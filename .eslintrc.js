@@ -39,5 +39,6 @@ module.exports = {
     'react-native/no-inline-styles': 0,
     'no-shadow': 'off',
     '@typescript-eslint/no-shadow': 0,
+    'eslint-comments/no-unlimited-disable': 0,
   },
 };
