@@ -37,5 +37,7 @@ module.exports = {
     'sonarjs/no-small-switch': 0,
     'import/namespace': 0,
     'react-native/no-inline-styles': 0,
+    'no-shadow': 'off',
+    '@typescript-eslint/no-shadow': 0,
   },
 };

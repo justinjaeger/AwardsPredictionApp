@@ -12,6 +12,11 @@ The ultimate collection of production-ready, flexible and accessible React Nativ
 - 🌆 **UI Kit** - Beautiful UI
 - ⚙️ **RN Dotenv** Environment variable with RN env
 
+## Running the app in simulator
+- must have xcode installed
+- in terminal: xed ios
+- hit "build" in xcode
+
 ## 🚀 Getting started
 
 The best way to start with the template is to [click here](https://github.com/joeygoksu/LightReactNative/generate).
