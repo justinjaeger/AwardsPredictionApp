@@ -23,7 +23,7 @@ The best way to start with the template is to [click here](https://github.com/jo
 
 Run the `setup.sh` inside the project folder:
 
-1. `bash ./setup`
+1. `bash ./setup.sh`
 2. Answer to `What is the name of the new project ❓`
 3. Wait until the see success message
 
