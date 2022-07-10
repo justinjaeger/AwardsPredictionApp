@@ -4,6 +4,7 @@
   "description": "All-In-One RN Template for Indie Hackers",
   "private": false,
   "scripts": {
+    "typescript": "tsc --noEmit --skipLibCheck",
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "start": "react-native start",

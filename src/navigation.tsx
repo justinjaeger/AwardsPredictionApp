@@ -1,5 +1,4 @@
 import 'react-native-gesture-handler';
-
 import React, { useEffect } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import RNBootSplash from 'react-native-bootsplash';

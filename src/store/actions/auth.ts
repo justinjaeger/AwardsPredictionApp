@@ -9,11 +9,12 @@ interface Auth {
 interface User {
   username: string;
   fullname: string;
-  email_verified: boolean;
+  emailVerified: boolean;
   email: string;
 }
 
 interface UserSession {
+  // eslint-disable-next-line @typescript-eslint/ban-types
   idToken: {};
 }
 

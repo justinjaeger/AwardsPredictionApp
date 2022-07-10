@@ -8,11 +8,7 @@ interface CardAccessoryProps {
   description: string;
 }
 
-export const CardAccessory = ({
-  title,
-  subtitle,
-  description,
-}: CardAccessoryProps) => {
+export const CardAccessory = ({ title, subtitle, description }: CardAccessoryProps) => {
   const Header = (props) => (
     <View {...props}>
       <Text category="h6">{title}</Text>

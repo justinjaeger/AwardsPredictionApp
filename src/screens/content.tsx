@@ -11,33 +11,24 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 
-interface ContentProps {}
-
-export const Content: React.FC<ContentProps> = props => {
+export const Content: React.FC = () => {
   const navigation = useNavigation();
 
   const navigateBack = () => {
     navigation.goBack();
   };
 
-  const BackAction = () => (
-    <TopNavigationAction icon={BackIcon} onPress={navigateBack} />
-  );
-
   const BackIcon = (props: any) => <Icon {...props} name="arrow-back" />;
+
+  const BackAction = () => <TopNavigationAction icon={BackIcon} onPress={navigateBack} />;
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <TopNavigation
-        title="Content"
-        alignment="center"
-        accessoryLeft={BackAction}
-      />
+      <TopNavigation title="Content" alignment="center" accessoryLeft={BackAction} />
 
       <Divider />
 
-      <Layout
-        style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Layout style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <Text category="h1" status="basic">
           Content
         </Text>
@@ -45,7 +36,3 @@ export const Content: React.FC<ContentProps> = props => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {},
-});

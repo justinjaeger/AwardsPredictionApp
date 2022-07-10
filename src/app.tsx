@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 
-import React from 'react';
+import React, { FC } from 'react';
 
 import { IconRegistry, ApplicationProvider } from '@ui-kitten/components';
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
@@ -15,7 +15,7 @@ import Navigation from './navigation';
 
 enableScreens();
 
-const App = () => {
+const App: FC = () => {
   return (
     <>
       <IconRegistry icons={EvaIconsPack} />
