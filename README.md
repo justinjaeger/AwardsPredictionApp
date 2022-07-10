@@ -12,6 +12,9 @@ The ultimate collection of production-ready, flexible and accessible React Nativ
 - 🌆 **UI Kit** - Beautiful UI
 - ⚙️ **RN Dotenv** Environment variable with RN env
 
+## Resources:
+- Initializing AWS Amplify: (https://docs.amplify.aws/start/getting-started/installation/q/integration/react-native/#option-2-follow-the-instructions)
+
 ## 🚀 Getting started
 
 The best way to start with the template is to [click here](https://github.com/joeygoksu/LightReactNative/generate).
