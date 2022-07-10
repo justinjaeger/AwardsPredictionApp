@@ -1,28 +1,39 @@
-export const AUTH_CHANGE = 'AUTH_CHANGE';
-export const LOGOUT_USER = 'LOGOUT_USER';
+import { iActionTypes } from '../actions';
 
 export interface iSuperAuth {
-  Auth: iAuth;
+  auth: iAuth;
+}
+export interface User {
+  id: string;
+  email: string;
+  emailVerified: boolean;
 }
 
 export interface iAuth {
-  loggedIn: boolean;
+  isLoggedIn: boolean;
+  user: User | undefined;
 }
 
 const initialState: iAuth = {
-  loggedIn: false,
+  isLoggedIn: false,
+  user: undefined,
 };
 
-export const authReducer = (state = initialState, action: any) => {
+export const authReducer = (
+  state = initialState,
+  action: { type: keyof typeof iActionTypes; payload: any },
+) => {
   switch (action.type) {
-    case AUTH_CHANGE:
+    case iActionTypes.LOGIN_USER:
       return {
         ...state,
-        ...action.payload,
+        isLoggedIn: true,
       };
-    case LOGOUT_USER:
-      return {};
-
+    case iActionTypes.LOGOUT_USER:
+      return {
+        ...state,
+        isLoggedIn: false,
+      };
     default:
       return state;
   }

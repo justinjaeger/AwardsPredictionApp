@@ -1,27 +1,21 @@
-import { AUTH_CHANGE, LOGOUT_USER } from '../reducers';
+import { User } from '../reducers';
 
-interface Auth {
-  loggedIn: boolean;
-  user?: User;
-  userSession?: UserSession;
+export enum iActionTypes {
+  LOGOUT_USER = 'LOGOUT_USER',
+  LOGIN_USER = 'LOGIN_USER',
 }
 
-interface User {
-  username: string;
-  fullname: string;
-  email_verified: boolean;
-  email: string;
-}
-
-interface UserSession {
-  idToken: {};
-}
-
-export const changeAuth = (payload: Auth) => ({
-  type: AUTH_CHANGE,
-  payload,
-});
+/**
+ * use like so:
+ * dispatch = useDispatch(); // import from 'react-redux'
+ * dispatch(logoutUser())
+ */
 
 export const logoutUser = () => ({
-  type: LOGOUT_USER,
+  type: iActionTypes.LOGOUT_USER,
+});
+
+export const loginUser = (payload: User) => ({
+  type: iActionTypes.LOGIN_USER,
+  payload,
 });

@@ -1,9 +1,5 @@
 import { Config as RNConfig } from 'react-native-config';
 
-interface iConfig {
-  API_URL: string;
-}
-
-export const configuration: iConfig = {
+export const configuration: { [key: string]: string } = {
   API_URL: RNConfig.API_URL,
 };
