@@ -1,4 +1,4 @@
-package com.lightreactnative;
+package com.awardspredictionapp;
 
 import com.facebook.react.ReactActivity;
 
@@ -15,7 +15,7 @@ public class MainActivity extends ReactActivity {
    */
   @Override
   protected String getMainComponentName() {
-    return "LightReactNative";
+    return "awardspredictionapp";
   }
 
   /**

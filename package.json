@@ -1,5 +1,5 @@
 {
-  "name": "lightreactnative",
+  "name": "awardspredictionapp",
   "version": "0.0.2",
   "description": "All-In-One RN Template for Indie Hackers",
   "private": false,
@@ -14,7 +14,7 @@
     "lint": "yarn lint:eslint && yarn lint:prettier",
     "lint:eslint": "eslint \"**/*.ts\"",
     "lint:prettier": "prettier --check \"**/*.ts\"",
-    "bundle-ios": "node node_modules/react-native/local-cli/cli.js bundle --entry-file='./index.ios.js' --bundle-output='./ios/LightReactNative/main.jsbundle' --assets-dest='./ios/LightReactNative' --dev=false --platform='ios'",
+    "bundle-ios": "node node_modules/react-native/local-cli/cli.js bundle --entry-file='./index.ios.js' --bundle-output='./ios/awardspredictionapp/main.jsbundle' --assets-dest='./ios/awardspredictionapp' --dev=false --platform='ios'",
     "bundle-android": "node node_modules/react-native/local-cli/cli.js bundle --entry-file='./index.android.js' --bundle-output='./android/app/src/main/assets/main.jsbundle' --assets-dest='./android/app/src/main/res/' --dev=false --platform='android'",
     "clean": "react-native-clean-project"
   },
