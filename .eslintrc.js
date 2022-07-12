@@ -41,5 +41,7 @@ module.exports = {
     '@typescript-eslint/no-shadow': 0,
     'eslint-comments/no-unlimited-disable': 0,
     '@typescript-eslint/ban-ts-comment': 0,
+    '@typescript-eslint/no-empty-function': 0,
+    'import/no-named-default': 0,
   },
 };

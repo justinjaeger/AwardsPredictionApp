@@ -1,12 +1,13 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import Home from '../screens/Main/Home';
+import Home from '../screens/Home';
 import Header from '../components/Header';
 
 const { Navigator, Screen } = createStackNavigator();
 
-const MainNavigator = () => (
+const HomeNavigator = () => (
   <Navigator
+    initialRouteName="Home"
     headerMode={'screen'}
     screenOptions={{
       animationTypeForReplace: 'push',
@@ -19,4 +20,4 @@ const MainNavigator = () => (
   </Navigator>
 );
 
-export default MainNavigator;
+export default HomeNavigator;
