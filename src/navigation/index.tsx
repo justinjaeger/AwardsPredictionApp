@@ -3,12 +3,8 @@ import React, { useEffect } from 'react';
 import RNBootSplash from 'react-native-bootsplash'; // what is this?
 import { NavigationContainer } from '@react-navigation/native';
 import MainNavigator from './MainNavigator';
-import { useAuth } from '../store';
-import AuthNavigator from './AuthNavigator';
 
 const Navigation = () => {
-  const { isLoggedIn } = useAuth();
-
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     const init = async () => {};
@@ -22,7 +18,7 @@ const Navigation = () => {
 
   return (
     <NavigationContainer>
-      {isLoggedIn ? <MainNavigator /> : <AuthNavigator />}
+      <MainNavigator />
     </NavigationContainer>
   );
 };
