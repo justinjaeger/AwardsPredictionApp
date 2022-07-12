@@ -1,24 +1,13 @@
 import 'react-native-gesture-handler';
-import React, { useEffect } from 'react';
-import RNBootSplash from 'react-native-bootsplash'; // what is this?
+import React from 'react';
+import RNBootSplash from 'react-native-bootsplash'; // splash screen (https://github.com/zoontek/react-native-bootsplash)
 import { NavigationContainer } from '@react-navigation/native';
-import MainNavigator from './MainNavigator';
+import BottomTabNavigator from './BottomTabNavigator';
 
 const Navigation = () => {
-  useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    const init = async () => {};
-
-    // Bootsplash: https://github.com/zoontek/react-native-bootsplash
-    init().finally(async () => {
-      await RNBootSplash.hide({ fade: true });
-      console.log('Bootsplash has been hidden successfully');
-    });
-  }, []);
-
   return (
-    <NavigationContainer>
-      <MainNavigator />
+    <NavigationContainer onReady={() => RNBootSplash.hide()}>
+      <BottomTabNavigator />
     </NavigationContainer>
   );
 };
