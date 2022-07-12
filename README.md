@@ -22,6 +22,7 @@ The ultimate collection of production-ready, flexible and accessible React Nativ
 - "When you’re ready to add a feature, run amplify add <category>"
     - like "amplify add api" or "amplify add auth" instead
 - THEN:
+    - Note: The below is better configured in the dashboard
     - (https://ui.docs.amplify.aws/react/connected-components/authenticator)
     - amplify add auth
         - ads auth resource locally

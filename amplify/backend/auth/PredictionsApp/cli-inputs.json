@@ -1,10 +1,10 @@
 {
   "version": "1",
   "cognitoConfig": {
-    "identityPoolName": "predictionsapp3d2f3c1f_identitypool_3d2f3c1f",
+    "identityPoolName": "testAuthIdentityPool",
     "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "predic3d2f3c1f",
-    "userPoolName": "predictionsapp3d2f3c1f_userpool_3d2f3c1f",
+    "resourceNameTruncated": "predicd7e413ca",
+    "userPoolName": "PredictionsApp",
     "autoVerifiedAttributes": [
       "email"
     ],
@@ -25,23 +25,23 @@
     "aliasAttributes": [],
     "userpoolClientGenerateSecret": false,
     "userpoolClientRefreshTokenValidity": 30,
-    "userpoolClientWriteAttributes": [
-      "email"
-    ],
-    "userpoolClientReadAttributes": [
-      "email"
-    ],
-    "userpoolClientLambdaRole": "predic3d2f3c1f_userpoolclient_lambda_role",
+    "userpoolClientWriteAttributes": [],
+    "userpoolClientReadAttributes": [],
+    "userpoolClientLambdaRole": "Predicd7e413ca_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "3d2f3c1f",
-    "resourceName": "predictionsapp3d2f3c1f",
+    "sharedId": "d7e413ca",
+    "resourceName": "PredictionsApp",
     "authSelections": "identityPoolAndUserPool",
-    "useDefault": "default",
+    "serviceName": "Cognito",
     "usernameAttributes": [
       "email"
     ],
+    "useDefault": "manual",
+    "userPoolGroups": false,
     "userPoolGroupList": [],
-    "serviceName": "Cognito",
+    "adminQueries": false,
+    "thirdPartyAuth": false,
+    "authProviders": [],
     "usernameCaseSensitive": false,
     "useEnabledMfas": true
   }
