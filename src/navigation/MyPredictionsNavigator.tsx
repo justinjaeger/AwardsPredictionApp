@@ -1,6 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import Header from '../components/Header';
+import MyPredictions from '../screens/MyPredictions';
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -10,9 +11,9 @@ const { Navigator, Screen } = createStackNavigator();
  * If they are logged in, they shouldn't.
  */
 
-const MyPredictions = () => (
+const MyPredictionsNavigator = () => (
   <Navigator
-    initialRouteName="MyPredictions"
+    initialRouteName="Auth"
     headerMode={'screen'}
     screenOptions={{
       animationTypeForReplace: 'push',
@@ -29,4 +30,4 @@ const MyPredictions = () => (
   </Navigator>
 );
 
-export default MyPredictions;
+export default MyPredictionsNavigator;

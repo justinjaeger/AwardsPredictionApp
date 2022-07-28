@@ -10,10 +10,10 @@ interface iAuthServiceReturn<T> {
 }
 
 const handleError = (message?: string, error?: any): iAuthServiceReturn<any> => {
-  console.log(message, error);
+  console.error(message, JSON.stringify(error));
   const m = error.message || message;
   Snackbar.error(m || '');
-  return { status: 'error', message: m, error };
+  return { status: 'error', message: m, error: error.name };
 };
 
 const signUp = async (
@@ -42,10 +42,25 @@ const signIn = async (
 ): Promise<iAuthServiceReturn<any>> => {
   try {
     const user = await Auth.signIn(email, password);
-    console.log('signIn user', user);
     return { status: 'success', data: user };
-  } catch (error) {
+  } catch (error: any) {
+    // if user is not confirmed, resend verification code
+    if (error.code === 'UserNotConfirmedException') {
+      return resendSignUp(email);
+    }
     return handleError('Error signing in.', error);
+  }
+};
+
+const resendSignUp = async (email: string): Promise<iAuthServiceReturn<any>> => {
+  try {
+    await Auth.resendSignUp(email);
+    return {
+      status: 'success',
+      message: 'A verification code has been sent to your email',
+    };
+  } catch (error) {
+    return handleError('Error resending verification code.', error);
   }
 };
 
@@ -70,13 +85,39 @@ const signOut = async (): Promise<iAuthServiceReturn<any>> => {
   }
 };
 
-const AuthServices: {
-  [key: string]: (...args: any) => Promise<iAuthServiceReturn<any>>;
-} = {
-  signIn,
+const forgotPassword = async (email: string): Promise<iAuthServiceReturn<any>> => {
+  try {
+    await Auth.forgotPassword(email);
+    return { status: 'success' };
+  } catch (error) {
+    return handleError('Error sending password reset.', error);
+  }
+};
+
+const forgotPasswordSubmit = async (
+  email: string,
+  code: string,
+  password: string,
+): Promise<iAuthServiceReturn<any>> => {
+  try {
+    await Auth.forgotPasswordSubmit(email, code, password);
+    return { status: 'success' };
+  } catch (error) {
+    return handleError(
+      'Error submitting password. Double check confirmation code.',
+      error,
+    );
+  }
+};
+
+const AuthServices = {
   signUp,
+  signIn,
   confirmSignUp,
   signOut,
+  forgotPassword,
+  forgotPasswordSubmit,
+  resendSignUp,
 };
 
 export default AuthServices;
