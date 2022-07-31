@@ -1,21 +1,20 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import Home from '../screens/Main/Home';
-import Header from '../components/Header';
+import BottomTabNavigator from './BottomTabNavigator';
+import AuthenticatorNavigator from './AuthenticatorNavigator';
 
 const { Navigator, Screen } = createStackNavigator();
 
 const MainNavigator = () => (
   <Navigator
-    headerMode={'screen'}
+    initialRouteName="Home"
+    headerMode={'none'}
     screenOptions={{
       animationTypeForReplace: 'push',
-      header: (props) => {
-        return <Header {...props} />;
-      },
     }}
   >
-    <Screen name="Home" component={Home} options={() => ({ title: 'Home' })} />
+    <Screen name="BottomTabNavigator" component={BottomTabNavigator} />
+    <Screen name="Authenticator" component={AuthenticatorNavigator} />
   </Navigator>
 );
 

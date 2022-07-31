@@ -6,7 +6,6 @@ export interface iSuperAuth {
 export interface User {
   id: string;
   email: string;
-  emailVerified: boolean;
 }
 
 export interface iAuth {
