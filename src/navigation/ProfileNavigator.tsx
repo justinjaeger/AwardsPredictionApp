@@ -1,10 +1,10 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import Home from '../screens/Home';
+import Profile from '../screens/Profile';
 
 const { Navigator, Screen } = createStackNavigator();
 
-const HomeNavigator = () => (
+const ProfileNavigator = () => (
   <Navigator
     initialRouteName="Home"
     headerMode={'screen'}
@@ -12,14 +12,8 @@ const HomeNavigator = () => (
       animationTypeForReplace: 'push',
     }}
   >
-    <Screen
-      name="Home"
-      component={Home}
-      options={{
-        headerTitle: 'Home',
-      }}
-    />
+    <Screen name="Proflie" component={Profile} options={{ headerTitle: 'My Profile' }} />
   </Navigator>
 );
 
-export default HomeNavigator;
+export default ProfileNavigator;

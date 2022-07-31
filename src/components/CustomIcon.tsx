@@ -1,23 +1,30 @@
 import React from 'react';
 import { Icon } from '@ui-kitten/components';
+import theme from '../theme';
 
 /**
  * https://akveo.github.io/eva-icons/#/
  */
 
-type iCustomIconProps = { name: string; styles?: React.CSSProperties };
+export type iCustomIconProps = {
+  name: string;
+  color?: string;
+  size?: number;
+  styles?: React.CSSProperties;
+};
 
 const CustomIcon = (props: iCustomIconProps) => {
-  const { name, styles } = props;
+  const { name, size, color, styles } = props;
   return (
     <Icon
       {...props}
       name={name}
       style={{
-        width: 32,
-        height: 32,
+        width: size || 32,
+        height: size || 32,
         ...styles,
       }}
+      fill={color || theme['color-primary-900']}
     />
   );
 };

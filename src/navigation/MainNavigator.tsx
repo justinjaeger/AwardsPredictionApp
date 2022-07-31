@@ -1,7 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import BottomTabNavigator from './BottomTabNavigator';
-import Authenticator from '../screens/Authenticator';
+import AuthenticatorNavigator from './AuthenticatorNavigator';
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -14,7 +14,7 @@ const MainNavigator = () => (
     }}
   >
     <Screen name="BottomTabNavigator" component={BottomTabNavigator} />
-    <Screen name="Authenticator" component={Authenticator} />
+    <Screen name="Authenticator" component={AuthenticatorNavigator} />
   </Navigator>
 );
 

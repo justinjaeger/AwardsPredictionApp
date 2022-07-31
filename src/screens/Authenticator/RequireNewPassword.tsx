@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Text } from '@ui-kitten/components';
 import { ScrollView } from 'react-native';
 import { iAuthScreenProps, iAuthState } from './types';
 import FormInput from '../../components/Inputs/FormInput';
@@ -39,7 +38,6 @@ const RequireNewPassword = (p: any) => {
     <ScrollView
       contentContainerStyle={{ alignItems: 'center', marginTop: 40, width: '75%' }}
     >
-      <Text>Create a new password</Text>
       <FormInput label="New Password" value={password} setValue={setPassword} />
       <FormInput label="Code" value={code} setValue={setCode} />
       <SubmitButton text={'Go to sign up'} onPress={() => navigate('signUp')} />

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Text } from '@ui-kitten/components';
 import { ScrollView } from 'react-native';
 import { iAuthScreenProps, iAuthState } from './types';
 import PasswordInput from '../../components/Inputs/PasswordInput';
@@ -66,7 +65,6 @@ const SignIn = (p: any) => {
     <ScrollView
       contentContainerStyle={{ alignItems: 'center', marginTop: 40, width: '75%' }}
     >
-      <Text>Log in</Text>
       <FormInput
         label="Email"
         value={email}

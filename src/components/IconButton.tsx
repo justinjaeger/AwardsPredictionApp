@@ -1,27 +1,26 @@
 import React from 'react';
 import { StyleProp, ViewStyle } from 'react-native';
 import { Button } from '@ui-kitten/components';
-import CustomIcon from './CustomIcon';
+import CustomIcon, { iCustomIconProps } from './CustomIcon';
 
 /**
  * https://akveo.github.io/eva-icons/#/
  */
 
 type iIconButtonProps = {
-  iconName: string;
   onPress: () => void;
-  iconStyles?: React.CSSProperties;
+  iconProps: iCustomIconProps;
   styles?: StyleProp<ViewStyle>;
 };
 
 export const IconButton = (props: iIconButtonProps) => {
-  const { iconName, onPress, iconStyles, styles } = props;
+  const { onPress, iconProps, styles } = props;
   return (
     <Button
       style={styles || {}}
       appearance="ghost"
       status="danger"
-      accessoryLeft={() => <CustomIcon name={iconName} styles={iconStyles} />}
+      accessoryLeft={() => <CustomIcon {...iconProps} />}
       onPress={onPress}
     />
   );

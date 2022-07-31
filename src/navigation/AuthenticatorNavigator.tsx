@@ -1,25 +1,26 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import Home from '../screens/Home';
+import Authenticator from '../screens/Authenticator';
+import BackButton from '../components/Buttons/BackButton';
 
 const { Navigator, Screen } = createStackNavigator();
 
-const HomeNavigator = () => (
+const AuthenticatorNavigator = () => (
   <Navigator
-    initialRouteName="Home"
+    initialRouteName="Authenticator"
     headerMode={'screen'}
     screenOptions={{
       animationTypeForReplace: 'push',
     }}
   >
     <Screen
-      name="Home"
-      component={Home}
+      name="Authenticator"
+      component={Authenticator}
       options={{
-        headerTitle: 'Home',
+        headerLeft: BackButton,
       }}
     />
   </Navigator>
 );
 
-export default HomeNavigator;
+export default AuthenticatorNavigator;

@@ -1,6 +1,5 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import Header from '../components/Header';
 import MyPredictions from '../screens/MyPredictions';
 
 const { Navigator, Screen } = createStackNavigator();
@@ -17,15 +16,12 @@ const MyPredictionsNavigator = () => (
     headerMode={'screen'}
     screenOptions={{
       animationTypeForReplace: 'push',
-      header: (props) => {
-        return <Header {...props} />;
-      },
     }}
   >
     <Screen
       name="MyPredictions"
       component={MyPredictions}
-      options={() => ({ title: 'My Predictions' })}
+      options={{ headerTitle: 'My Predictions' }}
     />
   </Navigator>
 );

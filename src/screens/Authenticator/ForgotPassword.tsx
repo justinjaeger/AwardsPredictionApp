@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Text } from '@ui-kitten/components';
 import { ScrollView } from 'react-native';
 import { iAuthScreenProps, iAuthState } from './types';
 import FormInput from '../../components/Inputs/FormInput';
@@ -31,7 +30,6 @@ const ForgotPassword = (p: any) => {
     <ScrollView
       contentContainerStyle={{ alignItems: 'center', marginTop: 40, width: '75%' }}
     >
-      <Text>Reset your password</Text>
       <FormInput
         label="Email"
         value={email}
