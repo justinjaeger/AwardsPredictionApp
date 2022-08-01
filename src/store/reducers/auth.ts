@@ -1,16 +1,15 @@
-import { iActionTypes } from '../actions';
-
+import { iActionTypes } from '../actions/auth';
 export interface iSuperAuth {
   auth: iAuth;
 }
-export interface User {
+export interface AuthUser {
   id: string;
   email: string;
 }
 
 export interface iAuth {
   isLoggedIn: boolean;
-  user: User | undefined;
+  user: AuthUser | undefined;
 }
 
 const initialState: iAuth = {

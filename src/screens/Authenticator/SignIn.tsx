@@ -7,7 +7,7 @@ import { SubmitButton } from '../../components/Buttons/SubmitButton';
 import AuthServices from '../../services/auth';
 import Snackbar from '../../components/Snackbar';
 import { useAuthenticator } from './context';
-import { loginUser } from '../../store/actions';
+import { loginUser } from '../../store/actions/auth';
 import { useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 
@@ -36,17 +36,14 @@ const SignIn = (p: any) => {
             duration: 5000,
           });
         }
-        // can do something with res.data
-        // can delete snackbar success
-        // TODO: create user in db
-        // NOTE: duplicating this logic in signUp, should fix that
+        // TODO: get existing user from database
+        // const existingUser = getExistingUser({ email: '', username: ''});
         dispatch(
           loginUser({
             id: '1234', // TODO: fix
             email,
           }),
         );
-        Snackbar.success('Login successful!');
         goBack();
       }
     });

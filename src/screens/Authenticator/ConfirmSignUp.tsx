@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { ScrollView } from 'react-native';
 import { iAuthScreenProps, iAuthState } from './types';
 import FormInput from '../../components/Inputs/FormInput';
@@ -6,17 +6,27 @@ import { SubmitButton } from '../../components/Buttons/SubmitButton';
 import AuthServices from '../../services/auth';
 import Snackbar from '../../components/Snackbar';
 import { useAuthenticator } from './context';
+// import { createUser } from '../../services/graphql/mutations';
+// import { UserRole } from '../../API';
+// import { useDispatch } from 'react-redux';
+// import { loginUser } from '../../store/actions/auth';
 
 const ConfirmSignUp = (p: any) => {
   const props = p as iAuthScreenProps; // typecasting because props are automatically passed from Authenticator
-  const { email } = useAuthenticator();
+  const {
+    email: contextEmail,
+    setEmail: setContextEmail,
+    // password: contextPassword,
+    username: contextUsername,
+  } = useAuthenticator();
+  //   const dispatch = useDispatch();
 
   const [code, setCode] = useState<string>('');
+  const [email, setEmail] = useState<string>(contextEmail || '');
+  const [username, setUsername] = useState<string>(contextUsername || '');
 
-  useEffect(() => {
-    // somehow get the code from url slug or something?
-    // also, maybe get the email from the previous page?
-  }, []);
+  const validCode = code.length === 6;
+  const validEmail = email.length > 0 && email.includes('.') && email.includes('@');
 
   const navigate = (authState: iAuthState) => {
     props.onStateChange(authState, {});
@@ -26,11 +36,37 @@ const ConfirmSignUp = (p: any) => {
     if (!email) {
       return Snackbar.error('Oops, something went wrong.');
     }
-    AuthServices.confirmSignUp(email, code).then((res) => {
+    AuthServices.confirmSignUp(email, code).then(async (res) => {
+      setContextEmail(email);
       if (res.status === 'success') {
-        // Snackbar.success(`Confirmed! ${email}`);
-        // redirect to signin or just sign in
-        navigate('signIn');
+        // if password somehow isn't stored, generate random one. they can reset password later
+        // const password = contextPassword || (Math.random() * 1000000000).toString();
+        // Create new user in db
+        // createUser({
+        //   email,
+        //   username,
+        //   admin: UserRole.USER,
+        // })
+        //   .then((res) => {
+        //     console.error('res', res.data?.id);
+        //     // Sign user in
+        //     AuthServices.signIn(email, password).then((res) => {
+        //       if (res.status === 'success') {
+        //         // tell Redux user is logged in
+        //         dispatch(
+        //           loginUser({
+        //             id: res.data?.id, // TODO: fix
+        //             email,
+        //           }),
+        //         );
+        //       }
+        //     });
+        //   })
+        //   .catch((err) => {
+        //     console.error('err', err);
+        //     // this case would be pretty bad
+        //     Snackbar.error('Sorry, something went wrong.');
+        //   });
       }
     });
   };
@@ -46,10 +82,35 @@ const ConfirmSignUp = (p: any) => {
     <ScrollView
       contentContainerStyle={{ alignItems: 'center', marginTop: 40, width: '75%' }}
     >
-      <FormInput label="Code" value={code} setValue={setCode} />
+      {!contextEmail ? (
+        <FormInput
+          label="Email"
+          value={email}
+          setValue={setEmail}
+          textContentType="emailAddress"
+        />
+      ) : null}
+      {!contextUsername ? (
+        <FormInput
+          label="Username"
+          value={username}
+          setValue={setUsername}
+          textContentType="username"
+        />
+      ) : null}
+      <FormInput
+        label="Code"
+        value={code}
+        setValue={setCode}
+        textContentType="oneTimeCode"
+      />
       <SubmitButton text={'Back to sign in'} onPress={() => navigate('signIn')} />
       <SubmitButton text={'Resend Code'} onPress={resendVerificationCode} />
-      <SubmitButton text={'Submit'} onPress={submit} />
+      <SubmitButton
+        text={'Submit'}
+        onPress={submit}
+        disabled={!validCode || !validEmail}
+      />
     </ScrollView>
   );
 };
