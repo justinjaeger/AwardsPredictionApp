@@ -1,10 +1,10 @@
 {
   "version": "1",
   "cognitoConfig": {
-    "identityPoolName": "testAuthIdentityPool",
+    "identityPoolName": "awardspredictionsbe5081d2_identitypool_be5081d2",
     "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "predicd7e413ca",
-    "userPoolName": "PredictionsApp",
+    "resourceNameTruncated": "awardsbe5081d2",
+    "userPoolName": "awardspredictionsbe5081d2_userpool_be5081d2",
     "autoVerifiedAttributes": [
       "email"
     ],
@@ -25,23 +25,23 @@
     "aliasAttributes": [],
     "userpoolClientGenerateSecret": false,
     "userpoolClientRefreshTokenValidity": 30,
-    "userpoolClientWriteAttributes": [],
-    "userpoolClientReadAttributes": [],
-    "userpoolClientLambdaRole": "Predicd7e413ca_userpoolclient_lambda_role",
+    "userpoolClientWriteAttributes": [
+      "email"
+    ],
+    "userpoolClientReadAttributes": [
+      "email"
+    ],
+    "userpoolClientLambdaRole": "awardsbe5081d2_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "d7e413ca",
-    "resourceName": "PredictionsApp",
+    "sharedId": "be5081d2",
+    "resourceName": "awardspredictionsbe5081d2",
     "authSelections": "identityPoolAndUserPool",
-    "serviceName": "Cognito",
+    "useDefault": "default",
     "usernameAttributes": [
       "email"
     ],
-    "useDefault": "manual",
-    "userPoolGroups": false,
     "userPoolGroupList": [],
-    "adminQueries": false,
-    "thirdPartyAuth": false,
-    "authProviders": [],
+    "serviceName": "Cognito",
     "usernameCaseSensitive": false,
     "useEnabledMfas": true
   }

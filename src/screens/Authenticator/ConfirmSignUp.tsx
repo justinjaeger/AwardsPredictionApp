@@ -6,20 +6,20 @@ import { SubmitButton } from '../../components/Buttons/SubmitButton';
 import AuthServices from '../../services/auth';
 import Snackbar from '../../components/Snackbar';
 import { useAuthenticator } from './context';
-// import { createUser } from '../../services/graphql/mutations';
-// import { UserRole } from '../../API';
-// import { useDispatch } from 'react-redux';
-// import { loginUser } from '../../store/actions/auth';
+import { UserRole } from '../../API';
+import { useDispatch } from 'react-redux';
+import { loginUser } from '../../store/actions/auth';
+import ApiServices from '../../services/graphql/mutations';
 
 const ConfirmSignUp = (p: any) => {
   const props = p as iAuthScreenProps; // typecasting because props are automatically passed from Authenticator
   const {
     email: contextEmail,
     setEmail: setContextEmail,
-    // password: contextPassword,
+    password: contextPassword,
     username: contextUsername,
   } = useAuthenticator();
-  //   const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const [code, setCode] = useState<string>('');
   const [email, setEmail] = useState<string>(contextEmail || '');
@@ -40,33 +40,36 @@ const ConfirmSignUp = (p: any) => {
       setContextEmail(email);
       if (res.status === 'success') {
         // if password somehow isn't stored, generate random one. they can reset password later
-        // const password = contextPassword || (Math.random() * 1000000000).toString();
+        const password = contextPassword || (Math.random() * 1000000000).toString();
         // Create new user in db
-        // createUser({
-        //   email,
-        //   username,
-        //   admin: UserRole.USER,
-        // })
-        //   .then((res) => {
-        //     console.error('res', res.data?.id);
-        //     // Sign user in
-        //     AuthServices.signIn(email, password).then((res) => {
-        //       if (res.status === 'success') {
-        //         // tell Redux user is logged in
-        //         dispatch(
-        //           loginUser({
-        //             id: res.data?.id, // TODO: fix
-        //             email,
-        //           }),
-        //         );
-        //       }
-        //     });
-        //   })
-        //   .catch((err) => {
-        //     console.error('err', err);
-        //     // this case would be pretty bad
-        //     Snackbar.error('Sorry, something went wrong.');
-        //   });
+        // TODO: don't do username in here because if they never validate, you're stuck with a newly created username
+        // make it the next step they have to do with their profile setup
+        // or maybe that's overkill
+        ApiServices.createUser({
+          email,
+          username,
+          admin: UserRole.USER,
+        })
+          .then((res) => {
+            console.error('res', res.data?.id);
+            // Sign user in
+            AuthServices.signIn(email, password).then((res) => {
+              if (res.status === 'success') {
+                // tell Redux user is logged in
+                dispatch(
+                  loginUser({
+                    id: res.data?.id, // TODO: fix
+                    email,
+                  }),
+                );
+              }
+            });
+          })
+          .catch((err) => {
+            console.error('err', err);
+            // this case would be pretty bad
+            Snackbar.error('Sorry, something went wrong.');
+          });
       }
     });
   };
