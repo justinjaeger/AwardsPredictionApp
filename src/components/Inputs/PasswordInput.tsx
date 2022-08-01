@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import { Icon, Input } from '@ui-kitten/components';
 import { ImageProps, TouchableWithoutFeedback } from 'react-native';
+import { EvaStatus } from '@ui-kitten/components/devsupport';
 
 const PasswordInput = (props: {
   value: string;
   setValue: React.Dispatch<React.SetStateAction<string>>;
   caption?: string;
+  onBlur?: () => void;
+  status?: EvaStatus;
 }) => {
-  const { value, setValue, caption } = props;
+  const { value, setValue, caption, onBlur, status } = props;
 
   const [secureTextEntry, setSecureTextEntry] = useState<boolean>(true);
 
@@ -27,6 +30,8 @@ const PasswordInput = (props: {
       secureTextEntry={secureTextEntry}
       autoFocus={false}
       onChangeText={(nextValue) => setValue(nextValue)}
+      onBlur={onBlur}
+      status={status}
     />
   );
 };

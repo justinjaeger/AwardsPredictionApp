@@ -2,7 +2,7 @@
 import { shallowEqual, useSelector } from 'react-redux';
 import { combineReducers } from 'redux';
 // Imports: Reducers
-import { authReducer, iSuperAuth } from './reducers';
+import { authReducer, iSuperAuth } from './reducers/auth';
 
 // Redux: Root Reducer
 export const rootReducer = combineReducers({
