@@ -75,8 +75,7 @@ enum CategoryName {
 }
 
 type User @model @auth(rules: [{allow: public}]) {
-    id: ID! @primaryKey
-    email: String!
+    email: ID! @primaryKey
     username: String!
     name: String
     bio: String
@@ -84,12 +83,12 @@ type User @model @auth(rules: [{allow: public}]) {
     admin: UserRole! @default(value: "USER")
     # below lets you retrieve related Relationships records from the source User record
     # under the hood, @hasMany configures a default secondary index on the related table to enable you to query the related model from the source model
-    followers: [Relationships] @hasMany(indexName: "byFollowedUser", fields: ["id"])
-    following: [Relationships] @hasMany(indexName: "byFollowingUser", fields: ["id"])
-    activePredictionsByEvent: [PredictionSet] @hasMany(indexName: "byUserByEventActive", fields: ["id"])
-    activePredictionsByCategory: [PredictionSet] @hasMany(indexName: "byUserByCategoryByActive", fields: ["id"])
-    pastPredictionsByEvent: [PredictionSet] @hasMany(indexName: "byUserByEventByDate", fields: ["id"])
-    pastPredictionsByCategory: [PredictionSet] @hasMany(indexName: "byUserByCategoryByDate", fields: ["id"])
+    followers: [Relationships] @hasMany(indexName: "byFollowedUser", fields: ["email"])
+    following: [Relationships] @hasMany(indexName: "byFollowingUser", fields: ["email"])
+    activePredictionsByEvent: [PredictionSet] @hasMany(indexName: "byUserByEventActive", fields: ["email"])
+    activePredictionsByCategory: [PredictionSet] @hasMany(indexName: "byUserByCategoryByActive", fields: ["email"])
+    pastPredictionsByEvent: [PredictionSet] @hasMany(indexName: "byUserByEventByDate", fields: ["email"])
+    pastPredictionsByCategory: [PredictionSet] @hasMany(indexName: "byUserByCategoryByDate", fields: ["email"])
     leaderboardScores: [LeaderboardPosition] @hasMany
 }
 
@@ -168,7 +167,7 @@ type Prediction @model @auth(rules: [{ allow: public }]) {
         queryField: "queryPredictionByContenderByRanking", 
         sortKeyFields: ["isActive", "ranking"],
     )
-    contender: Contender @hasOne(fields: ["contenderId"])
+    contender: Contender @belongsTo(fields: ["contenderId"])
     ranking: Int!
     isActive: String @default(value: "x") # essentially boolean - Must be removed when a new prediction is made (used in Contender activePredictions)
 }
@@ -200,7 +199,7 @@ type LeaderboardPosition @model @auth(rules: [{ allow: public }]) {
         sortKeyFields: ["ranking"],
     )
     event: Event @belongsTo(fields: ["eventId"])
-    user: User @hasOne(fields: ["userId"])
+    user: User @belongsTo(fields: ["userId"])
     accuracy: String
     ranking: Int
 }
@@ -237,7 +236,7 @@ type ContenderSnapshot @model @auth(rules: [{ allow: public }]) {
         queryField: "queryContenderSnapshotByContenderByDate",
         sortKeyFields: ["createdAt"],
     )
-    contender: Contender @hasOne(fields: ["contenderId"])
+    contender: Contender @belongsTo(fields: ["contenderId"])
     categoryId: ID!
     category: Category @hasOne(fields: ["categoryId"])
     # Stats for displaying leaderboard (must update manually when we set the record)

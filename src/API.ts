@@ -3,7 +3,6 @@
 //  This file was automatically generated and should not be edited.
 
 export type CreateUserInput = {
-  id?: string | null,
   email: string,
   username: string,
   name?: string | null,
@@ -19,7 +18,6 @@ export enum UserRole {
 
 
 export type ModelUserConditionInput = {
-  email?: ModelStringInput | null,
   username?: ModelStringInput | null,
   name?: ModelStringInput | null,
   bio?: ModelStringInput | null,
@@ -77,7 +75,6 @@ export type ModelUserRoleInput = {
 
 export type User = {
   __typename: "User",
-  id: string,
   email: string,
   username: string,
   name?: string | null,
@@ -212,7 +209,7 @@ export enum CategoryName {
   COMEDY_ACTOR = "COMEDY_ACTOR",
   COMEDY_ACTRESS = "COMEDY_ACTRESS",
   ACTION_PICTURE = "ACTION_PICTURE",
-  SCI_FI_HORROR_PICTURE = "SCI_FI_HORROR_PICTURE",
+  SCIFI_HORROR_PICTURE = "SCIFI_HORROR_PICTURE",
   YOUNG_ACTOR = "YOUNG_ACTOR",
   RISING_STAR = "RISING_STAR",
   DEBUT = "DEBUT",
@@ -350,8 +347,7 @@ export type ContenderSnapshot = {
 };
 
 export type UpdateUserInput = {
-  id: string,
-  email?: string | null,
+  email: string,
   username?: string | null,
   name?: string | null,
   bio?: string | null,
@@ -360,7 +356,7 @@ export type UpdateUserInput = {
 };
 
 export type DeleteUserInput = {
-  id: string,
+  email: string,
 };
 
 export type CreateRelationshipsInput = {
@@ -732,8 +728,7 @@ export type DeletePersonInput = {
 };
 
 export type ModelUserFilterInput = {
-  id?: ModelIDInput | null,
-  email?: ModelStringInput | null,
+  email?: ModelIDInput | null,
   username?: ModelStringInput | null,
   name?: ModelStringInput | null,
   bio?: ModelStringInput | null,
@@ -1003,7 +998,6 @@ export type CreateUserMutationVariables = {
 export type CreateUserMutation = {
   createUser?:  {
     __typename: "User",
-    id: string,
     email: string,
     username: string,
     name?: string | null,
@@ -1051,7 +1045,6 @@ export type UpdateUserMutationVariables = {
 export type UpdateUserMutation = {
   updateUser?:  {
     __typename: "User",
-    id: string,
     email: string,
     username: string,
     name?: string | null,
@@ -1099,7 +1092,6 @@ export type DeleteUserMutationVariables = {
 export type DeleteUserMutation = {
   deleteUser?:  {
     __typename: "User",
-    id: string,
     email: string,
     username: string,
     name?: string | null,
@@ -1152,7 +1144,6 @@ export type CreateRelationshipsMutation = {
     followingUserId: string,
     followedUser?:  {
       __typename: "User",
-      id: string,
       email: string,
       username: string,
       name?: string | null,
@@ -1164,7 +1155,6 @@ export type CreateRelationshipsMutation = {
     } | null,
     followingUser?:  {
       __typename: "User",
-      id: string,
       email: string,
       username: string,
       name?: string | null,
@@ -1196,7 +1186,6 @@ export type UpdateRelationshipsMutation = {
     followingUserId: string,
     followedUser?:  {
       __typename: "User",
-      id: string,
       email: string,
       username: string,
       name?: string | null,
@@ -1208,7 +1197,6 @@ export type UpdateRelationshipsMutation = {
     } | null,
     followingUser?:  {
       __typename: "User",
-      id: string,
       email: string,
       username: string,
       name?: string | null,
@@ -1240,7 +1228,6 @@ export type DeleteRelationshipsMutation = {
     followingUserId: string,
     followedUser?:  {
       __typename: "User",
-      id: string,
       email: string,
       username: string,
       name?: string | null,
@@ -1252,7 +1239,6 @@ export type DeleteRelationshipsMutation = {
     } | null,
     followingUser?:  {
       __typename: "User",
-      id: string,
       email: string,
       username: string,
       name?: string | null,
@@ -1594,7 +1580,6 @@ export type CreateLeaderboardPositionMutation = {
     } | null,
     user?:  {
       __typename: "User",
-      id: string,
       email: string,
       username: string,
       name?: string | null,
@@ -1635,7 +1620,6 @@ export type UpdateLeaderboardPositionMutation = {
     } | null,
     user?:  {
       __typename: "User",
-      id: string,
       email: string,
       username: string,
       name?: string | null,
@@ -1676,7 +1660,6 @@ export type DeleteLeaderboardPositionMutation = {
     } | null,
     user?:  {
       __typename: "User",
-      id: string,
       email: string,
       username: string,
       name?: string | null,
@@ -2175,13 +2158,12 @@ export type DeletePersonMutation = {
 };
 
 export type GetUserQueryVariables = {
-  id: string,
+  email: string,
 };
 
 export type GetUserQuery = {
   getUser?:  {
     __typename: "User",
-    id: string,
     email: string,
     username: string,
     name?: string | null,
@@ -2222,7 +2204,7 @@ export type GetUserQuery = {
 };
 
 export type ListUsersQueryVariables = {
-  id?: string | null,
+  email?: string | null,
   filter?: ModelUserFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
@@ -2234,7 +2216,6 @@ export type ListUsersQuery = {
     __typename: "ModelUserConnection",
     items:  Array< {
       __typename: "User",
-      id: string,
       email: string,
       username: string,
       name?: string | null,
@@ -2260,7 +2241,6 @@ export type GetRelationshipsQuery = {
     followingUserId: string,
     followedUser?:  {
       __typename: "User",
-      id: string,
       email: string,
       username: string,
       name?: string | null,
@@ -2272,7 +2252,6 @@ export type GetRelationshipsQuery = {
     } | null,
     followingUser?:  {
       __typename: "User",
-      id: string,
       email: string,
       username: string,
       name?: string | null,
@@ -2536,7 +2515,6 @@ export type GetLeaderboardPositionQuery = {
     } | null,
     user?:  {
       __typename: "User",
-      id: string,
       email: string,
       username: string,
       name?: string | null,
@@ -3170,7 +3148,6 @@ export type QueryContenderSnapshotByContenderByDateQuery = {
 export type OnCreateUserSubscription = {
   onCreateUser?:  {
     __typename: "User",
-    id: string,
     email: string,
     username: string,
     name?: string | null,
@@ -3213,7 +3190,6 @@ export type OnCreateUserSubscription = {
 export type OnUpdateUserSubscription = {
   onUpdateUser?:  {
     __typename: "User",
-    id: string,
     email: string,
     username: string,
     name?: string | null,
@@ -3256,7 +3232,6 @@ export type OnUpdateUserSubscription = {
 export type OnDeleteUserSubscription = {
   onDeleteUser?:  {
     __typename: "User",
-    id: string,
     email: string,
     username: string,
     name?: string | null,
@@ -3304,7 +3279,6 @@ export type OnCreateRelationshipsSubscription = {
     followingUserId: string,
     followedUser?:  {
       __typename: "User",
-      id: string,
       email: string,
       username: string,
       name?: string | null,
@@ -3316,7 +3290,6 @@ export type OnCreateRelationshipsSubscription = {
     } | null,
     followingUser?:  {
       __typename: "User",
-      id: string,
       email: string,
       username: string,
       name?: string | null,
@@ -3343,7 +3316,6 @@ export type OnUpdateRelationshipsSubscription = {
     followingUserId: string,
     followedUser?:  {
       __typename: "User",
-      id: string,
       email: string,
       username: string,
       name?: string | null,
@@ -3355,7 +3327,6 @@ export type OnUpdateRelationshipsSubscription = {
     } | null,
     followingUser?:  {
       __typename: "User",
-      id: string,
       email: string,
       username: string,
       name?: string | null,
@@ -3382,7 +3353,6 @@ export type OnDeleteRelationshipsSubscription = {
     followingUserId: string,
     followedUser?:  {
       __typename: "User",
-      id: string,
       email: string,
       username: string,
       name?: string | null,
@@ -3394,7 +3364,6 @@ export type OnDeleteRelationshipsSubscription = {
     } | null,
     followingUser?:  {
       __typename: "User",
-      id: string,
       email: string,
       username: string,
       name?: string | null,
@@ -3671,7 +3640,6 @@ export type OnCreateLeaderboardPositionSubscription = {
     } | null,
     user?:  {
       __typename: "User",
-      id: string,
       email: string,
       username: string,
       name?: string | null,
@@ -3707,7 +3675,6 @@ export type OnUpdateLeaderboardPositionSubscription = {
     } | null,
     user?:  {
       __typename: "User",
-      id: string,
       email: string,
       username: string,
       name?: string | null,
@@ -3743,7 +3710,6 @@ export type OnDeleteLeaderboardPositionSubscription = {
     } | null,
     user?:  {
       __typename: "User",
-      id: string,
       email: string,
       username: string,
       name?: string | null,

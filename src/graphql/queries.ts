@@ -3,9 +3,8 @@
 // this is an auto generated file. This will be overwritten
 
 export const getUser = /* GraphQL */ `
-  query GetUser($id: ID!) {
-    getUser(id: $id) {
-      id
+  query GetUser($email: ID!) {
+    getUser(email: $email) {
       email
       username
       name
@@ -40,21 +39,20 @@ export const getUser = /* GraphQL */ `
 `;
 export const listUsers = /* GraphQL */ `
   query ListUsers(
-    $id: ID
+    $email: ID
     $filter: ModelUserFilterInput
     $limit: Int
     $nextToken: String
     $sortDirection: ModelSortDirection
   ) {
     listUsers(
-      id: $id
+      email: $email
       filter: $filter
       limit: $limit
       nextToken: $nextToken
       sortDirection: $sortDirection
     ) {
       items {
-        id
         email
         username
         name
@@ -75,7 +73,6 @@ export const getRelationships = /* GraphQL */ `
       followedUserId
       followingUserId
       followedUser {
-        id
         email
         username
         name
@@ -86,7 +83,6 @@ export const getRelationships = /* GraphQL */ `
         updatedAt
       }
       followingUser {
-        id
         email
         username
         name
@@ -336,7 +332,6 @@ export const getLeaderboardPosition = /* GraphQL */ `
         updatedAt
       }
       user {
-        id
         email
         username
         name

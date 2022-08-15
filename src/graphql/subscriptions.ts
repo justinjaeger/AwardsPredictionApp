@@ -5,7 +5,6 @@
 export const onCreateUser = /* GraphQL */ `
   subscription OnCreateUser {
     onCreateUser {
-      id
       email
       username
       name
@@ -41,7 +40,6 @@ export const onCreateUser = /* GraphQL */ `
 export const onUpdateUser = /* GraphQL */ `
   subscription OnUpdateUser {
     onUpdateUser {
-      id
       email
       username
       name
@@ -77,7 +75,6 @@ export const onUpdateUser = /* GraphQL */ `
 export const onDeleteUser = /* GraphQL */ `
   subscription OnDeleteUser {
     onDeleteUser {
-      id
       email
       username
       name
@@ -117,7 +114,6 @@ export const onCreateRelationships = /* GraphQL */ `
       followedUserId
       followingUserId
       followedUser {
-        id
         email
         username
         name
@@ -128,7 +124,6 @@ export const onCreateRelationships = /* GraphQL */ `
         updatedAt
       }
       followingUser {
-        id
         email
         username
         name
@@ -153,7 +148,6 @@ export const onUpdateRelationships = /* GraphQL */ `
       followedUserId
       followingUserId
       followedUser {
-        id
         email
         username
         name
@@ -164,7 +158,6 @@ export const onUpdateRelationships = /* GraphQL */ `
         updatedAt
       }
       followingUser {
-        id
         email
         username
         name
@@ -189,7 +182,6 @@ export const onDeleteRelationships = /* GraphQL */ `
       followedUserId
       followingUserId
       followedUser {
-        id
         email
         username
         name
@@ -200,7 +192,6 @@ export const onDeleteRelationships = /* GraphQL */ `
         updatedAt
       }
       followingUser {
-        id
         email
         username
         name
@@ -459,7 +450,6 @@ export const onCreateLeaderboardPosition = /* GraphQL */ `
         updatedAt
       }
       user {
-        id
         email
         username
         name
@@ -493,7 +483,6 @@ export const onUpdateLeaderboardPosition = /* GraphQL */ `
         updatedAt
       }
       user {
-        id
         email
         username
         name
@@ -527,7 +516,6 @@ export const onDeleteLeaderboardPosition = /* GraphQL */ `
         updatedAt
       }
       user {
-        id
         email
         username
         name
