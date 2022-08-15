@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
-import { ScrollView } from 'react-native';
+import { View } from 'react-native';
 import { iAuthScreenProps, iAuthState } from './types';
 import FormInput from '../../components/Inputs/FormInput';
 import PasswordInput from '../../components/Inputs/PasswordInput';
-import { SubmitButton } from '../../components/Buttons/SubmitButton';
+import { SubmitButton, TouchableText } from '../../components/Buttons';
 import AuthServices from '../../services/auth';
 import { useAuthenticator } from './context';
 import { EvaStatus } from '@ui-kitten/components/devsupport';
+import { Body } from '../../components/Text';
+import { SignupRow } from './styles';
+import Snackbar from '../../components/Snackbar';
 
 const SignUp = (p: any) => {
   const props = p as iAuthScreenProps; // typecasting because props are automatically passed from Authenticator
@@ -38,15 +41,14 @@ const SignUp = (p: any) => {
     AuthServices.signUp(email, password).then((res) => {
       if (res.status === 'success') {
         setContextPassword(password); // important: password should be filled out for this step
+        Snackbar.success('We sent a verification code to your email', { duration: 4000 });
         navigate('confirmSignUp');
       }
     });
   };
 
   return (
-    <ScrollView
-      contentContainerStyle={{ alignItems: 'center', marginTop: 40, width: '75%' }}
-    >
+    <View style={{ width: '100%' }}>
       <FormInput
         label="Email"
         value={email}
@@ -94,17 +96,23 @@ const SignUp = (p: any) => {
           }
         }}
       />
-      <SubmitButton text={'Go to sign in'} onPress={() => navigate('signIn')} />
-      <SubmitButton
-        text={'Enter confirmation code'}
-        onPress={() => navigate('confirmSignUp')}
-      />
       <SubmitButton
         text={'Sign Up'}
         onPress={signUp}
         disabled={!validPassword || !validUsername || !validEmail}
       />
-    </ScrollView>
+      <SignupRow style={{ marginTop: 30 }}>
+        <Body>Already have an account?</Body>
+        <TouchableText text={'Sign in'} onPress={() => navigate('signIn')} />
+      </SignupRow>
+      <SignupRow>
+        <TouchableText
+          text={'Enter confirmation code'}
+          onPress={() => navigate('confirmSignUp')}
+          style={{ marginTop: 10 }}
+        />
+      </SignupRow>
+    </View>
   );
 };
 

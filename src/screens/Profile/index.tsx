@@ -1,17 +1,17 @@
 import React from 'react';
-import { Text } from '@ui-kitten/components';
 import { ScrollView } from 'react-native';
-import { SubmitButton } from '../../components/Buttons/SubmitButton';
+import { SubmitButton } from '../../components/Buttons';
 import AuthServices from '../../services/auth';
 import Snackbar from '../../components/Snackbar';
 import { logoutUser } from '../../store/actions/auth';
 import { useDispatch } from 'react-redux';
 import { useAuth } from '../../store';
 import { useNavigation } from '@react-navigation/native';
+import { Body } from '../../components/Text';
 
 const Profile = () => {
   const dispatch = useDispatch();
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, hasLoggedInBefore, user } = useAuth();
   const { navigate } = useNavigation();
 
   const logIn = () => {
@@ -30,11 +30,16 @@ const Profile = () => {
 
   return (
     <ScrollView contentContainerStyle={{ alignItems: 'center', marginTop: 40 }}>
-      <Text category={'h1'}>My Profile</Text>
       {!isLoggedIn ? (
-        <SubmitButton text={'Log in'} onPress={logIn} />
+        <SubmitButton
+          text={hasLoggedInBefore ? 'Log in' : 'Create Account'}
+          onPress={logIn}
+        />
       ) : (
-        <SubmitButton text={'Log out'} onPress={logOut} />
+        <>
+          <SubmitButton text={'Log out'} onPress={logOut} />
+          <Body>{JSON.stringify(user)}</Body>
+        </>
       )}
     </ScrollView>
   );

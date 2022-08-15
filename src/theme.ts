@@ -13,7 +13,7 @@ export default {
   'grayscale-300': '#DDD',
   'grayscale-400': '#BBB',
   'grayscale-500': '#888',
-  'grayscale-600': '#888',
+  'grayscale-600': '#666',
   'grayscale-800': '#444',
   'grayscale-900': '#222',
   // PASTE NEW COLORS BELOW

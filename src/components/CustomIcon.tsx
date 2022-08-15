@@ -1,6 +1,6 @@
 import React from 'react';
 import { Icon } from '@ui-kitten/components';
-import theme from '../theme';
+import COLORS from '../constants/colors';
 
 /**
  * https://akveo.github.io/eva-icons/#/
@@ -24,7 +24,7 @@ const CustomIcon = (props: iCustomIconProps) => {
         height: size || 32,
         ...styles,
       }}
-      fill={color || theme['color-primary-900']}
+      fill={color || COLORS.primary}
     />
   );
 };

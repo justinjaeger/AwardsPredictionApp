@@ -1,4 +1,4 @@
-import { AuthUser } from '../reducers/auth';
+import { User } from '../../API';
 
 export enum iActionTypes {
   LOGOUT_USER = 'LOGOUT_USER',
@@ -15,7 +15,7 @@ export const logoutUser = () => ({
   type: iActionTypes.LOGOUT_USER,
 });
 
-export const loginUser = (payload: AuthUser) => ({
+export const loginUser = (payload: User) => ({
   type: iActionTypes.LOGIN_USER,
   payload,
 });

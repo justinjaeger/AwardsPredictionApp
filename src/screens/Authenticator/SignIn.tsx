@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
-import { ScrollView } from 'react-native';
+import { View } from 'react-native';
 import { iAuthScreenProps, iAuthState } from './types';
 import PasswordInput from '../../components/Inputs/PasswordInput';
 import FormInput from '../../components/Inputs/FormInput';
-import { SubmitButton } from '../../components/Buttons/SubmitButton';
+import { SubmitButton, TouchableText } from '../../components/Buttons';
 import AuthServices from '../../services/auth';
 import Snackbar from '../../components/Snackbar';
 import { useAuthenticator } from './context';
 import { loginUser } from '../../store/actions/auth';
 import { useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
+import { SignupRow } from './styles';
+import { Body } from '../../components/Text';
 
 const SignIn = (p: any) => {
   const props = p as iAuthScreenProps; // typecasting because props are automatically passed from Authenticator
@@ -36,7 +38,7 @@ const SignIn = (p: any) => {
             duration: 5000,
           });
         }
-        // TODO: get existing user from database
+        // TODO: get existing user from database and set in redux
         // const existingUser = getExistingUser({ email: '', username: ''});
         dispatch(
           loginUser({
@@ -59,9 +61,7 @@ const SignIn = (p: any) => {
   };
 
   return (
-    <ScrollView
-      contentContainerStyle={{ alignItems: 'center', marginTop: 40, width: '75%' }}
-    >
+    <View style={{ width: '100%' }}>
       <FormInput
         label="Email"
         value={email}
@@ -69,14 +69,24 @@ const SignIn = (p: any) => {
         textContentType="emailAddress"
       />
       <PasswordInput value={password} setValue={setPassword} />
-      <SubmitButton text={'Go to sign up'} onPress={() => navigate('signUp')} />
-      <SubmitButton
-        text={'Forgot your password?'}
-        onPress={() => navigate('forgotPassword')}
-      />
-      <SubmitButton text={'Resend confirmation code?'} onPress={resendVerificationCode} />
       <SubmitButton text={'Log in'} onPress={signIn} disabled={password.length < 8} />
-    </ScrollView>
+      <SignupRow style={{ marginTop: 30 }}>
+        <Body>Don't have an account?</Body>
+        <TouchableText text={'Sign up'} onPress={() => navigate('signUp')} />
+      </SignupRow>
+      <TouchableText
+        text={'Forgot my password'}
+        onPress={() => navigate('forgotPassword')}
+        style={{ marginTop: 10 }}
+      />
+      {email ? (
+        <TouchableText
+          text={'Resend confirmation code'}
+          onPress={resendVerificationCode}
+          style={{ marginTop: 10 }}
+        />
+      ) : null}
+    </View>
   );
 };
 

@@ -6,7 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { TouchableOpacity, View } from 'react-native';
 import CustomIcon from '../components/CustomIcon';
 import ProfileNavigator from './ProfileNavigator';
-import theme from '../theme';
+import COLORS from '../constants/colors';
 
 const Tab = createBottomTabNavigator();
 
@@ -44,7 +44,7 @@ const TabBar = (props: ITabBarProps) => {
       edges={['bottom']}
       style={{
         borderTopWidth: 1,
-        borderColor: theme['grayscale-400'],
+        borderColor: COLORS.border,
         shadowOpacity: 0.2,
         shadowRadius: 10,
         shadowOffset: {

@@ -1,26 +1,26 @@
 import { default as RNSnackbar, SnackBarOptions } from 'react-native-snackbar';
-import theme from '../theme';
+import COLORS from '../constants/colors';
 
 const Snackbar = {
   success: (text: string, params?: Partial<SnackBarOptions>) =>
     RNSnackbar.show({
       text,
       duration: RNSnackbar.LENGTH_LONG,
-      backgroundColor: theme['color-success-700'],
+      backgroundColor: COLORS.success,
       ...params,
     }),
   warning: (text: string, params?: Partial<SnackBarOptions>) =>
     RNSnackbar.show({
       text,
       duration: RNSnackbar.LENGTH_LONG,
-      backgroundColor: theme['color-warning-400'],
+      backgroundColor: COLORS.warning,
       ...params,
     }),
   error: (text: string, params?: Partial<SnackBarOptions>) =>
     RNSnackbar.show({
       text,
       duration: RNSnackbar.LENGTH_LONG,
-      backgroundColor: theme['color-danger-800'],
+      backgroundColor: COLORS.error,
       ...params,
     }),
 };

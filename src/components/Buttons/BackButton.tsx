@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import theme from '../../theme';
+import COLORS from '../../constants/colors';
 import { IconButton } from '../IconButton';
 
 const BackButton = () => {
@@ -10,7 +10,7 @@ const BackButton = () => {
     <IconButton
       iconProps={{
         name: 'arrow-ios-back-outline',
-        styles: { color: theme['colors-primary-900'], width: 20, height: 30 },
+        styles: { color: COLORS.primary, width: 20, height: 30 },
       }}
       onPress={goBack}
       styles={{ width: 30, height: 30, marginLeft: 10 }}

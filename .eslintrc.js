@@ -44,5 +44,6 @@ module.exports = {
     '@typescript-eslint/no-empty-function': 0,
     'import/no-named-default': 0,
     'eslint-comments/no-unused-disable': 0,
+    'sonarjs/cognitive-complexity': 0,
   },
 };

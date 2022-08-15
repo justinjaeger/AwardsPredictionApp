@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { ScrollView } from 'react-native';
+import { View } from 'react-native';
 import { iAuthScreenProps, iAuthState } from './types';
 import FormInput from '../../components/Inputs/FormInput';
-import { SubmitButton } from '../../components/Buttons/SubmitButton';
+import { SubmitButton, TouchableText } from '../../components/Buttons';
 import AuthServices from '../../services/auth';
 import Snackbar from '../../components/Snackbar';
 import { useAuthenticator } from './context';
-import { UserRole } from '../../API';
+import { User, UserRole } from '../../API';
 import { useDispatch } from 'react-redux';
 import { loginUser } from '../../store/actions/auth';
 import ApiServices from '../../services/graphql/mutations';
@@ -42,26 +42,20 @@ const ConfirmSignUp = (p: any) => {
         // if password somehow isn't stored, generate random one. they can reset password later
         const password = contextPassword || (Math.random() * 1000000000).toString();
         // Create new user in db
-        // TODO: don't do username in here because if they never validate, you're stuck with a newly created username
-        // make it the next step they have to do with their profile setup
-        // or maybe that's overkill
         ApiServices.createUser({
           email,
           username,
           admin: UserRole.USER,
         })
           .then((res) => {
-            console.error('res', res.data?.id);
+            console.error('res.data', res.data?.createUser);
+            const user = res.data?.createUser;
+            if (!user) throw new Error();
             // Sign user in
             AuthServices.signIn(email, password).then((res) => {
               if (res.status === 'success') {
                 // tell Redux user is logged in
-                dispatch(
-                  loginUser({
-                    id: res.data?.id, // TODO: fix
-                    email,
-                  }),
-                );
+                dispatch(loginUser(user as User)); // definitely is this type if you mouse over "const user"
               }
             });
           })
@@ -82,9 +76,7 @@ const ConfirmSignUp = (p: any) => {
   };
 
   return (
-    <ScrollView
-      contentContainerStyle={{ alignItems: 'center', marginTop: 40, width: '75%' }}
-    >
+    <View style={{ width: '100%' }}>
       {!contextEmail ? (
         <FormInput
           label="Email"
@@ -107,14 +99,24 @@ const ConfirmSignUp = (p: any) => {
         setValue={setCode}
         textContentType="oneTimeCode"
       />
-      <SubmitButton text={'Back to sign in'} onPress={() => navigate('signIn')} />
-      <SubmitButton text={'Resend Code'} onPress={resendVerificationCode} />
       <SubmitButton
         text={'Submit'}
         onPress={submit}
         disabled={!validCode || !validEmail}
       />
-    </ScrollView>
+      <TouchableText
+        text={'Back to sign in'}
+        onPress={() => navigate('signIn')}
+        style={{ marginTop: 30 }}
+      />
+      {email ? (
+        <TouchableText
+          text={'Resend Code'}
+          onPress={resendVerificationCode}
+          style={{ marginTop: 20 }}
+        />
+      ) : null}
+    </View>
   );
 };
 

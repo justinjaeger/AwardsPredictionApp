@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { ScrollView } from 'react-native';
+import { View } from 'react-native';
 import { iAuthScreenProps, iAuthState } from './types';
 import FormInput from '../../components/Inputs/FormInput';
-import { SubmitButton } from '../../components/Buttons/SubmitButton';
+import { SubmitButton, TouchableText } from '../../components/Buttons';
 import AuthServices from '../../services/auth';
 import Snackbar from '../../components/Snackbar';
 import { useAuthenticator } from './context';
@@ -27,18 +27,20 @@ const ForgotPassword = (p: any) => {
   };
 
   return (
-    <ScrollView
-      contentContainerStyle={{ alignItems: 'center', marginTop: 40, width: '75%' }}
-    >
+    <View style={{ width: '100%' }}>
       <FormInput
         label="Email"
         value={email}
         setValue={setEmail}
         textContentType="emailAddress"
       />
-      <SubmitButton text={'Go to sign up'} onPress={() => navigate('signUp')} />
       <SubmitButton text={'Submit'} onPress={submit} />
-    </ScrollView>
+      <TouchableText
+        text={'Back to sign up'}
+        onPress={() => navigate('signUp')}
+        style={{ marginTop: 30 }}
+      />
+    </View>
   );
 };
 
