@@ -12,15 +12,18 @@ import { useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import { SignupRow } from './styles';
 import { Body } from '../../components/Text';
+import ApiServices from '../../services/graphql';
+import { useAuth } from '../../store';
 
 const SignIn = (p: any) => {
   const props = p as iAuthScreenProps; // typecasting because props are automatically passed from Authenticator
   const dispatch = useDispatch();
   const { goBack } = useNavigation();
+  const { storedEmail } = useAuth();
   const { email: contextEmail, setEmail: setContextEmail } = useAuthenticator();
 
   const [password, setPassword] = useState<string>('');
-  const [email, setEmail] = useState<string>(contextEmail || '');
+  const [email, setEmail] = useState<string>(storedEmail || contextEmail || '');
 
   const navigate = (authState: iAuthState) => {
     props.onStateChange(authState, {});
@@ -38,15 +41,17 @@ const SignIn = (p: any) => {
             duration: 5000,
           });
         }
-        // TODO: get existing user from database and set in redux
-        // const existingUser = getExistingUser({ email: '', username: ''});
-        dispatch(
-          loginUser({
-            id: '1234', // TODO: fix
-            email,
-          }),
-        );
-        goBack();
+        // Get existing user from database and set in redux
+        // NOTE: If this fails, we should log the user back out
+        ApiServices.getUsersByFilter({ filter: { email: { eq: email } } }).then((res) => {
+          if (res.status === 'success') {
+            const user = res.data?.[0];
+            if (user) {
+              dispatch(loginUser(user));
+              goBack();
+            }
+          }
+        });
       }
     });
   };

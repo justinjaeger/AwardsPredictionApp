@@ -1,6 +1,6 @@
 import React from 'react';
 import { ScrollView } from 'react-native';
-import { SubmitButton } from '../../components/Buttons';
+import { SubmitButton, TouchableText } from '../../components/Buttons';
 import AuthServices from '../../services/auth';
 import Snackbar from '../../components/Snackbar';
 import { logoutUser } from '../../store/actions/auth';
@@ -11,11 +11,11 @@ import { Body } from '../../components/Text';
 
 const Profile = () => {
   const dispatch = useDispatch();
-  const { isLoggedIn, hasLoggedInBefore, user } = useAuth();
-  const { navigate } = useNavigation();
+  const { isLoggedIn, storedEmail, user } = useAuth();
+  const navigation = useNavigation();
 
   const logIn = () => {
-    navigate('Authenticator');
+    navigation.navigate('Authenticator');
   };
 
   const logOut = () => {
@@ -23,7 +23,7 @@ const Profile = () => {
       // sign out in context as well
       if (res.status === 'success') {
         dispatch(logoutUser());
-        Snackbar.success('Successfully signed out');
+        Snackbar.success('You were signed out');
       }
     });
   };
@@ -31,13 +31,16 @@ const Profile = () => {
   return (
     <ScrollView contentContainerStyle={{ alignItems: 'center', marginTop: 40 }}>
       {!isLoggedIn ? (
-        <SubmitButton
-          text={hasLoggedInBefore ? 'Log in' : 'Create Account'}
-          onPress={logIn}
-        />
+        <SubmitButton text={storedEmail ? 'Log in' : 'Create Account'} onPress={logIn} />
       ) : (
         <>
           <SubmitButton text={'Log out'} onPress={logOut} />
+          <TouchableText
+            text={user?.username ? 'Change Username' : 'Create Username'}
+            onPress={() => {
+              navigation.navigate('ChangeUsername');
+            }}
+          />
           <Body>{JSON.stringify(user)}</Body>
         </>
       )}

@@ -8,12 +8,13 @@ export const createUser = /* GraphQL */ `
     $condition: ModelUserConditionInput
   ) {
     createUser(input: $input, condition: $condition) {
+      id
       email
       username
       name
       bio
       image
-      admin
+      role
       followers {
         nextToken
       }
@@ -46,12 +47,13 @@ export const updateUser = /* GraphQL */ `
     $condition: ModelUserConditionInput
   ) {
     updateUser(input: $input, condition: $condition) {
+      id
       email
       username
       name
       bio
       image
-      admin
+      role
       followers {
         nextToken
       }
@@ -84,12 +86,13 @@ export const deleteUser = /* GraphQL */ `
     $condition: ModelUserConditionInput
   ) {
     deleteUser(input: $input, condition: $condition) {
+      id
       email
       username
       name
       bio
       image
-      admin
+      role
       followers {
         nextToken
       }
@@ -126,22 +129,24 @@ export const createRelationships = /* GraphQL */ `
       followedUserId
       followingUserId
       followedUser {
+        id
         email
         username
         name
         bio
         image
-        admin
+        role
         createdAt
         updatedAt
       }
       followingUser {
+        id
         email
         username
         name
         bio
         image
-        admin
+        role
         createdAt
         updatedAt
       }
@@ -163,22 +168,24 @@ export const updateRelationships = /* GraphQL */ `
       followedUserId
       followingUserId
       followedUser {
+        id
         email
         username
         name
         bio
         image
-        admin
+        role
         createdAt
         updatedAt
       }
       followingUser {
+        id
         email
         username
         name
         bio
         image
-        admin
+        role
         createdAt
         updatedAt
       }
@@ -200,22 +207,24 @@ export const deleteRelationships = /* GraphQL */ `
       followedUserId
       followingUserId
       followedUser {
+        id
         email
         username
         name
         bio
         image
-        admin
+        role
         createdAt
         updatedAt
       }
       followingUser {
+        id
         email
         username
         name
         bio
         image
-        admin
+        role
         createdAt
         updatedAt
       }
@@ -507,12 +516,13 @@ export const createLeaderboardPosition = /* GraphQL */ `
         updatedAt
       }
       user {
+        id
         email
         username
         name
         bio
         image
-        admin
+        role
         createdAt
         updatedAt
       }
@@ -543,12 +553,13 @@ export const updateLeaderboardPosition = /* GraphQL */ `
         updatedAt
       }
       user {
+        id
         email
         username
         name
         bio
         image
-        admin
+        role
         createdAt
         updatedAt
       }
@@ -579,12 +590,13 @@ export const deleteLeaderboardPosition = /* GraphQL */ `
         updatedAt
       }
       user {
+        id
         email
         username
         name
         bio
         image
-        admin
+        role
         createdAt
         updatedAt
       }

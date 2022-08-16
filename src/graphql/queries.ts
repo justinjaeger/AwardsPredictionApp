@@ -3,14 +3,15 @@
 // this is an auto generated file. This will be overwritten
 
 export const getUser = /* GraphQL */ `
-  query GetUser($email: ID!) {
-    getUser(email: $email) {
+  query GetUser($id: ID!) {
+    getUser(id: $id) {
+      id
       email
       username
       name
       bio
       image
-      admin
+      role
       followers {
         nextToken
       }
@@ -39,26 +40,27 @@ export const getUser = /* GraphQL */ `
 `;
 export const listUsers = /* GraphQL */ `
   query ListUsers(
-    $email: ID
+    $id: ID
     $filter: ModelUserFilterInput
     $limit: Int
     $nextToken: String
     $sortDirection: ModelSortDirection
   ) {
     listUsers(
-      email: $email
+      id: $id
       filter: $filter
       limit: $limit
       nextToken: $nextToken
       sortDirection: $sortDirection
     ) {
       items {
+        id
         email
         username
         name
         bio
         image
-        admin
+        role
         createdAt
         updatedAt
       }
@@ -73,22 +75,24 @@ export const getRelationships = /* GraphQL */ `
       followedUserId
       followingUserId
       followedUser {
+        id
         email
         username
         name
         bio
         image
-        admin
+        role
         createdAt
         updatedAt
       }
       followingUser {
+        id
         email
         username
         name
         bio
         image
-        admin
+        role
         createdAt
         updatedAt
       }
@@ -332,12 +336,13 @@ export const getLeaderboardPosition = /* GraphQL */ `
         updatedAt
       }
       user {
+        id
         email
         username
         name
         bio
         image
-        admin
+        role
         createdAt
         updatedAt
       }

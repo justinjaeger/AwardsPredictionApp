@@ -6,13 +6,13 @@ export interface iSuperAuth {
 
 export interface iAuth {
   isLoggedIn: boolean;
-  hasLoggedInBefore: boolean;
+  storedEmail: string | undefined;
   user: User | undefined;
 }
 
 const initialState: iAuth = {
   isLoggedIn: false,
-  hasLoggedInBefore: false,
+  storedEmail: undefined,
   user: undefined,
 };
 
@@ -25,13 +25,19 @@ export const authReducer = (
       return {
         ...state,
         isLoggedIn: true,
-        hasLoggedInBefore: true,
+        storedEmail: action.payload.email,
         user: action.payload,
       };
     case iActionTypes.LOGOUT_USER:
       return {
         ...state,
         isLoggedIn: false,
+        user: undefined,
+      };
+    case iActionTypes.UPDATE_USER:
+      return {
+        ...state,
+        user: action.payload,
       };
     default:
       return state;

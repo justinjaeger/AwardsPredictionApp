@@ -75,20 +75,21 @@ enum CategoryName {
 }
 
 type User @model @auth(rules: [{allow: public}]) {
-    email: ID! @primaryKey
-    username: String!
+    id: ID! @primaryKey
+    email: String!
+    username: String
     name: String
     bio: String
     image: String
-    admin: UserRole! @default(value: "USER")
+    role: UserRole! @default(value: "USER")
     # below lets you retrieve related Relationships records from the source User record
     # under the hood, @hasMany configures a default secondary index on the related table to enable you to query the related model from the source model
-    followers: [Relationships] @hasMany(indexName: "byFollowedUser", fields: ["email"])
-    following: [Relationships] @hasMany(indexName: "byFollowingUser", fields: ["email"])
-    activePredictionsByEvent: [PredictionSet] @hasMany(indexName: "byUserByEventActive", fields: ["email"])
-    activePredictionsByCategory: [PredictionSet] @hasMany(indexName: "byUserByCategoryByActive", fields: ["email"])
-    pastPredictionsByEvent: [PredictionSet] @hasMany(indexName: "byUserByEventByDate", fields: ["email"])
-    pastPredictionsByCategory: [PredictionSet] @hasMany(indexName: "byUserByCategoryByDate", fields: ["email"])
+    followers: [Relationships] @hasMany(indexName: "byFollowedUser", fields: ["id"])
+    following: [Relationships] @hasMany(indexName: "byFollowingUser", fields: ["id"])
+    activePredictionsByEvent: [PredictionSet] @hasMany(indexName: "byUserByEventActive", fields: ["id"])
+    activePredictionsByCategory: [PredictionSet] @hasMany(indexName: "byUserByCategoryByActive", fields: ["id"])
+    pastPredictionsByEvent: [PredictionSet] @hasMany(indexName: "byUserByEventByDate", fields: ["id"])
+    pastPredictionsByCategory: [PredictionSet] @hasMany(indexName: "byUserByCategoryByDate", fields: ["id"])
     leaderboardScores: [LeaderboardPosition] @hasMany
 }
 

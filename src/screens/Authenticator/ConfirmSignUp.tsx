@@ -9,7 +9,8 @@ import { useAuthenticator } from './context';
 import { User, UserRole } from '../../API';
 import { useDispatch } from 'react-redux';
 import { loginUser } from '../../store/actions/auth';
-import ApiServices from '../../services/graphql/mutations';
+import ApiServices from '../../services/graphql';
+import { useNavigation } from '@react-navigation/native';
 
 const ConfirmSignUp = (p: any) => {
   const props = p as iAuthScreenProps; // typecasting because props are automatically passed from Authenticator
@@ -17,13 +18,12 @@ const ConfirmSignUp = (p: any) => {
     email: contextEmail,
     setEmail: setContextEmail,
     password: contextPassword,
-    username: contextUsername,
   } = useAuthenticator();
   const dispatch = useDispatch();
+  const { goBack } = useNavigation();
 
   const [code, setCode] = useState<string>('');
   const [email, setEmail] = useState<string>(contextEmail || '');
-  const [username, setUsername] = useState<string>(contextUsername || '');
 
   const validCode = code.length === 6;
   const validEmail = email.length > 0 && email.includes('.') && email.includes('@');
@@ -43,27 +43,24 @@ const ConfirmSignUp = (p: any) => {
         const password = contextPassword || (Math.random() * 1000000000).toString();
         // Create new user in db
         ApiServices.createUser({
-          email,
-          username,
-          admin: UserRole.USER,
-        })
-          .then((res) => {
-            console.error('res.data', res.data?.createUser);
+          input: {
+            email,
+            role: UserRole.USER,
+          },
+        }).then((res) => {
+          if (res.status === 'success') {
             const user = res.data?.createUser;
-            if (!user) throw new Error();
-            // Sign user in
-            AuthServices.signIn(email, password).then((res) => {
-              if (res.status === 'success') {
-                // tell Redux user is logged in
-                dispatch(loginUser(user as User)); // definitely is this type if you mouse over "const user"
-              }
-            });
-          })
-          .catch((err) => {
-            console.error('err', err);
-            // this case would be pretty bad
-            Snackbar.error('Sorry, something went wrong.');
-          });
+            if (user) {
+              AuthServices.signIn(email, password).then((res) => {
+                if (res.status === 'success') {
+                  // tell Redux user is logged in
+                  dispatch(loginUser(user as User)); // definitely is this type if you mouse over "const user"
+                  goBack();
+                }
+              });
+            }
+          }
+        });
       }
     });
   };
@@ -83,14 +80,6 @@ const ConfirmSignUp = (p: any) => {
           value={email}
           setValue={setEmail}
           textContentType="emailAddress"
-        />
-      ) : null}
-      {!contextUsername ? (
-        <FormInput
-          label="Username"
-          value={username}
-          setValue={setUsername}
-          textContentType="username"
         />
       ) : null}
       <FormInput

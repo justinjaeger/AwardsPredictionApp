@@ -12,6 +12,8 @@ import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../../store';
 import { ScrollView, View } from 'react-native';
 import COLORS from '../../constants/colors';
+import AuthServices from '../../services/auth';
+import Snackbar from '../../components/Snackbar';
 
 const headerTitles: { [key in iAuthState]: string } = {
   signIn: 'Log In',
@@ -21,17 +23,27 @@ const headerTitles: { [key in iAuthState]: string } = {
   forgotPassword: 'Reset Password',
   requireNewPassword: 'Create New Password',
   verifyContact: 'Verify Contact',
-  signedIn: 'Signed In',
+  signedIn: 'You are signed in!',
 };
 
 const Auth = () => {
   const navigation = useNavigation();
-  const { hasLoggedInBefore } = useAuth();
+  const { storedEmail } = useAuth();
   const [authState, setAuthState] = useState<iAuthState>('signIn');
 
   useEffect(() => {
-    setAuthState(hasLoggedInBefore ? 'signIn' : 'signUp');
-  }, [hasLoggedInBefore]);
+    setAuthState(storedEmail ? 'signIn' : 'signUp');
+  }, [storedEmail]);
+
+  useEffect(() => {
+    // if this scenario occurs, something is wrong and user should be removed
+    // this might happen if the Authenticator thinks the user is logged in, but the sign up request has failed
+    if (!storedEmail && authState === 'signedIn') {
+      AuthServices.deleteUser();
+      setAuthState('signUp');
+      Snackbar.error('Sorry, something went wrong. Please try signing up again.');
+    }
+  }, [storedEmail, authState]);
 
   useLayoutEffect(() => {
     // This is the best way to change the header
