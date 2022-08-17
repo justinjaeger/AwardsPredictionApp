@@ -24,6 +24,7 @@ const ConfirmSignUp = (p: any) => {
 
   const [code, setCode] = useState<string>('');
   const [email, setEmail] = useState<string>(contextEmail || '');
+  const [loading, setLoading] = useState<boolean>(false);
 
   const validCode = code.length === 6;
   const validEmail = email.length > 0 && email.includes('.') && email.includes('@');
@@ -36,22 +37,23 @@ const ConfirmSignUp = (p: any) => {
     if (!email) {
       return Snackbar.error('Oops, something went wrong.');
     }
+    setLoading(true);
     AuthServices.confirmSignUp(email, code).then(async (res) => {
       setContextEmail(email);
       if (res.status === 'success') {
         // if password somehow isn't stored, generate random one. they can reset password later
         const password = contextPassword || (Math.random() * 1000000000).toString();
         // Create new user in db
-        ApiServices.createUser({
+        await ApiServices.createUser({
           input: {
             email,
             role: UserRole.USER,
           },
-        }).then((res) => {
+        }).then(async (res) => {
           if (res.status === 'success') {
             const user = res.data?.createUser;
             if (user) {
-              AuthServices.signIn(email, password).then((res) => {
+              await AuthServices.signIn(email, password).then((res) => {
                 if (res.status === 'success') {
                   // tell Redux user is logged in
                   dispatch(loginUser(user as User)); // definitely is this type if you mouse over "const user"
@@ -62,6 +64,7 @@ const ConfirmSignUp = (p: any) => {
           }
         });
       }
+      setLoading(false);
     });
   };
 
@@ -70,6 +73,7 @@ const ConfirmSignUp = (p: any) => {
       return Snackbar.error('Oops, something went wrong.');
     }
     AuthServices.resendSignUp(email);
+    Snackbar.success('A verification code was sent to your email');
   };
 
   return (
@@ -92,6 +96,7 @@ const ConfirmSignUp = (p: any) => {
         text={'Submit'}
         onPress={submit}
         disabled={!validCode || !validEmail}
+        loading={loading}
       />
       <TouchableText
         text={'Back to sign in'}

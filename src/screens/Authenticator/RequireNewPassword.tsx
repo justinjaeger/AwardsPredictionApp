@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { View } from 'react-native';
 import { iAuthScreenProps, iAuthState } from './types';
 import FormInput from '../../components/Inputs/FormInput';
@@ -13,11 +13,7 @@ const RequireNewPassword = (p: any) => {
 
   const [code, setCode] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-
-  useEffect(() => {
-    // somehow get the code from url slug or something?
-    // also, maybe get the email from the previous page?
-  }, []);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const navigate = (authState: iAuthState) => {
     props.onStateChange(authState, {});
@@ -27,10 +23,12 @@ const RequireNewPassword = (p: any) => {
     if (!email) {
       return Snackbar.error('Oops! Something went wrong');
     }
+    setLoading(true);
     AuthServices.forgotPasswordSubmit(email, code, password).then((res) => {
       if (res.status === 'success') {
         Snackbar.success(`Confirm the email we sent to ${email}`);
       }
+      setLoading(false);
     });
   };
 
@@ -38,7 +36,7 @@ const RequireNewPassword = (p: any) => {
     <View style={{ width: '100%' }}>
       <FormInput label="New Password" value={password} setValue={setPassword} />
       <FormInput label="Code" value={code} setValue={setCode} />
-      <SubmitButton text={'Submit'} onPress={submit} />
+      <SubmitButton text={'Submit'} onPress={submit} loading={loading} />
       <TouchableText
         text={'Go to sign up'}
         onPress={() => navigate('signUp')}

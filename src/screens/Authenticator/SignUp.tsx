@@ -23,6 +23,7 @@ const SignUp = (p: any) => {
   const [email, setEmail] = useState<string>(contextEmail || '');
   const [emailStatus, setEmailStatus] = useState<EvaStatus | undefined>(undefined);
   const [passwordStatus, setPasswordStatus] = useState<EvaStatus | undefined>(undefined);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const validPassword = password.length >= 8;
   const validEmail = email.length > 0 && email.includes('.') && email.includes('@');
@@ -33,12 +34,14 @@ const SignUp = (p: any) => {
 
   const signUp = () => {
     setContextEmail(email);
+    setLoading(true);
     AuthServices.signUp(email, password).then((res) => {
       if (res.status === 'success') {
         setContextPassword(password); // important: password should be filled out for this step
         Snackbar.success('We sent a verification code to your email', { duration: 4000 });
         navigate('confirmSignUp');
       }
+      setLoading(false);
     });
   };
 
@@ -76,6 +79,7 @@ const SignUp = (p: any) => {
         text={'Sign Up'}
         onPress={signUp}
         disabled={!validPassword || !validEmail}
+        loading={loading}
       />
       <SignupRow style={{ marginTop: 30 }}>
         <Body>Already have an account?</Body>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ScrollView } from 'react-native';
 import { SubmitButton, TouchableText } from '../../components/Buttons';
 import AuthServices from '../../services/auth';
@@ -14,17 +14,21 @@ const Profile = () => {
   const { isLoggedIn, storedEmail, user } = useAuth();
   const navigation = useNavigation();
 
+  const [loading, setLoading] = useState<boolean>(false);
+
   const logIn = () => {
     navigation.navigate('Authenticator');
   };
 
   const logOut = () => {
+    setLoading(true);
     AuthServices.signOut().then((res) => {
       // sign out in context as well
       if (res.status === 'success') {
         dispatch(logoutUser());
         Snackbar.success('You were signed out');
       }
+      setLoading(false);
     });
   };
 
@@ -34,7 +38,7 @@ const Profile = () => {
         <SubmitButton text={storedEmail ? 'Log in' : 'Create Account'} onPress={logIn} />
       ) : (
         <>
-          <SubmitButton text={'Log out'} onPress={logOut} />
+          <SubmitButton text={'Log out'} onPress={logOut} loading={loading} />
           <TouchableText
             text={user?.username ? 'Change Username' : 'Create Username'}
             onPress={() => {

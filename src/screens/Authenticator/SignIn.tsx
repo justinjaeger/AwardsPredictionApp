@@ -24,35 +24,41 @@ const SignIn = (p: any) => {
 
   const [password, setPassword] = useState<string>('');
   const [email, setEmail] = useState<string>(storedEmail || contextEmail || '');
+  const [loading, setLoading] = useState<boolean>(false);
 
   const navigate = (authState: iAuthState) => {
     props.onStateChange(authState, {});
   };
 
   const signIn = () => {
+    setLoading(true);
     setContextEmail(email);
-    AuthServices.signIn(email, password).then((res) => {
+    AuthServices.signIn(email, password).then(async (res) => {
       if (res.status === 'success') {
         if (res.message) {
           // display message that verification code has been sent to email
           // navigate to verification code / signup
           navigate('confirmSignUp');
-          return Snackbar.success(res.message, {
+          Snackbar.success(res.message, {
             duration: 5000,
           });
+        } else {
+          // Get existing user from database and set in redux
+          // NOTE: If this fails, we should log the user back out
+          await ApiServices.getUsersByFilter({ filter: { email: { eq: email } } }).then(
+            (res) => {
+              if (res.status === 'success') {
+                const user = res.data?.[0];
+                if (user) {
+                  dispatch(loginUser(user));
+                  goBack();
+                }
+              }
+            },
+          );
         }
-        // Get existing user from database and set in redux
-        // NOTE: If this fails, we should log the user back out
-        ApiServices.getUsersByFilter({ filter: { email: { eq: email } } }).then((res) => {
-          if (res.status === 'success') {
-            const user = res.data?.[0];
-            if (user) {
-              dispatch(loginUser(user));
-              goBack();
-            }
-          }
-        });
       }
+      setLoading(false);
     });
   };
 
@@ -74,7 +80,12 @@ const SignIn = (p: any) => {
         textContentType="emailAddress"
       />
       <PasswordInput value={password} setValue={setPassword} />
-      <SubmitButton text={'Log in'} onPress={signIn} disabled={password.length < 8} />
+      <SubmitButton
+        text={'Log in'}
+        onPress={signIn}
+        disabled={password.length < 8}
+        loading={loading}
+      />
       <SignupRow style={{ marginTop: 30 }}>
         <Body>Don't have an account?</Body>
         <TouchableText text={'Sign up'} onPress={() => navigate('signUp')} />

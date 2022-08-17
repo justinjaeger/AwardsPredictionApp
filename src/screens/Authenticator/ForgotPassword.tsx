@@ -12,17 +12,20 @@ const ForgotPassword = (p: any) => {
   const { email: contextEmail, setEmail: setContextEmail } = useAuthenticator();
 
   const [email, setEmail] = useState<string>(contextEmail || '');
+  const [loading, setLoading] = useState<boolean>(false);
 
   const navigate = (authState: iAuthState) => {
     props.onStateChange(authState, {});
   };
 
   const submit = () => {
+    setLoading(true);
     setContextEmail(email);
     AuthServices.forgotPassword(email).then((res) => {
       if (res.status === 'success') {
         Snackbar.success(`Confirm the email we sent to ${email}`);
       }
+      setLoading(false);
     });
   };
 
@@ -34,7 +37,7 @@ const ForgotPassword = (p: any) => {
         setValue={setEmail}
         textContentType="emailAddress"
       />
-      <SubmitButton text={'Submit'} onPress={submit} />
+      <SubmitButton text={'Submit'} onPress={submit} loading={loading} />
       <TouchableText
         text={'Back to sign up'}
         onPress={() => navigate('signUp')}
