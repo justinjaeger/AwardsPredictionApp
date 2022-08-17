@@ -1,9 +1,6 @@
-import { User } from '../../API';
-
 export enum iActionTypes {
   LOGOUT_USER = 'LOGOUT_USER',
   LOGIN_USER = 'LOGIN_USER',
-  UPDATE_USER = 'UPDATE_USER',
 }
 
 /**
@@ -16,12 +13,7 @@ export const logoutUser = () => ({
   type: iActionTypes.LOGOUT_USER,
 });
 
-export const loginUser = (payload: User) => ({
-  type: iActionTypes.LOGIN_USER,
-  payload,
-});
-
-export const updateUser = (payload: User) => ({
+export const loginUser = (payload: { userId: string; userEmail: string }) => ({
   type: iActionTypes.LOGIN_USER,
   payload,
 });

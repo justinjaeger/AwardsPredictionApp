@@ -6,11 +6,12 @@ import { SubmitButton, TouchableText } from '../../components/Buttons';
 import AuthServices from '../../services/auth';
 import Snackbar from '../../components/Snackbar';
 import { useAuthenticator } from './context';
-import { User, UserRole } from '../../API';
+import { UserRole } from '../../API';
 import { useDispatch } from 'react-redux';
 import { loginUser } from '../../store/actions/auth';
-import ApiServices from '../../services/graphql';
 import { useNavigation } from '@react-navigation/native';
+import { DataStore } from 'aws-amplify';
+import { User } from '../../models';
 
 const ConfirmSignUp = (p: any) => {
   const props = p as iAuthScreenProps; // typecasting because props are automatically passed from Authenticator
@@ -44,23 +45,16 @@ const ConfirmSignUp = (p: any) => {
         // if password somehow isn't stored, generate random one. they can reset password later
         const password = contextPassword || (Math.random() * 1000000000).toString();
         // Create new user in db
-        await ApiServices.createUser({
-          input: {
+        const user = await DataStore.save(
+          new User({
             email,
             role: UserRole.USER,
-          },
-        }).then(async (res) => {
+          }),
+        );
+        AuthServices.signIn(email, password).then((res) => {
           if (res.status === 'success') {
-            const user = res.data?.createUser;
-            if (user) {
-              await AuthServices.signIn(email, password).then((res) => {
-                if (res.status === 'success') {
-                  // tell Redux user is logged in
-                  dispatch(loginUser(user as User)); // definitely is this type if you mouse over "const user"
-                  goBack();
-                }
-              });
-            }
+            dispatch(loginUser({ userId: user.id, userEmail: user.email }));
+            goBack();
           }
         });
       }

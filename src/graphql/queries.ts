@@ -14,27 +14,37 @@ export const getUser = /* GraphQL */ `
       role
       followers {
         nextToken
+        startedAt
       }
       following {
         nextToken
+        startedAt
       }
       activePredictionsByEvent {
         nextToken
+        startedAt
       }
       activePredictionsByCategory {
         nextToken
+        startedAt
       }
       pastPredictionsByEvent {
         nextToken
+        startedAt
       }
       pastPredictionsByCategory {
         nextToken
+        startedAt
       }
       leaderboardScores {
         nextToken
+        startedAt
       }
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
@@ -63,8 +73,44 @@ export const listUsers = /* GraphQL */ `
         role
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       nextToken
+      startedAt
+    }
+  }
+`;
+export const syncUsers = /* GraphQL */ `
+  query SyncUsers(
+    $filter: ModelUserFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncUsers(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        email
+        username
+        name
+        bio
+        image
+        role
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
     }
   }
 `;
@@ -84,6 +130,9 @@ export const getRelationships = /* GraphQL */ `
         role
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       followingUser {
         id
@@ -95,12 +144,19 @@ export const getRelationships = /* GraphQL */ `
         role
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       followedPredictionFeed {
         nextToken
+        startedAt
       }
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
@@ -125,8 +181,40 @@ export const listRelationships = /* GraphQL */ `
         followingUserId
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       nextToken
+      startedAt
+    }
+  }
+`;
+export const syncRelationships = /* GraphQL */ `
+  query SyncRelationships(
+    $filter: ModelRelationshipsFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncRelationships(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        followedUserId
+        followingUserId
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
     }
   }
 `;
@@ -139,10 +227,14 @@ export const getPredictionSet = /* GraphQL */ `
       categoryId
       predictions {
         nextToken
+        startedAt
       }
       isActive
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
@@ -169,8 +261,42 @@ export const listPredictionSets = /* GraphQL */ `
         isActive
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       nextToken
+      startedAt
+    }
+  }
+`;
+export const syncPredictionSets = /* GraphQL */ `
+  query SyncPredictionSets(
+    $filter: ModelPredictionSetFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncPredictionSets(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        userId
+        eventId
+        categoryId
+        isActive
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
     }
   }
 `;
@@ -187,6 +313,9 @@ export const getPrediction = /* GraphQL */ `
         didReceiveNominationOrWin
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         categoryContendersId
         contenderMovieId
         contenderPersonId
@@ -195,6 +324,9 @@ export const getPrediction = /* GraphQL */ `
       isActive
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       predictionSetPredictionsId
     }
   }
@@ -223,9 +355,45 @@ export const listPredictions = /* GraphQL */ `
         isActive
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         predictionSetPredictionsId
       }
       nextToken
+      startedAt
+    }
+  }
+`;
+export const syncPredictions = /* GraphQL */ `
+  query SyncPredictions(
+    $filter: ModelPredictionFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncPredictions(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        predictionSetId
+        userId
+        contenderId
+        ranking
+        isActive
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        predictionSetPredictionsId
+      }
+      nextToken
+      startedAt
     }
   }
 `;
@@ -235,9 +403,11 @@ export const getEvent = /* GraphQL */ `
       id
       categories {
         nextToken
+        startedAt
       }
       leaderboard {
         nextToken
+        startedAt
       }
       awardsBody
       year
@@ -245,10 +415,14 @@ export const getEvent = /* GraphQL */ `
       expiration
       usersPredicting {
         nextToken
+        startedAt
       }
       isActive
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
@@ -276,53 +450,125 @@ export const listEvents = /* GraphQL */ `
         isActive
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       nextToken
+      startedAt
+    }
+  }
+`;
+export const syncEvents = /* GraphQL */ `
+  query SyncEvents(
+    $filter: ModelEventFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncEvents(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        awardsBody
+        year
+        type
+        expiration
+        isActive
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
     }
   }
 `;
 export const getUserPredictingEvent = /* GraphQL */ `
-  query GetUserPredictingEvent($eventId: ID!, $userId: ID!) {
-    getUserPredictingEvent(eventId: $eventId, userId: $userId) {
+  query GetUserPredictingEvent($id: ID!) {
+    getUserPredictingEvent(id: $id) {
+      id
       eventId
       userId
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       eventUsersPredictingId
     }
   }
 `;
 export const listUserPredictingEvents = /* GraphQL */ `
   query ListUserPredictingEvents(
-    $eventId: ID
-    $userId: ModelIDKeyConditionInput
+    $id: ID
     $filter: ModelUserPredictingEventFilterInput
     $limit: Int
     $nextToken: String
     $sortDirection: ModelSortDirection
   ) {
     listUserPredictingEvents(
-      eventId: $eventId
-      userId: $userId
+      id: $id
       filter: $filter
       limit: $limit
       nextToken: $nextToken
       sortDirection: $sortDirection
     ) {
       items {
+        id
         eventId
         userId
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         eventUsersPredictingId
       }
       nextToken
+      startedAt
+    }
+  }
+`;
+export const syncUserPredictingEvents = /* GraphQL */ `
+  query SyncUserPredictingEvents(
+    $filter: ModelUserPredictingEventFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncUserPredictingEvents(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        eventId
+        userId
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        eventUsersPredictingId
+      }
+      nextToken
+      startedAt
     }
   }
 `;
 export const getLeaderboardPosition = /* GraphQL */ `
-  query GetLeaderboardPosition($userId: ID!, $eventId: ID!) {
-    getLeaderboardPosition(userId: $userId, eventId: $eventId) {
+  query GetLeaderboardPosition($id: ID!) {
+    getLeaderboardPosition(id: $id) {
+      id
       userId
       eventId
       event {
@@ -334,6 +580,9 @@ export const getLeaderboardPosition = /* GraphQL */ `
         isActive
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       user {
         id
@@ -345,42 +594,82 @@ export const getLeaderboardPosition = /* GraphQL */ `
         role
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       accuracy
       ranking
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       userLeaderboardScoresId
     }
   }
 `;
 export const listLeaderboardPositions = /* GraphQL */ `
   query ListLeaderboardPositions(
-    $userId: ID
-    $eventId: ModelIDKeyConditionInput
+    $id: ID
     $filter: ModelLeaderboardPositionFilterInput
     $limit: Int
     $nextToken: String
     $sortDirection: ModelSortDirection
   ) {
     listLeaderboardPositions(
-      userId: $userId
-      eventId: $eventId
+      id: $id
       filter: $filter
       limit: $limit
       nextToken: $nextToken
       sortDirection: $sortDirection
     ) {
       items {
+        id
         userId
         eventId
         accuracy
         ranking
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         userLeaderboardScoresId
       }
       nextToken
+      startedAt
+    }
+  }
+`;
+export const syncLeaderboardPositions = /* GraphQL */ `
+  query SyncLeaderboardPositions(
+    $filter: ModelLeaderboardPositionFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncLeaderboardPositions(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        userId
+        eventId
+        accuracy
+        ranking
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        userLeaderboardScoresId
+      }
+      nextToken
+      startedAt
     }
   }
 `;
@@ -399,12 +688,19 @@ export const getCategory = /* GraphQL */ `
         isActive
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       contenders {
         nextToken
+        startedAt
       }
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       eventCategoriesId
     }
   }
@@ -430,9 +726,42 @@ export const listCategories = /* GraphQL */ `
         eventId
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         eventCategoriesId
       }
       nextToken
+      startedAt
+    }
+  }
+`;
+export const syncCategories = /* GraphQL */ `
+  query SyncCategories(
+    $filter: ModelCategoryFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncCategories(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        name
+        eventId
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        eventCategoriesId
+      }
+      nextToken
+      startedAt
     }
   }
 `;
@@ -447,36 +776,54 @@ export const getContender = /* GraphQL */ `
         eventId
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         eventCategoriesId
       }
       movie {
+        id
         imdbId
         year
         image
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       person {
+        id
         imdbId
         image
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       snapshots {
         nextToken
+        startedAt
       }
       activePredictions {
         nextToken
+        startedAt
       }
       activePredictionsRankings {
         nextToken
+        startedAt
       }
       predictionsByUser {
         nextToken
+        startedAt
       }
       didReceiveNominationOrWin
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       categoryContendersId
       contenderMovieId
       contenderPersonId
@@ -504,11 +851,46 @@ export const listContenders = /* GraphQL */ `
         didReceiveNominationOrWin
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         categoryContendersId
         contenderMovieId
         contenderPersonId
       }
       nextToken
+      startedAt
+    }
+  }
+`;
+export const syncContenders = /* GraphQL */ `
+  query SyncContenders(
+    $filter: ModelContenderFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncContenders(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        categoryId
+        didReceiveNominationOrWin
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        categoryContendersId
+        contenderMovieId
+        contenderPersonId
+      }
+      nextToken
+      startedAt
     }
   }
 `;
@@ -523,6 +905,9 @@ export const getContenderSnapshot = /* GraphQL */ `
         didReceiveNominationOrWin
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         categoryContendersId
         contenderMovieId
         contenderPersonId
@@ -534,12 +919,18 @@ export const getContenderSnapshot = /* GraphQL */ `
         eventId
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         eventCategoriesId
       }
       numberOfUsersPredicting
       numberOfUsersPredictingWin
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
@@ -566,80 +957,189 @@ export const listContenderSnapshots = /* GraphQL */ `
         numberOfUsersPredictingWin
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       nextToken
+      startedAt
+    }
+  }
+`;
+export const syncContenderSnapshots = /* GraphQL */ `
+  query SyncContenderSnapshots(
+    $filter: ModelContenderSnapshotFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncContenderSnapshots(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        contenderId
+        categoryId
+        numberOfUsersPredicting
+        numberOfUsersPredictingWin
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
     }
   }
 `;
 export const getMovie = /* GraphQL */ `
-  query GetMovie($imdbId: String!) {
-    getMovie(imdbId: $imdbId) {
+  query GetMovie($id: ID!) {
+    getMovie(id: $id) {
+      id
       imdbId
       year
       image
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
 export const listMovies = /* GraphQL */ `
   query ListMovies(
-    $imdbId: String
+    $id: ID
     $filter: ModelMovieFilterInput
     $limit: Int
     $nextToken: String
     $sortDirection: ModelSortDirection
   ) {
     listMovies(
-      imdbId: $imdbId
+      id: $id
       filter: $filter
       limit: $limit
       nextToken: $nextToken
       sortDirection: $sortDirection
     ) {
       items {
+        id
         imdbId
         year
         image
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       nextToken
+      startedAt
+    }
+  }
+`;
+export const syncMovies = /* GraphQL */ `
+  query SyncMovies(
+    $filter: ModelMovieFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncMovies(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        imdbId
+        year
+        image
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
     }
   }
 `;
 export const getPerson = /* GraphQL */ `
-  query GetPerson($imdbId: String!) {
-    getPerson(imdbId: $imdbId) {
+  query GetPerson($id: ID!) {
+    getPerson(id: $id) {
+      id
       imdbId
       image
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
 export const listPeople = /* GraphQL */ `
   query ListPeople(
-    $imdbId: String
+    $id: ID
     $filter: ModelPersonFilterInput
     $limit: Int
     $nextToken: String
     $sortDirection: ModelSortDirection
   ) {
     listPeople(
-      imdbId: $imdbId
+      id: $id
       filter: $filter
       limit: $limit
       nextToken: $nextToken
       sortDirection: $sortDirection
     ) {
       items {
+        id
         imdbId
         image
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       nextToken
+      startedAt
+    }
+  }
+`;
+export const syncPeople = /* GraphQL */ `
+  query SyncPeople(
+    $filter: ModelPersonFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncPeople(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        imdbId
+        image
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
     }
   }
 `;
@@ -664,8 +1164,12 @@ export const queryRelationshipsByFollowedUser = /* GraphQL */ `
         followingUserId
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       nextToken
+      startedAt
     }
   }
 `;
@@ -690,8 +1194,12 @@ export const queryRelationshipsByFollowingUser = /* GraphQL */ `
         followingUserId
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       nextToken
+      startedAt
     }
   }
 `;
@@ -720,8 +1228,12 @@ export const queryPredictionSetByUserByActive = /* GraphQL */ `
         isActive
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       nextToken
+      startedAt
     }
   }
 `;
@@ -750,8 +1262,12 @@ export const queryPredictionSetByUserByEventByActive = /* GraphQL */ `
         isActive
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       nextToken
+      startedAt
     }
   }
 `;
@@ -780,8 +1296,12 @@ export const queryPredictionSetByUserByEventByCreatedAt = /* GraphQL */ `
         isActive
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       nextToken
+      startedAt
     }
   }
 `;
@@ -810,8 +1330,12 @@ export const queryPredictionSetByUserByCategoryByActive = /* GraphQL */ `
         isActive
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       nextToken
+      startedAt
     }
   }
 `;
@@ -840,8 +1364,12 @@ export const queryPredictionSetByUserByCategoryByCreatedAt = /* GraphQL */ `
         isActive
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       nextToken
+      startedAt
     }
   }
 `;
@@ -871,9 +1399,13 @@ export const queryPredictionByContenderByUser = /* GraphQL */ `
         isActive
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         predictionSetPredictionsId
       }
       nextToken
+      startedAt
     }
   }
 `;
@@ -903,9 +1435,13 @@ export const queryPredictionByContenderByActive = /* GraphQL */ `
         isActive
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         predictionSetPredictionsId
       }
       nextToken
+      startedAt
     }
   }
 `;
@@ -935,9 +1471,13 @@ export const queryPredictionByContenderByRanking = /* GraphQL */ `
         isActive
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         predictionSetPredictionsId
       }
       nextToken
+      startedAt
     }
   }
 `;
@@ -959,15 +1499,20 @@ export const queryLeaderboardPositionByEventByRanking = /* GraphQL */ `
       nextToken: $nextToken
     ) {
       items {
+        id
         userId
         eventId
         accuracy
         ranking
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         userLeaderboardScoresId
       }
       nextToken
+      startedAt
     }
   }
 `;
@@ -996,8 +1541,12 @@ export const queryContenderSnapshotByContenderByDate = /* GraphQL */ `
         numberOfUsersPredictingWin
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       nextToken
+      startedAt
     }
   }
 `;

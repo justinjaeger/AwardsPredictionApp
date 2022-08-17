@@ -187,13 +187,15 @@ type Event @model @auth(rules: [{ allow: public }]) {
 
 # Created to keep track of how many users are predicting an event (logged when user clicks event)
 type UserPredictingEvent @model @auth(rules: [{ allow: public }]) {
-    eventId: ID! @primaryKey(sortKeyFields: ["userId"])
+    id: ID! @primaryKey
+    eventId: ID!
     userId: ID!
 }
 
 # a record of the user's leaderboard ranking
 type LeaderboardPosition @model @auth(rules: [{ allow: public }]) {
-    userId: ID! @primaryKey(sortKeyFields: ["eventId"])
+    id: ID! @primaryKey
+    userId: ID!
     eventId: ID! @index( # because we want it to sort the results by ranking
         name: "byEventByRanking", 
         queryField: "queryLeaderboardPositionByEventByRanking", 
@@ -247,13 +249,15 @@ type ContenderSnapshot @model @auth(rules: [{ allow: public }]) {
 }
 
 type Movie @model @auth(rules: [{ allow: public }]) {
-    imdbId: String! @primaryKey # unique value, should query by or make primary key
+    id: ID! @primaryKey
+    imdbId: String! # unique value, should be able to query by
     year: Int # optional bc we might not know yet
     image: String # can override IMDb image
 }
 
 type Person @model @auth(rules: [{ allow: public }]) {
-    imdbId: String! @primaryKey # unique value, should be able to query by
+    id: ID! @primaryKey
+    imdbId: String! # unique value, should be able to query by
     image: String
 }
   

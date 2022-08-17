@@ -1,5 +1,6 @@
 {
   "AppSyncApiName": "awardspredictions",
   "DynamoDBBillingMode": "PAY_PER_REQUEST",
-  "DynamoDBEnableServerSideEncryption": false
+  "DynamoDBEnableServerSideEncryption": false,
+  "AuthModeLastUpdated": "2022-08-17T05:31:46.769Z"
 }

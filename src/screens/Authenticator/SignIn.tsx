@@ -12,18 +12,19 @@ import { useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import { SignupRow } from './styles';
 import { Body } from '../../components/Text';
-import ApiServices from '../../services/graphql';
 import { useAuth } from '../../store';
+import { DataStore } from 'aws-amplify';
+import { User } from '../../models';
 
 const SignIn = (p: any) => {
   const props = p as iAuthScreenProps; // typecasting because props are automatically passed from Authenticator
   const dispatch = useDispatch();
   const { goBack } = useNavigation();
-  const { storedEmail } = useAuth();
+  const { userEmail } = useAuth();
   const { email: contextEmail, setEmail: setContextEmail } = useAuthenticator();
 
   const [password, setPassword] = useState<string>('');
-  const [email, setEmail] = useState<string>(storedEmail || contextEmail || '');
+  const [email, setEmail] = useState<string>(userEmail || contextEmail || '');
   const [loading, setLoading] = useState<boolean>(false);
 
   const navigate = (authState: iAuthState) => {
@@ -43,19 +44,12 @@ const SignIn = (p: any) => {
             duration: 5000,
           });
         } else {
-          // Get existing user from database and set in redux
-          // NOTE: If this fails, we should log the user back out
-          await ApiServices.getUsersByFilter({ filter: { email: { eq: email } } }).then(
-            (res) => {
-              if (res.status === 'success') {
-                const user = res.data?.[0];
-                if (user) {
-                  dispatch(loginUser(user));
-                  goBack();
-                }
-              }
-            },
-          );
+          const users = await DataStore.query(User, (u) => u.email('eq', email));
+          if (users.length > 0) {
+            const user = users[0];
+            dispatch(loginUser({ userId: user.id, userEmail: user.email }));
+            goBack();
+          }
         }
       }
       setLoading(false);

@@ -28,22 +28,22 @@ const headerTitles: { [key in iAuthState]: string } = {
 
 const Auth = () => {
   const navigation = useNavigation();
-  const { storedEmail } = useAuth();
+  const { isLoggedIn, userEmail } = useAuth();
   const [authState, setAuthState] = useState<iAuthState>('signIn');
 
   useEffect(() => {
-    setAuthState(storedEmail ? 'signIn' : 'signUp');
-  }, [storedEmail]);
+    setAuthState(userEmail ? 'signIn' : 'signUp');
+  }, [userEmail]);
 
   useEffect(() => {
     // if this scenario occurs, something is wrong and user should be removed
     // this might happen if the Authenticator thinks the user is logged in, but the sign up request has failed
-    if (!storedEmail && authState === 'signedIn') {
+    if (isLoggedIn === false && authState === 'signedIn') {
       AuthServices.deleteUser();
       setAuthState('signUp');
       Snackbar.error('Sorry, something went wrong. Please try signing up again.');
     }
-  }, [storedEmail, authState]);
+  }, [isLoggedIn, authState]);
 
   useLayoutEffect(() => {
     // This is the best way to change the header

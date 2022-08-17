@@ -1,4 +1,3 @@
-import { User } from '../../API';
 import { iActionTypes } from '../actions/auth';
 export interface iSuperAuth {
   auth: iAuth;
@@ -6,14 +5,14 @@ export interface iSuperAuth {
 
 export interface iAuth {
   isLoggedIn: boolean;
-  storedEmail: string | undefined;
-  user: User | undefined;
+  userId: string | undefined;
+  userEmail: string | undefined;
 }
 
 const initialState: iAuth = {
   isLoggedIn: false,
-  storedEmail: undefined,
-  user: undefined,
+  userId: undefined,
+  userEmail: undefined,
 };
 
 export const authReducer = (
@@ -25,19 +24,14 @@ export const authReducer = (
       return {
         ...state,
         isLoggedIn: true,
-        storedEmail: action.payload.email,
-        user: action.payload,
+        userId: action.payload.userId,
+        userEmail: action.payload.userEmail,
       };
     case iActionTypes.LOGOUT_USER:
       return {
         ...state,
         isLoggedIn: false,
         user: undefined,
-      };
-    case iActionTypes.UPDATE_USER:
-      return {
-        ...state,
-        user: action.payload,
       };
     default:
       return state;

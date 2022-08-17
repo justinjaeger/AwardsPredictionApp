@@ -14,27 +14,37 @@ export const onCreateUser = /* GraphQL */ `
       role
       followers {
         nextToken
+        startedAt
       }
       following {
         nextToken
+        startedAt
       }
       activePredictionsByEvent {
         nextToken
+        startedAt
       }
       activePredictionsByCategory {
         nextToken
+        startedAt
       }
       pastPredictionsByEvent {
         nextToken
+        startedAt
       }
       pastPredictionsByCategory {
         nextToken
+        startedAt
       }
       leaderboardScores {
         nextToken
+        startedAt
       }
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
@@ -50,27 +60,37 @@ export const onUpdateUser = /* GraphQL */ `
       role
       followers {
         nextToken
+        startedAt
       }
       following {
         nextToken
+        startedAt
       }
       activePredictionsByEvent {
         nextToken
+        startedAt
       }
       activePredictionsByCategory {
         nextToken
+        startedAt
       }
       pastPredictionsByEvent {
         nextToken
+        startedAt
       }
       pastPredictionsByCategory {
         nextToken
+        startedAt
       }
       leaderboardScores {
         nextToken
+        startedAt
       }
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
@@ -86,27 +106,37 @@ export const onDeleteUser = /* GraphQL */ `
       role
       followers {
         nextToken
+        startedAt
       }
       following {
         nextToken
+        startedAt
       }
       activePredictionsByEvent {
         nextToken
+        startedAt
       }
       activePredictionsByCategory {
         nextToken
+        startedAt
       }
       pastPredictionsByEvent {
         nextToken
+        startedAt
       }
       pastPredictionsByCategory {
         nextToken
+        startedAt
       }
       leaderboardScores {
         nextToken
+        startedAt
       }
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
@@ -126,6 +156,9 @@ export const onCreateRelationships = /* GraphQL */ `
         role
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       followingUser {
         id
@@ -137,12 +170,19 @@ export const onCreateRelationships = /* GraphQL */ `
         role
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       followedPredictionFeed {
         nextToken
+        startedAt
       }
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
@@ -162,6 +202,9 @@ export const onUpdateRelationships = /* GraphQL */ `
         role
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       followingUser {
         id
@@ -173,12 +216,19 @@ export const onUpdateRelationships = /* GraphQL */ `
         role
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       followedPredictionFeed {
         nextToken
+        startedAt
       }
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
@@ -198,6 +248,9 @@ export const onDeleteRelationships = /* GraphQL */ `
         role
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       followingUser {
         id
@@ -209,12 +262,19 @@ export const onDeleteRelationships = /* GraphQL */ `
         role
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       followedPredictionFeed {
         nextToken
+        startedAt
       }
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
@@ -227,10 +287,14 @@ export const onCreatePredictionSet = /* GraphQL */ `
       categoryId
       predictions {
         nextToken
+        startedAt
       }
       isActive
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
@@ -243,10 +307,14 @@ export const onUpdatePredictionSet = /* GraphQL */ `
       categoryId
       predictions {
         nextToken
+        startedAt
       }
       isActive
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
@@ -259,10 +327,14 @@ export const onDeletePredictionSet = /* GraphQL */ `
       categoryId
       predictions {
         nextToken
+        startedAt
       }
       isActive
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
@@ -279,6 +351,9 @@ export const onCreatePrediction = /* GraphQL */ `
         didReceiveNominationOrWin
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         categoryContendersId
         contenderMovieId
         contenderPersonId
@@ -287,6 +362,9 @@ export const onCreatePrediction = /* GraphQL */ `
       isActive
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       predictionSetPredictionsId
     }
   }
@@ -304,6 +382,9 @@ export const onUpdatePrediction = /* GraphQL */ `
         didReceiveNominationOrWin
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         categoryContendersId
         contenderMovieId
         contenderPersonId
@@ -312,6 +393,9 @@ export const onUpdatePrediction = /* GraphQL */ `
       isActive
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       predictionSetPredictionsId
     }
   }
@@ -329,6 +413,9 @@ export const onDeletePrediction = /* GraphQL */ `
         didReceiveNominationOrWin
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         categoryContendersId
         contenderMovieId
         contenderPersonId
@@ -337,6 +424,9 @@ export const onDeletePrediction = /* GraphQL */ `
       isActive
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       predictionSetPredictionsId
     }
   }
@@ -347,9 +437,11 @@ export const onCreateEvent = /* GraphQL */ `
       id
       categories {
         nextToken
+        startedAt
       }
       leaderboard {
         nextToken
+        startedAt
       }
       awardsBody
       year
@@ -357,10 +449,14 @@ export const onCreateEvent = /* GraphQL */ `
       expiration
       usersPredicting {
         nextToken
+        startedAt
       }
       isActive
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
@@ -370,9 +466,11 @@ export const onUpdateEvent = /* GraphQL */ `
       id
       categories {
         nextToken
+        startedAt
       }
       leaderboard {
         nextToken
+        startedAt
       }
       awardsBody
       year
@@ -380,10 +478,14 @@ export const onUpdateEvent = /* GraphQL */ `
       expiration
       usersPredicting {
         nextToken
+        startedAt
       }
       isActive
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
@@ -393,9 +495,11 @@ export const onDeleteEvent = /* GraphQL */ `
       id
       categories {
         nextToken
+        startedAt
       }
       leaderboard {
         nextToken
+        startedAt
       }
       awardsBody
       year
@@ -403,20 +507,28 @@ export const onDeleteEvent = /* GraphQL */ `
       expiration
       usersPredicting {
         nextToken
+        startedAt
       }
       isActive
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
 export const onCreateUserPredictingEvent = /* GraphQL */ `
   subscription OnCreateUserPredictingEvent {
     onCreateUserPredictingEvent {
+      id
       eventId
       userId
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       eventUsersPredictingId
     }
   }
@@ -424,10 +536,14 @@ export const onCreateUserPredictingEvent = /* GraphQL */ `
 export const onUpdateUserPredictingEvent = /* GraphQL */ `
   subscription OnUpdateUserPredictingEvent {
     onUpdateUserPredictingEvent {
+      id
       eventId
       userId
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       eventUsersPredictingId
     }
   }
@@ -435,10 +551,14 @@ export const onUpdateUserPredictingEvent = /* GraphQL */ `
 export const onDeleteUserPredictingEvent = /* GraphQL */ `
   subscription OnDeleteUserPredictingEvent {
     onDeleteUserPredictingEvent {
+      id
       eventId
       userId
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       eventUsersPredictingId
     }
   }
@@ -446,6 +566,7 @@ export const onDeleteUserPredictingEvent = /* GraphQL */ `
 export const onCreateLeaderboardPosition = /* GraphQL */ `
   subscription OnCreateLeaderboardPosition {
     onCreateLeaderboardPosition {
+      id
       userId
       eventId
       event {
@@ -457,6 +578,9 @@ export const onCreateLeaderboardPosition = /* GraphQL */ `
         isActive
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       user {
         id
@@ -468,11 +592,17 @@ export const onCreateLeaderboardPosition = /* GraphQL */ `
         role
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       accuracy
       ranking
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       userLeaderboardScoresId
     }
   }
@@ -480,6 +610,7 @@ export const onCreateLeaderboardPosition = /* GraphQL */ `
 export const onUpdateLeaderboardPosition = /* GraphQL */ `
   subscription OnUpdateLeaderboardPosition {
     onUpdateLeaderboardPosition {
+      id
       userId
       eventId
       event {
@@ -491,6 +622,9 @@ export const onUpdateLeaderboardPosition = /* GraphQL */ `
         isActive
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       user {
         id
@@ -502,11 +636,17 @@ export const onUpdateLeaderboardPosition = /* GraphQL */ `
         role
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       accuracy
       ranking
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       userLeaderboardScoresId
     }
   }
@@ -514,6 +654,7 @@ export const onUpdateLeaderboardPosition = /* GraphQL */ `
 export const onDeleteLeaderboardPosition = /* GraphQL */ `
   subscription OnDeleteLeaderboardPosition {
     onDeleteLeaderboardPosition {
+      id
       userId
       eventId
       event {
@@ -525,6 +666,9 @@ export const onDeleteLeaderboardPosition = /* GraphQL */ `
         isActive
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       user {
         id
@@ -536,11 +680,17 @@ export const onDeleteLeaderboardPosition = /* GraphQL */ `
         role
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       accuracy
       ranking
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       userLeaderboardScoresId
     }
   }
@@ -560,12 +710,19 @@ export const onCreateCategory = /* GraphQL */ `
         isActive
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       contenders {
         nextToken
+        startedAt
       }
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       eventCategoriesId
     }
   }
@@ -585,12 +742,19 @@ export const onUpdateCategory = /* GraphQL */ `
         isActive
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       contenders {
         nextToken
+        startedAt
       }
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       eventCategoriesId
     }
   }
@@ -610,12 +774,19 @@ export const onDeleteCategory = /* GraphQL */ `
         isActive
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       contenders {
         nextToken
+        startedAt
       }
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       eventCategoriesId
     }
   }
@@ -631,36 +802,54 @@ export const onCreateContender = /* GraphQL */ `
         eventId
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         eventCategoriesId
       }
       movie {
+        id
         imdbId
         year
         image
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       person {
+        id
         imdbId
         image
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       snapshots {
         nextToken
+        startedAt
       }
       activePredictions {
         nextToken
+        startedAt
       }
       activePredictionsRankings {
         nextToken
+        startedAt
       }
       predictionsByUser {
         nextToken
+        startedAt
       }
       didReceiveNominationOrWin
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       categoryContendersId
       contenderMovieId
       contenderPersonId
@@ -678,36 +867,54 @@ export const onUpdateContender = /* GraphQL */ `
         eventId
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         eventCategoriesId
       }
       movie {
+        id
         imdbId
         year
         image
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       person {
+        id
         imdbId
         image
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       snapshots {
         nextToken
+        startedAt
       }
       activePredictions {
         nextToken
+        startedAt
       }
       activePredictionsRankings {
         nextToken
+        startedAt
       }
       predictionsByUser {
         nextToken
+        startedAt
       }
       didReceiveNominationOrWin
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       categoryContendersId
       contenderMovieId
       contenderPersonId
@@ -725,36 +932,54 @@ export const onDeleteContender = /* GraphQL */ `
         eventId
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         eventCategoriesId
       }
       movie {
+        id
         imdbId
         year
         image
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       person {
+        id
         imdbId
         image
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       snapshots {
         nextToken
+        startedAt
       }
       activePredictions {
         nextToken
+        startedAt
       }
       activePredictionsRankings {
         nextToken
+        startedAt
       }
       predictionsByUser {
         nextToken
+        startedAt
       }
       didReceiveNominationOrWin
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       categoryContendersId
       contenderMovieId
       contenderPersonId
@@ -772,6 +997,9 @@ export const onCreateContenderSnapshot = /* GraphQL */ `
         didReceiveNominationOrWin
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         categoryContendersId
         contenderMovieId
         contenderPersonId
@@ -783,12 +1011,18 @@ export const onCreateContenderSnapshot = /* GraphQL */ `
         eventId
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         eventCategoriesId
       }
       numberOfUsersPredicting
       numberOfUsersPredictingWin
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
@@ -803,6 +1037,9 @@ export const onUpdateContenderSnapshot = /* GraphQL */ `
         didReceiveNominationOrWin
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         categoryContendersId
         contenderMovieId
         contenderPersonId
@@ -814,12 +1051,18 @@ export const onUpdateContenderSnapshot = /* GraphQL */ `
         eventId
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         eventCategoriesId
       }
       numberOfUsersPredicting
       numberOfUsersPredictingWin
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
@@ -834,6 +1077,9 @@ export const onDeleteContenderSnapshot = /* GraphQL */ `
         didReceiveNominationOrWin
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         categoryContendersId
         contenderMovieId
         contenderPersonId
@@ -845,75 +1091,105 @@ export const onDeleteContenderSnapshot = /* GraphQL */ `
         eventId
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         eventCategoriesId
       }
       numberOfUsersPredicting
       numberOfUsersPredictingWin
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
 export const onCreateMovie = /* GraphQL */ `
   subscription OnCreateMovie {
     onCreateMovie {
+      id
       imdbId
       year
       image
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
 export const onUpdateMovie = /* GraphQL */ `
   subscription OnUpdateMovie {
     onUpdateMovie {
+      id
       imdbId
       year
       image
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
 export const onDeleteMovie = /* GraphQL */ `
   subscription OnDeleteMovie {
     onDeleteMovie {
+      id
       imdbId
       year
       image
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
 export const onCreatePerson = /* GraphQL */ `
   subscription OnCreatePerson {
     onCreatePerson {
+      id
       imdbId
       image
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
 export const onUpdatePerson = /* GraphQL */ `
   subscription OnUpdatePerson {
     onUpdatePerson {
+      id
       imdbId
       image
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
 export const onDeletePerson = /* GraphQL */ `
   subscription OnDeletePerson {
     onDeletePerson {
+      id
       imdbId
       image
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
