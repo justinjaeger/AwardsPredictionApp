@@ -21,6 +21,7 @@ export const authReducer = (
 ) => {
   switch (action.type) {
     case iActionTypes.LOGIN_USER:
+      console.error('logging in');
       return {
         ...state,
         isLoggedIn: true,
@@ -28,10 +29,11 @@ export const authReducer = (
         userEmail: action.payload.userEmail,
       };
     case iActionTypes.LOGOUT_USER:
+      console.error('logging out');
       return {
         ...state,
         isLoggedIn: false,
-        user: undefined,
+        userId: undefined,
       };
     default:
       return state;

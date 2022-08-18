@@ -31,7 +31,7 @@ const SignIn = (p: any) => {
     props.onStateChange(authState, {});
   };
 
-  const signIn = () => {
+  const signIn = async () => {
     setLoading(true);
     setContextEmail(email);
     AuthServices.signIn(email, password).then(async (res) => {

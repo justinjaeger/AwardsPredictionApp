@@ -39,8 +39,10 @@ const Auth = () => {
     // if this scenario occurs, something is wrong and user should be removed
     // this might happen if the Authenticator thinks the user is logged in, but the sign up request has failed
     if (isLoggedIn === false && authState === 'signedIn') {
-      AuthServices.deleteUser();
-      setAuthState('signUp');
+      // AuthServices.deleteUser();
+      // setAuthState('signUp');
+      AuthServices.signOut();
+      setAuthState('signIn');
       Snackbar.error('Sorry, something went wrong. Please try signing up again.');
     }
   }, [isLoggedIn, authState]);

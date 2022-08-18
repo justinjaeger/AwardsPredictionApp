@@ -8,26 +8,27 @@ import { useDispatch } from 'react-redux';
 import { useAuth } from '../../store';
 import { useNavigation } from '@react-navigation/native';
 import { Body } from '../../components/Text';
-import { User } from '../../models';
 import { DataStore } from 'aws-amplify';
+import { User } from '../../models';
 
 const Profile = () => {
   const dispatch = useDispatch();
-  const { isLoggedIn, userEmail, userId } = useAuth();
+  const { isLoggedIn, userEmail } = useAuth(); // later import userId
   const navigation = useNavigation();
 
   const [user, setUser] = useState<User>();
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    // TODO: what we actually need to do is subscribe to the user's data, because if we change the username, this object doesn't update (since userId doesn't change ever)
-    // we could potentially put the user / subscribing to the user at some top-level component
-    if (userId) {
-      DataStore.query(User, userId).then((u) => {
-        setUser(u);
-      });
-    }
-  }, [userId]);
+    // later we'll just use userId to get the user whose profile it is, but I want all users for experiment
+    const sub = DataStore.observeQuery(User).subscribe(({ items }) => {
+      setUser(items[0]);
+    });
+
+    return () => {
+      sub.unsubscribe();
+    };
+  }, []);
 
   const logIn = () => {
     navigation.navigate('Authenticator');
@@ -55,7 +56,7 @@ const Profile = () => {
           <TouchableText
             text={user?.username ? 'Change Username' : 'Create Username'}
             onPress={() => {
-              navigation.navigate('ChangeUsername');
+              navigation.navigate('ChangeUsername', { user });
             }}
           />
           <Body>{JSON.stringify(user)}</Body>

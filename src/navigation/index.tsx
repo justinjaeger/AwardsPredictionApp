@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React from 'react';
-import RNBootSplash from 'react-native-bootsplash'; // splash screen (https://github.com/zoontek/react-native-bootsplash)
+// import RNBootSplash from 'react-native-bootsplash'; // splash screen (https://github.com/zoontek/react-native-bootsplash)
 import { NavigationContainer } from '@react-navigation/native';
 import MainNavigator from './MainNavigator';
 
@@ -10,9 +10,10 @@ import MainNavigator from './MainNavigator';
 // cause I want them to be able to navigate the app like they're logged in but it just doesn't show you some features
 // basically they'd need to click a button that's liek "yes sign me in" then we navigate them to signin
 
+// onReady={() => RNBootSplash.hide()} (could add to NavigationContainer)
 const Navigation = () => {
   return (
-    <NavigationContainer onReady={() => RNBootSplash.hide()}>
+    <NavigationContainer>
       <MainNavigator />
     </NavigationContainer>
   );

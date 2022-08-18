@@ -36,7 +36,7 @@
     "@ui-kitten/components": "^5.1.0",
     "@ui-kitten/eva-icons": "^5.1.0",
     "amazon-cognito-identity-js": "^5.2.10",
-    "aws-amplify": "^4.3.27",
+    "aws-amplify": "^4.3.31",
     "aws-amplify-react-native": "^6.0.5",
     "react": "17.0.1",
     "react-native": "0.64.0",
