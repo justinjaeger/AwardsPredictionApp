@@ -7,6 +7,77 @@ enum UserRole {
   USER
 }
 
+enum AwardsBody {
+  ACADEMY_AWARDS
+  GOLDEN_GLOBES
+  CRITICS_CHOICE
+  BAFTA
+  HCA
+  PGA
+  SAG
+  DGA
+  WGA
+  ADG
+  MAKEUP_GUILD
+  CDG
+  ASC
+  MPSE
+}
+
+enum EventType {
+    WIN
+    NOMINATION
+}
+
+enum CategoryName {
+    PICTURE
+    DIRECTOR
+    ACTOR
+    ACTRESS
+    SUPPORTING_ACTOR
+    SUPPORTING_ACTRESS
+    ORIGINAL_SCREENPLAY
+    ADAPTED_SCREENPLAY
+    SCREENPLAY
+    INTERNATIONAL
+    ANIMATED
+    DOCUMENTARY
+    EDITING
+    CINEMATOGRAPHY
+    PRODUCTION_DESIGN
+    COSTUMES
+    MAKEUP
+    VISUAL_EFFECTS
+    SOUND
+    SCORE
+    SONG
+    SHORT_ANIMATED
+    SHORT_DOCUMENTARY
+    SHORT_LIVE_ACTION
+    ENSEMBLE
+    COMEDY_PICTURE
+    COMEDY_ACTOR
+    COMEDY_ACTRESS
+    ACTION_PICTURE
+    SCIFI_HORROR_PICTURE
+    YOUNG_ACTOR
+    RISING_STAR
+    DEBUT
+    FIRST_SCREENPLAY
+    BRITISH_PICTURE
+    ANIMATED_PERFORMANCE
+    BLOCKBUSTER
+    ACTING_ACHIEVEMENT
+    FEMALE_DIRECTOR
+    MALE_DIRECTOR
+    INDIE_PICTURE
+    BREAKTHROUGH
+}
+
+enum CateogrySet {
+  ACADEMY_AWARDS_2023,
+}
+
 type User @model @auth(rules: [{allow: public}]) {
     id: ID! @primaryKey
     email: String!
@@ -15,5 +86,184 @@ type User @model @auth(rules: [{allow: public}]) {
     bio: String
     image: String
     role: UserRole! @default(value: "USER")
+    # below lets you retrieve related Relationships records from the source User record
+    # under the hood, @hasMany configures a default secondary index on the related table to enable you to query the related model from the source model
+    followers: [Relationships] @hasMany(indexName: "byFollowedUser", fields: ["id"])
+    following: [Relationships] @hasMany(indexName: "byFollowingUser", fields: ["id"])
+    activePredictionsByEvent: [PredictionSet] @hasMany(indexName: "byUserByEventActive", fields: ["id"])
+    activePredictionsByCategory: [PredictionSet] @hasMany(indexName: "byUserByCategoryByActive", fields: ["id"])
+    pastPredictionsByEvent: [PredictionSet] @hasMany(indexName: "byUserByEventByDate", fields: ["id"])
+    pastPredictionsByCategory: [PredictionSet] @hasMany(indexName: "byUserByCategoryByDate", fields: ["id"])
+    leaderboardScores: [LeaderboardPosition] @hasMany
 }
+
+type Relationships @model @auth(rules: [{ allow: public }]) {
+    id: ID! @primaryKey
+    followedUserId: ID! @index(
+        name: "byFollowedUser", 
+        queryField: "queryRelationshipsByFollowedUser",
+    )
+    followingUserId: ID! @index(
+        name: "byFollowingUser", 
+        queryField: "queryRelationshipsByFollowingUser",
+    )
+    followedUser: User @belongsTo(fields: ["followedUserId"])
+    followingUser: User @belongsTo(fields: ["followingUserId"])
+    followedPredictionFeed: [PredictionSet] @hasMany(indexName: "byUserByActive", fields: ["followedUserId"])
+    # ^retrieve active predictions from the person being followed. Sort results by createdA
+}
+
+# NEVER DELETE from this table, as these entries are referenced in history
+# instead of modifying the predictions field, you can just create a new entry
+# When creating new PredictionSet, we must DELETE isActive from previous entry, AND we must delete isActive from Prediction table in corresponding predictions
+type PredictionSet @model @auth(rules: [{ allow: public }]) {
+    id: ID! @primaryKey
+    userId: ID! 
+    @index(
+        name: "byUserByActive",
+        queryField: "queryPredictionSetByUserByActive",
+        sortKeyFields: ["isActive"]
+    ) 
+    @index(
+        name: "byUserByEventActive", 
+        queryField: "queryPredictionSetByUserByEventByActive",
+        sortKeyFields: ["eventId", "isActive"] # only items with isActive present will be copied into results
+    ) 
+    @index(
+        name: "byUserByEventByDate",
+        queryField: "queryPredictionSetByUserByEventByCreatedAt",
+        sortKeyFields: ["eventId", "createdAt"],
+    ) 
+    @index(
+        name: "byUserByCategoryByActive", 
+        queryField: "queryPredictionSetByUserByCategoryByActive",
+        sortKeyFields: ["categoryId", "isActive"] # only items with isActive present will be copied into results
+    ) 
+    @index(
+        name: "byUserByCategoryByDate", 
+        queryField: "queryPredictionSetByUserByCategoryByCreatedAt",
+        sortKeyFields: ["categoryId", "createdAt"]
+    )
+    eventId: ID!
+    categoryId: ID!
+    predictions: [Prediction] @hasMany
+    isActive: String @default(value: "x") # essentially boolean
+    createdAt: AWSDateTime!
+    # ^why? see isOpen: https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-indexes-general-sparse-indexes.html
+}
+
+# NEVER DELETE from this table, as these entries are referenced in history
+type Prediction @model @auth(rules: [{ allow: public }]) {
+    id: ID! @primaryKey
+    predictionSetId: ID!
+    userId: ID!
+    contenderId: ID! @index( # Look up individual Contender and see history of user's predictions
+        name: "byContenderByUser", 
+        queryField: "queryPredictionByContenderByUser", 
+        sortKeyFields: ["userId"],
+    ) 
+    @index(
+        name: "byContenderByActive", 
+        queryField: "queryPredictionByContenderByActive", 
+        sortKeyFields: ["isActive"],
+    ) 
+    @index(
+        name: "byContenderByActiveByRanking", 
+        queryField: "queryPredictionByContenderByRanking", 
+        sortKeyFields: ["isActive", "ranking"],
+    )
+    contender: Contender @belongsTo(fields: ["contenderId"])
+    ranking: Int!
+    isActive: String @default(value: "x") # essentially boolean - Must be removed when a new prediction is made (used in Contender activePredictions)
+}
+
+type Event @model @auth(rules: [{ allow: public }]) {
+    id: ID! @primaryKey
+    categories: [Category] @hasMany # Retrieve categories on an event record
+    leaderboard: [LeaderboardPosition] @hasMany(indexName: "byEventByRanking", fields: ["id"])
+    awardsBody: AwardsBody!
+    year: Int!
+    type: EventType!
+    expiration: AWSDateTime
+    usersPredicting: [UserPredictingEvent] @hasMany
+    isActive: String @default(value: "x") # essentially boolean
+}
+
+# Created to keep track of how many users are predicting an event (logged when user clicks event)
+type UserPredictingEvent @model @auth(rules: [{ allow: public }]) {
+    id: ID! @primaryKey(sortKeyFields: ["eventId", "userId"])
+    eventId: ID!
+    userId: ID!
+}
+
+# a record of the user's leaderboard ranking
+type LeaderboardPosition @model @auth(rules: [{ allow: public }]) {
+    id: ID! @primaryKey(sortKeyFields: ["userId", "eventId"])
+    userId: ID!
+    eventId: ID! @index( # because we want it to sort the results by ranking
+        name: "byEventByRanking", 
+        queryField: "queryLeaderboardPositionByEventByRanking", 
+        sortKeyFields: ["ranking"],
+    )
+    event: Event @belongsTo(fields: ["eventId"])
+    user: User @belongsTo(fields: ["userId"])
+    accuracy: String
+    ranking: Int
+}
+
+type Category @model @auth(rules: [{ allow: public }]) {
+    id: ID! @primaryKey
+    name: CategoryName!
+    eventId: ID!
+    event: Event @belongsTo(fields: ["eventId"]) # Lets you retrieve info about the event from a Category record
+    contenders: [Contender] @hasMany
+}
+
+# Belongs to a particular category
+type Contender @model @auth(rules: [{ allow: public }]) {
+    id: ID! @primaryKey
+    categoryId: ID!
+    category: Category @belongsTo # belongsTo is for bi-directional relationships. Category also hasMany contenders
+    movie: Movie @hasOne
+    person: Person @hasOne # optional - only applies to acting categories
+    snapshots: [ContenderSnapshot] @hasMany(indexName: "byContenderByDate", fields: ["id"])
+    activePredictions: [Prediction] @hasMany(indexName: "byContenderByActive", fields: ["id"])
+    activePredictionsRankings: [Prediction] @hasMany(indexName: "byContenderByActiveByRanking", fields: ["id"]) # for getting users predicting a win
+    predictionsByUser: [Prediction] @hasMany(indexName: "byContenderByUser", fields: ["id"])
+    didReceiveNominationOrWin: Boolean
+}
+
+# Purpose of this table is to retrieve Global Prediction History
+# write to ContenderSnapshot at certain time every day
+# to query for contender snapshot, we need to first have the list of contenders, then get the "snapshots" property from it and pass the date we want
+type ContenderSnapshot @model @auth(rules: [{ allow: public }]) {
+    id: ID! @primaryKey
+    contenderId: ID! @index(
+        name: "byContenderByDate",
+        queryField: "queryContenderSnapshotByContenderByDate",
+        sortKeyFields: ["createdAt"],
+    )
+    contender: Contender @belongsTo(fields: ["contenderId"])
+    categoryId: ID!
+    category: Category @hasOne(fields: ["categoryId"])
+    # Stats for displaying leaderboard (must update manually when we set the record)
+    numberOfUsersPredicting: Int!
+    numberOfUsersPredictingWin: Int!
+    createdAt: AWSDateTime!
+}
+
+type Movie @model @auth(rules: [{ allow: public }]) {
+    id: ID! @primaryKey
+    imdbId: String! # unique value
+    year: Int # optional bc we might not know yet
+    image: String # can override IMDb image
+}
+
+type Person @model @auth(rules: [{ allow: public }]) {
+    id: ID! @primaryKey
+    imdbId: String! # unique value
+    image: String
+}
+  
+  
 
