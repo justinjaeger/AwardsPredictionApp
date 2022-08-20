@@ -2,19 +2,17 @@ import { iActionTypes } from '../actions/auth';
 export interface iSuperAuth {
   auth: iAuth;
 }
-export interface AuthUser {
-  id: string;
-  email: string;
-}
 
 export interface iAuth {
   isLoggedIn: boolean;
-  user: AuthUser | undefined;
+  userId: string | undefined;
+  userEmail: string | undefined;
 }
 
 const initialState: iAuth = {
   isLoggedIn: false,
-  user: undefined,
+  userId: undefined,
+  userEmail: undefined,
 };
 
 export const authReducer = (
@@ -23,14 +21,19 @@ export const authReducer = (
 ) => {
   switch (action.type) {
     case iActionTypes.LOGIN_USER:
+      console.error('logging in');
       return {
         ...state,
         isLoggedIn: true,
+        userId: action.payload.userId,
+        userEmail: action.payload.userEmail,
       };
     case iActionTypes.LOGOUT_USER:
+      console.error('logging out');
       return {
         ...state,
         isLoggedIn: false,
+        userId: undefined,
       };
     default:
       return state;

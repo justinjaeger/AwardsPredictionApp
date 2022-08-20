@@ -6,16 +6,22 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { TouchableOpacity, View } from 'react-native';
 import CustomIcon from '../components/CustomIcon';
 import ProfileNavigator from './ProfileNavigator';
-import theme from '../theme';
+import COLORS from '../constants/colors';
+import Dev from '../screens/Dev';
+import { useAuth } from '../store';
 
 const Tab = createBottomTabNavigator();
 
 const BottomTabNavigator = () => {
+  const { isLoggedIn } = useAuth();
   return (
     <Tab.Navigator tabBar={(p: ITabBarProps) => <TabBar {...p} />}>
       <Tab.Screen name="Home" component={HomeNavigator} />
-      <Tab.Screen name="MyPredictions" component={MyPredictionsNavigator} />
+      {isLoggedIn ? (
+        <Tab.Screen name="MyPredictions" component={MyPredictionsNavigator} />
+      ) : null}
       <Tab.Screen name="Profile" component={ProfileNavigator} />
+      <Tab.Screen name="Dev" component={Dev} />
     </Tab.Navigator>
   );
 };
@@ -44,7 +50,7 @@ const TabBar = (props: ITabBarProps) => {
       edges={['bottom']}
       style={{
         borderTopWidth: 1,
-        borderColor: theme['grayscale-400'],
+        borderColor: COLORS.border,
         shadowOpacity: 0.2,
         shadowRadius: 10,
         shadowOffset: {
@@ -78,33 +84,43 @@ const TabBar = (props: ITabBarProps) => {
             switch (routeName) {
               case 'home':
                 return (
-                  <>
+                  <View key={index}>
                     {isFocused ? (
                       <CustomIcon name={'home'} />
                     ) : (
                       <CustomIcon name={'home-outline'} />
                     )}
-                  </>
+                  </View>
                 );
               case 'mypredictions':
                 return (
-                  <>
+                  <View key={index}>
                     {isFocused ? (
                       <CustomIcon name={'list'} />
                     ) : (
                       <CustomIcon name={'list-outline'} />
                     )}
-                  </>
+                  </View>
                 );
               case 'profile':
                 return (
-                  <>
+                  <View key={index}>
                     {isFocused ? (
                       <CustomIcon name={'person'} />
                     ) : (
                       <CustomIcon name={'person-outline'} />
                     )}
-                  </>
+                  </View>
+                );
+              case 'dev':
+                return (
+                  <View key={index}>
+                    {isFocused ? (
+                      <CustomIcon name={'hard-drive'} />
+                    ) : (
+                      <CustomIcon name={'hard-drive-outline'} />
+                    )}
+                  </View>
                 );
             }
           })();

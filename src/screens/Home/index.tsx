@@ -1,11 +1,11 @@
 import React from 'react';
-import { Text } from '@ui-kitten/components';
 import { ScrollView } from 'react-native';
+import { Header } from '../../components/Text';
 
 const Home = () => {
   return (
     <ScrollView contentContainerStyle={{ alignItems: 'center', marginTop: 40 }}>
-      <Text category={'h1'}>I am a home screen</Text>
+      <Header>I am a home screen</Header>
     </ScrollView>
   );
 };

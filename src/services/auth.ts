@@ -29,7 +29,6 @@ const signUp = async (
         // other custom attributes
       },
     });
-    console.log('signUp user', user);
     return { status: 'success', data: user };
   } catch (error) {
     return handleError('Error signing up.', error);
@@ -110,6 +109,16 @@ const forgotPasswordSubmit = async (
   }
 };
 
+// only for edge cases where something went wrong. careful using this
+const deleteUser = async (): Promise<iAuthServiceReturn<any>> => {
+  try {
+    await Auth.deleteUser(); // "global" signs user out of all devices + invalidates tokens
+    return { status: 'success' };
+  } catch (error) {
+    return handleError('Error deleting user.', error);
+  }
+};
+
 const AuthServices = {
   signUp,
   signIn,
@@ -118,6 +127,7 @@ const AuthServices = {
   forgotPassword,
   forgotPasswordSubmit,
   resendSignUp,
+  deleteUser,
 };
 
 export default AuthServices;
