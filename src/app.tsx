@@ -8,14 +8,13 @@ import { persistor, store } from './store/configureStore';
 import { PersistGate } from 'redux-persist/integration/react';
 import Navigation from './navigation';
 import theme from './theme';
-import { Hub } from 'aws-amplify';
+// import { Hub } from 'aws-amplify';
 
 const App = () => {
   // https://docs.amplify.aws/lib/utilities/hub/q/platform/js/#listening-for-messages
-  // https://docs.amplify.aws/lib/utilities/hub/q/platform/js/#channels
-  Hub.listen(/.*/, (data) => {
-    console.error('Listening for all messages: ', data.payload.data);
-  });
+  //   Hub.listen(/.*/, (data) => {
+  //     console.log('Listening for all messages: ', data.payload.data);
+  //   });
 
   return (
     <>

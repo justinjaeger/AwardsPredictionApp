@@ -4,7 +4,7 @@ import { SafeAreaView, ScrollView, View } from 'react-native';
 import { TouchableText } from '../../components/Buttons';
 import { Body, Header, SubHeader } from '../../components/Text';
 import { User } from '../../models';
-import { deleteMockUsers, createMockUsers } from '../../scripts/mocks/users';
+import { deleteMockUsers, createMockUsers, clear } from '../../scripts/mocks/users';
 
 const Dev = () => {
   const [users, setUsers] = useState<User[]>();
@@ -24,6 +24,11 @@ const Dev = () => {
     <SafeAreaView style={{ height: '100%' }}>
       <ScrollView contentContainerStyle={{ alignItems: 'center', marginTop: 40 }}>
         <Header>Dev Console</Header>
+        <TouchableText
+          text={'Clear/Sync DataStore'}
+          onPress={clear}
+          style={{ marginTop: 10 }}
+        />
         <View style={{ alignItems: 'flex-start', width: '100%', marginTop: 10 }}>
           <SubHeader>USERS:</SubHeader>
         </View>
@@ -34,11 +39,6 @@ const Dev = () => {
         />
         <TouchableText
           text={'Delete mock users'}
-          onPress={deleteMockUsers}
-          style={{ marginTop: 10 }}
-        />
-        <TouchableText
-          text={'Clear DataStore Locally'}
           onPress={deleteMockUsers}
           style={{ marginTop: 10 }}
         />
