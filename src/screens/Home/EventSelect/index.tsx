@@ -4,8 +4,9 @@ import React, { useEffect, useState } from 'react';
 import { ScrollView } from 'react-native';
 import { TouchableText } from '../../../components/Buttons';
 import { Header } from '../../../components/Text';
-import { Event } from '../../../models';
+import { AwardsBody, Event } from '../../../models';
 import { AWARDS_BODY_TO_STRING, EVENT_TYPE_TO_STRING } from '../../../util/constants';
+import sortByObjectOrder from '../../../util/sortByObjectOrder';
 
 const EventSelect = () => {
   const navigation = useNavigation();
@@ -20,7 +21,7 @@ const EventSelect = () => {
   }, []);
 
   const eventToString = (e: Event) => {
-    const ab = AWARDS_BODY_TO_STRING[e.awardsBody];
+    const ab = AWARDS_BODY_TO_STRING[AwardsBody[e.awardsBody]];
     const et = EVENT_TYPE_TO_STRING[e.type];
     const y = e.year;
     return ab + ' ' + et + ' ' + y;
@@ -30,12 +31,18 @@ const EventSelect = () => {
     navigation.navigate('CategorySelect', { event: e });
   };
 
+  const orderedEvents = sortByObjectOrder<AwardsBody, Event>(
+    AWARDS_BODY_TO_STRING,
+    events,
+    events.map((e) => AwardsBody[e.awardsBody]),
+  );
+
   return (
     <ScrollView
       contentContainerStyle={{ alignItems: 'center', marginTop: 40, paddingBottom: 100 }}
     >
       <Header>Events</Header>
-      {events.map((event) => (
+      {orderedEvents.map((event) => (
         <TouchableText
           text={eventToString(event)}
           onPress={() => onSelectEvent(event)}

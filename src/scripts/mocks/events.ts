@@ -1,5 +1,5 @@
 import { DataStore } from 'aws-amplify';
-import { AwardsBody, EventType, Event, Category } from '../../models';
+import { AwardsBody, EventType, Event, Category, CategoryName } from '../../models';
 import { getCategoryList } from '../../util/constants';
 
 const DATA = [
@@ -27,15 +27,19 @@ export const createMockEvents = () => {
     const newEvent = await DataStore.save(new Event(event));
     console.log('created event', newEvent);
     // create categories on event
-    const categoryList = getCategoryList(event.awardsBody, event.year);
-    categoryList.forEach(async (a, catName) => {
-      const newCat = await DataStore.save(
-        new Category({
-          name: catName,
-          event: newEvent,
-        }),
-      );
-      console.log('created new category', newCat);
+    const category = getCategoryList(event.awardsBody, event.year);
+    const categoryList = Object.keys(category) as CategoryName[];
+    categoryList.forEach(async (catName) => {
+      if (catName) {
+        const newCat = await DataStore.save(
+          new Category({
+            name: catName,
+            event: newEvent,
+          }),
+        );
+        console.log('created new category', newCat);
+      }
+      console.error('category not found');
     });
   });
 };

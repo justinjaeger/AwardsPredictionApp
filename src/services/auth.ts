@@ -42,9 +42,9 @@ const signIn = async (
   try {
     const user = await Auth.signIn(email, password);
     return { status: 'success', data: user };
-  } catch (error: any) {
+  } catch (error) {
     // if user is not confirmed, resend verification code
-    if (error.code === 'UserNotConfirmedException') {
+    if ((error as any)?.code === 'UserNotConfirmedException') {
       return resendSignUp(email);
     }
     return handleError('Error signing in.', error);
