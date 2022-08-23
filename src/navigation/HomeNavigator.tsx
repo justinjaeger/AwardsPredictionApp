@@ -3,6 +3,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import EventSelect from '../screens/Home/EventSelect';
 import CategorySelect from '../screens/Home/CategorySelect';
 import { HomeParamList } from './types';
+import Contenders from '../screens/Home/Contenders';
+import BackButton from '../components/Buttons/BackButton';
 
 const { Navigator, Screen } = createStackNavigator<HomeParamList>();
 
@@ -18,14 +20,23 @@ const HomeNavigator = () => (
       name="EventSelect"
       component={EventSelect}
       options={{
-        headerTitle: 'Home',
+        headerTitle: 'Events',
       }}
     />
     <Screen
       name="CategorySelect"
       component={CategorySelect}
       options={{
-        headerTitle: 'Home',
+        headerTitle: 'Categories',
+        headerLeft: BackButton,
+      }}
+    />
+    <Screen
+      name="Contenders"
+      component={Contenders}
+      options={{
+        headerTitle: 'Contenders',
+        headerLeft: BackButton,
       }}
     />
   </Navigator>

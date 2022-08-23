@@ -1,9 +1,9 @@
-import { AwardsBody, CategoryName, EventType } from '../models';
+import { AwardsBody, CategoryName, EventType, Event } from '../models';
 
 export const EVENT_TYPE_TO_STRING: {
   [key in EventType]: string;
 } = {
-  [EventType.WIN]: 'wins',
+  [EventType.WIN]: 'Wins',
   [EventType.NOMINATION]: 'Nominations',
 };
 
@@ -13,7 +13,7 @@ export const AWARDS_BODY_TO_STRING: {
   [AwardsBody.ACADEMY_AWARDS]: 'Academy Award',
   [AwardsBody.ADG]: 'Art Directors Guild',
   [AwardsBody.ASC]: 'American Society of Cinematographers',
-  [AwardsBody.BAFTA]: 'BAFTA',
+  [AwardsBody.BAFTA]: 'British Academy of Film and Television',
   [AwardsBody.CDG]: 'Costume Designers Guild',
   [AwardsBody.CRITICS_CHOICE]: 'Critics Choice',
   [AwardsBody.DGA]: 'Directors Guild',
@@ -26,16 +26,21 @@ export const AWARDS_BODY_TO_STRING: {
   [AwardsBody.WGA]: 'Writers Guild',
 };
 
+export const AWARDS_BODY_TO_PLURAL_STRING: {
+  [key in AwardsBody]: string;
+} = {
+  ...AWARDS_BODY_TO_STRING,
+  [AwardsBody.ACADEMY_AWARDS]: 'Academy Awards',
+  [AwardsBody.GOLDEN_GLOBES]: 'Golden Globes',
+};
+
 type iCategoryObject = { [key in CategoryName]: string | undefined };
 
-export const getCategoryList = (
-  awardsBody: AwardsBody,
-  year: number,
-): iCategoryObject => {
-  switch (awardsBody) {
+export const getCategoryList = (event: Event): iCategoryObject => {
+  switch (event.awardsBody) {
     case AwardsBody.ACADEMY_AWARDS:
       // This is just an example of how to use this when an awards body updates their category list
-      if (year > 2022) {
+      if (event.year > 2022) {
         return ACADEMY_AWARDS_CATEGORIES_V1;
       }
       return ACADEMY_AWARDS_CATEGORIES_V1;

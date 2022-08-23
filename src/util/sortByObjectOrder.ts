@@ -9,7 +9,9 @@ const sortByObjectOrder = <T extends string, U>(
   arrayToSort: U[],
   arrayOfMappedKeys: T[],
 ) => {
-  const iterableKeys = Object.keys(objectWithOrderedKeys) as T[];
+  const iterableKeys = (Object.keys(objectWithOrderedKeys) as T[]).filter(
+    (key) => objectWithOrderedKeys[key] !== undefined, // filter makes sure no undefined values are returned
+  );
   if (arrayOfMappedKeys.length !== arrayToSort.length) {
     console.error('invalid params in sortByObjectOrder');
     return arrayToSort;

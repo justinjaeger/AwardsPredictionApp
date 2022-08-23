@@ -576,7 +576,7 @@ export const schema = {
                     "type": {
                         "model": "Category"
                     },
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": [],
                     "association": {
                         "connectionType": "BELONGS_TO",
@@ -763,7 +763,7 @@ export const schema = {
                     "type": {
                         "model": "Event"
                     },
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": [],
                     "association": {
                         "connectionType": "BELONGS_TO",
@@ -1539,8 +1539,14 @@ export const schema = {
                 "INDIE_PICTURE",
                 "BREAKTHROUGH"
             ]
+        },
+        "CateogrySet": {
+            "name": "CateogrySet",
+            "values": [
+                "ACADEMY_AWARDS_2023"
+            ]
         }
     },
     "nonModels": {},
-    "version": "f820c38aab2a8796909f14ff1d7aa778"
+    "version": "531a693dd630005af509800d9dd7b366"
 };

@@ -31,6 +31,13 @@ const Auth = () => {
   const { isLoggedIn, userEmail } = useAuth();
   const [authState, setAuthState] = useState<iAuthState>('signIn');
 
+  useLayoutEffect(() => {
+    // This is the best way to change the header
+    navigation.setOptions({
+      headerTitle: headerTitles[authState],
+    });
+  }, [authState, navigation]);
+
   useEffect(() => {
     setAuthState(userEmail ? 'signIn' : 'signUp');
   }, [userEmail]);
@@ -46,13 +53,6 @@ const Auth = () => {
       Snackbar.error('Sorry, something went wrong. Please try signing up again.');
     }
   }, [isLoggedIn, authState]);
-
-  useLayoutEffect(() => {
-    // This is the best way to change the header
-    navigation.setOptions({
-      headerTitle: headerTitles[authState],
-    });
-  }, [authState, navigation]);
 
   return (
     <AuthProvider>
