@@ -2,8 +2,9 @@ import { createStore, compose, applyMiddleware } from 'redux';
 import { persistStore, persistReducer } from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import createSagaMiddleware from 'redux-saga';
-
 import { rootReducer } from './index';
+
+// TODO: make redux typesafe (yarn typescript is giving me errors)
 
 declare global {
   interface Window {

@@ -1,12 +1,5 @@
-// const { DataStore } = require('aws-amplify');
-// const { User, UserRole } = require('../models');
 import { DataStore } from 'aws-amplify';
 import { User, UserRole } from '../../models';
-
-/**
- * How to run:
- * node src/scripts/createFakeUsers.ts
- */
 
 const DATA = [
   { email: 'a@a.com', username: 'aaaaaa' },
@@ -16,8 +9,8 @@ const DATA = [
 
 export const createMockUsers = () => {
   DATA.forEach(async (user) => {
-    const maybeUser = await DataStore.query(User, (u) => u.email('eq', user.email));
-    if (maybeUser.length === 0) {
+    const maybeUsers = await DataStore.query(User, (u) => u.email('eq', user.email));
+    if (maybeUsers.length === 0) {
       const res = await DataStore.save(
         new User({
           email: user.email,
@@ -33,17 +26,12 @@ export const createMockUsers = () => {
 
 export const deleteMockUsers = () => {
   DATA.forEach(async (user) => {
-    const maybeUser = await DataStore.query(User, (u) => u.email('eq', user.email));
-    console.error('maybeUser', maybeUser);
-    if (maybeUser.length > 0) {
-      const res = await DataStore.delete(User, maybeUser[0].id);
+    const maybeUsers = await DataStore.query(User, (u) => u.email('eq', user.email));
+    if (maybeUsers.length > 0) {
+      const res = await DataStore.delete(User, maybeUsers[0].id);
       console.log('deleted user', res);
     } else {
       console.log('user does not exist');
     }
   });
-};
-
-export const clear = () => {
-  DataStore.clear();
 };
