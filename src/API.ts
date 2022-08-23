@@ -171,7 +171,7 @@ export type Contender = {
   __typename: "Contender",
   id: string,
   categoryId: string,
-  category?: Category | null,
+  category: Category,
   movie?: Movie | null,
   person?: Person | null,
   snapshots?: ModelContenderSnapshotConnection | null,
@@ -194,7 +194,7 @@ export type Category = {
   id: string,
   name: CategoryName,
   eventId: string,
-  event?: Event | null,
+  event: Event,
   contenders?: ModelContenderConnection | null,
   createdAt: string,
   updatedAt: string,
@@ -1989,7 +1989,7 @@ export type CreateCategoryMutation = {
     id: string,
     name: CategoryName,
     eventId: string,
-    event?:  {
+    event:  {
       __typename: "Event",
       id: string,
       awardsBody: AwardsBody,
@@ -2002,7 +2002,7 @@ export type CreateCategoryMutation = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
-    } | null,
+    },
     contenders?:  {
       __typename: "ModelContenderConnection",
       nextToken?: string | null,
@@ -2028,7 +2028,7 @@ export type UpdateCategoryMutation = {
     id: string,
     name: CategoryName,
     eventId: string,
-    event?:  {
+    event:  {
       __typename: "Event",
       id: string,
       awardsBody: AwardsBody,
@@ -2041,7 +2041,7 @@ export type UpdateCategoryMutation = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
-    } | null,
+    },
     contenders?:  {
       __typename: "ModelContenderConnection",
       nextToken?: string | null,
@@ -2067,7 +2067,7 @@ export type DeleteCategoryMutation = {
     id: string,
     name: CategoryName,
     eventId: string,
-    event?:  {
+    event:  {
       __typename: "Event",
       id: string,
       awardsBody: AwardsBody,
@@ -2080,7 +2080,7 @@ export type DeleteCategoryMutation = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
-    } | null,
+    },
     contenders?:  {
       __typename: "ModelContenderConnection",
       nextToken?: string | null,
@@ -2105,7 +2105,7 @@ export type CreateContenderMutation = {
     __typename: "Contender",
     id: string,
     categoryId: string,
-    category?:  {
+    category:  {
       __typename: "Category",
       id: string,
       name: CategoryName,
@@ -2116,7 +2116,7 @@ export type CreateContenderMutation = {
       _deleted?: boolean | null,
       _lastChangedAt: number,
       eventCategoriesId?: string | null,
-    } | null,
+    },
     movie?:  {
       __typename: "Movie",
       id: string,
@@ -2182,7 +2182,7 @@ export type UpdateContenderMutation = {
     __typename: "Contender",
     id: string,
     categoryId: string,
-    category?:  {
+    category:  {
       __typename: "Category",
       id: string,
       name: CategoryName,
@@ -2193,7 +2193,7 @@ export type UpdateContenderMutation = {
       _deleted?: boolean | null,
       _lastChangedAt: number,
       eventCategoriesId?: string | null,
-    } | null,
+    },
     movie?:  {
       __typename: "Movie",
       id: string,
@@ -2259,7 +2259,7 @@ export type DeleteContenderMutation = {
     __typename: "Contender",
     id: string,
     categoryId: string,
-    category?:  {
+    category:  {
       __typename: "Category",
       id: string,
       name: CategoryName,
@@ -2270,7 +2270,7 @@ export type DeleteContenderMutation = {
       _deleted?: boolean | null,
       _lastChangedAt: number,
       eventCategoriesId?: string | null,
-    } | null,
+    },
     movie?:  {
       __typename: "Movie",
       id: string,
@@ -3281,7 +3281,7 @@ export type GetCategoryQuery = {
     id: string,
     name: CategoryName,
     eventId: string,
-    event?:  {
+    event:  {
       __typename: "Event",
       id: string,
       awardsBody: AwardsBody,
@@ -3294,7 +3294,7 @@ export type GetCategoryQuery = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
-    } | null,
+    },
     contenders?:  {
       __typename: "ModelContenderConnection",
       nextToken?: string | null,
@@ -3373,7 +3373,7 @@ export type GetContenderQuery = {
     __typename: "Contender",
     id: string,
     categoryId: string,
-    category?:  {
+    category:  {
       __typename: "Category",
       id: string,
       name: CategoryName,
@@ -3384,7 +3384,7 @@ export type GetContenderQuery = {
       _deleted?: boolean | null,
       _lastChangedAt: number,
       eventCategoriesId?: string | null,
-    } | null,
+    },
     movie?:  {
       __typename: "Movie",
       id: string,
@@ -4858,7 +4858,7 @@ export type OnCreateCategorySubscription = {
     id: string,
     name: CategoryName,
     eventId: string,
-    event?:  {
+    event:  {
       __typename: "Event",
       id: string,
       awardsBody: AwardsBody,
@@ -4871,7 +4871,7 @@ export type OnCreateCategorySubscription = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
-    } | null,
+    },
     contenders?:  {
       __typename: "ModelContenderConnection",
       nextToken?: string | null,
@@ -4892,7 +4892,7 @@ export type OnUpdateCategorySubscription = {
     id: string,
     name: CategoryName,
     eventId: string,
-    event?:  {
+    event:  {
       __typename: "Event",
       id: string,
       awardsBody: AwardsBody,
@@ -4905,7 +4905,7 @@ export type OnUpdateCategorySubscription = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
-    } | null,
+    },
     contenders?:  {
       __typename: "ModelContenderConnection",
       nextToken?: string | null,
@@ -4926,7 +4926,7 @@ export type OnDeleteCategorySubscription = {
     id: string,
     name: CategoryName,
     eventId: string,
-    event?:  {
+    event:  {
       __typename: "Event",
       id: string,
       awardsBody: AwardsBody,
@@ -4939,7 +4939,7 @@ export type OnDeleteCategorySubscription = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
-    } | null,
+    },
     contenders?:  {
       __typename: "ModelContenderConnection",
       nextToken?: string | null,
@@ -4959,7 +4959,7 @@ export type OnCreateContenderSubscription = {
     __typename: "Contender",
     id: string,
     categoryId: string,
-    category?:  {
+    category:  {
       __typename: "Category",
       id: string,
       name: CategoryName,
@@ -4970,7 +4970,7 @@ export type OnCreateContenderSubscription = {
       _deleted?: boolean | null,
       _lastChangedAt: number,
       eventCategoriesId?: string | null,
-    } | null,
+    },
     movie?:  {
       __typename: "Movie",
       id: string,
@@ -5031,7 +5031,7 @@ export type OnUpdateContenderSubscription = {
     __typename: "Contender",
     id: string,
     categoryId: string,
-    category?:  {
+    category:  {
       __typename: "Category",
       id: string,
       name: CategoryName,
@@ -5042,7 +5042,7 @@ export type OnUpdateContenderSubscription = {
       _deleted?: boolean | null,
       _lastChangedAt: number,
       eventCategoriesId?: string | null,
-    } | null,
+    },
     movie?:  {
       __typename: "Movie",
       id: string,
@@ -5103,7 +5103,7 @@ export type OnDeleteContenderSubscription = {
     __typename: "Contender",
     id: string,
     categoryId: string,
-    category?:  {
+    category:  {
       __typename: "Category",
       id: string,
       name: CategoryName,
@@ -5114,7 +5114,7 @@ export type OnDeleteContenderSubscription = {
       _deleted?: boolean | null,
       _lastChangedAt: number,
       eventCategoriesId?: string | null,
-    } | null,
+    },
     movie?:  {
       __typename: "Movie",
       id: string,

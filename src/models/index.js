@@ -74,6 +74,10 @@ const CategoryName = {
   "BREAKTHROUGH": "BREAKTHROUGH"
 };
 
+const CateogrySet = {
+  "ACADEMY_AWARDS_2023": "ACADEMY_AWARDS_2023"
+};
+
 const { User, Relationships, PredictionSet, Prediction, Contender, Category, Event, LeaderboardPosition, UserPredictingEvent, Movie, Person, ContenderSnapshot } = initSchema(schema);
 
 export {
@@ -92,5 +96,6 @@ export {
   UserRole,
   AwardsBody,
   EventType,
-  CategoryName
+  CategoryName,
+  CateogrySet
 };

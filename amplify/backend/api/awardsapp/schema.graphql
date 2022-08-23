@@ -215,7 +215,7 @@ type Category @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
     name: CategoryName!
     eventId: ID!
-    event: Event @belongsTo(fields: ["eventId"]) # Lets you retrieve info about the event from a Category record
+    event: Event! @belongsTo(fields: ["eventId"]) # Lets you retrieve info about the event from a Category record
     contenders: [Contender] @hasMany
 }
 
@@ -223,7 +223,7 @@ type Category @model @auth(rules: [{ allow: public }]) {
 type Contender @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
     categoryId: ID!
-    category: Category @belongsTo # belongsTo is for bi-directional relationships. Category also hasMany contenders
+    category: Category! @belongsTo # belongsTo is for bi-directional relationships. Category also hasMany contenders
     movie: Movie @hasOne
     person: Person @hasOne # optional - only applies to acting categories
     snapshots: [ContenderSnapshot] @hasMany(indexName: "byContenderByDate", fields: ["id"])

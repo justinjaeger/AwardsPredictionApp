@@ -72,6 +72,10 @@ export enum CategoryName {
   BREAKTHROUGH = "BREAKTHROUGH"
 }
 
+export enum CateogrySet {
+  ACADEMY_AWARDS_2023 = "ACADEMY_AWARDS_2023"
+}
+
 
 
 type UserMetaData = {
@@ -184,7 +188,7 @@ export declare class Prediction {
 export declare class Contender {
   readonly id: string;
   readonly categoryId: string;
-  readonly category?: Category | null;
+  readonly category: Category;
   readonly movie?: Movie | null;
   readonly person?: Person | null;
   readonly snapshots?: (ContenderSnapshot | null)[] | null;
@@ -203,7 +207,7 @@ export declare class Contender {
 export declare class Category {
   readonly id: string;
   readonly name: CategoryName | keyof typeof CategoryName;
-  readonly event?: Event | null;
+  readonly event: Event;
   readonly contenders?: (Contender | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
