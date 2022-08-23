@@ -1,37 +1,12 @@
 import React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import HomeNavigator from './HomeNavigator';
-import MyPredictionsNavigator from './MyPredictionsNavigator';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { TouchableOpacity, View } from 'react-native';
-import CustomIcon from '../components/CustomIcon';
-import ProfileNavigator from './ProfileNavigator';
-import COLORS from '../constants/colors';
-import Dev from '../screens/Dev';
-import { useAuth } from '../store';
+import CustomIcon from '../../components/CustomIcon';
+import COLORS from '../../constants/colors';
 
-const Tab = createBottomTabNavigator();
-
-const BottomTabNavigator = () => {
-  const { isLoggedIn } = useAuth();
-  return (
-    <Tab.Navigator tabBar={(p: ITabBarProps) => <TabBar {...p} />}>
-      <Tab.Screen name="Home" component={HomeNavigator} />
-      {isLoggedIn ? (
-        <Tab.Screen name="MyPredictions" component={MyPredictionsNavigator} />
-      ) : null}
-      <Tab.Screen name="Profile" component={ProfileNavigator} />
-      <Tab.Screen name="Dev" component={Dev} />
-    </Tab.Navigator>
-  );
-};
-
-export default BottomTabNavigator;
-
-// TAB BAR
 const BOTTOM_TAB_HEIGHT = 60;
 
-type ITabBarProps = {
+export type ITabBarProps = {
   state: any;
   descriptors: any;
   navigation: any;
@@ -147,3 +122,5 @@ const TabBar = (props: ITabBarProps) => {
     </SafeAreaView>
   );
 };
+
+export default TabBar;
