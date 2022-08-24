@@ -38,6 +38,7 @@
     "amazon-cognito-identity-js": "^5.2.10",
     "aws-amplify": "^4.3.31",
     "aws-amplify-react-native": "^6.0.5",
+    "axios": "^0.27.2",
     "react": "17.0.1",
     "react-native": "0.64.0",
     "react-native-bootsplash": "^3.2.3",

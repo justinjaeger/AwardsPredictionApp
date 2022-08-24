@@ -24,10 +24,7 @@ const Profile = () => {
     const sub = DataStore.observeQuery(User).subscribe(({ items }) => {
       setUser(items[0]);
     });
-
-    return () => {
-      sub.unsubscribe();
-    };
+    return () => sub.unsubscribe();
   }, []);
 
   const logIn = () => {

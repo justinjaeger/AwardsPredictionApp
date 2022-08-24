@@ -8,6 +8,9 @@ export type HomeParamList = {
   Contenders: {
     category: Category;
   };
+  CreateContender: {
+    category: Category;
+  };
 };
 
 export type ProfileParamList = {

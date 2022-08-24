@@ -48,6 +48,13 @@ const Contenders = () => {
           <TouchableText text={imdbId || ''} onPress={() => {}} style={{ margin: 10 }} />
         );
       })}
+      <TouchableText
+        text={'Submit a contender'}
+        onPress={() => {
+          navigation.navigate('CreateContender', { category });
+        }}
+        style={{ margin: 10 }}
+      />
     </ScrollView>
   );
 };
