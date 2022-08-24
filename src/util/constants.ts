@@ -1,5 +1,8 @@
 import { AwardsBody, CategoryName, EventType, Event } from '../models';
 
+export const TMDB_IMAGE_URL = 'https://image.tmdb.org/t/p/original';
+export const POSTER_DIMENSIONS = { width: 27, height: 40 };
+
 export const EVENT_TYPE_TO_STRING: {
   [key in EventType]: string;
 } = {

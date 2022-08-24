@@ -1,40 +1,46 @@
-import { RouteProp, useRoute } from '@react-navigation/native';
+import { RouteProp, useRoute, useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { ScrollView } from 'react-native';
 import { SubmitButton } from '../../components/Buttons';
 import SearchInput from '../../components/Inputs/SearchInput';
-import { Body } from '../../components/Text';
-import { HomeParamList } from '../../navigation/types';
-import TMDBServices from '../../services/tmdb';
-import axios from 'axios';
-// import { useNavigation } from '@react-navigation/native';
+import SearchResultsList from '../../components/List/SearchResultsList';
+import { CreateContenderParamList } from '../../navigation/types';
+import TmdbServices from '../../services/tmdb';
+import { iSearchMoviesData } from '../../services/tmdb/search';
+
+const MAX_CHAR_COUNT = 100;
 
 // TODO: should only be able to do this if logged in
 const CreateContender = () => {
   const {
     params: { category },
-  } = useRoute<RouteProp<HomeParamList, 'CreateContender'>>();
-  //   const navigation = useNavigation();
+  } = useRoute<RouteProp<CreateContenderParamList, 'CreateContender'>>();
+  const navigation = useNavigation();
 
   const event = category.event;
   const minYearToSearchFor = event.year - 1;
 
   const [search, setSearch] = useState<string>('');
-  const [results, setResults] = useState<string>('');
+  const [results, setResults] = useState<iSearchMoviesData>([]);
 
   const onSubmitSearch = () => {
-    const u =
-      'https://api.themoviedb.org/3/search/movie/?query=everything&api_key=d9a96448d1a564273c49ec13f752084f';
-    // axios(u).catch((err) => console.error('err', err, JSON.stringify(err)));
-    fetch(u).catch((err) => console.error('err', err, JSON.stringify(err)));
-    // TMDBServices.search(search, minYearToSearchFor).then((res) => {
-    //   setResults(JSON.stringify(res));
-    // });
+    TmdbServices.searchMovies(search, minYearToSearchFor).then((res) => {
+      setResults(res.data || []);
+    });
+  };
+
+  const onSelectSearchResult = (tmdbId: string) => {
+    navigation.navigate('ConfirmContender', { tmdbId, category });
   };
 
   return (
     <ScrollView
-      contentContainerStyle={{ alignItems: 'center', marginTop: 40, width: '100%' }}
+      contentContainerStyle={{
+        alignItems: 'center',
+        marginTop: 40,
+        width: '100%',
+        paddingBottom: 100,
+      }}
     >
       <SearchInput
         label={'Search Movies'}
@@ -43,7 +49,16 @@ const CreateContender = () => {
         style={{ width: '80%' }}
       />
       <SubmitButton text={'Search'} onPress={onSubmitSearch} />
-      <Body>{results}</Body>
+      <SearchResultsList
+        data={results.map((r) => ({
+          title: r.title,
+          description:
+            r.plot.length > MAX_CHAR_COUNT
+              ? r.plot.slice(0, MAX_CHAR_COUNT) + '...'
+              : r.plot,
+          onPress: () => onSelectSearchResult(r.tmdbId),
+        }))}
+      />
     </ScrollView>
   );
 };

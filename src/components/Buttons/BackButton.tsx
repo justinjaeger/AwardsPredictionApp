@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import COLORS from '../../constants/colors';
-import { IconButton } from '../IconButton';
+import { IconButton } from './IconButton';
 
 const BackButton = () => {
   const { goBack } = useNavigation();

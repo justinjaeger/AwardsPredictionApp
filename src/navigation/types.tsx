@@ -13,6 +13,16 @@ export type HomeParamList = {
   };
 };
 
+export type CreateContenderParamList = {
+  CreateContender: {
+    category: Category;
+  };
+  ConfirmContender: {
+    tmdbId: string;
+    category: Category;
+  };
+};
+
 export type ProfileParamList = {
   Profile: undefined;
 };

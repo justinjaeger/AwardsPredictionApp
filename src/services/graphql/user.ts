@@ -11,12 +11,12 @@ import {
 } from '../../API';
 import * as mutations from '../../graphql/mutations';
 import * as queries from '../../graphql/queries';
-import { handleError, iApiServiceReturn } from '.';
+import { handleError, iApiResponse } from '../utils';
 
 // create a new user after confirming email
 export const createUser = async (
   variables: CreateUserMutationVariables,
-): Promise<iApiServiceReturn<CreateUserMutation>> => {
+): Promise<iApiResponse<CreateUserMutation>> => {
   try {
     const res = await API.graphql<GraphQLQuery<CreateUserMutation>>(
       graphqlOperation(mutations.createUser, variables),
@@ -32,7 +32,7 @@ export const createUser = async (
 
 export const getUsersByFilter = async (
   variables: ListUsersQueryVariables,
-): Promise<iApiServiceReturn<User[]>> => {
+): Promise<iApiResponse<User[]>> => {
   try {
     const res = await API.graphql<GraphQLQuery<ListUsersQuery>>(
       graphqlOperation(queries.listUsers, variables),
@@ -52,7 +52,7 @@ export const getUsersByFilter = async (
 // update username (only call after verifying that it's unique)
 export const updateUsername = async (
   variables: UpdateUserMutationVariables,
-): Promise<iApiServiceReturn<User>> => {
+): Promise<iApiResponse<User>> => {
   try {
     const res = await API.graphql<GraphQLQuery<UpdateUserMutation>>(
       graphqlOperation(mutations.updateUser, variables),

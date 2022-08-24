@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleProp, ViewStyle } from 'react-native';
 import { Button } from '@ui-kitten/components';
-import CustomIcon, { iCustomIconProps } from './CustomIcon';
+import CustomIcon, { iCustomIconProps } from '../CustomIcon';
 
 /**
  * https://akveo.github.io/eva-icons/#/

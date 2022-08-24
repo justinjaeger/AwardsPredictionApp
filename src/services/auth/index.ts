@@ -1,25 +1,11 @@
 import { CognitoUser } from 'amazon-cognito-identity-js';
 import { Auth } from 'aws-amplify';
-import Snackbar from '../components/Snackbar';
-
-interface iAuthServiceReturn<T> {
-  status: 'success' | 'error';
-  data?: T;
-  error?: any;
-  message?: string;
-}
-
-const handleError = (message?: string, error?: any): iAuthServiceReturn<any> => {
-  console.error(message, JSON.stringify(error));
-  const m = error.message || message;
-  Snackbar.error(m || '');
-  return { status: 'error', message: m, error: error.name };
-};
+import { handleError, iApiResponse } from '../utils';
 
 const signUp = async (
   email: string,
   password: string,
-): Promise<iAuthServiceReturn<CognitoUser>> => {
+): Promise<iApiResponse<CognitoUser>> => {
   try {
     const { user } = await Auth.signUp({
       username: email,
@@ -35,10 +21,7 @@ const signUp = async (
   }
 };
 
-const signIn = async (
-  email: string,
-  password: string,
-): Promise<iAuthServiceReturn<any>> => {
+const signIn = async (email: string, password: string): Promise<iApiResponse<any>> => {
   try {
     const user = await Auth.signIn(email, password);
     return { status: 'success', data: user };
@@ -51,7 +34,7 @@ const signIn = async (
   }
 };
 
-const resendSignUp = async (email: string): Promise<iAuthServiceReturn<any>> => {
+const resendSignUp = async (email: string): Promise<iApiResponse<any>> => {
   try {
     await Auth.resendSignUp(email);
     return {
@@ -63,10 +46,7 @@ const resendSignUp = async (email: string): Promise<iAuthServiceReturn<any>> => 
   }
 };
 
-const confirmSignUp = async (
-  email: string,
-  code: string,
-): Promise<iAuthServiceReturn<any>> => {
+const confirmSignUp = async (email: string, code: string): Promise<iApiResponse<any>> => {
   try {
     await Auth.confirmSignUp(email, code);
     return { status: 'success' };
@@ -75,7 +55,7 @@ const confirmSignUp = async (
   }
 };
 
-const signOut = async (): Promise<iAuthServiceReturn<any>> => {
+const signOut = async (): Promise<iApiResponse<any>> => {
   try {
     await Auth.signOut({ global: true }); // "global" signs user out of all devices + invalidates tokens
     return { status: 'success' };
@@ -84,7 +64,7 @@ const signOut = async (): Promise<iAuthServiceReturn<any>> => {
   }
 };
 
-const forgotPassword = async (email: string): Promise<iAuthServiceReturn<any>> => {
+const forgotPassword = async (email: string): Promise<iApiResponse<any>> => {
   try {
     await Auth.forgotPassword(email);
     return { status: 'success' };
@@ -97,7 +77,7 @@ const forgotPasswordSubmit = async (
   email: string,
   code: string,
   password: string,
-): Promise<iAuthServiceReturn<any>> => {
+): Promise<iApiResponse<any>> => {
   try {
     await Auth.forgotPasswordSubmit(email, code, password);
     return { status: 'success' };
@@ -110,7 +90,7 @@ const forgotPasswordSubmit = async (
 };
 
 // only for edge cases where something went wrong. careful using this
-const deleteUser = async (): Promise<iAuthServiceReturn<any>> => {
+const deleteUser = async (): Promise<iApiResponse<any>> => {
   try {
     await Auth.deleteUser(); // "global" signs user out of all devices + invalidates tokens
     return { status: 'success' };
