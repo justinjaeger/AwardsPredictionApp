@@ -218,7 +218,7 @@ export const schema = {
                     "type": {
                         "model": "User"
                     },
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": [],
                     "association": {
                         "connectionType": "BELONGS_TO",
@@ -231,7 +231,7 @@ export const schema = {
                     "type": {
                         "model": "User"
                     },
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": [],
                     "association": {
                         "connectionType": "BELONGS_TO",
@@ -464,7 +464,7 @@ export const schema = {
                     "type": {
                         "model": "Contender"
                     },
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": [],
                     "association": {
                         "connectionType": "BELONGS_TO",
@@ -589,7 +589,7 @@ export const schema = {
                     "type": {
                         "model": "Movie"
                     },
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": [],
                     "association": {
                         "connectionType": "HAS_ONE",
@@ -694,7 +694,7 @@ export const schema = {
                     "name": "contenderMovieId",
                     "isArray": false,
                     "type": "ID",
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": []
                 },
                 "contenderPersonId": {
@@ -998,7 +998,7 @@ export const schema = {
                     "type": {
                         "model": "Event"
                     },
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": [],
                     "association": {
                         "connectionType": "BELONGS_TO",
@@ -1011,7 +1011,7 @@ export const schema = {
                     "type": {
                         "model": "User"
                     },
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": [],
                     "association": {
                         "connectionType": "BELONGS_TO",
@@ -1195,8 +1195,8 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "imdbId": {
-                    "name": "imdbId",
+                "tmdbId": {
+                    "name": "tmdbId",
                     "isArray": false,
                     "type": "String",
                     "isRequired": true,
@@ -1276,8 +1276,8 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "imdbId": {
-                    "name": "imdbId",
+                "tmdbId": {
+                    "name": "tmdbId",
                     "isArray": false,
                     "type": "String",
                     "isRequired": true,
@@ -1356,7 +1356,7 @@ export const schema = {
                     "type": {
                         "model": "Contender"
                     },
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": [],
                     "association": {
                         "connectionType": "BELONGS_TO",
@@ -1376,7 +1376,7 @@ export const schema = {
                     "type": {
                         "model": "Category"
                     },
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": [],
                     "association": {
                         "connectionType": "HAS_ONE",
@@ -1548,5 +1548,5 @@ export const schema = {
         }
     },
     "nonModels": {},
-    "version": "531a693dd630005af509800d9dd7b366"
+    "version": "ab8d7f634e1c2dd7784ddb875a3f335e"
 };

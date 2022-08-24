@@ -107,8 +107,8 @@ type Relationships @model @auth(rules: [{ allow: public }]) {
         name: "byFollowingUser", 
         queryField: "queryRelationshipsByFollowingUser",
     )
-    followedUser: User @belongsTo(fields: ["followedUserId"])
-    followingUser: User @belongsTo(fields: ["followingUserId"])
+    followedUser: User! @belongsTo(fields: ["followedUserId"])
+    followingUser: User! @belongsTo(fields: ["followingUserId"])
     followedPredictionFeed: [PredictionSet] @hasMany(indexName: "byUserByActive", fields: ["followedUserId"])
     # ^retrieve active predictions from the person being followed. Sort results by createdA
 }
@@ -172,7 +172,7 @@ type Prediction @model @auth(rules: [{ allow: public }]) {
         queryField: "queryPredictionByContenderByRanking", 
         sortKeyFields: ["isActive", "ranking"],
     )
-    contender: Contender @belongsTo(fields: ["contenderId"])
+    contender: Contender! @belongsTo(fields: ["contenderId"])
     ranking: Int!
     isActive: String @default(value: "x") # essentially boolean - Must be removed when a new prediction is made (used in Contender activePredictions)
 }
@@ -205,8 +205,8 @@ type LeaderboardPosition @model @auth(rules: [{ allow: public }]) {
         queryField: "queryLeaderboardPositionByEventByRanking", 
         sortKeyFields: ["ranking"],
     )
-    event: Event @belongsTo(fields: ["eventId"])
-    user: User @belongsTo(fields: ["userId"])
+    event: Event! @belongsTo(fields: ["eventId"])
+    user: User! @belongsTo(fields: ["userId"])
     accuracy: String
     ranking: Int
 }
@@ -224,7 +224,7 @@ type Contender @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
     categoryId: ID!
     category: Category! @belongsTo # belongsTo is for bi-directional relationships. Category also hasMany contenders
-    movie: Movie @hasOne
+    movie: Movie! @hasOne
     person: Person @hasOne # optional - only applies to acting categories
     snapshots: [ContenderSnapshot] @hasMany(indexName: "byContenderByDate", fields: ["id"])
     activePredictions: [Prediction] @hasMany(indexName: "byContenderByActive", fields: ["id"])
@@ -243,9 +243,9 @@ type ContenderSnapshot @model @auth(rules: [{ allow: public }]) {
         queryField: "queryContenderSnapshotByContenderByDate",
         sortKeyFields: ["createdAt"],
     )
-    contender: Contender @belongsTo(fields: ["contenderId"])
+    contender: Contender! @belongsTo(fields: ["contenderId"])
     categoryId: ID!
-    category: Category @hasOne(fields: ["categoryId"])
+    category: Category! @hasOne(fields: ["categoryId"])
     # Stats for displaying leaderboard (must update manually when we set the record)
     numberOfUsersPredicting: Int!
     numberOfUsersPredictingWin: Int!
@@ -254,14 +254,14 @@ type ContenderSnapshot @model @auth(rules: [{ allow: public }]) {
 
 type Movie @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
-    imdbId: String! # unique value
+    tmdbId: String! # unique value
     year: Int # optional bc we might not know yet
     image: String # can override IMDb image
 }
 
 type Person @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
-    imdbId: String! # unique value
+    tmdbId: String! # unique value
     image: String
 }
   

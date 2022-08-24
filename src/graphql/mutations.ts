@@ -884,7 +884,7 @@ export const createContender = /* GraphQL */ `
       }
       movie {
         id
-        imdbId
+        tmdbId
         year
         image
         createdAt
@@ -895,7 +895,7 @@ export const createContender = /* GraphQL */ `
       }
       person {
         id
-        imdbId
+        tmdbId
         image
         createdAt
         updatedAt
@@ -952,7 +952,7 @@ export const updateContender = /* GraphQL */ `
       }
       movie {
         id
-        imdbId
+        tmdbId
         year
         image
         createdAt
@@ -963,7 +963,7 @@ export const updateContender = /* GraphQL */ `
       }
       person {
         id
-        imdbId
+        tmdbId
         image
         createdAt
         updatedAt
@@ -1020,7 +1020,7 @@ export const deleteContender = /* GraphQL */ `
       }
       movie {
         id
-        imdbId
+        tmdbId
         year
         image
         createdAt
@@ -1031,7 +1031,7 @@ export const deleteContender = /* GraphQL */ `
       }
       person {
         id
-        imdbId
+        tmdbId
         image
         createdAt
         updatedAt
@@ -1203,7 +1203,7 @@ export const createMovie = /* GraphQL */ `
   ) {
     createMovie(input: $input, condition: $condition) {
       id
-      imdbId
+      tmdbId
       year
       image
       createdAt
@@ -1221,7 +1221,7 @@ export const updateMovie = /* GraphQL */ `
   ) {
     updateMovie(input: $input, condition: $condition) {
       id
-      imdbId
+      tmdbId
       year
       image
       createdAt
@@ -1239,7 +1239,7 @@ export const deleteMovie = /* GraphQL */ `
   ) {
     deleteMovie(input: $input, condition: $condition) {
       id
-      imdbId
+      tmdbId
       year
       image
       createdAt
@@ -1257,7 +1257,7 @@ export const createPerson = /* GraphQL */ `
   ) {
     createPerson(input: $input, condition: $condition) {
       id
-      imdbId
+      tmdbId
       image
       createdAt
       updatedAt
@@ -1274,7 +1274,7 @@ export const updatePerson = /* GraphQL */ `
   ) {
     updatePerson(input: $input, condition: $condition) {
       id
-      imdbId
+      tmdbId
       image
       createdAt
       updatedAt
@@ -1291,7 +1291,7 @@ export const deletePerson = /* GraphQL */ `
   ) {
     deletePerson(input: $input, condition: $condition) {
       id
-      imdbId
+      tmdbId
       image
       createdAt
       updatedAt

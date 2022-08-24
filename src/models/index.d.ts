@@ -149,8 +149,8 @@ export declare class User {
 
 export declare class Relationships {
   readonly id: string;
-  readonly followedUser?: User | null;
-  readonly followingUser?: User | null;
+  readonly followedUser: User;
+  readonly followingUser: User;
   readonly followedPredictionFeed?: (PredictionSet | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
@@ -175,7 +175,7 @@ export declare class Prediction {
   readonly id: string;
   readonly predictionSetId: string;
   readonly userId: string;
-  readonly contender?: Contender | null;
+  readonly contender: Contender;
   readonly ranking: number;
   readonly isActive?: string | null;
   readonly createdAt?: string | null;
@@ -189,7 +189,7 @@ export declare class Contender {
   readonly id: string;
   readonly categoryId: string;
   readonly category: Category;
-  readonly movie?: Movie | null;
+  readonly movie: Movie;
   readonly person?: Person | null;
   readonly snapshots?: (ContenderSnapshot | null)[] | null;
   readonly activePredictions?: (Prediction | null)[] | null;
@@ -198,7 +198,7 @@ export declare class Contender {
   readonly didReceiveNominationOrWin?: boolean | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
-  readonly contenderMovieId?: string | null;
+  readonly contenderMovieId: string;
   readonly contenderPersonId?: string | null;
   constructor(init: ModelInit<Contender, ContenderMetaData>);
   static copyOf(source: Contender, mutator: (draft: MutableModel<Contender, ContenderMetaData>) => MutableModel<Contender, ContenderMetaData> | void): Contender;
@@ -234,8 +234,8 @@ export declare class Event {
 
 export declare class LeaderboardPosition {
   readonly id: string;
-  readonly event?: Event | null;
-  readonly user?: User | null;
+  readonly event: Event;
+  readonly user: User;
   readonly accuracy?: string | null;
   readonly ranking?: number | null;
   readonly createdAt?: string | null;
@@ -258,7 +258,7 @@ export declare class UserPredictingEvent {
 
 export declare class Movie {
   readonly id: string;
-  readonly imdbId: string;
+  readonly tmdbId: string;
   readonly year?: number | null;
   readonly image?: string | null;
   readonly createdAt?: string | null;
@@ -269,7 +269,7 @@ export declare class Movie {
 
 export declare class Person {
   readonly id: string;
-  readonly imdbId: string;
+  readonly tmdbId: string;
   readonly image?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
@@ -279,9 +279,9 @@ export declare class Person {
 
 export declare class ContenderSnapshot {
   readonly id: string;
-  readonly contender?: Contender | null;
+  readonly contender: Contender;
   readonly categoryId: string;
-  readonly category?: Category | null;
+  readonly category: Category;
   readonly numberOfUsersPredicting: number;
   readonly numberOfUsersPredictingWin: number;
   readonly createdAt: string;

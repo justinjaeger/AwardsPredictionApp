@@ -809,7 +809,7 @@ export const onCreateContender = /* GraphQL */ `
       }
       movie {
         id
-        imdbId
+        tmdbId
         year
         image
         createdAt
@@ -820,7 +820,7 @@ export const onCreateContender = /* GraphQL */ `
       }
       person {
         id
-        imdbId
+        tmdbId
         image
         createdAt
         updatedAt
@@ -874,7 +874,7 @@ export const onUpdateContender = /* GraphQL */ `
       }
       movie {
         id
-        imdbId
+        tmdbId
         year
         image
         createdAt
@@ -885,7 +885,7 @@ export const onUpdateContender = /* GraphQL */ `
       }
       person {
         id
-        imdbId
+        tmdbId
         image
         createdAt
         updatedAt
@@ -939,7 +939,7 @@ export const onDeleteContender = /* GraphQL */ `
       }
       movie {
         id
-        imdbId
+        tmdbId
         year
         image
         createdAt
@@ -950,7 +950,7 @@ export const onDeleteContender = /* GraphQL */ `
       }
       person {
         id
-        imdbId
+        tmdbId
         image
         createdAt
         updatedAt
@@ -1110,7 +1110,7 @@ export const onCreateMovie = /* GraphQL */ `
   subscription OnCreateMovie {
     onCreateMovie {
       id
-      imdbId
+      tmdbId
       year
       image
       createdAt
@@ -1125,7 +1125,7 @@ export const onUpdateMovie = /* GraphQL */ `
   subscription OnUpdateMovie {
     onUpdateMovie {
       id
-      imdbId
+      tmdbId
       year
       image
       createdAt
@@ -1140,7 +1140,7 @@ export const onDeleteMovie = /* GraphQL */ `
   subscription OnDeleteMovie {
     onDeleteMovie {
       id
-      imdbId
+      tmdbId
       year
       image
       createdAt
@@ -1155,7 +1155,7 @@ export const onCreatePerson = /* GraphQL */ `
   subscription OnCreatePerson {
     onCreatePerson {
       id
-      imdbId
+      tmdbId
       image
       createdAt
       updatedAt
@@ -1169,7 +1169,7 @@ export const onUpdatePerson = /* GraphQL */ `
   subscription OnUpdatePerson {
     onUpdatePerson {
       id
-      imdbId
+      tmdbId
       image
       createdAt
       updatedAt
@@ -1183,7 +1183,7 @@ export const onDeletePerson = /* GraphQL */ `
   subscription OnDeletePerson {
     onDeletePerson {
       id
-      imdbId
+      tmdbId
       image
       createdAt
       updatedAt
