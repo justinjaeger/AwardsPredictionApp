@@ -310,6 +310,7 @@ export const getPrediction = /* GraphQL */ `
       contender {
         id
         categoryId
+        contenderType
         didReceiveNominationOrWin
         createdAt
         updatedAt
@@ -319,6 +320,7 @@ export const getPrediction = /* GraphQL */ `
         categoryContendersId
         contenderMovieId
         contenderPersonId
+        contenderSongId
       }
       ranking
       isActive
@@ -785,6 +787,7 @@ export const getContender = /* GraphQL */ `
         _lastChangedAt
         eventCategoriesId
       }
+      contenderType
       movie {
         id
         tmdbId
@@ -800,6 +803,15 @@ export const getContender = /* GraphQL */ `
         id
         tmdbId
         image
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      song {
+        id
+        apiId
         createdAt
         updatedAt
         _version
@@ -831,6 +843,7 @@ export const getContender = /* GraphQL */ `
       categoryContendersId
       contenderMovieId
       contenderPersonId
+      contenderSongId
     }
   }
 `;
@@ -852,6 +865,7 @@ export const listContenders = /* GraphQL */ `
       items {
         id
         categoryId
+        contenderType
         didReceiveNominationOrWin
         createdAt
         updatedAt
@@ -861,6 +875,7 @@ export const listContenders = /* GraphQL */ `
         categoryContendersId
         contenderMovieId
         contenderPersonId
+        contenderSongId
       }
       nextToken
       startedAt
@@ -883,6 +898,7 @@ export const syncContenders = /* GraphQL */ `
       items {
         id
         categoryId
+        contenderType
         didReceiveNominationOrWin
         createdAt
         updatedAt
@@ -892,6 +908,7 @@ export const syncContenders = /* GraphQL */ `
         categoryContendersId
         contenderMovieId
         contenderPersonId
+        contenderSongId
       }
       nextToken
       startedAt
@@ -906,6 +923,7 @@ export const getContenderSnapshot = /* GraphQL */ `
       contender {
         id
         categoryId
+        contenderType
         didReceiveNominationOrWin
         createdAt
         updatedAt
@@ -915,6 +933,7 @@ export const getContenderSnapshot = /* GraphQL */ `
         categoryContendersId
         contenderMovieId
         contenderPersonId
+        contenderSongId
       }
       categoryId
       category {
@@ -1136,6 +1155,75 @@ export const syncPeople = /* GraphQL */ `
         id
         tmdbId
         image
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const getSong = /* GraphQL */ `
+  query GetSong($id: ID!) {
+    getSong(id: $id) {
+      id
+      apiId
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const listSongs = /* GraphQL */ `
+  query ListSongs(
+    $id: ID
+    $filter: ModelSongFilterInput
+    $limit: Int
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listSongs(
+      id: $id
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        id
+        apiId
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const syncSongs = /* GraphQL */ `
+  query SyncSongs(
+    $filter: ModelSongFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncSongs(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        apiId
         createdAt
         updatedAt
         _version

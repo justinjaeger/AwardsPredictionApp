@@ -27,6 +27,12 @@ export enum EventType {
   NOMINATION = "NOMINATION"
 }
 
+export enum ContenderType {
+  DEFAULT = "DEFAULT",
+  ACTOR = "ACTOR",
+  SONG = "SONG"
+}
+
 export enum CategoryName {
   PICTURE = "PICTURE",
   DIRECTOR = "DIRECTOR",
@@ -122,6 +128,10 @@ type PersonMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 }
 
+type SongMetaData = {
+  readOnlyFields: 'createdAt' | 'updatedAt';
+}
+
 type ContenderSnapshotMetaData = {
   readOnlyFields: 'updatedAt';
 }
@@ -188,8 +198,10 @@ export declare class Prediction {
 export declare class Contender {
   readonly id: string;
   readonly category: Category;
+  readonly contenderType: ContenderType | keyof typeof ContenderType;
   readonly movie: Movie;
   readonly person?: Person | null;
+  readonly song?: Song | null;
   readonly snapshots?: (ContenderSnapshot | null)[] | null;
   readonly activePredictions?: (Prediction | null)[] | null;
   readonly activePredictionsRankings?: (Prediction | null)[] | null;
@@ -199,6 +211,7 @@ export declare class Contender {
   readonly updatedAt?: string | null;
   readonly contenderMovieId: string;
   readonly contenderPersonId?: string | null;
+  readonly contenderSongId?: string | null;
   readonly categoryContendersId?: string | null;
   constructor(init: ModelInit<Contender, ContenderMetaData>);
   static copyOf(source: Contender, mutator: (draft: MutableModel<Contender, ContenderMetaData>) => MutableModel<Contender, ContenderMetaData> | void): Contender;
@@ -275,6 +288,15 @@ export declare class Person {
   readonly updatedAt?: string | null;
   constructor(init: ModelInit<Person, PersonMetaData>);
   static copyOf(source: Person, mutator: (draft: MutableModel<Person, PersonMetaData>) => MutableModel<Person, PersonMetaData> | void): Person;
+}
+
+export declare class Song {
+  readonly id: string;
+  readonly apiId: string;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+  constructor(init: ModelInit<Song, SongMetaData>);
+  static copyOf(source: Song, mutator: (draft: MutableModel<Song, SongMetaData>) => MutableModel<Song, SongMetaData> | void): Song;
 }
 
 export declare class ContenderSnapshot {

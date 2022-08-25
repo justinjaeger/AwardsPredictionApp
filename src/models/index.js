@@ -29,6 +29,12 @@ const EventType = {
   "NOMINATION": "NOMINATION"
 };
 
+const ContenderType = {
+  "DEFAULT": "DEFAULT",
+  "ACTOR": "ACTOR",
+  "SONG": "SONG"
+};
+
 const CategoryName = {
   "PICTURE": "PICTURE",
   "DIRECTOR": "DIRECTOR",
@@ -78,7 +84,7 @@ const CateogrySet = {
   "ACADEMY_AWARDS_2023": "ACADEMY_AWARDS_2023"
 };
 
-const { User, Relationships, PredictionSet, Prediction, Contender, Category, Event, LeaderboardPosition, UserPredictingEvent, Movie, Person, ContenderSnapshot } = initSchema(schema);
+const { User, Relationships, PredictionSet, Prediction, Contender, Category, Event, LeaderboardPosition, UserPredictingEvent, Movie, Person, Song, ContenderSnapshot } = initSchema(schema);
 
 export {
   User,
@@ -92,10 +98,12 @@ export {
   UserPredictingEvent,
   Movie,
   Person,
+  Song,
   ContenderSnapshot,
   UserRole,
   AwardsBody,
   EventType,
+  ContenderType,
   CategoryName,
   CateogrySet
 };

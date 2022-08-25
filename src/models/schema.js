@@ -576,6 +576,15 @@ export const schema = {
                         "targetName": "categoryId"
                     }
                 },
+                "contenderType": {
+                    "name": "contenderType",
+                    "isArray": false,
+                    "type": {
+                        "enum": "ContenderType"
+                    },
+                    "isRequired": true,
+                    "attributes": []
+                },
                 "movie": {
                     "name": "movie",
                     "isArray": false,
@@ -602,6 +611,20 @@ export const schema = {
                         "connectionType": "HAS_ONE",
                         "associatedWith": "id",
                         "targetName": "contenderPersonId"
+                    }
+                },
+                "song": {
+                    "name": "song",
+                    "isArray": false,
+                    "type": {
+                        "model": "Song"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "association": {
+                        "connectionType": "HAS_ONE",
+                        "associatedWith": "id",
+                        "targetName": "contenderSongId"
                     }
                 },
                 "snapshots": {
@@ -692,6 +715,13 @@ export const schema = {
                 },
                 "contenderPersonId": {
                     "name": "contenderPersonId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "contenderSongId": {
+                    "name": "contenderSongId",
                     "isArray": false,
                     "type": "ID",
                     "isRequired": false,
@@ -1340,6 +1370,73 @@ export const schema = {
                 }
             ]
         },
+        "Song": {
+            "name": "Song",
+            "fields": {
+                "id": {
+                    "name": "id",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "apiId": {
+                    "name": "apiId",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                }
+            },
+            "syncable": true,
+            "pluralName": "Songs",
+            "attributes": [
+                {
+                    "type": "model",
+                    "properties": {}
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "fields": [
+                            "id"
+                        ]
+                    }
+                },
+                {
+                    "type": "auth",
+                    "properties": {
+                        "rules": [
+                            {
+                                "allow": "public",
+                                "operations": [
+                                    "create",
+                                    "update",
+                                    "delete",
+                                    "read"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
         "ContenderSnapshot": {
             "name": "ContenderSnapshot",
             "fields": {
@@ -1493,6 +1590,14 @@ export const schema = {
                 "NOMINATION"
             ]
         },
+        "ContenderType": {
+            "name": "ContenderType",
+            "values": [
+                "DEFAULT",
+                "ACTOR",
+                "SONG"
+            ]
+        },
         "CategoryName": {
             "name": "CategoryName",
             "values": [
@@ -1548,5 +1653,5 @@ export const schema = {
         }
     },
     "nonModels": {},
-    "version": "3366a17c84b33ea50ee38d7a934b73e8"
+    "version": "22f131cdd257606f7c0f101864fce273"
 };

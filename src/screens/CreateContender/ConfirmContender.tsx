@@ -5,7 +5,8 @@ import { ScrollView, Image, View } from 'react-native';
 import { SubmitButton, TouchableText } from '../../components/Buttons';
 import Snackbar from '../../components/Snackbar';
 import { BodyLarge, SubHeader } from '../../components/Text';
-import { Contender, Movie } from '../../models';
+import { ContenderType, Contender, Movie } from '../../models';
+
 import { CreateContenderParamList } from '../../navigation/types';
 import TmdbServices from '../../services/tmdb';
 import { iGetMovieCreditsData, iGetMovieData } from '../../services/tmdb/movie';
@@ -60,6 +61,7 @@ const ConfirmContender = () => {
           category,
           movie,
           contenderMovieId: movie.id,
+          contenderType: ContenderType.DEFAULT,
         }),
       );
       console.error('SUCCESS', contender);
