@@ -187,7 +187,6 @@ export declare class Prediction {
 
 export declare class Contender {
   readonly id: string;
-  readonly categoryId: string;
   readonly category: Category;
   readonly movie: Movie;
   readonly person?: Person | null;
@@ -200,6 +199,7 @@ export declare class Contender {
   readonly updatedAt?: string | null;
   readonly contenderMovieId: string;
   readonly contenderPersonId?: string | null;
+  readonly categoryContendersId?: string | null;
   constructor(init: ModelInit<Contender, ContenderMetaData>);
   static copyOf(source: Contender, mutator: (draft: MutableModel<Contender, ContenderMetaData>) => MutableModel<Contender, ContenderMetaData> | void): Contender;
 }

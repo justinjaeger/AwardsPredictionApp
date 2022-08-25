@@ -563,13 +563,6 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "categoryId": {
-                    "name": "categoryId",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": true,
-                    "attributes": []
-                },
                 "category": {
                     "name": "category",
                     "isArray": false,
@@ -580,7 +573,7 @@ export const schema = {
                     "attributes": [],
                     "association": {
                         "connectionType": "BELONGS_TO",
-                        "targetName": "categoryContendersId"
+                        "targetName": "categoryId"
                     }
                 },
                 "movie": {
@@ -699,6 +692,13 @@ export const schema = {
                 },
                 "contenderPersonId": {
                     "name": "contenderPersonId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "categoryContendersId": {
+                    "name": "categoryContendersId",
                     "isArray": false,
                     "type": "ID",
                     "isRequired": false,
@@ -1548,5 +1548,5 @@ export const schema = {
         }
     },
     "nonModels": {},
-    "version": "ab8d7f634e1c2dd7784ddb875a3f335e"
+    "version": "3366a17c84b33ea50ee38d7a934b73e8"
 };

@@ -1,11 +1,13 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { DataStore } from 'aws-amplify';
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import { ScrollView } from 'react-native';
 import { TouchableText } from '../../../components/Buttons';
+import { Body } from '../../../components/Text';
 import { Contender } from '../../../models';
 import { HomeParamList } from '../../../navigation/types';
 import { getCategoryList } from '../../../util/constants';
+import { useAsyncEffect } from '../../../util/hooks';
 import { eventToString } from '../../../util/stringConversions';
 
 const Contenders = () => {
@@ -25,29 +27,22 @@ const Contenders = () => {
     });
   }, [navigation, category.name, category.event]);
 
-  useEffect(() => {
-    const sub = DataStore.observeQuery(Contender, (c) =>
-      c.categoryId('eq', category.id),
-    ).subscribe(({ items }) => {
-      setContenders(items);
-    });
-    return () => sub.unsubscribe();
-  }, [category]);
+  useAsyncEffect(async () => {
+    // TODO: need a "subscription" here because when I create a movie and come back, it's not refreshing the data unless i reload the whole screen
+    // later we'll just use userId to get the user whose profile it is, but I want all users for experiment
+    const _contenders = (await DataStore.query(Contender)).filter(
+      (c) => c.category?.id === category.id,
+    );
+    setContenders(_contenders);
+  }, []);
 
-  const imdbIds = contenders.map((c) => c.movie?.imdbId);
-
-  // TODO: Fetch data from imdbApi. Figure out a way to also cache that data so it refreshes/only fetches every 24 hours or so
+  // TODO: Fetch data from tmdbApi. Figure out a way to also cache that data so it refreshes/only fetches every 24 hours or so
 
   return (
     <ScrollView
       contentContainerStyle={{ alignItems: 'center', marginTop: 40, paddingBottom: 100 }}
     >
-      {imdbIds.map((imdbId) => {
-        // TODO: this should display data fetched from the imdb api
-        return (
-          <TouchableText text={imdbId || ''} onPress={() => {}} style={{ margin: 10 }} />
-        );
-      })}
+      <Body>{JSON.stringify(contenders)}</Body>
       <TouchableText
         text={'Submit a contender'}
         onPress={() => {

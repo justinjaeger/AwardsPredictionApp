@@ -223,7 +223,7 @@ type Category @model @auth(rules: [{ allow: public }]) {
 type Contender @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
     categoryId: ID!
-    category: Category! @belongsTo # belongsTo is for bi-directional relationships. Category also hasMany contenders
+    category: Category! @belongsTo(fields: ["categoryId"]) # belongsTo is for bi-directional relationships. Category also hasMany contenders
     movie: Movie! @hasOne
     person: Person @hasOne # optional - only applies to acting categories
     snapshots: [ContenderSnapshot] @hasMany(indexName: "byContenderByDate", fields: ["id"])

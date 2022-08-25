@@ -3,6 +3,7 @@ import { DataStore } from 'aws-amplify';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, Image, View } from 'react-native';
 import { SubmitButton, TouchableText } from '../../components/Buttons';
+import Snackbar from '../../components/Snackbar';
 import { BodyLarge, SubHeader } from '../../components/Text';
 import { Contender, Movie } from '../../models';
 import { CreateContenderParamList } from '../../navigation/types';
@@ -34,23 +35,40 @@ const ConfirmContender = () => {
     // make request to get the movie's details (these will be cached using the tmdbId as the)
   }, [tmdbId]);
 
-  const onConfirmContender = () => {
+  const onConfirmContender = async () => {
     if (!movieDetails) return;
-    // TODO: don't let them create the movie if already exists (probably should do this in the previous screen)
-    DataStore.save(
-      new Movie({ tmdbId, image: movieDetails.posterPath, year: movieDetails.year }),
-    ).then((movie) => {
-      DataStore.save(
-        new Contender({
-          category,
-          categoryId: category.id,
-          movie,
+    // Put this in some other file
+    // Don't let them create the movie if already exists (should do this in the previous screen as well)
+    try {
+      const tmdbIdString = tmdbId.toString();
+      const maybeMovie = await DataStore.query(Movie, (m) =>
+        m.tmdbId('eq', tmdbIdString),
+      );
+      if (maybeMovie.length > 0) {
+        Snackbar.error('This movie has already been added');
+        return;
+      }
+      const movie = await DataStore.save(
+        new Movie({
+          tmdbId: tmdbIdString,
+          image: movieDetails.posterPath,
+          year: movieDetails.year,
         }),
       );
-    });
-
-    // Create contender in DataStore
-    // Cache contender
+      const contender = await DataStore.save(
+        new Contender({
+          category,
+          movie,
+          contenderMovieId: movie.id,
+        }),
+      );
+      console.error('SUCCESS', contender);
+    } catch (err) {
+      console.error('err', err);
+    }
+    // Cache tmdbId info
+    // TODO: need this to be in some designated file. then we need to check if tmdbId exists in the cache before we make ANY request to tmdb. so that should be in a separate file also
+    // { [key: tmdbId]: {  }}
   };
 
   const directors = castAndCrew?.directors.map((d) => d.name).join(', ');
