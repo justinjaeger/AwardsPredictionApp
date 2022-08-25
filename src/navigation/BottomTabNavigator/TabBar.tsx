@@ -3,8 +3,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { TouchableOpacity, View } from 'react-native';
 import CustomIcon from '../../components/CustomIcon';
 import COLORS from '../../constants/colors';
-
-const BOTTOM_TAB_HEIGHT = 60;
+import { BOTTOM_TAB_HEIGHT } from '../../util/constants';
 
 export type ITabBarProps = {
   state: any;
@@ -37,8 +36,7 @@ const TabBar = (props: ITabBarProps) => {
       <View
         style={{
           flexDirection: 'row',
-          marginTop: 5,
-          marginBottom: 5,
+          height: BOTTOM_TAB_HEIGHT,
         }}
       >
         {state.routes.map((route: any, index: number) => {
@@ -111,7 +109,6 @@ const TabBar = (props: ITabBarProps) => {
                 justifyContent: 'center',
                 alignItems: 'center',
                 width: '100%',
-                height: BOTTOM_TAB_HEIGHT,
               }}
             >
               {icon}

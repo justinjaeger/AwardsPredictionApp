@@ -38,7 +38,12 @@ type iTmdbGetMovieResponse = {
 
 export type iGetMovieData = {
   title: string;
-  backdropPath: string;
+  plot: string;
+  imdbId: string;
+  year: number | null;
+  productionCompanies: string[];
+  productionCountries: string[];
+  backdropPath: string | null;
   posterPath: string | null;
 };
 
@@ -49,10 +54,19 @@ export const getMovie = async (movieId: string): Promise<iApiResponse<iGetMovieD
     if (result?.status === 'error') {
       throw new Error(result?.message);
     }
+    const year = result.data.release_date
+      ? parseInt(result.data.release_date?.slice(0, 4), 10)
+      : null;
+
     return {
       status: 'success',
       data: {
         title: result.data.title,
+        plot: result.data.overview,
+        imdbId: result.data.imdb_id,
+        year,
+        productionCompanies: result.data.production_companies.map((pc) => pc.name),
+        productionCountries: result.data.production_countries.map((pc) => pc.name),
         backdropPath: result.data.backdrop_path,
         posterPath: result.data.poster_path,
       },
@@ -85,9 +99,8 @@ type iTmdbGetMovieCreditsResponse = {
 };
 
 export type iGetMovieCreditsData = {
-  director: iCrew | undefined;
-  cast: { name: string }[];
-  crew: iCrew[];
+  directors: iCrew[];
+  cast: iCast[];
 };
 
 export const getMovieCredits = async (
@@ -99,13 +112,13 @@ export const getMovieCredits = async (
     if (result?.status === 'error') {
       throw new Error(result?.message);
     }
-    const director = result.data.crew.find((c) => c.job.toLowerCase() === 'director');
+    const directors = result.data.crew.filter((c) => c.job.toLowerCase() === 'director');
+
     return {
       status: 'success',
       data: {
-        director,
+        directors,
         cast: result.data.cast,
-        crew: result.data.crew,
       },
     };
   } catch (err: any) {

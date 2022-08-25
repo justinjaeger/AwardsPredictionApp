@@ -1,13 +1,14 @@
-import { RouteProp, useRoute } from '@react-navigation/native';
+import { RouteProp, useRoute, useNavigation } from '@react-navigation/native';
+import { DataStore } from 'aws-amplify';
 import React, { useEffect, useState } from 'react';
-import { ScrollView, Image } from 'react-native';
-import { SubmitButton } from '../../components/Buttons';
-import { Body } from '../../components/Text';
+import { ScrollView, Image, View } from 'react-native';
+import { SubmitButton, TouchableText } from '../../components/Buttons';
+import { BodyLarge, SubHeader } from '../../components/Text';
+import { Contender, Movie } from '../../models';
 import { CreateContenderParamList } from '../../navigation/types';
 import TmdbServices from '../../services/tmdb';
 import { iGetMovieCreditsData, iGetMovieData } from '../../services/tmdb/movie';
 import { TMDB_IMAGE_URL, POSTER_DIMENSIONS } from '../../util/constants';
-// import { useNavigation } from '@react-navigation/native';
 
 // move this somewhere else
 
@@ -17,12 +18,13 @@ const ConfirmContender = () => {
   const {
     params: { tmdbId, category },
   } = useRoute<RouteProp<CreateContenderParamList, 'ConfirmContender'>>();
-  //   const navigation = useNavigation();
+  const navigation = useNavigation();
 
   const [movieDetails, setMovieDetails] = useState<iGetMovieData | undefined>();
   const [castAndCrew, setCastAndCrew] = useState<iGetMovieCreditsData | undefined>();
 
   useEffect(() => {
+    // TODO: combine these
     TmdbServices.getMovie(tmdbId).then((res) => {
       setMovieDetails(res.data);
     });
@@ -33,9 +35,37 @@ const ConfirmContender = () => {
   }, [tmdbId]);
 
   const onConfirmContender = () => {
+    if (!movieDetails) return;
+    // TODO: don't let them create the movie if already exists (probably should do this in the previous screen)
+    DataStore.save(
+      new Movie({ tmdbId, image: movieDetails.posterPath, year: movieDetails.year }),
+    ).then((movie) => {
+      DataStore.save(
+        new Contender({
+          category,
+          categoryId: category.id,
+          movie,
+        }),
+      );
+    });
+
     // Create contender in DataStore
     // Cache contender
   };
+
+  const directors = castAndCrew?.directors.map((d) => d.name).join(', ');
+
+  const formattedCast = castAndCrew?.cast
+    .map((c) => c.name)
+    .filter((c, i) => i < 10) // display 10 cast members max
+    .join(', ');
+
+  const productionCompanies = movieDetails?.productionCompanies.join(', ');
+
+  if (!movieDetails || !castAndCrew) {
+    // TODO: return loading state
+    return null;
+  }
 
   return (
     <ScrollView
@@ -47,19 +77,73 @@ const ConfirmContender = () => {
       }}
     >
       <SubmitButton text={'Confirm Contender'} onPress={onConfirmContender} />
-      <Body>{movieDetails?.title || ''}</Body>
+      <SubHeader style={{ margin: 10 }}>{movieDetails.title || ''}</SubHeader>
       {movieDetails?.posterPath ? (
         <Image
           style={{
-            width: POSTER_DIMENSIONS.width * 10,
-            height: POSTER_DIMENSIONS.height * 10,
+            width: POSTER_DIMENSIONS.width * 5,
+            height: POSTER_DIMENSIONS.height * 5,
           }}
           source={{
             uri: `${TMDB_IMAGE_URL}/${movieDetails.posterPath}`,
           }}
         />
       ) : null}
-      <Body>{JSON.stringify(castAndCrew)}</Body>
+      <TouchableText
+        text={'View in Imdb'}
+        onPress={() => {
+          navigation.navigate('WebView', {
+            uri: `https://www.imdb.com/title/${movieDetails.imdbId}`,
+            title: movieDetails.title,
+          });
+        }}
+      />
+      <TouchableText
+        text={'See Cast'}
+        onPress={() => {
+          navigation.navigate('WebView', {
+            uri: `https://www.imdb.com/title/${movieDetails.imdbId}/fullcredits/cast`,
+            title: movieDetails.title,
+          });
+        }}
+      />
+      <TouchableText
+        text={'See Crew'}
+        onPress={() => {
+          navigation.navigate('WebView', {
+            uri: `https://www.imdb.com/title/${movieDetails.imdbId}/fullcredits`,
+            title: movieDetails.title,
+          });
+        }}
+      />
+      <View style={{ alignItems: 'flex-start' }}>
+        <View style={{ flexDirection: 'column', marginTop: 5 }}>
+          <BodyLarge style={{ fontWeight: '800', marginBottom: 5, width: '50%' }}>
+            {'Plot'}
+          </BodyLarge>
+          <BodyLarge>{movieDetails?.plot || ''}</BodyLarge>
+        </View>
+        <View style={{ flexDirection: 'column', marginTop: 5 }}>
+          <BodyLarge style={{ fontWeight: '800', marginBottom: 5, width: '50%' }}>
+            {'Directed by'}
+          </BodyLarge>
+          <BodyLarge>{directors || ''}</BodyLarge>
+        </View>
+        <View style={{ flexDirection: 'column', marginTop: 5 }}>
+          <BodyLarge style={{ fontWeight: '800', marginBottom: 5, width: '50%' }}>
+            {'Cast'}
+          </BodyLarge>
+          <BodyLarge>{formattedCast || ''}</BodyLarge>
+        </View>
+        <View style={{ flexDirection: 'column', marginTop: 5 }}>
+          <BodyLarge style={{ fontWeight: '800', marginBottom: 5, width: '50%' }}>
+            {movieDetails?.productionCompanies.length > 1
+              ? 'Production Companies'
+              : 'Production Company'}
+          </BodyLarge>
+          <BodyLarge>{productionCompanies || ''}</BodyLarge>
+        </View>
+      </View>
     </ScrollView>
   );
 };

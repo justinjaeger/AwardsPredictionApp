@@ -30,8 +30,12 @@ export const searchMovies = async (
     }
     const filteredData = result.data.results
       .filter((movie) => {
-        const releaseYear = parseInt(movie.release_date.slice(0, 4), 10);
-        return releaseYear >= minReleaseYear;
+        const releaseYear = movie.release_date
+          ? parseInt(movie.release_date.slice(0, 4), 10)
+          : undefined;
+        if (releaseYear) {
+          return releaseYear >= minReleaseYear;
+        } else return 0;
       })
       .sort((m1, m2) => {
         if (m1.popularity > m2.popularity) {

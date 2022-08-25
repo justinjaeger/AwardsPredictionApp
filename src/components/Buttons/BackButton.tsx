@@ -4,7 +4,7 @@ import COLORS from '../../constants/colors';
 import { IconButton } from './IconButton';
 
 const BackButton = () => {
-  const { goBack } = useNavigation();
+  const navigation = useNavigation();
 
   return (
     <IconButton
@@ -12,7 +12,7 @@ const BackButton = () => {
         name: 'arrow-ios-back-outline',
         styles: { color: COLORS.primary, width: 20, height: 30 },
       }}
-      onPress={goBack}
+      onPress={navigation.goBack}
       styles={{ width: 30, height: 30, marginLeft: 10 }}
     />
   );

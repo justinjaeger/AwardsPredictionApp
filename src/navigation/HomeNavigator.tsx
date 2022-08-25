@@ -10,13 +10,7 @@ import CreateContenderNavigator from './CreateContenderNavigator';
 const { Navigator, Screen } = createStackNavigator<HomeParamList>();
 
 const HomeNavigator = () => (
-  <Navigator
-    initialRouteName="EventSelect"
-    headerMode={'screen'}
-    screenOptions={{
-      animationTypeForReplace: 'push',
-    }}
-  >
+  <Navigator initialRouteName="EventSelect" headerMode="screen">
     <Screen
       name="EventSelect"
       component={EventSelect}
@@ -44,8 +38,9 @@ const HomeNavigator = () => (
       name="CreateContender"
       component={CreateContenderNavigator}
       options={{
-        headerTitle: 'Add a Contender',
-        headerLeft: BackButton,
+        headerShown: false,
+        // headerTitle: 'Add a Contender',
+        // headerLeft: BackButton,
       }}
     />
   </Navigator>

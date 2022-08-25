@@ -1,5 +1,14 @@
 import { Category, Event } from '../models';
 
+export type MainParamList = {
+  BottomTabNavigator: undefined;
+  Authenticator: undefined;
+  WebView: {
+    uri: string;
+    title: string;
+  };
+};
+
 export type HomeParamList = {
   EventSelect: undefined;
   CategorySelect: {
