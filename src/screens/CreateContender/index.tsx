@@ -1,4 +1,5 @@
 import { RouteProp, useRoute, useNavigation } from '@react-navigation/native';
+import { DataStore } from 'aws-amplify';
 import React, { useState } from 'react';
 import { ScrollView } from 'react-native';
 import { SubmitButton } from '../../components/Buttons';
@@ -7,6 +8,8 @@ import SearchResultsList from '../../components/List/SearchResultsList';
 import { CreateContenderParamList } from '../../navigation/types';
 import TmdbServices from '../../services/tmdb';
 import { iSearchMoviesData } from '../../services/tmdb/search';
+import { Movie } from '../../models';
+import Snackbar from '../../components/Snackbar';
 
 const MAX_CHAR_COUNT = 100;
 
@@ -29,8 +32,20 @@ const CreateContender = () => {
     });
   };
 
-  const onSelectSearchResult = (tmdbId: string) => {
-    navigation.navigate('ConfirmContender', { tmdbId, category });
+  const onSelectSearchResult = async (tmdbId: string) => {
+    try {
+      const tmdbIdString = tmdbId.toString();
+      const maybeMovie = await DataStore.query(Movie, (m) =>
+        m.tmdbId('eq', tmdbIdString),
+      );
+      if (maybeMovie.length > 0) {
+        Snackbar.error('This movie has already been added');
+      } else {
+        navigation.navigate('ConfirmContender', { tmdbId, category });
+      }
+    } catch (err) {
+      console.error('err', err);
+    }
   };
 
   return (
