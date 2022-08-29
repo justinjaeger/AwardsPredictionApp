@@ -1,14 +1,14 @@
 import { RouteProp, useRoute, useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { ScrollView, Image, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { SubmitButton, TouchableText } from '../../components/Buttons';
+import Poster from '../../components/Images/Poster';
 import { BodyLarge, SubHeader } from '../../components/Text';
 import { CreateContenderParamList } from '../../navigation/types';
 import { iTmdbCacheItem } from '../../services/cache/tmdb';
 import DS from '../../services/datastore';
 import TmdbServices from '../../services/tmdb';
 import { iGetTmdbMovieCreditsData } from '../../services/tmdb/movie';
-import { TMDB_IMAGE_URL, POSTER_DIMENSIONS } from '../../util/constants';
 
 // move this somewhere else
 
@@ -70,17 +70,7 @@ const ConfirmContender = () => {
     >
       <SubmitButton text={'Confirm Contender'} onPress={onConfirmContender} />
       <SubHeader style={{ margin: 10 }}>{movieDetails.title || ''}</SubHeader>
-      {movieDetails?.posterPath ? (
-        <Image
-          style={{
-            width: POSTER_DIMENSIONS.width * 5,
-            height: POSTER_DIMENSIONS.height * 5,
-          }}
-          source={{
-            uri: `${TMDB_IMAGE_URL}/${movieDetails.posterPath}`,
-          }}
-        />
-      ) : null}
+      {movieDetails?.posterPath ? <Poster path={movieDetails.posterPath} /> : null}
       <TouchableText
         text={'View in Imdb'}
         onPress={() => {
