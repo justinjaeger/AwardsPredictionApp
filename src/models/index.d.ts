@@ -29,7 +29,7 @@ export enum EventType {
 
 export enum ContenderType {
   DEFAULT = "DEFAULT",
-  ACTOR = "ACTOR",
+  PERFORMANCE = "PERFORMANCE",
   SONG = "SONG"
 }
 

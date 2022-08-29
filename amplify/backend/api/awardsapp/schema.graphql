@@ -31,7 +31,7 @@ enum EventType {
 
 enum ContenderType {
     DEFAULT
-    ACTOR
+    PERFORMANCE
     SONG
 }
 
@@ -263,14 +263,11 @@ type ContenderSnapshot @model @auth(rules: [{ allow: public }]) {
 type Movie @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
     tmdbId: String! # unique value
-    year: Int # optional bc we might not know yet
-    image: String # can override IMDb image
 }
 
 type Person @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
     tmdbId: String! # unique value
-    image: String
 }
   
 type Song @model @auth(rules: [{ allow: public }]) {
