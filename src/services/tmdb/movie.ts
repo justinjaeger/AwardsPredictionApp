@@ -4,6 +4,7 @@ import axios from 'axios';
 import { handleError, iApiResponse } from '../utils';
 import { iTmdbResponse } from './types';
 import { TMDB_URL } from '.';
+import { iTmdbCacheItem } from '../cache/tmdb';
 
 type iTmdbgetTmdbMovieResponse = {
   backdrop_path: string;
@@ -36,20 +37,9 @@ type iTmdbgetTmdbMovieResponse = {
   title: string; // 'Fight Club';};
 };
 
-export type iGetTmdbMovieData = {
-  title: string;
-  plot: string;
-  imdbId: string;
-  year: number | null;
-  productionCompanies: string[];
-  productionCountries: string[];
-  backdropPath: string | null;
-  posterPath: string | null;
-};
-
 export const getTmdbMovie = async (
   movieId: string,
-): Promise<iApiResponse<iGetTmdbMovieData>> => {
+): Promise<iApiResponse<iTmdbCacheItem>> => {
   const url = `${TMDB_URL}/movie/${movieId}?api_key=${TMDB_API_KEY}`;
   try {
     const result = (await axios(url)) as iTmdbResponse<iTmdbgetTmdbMovieResponse>;

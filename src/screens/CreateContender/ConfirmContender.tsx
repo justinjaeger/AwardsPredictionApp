@@ -4,9 +4,10 @@ import { ScrollView, Image, View } from 'react-native';
 import { SubmitButton, TouchableText } from '../../components/Buttons';
 import { BodyLarge, SubHeader } from '../../components/Text';
 import { CreateContenderParamList } from '../../navigation/types';
+import { iTmdbCacheItem } from '../../services/cache/tmdb';
 import DS from '../../services/datastore';
 import TmdbServices from '../../services/tmdb';
-import { iGetTmdbMovieCreditsData, iGetTmdbMovieData } from '../../services/tmdb/movie';
+import { iGetTmdbMovieCreditsData } from '../../services/tmdb/movie';
 import { TMDB_IMAGE_URL, POSTER_DIMENSIONS } from '../../util/constants';
 
 // move this somewhere else
@@ -19,7 +20,7 @@ const ConfirmContender = () => {
   } = useRoute<RouteProp<CreateContenderParamList, 'ConfirmContender'>>();
   const navigation = useNavigation();
 
-  const [movieDetails, setMovieDetails] = useState<iGetTmdbMovieData | undefined>();
+  const [movieDetails, setMovieDetails] = useState<iTmdbCacheItem | undefined>();
   const [castAndCrew, setCastAndCrew] = useState<iGetTmdbMovieCreditsData | undefined>();
 
   useEffect(() => {
