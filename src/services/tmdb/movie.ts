@@ -5,7 +5,7 @@ import { handleError, iApiResponse } from '../utils';
 import { iTmdbResponse } from './types';
 import { TMDB_URL } from '.';
 
-type iTmdbGetMovieResponse = {
+type iTmdbgetTmdbMovieResponse = {
   backdrop_path: string;
   genres: {
     id: number;
@@ -36,7 +36,7 @@ type iTmdbGetMovieResponse = {
   title: string; // 'Fight Club';};
 };
 
-export type iGetMovieData = {
+export type iGetTmdbMovieData = {
   title: string;
   plot: string;
   imdbId: string;
@@ -47,10 +47,12 @@ export type iGetMovieData = {
   posterPath: string | null;
 };
 
-export const getMovie = async (movieId: string): Promise<iApiResponse<iGetMovieData>> => {
+export const getTmdbMovie = async (
+  movieId: string,
+): Promise<iApiResponse<iGetTmdbMovieData>> => {
   const url = `${TMDB_URL}/movie/${movieId}?api_key=${TMDB_API_KEY}`;
   try {
-    const result = (await axios(url)) as iTmdbResponse<iTmdbGetMovieResponse>;
+    const result = (await axios(url)) as iTmdbResponse<iTmdbgetTmdbMovieResponse>;
     if (result?.status === 'error') {
       throw new Error(result?.message);
     }
@@ -92,23 +94,23 @@ type iCast = {
   credit_id: string;
 };
 
-type iTmdbGetMovieCreditsResponse = {
+type iTmdbGetTmdbMovieCreditsResponse = {
   id: number;
   cast: iCast[];
   crew: iCrew[];
 };
 
-export type iGetMovieCreditsData = {
+export type iGetTmdbMovieCreditsData = {
   directors: iCrew[];
   cast: iCast[];
 };
 
-export const getMovieCredits = async (
+export const getTmdbMovieCredits = async (
   movieId: string,
-): Promise<iApiResponse<iGetMovieCreditsData>> => {
+): Promise<iApiResponse<iGetTmdbMovieCreditsData>> => {
   const url = `${TMDB_URL}/movie/${movieId}/credits?api_key=${TMDB_API_KEY}`;
   try {
-    const result = (await axios(url)) as iTmdbResponse<iTmdbGetMovieCreditsResponse>;
+    const result = (await axios(url)) as iTmdbResponse<iTmdbGetTmdbMovieCreditsResponse>;
     if (result?.status === 'error') {
       throw new Error(result?.message);
     }

@@ -1,15 +1,12 @@
 import { RouteProp, useRoute, useNavigation } from '@react-navigation/native';
-import { DataStore } from 'aws-amplify';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, Image, View } from 'react-native';
 import { SubmitButton, TouchableText } from '../../components/Buttons';
-import Snackbar from '../../components/Snackbar';
 import { BodyLarge, SubHeader } from '../../components/Text';
-import { ContenderType, Contender, Movie } from '../../models';
-
 import { CreateContenderParamList } from '../../navigation/types';
+import DS from '../../services/datastore';
 import TmdbServices from '../../services/tmdb';
-import { iGetMovieCreditsData, iGetMovieData } from '../../services/tmdb/movie';
+import { iGetTmdbMovieCreditsData, iGetTmdbMovieData } from '../../services/tmdb/movie';
 import { TMDB_IMAGE_URL, POSTER_DIMENSIONS } from '../../util/constants';
 
 // move this somewhere else
@@ -22,52 +19,26 @@ const ConfirmContender = () => {
   } = useRoute<RouteProp<CreateContenderParamList, 'ConfirmContender'>>();
   const navigation = useNavigation();
 
-  const [movieDetails, setMovieDetails] = useState<iGetMovieData | undefined>();
-  const [castAndCrew, setCastAndCrew] = useState<iGetMovieCreditsData | undefined>();
+  const [movieDetails, setMovieDetails] = useState<iGetTmdbMovieData | undefined>();
+  const [castAndCrew, setCastAndCrew] = useState<iGetTmdbMovieCreditsData | undefined>();
 
   useEffect(() => {
     // TODO: combine these
-    TmdbServices.getMovie(tmdbId).then((res) => {
+    TmdbServices.getTmdbMovie(tmdbId).then((res) => {
       setMovieDetails(res.data);
     });
-    TmdbServices.getMovieCredits(tmdbId).then((res) => {
+    TmdbServices.getTmdbMovieCredits(tmdbId).then((res) => {
       setCastAndCrew(res.data);
     });
     // make request to get the movie's details (these will be cached using the tmdbId as the)
   }, [tmdbId]);
 
   const onConfirmContender = async () => {
-    if (!movieDetails) return;
-    // Put this in some other file
-    // Don't let them create the movie if already exists (should do this in the previous screen as well)
-    try {
-      const tmdbIdString = tmdbId.toString();
-      const maybeMovie = await DataStore.query(Movie, (m) =>
-        m.tmdbId('eq', tmdbIdString),
-      );
-      if (maybeMovie.length > 0) {
-        Snackbar.error('This movie has already been added');
-        return;
-      }
-      const movie = await DataStore.save(
-        new Movie({
-          tmdbId: tmdbIdString,
-          image: movieDetails.posterPath,
-          year: movieDetails.year,
-        }),
-      );
-      const contender = await DataStore.save(
-        new Contender({
-          category,
-          movie,
-          contenderMovieId: movie.id,
-          contenderType: ContenderType.DEFAULT,
-        }),
-      );
-      console.error('SUCCESS', contender);
-    } catch (err) {
-      console.error('err', err);
-    }
+    const { data: movie } = await DS.getOrCreateMovie(tmdbId);
+    if (!movie) return;
+    const { data: contender } = await DS.getOrCreateContender(category, movie);
+    if (!contender) return;
+    console.error('contender', contender);
     // Cache tmdbId info
     // TODO: need this to be in some designated file. then we need to check if tmdbId exists in the cache before we make ANY request to tmdb. so that should be in a separate file also
     // { [key: tmdbId]: {  }}

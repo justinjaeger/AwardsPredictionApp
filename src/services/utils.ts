@@ -9,7 +9,7 @@ export interface iApiResponse<T> {
 
 export const handleError = (message?: string, error?: any): iApiResponse<any> => {
   console.error(message, JSON.stringify(error));
-  const m = error.message || message;
+  const m = error.message || message || 'something went wrong';
   Snackbar.error(m || '');
   return { status: 'error', message: m, error: error.name };
 };

@@ -8,7 +8,7 @@ import SearchResultsList from '../../components/List/SearchResultsList';
 import { CreateContenderParamList } from '../../navigation/types';
 import TmdbServices from '../../services/tmdb';
 import { iSearchMoviesData } from '../../services/tmdb/search';
-import { Movie } from '../../models';
+import { Movie, Contender } from '../../models';
 import Snackbar from '../../components/Snackbar';
 
 const MAX_CHAR_COUNT = 100;
@@ -35,14 +35,21 @@ const CreateContender = () => {
   const onSelectSearchResult = async (tmdbId: string) => {
     try {
       const tmdbIdString = tmdbId.toString();
+      // check if contender exists. contender is essentially unique because of a movie+cateogory (NOT IF MOVIE EXISTS)
       const maybeMovie = await DataStore.query(Movie, (m) =>
         m.tmdbId('eq', tmdbIdString),
       );
       if (maybeMovie.length > 0) {
-        Snackbar.error('This movie has already been added');
-      } else {
-        navigation.navigate('ConfirmContender', { tmdbId, category });
+        const movie = maybeMovie[0];
+        const maybeContender = (
+          await DataStore.query(Contender, (c) => c.contenderMovieId('eq', movie.id))
+        ).filter((c) => c.category?.id === category.id);
+        if (maybeContender.length > 0) {
+          Snackbar.error('This movie has already been added');
+          return;
+        }
       }
+      navigation.navigate('ConfirmContender', { tmdbId, category });
     } catch (err) {
       console.error('err', err);
     }
