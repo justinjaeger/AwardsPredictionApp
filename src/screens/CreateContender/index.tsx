@@ -1,5 +1,4 @@
 import { RouteProp, useRoute, useNavigation } from '@react-navigation/native';
-import { DataStore } from 'aws-amplify';
 import React, { useState } from 'react';
 import { ScrollView } from 'react-native';
 import { SubmitButton } from '../../components/Buttons';
@@ -8,7 +7,7 @@ import SearchResultsList from '../../components/List/SearchResultsList';
 import { CreateContenderParamList } from '../../navigation/types';
 import TmdbServices from '../../services/tmdb';
 import { iSearchMoviesData } from '../../services/tmdb/search';
-import { Movie, Contender } from '../../models';
+import DS from '../../services/datastore';
 import Snackbar from '../../components/Snackbar';
 
 const MAX_CHAR_COUNT = 100;
@@ -32,19 +31,13 @@ const CreateContender = () => {
     });
   };
 
-  const onSelectSearchResult = async (tmdbId: string) => {
+  const onSelectSearchResult = async (tmdbId: number) => {
     try {
       const tmdbIdString = tmdbId.toString();
-      // check if contender exists. contender is essentially unique because of a movie+cateogory (NOT IF MOVIE EXISTS)
-      const maybeMovie = await DataStore.query(Movie, (m) =>
-        m.tmdbId('eq', tmdbIdString),
-      );
-      if (maybeMovie.length > 0) {
-        const movie = maybeMovie[0];
-        const maybeContender = (
-          await DataStore.query(Contender, (c) => c.contenderMovieId('eq', movie.id))
-        ).filter((c) => c.category?.id === category.id);
-        if (maybeContender.length > 0) {
+      const { data: movie } = await DS.getOrCreateMovie(tmdbIdString);
+      if (movie) {
+        const { data: contender } = await DS.peekContender(category, movie);
+        if (contender) {
           Snackbar.error('This movie has already been added');
           return;
         }

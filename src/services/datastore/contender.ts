@@ -65,3 +65,23 @@ export const getOrCreatePerformance = async (
     return handleError(undefined, err);
   }
 };
+
+/**
+ * returns contender if contender exists
+ */
+export const peekContender = async (
+  category: Category,
+  movie: Movie,
+): Promise<iApiResponse<Contender>> => {
+  try {
+    const maybeContenders = (
+      await DataStore.query(Contender, (c) => c.contenderMovieId('eq', movie.id))
+    ).filter(
+      (c) => c.category?.id === category.id && c.contenderType === ContenderType.DEFAULT,
+    );
+    const contender = maybeContenders.length > 0 ? maybeContenders[0] : undefined;
+    return { status: 'success', data: contender };
+  } catch (err) {
+    return handleError(undefined, err);
+  }
+};

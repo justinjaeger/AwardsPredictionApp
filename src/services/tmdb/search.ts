@@ -2,20 +2,13 @@
 import { TMDB_API_KEY } from '../../config';
 import axios from 'axios';
 import { handleError, iApiResponse } from '../utils';
-import { iTmdbResponse } from './types';
+import { iTmdbResponse, iTmdbSearchResponse } from './types';
 import { TMDB_URL } from '.';
-
-type iTmdbSearchResponse = {
-  page: number;
-  results: any[];
-  total_results: number;
-  total_pages: number;
-};
 
 export type iSearchMoviesData = {
   title: string;
   plot: string;
-  tmdbId: string;
+  tmdbId: number;
 }[];
 
 export const searchMovies = async (
@@ -28,6 +21,7 @@ export const searchMovies = async (
     if (result?.status === 'error') {
       throw new Error(result?.message);
     }
+    console.error('result.data', result.data);
     const filteredData = result.data.results
       .filter((movie) => {
         const releaseYear = movie.release_date

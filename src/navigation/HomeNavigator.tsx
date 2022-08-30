@@ -39,8 +39,6 @@ const HomeNavigator = () => (
       component={CreateContenderNavigator}
       options={{
         headerShown: false,
-        // headerTitle: 'Add a Contender',
-        // headerLeft: BackButton,
       }}
     />
   </Navigator>
