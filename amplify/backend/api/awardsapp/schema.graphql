@@ -262,12 +262,12 @@ type ContenderSnapshot @model @auth(rules: [{ allow: public }]) {
 
 type Movie @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
-    tmdbId: String! # unique value
+    tmdbId: Number! # unique value
 }
 
 type Person @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
-    tmdbId: String! # unique value
+    tmdbId: Number! # unique value
 }
   
 type Song @model @auth(rules: [{ allow: public }]) {

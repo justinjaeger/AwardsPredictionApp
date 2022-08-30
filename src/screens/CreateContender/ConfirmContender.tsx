@@ -5,10 +5,9 @@ import { SubmitButton, TouchableText } from '../../components/Buttons';
 import Poster from '../../components/Images/Poster';
 import { BodyLarge, SubHeader } from '../../components/Text';
 import { CreateContenderParamList } from '../../navigation/types';
-import { iTmdbCacheItem } from '../../services/cache/tmdb';
+import { iCachedTmdbCredits, iCachedTmdbMovie } from '../../services/cache/types';
 import DS from '../../services/datastore';
 import TmdbServices from '../../services/tmdb';
-import { iGetTmdbMovieCreditsData } from '../../services/tmdb/movie';
 
 // move this somewhere else
 
@@ -20,8 +19,8 @@ const ConfirmContender = () => {
   } = useRoute<RouteProp<CreateContenderParamList, 'ConfirmContender'>>();
   const navigation = useNavigation();
 
-  const [movieDetails, setMovieDetails] = useState<iTmdbCacheItem | undefined>();
-  const [castAndCrew, setCastAndCrew] = useState<iGetTmdbMovieCreditsData | undefined>();
+  const [movieDetails, setMovieDetails] = useState<iCachedTmdbMovie | undefined>();
+  const [castAndCrew, setCastAndCrew] = useState<iCachedTmdbCredits | undefined>();
 
   useEffect(() => {
     // TODO: combine these
@@ -35,24 +34,20 @@ const ConfirmContender = () => {
   }, [tmdbId]);
 
   const onConfirmContender = async () => {
+    if (!movieDetails) return;
     const { data: movie } = await DS.getOrCreateMovie(tmdbId);
     if (!movie) return;
-    const { data: contender } = await DS.getOrCreateContender(category, movie);
-    if (!contender) return;
-    console.error('contender', contender);
-    // Cache tmdbId info
-    // TODO: need this to be in some designated file. then we need to check if tmdbId exists in the cache before we make ANY request to tmdb. so that should be in a separate file also
-    // { [key: tmdbId]: {  }}
+    await DS.getOrCreateContender(category, movie);
   };
 
-  const directors = castAndCrew?.directors.map((d) => d.name).join(', ');
+  const directors = castAndCrew?.directors?.map((d) => d.name).join(', ');
 
   const formattedCast = castAndCrew?.cast
-    .map((c) => c.name)
+    ?.map((c) => c.name)
     .filter((c, i) => i < 10) // display 10 cast members max
     .join(', ');
 
-  const productionCompanies = movieDetails?.productionCompanies.join(', ');
+  const productionCompanies = movieDetails?.productionCompanies?.join(', ');
 
   if (!movieDetails || !castAndCrew) {
     // TODO: return loading state

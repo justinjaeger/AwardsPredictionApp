@@ -21,7 +21,6 @@ export const searchMovies = async (
     if (result?.status === 'error') {
       throw new Error(result?.message);
     }
-    console.error('result.data', result.data);
     const filteredData = result.data.results
       .filter((movie) => {
         const releaseYear = movie.release_date
