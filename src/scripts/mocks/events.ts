@@ -1,6 +1,6 @@
 import { DataStore } from 'aws-amplify';
+import { getCategoryList } from '../../constants/lists';
 import { AwardsBody, EventType, Event, Category, CategoryName } from '../../models';
-import { getCategoryList } from '../../util/constants';
 
 const DATA = [
   { awardsBody: AwardsBody.ACADEMY_AWARDS, year: 2023, type: EventType.NOMINATION }, // expect isActive to have a value of "x"

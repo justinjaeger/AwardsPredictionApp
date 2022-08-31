@@ -3,8 +3,8 @@ import { DataStore } from 'aws-amplify';
 import React, { useEffect, useState } from 'react';
 import { ScrollView } from 'react-native';
 import { TouchableText } from '../../../components/Buttons';
+import { AWARDS_BODY_TO_STRING } from '../../../constants/lists';
 import { AwardsBody, Event } from '../../../models';
-import { AWARDS_BODY_TO_STRING } from '../../../util/constants';
 import sortByObjectOrder from '../../../util/sortByObjectOrder';
 import { eventToString } from '../../../util/stringConversions';
 

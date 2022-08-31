@@ -6,7 +6,7 @@ import { ActivityIndicator, View } from 'react-native';
 import COLORS from '../../constants/colors';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { IconButton } from '../../components/Buttons/IconButton';
-import { BOTTOM_TAB_HEIGHT } from '../../util/constants';
+import { BOTTOM_TAB_HEIGHT } from '../../constants';
 
 const WebViewScreen = () => {
   const {

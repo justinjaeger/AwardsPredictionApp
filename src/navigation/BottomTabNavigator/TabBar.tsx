@@ -3,7 +3,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { TouchableOpacity, View } from 'react-native';
 import CustomIcon from '../../components/CustomIcon';
 import COLORS from '../../constants/colors';
-import { BOTTOM_TAB_HEIGHT } from '../../util/constants';
+import { BOTTOM_TAB_HEIGHT } from '../../constants';
 
 export type ITabBarProps = {
   state: any;

@@ -3,10 +3,10 @@ import { DataStore } from 'aws-amplify';
 import React, { useLayoutEffect, useState } from 'react';
 import { ScrollView } from 'react-native';
 import { TouchableText } from '../../../components/Buttons';
-import { Body } from '../../../components/Text';
+import ContenderList from '../../../components/List/ContenderList';
+import { getCategoryList } from '../../../constants/lists';
 import { Contender } from '../../../models';
 import { HomeParamList } from '../../../navigation/types';
-import { getCategoryList } from '../../../util/constants';
 import { useAsyncEffect } from '../../../util/hooks';
 import { eventToString } from '../../../util/stringConversions';
 
@@ -42,7 +42,7 @@ const Contenders = () => {
     <ScrollView
       contentContainerStyle={{ alignItems: 'center', marginTop: 40, paddingBottom: 100 }}
     >
-      <Body>{JSON.stringify(contenders)}</Body>
+      <ContenderList contenders={contenders} onPressItem={() => {}} />
       <TouchableText
         text={'Submit a contender'}
         onPress={() => {

@@ -3,7 +3,7 @@ import { Cache } from 'react-native-cache';
 import { iCachedTmdbMovie } from './types';
 
 const tmdbMovieCache = new Cache({
-  namespace: 'tmdb',
+  namespace: 'tmdb-movies',
   policy: {
     maxEntries: 50000, // if unspecified, it can have unlimited entries
     stdTTL: 60 * 60 * 24, // in seconds
