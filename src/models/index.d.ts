@@ -271,9 +271,7 @@ export declare class UserPredictingEvent {
 
 export declare class Movie {
   readonly id: string;
-  readonly tmdbId: string;
-  readonly year?: number | null;
-  readonly image?: string | null;
+  readonly tmdbId: number;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
   constructor(init: ModelInit<Movie, MovieMetaData>);
@@ -282,8 +280,7 @@ export declare class Movie {
 
 export declare class Person {
   readonly id: string;
-  readonly tmdbId: string;
-  readonly image?: string | null;
+  readonly tmdbId: number;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
   constructor(init: ModelInit<Person, PersonMetaData>);

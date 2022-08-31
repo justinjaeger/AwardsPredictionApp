@@ -11,28 +11,28 @@ const tmdbMovieCache = new Cache({
   backend: AsyncStorage,
 });
 
-const get = async (tmdbId: string) => {
-  const value = await tmdbMovieCache.get(tmdbId);
+const get = async (tmdbId: number) => {
+  const value = await tmdbMovieCache.get(tmdbId.toString());
   if (value !== undefined) {
     return JSON.parse(value) as iCachedTmdbMovie;
   }
   return value;
 };
 
-const peek = async (tmdbId: string) => {
-  const value = await tmdbMovieCache.peek(tmdbId);
+const peek = async (tmdbId: number) => {
+  const value = await tmdbMovieCache.peek(tmdbId.toString());
   if (value !== undefined) {
     return JSON.parse(value) as iCachedTmdbMovie;
   }
   return value;
 };
 
-const set = async (tmdbId: string, value: iCachedTmdbMovie) => {
-  return await tmdbMovieCache.set(tmdbId, JSON.stringify(value));
+const set = async (tmdbId: number, value: iCachedTmdbMovie) => {
+  return await tmdbMovieCache.set(tmdbId.toString(), JSON.stringify(value));
 };
 
-const remove = async (tmdbId: string) => {
-  return await tmdbMovieCache.remove(tmdbId);
+const remove = async (tmdbId: number) => {
+  return await tmdbMovieCache.remove(tmdbId.toString());
 };
 
 const getAllEntries = async () => {

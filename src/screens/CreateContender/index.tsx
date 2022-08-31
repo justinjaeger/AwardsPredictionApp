@@ -33,8 +33,7 @@ const CreateContender = () => {
 
   const onSelectSearchResult = async (tmdbId: number) => {
     try {
-      const tmdbIdString = tmdbId.toString();
-      const { data: movie } = await DS.getOrCreateMovie(tmdbIdString);
+      const { data: movie } = await DS.getOrCreateMovie(tmdbId);
       if (movie) {
         const { data: contender } = await DS.peekContender(category, movie);
         if (contender) {

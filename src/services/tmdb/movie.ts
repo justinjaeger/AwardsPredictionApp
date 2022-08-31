@@ -8,7 +8,7 @@ import { iCachedTmdbCredits, iCachedTmdbMovie } from '../cache/types';
 import TmdbCreditsCache from '../cache/tmdbCredits';
 
 export const getTmdbMovie = async (
-  tmdbId: string,
+  tmdbId: number,
 ): Promise<iApiResponse<iCachedTmdbMovie>> => {
   try {
     // attempt to get from cache first
@@ -52,7 +52,7 @@ export const getTmdbMovie = async (
 };
 
 export const getTmdbMovieCredits = async (
-  tmdbId: string,
+  tmdbId: number,
 ): Promise<iApiResponse<iCachedTmdbCredits>> => {
   const url = `${TMDB_URL}/movie/${tmdbId}/credits?api_key=${TMDB_API_KEY}`;
   try {

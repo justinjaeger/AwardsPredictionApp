@@ -892,8 +892,6 @@ export const createContender = /* GraphQL */ `
       movie {
         id
         tmdbId
-        year
-        image
         createdAt
         updatedAt
         _version
@@ -903,7 +901,6 @@ export const createContender = /* GraphQL */ `
       person {
         id
         tmdbId
-        image
         createdAt
         updatedAt
         _version
@@ -971,8 +968,6 @@ export const updateContender = /* GraphQL */ `
       movie {
         id
         tmdbId
-        year
-        image
         createdAt
         updatedAt
         _version
@@ -982,7 +977,6 @@ export const updateContender = /* GraphQL */ `
       person {
         id
         tmdbId
-        image
         createdAt
         updatedAt
         _version
@@ -1050,8 +1044,6 @@ export const deleteContender = /* GraphQL */ `
       movie {
         id
         tmdbId
-        year
-        image
         createdAt
         updatedAt
         _version
@@ -1061,7 +1053,6 @@ export const deleteContender = /* GraphQL */ `
       person {
         id
         tmdbId
-        image
         createdAt
         updatedAt
         _version
@@ -1249,8 +1240,6 @@ export const createMovie = /* GraphQL */ `
     createMovie(input: $input, condition: $condition) {
       id
       tmdbId
-      year
-      image
       createdAt
       updatedAt
       _version
@@ -1267,8 +1256,6 @@ export const updateMovie = /* GraphQL */ `
     updateMovie(input: $input, condition: $condition) {
       id
       tmdbId
-      year
-      image
       createdAt
       updatedAt
       _version
@@ -1285,8 +1272,6 @@ export const deleteMovie = /* GraphQL */ `
     deleteMovie(input: $input, condition: $condition) {
       id
       tmdbId
-      year
-      image
       createdAt
       updatedAt
       _version
@@ -1303,7 +1288,6 @@ export const createPerson = /* GraphQL */ `
     createPerson(input: $input, condition: $condition) {
       id
       tmdbId
-      image
       createdAt
       updatedAt
       _version
@@ -1320,7 +1304,6 @@ export const updatePerson = /* GraphQL */ `
     updatePerson(input: $input, condition: $condition) {
       id
       tmdbId
-      image
       createdAt
       updatedAt
       _version
@@ -1337,7 +1320,6 @@ export const deletePerson = /* GraphQL */ `
     deletePerson(input: $input, condition: $condition) {
       id
       tmdbId
-      image
       createdAt
       updatedAt
       _version

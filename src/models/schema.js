@@ -1228,22 +1228,8 @@ export const schema = {
                 "tmdbId": {
                     "name": "tmdbId",
                     "isArray": false,
-                    "type": "String",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "year": {
-                    "name": "year",
-                    "isArray": false,
                     "type": "Int",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "image": {
-                    "name": "image",
-                    "isArray": false,
-                    "type": "String",
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": []
                 },
                 "createdAt": {
@@ -1309,15 +1295,8 @@ export const schema = {
                 "tmdbId": {
                     "name": "tmdbId",
                     "isArray": false,
-                    "type": "String",
+                    "type": "Int",
                     "isRequired": true,
-                    "attributes": []
-                },
-                "image": {
-                    "name": "image",
-                    "isArray": false,
-                    "type": "String",
-                    "isRequired": false,
                     "attributes": []
                 },
                 "createdAt": {
@@ -1594,7 +1573,7 @@ export const schema = {
             "name": "ContenderType",
             "values": [
                 "DEFAULT",
-                "ACTOR",
+                "PERFORMANCE",
                 "SONG"
             ]
         },
@@ -1653,5 +1632,5 @@ export const schema = {
         }
     },
     "nonModels": {},
-    "version": "22f131cdd257606f7c0f101864fce273"
+    "version": "3f99a0aaf3890b143875dbfa6a2c00e8"
 };

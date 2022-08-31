@@ -27,7 +27,7 @@ export type CreateContenderParamList = {
     category: Category;
   };
   ConfirmContender: {
-    tmdbId: string;
+    tmdbId: number;
     category: Category;
   };
 };

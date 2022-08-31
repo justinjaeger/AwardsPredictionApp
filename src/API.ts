@@ -355,7 +355,7 @@ export type ModelContenderConnection = {
 
 export enum ContenderType {
   DEFAULT = "DEFAULT",
-  ACTOR = "ACTOR",
+  PERFORMANCE = "PERFORMANCE",
   SONG = "SONG",
 }
 
@@ -363,9 +363,7 @@ export enum ContenderType {
 export type Movie = {
   __typename: "Movie",
   id: string,
-  tmdbId: string,
-  year?: number | null,
-  image?: string | null,
+  tmdbId: number,
   createdAt: string,
   updatedAt: string,
   _version: number,
@@ -376,8 +374,7 @@ export type Movie = {
 export type Person = {
   __typename: "Person",
   id: string,
-  tmdbId: string,
-  image?: string | null,
+  tmdbId: number,
   createdAt: string,
   updatedAt: string,
   _version: number,
@@ -804,16 +801,12 @@ export type DeleteContenderSnapshotInput = {
 
 export type CreateMovieInput = {
   id?: string | null,
-  tmdbId: string,
-  year?: number | null,
-  image?: string | null,
+  tmdbId: number,
   _version?: number | null,
 };
 
 export type ModelMovieConditionInput = {
-  tmdbId?: ModelStringInput | null,
-  year?: ModelIntInput | null,
-  image?: ModelStringInput | null,
+  tmdbId?: ModelIntInput | null,
   and?: Array< ModelMovieConditionInput | null > | null,
   or?: Array< ModelMovieConditionInput | null > | null,
   not?: ModelMovieConditionInput | null,
@@ -821,9 +814,7 @@ export type ModelMovieConditionInput = {
 
 export type UpdateMovieInput = {
   id: string,
-  tmdbId?: string | null,
-  year?: number | null,
-  image?: string | null,
+  tmdbId?: number | null,
   _version?: number | null,
 };
 
@@ -834,14 +825,12 @@ export type DeleteMovieInput = {
 
 export type CreatePersonInput = {
   id?: string | null,
-  tmdbId: string,
-  image?: string | null,
+  tmdbId: number,
   _version?: number | null,
 };
 
 export type ModelPersonConditionInput = {
-  tmdbId?: ModelStringInput | null,
-  image?: ModelStringInput | null,
+  tmdbId?: ModelIntInput | null,
   and?: Array< ModelPersonConditionInput | null > | null,
   or?: Array< ModelPersonConditionInput | null > | null,
   not?: ModelPersonConditionInput | null,
@@ -849,8 +838,7 @@ export type ModelPersonConditionInput = {
 
 export type UpdatePersonInput = {
   id: string,
-  tmdbId?: string | null,
-  image?: string | null,
+  tmdbId?: number | null,
   _version?: number | null,
 };
 
@@ -1052,9 +1040,7 @@ export type ModelContenderSnapshotFilterInput = {
 
 export type ModelMovieFilterInput = {
   id?: ModelIDInput | null,
-  tmdbId?: ModelStringInput | null,
-  year?: ModelIntInput | null,
-  image?: ModelStringInput | null,
+  tmdbId?: ModelIntInput | null,
   and?: Array< ModelMovieFilterInput | null > | null,
   or?: Array< ModelMovieFilterInput | null > | null,
   not?: ModelMovieFilterInput | null,
@@ -1069,8 +1055,7 @@ export type ModelMovieConnection = {
 
 export type ModelPersonFilterInput = {
   id?: ModelIDInput | null,
-  tmdbId?: ModelStringInput | null,
-  image?: ModelStringInput | null,
+  tmdbId?: ModelIntInput | null,
   and?: Array< ModelPersonFilterInput | null > | null,
   or?: Array< ModelPersonFilterInput | null > | null,
   not?: ModelPersonFilterInput | null,
@@ -2200,9 +2185,7 @@ export type CreateContenderMutation = {
     movie:  {
       __typename: "Movie",
       id: string,
-      tmdbId: string,
-      year?: number | null,
-      image?: string | null,
+      tmdbId: number,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -2212,8 +2195,7 @@ export type CreateContenderMutation = {
     person?:  {
       __typename: "Person",
       id: string,
-      tmdbId: string,
-      image?: string | null,
+      tmdbId: number,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -2289,9 +2271,7 @@ export type UpdateContenderMutation = {
     movie:  {
       __typename: "Movie",
       id: string,
-      tmdbId: string,
-      year?: number | null,
-      image?: string | null,
+      tmdbId: number,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -2301,8 +2281,7 @@ export type UpdateContenderMutation = {
     person?:  {
       __typename: "Person",
       id: string,
-      tmdbId: string,
-      image?: string | null,
+      tmdbId: number,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -2378,9 +2357,7 @@ export type DeleteContenderMutation = {
     movie:  {
       __typename: "Movie",
       id: string,
-      tmdbId: string,
-      year?: number | null,
-      image?: string | null,
+      tmdbId: number,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -2390,8 +2367,7 @@ export type DeleteContenderMutation = {
     person?:  {
       __typename: "Person",
       id: string,
-      tmdbId: string,
-      image?: string | null,
+      tmdbId: number,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -2597,9 +2573,7 @@ export type CreateMovieMutation = {
   createMovie?:  {
     __typename: "Movie",
     id: string,
-    tmdbId: string,
-    year?: number | null,
-    image?: string | null,
+    tmdbId: number,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -2617,9 +2591,7 @@ export type UpdateMovieMutation = {
   updateMovie?:  {
     __typename: "Movie",
     id: string,
-    tmdbId: string,
-    year?: number | null,
-    image?: string | null,
+    tmdbId: number,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -2637,9 +2609,7 @@ export type DeleteMovieMutation = {
   deleteMovie?:  {
     __typename: "Movie",
     id: string,
-    tmdbId: string,
-    year?: number | null,
-    image?: string | null,
+    tmdbId: number,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -2657,8 +2627,7 @@ export type CreatePersonMutation = {
   createPerson?:  {
     __typename: "Person",
     id: string,
-    tmdbId: string,
-    image?: string | null,
+    tmdbId: number,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -2676,8 +2645,7 @@ export type UpdatePersonMutation = {
   updatePerson?:  {
     __typename: "Person",
     id: string,
-    tmdbId: string,
-    image?: string | null,
+    tmdbId: number,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -2695,8 +2663,7 @@ export type DeletePersonMutation = {
   deletePerson?:  {
     __typename: "Person",
     id: string,
-    tmdbId: string,
-    image?: string | null,
+    tmdbId: number,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -3566,9 +3533,7 @@ export type GetContenderQuery = {
     movie:  {
       __typename: "Movie",
       id: string,
-      tmdbId: string,
-      year?: number | null,
-      image?: string | null,
+      tmdbId: number,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -3578,8 +3543,7 @@ export type GetContenderQuery = {
     person?:  {
       __typename: "Person",
       id: string,
-      tmdbId: string,
-      image?: string | null,
+      tmdbId: number,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -3805,9 +3769,7 @@ export type GetMovieQuery = {
   getMovie?:  {
     __typename: "Movie",
     id: string,
-    tmdbId: string,
-    year?: number | null,
-    image?: string | null,
+    tmdbId: number,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -3830,9 +3792,7 @@ export type ListMoviesQuery = {
     items:  Array< {
       __typename: "Movie",
       id: string,
-      tmdbId: string,
-      year?: number | null,
-      image?: string | null,
+      tmdbId: number,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -3857,9 +3817,7 @@ export type SyncMoviesQuery = {
     items:  Array< {
       __typename: "Movie",
       id: string,
-      tmdbId: string,
-      year?: number | null,
-      image?: string | null,
+      tmdbId: number,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -3879,8 +3837,7 @@ export type GetPersonQuery = {
   getPerson?:  {
     __typename: "Person",
     id: string,
-    tmdbId: string,
-    image?: string | null,
+    tmdbId: number,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -3903,8 +3860,7 @@ export type ListPeopleQuery = {
     items:  Array< {
       __typename: "Person",
       id: string,
-      tmdbId: string,
-      image?: string | null,
+      tmdbId: number,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -3929,8 +3885,7 @@ export type SyncPeopleQuery = {
     items:  Array< {
       __typename: "Person",
       id: string,
-      tmdbId: string,
-      image?: string | null,
+      tmdbId: number,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -5244,9 +5199,7 @@ export type OnCreateContenderSubscription = {
     movie:  {
       __typename: "Movie",
       id: string,
-      tmdbId: string,
-      year?: number | null,
-      image?: string | null,
+      tmdbId: number,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -5256,8 +5209,7 @@ export type OnCreateContenderSubscription = {
     person?:  {
       __typename: "Person",
       id: string,
-      tmdbId: string,
-      image?: string | null,
+      tmdbId: number,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -5328,9 +5280,7 @@ export type OnUpdateContenderSubscription = {
     movie:  {
       __typename: "Movie",
       id: string,
-      tmdbId: string,
-      year?: number | null,
-      image?: string | null,
+      tmdbId: number,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -5340,8 +5290,7 @@ export type OnUpdateContenderSubscription = {
     person?:  {
       __typename: "Person",
       id: string,
-      tmdbId: string,
-      image?: string | null,
+      tmdbId: number,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -5412,9 +5361,7 @@ export type OnDeleteContenderSubscription = {
     movie:  {
       __typename: "Movie",
       id: string,
-      tmdbId: string,
-      year?: number | null,
-      image?: string | null,
+      tmdbId: number,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -5424,8 +5371,7 @@ export type OnDeleteContenderSubscription = {
     person?:  {
       __typename: "Person",
       id: string,
-      tmdbId: string,
-      image?: string | null,
+      tmdbId: number,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -5611,9 +5557,7 @@ export type OnCreateMovieSubscription = {
   onCreateMovie?:  {
     __typename: "Movie",
     id: string,
-    tmdbId: string,
-    year?: number | null,
-    image?: string | null,
+    tmdbId: number,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -5626,9 +5570,7 @@ export type OnUpdateMovieSubscription = {
   onUpdateMovie?:  {
     __typename: "Movie",
     id: string,
-    tmdbId: string,
-    year?: number | null,
-    image?: string | null,
+    tmdbId: number,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -5641,9 +5583,7 @@ export type OnDeleteMovieSubscription = {
   onDeleteMovie?:  {
     __typename: "Movie",
     id: string,
-    tmdbId: string,
-    year?: number | null,
-    image?: string | null,
+    tmdbId: number,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -5656,8 +5596,7 @@ export type OnCreatePersonSubscription = {
   onCreatePerson?:  {
     __typename: "Person",
     id: string,
-    tmdbId: string,
-    image?: string | null,
+    tmdbId: number,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -5670,8 +5609,7 @@ export type OnUpdatePersonSubscription = {
   onUpdatePerson?:  {
     __typename: "Person",
     id: string,
-    tmdbId: string,
-    image?: string | null,
+    tmdbId: number,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -5684,8 +5622,7 @@ export type OnDeletePersonSubscription = {
   onDeletePerson?:  {
     __typename: "Person",
     id: string,
-    tmdbId: string,
-    image?: string | null,
+    tmdbId: number,
     createdAt: string,
     updatedAt: string,
     _version: number,

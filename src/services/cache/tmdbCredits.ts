@@ -11,28 +11,28 @@ const tmdbCreditsCache = new Cache({
   backend: AsyncStorage,
 });
 
-const get = async (tmdbId: string) => {
-  const value = await tmdbCreditsCache.get(tmdbId);
+const get = async (tmdbId: number) => {
+  const value = await tmdbCreditsCache.get(tmdbId.toString());
   if (value !== undefined) {
     return JSON.parse(value) as iCachedTmdbCredits;
   }
   return value;
 };
 
-const peek = async (tmdbId: string) => {
-  const value = await tmdbCreditsCache.peek(tmdbId);
+const peek = async (tmdbId: number) => {
+  const value = await tmdbCreditsCache.peek(tmdbId.toString());
   if (value !== undefined) {
     return JSON.parse(value) as iCachedTmdbCredits;
   }
   return value;
 };
 
-const set = async (tmdbId: string, value: iCachedTmdbCredits) => {
-  return await tmdbCreditsCache.set(tmdbId, JSON.stringify(value));
+const set = async (tmdbId: number, value: iCachedTmdbCredits) => {
+  return await tmdbCreditsCache.set(tmdbId.toString(), JSON.stringify(value));
 };
 
-const remove = async (tmdbId: string) => {
-  return await tmdbCreditsCache.remove(tmdbId);
+const remove = async (tmdbId: number) => {
+  return await tmdbCreditsCache.remove(tmdbId.toString());
 };
 
 const getAllEntries = async () => {

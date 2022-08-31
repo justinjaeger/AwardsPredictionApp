@@ -817,8 +817,6 @@ export const onCreateContender = /* GraphQL */ `
       movie {
         id
         tmdbId
-        year
-        image
         createdAt
         updatedAt
         _version
@@ -828,7 +826,6 @@ export const onCreateContender = /* GraphQL */ `
       person {
         id
         tmdbId
-        image
         createdAt
         updatedAt
         _version
@@ -893,8 +890,6 @@ export const onUpdateContender = /* GraphQL */ `
       movie {
         id
         tmdbId
-        year
-        image
         createdAt
         updatedAt
         _version
@@ -904,7 +899,6 @@ export const onUpdateContender = /* GraphQL */ `
       person {
         id
         tmdbId
-        image
         createdAt
         updatedAt
         _version
@@ -969,8 +963,6 @@ export const onDeleteContender = /* GraphQL */ `
       movie {
         id
         tmdbId
-        year
-        image
         createdAt
         updatedAt
         _version
@@ -980,7 +972,6 @@ export const onDeleteContender = /* GraphQL */ `
       person {
         id
         tmdbId
-        image
         createdAt
         updatedAt
         _version
@@ -1156,8 +1147,6 @@ export const onCreateMovie = /* GraphQL */ `
     onCreateMovie {
       id
       tmdbId
-      year
-      image
       createdAt
       updatedAt
       _version
@@ -1171,8 +1160,6 @@ export const onUpdateMovie = /* GraphQL */ `
     onUpdateMovie {
       id
       tmdbId
-      year
-      image
       createdAt
       updatedAt
       _version
@@ -1186,8 +1173,6 @@ export const onDeleteMovie = /* GraphQL */ `
     onDeleteMovie {
       id
       tmdbId
-      year
-      image
       createdAt
       updatedAt
       _version
@@ -1201,7 +1186,6 @@ export const onCreatePerson = /* GraphQL */ `
     onCreatePerson {
       id
       tmdbId
-      image
       createdAt
       updatedAt
       _version
@@ -1215,7 +1199,6 @@ export const onUpdatePerson = /* GraphQL */ `
     onUpdatePerson {
       id
       tmdbId
-      image
       createdAt
       updatedAt
       _version
@@ -1229,7 +1212,6 @@ export const onDeletePerson = /* GraphQL */ `
     onDeletePerson {
       id
       tmdbId
-      image
       createdAt
       updatedAt
       _version

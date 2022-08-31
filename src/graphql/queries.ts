@@ -791,8 +791,6 @@ export const getContender = /* GraphQL */ `
       movie {
         id
         tmdbId
-        year
-        image
         createdAt
         updatedAt
         _version
@@ -802,7 +800,6 @@ export const getContender = /* GraphQL */ `
       person {
         id
         tmdbId
-        image
         createdAt
         updatedAt
         _version
@@ -1024,8 +1021,6 @@ export const getMovie = /* GraphQL */ `
     getMovie(id: $id) {
       id
       tmdbId
-      year
-      image
       createdAt
       updatedAt
       _version
@@ -1052,8 +1047,6 @@ export const listMovies = /* GraphQL */ `
       items {
         id
         tmdbId
-        year
-        image
         createdAt
         updatedAt
         _version
@@ -1081,8 +1074,6 @@ export const syncMovies = /* GraphQL */ `
       items {
         id
         tmdbId
-        year
-        image
         createdAt
         updatedAt
         _version
@@ -1099,7 +1090,6 @@ export const getPerson = /* GraphQL */ `
     getPerson(id: $id) {
       id
       tmdbId
-      image
       createdAt
       updatedAt
       _version
@@ -1126,7 +1116,6 @@ export const listPeople = /* GraphQL */ `
       items {
         id
         tmdbId
-        image
         createdAt
         updatedAt
         _version
@@ -1154,7 +1143,6 @@ export const syncPeople = /* GraphQL */ `
       items {
         id
         tmdbId
-        image
         createdAt
         updatedAt
         _version

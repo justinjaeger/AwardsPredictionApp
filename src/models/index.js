@@ -31,7 +31,7 @@ const EventType = {
 
 const ContenderType = {
   "DEFAULT": "DEFAULT",
-  "ACTOR": "ACTOR",
+  "PERFORMANCE": "PERFORMANCE",
   "SONG": "SONG"
 };
 
