@@ -378,6 +378,7 @@ export const createPrediction = /* GraphQL */ `
       contender {
         id
         categoryId
+        contenderType
         didReceiveNominationOrWin
         createdAt
         updatedAt
@@ -387,6 +388,7 @@ export const createPrediction = /* GraphQL */ `
         categoryContendersId
         contenderMovieId
         contenderPersonId
+        contenderSongId
       }
       ranking
       isActive
@@ -412,6 +414,7 @@ export const updatePrediction = /* GraphQL */ `
       contender {
         id
         categoryId
+        contenderType
         didReceiveNominationOrWin
         createdAt
         updatedAt
@@ -421,6 +424,7 @@ export const updatePrediction = /* GraphQL */ `
         categoryContendersId
         contenderMovieId
         contenderPersonId
+        contenderSongId
       }
       ranking
       isActive
@@ -446,6 +450,7 @@ export const deletePrediction = /* GraphQL */ `
       contender {
         id
         categoryId
+        contenderType
         didReceiveNominationOrWin
         createdAt
         updatedAt
@@ -455,6 +460,7 @@ export const deletePrediction = /* GraphQL */ `
         categoryContendersId
         contenderMovieId
         contenderPersonId
+        contenderSongId
       }
       ranking
       isActive
@@ -882,11 +888,10 @@ export const createContender = /* GraphQL */ `
         _lastChangedAt
         eventCategoriesId
       }
+      contenderType
       movie {
         id
-        imdbId
-        year
-        image
+        tmdbId
         createdAt
         updatedAt
         _version
@@ -895,8 +900,16 @@ export const createContender = /* GraphQL */ `
       }
       person {
         id
-        imdbId
-        image
+        tmdbId
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      song {
+        id
+        apiId
         createdAt
         updatedAt
         _version
@@ -928,6 +941,7 @@ export const createContender = /* GraphQL */ `
       categoryContendersId
       contenderMovieId
       contenderPersonId
+      contenderSongId
     }
   }
 `;
@@ -950,11 +964,10 @@ export const updateContender = /* GraphQL */ `
         _lastChangedAt
         eventCategoriesId
       }
+      contenderType
       movie {
         id
-        imdbId
-        year
-        image
+        tmdbId
         createdAt
         updatedAt
         _version
@@ -963,8 +976,16 @@ export const updateContender = /* GraphQL */ `
       }
       person {
         id
-        imdbId
-        image
+        tmdbId
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      song {
+        id
+        apiId
         createdAt
         updatedAt
         _version
@@ -996,6 +1017,7 @@ export const updateContender = /* GraphQL */ `
       categoryContendersId
       contenderMovieId
       contenderPersonId
+      contenderSongId
     }
   }
 `;
@@ -1018,11 +1040,10 @@ export const deleteContender = /* GraphQL */ `
         _lastChangedAt
         eventCategoriesId
       }
+      contenderType
       movie {
         id
-        imdbId
-        year
-        image
+        tmdbId
         createdAt
         updatedAt
         _version
@@ -1031,8 +1052,16 @@ export const deleteContender = /* GraphQL */ `
       }
       person {
         id
-        imdbId
-        image
+        tmdbId
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      song {
+        id
+        apiId
         createdAt
         updatedAt
         _version
@@ -1064,6 +1093,7 @@ export const deleteContender = /* GraphQL */ `
       categoryContendersId
       contenderMovieId
       contenderPersonId
+      contenderSongId
     }
   }
 `;
@@ -1078,6 +1108,7 @@ export const createContenderSnapshot = /* GraphQL */ `
       contender {
         id
         categoryId
+        contenderType
         didReceiveNominationOrWin
         createdAt
         updatedAt
@@ -1087,6 +1118,7 @@ export const createContenderSnapshot = /* GraphQL */ `
         categoryContendersId
         contenderMovieId
         contenderPersonId
+        contenderSongId
       }
       categoryId
       category {
@@ -1121,6 +1153,7 @@ export const updateContenderSnapshot = /* GraphQL */ `
       contender {
         id
         categoryId
+        contenderType
         didReceiveNominationOrWin
         createdAt
         updatedAt
@@ -1130,6 +1163,7 @@ export const updateContenderSnapshot = /* GraphQL */ `
         categoryContendersId
         contenderMovieId
         contenderPersonId
+        contenderSongId
       }
       categoryId
       category {
@@ -1164,6 +1198,7 @@ export const deleteContenderSnapshot = /* GraphQL */ `
       contender {
         id
         categoryId
+        contenderType
         didReceiveNominationOrWin
         createdAt
         updatedAt
@@ -1173,6 +1208,7 @@ export const deleteContenderSnapshot = /* GraphQL */ `
         categoryContendersId
         contenderMovieId
         contenderPersonId
+        contenderSongId
       }
       categoryId
       category {
@@ -1203,9 +1239,7 @@ export const createMovie = /* GraphQL */ `
   ) {
     createMovie(input: $input, condition: $condition) {
       id
-      imdbId
-      year
-      image
+      tmdbId
       createdAt
       updatedAt
       _version
@@ -1221,9 +1255,7 @@ export const updateMovie = /* GraphQL */ `
   ) {
     updateMovie(input: $input, condition: $condition) {
       id
-      imdbId
-      year
-      image
+      tmdbId
       createdAt
       updatedAt
       _version
@@ -1239,9 +1271,7 @@ export const deleteMovie = /* GraphQL */ `
   ) {
     deleteMovie(input: $input, condition: $condition) {
       id
-      imdbId
-      year
-      image
+      tmdbId
       createdAt
       updatedAt
       _version
@@ -1257,8 +1287,7 @@ export const createPerson = /* GraphQL */ `
   ) {
     createPerson(input: $input, condition: $condition) {
       id
-      imdbId
-      image
+      tmdbId
       createdAt
       updatedAt
       _version
@@ -1274,8 +1303,7 @@ export const updatePerson = /* GraphQL */ `
   ) {
     updatePerson(input: $input, condition: $condition) {
       id
-      imdbId
-      image
+      tmdbId
       createdAt
       updatedAt
       _version
@@ -1291,8 +1319,55 @@ export const deletePerson = /* GraphQL */ `
   ) {
     deletePerson(input: $input, condition: $condition) {
       id
-      imdbId
-      image
+      tmdbId
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const createSong = /* GraphQL */ `
+  mutation CreateSong(
+    $input: CreateSongInput!
+    $condition: ModelSongConditionInput
+  ) {
+    createSong(input: $input, condition: $condition) {
+      id
+      apiId
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const updateSong = /* GraphQL */ `
+  mutation UpdateSong(
+    $input: UpdateSongInput!
+    $condition: ModelSongConditionInput
+  ) {
+    updateSong(input: $input, condition: $condition) {
+      id
+      apiId
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const deleteSong = /* GraphQL */ `
+  mutation DeleteSong(
+    $input: DeleteSongInput!
+    $condition: ModelSongConditionInput
+  ) {
+    deleteSong(input: $input, condition: $condition) {
+      id
+      apiId
       createdAt
       updatedAt
       _version

@@ -218,7 +218,7 @@ export const schema = {
                     "type": {
                         "model": "User"
                     },
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": [],
                     "association": {
                         "connectionType": "BELONGS_TO",
@@ -231,7 +231,7 @@ export const schema = {
                     "type": {
                         "model": "User"
                     },
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": [],
                     "association": {
                         "connectionType": "BELONGS_TO",
@@ -464,7 +464,7 @@ export const schema = {
                     "type": {
                         "model": "Contender"
                     },
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": [],
                     "association": {
                         "connectionType": "BELONGS_TO",
@@ -563,25 +563,27 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "categoryId": {
-                    "name": "categoryId",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": true,
-                    "attributes": []
-                },
                 "category": {
                     "name": "category",
                     "isArray": false,
                     "type": {
                         "model": "Category"
                     },
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": [],
                     "association": {
                         "connectionType": "BELONGS_TO",
-                        "targetName": "categoryContendersId"
+                        "targetName": "categoryId"
                     }
+                },
+                "contenderType": {
+                    "name": "contenderType",
+                    "isArray": false,
+                    "type": {
+                        "enum": "ContenderType"
+                    },
+                    "isRequired": true,
+                    "attributes": []
                 },
                 "movie": {
                     "name": "movie",
@@ -589,7 +591,7 @@ export const schema = {
                     "type": {
                         "model": "Movie"
                     },
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": [],
                     "association": {
                         "connectionType": "HAS_ONE",
@@ -609,6 +611,20 @@ export const schema = {
                         "connectionType": "HAS_ONE",
                         "associatedWith": "id",
                         "targetName": "contenderPersonId"
+                    }
+                },
+                "song": {
+                    "name": "song",
+                    "isArray": false,
+                    "type": {
+                        "model": "Song"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "association": {
+                        "connectionType": "HAS_ONE",
+                        "associatedWith": "id",
+                        "targetName": "contenderSongId"
                     }
                 },
                 "snapshots": {
@@ -694,11 +710,25 @@ export const schema = {
                     "name": "contenderMovieId",
                     "isArray": false,
                     "type": "ID",
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": []
                 },
                 "contenderPersonId": {
                     "name": "contenderPersonId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "contenderSongId": {
+                    "name": "contenderSongId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "categoryContendersId": {
+                    "name": "categoryContendersId",
                     "isArray": false,
                     "type": "ID",
                     "isRequired": false,
@@ -763,7 +793,7 @@ export const schema = {
                     "type": {
                         "model": "Event"
                     },
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": [],
                     "association": {
                         "connectionType": "BELONGS_TO",
@@ -998,7 +1028,7 @@ export const schema = {
                     "type": {
                         "model": "Event"
                     },
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": [],
                     "association": {
                         "connectionType": "BELONGS_TO",
@@ -1011,7 +1041,7 @@ export const schema = {
                     "type": {
                         "model": "User"
                     },
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": [],
                     "association": {
                         "connectionType": "BELONGS_TO",
@@ -1195,25 +1225,11 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "imdbId": {
-                    "name": "imdbId",
-                    "isArray": false,
-                    "type": "String",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "year": {
-                    "name": "year",
+                "tmdbId": {
+                    "name": "tmdbId",
                     "isArray": false,
                     "type": "Int",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "image": {
-                    "name": "image",
-                    "isArray": false,
-                    "type": "String",
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": []
                 },
                 "createdAt": {
@@ -1276,18 +1292,11 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "imdbId": {
-                    "name": "imdbId",
+                "tmdbId": {
+                    "name": "tmdbId",
                     "isArray": false,
-                    "type": "String",
+                    "type": "Int",
                     "isRequired": true,
-                    "attributes": []
-                },
-                "image": {
-                    "name": "image",
-                    "isArray": false,
-                    "type": "String",
-                    "isRequired": false,
                     "attributes": []
                 },
                 "createdAt": {
@@ -1340,6 +1349,73 @@ export const schema = {
                 }
             ]
         },
+        "Song": {
+            "name": "Song",
+            "fields": {
+                "id": {
+                    "name": "id",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "apiId": {
+                    "name": "apiId",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                }
+            },
+            "syncable": true,
+            "pluralName": "Songs",
+            "attributes": [
+                {
+                    "type": "model",
+                    "properties": {}
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "fields": [
+                            "id"
+                        ]
+                    }
+                },
+                {
+                    "type": "auth",
+                    "properties": {
+                        "rules": [
+                            {
+                                "allow": "public",
+                                "operations": [
+                                    "create",
+                                    "update",
+                                    "delete",
+                                    "read"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
         "ContenderSnapshot": {
             "name": "ContenderSnapshot",
             "fields": {
@@ -1356,7 +1432,7 @@ export const schema = {
                     "type": {
                         "model": "Contender"
                     },
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": [],
                     "association": {
                         "connectionType": "BELONGS_TO",
@@ -1376,7 +1452,7 @@ export const schema = {
                     "type": {
                         "model": "Category"
                     },
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": [],
                     "association": {
                         "connectionType": "HAS_ONE",
@@ -1493,6 +1569,14 @@ export const schema = {
                 "NOMINATION"
             ]
         },
+        "ContenderType": {
+            "name": "ContenderType",
+            "values": [
+                "DEFAULT",
+                "PERFORMANCE",
+                "SONG"
+            ]
+        },
         "CategoryName": {
             "name": "CategoryName",
             "values": [
@@ -1539,8 +1623,14 @@ export const schema = {
                 "INDIE_PICTURE",
                 "BREAKTHROUGH"
             ]
+        },
+        "CateogrySet": {
+            "name": "CateogrySet",
+            "values": [
+                "ACADEMY_AWARDS_2023"
+            ]
         }
     },
     "nonModels": {},
-    "version": "f820c38aab2a8796909f14ff1d7aa778"
+    "version": "3f99a0aaf3890b143875dbfa6a2c00e8"
 };

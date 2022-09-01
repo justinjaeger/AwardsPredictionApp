@@ -1,6 +1,6 @@
 import { DataStore } from 'aws-amplify';
+import { getCategoryList } from '../../constants/lists';
 import { AwardsBody, EventType, Event, Category, CategoryName } from '../../models';
-import { getCategoryList } from '../../util/constants';
 
 const DATA = [
   { awardsBody: AwardsBody.ACADEMY_AWARDS, year: 2023, type: EventType.NOMINATION }, // expect isActive to have a value of "x"
@@ -27,7 +27,7 @@ export const createMockEvents = () => {
     const newEvent = await DataStore.save(new Event(event));
     console.log('created event', newEvent);
     // create categories on event
-    const category = getCategoryList(event.awardsBody, event.year);
+    const category = getCategoryList(event as Event);
     const categoryList = Object.keys(category) as CategoryName[];
     categoryList.forEach(async (catName) => {
       if (catName) {

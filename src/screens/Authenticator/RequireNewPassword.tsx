@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { View } from 'react-native';
 import { iAuthScreenProps, iAuthState } from './types';
 import FormInput from '../../components/Inputs/FormInput';
-import { SubmitButton, TouchableText } from '../../components/Buttons';
 import AuthServices from '../../services/auth';
 import Snackbar from '../../components/Snackbar';
 import { useAuthenticator } from './context';
+import { SubmitButton, TouchableText } from '../../components/Buttons';
 
 const RequireNewPassword = (p: any) => {
   const props = p as iAuthScreenProps; // typecasting because props are automatically passed from Authenticator

@@ -111,8 +111,8 @@ export type Relationships = {
   id: string,
   followedUserId: string,
   followingUserId: string,
-  followedUser?: User | null,
-  followingUser?: User | null,
+  followedUser: User,
+  followingUser: User,
   followedPredictionFeed?: ModelPredictionSetConnection | null,
   createdAt: string,
   updatedAt: string,
@@ -156,7 +156,7 @@ export type Prediction = {
   predictionSetId: string,
   userId: string,
   contenderId: string,
-  contender?: Contender | null,
+  contender: Contender,
   ranking: number,
   isActive?: string | null,
   createdAt: string,
@@ -171,9 +171,11 @@ export type Contender = {
   __typename: "Contender",
   id: string,
   categoryId: string,
-  category?: Category | null,
-  movie?: Movie | null,
+  category: Category,
+  contenderType: ContenderType,
+  movie: Movie,
   person?: Person | null,
+  song?: Song | null,
   snapshots?: ModelContenderSnapshotConnection | null,
   activePredictions?: ModelPredictionConnection | null,
   activePredictionsRankings?: ModelPredictionConnection | null,
@@ -185,8 +187,9 @@ export type Contender = {
   _deleted?: boolean | null,
   _lastChangedAt: number,
   categoryContendersId?: string | null,
-  contenderMovieId?: string | null,
+  contenderMovieId: string,
   contenderPersonId?: string | null,
+  contenderSongId?: string | null,
 };
 
 export type Category = {
@@ -194,7 +197,7 @@ export type Category = {
   id: string,
   name: CategoryName,
   eventId: string,
-  event?: Event | null,
+  event: Event,
   contenders?: ModelContenderConnection | null,
   createdAt: string,
   updatedAt: string,
@@ -287,8 +290,8 @@ export type LeaderboardPosition = {
   id: string,
   userId: string,
   eventId: string,
-  event?: Event | null,
-  user?: User | null,
+  event: Event,
+  user: User,
   accuracy?: string | null,
   ranking?: number | null,
   createdAt: string,
@@ -350,12 +353,17 @@ export type ModelContenderConnection = {
   startedAt?: number | null,
 };
 
+export enum ContenderType {
+  DEFAULT = "DEFAULT",
+  PERFORMANCE = "PERFORMANCE",
+  SONG = "SONG",
+}
+
+
 export type Movie = {
   __typename: "Movie",
   id: string,
-  imdbId: string,
-  year?: number | null,
-  image?: string | null,
+  tmdbId: number,
   createdAt: string,
   updatedAt: string,
   _version: number,
@@ -366,8 +374,18 @@ export type Movie = {
 export type Person = {
   __typename: "Person",
   id: string,
-  imdbId: string,
-  image?: string | null,
+  tmdbId: number,
+  createdAt: string,
+  updatedAt: string,
+  _version: number,
+  _deleted?: boolean | null,
+  _lastChangedAt: number,
+};
+
+export type Song = {
+  __typename: "Song",
+  id: string,
+  apiId: string,
   createdAt: string,
   updatedAt: string,
   _version: number,
@@ -386,9 +404,9 @@ export type ContenderSnapshot = {
   __typename: "ContenderSnapshot",
   id: string,
   contenderId: string,
-  contender?: Contender | null,
+  contender: Contender,
   categoryId: string,
-  category?: Category | null,
+  category: Category,
   numberOfUsersPredicting: number,
   numberOfUsersPredictingWin: number,
   createdAt: string,
@@ -694,15 +712,18 @@ export type DeleteCategoryInput = {
 export type CreateContenderInput = {
   id?: string | null,
   categoryId: string,
+  contenderType: ContenderType,
   didReceiveNominationOrWin?: boolean | null,
   _version?: number | null,
   categoryContendersId?: string | null,
-  contenderMovieId?: string | null,
+  contenderMovieId: string,
   contenderPersonId?: string | null,
+  contenderSongId?: string | null,
 };
 
 export type ModelContenderConditionInput = {
   categoryId?: ModelIDInput | null,
+  contenderType?: ModelContenderTypeInput | null,
   didReceiveNominationOrWin?: ModelBooleanInput | null,
   and?: Array< ModelContenderConditionInput | null > | null,
   or?: Array< ModelContenderConditionInput | null > | null,
@@ -710,6 +731,12 @@ export type ModelContenderConditionInput = {
   categoryContendersId?: ModelIDInput | null,
   contenderMovieId?: ModelIDInput | null,
   contenderPersonId?: ModelIDInput | null,
+  contenderSongId?: ModelIDInput | null,
+};
+
+export type ModelContenderTypeInput = {
+  eq?: ContenderType | null,
+  ne?: ContenderType | null,
 };
 
 export type ModelBooleanInput = {
@@ -722,11 +749,13 @@ export type ModelBooleanInput = {
 export type UpdateContenderInput = {
   id: string,
   categoryId?: string | null,
+  contenderType?: ContenderType | null,
   didReceiveNominationOrWin?: boolean | null,
   _version?: number | null,
   categoryContendersId?: string | null,
-  contenderMovieId?: string | null,
+  contenderMovieId: string,
   contenderPersonId?: string | null,
+  contenderSongId?: string | null,
 };
 
 export type DeleteContenderInput = {
@@ -772,16 +801,12 @@ export type DeleteContenderSnapshotInput = {
 
 export type CreateMovieInput = {
   id?: string | null,
-  imdbId: string,
-  year?: number | null,
-  image?: string | null,
+  tmdbId: number,
   _version?: number | null,
 };
 
 export type ModelMovieConditionInput = {
-  imdbId?: ModelStringInput | null,
-  year?: ModelIntInput | null,
-  image?: ModelStringInput | null,
+  tmdbId?: ModelIntInput | null,
   and?: Array< ModelMovieConditionInput | null > | null,
   or?: Array< ModelMovieConditionInput | null > | null,
   not?: ModelMovieConditionInput | null,
@@ -789,9 +814,7 @@ export type ModelMovieConditionInput = {
 
 export type UpdateMovieInput = {
   id: string,
-  imdbId?: string | null,
-  year?: number | null,
-  image?: string | null,
+  tmdbId?: number | null,
   _version?: number | null,
 };
 
@@ -802,14 +825,12 @@ export type DeleteMovieInput = {
 
 export type CreatePersonInput = {
   id?: string | null,
-  imdbId: string,
-  image?: string | null,
+  tmdbId: number,
   _version?: number | null,
 };
 
 export type ModelPersonConditionInput = {
-  imdbId?: ModelStringInput | null,
-  image?: ModelStringInput | null,
+  tmdbId?: ModelIntInput | null,
   and?: Array< ModelPersonConditionInput | null > | null,
   or?: Array< ModelPersonConditionInput | null > | null,
   not?: ModelPersonConditionInput | null,
@@ -817,12 +838,35 @@ export type ModelPersonConditionInput = {
 
 export type UpdatePersonInput = {
   id: string,
-  imdbId?: string | null,
-  image?: string | null,
+  tmdbId?: number | null,
   _version?: number | null,
 };
 
 export type DeletePersonInput = {
+  id: string,
+  _version?: number | null,
+};
+
+export type CreateSongInput = {
+  id?: string | null,
+  apiId: string,
+  _version?: number | null,
+};
+
+export type ModelSongConditionInput = {
+  apiId?: ModelStringInput | null,
+  and?: Array< ModelSongConditionInput | null > | null,
+  or?: Array< ModelSongConditionInput | null > | null,
+  not?: ModelSongConditionInput | null,
+};
+
+export type UpdateSongInput = {
+  id: string,
+  apiId?: string | null,
+  _version?: number | null,
+};
+
+export type DeleteSongInput = {
   id: string,
   _version?: number | null,
 };
@@ -971,6 +1015,7 @@ export type ModelCategoryFilterInput = {
 export type ModelContenderFilterInput = {
   id?: ModelIDInput | null,
   categoryId?: ModelIDInput | null,
+  contenderType?: ModelContenderTypeInput | null,
   didReceiveNominationOrWin?: ModelBooleanInput | null,
   and?: Array< ModelContenderFilterInput | null > | null,
   or?: Array< ModelContenderFilterInput | null > | null,
@@ -978,6 +1023,7 @@ export type ModelContenderFilterInput = {
   categoryContendersId?: ModelIDInput | null,
   contenderMovieId?: ModelIDInput | null,
   contenderPersonId?: ModelIDInput | null,
+  contenderSongId?: ModelIDInput | null,
 };
 
 export type ModelContenderSnapshotFilterInput = {
@@ -994,9 +1040,7 @@ export type ModelContenderSnapshotFilterInput = {
 
 export type ModelMovieFilterInput = {
   id?: ModelIDInput | null,
-  imdbId?: ModelStringInput | null,
-  year?: ModelIntInput | null,
-  image?: ModelStringInput | null,
+  tmdbId?: ModelIntInput | null,
   and?: Array< ModelMovieFilterInput | null > | null,
   or?: Array< ModelMovieFilterInput | null > | null,
   not?: ModelMovieFilterInput | null,
@@ -1011,8 +1055,7 @@ export type ModelMovieConnection = {
 
 export type ModelPersonFilterInput = {
   id?: ModelIDInput | null,
-  imdbId?: ModelStringInput | null,
-  image?: ModelStringInput | null,
+  tmdbId?: ModelIntInput | null,
   and?: Array< ModelPersonFilterInput | null > | null,
   or?: Array< ModelPersonFilterInput | null > | null,
   not?: ModelPersonFilterInput | null,
@@ -1021,6 +1064,21 @@ export type ModelPersonFilterInput = {
 export type ModelPersonConnection = {
   __typename: "ModelPersonConnection",
   items:  Array<Person | null >,
+  nextToken?: string | null,
+  startedAt?: number | null,
+};
+
+export type ModelSongFilterInput = {
+  id?: ModelIDInput | null,
+  apiId?: ModelStringInput | null,
+  and?: Array< ModelSongFilterInput | null > | null,
+  or?: Array< ModelSongFilterInput | null > | null,
+  not?: ModelSongFilterInput | null,
+};
+
+export type ModelSongConnection = {
+  __typename: "ModelSongConnection",
+  items:  Array<Song | null >,
   nextToken?: string | null,
   startedAt?: number | null,
 };
@@ -1314,7 +1372,7 @@ export type CreateRelationshipsMutation = {
     id: string,
     followedUserId: string,
     followingUserId: string,
-    followedUser?:  {
+    followedUser:  {
       __typename: "User",
       id: string,
       email: string,
@@ -1328,8 +1386,8 @@ export type CreateRelationshipsMutation = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
-    } | null,
-    followingUser?:  {
+    },
+    followingUser:  {
       __typename: "User",
       id: string,
       email: string,
@@ -1343,7 +1401,7 @@ export type CreateRelationshipsMutation = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
-    } | null,
+    },
     followedPredictionFeed?:  {
       __typename: "ModelPredictionSetConnection",
       nextToken?: string | null,
@@ -1368,7 +1426,7 @@ export type UpdateRelationshipsMutation = {
     id: string,
     followedUserId: string,
     followingUserId: string,
-    followedUser?:  {
+    followedUser:  {
       __typename: "User",
       id: string,
       email: string,
@@ -1382,8 +1440,8 @@ export type UpdateRelationshipsMutation = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
-    } | null,
-    followingUser?:  {
+    },
+    followingUser:  {
       __typename: "User",
       id: string,
       email: string,
@@ -1397,7 +1455,7 @@ export type UpdateRelationshipsMutation = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
-    } | null,
+    },
     followedPredictionFeed?:  {
       __typename: "ModelPredictionSetConnection",
       nextToken?: string | null,
@@ -1422,7 +1480,7 @@ export type DeleteRelationshipsMutation = {
     id: string,
     followedUserId: string,
     followingUserId: string,
-    followedUser?:  {
+    followedUser:  {
       __typename: "User",
       id: string,
       email: string,
@@ -1436,8 +1494,8 @@ export type DeleteRelationshipsMutation = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
-    } | null,
-    followingUser?:  {
+    },
+    followingUser:  {
       __typename: "User",
       id: string,
       email: string,
@@ -1451,7 +1509,7 @@ export type DeleteRelationshipsMutation = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
-    } | null,
+    },
     followedPredictionFeed?:  {
       __typename: "ModelPredictionSetConnection",
       nextToken?: string | null,
@@ -1555,10 +1613,11 @@ export type CreatePredictionMutation = {
     predictionSetId: string,
     userId: string,
     contenderId: string,
-    contender?:  {
+    contender:  {
       __typename: "Contender",
       id: string,
       categoryId: string,
+      contenderType: ContenderType,
       didReceiveNominationOrWin?: boolean | null,
       createdAt: string,
       updatedAt: string,
@@ -1566,9 +1625,10 @@ export type CreatePredictionMutation = {
       _deleted?: boolean | null,
       _lastChangedAt: number,
       categoryContendersId?: string | null,
-      contenderMovieId?: string | null,
+      contenderMovieId: string,
       contenderPersonId?: string | null,
-    } | null,
+      contenderSongId?: string | null,
+    },
     ranking: number,
     isActive?: string | null,
     createdAt: string,
@@ -1592,10 +1652,11 @@ export type UpdatePredictionMutation = {
     predictionSetId: string,
     userId: string,
     contenderId: string,
-    contender?:  {
+    contender:  {
       __typename: "Contender",
       id: string,
       categoryId: string,
+      contenderType: ContenderType,
       didReceiveNominationOrWin?: boolean | null,
       createdAt: string,
       updatedAt: string,
@@ -1603,9 +1664,10 @@ export type UpdatePredictionMutation = {
       _deleted?: boolean | null,
       _lastChangedAt: number,
       categoryContendersId?: string | null,
-      contenderMovieId?: string | null,
+      contenderMovieId: string,
       contenderPersonId?: string | null,
-    } | null,
+      contenderSongId?: string | null,
+    },
     ranking: number,
     isActive?: string | null,
     createdAt: string,
@@ -1629,10 +1691,11 @@ export type DeletePredictionMutation = {
     predictionSetId: string,
     userId: string,
     contenderId: string,
-    contender?:  {
+    contender:  {
       __typename: "Contender",
       id: string,
       categoryId: string,
+      contenderType: ContenderType,
       didReceiveNominationOrWin?: boolean | null,
       createdAt: string,
       updatedAt: string,
@@ -1640,9 +1703,10 @@ export type DeletePredictionMutation = {
       _deleted?: boolean | null,
       _lastChangedAt: number,
       categoryContendersId?: string | null,
-      contenderMovieId?: string | null,
+      contenderMovieId: string,
       contenderPersonId?: string | null,
-    } | null,
+      contenderSongId?: string | null,
+    },
     ranking: number,
     isActive?: string | null,
     createdAt: string,
@@ -1836,7 +1900,7 @@ export type CreateLeaderboardPositionMutation = {
     id: string,
     userId: string,
     eventId: string,
-    event?:  {
+    event:  {
       __typename: "Event",
       id: string,
       awardsBody: AwardsBody,
@@ -1849,8 +1913,8 @@ export type CreateLeaderboardPositionMutation = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
-    } | null,
-    user?:  {
+    },
+    user:  {
       __typename: "User",
       id: string,
       email: string,
@@ -1864,7 +1928,7 @@ export type CreateLeaderboardPositionMutation = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
-    } | null,
+    },
     accuracy?: string | null,
     ranking?: number | null,
     createdAt: string,
@@ -1887,7 +1951,7 @@ export type UpdateLeaderboardPositionMutation = {
     id: string,
     userId: string,
     eventId: string,
-    event?:  {
+    event:  {
       __typename: "Event",
       id: string,
       awardsBody: AwardsBody,
@@ -1900,8 +1964,8 @@ export type UpdateLeaderboardPositionMutation = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
-    } | null,
-    user?:  {
+    },
+    user:  {
       __typename: "User",
       id: string,
       email: string,
@@ -1915,7 +1979,7 @@ export type UpdateLeaderboardPositionMutation = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
-    } | null,
+    },
     accuracy?: string | null,
     ranking?: number | null,
     createdAt: string,
@@ -1938,7 +2002,7 @@ export type DeleteLeaderboardPositionMutation = {
     id: string,
     userId: string,
     eventId: string,
-    event?:  {
+    event:  {
       __typename: "Event",
       id: string,
       awardsBody: AwardsBody,
@@ -1951,8 +2015,8 @@ export type DeleteLeaderboardPositionMutation = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
-    } | null,
-    user?:  {
+    },
+    user:  {
       __typename: "User",
       id: string,
       email: string,
@@ -1966,7 +2030,7 @@ export type DeleteLeaderboardPositionMutation = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
-    } | null,
+    },
     accuracy?: string | null,
     ranking?: number | null,
     createdAt: string,
@@ -1989,7 +2053,7 @@ export type CreateCategoryMutation = {
     id: string,
     name: CategoryName,
     eventId: string,
-    event?:  {
+    event:  {
       __typename: "Event",
       id: string,
       awardsBody: AwardsBody,
@@ -2002,7 +2066,7 @@ export type CreateCategoryMutation = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
-    } | null,
+    },
     contenders?:  {
       __typename: "ModelContenderConnection",
       nextToken?: string | null,
@@ -2028,7 +2092,7 @@ export type UpdateCategoryMutation = {
     id: string,
     name: CategoryName,
     eventId: string,
-    event?:  {
+    event:  {
       __typename: "Event",
       id: string,
       awardsBody: AwardsBody,
@@ -2041,7 +2105,7 @@ export type UpdateCategoryMutation = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
-    } | null,
+    },
     contenders?:  {
       __typename: "ModelContenderConnection",
       nextToken?: string | null,
@@ -2067,7 +2131,7 @@ export type DeleteCategoryMutation = {
     id: string,
     name: CategoryName,
     eventId: string,
-    event?:  {
+    event:  {
       __typename: "Event",
       id: string,
       awardsBody: AwardsBody,
@@ -2080,7 +2144,7 @@ export type DeleteCategoryMutation = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
-    } | null,
+    },
     contenders?:  {
       __typename: "ModelContenderConnection",
       nextToken?: string | null,
@@ -2105,7 +2169,7 @@ export type CreateContenderMutation = {
     __typename: "Contender",
     id: string,
     categoryId: string,
-    category?:  {
+    category:  {
       __typename: "Category",
       id: string,
       name: CategoryName,
@@ -2116,24 +2180,32 @@ export type CreateContenderMutation = {
       _deleted?: boolean | null,
       _lastChangedAt: number,
       eventCategoriesId?: string | null,
-    } | null,
-    movie?:  {
+    },
+    contenderType: ContenderType,
+    movie:  {
       __typename: "Movie",
       id: string,
-      imdbId: string,
-      year?: number | null,
-      image?: string | null,
+      tmdbId: number,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
+    person?:  {
+      __typename: "Person",
+      id: string,
+      tmdbId: number,
       createdAt: string,
       updatedAt: string,
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
     } | null,
-    person?:  {
-      __typename: "Person",
+    song?:  {
+      __typename: "Song",
       id: string,
-      imdbId: string,
-      image?: string | null,
+      apiId: string,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -2167,8 +2239,9 @@ export type CreateContenderMutation = {
     _deleted?: boolean | null,
     _lastChangedAt: number,
     categoryContendersId?: string | null,
-    contenderMovieId?: string | null,
+    contenderMovieId: string,
     contenderPersonId?: string | null,
+    contenderSongId?: string | null,
   } | null,
 };
 
@@ -2182,7 +2255,7 @@ export type UpdateContenderMutation = {
     __typename: "Contender",
     id: string,
     categoryId: string,
-    category?:  {
+    category:  {
       __typename: "Category",
       id: string,
       name: CategoryName,
@@ -2193,24 +2266,32 @@ export type UpdateContenderMutation = {
       _deleted?: boolean | null,
       _lastChangedAt: number,
       eventCategoriesId?: string | null,
-    } | null,
-    movie?:  {
+    },
+    contenderType: ContenderType,
+    movie:  {
       __typename: "Movie",
       id: string,
-      imdbId: string,
-      year?: number | null,
-      image?: string | null,
+      tmdbId: number,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
+    person?:  {
+      __typename: "Person",
+      id: string,
+      tmdbId: number,
       createdAt: string,
       updatedAt: string,
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
     } | null,
-    person?:  {
-      __typename: "Person",
+    song?:  {
+      __typename: "Song",
       id: string,
-      imdbId: string,
-      image?: string | null,
+      apiId: string,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -2244,8 +2325,9 @@ export type UpdateContenderMutation = {
     _deleted?: boolean | null,
     _lastChangedAt: number,
     categoryContendersId?: string | null,
-    contenderMovieId?: string | null,
+    contenderMovieId: string,
     contenderPersonId?: string | null,
+    contenderSongId?: string | null,
   } | null,
 };
 
@@ -2259,7 +2341,7 @@ export type DeleteContenderMutation = {
     __typename: "Contender",
     id: string,
     categoryId: string,
-    category?:  {
+    category:  {
       __typename: "Category",
       id: string,
       name: CategoryName,
@@ -2270,24 +2352,32 @@ export type DeleteContenderMutation = {
       _deleted?: boolean | null,
       _lastChangedAt: number,
       eventCategoriesId?: string | null,
-    } | null,
-    movie?:  {
+    },
+    contenderType: ContenderType,
+    movie:  {
       __typename: "Movie",
       id: string,
-      imdbId: string,
-      year?: number | null,
-      image?: string | null,
+      tmdbId: number,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
+    person?:  {
+      __typename: "Person",
+      id: string,
+      tmdbId: number,
       createdAt: string,
       updatedAt: string,
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
     } | null,
-    person?:  {
-      __typename: "Person",
+    song?:  {
+      __typename: "Song",
       id: string,
-      imdbId: string,
-      image?: string | null,
+      apiId: string,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -2321,8 +2411,9 @@ export type DeleteContenderMutation = {
     _deleted?: boolean | null,
     _lastChangedAt: number,
     categoryContendersId?: string | null,
-    contenderMovieId?: string | null,
+    contenderMovieId: string,
     contenderPersonId?: string | null,
+    contenderSongId?: string | null,
   } | null,
 };
 
@@ -2336,10 +2427,11 @@ export type CreateContenderSnapshotMutation = {
     __typename: "ContenderSnapshot",
     id: string,
     contenderId: string,
-    contender?:  {
+    contender:  {
       __typename: "Contender",
       id: string,
       categoryId: string,
+      contenderType: ContenderType,
       didReceiveNominationOrWin?: boolean | null,
       createdAt: string,
       updatedAt: string,
@@ -2347,11 +2439,12 @@ export type CreateContenderSnapshotMutation = {
       _deleted?: boolean | null,
       _lastChangedAt: number,
       categoryContendersId?: string | null,
-      contenderMovieId?: string | null,
+      contenderMovieId: string,
       contenderPersonId?: string | null,
-    } | null,
+      contenderSongId?: string | null,
+    },
     categoryId: string,
-    category?:  {
+    category:  {
       __typename: "Category",
       id: string,
       name: CategoryName,
@@ -2362,7 +2455,7 @@ export type CreateContenderSnapshotMutation = {
       _deleted?: boolean | null,
       _lastChangedAt: number,
       eventCategoriesId?: string | null,
-    } | null,
+    },
     numberOfUsersPredicting: number,
     numberOfUsersPredictingWin: number,
     createdAt: string,
@@ -2383,10 +2476,11 @@ export type UpdateContenderSnapshotMutation = {
     __typename: "ContenderSnapshot",
     id: string,
     contenderId: string,
-    contender?:  {
+    contender:  {
       __typename: "Contender",
       id: string,
       categoryId: string,
+      contenderType: ContenderType,
       didReceiveNominationOrWin?: boolean | null,
       createdAt: string,
       updatedAt: string,
@@ -2394,11 +2488,12 @@ export type UpdateContenderSnapshotMutation = {
       _deleted?: boolean | null,
       _lastChangedAt: number,
       categoryContendersId?: string | null,
-      contenderMovieId?: string | null,
+      contenderMovieId: string,
       contenderPersonId?: string | null,
-    } | null,
+      contenderSongId?: string | null,
+    },
     categoryId: string,
-    category?:  {
+    category:  {
       __typename: "Category",
       id: string,
       name: CategoryName,
@@ -2409,7 +2504,7 @@ export type UpdateContenderSnapshotMutation = {
       _deleted?: boolean | null,
       _lastChangedAt: number,
       eventCategoriesId?: string | null,
-    } | null,
+    },
     numberOfUsersPredicting: number,
     numberOfUsersPredictingWin: number,
     createdAt: string,
@@ -2430,10 +2525,11 @@ export type DeleteContenderSnapshotMutation = {
     __typename: "ContenderSnapshot",
     id: string,
     contenderId: string,
-    contender?:  {
+    contender:  {
       __typename: "Contender",
       id: string,
       categoryId: string,
+      contenderType: ContenderType,
       didReceiveNominationOrWin?: boolean | null,
       createdAt: string,
       updatedAt: string,
@@ -2441,11 +2537,12 @@ export type DeleteContenderSnapshotMutation = {
       _deleted?: boolean | null,
       _lastChangedAt: number,
       categoryContendersId?: string | null,
-      contenderMovieId?: string | null,
+      contenderMovieId: string,
       contenderPersonId?: string | null,
-    } | null,
+      contenderSongId?: string | null,
+    },
     categoryId: string,
-    category?:  {
+    category:  {
       __typename: "Category",
       id: string,
       name: CategoryName,
@@ -2456,7 +2553,7 @@ export type DeleteContenderSnapshotMutation = {
       _deleted?: boolean | null,
       _lastChangedAt: number,
       eventCategoriesId?: string | null,
-    } | null,
+    },
     numberOfUsersPredicting: number,
     numberOfUsersPredictingWin: number,
     createdAt: string,
@@ -2476,9 +2573,7 @@ export type CreateMovieMutation = {
   createMovie?:  {
     __typename: "Movie",
     id: string,
-    imdbId: string,
-    year?: number | null,
-    image?: string | null,
+    tmdbId: number,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -2496,9 +2591,7 @@ export type UpdateMovieMutation = {
   updateMovie?:  {
     __typename: "Movie",
     id: string,
-    imdbId: string,
-    year?: number | null,
-    image?: string | null,
+    tmdbId: number,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -2516,9 +2609,7 @@ export type DeleteMovieMutation = {
   deleteMovie?:  {
     __typename: "Movie",
     id: string,
-    imdbId: string,
-    year?: number | null,
-    image?: string | null,
+    tmdbId: number,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -2536,8 +2627,7 @@ export type CreatePersonMutation = {
   createPerson?:  {
     __typename: "Person",
     id: string,
-    imdbId: string,
-    image?: string | null,
+    tmdbId: number,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -2555,8 +2645,7 @@ export type UpdatePersonMutation = {
   updatePerson?:  {
     __typename: "Person",
     id: string,
-    imdbId: string,
-    image?: string | null,
+    tmdbId: number,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -2574,8 +2663,61 @@ export type DeletePersonMutation = {
   deletePerson?:  {
     __typename: "Person",
     id: string,
-    imdbId: string,
-    image?: string | null,
+    tmdbId: number,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type CreateSongMutationVariables = {
+  input: CreateSongInput,
+  condition?: ModelSongConditionInput | null,
+};
+
+export type CreateSongMutation = {
+  createSong?:  {
+    __typename: "Song",
+    id: string,
+    apiId: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type UpdateSongMutationVariables = {
+  input: UpdateSongInput,
+  condition?: ModelSongConditionInput | null,
+};
+
+export type UpdateSongMutation = {
+  updateSong?:  {
+    __typename: "Song",
+    id: string,
+    apiId: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type DeleteSongMutationVariables = {
+  input: DeleteSongInput,
+  condition?: ModelSongConditionInput | null,
+};
+
+export type DeleteSongMutation = {
+  deleteSong?:  {
+    __typename: "Song",
+    id: string,
+    apiId: string,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -2712,7 +2854,7 @@ export type GetRelationshipsQuery = {
     id: string,
     followedUserId: string,
     followingUserId: string,
-    followedUser?:  {
+    followedUser:  {
       __typename: "User",
       id: string,
       email: string,
@@ -2726,8 +2868,8 @@ export type GetRelationshipsQuery = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
-    } | null,
-    followingUser?:  {
+    },
+    followingUser:  {
       __typename: "User",
       id: string,
       email: string,
@@ -2741,7 +2883,7 @@ export type GetRelationshipsQuery = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
-    } | null,
+    },
     followedPredictionFeed?:  {
       __typename: "ModelPredictionSetConnection",
       nextToken?: string | null,
@@ -2901,10 +3043,11 @@ export type GetPredictionQuery = {
     predictionSetId: string,
     userId: string,
     contenderId: string,
-    contender?:  {
+    contender:  {
       __typename: "Contender",
       id: string,
       categoryId: string,
+      contenderType: ContenderType,
       didReceiveNominationOrWin?: boolean | null,
       createdAt: string,
       updatedAt: string,
@@ -2912,9 +3055,10 @@ export type GetPredictionQuery = {
       _deleted?: boolean | null,
       _lastChangedAt: number,
       categoryContendersId?: string | null,
-      contenderMovieId?: string | null,
+      contenderMovieId: string,
       contenderPersonId?: string | null,
-    } | null,
+      contenderSongId?: string | null,
+    },
     ranking: number,
     isActive?: string | null,
     createdAt: string,
@@ -3171,7 +3315,7 @@ export type GetLeaderboardPositionQuery = {
     id: string,
     userId: string,
     eventId: string,
-    event?:  {
+    event:  {
       __typename: "Event",
       id: string,
       awardsBody: AwardsBody,
@@ -3184,8 +3328,8 @@ export type GetLeaderboardPositionQuery = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
-    } | null,
-    user?:  {
+    },
+    user:  {
       __typename: "User",
       id: string,
       email: string,
@@ -3199,7 +3343,7 @@ export type GetLeaderboardPositionQuery = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
-    } | null,
+    },
     accuracy?: string | null,
     ranking?: number | null,
     createdAt: string,
@@ -3281,7 +3425,7 @@ export type GetCategoryQuery = {
     id: string,
     name: CategoryName,
     eventId: string,
-    event?:  {
+    event:  {
       __typename: "Event",
       id: string,
       awardsBody: AwardsBody,
@@ -3294,7 +3438,7 @@ export type GetCategoryQuery = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
-    } | null,
+    },
     contenders?:  {
       __typename: "ModelContenderConnection",
       nextToken?: string | null,
@@ -3373,7 +3517,7 @@ export type GetContenderQuery = {
     __typename: "Contender",
     id: string,
     categoryId: string,
-    category?:  {
+    category:  {
       __typename: "Category",
       id: string,
       name: CategoryName,
@@ -3384,24 +3528,32 @@ export type GetContenderQuery = {
       _deleted?: boolean | null,
       _lastChangedAt: number,
       eventCategoriesId?: string | null,
-    } | null,
-    movie?:  {
+    },
+    contenderType: ContenderType,
+    movie:  {
       __typename: "Movie",
       id: string,
-      imdbId: string,
-      year?: number | null,
-      image?: string | null,
+      tmdbId: number,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
+    person?:  {
+      __typename: "Person",
+      id: string,
+      tmdbId: number,
       createdAt: string,
       updatedAt: string,
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
     } | null,
-    person?:  {
-      __typename: "Person",
+    song?:  {
+      __typename: "Song",
       id: string,
-      imdbId: string,
-      image?: string | null,
+      apiId: string,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -3435,8 +3587,9 @@ export type GetContenderQuery = {
     _deleted?: boolean | null,
     _lastChangedAt: number,
     categoryContendersId?: string | null,
-    contenderMovieId?: string | null,
+    contenderMovieId: string,
     contenderPersonId?: string | null,
+    contenderSongId?: string | null,
   } | null,
 };
 
@@ -3455,6 +3608,7 @@ export type ListContendersQuery = {
       __typename: "Contender",
       id: string,
       categoryId: string,
+      contenderType: ContenderType,
       didReceiveNominationOrWin?: boolean | null,
       createdAt: string,
       updatedAt: string,
@@ -3462,8 +3616,9 @@ export type ListContendersQuery = {
       _deleted?: boolean | null,
       _lastChangedAt: number,
       categoryContendersId?: string | null,
-      contenderMovieId?: string | null,
+      contenderMovieId: string,
       contenderPersonId?: string | null,
+      contenderSongId?: string | null,
     } | null >,
     nextToken?: string | null,
     startedAt?: number | null,
@@ -3484,6 +3639,7 @@ export type SyncContendersQuery = {
       __typename: "Contender",
       id: string,
       categoryId: string,
+      contenderType: ContenderType,
       didReceiveNominationOrWin?: boolean | null,
       createdAt: string,
       updatedAt: string,
@@ -3491,8 +3647,9 @@ export type SyncContendersQuery = {
       _deleted?: boolean | null,
       _lastChangedAt: number,
       categoryContendersId?: string | null,
-      contenderMovieId?: string | null,
+      contenderMovieId: string,
       contenderPersonId?: string | null,
+      contenderSongId?: string | null,
     } | null >,
     nextToken?: string | null,
     startedAt?: number | null,
@@ -3508,10 +3665,11 @@ export type GetContenderSnapshotQuery = {
     __typename: "ContenderSnapshot",
     id: string,
     contenderId: string,
-    contender?:  {
+    contender:  {
       __typename: "Contender",
       id: string,
       categoryId: string,
+      contenderType: ContenderType,
       didReceiveNominationOrWin?: boolean | null,
       createdAt: string,
       updatedAt: string,
@@ -3519,11 +3677,12 @@ export type GetContenderSnapshotQuery = {
       _deleted?: boolean | null,
       _lastChangedAt: number,
       categoryContendersId?: string | null,
-      contenderMovieId?: string | null,
+      contenderMovieId: string,
       contenderPersonId?: string | null,
-    } | null,
+      contenderSongId?: string | null,
+    },
     categoryId: string,
-    category?:  {
+    category:  {
       __typename: "Category",
       id: string,
       name: CategoryName,
@@ -3534,7 +3693,7 @@ export type GetContenderSnapshotQuery = {
       _deleted?: boolean | null,
       _lastChangedAt: number,
       eventCategoriesId?: string | null,
-    } | null,
+    },
     numberOfUsersPredicting: number,
     numberOfUsersPredictingWin: number,
     createdAt: string,
@@ -3610,9 +3769,7 @@ export type GetMovieQuery = {
   getMovie?:  {
     __typename: "Movie",
     id: string,
-    imdbId: string,
-    year?: number | null,
-    image?: string | null,
+    tmdbId: number,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -3635,9 +3792,7 @@ export type ListMoviesQuery = {
     items:  Array< {
       __typename: "Movie",
       id: string,
-      imdbId: string,
-      year?: number | null,
-      image?: string | null,
+      tmdbId: number,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -3662,9 +3817,7 @@ export type SyncMoviesQuery = {
     items:  Array< {
       __typename: "Movie",
       id: string,
-      imdbId: string,
-      year?: number | null,
-      image?: string | null,
+      tmdbId: number,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -3684,8 +3837,7 @@ export type GetPersonQuery = {
   getPerson?:  {
     __typename: "Person",
     id: string,
-    imdbId: string,
-    image?: string | null,
+    tmdbId: number,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -3708,8 +3860,7 @@ export type ListPeopleQuery = {
     items:  Array< {
       __typename: "Person",
       id: string,
-      imdbId: string,
-      image?: string | null,
+      tmdbId: number,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -3734,8 +3885,75 @@ export type SyncPeopleQuery = {
     items:  Array< {
       __typename: "Person",
       id: string,
-      imdbId: string,
-      image?: string | null,
+      tmdbId: number,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type GetSongQueryVariables = {
+  id: string,
+};
+
+export type GetSongQuery = {
+  getSong?:  {
+    __typename: "Song",
+    id: string,
+    apiId: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type ListSongsQueryVariables = {
+  id?: string | null,
+  filter?: ModelSongFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  sortDirection?: ModelSortDirection | null,
+};
+
+export type ListSongsQuery = {
+  listSongs?:  {
+    __typename: "ModelSongConnection",
+    items:  Array< {
+      __typename: "Song",
+      id: string,
+      apiId: string,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type SyncSongsQueryVariables = {
+  filter?: ModelSongFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  lastSync?: number | null,
+};
+
+export type SyncSongsQuery = {
+  syncSongs?:  {
+    __typename: "ModelSongConnection",
+    items:  Array< {
+      __typename: "Song",
+      id: string,
+      apiId: string,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -4273,7 +4491,7 @@ export type OnCreateRelationshipsSubscription = {
     id: string,
     followedUserId: string,
     followingUserId: string,
-    followedUser?:  {
+    followedUser:  {
       __typename: "User",
       id: string,
       email: string,
@@ -4287,8 +4505,8 @@ export type OnCreateRelationshipsSubscription = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
-    } | null,
-    followingUser?:  {
+    },
+    followingUser:  {
       __typename: "User",
       id: string,
       email: string,
@@ -4302,7 +4520,7 @@ export type OnCreateRelationshipsSubscription = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
-    } | null,
+    },
     followedPredictionFeed?:  {
       __typename: "ModelPredictionSetConnection",
       nextToken?: string | null,
@@ -4322,7 +4540,7 @@ export type OnUpdateRelationshipsSubscription = {
     id: string,
     followedUserId: string,
     followingUserId: string,
-    followedUser?:  {
+    followedUser:  {
       __typename: "User",
       id: string,
       email: string,
@@ -4336,8 +4554,8 @@ export type OnUpdateRelationshipsSubscription = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
-    } | null,
-    followingUser?:  {
+    },
+    followingUser:  {
       __typename: "User",
       id: string,
       email: string,
@@ -4351,7 +4569,7 @@ export type OnUpdateRelationshipsSubscription = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
-    } | null,
+    },
     followedPredictionFeed?:  {
       __typename: "ModelPredictionSetConnection",
       nextToken?: string | null,
@@ -4371,7 +4589,7 @@ export type OnDeleteRelationshipsSubscription = {
     id: string,
     followedUserId: string,
     followingUserId: string,
-    followedUser?:  {
+    followedUser:  {
       __typename: "User",
       id: string,
       email: string,
@@ -4385,8 +4603,8 @@ export type OnDeleteRelationshipsSubscription = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
-    } | null,
-    followingUser?:  {
+    },
+    followingUser:  {
       __typename: "User",
       id: string,
       email: string,
@@ -4400,7 +4618,7 @@ export type OnDeleteRelationshipsSubscription = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
-    } | null,
+    },
     followedPredictionFeed?:  {
       __typename: "ModelPredictionSetConnection",
       nextToken?: string | null,
@@ -4484,10 +4702,11 @@ export type OnCreatePredictionSubscription = {
     predictionSetId: string,
     userId: string,
     contenderId: string,
-    contender?:  {
+    contender:  {
       __typename: "Contender",
       id: string,
       categoryId: string,
+      contenderType: ContenderType,
       didReceiveNominationOrWin?: boolean | null,
       createdAt: string,
       updatedAt: string,
@@ -4495,9 +4714,10 @@ export type OnCreatePredictionSubscription = {
       _deleted?: boolean | null,
       _lastChangedAt: number,
       categoryContendersId?: string | null,
-      contenderMovieId?: string | null,
+      contenderMovieId: string,
       contenderPersonId?: string | null,
-    } | null,
+      contenderSongId?: string | null,
+    },
     ranking: number,
     isActive?: string | null,
     createdAt: string,
@@ -4516,10 +4736,11 @@ export type OnUpdatePredictionSubscription = {
     predictionSetId: string,
     userId: string,
     contenderId: string,
-    contender?:  {
+    contender:  {
       __typename: "Contender",
       id: string,
       categoryId: string,
+      contenderType: ContenderType,
       didReceiveNominationOrWin?: boolean | null,
       createdAt: string,
       updatedAt: string,
@@ -4527,9 +4748,10 @@ export type OnUpdatePredictionSubscription = {
       _deleted?: boolean | null,
       _lastChangedAt: number,
       categoryContendersId?: string | null,
-      contenderMovieId?: string | null,
+      contenderMovieId: string,
       contenderPersonId?: string | null,
-    } | null,
+      contenderSongId?: string | null,
+    },
     ranking: number,
     isActive?: string | null,
     createdAt: string,
@@ -4548,10 +4770,11 @@ export type OnDeletePredictionSubscription = {
     predictionSetId: string,
     userId: string,
     contenderId: string,
-    contender?:  {
+    contender:  {
       __typename: "Contender",
       id: string,
       categoryId: string,
+      contenderType: ContenderType,
       didReceiveNominationOrWin?: boolean | null,
       createdAt: string,
       updatedAt: string,
@@ -4559,9 +4782,10 @@ export type OnDeletePredictionSubscription = {
       _deleted?: boolean | null,
       _lastChangedAt: number,
       categoryContendersId?: string | null,
-      contenderMovieId?: string | null,
+      contenderMovieId: string,
       contenderPersonId?: string | null,
-    } | null,
+      contenderSongId?: string | null,
+    },
     ranking: number,
     isActive?: string | null,
     createdAt: string,
@@ -4720,7 +4944,7 @@ export type OnCreateLeaderboardPositionSubscription = {
     id: string,
     userId: string,
     eventId: string,
-    event?:  {
+    event:  {
       __typename: "Event",
       id: string,
       awardsBody: AwardsBody,
@@ -4733,8 +4957,8 @@ export type OnCreateLeaderboardPositionSubscription = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
-    } | null,
-    user?:  {
+    },
+    user:  {
       __typename: "User",
       id: string,
       email: string,
@@ -4748,7 +4972,7 @@ export type OnCreateLeaderboardPositionSubscription = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
-    } | null,
+    },
     accuracy?: string | null,
     ranking?: number | null,
     createdAt: string,
@@ -4766,7 +4990,7 @@ export type OnUpdateLeaderboardPositionSubscription = {
     id: string,
     userId: string,
     eventId: string,
-    event?:  {
+    event:  {
       __typename: "Event",
       id: string,
       awardsBody: AwardsBody,
@@ -4779,8 +5003,8 @@ export type OnUpdateLeaderboardPositionSubscription = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
-    } | null,
-    user?:  {
+    },
+    user:  {
       __typename: "User",
       id: string,
       email: string,
@@ -4794,7 +5018,7 @@ export type OnUpdateLeaderboardPositionSubscription = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
-    } | null,
+    },
     accuracy?: string | null,
     ranking?: number | null,
     createdAt: string,
@@ -4812,7 +5036,7 @@ export type OnDeleteLeaderboardPositionSubscription = {
     id: string,
     userId: string,
     eventId: string,
-    event?:  {
+    event:  {
       __typename: "Event",
       id: string,
       awardsBody: AwardsBody,
@@ -4825,8 +5049,8 @@ export type OnDeleteLeaderboardPositionSubscription = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
-    } | null,
-    user?:  {
+    },
+    user:  {
       __typename: "User",
       id: string,
       email: string,
@@ -4840,7 +5064,7 @@ export type OnDeleteLeaderboardPositionSubscription = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
-    } | null,
+    },
     accuracy?: string | null,
     ranking?: number | null,
     createdAt: string,
@@ -4858,7 +5082,7 @@ export type OnCreateCategorySubscription = {
     id: string,
     name: CategoryName,
     eventId: string,
-    event?:  {
+    event:  {
       __typename: "Event",
       id: string,
       awardsBody: AwardsBody,
@@ -4871,7 +5095,7 @@ export type OnCreateCategorySubscription = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
-    } | null,
+    },
     contenders?:  {
       __typename: "ModelContenderConnection",
       nextToken?: string | null,
@@ -4892,7 +5116,7 @@ export type OnUpdateCategorySubscription = {
     id: string,
     name: CategoryName,
     eventId: string,
-    event?:  {
+    event:  {
       __typename: "Event",
       id: string,
       awardsBody: AwardsBody,
@@ -4905,7 +5129,7 @@ export type OnUpdateCategorySubscription = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
-    } | null,
+    },
     contenders?:  {
       __typename: "ModelContenderConnection",
       nextToken?: string | null,
@@ -4926,7 +5150,7 @@ export type OnDeleteCategorySubscription = {
     id: string,
     name: CategoryName,
     eventId: string,
-    event?:  {
+    event:  {
       __typename: "Event",
       id: string,
       awardsBody: AwardsBody,
@@ -4939,7 +5163,7 @@ export type OnDeleteCategorySubscription = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
-    } | null,
+    },
     contenders?:  {
       __typename: "ModelContenderConnection",
       nextToken?: string | null,
@@ -4959,7 +5183,7 @@ export type OnCreateContenderSubscription = {
     __typename: "Contender",
     id: string,
     categoryId: string,
-    category?:  {
+    category:  {
       __typename: "Category",
       id: string,
       name: CategoryName,
@@ -4970,24 +5194,32 @@ export type OnCreateContenderSubscription = {
       _deleted?: boolean | null,
       _lastChangedAt: number,
       eventCategoriesId?: string | null,
-    } | null,
-    movie?:  {
+    },
+    contenderType: ContenderType,
+    movie:  {
       __typename: "Movie",
       id: string,
-      imdbId: string,
-      year?: number | null,
-      image?: string | null,
+      tmdbId: number,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
+    person?:  {
+      __typename: "Person",
+      id: string,
+      tmdbId: number,
       createdAt: string,
       updatedAt: string,
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
     } | null,
-    person?:  {
-      __typename: "Person",
+    song?:  {
+      __typename: "Song",
       id: string,
-      imdbId: string,
-      image?: string | null,
+      apiId: string,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -5021,8 +5253,9 @@ export type OnCreateContenderSubscription = {
     _deleted?: boolean | null,
     _lastChangedAt: number,
     categoryContendersId?: string | null,
-    contenderMovieId?: string | null,
+    contenderMovieId: string,
     contenderPersonId?: string | null,
+    contenderSongId?: string | null,
   } | null,
 };
 
@@ -5031,7 +5264,7 @@ export type OnUpdateContenderSubscription = {
     __typename: "Contender",
     id: string,
     categoryId: string,
-    category?:  {
+    category:  {
       __typename: "Category",
       id: string,
       name: CategoryName,
@@ -5042,24 +5275,32 @@ export type OnUpdateContenderSubscription = {
       _deleted?: boolean | null,
       _lastChangedAt: number,
       eventCategoriesId?: string | null,
-    } | null,
-    movie?:  {
+    },
+    contenderType: ContenderType,
+    movie:  {
       __typename: "Movie",
       id: string,
-      imdbId: string,
-      year?: number | null,
-      image?: string | null,
+      tmdbId: number,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
+    person?:  {
+      __typename: "Person",
+      id: string,
+      tmdbId: number,
       createdAt: string,
       updatedAt: string,
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
     } | null,
-    person?:  {
-      __typename: "Person",
+    song?:  {
+      __typename: "Song",
       id: string,
-      imdbId: string,
-      image?: string | null,
+      apiId: string,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -5093,8 +5334,9 @@ export type OnUpdateContenderSubscription = {
     _deleted?: boolean | null,
     _lastChangedAt: number,
     categoryContendersId?: string | null,
-    contenderMovieId?: string | null,
+    contenderMovieId: string,
     contenderPersonId?: string | null,
+    contenderSongId?: string | null,
   } | null,
 };
 
@@ -5103,7 +5345,7 @@ export type OnDeleteContenderSubscription = {
     __typename: "Contender",
     id: string,
     categoryId: string,
-    category?:  {
+    category:  {
       __typename: "Category",
       id: string,
       name: CategoryName,
@@ -5114,24 +5356,32 @@ export type OnDeleteContenderSubscription = {
       _deleted?: boolean | null,
       _lastChangedAt: number,
       eventCategoriesId?: string | null,
-    } | null,
-    movie?:  {
+    },
+    contenderType: ContenderType,
+    movie:  {
       __typename: "Movie",
       id: string,
-      imdbId: string,
-      year?: number | null,
-      image?: string | null,
+      tmdbId: number,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
+    person?:  {
+      __typename: "Person",
+      id: string,
+      tmdbId: number,
       createdAt: string,
       updatedAt: string,
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
     } | null,
-    person?:  {
-      __typename: "Person",
+    song?:  {
+      __typename: "Song",
       id: string,
-      imdbId: string,
-      image?: string | null,
+      apiId: string,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -5165,8 +5415,9 @@ export type OnDeleteContenderSubscription = {
     _deleted?: boolean | null,
     _lastChangedAt: number,
     categoryContendersId?: string | null,
-    contenderMovieId?: string | null,
+    contenderMovieId: string,
     contenderPersonId?: string | null,
+    contenderSongId?: string | null,
   } | null,
 };
 
@@ -5175,10 +5426,11 @@ export type OnCreateContenderSnapshotSubscription = {
     __typename: "ContenderSnapshot",
     id: string,
     contenderId: string,
-    contender?:  {
+    contender:  {
       __typename: "Contender",
       id: string,
       categoryId: string,
+      contenderType: ContenderType,
       didReceiveNominationOrWin?: boolean | null,
       createdAt: string,
       updatedAt: string,
@@ -5186,11 +5438,12 @@ export type OnCreateContenderSnapshotSubscription = {
       _deleted?: boolean | null,
       _lastChangedAt: number,
       categoryContendersId?: string | null,
-      contenderMovieId?: string | null,
+      contenderMovieId: string,
       contenderPersonId?: string | null,
-    } | null,
+      contenderSongId?: string | null,
+    },
     categoryId: string,
-    category?:  {
+    category:  {
       __typename: "Category",
       id: string,
       name: CategoryName,
@@ -5201,7 +5454,7 @@ export type OnCreateContenderSnapshotSubscription = {
       _deleted?: boolean | null,
       _lastChangedAt: number,
       eventCategoriesId?: string | null,
-    } | null,
+    },
     numberOfUsersPredicting: number,
     numberOfUsersPredictingWin: number,
     createdAt: string,
@@ -5217,10 +5470,11 @@ export type OnUpdateContenderSnapshotSubscription = {
     __typename: "ContenderSnapshot",
     id: string,
     contenderId: string,
-    contender?:  {
+    contender:  {
       __typename: "Contender",
       id: string,
       categoryId: string,
+      contenderType: ContenderType,
       didReceiveNominationOrWin?: boolean | null,
       createdAt: string,
       updatedAt: string,
@@ -5228,11 +5482,12 @@ export type OnUpdateContenderSnapshotSubscription = {
       _deleted?: boolean | null,
       _lastChangedAt: number,
       categoryContendersId?: string | null,
-      contenderMovieId?: string | null,
+      contenderMovieId: string,
       contenderPersonId?: string | null,
-    } | null,
+      contenderSongId?: string | null,
+    },
     categoryId: string,
-    category?:  {
+    category:  {
       __typename: "Category",
       id: string,
       name: CategoryName,
@@ -5243,7 +5498,7 @@ export type OnUpdateContenderSnapshotSubscription = {
       _deleted?: boolean | null,
       _lastChangedAt: number,
       eventCategoriesId?: string | null,
-    } | null,
+    },
     numberOfUsersPredicting: number,
     numberOfUsersPredictingWin: number,
     createdAt: string,
@@ -5259,10 +5514,11 @@ export type OnDeleteContenderSnapshotSubscription = {
     __typename: "ContenderSnapshot",
     id: string,
     contenderId: string,
-    contender?:  {
+    contender:  {
       __typename: "Contender",
       id: string,
       categoryId: string,
+      contenderType: ContenderType,
       didReceiveNominationOrWin?: boolean | null,
       createdAt: string,
       updatedAt: string,
@@ -5270,11 +5526,12 @@ export type OnDeleteContenderSnapshotSubscription = {
       _deleted?: boolean | null,
       _lastChangedAt: number,
       categoryContendersId?: string | null,
-      contenderMovieId?: string | null,
+      contenderMovieId: string,
       contenderPersonId?: string | null,
-    } | null,
+      contenderSongId?: string | null,
+    },
     categoryId: string,
-    category?:  {
+    category:  {
       __typename: "Category",
       id: string,
       name: CategoryName,
@@ -5285,7 +5542,7 @@ export type OnDeleteContenderSnapshotSubscription = {
       _deleted?: boolean | null,
       _lastChangedAt: number,
       eventCategoriesId?: string | null,
-    } | null,
+    },
     numberOfUsersPredicting: number,
     numberOfUsersPredictingWin: number,
     createdAt: string,
@@ -5300,9 +5557,7 @@ export type OnCreateMovieSubscription = {
   onCreateMovie?:  {
     __typename: "Movie",
     id: string,
-    imdbId: string,
-    year?: number | null,
-    image?: string | null,
+    tmdbId: number,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -5315,9 +5570,7 @@ export type OnUpdateMovieSubscription = {
   onUpdateMovie?:  {
     __typename: "Movie",
     id: string,
-    imdbId: string,
-    year?: number | null,
-    image?: string | null,
+    tmdbId: number,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -5330,9 +5583,7 @@ export type OnDeleteMovieSubscription = {
   onDeleteMovie?:  {
     __typename: "Movie",
     id: string,
-    imdbId: string,
-    year?: number | null,
-    image?: string | null,
+    tmdbId: number,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -5345,8 +5596,7 @@ export type OnCreatePersonSubscription = {
   onCreatePerson?:  {
     __typename: "Person",
     id: string,
-    imdbId: string,
-    image?: string | null,
+    tmdbId: number,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -5359,8 +5609,7 @@ export type OnUpdatePersonSubscription = {
   onUpdatePerson?:  {
     __typename: "Person",
     id: string,
-    imdbId: string,
-    image?: string | null,
+    tmdbId: number,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -5373,8 +5622,46 @@ export type OnDeletePersonSubscription = {
   onDeletePerson?:  {
     __typename: "Person",
     id: string,
-    imdbId: string,
-    image?: string | null,
+    tmdbId: number,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type OnCreateSongSubscription = {
+  onCreateSong?:  {
+    __typename: "Song",
+    id: string,
+    apiId: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type OnUpdateSongSubscription = {
+  onUpdateSong?:  {
+    __typename: "Song",
+    id: string,
+    apiId: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type OnDeleteSongSubscription = {
+  onDeleteSong?:  {
+    __typename: "Song",
+    id: string,
+    apiId: string,
     createdAt: string,
     updatedAt: string,
     _version: number,
