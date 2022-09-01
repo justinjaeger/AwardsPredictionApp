@@ -7,9 +7,10 @@ import ContenderList from '../../../components/List/ContenderList';
 import { getCategoryList } from '../../../constants/lists';
 import { Contender } from '../../../models';
 import { HomeParamList } from '../../../navigation/types';
-import { useAsyncEffect } from '../../../util/hooks';
+import { useSubscriptionEffect } from '../../../util/hooks';
 import { eventToString } from '../../../util/stringConversions';
 
+// TODO: no list order yet. eventually have to define something
 const Contenders = () => {
   const {
     params: { category },
@@ -27,16 +28,12 @@ const Contenders = () => {
     });
   }, [navigation, category.name, category.event]);
 
-  useAsyncEffect(async () => {
-    // TODO: need a "subscription" here because when I create a movie and come back, it's not refreshing the data unless i reload the whole screen
-    // later we'll just use userId to get the user whose profile it is, but I want all users for experiment
+  useSubscriptionEffect(async () => {
     const _contenders = (await DataStore.query(Contender)).filter(
       (c) => c.category?.id === category.id,
     );
     setContenders(_contenders);
   }, []);
-
-  // TODO: Fetch data from tmdbApi. Figure out a way to also cache that data so it refreshes/only fetches every 24 hours or so
 
   return (
     <ScrollView

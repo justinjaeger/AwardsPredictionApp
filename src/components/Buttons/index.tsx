@@ -15,7 +15,19 @@ export const SubmitButton = (props: iButtonProps) => (
     status="primary"
     size="giant"
     disabled={props.disabled || props.loading}
-    style={{ marginTop: 40, ...props.style }}
+    style={{ ...props.style }}
+  >
+    {props.loading ? () => <Spinner size="medium" status="control" /> : props.text}
+  </Button>
+);
+
+export const SmallButton = (props: iButtonProps) => (
+  <Button
+    onPress={props.onPress}
+    status="primary"
+    size="small"
+    disabled={props.disabled || props.loading}
+    style={{ ...props.style }}
   >
     {props.loading ? () => <Spinner size="medium" status="control" /> : props.text}
   </Button>
