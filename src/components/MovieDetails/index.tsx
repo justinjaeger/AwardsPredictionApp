@@ -30,7 +30,7 @@ const MovieDetails = (props: iMovieDetailsProps) => {
     TmdbServices.getTmdbMovieCredits(tmdbId).then((res) => {
       setCastAndCrew(res.data);
     });
-  }, [tmdbId]);
+  }, [tmdbId, returnMovieDetails]);
 
   const directors = castAndCrew?.directors?.map((d) => d.name).join(', ');
 
@@ -92,25 +92,26 @@ const MovieDetails = (props: iMovieDetailsProps) => {
       />
       <View style={{ alignItems: 'flex-start' }}>
         <View style={{ flexDirection: 'column', marginTop: 5 }}>
-          <BodyLarge style={{ fontWeight: '800', marginBottom: 5, width: '50%' }}>
-            {'Plot'}
-          </BodyLarge>
+          <BodyLarge style={{ fontWeight: '800', marginBottom: 5 }}>{'Plot'}</BodyLarge>
           <BodyLarge>{movieDetails?.plot || ''}</BodyLarge>
         </View>
         <View style={{ flexDirection: 'column', marginTop: 5 }}>
-          <BodyLarge style={{ fontWeight: '800', marginBottom: 5, width: '50%' }}>
+          <BodyLarge style={{ fontWeight: '800', marginBottom: 5 }}>
             {'Directed by'}
           </BodyLarge>
           <BodyLarge>{directors || ''}</BodyLarge>
         </View>
         <View style={{ flexDirection: 'column', marginTop: 5 }}>
-          <BodyLarge style={{ fontWeight: '800', marginBottom: 5, width: '50%' }}>
-            {'Cast'}
-          </BodyLarge>
+          <BodyLarge style={{ fontWeight: '800', marginBottom: 5 }}>{'Cast'}</BodyLarge>
           <BodyLarge>{formattedCast || ''}</BodyLarge>
         </View>
         <View style={{ flexDirection: 'column', marginTop: 5 }}>
-          <BodyLarge style={{ fontWeight: '800', marginBottom: 5, width: '50%' }}>
+          <BodyLarge
+            style={{
+              fontWeight: '800',
+              marginTop: 5,
+            }}
+          >
             {movieDetails?.productionCompanies?.length > 1
               ? 'Production Companies'
               : 'Production Company'}

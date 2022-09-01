@@ -18,7 +18,7 @@ const CategorySelect = () => {
 
   const [categories, setCategories] = useState<Category[]>([]);
 
-  // Set the header title
+  // Set header title
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: eventToString(event),

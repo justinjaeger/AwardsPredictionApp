@@ -18,7 +18,7 @@ const Contenders = () => {
 
   const [contenders, setContenders] = useState<Contender[]>([]);
 
-  // Set the header title
+  // Set header title
   useLayoutEffect(() => {
     const categoryList = getCategoryList(category.event);
     navigation.setOptions({
@@ -42,7 +42,12 @@ const Contenders = () => {
     <ScrollView
       contentContainerStyle={{ alignItems: 'center', marginTop: 40, paddingBottom: 100 }}
     >
-      <ContenderList contenders={contenders} onPressItem={() => {}} />
+      <ContenderList
+        contenders={contenders}
+        onPressItem={(contender: Contender) => {
+          navigation.navigate('ContenderDetails', { contender });
+        }}
+      />
       <TouchableText
         text={'Submit a contender'}
         onPress={() => {
