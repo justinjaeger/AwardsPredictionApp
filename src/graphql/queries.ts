@@ -310,7 +310,6 @@ export const getPrediction = /* GraphQL */ `
       contender {
         id
         categoryId
-        contenderType
         didReceiveNominationOrWin
         createdAt
         updatedAt
@@ -684,6 +683,7 @@ export const getCategory = /* GraphQL */ `
     getCategory(id: $id) {
       id
       name
+      type
       eventId
       event {
         id
@@ -729,6 +729,7 @@ export const listCategories = /* GraphQL */ `
       items {
         id
         name
+        type
         eventId
         createdAt
         updatedAt
@@ -758,6 +759,7 @@ export const syncCategories = /* GraphQL */ `
       items {
         id
         name
+        type
         eventId
         createdAt
         updatedAt
@@ -779,6 +781,7 @@ export const getContender = /* GraphQL */ `
       category {
         id
         name
+        type
         eventId
         createdAt
         updatedAt
@@ -787,7 +790,6 @@ export const getContender = /* GraphQL */ `
         _lastChangedAt
         eventCategoriesId
       }
-      contenderType
       movie {
         id
         tmdbId
@@ -862,7 +864,6 @@ export const listContenders = /* GraphQL */ `
       items {
         id
         categoryId
-        contenderType
         didReceiveNominationOrWin
         createdAt
         updatedAt
@@ -895,7 +896,6 @@ export const syncContenders = /* GraphQL */ `
       items {
         id
         categoryId
-        contenderType
         didReceiveNominationOrWin
         createdAt
         updatedAt
@@ -920,7 +920,6 @@ export const getContenderSnapshot = /* GraphQL */ `
       contender {
         id
         categoryId
-        contenderType
         didReceiveNominationOrWin
         createdAt
         updatedAt
@@ -936,6 +935,7 @@ export const getContenderSnapshot = /* GraphQL */ `
       category {
         id
         name
+        type
         eventId
         createdAt
         updatedAt

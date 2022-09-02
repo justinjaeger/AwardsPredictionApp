@@ -29,8 +29,8 @@ enum EventType {
     NOMINATION
 }
 
-enum ContenderType {
-    DEFAULT
+enum CategoryType {
+    FILM
     PERFORMANCE
     SONG
 }
@@ -220,6 +220,7 @@ type LeaderboardPosition @model @auth(rules: [{ allow: public }]) {
 type Category @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
     name: CategoryName!
+    type: CategoryType! @default(value: "FILM")
     eventId: ID!
     event: Event! @belongsTo(fields: ["eventId"]) # Lets you retrieve info about the event from a Category record
     contenders: [Contender] @hasMany
@@ -230,7 +231,6 @@ type Contender @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
     categoryId: ID!
     category: Category! @belongsTo(fields: ["categoryId"]) # belongsTo is for bi-directional relationships. Category also hasMany contenders
-    contenderType: ContenderType! @default(value: "DEFAULT")
     movie: Movie! @hasOne
     person: Person @hasOne # optional - only applies to acting categories
     song: Song @hasOne # optional - only applies to the song category

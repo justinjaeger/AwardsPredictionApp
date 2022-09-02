@@ -40,7 +40,9 @@ const Dev = () => {
   }, []);
 
   const clear = () => {
-    DataStore.clear();
+    DataStore.clear()
+      .then((res) => console.error('cleared data store', res))
+      .catch((err) => console.error('err clearing data store', err));
   };
 
   return (

@@ -1,8 +1,12 @@
-import { AwardsBody, CategoryName, Event } from '../models';
+import { AwardsBody, CategoryName, CategoryType, Event } from '../models';
 
-type iCategoryObject = { [key in CategoryName]: string | undefined };
+export type iCategoryData = { name: string; type: CategoryType };
 
-export const getCategoryList = (event: Event): iCategoryObject => {
+type iCategoryObject = {
+  [key in CategoryName]: iCategoryData | undefined;
+};
+
+export const getAwardsBodyCategories = (event: Event): iCategoryObject => {
   switch (event.awardsBody) {
     case AwardsBody.ACADEMY_AWARDS:
       // This is just an example of how to use this when an awards body updates their category list
@@ -63,29 +67,53 @@ const ALL_CATEGORIES: iCategoryObject = {
 };
 
 const ACADEMY_AWARDS_CATEGORIES_V1: iCategoryObject = {
-  [CategoryName.PICTURE]: 'Picture',
-  [CategoryName.DIRECTOR]: 'Director',
-  [CategoryName.ACTOR]: 'Actor',
-  [CategoryName.ACTRESS]: 'Actress',
-  [CategoryName.SUPPORTING_ACTOR]: 'Supporting Actor',
-  [CategoryName.SUPPORTING_ACTRESS]: 'Supporting Actress',
-  [CategoryName.ORIGINAL_SCREENPLAY]: 'Original Screenplay',
-  [CategoryName.ADAPTED_SCREENPLAY]: 'Adapted Screenplay',
-  [CategoryName.INTERNATIONAL]: 'International Feature',
-  [CategoryName.DOCUMENTARY]: 'Documentary Feature',
-  [CategoryName.ANIMATED]: 'Animated Feature',
-  [CategoryName.CINEMATOGRAPHY]: 'Cinematography',
-  [CategoryName.EDITING]: 'Editing',
-  [CategoryName.PRODUCTION_DESIGN]: 'Production Design',
-  [CategoryName.COSTUMES]: 'Costumes',
-  [CategoryName.MAKEUP]: 'Makeup and Hair',
-  [CategoryName.VISUAL_EFFECTS]: 'Visual Effects',
-  [CategoryName.SOUND]: 'Sound',
-  [CategoryName.SCORE]: 'Original Score',
-  [CategoryName.SONG]: 'Original Song',
-  [CategoryName.SHORT_DOCUMENTARY]: 'Documentary Short',
-  [CategoryName.SHORT_ANIMATED]: 'Animated Short',
-  [CategoryName.SHORT_LIVE_ACTION]: 'Live Action Short',
+  [CategoryName.PICTURE]: { name: 'Picture', type: CategoryType.FILM },
+  [CategoryName.DIRECTOR]: { name: 'Director', type: CategoryType.FILM },
+  [CategoryName.ACTOR]: { name: 'Actor', type: CategoryType.PERFORMANCE },
+  [CategoryName.ACTRESS]: { name: 'Actress', type: CategoryType.PERFORMANCE },
+  [CategoryName.SUPPORTING_ACTOR]: {
+    name: 'Supporting Actor',
+    type: CategoryType.PERFORMANCE,
+  },
+  [CategoryName.SUPPORTING_ACTRESS]: {
+    name: 'Supporting Actress',
+    type: CategoryType.PERFORMANCE,
+  },
+  [CategoryName.ORIGINAL_SCREENPLAY]: {
+    name: 'Original Screenplay',
+    type: CategoryType.FILM,
+  },
+  [CategoryName.ADAPTED_SCREENPLAY]: {
+    name: 'Adapted Screenplay',
+    type: CategoryType.FILM,
+  },
+  [CategoryName.INTERNATIONAL]: {
+    name: 'International Feature',
+    type: CategoryType.FILM,
+  },
+  [CategoryName.DOCUMENTARY]: { name: 'Documentary Feature', type: CategoryType.FILM },
+  [CategoryName.ANIMATED]: { name: 'Animated Feature', type: CategoryType.FILM },
+  [CategoryName.CINEMATOGRAPHY]: { name: 'Cinematography', type: CategoryType.FILM },
+  [CategoryName.EDITING]: { name: 'Editing', type: CategoryType.FILM },
+  [CategoryName.PRODUCTION_DESIGN]: {
+    name: 'Production Design',
+    type: CategoryType.FILM,
+  },
+  [CategoryName.COSTUMES]: { name: 'Costumes', type: CategoryType.FILM },
+  [CategoryName.MAKEUP]: { name: 'Makeup and Hair', type: CategoryType.FILM },
+  [CategoryName.VISUAL_EFFECTS]: { name: 'Visual Effects', type: CategoryType.FILM },
+  [CategoryName.SOUND]: { name: 'Sound', type: CategoryType.FILM },
+  [CategoryName.SCORE]: { name: 'Original Score', type: CategoryType.FILM },
+  [CategoryName.SONG]: { name: 'Original Song', type: CategoryType.SONG },
+  [CategoryName.SHORT_DOCUMENTARY]: {
+    name: 'Documentary Short',
+    type: CategoryType.FILM,
+  },
+  [CategoryName.SHORT_ANIMATED]: { name: 'Animated Short', type: CategoryType.FILM },
+  [CategoryName.SHORT_LIVE_ACTION]: {
+    name: 'Live Action Short',
+    type: CategoryType.FILM,
+  },
   SCREENPLAY: undefined,
   ENSEMBLE: undefined,
   COMEDY_PICTURE: undefined,
@@ -108,20 +136,38 @@ const ACADEMY_AWARDS_CATEGORIES_V1: iCategoryObject = {
 };
 
 const GOLDEN_GLOBE_CATEGORIES_V1: iCategoryObject = {
-  [CategoryName.PICTURE]: 'Motion Picture - Drama',
-  [CategoryName.COMEDY_PICTURE]: 'Motion Picture - Musical or Comedy',
-  [CategoryName.DIRECTOR]: 'Director',
-  [CategoryName.ACTOR]: 'Actor - Drama',
-  [CategoryName.ACTRESS]: 'Actress - Drama',
-  [CategoryName.COMEDY_ACTOR]: 'Actor - Musical or Comedy',
-  [CategoryName.COMEDY_ACTRESS]: 'Actress - Musical or Comedy',
-  [CategoryName.SUPPORTING_ACTOR]: 'Supporting Actor',
-  [CategoryName.SUPPORTING_ACTRESS]: 'Supporting Actress',
-  [CategoryName.SCREENPLAY]: 'Screenplay',
-  [CategoryName.INTERNATIONAL]: 'Motion Picture - Foreign Language',
-  [CategoryName.ANIMATED]: 'Motion Picture - Animated',
-  [CategoryName.SCORE]: 'Original Score',
-  [CategoryName.SONG]: 'Original Song',
+  [CategoryName.PICTURE]: { name: 'Motion Picture - Drama', type: CategoryType.FILM },
+  [CategoryName.COMEDY_PICTURE]: {
+    name: 'Motion Picture - Musical or Comedy',
+    type: CategoryType.FILM,
+  },
+  [CategoryName.DIRECTOR]: { name: 'Director', type: CategoryType.FILM },
+  [CategoryName.ACTOR]: { name: 'Actor - Drama', type: CategoryType.PERFORMANCE },
+  [CategoryName.ACTRESS]: { name: 'Actress - Drama', type: CategoryType.PERFORMANCE },
+  [CategoryName.COMEDY_ACTOR]: {
+    name: 'Actor - Musical or Comedy',
+    type: CategoryType.PERFORMANCE,
+  },
+  [CategoryName.COMEDY_ACTRESS]: {
+    name: 'Actress - Musical or Comedy',
+    type: CategoryType.PERFORMANCE,
+  },
+  [CategoryName.SUPPORTING_ACTOR]: {
+    name: 'Supporting Actor',
+    type: CategoryType.PERFORMANCE,
+  },
+  [CategoryName.SUPPORTING_ACTRESS]: {
+    name: 'Supporting Actress',
+    type: CategoryType.PERFORMANCE,
+  },
+  [CategoryName.SCREENPLAY]: { name: 'Screenplay', type: CategoryType.FILM },
+  [CategoryName.INTERNATIONAL]: {
+    name: 'Motion Picture - Foreign Language',
+    type: CategoryType.FILM,
+  },
+  [CategoryName.ANIMATED]: { name: 'Motion Picture - Animated', type: CategoryType.FILM },
+  [CategoryName.SCORE]: { name: 'Original Score', type: CategoryType.FILM },
+  [CategoryName.SONG]: { name: 'Original Song', type: CategoryType.SONG },
   ORIGINAL_SCREENPLAY: undefined,
   ADAPTED_SCREENPLAY: undefined,
   DOCUMENTARY: undefined,

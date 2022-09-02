@@ -348,7 +348,6 @@ export const onCreatePrediction = /* GraphQL */ `
       contender {
         id
         categoryId
-        contenderType
         didReceiveNominationOrWin
         createdAt
         updatedAt
@@ -381,7 +380,6 @@ export const onUpdatePrediction = /* GraphQL */ `
       contender {
         id
         categoryId
-        contenderType
         didReceiveNominationOrWin
         createdAt
         updatedAt
@@ -414,7 +412,6 @@ export const onDeletePrediction = /* GraphQL */ `
       contender {
         id
         categoryId
-        contenderType
         didReceiveNominationOrWin
         createdAt
         updatedAt
@@ -706,6 +703,7 @@ export const onCreateCategory = /* GraphQL */ `
     onCreateCategory {
       id
       name
+      type
       eventId
       event {
         id
@@ -738,6 +736,7 @@ export const onUpdateCategory = /* GraphQL */ `
     onUpdateCategory {
       id
       name
+      type
       eventId
       event {
         id
@@ -770,6 +769,7 @@ export const onDeleteCategory = /* GraphQL */ `
     onDeleteCategory {
       id
       name
+      type
       eventId
       event {
         id
@@ -805,6 +805,7 @@ export const onCreateContender = /* GraphQL */ `
       category {
         id
         name
+        type
         eventId
         createdAt
         updatedAt
@@ -813,7 +814,6 @@ export const onCreateContender = /* GraphQL */ `
         _lastChangedAt
         eventCategoriesId
       }
-      contenderType
       movie {
         id
         tmdbId
@@ -878,6 +878,7 @@ export const onUpdateContender = /* GraphQL */ `
       category {
         id
         name
+        type
         eventId
         createdAt
         updatedAt
@@ -886,7 +887,6 @@ export const onUpdateContender = /* GraphQL */ `
         _lastChangedAt
         eventCategoriesId
       }
-      contenderType
       movie {
         id
         tmdbId
@@ -951,6 +951,7 @@ export const onDeleteContender = /* GraphQL */ `
       category {
         id
         name
+        type
         eventId
         createdAt
         updatedAt
@@ -959,7 +960,6 @@ export const onDeleteContender = /* GraphQL */ `
         _lastChangedAt
         eventCategoriesId
       }
-      contenderType
       movie {
         id
         tmdbId
@@ -1024,7 +1024,6 @@ export const onCreateContenderSnapshot = /* GraphQL */ `
       contender {
         id
         categoryId
-        contenderType
         didReceiveNominationOrWin
         createdAt
         updatedAt
@@ -1040,6 +1039,7 @@ export const onCreateContenderSnapshot = /* GraphQL */ `
       category {
         id
         name
+        type
         eventId
         createdAt
         updatedAt
@@ -1066,7 +1066,6 @@ export const onUpdateContenderSnapshot = /* GraphQL */ `
       contender {
         id
         categoryId
-        contenderType
         didReceiveNominationOrWin
         createdAt
         updatedAt
@@ -1082,6 +1081,7 @@ export const onUpdateContenderSnapshot = /* GraphQL */ `
       category {
         id
         name
+        type
         eventId
         createdAt
         updatedAt
@@ -1108,7 +1108,6 @@ export const onDeleteContenderSnapshot = /* GraphQL */ `
       contender {
         id
         categoryId
-        contenderType
         didReceiveNominationOrWin
         createdAt
         updatedAt
@@ -1124,6 +1123,7 @@ export const onDeleteContenderSnapshot = /* GraphQL */ `
       category {
         id
         name
+        type
         eventId
         createdAt
         updatedAt

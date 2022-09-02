@@ -3,7 +3,7 @@ import { DataStore } from 'aws-amplify';
 import React, { useLayoutEffect, useState } from 'react';
 import { ScrollView } from 'react-native';
 import { TouchableText } from '../../../components/Buttons';
-import { getCategoryList } from '../../../constants/categories';
+import { getAwardsBodyCategories } from '../../../constants/categories';
 import { Category, CategoryName } from '../../../models';
 import { HomeParamList } from '../../../navigation/types';
 import { useAsyncEffect } from '../../../util/hooks';
@@ -37,7 +37,7 @@ const CategorySelect = () => {
     navigation.navigate('Contenders', { category: c });
   };
 
-  const categoryList = getCategoryList(event);
+  const categoryList = getAwardsBodyCategories(event);
 
   const orderedCategories = sortByObjectOrder<CategoryName, Category>(
     categoryList,
@@ -50,10 +50,10 @@ const CategorySelect = () => {
       contentContainerStyle={{ alignItems: 'center', marginTop: 40, paddingBottom: 100 }}
     >
       {orderedCategories.map((c) => {
-        const catName = categoryList[CategoryName[c.name]] || '';
+        const catData = categoryList[CategoryName[c.name]] || undefined;
         return (
           <TouchableText
-            text={catName}
+            text={catData?.name || ''}
             onPress={() => onSelectEvent(c)}
             style={{ margin: 10 }}
           />

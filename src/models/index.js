@@ -29,8 +29,8 @@ const EventType = {
   "NOMINATION": "NOMINATION"
 };
 
-const ContenderType = {
-  "DEFAULT": "DEFAULT",
+const CategoryType = {
+  "FILM": "FILM",
   "PERFORMANCE": "PERFORMANCE",
   "SONG": "SONG"
 };
@@ -103,7 +103,7 @@ export {
   UserRole,
   AwardsBody,
   EventType,
-  ContenderType,
+  CategoryType,
   CategoryName,
   CateogrySet
 };

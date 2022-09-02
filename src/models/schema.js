@@ -576,15 +576,6 @@ export const schema = {
                         "targetName": "categoryId"
                     }
                 },
-                "contenderType": {
-                    "name": "contenderType",
-                    "isArray": false,
-                    "type": {
-                        "enum": "ContenderType"
-                    },
-                    "isRequired": true,
-                    "attributes": []
-                },
                 "movie": {
                     "name": "movie",
                     "isArray": false,
@@ -783,6 +774,15 @@ export const schema = {
                     "isArray": false,
                     "type": {
                         "enum": "CategoryName"
+                    },
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "type": {
+                    "name": "type",
+                    "isArray": false,
+                    "type": {
+                        "enum": "CategoryType"
                     },
                     "isRequired": true,
                     "attributes": []
@@ -1569,10 +1569,10 @@ export const schema = {
                 "NOMINATION"
             ]
         },
-        "ContenderType": {
-            "name": "ContenderType",
+        "CategoryType": {
+            "name": "CategoryType",
             "values": [
-                "DEFAULT",
+                "FILM",
                 "PERFORMANCE",
                 "SONG"
             ]
@@ -1632,5 +1632,5 @@ export const schema = {
         }
     },
     "nonModels": {},
-    "version": "3f99a0aaf3890b143875dbfa6a2c00e8"
+    "version": "71b5595d6cf519610feedb59dbb4eeb3"
 };

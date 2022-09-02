@@ -4,7 +4,7 @@ import React, { useLayoutEffect, useState } from 'react';
 import { ScrollView } from 'react-native';
 import { TouchableText } from '../../../components/Buttons';
 import ContenderList from '../../../components/List/ContenderList';
-import { getCategoryList } from '../../../constants/categories';
+import { getAwardsBodyCategories } from '../../../constants/categories';
 import { Contender } from '../../../models';
 import { HomeParamList } from '../../../navigation/types';
 import { useSubscriptionEffect } from '../../../util/hooks';
@@ -21,10 +21,14 @@ const Contenders = () => {
 
   // Set header title
   useLayoutEffect(() => {
-    const categoryList = getCategoryList(category.event);
+    const categoryList = getAwardsBodyCategories(category.event);
     navigation.setOptions({
       headerTitle:
-        'Best' + ' ' + categoryList[category.name] + ' ' + eventToString(category.event),
+        'Best' +
+        ' ' +
+        categoryList[category.name]?.name +
+        ' ' +
+        eventToString(category.event),
     });
   }, [navigation, category.name, category.event]);
 

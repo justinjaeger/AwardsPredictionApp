@@ -27,8 +27,8 @@ export enum EventType {
   NOMINATION = "NOMINATION"
 }
 
-export enum ContenderType {
-  DEFAULT = "DEFAULT",
+export enum CategoryType {
+  FILM = "FILM",
   PERFORMANCE = "PERFORMANCE",
   SONG = "SONG"
 }
@@ -198,7 +198,6 @@ export declare class Prediction {
 export declare class Contender {
   readonly id: string;
   readonly category: Category;
-  readonly contenderType: ContenderType | keyof typeof ContenderType;
   readonly movie: Movie;
   readonly person?: Person | null;
   readonly song?: Song | null;
@@ -220,6 +219,7 @@ export declare class Contender {
 export declare class Category {
   readonly id: string;
   readonly name: CategoryName | keyof typeof CategoryName;
+  readonly type: CategoryType | keyof typeof CategoryType;
   readonly event: Event;
   readonly contenders?: (Contender | null)[] | null;
   readonly createdAt?: string | null;

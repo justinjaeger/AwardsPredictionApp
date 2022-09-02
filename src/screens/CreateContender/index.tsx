@@ -49,7 +49,7 @@ const CreateContender = () => {
     try {
       const { data: movie } = await DS.getOrCreateMovie(tmdbId);
       if (movie) {
-        const { data: contender } = await DS.peekContender(category, movie);
+        const { data: contender } = await DS.getContender(category, movie);
         if (contender) {
           Snackbar.error('This movie has already been added');
           return;
