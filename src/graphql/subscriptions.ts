@@ -834,12 +834,15 @@ export const onCreateContender = /* GraphQL */ `
       }
       song {
         id
-        apiId
+        key
+        title
+        artist
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
+        songMovieId
       }
       snapshots {
         nextToken
@@ -907,12 +910,15 @@ export const onUpdateContender = /* GraphQL */ `
       }
       song {
         id
-        apiId
+        key
+        title
+        artist
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
+        songMovieId
       }
       snapshots {
         nextToken
@@ -980,12 +986,15 @@ export const onDeleteContender = /* GraphQL */ `
       }
       song {
         id
-        apiId
+        key
+        title
+        artist
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
+        songMovieId
       }
       snapshots {
         nextToken
@@ -1224,12 +1233,24 @@ export const onCreateSong = /* GraphQL */ `
   subscription OnCreateSong {
     onCreateSong {
       id
-      apiId
+      key
+      title
+      artist
+      movie {
+        id
+        tmdbId
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
+      songMovieId
     }
   }
 `;
@@ -1237,12 +1258,24 @@ export const onUpdateSong = /* GraphQL */ `
   subscription OnUpdateSong {
     onUpdateSong {
       id
-      apiId
+      key
+      title
+      artist
+      movie {
+        id
+        tmdbId
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
+      songMovieId
     }
   }
 `;
@@ -1250,12 +1283,24 @@ export const onDeleteSong = /* GraphQL */ `
   subscription OnDeleteSong {
     onDeleteSong {
       id
-      apiId
+      key
+      title
+      artist
+      movie {
+        id
+        tmdbId
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
+      songMovieId
     }
   }
 `;

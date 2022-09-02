@@ -810,12 +810,15 @@ export const getContender = /* GraphQL */ `
       }
       song {
         id
-        apiId
+        key
+        title
+        artist
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
+        songMovieId
       }
       snapshots {
         nextToken
@@ -1158,12 +1161,24 @@ export const getSong = /* GraphQL */ `
   query GetSong($id: ID!) {
     getSong(id: $id) {
       id
-      apiId
+      key
+      title
+      artist
+      movie {
+        id
+        tmdbId
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
+      songMovieId
     }
   }
 `;
@@ -1184,12 +1199,15 @@ export const listSongs = /* GraphQL */ `
     ) {
       items {
         id
-        apiId
+        key
+        title
+        artist
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
+        songMovieId
       }
       nextToken
       startedAt
@@ -1211,12 +1229,15 @@ export const syncSongs = /* GraphQL */ `
     ) {
       items {
         id
-        apiId
+        key
+        title
+        artist
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
+        songMovieId
       }
       nextToken
       startedAt

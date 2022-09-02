@@ -1359,12 +1359,40 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "apiId": {
-                    "name": "apiId",
+                "key": {
+                    "name": "key",
                     "isArray": false,
                     "type": "String",
                     "isRequired": true,
                     "attributes": []
+                },
+                "title": {
+                    "name": "title",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "artist": {
+                    "name": "artist",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "movie": {
+                    "name": "movie",
+                    "isArray": false,
+                    "type": {
+                        "model": "Movie"
+                    },
+                    "isRequired": true,
+                    "attributes": [],
+                    "association": {
+                        "connectionType": "HAS_ONE",
+                        "associatedWith": "id",
+                        "targetName": "songMovieId"
+                    }
                 },
                 "createdAt": {
                     "name": "createdAt",
@@ -1381,6 +1409,13 @@ export const schema = {
                     "isRequired": false,
                     "attributes": [],
                     "isReadOnly": true
+                },
+                "songMovieId": {
+                    "name": "songMovieId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
                 }
             },
             "syncable": true,
@@ -1632,5 +1667,5 @@ export const schema = {
         }
     },
     "nonModels": {},
-    "version": "71b5595d6cf519610feedb59dbb4eeb3"
+    "version": "746ed3d3a1619dd188248ca17325d818"
 };

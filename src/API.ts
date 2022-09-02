@@ -385,12 +385,16 @@ export type Person = {
 export type Song = {
   __typename: "Song",
   id: string,
-  apiId: string,
+  key: string,
+  title: string,
+  artist: string,
+  movie: Movie,
   createdAt: string,
   updatedAt: string,
   _version: number,
   _deleted?: boolean | null,
   _lastChangedAt: number,
+  songMovieId: string,
 };
 
 export type ModelContenderSnapshotConnection = {
@@ -849,21 +853,30 @@ export type DeletePersonInput = {
 
 export type CreateSongInput = {
   id?: string | null,
-  apiId: string,
+  key: string,
+  title: string,
+  artist: string,
   _version?: number | null,
+  songMovieId: string,
 };
 
 export type ModelSongConditionInput = {
-  apiId?: ModelStringInput | null,
+  key?: ModelStringInput | null,
+  title?: ModelStringInput | null,
+  artist?: ModelStringInput | null,
   and?: Array< ModelSongConditionInput | null > | null,
   or?: Array< ModelSongConditionInput | null > | null,
   not?: ModelSongConditionInput | null,
+  songMovieId?: ModelIDInput | null,
 };
 
 export type UpdateSongInput = {
   id: string,
-  apiId?: string | null,
+  key?: string | null,
+  title?: string | null,
+  artist?: string | null,
   _version?: number | null,
+  songMovieId: string,
 };
 
 export type DeleteSongInput = {
@@ -1070,10 +1083,13 @@ export type ModelPersonConnection = {
 
 export type ModelSongFilterInput = {
   id?: ModelIDInput | null,
-  apiId?: ModelStringInput | null,
+  key?: ModelStringInput | null,
+  title?: ModelStringInput | null,
+  artist?: ModelStringInput | null,
   and?: Array< ModelSongFilterInput | null > | null,
   or?: Array< ModelSongFilterInput | null > | null,
   not?: ModelSongFilterInput | null,
+  songMovieId?: ModelIDInput | null,
 };
 
 export type ModelSongConnection = {
@@ -2205,12 +2221,15 @@ export type CreateContenderMutation = {
     song?:  {
       __typename: "Song",
       id: string,
-      apiId: string,
+      key: string,
+      title: string,
+      artist: string,
       createdAt: string,
       updatedAt: string,
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
+      songMovieId: string,
     } | null,
     snapshots?:  {
       __typename: "ModelContenderSnapshotConnection",
@@ -2291,12 +2310,15 @@ export type UpdateContenderMutation = {
     song?:  {
       __typename: "Song",
       id: string,
-      apiId: string,
+      key: string,
+      title: string,
+      artist: string,
       createdAt: string,
       updatedAt: string,
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
+      songMovieId: string,
     } | null,
     snapshots?:  {
       __typename: "ModelContenderSnapshotConnection",
@@ -2377,12 +2399,15 @@ export type DeleteContenderMutation = {
     song?:  {
       __typename: "Song",
       id: string,
-      apiId: string,
+      key: string,
+      title: string,
+      artist: string,
       createdAt: string,
       updatedAt: string,
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
+      songMovieId: string,
     } | null,
     snapshots?:  {
       __typename: "ModelContenderSnapshotConnection",
@@ -2681,12 +2706,25 @@ export type CreateSongMutation = {
   createSong?:  {
     __typename: "Song",
     id: string,
-    apiId: string,
+    key: string,
+    title: string,
+    artist: string,
+    movie:  {
+      __typename: "Movie",
+      id: string,
+      tmdbId: number,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
     createdAt: string,
     updatedAt: string,
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
+    songMovieId: string,
   } | null,
 };
 
@@ -2699,12 +2737,25 @@ export type UpdateSongMutation = {
   updateSong?:  {
     __typename: "Song",
     id: string,
-    apiId: string,
+    key: string,
+    title: string,
+    artist: string,
+    movie:  {
+      __typename: "Movie",
+      id: string,
+      tmdbId: number,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
     createdAt: string,
     updatedAt: string,
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
+    songMovieId: string,
   } | null,
 };
 
@@ -2717,12 +2768,25 @@ export type DeleteSongMutation = {
   deleteSong?:  {
     __typename: "Song",
     id: string,
-    apiId: string,
+    key: string,
+    title: string,
+    artist: string,
+    movie:  {
+      __typename: "Movie",
+      id: string,
+      tmdbId: number,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
     createdAt: string,
     updatedAt: string,
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
+    songMovieId: string,
   } | null,
 };
 
@@ -3555,12 +3619,15 @@ export type GetContenderQuery = {
     song?:  {
       __typename: "Song",
       id: string,
-      apiId: string,
+      key: string,
+      title: string,
+      artist: string,
       createdAt: string,
       updatedAt: string,
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
+      songMovieId: string,
     } | null,
     snapshots?:  {
       __typename: "ModelContenderSnapshotConnection",
@@ -3905,12 +3972,25 @@ export type GetSongQuery = {
   getSong?:  {
     __typename: "Song",
     id: string,
-    apiId: string,
+    key: string,
+    title: string,
+    artist: string,
+    movie:  {
+      __typename: "Movie",
+      id: string,
+      tmdbId: number,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
     createdAt: string,
     updatedAt: string,
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
+    songMovieId: string,
   } | null,
 };
 
@@ -3928,12 +4008,15 @@ export type ListSongsQuery = {
     items:  Array< {
       __typename: "Song",
       id: string,
-      apiId: string,
+      key: string,
+      title: string,
+      artist: string,
       createdAt: string,
       updatedAt: string,
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
+      songMovieId: string,
     } | null >,
     nextToken?: string | null,
     startedAt?: number | null,
@@ -3953,12 +4036,15 @@ export type SyncSongsQuery = {
     items:  Array< {
       __typename: "Song",
       id: string,
-      apiId: string,
+      key: string,
+      title: string,
+      artist: string,
       createdAt: string,
       updatedAt: string,
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
+      songMovieId: string,
     } | null >,
     nextToken?: string | null,
     startedAt?: number | null,
@@ -5219,12 +5305,15 @@ export type OnCreateContenderSubscription = {
     song?:  {
       __typename: "Song",
       id: string,
-      apiId: string,
+      key: string,
+      title: string,
+      artist: string,
       createdAt: string,
       updatedAt: string,
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
+      songMovieId: string,
     } | null,
     snapshots?:  {
       __typename: "ModelContenderSnapshotConnection",
@@ -5300,12 +5389,15 @@ export type OnUpdateContenderSubscription = {
     song?:  {
       __typename: "Song",
       id: string,
-      apiId: string,
+      key: string,
+      title: string,
+      artist: string,
       createdAt: string,
       updatedAt: string,
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
+      songMovieId: string,
     } | null,
     snapshots?:  {
       __typename: "ModelContenderSnapshotConnection",
@@ -5381,12 +5473,15 @@ export type OnDeleteContenderSubscription = {
     song?:  {
       __typename: "Song",
       id: string,
-      apiId: string,
+      key: string,
+      title: string,
+      artist: string,
       createdAt: string,
       updatedAt: string,
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
+      songMovieId: string,
     } | null,
     snapshots?:  {
       __typename: "ModelContenderSnapshotConnection",
@@ -5635,12 +5730,25 @@ export type OnCreateSongSubscription = {
   onCreateSong?:  {
     __typename: "Song",
     id: string,
-    apiId: string,
+    key: string,
+    title: string,
+    artist: string,
+    movie:  {
+      __typename: "Movie",
+      id: string,
+      tmdbId: number,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
     createdAt: string,
     updatedAt: string,
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
+    songMovieId: string,
   } | null,
 };
 
@@ -5648,12 +5756,25 @@ export type OnUpdateSongSubscription = {
   onUpdateSong?:  {
     __typename: "Song",
     id: string,
-    apiId: string,
+    key: string,
+    title: string,
+    artist: string,
+    movie:  {
+      __typename: "Movie",
+      id: string,
+      tmdbId: number,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
     createdAt: string,
     updatedAt: string,
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
+    songMovieId: string,
   } | null,
 };
 
@@ -5661,11 +5782,24 @@ export type OnDeleteSongSubscription = {
   onDeleteSong?:  {
     __typename: "Song",
     id: string,
-    apiId: string,
+    key: string,
+    title: string,
+    artist: string,
+    movie:  {
+      __typename: "Movie",
+      id: string,
+      tmdbId: number,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
     createdAt: string,
     updatedAt: string,
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
+    songMovieId: string,
   } | null,
 };

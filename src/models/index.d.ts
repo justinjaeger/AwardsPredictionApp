@@ -289,9 +289,13 @@ export declare class Person {
 
 export declare class Song {
   readonly id: string;
-  readonly apiId: string;
+  readonly key: string;
+  readonly title: string;
+  readonly artist: string;
+  readonly movie: Movie;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
+  readonly songMovieId: string;
   constructor(init: ModelInit<Song, SongMetaData>);
   static copyOf(source: Song, mutator: (draft: MutableModel<Song, SongMetaData>) => MutableModel<Song, SongMetaData> | void): Song;
 }
