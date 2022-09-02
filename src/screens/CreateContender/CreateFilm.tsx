@@ -12,6 +12,8 @@ import { Body } from '../../components/Text';
 import TmdbMovieCache from '../../services/cache/tmdbMovie';
 import { iCreateContenderProps } from '.';
 import { CategoryType } from '../../models';
+import { IconButton } from '../../components/Buttons/IconButton';
+import { View } from 'react-native';
 
 const MAX_CHAR_COUNT = 100;
 
@@ -72,6 +74,10 @@ const CreateFilm = (props: iCreateContenderProps) => {
     Snackbar.success(`Added ${m?.title || 'film'} to list`);
   };
 
+  const removeFilm = () => {
+    setTmdbId(undefined);
+  };
+
   const movieData = searchResults.map((m) => ({
     title: m.title,
     description: m.description
@@ -85,13 +91,11 @@ const CreateFilm = (props: iCreateContenderProps) => {
 
   return (
     <>
-      <SearchInput
-        placeholder={'Search Movies'}
-        handleSearch={(s: string) => handleSearch(s)}
-        style={{ width: '80%' }}
-      />
       {tmdbId ? (
         <>
+          <View style={{ position: 'absolute', right: 30, top: 10, zIndex: 2 }}>
+            <IconButton iconProps={{ name: 'close-outline' }} onPress={removeFilm} />
+          </View>
           <SubmitButton text={'Confirm'} onPress={onConfirmContender} loading={loading} />
           <ContenderDetails
             movieTmdbId={tmdbId}
@@ -100,6 +104,11 @@ const CreateFilm = (props: iCreateContenderProps) => {
         </>
       ) : (
         <>
+          <SearchInput
+            placeholder={'Search Movies'}
+            handleSearch={(s: string) => handleSearch(s)}
+            style={{ width: '80%' }}
+          />
           {searchResults.length === 0 ? (
             <Body style={{ marginTop: 40 }}>{searchMessage}</Body>
           ) : null}
