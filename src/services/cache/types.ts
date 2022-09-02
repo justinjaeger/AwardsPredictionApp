@@ -15,3 +15,11 @@ export type iCachedTmdbCredits = {
   directors: iTmdbCrew[];
   cast: iTmdbCast[];
 };
+
+export type iCachedTmdbPerson = {
+  name: string;
+  gender: number;
+  profilePath: string | null;
+  imdbId: string;
+  biography: string;
+};

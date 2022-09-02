@@ -105,7 +105,9 @@ export const getOrCreatePerformance = async (
   person: Person,
 ): Promise<iApiResponse<Contender>> => {
   try {
+    console.error('passing this in:', person);
     let performance = (await getPerformance(category, movie, person)).data;
+    console.error('got this back:', performance);
     if (!performance) {
       performance = await DataStore.save(
         new Contender({
@@ -113,8 +115,10 @@ export const getOrCreatePerformance = async (
           movie,
           person,
           contenderMovieId: movie.id,
+          contenderPersonId: person.id,
         }),
       );
+      console.error('created this:', performance); // GOOD, has person and person.tmdb
     }
     return { status: 'success', data: performance };
   } catch (err) {

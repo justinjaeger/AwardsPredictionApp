@@ -1,4 +1,4 @@
-import { Category, Contender, Event } from '../models';
+import { Category, CategoryType, Contender, Event } from '../models';
 
 export type MainParamList = {
   BottomTabNavigator: undefined;
@@ -21,7 +21,9 @@ export type HomeParamList = {
     category: Category;
   };
   ContenderDetails: {
+    categoryType: CategoryType;
     contender: Contender;
+    personTmdb?: number | undefined;
   };
 };
 

@@ -22,9 +22,40 @@ export type iTmdbMovieFromSearch = {
   vote_count: number;
 };
 
-export type iTmdbSearchResponse = {
+export type iTmdbShowFromSearch = {
+  poster_path: string | null;
+  popularity: 1.4;
+  id: number;
+  overview: string;
+  backdrop_path: string | null;
+  vote_average: number; // 6.9
+  media_type: string;
+  first_air_date: string;
+  origin_country: string[];
+  vote_count: number;
+  name: string;
+  original_name: string;
+};
+
+export type iTmdbSearchMoviesResponse = {
   page: number;
   results: iTmdbMovieFromSearch[];
+  total_pages: number;
+  total_results: number;
+};
+
+export type iTmdbPersonFromSearch = {
+  profile_path: string | null;
+  adult: boolean;
+  id: number;
+  known_for: iTmdbMovieFromSearch | iTmdbShowFromSearch; // either a movie (iTmdbMovieFromSearch) or tv show object
+  name: string;
+  popularity: number;
+};
+
+export type iTmdbSearchPeopleResponse = {
+  page: number;
+  results: iTmdbPersonFromSearch[];
   total_pages: number;
   total_results: number;
 };
@@ -78,6 +109,23 @@ export type iTmdbMovieResponse = {
   vote_count: number;
 };
 
+export type iTmdbPersonResponse = {
+  birthday: string | null;
+  known_for_department: string;
+  deathday: null | string;
+  id: number;
+  name: string;
+  also_known_as: string[];
+  gender: number;
+  biography: string;
+  popularity: number;
+  place_of_birth: string | null;
+  profile_path: string | null;
+  adult: boolean;
+  imdb_id: string;
+  homepage: null | string;
+};
+
 export type iTmdbCrew = {
   adult: boolean;
   gender: number | null;
@@ -111,4 +159,44 @@ export type iTmdbMovieCreditsResponse = {
   id: number;
   cast: iTmdbCast[];
   crew: iTmdbCrew[];
+};
+
+export type iTmdbPersonMovieCredits = {
+  id: number;
+  cast: {
+    character: string;
+    credit_id: string;
+    release_date: string;
+    vote_count: number;
+    video: boolean;
+    adult: boolean;
+    vote_average: number;
+    title: string;
+    genre_ids: number[];
+    original_language: string;
+    original_title: string;
+    popularity: SVGAnimatedNumberList;
+    id: number;
+    backdrop_path: string | null;
+    overview: string;
+    poster_path: string | null;
+  }[];
+  crew: {
+    id: number;
+    department: string;
+    original_language: string;
+    original_title: string;
+    job: string;
+    overview: string;
+    vote_count: number;
+    video: boolean;
+    poster_path: string | null;
+    backdrop_path: string | null;
+    title: string;
+    popularity: number;
+    genre_ids: number[];
+    vote_average: number;
+    release_date: string;
+    credit_id: string;
+  }[];
 };

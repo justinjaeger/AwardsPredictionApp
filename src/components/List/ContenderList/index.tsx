@@ -1,17 +1,19 @@
 import React from 'react';
 import { View } from 'react-native';
 import COLORS from '../../../constants/colors';
-import { Contender } from '../../../models';
+import { CategoryType, Contender } from '../../../models';
 import { BodyLarge } from '../../Text';
 import ContenderListItem from './ContenderListItem';
+import PerformanceListItem from './PerformanceListItem';
 
 type iContenderListProps = {
+  categoryType: CategoryType;
   contenders: Contender[];
   onPressItem: (c: Contender) => void;
 };
 
 const ContenderList = (props: iContenderListProps) => {
-  const { contenders, onPressItem } = props;
+  const { categoryType, contenders, onPressItem } = props;
 
   return (
     <View
@@ -34,13 +36,21 @@ const ContenderList = (props: iContenderListProps) => {
           <BodyLarge>Add films to this list</BodyLarge>
         </View>
       ) : null}
-      {contenders.map((c, i) => (
-        <ContenderListItem
-          tmdbId={c.movie.tmdbId}
-          ranking={i + 1}
-          onPress={() => onPressItem(c)}
-        />
-      ))}
+      {contenders.map((c, i) => {
+        return categoryType === CategoryType.PERFORMANCE ? (
+          <PerformanceListItem
+            contender={c}
+            ranking={i + 1}
+            onPress={() => onPressItem(c)}
+          />
+        ) : (
+          <ContenderListItem
+            tmdbId={c.movie.tmdbId}
+            ranking={i + 1}
+            onPress={() => onPressItem(c)}
+          />
+        );
+      })}
     </View>
   );
 };
