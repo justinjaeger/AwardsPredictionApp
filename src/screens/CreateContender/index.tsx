@@ -5,7 +5,7 @@ import { CreateContenderParamList } from '../../navigation/types';
 import { Category, CategoryType } from '../../models';
 import { getAwardsBodyCategories } from '../../constants/categories';
 import CreateFilm from './CreateFilm';
-import CreatePerson from './CreatePerson';
+import CreatePerformance from './CreatePerformance';
 
 export type iCreateContenderProps = { category: Category };
 
@@ -35,7 +35,7 @@ const CreateContender = () => {
       }}
     >
       {category.type === CategoryType.PERFORMANCE ? (
-        <CreatePerson category={category} />
+        <CreatePerformance category={category} />
       ) : (
         <CreateFilm category={category} />
       )}

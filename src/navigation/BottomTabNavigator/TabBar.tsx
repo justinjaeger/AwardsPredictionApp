@@ -55,7 +55,7 @@ const TabBar = (props: ITabBarProps) => {
           };
           const icon = (() => {
             switch (routeName) {
-              case 'home':
+              case 'predictions':
                 return (
                   <View key={index}>
                     {isFocused ? (

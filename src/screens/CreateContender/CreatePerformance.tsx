@@ -16,7 +16,7 @@ import TmdbPersonCache from '../../services/cache/tmdbPerson';
 import ContenderDetails from '../../components/ContenderDetails';
 
 // TODO: should only be able to do this if logged in
-const CreatePerson = (props: iCreateContenderProps) => {
+const CreatePerformance = (props: iCreateContenderProps) => {
   const { category } = props;
 
   const navigation = useNavigation();
@@ -164,4 +164,4 @@ const CreatePerson = (props: iCreateContenderProps) => {
   );
 };
 
-export default CreatePerson;
+export default CreatePerformance;
