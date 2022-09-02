@@ -49,7 +49,7 @@ const Poster = (props: iPosterProps) => {
             style={{
               ...(style as Record<string, unknown>),
               justifyContent: 'center',
-              backgroundColor: COLORS.warning,
+              backgroundColor: COLORS.lightestGray,
             }}
           >
             <Body style={{ textAlign: 'center' }}>{title}</Body>

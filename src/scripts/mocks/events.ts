@@ -1,5 +1,5 @@
 import { DataStore } from 'aws-amplify';
-import { getCategoryList } from '../../constants/lists';
+import { getCategoryList } from '../../constants/categories';
 import { AwardsBody, EventType, Event, Category, CategoryName } from '../../models';
 
 const DATA = [

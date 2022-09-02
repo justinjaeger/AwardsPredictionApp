@@ -4,7 +4,7 @@ import React, { useLayoutEffect, useState } from 'react';
 import { ScrollView } from 'react-native';
 import { TouchableText } from '../../../components/Buttons';
 import ContenderList from '../../../components/List/ContenderList';
-import { getCategoryList } from '../../../constants/lists';
+import { getCategoryList } from '../../../constants/categories';
 import { Contender } from '../../../models';
 import { HomeParamList } from '../../../navigation/types';
 import { useSubscriptionEffect } from '../../../util/hooks';
