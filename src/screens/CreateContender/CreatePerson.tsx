@@ -10,11 +10,10 @@ import Snackbar from '../../components/Snackbar';
 import { Body } from '../../components/Text';
 import { CategoryType } from '../../models';
 import { iCreateContenderProps } from '.';
-import PersonDetails from '../../components/PersonDetails';
 import { IconButton } from '../../components/Buttons/IconButton';
 import { View } from 'react-native';
-import PerformanceDetails from '../../components/PerformanceDetails';
 import TmdbPersonCache from '../../services/cache/tmdbPerson';
+import ContenderDetails from '../../components/ContenderDetails';
 
 // TODO: should only be able to do this if logged in
 const CreatePerson = (props: iCreateContenderProps) => {
@@ -121,7 +120,11 @@ const CreatePerson = (props: iCreateContenderProps) => {
           </View>
           {movieId ? (
             <>
-              <PerformanceDetails personId={personId} movieId={movieId} />
+              <ContenderDetails
+                personTmdbId={personId}
+                movieTmdbId={movieId}
+                categoryType={CategoryType[category.type]}
+              />
               <SubmitButton
                 text={'Confirm'}
                 onPress={onConfirmPerformance}
@@ -130,7 +133,10 @@ const CreatePerson = (props: iCreateContenderProps) => {
             </>
           ) : (
             <>
-              <PersonDetails tmdbId={personId} />
+              <ContenderDetails
+                personTmdbId={personId}
+                categoryType={CategoryType[category.type]}
+              />
               <Body>Which movie?</Body>
               <SearchResultsList data={creditsData} />
             </>

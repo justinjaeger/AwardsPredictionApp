@@ -7,10 +7,11 @@ import TmdbServices from '../../services/tmdb';
 import { iSearchData } from '../../services/tmdb/search';
 import DS from '../../services/datastore';
 import Snackbar from '../../components/Snackbar';
-import MovieDetails from '../../components/MovieDetails';
+import ContenderDetails from '../../components/ContenderDetails';
 import { Body } from '../../components/Text';
 import TmdbMovieCache from '../../services/cache/tmdbMovie';
 import { iCreateContenderProps } from '.';
+import { CategoryType } from '../../models';
 
 const MAX_CHAR_COUNT = 100;
 
@@ -92,7 +93,10 @@ const CreateFilm = (props: iCreateContenderProps) => {
       {tmdbId ? (
         <>
           <SubmitButton text={'Confirm'} onPress={onConfirmContender} loading={loading} />
-          <MovieDetails tmdbId={tmdbId} />
+          <ContenderDetails
+            movieTmdbId={tmdbId}
+            categoryType={CategoryType[category.type]}
+          />
         </>
       ) : (
         <>

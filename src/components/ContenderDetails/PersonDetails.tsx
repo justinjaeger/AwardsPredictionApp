@@ -1,12 +1,11 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { TouchableText } from '../../components/Buttons';
-import Poster from '../../components/Images/Poster';
-import { SubHeader } from '../../components/Text';
+import { TouchableText } from '../Buttons';
+import Poster from '../Images/Poster';
+import { SubHeader } from '../Text';
 import { PosterSize } from '../../constants/posterDimensions';
 import { iCachedTmdbPerson } from '../../services/cache/types';
 import TmdbServices from '../../services/tmdb';
-import { DetailContainer } from '../MovieDetails/styles';
 
 type iPersonDetailsProps = {
   tmdbId: number;
@@ -33,7 +32,7 @@ const PersonDetails = (props: iPersonDetailsProps) => {
   }
 
   return (
-    <DetailContainer>
+    <>
       <SubHeader style={{ margin: 10 }}>{personDetails.name || ''}</SubHeader>
       {personDetails ? (
         <Poster
@@ -60,7 +59,7 @@ const PersonDetails = (props: iPersonDetailsProps) => {
           });
         }}
       />
-    </DetailContainer>
+    </>
   );
 };
 

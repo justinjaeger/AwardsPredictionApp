@@ -1,62 +1,85 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState, useLayoutEffect } from 'react';
 import { View } from 'react-native';
-import { TouchableText } from '../../components/Buttons';
-import Poster from '../../components/Images/Poster';
-import { BodyLarge, SubHeader } from '../../components/Text';
+import { TouchableText } from '../Buttons';
+import Poster from '../Images/Poster';
+import { BodyLarge, SubHeader } from '../Text';
 import { PosterSize } from '../../constants/posterDimensions';
-import { iCachedTmdbCredits, iCachedTmdbMovie } from '../../services/cache/types';
+import { iCachedTmdbMovie, iCachedTmdbPerson } from '../../services/cache/types';
 import TmdbServices from '../../services/tmdb';
-import { DetailContainer } from './styles';
 
-type iMovieDetailsProps = {
-  tmdbId: number;
-  returnMovieDetails?: (md: iCachedTmdbMovie | undefined) => void;
+type iPerformanceDetailsProps = {
+  personId: number;
+  movieId: number;
 };
 
-const MovieDetails = (props: iMovieDetailsProps) => {
-  const { tmdbId, returnMovieDetails } = props;
+const PerformanceDetails = (props: iPerformanceDetailsProps) => {
+  const { personId, movieId } = props;
 
   const navigation = useNavigation();
 
-  const [movieDetails, setMovieDetails] = useState<iCachedTmdbMovie | undefined>();
-  const [castAndCrew, setCastAndCrew] = useState<iCachedTmdbCredits | undefined>();
+  const [movieDetails, setContenderDetails] = useState<iCachedTmdbMovie | undefined>();
+  const [personDetails, setPersonDetails] = useState<iCachedTmdbPerson | undefined>();
 
   // Set header title
   useLayoutEffect(() => {
-    if (movieDetails) {
+    if (!movieDetails) return;
+    const movieTitle = movieDetails.title;
+    if (personDetails) {
       navigation.setOptions({
-        headerTitle: movieDetails.title,
+        headerTitle: `${personDetails.name} - ${movieTitle}`,
+      });
+    } else {
+      navigation.setOptions({
+        headerTitle: movieTitle,
       });
     }
-  }, [navigation, movieDetails]);
+  }, [navigation, personDetails, movieDetails]);
 
   useEffect(() => {
-    TmdbServices.getTmdbMovie(tmdbId).then((res) => {
-      setMovieDetails(res.data);
-      returnMovieDetails && returnMovieDetails(res.data);
+    TmdbServices.getTmdbMovie(movieId).then((res) => {
+      setContenderDetails(res.data);
     });
-    TmdbServices.getTmdbMovieCredits(tmdbId).then((res) => {
-      setCastAndCrew(res.data);
+    TmdbServices.getTmdbPerson(personId).then((res) => {
+      setPersonDetails(res.data);
     });
-  }, [tmdbId, returnMovieDetails]);
-
-  const directors = castAndCrew?.directors?.map((d) => d.name).join(', ');
-
-  const formattedCast = castAndCrew?.cast
-    ?.map((c) => c.name)
-    .filter((c, i) => i < 10) // display 10 cast members max
-    .join(', ');
+  }, [movieId]);
 
   const productionCompanies = movieDetails?.productionCompanies?.join(', ');
 
-  if (!movieDetails || !castAndCrew) {
+  if (!movieDetails || !personDetails) {
     // TODO: return loading state
     return null;
   }
 
   return (
-    <DetailContainer>
+    <>
+      <SubHeader style={{ margin: 10 }}>{personDetails.name || ''}</SubHeader>
+      {personDetails ? (
+        <Poster
+          path={personDetails.profilePath}
+          size={PosterSize.LARGE}
+          title={personDetails.name}
+        />
+      ) : null}
+      <TouchableText
+        text={'View in Imdb'}
+        onPress={() => {
+          navigation.navigate('WebView', {
+            uri: `https://www.imdb.com/name/${personDetails.imdbId}`,
+            title: personDetails.name,
+          });
+        }}
+      />
+      <TouchableText
+        text={'Filmography'}
+        onPress={() => {
+          navigation.navigate('WebView', {
+            uri: `https://www.imdb.com/name/${personDetails.imdbId}/filmotype`,
+            title: personDetails.name,
+          });
+        }}
+      />
       <SubHeader style={{ margin: 10 }}>{movieDetails.title || ''}</SubHeader>
       {movieDetails ? (
         <Poster
@@ -98,16 +121,6 @@ const MovieDetails = (props: iMovieDetailsProps) => {
           <BodyLarge>{movieDetails?.plot || ''}</BodyLarge>
         </View>
         <View style={{ flexDirection: 'column', marginTop: 5 }}>
-          <BodyLarge style={{ fontWeight: '800', marginBottom: 5 }}>
-            {'Directed by'}
-          </BodyLarge>
-          <BodyLarge>{directors || ''}</BodyLarge>
-        </View>
-        <View style={{ flexDirection: 'column', marginTop: 5 }}>
-          <BodyLarge style={{ fontWeight: '800', marginBottom: 5 }}>{'Cast'}</BodyLarge>
-          <BodyLarge>{formattedCast || ''}</BodyLarge>
-        </View>
-        <View style={{ flexDirection: 'column', marginTop: 5 }}>
           <BodyLarge
             style={{
               fontWeight: '800',
@@ -121,8 +134,8 @@ const MovieDetails = (props: iMovieDetailsProps) => {
           <BodyLarge>{productionCompanies || ''}</BodyLarge>
         </View>
       </View>
-    </DetailContainer>
+    </>
   );
 };
 
-export default MovieDetails;
+export default PerformanceDetails;

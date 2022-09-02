@@ -5,8 +5,8 @@ import CategorySelect from '../screens/Home/CategorySelect';
 import { HomeParamList } from './types';
 import Contenders from '../screens/Home/Contenders';
 import BackButton from '../components/Buttons/BackButton';
-import ContenderDetails from '../screens/Home/ContenderDetails';
 import CreateContender from '../screens/CreateContender';
+import ContenderDetailsScreen from '../screens/Home/ContenderDetailsScreen';
 
 const { Navigator, Screen } = createStackNavigator<HomeParamList>();
 
@@ -45,7 +45,7 @@ const HomeNavigator = () => (
     />
     <Screen
       name="ContenderDetails"
-      component={ContenderDetails}
+      component={ContenderDetailsScreen}
       options={{
         headerTitle: '',
         headerLeft: BackButton,

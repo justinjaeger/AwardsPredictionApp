@@ -14,7 +14,7 @@ export const getTmdbPerson = async (
     // attempt to get from cache first
     const cacheResponse = await TmdbPersonCache.get(tmdbId);
     if (cacheResponse) {
-      console.log('serving movie from cache');
+      console.log('serving from cache');
       return { status: 'success', data: cacheResponse };
     }
 

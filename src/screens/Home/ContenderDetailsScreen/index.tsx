@@ -1,12 +1,10 @@
 import { RouteProp, useRoute } from '@react-navigation/native';
 import React from 'react';
 import { ScrollView } from 'react-native';
-import MovieDetails from '../../../components/MovieDetails';
-import PerformanceDetails from '../../../components/PerformanceDetails';
-import { CategoryType } from '../../../models';
+import ContenderDetails from '../../../components/ContenderDetails';
 import { HomeParamList } from '../../../navigation/types';
 
-const ContenderDetails = () => {
+const ContenderDetailsScreen = () => {
   const {
     params: { categoryType, contender, personTmdb },
   } = useRoute<RouteProp<HomeParamList, 'ContenderDetails'>>();
@@ -15,13 +13,13 @@ const ContenderDetails = () => {
 
   return (
     <ScrollView contentContainerStyle={{ alignSelf: 'center', padding: '5%' }}>
-      {categoryType === CategoryType.PERFORMANCE && personTmdb ? (
-        <PerformanceDetails personId={personTmdb} movieId={movieTmdbId} />
-      ) : (
-        <MovieDetails tmdbId={movieTmdbId} />
-      )}
+      <ContenderDetails
+        movieTmdbId={movieTmdbId}
+        personTmdbId={personTmdb}
+        categoryType={categoryType}
+      />
     </ScrollView>
   );
 };
 
-export default ContenderDetails;
+export default ContenderDetailsScreen;
