@@ -272,11 +272,13 @@ type Person @model @auth(rules: [{ allow: public }]) {
   
 type Song @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
-    key: String! # unique value. could be "name" put through a function that removes spaces, caps, and non-alpha chars, for example
     title: String!
     artist: String!
     movie: Movie! @hasOne
 }
-  
-  
 
+type SongDraft @model @auth(rules: [{ allow: public }]) {
+    id: ID! @primaryKey
+    title: String!
+    movie: Movie! @hasOne
+}

@@ -909,7 +909,6 @@ export const createContender = /* GraphQL */ `
       }
       song {
         id
-        key
         title
         artist
         createdAt
@@ -988,7 +987,6 @@ export const updateContender = /* GraphQL */ `
       }
       song {
         id
-        key
         title
         artist
         createdAt
@@ -1067,7 +1065,6 @@ export const deleteContender = /* GraphQL */ `
       }
       song {
         id
-        key
         title
         artist
         createdAt
@@ -1344,7 +1341,6 @@ export const createSong = /* GraphQL */ `
   ) {
     createSong(input: $input, condition: $condition) {
       id
-      key
       title
       artist
       movie {
@@ -1372,7 +1368,6 @@ export const updateSong = /* GraphQL */ `
   ) {
     updateSong(input: $input, condition: $condition) {
       id
-      key
       title
       artist
       movie {
@@ -1400,7 +1395,6 @@ export const deleteSong = /* GraphQL */ `
   ) {
     deleteSong(input: $input, condition: $condition) {
       id
-      key
       title
       artist
       movie {
@@ -1418,6 +1412,84 @@ export const deleteSong = /* GraphQL */ `
       _deleted
       _lastChangedAt
       songMovieId
+    }
+  }
+`;
+export const createSongDraft = /* GraphQL */ `
+  mutation CreateSongDraft(
+    $input: CreateSongDraftInput!
+    $condition: ModelSongDraftConditionInput
+  ) {
+    createSongDraft(input: $input, condition: $condition) {
+      id
+      title
+      movie {
+        id
+        tmdbId
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      songDraftMovieId
+    }
+  }
+`;
+export const updateSongDraft = /* GraphQL */ `
+  mutation UpdateSongDraft(
+    $input: UpdateSongDraftInput!
+    $condition: ModelSongDraftConditionInput
+  ) {
+    updateSongDraft(input: $input, condition: $condition) {
+      id
+      title
+      movie {
+        id
+        tmdbId
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      songDraftMovieId
+    }
+  }
+`;
+export const deleteSongDraft = /* GraphQL */ `
+  mutation DeleteSongDraft(
+    $input: DeleteSongDraftInput!
+    $condition: ModelSongDraftConditionInput
+  ) {
+    deleteSongDraft(input: $input, condition: $condition) {
+      id
+      title
+      movie {
+        id
+        tmdbId
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      songDraftMovieId
     }
   }
 `;

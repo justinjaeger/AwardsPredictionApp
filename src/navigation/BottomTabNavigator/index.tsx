@@ -2,10 +2,10 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MyPredictionsNavigator from '../MyPredictionsNavigator';
 import ProfileNavigator from '../ProfileNavigator';
-import Dev from '../../screens/Dev';
 import { useAuth } from '../../store';
 import TabBar, { ITabBarProps } from './TabBar';
 import GlobalPredictionsNavigator from '../GlobalPredictionsNavigator';
+import DevNavigator from '../DevNavigator';
 
 const Tab = createBottomTabNavigator();
 
@@ -18,7 +18,7 @@ const BottomTabNavigator = () => {
         <Tab.Screen name="MyPredictions" component={MyPredictionsNavigator} />
       ) : null}
       <Tab.Screen name="Profile" component={ProfileNavigator} />
-      <Tab.Screen name="Dev" component={Dev} />
+      <Tab.Screen name="Dev" component={DevNavigator} />
     </Tab.Navigator>
   );
 };

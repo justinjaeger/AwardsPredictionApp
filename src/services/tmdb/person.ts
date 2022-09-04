@@ -20,7 +20,6 @@ export const getTmdbPerson = async (
 
     // else, fetch from tmdb
     const url = `${TMDB_URL}/person/${tmdbId}?api_key=${TMDB_API_KEY}`;
-    console.error('urllllll', url);
     const result = (await axios(url)) as iTmdbResponse<iTmdbPersonResponse>;
     // console.error('result', result);
     if (result?.status === 'error') {

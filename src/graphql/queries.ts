@@ -810,7 +810,6 @@ export const getContender = /* GraphQL */ `
       }
       song {
         id
-        key
         title
         artist
         createdAt
@@ -1161,7 +1160,6 @@ export const getSong = /* GraphQL */ `
   query GetSong($id: ID!) {
     getSong(id: $id) {
       id
-      key
       title
       artist
       movie {
@@ -1199,7 +1197,6 @@ export const listSongs = /* GraphQL */ `
     ) {
       items {
         id
-        key
         title
         artist
         createdAt
@@ -1229,7 +1226,6 @@ export const syncSongs = /* GraphQL */ `
     ) {
       items {
         id
-        key
         title
         artist
         createdAt
@@ -1238,6 +1234,87 @@ export const syncSongs = /* GraphQL */ `
         _deleted
         _lastChangedAt
         songMovieId
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const getSongDraft = /* GraphQL */ `
+  query GetSongDraft($id: ID!) {
+    getSongDraft(id: $id) {
+      id
+      title
+      movie {
+        id
+        tmdbId
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      songDraftMovieId
+    }
+  }
+`;
+export const listSongDrafts = /* GraphQL */ `
+  query ListSongDrafts(
+    $id: ID
+    $filter: ModelSongDraftFilterInput
+    $limit: Int
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listSongDrafts(
+      id: $id
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        id
+        title
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        songDraftMovieId
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const syncSongDrafts = /* GraphQL */ `
+  query SyncSongDrafts(
+    $filter: ModelSongDraftFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncSongDrafts(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        title
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        songDraftMovieId
       }
       nextToken
       startedAt

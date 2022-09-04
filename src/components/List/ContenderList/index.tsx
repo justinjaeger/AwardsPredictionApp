@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import COLORS from '../../../constants/colors';
 import { CategoryType, Contender } from '../../../models';
 import { BodyLarge } from '../../Text';
-import ContenderListItem from './ContenderListItem';
+import FilmListItem from './FilmListItem';
 import PerformanceListItem from './PerformanceListItem';
 
 type iContenderListProps = {
@@ -44,7 +44,7 @@ const ContenderList = (props: iContenderListProps) => {
             onPress={() => onPressItem(c)}
           />
         ) : (
-          <ContenderListItem
+          <FilmListItem
             tmdbId={c.movie.tmdbId}
             ranking={i + 1}
             onPress={() => onPressItem(c)}

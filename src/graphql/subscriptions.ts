@@ -834,7 +834,6 @@ export const onCreateContender = /* GraphQL */ `
       }
       song {
         id
-        key
         title
         artist
         createdAt
@@ -910,7 +909,6 @@ export const onUpdateContender = /* GraphQL */ `
       }
       song {
         id
-        key
         title
         artist
         createdAt
@@ -986,7 +984,6 @@ export const onDeleteContender = /* GraphQL */ `
       }
       song {
         id
-        key
         title
         artist
         createdAt
@@ -1233,7 +1230,6 @@ export const onCreateSong = /* GraphQL */ `
   subscription OnCreateSong {
     onCreateSong {
       id
-      key
       title
       artist
       movie {
@@ -1258,7 +1254,6 @@ export const onUpdateSong = /* GraphQL */ `
   subscription OnUpdateSong {
     onUpdateSong {
       id
-      key
       title
       artist
       movie {
@@ -1283,7 +1278,6 @@ export const onDeleteSong = /* GraphQL */ `
   subscription OnDeleteSong {
     onDeleteSong {
       id
-      key
       title
       artist
       movie {
@@ -1301,6 +1295,75 @@ export const onDeleteSong = /* GraphQL */ `
       _deleted
       _lastChangedAt
       songMovieId
+    }
+  }
+`;
+export const onCreateSongDraft = /* GraphQL */ `
+  subscription OnCreateSongDraft {
+    onCreateSongDraft {
+      id
+      title
+      movie {
+        id
+        tmdbId
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      songDraftMovieId
+    }
+  }
+`;
+export const onUpdateSongDraft = /* GraphQL */ `
+  subscription OnUpdateSongDraft {
+    onUpdateSongDraft {
+      id
+      title
+      movie {
+        id
+        tmdbId
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      songDraftMovieId
+    }
+  }
+`;
+export const onDeleteSongDraft = /* GraphQL */ `
+  subscription OnDeleteSongDraft {
+    onDeleteSongDraft {
+      id
+      title
+      movie {
+        id
+        tmdbId
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      songDraftMovieId
     }
   }
 `;
