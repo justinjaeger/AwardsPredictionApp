@@ -8,7 +8,7 @@ import { iSearchData } from '../../services/tmdb/search';
 import DS from '../../services/datastore';
 import Snackbar from '../../components/Snackbar';
 import { Body } from '../../components/Text';
-import { CategoryType } from '../../models';
+import { CategoryType, Movie } from '../../models';
 import { iCreateContenderProps } from '.';
 import { IconButton } from '../../components/Buttons/IconButton';
 import { View } from 'react-native';
@@ -25,11 +25,11 @@ const CreatePerformance = (props: iCreateContenderProps) => {
   const minReleaseYear = event.year - 1;
 
   const [personSearchResults, setPersonSearchResults] = useState<iSearchData>([]);
-  const [credits, setCredits] = useState<iSearchData>([]);
+  const [movieSearch, setMovieSearch] = useState<iSearchData>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [searchMessage, setSearchMessage] = useState<string>('');
   const [personId, setPersonId] = useState<number | undefined>();
-  const [movieId, setMovieId] = useState<number | undefined>();
+  const [movie, setMovie] = useState<Movie | undefined>();
 
   const handleSearch = (s: string) => {
     if (s === '') {
@@ -38,8 +38,7 @@ const CreatePerformance = (props: iCreateContenderProps) => {
       return;
     }
     TmdbServices.searchPeople(s).then((res) => {
-      console.error('res', res);
-      setMovieId(undefined);
+      setMovie(undefined);
       const r = res.data || [];
       setPersonSearchResults(r);
       if (r.length === 0) {
@@ -49,12 +48,12 @@ const CreatePerformance = (props: iCreateContenderProps) => {
   };
 
   const getPersonRecentMovies = async (tmdbId: number) => {
-    const { data: credits } = await TmdbServices.getTmdbPersonMovieCredits(
+    const { data: _searchData } = await TmdbServices.getTmdbPersonMovieCredits(
       tmdbId,
       minReleaseYear,
     );
-    if (credits) {
-      setCredits(credits);
+    if (_searchData) {
+      setMovieSearch(_searchData);
     }
   };
 
@@ -71,19 +70,13 @@ const CreatePerformance = (props: iCreateContenderProps) => {
     }
   };
 
-  const onSelectMovie = async (tmdbId: number) => {
-    setMovieId(tmdbId);
-  };
-
   const removePerson = () => {
     setPersonId(undefined);
   };
 
   const onConfirmPerformance = async () => {
-    if (!movieId || !personId) return;
+    if (!movie || !personId) return;
     setLoading(true);
-    const { data: movie } = await DS.getOrCreateMovie(movieId);
-    if (!movie) return;
     const { data: person } = await DS.getOrCreatePerson(personId);
     if (!person) return;
     await DS.getOrCreatePerformance(category, movie, person);
@@ -99,12 +92,17 @@ const CreatePerformance = (props: iCreateContenderProps) => {
     onPress: () => onSelectPerson(p.tmdbId),
   }));
 
-  const creditsData = credits.map((c) => ({
-    title: c.title,
-    image: c.image,
-    description: c.description,
-    onPress: () => onSelectMovie(c.tmdbId),
-  }));
+  const creditsData = movieSearch.map((ms) => {
+    return {
+      title: ms.title,
+      image: ms.image,
+      description: ms.description,
+      onPress: async () => {
+        const { data: _movie } = await DS.getOrCreateMovie(ms.tmdbId);
+        setMovie(_movie);
+      },
+    };
+  });
 
   return (
     <>
@@ -113,11 +111,11 @@ const CreatePerformance = (props: iCreateContenderProps) => {
           <View style={{ position: 'absolute', right: 30, top: 10, zIndex: 2 }}>
             <IconButton iconProps={{ name: 'close-outline' }} onPress={removePerson} />
           </View>
-          {movieId ? (
+          {movie ? (
             <>
               <ContenderDetails
                 personTmdbId={personId}
-                movieTmdbId={movieId}
+                movie={movie}
                 categoryType={CategoryType[category.type]}
               />
               <SubmitButton

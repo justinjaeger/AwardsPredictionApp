@@ -7,19 +7,21 @@ import { BodyLarge, SubHeader } from '../Text';
 import { PosterSize } from '../../constants/posterDimensions';
 import { iCachedTmdbMovie } from '../../services/cache/types';
 import TmdbServices from '../../services/tmdb';
-import { Song } from '../../models';
+import { Movie, Song } from '../../models';
 
 type iSongDetailsProps = {
-  movieTmdbId: number;
+  movie: Movie;
   song: Song;
 };
 
 const SongDetails = (props: iSongDetailsProps) => {
-  const { movieTmdbId, song } = props;
+  const { movie, song } = props;
 
   const navigation = useNavigation();
 
   const [movieDetails, setMovieDetails] = useState<iCachedTmdbMovie | undefined>();
+
+  const movieTmdbId = movie.tmdbId;
 
   // Set header title
   useLayoutEffect(() => {

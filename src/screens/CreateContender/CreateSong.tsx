@@ -10,7 +10,7 @@ import Snackbar from '../../components/Snackbar';
 import ContenderDetails from '../../components/ContenderDetails';
 import { Body } from '../../components/Text';
 import { iCreateContenderProps } from '.';
-import { CategoryType } from '../../models';
+import { CategoryType, Movie } from '../../models';
 import { IconButton } from '../../components/Buttons/IconButton';
 import { View } from 'react-native';
 import FormInput from '../../components/Inputs/FormInput';
@@ -27,7 +27,7 @@ const CreateSong = (props: iCreateContenderProps) => {
   const minReleaseYear = event.year - 1;
 
   const [searchResults, setSearchResults] = useState<iSearchData>([]);
-  const [tmdbId, setTmdbId] = useState<number | undefined>();
+  const [movie, setMovie] = useState<Movie | undefined>();
   const [loading, setLoading] = useState<boolean>(false);
   const [searchMessage, setSearchMessage] = useState<string>('');
   const [songTitle, setSongTitle] = useState<string>('');
@@ -39,7 +39,7 @@ const CreateSong = (props: iCreateContenderProps) => {
       return setSearchResults([]);
     }
     TmdbServices.searchMovies(s, minReleaseYear).then((res) => {
-      setTmdbId(undefined);
+      setMovie(undefined);
       const r = res.data || [];
       setSearchResults(r);
       if (r.length === 0) {
@@ -50,18 +50,18 @@ const CreateSong = (props: iCreateContenderProps) => {
 
   const onSelectMovie = async (tmdbId: number) => {
     try {
-      await DS.getOrCreateMovie(tmdbId);
-      setTmdbId(tmdbId);
+      const { data: movie } = await DS.getOrCreateMovie(tmdbId);
+      if (movie) {
+        setMovie(movie);
+      }
     } catch (err) {
       console.error('error selecting search result', err);
     }
   };
 
   const onConfirmSong = async () => {
-    if (!tmdbId) return;
-    setLoading(true);
-    const { data: movie } = await DS.getOrCreateMovie(tmdbId);
     if (!movie) return;
+    setLoading(true);
     const { data: song } = await DS.getOrCreateSong(songTitle, artist, movie);
     if (!song) return;
     await DS.getOrCreateSongContender(category, movie, song);
@@ -71,7 +71,7 @@ const CreateSong = (props: iCreateContenderProps) => {
   };
 
   const removeFilm = () => {
-    setTmdbId(undefined);
+    setMovie(undefined);
   };
 
   const movieData = searchResults.map((m) => ({
@@ -87,7 +87,7 @@ const CreateSong = (props: iCreateContenderProps) => {
 
   return (
     <>
-      {tmdbId ? (
+      {movie ? (
         <>
           <View style={{ width: '90%' }}>
             <FormInput
@@ -114,7 +114,7 @@ const CreateSong = (props: iCreateContenderProps) => {
               <IconButton iconProps={{ name: 'close-outline' }} onPress={removeFilm} />
             </View>
             <ContenderDetails
-              movieTmdbId={tmdbId}
+              movie={movie}
               categoryType={CategoryType.FILM} // Imporant because we're entering details in the screen and can't display them yet
             />
           </View>

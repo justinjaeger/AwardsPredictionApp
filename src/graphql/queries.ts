@@ -793,6 +793,7 @@ export const getContender = /* GraphQL */ `
       movie {
         id
         tmdbId
+        studio
         createdAt
         updatedAt
         _version
@@ -1023,6 +1024,7 @@ export const getMovie = /* GraphQL */ `
     getMovie(id: $id) {
       id
       tmdbId
+      studio
       createdAt
       updatedAt
       _version
@@ -1049,6 +1051,7 @@ export const listMovies = /* GraphQL */ `
       items {
         id
         tmdbId
+        studio
         createdAt
         updatedAt
         _version
@@ -1076,6 +1079,7 @@ export const syncMovies = /* GraphQL */ `
       items {
         id
         tmdbId
+        studio
         createdAt
         updatedAt
         _version
@@ -1165,6 +1169,7 @@ export const getSong = /* GraphQL */ `
       movie {
         id
         tmdbId
+        studio
         createdAt
         updatedAt
         _version

@@ -263,6 +263,7 @@ type ContenderSnapshot @model @auth(rules: [{ allow: public }]) {
 type Movie @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
     tmdbId: Int! # unique value
+    studio: String # distribution studio
 }
 
 type Person @model @auth(rules: [{ allow: public }]) {

@@ -7,19 +7,22 @@ import { BodyLarge, SubHeader } from '../Text';
 import { PosterSize } from '../../constants/posterDimensions';
 import { iCachedTmdbMovie, iCachedTmdbPerson } from '../../services/cache/types';
 import TmdbServices from '../../services/tmdb';
+import { Movie } from '../../models';
 
 type iPerformanceDetailsProps = {
   personTmdbId: number;
-  movieTmdbId: number | undefined;
+  movie: Movie | undefined;
 };
 
 const PerformanceDetails = (props: iPerformanceDetailsProps) => {
-  const { personTmdbId, movieTmdbId } = props;
+  const { personTmdbId, movie } = props;
 
   const navigation = useNavigation();
 
   const [movieDetails, setContenderDetails] = useState<iCachedTmdbMovie | undefined>();
   const [personDetails, setPersonDetails] = useState<iCachedTmdbPerson | undefined>();
+
+  const movieTmdbId = movie?.tmdbId;
 
   // Set header title
   useLayoutEffect(() => {

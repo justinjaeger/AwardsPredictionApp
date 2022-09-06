@@ -1,37 +1,35 @@
 import React from 'react';
-import { CategoryType, Song } from '../../models';
+import { CategoryType, Movie, Song } from '../../models';
 import PerformanceDetails from './PerformanceDetails';
 import FilmDetails from './FilmDetails';
 import { DetailContainer } from './styles';
 import SongDetails from './SongDetails';
 
 type iContenderDetailsProps = {
-  movieTmdbId?: number;
+  movie?: Movie;
   personTmdbId?: number;
   song?: Song | undefined;
   categoryType: CategoryType;
 };
 
 const ContenderDetails = (props: iContenderDetailsProps) => {
-  const { movieTmdbId, categoryType, personTmdbId, song } = props;
+  const { movie, categoryType, personTmdbId, song } = props;
 
   const DetailComponent = (() => {
     switch (categoryType) {
       case CategoryType.FILM:
-        if (movieTmdbId) {
-          return <FilmDetails movieTmdbId={movieTmdbId} />;
+        if (movie) {
+          return <FilmDetails movie={movie} />;
         }
         break;
       case CategoryType.PERFORMANCE:
         if (personTmdbId) {
-          return (
-            <PerformanceDetails personTmdbId={personTmdbId} movieTmdbId={movieTmdbId} />
-          );
+          return <PerformanceDetails personTmdbId={personTmdbId} movie={movie} />;
         }
         break;
       case CategoryType.SONG:
-        if (movieTmdbId && song) {
-          return <SongDetails movieTmdbId={movieTmdbId} song={song} />;
+        if (movie && song) {
+          return <SongDetails movie={movie} song={song} />;
         }
         break;
       default:

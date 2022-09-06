@@ -9,8 +9,6 @@ const ContenderDetailsScreen = () => {
     params: { categoryType, contender, personTmdb },
   } = useRoute<RouteProp<HomeParamList, 'ContenderDetails'>>();
 
-  const movieTmdbId = contender.movie.tmdbId;
-
   return (
     <ScrollView
       contentContainerStyle={{
@@ -21,7 +19,7 @@ const ContenderDetailsScreen = () => {
       }}
     >
       <ContenderDetails
-        movieTmdbId={movieTmdbId}
+        movie={contender.movie}
         personTmdbId={personTmdb}
         song={contender.song || undefined}
         categoryType={categoryType}

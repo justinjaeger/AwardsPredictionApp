@@ -11,7 +11,7 @@ import ContenderDetails from '../../components/ContenderDetails';
 import { Body } from '../../components/Text';
 import TmdbMovieCache from '../../services/cache/tmdbMovie';
 import { iCreateContenderProps } from '.';
-import { CategoryType } from '../../models';
+import { CategoryType, Movie } from '../../models';
 import { IconButton } from '../../components/Buttons/IconButton';
 import { View } from 'react-native';
 
@@ -27,7 +27,7 @@ const CreateFilm = (props: iCreateContenderProps) => {
   const minReleaseYear = event.year - 1;
 
   const [searchResults, setSearchResults] = useState<iSearchData>([]);
-  const [tmdbId, setTmdbId] = useState<number | undefined>();
+  const [movie, setMovie] = useState<Movie | undefined>();
   const [loading, setLoading] = useState<boolean>(false);
   const [searchMessage, setSearchMessage] = useState<string>('');
 
@@ -37,7 +37,7 @@ const CreateFilm = (props: iCreateContenderProps) => {
       return setSearchResults([]);
     }
     TmdbServices.searchMovies(s, minReleaseYear).then((res) => {
-      setTmdbId(undefined);
+      setMovie(undefined);
       const r = res.data || [];
       setSearchResults(r);
       if (r.length === 0) {
@@ -56,26 +56,24 @@ const CreateFilm = (props: iCreateContenderProps) => {
           return;
         }
       }
-      setTmdbId(tmdbId);
+      setMovie(movie);
     } catch (err) {
       console.error('error selecting search result', err);
     }
   };
 
   const onConfirmContender = async () => {
-    if (!tmdbId) return;
-    setLoading(true);
-    const { data: movie } = await DS.getOrCreateMovie(tmdbId);
     if (!movie) return;
+    setLoading(true);
     await DS.getOrCreateContender(category, movie);
     setLoading(false);
     navigation.goBack();
-    const m = await TmdbMovieCache.get(tmdbId);
+    const m = await TmdbMovieCache.get(movie.tmdbId);
     Snackbar.success(`Added ${m?.title || 'film'} to predictions`);
   };
 
   const removeFilm = () => {
-    setTmdbId(undefined);
+    setMovie(undefined);
   };
 
   const movieData = searchResults.map((m) => ({
@@ -86,21 +84,20 @@ const CreateFilm = (props: iCreateContenderProps) => {
         : m.description
       : '',
     image: m.image,
-    onPress: () => onSelectMovie(m.tmdbId),
+    onPress: () => {
+      onSelectMovie(m.tmdbId);
+    },
   }));
 
   return (
     <>
-      {tmdbId ? (
+      {movie ? (
         <>
           <View style={{ position: 'absolute', right: 30, top: 10, zIndex: 2 }}>
             <IconButton iconProps={{ name: 'close-outline' }} onPress={removeFilm} />
           </View>
           <SubmitButton text={'Confirm'} onPress={onConfirmContender} loading={loading} />
-          <ContenderDetails
-            movieTmdbId={tmdbId}
-            categoryType={CategoryType[category.type]}
-          />
+          <ContenderDetails movie={movie} categoryType={CategoryType[category.type]} />
         </>
       ) : (
         <>

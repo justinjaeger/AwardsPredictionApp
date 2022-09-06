@@ -817,6 +817,7 @@ export const onCreateContender = /* GraphQL */ `
       movie {
         id
         tmdbId
+        studio
         createdAt
         updatedAt
         _version
@@ -892,6 +893,7 @@ export const onUpdateContender = /* GraphQL */ `
       movie {
         id
         tmdbId
+        studio
         createdAt
         updatedAt
         _version
@@ -967,6 +969,7 @@ export const onDeleteContender = /* GraphQL */ `
       movie {
         id
         tmdbId
+        studio
         createdAt
         updatedAt
         _version
@@ -1153,6 +1156,7 @@ export const onCreateMovie = /* GraphQL */ `
     onCreateMovie {
       id
       tmdbId
+      studio
       createdAt
       updatedAt
       _version
@@ -1166,6 +1170,7 @@ export const onUpdateMovie = /* GraphQL */ `
     onUpdateMovie {
       id
       tmdbId
+      studio
       createdAt
       updatedAt
       _version
@@ -1179,6 +1184,7 @@ export const onDeleteMovie = /* GraphQL */ `
     onDeleteMovie {
       id
       tmdbId
+      studio
       createdAt
       updatedAt
       _version
@@ -1235,6 +1241,7 @@ export const onCreateSong = /* GraphQL */ `
       movie {
         id
         tmdbId
+        studio
         createdAt
         updatedAt
         _version
@@ -1259,6 +1266,7 @@ export const onUpdateSong = /* GraphQL */ `
       movie {
         id
         tmdbId
+        studio
         createdAt
         updatedAt
         _version
@@ -1283,6 +1291,7 @@ export const onDeleteSong = /* GraphQL */ `
       movie {
         id
         tmdbId
+        studio
         createdAt
         updatedAt
         _version
