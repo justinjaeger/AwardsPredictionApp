@@ -5,7 +5,8 @@ import { CreateContenderParamList } from '../../navigation/types';
 import { Category, CategoryType } from '../../models';
 import { getAwardsBodyCategories } from '../../constants/categories';
 import CreateFilm from './CreateFilm';
-import CreatePerson from './CreatePerson';
+import CreatePerformance from './CreatePerformance';
+import CreateSong from './CreateSong';
 
 export type iCreateContenderProps = { category: Category };
 
@@ -25,6 +26,17 @@ const CreateContender = () => {
     });
   }, [navigation]);
 
+  const CreateComponent = (() => {
+    switch (CategoryType[category.type]) {
+      case CategoryType.FILM:
+        return <CreateFilm category={category} />;
+      case CategoryType.PERFORMANCE:
+        return <CreatePerformance category={category} />;
+      case CategoryType.SONG:
+        return <CreateSong category={category} />;
+    }
+  })();
+
   return (
     <ScrollView
       contentContainerStyle={{
@@ -34,11 +46,7 @@ const CreateContender = () => {
         paddingBottom: 100,
       }}
     >
-      {category.type === CategoryType.PERFORMANCE ? (
-        <CreatePerson category={category} />
-      ) : (
-        <CreateFilm category={category} />
-      )}
+      {CreateComponent}
     </ScrollView>
   );
 };

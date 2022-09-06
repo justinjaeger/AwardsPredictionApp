@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { PosterSize } from '../../../constants/posterDimensions';
+import { Category } from '../../../models';
 import { iCachedTmdbMovie } from '../../../services/cache/types';
 import TmdbServices from '../../../services/tmdb';
 import Poster from '../../Images/Poster';
@@ -8,12 +9,15 @@ import { BodyLarge } from '../../Text';
 
 type iContenderListItemProps = {
   tmdbId: number;
+  category: Category;
   ranking?: number;
   onPress: () => void;
 };
 
 const ContenderListItem = (props: iContenderListItemProps) => {
-  const { tmdbId, ranking, onPress } = props;
+  const { tmdbId, category, ranking, onPress } = props;
+
+  // TODO: based on category.name (CategoryName), display a distinct piece of information with the film like who the directors or screenwriters are
 
   const [movie, setMovie] = useState<iCachedTmdbMovie | undefined>();
 
@@ -24,6 +28,8 @@ const ContenderListItem = (props: iContenderListItemProps) => {
       }
     });
   }, [tmdbId]);
+
+  const categoryInfo = movie?.categoryInfo?.[category.name];
 
   // TODO: create better loading state
 
@@ -36,8 +42,10 @@ const ContenderListItem = (props: iContenderListItemProps) => {
       }}
     >
       <View style={{ flexDirection: 'row' }}>
+        {categoryInfo ? (
+          <BodyLarge style={{ marginLeft: 10 }}>{JSON.stringify(categoryInfo)}</BodyLarge>
+        ) : null}
         <BodyLarge style={{ marginLeft: 10 }}>{ranking?.toString() || ''}</BodyLarge>
-
         <Poster
           path={movie?.posterPath || null}
           title={movie?.title || ''}

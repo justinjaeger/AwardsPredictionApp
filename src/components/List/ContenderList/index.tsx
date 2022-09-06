@@ -1,19 +1,20 @@
 import React from 'react';
 import { View } from 'react-native';
 import COLORS from '../../../constants/colors';
-import { CategoryType, Contender } from '../../../models';
+import { Category, CategoryType, Contender } from '../../../models';
 import { BodyLarge } from '../../Text';
-import ContenderListItem from './ContenderListItem';
+import FilmListItem from './FilmListItem';
 import PerformanceListItem from './PerformanceListItem';
+import SongListItem from './SongListItem';
 
 type iContenderListProps = {
-  categoryType: CategoryType;
+  category: Category;
   contenders: Contender[];
-  onPressItem: (c: Contender) => void;
+  onPressItem: (c: Contender) => Promise<void>;
 };
 
 const ContenderList = (props: iContenderListProps) => {
-  const { categoryType, contenders, onPressItem } = props;
+  const { category, contenders, onPressItem } = props;
 
   return (
     <View
@@ -37,19 +38,37 @@ const ContenderList = (props: iContenderListProps) => {
         </View>
       ) : null}
       {contenders.map((c, i) => {
-        return categoryType === CategoryType.PERFORMANCE ? (
-          <PerformanceListItem
-            contender={c}
-            ranking={i + 1}
-            onPress={() => onPressItem(c)}
-          />
-        ) : (
-          <ContenderListItem
-            tmdbId={c.movie.tmdbId}
-            ranking={i + 1}
-            onPress={() => onPressItem(c)}
-          />
-        );
+        switch (CategoryType[category.type]) {
+          case CategoryType.FILM:
+            return (
+              <FilmListItem
+                category={category}
+                tmdbId={c.movie.tmdbId}
+                ranking={i + 1}
+                onPress={() => onPressItem(c)}
+              />
+            );
+          case CategoryType.PERFORMANCE:
+            return (
+              <PerformanceListItem
+                contender={c}
+                ranking={i + 1}
+                onPress={() => onPressItem(c)}
+              />
+            );
+          case CategoryType.SONG:
+            if (!c.song) return null;
+            return (
+              <SongListItem
+                tmdbMovieId={c.movie.tmdbId}
+                song={c.song}
+                ranking={i + 1}
+                onPress={() => onPressItem(c)}
+              />
+            );
+          default:
+            return null;
+        }
       })}
     </View>
   );

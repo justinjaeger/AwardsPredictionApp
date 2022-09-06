@@ -33,7 +33,7 @@ const CategorySelect = () => {
     setCategories(_categories);
   }, []);
 
-  const onSelectEvent = (c: Category) => {
+  const onSelectCategory = (c: Category) => {
     navigation.navigate('Contenders', { category: c });
   };
 
@@ -54,7 +54,7 @@ const CategorySelect = () => {
         return (
           <TouchableText
             text={catData?.name || ''}
-            onPress={() => onSelectEvent(c)}
+            onPress={() => onSelectCategory(c)}
             style={{ margin: 10 }}
           />
         );

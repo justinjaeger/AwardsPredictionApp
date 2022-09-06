@@ -364,6 +364,7 @@ export type Movie = {
   __typename: "Movie",
   id: string,
   tmdbId: number,
+  studio?: string | null,
   createdAt: string,
   updatedAt: string,
   _version: number,
@@ -385,7 +386,6 @@ export type Person = {
 export type Song = {
   __typename: "Song",
   id: string,
-  key: string,
   title: string,
   artist: string,
   movie: Movie,
@@ -806,11 +806,13 @@ export type DeleteContenderSnapshotInput = {
 export type CreateMovieInput = {
   id?: string | null,
   tmdbId: number,
+  studio?: string | null,
   _version?: number | null,
 };
 
 export type ModelMovieConditionInput = {
   tmdbId?: ModelIntInput | null,
+  studio?: ModelStringInput | null,
   and?: Array< ModelMovieConditionInput | null > | null,
   or?: Array< ModelMovieConditionInput | null > | null,
   not?: ModelMovieConditionInput | null,
@@ -819,6 +821,7 @@ export type ModelMovieConditionInput = {
 export type UpdateMovieInput = {
   id: string,
   tmdbId?: number | null,
+  studio?: string | null,
   _version?: number | null,
 };
 
@@ -853,7 +856,6 @@ export type DeletePersonInput = {
 
 export type CreateSongInput = {
   id?: string | null,
-  key: string,
   title: string,
   artist: string,
   _version?: number | null,
@@ -861,7 +863,6 @@ export type CreateSongInput = {
 };
 
 export type ModelSongConditionInput = {
-  key?: ModelStringInput | null,
   title?: ModelStringInput | null,
   artist?: ModelStringInput | null,
   and?: Array< ModelSongConditionInput | null > | null,
@@ -872,7 +873,6 @@ export type ModelSongConditionInput = {
 
 export type UpdateSongInput = {
   id: string,
-  key?: string | null,
   title?: string | null,
   artist?: string | null,
   _version?: number | null,
@@ -1054,6 +1054,7 @@ export type ModelContenderSnapshotFilterInput = {
 export type ModelMovieFilterInput = {
   id?: ModelIDInput | null,
   tmdbId?: ModelIntInput | null,
+  studio?: ModelStringInput | null,
   and?: Array< ModelMovieFilterInput | null > | null,
   or?: Array< ModelMovieFilterInput | null > | null,
   not?: ModelMovieFilterInput | null,
@@ -1083,7 +1084,6 @@ export type ModelPersonConnection = {
 
 export type ModelSongFilterInput = {
   id?: ModelIDInput | null,
-  key?: ModelStringInput | null,
   title?: ModelStringInput | null,
   artist?: ModelStringInput | null,
   and?: Array< ModelSongFilterInput | null > | null,
@@ -2202,6 +2202,7 @@ export type CreateContenderMutation = {
       __typename: "Movie",
       id: string,
       tmdbId: number,
+      studio?: string | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -2221,7 +2222,6 @@ export type CreateContenderMutation = {
     song?:  {
       __typename: "Song",
       id: string,
-      key: string,
       title: string,
       artist: string,
       createdAt: string,
@@ -2291,6 +2291,7 @@ export type UpdateContenderMutation = {
       __typename: "Movie",
       id: string,
       tmdbId: number,
+      studio?: string | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -2310,7 +2311,6 @@ export type UpdateContenderMutation = {
     song?:  {
       __typename: "Song",
       id: string,
-      key: string,
       title: string,
       artist: string,
       createdAt: string,
@@ -2380,6 +2380,7 @@ export type DeleteContenderMutation = {
       __typename: "Movie",
       id: string,
       tmdbId: number,
+      studio?: string | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -2399,7 +2400,6 @@ export type DeleteContenderMutation = {
     song?:  {
       __typename: "Song",
       id: string,
-      key: string,
       title: string,
       artist: string,
       createdAt: string,
@@ -2599,6 +2599,7 @@ export type CreateMovieMutation = {
     __typename: "Movie",
     id: string,
     tmdbId: number,
+    studio?: string | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -2617,6 +2618,7 @@ export type UpdateMovieMutation = {
     __typename: "Movie",
     id: string,
     tmdbId: number,
+    studio?: string | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -2635,6 +2637,7 @@ export type DeleteMovieMutation = {
     __typename: "Movie",
     id: string,
     tmdbId: number,
+    studio?: string | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -2706,13 +2709,13 @@ export type CreateSongMutation = {
   createSong?:  {
     __typename: "Song",
     id: string,
-    key: string,
     title: string,
     artist: string,
     movie:  {
       __typename: "Movie",
       id: string,
       tmdbId: number,
+      studio?: string | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -2737,13 +2740,13 @@ export type UpdateSongMutation = {
   updateSong?:  {
     __typename: "Song",
     id: string,
-    key: string,
     title: string,
     artist: string,
     movie:  {
       __typename: "Movie",
       id: string,
       tmdbId: number,
+      studio?: string | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -2768,13 +2771,13 @@ export type DeleteSongMutation = {
   deleteSong?:  {
     __typename: "Song",
     id: string,
-    key: string,
     title: string,
     artist: string,
     movie:  {
       __typename: "Movie",
       id: string,
       tmdbId: number,
+      studio?: string | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -3600,6 +3603,7 @@ export type GetContenderQuery = {
       __typename: "Movie",
       id: string,
       tmdbId: number,
+      studio?: string | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -3619,7 +3623,6 @@ export type GetContenderQuery = {
     song?:  {
       __typename: "Song",
       id: string,
-      key: string,
       title: string,
       artist: string,
       createdAt: string,
@@ -3837,6 +3840,7 @@ export type GetMovieQuery = {
     __typename: "Movie",
     id: string,
     tmdbId: number,
+    studio?: string | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -3860,6 +3864,7 @@ export type ListMoviesQuery = {
       __typename: "Movie",
       id: string,
       tmdbId: number,
+      studio?: string | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -3885,6 +3890,7 @@ export type SyncMoviesQuery = {
       __typename: "Movie",
       id: string,
       tmdbId: number,
+      studio?: string | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -3972,13 +3978,13 @@ export type GetSongQuery = {
   getSong?:  {
     __typename: "Song",
     id: string,
-    key: string,
     title: string,
     artist: string,
     movie:  {
       __typename: "Movie",
       id: string,
       tmdbId: number,
+      studio?: string | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -4008,7 +4014,6 @@ export type ListSongsQuery = {
     items:  Array< {
       __typename: "Song",
       id: string,
-      key: string,
       title: string,
       artist: string,
       createdAt: string,
@@ -4036,7 +4041,6 @@ export type SyncSongsQuery = {
     items:  Array< {
       __typename: "Song",
       id: string,
-      key: string,
       title: string,
       artist: string,
       createdAt: string,
@@ -5286,6 +5290,7 @@ export type OnCreateContenderSubscription = {
       __typename: "Movie",
       id: string,
       tmdbId: number,
+      studio?: string | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -5305,7 +5310,6 @@ export type OnCreateContenderSubscription = {
     song?:  {
       __typename: "Song",
       id: string,
-      key: string,
       title: string,
       artist: string,
       createdAt: string,
@@ -5370,6 +5374,7 @@ export type OnUpdateContenderSubscription = {
       __typename: "Movie",
       id: string,
       tmdbId: number,
+      studio?: string | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -5389,7 +5394,6 @@ export type OnUpdateContenderSubscription = {
     song?:  {
       __typename: "Song",
       id: string,
-      key: string,
       title: string,
       artist: string,
       createdAt: string,
@@ -5454,6 +5458,7 @@ export type OnDeleteContenderSubscription = {
       __typename: "Movie",
       id: string,
       tmdbId: number,
+      studio?: string | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -5473,7 +5478,6 @@ export type OnDeleteContenderSubscription = {
     song?:  {
       __typename: "Song",
       id: string,
-      key: string,
       title: string,
       artist: string,
       createdAt: string,
@@ -5653,6 +5657,7 @@ export type OnCreateMovieSubscription = {
     __typename: "Movie",
     id: string,
     tmdbId: number,
+    studio?: string | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -5666,6 +5671,7 @@ export type OnUpdateMovieSubscription = {
     __typename: "Movie",
     id: string,
     tmdbId: number,
+    studio?: string | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -5679,6 +5685,7 @@ export type OnDeleteMovieSubscription = {
     __typename: "Movie",
     id: string,
     tmdbId: number,
+    studio?: string | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -5730,13 +5737,13 @@ export type OnCreateSongSubscription = {
   onCreateSong?:  {
     __typename: "Song",
     id: string,
-    key: string,
     title: string,
     artist: string,
     movie:  {
       __typename: "Movie",
       id: string,
       tmdbId: number,
+      studio?: string | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -5756,13 +5763,13 @@ export type OnUpdateSongSubscription = {
   onUpdateSong?:  {
     __typename: "Song",
     id: string,
-    key: string,
     title: string,
     artist: string,
     movie:  {
       __typename: "Movie",
       id: string,
       tmdbId: number,
+      studio?: string | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -5782,13 +5789,13 @@ export type OnDeleteSongSubscription = {
   onDeleteSong?:  {
     __typename: "Song",
     id: string,
-    key: string,
     title: string,
     artist: string,
     movie:  {
       __typename: "Movie",
       id: string,
       tmdbId: number,
+      studio?: string | null,
       createdAt: string,
       updatedAt: string,
       _version: number,

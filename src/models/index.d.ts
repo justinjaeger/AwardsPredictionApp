@@ -272,6 +272,7 @@ export declare class UserPredictingEvent {
 export declare class Movie {
   readonly id: string;
   readonly tmdbId: number;
+  readonly studio?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
   constructor(init: ModelInit<Movie, MovieMetaData>);
@@ -289,7 +290,6 @@ export declare class Person {
 
 export declare class Song {
   readonly id: string;
-  readonly key: string;
   readonly title: string;
   readonly artist: string;
   readonly movie: Movie;

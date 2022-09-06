@@ -1232,6 +1232,13 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
+                "studio": {
+                    "name": "studio",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -1356,13 +1363,6 @@ export const schema = {
                     "name": "id",
                     "isArray": false,
                     "type": "ID",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "key": {
-                    "name": "key",
-                    "isArray": false,
-                    "type": "String",
                     "isRequired": true,
                     "attributes": []
                 },
@@ -1667,5 +1667,5 @@ export const schema = {
         }
     },
     "nonModels": {},
-    "version": "746ed3d3a1619dd188248ca17325d818"
+    "version": "cc9d6509b820287fa40633162b5b8d83"
 };

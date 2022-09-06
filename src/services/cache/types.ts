@@ -1,4 +1,6 @@
-import { iTmdbCast, iTmdbCrew } from '../tmdb/types';
+import { CategoryName } from '../../models';
+
+export type iCategoryDetails = { [key in CategoryName]: string[] | undefined };
 
 export type iCachedTmdbMovie = {
   title: string;
@@ -9,11 +11,8 @@ export type iCachedTmdbMovie = {
   productionCountries: string[];
   backdropPath: string | null;
   posterPath: string | null;
-};
-
-export type iCachedTmdbCredits = {
-  directors: iTmdbCrew[];
-  cast: iTmdbCast[];
+  cast: string;
+  categoryInfo: iCategoryDetails;
 };
 
 export type iCachedTmdbPerson = {

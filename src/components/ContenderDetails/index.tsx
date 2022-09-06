@@ -1,34 +1,44 @@
 import React from 'react';
-import { CategoryType } from '../../models';
-import { iCachedTmdbMovie } from '../../services/cache/types';
+import { CategoryType, Movie, Song } from '../../models';
 import PerformanceDetails from './PerformanceDetails';
 import FilmDetails from './FilmDetails';
 import { DetailContainer } from './styles';
-import PersonDetails from './PersonDetails';
+import SongDetails from './SongDetails';
 
 type iContenderDetailsProps = {
-  movieTmdbId?: number;
+  movie?: Movie;
   personTmdbId?: number;
+  song?: Song | undefined;
   categoryType: CategoryType;
-  returnContenderDetails?: (md: iCachedTmdbMovie | undefined) => void;
 };
 
 const ContenderDetails = (props: iContenderDetailsProps) => {
-  const { movieTmdbId, categoryType, personTmdbId } = props;
+  const { movie, categoryType, personTmdbId, song } = props;
 
-  return (
-    <DetailContainer>
-      {categoryType === CategoryType.PERFORMANCE && personTmdbId ? (
-        movieTmdbId ? (
-          <PerformanceDetails personId={personTmdbId} movieId={movieTmdbId} />
-        ) : movieTmdbId ? (
-          <PersonDetails tmdbId={personTmdbId} />
-        ) : null
-      ) : movieTmdbId ? (
-        <FilmDetails tmdbId={movieTmdbId} />
-      ) : null}
-    </DetailContainer>
-  );
+  const DetailComponent = (() => {
+    switch (categoryType) {
+      case CategoryType.FILM:
+        if (movie) {
+          return <FilmDetails movie={movie} />;
+        }
+        break;
+      case CategoryType.PERFORMANCE:
+        if (personTmdbId) {
+          return <PerformanceDetails personTmdbId={personTmdbId} movie={movie} />;
+        }
+        break;
+      case CategoryType.SONG:
+        if (movie && song) {
+          return <SongDetails movie={movie} song={song} />;
+        }
+        break;
+      default:
+        return null;
+    }
+    return null;
+  })();
+
+  return <DetailContainer>{DetailComponent}</DetailContainer>;
 };
 
 export default ContenderDetails;

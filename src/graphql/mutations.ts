@@ -892,6 +892,7 @@ export const createContender = /* GraphQL */ `
       movie {
         id
         tmdbId
+        studio
         createdAt
         updatedAt
         _version
@@ -909,7 +910,6 @@ export const createContender = /* GraphQL */ `
       }
       song {
         id
-        key
         title
         artist
         createdAt
@@ -971,6 +971,7 @@ export const updateContender = /* GraphQL */ `
       movie {
         id
         tmdbId
+        studio
         createdAt
         updatedAt
         _version
@@ -988,7 +989,6 @@ export const updateContender = /* GraphQL */ `
       }
       song {
         id
-        key
         title
         artist
         createdAt
@@ -1050,6 +1050,7 @@ export const deleteContender = /* GraphQL */ `
       movie {
         id
         tmdbId
+        studio
         createdAt
         updatedAt
         _version
@@ -1067,7 +1068,6 @@ export const deleteContender = /* GraphQL */ `
       }
       song {
         id
-        key
         title
         artist
         createdAt
@@ -1249,6 +1249,7 @@ export const createMovie = /* GraphQL */ `
     createMovie(input: $input, condition: $condition) {
       id
       tmdbId
+      studio
       createdAt
       updatedAt
       _version
@@ -1265,6 +1266,7 @@ export const updateMovie = /* GraphQL */ `
     updateMovie(input: $input, condition: $condition) {
       id
       tmdbId
+      studio
       createdAt
       updatedAt
       _version
@@ -1281,6 +1283,7 @@ export const deleteMovie = /* GraphQL */ `
     deleteMovie(input: $input, condition: $condition) {
       id
       tmdbId
+      studio
       createdAt
       updatedAt
       _version
@@ -1344,12 +1347,12 @@ export const createSong = /* GraphQL */ `
   ) {
     createSong(input: $input, condition: $condition) {
       id
-      key
       title
       artist
       movie {
         id
         tmdbId
+        studio
         createdAt
         updatedAt
         _version
@@ -1372,12 +1375,12 @@ export const updateSong = /* GraphQL */ `
   ) {
     updateSong(input: $input, condition: $condition) {
       id
-      key
       title
       artist
       movie {
         id
         tmdbId
+        studio
         createdAt
         updatedAt
         _version
@@ -1400,12 +1403,12 @@ export const deleteSong = /* GraphQL */ `
   ) {
     deleteSong(input: $input, condition: $condition) {
       id
-      key
       title
       artist
       movie {
         id
         tmdbId
+        studio
         createdAt
         updatedAt
         _version

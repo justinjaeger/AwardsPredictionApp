@@ -20,7 +20,6 @@ export const getTmdbPerson = async (
 
     // else, fetch from tmdb
     const url = `${TMDB_URL}/person/${tmdbId}?api_key=${TMDB_API_KEY}`;
-    console.error('urllllll', url);
     const result = (await axios(url)) as iTmdbResponse<iTmdbPersonResponse>;
     // console.error('result', result);
     if (result?.status === 'error') {
@@ -42,7 +41,7 @@ export const getTmdbPerson = async (
       status: 'success',
       data,
     };
-  } catch (err: any) {
+  } catch (err) {
     return handleError('error searching tmdb', err);
   }
 };
@@ -63,7 +62,6 @@ export const getTmdbPersonMovieCredits = async (
         const releaseYear = c.release_date
           ? parseInt(c.release_date.slice(0, 4), 10)
           : undefined;
-        console.error('releaseYear', releaseYear);
         if (releaseYear) {
           return releaseYear >= minReleaseYear;
         } else {
@@ -82,7 +80,7 @@ export const getTmdbPersonMovieCredits = async (
       status: 'success',
       data,
     };
-  } catch (err: any) {
+  } catch (err) {
     return handleError('error searching tmdb', err);
   }
 };

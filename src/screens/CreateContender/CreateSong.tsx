@@ -9,16 +9,16 @@ import DS from '../../services/datastore';
 import Snackbar from '../../components/Snackbar';
 import ContenderDetails from '../../components/ContenderDetails';
 import { Body } from '../../components/Text';
-import TmdbMovieCache from '../../services/cache/tmdbMovie';
 import { iCreateContenderProps } from '.';
 import { CategoryType, Movie } from '../../models';
 import { IconButton } from '../../components/Buttons/IconButton';
 import { View } from 'react-native';
+import FormInput from '../../components/Inputs/FormInput';
 
 const MAX_CHAR_COUNT = 100;
 
 // TODO: should only be able to do this if logged in
-const CreateFilm = (props: iCreateContenderProps) => {
+const CreateSong = (props: iCreateContenderProps) => {
   const { category } = props;
 
   const navigation = useNavigation();
@@ -30,6 +30,8 @@ const CreateFilm = (props: iCreateContenderProps) => {
   const [movie, setMovie] = useState<Movie | undefined>();
   const [loading, setLoading] = useState<boolean>(false);
   const [searchMessage, setSearchMessage] = useState<string>('');
+  const [songTitle, setSongTitle] = useState<string>('');
+  const [artist, setArtist] = useState<string>('');
 
   const handleSearch = (s: string) => {
     if (s === '') {
@@ -50,26 +52,22 @@ const CreateFilm = (props: iCreateContenderProps) => {
     try {
       const { data: movie } = await DS.getOrCreateMovie(tmdbId);
       if (movie) {
-        const { data: contender } = await DS.getContender(category, movie);
-        if (contender) {
-          Snackbar.error('This movie has already been added');
-          return;
-        }
+        setMovie(movie);
       }
-      setMovie(movie);
     } catch (err) {
       console.error('error selecting search result', err);
     }
   };
 
-  const onConfirmContender = async () => {
+  const onConfirmSong = async () => {
     if (!movie) return;
     setLoading(true);
-    await DS.getOrCreateContender(category, movie);
-    setLoading(false);
+    const { data: song } = await DS.getOrCreateSong(songTitle, artist, movie);
+    if (!song) return;
+    await DS.getOrCreateSongContender(category, movie, song);
     navigation.goBack();
-    const m = await TmdbMovieCache.get(movie.tmdbId);
-    Snackbar.success(`Added ${m?.title || 'film'} to predictions`);
+    Snackbar.success(`Added ${song.title || 'film'} to predictions`);
+    setLoading(false);
   };
 
   const removeFilm = () => {
@@ -84,20 +82,42 @@ const CreateFilm = (props: iCreateContenderProps) => {
         : m.description
       : '',
     image: m.image,
-    onPress: () => {
-      onSelectMovie(m.tmdbId);
-    },
+    onPress: () => onSelectMovie(m.tmdbId),
   }));
 
   return (
     <>
       {movie ? (
         <>
-          <View style={{ position: 'absolute', right: 30, top: 10, zIndex: 2 }}>
-            <IconButton iconProps={{ name: 'close-outline' }} onPress={removeFilm} />
+          <View style={{ width: '90%' }}>
+            <FormInput
+              label="Song Title"
+              value={songTitle}
+              setValue={setSongTitle}
+              textContentType={'name'}
+            />
+            <FormInput
+              label="Artist"
+              value={artist}
+              setValue={setArtist}
+              textContentType={'name'}
+            />
+            <SubmitButton
+              text={'Confirm'}
+              onPress={onConfirmSong}
+              loading={loading}
+              disabled={songTitle.length === 0 || artist.length === 0}
+            />
           </View>
-          <SubmitButton text={'Confirm'} onPress={onConfirmContender} loading={loading} />
-          <ContenderDetails movie={movie} categoryType={CategoryType[category.type]} />
+          <View>
+            <View style={{ position: 'absolute', right: 10, top: 10, zIndex: 2 }}>
+              <IconButton iconProps={{ name: 'close-outline' }} onPress={removeFilm} />
+            </View>
+            <ContenderDetails
+              movie={movie}
+              categoryType={CategoryType.FILM} // Imporant because we're entering details in the screen and can't display them yet
+            />
+          </View>
         </>
       ) : (
         <>
@@ -116,4 +136,4 @@ const CreateFilm = (props: iCreateContenderProps) => {
   );
 };
 
-export default CreateFilm;
+export default CreateSong;

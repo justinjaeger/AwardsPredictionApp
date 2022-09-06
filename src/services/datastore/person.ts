@@ -4,7 +4,7 @@ import { Person } from '../../models';
 
 /**
  * enforce tmdb being unique
- * check to see if movie is already stored (identified by tmdbId)
+ * check to see if person is already stored (identified by tmdbId)
  */
 export const getOrCreatePerson = async (
   tmdbId: number,

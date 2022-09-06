@@ -817,6 +817,7 @@ export const onCreateContender = /* GraphQL */ `
       movie {
         id
         tmdbId
+        studio
         createdAt
         updatedAt
         _version
@@ -834,7 +835,6 @@ export const onCreateContender = /* GraphQL */ `
       }
       song {
         id
-        key
         title
         artist
         createdAt
@@ -893,6 +893,7 @@ export const onUpdateContender = /* GraphQL */ `
       movie {
         id
         tmdbId
+        studio
         createdAt
         updatedAt
         _version
@@ -910,7 +911,6 @@ export const onUpdateContender = /* GraphQL */ `
       }
       song {
         id
-        key
         title
         artist
         createdAt
@@ -969,6 +969,7 @@ export const onDeleteContender = /* GraphQL */ `
       movie {
         id
         tmdbId
+        studio
         createdAt
         updatedAt
         _version
@@ -986,7 +987,6 @@ export const onDeleteContender = /* GraphQL */ `
       }
       song {
         id
-        key
         title
         artist
         createdAt
@@ -1156,6 +1156,7 @@ export const onCreateMovie = /* GraphQL */ `
     onCreateMovie {
       id
       tmdbId
+      studio
       createdAt
       updatedAt
       _version
@@ -1169,6 +1170,7 @@ export const onUpdateMovie = /* GraphQL */ `
     onUpdateMovie {
       id
       tmdbId
+      studio
       createdAt
       updatedAt
       _version
@@ -1182,6 +1184,7 @@ export const onDeleteMovie = /* GraphQL */ `
     onDeleteMovie {
       id
       tmdbId
+      studio
       createdAt
       updatedAt
       _version
@@ -1233,12 +1236,12 @@ export const onCreateSong = /* GraphQL */ `
   subscription OnCreateSong {
     onCreateSong {
       id
-      key
       title
       artist
       movie {
         id
         tmdbId
+        studio
         createdAt
         updatedAt
         _version
@@ -1258,12 +1261,12 @@ export const onUpdateSong = /* GraphQL */ `
   subscription OnUpdateSong {
     onUpdateSong {
       id
-      key
       title
       artist
       movie {
         id
         tmdbId
+        studio
         createdAt
         updatedAt
         _version
@@ -1283,12 +1286,12 @@ export const onDeleteSong = /* GraphQL */ `
   subscription OnDeleteSong {
     onDeleteSong {
       id
-      key
       title
       artist
       movie {
         id
         tmdbId
+        studio
         createdAt
         updatedAt
         _version
