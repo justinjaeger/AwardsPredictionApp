@@ -2,6 +2,7 @@ import React from 'react';
 import { Input } from '@ui-kitten/components';
 import { iTextContentType } from './types';
 import { EvaStatus } from '@ui-kitten/components/devsupport';
+import { titleCase } from 'title-case';
 
 const FormInput = (props: {
   label: string;
@@ -28,6 +29,9 @@ const FormInput = (props: {
         if (/^[0-9]*$/.test(v) === true && v.length <= 6) {
           setValue(v.toLowerCase());
         }
+        break;
+      case 'name':
+        setValue(titleCase(v));
         break;
       default:
         setValue(v);

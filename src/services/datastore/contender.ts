@@ -46,9 +46,9 @@ export const getPerformance = async (
 };
 
 /**
- * returns song if exists
+ * returns performance if exists
  */
-export const getSong = async (
+export const getSongContender = async (
   category: Category,
   movie: Movie,
   song: Song,
@@ -63,8 +63,8 @@ export const getSong = async (
         c.category?.id === category.id &&
         c.category?.type === CategoryType.SONG,
     );
-    const songContender = maybeSongs.length > 0 ? maybeSongs[0] : undefined;
-    return { status: 'success', data: songContender };
+    const s = maybeSongs.length > 0 ? maybeSongs[0] : undefined;
+    return { status: 'success', data: s };
   } catch (err) {
     return handleError(undefined, err);
   }
@@ -105,9 +105,7 @@ export const getOrCreatePerformance = async (
   person: Person,
 ): Promise<iApiResponse<Contender>> => {
   try {
-    console.error('passing this in:', person);
     let performance = (await getPerformance(category, movie, person)).data;
-    console.error('got this back:', performance);
     if (!performance) {
       performance = await DataStore.save(
         new Contender({
@@ -118,7 +116,6 @@ export const getOrCreatePerformance = async (
           contenderPersonId: person.id,
         }),
       );
-      console.error('created this:', performance); // GOOD, has person and person.tmdb
     }
     return { status: 'success', data: performance };
   } catch (err) {
@@ -127,27 +124,28 @@ export const getOrCreatePerformance = async (
 };
 
 /**
- * returns existing or new performance based on uniqueness of category+movie+song
- * only works with CategoryType.SONG
+ * returns existing or new performance based on uniqueness of category+movie+person
+ * only works with CategoryType.PERFORMANCE
  */
-export const getOrCreateSong = async (
+export const getOrCreateSongContender = async (
   category: Category,
   movie: Movie,
   song: Song,
 ): Promise<iApiResponse<Contender>> => {
   try {
-    let songContender = (await getSong(category, movie, song)).data;
-    if (!songContender) {
-      songContender = await DataStore.save(
+    let _song = (await getSongContender(category, movie, song)).data;
+    if (!_song) {
+      _song = await DataStore.save(
         new Contender({
           category,
           movie,
           song,
           contenderMovieId: movie.id,
+          contenderSongId: song.id,
         }),
       );
     }
-    return { status: 'success', data: songContender };
+    return { status: 'success', data: _song };
   } catch (err) {
     return handleError(undefined, err);
   }

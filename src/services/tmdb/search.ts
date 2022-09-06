@@ -54,7 +54,7 @@ export const searchMovies = async (
         image: d.poster_path,
       })),
     };
-  } catch (err: any) {
+  } catch (err) {
     return handleError('error searching tmdb', err);
   }
 };
@@ -85,7 +85,7 @@ export const searchPeople = async (
         image: p.profile_path,
       })),
     };
-  } catch (err: any) {
+  } catch (err) {
     return handleError('error searching tmdb', err);
   }
 };

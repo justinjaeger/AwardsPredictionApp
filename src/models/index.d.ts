@@ -136,10 +136,6 @@ type ContenderSnapshotMetaData = {
   readOnlyFields: 'updatedAt';
 }
 
-type SongDraftMetaData = {
-  readOnlyFields: 'createdAt' | 'updatedAt';
-}
-
 export declare class User {
   readonly id: string;
   readonly email: string;
@@ -314,15 +310,4 @@ export declare class ContenderSnapshot {
   readonly updatedAt?: string | null;
   constructor(init: ModelInit<ContenderSnapshot, ContenderSnapshotMetaData>);
   static copyOf(source: ContenderSnapshot, mutator: (draft: MutableModel<ContenderSnapshot, ContenderSnapshotMetaData>) => MutableModel<ContenderSnapshot, ContenderSnapshotMetaData> | void): ContenderSnapshot;
-}
-
-export declare class SongDraft {
-  readonly id: string;
-  readonly title: string;
-  readonly movie: Movie;
-  readonly createdAt?: string | null;
-  readonly updatedAt?: string | null;
-  readonly songDraftMovieId: string;
-  constructor(init: ModelInit<SongDraft, SongDraftMetaData>);
-  static copyOf(source: SongDraft, mutator: (draft: MutableModel<SongDraft, SongDraftMetaData>) => MutableModel<SongDraft, SongDraftMetaData> | void): SongDraft;
 }

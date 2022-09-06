@@ -9,12 +9,15 @@ import { iCachedTmdbCredits, iCachedTmdbMovie } from '../../services/cache/types
 import TmdbServices from '../../services/tmdb';
 
 type iFilmDetailsProps = {
-  tmdbId: number;
-  returnContenderDetails?: (md: iCachedTmdbMovie | undefined) => void;
+  movieTmdbId: number;
 };
 
+// TODO: based on category.name (CategoryName), display a distinct piece of information with the film like who the directors or screenwriters are
+// That would be more like ContenderDetails, which is actually helpful because we want to see more details about the CONTENDER, not necessarily the movie
+// This is also where we want to take a look at stats in the future, so we do need the contender passed into the details screen
+
 const FilmDetails = (props: iFilmDetailsProps) => {
-  const { tmdbId, returnContenderDetails } = props;
+  const { movieTmdbId } = props;
 
   const navigation = useNavigation();
 
@@ -31,14 +34,13 @@ const FilmDetails = (props: iFilmDetailsProps) => {
   }, [navigation, movieDetails]);
 
   useEffect(() => {
-    TmdbServices.getTmdbMovie(tmdbId).then((res) => {
+    TmdbServices.getTmdbMovie(movieTmdbId).then((res) => {
       setContenderDetails(res.data);
-      returnContenderDetails && returnContenderDetails(res.data);
     });
-    TmdbServices.getTmdbMovieCredits(tmdbId).then((res) => {
+    TmdbServices.getTmdbMovieCredits(movieTmdbId).then((res) => {
       setCastAndCrew(res.data);
     });
-  }, [tmdbId, returnContenderDetails]);
+  }, [movieTmdbId]);
 
   const directors = castAndCrew?.directors?.map((d) => d.name).join(', ');
 

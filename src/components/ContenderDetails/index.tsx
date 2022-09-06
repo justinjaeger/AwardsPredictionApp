@@ -1,34 +1,46 @@
 import React from 'react';
-import { CategoryType } from '../../models';
-import { iCachedTmdbMovie } from '../../services/cache/types';
+import { CategoryType, Song } from '../../models';
 import PerformanceDetails from './PerformanceDetails';
 import FilmDetails from './FilmDetails';
 import { DetailContainer } from './styles';
-import PersonDetails from './PersonDetails';
+import SongDetails from './SongDetails';
 
 type iContenderDetailsProps = {
   movieTmdbId?: number;
   personTmdbId?: number;
+  song?: Song | undefined;
   categoryType: CategoryType;
-  returnContenderDetails?: (md: iCachedTmdbMovie | undefined) => void;
 };
 
 const ContenderDetails = (props: iContenderDetailsProps) => {
-  const { movieTmdbId, categoryType, personTmdbId } = props;
+  const { movieTmdbId, categoryType, personTmdbId, song } = props;
 
-  return (
-    <DetailContainer>
-      {categoryType === CategoryType.PERFORMANCE && personTmdbId ? (
-        movieTmdbId ? (
-          <PerformanceDetails personId={personTmdbId} movieId={movieTmdbId} />
-        ) : movieTmdbId ? (
-          <PersonDetails tmdbId={personTmdbId} />
-        ) : null
-      ) : movieTmdbId ? (
-        <FilmDetails tmdbId={movieTmdbId} />
-      ) : null}
-    </DetailContainer>
-  );
+  const DetailComponent = (() => {
+    switch (categoryType) {
+      case CategoryType.FILM:
+        if (movieTmdbId) {
+          return <FilmDetails movieTmdbId={movieTmdbId} />;
+        }
+        break;
+      case CategoryType.PERFORMANCE:
+        if (personTmdbId) {
+          return (
+            <PerformanceDetails personTmdbId={personTmdbId} movieTmdbId={movieTmdbId} />
+          );
+        }
+        break;
+      case CategoryType.SONG:
+        if (movieTmdbId && song) {
+          return <SongDetails movieTmdbId={movieTmdbId} song={song} />;
+        }
+        break;
+      default:
+        return null;
+    }
+    return null;
+  })();
+
+  return <DetailContainer>{DetailComponent}</DetailContainer>;
 };
 
 export default ContenderDetails;

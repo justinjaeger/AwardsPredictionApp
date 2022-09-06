@@ -46,7 +46,7 @@ export const getTmdbMovie = async (
       status: 'success',
       data,
     };
-  } catch (err: any) {
+  } catch (err) {
     return handleError('error searching tmdb', err);
   }
 };
@@ -81,7 +81,7 @@ export const getTmdbMovieCredits = async (
       status: 'success',
       data,
     };
-  } catch (err: any) {
+  } catch (err) {
     return handleError('error searching tmdb', err);
   }
 };

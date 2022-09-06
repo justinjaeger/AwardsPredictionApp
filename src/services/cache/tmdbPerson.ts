@@ -19,14 +19,6 @@ const get = async (tmdbId: number) => {
   return value;
 };
 
-const peek = async (tmdbId: number) => {
-  const value = await tmdbPersonCache.peek(tmdbId.toString());
-  if (value !== undefined) {
-    return JSON.parse(value) as iCachedTmdbPerson;
-  }
-  return value;
-};
-
 const set = async (tmdbId: number, value: iCachedTmdbPerson) => {
   return await tmdbPersonCache.set(tmdbId.toString(), JSON.stringify(value));
 };
@@ -48,7 +40,6 @@ const TmdbPersonCache = {
   get,
   set,
   remove,
-  peek,
   clearAll,
   getAllEntries,
 };

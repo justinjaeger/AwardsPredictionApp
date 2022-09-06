@@ -1561,94 +1561,6 @@ export const schema = {
                     }
                 }
             ]
-        },
-        "SongDraft": {
-            "name": "SongDraft",
-            "fields": {
-                "id": {
-                    "name": "id",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "title": {
-                    "name": "title",
-                    "isArray": false,
-                    "type": "String",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "movie": {
-                    "name": "movie",
-                    "isArray": false,
-                    "type": {
-                        "model": "Movie"
-                    },
-                    "isRequired": true,
-                    "attributes": [],
-                    "association": {
-                        "connectionType": "HAS_ONE",
-                        "associatedWith": "id",
-                        "targetName": "songDraftMovieId"
-                    }
-                },
-                "createdAt": {
-                    "name": "createdAt",
-                    "isArray": false,
-                    "type": "AWSDateTime",
-                    "isRequired": false,
-                    "attributes": [],
-                    "isReadOnly": true
-                },
-                "updatedAt": {
-                    "name": "updatedAt",
-                    "isArray": false,
-                    "type": "AWSDateTime",
-                    "isRequired": false,
-                    "attributes": [],
-                    "isReadOnly": true
-                },
-                "songDraftMovieId": {
-                    "name": "songDraftMovieId",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": true,
-                    "attributes": []
-                }
-            },
-            "syncable": true,
-            "pluralName": "SongDrafts",
-            "attributes": [
-                {
-                    "type": "model",
-                    "properties": {}
-                },
-                {
-                    "type": "key",
-                    "properties": {
-                        "fields": [
-                            "id"
-                        ]
-                    }
-                },
-                {
-                    "type": "auth",
-                    "properties": {
-                        "rules": [
-                            {
-                                "allow": "public",
-                                "operations": [
-                                    "create",
-                                    "update",
-                                    "delete",
-                                    "read"
-                                ]
-                            }
-                        ]
-                    }
-                }
-            ]
         }
     },
     "enums": {
@@ -1748,5 +1660,5 @@ export const schema = {
         }
     },
     "nonModels": {},
-    "version": "c79c6d283d96ee5d4a51e68ecf97d8d1"
+    "version": "25e84012d7f04d42907ed149fdc22a79"
 };

@@ -27,6 +27,10 @@ export type HomeParamList = {
   };
 };
 
+export type DevParamList = {
+  Dev: undefined;
+};
+
 export type CreateContenderParamList = {
   CreateContender: {
     category: Category;

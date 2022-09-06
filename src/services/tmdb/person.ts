@@ -41,7 +41,7 @@ export const getTmdbPerson = async (
       status: 'success',
       data,
     };
-  } catch (err: any) {
+  } catch (err) {
     return handleError('error searching tmdb', err);
   }
 };
@@ -62,7 +62,6 @@ export const getTmdbPersonMovieCredits = async (
         const releaseYear = c.release_date
           ? parseInt(c.release_date.slice(0, 4), 10)
           : undefined;
-        console.error('releaseYear', releaseYear);
         if (releaseYear) {
           return releaseYear >= minReleaseYear;
         } else {
@@ -81,7 +80,7 @@ export const getTmdbPersonMovieCredits = async (
       status: 'success',
       data,
     };
-  } catch (err: any) {
+  } catch (err) {
     return handleError('error searching tmdb', err);
   }
 };

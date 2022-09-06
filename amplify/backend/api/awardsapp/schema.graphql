@@ -276,9 +276,3 @@ type Song @model @auth(rules: [{ allow: public }]) {
     artist: String!
     movie: Movie! @hasOne
 }
-
-type SongDraft @model @auth(rules: [{ allow: public }]) {
-    id: ID! @primaryKey
-    title: String!
-    movie: Movie! @hasOne
-}

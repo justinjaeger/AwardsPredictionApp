@@ -86,16 +86,11 @@ const CreatePerformance = (props: iCreateContenderProps) => {
     if (!movie) return;
     const { data: person } = await DS.getOrCreatePerson(personId);
     if (!person) return;
-    const { data: performance } = await DS.getOrCreatePerformance(
-      category,
-      movie,
-      person,
-    );
-    console.error('performance should have person.tmdbId on it', performance); // CORRECT
+    await DS.getOrCreatePerformance(category, movie, person);
     setLoading(false);
     navigation.goBack();
     const p = await TmdbPersonCache.get(personId);
-    Snackbar.success(`Added ${p?.name || 'film'} to list`);
+    Snackbar.success(`Added ${p?.name || 'film'} to predictions`);
   };
 
   const peopleData = personSearchResults.map((p) => ({
