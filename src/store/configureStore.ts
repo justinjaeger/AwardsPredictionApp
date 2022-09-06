@@ -44,4 +44,5 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = createStore(persistedReducer, enhancer);
 
+// @ts-ignore
 export const persistor = persistStore(store);

@@ -1,13 +1,16 @@
+import { useNavigation } from '@react-navigation/native';
 import { DataStore } from 'aws-amplify';
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView, ScrollView, View } from 'react-native';
 import { TouchableText } from '../../components/Buttons';
-import { Body, Header, SubHeader } from '../../components/Text';
+import { Body, SubHeader } from '../../components/Text';
 import { User, Event, Category } from '../../models';
 import { createMockEvents, deleteMockEvents } from '../../scripts/mocks/events';
 import { deleteMockUsers, createMockUsers } from '../../scripts/mocks/users';
 
 const Dev = () => {
+  const navigation = useNavigation();
+
   const [users, setUsers] = useState<User[]>([]);
   const [events, setEvents] = useState<Event[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -30,7 +33,7 @@ const Dev = () => {
     return () => sub.unsubscribe();
   }, []);
 
-  // CATEGORIES
+  //   CATEGORIES
   useEffect(() => {
     // later we'll just use userId to get the user whose profile it is, but I want all users for experiment
     const sub = DataStore.observeQuery(Category).subscribe(({ items }) => {
@@ -40,7 +43,9 @@ const Dev = () => {
   }, []);
 
   const clear = () => {
-    DataStore.clear();
+    DataStore.clear()
+      .then((res) => console.error('cleared data store', res))
+      .catch((err) => console.error('err clearing data store', err));
   };
 
   return (
@@ -48,11 +53,16 @@ const Dev = () => {
       <ScrollView
         contentContainerStyle={{
           alignItems: 'center',
-          marginTop: 40,
           paddingBottom: 200,
         }}
       >
-        <Header>Dev Console</Header>
+        <TouchableText
+          text={'Approve songs'}
+          onPress={() => {
+            navigation.navigate('ApproveSongs');
+          }}
+          style={{ marginTop: 10 }}
+        />
         <TouchableText
           text={'Clear/Sync DataStore'}
           onPress={clear}

@@ -576,15 +576,6 @@ export const schema = {
                         "targetName": "categoryId"
                     }
                 },
-                "contenderType": {
-                    "name": "contenderType",
-                    "isArray": false,
-                    "type": {
-                        "enum": "ContenderType"
-                    },
-                    "isRequired": true,
-                    "attributes": []
-                },
                 "movie": {
                     "name": "movie",
                     "isArray": false,
@@ -783,6 +774,15 @@ export const schema = {
                     "isArray": false,
                     "type": {
                         "enum": "CategoryName"
+                    },
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "type": {
+                    "name": "type",
+                    "isArray": false,
+                    "type": {
+                        "enum": "CategoryType"
                     },
                     "isRequired": true,
                     "attributes": []
@@ -1232,6 +1232,13 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
+                "studio": {
+                    "name": "studio",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -1359,12 +1366,33 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "apiId": {
-                    "name": "apiId",
+                "title": {
+                    "name": "title",
                     "isArray": false,
                     "type": "String",
                     "isRequired": true,
                     "attributes": []
+                },
+                "artist": {
+                    "name": "artist",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "movie": {
+                    "name": "movie",
+                    "isArray": false,
+                    "type": {
+                        "model": "Movie"
+                    },
+                    "isRequired": true,
+                    "attributes": [],
+                    "association": {
+                        "connectionType": "HAS_ONE",
+                        "associatedWith": "id",
+                        "targetName": "songMovieId"
+                    }
                 },
                 "createdAt": {
                     "name": "createdAt",
@@ -1381,6 +1409,13 @@ export const schema = {
                     "isRequired": false,
                     "attributes": [],
                     "isReadOnly": true
+                },
+                "songMovieId": {
+                    "name": "songMovieId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
                 }
             },
             "syncable": true,
@@ -1569,10 +1604,10 @@ export const schema = {
                 "NOMINATION"
             ]
         },
-        "ContenderType": {
-            "name": "ContenderType",
+        "CategoryType": {
+            "name": "CategoryType",
             "values": [
-                "DEFAULT",
+                "FILM",
                 "PERFORMANCE",
                 "SONG"
             ]
@@ -1632,5 +1667,5 @@ export const schema = {
         }
     },
     "nonModels": {},
-    "version": "3f99a0aaf3890b143875dbfa6a2c00e8"
+    "version": "cc9d6509b820287fa40633162b5b8d83"
 };

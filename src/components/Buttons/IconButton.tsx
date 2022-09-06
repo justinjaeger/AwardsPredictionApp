@@ -13,14 +13,22 @@ type iIconButtonProps = {
   styles?: StyleProp<ViewStyle>;
 };
 
+const SIZE = 30;
+
 export const IconButton = (props: iIconButtonProps) => {
   const { onPress, iconProps, styles } = props;
   return (
     <Button
-      style={styles || {}}
+      style={
+        styles || {
+          borderRadius: SIZE,
+          height: SIZE,
+          width: SIZE,
+        }
+      }
       appearance="ghost"
       status="danger"
-      accessoryLeft={() => <CustomIcon {...iconProps} />}
+      accessoryLeft={() => <CustomIcon {...iconProps} styles={{ borderRadius: 100 }} />}
       onPress={onPress}
     />
   );

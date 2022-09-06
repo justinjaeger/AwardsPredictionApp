@@ -378,7 +378,6 @@ export const createPrediction = /* GraphQL */ `
       contender {
         id
         categoryId
-        contenderType
         didReceiveNominationOrWin
         createdAt
         updatedAt
@@ -414,7 +413,6 @@ export const updatePrediction = /* GraphQL */ `
       contender {
         id
         categoryId
-        contenderType
         didReceiveNominationOrWin
         createdAt
         updatedAt
@@ -450,7 +448,6 @@ export const deletePrediction = /* GraphQL */ `
       contender {
         id
         categoryId
-        contenderType
         didReceiveNominationOrWin
         createdAt
         updatedAt
@@ -772,6 +769,7 @@ export const createCategory = /* GraphQL */ `
     createCategory(input: $input, condition: $condition) {
       id
       name
+      type
       eventId
       event {
         id
@@ -807,6 +805,7 @@ export const updateCategory = /* GraphQL */ `
     updateCategory(input: $input, condition: $condition) {
       id
       name
+      type
       eventId
       event {
         id
@@ -842,6 +841,7 @@ export const deleteCategory = /* GraphQL */ `
     deleteCategory(input: $input, condition: $condition) {
       id
       name
+      type
       eventId
       event {
         id
@@ -880,6 +880,7 @@ export const createContender = /* GraphQL */ `
       category {
         id
         name
+        type
         eventId
         createdAt
         updatedAt
@@ -888,10 +889,10 @@ export const createContender = /* GraphQL */ `
         _lastChangedAt
         eventCategoriesId
       }
-      contenderType
       movie {
         id
         tmdbId
+        studio
         createdAt
         updatedAt
         _version
@@ -909,12 +910,14 @@ export const createContender = /* GraphQL */ `
       }
       song {
         id
-        apiId
+        title
+        artist
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
+        songMovieId
       }
       snapshots {
         nextToken
@@ -956,6 +959,7 @@ export const updateContender = /* GraphQL */ `
       category {
         id
         name
+        type
         eventId
         createdAt
         updatedAt
@@ -964,10 +968,10 @@ export const updateContender = /* GraphQL */ `
         _lastChangedAt
         eventCategoriesId
       }
-      contenderType
       movie {
         id
         tmdbId
+        studio
         createdAt
         updatedAt
         _version
@@ -985,12 +989,14 @@ export const updateContender = /* GraphQL */ `
       }
       song {
         id
-        apiId
+        title
+        artist
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
+        songMovieId
       }
       snapshots {
         nextToken
@@ -1032,6 +1038,7 @@ export const deleteContender = /* GraphQL */ `
       category {
         id
         name
+        type
         eventId
         createdAt
         updatedAt
@@ -1040,10 +1047,10 @@ export const deleteContender = /* GraphQL */ `
         _lastChangedAt
         eventCategoriesId
       }
-      contenderType
       movie {
         id
         tmdbId
+        studio
         createdAt
         updatedAt
         _version
@@ -1061,12 +1068,14 @@ export const deleteContender = /* GraphQL */ `
       }
       song {
         id
-        apiId
+        title
+        artist
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
+        songMovieId
       }
       snapshots {
         nextToken
@@ -1108,7 +1117,6 @@ export const createContenderSnapshot = /* GraphQL */ `
       contender {
         id
         categoryId
-        contenderType
         didReceiveNominationOrWin
         createdAt
         updatedAt
@@ -1124,6 +1132,7 @@ export const createContenderSnapshot = /* GraphQL */ `
       category {
         id
         name
+        type
         eventId
         createdAt
         updatedAt
@@ -1153,7 +1162,6 @@ export const updateContenderSnapshot = /* GraphQL */ `
       contender {
         id
         categoryId
-        contenderType
         didReceiveNominationOrWin
         createdAt
         updatedAt
@@ -1169,6 +1177,7 @@ export const updateContenderSnapshot = /* GraphQL */ `
       category {
         id
         name
+        type
         eventId
         createdAt
         updatedAt
@@ -1198,7 +1207,6 @@ export const deleteContenderSnapshot = /* GraphQL */ `
       contender {
         id
         categoryId
-        contenderType
         didReceiveNominationOrWin
         createdAt
         updatedAt
@@ -1214,6 +1222,7 @@ export const deleteContenderSnapshot = /* GraphQL */ `
       category {
         id
         name
+        type
         eventId
         createdAt
         updatedAt
@@ -1240,6 +1249,7 @@ export const createMovie = /* GraphQL */ `
     createMovie(input: $input, condition: $condition) {
       id
       tmdbId
+      studio
       createdAt
       updatedAt
       _version
@@ -1256,6 +1266,7 @@ export const updateMovie = /* GraphQL */ `
     updateMovie(input: $input, condition: $condition) {
       id
       tmdbId
+      studio
       createdAt
       updatedAt
       _version
@@ -1272,6 +1283,7 @@ export const deleteMovie = /* GraphQL */ `
     deleteMovie(input: $input, condition: $condition) {
       id
       tmdbId
+      studio
       createdAt
       updatedAt
       _version
@@ -1335,12 +1347,24 @@ export const createSong = /* GraphQL */ `
   ) {
     createSong(input: $input, condition: $condition) {
       id
-      apiId
+      title
+      artist
+      movie {
+        id
+        tmdbId
+        studio
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
+      songMovieId
     }
   }
 `;
@@ -1351,12 +1375,24 @@ export const updateSong = /* GraphQL */ `
   ) {
     updateSong(input: $input, condition: $condition) {
       id
-      apiId
+      title
+      artist
+      movie {
+        id
+        tmdbId
+        studio
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
+      songMovieId
     }
   }
 `;
@@ -1367,12 +1403,24 @@ export const deleteSong = /* GraphQL */ `
   ) {
     deleteSong(input: $input, condition: $condition) {
       id
-      apiId
+      title
+      artist
+      movie {
+        id
+        tmdbId
+        studio
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
+      songMovieId
     }
   }
 `;

@@ -27,8 +27,8 @@ export enum EventType {
   NOMINATION = "NOMINATION"
 }
 
-export enum ContenderType {
-  DEFAULT = "DEFAULT",
+export enum CategoryType {
+  FILM = "FILM",
   PERFORMANCE = "PERFORMANCE",
   SONG = "SONG"
 }
@@ -198,7 +198,6 @@ export declare class Prediction {
 export declare class Contender {
   readonly id: string;
   readonly category: Category;
-  readonly contenderType: ContenderType | keyof typeof ContenderType;
   readonly movie: Movie;
   readonly person?: Person | null;
   readonly song?: Song | null;
@@ -220,6 +219,7 @@ export declare class Contender {
 export declare class Category {
   readonly id: string;
   readonly name: CategoryName | keyof typeof CategoryName;
+  readonly type: CategoryType | keyof typeof CategoryType;
   readonly event: Event;
   readonly contenders?: (Contender | null)[] | null;
   readonly createdAt?: string | null;
@@ -272,6 +272,7 @@ export declare class UserPredictingEvent {
 export declare class Movie {
   readonly id: string;
   readonly tmdbId: number;
+  readonly studio?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
   constructor(init: ModelInit<Movie, MovieMetaData>);
@@ -289,9 +290,12 @@ export declare class Person {
 
 export declare class Song {
   readonly id: string;
-  readonly apiId: string;
+  readonly title: string;
+  readonly artist: string;
+  readonly movie: Movie;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
+  readonly songMovieId: string;
   constructor(init: ModelInit<Song, SongMetaData>);
   static copyOf(source: Song, mutator: (draft: MutableModel<Song, SongMetaData>) => MutableModel<Song, SongMetaData> | void): Song;
 }

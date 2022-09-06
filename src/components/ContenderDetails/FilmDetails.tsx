@@ -1,60 +1,58 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useLayoutEffect } from 'react';
 import { View } from 'react-native';
-import { TouchableText } from '../../components/Buttons';
-import Poster from '../../components/Images/Poster';
-import { BodyLarge, SubHeader } from '../../components/Text';
-import COLORS from '../../constants/colors';
+import { TouchableText } from '../Buttons';
+import Poster from '../Images/Poster';
+import { BodyLarge, SubHeader } from '../Text';
 import { PosterSize } from '../../constants/posterDimensions';
-import { iCachedTmdbCredits, iCachedTmdbMovie } from '../../services/cache/types';
+import { iCachedTmdbMovie } from '../../services/cache/types';
 import TmdbServices from '../../services/tmdb';
+import { Movie } from '../../models';
 
-type iMovieDetailsProps = {
-  tmdbId: number;
-  returnMovieDetails?: (md: iCachedTmdbMovie | undefined) => void;
+type iFilmDetailsProps = {
+  movie: Movie;
 };
 
-const MovieDetails = (props: iMovieDetailsProps) => {
-  const { tmdbId, returnMovieDetails } = props;
+// TODO: based on category.name (CategoryName), display a distinct piece of information with the film like who the directors or screenwriters are
+// That would be more like ContenderDetails, which is actually helpful because we want to see more details about the CONTENDER, not necessarily the movie
+// This is also where we want to take a look at stats in the future, so we do need the contender passed into the details screen
+
+const FilmDetails = (props: iFilmDetailsProps) => {
+  const { movie } = props;
 
   const navigation = useNavigation();
 
-  const [movieDetails, setMovieDetails] = useState<iCachedTmdbMovie | undefined>();
-  const [castAndCrew, setCastAndCrew] = useState<iCachedTmdbCredits | undefined>();
+  const [movieDetails, setContenderDetails] = useState<iCachedTmdbMovie | undefined>();
+
+  const movieTmdbId = movie.tmdbId;
+
+  // Set header title
+  useLayoutEffect(() => {
+    if (movieDetails) {
+      navigation.setOptions({
+        headerTitle: movieDetails.title,
+      });
+    }
+  }, [navigation, movieDetails]);
 
   useEffect(() => {
-    TmdbServices.getTmdbMovie(tmdbId).then((res) => {
-      setMovieDetails(res.data);
-      returnMovieDetails && returnMovieDetails(res.data);
+    TmdbServices.getTmdbMovie(movieTmdbId).then((res) => {
+      setContenderDetails(res.data);
     });
-    TmdbServices.getTmdbMovieCredits(tmdbId).then((res) => {
-      setCastAndCrew(res.data);
-    });
-  }, [tmdbId, returnMovieDetails]);
+  }, [movieTmdbId]);
 
-  const directors = castAndCrew?.directors?.map((d) => d.name).join(', ');
-
-  const formattedCast = castAndCrew?.cast
-    ?.map((c) => c.name)
-    .filter((c, i) => i < 10) // display 10 cast members max
-    .join(', ');
+  const formattedCast = movieDetails?.cast;
+  const directors = movieDetails?.categoryInfo?.DIRECTOR;
 
   const productionCompanies = movieDetails?.productionCompanies?.join(', ');
 
-  if (!movieDetails || !castAndCrew) {
+  if (!movieDetails) {
     // TODO: return loading state
     return null;
   }
 
   return (
-    <View
-      style={{
-        alignItems: 'center',
-        padding: 20,
-        backgroundColor: COLORS.lightestGray,
-        borderRadius: 20,
-      }}
-    >
+    <>
       <SubHeader style={{ margin: 10 }}>{movieDetails.title || ''}</SubHeader>
       {movieDetails ? (
         <Poster
@@ -93,13 +91,17 @@ const MovieDetails = (props: iMovieDetailsProps) => {
       <View style={{ alignItems: 'flex-start' }}>
         <View style={{ flexDirection: 'column', marginTop: 5 }}>
           <BodyLarge style={{ fontWeight: '800', marginBottom: 5 }}>{'Plot'}</BodyLarge>
+          <BodyLarge>{movie.studio || ''}</BodyLarge>
+        </View>
+        <View style={{ flexDirection: 'column', marginTop: 5 }}>
+          <BodyLarge style={{ fontWeight: '800', marginBottom: 5 }}>{'Plot'}</BodyLarge>
           <BodyLarge>{movieDetails?.plot || ''}</BodyLarge>
         </View>
         <View style={{ flexDirection: 'column', marginTop: 5 }}>
           <BodyLarge style={{ fontWeight: '800', marginBottom: 5 }}>
             {'Directed by'}
           </BodyLarge>
-          <BodyLarge>{directors || ''}</BodyLarge>
+          <BodyLarge>{directors ? JSON.stringify(directors) : ''}</BodyLarge>
         </View>
         <View style={{ flexDirection: 'column', marginTop: 5 }}>
           <BodyLarge style={{ fontWeight: '800', marginBottom: 5 }}>{'Cast'}</BodyLarge>
@@ -119,8 +121,8 @@ const MovieDetails = (props: iMovieDetailsProps) => {
           <BodyLarge>{productionCompanies || ''}</BodyLarge>
         </View>
       </View>
-    </View>
+    </>
   );
 };
 
-export default MovieDetails;
+export default FilmDetails;

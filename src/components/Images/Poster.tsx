@@ -14,6 +14,10 @@ type iPosterProps = {
   styles?: StyleProp<ImageStyle>;
 };
 
+/**
+ * TODO: add a blank image and blank movie poster for when poster is small
+ */
+
 const Poster = (props: iPosterProps) => {
   const { path, title, size, onPress, styles } = props;
 
@@ -49,10 +53,12 @@ const Poster = (props: iPosterProps) => {
             style={{
               ...(style as Record<string, unknown>),
               justifyContent: 'center',
-              backgroundColor: COLORS.warning,
+              backgroundColor: COLORS.border,
             }}
           >
-            <Body style={{ textAlign: 'center' }}>{title}</Body>
+            {size !== PosterSize.SMALL ? (
+              <Body style={{ textAlign: 'center' }}>{title}</Body>
+            ) : null}
           </View>
         )}
       </>
