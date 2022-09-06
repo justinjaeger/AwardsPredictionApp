@@ -21,7 +21,7 @@ export const getAwardsBodyCategories = (event: Event): iCategoryObject => {
   }
 };
 
-const ALL_CATEGORIES: iCategoryObject = {
+export const ALL_CATEGORIES: { [key in CategoryName]: undefined } = {
   [CategoryName.PICTURE]: undefined,
   [CategoryName.DIRECTOR]: undefined,
   [CategoryName.ACTOR]: undefined,

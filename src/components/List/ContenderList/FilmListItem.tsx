@@ -29,6 +29,8 @@ const ContenderListItem = (props: iContenderListItemProps) => {
     });
   }, [tmdbId]);
 
+  const categoryInfo = movie?.categoryInfo?.[category.name];
+
   // TODO: create better loading state
 
   return (
@@ -40,6 +42,9 @@ const ContenderListItem = (props: iContenderListItemProps) => {
       }}
     >
       <View style={{ flexDirection: 'row' }}>
+        {categoryInfo ? (
+          <BodyLarge style={{ marginLeft: 10 }}>{JSON.stringify(categoryInfo)}</BodyLarge>
+        ) : null}
         <BodyLarge style={{ marginLeft: 10 }}>{ranking?.toString() || ''}</BodyLarge>
         <Poster
           path={movie?.posterPath || null}
