@@ -145,7 +145,6 @@ export const getOrCreateSongContender = async (
         }),
       );
     }
-    console.error('songggg', _song);
     return { status: 'success', data: _song };
   } catch (err) {
     return handleError(undefined, err);

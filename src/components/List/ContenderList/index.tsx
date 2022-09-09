@@ -16,7 +16,6 @@ type iContenderListProps = {
 const ContenderList = (props: iContenderListProps) => {
   const { category, contenders, onPressItem } = props;
 
-  console.error('s', contenders);
   return (
     <View
       style={{

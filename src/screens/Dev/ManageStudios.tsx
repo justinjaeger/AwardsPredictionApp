@@ -17,7 +17,8 @@ const ManageStudios = () => {
 
   useEffect(() => {
     const sub = DataStore.observeQuery(Movie).subscribe(({ items }) => {
-      setMovies(items);
+      const sortedItems = items.sort((m) => (!!m.studio === false ? -1 : 1));
+      setMovies(sortedItems);
     });
     return () => sub.unsubscribe();
   }, []);

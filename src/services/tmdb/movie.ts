@@ -42,7 +42,9 @@ export const getTmdbMovie = async (
       .filter((c) => c.job.toLowerCase() === 'director')
       .map((crew) => crew.name);
     const screenplay = creditsResult.data.crew
-      .filter((c) => c.job.toLowerCase() === 'screenplay')
+      .filter(
+        (c) => c.job.toLowerCase() === 'screenplay' || c.job.toLowerCase() === 'writer',
+      )
       .map((crew) => crew.name);
     const cinematographer = creditsResult.data.crew
       .filter((c) => c.job.toLowerCase() === 'director of photography')

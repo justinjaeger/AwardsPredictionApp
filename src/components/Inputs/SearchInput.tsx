@@ -25,6 +25,7 @@ const SearchInput = (props: {
 
   useEffect(() => {
     setSearching(true);
+    if (searchInput === '') setSearching(false);
   }, [searchInput]);
 
   useEffect(() => {

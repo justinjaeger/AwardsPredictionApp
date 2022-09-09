@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View } from 'react-native';
 import { PosterSize } from '../../../constants/posterDimensions';
 import { Contender } from '../../../models';
-import { iCachedTmdbPerson } from '../../../services/cache/types';
+import { iCachedTmdbMovie, iCachedTmdbPerson } from '../../../services/cache/types';
 import DS from '../../../services/datastore';
 import TmdbServices from '../../../services/tmdb';
 import { useSubscriptionEffect } from '../../../util/hooks';
@@ -19,9 +19,10 @@ const PerformanceListItem = (props: iPerformanceListItemProps) => {
   const { contender, ranking, onPress } = props;
 
   const [person, setPerson] = useState<iCachedTmdbPerson | undefined>();
+  const [tmdbMovie, setTmdbMovie] = useState<iCachedTmdbMovie | undefined>();
 
-  // NOTE: ideally contender just has contender.person.tmdb accessible on it, but for some reason you can only get contender.contenderPersonId
   useSubscriptionEffect(async () => {
+    // get tmdb person info
     if (contender.contenderPersonId) {
       const { data: p } = await DS.getPersonById(contender.contenderPersonId);
       if (p) {
@@ -32,6 +33,12 @@ const PerformanceListItem = (props: iPerformanceListItemProps) => {
         });
       }
     }
+    // get movie tmdb info
+    TmdbServices.getTmdbMovie(contender.movie.tmdbId).then((m) => {
+      if (m.status === 'success') {
+        setTmdbMovie(m.data);
+      }
+    });
   }, [contender]);
 
   // TODO: create better loading state
@@ -51,9 +58,16 @@ const PerformanceListItem = (props: iPerformanceListItemProps) => {
           title={person?.name || ''}
           onPress={onPress}
         />
-        <BodyLarge style={{ marginTop: 10, marginLeft: 10 }}>
-          {person?.name || ''}
-        </BodyLarge>
+        <View style={{ flexDirection: 'column' }}>
+          <BodyLarge style={{ marginTop: 10, marginLeft: 10 }}>
+            {person?.name || ''}
+          </BodyLarge>
+          {tmdbMovie ? (
+            <BodyLarge style={{ marginTop: 10, marginLeft: 10 }}>
+              {tmdbMovie.title || ''}
+            </BodyLarge>
+          ) : null}
+        </View>
       </View>
     </View>
   );

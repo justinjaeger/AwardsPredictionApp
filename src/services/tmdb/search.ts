@@ -76,7 +76,6 @@ export const searchPeople = async (
         return 1;
       }
     });
-    console.error('sortedPeople', sortedPeople.length);
     return {
       status: 'success',
       data: sortedPeople.map((p) => ({
