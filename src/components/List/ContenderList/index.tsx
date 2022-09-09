@@ -43,7 +43,7 @@ const ContenderList = (props: iContenderListProps) => {
             return (
               <FilmListItem
                 category={category}
-                tmdbId={c.movie.tmdbId}
+                movie={c.movie}
                 ranking={i + 1}
                 onPress={() => onPressItem(c)}
               />

@@ -125,9 +125,6 @@ const PerformanceDetails = (props: iPerformanceDetailsProps) => {
           />
           <View style={{ alignItems: 'flex-start' }}>
             <View style={{ flexDirection: 'column', marginTop: 5 }}>
-              <BodyLarge style={{ fontWeight: '800', marginBottom: 5 }}>
-                {'Plot'}
-              </BodyLarge>
               <BodyLarge>{movieDetails?.plot || ''}</BodyLarge>
             </View>
             <View style={{ flexDirection: 'column', marginTop: 5 }}>

@@ -18,3 +18,23 @@ export const getOrCreateMovie = async (tmdbId: number): Promise<iApiResponse<Mov
     return handleError('error fetching movie by tmdbId', err);
   }
 };
+
+export const updateStudio = async (
+  id: string,
+  studio: string,
+): Promise<iApiResponse<Movie>> => {
+  try {
+    const movie = await DataStore.query(Movie, id);
+    if (!movie) {
+      throw new Error('movie not found');
+    }
+    await DataStore.save(
+      Movie.copyOf(movie, (updated) => {
+        updated.studio = studio;
+      }),
+    );
+    return { status: 'success', data: movie };
+  } catch (err) {
+    return handleError('error fetching movie by tmdbId', err);
+  }
+};

@@ -90,7 +90,9 @@ const FilmDetails = (props: iFilmDetailsProps) => {
       />
       <View style={{ alignItems: 'flex-start' }}>
         <View style={{ flexDirection: 'column', marginTop: 5 }}>
-          <BodyLarge style={{ fontWeight: '800', marginBottom: 5 }}>{'Plot'}</BodyLarge>
+          <BodyLarge style={{ fontWeight: '800', marginBottom: 5 }}>
+            {'Distributor'}
+          </BodyLarge>
           <BodyLarge>{movie.studio || ''}</BodyLarge>
         </View>
         <View style={{ flexDirection: 'column', marginTop: 5 }}>

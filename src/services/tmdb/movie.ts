@@ -83,7 +83,6 @@ export const getTmdbMovie = async (
       cast,
       categoryInfo: {
         ...ALL_CATEGORIES,
-        [CategoryName.PICTURE]: productionCompanies, // display studios
         [CategoryName.DIRECTOR]: directors,
         [CategoryName.SCREENPLAY]: screenplay, // fill in same as others
         [CategoryName.ORIGINAL_SCREENPLAY]: screenplay, // fill in same as others
