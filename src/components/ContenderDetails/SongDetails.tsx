@@ -52,7 +52,7 @@ const SongDetails = (props: iSongDetailsProps) => {
         text={'View in Imdb'}
         onPress={() => {
           navigation.navigate('WebView', {
-            uri: `https://www.imdb.com/title/${movieDetails.imdbId}`,
+            uri: `https://www.imdb.com/title/${movieDetails.imdbId}/`,
             title: movieDetails.title,
           });
         }}

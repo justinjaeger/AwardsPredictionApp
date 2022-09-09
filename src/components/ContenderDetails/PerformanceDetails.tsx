@@ -74,7 +74,7 @@ const PerformanceDetails = (props: iPerformanceDetailsProps) => {
         text={'View in Imdb'}
         onPress={() => {
           navigation.navigate('WebView', {
-            uri: `https://www.imdb.com/name/${personDetails.imdbId}`,
+            uri: `https://www.imdb.com/name/${personDetails.imdbId}/`,
             title: personDetails.name,
           });
         }}
@@ -83,7 +83,7 @@ const PerformanceDetails = (props: iPerformanceDetailsProps) => {
         text={'Filmography'}
         onPress={() => {
           navigation.navigate('WebView', {
-            uri: `https://www.imdb.com/name/${personDetails.imdbId}/filmotype`,
+            uri: `https://www.imdb.com/name/${personDetails.imdbId}/filmotype/`,
             title: personDetails.name,
           });
         }}
@@ -100,7 +100,7 @@ const PerformanceDetails = (props: iPerformanceDetailsProps) => {
             text={'View in Imdb'}
             onPress={() => {
               navigation.navigate('WebView', {
-                uri: `https://www.imdb.com/title/${movieDetails.imdbId}`,
+                uri: `https://www.imdb.com/title/${movieDetails.imdbId}/`,
                 title: movieDetails.title,
               });
             }}
@@ -109,7 +109,7 @@ const PerformanceDetails = (props: iPerformanceDetailsProps) => {
             text={'See Cast'}
             onPress={() => {
               navigation.navigate('WebView', {
-                uri: `https://www.imdb.com/title/${movieDetails.imdbId}/fullcredits/cast`,
+                uri: `https://www.imdb.com/title/${movieDetails.imdbId}/fullcredits/cast/`,
                 title: movieDetails.title,
               });
             }}
@@ -118,7 +118,7 @@ const PerformanceDetails = (props: iPerformanceDetailsProps) => {
             text={'See Crew'}
             onPress={() => {
               navigation.navigate('WebView', {
-                uri: `https://www.imdb.com/title/${movieDetails.imdbId}/fullcredits`,
+                uri: `https://www.imdb.com/title/${movieDetails.imdbId}/fullcredits/`,
                 title: movieDetails.title,
               });
             }}
