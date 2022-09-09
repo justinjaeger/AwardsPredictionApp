@@ -3,21 +3,24 @@ import { View } from 'react-native';
 import { PosterSize } from '../../../constants/posterDimensions';
 import { Song } from '../../../models';
 import { iCachedTmdbMovie } from '../../../services/cache/types';
+import DS from '../../../services/datastore';
 import TmdbServices from '../../../services/tmdb';
+import { useAsyncEffect } from '../../../util/hooks';
 import Poster from '../../Images/Poster';
 import { BodyLarge } from '../../Text';
 
 type iSongListItemProps = {
   tmdbMovieId: number;
-  song: Song;
+  songId: string;
   ranking?: number;
   onPress: () => void;
 };
 
 const SongListItem = (props: iSongListItemProps) => {
-  const { song, ranking, tmdbMovieId, onPress } = props;
+  const { songId, ranking, tmdbMovieId, onPress } = props;
 
   const [movie, setMovie] = useState<iCachedTmdbMovie | undefined>();
+  const [song, setSong] = useState<Song | undefined>();
 
   useEffect(() => {
     TmdbServices.getTmdbMovie(tmdbMovieId).then((m) => {
@@ -27,7 +30,13 @@ const SongListItem = (props: iSongListItemProps) => {
     });
   }, [tmdbMovieId]);
 
+  useAsyncEffect(async () => {
+    const { data: song } = await DS.getSongById(songId);
+    setSong(song);
+  }, [songId]);
+
   // TODO: create better loading state
+  if (!song) return null;
 
   return (
     <View

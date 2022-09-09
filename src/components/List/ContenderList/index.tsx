@@ -16,6 +16,7 @@ type iContenderListProps = {
 const ContenderList = (props: iContenderListProps) => {
   const { category, contenders, onPressItem } = props;
 
+  console.error('s', contenders);
   return (
     <View
       style={{
@@ -57,11 +58,11 @@ const ContenderList = (props: iContenderListProps) => {
               />
             );
           case CategoryType.SONG:
-            if (!c.song) return null;
+            if (!c.contenderSongId) return null;
             return (
               <SongListItem
                 tmdbMovieId={c.movie.tmdbId}
-                song={c.song}
+                songId={c.contenderSongId}
                 ranking={i + 1}
                 onPress={() => onPressItem(c)}
               />

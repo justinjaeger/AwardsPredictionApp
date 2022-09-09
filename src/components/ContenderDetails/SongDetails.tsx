@@ -8,18 +8,26 @@ import { PosterSize } from '../../constants/posterDimensions';
 import { iCachedTmdbMovie } from '../../services/cache/types';
 import TmdbServices from '../../services/tmdb';
 import { Movie, Song } from '../../models';
+import { useAsyncEffect } from '../../util/hooks';
+import DS from '../../services/datastore';
 
 type iSongDetailsProps = {
   movie: Movie;
-  song: Song;
+  songId: string;
 };
 
 const SongDetails = (props: iSongDetailsProps) => {
-  const { movie, song } = props;
+  const { movie, songId } = props;
 
   const navigation = useNavigation();
 
   const [movieDetails, setMovieDetails] = useState<iCachedTmdbMovie | undefined>();
+  const [song, setSong] = useState<Song | undefined>();
+
+  useAsyncEffect(async () => {
+    const { data: song } = await DS.getSongById(songId);
+    setSong(song);
+  }, [songId]);
 
   const movieTmdbId = movie.tmdbId;
 
