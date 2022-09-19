@@ -9,7 +9,22 @@ export type MainParamList = {
   };
 };
 
-export type HomeParamList = {
+export type GlobalParamList = {
+  EventSelect: undefined;
+  CategorySelect: {
+    event: Event;
+  };
+  Contenders: {
+    category: Category;
+  };
+  ContenderDetails: {
+    categoryType: CategoryType;
+    contender: Contender;
+    personTmdb?: number | undefined;
+  };
+};
+
+export type PersonalParamList = {
   EventSelect: undefined;
   CategorySelect: {
     event: Event;
@@ -24,6 +39,9 @@ export type HomeParamList = {
     categoryType: CategoryType;
     contender: Contender;
     personTmdb?: number | undefined;
+  };
+  AddContenders: {
+    category: Category;
   };
 };
 
@@ -45,6 +63,6 @@ export type ProfileParamList = {
   Profile: undefined;
 };
 
-export type MyPredictionsParamList = {
-  MyPredictions: undefined;
+export type PersonalPredictionsParamList = {
+  PersonalPredictions: undefined;
 };

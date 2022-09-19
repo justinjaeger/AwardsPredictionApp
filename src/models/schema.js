@@ -378,7 +378,7 @@ export const schema = {
                     "name": "createdAt",
                     "isArray": false,
                     "type": "AWSDateTime",
-                    "isRequired": true,
+                    "isRequired": false,
                     "attributes": []
                 },
                 "updatedAt": {
@@ -444,15 +444,15 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "predictionSetId": {
-                    "name": "predictionSetId",
+                "userId": {
+                    "name": "userId",
                     "isArray": false,
                     "type": "ID",
                     "isRequired": true,
                     "attributes": []
                 },
-                "userId": {
-                    "name": "userId",
+                "predictionSetId": {
+                    "name": "predictionSetId",
                     "isArray": false,
                     "type": "ID",
                     "isRequired": true,
@@ -1513,7 +1513,7 @@ export const schema = {
                     "name": "createdAt",
                     "isArray": false,
                     "type": "AWSDateTime",
-                    "isRequired": true,
+                    "isRequired": false,
                     "attributes": []
                 },
                 "updatedAt": {
@@ -1667,5 +1667,5 @@ export const schema = {
         }
     },
     "nonModels": {},
-    "version": "cc9d6509b820287fa40633162b5b8d83"
+    "version": "1d2eb2f241ab41b983dc86cbf3420b88"
 };

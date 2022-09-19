@@ -2,11 +2,10 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { DataStore } from 'aws-amplify';
 import React, { useLayoutEffect, useState } from 'react';
 import { ScrollView } from 'react-native';
-import { TouchableText } from '../../../components/Buttons';
 import ContenderList from '../../../components/List/ContenderList';
 import { getAwardsBodyCategories } from '../../../constants/categories';
 import { Category, CategoryType, Contender } from '../../../models';
-import { HomeParamList } from '../../../navigation/types';
+import { GlobalParamList } from '../../../navigation/types';
 import DS from '../../../services/datastore';
 import { useSubscriptionEffect } from '../../../util/hooks';
 import { eventToString } from '../../../util/stringConversions';
@@ -17,7 +16,7 @@ export type iContendersProps = { category: Category; contenders: Contender[] };
 const Contenders = () => {
   const {
     params: { category },
-  } = useRoute<RouteProp<HomeParamList, 'Contenders'>>();
+  } = useRoute<RouteProp<GlobalParamList, 'Contenders'>>();
   const navigation = useNavigation();
 
   const [contenders, setContenders] = useState<Contender[]>([]);
@@ -64,7 +63,7 @@ const Contenders = () => {
     });
   };
 
-  const onPressItem = (() => {
+  const onPressThumbnail = (() => {
     switch (CategoryType[category.type]) {
       case CategoryType.FILM:
       case CategoryType.SONG:
@@ -81,14 +80,7 @@ const Contenders = () => {
       <ContenderList
         category={category}
         contenders={contenders}
-        onPressItem={onPressItem}
-      />
-      <TouchableText
-        text={'Submit a contender'}
-        onPress={() => {
-          navigation.navigate('CreateContender', { category });
-        }}
-        style={{ margin: 10 }}
+        onPressThumbnail={onPressThumbnail}
       />
     </ScrollView>
   );

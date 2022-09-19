@@ -19,6 +19,15 @@ export const getOrCreateMovie = async (tmdbId: number): Promise<iApiResponse<Mov
   }
 };
 
+export const getMovieById = async (id: string): Promise<iApiResponse<Movie>> => {
+  try {
+    const movie = await DataStore.query(Movie, id);
+    return { status: 'success', data: movie };
+  } catch (err) {
+    return handleError('error fetching movie by id', err);
+  }
+};
+
 export const updateStudio = async (
   id: string,
   studio: string,

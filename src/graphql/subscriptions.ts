@@ -342,8 +342,8 @@ export const onCreatePrediction = /* GraphQL */ `
   subscription OnCreatePrediction {
     onCreatePrediction {
       id
-      predictionSetId
       userId
+      predictionSetId
       contenderId
       contender {
         id
@@ -374,8 +374,8 @@ export const onUpdatePrediction = /* GraphQL */ `
   subscription OnUpdatePrediction {
     onUpdatePrediction {
       id
-      predictionSetId
       userId
+      predictionSetId
       contenderId
       contender {
         id
@@ -406,8 +406,8 @@ export const onDeletePrediction = /* GraphQL */ `
   subscription OnDeletePrediction {
     onDeletePrediction {
       id
-      predictionSetId
       userId
+      predictionSetId
       contenderId
       contender {
         id

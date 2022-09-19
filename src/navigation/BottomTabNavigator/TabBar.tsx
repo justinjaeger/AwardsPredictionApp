@@ -41,7 +41,6 @@ const TabBar = (props: ITabBarProps) => {
       >
         {state.routes.map((route: any, index: number) => {
           const { options } = descriptors[route.key];
-          const routeName = route.name.toLowerCase();
           const isFocused = state.index === index;
           const onPress = () => {
             const event = navigation.emit({
@@ -54,8 +53,8 @@ const TabBar = (props: ITabBarProps) => {
             }
           };
           const icon = (() => {
-            switch (routeName) {
-              case 'predictions':
+            switch (route.name) {
+              case 'GlobalPredictions':
                 return (
                   <View key={index}>
                     {isFocused ? (
@@ -65,7 +64,7 @@ const TabBar = (props: ITabBarProps) => {
                     )}
                   </View>
                 );
-              case 'mypredictions':
+              case 'PersonalPredictions':
                 return (
                   <View key={index}>
                     {isFocused ? (
@@ -75,7 +74,7 @@ const TabBar = (props: ITabBarProps) => {
                     )}
                   </View>
                 );
-              case 'profile':
+              case 'Profile':
                 return (
                   <View key={index}>
                     {isFocused ? (
@@ -85,7 +84,7 @@ const TabBar = (props: ITabBarProps) => {
                     )}
                   </View>
                 );
-              case 'dev':
+              case 'Dev':
                 return (
                   <View key={index}>
                     {isFocused ? (

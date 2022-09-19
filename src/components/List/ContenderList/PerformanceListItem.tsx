@@ -33,8 +33,10 @@ const PerformanceListItem = (props: iPerformanceListItemProps) => {
         });
       }
     }
+    const { data: movie } = await DS.getMovieById(contender.contenderMovieId);
+    if (!movie) return;
     // get movie tmdb info
-    TmdbServices.getTmdbMovie(contender.movie.tmdbId).then((m) => {
+    TmdbServices.getTmdbMovie(movie.tmdbId).then((m) => {
       if (m.status === 'success') {
         setTmdbMovie(m.data);
       }

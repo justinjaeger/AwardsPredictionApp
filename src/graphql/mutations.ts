@@ -372,8 +372,8 @@ export const createPrediction = /* GraphQL */ `
   ) {
     createPrediction(input: $input, condition: $condition) {
       id
-      predictionSetId
       userId
+      predictionSetId
       contenderId
       contender {
         id
@@ -407,8 +407,8 @@ export const updatePrediction = /* GraphQL */ `
   ) {
     updatePrediction(input: $input, condition: $condition) {
       id
-      predictionSetId
       userId
+      predictionSetId
       contenderId
       contender {
         id
@@ -442,8 +442,8 @@ export const deletePrediction = /* GraphQL */ `
   ) {
     deletePrediction(input: $input, condition: $condition) {
       id
-      predictionSetId
       userId
+      predictionSetId
       contenderId
       contender {
         id

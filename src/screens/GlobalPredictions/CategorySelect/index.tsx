@@ -5,7 +5,7 @@ import { ScrollView } from 'react-native';
 import { TouchableText } from '../../../components/Buttons';
 import { getAwardsBodyCategories } from '../../../constants/categories';
 import { Category, CategoryName } from '../../../models';
-import { HomeParamList } from '../../../navigation/types';
+import { GlobalParamList } from '../../../navigation/types';
 import { useAsyncEffect } from '../../../util/hooks';
 import sortByObjectOrder from '../../../util/sortByObjectOrder';
 import { eventToString } from '../../../util/stringConversions';
@@ -13,7 +13,7 @@ import { eventToString } from '../../../util/stringConversions';
 const CategorySelect = () => {
   const {
     params: { event },
-  } = useRoute<RouteProp<HomeParamList, 'CategorySelect'>>();
+  } = useRoute<RouteProp<GlobalParamList, 'CategorySelect'>>();
   const navigation = useNavigation();
 
   const [categories, setCategories] = useState<Category[]>([]);
