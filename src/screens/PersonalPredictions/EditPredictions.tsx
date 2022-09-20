@@ -1,8 +1,8 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import React, { useLayoutEffect, useState } from 'react';
-import { ScrollView } from 'react-native';
+import { View } from 'react-native';
 import { TouchableText } from '../../components/Buttons';
-import ContenderList from '../../components/List/ContenderList';
+import ContenderListDraggable from '../../components/List/ContenderList/ContenderListDraggable';
 import { getAwardsBodyCategories } from '../../constants/categories';
 import { Contender, Prediction } from '../../models';
 import { PersonalParamList } from '../../navigation/types';
@@ -11,7 +11,7 @@ import { useAuth } from '../../store';
 import { useSubscriptionEffect } from '../../util/hooks';
 import { eventToString } from '../../util/stringConversions';
 
-const ViewPredictions = () => {
+const EditPredictions = () => {
   const {
     params: { category },
   } = useRoute<RouteProp<PersonalParamList, 'Contenders'>>();
@@ -53,23 +53,21 @@ const ViewPredictions = () => {
     .map((p) => p.contender);
 
   return (
-    <ScrollView
-      contentContainerStyle={{ alignItems: 'center', marginTop: 40, paddingBottom: 200 }}
-    >
-      <ContenderList
+    <View style={{ alignItems: 'center', marginTop: 40, paddingBottom: 200 }}>
+      <ContenderListDraggable
         category={category}
         contenders={orderedContenders}
         onPressThumbnail={onPressThumbnail}
       />
       <TouchableText
-        text={'Edit Predictions'}
+        text={'Add to list'}
         onPress={() => {
-          navigation.navigate('EditPredictions', { category });
+          navigation.navigate('AddContenders', { category });
         }}
         style={{ margin: 10 }}
       />
-    </ScrollView>
+    </View>
   );
 };
 
-export default ViewPredictions;
+export default EditPredictions;

@@ -6,6 +6,7 @@ import EventSelect from '../screens/GlobalPredictions/EventSelect';
 import ViewPredictions from '../screens/PersonalPredictions/ViewPredictions';
 import AddContenders from '../screens/PersonalPredictions/AddContenders';
 import CreateContender from '../screens/CreateContender';
+import EditPredictions from '../screens/PersonalPredictions/EditPredictions';
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -43,6 +44,14 @@ const PersonalPredictionsNavigator = () => (
       component={ViewPredictions}
       options={{
         headerTitle: 'Contenders',
+        headerLeft: BackButton,
+      }}
+    />
+    <Screen
+      name="EditPredictions"
+      component={EditPredictions}
+      options={{
+        headerTitle: 'Edit Predictions',
         headerLeft: BackButton,
       }}
     />
