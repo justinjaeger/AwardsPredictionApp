@@ -152,17 +152,16 @@ type PredictionSet @model @auth(rules: [{ allow: public }]) {
     )
     eventId: ID!
     categoryId: ID!
-    predictions: [Prediction] @hasMany
+    predictions: [Prediction] @hasMany # NOTE: DataStore does not return this field so not using at the moment
     isActive: String @default(value: "x") # essentially boolean
-    createdAt: AWSDateTime!
+    createdAt: AWSDateTime
     # ^why? see isOpen: https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-indexes-general-sparse-indexes.html
 }
 
-# NEVER DELETE from this table, as these entries are referenced in history
 type Prediction @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
-    predictionSetId: ID!
     userId: ID!
+    predictionSetId: ID!
     contenderId: ID! @index( # Look up individual Contender and see history of user's predictions
         name: "byContenderByUser", 
         queryField: "queryPredictionByContenderByUser", 
@@ -257,7 +256,7 @@ type ContenderSnapshot @model @auth(rules: [{ allow: public }]) {
     # Stats for displaying leaderboard (must update manually when we set the record)
     numberOfUsersPredicting: Int!
     numberOfUsersPredictingWin: Int!
-    createdAt: AWSDateTime!
+    createdAt: AWSDateTime
 }
 
 type Movie @model @auth(rules: [{ allow: public }]) {

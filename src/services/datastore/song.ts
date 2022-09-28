@@ -34,3 +34,16 @@ export const getOrCreateSong = async (
     return handleError('error fetching person by tmdbId', err);
   }
 };
+
+export const getSongById = async (id: string): Promise<iApiResponse<Song>> => {
+  try {
+    // get songs associated with movie. Compare keys to see if song already exists
+    const song = await DataStore.query(Song, id);
+    if (!song) {
+      throw new Error('no song found');
+    }
+    return { status: 'success', data: song };
+  } catch (err) {
+    return handleError('error fetching song by id', err);
+  }
+};

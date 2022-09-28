@@ -304,8 +304,8 @@ export const getPrediction = /* GraphQL */ `
   query GetPrediction($id: ID!) {
     getPrediction(id: $id) {
       id
-      predictionSetId
       userId
+      predictionSetId
       contenderId
       contender {
         id
@@ -349,8 +349,8 @@ export const listPredictions = /* GraphQL */ `
     ) {
       items {
         id
-        predictionSetId
         userId
+        predictionSetId
         contenderId
         ranking
         isActive
@@ -381,8 +381,8 @@ export const syncPredictions = /* GraphQL */ `
     ) {
       items {
         id
-        predictionSetId
         userId
+        predictionSetId
         contenderId
         ranking
         isActive
@@ -1494,8 +1494,8 @@ export const queryPredictionByContenderByUser = /* GraphQL */ `
     ) {
       items {
         id
-        predictionSetId
         userId
+        predictionSetId
         contenderId
         ranking
         isActive
@@ -1530,8 +1530,8 @@ export const queryPredictionByContenderByActive = /* GraphQL */ `
     ) {
       items {
         id
-        predictionSetId
         userId
+        predictionSetId
         contenderId
         ranking
         isActive
@@ -1566,8 +1566,8 @@ export const queryPredictionByContenderByRanking = /* GraphQL */ `
     ) {
       items {
         id
-        predictionSetId
         userId
+        predictionSetId
         contenderId
         ranking
         isActive

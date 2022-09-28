@@ -65,7 +65,7 @@ const FilmDetails = (props: iFilmDetailsProps) => {
         text={'View in Imdb'}
         onPress={() => {
           navigation.navigate('WebView', {
-            uri: `https://www.imdb.com/title/${movieDetails.imdbId}`,
+            uri: `https://www.imdb.com/title/${movieDetails.imdbId}/`,
             title: movieDetails.title,
           });
         }}
@@ -74,7 +74,7 @@ const FilmDetails = (props: iFilmDetailsProps) => {
         text={'See Cast'}
         onPress={() => {
           navigation.navigate('WebView', {
-            uri: `https://www.imdb.com/title/${movieDetails.imdbId}/fullcredits/cast`,
+            uri: `https://www.imdb.com/title/${movieDetails.imdbId}/fullcredits/cast/`,
             title: movieDetails.title,
           });
         }}
@@ -83,14 +83,16 @@ const FilmDetails = (props: iFilmDetailsProps) => {
         text={'See Crew'}
         onPress={() => {
           navigation.navigate('WebView', {
-            uri: `https://www.imdb.com/title/${movieDetails.imdbId}/fullcredits`,
+            uri: `https://www.imdb.com/title/${movieDetails.imdbId}/fullcredits/`,
             title: movieDetails.title,
           });
         }}
       />
       <View style={{ alignItems: 'flex-start' }}>
         <View style={{ flexDirection: 'column', marginTop: 5 }}>
-          <BodyLarge style={{ fontWeight: '800', marginBottom: 5 }}>{'Plot'}</BodyLarge>
+          <BodyLarge style={{ fontWeight: '800', marginBottom: 5 }}>
+            {'Distributor'}
+          </BodyLarge>
           <BodyLarge>{movie.studio || ''}</BodyLarge>
         </View>
         <View style={{ flexDirection: 'column', marginTop: 5 }}>

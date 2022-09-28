@@ -1,14 +1,13 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import EventSelect from '../screens/GlobalPredictions/EventSelect';
 import CategorySelect from '../screens/GlobalPredictions/CategorySelect';
-import { HomeParamList } from './types';
+import { GlobalParamList } from './types';
 import BackButton from '../components/Buttons/BackButton';
-import CreateContender from '../screens/CreateContender';
 import Contenders from '../screens/Category/Contenders';
 import ContenderDetailsScreen from '../screens/Category/ContenderDetailsScreen';
+import EventSelect from '../screens/GlobalPredictions/EventSelect';
 
-const { Navigator, Screen } = createStackNavigator<HomeParamList>();
+const { Navigator, Screen } = createStackNavigator<GlobalParamList>();
 
 const GlobalPredictionsNavigator = () => (
   <Navigator initialRouteName="EventSelect" headerMode="screen">
@@ -16,7 +15,7 @@ const GlobalPredictionsNavigator = () => (
       name="EventSelect"
       component={EventSelect}
       options={{
-        headerTitle: 'Events',
+        headerTitle: 'Events (Global)',
       }}
     />
     <Screen
@@ -32,14 +31,6 @@ const GlobalPredictionsNavigator = () => (
       component={Contenders}
       options={{
         headerTitle: 'Contenders',
-        headerLeft: BackButton,
-      }}
-    />
-    <Screen
-      name="CreateContender"
-      component={CreateContender}
-      options={{
-        headerTitle: 'Add Contender',
         headerLeft: BackButton,
       }}
     />

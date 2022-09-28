@@ -7,6 +7,8 @@ import { Body, SubHeader } from '../../components/Text';
 import { User, Event, Category } from '../../models';
 import { createMockEvents, deleteMockEvents } from '../../scripts/mocks/events';
 import { deleteMockUsers, createMockUsers } from '../../scripts/mocks/users';
+import TmdbMovieCache from '../../services/cache/tmdbMovie';
+import TmdbPersonCache from '../../services/cache/tmdbPerson';
 
 const Dev = () => {
   const navigation = useNavigation();
@@ -48,6 +50,11 @@ const Dev = () => {
       .catch((err) => console.error('err clearing data store', err));
   };
 
+  const clearAllCache = () => {
+    TmdbMovieCache.clearAll();
+    TmdbPersonCache.clearAll();
+  };
+
   return (
     <SafeAreaView style={{ height: '100%' }}>
       <ScrollView
@@ -66,6 +73,16 @@ const Dev = () => {
         <TouchableText
           text={'Clear/Sync DataStore'}
           onPress={clear}
+          style={{ marginTop: 10 }}
+        />
+        <TouchableText
+          text={'Clear Cache'}
+          onPress={clearAllCache}
+          style={{ marginTop: 10 }}
+        />
+        <TouchableText
+          text={'Manage Studios'}
+          onPress={() => navigation.navigate('ManageStudios')}
           style={{ marginTop: 10 }}
         />
         <View style={{ alignItems: 'flex-start', width: '100%', marginTop: 10 }}>

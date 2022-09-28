@@ -1,4 +1,4 @@
-import { ModelInit, MutableModel, PersistentModelConstructor } from "@aws-amplify/datastore";
+import { ModelInit, MutableModel } from "@aws-amplify/datastore";
 
 export enum UserRole {
   ADMIN = "ADMIN",
@@ -81,8 +81,6 @@ export enum CategoryName {
 export enum CateogrySet {
   ACADEMY_AWARDS_2023 = "ACADEMY_AWARDS_2023"
 }
-
-
 
 type UserMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
@@ -175,7 +173,7 @@ export declare class PredictionSet {
   readonly categoryId: string;
   readonly predictions?: (Prediction | null)[] | null;
   readonly isActive?: string | null;
-  readonly createdAt: string;
+  readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
   constructor(init: ModelInit<PredictionSet, PredictionSetMetaData>);
   static copyOf(source: PredictionSet, mutator: (draft: MutableModel<PredictionSet, PredictionSetMetaData>) => MutableModel<PredictionSet, PredictionSetMetaData> | void): PredictionSet;
@@ -183,8 +181,8 @@ export declare class PredictionSet {
 
 export declare class Prediction {
   readonly id: string;
-  readonly predictionSetId: string;
   readonly userId: string;
+  readonly predictionSetId: string;
   readonly contender: Contender;
   readonly ranking: number;
   readonly isActive?: string | null;
@@ -307,7 +305,7 @@ export declare class ContenderSnapshot {
   readonly category: Category;
   readonly numberOfUsersPredicting: number;
   readonly numberOfUsersPredictingWin: number;
-  readonly createdAt: string;
+  readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
   constructor(init: ModelInit<ContenderSnapshot, ContenderSnapshotMetaData>);
   static copyOf(source: ContenderSnapshot, mutator: (draft: MutableModel<ContenderSnapshot, ContenderSnapshotMetaData>) => MutableModel<ContenderSnapshot, ContenderSnapshotMetaData> | void): ContenderSnapshot;

@@ -42,7 +42,9 @@ export const getTmdbMovie = async (
       .filter((c) => c.job.toLowerCase() === 'director')
       .map((crew) => crew.name);
     const screenplay = creditsResult.data.crew
-      .filter((c) => c.job.toLowerCase() === 'screenplay')
+      .filter(
+        (c) => c.job.toLowerCase() === 'screenplay' || c.job.toLowerCase() === 'writer',
+      )
       .map((crew) => crew.name);
     const cinematographer = creditsResult.data.crew
       .filter((c) => c.job.toLowerCase() === 'director of photography')
@@ -83,7 +85,6 @@ export const getTmdbMovie = async (
       cast,
       categoryInfo: {
         ...ALL_CATEGORIES,
-        [CategoryName.PICTURE]: productionCompanies, // display studios
         [CategoryName.DIRECTOR]: directors,
         [CategoryName.SCREENPLAY]: screenplay, // fill in same as others
         [CategoryName.ORIGINAL_SCREENPLAY]: screenplay, // fill in same as others
