@@ -10,8 +10,7 @@ import { UserRole } from '../../API';
 import { useDispatch } from 'react-redux';
 import { loginUser } from '../../store/actions/auth';
 import { useNavigation } from '@react-navigation/native';
-import { DataStore } from 'aws-amplify';
-import { User } from '../../models';
+import ApiServices from '../../services/graphql';
 
 const ConfirmSignUp = (p: any) => {
   const props = p as iAuthScreenProps; // typecasting because props are automatically passed from Authenticator
@@ -45,12 +44,11 @@ const ConfirmSignUp = (p: any) => {
         // if password somehow isn't stored, generate random one. they can reset password later
         const password = contextPassword || (Math.random() * 1000000000).toString();
         // Create new user in db
-        const user = await DataStore.save(
-          new User({
-            email,
-            role: UserRole.USER,
-          }),
-        );
+        const { data: user } = await ApiServices.createUser({
+          email,
+          role: UserRole.USER,
+        });
+        if (!user) return; // maybe display status message
         AuthServices.signIn(email, password).then((res) => {
           if (res.status === 'success') {
             dispatch(loginUser({ userId: user.id, userEmail: user.email }));

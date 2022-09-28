@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { DataStore } from 'aws-amplify';
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, ScrollView, View } from 'react-native';
+import { SafeAreaView, ScrollView, StyleProp, View, ViewStyle } from 'react-native';
 import { TouchableText } from '../../components/Buttons';
 import { Body, SubHeader } from '../../components/Text';
 import { User, Event, Category } from '../../models';
@@ -9,6 +9,7 @@ import { createMockEvents, deleteMockEvents } from '../../scripts/mocks/events';
 import { deleteMockUsers, createMockUsers } from '../../scripts/mocks/users';
 import TmdbMovieCache from '../../services/cache/tmdbMovie';
 import TmdbPersonCache from '../../services/cache/tmdbPerson';
+import ApiServices from '../../services/graphql';
 
 const Dev = () => {
   const navigation = useNavigation();
@@ -19,11 +20,11 @@ const Dev = () => {
 
   // USERS
   useEffect(() => {
-    // later we'll just use userId to get the user whose profile it is, but I want all users for experiment
-    const sub = DataStore.observeQuery(User).subscribe(({ items }) => {
-      setUsers(items);
+    ApiServices.getAllUsers().then(({ data: us }) => {
+      if (us) {
+        setUsers(us);
+      }
     });
-    return () => sub.unsubscribe();
   }, []);
 
   // EVENTS
@@ -35,7 +36,7 @@ const Dev = () => {
     return () => sub.unsubscribe();
   }, []);
 
-  //   CATEGORIES
+  // CATEGORIES
   useEffect(() => {
     // later we'll just use userId to get the user whose profile it is, but I want all users for experiment
     const sub = DataStore.observeQuery(Category).subscribe(({ items }) => {
@@ -53,6 +54,12 @@ const Dev = () => {
   const clearAllCache = () => {
     TmdbMovieCache.clearAll();
     TmdbPersonCache.clearAll();
+  };
+
+  const sectionStyles: StyleProp<ViewStyle> = {
+    alignItems: 'flex-start',
+    width: '100%',
+    marginTop: 10,
   };
 
   return (
@@ -85,7 +92,7 @@ const Dev = () => {
           onPress={() => navigation.navigate('ManageStudios')}
           style={{ marginTop: 10 }}
         />
-        <View style={{ alignItems: 'flex-start', width: '100%', marginTop: 10 }}>
+        <View style={{ ...sectionStyles }}>
           <SubHeader>USERS:</SubHeader>
         </View>
         <TouchableText
@@ -103,7 +110,7 @@ const Dev = () => {
             <Body>{JSON.stringify(u)}</Body>
           </View>
         ))}
-        <View style={{ alignItems: 'flex-start', width: '100%', marginTop: 10 }}>
+        <View style={{ ...sectionStyles }}>
           <SubHeader>EVENTS:</SubHeader>
         </View>
         <TouchableText
@@ -121,7 +128,7 @@ const Dev = () => {
             <Body>{JSON.stringify(e)}</Body>
           </View>
         ))}
-        <View style={{ alignItems: 'flex-start', width: '100%', marginTop: 10 }}>
+        <View style={{ ...sectionStyles }}>
           <SubHeader>CATEGORIES:</SubHeader>
         </View>
         {categories?.map((c) => (

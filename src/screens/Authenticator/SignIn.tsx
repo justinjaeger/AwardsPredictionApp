@@ -13,8 +13,7 @@ import { useNavigation } from '@react-navigation/native';
 import { SignupRow } from './styles';
 import { Body } from '../../components/Text';
 import { useAuth } from '../../store';
-import { DataStore } from 'aws-amplify';
-import { User } from '../../models';
+import ApiServices from '../../services/graphql';
 
 const SignIn = (p: any) => {
   const props = p as iAuthScreenProps; // typecasting because props are automatically passed from Authenticator
@@ -35,6 +34,7 @@ const SignIn = (p: any) => {
     setLoading(true);
     setContextEmail(email);
     AuthServices.signIn(email, password).then(async (res) => {
+      console.error('ressssss', res);
       if (res.status === 'success') {
         if (res.message) {
           // display message that verification code has been sent to email
@@ -44,12 +44,12 @@ const SignIn = (p: any) => {
             duration: 5000,
           });
         } else {
-          const users = await DataStore.query(User, (u) => u.email('eq', email));
-          if (users.length > 0) {
-            const user = users[0];
-            dispatch(loginUser({ userId: user.id, userEmail: user.email }));
-            goBack();
-          }
+          console.error('else');
+          const { data: user } = await ApiServices.getUserByEmail(email);
+          console.error('user', user);
+          if (!user) return;
+          dispatch(loginUser({ userId: user.id, userEmail: user.email }));
+          goBack();
         }
       }
       setLoading(false);
@@ -79,6 +79,7 @@ const SignIn = (p: any) => {
         onPress={signIn}
         disabled={password.length < 8}
         loading={loading}
+        style={{ marginTop: 30 }}
       />
       <SignupRow style={{ marginTop: 30 }}>
         <Body>Don't have an account?</Body>

@@ -8,23 +8,24 @@ import { useDispatch } from 'react-redux';
 import { useAuth } from '../../store';
 import { useNavigation } from '@react-navigation/native';
 import { Body } from '../../components/Text';
-import { DataStore } from 'aws-amplify';
 import { User } from '../../models';
+import ApiServices from '../../services/graphql';
 
 const Profile = () => {
   const dispatch = useDispatch();
-  const { isLoggedIn, userEmail } = useAuth(); // later import userId
+  const { isLoggedIn, userId, userEmail } = useAuth(); // later import userId
   const navigation = useNavigation();
 
   const [user, setUser] = useState<User>();
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    // later we'll just use userId to get the user whose profile it is, but I want all users for experiment
-    const sub = DataStore.observeQuery(User).subscribe(({ items }) => {
-      setUser(items[0]);
+    if (!userId) return;
+    console.error('userid', userId);
+    ApiServices.getUserById(userId).then(({ data: u }) => {
+      //   console.error('u', u);
+      setUser(u);
     });
-    return () => sub.unsubscribe();
   }, []);
 
   const logIn = () => {
