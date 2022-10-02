@@ -115,71 +115,40 @@ type Relationships @model @auth(rules: [{ allow: public }]) {
     )
     followedUser: User! @belongsTo(fields: ["followedUserId"])
     followingUser: User! @belongsTo(fields: ["followingUserId"])
-    followedPredictionFeed: [PredictionSet] @hasMany(indexName: "byUserByActive", fields: ["followedUserId"])
-    # ^retrieve active predictions from the person being followed. Sort results by createdA
 }
 
-# NEVER DELETE from this table, as these entries are referenced in history
-# instead of modifying the predictions field, you can just create a new entry
-# When creating new PredictionSet, we must DELETE isActive from previous entry, AND we must delete isActive from Prediction table in corresponding predictions
 type PredictionSet @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
     userId: ID! 
-    @index(
-        name: "byUserByActive",
-        queryField: "queryPredictionSetByUserByActive",
-        sortKeyFields: ["isActive"]
-    ) 
-    @index(
-        name: "byUserByEventActive", 
-        queryField: "queryPredictionSetByUserByEventByActive",
-        sortKeyFields: ["eventId", "isActive"] # only items with isActive present will be copied into results
-    ) 
-    @index(
-        name: "byUserByEventByDate",
-        queryField: "queryPredictionSetByUserByEventByCreatedAt",
-        sortKeyFields: ["eventId", "createdAt"],
-    ) 
-    @index(
-        name: "byUserByCategoryByActive", 
-        queryField: "queryPredictionSetByUserByCategoryByActive",
-        sortKeyFields: ["categoryId", "isActive"] # only items with isActive present will be copied into results
-    ) 
-    @index(
-        name: "byUserByCategoryByDate", 
-        queryField: "queryPredictionSetByUserByCategoryByCreatedAt",
-        sortKeyFields: ["categoryId", "createdAt"]
-    )
     eventId: ID!
     categoryId: ID!
     predictions: [Prediction] @hasMany # NOTE: DataStore does not return this field so not using at the moment
-    isActive: String @default(value: "x") # essentially boolean
-    createdAt: AWSDateTime
-    # ^why? see isOpen: https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-indexes-general-sparse-indexes.html
+}
+
+type PredictionSetSnapshot @model @auth(rules: [{ allow: public }]) {
+    id: ID! @primaryKey
+    userId: ID! 
+    eventId: ID!
+    categoryId: ID!
+    predictions: [PredictionSnapshot] @hasMany # NOTE: DataStore does not return this field so not using at the moment
 }
 
 type Prediction @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
     userId: ID!
     predictionSetId: ID!
-    contenderId: ID! @index( # Look up individual Contender and see history of user's predictions
-        name: "byContenderByUser", 
-        queryField: "queryPredictionByContenderByUser", 
-        sortKeyFields: ["userId"],
-    ) 
-    @index(
-        name: "byContenderByActive", 
-        queryField: "queryPredictionByContenderByActive", 
-        sortKeyFields: ["isActive"],
-    ) 
-    @index(
-        name: "byContenderByActiveByRanking", 
-        queryField: "queryPredictionByContenderByRanking", 
-        sortKeyFields: ["isActive", "ranking"],
-    )
+    contenderId: ID!
     contender: Contender! @belongsTo(fields: ["contenderId"])
     ranking: Int!
-    isActive: String @default(value: "x") # essentially boolean - Must be removed when a new prediction is made (used in Contender activePredictions)
+}
+
+type PredictionSnapshot @model @auth(rules: [{ allow: public }]) {
+    id: ID! @primaryKey
+    userId: ID!
+    predictionSetId: ID!
+    contenderId: ID!
+    contender: Contender! @belongsTo(fields: ["contenderId"])
+    ranking: Int!
 }
 
 type Event @model @auth(rules: [{ allow: public }]) {
@@ -234,10 +203,11 @@ type Contender @model @auth(rules: [{ allow: public }]) {
     person: Person @hasOne # optional - only applies to acting categories
     song: Song @hasOne # optional - only applies to the song category
     snapshots: [ContenderSnapshot] @hasMany(indexName: "byContenderByDate", fields: ["id"])
-    activePredictions: [Prediction] @hasMany(indexName: "byContenderByActive", fields: ["id"])
-    activePredictionsRankings: [Prediction] @hasMany(indexName: "byContenderByActiveByRanking", fields: ["id"]) # for getting users predicting a win
-    predictionsByUser: [Prediction] @hasMany(indexName: "byContenderByUser", fields: ["id"])
     didReceiveNominationOrWin: Boolean
+    # Stats for displaying leaderboard (must update manually when we change predictions)
+    numberOfUsersPredictingNom: Int
+    numberOfUsersPredictingUnranked: Int
+    numberOfUsersPredictingWin: Int
 }
 
 # Purpose of this table is to retrieve Global Prediction History
@@ -253,9 +223,10 @@ type ContenderSnapshot @model @auth(rules: [{ allow: public }]) {
     contender: Contender! @belongsTo(fields: ["contenderId"])
     categoryId: ID!
     category: Category! @hasOne(fields: ["categoryId"])
-    # Stats for displaying leaderboard (must update manually when we set the record)
-    numberOfUsersPredicting: Int!
-    numberOfUsersPredictingWin: Int!
+    # Stats for displaying leaderboard (must update manually when we change predictions)
+    numberOfUsersPredictingNom: Int
+    numberOfUsersPredictingUnranked: Int
+    numberOfUsersPredictingWin: Int
     createdAt: AWSDateTime
 }
 
@@ -276,3 +247,4 @@ type Song @model @auth(rules: [{ allow: public }]) {
     artist: String!
     movie: Movie! @hasOne
 }
+

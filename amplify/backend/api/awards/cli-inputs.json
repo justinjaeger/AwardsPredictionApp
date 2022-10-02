@@ -1,7 +1,7 @@
 {
   "version": 1,
   "serviceConfiguration": {
-    "apiName": "awardsapp",
+    "apiName": "awards",
     "serviceName": "AppSync",
     "defaultAuthType": {
       "mode": "API_KEY",

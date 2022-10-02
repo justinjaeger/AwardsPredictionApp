@@ -1,19 +1,19 @@
 {
   "dev": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-awardsapp-dev-174641-authRole",
-      "UnauthRoleArn": "arn:aws:iam::709934184485:role/amplify-awardsapp-dev-174641-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::709934184485:role/amplify-awardsapp-dev-174641-authRole",
+      "AuthRoleName": "amplify-awards-dev-135815-authRole",
+      "UnauthRoleArn": "arn:aws:iam::709934184485:role/amplify-awards-dev-135815-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::709934184485:role/amplify-awards-dev-135815-authRole",
       "Region": "us-east-1",
-      "DeploymentBucketName": "amplify-awardsapp-dev-174641-deployment",
-      "UnauthRoleName": "amplify-awardsapp-dev-174641-unauthRole",
-      "StackName": "amplify-awardsapp-dev-174641",
-      "StackId": "arn:aws:cloudformation:us-east-1:709934184485:stack/amplify-awardsapp-dev-174641/6a2e2670-2008-11ed-900b-0e7ad6d1b679",
-      "AmplifyAppId": "d2lh6wuzbuchbx"
+      "DeploymentBucketName": "amplify-awards-dev-135815-deployment",
+      "UnauthRoleName": "amplify-awards-dev-135815-unauthRole",
+      "StackName": "amplify-awards-dev-135815",
+      "StackId": "arn:aws:cloudformation:us-east-1:709934184485:stack/amplify-awards-dev-135815/ca888a70-427b-11ed-990a-0a04c8377975",
+      "AmplifyAppId": "dley6l8symg5y"
     },
     "categories": {
       "auth": {
-        "awardsapp44e76dcc": {}
+        "awardsfb00fe02": {}
       }
     }
   }
