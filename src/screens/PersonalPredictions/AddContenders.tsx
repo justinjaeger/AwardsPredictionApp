@@ -6,14 +6,12 @@ import { TouchableText } from '../../components/Buttons';
 import ContenderListItem from '../../components/List/ContenderList/ContenderListItem';
 import { getAwardsBodyCategories } from '../../constants/categories';
 import { PosterSize } from '../../constants/posterDimensions';
-import { Category, CategoryType, Contender, Prediction } from '../../models';
+import { CategoryType, Contender, Prediction } from '../../models';
 import { PersonalParamList } from '../../navigation/types';
 import DS from '../../services/datastore';
 import { useAuth } from '../../store';
 import { useSubscriptionEffect } from '../../util/hooks';
 import { eventToString } from '../../util/stringConversions';
-
-export type iContendersProps = { category: Category; contenders: Contender[] };
 
 type iAddContenderItem = {
   selected: boolean;

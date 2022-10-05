@@ -1,6 +1,7 @@
 import { handleError, iApiResponse } from '../../utils';
 import { DataStore } from 'aws-amplify';
-import { Category, Contender, Prediction, PredictionSet } from '../../../models';
+import { Event, Category, Contender, Prediction, PredictionSet } from '../../../models';
+import { getCategorySlots } from '../../../constants/categories';
 
 // get prediction set. enforce uniqueness of user/category
 // NOTE: for now, I'm going with the approach that we're doing a "snapshot" of predictions every 24 hours just like the global predictions
@@ -39,8 +40,18 @@ export const createOrUpdatePredictions = async (
   predictionData: iPredictionData,
 ): Promise<iApiResponse<Prediction[]>> => {
   try {
-    // delete prediction sets associated with user AND category (NOTE: Should make this atomic)
-    // enforces ONE predictionSet per user+category
+    // NOTE: Should make this atomic
+    // FLAG: sorta weird, but I'm not confident if event id is going to be either of these
+    const eventId = category.event.id || category.eventCategoriesId;
+    if (!eventId) {
+      throw new Error('No event id in createOrUpdatePredictions');
+    }
+    const event = await DataStore.query(Event, category.event.id);
+    if (!event) {
+      throw new Error('No event in createOrUpdatePredictions');
+    }
+
+    const slots = getCategorySlots(event, category);
 
     // get prediction set
     const pSets = (
@@ -48,12 +59,18 @@ export const createOrUpdatePredictions = async (
     ).filter((ps) => ps.categoryId === category.id); // should only be one
 
     // delete existing prediction sets AND predictions
+    // enforces ONE predictionSet per user+category
     if (pSets.length > 0) {
       pSets.forEach(async (ps) => {
         const deletedPredictionSet = await DataStore.delete(PredictionSet, ps.id); // should only be one
-        deletedPredictionSet.forEach(async (dps) => {
-          await DataStore.delete(Prediction, (ps) => ps.predictionSetId('eq', dps.id));
-        });
+        // remove all predictions
+        await Promise.all(
+          deletedPredictionSet.map(async (dps) => {
+            return await DataStore.delete(Prediction, (ps) =>
+              ps.predictionSetId('eq', dps.id),
+            );
+          }),
+        );
       });
     }
 
@@ -78,6 +95,22 @@ export const createOrUpdatePredictions = async (
             predictionSetId: predictionSet.id,
           }),
         );
+      }),
+    );
+
+    // update nom/win/unranked count on contenders (used to calculate global prediction order)
+    await Promise.all(
+      predictions.map(async (p) => {
+        return await Contender.copyOf(p.contender, (c) => {
+          if (p.ranking === 1) {
+            c.numberOfUsersPredictingWin = (c.numberOfUsersPredictingWin || 0) + 1;
+          } else if (p.ranking >= slots) {
+            c.numberOfUsersPredictingNom = (c.numberOfUsersPredictingNom || 0) + 1;
+          } else {
+            c.numberOfUsersPredictingUnranked =
+              (c.numberOfUsersPredictingUnranked || 0) + 1;
+          }
+        });
       }),
     );
 
