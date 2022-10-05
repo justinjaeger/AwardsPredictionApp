@@ -1,6 +1,6 @@
-import { handleError, iApiResponse } from '../utils';
+import { handleError, iApiResponse } from '../../utils';
 import { DataStore } from 'aws-amplify';
-import { Category, Contender, Prediction, PredictionSet } from '../../models';
+import { Category, Contender, Prediction, PredictionSet } from '../../../models';
 
 // get prediction set. enforce uniqueness of user/category
 // NOTE: for now, I'm going with the approach that we're doing a "snapshot" of predictions every 24 hours just like the global predictions
@@ -39,20 +39,25 @@ export const createOrUpdatePredictions = async (
   predictionData: iPredictionData,
 ): Promise<iApiResponse<Prediction[]>> => {
   try {
-    // delete prediction sets associated with user AND category (NOTE: Should make this atomic)
-    // enforces ONE predictionSet per user+category
-
+    // NOTE: Should make this atomic
+    // get prediction set (user + category)
     const pSets = (
       await DataStore.query(PredictionSet, (ps) => ps.userId('eq', userId))
     ).filter((ps) => ps.categoryId === category.id); // should only be one
 
-    // delete existing prediction sets and predictions
+    // delete existing prediction sets AND predictions
+    // enforces ONE predictionSet per user+category
     if (pSets.length > 0) {
       pSets.forEach(async (ps) => {
         const deletedPredictionSet = await DataStore.delete(PredictionSet, ps.id); // should only be one
-        deletedPredictionSet.forEach(async (dps) => {
-          await DataStore.delete(Prediction, (ps) => ps.predictionSetId('eq', dps.id));
-        });
+        // remove all predictions associated with prediction set
+        await Promise.all(
+          deletedPredictionSet.map(async (dps) => {
+            return await DataStore.delete(Prediction, (ps) =>
+              ps.predictionSetId('eq', dps.id),
+            );
+          }),
+        );
       });
     }
 

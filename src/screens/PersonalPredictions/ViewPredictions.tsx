@@ -4,7 +4,7 @@ import { ScrollView } from 'react-native';
 import { TouchableText } from '../../components/Buttons';
 import ContenderList from '../../components/List/ContenderList';
 import { getAwardsBodyCategories } from '../../constants/categories';
-import { Contender, Prediction } from '../../models';
+import { Contender } from '../../models';
 import { PersonalParamList } from '../../navigation/types';
 import DS from '../../services/datastore';
 import { useAuth } from '../../store';
@@ -18,7 +18,7 @@ const ViewPredictions = () => {
   const navigation = useNavigation();
   const { userId } = useAuth();
 
-  const [predictions, setPredictions] = useState<Prediction[] | undefined>();
+  const [contenders, setContenders] = useState<Contender[]>([]);
 
   // Set header title (NOTE: dupliated from Global, combine these screens via top tabs eventually)
   // Move all duplicated stuff into shared menu like "add contender" (maybe that's in a FAB popout)
@@ -34,11 +34,15 @@ const ViewPredictions = () => {
     });
   }, [navigation, category.name, category.event]);
 
+  // NOTE: same logic exists in EditPredictions
   useSubscriptionEffect(async () => {
     if (!userId) return;
-    const { data: p } = await DS.getPredictions(userId, category);
-    if (!p) return;
-    setPredictions([...p]);
+    const { data: ps } = await DS.getPredictions(userId, category);
+    if (!ps) return;
+    const sortedContenders = (ps || [])
+      .sort((a, b) => (a.ranking > b.ranking ? 1 : -1))
+      .map((p) => p.contender);
+    setContenders(sortedContenders);
   }, []);
 
   const onPressThumbnail = async (c: Contender) => {
@@ -49,21 +53,19 @@ const ViewPredictions = () => {
     <ScrollView
       contentContainerStyle={{ alignItems: 'center', marginTop: 40, paddingBottom: 200 }}
     >
-      {predictions && predictions.length > 0 ? (
+      {contenders.length > 0 ? (
         <>
-          <ContenderList
-            category={category}
-            contenders={predictions
-              .sort((a, b) => (a.ranking > b.ranking ? 1 : -1))
-              .map((p) => p.contender)}
-            onPressThumbnail={onPressThumbnail}
-          />
           <TouchableText
             text={'Edit Predictions'}
             onPress={() => {
               navigation.navigate('EditPredictions', { category });
             }}
             style={{ margin: 10 }}
+          />
+          <ContenderList
+            category={category}
+            contenders={contenders}
+            onPressThumbnail={onPressThumbnail}
           />
         </>
       ) : (

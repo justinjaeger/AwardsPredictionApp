@@ -1,9 +1,15 @@
-import { AwardsBody, CategoryName, CategoryType, Event } from '../models';
+import { AwardsBody, Category, CategoryName, CategoryType, Event } from '../models';
 
 export type iCategoryData = { name: string; type: CategoryType; slots?: number };
 
 type iCategoryObject = {
   [key in CategoryName]: iCategoryData | undefined;
+};
+
+export const getCategorySlots = (event: Event, category: Category) => {
+  const awardsBodyCategory = getAwardsBodyCategories(event);
+  // Get number of slots in category (5 by default)
+  return awardsBodyCategory[CategoryName[category.name]]?.slots || 5;
 };
 
 export const getAwardsBodyCategories = (event: Event): iCategoryObject => {

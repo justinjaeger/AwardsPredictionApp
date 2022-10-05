@@ -87,7 +87,6 @@ export type User = {
   role: UserRole,
   followers?: ModelRelationshipsConnection | null,
   following?: ModelRelationshipsConnection | null,
-  leaderboardScores?: ModelLeaderboardPositionConnection | null,
   createdAt: string,
   updatedAt: string,
   _version: number,
@@ -114,285 +113,6 @@ export type Relationships = {
   _version: number,
   _deleted?: boolean | null,
   _lastChangedAt: number,
-};
-
-export type ModelLeaderboardPositionConnection = {
-  __typename: "ModelLeaderboardPositionConnection",
-  items:  Array<LeaderboardPosition | null >,
-  nextToken?: string | null,
-  startedAt?: number | null,
-};
-
-export type LeaderboardPosition = {
-  __typename: "LeaderboardPosition",
-  id: string,
-  userId: string,
-  eventId: string,
-  event: Event,
-  user: User,
-  accuracy?: string | null,
-  ranking?: number | null,
-  createdAt: string,
-  updatedAt: string,
-  _version: number,
-  _deleted?: boolean | null,
-  _lastChangedAt: number,
-  userLeaderboardScoresId?: string | null,
-};
-
-export type Event = {
-  __typename: "Event",
-  id: string,
-  categories?: ModelCategoryConnection | null,
-  leaderboard?: ModelLeaderboardPositionConnection | null,
-  awardsBody: AwardsBody,
-  year: number,
-  type: EventType,
-  expiration?: string | null,
-  usersPredicting?: ModelUserPredictingEventConnection | null,
-  isActive?: string | null,
-  createdAt: string,
-  updatedAt: string,
-  _version: number,
-  _deleted?: boolean | null,
-  _lastChangedAt: number,
-};
-
-export type ModelCategoryConnection = {
-  __typename: "ModelCategoryConnection",
-  items:  Array<Category | null >,
-  nextToken?: string | null,
-  startedAt?: number | null,
-};
-
-export type Category = {
-  __typename: "Category",
-  id: string,
-  name: CategoryName,
-  type: CategoryType,
-  eventId: string,
-  event: Event,
-  contenders?: ModelContenderConnection | null,
-  createdAt: string,
-  updatedAt: string,
-  _version: number,
-  _deleted?: boolean | null,
-  _lastChangedAt: number,
-  eventCategoriesId?: string | null,
-};
-
-export enum CategoryName {
-  PICTURE = "PICTURE",
-  DIRECTOR = "DIRECTOR",
-  ACTOR = "ACTOR",
-  ACTRESS = "ACTRESS",
-  SUPPORTING_ACTOR = "SUPPORTING_ACTOR",
-  SUPPORTING_ACTRESS = "SUPPORTING_ACTRESS",
-  ORIGINAL_SCREENPLAY = "ORIGINAL_SCREENPLAY",
-  ADAPTED_SCREENPLAY = "ADAPTED_SCREENPLAY",
-  SCREENPLAY = "SCREENPLAY",
-  INTERNATIONAL = "INTERNATIONAL",
-  ANIMATED = "ANIMATED",
-  DOCUMENTARY = "DOCUMENTARY",
-  EDITING = "EDITING",
-  CINEMATOGRAPHY = "CINEMATOGRAPHY",
-  PRODUCTION_DESIGN = "PRODUCTION_DESIGN",
-  COSTUMES = "COSTUMES",
-  MAKEUP = "MAKEUP",
-  VISUAL_EFFECTS = "VISUAL_EFFECTS",
-  SOUND = "SOUND",
-  SCORE = "SCORE",
-  SONG = "SONG",
-  SHORT_ANIMATED = "SHORT_ANIMATED",
-  SHORT_DOCUMENTARY = "SHORT_DOCUMENTARY",
-  SHORT_LIVE_ACTION = "SHORT_LIVE_ACTION",
-  ENSEMBLE = "ENSEMBLE",
-  COMEDY_PICTURE = "COMEDY_PICTURE",
-  COMEDY_ACTOR = "COMEDY_ACTOR",
-  COMEDY_ACTRESS = "COMEDY_ACTRESS",
-  ACTION_PICTURE = "ACTION_PICTURE",
-  SCIFI_HORROR_PICTURE = "SCIFI_HORROR_PICTURE",
-  YOUNG_ACTOR = "YOUNG_ACTOR",
-  RISING_STAR = "RISING_STAR",
-  DEBUT = "DEBUT",
-  FIRST_SCREENPLAY = "FIRST_SCREENPLAY",
-  BRITISH_PICTURE = "BRITISH_PICTURE",
-  ANIMATED_PERFORMANCE = "ANIMATED_PERFORMANCE",
-  BLOCKBUSTER = "BLOCKBUSTER",
-  ACTING_ACHIEVEMENT = "ACTING_ACHIEVEMENT",
-  FEMALE_DIRECTOR = "FEMALE_DIRECTOR",
-  MALE_DIRECTOR = "MALE_DIRECTOR",
-  INDIE_PICTURE = "INDIE_PICTURE",
-  BREAKTHROUGH = "BREAKTHROUGH",
-}
-
-
-export enum CategoryType {
-  FILM = "FILM",
-  PERFORMANCE = "PERFORMANCE",
-  SONG = "SONG",
-}
-
-
-export type ModelContenderConnection = {
-  __typename: "ModelContenderConnection",
-  items:  Array<Contender | null >,
-  nextToken?: string | null,
-  startedAt?: number | null,
-};
-
-export type Contender = {
-  __typename: "Contender",
-  id: string,
-  categoryId: string,
-  category: Category,
-  movie: Movie,
-  person?: Person | null,
-  song?: Song | null,
-  snapshots?: ModelContenderSnapshotConnection | null,
-  predictions?: ModelPredictionConnection | null,
-  didReceiveNominationOrWin?: boolean | null,
-  numberOfUsersPredictingNom?: number | null,
-  numberOfUsersPredictingUnranked?: number | null,
-  numberOfUsersPredictingWin?: number | null,
-  createdAt: string,
-  updatedAt: string,
-  _version: number,
-  _deleted?: boolean | null,
-  _lastChangedAt: number,
-  categoryContendersId?: string | null,
-  contenderMovieId: string,
-  contenderPersonId?: string | null,
-  contenderSongId?: string | null,
-};
-
-export type Movie = {
-  __typename: "Movie",
-  id: string,
-  tmdbId: number,
-  studio?: string | null,
-  createdAt: string,
-  updatedAt: string,
-  _version: number,
-  _deleted?: boolean | null,
-  _lastChangedAt: number,
-};
-
-export type Person = {
-  __typename: "Person",
-  id: string,
-  tmdbId: number,
-  createdAt: string,
-  updatedAt: string,
-  _version: number,
-  _deleted?: boolean | null,
-  _lastChangedAt: number,
-};
-
-export type Song = {
-  __typename: "Song",
-  id: string,
-  title: string,
-  artist: string,
-  movie: Movie,
-  createdAt: string,
-  updatedAt: string,
-  _version: number,
-  _deleted?: boolean | null,
-  _lastChangedAt: number,
-  songMovieId: string,
-};
-
-export type ModelContenderSnapshotConnection = {
-  __typename: "ModelContenderSnapshotConnection",
-  items:  Array<ContenderSnapshot | null >,
-  nextToken?: string | null,
-  startedAt?: number | null,
-};
-
-export type ContenderSnapshot = {
-  __typename: "ContenderSnapshot",
-  id: string,
-  contenderId: string,
-  contender: Contender,
-  categoryId: string,
-  category: Category,
-  numberOfUsersPredictingNom?: number | null,
-  numberOfUsersPredictingUnranked?: number | null,
-  numberOfUsersPredictingWin?: number | null,
-  createdAt?: string | null,
-  updatedAt: string,
-  _version: number,
-  _deleted?: boolean | null,
-  _lastChangedAt: number,
-};
-
-export type ModelPredictionConnection = {
-  __typename: "ModelPredictionConnection",
-  items:  Array<Prediction | null >,
-  nextToken?: string | null,
-  startedAt?: number | null,
-};
-
-export type Prediction = {
-  __typename: "Prediction",
-  id: string,
-  userId: string,
-  predictionSetId: string,
-  contenderId: string,
-  contender: Contender,
-  ranking: number,
-  createdAt: string,
-  updatedAt: string,
-  _version: number,
-  _deleted?: boolean | null,
-  _lastChangedAt: number,
-  predictionSetPredictionsId?: string | null,
-  contenderPredictionsId?: string | null,
-};
-
-export enum AwardsBody {
-  ACADEMY_AWARDS = "ACADEMY_AWARDS",
-  GOLDEN_GLOBES = "GOLDEN_GLOBES",
-  CRITICS_CHOICE = "CRITICS_CHOICE",
-  BAFTA = "BAFTA",
-  HCA = "HCA",
-  PGA = "PGA",
-  SAG = "SAG",
-  DGA = "DGA",
-  WGA = "WGA",
-  ADG = "ADG",
-  MAKEUP_GUILD = "MAKEUP_GUILD",
-  CDG = "CDG",
-  ASC = "ASC",
-  MPSE = "MPSE",
-}
-
-
-export enum EventType {
-  WIN = "WIN",
-  NOMINATION = "NOMINATION",
-}
-
-
-export type ModelUserPredictingEventConnection = {
-  __typename: "ModelUserPredictingEventConnection",
-  items:  Array<UserPredictingEvent | null >,
-  nextToken?: string | null,
-  startedAt?: number | null,
-};
-
-export type UserPredictingEvent = {
-  __typename: "UserPredictingEvent",
-  id: string,
-  eventId: string,
-  userId: string,
-  createdAt: string,
-  updatedAt: string,
-  _version: number,
-  _deleted?: boolean | null,
-  _lastChangedAt: number,
-  eventUsersPredictingId?: string | null,
 };
 
 export type UpdateUserInput = {
@@ -483,6 +203,214 @@ export type PredictionSet = {
   _version: number,
   _deleted?: boolean | null,
   _lastChangedAt: number,
+};
+
+export type ModelPredictionConnection = {
+  __typename: "ModelPredictionConnection",
+  items:  Array<Prediction | null >,
+  nextToken?: string | null,
+  startedAt?: number | null,
+};
+
+export type Prediction = {
+  __typename: "Prediction",
+  id: string,
+  userId: string,
+  predictionSetId: string,
+  contenderId: string,
+  contender: Contender,
+  ranking: number,
+  createdAt: string,
+  updatedAt: string,
+  _version: number,
+  _deleted?: boolean | null,
+  _lastChangedAt: number,
+  predictionSetPredictionsId?: string | null,
+  contenderPredictionsId?: string | null,
+};
+
+export type Contender = {
+  __typename: "Contender",
+  id: string,
+  categoryId: string,
+  category: Category,
+  movie: Movie,
+  person?: Person | null,
+  song?: Song | null,
+  predictions?: ModelPredictionConnection | null,
+  didReceiveNominationOrWin?: boolean | null,
+  numberOfUsersPredictingWin: number,
+  numberOfUsersPredictingNom: number,
+  numberOfUsersPredictingUnranked: number,
+  createdAt: string,
+  updatedAt: string,
+  _version: number,
+  _deleted?: boolean | null,
+  _lastChangedAt: number,
+  categoryContendersId?: string | null,
+  contenderMovieId: string,
+  contenderPersonId?: string | null,
+  contenderSongId?: string | null,
+};
+
+export type Category = {
+  __typename: "Category",
+  id: string,
+  name: CategoryName,
+  type: CategoryType,
+  eventId: string,
+  event: Event,
+  contenders?: ModelContenderConnection | null,
+  createdAt: string,
+  updatedAt: string,
+  _version: number,
+  _deleted?: boolean | null,
+  _lastChangedAt: number,
+  eventCategoriesId?: string | null,
+};
+
+export enum CategoryName {
+  PICTURE = "PICTURE",
+  DIRECTOR = "DIRECTOR",
+  ACTOR = "ACTOR",
+  ACTRESS = "ACTRESS",
+  SUPPORTING_ACTOR = "SUPPORTING_ACTOR",
+  SUPPORTING_ACTRESS = "SUPPORTING_ACTRESS",
+  ORIGINAL_SCREENPLAY = "ORIGINAL_SCREENPLAY",
+  ADAPTED_SCREENPLAY = "ADAPTED_SCREENPLAY",
+  SCREENPLAY = "SCREENPLAY",
+  INTERNATIONAL = "INTERNATIONAL",
+  ANIMATED = "ANIMATED",
+  DOCUMENTARY = "DOCUMENTARY",
+  EDITING = "EDITING",
+  CINEMATOGRAPHY = "CINEMATOGRAPHY",
+  PRODUCTION_DESIGN = "PRODUCTION_DESIGN",
+  COSTUMES = "COSTUMES",
+  MAKEUP = "MAKEUP",
+  VISUAL_EFFECTS = "VISUAL_EFFECTS",
+  SOUND = "SOUND",
+  SCORE = "SCORE",
+  SONG = "SONG",
+  SHORT_ANIMATED = "SHORT_ANIMATED",
+  SHORT_DOCUMENTARY = "SHORT_DOCUMENTARY",
+  SHORT_LIVE_ACTION = "SHORT_LIVE_ACTION",
+  ENSEMBLE = "ENSEMBLE",
+  COMEDY_PICTURE = "COMEDY_PICTURE",
+  COMEDY_ACTOR = "COMEDY_ACTOR",
+  COMEDY_ACTRESS = "COMEDY_ACTRESS",
+  ACTION_PICTURE = "ACTION_PICTURE",
+  SCIFI_HORROR_PICTURE = "SCIFI_HORROR_PICTURE",
+  YOUNG_ACTOR = "YOUNG_ACTOR",
+  RISING_STAR = "RISING_STAR",
+  DEBUT = "DEBUT",
+  FIRST_SCREENPLAY = "FIRST_SCREENPLAY",
+  BRITISH_PICTURE = "BRITISH_PICTURE",
+  ANIMATED_PERFORMANCE = "ANIMATED_PERFORMANCE",
+  BLOCKBUSTER = "BLOCKBUSTER",
+  ACTING_ACHIEVEMENT = "ACTING_ACHIEVEMENT",
+  FEMALE_DIRECTOR = "FEMALE_DIRECTOR",
+  MALE_DIRECTOR = "MALE_DIRECTOR",
+  INDIE_PICTURE = "INDIE_PICTURE",
+  BREAKTHROUGH = "BREAKTHROUGH",
+}
+
+
+export enum CategoryType {
+  FILM = "FILM",
+  PERFORMANCE = "PERFORMANCE",
+  SONG = "SONG",
+}
+
+
+export type Event = {
+  __typename: "Event",
+  id: string,
+  categories?: ModelCategoryConnection | null,
+  awardsBody: AwardsBody,
+  year: number,
+  type: EventType,
+  expiration?: string | null,
+  isActive?: string | null,
+  createdAt: string,
+  updatedAt: string,
+  _version: number,
+  _deleted?: boolean | null,
+  _lastChangedAt: number,
+};
+
+export type ModelCategoryConnection = {
+  __typename: "ModelCategoryConnection",
+  items:  Array<Category | null >,
+  nextToken?: string | null,
+  startedAt?: number | null,
+};
+
+export enum AwardsBody {
+  ACADEMY_AWARDS = "ACADEMY_AWARDS",
+  GOLDEN_GLOBES = "GOLDEN_GLOBES",
+  CRITICS_CHOICE = "CRITICS_CHOICE",
+  BAFTA = "BAFTA",
+  HCA = "HCA",
+  PGA = "PGA",
+  SAG = "SAG",
+  DGA = "DGA",
+  WGA = "WGA",
+  ADG = "ADG",
+  MAKEUP_GUILD = "MAKEUP_GUILD",
+  CDG = "CDG",
+  ASC = "ASC",
+  MPSE = "MPSE",
+}
+
+
+export enum EventType {
+  WIN = "WIN",
+  NOMINATION = "NOMINATION",
+}
+
+
+export type ModelContenderConnection = {
+  __typename: "ModelContenderConnection",
+  items:  Array<Contender | null >,
+  nextToken?: string | null,
+  startedAt?: number | null,
+};
+
+export type Movie = {
+  __typename: "Movie",
+  id: string,
+  tmdbId: number,
+  studio?: string | null,
+  createdAt: string,
+  updatedAt: string,
+  _version: number,
+  _deleted?: boolean | null,
+  _lastChangedAt: number,
+};
+
+export type Person = {
+  __typename: "Person",
+  id: string,
+  tmdbId: number,
+  createdAt: string,
+  updatedAt: string,
+  _version: number,
+  _deleted?: boolean | null,
+  _lastChangedAt: number,
+};
+
+export type Song = {
+  __typename: "Song",
+  id: string,
+  title: string,
+  artist: string,
+  movie: Movie,
+  createdAt: string,
+  updatedAt: string,
+  _version: number,
+  _deleted?: boolean | null,
+  _lastChangedAt: number,
+  songMovieId: string,
 };
 
 export type UpdatePredictionSetInput = {
@@ -595,72 +523,6 @@ export type DeleteEventInput = {
   _version?: number | null,
 };
 
-export type CreateUserPredictingEventInput = {
-  id?: string | null,
-  eventId: string,
-  userId: string,
-  _version?: number | null,
-  eventUsersPredictingId?: string | null,
-};
-
-export type ModelUserPredictingEventConditionInput = {
-  and?: Array< ModelUserPredictingEventConditionInput | null > | null,
-  or?: Array< ModelUserPredictingEventConditionInput | null > | null,
-  not?: ModelUserPredictingEventConditionInput | null,
-  eventUsersPredictingId?: ModelIDInput | null,
-};
-
-export type UpdateUserPredictingEventInput = {
-  id: string,
-  eventId: string,
-  userId: string,
-  _version?: number | null,
-  eventUsersPredictingId?: string | null,
-};
-
-export type DeleteUserPredictingEventInput = {
-  id: string,
-  eventId: string,
-  userId: string,
-  _version?: number | null,
-};
-
-export type CreateLeaderboardPositionInput = {
-  id?: string | null,
-  userId: string,
-  eventId: string,
-  accuracy?: string | null,
-  ranking?: number | null,
-  _version?: number | null,
-  userLeaderboardScoresId?: string | null,
-};
-
-export type ModelLeaderboardPositionConditionInput = {
-  accuracy?: ModelStringInput | null,
-  ranking?: ModelIntInput | null,
-  and?: Array< ModelLeaderboardPositionConditionInput | null > | null,
-  or?: Array< ModelLeaderboardPositionConditionInput | null > | null,
-  not?: ModelLeaderboardPositionConditionInput | null,
-  userLeaderboardScoresId?: ModelIDInput | null,
-};
-
-export type UpdateLeaderboardPositionInput = {
-  id: string,
-  userId: string,
-  eventId: string,
-  accuracy?: string | null,
-  ranking?: number | null,
-  _version?: number | null,
-  userLeaderboardScoresId?: string | null,
-};
-
-export type DeleteLeaderboardPositionInput = {
-  id: string,
-  userId: string,
-  eventId: string,
-  _version?: number | null,
-};
-
 export type CreateCategoryInput = {
   id?: string | null,
   name: CategoryName,
@@ -708,9 +570,9 @@ export type CreateContenderInput = {
   id?: string | null,
   categoryId: string,
   didReceiveNominationOrWin?: boolean | null,
-  numberOfUsersPredictingNom?: number | null,
-  numberOfUsersPredictingUnranked?: number | null,
-  numberOfUsersPredictingWin?: number | null,
+  numberOfUsersPredictingWin: number,
+  numberOfUsersPredictingNom: number,
+  numberOfUsersPredictingUnranked: number,
   _version?: number | null,
   categoryContendersId?: string | null,
   contenderMovieId: string,
@@ -721,9 +583,9 @@ export type CreateContenderInput = {
 export type ModelContenderConditionInput = {
   categoryId?: ModelIDInput | null,
   didReceiveNominationOrWin?: ModelBooleanInput | null,
+  numberOfUsersPredictingWin?: ModelIntInput | null,
   numberOfUsersPredictingNom?: ModelIntInput | null,
   numberOfUsersPredictingUnranked?: ModelIntInput | null,
-  numberOfUsersPredictingWin?: ModelIntInput | null,
   and?: Array< ModelContenderConditionInput | null > | null,
   or?: Array< ModelContenderConditionInput | null > | null,
   not?: ModelContenderConditionInput | null,
@@ -744,9 +606,9 @@ export type UpdateContenderInput = {
   id: string,
   categoryId?: string | null,
   didReceiveNominationOrWin?: boolean | null,
+  numberOfUsersPredictingWin?: number | null,
   numberOfUsersPredictingNom?: number | null,
   numberOfUsersPredictingUnranked?: number | null,
-  numberOfUsersPredictingWin?: number | null,
   _version?: number | null,
   categoryContendersId?: string | null,
   contenderMovieId: string,
@@ -755,45 +617,6 @@ export type UpdateContenderInput = {
 };
 
 export type DeleteContenderInput = {
-  id: string,
-  _version?: number | null,
-};
-
-export type CreateContenderSnapshotInput = {
-  id?: string | null,
-  contenderId: string,
-  categoryId: string,
-  numberOfUsersPredictingNom?: number | null,
-  numberOfUsersPredictingUnranked?: number | null,
-  numberOfUsersPredictingWin?: number | null,
-  createdAt?: string | null,
-  _version?: number | null,
-};
-
-export type ModelContenderSnapshotConditionInput = {
-  contenderId?: ModelIDInput | null,
-  categoryId?: ModelIDInput | null,
-  numberOfUsersPredictingNom?: ModelIntInput | null,
-  numberOfUsersPredictingUnranked?: ModelIntInput | null,
-  numberOfUsersPredictingWin?: ModelIntInput | null,
-  createdAt?: ModelStringInput | null,
-  and?: Array< ModelContenderSnapshotConditionInput | null > | null,
-  or?: Array< ModelContenderSnapshotConditionInput | null > | null,
-  not?: ModelContenderSnapshotConditionInput | null,
-};
-
-export type UpdateContenderSnapshotInput = {
-  id: string,
-  contenderId?: string | null,
-  categoryId?: string | null,
-  numberOfUsersPredictingNom?: number | null,
-  numberOfUsersPredictingUnranked?: number | null,
-  numberOfUsersPredictingWin?: number | null,
-  createdAt?: string | null,
-  _version?: number | null,
-};
-
-export type DeleteContenderSnapshotInput = {
   id: string,
   _version?: number | null,
 };
@@ -963,58 +786,6 @@ export type ModelEventConnection = {
   startedAt?: number | null,
 };
 
-export type ModelUserPredictingEventPrimaryCompositeKeyConditionInput = {
-  eq?: ModelUserPredictingEventPrimaryCompositeKeyInput | null,
-  le?: ModelUserPredictingEventPrimaryCompositeKeyInput | null,
-  lt?: ModelUserPredictingEventPrimaryCompositeKeyInput | null,
-  ge?: ModelUserPredictingEventPrimaryCompositeKeyInput | null,
-  gt?: ModelUserPredictingEventPrimaryCompositeKeyInput | null,
-  between?: Array< ModelUserPredictingEventPrimaryCompositeKeyInput | null > | null,
-  beginsWith?: ModelUserPredictingEventPrimaryCompositeKeyInput | null,
-};
-
-export type ModelUserPredictingEventPrimaryCompositeKeyInput = {
-  eventId?: string | null,
-  userId?: string | null,
-};
-
-export type ModelUserPredictingEventFilterInput = {
-  id?: ModelIDInput | null,
-  eventId?: ModelIDInput | null,
-  userId?: ModelIDInput | null,
-  and?: Array< ModelUserPredictingEventFilterInput | null > | null,
-  or?: Array< ModelUserPredictingEventFilterInput | null > | null,
-  not?: ModelUserPredictingEventFilterInput | null,
-  eventUsersPredictingId?: ModelIDInput | null,
-};
-
-export type ModelLeaderboardPositionPrimaryCompositeKeyConditionInput = {
-  eq?: ModelLeaderboardPositionPrimaryCompositeKeyInput | null,
-  le?: ModelLeaderboardPositionPrimaryCompositeKeyInput | null,
-  lt?: ModelLeaderboardPositionPrimaryCompositeKeyInput | null,
-  ge?: ModelLeaderboardPositionPrimaryCompositeKeyInput | null,
-  gt?: ModelLeaderboardPositionPrimaryCompositeKeyInput | null,
-  between?: Array< ModelLeaderboardPositionPrimaryCompositeKeyInput | null > | null,
-  beginsWith?: ModelLeaderboardPositionPrimaryCompositeKeyInput | null,
-};
-
-export type ModelLeaderboardPositionPrimaryCompositeKeyInput = {
-  userId?: string | null,
-  eventId?: string | null,
-};
-
-export type ModelLeaderboardPositionFilterInput = {
-  id?: ModelIDInput | null,
-  userId?: ModelIDInput | null,
-  eventId?: ModelIDInput | null,
-  accuracy?: ModelStringInput | null,
-  ranking?: ModelIntInput | null,
-  and?: Array< ModelLeaderboardPositionFilterInput | null > | null,
-  or?: Array< ModelLeaderboardPositionFilterInput | null > | null,
-  not?: ModelLeaderboardPositionFilterInput | null,
-  userLeaderboardScoresId?: ModelIDInput | null,
-};
-
 export type ModelCategoryFilterInput = {
   id?: ModelIDInput | null,
   name?: ModelCategoryNameInput | null,
@@ -1030,9 +801,9 @@ export type ModelContenderFilterInput = {
   id?: ModelIDInput | null,
   categoryId?: ModelIDInput | null,
   didReceiveNominationOrWin?: ModelBooleanInput | null,
+  numberOfUsersPredictingWin?: ModelIntInput | null,
   numberOfUsersPredictingNom?: ModelIntInput | null,
   numberOfUsersPredictingUnranked?: ModelIntInput | null,
-  numberOfUsersPredictingWin?: ModelIntInput | null,
   and?: Array< ModelContenderFilterInput | null > | null,
   or?: Array< ModelContenderFilterInput | null > | null,
   not?: ModelContenderFilterInput | null,
@@ -1040,19 +811,6 @@ export type ModelContenderFilterInput = {
   contenderMovieId?: ModelIDInput | null,
   contenderPersonId?: ModelIDInput | null,
   contenderSongId?: ModelIDInput | null,
-};
-
-export type ModelContenderSnapshotFilterInput = {
-  id?: ModelIDInput | null,
-  contenderId?: ModelIDInput | null,
-  categoryId?: ModelIDInput | null,
-  numberOfUsersPredictingNom?: ModelIntInput | null,
-  numberOfUsersPredictingUnranked?: ModelIntInput | null,
-  numberOfUsersPredictingWin?: ModelIntInput | null,
-  createdAt?: ModelStringInput | null,
-  and?: Array< ModelContenderSnapshotFilterInput | null > | null,
-  or?: Array< ModelContenderSnapshotFilterInput | null > | null,
-  not?: ModelContenderSnapshotFilterInput | null,
 };
 
 export type ModelMovieFilterInput = {
@@ -1103,25 +861,6 @@ export type ModelSongConnection = {
   startedAt?: number | null,
 };
 
-export type ModelIntKeyConditionInput = {
-  eq?: number | null,
-  le?: number | null,
-  lt?: number | null,
-  ge?: number | null,
-  gt?: number | null,
-  between?: Array< number | null > | null,
-};
-
-export type ModelStringKeyConditionInput = {
-  eq?: string | null,
-  le?: string | null,
-  lt?: string | null,
-  ge?: string | null,
-  gt?: string | null,
-  between?: Array< string | null > | null,
-  beginsWith?: string | null,
-};
-
 export type CreateUserMutationVariables = {
   input: CreateUserInput,
   condition?: ModelUserConditionInput | null,
@@ -1144,11 +883,6 @@ export type CreateUserMutation = {
     } | null,
     following?:  {
       __typename: "ModelRelationshipsConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
-    leaderboardScores?:  {
-      __typename: "ModelLeaderboardPositionConnection",
       nextToken?: string | null,
       startedAt?: number | null,
     } | null,
@@ -1185,11 +919,6 @@ export type UpdateUserMutation = {
       nextToken?: string | null,
       startedAt?: number | null,
     } | null,
-    leaderboardScores?:  {
-      __typename: "ModelLeaderboardPositionConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -1220,11 +949,6 @@ export type DeleteUserMutation = {
     } | null,
     following?:  {
       __typename: "ModelRelationshipsConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
-    leaderboardScores?:  {
-      __typename: "ModelLeaderboardPositionConnection",
       nextToken?: string | null,
       startedAt?: number | null,
     } | null,
@@ -1475,9 +1199,9 @@ export type CreatePredictionMutation = {
       id: string,
       categoryId: string,
       didReceiveNominationOrWin?: boolean | null,
-      numberOfUsersPredictingNom?: number | null,
-      numberOfUsersPredictingUnranked?: number | null,
-      numberOfUsersPredictingWin?: number | null,
+      numberOfUsersPredictingWin: number,
+      numberOfUsersPredictingNom: number,
+      numberOfUsersPredictingUnranked: number,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -1516,9 +1240,9 @@ export type UpdatePredictionMutation = {
       id: string,
       categoryId: string,
       didReceiveNominationOrWin?: boolean | null,
-      numberOfUsersPredictingNom?: number | null,
-      numberOfUsersPredictingUnranked?: number | null,
-      numberOfUsersPredictingWin?: number | null,
+      numberOfUsersPredictingWin: number,
+      numberOfUsersPredictingNom: number,
+      numberOfUsersPredictingUnranked: number,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -1557,9 +1281,9 @@ export type DeletePredictionMutation = {
       id: string,
       categoryId: string,
       didReceiveNominationOrWin?: boolean | null,
-      numberOfUsersPredictingNom?: number | null,
-      numberOfUsersPredictingUnranked?: number | null,
-      numberOfUsersPredictingWin?: number | null,
+      numberOfUsersPredictingWin: number,
+      numberOfUsersPredictingNom: number,
+      numberOfUsersPredictingUnranked: number,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -1595,20 +1319,10 @@ export type CreateEventMutation = {
       nextToken?: string | null,
       startedAt?: number | null,
     } | null,
-    leaderboard?:  {
-      __typename: "ModelLeaderboardPositionConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
     awardsBody: AwardsBody,
     year: number,
     type: EventType,
     expiration?: string | null,
-    usersPredicting?:  {
-      __typename: "ModelUserPredictingEventConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
     isActive?: string | null,
     createdAt: string,
     updatedAt: string,
@@ -1632,20 +1346,10 @@ export type UpdateEventMutation = {
       nextToken?: string | null,
       startedAt?: number | null,
     } | null,
-    leaderboard?:  {
-      __typename: "ModelLeaderboardPositionConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
     awardsBody: AwardsBody,
     year: number,
     type: EventType,
     expiration?: string | null,
-    usersPredicting?:  {
-      __typename: "ModelUserPredictingEventConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
     isActive?: string | null,
     createdAt: string,
     updatedAt: string,
@@ -1669,239 +1373,16 @@ export type DeleteEventMutation = {
       nextToken?: string | null,
       startedAt?: number | null,
     } | null,
-    leaderboard?:  {
-      __typename: "ModelLeaderboardPositionConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
     awardsBody: AwardsBody,
     year: number,
     type: EventType,
     expiration?: string | null,
-    usersPredicting?:  {
-      __typename: "ModelUserPredictingEventConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
     isActive?: string | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
-  } | null,
-};
-
-export type CreateUserPredictingEventMutationVariables = {
-  input: CreateUserPredictingEventInput,
-  condition?: ModelUserPredictingEventConditionInput | null,
-};
-
-export type CreateUserPredictingEventMutation = {
-  createUserPredictingEvent?:  {
-    __typename: "UserPredictingEvent",
-    id: string,
-    eventId: string,
-    userId: string,
-    createdAt: string,
-    updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
-    eventUsersPredictingId?: string | null,
-  } | null,
-};
-
-export type UpdateUserPredictingEventMutationVariables = {
-  input: UpdateUserPredictingEventInput,
-  condition?: ModelUserPredictingEventConditionInput | null,
-};
-
-export type UpdateUserPredictingEventMutation = {
-  updateUserPredictingEvent?:  {
-    __typename: "UserPredictingEvent",
-    id: string,
-    eventId: string,
-    userId: string,
-    createdAt: string,
-    updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
-    eventUsersPredictingId?: string | null,
-  } | null,
-};
-
-export type DeleteUserPredictingEventMutationVariables = {
-  input: DeleteUserPredictingEventInput,
-  condition?: ModelUserPredictingEventConditionInput | null,
-};
-
-export type DeleteUserPredictingEventMutation = {
-  deleteUserPredictingEvent?:  {
-    __typename: "UserPredictingEvent",
-    id: string,
-    eventId: string,
-    userId: string,
-    createdAt: string,
-    updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
-    eventUsersPredictingId?: string | null,
-  } | null,
-};
-
-export type CreateLeaderboardPositionMutationVariables = {
-  input: CreateLeaderboardPositionInput,
-  condition?: ModelLeaderboardPositionConditionInput | null,
-};
-
-export type CreateLeaderboardPositionMutation = {
-  createLeaderboardPosition?:  {
-    __typename: "LeaderboardPosition",
-    id: string,
-    userId: string,
-    eventId: string,
-    event:  {
-      __typename: "Event",
-      id: string,
-      awardsBody: AwardsBody,
-      year: number,
-      type: EventType,
-      expiration?: string | null,
-      isActive?: string | null,
-      createdAt: string,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-    },
-    user:  {
-      __typename: "User",
-      id: string,
-      email: string,
-      username?: string | null,
-      name?: string | null,
-      bio?: string | null,
-      image?: string | null,
-      role: UserRole,
-      createdAt: string,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-    },
-    accuracy?: string | null,
-    ranking?: number | null,
-    createdAt: string,
-    updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
-    userLeaderboardScoresId?: string | null,
-  } | null,
-};
-
-export type UpdateLeaderboardPositionMutationVariables = {
-  input: UpdateLeaderboardPositionInput,
-  condition?: ModelLeaderboardPositionConditionInput | null,
-};
-
-export type UpdateLeaderboardPositionMutation = {
-  updateLeaderboardPosition?:  {
-    __typename: "LeaderboardPosition",
-    id: string,
-    userId: string,
-    eventId: string,
-    event:  {
-      __typename: "Event",
-      id: string,
-      awardsBody: AwardsBody,
-      year: number,
-      type: EventType,
-      expiration?: string | null,
-      isActive?: string | null,
-      createdAt: string,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-    },
-    user:  {
-      __typename: "User",
-      id: string,
-      email: string,
-      username?: string | null,
-      name?: string | null,
-      bio?: string | null,
-      image?: string | null,
-      role: UserRole,
-      createdAt: string,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-    },
-    accuracy?: string | null,
-    ranking?: number | null,
-    createdAt: string,
-    updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
-    userLeaderboardScoresId?: string | null,
-  } | null,
-};
-
-export type DeleteLeaderboardPositionMutationVariables = {
-  input: DeleteLeaderboardPositionInput,
-  condition?: ModelLeaderboardPositionConditionInput | null,
-};
-
-export type DeleteLeaderboardPositionMutation = {
-  deleteLeaderboardPosition?:  {
-    __typename: "LeaderboardPosition",
-    id: string,
-    userId: string,
-    eventId: string,
-    event:  {
-      __typename: "Event",
-      id: string,
-      awardsBody: AwardsBody,
-      year: number,
-      type: EventType,
-      expiration?: string | null,
-      isActive?: string | null,
-      createdAt: string,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-    },
-    user:  {
-      __typename: "User",
-      id: string,
-      email: string,
-      username?: string | null,
-      name?: string | null,
-      bio?: string | null,
-      image?: string | null,
-      role: UserRole,
-      createdAt: string,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-    },
-    accuracy?: string | null,
-    ranking?: number | null,
-    createdAt: string,
-    updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
-    userLeaderboardScoresId?: string | null,
   } | null,
 };
 
@@ -2081,20 +1562,15 @@ export type CreateContenderMutation = {
       _lastChangedAt: number,
       songMovieId: string,
     } | null,
-    snapshots?:  {
-      __typename: "ModelContenderSnapshotConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
     predictions?:  {
       __typename: "ModelPredictionConnection",
       nextToken?: string | null,
       startedAt?: number | null,
     } | null,
     didReceiveNominationOrWin?: boolean | null,
-    numberOfUsersPredictingNom?: number | null,
-    numberOfUsersPredictingUnranked?: number | null,
-    numberOfUsersPredictingWin?: number | null,
+    numberOfUsersPredictingWin: number,
+    numberOfUsersPredictingNom: number,
+    numberOfUsersPredictingUnranked: number,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -2163,20 +1639,15 @@ export type UpdateContenderMutation = {
       _lastChangedAt: number,
       songMovieId: string,
     } | null,
-    snapshots?:  {
-      __typename: "ModelContenderSnapshotConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
     predictions?:  {
       __typename: "ModelPredictionConnection",
       nextToken?: string | null,
       startedAt?: number | null,
     } | null,
     didReceiveNominationOrWin?: boolean | null,
-    numberOfUsersPredictingNom?: number | null,
-    numberOfUsersPredictingUnranked?: number | null,
-    numberOfUsersPredictingWin?: number | null,
+    numberOfUsersPredictingWin: number,
+    numberOfUsersPredictingNom: number,
+    numberOfUsersPredictingUnranked: number,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -2245,20 +1716,15 @@ export type DeleteContenderMutation = {
       _lastChangedAt: number,
       songMovieId: string,
     } | null,
-    snapshots?:  {
-      __typename: "ModelContenderSnapshotConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
     predictions?:  {
       __typename: "ModelPredictionConnection",
       nextToken?: string | null,
       startedAt?: number | null,
     } | null,
     didReceiveNominationOrWin?: boolean | null,
-    numberOfUsersPredictingNom?: number | null,
-    numberOfUsersPredictingUnranked?: number | null,
-    numberOfUsersPredictingWin?: number | null,
+    numberOfUsersPredictingWin: number,
+    numberOfUsersPredictingNom: number,
+    numberOfUsersPredictingUnranked: number,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -2268,165 +1734,6 @@ export type DeleteContenderMutation = {
     contenderMovieId: string,
     contenderPersonId?: string | null,
     contenderSongId?: string | null,
-  } | null,
-};
-
-export type CreateContenderSnapshotMutationVariables = {
-  input: CreateContenderSnapshotInput,
-  condition?: ModelContenderSnapshotConditionInput | null,
-};
-
-export type CreateContenderSnapshotMutation = {
-  createContenderSnapshot?:  {
-    __typename: "ContenderSnapshot",
-    id: string,
-    contenderId: string,
-    contender:  {
-      __typename: "Contender",
-      id: string,
-      categoryId: string,
-      didReceiveNominationOrWin?: boolean | null,
-      numberOfUsersPredictingNom?: number | null,
-      numberOfUsersPredictingUnranked?: number | null,
-      numberOfUsersPredictingWin?: number | null,
-      createdAt: string,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-      categoryContendersId?: string | null,
-      contenderMovieId: string,
-      contenderPersonId?: string | null,
-      contenderSongId?: string | null,
-    },
-    categoryId: string,
-    category:  {
-      __typename: "Category",
-      id: string,
-      name: CategoryName,
-      type: CategoryType,
-      eventId: string,
-      createdAt: string,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-      eventCategoriesId?: string | null,
-    },
-    numberOfUsersPredictingNom?: number | null,
-    numberOfUsersPredictingUnranked?: number | null,
-    numberOfUsersPredictingWin?: number | null,
-    createdAt?: string | null,
-    updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
-  } | null,
-};
-
-export type UpdateContenderSnapshotMutationVariables = {
-  input: UpdateContenderSnapshotInput,
-  condition?: ModelContenderSnapshotConditionInput | null,
-};
-
-export type UpdateContenderSnapshotMutation = {
-  updateContenderSnapshot?:  {
-    __typename: "ContenderSnapshot",
-    id: string,
-    contenderId: string,
-    contender:  {
-      __typename: "Contender",
-      id: string,
-      categoryId: string,
-      didReceiveNominationOrWin?: boolean | null,
-      numberOfUsersPredictingNom?: number | null,
-      numberOfUsersPredictingUnranked?: number | null,
-      numberOfUsersPredictingWin?: number | null,
-      createdAt: string,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-      categoryContendersId?: string | null,
-      contenderMovieId: string,
-      contenderPersonId?: string | null,
-      contenderSongId?: string | null,
-    },
-    categoryId: string,
-    category:  {
-      __typename: "Category",
-      id: string,
-      name: CategoryName,
-      type: CategoryType,
-      eventId: string,
-      createdAt: string,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-      eventCategoriesId?: string | null,
-    },
-    numberOfUsersPredictingNom?: number | null,
-    numberOfUsersPredictingUnranked?: number | null,
-    numberOfUsersPredictingWin?: number | null,
-    createdAt?: string | null,
-    updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
-  } | null,
-};
-
-export type DeleteContenderSnapshotMutationVariables = {
-  input: DeleteContenderSnapshotInput,
-  condition?: ModelContenderSnapshotConditionInput | null,
-};
-
-export type DeleteContenderSnapshotMutation = {
-  deleteContenderSnapshot?:  {
-    __typename: "ContenderSnapshot",
-    id: string,
-    contenderId: string,
-    contender:  {
-      __typename: "Contender",
-      id: string,
-      categoryId: string,
-      didReceiveNominationOrWin?: boolean | null,
-      numberOfUsersPredictingNom?: number | null,
-      numberOfUsersPredictingUnranked?: number | null,
-      numberOfUsersPredictingWin?: number | null,
-      createdAt: string,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-      categoryContendersId?: string | null,
-      contenderMovieId: string,
-      contenderPersonId?: string | null,
-      contenderSongId?: string | null,
-    },
-    categoryId: string,
-    category:  {
-      __typename: "Category",
-      id: string,
-      name: CategoryName,
-      type: CategoryType,
-      eventId: string,
-      createdAt: string,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-      eventCategoriesId?: string | null,
-    },
-    numberOfUsersPredictingNom?: number | null,
-    numberOfUsersPredictingUnranked?: number | null,
-    numberOfUsersPredictingWin?: number | null,
-    createdAt?: string | null,
-    updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
   } | null,
 };
 
@@ -2655,11 +1962,6 @@ export type GetUserQuery = {
     } | null,
     following?:  {
       __typename: "ModelRelationshipsConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
-    leaderboardScores?:  {
-      __typename: "ModelLeaderboardPositionConnection",
       nextToken?: string | null,
       startedAt?: number | null,
     } | null,
@@ -2928,9 +2230,9 @@ export type GetPredictionQuery = {
       id: string,
       categoryId: string,
       didReceiveNominationOrWin?: boolean | null,
-      numberOfUsersPredictingNom?: number | null,
-      numberOfUsersPredictingUnranked?: number | null,
-      numberOfUsersPredictingWin?: number | null,
+      numberOfUsersPredictingWin: number,
+      numberOfUsersPredictingNom: number,
+      numberOfUsersPredictingUnranked: number,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -3026,20 +2328,10 @@ export type GetEventQuery = {
       nextToken?: string | null,
       startedAt?: number | null,
     } | null,
-    leaderboard?:  {
-      __typename: "ModelLeaderboardPositionConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
     awardsBody: AwardsBody,
     year: number,
     type: EventType,
     expiration?: string | null,
-    usersPredicting?:  {
-      __typename: "ModelUserPredictingEventConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
     isActive?: string | null,
     createdAt: string,
     updatedAt: string,
@@ -3102,195 +2394,6 @@ export type SyncEventsQuery = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
-    } | null >,
-    nextToken?: string | null,
-    startedAt?: number | null,
-  } | null,
-};
-
-export type GetUserPredictingEventQueryVariables = {
-  id: string,
-  eventId: string,
-  userId: string,
-};
-
-export type GetUserPredictingEventQuery = {
-  getUserPredictingEvent?:  {
-    __typename: "UserPredictingEvent",
-    id: string,
-    eventId: string,
-    userId: string,
-    createdAt: string,
-    updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
-    eventUsersPredictingId?: string | null,
-  } | null,
-};
-
-export type ListUserPredictingEventsQueryVariables = {
-  id?: string | null,
-  eventIdUserId?: ModelUserPredictingEventPrimaryCompositeKeyConditionInput | null,
-  filter?: ModelUserPredictingEventFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-  sortDirection?: ModelSortDirection | null,
-};
-
-export type ListUserPredictingEventsQuery = {
-  listUserPredictingEvents?:  {
-    __typename: "ModelUserPredictingEventConnection",
-    items:  Array< {
-      __typename: "UserPredictingEvent",
-      id: string,
-      eventId: string,
-      userId: string,
-      createdAt: string,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-      eventUsersPredictingId?: string | null,
-    } | null >,
-    nextToken?: string | null,
-    startedAt?: number | null,
-  } | null,
-};
-
-export type SyncUserPredictingEventsQueryVariables = {
-  filter?: ModelUserPredictingEventFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-  lastSync?: number | null,
-};
-
-export type SyncUserPredictingEventsQuery = {
-  syncUserPredictingEvents?:  {
-    __typename: "ModelUserPredictingEventConnection",
-    items:  Array< {
-      __typename: "UserPredictingEvent",
-      id: string,
-      eventId: string,
-      userId: string,
-      createdAt: string,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-      eventUsersPredictingId?: string | null,
-    } | null >,
-    nextToken?: string | null,
-    startedAt?: number | null,
-  } | null,
-};
-
-export type GetLeaderboardPositionQueryVariables = {
-  id: string,
-  userId: string,
-  eventId: string,
-};
-
-export type GetLeaderboardPositionQuery = {
-  getLeaderboardPosition?:  {
-    __typename: "LeaderboardPosition",
-    id: string,
-    userId: string,
-    eventId: string,
-    event:  {
-      __typename: "Event",
-      id: string,
-      awardsBody: AwardsBody,
-      year: number,
-      type: EventType,
-      expiration?: string | null,
-      isActive?: string | null,
-      createdAt: string,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-    },
-    user:  {
-      __typename: "User",
-      id: string,
-      email: string,
-      username?: string | null,
-      name?: string | null,
-      bio?: string | null,
-      image?: string | null,
-      role: UserRole,
-      createdAt: string,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-    },
-    accuracy?: string | null,
-    ranking?: number | null,
-    createdAt: string,
-    updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
-    userLeaderboardScoresId?: string | null,
-  } | null,
-};
-
-export type ListLeaderboardPositionsQueryVariables = {
-  id?: string | null,
-  userIdEventId?: ModelLeaderboardPositionPrimaryCompositeKeyConditionInput | null,
-  filter?: ModelLeaderboardPositionFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-  sortDirection?: ModelSortDirection | null,
-};
-
-export type ListLeaderboardPositionsQuery = {
-  listLeaderboardPositions?:  {
-    __typename: "ModelLeaderboardPositionConnection",
-    items:  Array< {
-      __typename: "LeaderboardPosition",
-      id: string,
-      userId: string,
-      eventId: string,
-      accuracy?: string | null,
-      ranking?: number | null,
-      createdAt: string,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-      userLeaderboardScoresId?: string | null,
-    } | null >,
-    nextToken?: string | null,
-    startedAt?: number | null,
-  } | null,
-};
-
-export type SyncLeaderboardPositionsQueryVariables = {
-  filter?: ModelLeaderboardPositionFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-  lastSync?: number | null,
-};
-
-export type SyncLeaderboardPositionsQuery = {
-  syncLeaderboardPositions?:  {
-    __typename: "ModelLeaderboardPositionConnection",
-    items:  Array< {
-      __typename: "LeaderboardPosition",
-      id: string,
-      userId: string,
-      eventId: string,
-      accuracy?: string | null,
-      ranking?: number | null,
-      createdAt: string,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-      userLeaderboardScoresId?: string | null,
     } | null >,
     nextToken?: string | null,
     startedAt?: number | null,
@@ -3448,20 +2551,15 @@ export type GetContenderQuery = {
       _lastChangedAt: number,
       songMovieId: string,
     } | null,
-    snapshots?:  {
-      __typename: "ModelContenderSnapshotConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
     predictions?:  {
       __typename: "ModelPredictionConnection",
       nextToken?: string | null,
       startedAt?: number | null,
     } | null,
     didReceiveNominationOrWin?: boolean | null,
-    numberOfUsersPredictingNom?: number | null,
-    numberOfUsersPredictingUnranked?: number | null,
-    numberOfUsersPredictingWin?: number | null,
+    numberOfUsersPredictingWin: number,
+    numberOfUsersPredictingNom: number,
+    numberOfUsersPredictingUnranked: number,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -3490,9 +2588,9 @@ export type ListContendersQuery = {
       id: string,
       categoryId: string,
       didReceiveNominationOrWin?: boolean | null,
-      numberOfUsersPredictingNom?: number | null,
-      numberOfUsersPredictingUnranked?: number | null,
-      numberOfUsersPredictingWin?: number | null,
+      numberOfUsersPredictingWin: number,
+      numberOfUsersPredictingNom: number,
+      numberOfUsersPredictingUnranked: number,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -3523,9 +2621,9 @@ export type SyncContendersQuery = {
       id: string,
       categoryId: string,
       didReceiveNominationOrWin?: boolean | null,
-      numberOfUsersPredictingNom?: number | null,
-      numberOfUsersPredictingUnranked?: number | null,
-      numberOfUsersPredictingWin?: number | null,
+      numberOfUsersPredictingWin: number,
+      numberOfUsersPredictingNom: number,
+      numberOfUsersPredictingUnranked: number,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -3535,117 +2633,6 @@ export type SyncContendersQuery = {
       contenderMovieId: string,
       contenderPersonId?: string | null,
       contenderSongId?: string | null,
-    } | null >,
-    nextToken?: string | null,
-    startedAt?: number | null,
-  } | null,
-};
-
-export type GetContenderSnapshotQueryVariables = {
-  id: string,
-};
-
-export type GetContenderSnapshotQuery = {
-  getContenderSnapshot?:  {
-    __typename: "ContenderSnapshot",
-    id: string,
-    contenderId: string,
-    contender:  {
-      __typename: "Contender",
-      id: string,
-      categoryId: string,
-      didReceiveNominationOrWin?: boolean | null,
-      numberOfUsersPredictingNom?: number | null,
-      numberOfUsersPredictingUnranked?: number | null,
-      numberOfUsersPredictingWin?: number | null,
-      createdAt: string,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-      categoryContendersId?: string | null,
-      contenderMovieId: string,
-      contenderPersonId?: string | null,
-      contenderSongId?: string | null,
-    },
-    categoryId: string,
-    category:  {
-      __typename: "Category",
-      id: string,
-      name: CategoryName,
-      type: CategoryType,
-      eventId: string,
-      createdAt: string,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-      eventCategoriesId?: string | null,
-    },
-    numberOfUsersPredictingNom?: number | null,
-    numberOfUsersPredictingUnranked?: number | null,
-    numberOfUsersPredictingWin?: number | null,
-    createdAt?: string | null,
-    updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
-  } | null,
-};
-
-export type ListContenderSnapshotsQueryVariables = {
-  id?: string | null,
-  filter?: ModelContenderSnapshotFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-  sortDirection?: ModelSortDirection | null,
-};
-
-export type ListContenderSnapshotsQuery = {
-  listContenderSnapshots?:  {
-    __typename: "ModelContenderSnapshotConnection",
-    items:  Array< {
-      __typename: "ContenderSnapshot",
-      id: string,
-      contenderId: string,
-      categoryId: string,
-      numberOfUsersPredictingNom?: number | null,
-      numberOfUsersPredictingUnranked?: number | null,
-      numberOfUsersPredictingWin?: number | null,
-      createdAt?: string | null,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-    } | null >,
-    nextToken?: string | null,
-    startedAt?: number | null,
-  } | null,
-};
-
-export type SyncContenderSnapshotsQueryVariables = {
-  filter?: ModelContenderSnapshotFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-  lastSync?: number | null,
-};
-
-export type SyncContenderSnapshotsQuery = {
-  syncContenderSnapshots?:  {
-    __typename: "ModelContenderSnapshotConnection",
-    items:  Array< {
-      __typename: "ContenderSnapshot",
-      id: string,
-      contenderId: string,
-      categoryId: string,
-      numberOfUsersPredictingNom?: number | null,
-      numberOfUsersPredictingUnranked?: number | null,
-      numberOfUsersPredictingWin?: number | null,
-      createdAt?: string | null,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     } | null >,
     nextToken?: string | null,
     startedAt?: number | null,
@@ -3930,68 +2917,6 @@ export type QueryRelationshipsByFollowingUserQuery = {
   } | null,
 };
 
-export type QueryLeaderboardPositionByEventByRankingQueryVariables = {
-  eventId: string,
-  ranking?: ModelIntKeyConditionInput | null,
-  sortDirection?: ModelSortDirection | null,
-  filter?: ModelLeaderboardPositionFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type QueryLeaderboardPositionByEventByRankingQuery = {
-  queryLeaderboardPositionByEventByRanking?:  {
-    __typename: "ModelLeaderboardPositionConnection",
-    items:  Array< {
-      __typename: "LeaderboardPosition",
-      id: string,
-      userId: string,
-      eventId: string,
-      accuracy?: string | null,
-      ranking?: number | null,
-      createdAt: string,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-      userLeaderboardScoresId?: string | null,
-    } | null >,
-    nextToken?: string | null,
-    startedAt?: number | null,
-  } | null,
-};
-
-export type QueryContenderSnapshotByContenderByDateQueryVariables = {
-  contenderId: string,
-  createdAt?: ModelStringKeyConditionInput | null,
-  sortDirection?: ModelSortDirection | null,
-  filter?: ModelContenderSnapshotFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type QueryContenderSnapshotByContenderByDateQuery = {
-  queryContenderSnapshotByContenderByDate?:  {
-    __typename: "ModelContenderSnapshotConnection",
-    items:  Array< {
-      __typename: "ContenderSnapshot",
-      id: string,
-      contenderId: string,
-      categoryId: string,
-      numberOfUsersPredictingNom?: number | null,
-      numberOfUsersPredictingUnranked?: number | null,
-      numberOfUsersPredictingWin?: number | null,
-      createdAt?: string | null,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-    } | null >,
-    nextToken?: string | null,
-    startedAt?: number | null,
-  } | null,
-};
-
 export type OnCreateUserSubscription = {
   onCreateUser?:  {
     __typename: "User",
@@ -4009,11 +2934,6 @@ export type OnCreateUserSubscription = {
     } | null,
     following?:  {
       __typename: "ModelRelationshipsConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
-    leaderboardScores?:  {
-      __typename: "ModelLeaderboardPositionConnection",
       nextToken?: string | null,
       startedAt?: number | null,
     } | null,
@@ -4045,11 +2965,6 @@ export type OnUpdateUserSubscription = {
       nextToken?: string | null,
       startedAt?: number | null,
     } | null,
-    leaderboardScores?:  {
-      __typename: "ModelLeaderboardPositionConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -4075,11 +2990,6 @@ export type OnDeleteUserSubscription = {
     } | null,
     following?:  {
       __typename: "ModelRelationshipsConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
-    leaderboardScores?:  {
-      __typename: "ModelLeaderboardPositionConnection",
       nextToken?: string | null,
       startedAt?: number | null,
     } | null,
@@ -4295,9 +3205,9 @@ export type OnCreatePredictionSubscription = {
       id: string,
       categoryId: string,
       didReceiveNominationOrWin?: boolean | null,
-      numberOfUsersPredictingNom?: number | null,
-      numberOfUsersPredictingUnranked?: number | null,
-      numberOfUsersPredictingWin?: number | null,
+      numberOfUsersPredictingWin: number,
+      numberOfUsersPredictingNom: number,
+      numberOfUsersPredictingUnranked: number,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -4331,9 +3241,9 @@ export type OnUpdatePredictionSubscription = {
       id: string,
       categoryId: string,
       didReceiveNominationOrWin?: boolean | null,
-      numberOfUsersPredictingNom?: number | null,
-      numberOfUsersPredictingUnranked?: number | null,
-      numberOfUsersPredictingWin?: number | null,
+      numberOfUsersPredictingWin: number,
+      numberOfUsersPredictingNom: number,
+      numberOfUsersPredictingUnranked: number,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -4367,9 +3277,9 @@ export type OnDeletePredictionSubscription = {
       id: string,
       categoryId: string,
       didReceiveNominationOrWin?: boolean | null,
-      numberOfUsersPredictingNom?: number | null,
-      numberOfUsersPredictingUnranked?: number | null,
-      numberOfUsersPredictingWin?: number | null,
+      numberOfUsersPredictingWin: number,
+      numberOfUsersPredictingNom: number,
+      numberOfUsersPredictingUnranked: number,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -4400,20 +3310,10 @@ export type OnCreateEventSubscription = {
       nextToken?: string | null,
       startedAt?: number | null,
     } | null,
-    leaderboard?:  {
-      __typename: "ModelLeaderboardPositionConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
     awardsBody: AwardsBody,
     year: number,
     type: EventType,
     expiration?: string | null,
-    usersPredicting?:  {
-      __typename: "ModelUserPredictingEventConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
     isActive?: string | null,
     createdAt: string,
     updatedAt: string,
@@ -4432,20 +3332,10 @@ export type OnUpdateEventSubscription = {
       nextToken?: string | null,
       startedAt?: number | null,
     } | null,
-    leaderboard?:  {
-      __typename: "ModelLeaderboardPositionConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
     awardsBody: AwardsBody,
     year: number,
     type: EventType,
     expiration?: string | null,
-    usersPredicting?:  {
-      __typename: "ModelUserPredictingEventConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
     isActive?: string | null,
     createdAt: string,
     updatedAt: string,
@@ -4464,209 +3354,16 @@ export type OnDeleteEventSubscription = {
       nextToken?: string | null,
       startedAt?: number | null,
     } | null,
-    leaderboard?:  {
-      __typename: "ModelLeaderboardPositionConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
     awardsBody: AwardsBody,
     year: number,
     type: EventType,
     expiration?: string | null,
-    usersPredicting?:  {
-      __typename: "ModelUserPredictingEventConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
     isActive?: string | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
-  } | null,
-};
-
-export type OnCreateUserPredictingEventSubscription = {
-  onCreateUserPredictingEvent?:  {
-    __typename: "UserPredictingEvent",
-    id: string,
-    eventId: string,
-    userId: string,
-    createdAt: string,
-    updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
-    eventUsersPredictingId?: string | null,
-  } | null,
-};
-
-export type OnUpdateUserPredictingEventSubscription = {
-  onUpdateUserPredictingEvent?:  {
-    __typename: "UserPredictingEvent",
-    id: string,
-    eventId: string,
-    userId: string,
-    createdAt: string,
-    updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
-    eventUsersPredictingId?: string | null,
-  } | null,
-};
-
-export type OnDeleteUserPredictingEventSubscription = {
-  onDeleteUserPredictingEvent?:  {
-    __typename: "UserPredictingEvent",
-    id: string,
-    eventId: string,
-    userId: string,
-    createdAt: string,
-    updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
-    eventUsersPredictingId?: string | null,
-  } | null,
-};
-
-export type OnCreateLeaderboardPositionSubscription = {
-  onCreateLeaderboardPosition?:  {
-    __typename: "LeaderboardPosition",
-    id: string,
-    userId: string,
-    eventId: string,
-    event:  {
-      __typename: "Event",
-      id: string,
-      awardsBody: AwardsBody,
-      year: number,
-      type: EventType,
-      expiration?: string | null,
-      isActive?: string | null,
-      createdAt: string,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-    },
-    user:  {
-      __typename: "User",
-      id: string,
-      email: string,
-      username?: string | null,
-      name?: string | null,
-      bio?: string | null,
-      image?: string | null,
-      role: UserRole,
-      createdAt: string,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-    },
-    accuracy?: string | null,
-    ranking?: number | null,
-    createdAt: string,
-    updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
-    userLeaderboardScoresId?: string | null,
-  } | null,
-};
-
-export type OnUpdateLeaderboardPositionSubscription = {
-  onUpdateLeaderboardPosition?:  {
-    __typename: "LeaderboardPosition",
-    id: string,
-    userId: string,
-    eventId: string,
-    event:  {
-      __typename: "Event",
-      id: string,
-      awardsBody: AwardsBody,
-      year: number,
-      type: EventType,
-      expiration?: string | null,
-      isActive?: string | null,
-      createdAt: string,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-    },
-    user:  {
-      __typename: "User",
-      id: string,
-      email: string,
-      username?: string | null,
-      name?: string | null,
-      bio?: string | null,
-      image?: string | null,
-      role: UserRole,
-      createdAt: string,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-    },
-    accuracy?: string | null,
-    ranking?: number | null,
-    createdAt: string,
-    updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
-    userLeaderboardScoresId?: string | null,
-  } | null,
-};
-
-export type OnDeleteLeaderboardPositionSubscription = {
-  onDeleteLeaderboardPosition?:  {
-    __typename: "LeaderboardPosition",
-    id: string,
-    userId: string,
-    eventId: string,
-    event:  {
-      __typename: "Event",
-      id: string,
-      awardsBody: AwardsBody,
-      year: number,
-      type: EventType,
-      expiration?: string | null,
-      isActive?: string | null,
-      createdAt: string,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-    },
-    user:  {
-      __typename: "User",
-      id: string,
-      email: string,
-      username?: string | null,
-      name?: string | null,
-      bio?: string | null,
-      image?: string | null,
-      role: UserRole,
-      createdAt: string,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-    },
-    accuracy?: string | null,
-    ranking?: number | null,
-    createdAt: string,
-    updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
-    userLeaderboardScoresId?: string | null,
   } | null,
 };
 
@@ -4826,20 +3523,15 @@ export type OnCreateContenderSubscription = {
       _lastChangedAt: number,
       songMovieId: string,
     } | null,
-    snapshots?:  {
-      __typename: "ModelContenderSnapshotConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
     predictions?:  {
       __typename: "ModelPredictionConnection",
       nextToken?: string | null,
       startedAt?: number | null,
     } | null,
     didReceiveNominationOrWin?: boolean | null,
-    numberOfUsersPredictingNom?: number | null,
-    numberOfUsersPredictingUnranked?: number | null,
-    numberOfUsersPredictingWin?: number | null,
+    numberOfUsersPredictingWin: number,
+    numberOfUsersPredictingNom: number,
+    numberOfUsersPredictingUnranked: number,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -4903,20 +3595,15 @@ export type OnUpdateContenderSubscription = {
       _lastChangedAt: number,
       songMovieId: string,
     } | null,
-    snapshots?:  {
-      __typename: "ModelContenderSnapshotConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
     predictions?:  {
       __typename: "ModelPredictionConnection",
       nextToken?: string | null,
       startedAt?: number | null,
     } | null,
     didReceiveNominationOrWin?: boolean | null,
-    numberOfUsersPredictingNom?: number | null,
-    numberOfUsersPredictingUnranked?: number | null,
-    numberOfUsersPredictingWin?: number | null,
+    numberOfUsersPredictingWin: number,
+    numberOfUsersPredictingNom: number,
+    numberOfUsersPredictingUnranked: number,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -4980,20 +3667,15 @@ export type OnDeleteContenderSubscription = {
       _lastChangedAt: number,
       songMovieId: string,
     } | null,
-    snapshots?:  {
-      __typename: "ModelContenderSnapshotConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
     predictions?:  {
       __typename: "ModelPredictionConnection",
       nextToken?: string | null,
       startedAt?: number | null,
     } | null,
     didReceiveNominationOrWin?: boolean | null,
-    numberOfUsersPredictingNom?: number | null,
-    numberOfUsersPredictingUnranked?: number | null,
-    numberOfUsersPredictingWin?: number | null,
+    numberOfUsersPredictingWin: number,
+    numberOfUsersPredictingNom: number,
+    numberOfUsersPredictingUnranked: number,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -5003,150 +3685,6 @@ export type OnDeleteContenderSubscription = {
     contenderMovieId: string,
     contenderPersonId?: string | null,
     contenderSongId?: string | null,
-  } | null,
-};
-
-export type OnCreateContenderSnapshotSubscription = {
-  onCreateContenderSnapshot?:  {
-    __typename: "ContenderSnapshot",
-    id: string,
-    contenderId: string,
-    contender:  {
-      __typename: "Contender",
-      id: string,
-      categoryId: string,
-      didReceiveNominationOrWin?: boolean | null,
-      numberOfUsersPredictingNom?: number | null,
-      numberOfUsersPredictingUnranked?: number | null,
-      numberOfUsersPredictingWin?: number | null,
-      createdAt: string,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-      categoryContendersId?: string | null,
-      contenderMovieId: string,
-      contenderPersonId?: string | null,
-      contenderSongId?: string | null,
-    },
-    categoryId: string,
-    category:  {
-      __typename: "Category",
-      id: string,
-      name: CategoryName,
-      type: CategoryType,
-      eventId: string,
-      createdAt: string,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-      eventCategoriesId?: string | null,
-    },
-    numberOfUsersPredictingNom?: number | null,
-    numberOfUsersPredictingUnranked?: number | null,
-    numberOfUsersPredictingWin?: number | null,
-    createdAt?: string | null,
-    updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
-  } | null,
-};
-
-export type OnUpdateContenderSnapshotSubscription = {
-  onUpdateContenderSnapshot?:  {
-    __typename: "ContenderSnapshot",
-    id: string,
-    contenderId: string,
-    contender:  {
-      __typename: "Contender",
-      id: string,
-      categoryId: string,
-      didReceiveNominationOrWin?: boolean | null,
-      numberOfUsersPredictingNom?: number | null,
-      numberOfUsersPredictingUnranked?: number | null,
-      numberOfUsersPredictingWin?: number | null,
-      createdAt: string,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-      categoryContendersId?: string | null,
-      contenderMovieId: string,
-      contenderPersonId?: string | null,
-      contenderSongId?: string | null,
-    },
-    categoryId: string,
-    category:  {
-      __typename: "Category",
-      id: string,
-      name: CategoryName,
-      type: CategoryType,
-      eventId: string,
-      createdAt: string,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-      eventCategoriesId?: string | null,
-    },
-    numberOfUsersPredictingNom?: number | null,
-    numberOfUsersPredictingUnranked?: number | null,
-    numberOfUsersPredictingWin?: number | null,
-    createdAt?: string | null,
-    updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
-  } | null,
-};
-
-export type OnDeleteContenderSnapshotSubscription = {
-  onDeleteContenderSnapshot?:  {
-    __typename: "ContenderSnapshot",
-    id: string,
-    contenderId: string,
-    contender:  {
-      __typename: "Contender",
-      id: string,
-      categoryId: string,
-      didReceiveNominationOrWin?: boolean | null,
-      numberOfUsersPredictingNom?: number | null,
-      numberOfUsersPredictingUnranked?: number | null,
-      numberOfUsersPredictingWin?: number | null,
-      createdAt: string,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-      categoryContendersId?: string | null,
-      contenderMovieId: string,
-      contenderPersonId?: string | null,
-      contenderSongId?: string | null,
-    },
-    categoryId: string,
-    category:  {
-      __typename: "Category",
-      id: string,
-      name: CategoryName,
-      type: CategoryType,
-      eventId: string,
-      createdAt: string,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-      eventCategoriesId?: string | null,
-    },
-    numberOfUsersPredictingNom?: number | null,
-    numberOfUsersPredictingUnranked?: number | null,
-    numberOfUsersPredictingWin?: number | null,
-    createdAt?: string | null,
-    updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
   } | null,
 };
 

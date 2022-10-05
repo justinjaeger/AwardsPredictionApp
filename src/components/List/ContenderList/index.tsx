@@ -21,7 +21,7 @@ const ContenderList = (props: iContenderListProps) => {
 
   useSubscriptionEffect(async () => {
     setData(contenders);
-  }, []);
+  }, [contenders]);
 
   return (
     <TouchableHighlight
@@ -42,7 +42,7 @@ const ContenderList = (props: iContenderListProps) => {
               justifyContent: 'center',
             }}
           >
-            <BodyLarge>Add films to this list</BodyLarge>
+            <BodyLarge>No films in this list</BodyLarge>
           </View>
         ) : null}
         {data.map((c, i) => (

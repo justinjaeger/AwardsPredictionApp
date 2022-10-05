@@ -20,10 +20,6 @@ export const getUser = /* GraphQL */ `
         nextToken
         startedAt
       }
-      leaderboardScores {
-        nextToken
-        startedAt
-      }
       createdAt
       updatedAt
       _version
@@ -288,9 +284,9 @@ export const getPrediction = /* GraphQL */ `
         id
         categoryId
         didReceiveNominationOrWin
+        numberOfUsersPredictingWin
         numberOfUsersPredictingNom
         numberOfUsersPredictingUnranked
-        numberOfUsersPredictingWin
         createdAt
         updatedAt
         _version
@@ -386,18 +382,10 @@ export const getEvent = /* GraphQL */ `
         nextToken
         startedAt
       }
-      leaderboard {
-        nextToken
-        startedAt
-      }
       awardsBody
       year
       type
       expiration
-      usersPredicting {
-        nextToken
-        startedAt
-      }
       isActive
       createdAt
       updatedAt
@@ -465,193 +453,6 @@ export const syncEvents = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
-      }
-      nextToken
-      startedAt
-    }
-  }
-`;
-export const getUserPredictingEvent = /* GraphQL */ `
-  query GetUserPredictingEvent($id: ID!, $eventId: ID!, $userId: ID!) {
-    getUserPredictingEvent(id: $id, eventId: $eventId, userId: $userId) {
-      id
-      eventId
-      userId
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-      eventUsersPredictingId
-    }
-  }
-`;
-export const listUserPredictingEvents = /* GraphQL */ `
-  query ListUserPredictingEvents(
-    $id: ID
-    $eventIdUserId: ModelUserPredictingEventPrimaryCompositeKeyConditionInput
-    $filter: ModelUserPredictingEventFilterInput
-    $limit: Int
-    $nextToken: String
-    $sortDirection: ModelSortDirection
-  ) {
-    listUserPredictingEvents(
-      id: $id
-      eventIdUserId: $eventIdUserId
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      sortDirection: $sortDirection
-    ) {
-      items {
-        id
-        eventId
-        userId
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        eventUsersPredictingId
-      }
-      nextToken
-      startedAt
-    }
-  }
-`;
-export const syncUserPredictingEvents = /* GraphQL */ `
-  query SyncUserPredictingEvents(
-    $filter: ModelUserPredictingEventFilterInput
-    $limit: Int
-    $nextToken: String
-    $lastSync: AWSTimestamp
-  ) {
-    syncUserPredictingEvents(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
-      items {
-        id
-        eventId
-        userId
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        eventUsersPredictingId
-      }
-      nextToken
-      startedAt
-    }
-  }
-`;
-export const getLeaderboardPosition = /* GraphQL */ `
-  query GetLeaderboardPosition($id: ID!, $userId: ID!, $eventId: ID!) {
-    getLeaderboardPosition(id: $id, userId: $userId, eventId: $eventId) {
-      id
-      userId
-      eventId
-      event {
-        id
-        awardsBody
-        year
-        type
-        expiration
-        isActive
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
-      user {
-        id
-        email
-        username
-        name
-        bio
-        image
-        role
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
-      accuracy
-      ranking
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-      userLeaderboardScoresId
-    }
-  }
-`;
-export const listLeaderboardPositions = /* GraphQL */ `
-  query ListLeaderboardPositions(
-    $id: ID
-    $userIdEventId: ModelLeaderboardPositionPrimaryCompositeKeyConditionInput
-    $filter: ModelLeaderboardPositionFilterInput
-    $limit: Int
-    $nextToken: String
-    $sortDirection: ModelSortDirection
-  ) {
-    listLeaderboardPositions(
-      id: $id
-      userIdEventId: $userIdEventId
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      sortDirection: $sortDirection
-    ) {
-      items {
-        id
-        userId
-        eventId
-        accuracy
-        ranking
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        userLeaderboardScoresId
-      }
-      nextToken
-      startedAt
-    }
-  }
-`;
-export const syncLeaderboardPositions = /* GraphQL */ `
-  query SyncLeaderboardPositions(
-    $filter: ModelLeaderboardPositionFilterInput
-    $limit: Int
-    $nextToken: String
-    $lastSync: AWSTimestamp
-  ) {
-    syncLeaderboardPositions(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
-      items {
-        id
-        userId
-        eventId
-        accuracy
-        ranking
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        userLeaderboardScoresId
       }
       nextToken
       startedAt
@@ -800,18 +601,14 @@ export const getContender = /* GraphQL */ `
         _lastChangedAt
         songMovieId
       }
-      snapshots {
-        nextToken
-        startedAt
-      }
       predictions {
         nextToken
         startedAt
       }
       didReceiveNominationOrWin
+      numberOfUsersPredictingWin
       numberOfUsersPredictingNom
       numberOfUsersPredictingUnranked
-      numberOfUsersPredictingWin
       createdAt
       updatedAt
       _version
@@ -843,9 +640,9 @@ export const listContenders = /* GraphQL */ `
         id
         categoryId
         didReceiveNominationOrWin
+        numberOfUsersPredictingWin
         numberOfUsersPredictingNom
         numberOfUsersPredictingUnranked
-        numberOfUsersPredictingWin
         createdAt
         updatedAt
         _version
@@ -878,9 +675,9 @@ export const syncContenders = /* GraphQL */ `
         id
         categoryId
         didReceiveNominationOrWin
+        numberOfUsersPredictingWin
         numberOfUsersPredictingNom
         numberOfUsersPredictingUnranked
-        numberOfUsersPredictingWin
         createdAt
         updatedAt
         _version
@@ -890,116 +687,6 @@ export const syncContenders = /* GraphQL */ `
         contenderMovieId
         contenderPersonId
         contenderSongId
-      }
-      nextToken
-      startedAt
-    }
-  }
-`;
-export const getContenderSnapshot = /* GraphQL */ `
-  query GetContenderSnapshot($id: ID!) {
-    getContenderSnapshot(id: $id) {
-      id
-      contenderId
-      contender {
-        id
-        categoryId
-        didReceiveNominationOrWin
-        numberOfUsersPredictingNom
-        numberOfUsersPredictingUnranked
-        numberOfUsersPredictingWin
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        categoryContendersId
-        contenderMovieId
-        contenderPersonId
-        contenderSongId
-      }
-      categoryId
-      category {
-        id
-        name
-        type
-        eventId
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        eventCategoriesId
-      }
-      numberOfUsersPredictingNom
-      numberOfUsersPredictingUnranked
-      numberOfUsersPredictingWin
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-    }
-  }
-`;
-export const listContenderSnapshots = /* GraphQL */ `
-  query ListContenderSnapshots(
-    $id: ID
-    $filter: ModelContenderSnapshotFilterInput
-    $limit: Int
-    $nextToken: String
-    $sortDirection: ModelSortDirection
-  ) {
-    listContenderSnapshots(
-      id: $id
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      sortDirection: $sortDirection
-    ) {
-      items {
-        id
-        contenderId
-        categoryId
-        numberOfUsersPredictingNom
-        numberOfUsersPredictingUnranked
-        numberOfUsersPredictingWin
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
-      nextToken
-      startedAt
-    }
-  }
-`;
-export const syncContenderSnapshots = /* GraphQL */ `
-  query SyncContenderSnapshots(
-    $filter: ModelContenderSnapshotFilterInput
-    $limit: Int
-    $nextToken: String
-    $lastSync: AWSTimestamp
-  ) {
-    syncContenderSnapshots(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
-      items {
-        id
-        contenderId
-        categoryId
-        numberOfUsersPredictingNom
-        numberOfUsersPredictingUnranked
-        numberOfUsersPredictingWin
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
       }
       nextToken
       startedAt
@@ -1281,76 +968,6 @@ export const queryRelationshipsByFollowingUser = /* GraphQL */ `
         id
         followedUserId
         followingUserId
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
-      nextToken
-      startedAt
-    }
-  }
-`;
-export const queryLeaderboardPositionByEventByRanking = /* GraphQL */ `
-  query QueryLeaderboardPositionByEventByRanking(
-    $eventId: ID!
-    $ranking: ModelIntKeyConditionInput
-    $sortDirection: ModelSortDirection
-    $filter: ModelLeaderboardPositionFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    queryLeaderboardPositionByEventByRanking(
-      eventId: $eventId
-      ranking: $ranking
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        userId
-        eventId
-        accuracy
-        ranking
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        userLeaderboardScoresId
-      }
-      nextToken
-      startedAt
-    }
-  }
-`;
-export const queryContenderSnapshotByContenderByDate = /* GraphQL */ `
-  query QueryContenderSnapshotByContenderByDate(
-    $contenderId: ID!
-    $createdAt: ModelStringKeyConditionInput
-    $sortDirection: ModelSortDirection
-    $filter: ModelContenderSnapshotFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    queryContenderSnapshotByContenderByDate(
-      contenderId: $contenderId
-      createdAt: $createdAt
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        contenderId
-        categoryId
-        numberOfUsersPredictingNom
-        numberOfUsersPredictingUnranked
-        numberOfUsersPredictingWin
         createdAt
         updatedAt
         _version

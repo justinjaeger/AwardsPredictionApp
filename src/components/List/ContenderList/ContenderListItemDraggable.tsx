@@ -48,7 +48,7 @@ const ContenderListItemDraggable = (props: iContenderListItemDraggableProps) => 
     const movieId = contender.contenderMovieId;
     const { data: movie } = await DS.getMovieById(movieId);
     setMovie(movie);
-  }, [movie]);
+  }, [contender.contenderMovieId]);
 
   if (!movie) return null;
 
@@ -59,6 +59,7 @@ const ContenderListItemDraggable = (props: iContenderListItemDraggableProps) => 
     case CategoryType.FILM:
       component = (
         <FilmListItem
+          contender={contender}
           category={category}
           movie={movie}
           ranking={ranking}

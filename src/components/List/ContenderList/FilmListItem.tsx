@@ -1,29 +1,35 @@
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { PosterSize } from '../../../constants/posterDimensions';
-import { CategoryName, Category, Movie } from '../../../models';
+import { CategoryName, Category, Movie, Contender } from '../../../models';
 
 import { iCachedTmdbMovie } from '../../../services/cache/types';
+import DS from '../../../services/datastore';
+import { iNumberPredicting } from '../../../services/datastore/contender';
 import TmdbServices from '../../../services/tmdb';
 import Poster from '../../Images/Poster';
 import { BodyLarge } from '../../Text';
 
-type iContenderListItemProps = {
+type iFilmListItemProps = {
   movie: Movie;
+  contender: Contender;
   category: Category;
   ranking?: number;
   size?: PosterSize;
   onPress: () => void;
 };
 
-const ContenderListItem = (props: iContenderListItemProps) => {
-  const { movie, category, ranking, size, onPress } = props;
+const FilmListItem = (props: iFilmListItemProps) => {
+  const { movie, contender, category, ranking, size, onPress } = props;
 
   const movieTmdbId = movie.tmdbId;
 
   // TODO: based on category.name (CategoryName), display a distinct piece of information with the film like who the directors or screenwriters are
 
   const [tmdbMovie, setTmdbMovie] = useState<iCachedTmdbMovie | undefined>();
+  const [numPredicting, setNumPredicting] = useState<iNumberPredicting | undefined>(
+    undefined,
+  );
 
   useEffect(() => {
     TmdbServices.getTmdbMovie(movieTmdbId).then((m) => {
@@ -31,11 +37,12 @@ const ContenderListItem = (props: iContenderListItemProps) => {
         setTmdbMovie(m.data);
       }
     });
+    DS.getNumberPredicting(contender).then(({ data }) => {
+      setNumPredicting(data);
+    });
   }, [movieTmdbId]);
 
   const categoryInfo = tmdbMovie?.categoryInfo?.[category.name];
-
-  // TODO: create better loading state
 
   return (
     <View
@@ -65,10 +72,23 @@ const ContenderListItem = (props: iContenderListItemProps) => {
           {categoryInfo ? (
             <BodyLarge style={{ marginLeft: 10 }}>{categoryInfo.join(', ')}</BodyLarge>
           ) : null}
+          {size !== PosterSize.SMALL ? (
+            <>
+              <BodyLarge
+                style={{ marginLeft: 10 }}
+              >{`pred win: ${numPredicting?.predictingWin}`}</BodyLarge>
+              <BodyLarge
+                style={{ marginLeft: 10 }}
+              >{`pred nom: ${numPredicting?.predictingNom}`}</BodyLarge>
+              <BodyLarge
+                style={{ marginLeft: 10 }}
+              >{`pred unranked: ${numPredicting?.predictingUnranked}`}</BodyLarge>
+            </>
+          ) : null}
         </View>
       </View>
     </View>
   );
 };
 
-export default ContenderListItem;
+export default FilmListItem;
