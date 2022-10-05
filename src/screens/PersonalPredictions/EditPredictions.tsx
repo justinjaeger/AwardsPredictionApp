@@ -7,7 +7,7 @@ import { getAwardsBodyCategories } from '../../constants/categories';
 import { Contender } from '../../models';
 import { PersonalParamList } from '../../navigation/types';
 import DS from '../../services/datastore';
-import { iPredictionData } from '../../services/datastore/predictions';
+import { iPredictionData } from '../../services/datastore/user/predictions';
 import { useAuth } from '../../store';
 import { useSubscriptionEffect } from '../../util/hooks';
 import { eventToString } from '../../util/stringConversions';

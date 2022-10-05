@@ -1,6 +1,6 @@
-import { handleError, iApiResponse } from '../utils';
+import { handleError, iApiResponse } from '../../utils';
 import { DataStore } from 'aws-amplify';
-import { Category, Contender, Prediction, PredictionSet } from '../../models';
+import { Category, Contender, Prediction, PredictionSet } from '../../../models';
 
 // get prediction set. enforce uniqueness of user/category
 // NOTE: for now, I'm going with the approach that we're doing a "snapshot" of predictions every 24 hours just like the global predictions
