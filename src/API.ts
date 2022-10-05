@@ -87,10 +87,6 @@ export type User = {
   role: UserRole,
   followers?: ModelRelationshipsConnection | null,
   following?: ModelRelationshipsConnection | null,
-  activePredictionsByEvent?: ModelPredictionSetConnection | null,
-  activePredictionsByCategory?: ModelPredictionSetConnection | null,
-  pastPredictionsByEvent?: ModelPredictionSetConnection | null,
-  pastPredictionsByCategory?: ModelPredictionSetConnection | null,
   leaderboardScores?: ModelLeaderboardPositionConnection | null,
   createdAt: string,
   updatedAt: string,
@@ -113,7 +109,6 @@ export type Relationships = {
   followingUserId: string,
   followedUser: User,
   followingUser: User,
-  followedPredictionFeed?: ModelPredictionSetConnection | null,
   createdAt: string,
   updatedAt: string,
   _version: number,
@@ -121,74 +116,53 @@ export type Relationships = {
   _lastChangedAt: number,
 };
 
-export type ModelPredictionSetConnection = {
-  __typename: "ModelPredictionSetConnection",
-  items:  Array<PredictionSet | null >,
+export type ModelLeaderboardPositionConnection = {
+  __typename: "ModelLeaderboardPositionConnection",
+  items:  Array<LeaderboardPosition | null >,
   nextToken?: string | null,
   startedAt?: number | null,
 };
 
-export type PredictionSet = {
-  __typename: "PredictionSet",
+export type LeaderboardPosition = {
+  __typename: "LeaderboardPosition",
   id: string,
   userId: string,
   eventId: string,
-  categoryId: string,
-  predictions?: ModelPredictionConnection | null,
+  event: Event,
+  user: User,
+  accuracy?: string | null,
+  ranking?: number | null,
+  createdAt: string,
+  updatedAt: string,
+  _version: number,
+  _deleted?: boolean | null,
+  _lastChangedAt: number,
+  userLeaderboardScoresId?: string | null,
+};
+
+export type Event = {
+  __typename: "Event",
+  id: string,
+  categories?: ModelCategoryConnection | null,
+  leaderboard?: ModelLeaderboardPositionConnection | null,
+  awardsBody: AwardsBody,
+  year: number,
+  type: EventType,
+  expiration?: string | null,
+  usersPredicting?: ModelUserPredictingEventConnection | null,
   isActive?: string | null,
-  createdAt?: string | null,
+  createdAt: string,
   updatedAt: string,
   _version: number,
   _deleted?: boolean | null,
   _lastChangedAt: number,
 };
 
-export type ModelPredictionConnection = {
-  __typename: "ModelPredictionConnection",
-  items:  Array<Prediction | null >,
+export type ModelCategoryConnection = {
+  __typename: "ModelCategoryConnection",
+  items:  Array<Category | null >,
   nextToken?: string | null,
   startedAt?: number | null,
-};
-
-export type Prediction = {
-  __typename: "Prediction",
-  id: string,
-  userId: string,
-  predictionSetId: string,
-  contenderId: string,
-  contender: Contender,
-  ranking: number,
-  isActive?: string | null,
-  createdAt: string,
-  updatedAt: string,
-  _version: number,
-  _deleted?: boolean | null,
-  _lastChangedAt: number,
-  predictionSetPredictionsId?: string | null,
-};
-
-export type Contender = {
-  __typename: "Contender",
-  id: string,
-  categoryId: string,
-  category: Category,
-  movie: Movie,
-  person?: Person | null,
-  song?: Song | null,
-  snapshots?: ModelContenderSnapshotConnection | null,
-  activePredictions?: ModelPredictionConnection | null,
-  activePredictionsRankings?: ModelPredictionConnection | null,
-  predictionsByUser?: ModelPredictionConnection | null,
-  didReceiveNominationOrWin?: boolean | null,
-  createdAt: string,
-  updatedAt: string,
-  _version: number,
-  _deleted?: boolean | null,
-  _lastChangedAt: number,
-  categoryContendersId?: string | null,
-  contenderMovieId: string,
-  contenderPersonId?: string | null,
-  contenderSongId?: string | null,
 };
 
 export type Category = {
@@ -260,104 +234,36 @@ export enum CategoryType {
 }
 
 
-export type Event = {
-  __typename: "Event",
-  id: string,
-  categories?: ModelCategoryConnection | null,
-  leaderboard?: ModelLeaderboardPositionConnection | null,
-  awardsBody: AwardsBody,
-  year: number,
-  type: EventType,
-  expiration?: string | null,
-  usersPredicting?: ModelUserPredictingEventConnection | null,
-  isActive?: string | null,
-  createdAt: string,
-  updatedAt: string,
-  _version: number,
-  _deleted?: boolean | null,
-  _lastChangedAt: number,
-};
-
-export type ModelCategoryConnection = {
-  __typename: "ModelCategoryConnection",
-  items:  Array<Category | null >,
-  nextToken?: string | null,
-  startedAt?: number | null,
-};
-
-export type ModelLeaderboardPositionConnection = {
-  __typename: "ModelLeaderboardPositionConnection",
-  items:  Array<LeaderboardPosition | null >,
-  nextToken?: string | null,
-  startedAt?: number | null,
-};
-
-export type LeaderboardPosition = {
-  __typename: "LeaderboardPosition",
-  id: string,
-  userId: string,
-  eventId: string,
-  event: Event,
-  user: User,
-  accuracy?: string | null,
-  ranking?: number | null,
-  createdAt: string,
-  updatedAt: string,
-  _version: number,
-  _deleted?: boolean | null,
-  _lastChangedAt: number,
-  userLeaderboardScoresId?: string | null,
-};
-
-export enum AwardsBody {
-  ACADEMY_AWARDS = "ACADEMY_AWARDS",
-  GOLDEN_GLOBES = "GOLDEN_GLOBES",
-  CRITICS_CHOICE = "CRITICS_CHOICE",
-  BAFTA = "BAFTA",
-  HCA = "HCA",
-  PGA = "PGA",
-  SAG = "SAG",
-  DGA = "DGA",
-  WGA = "WGA",
-  ADG = "ADG",
-  MAKEUP_GUILD = "MAKEUP_GUILD",
-  CDG = "CDG",
-  ASC = "ASC",
-  MPSE = "MPSE",
-}
-
-
-export enum EventType {
-  WIN = "WIN",
-  NOMINATION = "NOMINATION",
-}
-
-
-export type ModelUserPredictingEventConnection = {
-  __typename: "ModelUserPredictingEventConnection",
-  items:  Array<UserPredictingEvent | null >,
-  nextToken?: string | null,
-  startedAt?: number | null,
-};
-
-export type UserPredictingEvent = {
-  __typename: "UserPredictingEvent",
-  id: string,
-  eventId: string,
-  userId: string,
-  createdAt: string,
-  updatedAt: string,
-  _version: number,
-  _deleted?: boolean | null,
-  _lastChangedAt: number,
-  eventUsersPredictingId?: string | null,
-};
-
 export type ModelContenderConnection = {
   __typename: "ModelContenderConnection",
   items:  Array<Contender | null >,
   nextToken?: string | null,
   startedAt?: number | null,
+};
+
+export type Contender = {
+  __typename: "Contender",
+  id: string,
+  categoryId: string,
+  category: Category,
+  movie: Movie,
+  person?: Person | null,
+  song?: Song | null,
+  snapshots?: ModelContenderSnapshotConnection | null,
+  predictions?: ModelPredictionConnection | null,
+  didReceiveNominationOrWin?: boolean | null,
+  numberOfUsersPredictingNom?: number | null,
+  numberOfUsersPredictingUnranked?: number | null,
+  numberOfUsersPredictingWin?: number | null,
+  createdAt: string,
+  updatedAt: string,
+  _version: number,
+  _deleted?: boolean | null,
+  _lastChangedAt: number,
+  categoryContendersId?: string | null,
+  contenderMovieId: string,
+  contenderPersonId?: string | null,
+  contenderSongId?: string | null,
 };
 
 export type Movie = {
@@ -411,13 +317,82 @@ export type ContenderSnapshot = {
   contender: Contender,
   categoryId: string,
   category: Category,
-  numberOfUsersPredicting: number,
-  numberOfUsersPredictingWin: number,
+  numberOfUsersPredictingNom?: number | null,
+  numberOfUsersPredictingUnranked?: number | null,
+  numberOfUsersPredictingWin?: number | null,
   createdAt?: string | null,
   updatedAt: string,
   _version: number,
   _deleted?: boolean | null,
   _lastChangedAt: number,
+};
+
+export type ModelPredictionConnection = {
+  __typename: "ModelPredictionConnection",
+  items:  Array<Prediction | null >,
+  nextToken?: string | null,
+  startedAt?: number | null,
+};
+
+export type Prediction = {
+  __typename: "Prediction",
+  id: string,
+  userId: string,
+  predictionSetId: string,
+  contenderId: string,
+  contender: Contender,
+  ranking: number,
+  createdAt: string,
+  updatedAt: string,
+  _version: number,
+  _deleted?: boolean | null,
+  _lastChangedAt: number,
+  predictionSetPredictionsId?: string | null,
+  contenderPredictionsId?: string | null,
+};
+
+export enum AwardsBody {
+  ACADEMY_AWARDS = "ACADEMY_AWARDS",
+  GOLDEN_GLOBES = "GOLDEN_GLOBES",
+  CRITICS_CHOICE = "CRITICS_CHOICE",
+  BAFTA = "BAFTA",
+  HCA = "HCA",
+  PGA = "PGA",
+  SAG = "SAG",
+  DGA = "DGA",
+  WGA = "WGA",
+  ADG = "ADG",
+  MAKEUP_GUILD = "MAKEUP_GUILD",
+  CDG = "CDG",
+  ASC = "ASC",
+  MPSE = "MPSE",
+}
+
+
+export enum EventType {
+  WIN = "WIN",
+  NOMINATION = "NOMINATION",
+}
+
+
+export type ModelUserPredictingEventConnection = {
+  __typename: "ModelUserPredictingEventConnection",
+  items:  Array<UserPredictingEvent | null >,
+  nextToken?: string | null,
+  startedAt?: number | null,
+};
+
+export type UserPredictingEvent = {
+  __typename: "UserPredictingEvent",
+  id: string,
+  eventId: string,
+  userId: string,
+  createdAt: string,
+  updatedAt: string,
+  _version: number,
+  _deleted?: boolean | null,
+  _lastChangedAt: number,
+  eventUsersPredictingId?: string | null,
 };
 
 export type UpdateUserInput = {
@@ -484,8 +459,6 @@ export type CreatePredictionSetInput = {
   userId: string,
   eventId: string,
   categoryId: string,
-  isActive?: string | null,
-  createdAt?: string | null,
   _version?: number | null,
 };
 
@@ -493,11 +466,23 @@ export type ModelPredictionSetConditionInput = {
   userId?: ModelIDInput | null,
   eventId?: ModelIDInput | null,
   categoryId?: ModelIDInput | null,
-  isActive?: ModelStringInput | null,
-  createdAt?: ModelStringInput | null,
   and?: Array< ModelPredictionSetConditionInput | null > | null,
   or?: Array< ModelPredictionSetConditionInput | null > | null,
   not?: ModelPredictionSetConditionInput | null,
+};
+
+export type PredictionSet = {
+  __typename: "PredictionSet",
+  id: string,
+  userId: string,
+  eventId: string,
+  categoryId: string,
+  predictions?: ModelPredictionConnection | null,
+  createdAt: string,
+  updatedAt: string,
+  _version: number,
+  _deleted?: boolean | null,
+  _lastChangedAt: number,
 };
 
 export type UpdatePredictionSetInput = {
@@ -505,8 +490,6 @@ export type UpdatePredictionSetInput = {
   userId?: string | null,
   eventId?: string | null,
   categoryId?: string | null,
-  isActive?: string | null,
-  createdAt?: string | null,
   _version?: number | null,
 };
 
@@ -521,9 +504,9 @@ export type CreatePredictionInput = {
   predictionSetId: string,
   contenderId: string,
   ranking: number,
-  isActive?: string | null,
   _version?: number | null,
   predictionSetPredictionsId?: string | null,
+  contenderPredictionsId?: string | null,
 };
 
 export type ModelPredictionConditionInput = {
@@ -531,11 +514,11 @@ export type ModelPredictionConditionInput = {
   predictionSetId?: ModelIDInput | null,
   contenderId?: ModelIDInput | null,
   ranking?: ModelIntInput | null,
-  isActive?: ModelStringInput | null,
   and?: Array< ModelPredictionConditionInput | null > | null,
   or?: Array< ModelPredictionConditionInput | null > | null,
   not?: ModelPredictionConditionInput | null,
   predictionSetPredictionsId?: ModelIDInput | null,
+  contenderPredictionsId?: ModelIDInput | null,
 };
 
 export type ModelIntInput = {
@@ -556,9 +539,9 @@ export type UpdatePredictionInput = {
   predictionSetId?: string | null,
   contenderId?: string | null,
   ranking?: number | null,
-  isActive?: string | null,
   _version?: number | null,
   predictionSetPredictionsId?: string | null,
+  contenderPredictionsId?: string | null,
 };
 
 export type DeletePredictionInput = {
@@ -725,6 +708,9 @@ export type CreateContenderInput = {
   id?: string | null,
   categoryId: string,
   didReceiveNominationOrWin?: boolean | null,
+  numberOfUsersPredictingNom?: number | null,
+  numberOfUsersPredictingUnranked?: number | null,
+  numberOfUsersPredictingWin?: number | null,
   _version?: number | null,
   categoryContendersId?: string | null,
   contenderMovieId: string,
@@ -735,6 +721,9 @@ export type CreateContenderInput = {
 export type ModelContenderConditionInput = {
   categoryId?: ModelIDInput | null,
   didReceiveNominationOrWin?: ModelBooleanInput | null,
+  numberOfUsersPredictingNom?: ModelIntInput | null,
+  numberOfUsersPredictingUnranked?: ModelIntInput | null,
+  numberOfUsersPredictingWin?: ModelIntInput | null,
   and?: Array< ModelContenderConditionInput | null > | null,
   or?: Array< ModelContenderConditionInput | null > | null,
   not?: ModelContenderConditionInput | null,
@@ -755,6 +744,9 @@ export type UpdateContenderInput = {
   id: string,
   categoryId?: string | null,
   didReceiveNominationOrWin?: boolean | null,
+  numberOfUsersPredictingNom?: number | null,
+  numberOfUsersPredictingUnranked?: number | null,
+  numberOfUsersPredictingWin?: number | null,
   _version?: number | null,
   categoryContendersId?: string | null,
   contenderMovieId: string,
@@ -771,8 +763,9 @@ export type CreateContenderSnapshotInput = {
   id?: string | null,
   contenderId: string,
   categoryId: string,
-  numberOfUsersPredicting: number,
-  numberOfUsersPredictingWin: number,
+  numberOfUsersPredictingNom?: number | null,
+  numberOfUsersPredictingUnranked?: number | null,
+  numberOfUsersPredictingWin?: number | null,
   createdAt?: string | null,
   _version?: number | null,
 };
@@ -780,7 +773,8 @@ export type CreateContenderSnapshotInput = {
 export type ModelContenderSnapshotConditionInput = {
   contenderId?: ModelIDInput | null,
   categoryId?: ModelIDInput | null,
-  numberOfUsersPredicting?: ModelIntInput | null,
+  numberOfUsersPredictingNom?: ModelIntInput | null,
+  numberOfUsersPredictingUnranked?: ModelIntInput | null,
   numberOfUsersPredictingWin?: ModelIntInput | null,
   createdAt?: ModelStringInput | null,
   and?: Array< ModelContenderSnapshotConditionInput | null > | null,
@@ -792,7 +786,8 @@ export type UpdateContenderSnapshotInput = {
   id: string,
   contenderId?: string | null,
   categoryId?: string | null,
-  numberOfUsersPredicting?: number | null,
+  numberOfUsersPredictingNom?: number | null,
+  numberOfUsersPredictingUnranked?: number | null,
   numberOfUsersPredictingWin?: number | null,
   createdAt?: string | null,
   _version?: number | null,
@@ -924,11 +919,16 @@ export type ModelPredictionSetFilterInput = {
   userId?: ModelIDInput | null,
   eventId?: ModelIDInput | null,
   categoryId?: ModelIDInput | null,
-  isActive?: ModelStringInput | null,
-  createdAt?: ModelStringInput | null,
   and?: Array< ModelPredictionSetFilterInput | null > | null,
   or?: Array< ModelPredictionSetFilterInput | null > | null,
   not?: ModelPredictionSetFilterInput | null,
+};
+
+export type ModelPredictionSetConnection = {
+  __typename: "ModelPredictionSetConnection",
+  items:  Array<PredictionSet | null >,
+  nextToken?: string | null,
+  startedAt?: number | null,
 };
 
 export type ModelPredictionFilterInput = {
@@ -937,11 +937,11 @@ export type ModelPredictionFilterInput = {
   predictionSetId?: ModelIDInput | null,
   contenderId?: ModelIDInput | null,
   ranking?: ModelIntInput | null,
-  isActive?: ModelStringInput | null,
   and?: Array< ModelPredictionFilterInput | null > | null,
   or?: Array< ModelPredictionFilterInput | null > | null,
   not?: ModelPredictionFilterInput | null,
   predictionSetPredictionsId?: ModelIDInput | null,
+  contenderPredictionsId?: ModelIDInput | null,
 };
 
 export type ModelEventFilterInput = {
@@ -1030,6 +1030,9 @@ export type ModelContenderFilterInput = {
   id?: ModelIDInput | null,
   categoryId?: ModelIDInput | null,
   didReceiveNominationOrWin?: ModelBooleanInput | null,
+  numberOfUsersPredictingNom?: ModelIntInput | null,
+  numberOfUsersPredictingUnranked?: ModelIntInput | null,
+  numberOfUsersPredictingWin?: ModelIntInput | null,
   and?: Array< ModelContenderFilterInput | null > | null,
   or?: Array< ModelContenderFilterInput | null > | null,
   not?: ModelContenderFilterInput | null,
@@ -1043,7 +1046,8 @@ export type ModelContenderSnapshotFilterInput = {
   id?: ModelIDInput | null,
   contenderId?: ModelIDInput | null,
   categoryId?: ModelIDInput | null,
-  numberOfUsersPredicting?: ModelIntInput | null,
+  numberOfUsersPredictingNom?: ModelIntInput | null,
+  numberOfUsersPredictingUnranked?: ModelIntInput | null,
   numberOfUsersPredictingWin?: ModelIntInput | null,
   createdAt?: ModelStringInput | null,
   and?: Array< ModelContenderSnapshotFilterInput | null > | null,
@@ -1099,6 +1103,15 @@ export type ModelSongConnection = {
   startedAt?: number | null,
 };
 
+export type ModelIntKeyConditionInput = {
+  eq?: number | null,
+  le?: number | null,
+  lt?: number | null,
+  ge?: number | null,
+  gt?: number | null,
+  between?: Array< number | null > | null,
+};
+
 export type ModelStringKeyConditionInput = {
   eq?: string | null,
   le?: string | null,
@@ -1107,100 +1120,6 @@ export type ModelStringKeyConditionInput = {
   gt?: string | null,
   between?: Array< string | null > | null,
   beginsWith?: string | null,
-};
-
-export type ModelPredictionSetByUserByEventActiveCompositeKeyConditionInput = {
-  eq?: ModelPredictionSetByUserByEventActiveCompositeKeyInput | null,
-  le?: ModelPredictionSetByUserByEventActiveCompositeKeyInput | null,
-  lt?: ModelPredictionSetByUserByEventActiveCompositeKeyInput | null,
-  ge?: ModelPredictionSetByUserByEventActiveCompositeKeyInput | null,
-  gt?: ModelPredictionSetByUserByEventActiveCompositeKeyInput | null,
-  between?: Array< ModelPredictionSetByUserByEventActiveCompositeKeyInput | null > | null,
-  beginsWith?: ModelPredictionSetByUserByEventActiveCompositeKeyInput | null,
-};
-
-export type ModelPredictionSetByUserByEventActiveCompositeKeyInput = {
-  eventId?: string | null,
-  isActive?: string | null,
-};
-
-export type ModelPredictionSetByUserByEventByDateCompositeKeyConditionInput = {
-  eq?: ModelPredictionSetByUserByEventByDateCompositeKeyInput | null,
-  le?: ModelPredictionSetByUserByEventByDateCompositeKeyInput | null,
-  lt?: ModelPredictionSetByUserByEventByDateCompositeKeyInput | null,
-  ge?: ModelPredictionSetByUserByEventByDateCompositeKeyInput | null,
-  gt?: ModelPredictionSetByUserByEventByDateCompositeKeyInput | null,
-  between?: Array< ModelPredictionSetByUserByEventByDateCompositeKeyInput | null > | null,
-  beginsWith?: ModelPredictionSetByUserByEventByDateCompositeKeyInput | null,
-};
-
-export type ModelPredictionSetByUserByEventByDateCompositeKeyInput = {
-  eventId?: string | null,
-  createdAt?: string | null,
-};
-
-export type ModelPredictionSetByUserByCategoryByActiveCompositeKeyConditionInput = {
-  eq?: ModelPredictionSetByUserByCategoryByActiveCompositeKeyInput | null,
-  le?: ModelPredictionSetByUserByCategoryByActiveCompositeKeyInput | null,
-  lt?: ModelPredictionSetByUserByCategoryByActiveCompositeKeyInput | null,
-  ge?: ModelPredictionSetByUserByCategoryByActiveCompositeKeyInput | null,
-  gt?: ModelPredictionSetByUserByCategoryByActiveCompositeKeyInput | null,
-  between?: Array< ModelPredictionSetByUserByCategoryByActiveCompositeKeyInput | null > | null,
-  beginsWith?: ModelPredictionSetByUserByCategoryByActiveCompositeKeyInput | null,
-};
-
-export type ModelPredictionSetByUserByCategoryByActiveCompositeKeyInput = {
-  categoryId?: string | null,
-  isActive?: string | null,
-};
-
-export type ModelPredictionSetByUserByCategoryByDateCompositeKeyConditionInput = {
-  eq?: ModelPredictionSetByUserByCategoryByDateCompositeKeyInput | null,
-  le?: ModelPredictionSetByUserByCategoryByDateCompositeKeyInput | null,
-  lt?: ModelPredictionSetByUserByCategoryByDateCompositeKeyInput | null,
-  ge?: ModelPredictionSetByUserByCategoryByDateCompositeKeyInput | null,
-  gt?: ModelPredictionSetByUserByCategoryByDateCompositeKeyInput | null,
-  between?: Array< ModelPredictionSetByUserByCategoryByDateCompositeKeyInput | null > | null,
-  beginsWith?: ModelPredictionSetByUserByCategoryByDateCompositeKeyInput | null,
-};
-
-export type ModelPredictionSetByUserByCategoryByDateCompositeKeyInput = {
-  categoryId?: string | null,
-  createdAt?: string | null,
-};
-
-export type ModelIDKeyConditionInput = {
-  eq?: string | null,
-  le?: string | null,
-  lt?: string | null,
-  ge?: string | null,
-  gt?: string | null,
-  between?: Array< string | null > | null,
-  beginsWith?: string | null,
-};
-
-export type ModelPredictionByContenderByActiveByRankingCompositeKeyConditionInput = {
-  eq?: ModelPredictionByContenderByActiveByRankingCompositeKeyInput | null,
-  le?: ModelPredictionByContenderByActiveByRankingCompositeKeyInput | null,
-  lt?: ModelPredictionByContenderByActiveByRankingCompositeKeyInput | null,
-  ge?: ModelPredictionByContenderByActiveByRankingCompositeKeyInput | null,
-  gt?: ModelPredictionByContenderByActiveByRankingCompositeKeyInput | null,
-  between?: Array< ModelPredictionByContenderByActiveByRankingCompositeKeyInput | null > | null,
-  beginsWith?: ModelPredictionByContenderByActiveByRankingCompositeKeyInput | null,
-};
-
-export type ModelPredictionByContenderByActiveByRankingCompositeKeyInput = {
-  isActive?: string | null,
-  ranking?: number | null,
-};
-
-export type ModelIntKeyConditionInput = {
-  eq?: number | null,
-  le?: number | null,
-  lt?: number | null,
-  ge?: number | null,
-  gt?: number | null,
-  between?: Array< number | null > | null,
 };
 
 export type CreateUserMutationVariables = {
@@ -1225,26 +1144,6 @@ export type CreateUserMutation = {
     } | null,
     following?:  {
       __typename: "ModelRelationshipsConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
-    activePredictionsByEvent?:  {
-      __typename: "ModelPredictionSetConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
-    activePredictionsByCategory?:  {
-      __typename: "ModelPredictionSetConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
-    pastPredictionsByEvent?:  {
-      __typename: "ModelPredictionSetConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
-    pastPredictionsByCategory?:  {
-      __typename: "ModelPredictionSetConnection",
       nextToken?: string | null,
       startedAt?: number | null,
     } | null,
@@ -1286,26 +1185,6 @@ export type UpdateUserMutation = {
       nextToken?: string | null,
       startedAt?: number | null,
     } | null,
-    activePredictionsByEvent?:  {
-      __typename: "ModelPredictionSetConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
-    activePredictionsByCategory?:  {
-      __typename: "ModelPredictionSetConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
-    pastPredictionsByEvent?:  {
-      __typename: "ModelPredictionSetConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
-    pastPredictionsByCategory?:  {
-      __typename: "ModelPredictionSetConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
     leaderboardScores?:  {
       __typename: "ModelLeaderboardPositionConnection",
       nextToken?: string | null,
@@ -1341,26 +1220,6 @@ export type DeleteUserMutation = {
     } | null,
     following?:  {
       __typename: "ModelRelationshipsConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
-    activePredictionsByEvent?:  {
-      __typename: "ModelPredictionSetConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
-    activePredictionsByCategory?:  {
-      __typename: "ModelPredictionSetConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
-    pastPredictionsByEvent?:  {
-      __typename: "ModelPredictionSetConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
-    pastPredictionsByCategory?:  {
-      __typename: "ModelPredictionSetConnection",
       nextToken?: string | null,
       startedAt?: number | null,
     } | null,
@@ -1418,11 +1277,6 @@ export type CreateRelationshipsMutation = {
       _deleted?: boolean | null,
       _lastChangedAt: number,
     },
-    followedPredictionFeed?:  {
-      __typename: "ModelPredictionSetConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -1472,11 +1326,6 @@ export type UpdateRelationshipsMutation = {
       _deleted?: boolean | null,
       _lastChangedAt: number,
     },
-    followedPredictionFeed?:  {
-      __typename: "ModelPredictionSetConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -1526,11 +1375,6 @@ export type DeleteRelationshipsMutation = {
       _deleted?: boolean | null,
       _lastChangedAt: number,
     },
-    followedPredictionFeed?:  {
-      __typename: "ModelPredictionSetConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -1556,8 +1400,7 @@ export type CreatePredictionSetMutation = {
       nextToken?: string | null,
       startedAt?: number | null,
     } | null,
-    isActive?: string | null,
-    createdAt?: string | null,
+    createdAt: string,
     updatedAt: string,
     _version: number,
     _deleted?: boolean | null,
@@ -1582,8 +1425,7 @@ export type UpdatePredictionSetMutation = {
       nextToken?: string | null,
       startedAt?: number | null,
     } | null,
-    isActive?: string | null,
-    createdAt?: string | null,
+    createdAt: string,
     updatedAt: string,
     _version: number,
     _deleted?: boolean | null,
@@ -1608,8 +1450,7 @@ export type DeletePredictionSetMutation = {
       nextToken?: string | null,
       startedAt?: number | null,
     } | null,
-    isActive?: string | null,
-    createdAt?: string | null,
+    createdAt: string,
     updatedAt: string,
     _version: number,
     _deleted?: boolean | null,
@@ -1634,6 +1475,9 @@ export type CreatePredictionMutation = {
       id: string,
       categoryId: string,
       didReceiveNominationOrWin?: boolean | null,
+      numberOfUsersPredictingNom?: number | null,
+      numberOfUsersPredictingUnranked?: number | null,
+      numberOfUsersPredictingWin?: number | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -1645,13 +1489,13 @@ export type CreatePredictionMutation = {
       contenderSongId?: string | null,
     },
     ranking: number,
-    isActive?: string | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
     predictionSetPredictionsId?: string | null,
+    contenderPredictionsId?: string | null,
   } | null,
 };
 
@@ -1672,6 +1516,9 @@ export type UpdatePredictionMutation = {
       id: string,
       categoryId: string,
       didReceiveNominationOrWin?: boolean | null,
+      numberOfUsersPredictingNom?: number | null,
+      numberOfUsersPredictingUnranked?: number | null,
+      numberOfUsersPredictingWin?: number | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -1683,13 +1530,13 @@ export type UpdatePredictionMutation = {
       contenderSongId?: string | null,
     },
     ranking: number,
-    isActive?: string | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
     predictionSetPredictionsId?: string | null,
+    contenderPredictionsId?: string | null,
   } | null,
 };
 
@@ -1710,6 +1557,9 @@ export type DeletePredictionMutation = {
       id: string,
       categoryId: string,
       didReceiveNominationOrWin?: boolean | null,
+      numberOfUsersPredictingNom?: number | null,
+      numberOfUsersPredictingUnranked?: number | null,
+      numberOfUsersPredictingWin?: number | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -1721,13 +1571,13 @@ export type DeletePredictionMutation = {
       contenderSongId?: string | null,
     },
     ranking: number,
-    isActive?: string | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
     predictionSetPredictionsId?: string | null,
+    contenderPredictionsId?: string | null,
   } | null,
 };
 
@@ -2236,22 +2086,15 @@ export type CreateContenderMutation = {
       nextToken?: string | null,
       startedAt?: number | null,
     } | null,
-    activePredictions?:  {
-      __typename: "ModelPredictionConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
-    activePredictionsRankings?:  {
-      __typename: "ModelPredictionConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
-    predictionsByUser?:  {
+    predictions?:  {
       __typename: "ModelPredictionConnection",
       nextToken?: string | null,
       startedAt?: number | null,
     } | null,
     didReceiveNominationOrWin?: boolean | null,
+    numberOfUsersPredictingNom?: number | null,
+    numberOfUsersPredictingUnranked?: number | null,
+    numberOfUsersPredictingWin?: number | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -2325,22 +2168,15 @@ export type UpdateContenderMutation = {
       nextToken?: string | null,
       startedAt?: number | null,
     } | null,
-    activePredictions?:  {
-      __typename: "ModelPredictionConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
-    activePredictionsRankings?:  {
-      __typename: "ModelPredictionConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
-    predictionsByUser?:  {
+    predictions?:  {
       __typename: "ModelPredictionConnection",
       nextToken?: string | null,
       startedAt?: number | null,
     } | null,
     didReceiveNominationOrWin?: boolean | null,
+    numberOfUsersPredictingNom?: number | null,
+    numberOfUsersPredictingUnranked?: number | null,
+    numberOfUsersPredictingWin?: number | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -2414,22 +2250,15 @@ export type DeleteContenderMutation = {
       nextToken?: string | null,
       startedAt?: number | null,
     } | null,
-    activePredictions?:  {
-      __typename: "ModelPredictionConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
-    activePredictionsRankings?:  {
-      __typename: "ModelPredictionConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
-    predictionsByUser?:  {
+    predictions?:  {
       __typename: "ModelPredictionConnection",
       nextToken?: string | null,
       startedAt?: number | null,
     } | null,
     didReceiveNominationOrWin?: boolean | null,
+    numberOfUsersPredictingNom?: number | null,
+    numberOfUsersPredictingUnranked?: number | null,
+    numberOfUsersPredictingWin?: number | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -2457,6 +2286,9 @@ export type CreateContenderSnapshotMutation = {
       id: string,
       categoryId: string,
       didReceiveNominationOrWin?: boolean | null,
+      numberOfUsersPredictingNom?: number | null,
+      numberOfUsersPredictingUnranked?: number | null,
+      numberOfUsersPredictingWin?: number | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -2481,8 +2313,9 @@ export type CreateContenderSnapshotMutation = {
       _lastChangedAt: number,
       eventCategoriesId?: string | null,
     },
-    numberOfUsersPredicting: number,
-    numberOfUsersPredictingWin: number,
+    numberOfUsersPredictingNom?: number | null,
+    numberOfUsersPredictingUnranked?: number | null,
+    numberOfUsersPredictingWin?: number | null,
     createdAt?: string | null,
     updatedAt: string,
     _version: number,
@@ -2506,6 +2339,9 @@ export type UpdateContenderSnapshotMutation = {
       id: string,
       categoryId: string,
       didReceiveNominationOrWin?: boolean | null,
+      numberOfUsersPredictingNom?: number | null,
+      numberOfUsersPredictingUnranked?: number | null,
+      numberOfUsersPredictingWin?: number | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -2530,8 +2366,9 @@ export type UpdateContenderSnapshotMutation = {
       _lastChangedAt: number,
       eventCategoriesId?: string | null,
     },
-    numberOfUsersPredicting: number,
-    numberOfUsersPredictingWin: number,
+    numberOfUsersPredictingNom?: number | null,
+    numberOfUsersPredictingUnranked?: number | null,
+    numberOfUsersPredictingWin?: number | null,
     createdAt?: string | null,
     updatedAt: string,
     _version: number,
@@ -2555,6 +2392,9 @@ export type DeleteContenderSnapshotMutation = {
       id: string,
       categoryId: string,
       didReceiveNominationOrWin?: boolean | null,
+      numberOfUsersPredictingNom?: number | null,
+      numberOfUsersPredictingUnranked?: number | null,
+      numberOfUsersPredictingWin?: number | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -2579,8 +2419,9 @@ export type DeleteContenderSnapshotMutation = {
       _lastChangedAt: number,
       eventCategoriesId?: string | null,
     },
-    numberOfUsersPredicting: number,
-    numberOfUsersPredictingWin: number,
+    numberOfUsersPredictingNom?: number | null,
+    numberOfUsersPredictingUnranked?: number | null,
+    numberOfUsersPredictingWin?: number | null,
     createdAt?: string | null,
     updatedAt: string,
     _version: number,
@@ -2817,26 +2658,6 @@ export type GetUserQuery = {
       nextToken?: string | null,
       startedAt?: number | null,
     } | null,
-    activePredictionsByEvent?:  {
-      __typename: "ModelPredictionSetConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
-    activePredictionsByCategory?:  {
-      __typename: "ModelPredictionSetConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
-    pastPredictionsByEvent?:  {
-      __typename: "ModelPredictionSetConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
-    pastPredictionsByCategory?:  {
-      __typename: "ModelPredictionSetConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
     leaderboardScores?:  {
       __typename: "ModelLeaderboardPositionConnection",
       nextToken?: string | null,
@@ -2951,11 +2772,6 @@ export type GetRelationshipsQuery = {
       _deleted?: boolean | null,
       _lastChangedAt: number,
     },
-    followedPredictionFeed?:  {
-      __typename: "ModelPredictionSetConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -3033,8 +2849,7 @@ export type GetPredictionSetQuery = {
       nextToken?: string | null,
       startedAt?: number | null,
     } | null,
-    isActive?: string | null,
-    createdAt?: string | null,
+    createdAt: string,
     updatedAt: string,
     _version: number,
     _deleted?: boolean | null,
@@ -3059,8 +2874,7 @@ export type ListPredictionSetsQuery = {
       userId: string,
       eventId: string,
       categoryId: string,
-      isActive?: string | null,
-      createdAt?: string | null,
+      createdAt: string,
       updatedAt: string,
       _version: number,
       _deleted?: boolean | null,
@@ -3087,8 +2901,7 @@ export type SyncPredictionSetsQuery = {
       userId: string,
       eventId: string,
       categoryId: string,
-      isActive?: string | null,
-      createdAt?: string | null,
+      createdAt: string,
       updatedAt: string,
       _version: number,
       _deleted?: boolean | null,
@@ -3115,6 +2928,9 @@ export type GetPredictionQuery = {
       id: string,
       categoryId: string,
       didReceiveNominationOrWin?: boolean | null,
+      numberOfUsersPredictingNom?: number | null,
+      numberOfUsersPredictingUnranked?: number | null,
+      numberOfUsersPredictingWin?: number | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -3126,13 +2942,13 @@ export type GetPredictionQuery = {
       contenderSongId?: string | null,
     },
     ranking: number,
-    isActive?: string | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
     predictionSetPredictionsId?: string | null,
+    contenderPredictionsId?: string | null,
   } | null,
 };
 
@@ -3154,13 +2970,13 @@ export type ListPredictionsQuery = {
       predictionSetId: string,
       contenderId: string,
       ranking: number,
-      isActive?: string | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
       predictionSetPredictionsId?: string | null,
+      contenderPredictionsId?: string | null,
     } | null >,
     nextToken?: string | null,
     startedAt?: number | null,
@@ -3184,13 +3000,13 @@ export type SyncPredictionsQuery = {
       predictionSetId: string,
       contenderId: string,
       ranking: number,
-      isActive?: string | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
       predictionSetPredictionsId?: string | null,
+      contenderPredictionsId?: string | null,
     } | null >,
     nextToken?: string | null,
     startedAt?: number | null,
@@ -3637,22 +3453,15 @@ export type GetContenderQuery = {
       nextToken?: string | null,
       startedAt?: number | null,
     } | null,
-    activePredictions?:  {
-      __typename: "ModelPredictionConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
-    activePredictionsRankings?:  {
-      __typename: "ModelPredictionConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
-    predictionsByUser?:  {
+    predictions?:  {
       __typename: "ModelPredictionConnection",
       nextToken?: string | null,
       startedAt?: number | null,
     } | null,
     didReceiveNominationOrWin?: boolean | null,
+    numberOfUsersPredictingNom?: number | null,
+    numberOfUsersPredictingUnranked?: number | null,
+    numberOfUsersPredictingWin?: number | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -3681,6 +3490,9 @@ export type ListContendersQuery = {
       id: string,
       categoryId: string,
       didReceiveNominationOrWin?: boolean | null,
+      numberOfUsersPredictingNom?: number | null,
+      numberOfUsersPredictingUnranked?: number | null,
+      numberOfUsersPredictingWin?: number | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -3711,6 +3523,9 @@ export type SyncContendersQuery = {
       id: string,
       categoryId: string,
       didReceiveNominationOrWin?: boolean | null,
+      numberOfUsersPredictingNom?: number | null,
+      numberOfUsersPredictingUnranked?: number | null,
+      numberOfUsersPredictingWin?: number | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -3740,6 +3555,9 @@ export type GetContenderSnapshotQuery = {
       id: string,
       categoryId: string,
       didReceiveNominationOrWin?: boolean | null,
+      numberOfUsersPredictingNom?: number | null,
+      numberOfUsersPredictingUnranked?: number | null,
+      numberOfUsersPredictingWin?: number | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -3764,8 +3582,9 @@ export type GetContenderSnapshotQuery = {
       _lastChangedAt: number,
       eventCategoriesId?: string | null,
     },
-    numberOfUsersPredicting: number,
-    numberOfUsersPredictingWin: number,
+    numberOfUsersPredictingNom?: number | null,
+    numberOfUsersPredictingUnranked?: number | null,
+    numberOfUsersPredictingWin?: number | null,
     createdAt?: string | null,
     updatedAt: string,
     _version: number,
@@ -3790,8 +3609,9 @@ export type ListContenderSnapshotsQuery = {
       id: string,
       contenderId: string,
       categoryId: string,
-      numberOfUsersPredicting: number,
-      numberOfUsersPredictingWin: number,
+      numberOfUsersPredictingNom?: number | null,
+      numberOfUsersPredictingUnranked?: number | null,
+      numberOfUsersPredictingWin?: number | null,
       createdAt?: string | null,
       updatedAt: string,
       _version: number,
@@ -3818,8 +3638,9 @@ export type SyncContenderSnapshotsQuery = {
       id: string,
       contenderId: string,
       categoryId: string,
-      numberOfUsersPredicting: number,
-      numberOfUsersPredictingWin: number,
+      numberOfUsersPredictingNom?: number | null,
+      numberOfUsersPredictingUnranked?: number | null,
+      numberOfUsersPredictingWin?: number | null,
       createdAt?: string | null,
       updatedAt: string,
       _version: number,
@@ -4109,252 +3930,6 @@ export type QueryRelationshipsByFollowingUserQuery = {
   } | null,
 };
 
-export type QueryPredictionSetByUserByActiveQueryVariables = {
-  userId: string,
-  isActive?: ModelStringKeyConditionInput | null,
-  sortDirection?: ModelSortDirection | null,
-  filter?: ModelPredictionSetFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type QueryPredictionSetByUserByActiveQuery = {
-  queryPredictionSetByUserByActive?:  {
-    __typename: "ModelPredictionSetConnection",
-    items:  Array< {
-      __typename: "PredictionSet",
-      id: string,
-      userId: string,
-      eventId: string,
-      categoryId: string,
-      isActive?: string | null,
-      createdAt?: string | null,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-    } | null >,
-    nextToken?: string | null,
-    startedAt?: number | null,
-  } | null,
-};
-
-export type QueryPredictionSetByUserByEventByActiveQueryVariables = {
-  userId: string,
-  eventIdIsActive?: ModelPredictionSetByUserByEventActiveCompositeKeyConditionInput | null,
-  sortDirection?: ModelSortDirection | null,
-  filter?: ModelPredictionSetFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type QueryPredictionSetByUserByEventByActiveQuery = {
-  queryPredictionSetByUserByEventByActive?:  {
-    __typename: "ModelPredictionSetConnection",
-    items:  Array< {
-      __typename: "PredictionSet",
-      id: string,
-      userId: string,
-      eventId: string,
-      categoryId: string,
-      isActive?: string | null,
-      createdAt?: string | null,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-    } | null >,
-    nextToken?: string | null,
-    startedAt?: number | null,
-  } | null,
-};
-
-export type QueryPredictionSetByUserByEventByCreatedAtQueryVariables = {
-  userId: string,
-  eventIdCreatedAt?: ModelPredictionSetByUserByEventByDateCompositeKeyConditionInput | null,
-  sortDirection?: ModelSortDirection | null,
-  filter?: ModelPredictionSetFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type QueryPredictionSetByUserByEventByCreatedAtQuery = {
-  queryPredictionSetByUserByEventByCreatedAt?:  {
-    __typename: "ModelPredictionSetConnection",
-    items:  Array< {
-      __typename: "PredictionSet",
-      id: string,
-      userId: string,
-      eventId: string,
-      categoryId: string,
-      isActive?: string | null,
-      createdAt?: string | null,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-    } | null >,
-    nextToken?: string | null,
-    startedAt?: number | null,
-  } | null,
-};
-
-export type QueryPredictionSetByUserByCategoryByActiveQueryVariables = {
-  userId: string,
-  categoryIdIsActive?: ModelPredictionSetByUserByCategoryByActiveCompositeKeyConditionInput | null,
-  sortDirection?: ModelSortDirection | null,
-  filter?: ModelPredictionSetFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type QueryPredictionSetByUserByCategoryByActiveQuery = {
-  queryPredictionSetByUserByCategoryByActive?:  {
-    __typename: "ModelPredictionSetConnection",
-    items:  Array< {
-      __typename: "PredictionSet",
-      id: string,
-      userId: string,
-      eventId: string,
-      categoryId: string,
-      isActive?: string | null,
-      createdAt?: string | null,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-    } | null >,
-    nextToken?: string | null,
-    startedAt?: number | null,
-  } | null,
-};
-
-export type QueryPredictionSetByUserByCategoryByCreatedAtQueryVariables = {
-  userId: string,
-  categoryIdCreatedAt?: ModelPredictionSetByUserByCategoryByDateCompositeKeyConditionInput | null,
-  sortDirection?: ModelSortDirection | null,
-  filter?: ModelPredictionSetFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type QueryPredictionSetByUserByCategoryByCreatedAtQuery = {
-  queryPredictionSetByUserByCategoryByCreatedAt?:  {
-    __typename: "ModelPredictionSetConnection",
-    items:  Array< {
-      __typename: "PredictionSet",
-      id: string,
-      userId: string,
-      eventId: string,
-      categoryId: string,
-      isActive?: string | null,
-      createdAt?: string | null,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-    } | null >,
-    nextToken?: string | null,
-    startedAt?: number | null,
-  } | null,
-};
-
-export type QueryPredictionByContenderByUserQueryVariables = {
-  contenderId: string,
-  userId?: ModelIDKeyConditionInput | null,
-  sortDirection?: ModelSortDirection | null,
-  filter?: ModelPredictionFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type QueryPredictionByContenderByUserQuery = {
-  queryPredictionByContenderByUser?:  {
-    __typename: "ModelPredictionConnection",
-    items:  Array< {
-      __typename: "Prediction",
-      id: string,
-      userId: string,
-      predictionSetId: string,
-      contenderId: string,
-      ranking: number,
-      isActive?: string | null,
-      createdAt: string,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-      predictionSetPredictionsId?: string | null,
-    } | null >,
-    nextToken?: string | null,
-    startedAt?: number | null,
-  } | null,
-};
-
-export type QueryPredictionByContenderByActiveQueryVariables = {
-  contenderId: string,
-  isActive?: ModelStringKeyConditionInput | null,
-  sortDirection?: ModelSortDirection | null,
-  filter?: ModelPredictionFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type QueryPredictionByContenderByActiveQuery = {
-  queryPredictionByContenderByActive?:  {
-    __typename: "ModelPredictionConnection",
-    items:  Array< {
-      __typename: "Prediction",
-      id: string,
-      userId: string,
-      predictionSetId: string,
-      contenderId: string,
-      ranking: number,
-      isActive?: string | null,
-      createdAt: string,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-      predictionSetPredictionsId?: string | null,
-    } | null >,
-    nextToken?: string | null,
-    startedAt?: number | null,
-  } | null,
-};
-
-export type QueryPredictionByContenderByRankingQueryVariables = {
-  contenderId: string,
-  isActiveRanking?: ModelPredictionByContenderByActiveByRankingCompositeKeyConditionInput | null,
-  sortDirection?: ModelSortDirection | null,
-  filter?: ModelPredictionFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type QueryPredictionByContenderByRankingQuery = {
-  queryPredictionByContenderByRanking?:  {
-    __typename: "ModelPredictionConnection",
-    items:  Array< {
-      __typename: "Prediction",
-      id: string,
-      userId: string,
-      predictionSetId: string,
-      contenderId: string,
-      ranking: number,
-      isActive?: string | null,
-      createdAt: string,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-      predictionSetPredictionsId?: string | null,
-    } | null >,
-    nextToken?: string | null,
-    startedAt?: number | null,
-  } | null,
-};
-
 export type QueryLeaderboardPositionByEventByRankingQueryVariables = {
   eventId: string,
   ranking?: ModelIntKeyConditionInput | null,
@@ -4403,8 +3978,9 @@ export type QueryContenderSnapshotByContenderByDateQuery = {
       id: string,
       contenderId: string,
       categoryId: string,
-      numberOfUsersPredicting: number,
-      numberOfUsersPredictingWin: number,
+      numberOfUsersPredictingNom?: number | null,
+      numberOfUsersPredictingUnranked?: number | null,
+      numberOfUsersPredictingWin?: number | null,
       createdAt?: string | null,
       updatedAt: string,
       _version: number,
@@ -4433,26 +4009,6 @@ export type OnCreateUserSubscription = {
     } | null,
     following?:  {
       __typename: "ModelRelationshipsConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
-    activePredictionsByEvent?:  {
-      __typename: "ModelPredictionSetConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
-    activePredictionsByCategory?:  {
-      __typename: "ModelPredictionSetConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
-    pastPredictionsByEvent?:  {
-      __typename: "ModelPredictionSetConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
-    pastPredictionsByCategory?:  {
-      __typename: "ModelPredictionSetConnection",
       nextToken?: string | null,
       startedAt?: number | null,
     } | null,
@@ -4489,26 +4045,6 @@ export type OnUpdateUserSubscription = {
       nextToken?: string | null,
       startedAt?: number | null,
     } | null,
-    activePredictionsByEvent?:  {
-      __typename: "ModelPredictionSetConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
-    activePredictionsByCategory?:  {
-      __typename: "ModelPredictionSetConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
-    pastPredictionsByEvent?:  {
-      __typename: "ModelPredictionSetConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
-    pastPredictionsByCategory?:  {
-      __typename: "ModelPredictionSetConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
     leaderboardScores?:  {
       __typename: "ModelLeaderboardPositionConnection",
       nextToken?: string | null,
@@ -4539,26 +4075,6 @@ export type OnDeleteUserSubscription = {
     } | null,
     following?:  {
       __typename: "ModelRelationshipsConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
-    activePredictionsByEvent?:  {
-      __typename: "ModelPredictionSetConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
-    activePredictionsByCategory?:  {
-      __typename: "ModelPredictionSetConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
-    pastPredictionsByEvent?:  {
-      __typename: "ModelPredictionSetConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
-    pastPredictionsByCategory?:  {
-      __typename: "ModelPredictionSetConnection",
       nextToken?: string | null,
       startedAt?: number | null,
     } | null,
@@ -4611,11 +4127,6 @@ export type OnCreateRelationshipsSubscription = {
       _deleted?: boolean | null,
       _lastChangedAt: number,
     },
-    followedPredictionFeed?:  {
-      __typename: "ModelPredictionSetConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -4660,11 +4171,6 @@ export type OnUpdateRelationshipsSubscription = {
       _deleted?: boolean | null,
       _lastChangedAt: number,
     },
-    followedPredictionFeed?:  {
-      __typename: "ModelPredictionSetConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -4709,11 +4215,6 @@ export type OnDeleteRelationshipsSubscription = {
       _deleted?: boolean | null,
       _lastChangedAt: number,
     },
-    followedPredictionFeed?:  {
-      __typename: "ModelPredictionSetConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -4734,8 +4235,7 @@ export type OnCreatePredictionSetSubscription = {
       nextToken?: string | null,
       startedAt?: number | null,
     } | null,
-    isActive?: string | null,
-    createdAt?: string | null,
+    createdAt: string,
     updatedAt: string,
     _version: number,
     _deleted?: boolean | null,
@@ -4755,8 +4255,7 @@ export type OnUpdatePredictionSetSubscription = {
       nextToken?: string | null,
       startedAt?: number | null,
     } | null,
-    isActive?: string | null,
-    createdAt?: string | null,
+    createdAt: string,
     updatedAt: string,
     _version: number,
     _deleted?: boolean | null,
@@ -4776,8 +4275,7 @@ export type OnDeletePredictionSetSubscription = {
       nextToken?: string | null,
       startedAt?: number | null,
     } | null,
-    isActive?: string | null,
-    createdAt?: string | null,
+    createdAt: string,
     updatedAt: string,
     _version: number,
     _deleted?: boolean | null,
@@ -4797,6 +4295,9 @@ export type OnCreatePredictionSubscription = {
       id: string,
       categoryId: string,
       didReceiveNominationOrWin?: boolean | null,
+      numberOfUsersPredictingNom?: number | null,
+      numberOfUsersPredictingUnranked?: number | null,
+      numberOfUsersPredictingWin?: number | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -4808,13 +4309,13 @@ export type OnCreatePredictionSubscription = {
       contenderSongId?: string | null,
     },
     ranking: number,
-    isActive?: string | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
     predictionSetPredictionsId?: string | null,
+    contenderPredictionsId?: string | null,
   } | null,
 };
 
@@ -4830,6 +4331,9 @@ export type OnUpdatePredictionSubscription = {
       id: string,
       categoryId: string,
       didReceiveNominationOrWin?: boolean | null,
+      numberOfUsersPredictingNom?: number | null,
+      numberOfUsersPredictingUnranked?: number | null,
+      numberOfUsersPredictingWin?: number | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -4841,13 +4345,13 @@ export type OnUpdatePredictionSubscription = {
       contenderSongId?: string | null,
     },
     ranking: number,
-    isActive?: string | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
     predictionSetPredictionsId?: string | null,
+    contenderPredictionsId?: string | null,
   } | null,
 };
 
@@ -4863,6 +4367,9 @@ export type OnDeletePredictionSubscription = {
       id: string,
       categoryId: string,
       didReceiveNominationOrWin?: boolean | null,
+      numberOfUsersPredictingNom?: number | null,
+      numberOfUsersPredictingUnranked?: number | null,
+      numberOfUsersPredictingWin?: number | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -4874,13 +4381,13 @@ export type OnDeletePredictionSubscription = {
       contenderSongId?: string | null,
     },
     ranking: number,
-    isActive?: string | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
     predictionSetPredictionsId?: string | null,
+    contenderPredictionsId?: string | null,
   } | null,
 };
 
@@ -5324,22 +4831,15 @@ export type OnCreateContenderSubscription = {
       nextToken?: string | null,
       startedAt?: number | null,
     } | null,
-    activePredictions?:  {
-      __typename: "ModelPredictionConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
-    activePredictionsRankings?:  {
-      __typename: "ModelPredictionConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
-    predictionsByUser?:  {
+    predictions?:  {
       __typename: "ModelPredictionConnection",
       nextToken?: string | null,
       startedAt?: number | null,
     } | null,
     didReceiveNominationOrWin?: boolean | null,
+    numberOfUsersPredictingNom?: number | null,
+    numberOfUsersPredictingUnranked?: number | null,
+    numberOfUsersPredictingWin?: number | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -5408,22 +4908,15 @@ export type OnUpdateContenderSubscription = {
       nextToken?: string | null,
       startedAt?: number | null,
     } | null,
-    activePredictions?:  {
-      __typename: "ModelPredictionConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
-    activePredictionsRankings?:  {
-      __typename: "ModelPredictionConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
-    predictionsByUser?:  {
+    predictions?:  {
       __typename: "ModelPredictionConnection",
       nextToken?: string | null,
       startedAt?: number | null,
     } | null,
     didReceiveNominationOrWin?: boolean | null,
+    numberOfUsersPredictingNom?: number | null,
+    numberOfUsersPredictingUnranked?: number | null,
+    numberOfUsersPredictingWin?: number | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -5492,22 +4985,15 @@ export type OnDeleteContenderSubscription = {
       nextToken?: string | null,
       startedAt?: number | null,
     } | null,
-    activePredictions?:  {
-      __typename: "ModelPredictionConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
-    activePredictionsRankings?:  {
-      __typename: "ModelPredictionConnection",
-      nextToken?: string | null,
-      startedAt?: number | null,
-    } | null,
-    predictionsByUser?:  {
+    predictions?:  {
       __typename: "ModelPredictionConnection",
       nextToken?: string | null,
       startedAt?: number | null,
     } | null,
     didReceiveNominationOrWin?: boolean | null,
+    numberOfUsersPredictingNom?: number | null,
+    numberOfUsersPredictingUnranked?: number | null,
+    numberOfUsersPredictingWin?: number | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -5530,6 +5016,9 @@ export type OnCreateContenderSnapshotSubscription = {
       id: string,
       categoryId: string,
       didReceiveNominationOrWin?: boolean | null,
+      numberOfUsersPredictingNom?: number | null,
+      numberOfUsersPredictingUnranked?: number | null,
+      numberOfUsersPredictingWin?: number | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -5554,8 +5043,9 @@ export type OnCreateContenderSnapshotSubscription = {
       _lastChangedAt: number,
       eventCategoriesId?: string | null,
     },
-    numberOfUsersPredicting: number,
-    numberOfUsersPredictingWin: number,
+    numberOfUsersPredictingNom?: number | null,
+    numberOfUsersPredictingUnranked?: number | null,
+    numberOfUsersPredictingWin?: number | null,
     createdAt?: string | null,
     updatedAt: string,
     _version: number,
@@ -5574,6 +5064,9 @@ export type OnUpdateContenderSnapshotSubscription = {
       id: string,
       categoryId: string,
       didReceiveNominationOrWin?: boolean | null,
+      numberOfUsersPredictingNom?: number | null,
+      numberOfUsersPredictingUnranked?: number | null,
+      numberOfUsersPredictingWin?: number | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -5598,8 +5091,9 @@ export type OnUpdateContenderSnapshotSubscription = {
       _lastChangedAt: number,
       eventCategoriesId?: string | null,
     },
-    numberOfUsersPredicting: number,
-    numberOfUsersPredictingWin: number,
+    numberOfUsersPredictingNom?: number | null,
+    numberOfUsersPredictingUnranked?: number | null,
+    numberOfUsersPredictingWin?: number | null,
     createdAt?: string | null,
     updatedAt: string,
     _version: number,
@@ -5618,6 +5112,9 @@ export type OnDeleteContenderSnapshotSubscription = {
       id: string,
       categoryId: string,
       didReceiveNominationOrWin?: boolean | null,
+      numberOfUsersPredictingNom?: number | null,
+      numberOfUsersPredictingUnranked?: number | null,
+      numberOfUsersPredictingWin?: number | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -5642,8 +5139,9 @@ export type OnDeleteContenderSnapshotSubscription = {
       _lastChangedAt: number,
       eventCategoriesId?: string | null,
     },
-    numberOfUsersPredicting: number,
-    numberOfUsersPredictingWin: number,
+    numberOfUsersPredictingNom?: number | null,
+    numberOfUsersPredictingUnranked?: number | null,
+    numberOfUsersPredictingWin?: number | null,
     createdAt?: string | null,
     updatedAt: string,
     _version: number,

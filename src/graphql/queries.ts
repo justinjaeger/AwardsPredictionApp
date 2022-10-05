@@ -20,22 +20,6 @@ export const getUser = /* GraphQL */ `
         nextToken
         startedAt
       }
-      activePredictionsByEvent {
-        nextToken
-        startedAt
-      }
-      activePredictionsByCategory {
-        nextToken
-        startedAt
-      }
-      pastPredictionsByEvent {
-        nextToken
-        startedAt
-      }
-      pastPredictionsByCategory {
-        nextToken
-        startedAt
-      }
       leaderboardScores {
         nextToken
         startedAt
@@ -148,10 +132,6 @@ export const getRelationships = /* GraphQL */ `
         _deleted
         _lastChangedAt
       }
-      followedPredictionFeed {
-        nextToken
-        startedAt
-      }
       createdAt
       updatedAt
       _version
@@ -229,7 +209,6 @@ export const getPredictionSet = /* GraphQL */ `
         nextToken
         startedAt
       }
-      isActive
       createdAt
       updatedAt
       _version
@@ -258,7 +237,6 @@ export const listPredictionSets = /* GraphQL */ `
         userId
         eventId
         categoryId
-        isActive
         createdAt
         updatedAt
         _version
@@ -288,7 +266,6 @@ export const syncPredictionSets = /* GraphQL */ `
         userId
         eventId
         categoryId
-        isActive
         createdAt
         updatedAt
         _version
@@ -311,6 +288,9 @@ export const getPrediction = /* GraphQL */ `
         id
         categoryId
         didReceiveNominationOrWin
+        numberOfUsersPredictingNom
+        numberOfUsersPredictingUnranked
+        numberOfUsersPredictingWin
         createdAt
         updatedAt
         _version
@@ -322,13 +302,13 @@ export const getPrediction = /* GraphQL */ `
         contenderSongId
       }
       ranking
-      isActive
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
       predictionSetPredictionsId
+      contenderPredictionsId
     }
   }
 `;
@@ -353,13 +333,13 @@ export const listPredictions = /* GraphQL */ `
         predictionSetId
         contenderId
         ranking
-        isActive
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
         predictionSetPredictionsId
+        contenderPredictionsId
       }
       nextToken
       startedAt
@@ -385,13 +365,13 @@ export const syncPredictions = /* GraphQL */ `
         predictionSetId
         contenderId
         ranking
-        isActive
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
         predictionSetPredictionsId
+        contenderPredictionsId
       }
       nextToken
       startedAt
@@ -824,19 +804,14 @@ export const getContender = /* GraphQL */ `
         nextToken
         startedAt
       }
-      activePredictions {
-        nextToken
-        startedAt
-      }
-      activePredictionsRankings {
-        nextToken
-        startedAt
-      }
-      predictionsByUser {
+      predictions {
         nextToken
         startedAt
       }
       didReceiveNominationOrWin
+      numberOfUsersPredictingNom
+      numberOfUsersPredictingUnranked
+      numberOfUsersPredictingWin
       createdAt
       updatedAt
       _version
@@ -868,6 +843,9 @@ export const listContenders = /* GraphQL */ `
         id
         categoryId
         didReceiveNominationOrWin
+        numberOfUsersPredictingNom
+        numberOfUsersPredictingUnranked
+        numberOfUsersPredictingWin
         createdAt
         updatedAt
         _version
@@ -900,6 +878,9 @@ export const syncContenders = /* GraphQL */ `
         id
         categoryId
         didReceiveNominationOrWin
+        numberOfUsersPredictingNom
+        numberOfUsersPredictingUnranked
+        numberOfUsersPredictingWin
         createdAt
         updatedAt
         _version
@@ -924,6 +905,9 @@ export const getContenderSnapshot = /* GraphQL */ `
         id
         categoryId
         didReceiveNominationOrWin
+        numberOfUsersPredictingNom
+        numberOfUsersPredictingUnranked
+        numberOfUsersPredictingWin
         createdAt
         updatedAt
         _version
@@ -947,7 +931,8 @@ export const getContenderSnapshot = /* GraphQL */ `
         _lastChangedAt
         eventCategoriesId
       }
-      numberOfUsersPredicting
+      numberOfUsersPredictingNom
+      numberOfUsersPredictingUnranked
       numberOfUsersPredictingWin
       createdAt
       updatedAt
@@ -976,7 +961,8 @@ export const listContenderSnapshots = /* GraphQL */ `
         id
         contenderId
         categoryId
-        numberOfUsersPredicting
+        numberOfUsersPredictingNom
+        numberOfUsersPredictingUnranked
         numberOfUsersPredictingWin
         createdAt
         updatedAt
@@ -1006,7 +992,8 @@ export const syncContenderSnapshots = /* GraphQL */ `
         id
         contenderId
         categoryId
-        numberOfUsersPredicting
+        numberOfUsersPredictingNom
+        numberOfUsersPredictingUnranked
         numberOfUsersPredictingWin
         createdAt
         updatedAt
@@ -1305,284 +1292,6 @@ export const queryRelationshipsByFollowingUser = /* GraphQL */ `
     }
   }
 `;
-export const queryPredictionSetByUserByActive = /* GraphQL */ `
-  query QueryPredictionSetByUserByActive(
-    $userId: ID!
-    $isActive: ModelStringKeyConditionInput
-    $sortDirection: ModelSortDirection
-    $filter: ModelPredictionSetFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    queryPredictionSetByUserByActive(
-      userId: $userId
-      isActive: $isActive
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        userId
-        eventId
-        categoryId
-        isActive
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
-      nextToken
-      startedAt
-    }
-  }
-`;
-export const queryPredictionSetByUserByEventByActive = /* GraphQL */ `
-  query QueryPredictionSetByUserByEventByActive(
-    $userId: ID!
-    $eventIdIsActive: ModelPredictionSetByUserByEventActiveCompositeKeyConditionInput
-    $sortDirection: ModelSortDirection
-    $filter: ModelPredictionSetFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    queryPredictionSetByUserByEventByActive(
-      userId: $userId
-      eventIdIsActive: $eventIdIsActive
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        userId
-        eventId
-        categoryId
-        isActive
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
-      nextToken
-      startedAt
-    }
-  }
-`;
-export const queryPredictionSetByUserByEventByCreatedAt = /* GraphQL */ `
-  query QueryPredictionSetByUserByEventByCreatedAt(
-    $userId: ID!
-    $eventIdCreatedAt: ModelPredictionSetByUserByEventByDateCompositeKeyConditionInput
-    $sortDirection: ModelSortDirection
-    $filter: ModelPredictionSetFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    queryPredictionSetByUserByEventByCreatedAt(
-      userId: $userId
-      eventIdCreatedAt: $eventIdCreatedAt
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        userId
-        eventId
-        categoryId
-        isActive
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
-      nextToken
-      startedAt
-    }
-  }
-`;
-export const queryPredictionSetByUserByCategoryByActive = /* GraphQL */ `
-  query QueryPredictionSetByUserByCategoryByActive(
-    $userId: ID!
-    $categoryIdIsActive: ModelPredictionSetByUserByCategoryByActiveCompositeKeyConditionInput
-    $sortDirection: ModelSortDirection
-    $filter: ModelPredictionSetFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    queryPredictionSetByUserByCategoryByActive(
-      userId: $userId
-      categoryIdIsActive: $categoryIdIsActive
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        userId
-        eventId
-        categoryId
-        isActive
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
-      nextToken
-      startedAt
-    }
-  }
-`;
-export const queryPredictionSetByUserByCategoryByCreatedAt = /* GraphQL */ `
-  query QueryPredictionSetByUserByCategoryByCreatedAt(
-    $userId: ID!
-    $categoryIdCreatedAt: ModelPredictionSetByUserByCategoryByDateCompositeKeyConditionInput
-    $sortDirection: ModelSortDirection
-    $filter: ModelPredictionSetFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    queryPredictionSetByUserByCategoryByCreatedAt(
-      userId: $userId
-      categoryIdCreatedAt: $categoryIdCreatedAt
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        userId
-        eventId
-        categoryId
-        isActive
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
-      nextToken
-      startedAt
-    }
-  }
-`;
-export const queryPredictionByContenderByUser = /* GraphQL */ `
-  query QueryPredictionByContenderByUser(
-    $contenderId: ID!
-    $userId: ModelIDKeyConditionInput
-    $sortDirection: ModelSortDirection
-    $filter: ModelPredictionFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    queryPredictionByContenderByUser(
-      contenderId: $contenderId
-      userId: $userId
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        userId
-        predictionSetId
-        contenderId
-        ranking
-        isActive
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        predictionSetPredictionsId
-      }
-      nextToken
-      startedAt
-    }
-  }
-`;
-export const queryPredictionByContenderByActive = /* GraphQL */ `
-  query QueryPredictionByContenderByActive(
-    $contenderId: ID!
-    $isActive: ModelStringKeyConditionInput
-    $sortDirection: ModelSortDirection
-    $filter: ModelPredictionFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    queryPredictionByContenderByActive(
-      contenderId: $contenderId
-      isActive: $isActive
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        userId
-        predictionSetId
-        contenderId
-        ranking
-        isActive
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        predictionSetPredictionsId
-      }
-      nextToken
-      startedAt
-    }
-  }
-`;
-export const queryPredictionByContenderByRanking = /* GraphQL */ `
-  query QueryPredictionByContenderByRanking(
-    $contenderId: ID!
-    $isActiveRanking: ModelPredictionByContenderByActiveByRankingCompositeKeyConditionInput
-    $sortDirection: ModelSortDirection
-    $filter: ModelPredictionFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    queryPredictionByContenderByRanking(
-      contenderId: $contenderId
-      isActiveRanking: $isActiveRanking
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        userId
-        predictionSetId
-        contenderId
-        ranking
-        isActive
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        predictionSetPredictionsId
-      }
-      nextToken
-      startedAt
-    }
-  }
-`;
 export const queryLeaderboardPositionByEventByRanking = /* GraphQL */ `
   query QueryLeaderboardPositionByEventByRanking(
     $eventId: ID!
@@ -1639,7 +1348,8 @@ export const queryContenderSnapshotByContenderByDate = /* GraphQL */ `
         id
         contenderId
         categoryId
-        numberOfUsersPredicting
+        numberOfUsersPredictingNom
+        numberOfUsersPredictingUnranked
         numberOfUsersPredictingWin
         createdAt
         updatedAt
