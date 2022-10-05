@@ -12,11 +12,12 @@ type iContenderListItemProps = {
   movie: Movie;
   category: Category;
   ranking?: number;
+  size?: PosterSize;
   onPress: () => void;
 };
 
 const ContenderListItem = (props: iContenderListItemProps) => {
-  const { movie, category, ranking, onPress } = props;
+  const { movie, category, ranking, size, onPress } = props;
 
   const movieTmdbId = movie.tmdbId;
 
@@ -40,7 +41,7 @@ const ContenderListItem = (props: iContenderListItemProps) => {
     <View
       style={{
         width: '100%',
-        height: PosterSize.MEDIUM,
+        height: size || PosterSize.MEDIUM,
         marginTop: 10,
       }}
     >
@@ -49,6 +50,7 @@ const ContenderListItem = (props: iContenderListItemProps) => {
         <Poster
           path={tmdbMovie?.posterPath || null}
           title={tmdbMovie?.title || ''}
+          size={size}
           onPress={onPress}
         />
         <View style={{ flexDirection: 'column' }}>

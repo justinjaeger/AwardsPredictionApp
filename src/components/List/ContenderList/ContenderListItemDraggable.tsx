@@ -52,6 +52,8 @@ const ContenderListItemDraggable = (props: iContenderListItemDraggableProps) => 
 
   if (!movie) return null;
 
+  const size = PosterSize.SMALL;
+
   let component: JSX.Element = <></>;
   switch (CategoryType[category.type]) {
     case CategoryType.FILM:
@@ -60,13 +62,19 @@ const ContenderListItemDraggable = (props: iContenderListItemDraggableProps) => 
           category={category}
           movie={movie}
           ranking={ranking}
+          size={size}
           onPress={onPress}
         />
       );
       break;
     case CategoryType.PERFORMANCE:
       component = (
-        <PerformanceListItem contender={contender} ranking={ranking} onPress={onPress} />
+        <PerformanceListItem
+          contender={contender}
+          ranking={ranking}
+          size={size}
+          onPress={onPress}
+        />
       );
       break;
     case CategoryType.SONG:
@@ -76,6 +84,7 @@ const ContenderListItemDraggable = (props: iContenderListItemDraggableProps) => 
           tmdbMovieId={movie?.tmdbId}
           songId={contender.contenderSongId}
           ranking={ranking}
+          size={size}
           onPress={onPress}
         />
       );
@@ -94,7 +103,7 @@ const ContenderListItemDraggable = (props: iContenderListItemDraggableProps) => 
       style={{
         backgroundColor: selected ? COLORS.success : 'transparent',
         width: '100%',
-        height: PosterSize.MEDIUM,
+        height: size,
       }}
       underlayColor={onPressItem ? COLORS.border : 'transparent'}
       onLongPress={drag}

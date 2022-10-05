@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { TouchableHighlight } from 'react-native';
 import COLORS from '../../../constants/colors';
+import { PosterSize } from '../../../constants/posterDimensions';
 import { Category, CategoryType, Contender, Movie } from '../../../models';
 import DS from '../../../services/datastore';
 import { useAsyncEffect } from '../../../util/hooks';
@@ -15,6 +16,7 @@ type iContenderListItemProps = {
   selected?: boolean;
   isSelectable?: boolean;
   disabled?: boolean;
+  size?: PosterSize;
   onPressThumbnail?: (c: Contender) => Promise<void>;
   onPressItem?: (c: Contender) => Promise<void>;
 };
@@ -24,6 +26,7 @@ const ContenderListItem = (props: iContenderListItemProps) => {
     category,
     contender,
     ranking,
+    size,
     selected: _selected,
     isSelectable,
     disabled,
@@ -55,13 +58,19 @@ const ContenderListItem = (props: iContenderListItemProps) => {
           category={category}
           movie={movie}
           ranking={ranking}
+          size={size}
           onPress={onPress}
         />
       );
       break;
     case CategoryType.PERFORMANCE:
       component = (
-        <PerformanceListItem contender={contender} ranking={ranking} onPress={onPress} />
+        <PerformanceListItem
+          contender={contender}
+          ranking={ranking}
+          size={size}
+          onPress={onPress}
+        />
       );
       break;
     case CategoryType.SONG:
@@ -71,6 +80,7 @@ const ContenderListItem = (props: iContenderListItemProps) => {
           tmdbMovieId={movie?.tmdbId}
           songId={contender.contenderSongId}
           ranking={ranking}
+          size={size}
           onPress={onPress}
         />
       );

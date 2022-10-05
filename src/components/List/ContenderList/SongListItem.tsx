@@ -13,11 +13,12 @@ type iSongListItemProps = {
   tmdbMovieId: number;
   songId: string;
   ranking?: number;
+  size?: PosterSize;
   onPress: () => void;
 };
 
 const SongListItem = (props: iSongListItemProps) => {
-  const { songId, ranking, tmdbMovieId, onPress } = props;
+  const { songId, ranking, tmdbMovieId, size, onPress } = props;
 
   const [movie, setMovie] = useState<iCachedTmdbMovie | undefined>();
   const [song, setSong] = useState<Song | undefined>();
@@ -42,7 +43,7 @@ const SongListItem = (props: iSongListItemProps) => {
     <View
       style={{
         width: '100%',
-        height: PosterSize.MEDIUM,
+        height: size || PosterSize.MEDIUM,
         marginTop: 10,
       }}
     >
@@ -51,6 +52,7 @@ const SongListItem = (props: iSongListItemProps) => {
         <Poster
           path={movie?.posterPath || null}
           title={movie?.title || ''}
+          size={size}
           onPress={onPress}
         />
         <View style={{ flexDirection: 'column' }}>

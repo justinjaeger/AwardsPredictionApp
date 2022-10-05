@@ -5,6 +5,7 @@ import { ScrollView } from 'react-native';
 import { TouchableText } from '../../components/Buttons';
 import ContenderListItem from '../../components/List/ContenderList/ContenderListItem';
 import { getAwardsBodyCategories } from '../../constants/categories';
+import { PosterSize } from '../../constants/posterDimensions';
 import { Category, CategoryType, Contender, Prediction } from '../../models';
 import { PersonalParamList } from '../../navigation/types';
 import DS from '../../services/datastore';
@@ -23,6 +24,8 @@ type iPredictionData = {
   contender: Contender;
   ranking: number;
 }[];
+
+// TODO: really, this is adding OR deleting contenders
 
 const AddContenders = () => {
   const {
@@ -177,11 +180,14 @@ const AddContenders = () => {
           onPressItem={onPressItem}
           onPressThumbnail={onPressThumbnail}
           selected={c.selected}
+          size={PosterSize.SMALL}
           isSelectable
           disabled={loading}
         />
       ))}
-      <TouchableText text={'Save'} onPress={onSave} style={{ margin: 10 }} />
+      {contenderData.length > 0 ? (
+        <TouchableText text={'Save'} onPress={onSave} style={{ margin: 10 }} />
+      ) : null}
       <TouchableText
         text={'Submit a contender'}
         onPress={() => {
