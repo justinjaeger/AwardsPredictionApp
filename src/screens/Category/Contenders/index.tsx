@@ -4,13 +4,11 @@ import React, { useLayoutEffect, useState } from 'react';
 import { ScrollView } from 'react-native';
 import ContenderList from '../../../components/List/ContenderList';
 import { getAwardsBodyCategories } from '../../../constants/categories';
-import { Category, CategoryType, Contender } from '../../../models';
+import { CategoryType, Contender } from '../../../models';
 import { GlobalParamList } from '../../../navigation/types';
 import DS from '../../../services/datastore';
 import { useSubscriptionEffect } from '../../../util/hooks';
 import { eventToString } from '../../../util/stringConversions';
-
-export type iContendersProps = { category: Category; contenders: Contender[] };
 
 // TODO: no list order yet. eventually have to define something
 const Contenders = () => {
@@ -38,6 +36,10 @@ const Contenders = () => {
     const _contenders = (await DataStore.query(Contender)).filter(
       (c) => c.category?.id === category.id,
     );
+    // TODO: order contenders in display
+    // const orderedContenders = _contenders.sort((c1,c2)=>{
+    //     if (c1.)
+    // })
     setContenders(_contenders);
   }, []);
 
