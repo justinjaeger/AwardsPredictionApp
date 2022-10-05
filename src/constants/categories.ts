@@ -1,6 +1,6 @@
 import { AwardsBody, CategoryName, CategoryType, Event } from '../models';
 
-export type iCategoryData = { name: string; type: CategoryType };
+export type iCategoryData = { name: string; type: CategoryType; slots?: number };
 
 type iCategoryObject = {
   [key in CategoryName]: iCategoryData | undefined;
@@ -67,7 +67,7 @@ export const ALL_CATEGORIES: { [key in CategoryName]: undefined } = {
 };
 
 const ACADEMY_AWARDS_CATEGORIES_V1: iCategoryObject = {
-  [CategoryName.PICTURE]: { name: 'Picture', type: CategoryType.FILM },
+  [CategoryName.PICTURE]: { name: 'Picture', type: CategoryType.FILM, slots: 10 },
   [CategoryName.DIRECTOR]: { name: 'Director', type: CategoryType.FILM },
   [CategoryName.ACTOR]: { name: 'Actor', type: CategoryType.PERFORMANCE },
   [CategoryName.ACTRESS]: { name: 'Actress', type: CategoryType.PERFORMANCE },

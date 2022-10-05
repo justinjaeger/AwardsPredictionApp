@@ -20,22 +20,6 @@ export const onCreateUser = /* GraphQL */ `
         nextToken
         startedAt
       }
-      activePredictionsByEvent {
-        nextToken
-        startedAt
-      }
-      activePredictionsByCategory {
-        nextToken
-        startedAt
-      }
-      pastPredictionsByEvent {
-        nextToken
-        startedAt
-      }
-      pastPredictionsByCategory {
-        nextToken
-        startedAt
-      }
       leaderboardScores {
         nextToken
         startedAt
@@ -66,22 +50,6 @@ export const onUpdateUser = /* GraphQL */ `
         nextToken
         startedAt
       }
-      activePredictionsByEvent {
-        nextToken
-        startedAt
-      }
-      activePredictionsByCategory {
-        nextToken
-        startedAt
-      }
-      pastPredictionsByEvent {
-        nextToken
-        startedAt
-      }
-      pastPredictionsByCategory {
-        nextToken
-        startedAt
-      }
       leaderboardScores {
         nextToken
         startedAt
@@ -109,22 +77,6 @@ export const onDeleteUser = /* GraphQL */ `
         startedAt
       }
       following {
-        nextToken
-        startedAt
-      }
-      activePredictionsByEvent {
-        nextToken
-        startedAt
-      }
-      activePredictionsByCategory {
-        nextToken
-        startedAt
-      }
-      pastPredictionsByEvent {
-        nextToken
-        startedAt
-      }
-      pastPredictionsByCategory {
         nextToken
         startedAt
       }
@@ -174,10 +126,6 @@ export const onCreateRelationships = /* GraphQL */ `
         _deleted
         _lastChangedAt
       }
-      followedPredictionFeed {
-        nextToken
-        startedAt
-      }
       createdAt
       updatedAt
       _version
@@ -219,10 +167,6 @@ export const onUpdateRelationships = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
-      }
-      followedPredictionFeed {
-        nextToken
-        startedAt
       }
       createdAt
       updatedAt
@@ -266,10 +210,6 @@ export const onDeleteRelationships = /* GraphQL */ `
         _deleted
         _lastChangedAt
       }
-      followedPredictionFeed {
-        nextToken
-        startedAt
-      }
       createdAt
       updatedAt
       _version
@@ -289,7 +229,6 @@ export const onCreatePredictionSet = /* GraphQL */ `
         nextToken
         startedAt
       }
-      isActive
       createdAt
       updatedAt
       _version
@@ -309,7 +248,6 @@ export const onUpdatePredictionSet = /* GraphQL */ `
         nextToken
         startedAt
       }
-      isActive
       createdAt
       updatedAt
       _version
@@ -329,7 +267,6 @@ export const onDeletePredictionSet = /* GraphQL */ `
         nextToken
         startedAt
       }
-      isActive
       createdAt
       updatedAt
       _version
@@ -349,6 +286,9 @@ export const onCreatePrediction = /* GraphQL */ `
         id
         categoryId
         didReceiveNominationOrWin
+        numberOfUsersPredictingNom
+        numberOfUsersPredictingUnranked
+        numberOfUsersPredictingWin
         createdAt
         updatedAt
         _version
@@ -360,13 +300,13 @@ export const onCreatePrediction = /* GraphQL */ `
         contenderSongId
       }
       ranking
-      isActive
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
       predictionSetPredictionsId
+      contenderPredictionsId
     }
   }
 `;
@@ -381,6 +321,9 @@ export const onUpdatePrediction = /* GraphQL */ `
         id
         categoryId
         didReceiveNominationOrWin
+        numberOfUsersPredictingNom
+        numberOfUsersPredictingUnranked
+        numberOfUsersPredictingWin
         createdAt
         updatedAt
         _version
@@ -392,13 +335,13 @@ export const onUpdatePrediction = /* GraphQL */ `
         contenderSongId
       }
       ranking
-      isActive
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
       predictionSetPredictionsId
+      contenderPredictionsId
     }
   }
 `;
@@ -413,6 +356,9 @@ export const onDeletePrediction = /* GraphQL */ `
         id
         categoryId
         didReceiveNominationOrWin
+        numberOfUsersPredictingNom
+        numberOfUsersPredictingUnranked
+        numberOfUsersPredictingWin
         createdAt
         updatedAt
         _version
@@ -424,13 +370,13 @@ export const onDeletePrediction = /* GraphQL */ `
         contenderSongId
       }
       ranking
-      isActive
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
       predictionSetPredictionsId
+      contenderPredictionsId
     }
   }
 `;
@@ -848,19 +794,14 @@ export const onCreateContender = /* GraphQL */ `
         nextToken
         startedAt
       }
-      activePredictions {
-        nextToken
-        startedAt
-      }
-      activePredictionsRankings {
-        nextToken
-        startedAt
-      }
-      predictionsByUser {
+      predictions {
         nextToken
         startedAt
       }
       didReceiveNominationOrWin
+      numberOfUsersPredictingNom
+      numberOfUsersPredictingUnranked
+      numberOfUsersPredictingWin
       createdAt
       updatedAt
       _version
@@ -924,19 +865,14 @@ export const onUpdateContender = /* GraphQL */ `
         nextToken
         startedAt
       }
-      activePredictions {
-        nextToken
-        startedAt
-      }
-      activePredictionsRankings {
-        nextToken
-        startedAt
-      }
-      predictionsByUser {
+      predictions {
         nextToken
         startedAt
       }
       didReceiveNominationOrWin
+      numberOfUsersPredictingNom
+      numberOfUsersPredictingUnranked
+      numberOfUsersPredictingWin
       createdAt
       updatedAt
       _version
@@ -1000,19 +936,14 @@ export const onDeleteContender = /* GraphQL */ `
         nextToken
         startedAt
       }
-      activePredictions {
-        nextToken
-        startedAt
-      }
-      activePredictionsRankings {
-        nextToken
-        startedAt
-      }
-      predictionsByUser {
+      predictions {
         nextToken
         startedAt
       }
       didReceiveNominationOrWin
+      numberOfUsersPredictingNom
+      numberOfUsersPredictingUnranked
+      numberOfUsersPredictingWin
       createdAt
       updatedAt
       _version
@@ -1034,6 +965,9 @@ export const onCreateContenderSnapshot = /* GraphQL */ `
         id
         categoryId
         didReceiveNominationOrWin
+        numberOfUsersPredictingNom
+        numberOfUsersPredictingUnranked
+        numberOfUsersPredictingWin
         createdAt
         updatedAt
         _version
@@ -1057,7 +991,8 @@ export const onCreateContenderSnapshot = /* GraphQL */ `
         _lastChangedAt
         eventCategoriesId
       }
-      numberOfUsersPredicting
+      numberOfUsersPredictingNom
+      numberOfUsersPredictingUnranked
       numberOfUsersPredictingWin
       createdAt
       updatedAt
@@ -1076,6 +1011,9 @@ export const onUpdateContenderSnapshot = /* GraphQL */ `
         id
         categoryId
         didReceiveNominationOrWin
+        numberOfUsersPredictingNom
+        numberOfUsersPredictingUnranked
+        numberOfUsersPredictingWin
         createdAt
         updatedAt
         _version
@@ -1099,7 +1037,8 @@ export const onUpdateContenderSnapshot = /* GraphQL */ `
         _lastChangedAt
         eventCategoriesId
       }
-      numberOfUsersPredicting
+      numberOfUsersPredictingNom
+      numberOfUsersPredictingUnranked
       numberOfUsersPredictingWin
       createdAt
       updatedAt
@@ -1118,6 +1057,9 @@ export const onDeleteContenderSnapshot = /* GraphQL */ `
         id
         categoryId
         didReceiveNominationOrWin
+        numberOfUsersPredictingNom
+        numberOfUsersPredictingUnranked
+        numberOfUsersPredictingWin
         createdAt
         updatedAt
         _version
@@ -1141,7 +1083,8 @@ export const onDeleteContenderSnapshot = /* GraphQL */ `
         _lastChangedAt
         eventCategoriesId
       }
-      numberOfUsersPredicting
+      numberOfUsersPredictingNom
+      numberOfUsersPredictingUnranked
       numberOfUsersPredictingWin
       createdAt
       updatedAt

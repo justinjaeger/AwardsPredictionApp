@@ -82,62 +82,6 @@ export const schema = {
                         "associatedWith": "followingUser"
                     }
                 },
-                "activePredictionsByEvent": {
-                    "name": "activePredictionsByEvent",
-                    "isArray": true,
-                    "type": {
-                        "model": "PredictionSet"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "isArrayNullable": true,
-                    "association": {
-                        "connectionType": "HAS_MANY",
-                        "associatedWith": "userId"
-                    }
-                },
-                "activePredictionsByCategory": {
-                    "name": "activePredictionsByCategory",
-                    "isArray": true,
-                    "type": {
-                        "model": "PredictionSet"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "isArrayNullable": true,
-                    "association": {
-                        "connectionType": "HAS_MANY",
-                        "associatedWith": "userId"
-                    }
-                },
-                "pastPredictionsByEvent": {
-                    "name": "pastPredictionsByEvent",
-                    "isArray": true,
-                    "type": {
-                        "model": "PredictionSet"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "isArrayNullable": true,
-                    "association": {
-                        "connectionType": "HAS_MANY",
-                        "associatedWith": "userId"
-                    }
-                },
-                "pastPredictionsByCategory": {
-                    "name": "pastPredictionsByCategory",
-                    "isArray": true,
-                    "type": {
-                        "model": "PredictionSet"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "isArrayNullable": true,
-                    "association": {
-                        "connectionType": "HAS_MANY",
-                        "associatedWith": "userId"
-                    }
-                },
                 "leaderboardScores": {
                     "name": "leaderboardScores",
                     "isArray": true,
@@ -238,20 +182,6 @@ export const schema = {
                         "targetName": "followingUserId"
                     }
                 },
-                "followedPredictionFeed": {
-                    "name": "followedPredictionFeed",
-                    "isArray": true,
-                    "type": {
-                        "model": "PredictionSet"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "isArrayNullable": true,
-                    "association": {
-                        "connectionType": "HAS_MANY",
-                        "associatedWith": "userId"
-                    }
-                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -322,468 +252,13 @@ export const schema = {
                 }
             ]
         },
-        "PredictionSet": {
-            "name": "PredictionSet",
+        "LeaderboardPosition": {
+            "name": "LeaderboardPosition",
             "fields": {
                 "id": {
                     "name": "id",
                     "isArray": false,
                     "type": "ID",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "userId": {
-                    "name": "userId",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "eventId": {
-                    "name": "eventId",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "categoryId": {
-                    "name": "categoryId",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "predictions": {
-                    "name": "predictions",
-                    "isArray": true,
-                    "type": {
-                        "model": "Prediction"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "isArrayNullable": true,
-                    "association": {
-                        "connectionType": "HAS_MANY",
-                        "associatedWith": "predictionSetPredictionsId"
-                    }
-                },
-                "isActive": {
-                    "name": "isActive",
-                    "isArray": false,
-                    "type": "String",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "createdAt": {
-                    "name": "createdAt",
-                    "isArray": false,
-                    "type": "AWSDateTime",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "updatedAt": {
-                    "name": "updatedAt",
-                    "isArray": false,
-                    "type": "AWSDateTime",
-                    "isRequired": false,
-                    "attributes": [],
-                    "isReadOnly": true
-                }
-            },
-            "syncable": true,
-            "pluralName": "PredictionSets",
-            "attributes": [
-                {
-                    "type": "model",
-                    "properties": {}
-                },
-                {
-                    "type": "key",
-                    "properties": {
-                        "fields": [
-                            "id"
-                        ]
-                    }
-                },
-                {
-                    "type": "key",
-                    "properties": {
-                        "name": "byUserByActive",
-                        "queryField": "queryPredictionSetByUserByActive",
-                        "fields": [
-                            "userId",
-                            "isActive"
-                        ]
-                    }
-                },
-                {
-                    "type": "auth",
-                    "properties": {
-                        "rules": [
-                            {
-                                "allow": "public",
-                                "operations": [
-                                    "create",
-                                    "update",
-                                    "delete",
-                                    "read"
-                                ]
-                            }
-                        ]
-                    }
-                }
-            ]
-        },
-        "Prediction": {
-            "name": "Prediction",
-            "fields": {
-                "id": {
-                    "name": "id",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "userId": {
-                    "name": "userId",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "predictionSetId": {
-                    "name": "predictionSetId",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "contender": {
-                    "name": "contender",
-                    "isArray": false,
-                    "type": {
-                        "model": "Contender"
-                    },
-                    "isRequired": true,
-                    "attributes": [],
-                    "association": {
-                        "connectionType": "BELONGS_TO",
-                        "targetName": "contenderId"
-                    }
-                },
-                "ranking": {
-                    "name": "ranking",
-                    "isArray": false,
-                    "type": "Int",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "isActive": {
-                    "name": "isActive",
-                    "isArray": false,
-                    "type": "String",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "createdAt": {
-                    "name": "createdAt",
-                    "isArray": false,
-                    "type": "AWSDateTime",
-                    "isRequired": false,
-                    "attributes": [],
-                    "isReadOnly": true
-                },
-                "updatedAt": {
-                    "name": "updatedAt",
-                    "isArray": false,
-                    "type": "AWSDateTime",
-                    "isRequired": false,
-                    "attributes": [],
-                    "isReadOnly": true
-                },
-                "predictionSetPredictionsId": {
-                    "name": "predictionSetPredictionsId",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": false,
-                    "attributes": []
-                }
-            },
-            "syncable": true,
-            "pluralName": "Predictions",
-            "attributes": [
-                {
-                    "type": "model",
-                    "properties": {}
-                },
-                {
-                    "type": "key",
-                    "properties": {
-                        "fields": [
-                            "id"
-                        ]
-                    }
-                },
-                {
-                    "type": "key",
-                    "properties": {
-                        "name": "byContenderByUser",
-                        "queryField": "queryPredictionByContenderByUser",
-                        "fields": [
-                            "contenderId",
-                            "userId"
-                        ]
-                    }
-                },
-                {
-                    "type": "auth",
-                    "properties": {
-                        "rules": [
-                            {
-                                "allow": "public",
-                                "operations": [
-                                    "create",
-                                    "update",
-                                    "delete",
-                                    "read"
-                                ]
-                            }
-                        ]
-                    }
-                }
-            ]
-        },
-        "Contender": {
-            "name": "Contender",
-            "fields": {
-                "id": {
-                    "name": "id",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "category": {
-                    "name": "category",
-                    "isArray": false,
-                    "type": {
-                        "model": "Category"
-                    },
-                    "isRequired": true,
-                    "attributes": [],
-                    "association": {
-                        "connectionType": "BELONGS_TO",
-                        "targetName": "categoryId"
-                    }
-                },
-                "movie": {
-                    "name": "movie",
-                    "isArray": false,
-                    "type": {
-                        "model": "Movie"
-                    },
-                    "isRequired": true,
-                    "attributes": [],
-                    "association": {
-                        "connectionType": "HAS_ONE",
-                        "associatedWith": "id",
-                        "targetName": "contenderMovieId"
-                    }
-                },
-                "person": {
-                    "name": "person",
-                    "isArray": false,
-                    "type": {
-                        "model": "Person"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "association": {
-                        "connectionType": "HAS_ONE",
-                        "associatedWith": "id",
-                        "targetName": "contenderPersonId"
-                    }
-                },
-                "song": {
-                    "name": "song",
-                    "isArray": false,
-                    "type": {
-                        "model": "Song"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "association": {
-                        "connectionType": "HAS_ONE",
-                        "associatedWith": "id",
-                        "targetName": "contenderSongId"
-                    }
-                },
-                "snapshots": {
-                    "name": "snapshots",
-                    "isArray": true,
-                    "type": {
-                        "model": "ContenderSnapshot"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "isArrayNullable": true,
-                    "association": {
-                        "connectionType": "HAS_MANY",
-                        "associatedWith": "contender"
-                    }
-                },
-                "activePredictions": {
-                    "name": "activePredictions",
-                    "isArray": true,
-                    "type": {
-                        "model": "Prediction"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "isArrayNullable": true,
-                    "association": {
-                        "connectionType": "HAS_MANY",
-                        "associatedWith": "contender"
-                    }
-                },
-                "activePredictionsRankings": {
-                    "name": "activePredictionsRankings",
-                    "isArray": true,
-                    "type": {
-                        "model": "Prediction"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "isArrayNullable": true,
-                    "association": {
-                        "connectionType": "HAS_MANY",
-                        "associatedWith": "contender"
-                    }
-                },
-                "predictionsByUser": {
-                    "name": "predictionsByUser",
-                    "isArray": true,
-                    "type": {
-                        "model": "Prediction"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "isArrayNullable": true,
-                    "association": {
-                        "connectionType": "HAS_MANY",
-                        "associatedWith": "contender"
-                    }
-                },
-                "didReceiveNominationOrWin": {
-                    "name": "didReceiveNominationOrWin",
-                    "isArray": false,
-                    "type": "Boolean",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "createdAt": {
-                    "name": "createdAt",
-                    "isArray": false,
-                    "type": "AWSDateTime",
-                    "isRequired": false,
-                    "attributes": [],
-                    "isReadOnly": true
-                },
-                "updatedAt": {
-                    "name": "updatedAt",
-                    "isArray": false,
-                    "type": "AWSDateTime",
-                    "isRequired": false,
-                    "attributes": [],
-                    "isReadOnly": true
-                },
-                "contenderMovieId": {
-                    "name": "contenderMovieId",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "contenderPersonId": {
-                    "name": "contenderPersonId",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "contenderSongId": {
-                    "name": "contenderSongId",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "categoryContendersId": {
-                    "name": "categoryContendersId",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": false,
-                    "attributes": []
-                }
-            },
-            "syncable": true,
-            "pluralName": "Contenders",
-            "attributes": [
-                {
-                    "type": "model",
-                    "properties": {}
-                },
-                {
-                    "type": "key",
-                    "properties": {
-                        "fields": [
-                            "id"
-                        ]
-                    }
-                },
-                {
-                    "type": "auth",
-                    "properties": {
-                        "rules": [
-                            {
-                                "allow": "public",
-                                "operations": [
-                                    "create",
-                                    "update",
-                                    "delete",
-                                    "read"
-                                ]
-                            }
-                        ]
-                    }
-                }
-            ]
-        },
-        "Category": {
-            "name": "Category",
-            "fields": {
-                "id": {
-                    "name": "id",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "name": {
-                    "name": "name",
-                    "isArray": false,
-                    "type": {
-                        "enum": "CategoryName"
-                    },
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "type": {
-                    "name": "type",
-                    "isArray": false,
-                    "type": {
-                        "enum": "CategoryType"
-                    },
                     "isRequired": true,
                     "attributes": []
                 },
@@ -800,19 +275,32 @@ export const schema = {
                         "targetName": "eventId"
                     }
                 },
-                "contenders": {
-                    "name": "contenders",
-                    "isArray": true,
+                "user": {
+                    "name": "user",
+                    "isArray": false,
                     "type": {
-                        "model": "Contender"
+                        "model": "User"
                     },
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": [],
-                    "isArrayNullable": true,
                     "association": {
-                        "connectionType": "HAS_MANY",
-                        "associatedWith": "categoryContendersId"
+                        "connectionType": "BELONGS_TO",
+                        "targetName": "userId"
                     }
+                },
+                "accuracy": {
+                    "name": "accuracy",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "ranking": {
+                    "name": "ranking",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": false,
+                    "attributes": []
                 },
                 "createdAt": {
                     "name": "createdAt",
@@ -830,8 +318,8 @@ export const schema = {
                     "attributes": [],
                     "isReadOnly": true
                 },
-                "eventCategoriesId": {
-                    "name": "eventCategoriesId",
+                "userLeaderboardScoresId": {
+                    "name": "userLeaderboardScoresId",
                     "isArray": false,
                     "type": "ID",
                     "isRequired": false,
@@ -839,7 +327,7 @@ export const schema = {
                 }
             },
             "syncable": true,
-            "pluralName": "Categories",
+            "pluralName": "LeaderboardPositions",
             "attributes": [
                 {
                     "type": "model",
@@ -849,7 +337,20 @@ export const schema = {
                     "type": "key",
                     "properties": {
                         "fields": [
-                            "id"
+                            "id",
+                            "userId",
+                            "eventId"
+                        ]
+                    }
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "byEventByRanking",
+                        "queryField": "queryLeaderboardPositionByEventByRanking",
+                        "fields": [
+                            "eventId",
+                            "ranking"
                         ]
                     }
                 },
@@ -1012,13 +513,31 @@ export const schema = {
                 }
             ]
         },
-        "LeaderboardPosition": {
-            "name": "LeaderboardPosition",
+        "Category": {
+            "name": "Category",
             "fields": {
                 "id": {
                     "name": "id",
                     "isArray": false,
                     "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "name": {
+                    "name": "name",
+                    "isArray": false,
+                    "type": {
+                        "enum": "CategoryName"
+                    },
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "type": {
+                    "name": "type",
+                    "isArray": false,
+                    "type": {
+                        "enum": "CategoryType"
+                    },
                     "isRequired": true,
                     "attributes": []
                 },
@@ -1035,32 +554,19 @@ export const schema = {
                         "targetName": "eventId"
                     }
                 },
-                "user": {
-                    "name": "user",
-                    "isArray": false,
+                "contenders": {
+                    "name": "contenders",
+                    "isArray": true,
                     "type": {
-                        "model": "User"
+                        "model": "Contender"
                     },
-                    "isRequired": true,
+                    "isRequired": false,
                     "attributes": [],
+                    "isArrayNullable": true,
                     "association": {
-                        "connectionType": "BELONGS_TO",
-                        "targetName": "userId"
+                        "connectionType": "HAS_MANY",
+                        "associatedWith": "categoryContendersId"
                     }
-                },
-                "accuracy": {
-                    "name": "accuracy",
-                    "isArray": false,
-                    "type": "String",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "ranking": {
-                    "name": "ranking",
-                    "isArray": false,
-                    "type": "Int",
-                    "isRequired": false,
-                    "attributes": []
                 },
                 "createdAt": {
                     "name": "createdAt",
@@ -1078,8 +584,8 @@ export const schema = {
                     "attributes": [],
                     "isReadOnly": true
                 },
-                "userLeaderboardScoresId": {
-                    "name": "userLeaderboardScoresId",
+                "eventCategoriesId": {
+                    "name": "eventCategoriesId",
                     "isArray": false,
                     "type": "ID",
                     "isRequired": false,
@@ -1087,7 +593,7 @@ export const schema = {
                 }
             },
             "syncable": true,
-            "pluralName": "LeaderboardPositions",
+            "pluralName": "Categories",
             "attributes": [
                 {
                     "type": "model",
@@ -1097,20 +603,7 @@ export const schema = {
                     "type": "key",
                     "properties": {
                         "fields": [
-                            "id",
-                            "userId",
-                            "eventId"
-                        ]
-                    }
-                },
-                {
-                    "type": "key",
-                    "properties": {
-                        "name": "byEventByRanking",
-                        "queryField": "queryLeaderboardPositionByEventByRanking",
-                        "fields": [
-                            "eventId",
-                            "ranking"
+                            "id"
                         ]
                     }
                 },
@@ -1132,8 +625,8 @@ export const schema = {
                 }
             ]
         },
-        "UserPredictingEvent": {
-            "name": "UserPredictingEvent",
+        "Contender": {
+            "name": "Contender",
             "fields": {
                 "id": {
                     "name": "id",
@@ -1142,18 +635,115 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "eventId": {
-                    "name": "eventId",
+                "category": {
+                    "name": "category",
                     "isArray": false,
-                    "type": "ID",
+                    "type": {
+                        "model": "Category"
+                    },
                     "isRequired": true,
+                    "attributes": [],
+                    "association": {
+                        "connectionType": "BELONGS_TO",
+                        "targetName": "categoryId"
+                    }
+                },
+                "movie": {
+                    "name": "movie",
+                    "isArray": false,
+                    "type": {
+                        "model": "Movie"
+                    },
+                    "isRequired": true,
+                    "attributes": [],
+                    "association": {
+                        "connectionType": "HAS_ONE",
+                        "associatedWith": "id",
+                        "targetName": "contenderMovieId"
+                    }
+                },
+                "person": {
+                    "name": "person",
+                    "isArray": false,
+                    "type": {
+                        "model": "Person"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "association": {
+                        "connectionType": "HAS_ONE",
+                        "associatedWith": "id",
+                        "targetName": "contenderPersonId"
+                    }
+                },
+                "song": {
+                    "name": "song",
+                    "isArray": false,
+                    "type": {
+                        "model": "Song"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "association": {
+                        "connectionType": "HAS_ONE",
+                        "associatedWith": "id",
+                        "targetName": "contenderSongId"
+                    }
+                },
+                "snapshots": {
+                    "name": "snapshots",
+                    "isArray": true,
+                    "type": {
+                        "model": "ContenderSnapshot"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "isArrayNullable": true,
+                    "association": {
+                        "connectionType": "HAS_MANY",
+                        "associatedWith": "contender"
+                    }
+                },
+                "predictions": {
+                    "name": "predictions",
+                    "isArray": true,
+                    "type": {
+                        "model": "Prediction"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "isArrayNullable": true,
+                    "association": {
+                        "connectionType": "HAS_MANY",
+                        "associatedWith": "contenderPredictionsId"
+                    }
+                },
+                "didReceiveNominationOrWin": {
+                    "name": "didReceiveNominationOrWin",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": false,
                     "attributes": []
                 },
-                "userId": {
-                    "name": "userId",
+                "numberOfUsersPredictingNom": {
+                    "name": "numberOfUsersPredictingNom",
                     "isArray": false,
-                    "type": "ID",
-                    "isRequired": true,
+                    "type": "Int",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "numberOfUsersPredictingUnranked": {
+                    "name": "numberOfUsersPredictingUnranked",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "numberOfUsersPredictingWin": {
+                    "name": "numberOfUsersPredictingWin",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": false,
                     "attributes": []
                 },
                 "createdAt": {
@@ -1172,8 +762,29 @@ export const schema = {
                     "attributes": [],
                     "isReadOnly": true
                 },
-                "eventUsersPredictingId": {
-                    "name": "eventUsersPredictingId",
+                "categoryContendersId": {
+                    "name": "categoryContendersId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "contenderMovieId": {
+                    "name": "contenderMovieId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "contenderPersonId": {
+                    "name": "contenderPersonId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "contenderSongId": {
+                    "name": "contenderSongId",
                     "isArray": false,
                     "type": "ID",
                     "isRequired": false,
@@ -1181,7 +792,7 @@ export const schema = {
                 }
             },
             "syncable": true,
-            "pluralName": "UserPredictingEvents",
+            "pluralName": "Contenders",
             "attributes": [
                 {
                     "type": "model",
@@ -1191,9 +802,7 @@ export const schema = {
                     "type": "key",
                     "properties": {
                         "fields": [
-                            "id",
-                            "eventId",
-                            "userId"
+                            "id"
                         ]
                     }
                 },
@@ -1495,18 +1104,25 @@ export const schema = {
                         "targetName": "categoryId"
                     }
                 },
-                "numberOfUsersPredicting": {
-                    "name": "numberOfUsersPredicting",
+                "numberOfUsersPredictingNom": {
+                    "name": "numberOfUsersPredictingNom",
                     "isArray": false,
                     "type": "Int",
-                    "isRequired": true,
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "numberOfUsersPredictingUnranked": {
+                    "name": "numberOfUsersPredictingUnranked",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": false,
                     "attributes": []
                 },
                 "numberOfUsersPredictingWin": {
                     "name": "numberOfUsersPredictingWin",
                     "isArray": false,
                     "type": "Int",
-                    "isRequired": true,
+                    "isRequired": false,
                     "attributes": []
                 },
                 "createdAt": {
@@ -1548,6 +1164,292 @@ export const schema = {
                         "fields": [
                             "contenderId",
                             "createdAt"
+                        ]
+                    }
+                },
+                {
+                    "type": "auth",
+                    "properties": {
+                        "rules": [
+                            {
+                                "allow": "public",
+                                "operations": [
+                                    "create",
+                                    "update",
+                                    "delete",
+                                    "read"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        "Prediction": {
+            "name": "Prediction",
+            "fields": {
+                "id": {
+                    "name": "id",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "userId": {
+                    "name": "userId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "predictionSetId": {
+                    "name": "predictionSetId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "contender": {
+                    "name": "contender",
+                    "isArray": false,
+                    "type": {
+                        "model": "Contender"
+                    },
+                    "isRequired": true,
+                    "attributes": [],
+                    "association": {
+                        "connectionType": "BELONGS_TO",
+                        "targetName": "contenderId"
+                    }
+                },
+                "ranking": {
+                    "name": "ranking",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                },
+                "contenderPredictionsId": {
+                    "name": "contenderPredictionsId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "predictionSetPredictionsId": {
+                    "name": "predictionSetPredictionsId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": false,
+                    "attributes": []
+                }
+            },
+            "syncable": true,
+            "pluralName": "Predictions",
+            "attributes": [
+                {
+                    "type": "model",
+                    "properties": {}
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "fields": [
+                            "id"
+                        ]
+                    }
+                },
+                {
+                    "type": "auth",
+                    "properties": {
+                        "rules": [
+                            {
+                                "allow": "public",
+                                "operations": [
+                                    "create",
+                                    "update",
+                                    "delete",
+                                    "read"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        "UserPredictingEvent": {
+            "name": "UserPredictingEvent",
+            "fields": {
+                "id": {
+                    "name": "id",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "eventId": {
+                    "name": "eventId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "userId": {
+                    "name": "userId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                },
+                "eventUsersPredictingId": {
+                    "name": "eventUsersPredictingId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": false,
+                    "attributes": []
+                }
+            },
+            "syncable": true,
+            "pluralName": "UserPredictingEvents",
+            "attributes": [
+                {
+                    "type": "model",
+                    "properties": {}
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "fields": [
+                            "id",
+                            "eventId",
+                            "userId"
+                        ]
+                    }
+                },
+                {
+                    "type": "auth",
+                    "properties": {
+                        "rules": [
+                            {
+                                "allow": "public",
+                                "operations": [
+                                    "create",
+                                    "update",
+                                    "delete",
+                                    "read"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        "PredictionSet": {
+            "name": "PredictionSet",
+            "fields": {
+                "id": {
+                    "name": "id",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "userId": {
+                    "name": "userId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "eventId": {
+                    "name": "eventId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "categoryId": {
+                    "name": "categoryId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "predictions": {
+                    "name": "predictions",
+                    "isArray": true,
+                    "type": {
+                        "model": "Prediction"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "isArrayNullable": true,
+                    "association": {
+                        "connectionType": "HAS_MANY",
+                        "associatedWith": "predictionSetPredictionsId"
+                    }
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                }
+            },
+            "syncable": true,
+            "pluralName": "PredictionSets",
+            "attributes": [
+                {
+                    "type": "model",
+                    "properties": {}
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "fields": [
+                            "id"
                         ]
                     }
                 },
@@ -1667,5 +1569,5 @@ export const schema = {
         }
     },
     "nonModels": {},
-    "version": "1d2eb2f241ab41b983dc86cbf3420b88"
+    "version": "dd169187925b023732d80a6203cc9c14"
 };

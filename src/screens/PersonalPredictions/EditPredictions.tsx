@@ -45,27 +45,24 @@ const EditPredictions = () => {
     // do nothing for now?
   };
 
-  // TODO: better loading state
-  if (!predictions) return null;
-
-  const orderedContenders = predictions
-    .sort((a, b) => (a.ranking > b.ranking ? 1 : -1))
-    .map((p) => p.contender);
-
   return (
     <View style={{ alignItems: 'center', marginTop: 40, paddingBottom: 200 }}>
-      <ContenderListDraggable
-        category={category}
-        contenders={orderedContenders}
-        onPressThumbnail={onPressThumbnail}
-      />
       <TouchableText
-        text={'Add to list'}
+        text={'Add or delete contenders'}
         onPress={() => {
           navigation.navigate('AddContenders', { category });
         }}
         style={{ margin: 10 }}
       />
+      {predictions && predictions.length > 0 ? (
+        <ContenderListDraggable
+          category={category}
+          contenders={predictions
+            .sort((a, b) => (a.ranking > b.ranking ? 1 : -1))
+            .map((p) => p.contender)}
+          onPressThumbnail={onPressThumbnail}
+        />
+      ) : null}
     </View>
   );
 };

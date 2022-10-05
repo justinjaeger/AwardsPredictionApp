@@ -12,11 +12,12 @@ import { BodyLarge } from '../../Text';
 type iPerformanceListItemProps = {
   contender: Contender;
   ranking?: number;
+  size?: PosterSize;
   onPress: () => void;
 };
 
 const PerformanceListItem = (props: iPerformanceListItemProps) => {
-  const { contender, ranking, onPress } = props;
+  const { contender, ranking, size, onPress } = props;
 
   const [person, setPerson] = useState<iCachedTmdbPerson | undefined>();
   const [tmdbMovie, setTmdbMovie] = useState<iCachedTmdbMovie | undefined>();
@@ -49,7 +50,7 @@ const PerformanceListItem = (props: iPerformanceListItemProps) => {
     <View
       style={{
         width: '100%',
-        height: PosterSize.MEDIUM,
+        height: size || PosterSize.MEDIUM,
         marginTop: 10,
       }}
     >
@@ -58,6 +59,7 @@ const PerformanceListItem = (props: iPerformanceListItemProps) => {
         <Poster
           path={person?.profilePath || null}
           title={person?.name || ''}
+          size={size}
           onPress={onPress}
         />
         <View style={{ flexDirection: 'column' }}>

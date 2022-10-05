@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { TouchableHighlight, View } from 'react-native';
 import COLORS from '../../../constants/colors';
 import { Category, Contender } from '../../../models';
+import { useSubscriptionEffect } from '../../../util/hooks';
 import { BodyLarge } from '../../Text';
 import ContenderListItem from './ContenderListItem';
 
@@ -16,6 +17,12 @@ type iContenderListProps = {
 const ContenderList = (props: iContenderListProps) => {
   const { category, contenders, isSelectable, onPressThumbnail, onPressItem } = props;
 
+  const [data, setData] = useState<Contender[]>([]);
+
+  useSubscriptionEffect(async () => {
+    setData(contenders);
+  }, []);
+
   return (
     <TouchableHighlight
       style={{
@@ -26,7 +33,7 @@ const ContenderList = (props: iContenderListProps) => {
       }}
     >
       <>
-        {contenders.length === 0 ? (
+        {data.length === 0 ? (
           <View
             style={{
               width: '100%',
@@ -38,7 +45,7 @@ const ContenderList = (props: iContenderListProps) => {
             <BodyLarge>Add films to this list</BodyLarge>
           </View>
         ) : null}
-        {contenders.map((c, i) => (
+        {data.map((c, i) => (
           <ContenderListItem
             contender={c}
             ranking={i + 1}

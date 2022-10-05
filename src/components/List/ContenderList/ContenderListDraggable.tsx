@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { Category, Contender } from '../../../models';
 import { BodyLarge } from '../../Text';
@@ -8,6 +8,7 @@ import {
   ScaleDecorator,
 } from 'react-native-draggable-flatlist';
 import ContenderListItemDraggable from './ContenderListItemDraggable';
+import { PosterSize } from '../../../constants/posterDimensions';
 
 type iContenderListProps = {
   category: Category;
@@ -22,9 +23,13 @@ const ContenderList = (props: iContenderListProps) => {
 
   const [data, setData] = useState<Contender[]>(contenders);
 
+  useEffect(() => {
+    setData(contenders);
+  }, [contenders]);
+
   return (
-    <>
-      {contenders.length === 0 ? (
+    <View style={{ width: '100%' }}>
+      {data.length === 0 ? (
         <View
           style={{
             width: '100%',
@@ -36,10 +41,16 @@ const ContenderList = (props: iContenderListProps) => {
           <BodyLarge>Add films to this list</BodyLarge>
         </View>
       ) : null}
+      {/* @ts-ignore not actually broken */}
       <NestableScrollContainer>
         <NestableDraggableFlatList
           data={data}
           keyExtractor={(item) => item.id}
+          style={{}}
+          contentContainerStyle={{
+            paddingBottom: PosterSize.SMALL,
+            paddingTop: 20,
+          }}
           renderItem={({ item: contender, index, drag, isActive }) => (
             <ScaleDecorator>
               <ContenderListItemDraggable
@@ -58,7 +69,7 @@ const ContenderList = (props: iContenderListProps) => {
           onDragEnd={({ data }) => setData(data)}
         />
       </NestableScrollContainer>
-    </>
+    </View>
   );
 };
 

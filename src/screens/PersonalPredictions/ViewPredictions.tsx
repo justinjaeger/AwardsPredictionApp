@@ -45,29 +45,36 @@ const ViewPredictions = () => {
     // do nothing for now?
   };
 
-  // TODO: better loading state
-  if (!predictions) return null;
-
-  const orderedContenders = predictions
-    .sort((a, b) => (a.ranking > b.ranking ? 1 : -1))
-    .map((p) => p.contender);
-
   return (
     <ScrollView
       contentContainerStyle={{ alignItems: 'center', marginTop: 40, paddingBottom: 200 }}
     >
-      <ContenderList
-        category={category}
-        contenders={orderedContenders}
-        onPressThumbnail={onPressThumbnail}
-      />
-      <TouchableText
-        text={'Edit Predictions'}
-        onPress={() => {
-          navigation.navigate('EditPredictions', { category });
-        }}
-        style={{ margin: 10 }}
-      />
+      {predictions && predictions.length > 0 ? (
+        <>
+          <ContenderList
+            category={category}
+            contenders={predictions
+              .sort((a, b) => (a.ranking > b.ranking ? 1 : -1))
+              .map((p) => p.contender)}
+            onPressThumbnail={onPressThumbnail}
+          />
+          <TouchableText
+            text={'Edit Predictions'}
+            onPress={() => {
+              navigation.navigate('EditPredictions', { category });
+            }}
+            style={{ margin: 10 }}
+          />
+        </>
+      ) : (
+        <TouchableText
+          text={'Add to list'}
+          onPress={() => {
+            navigation.navigate('AddContenders', { category });
+          }}
+          style={{ margin: 10 }}
+        />
+      )}
     </ScrollView>
   );
 };

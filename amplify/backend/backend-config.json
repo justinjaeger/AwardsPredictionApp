@@ -1,6 +1,6 @@
 {
   "auth": {
-    "awardsapp44e76dcc": {
+    "awardsapp783dde78": {
       "service": "Cognito",
       "providerPlugin": "awscloudformation",
       "dependsOn": [],

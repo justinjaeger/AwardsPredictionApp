@@ -68,9 +68,9 @@ const TabBar = (props: ITabBarProps) => {
                 return (
                   <View key={index}>
                     {isFocused ? (
-                      <CustomIcon name={'list'} />
+                      <CustomIcon name={'edit'} />
                     ) : (
-                      <CustomIcon name={'list-outline'} />
+                      <CustomIcon name={'edit-outline'} />
                     )}
                   </View>
                 );

@@ -90,19 +90,7 @@ type RelationshipsMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 }
 
-type PredictionSetMetaData = {
-  readOnlyFields: 'updatedAt';
-}
-
-type PredictionMetaData = {
-  readOnlyFields: 'createdAt' | 'updatedAt';
-}
-
-type ContenderMetaData = {
-  readOnlyFields: 'createdAt' | 'updatedAt';
-}
-
-type CategoryMetaData = {
+type LeaderboardPositionMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 }
 
@@ -110,11 +98,11 @@ type EventMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 }
 
-type LeaderboardPositionMetaData = {
+type CategoryMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 }
 
-type UserPredictingEventMetaData = {
+type ContenderMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 }
 
@@ -134,6 +122,18 @@ type ContenderSnapshotMetaData = {
   readOnlyFields: 'updatedAt';
 }
 
+type PredictionMetaData = {
+  readOnlyFields: 'createdAt' | 'updatedAt';
+}
+
+type UserPredictingEventMetaData = {
+  readOnlyFields: 'createdAt' | 'updatedAt';
+}
+
+type PredictionSetMetaData = {
+  readOnlyFields: 'createdAt' | 'updatedAt';
+}
+
 export declare class User {
   readonly id: string;
   readonly email: string;
@@ -144,10 +144,6 @@ export declare class User {
   readonly role: UserRole | keyof typeof UserRole;
   readonly followers?: (Relationships | null)[] | null;
   readonly following?: (Relationships | null)[] | null;
-  readonly activePredictionsByEvent?: (PredictionSet | null)[] | null;
-  readonly activePredictionsByCategory?: (PredictionSet | null)[] | null;
-  readonly pastPredictionsByEvent?: (PredictionSet | null)[] | null;
-  readonly pastPredictionsByCategory?: (PredictionSet | null)[] | null;
   readonly leaderboardScores?: (LeaderboardPosition | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
@@ -159,72 +155,23 @@ export declare class Relationships {
   readonly id: string;
   readonly followedUser: User;
   readonly followingUser: User;
-  readonly followedPredictionFeed?: (PredictionSet | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
   constructor(init: ModelInit<Relationships, RelationshipsMetaData>);
   static copyOf(source: Relationships, mutator: (draft: MutableModel<Relationships, RelationshipsMetaData>) => MutableModel<Relationships, RelationshipsMetaData> | void): Relationships;
 }
 
-export declare class PredictionSet {
+export declare class LeaderboardPosition {
   readonly id: string;
-  readonly userId: string;
-  readonly eventId: string;
-  readonly categoryId: string;
-  readonly predictions?: (Prediction | null)[] | null;
-  readonly isActive?: string | null;
-  readonly createdAt?: string | null;
-  readonly updatedAt?: string | null;
-  constructor(init: ModelInit<PredictionSet, PredictionSetMetaData>);
-  static copyOf(source: PredictionSet, mutator: (draft: MutableModel<PredictionSet, PredictionSetMetaData>) => MutableModel<PredictionSet, PredictionSetMetaData> | void): PredictionSet;
-}
-
-export declare class Prediction {
-  readonly id: string;
-  readonly userId: string;
-  readonly predictionSetId: string;
-  readonly contender: Contender;
-  readonly ranking: number;
-  readonly isActive?: string | null;
-  readonly createdAt?: string | null;
-  readonly updatedAt?: string | null;
-  readonly predictionSetPredictionsId?: string | null;
-  constructor(init: ModelInit<Prediction, PredictionMetaData>);
-  static copyOf(source: Prediction, mutator: (draft: MutableModel<Prediction, PredictionMetaData>) => MutableModel<Prediction, PredictionMetaData> | void): Prediction;
-}
-
-export declare class Contender {
-  readonly id: string;
-  readonly category: Category;
-  readonly movie: Movie;
-  readonly person?: Person | null;
-  readonly song?: Song | null;
-  readonly snapshots?: (ContenderSnapshot | null)[] | null;
-  readonly activePredictions?: (Prediction | null)[] | null;
-  readonly activePredictionsRankings?: (Prediction | null)[] | null;
-  readonly predictionsByUser?: (Prediction | null)[] | null;
-  readonly didReceiveNominationOrWin?: boolean | null;
-  readonly createdAt?: string | null;
-  readonly updatedAt?: string | null;
-  readonly contenderMovieId: string;
-  readonly contenderPersonId?: string | null;
-  readonly contenderSongId?: string | null;
-  readonly categoryContendersId?: string | null;
-  constructor(init: ModelInit<Contender, ContenderMetaData>);
-  static copyOf(source: Contender, mutator: (draft: MutableModel<Contender, ContenderMetaData>) => MutableModel<Contender, ContenderMetaData> | void): Contender;
-}
-
-export declare class Category {
-  readonly id: string;
-  readonly name: CategoryName | keyof typeof CategoryName;
-  readonly type: CategoryType | keyof typeof CategoryType;
   readonly event: Event;
-  readonly contenders?: (Contender | null)[] | null;
+  readonly user: User;
+  readonly accuracy?: string | null;
+  readonly ranking?: number | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
-  readonly eventCategoriesId?: string | null;
-  constructor(init: ModelInit<Category, CategoryMetaData>);
-  static copyOf(source: Category, mutator: (draft: MutableModel<Category, CategoryMetaData>) => MutableModel<Category, CategoryMetaData> | void): Category;
+  readonly userLeaderboardScoresId?: string | null;
+  constructor(init: ModelInit<LeaderboardPosition, LeaderboardPositionMetaData>);
+  static copyOf(source: LeaderboardPosition, mutator: (draft: MutableModel<LeaderboardPosition, LeaderboardPositionMetaData>) => MutableModel<LeaderboardPosition, LeaderboardPositionMetaData> | void): LeaderboardPosition;
 }
 
 export declare class Event {
@@ -243,28 +190,39 @@ export declare class Event {
   static copyOf(source: Event, mutator: (draft: MutableModel<Event, EventMetaData>) => MutableModel<Event, EventMetaData> | void): Event;
 }
 
-export declare class LeaderboardPosition {
+export declare class Category {
   readonly id: string;
+  readonly name: CategoryName | keyof typeof CategoryName;
+  readonly type: CategoryType | keyof typeof CategoryType;
   readonly event: Event;
-  readonly user: User;
-  readonly accuracy?: string | null;
-  readonly ranking?: number | null;
+  readonly contenders?: (Contender | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
-  readonly userLeaderboardScoresId?: string | null;
-  constructor(init: ModelInit<LeaderboardPosition, LeaderboardPositionMetaData>);
-  static copyOf(source: LeaderboardPosition, mutator: (draft: MutableModel<LeaderboardPosition, LeaderboardPositionMetaData>) => MutableModel<LeaderboardPosition, LeaderboardPositionMetaData> | void): LeaderboardPosition;
+  readonly eventCategoriesId?: string | null;
+  constructor(init: ModelInit<Category, CategoryMetaData>);
+  static copyOf(source: Category, mutator: (draft: MutableModel<Category, CategoryMetaData>) => MutableModel<Category, CategoryMetaData> | void): Category;
 }
 
-export declare class UserPredictingEvent {
+export declare class Contender {
   readonly id: string;
-  readonly eventId: string;
-  readonly userId: string;
+  readonly category: Category;
+  readonly movie: Movie;
+  readonly person?: Person | null;
+  readonly song?: Song | null;
+  readonly snapshots?: (ContenderSnapshot | null)[] | null;
+  readonly predictions?: (Prediction | null)[] | null;
+  readonly didReceiveNominationOrWin?: boolean | null;
+  readonly numberOfUsersPredictingNom?: number | null;
+  readonly numberOfUsersPredictingUnranked?: number | null;
+  readonly numberOfUsersPredictingWin?: number | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
-  readonly eventUsersPredictingId?: string | null;
-  constructor(init: ModelInit<UserPredictingEvent, UserPredictingEventMetaData>);
-  static copyOf(source: UserPredictingEvent, mutator: (draft: MutableModel<UserPredictingEvent, UserPredictingEventMetaData>) => MutableModel<UserPredictingEvent, UserPredictingEventMetaData> | void): UserPredictingEvent;
+  readonly categoryContendersId?: string | null;
+  readonly contenderMovieId: string;
+  readonly contenderPersonId?: string | null;
+  readonly contenderSongId?: string | null;
+  constructor(init: ModelInit<Contender, ContenderMetaData>);
+  static copyOf(source: Contender, mutator: (draft: MutableModel<Contender, ContenderMetaData>) => MutableModel<Contender, ContenderMetaData> | void): Contender;
 }
 
 export declare class Movie {
@@ -303,10 +261,48 @@ export declare class ContenderSnapshot {
   readonly contender: Contender;
   readonly categoryId: string;
   readonly category: Category;
-  readonly numberOfUsersPredicting: number;
-  readonly numberOfUsersPredictingWin: number;
+  readonly numberOfUsersPredictingNom?: number | null;
+  readonly numberOfUsersPredictingUnranked?: number | null;
+  readonly numberOfUsersPredictingWin?: number | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
   constructor(init: ModelInit<ContenderSnapshot, ContenderSnapshotMetaData>);
   static copyOf(source: ContenderSnapshot, mutator: (draft: MutableModel<ContenderSnapshot, ContenderSnapshotMetaData>) => MutableModel<ContenderSnapshot, ContenderSnapshotMetaData> | void): ContenderSnapshot;
+}
+
+export declare class Prediction {
+  readonly id: string;
+  readonly userId: string;
+  readonly predictionSetId: string;
+  readonly contender: Contender;
+  readonly ranking: number;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+  readonly contenderPredictionsId?: string | null;
+  readonly predictionSetPredictionsId?: string | null;
+  constructor(init: ModelInit<Prediction, PredictionMetaData>);
+  static copyOf(source: Prediction, mutator: (draft: MutableModel<Prediction, PredictionMetaData>) => MutableModel<Prediction, PredictionMetaData> | void): Prediction;
+}
+
+export declare class UserPredictingEvent {
+  readonly id: string;
+  readonly eventId: string;
+  readonly userId: string;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+  readonly eventUsersPredictingId?: string | null;
+  constructor(init: ModelInit<UserPredictingEvent, UserPredictingEventMetaData>);
+  static copyOf(source: UserPredictingEvent, mutator: (draft: MutableModel<UserPredictingEvent, UserPredictingEventMetaData>) => MutableModel<UserPredictingEvent, UserPredictingEventMetaData> | void): UserPredictingEvent;
+}
+
+export declare class PredictionSet {
+  readonly id: string;
+  readonly userId: string;
+  readonly eventId: string;
+  readonly categoryId: string;
+  readonly predictions?: (Prediction | null)[] | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+  constructor(init: ModelInit<PredictionSet, PredictionSetMetaData>);
+  static copyOf(source: PredictionSet, mutator: (draft: MutableModel<PredictionSet, PredictionSetMetaData>) => MutableModel<PredictionSet, PredictionSetMetaData> | void): PredictionSet;
 }

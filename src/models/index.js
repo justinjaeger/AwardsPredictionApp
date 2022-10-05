@@ -84,22 +84,22 @@ const CateogrySet = {
   "ACADEMY_AWARDS_2023": "ACADEMY_AWARDS_2023"
 };
 
-const { User, Relationships, PredictionSet, Prediction, Contender, Category, Event, LeaderboardPosition, UserPredictingEvent, Movie, Person, Song, ContenderSnapshot } = initSchema(schema);
+const { User, Relationships, LeaderboardPosition, Event, Category, Contender, Movie, Person, Song, ContenderSnapshot, Prediction, UserPredictingEvent, PredictionSet } = initSchema(schema);
 
 export {
   User,
   Relationships,
-  PredictionSet,
-  Prediction,
-  Contender,
-  Category,
-  Event,
   LeaderboardPosition,
-  UserPredictingEvent,
+  Event,
+  Category,
+  Contender,
   Movie,
   Person,
   Song,
   ContenderSnapshot,
+  Prediction,
+  UserPredictingEvent,
+  PredictionSet,
   UserRole,
   AwardsBody,
   EventType,
