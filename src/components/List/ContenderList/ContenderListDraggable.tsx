@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { View } from 'react-native';
 import { Category, Contender } from '../../../models';
 import { BodyLarge } from '../../Text';
@@ -14,28 +14,29 @@ type iContenderListProps = {
   category: Category;
   contenders: Contender[];
   isSelectable?: boolean; // makes items appear "on" or "off"
+  onDragEnd: (cs: Contender[]) => void;
   onPressThumbnail?: (c: Contender) => Promise<void>;
   onPressItem?: (c: Contender) => Promise<void>;
 };
 
 const ContenderList = (props: iContenderListProps) => {
-  const { category, contenders, isSelectable, onPressThumbnail, onPressItem } = props;
-
-  const [data, setData] = useState<Contender[]>(contenders);
-
-  useEffect(() => {
-    setData(contenders);
-  }, [contenders]);
+  const {
+    category,
+    contenders,
+    isSelectable,
+    onDragEnd,
+    onPressThumbnail,
+    onPressItem,
+  } = props;
 
   return (
     <View style={{ width: '100%' }}>
-      {data.length === 0 ? (
+      {contenders.length === 0 ? (
         <View
           style={{
             width: '100%',
             height: '100%',
             alignItems: 'center',
-            justifyContent: 'center',
           }}
         >
           <BodyLarge>Add films to this list</BodyLarge>
@@ -44,7 +45,7 @@ const ContenderList = (props: iContenderListProps) => {
       {/* @ts-ignore not actually broken */}
       <NestableScrollContainer>
         <NestableDraggableFlatList
-          data={data}
+          data={contenders}
           keyExtractor={(item) => item.id}
           style={{}}
           contentContainerStyle={{
@@ -66,7 +67,7 @@ const ContenderList = (props: iContenderListProps) => {
               />
             </ScaleDecorator>
           )}
-          onDragEnd={({ data }) => setData(data)}
+          onDragEnd={({ data }) => onDragEnd(data)}
         />
       </NestableScrollContainer>
     </View>

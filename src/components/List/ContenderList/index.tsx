@@ -21,7 +21,7 @@ const ContenderList = (props: iContenderListProps) => {
 
   useSubscriptionEffect(async () => {
     setData(contenders);
-  }, []);
+  }, [contenders]);
 
   return (
     <TouchableHighlight

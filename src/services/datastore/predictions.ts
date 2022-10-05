@@ -42,11 +42,12 @@ export const createOrUpdatePredictions = async (
     // delete prediction sets associated with user AND category (NOTE: Should make this atomic)
     // enforces ONE predictionSet per user+category
 
+    // get prediction set
     const pSets = (
       await DataStore.query(PredictionSet, (ps) => ps.userId('eq', userId))
     ).filter((ps) => ps.categoryId === category.id); // should only be one
 
-    // delete existing prediction sets and predictions
+    // delete existing prediction sets AND predictions
     if (pSets.length > 0) {
       pSets.forEach(async (ps) => {
         const deletedPredictionSet = await DataStore.delete(PredictionSet, ps.id); // should only be one

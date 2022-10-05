@@ -4,9 +4,10 @@ import { View } from 'react-native';
 import { TouchableText } from '../../components/Buttons';
 import ContenderListDraggable from '../../components/List/ContenderList/ContenderListDraggable';
 import { getAwardsBodyCategories } from '../../constants/categories';
-import { Contender, Prediction } from '../../models';
+import { Contender } from '../../models';
 import { PersonalParamList } from '../../navigation/types';
 import DS from '../../services/datastore';
+import { iPredictionData } from '../../services/datastore/predictions';
 import { useAuth } from '../../store';
 import { useSubscriptionEffect } from '../../util/hooks';
 import { eventToString } from '../../util/stringConversions';
@@ -18,7 +19,8 @@ const EditPredictions = () => {
   const navigation = useNavigation();
   const { userId } = useAuth();
 
-  const [predictions, setPredictions] = useState<Prediction[] | undefined>();
+  const [contenders, setContenders] = useState<Contender[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   // Set header title (NOTE: dupliated from Global, combine these screens via top tabs eventually)
   // Move all duplicated stuff into shared menu like "add contender" (maybe that's in a FAB popout)
@@ -32,17 +34,33 @@ const EditPredictions = () => {
         ' ' +
         eventToString(category.event),
     });
+    navigation.setOptions({});
   }, [navigation, category.name, category.event]);
 
   useSubscriptionEffect(async () => {
     if (!userId) return;
-    const { data: p } = await DS.getPredictions(userId, category);
-    if (!p) return;
-    setPredictions([...p]);
+    const { data: ps } = await DS.getPredictions(userId, category);
+    if (!ps) return;
+    const sortedContenders = (ps || [])
+      .sort((a, b) => (a.ranking > b.ranking ? 1 : -1))
+      .map((p) => p.contender);
+    setContenders(sortedContenders);
   }, []);
 
   const onPressThumbnail = async (c: Contender) => {
     // do nothing for now?
+  };
+
+  const onSaveContenders = async () => {
+    if (!userId) return;
+    const predictionData: iPredictionData = contenders.map((c, i) => ({
+      contender: c,
+      ranking: i + 1,
+    }));
+    setLoading(true);
+    await DS.createOrUpdatePredictions(userId, category, predictionData);
+    setLoading(false);
+    navigation.goBack();
   };
 
   return (
@@ -52,17 +70,21 @@ const EditPredictions = () => {
         onPress={() => {
           navigation.navigate('AddContenders', { category });
         }}
+        loading={loading}
         style={{ margin: 10 }}
       />
-      {predictions && predictions.length > 0 ? (
-        <ContenderListDraggable
-          category={category}
-          contenders={predictions
-            .sort((a, b) => (a.ranking > b.ranking ? 1 : -1))
-            .map((p) => p.contender)}
-          onPressThumbnail={onPressThumbnail}
-        />
-      ) : null}
+      <TouchableText
+        text={'Save'}
+        onPress={onSaveContenders}
+        loading={loading}
+        style={{ margin: 10 }}
+      />
+      <ContenderListDraggable
+        category={category}
+        contenders={contenders}
+        onDragEnd={setContenders}
+        onPressThumbnail={onPressThumbnail}
+      />
     </View>
   );
 };
