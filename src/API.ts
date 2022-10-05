@@ -10,7 +10,6 @@ export type CreateUserInput = {
   bio?: string | null,
   image?: string | null,
   role: UserRole,
-  _version?: number | null,
 };
 
 export enum UserRole {
@@ -89,16 +88,12 @@ export type User = {
   following?: ModelRelationshipsConnection | null,
   createdAt: string,
   updatedAt: string,
-  _version: number,
-  _deleted?: boolean | null,
-  _lastChangedAt: number,
 };
 
 export type ModelRelationshipsConnection = {
   __typename: "ModelRelationshipsConnection",
   items:  Array<Relationships | null >,
   nextToken?: string | null,
-  startedAt?: number | null,
 };
 
 export type Relationships = {
@@ -110,9 +105,6 @@ export type Relationships = {
   followingUser: User,
   createdAt: string,
   updatedAt: string,
-  _version: number,
-  _deleted?: boolean | null,
-  _lastChangedAt: number,
 };
 
 export type UpdateUserInput = {
@@ -123,19 +115,16 @@ export type UpdateUserInput = {
   bio?: string | null,
   image?: string | null,
   role?: UserRole | null,
-  _version?: number | null,
 };
 
 export type DeleteUserInput = {
   id: string,
-  _version?: number | null,
 };
 
 export type CreateRelationshipsInput = {
   id?: string | null,
   followedUserId: string,
   followingUserId: string,
-  _version?: number | null,
 };
 
 export type ModelRelationshipsConditionInput = {
@@ -166,12 +155,10 @@ export type UpdateRelationshipsInput = {
   id: string,
   followedUserId?: string | null,
   followingUserId?: string | null,
-  _version?: number | null,
 };
 
 export type DeleteRelationshipsInput = {
   id: string,
-  _version?: number | null,
 };
 
 export type CreatePredictionSetInput = {
@@ -179,7 +166,6 @@ export type CreatePredictionSetInput = {
   userId: string,
   eventId: string,
   categoryId: string,
-  _version?: number | null,
 };
 
 export type ModelPredictionSetConditionInput = {
@@ -200,16 +186,12 @@ export type PredictionSet = {
   predictions?: ModelPredictionConnection | null,
   createdAt: string,
   updatedAt: string,
-  _version: number,
-  _deleted?: boolean | null,
-  _lastChangedAt: number,
 };
 
 export type ModelPredictionConnection = {
   __typename: "ModelPredictionConnection",
   items:  Array<Prediction | null >,
   nextToken?: string | null,
-  startedAt?: number | null,
 };
 
 export type Prediction = {
@@ -222,9 +204,6 @@ export type Prediction = {
   ranking: number,
   createdAt: string,
   updatedAt: string,
-  _version: number,
-  _deleted?: boolean | null,
-  _lastChangedAt: number,
   predictionSetPredictionsId?: string | null,
   contenderPredictionsId?: string | null,
 };
@@ -244,9 +223,6 @@ export type Contender = {
   numberOfUsersPredictingUnranked: number,
   createdAt: string,
   updatedAt: string,
-  _version: number,
-  _deleted?: boolean | null,
-  _lastChangedAt: number,
   categoryContendersId?: string | null,
   contenderMovieId: string,
   contenderPersonId?: string | null,
@@ -263,9 +239,6 @@ export type Category = {
   contenders?: ModelContenderConnection | null,
   createdAt: string,
   updatedAt: string,
-  _version: number,
-  _deleted?: boolean | null,
-  _lastChangedAt: number,
   eventCategoriesId?: string | null,
 };
 
@@ -333,16 +306,12 @@ export type Event = {
   isActive?: string | null,
   createdAt: string,
   updatedAt: string,
-  _version: number,
-  _deleted?: boolean | null,
-  _lastChangedAt: number,
 };
 
 export type ModelCategoryConnection = {
   __typename: "ModelCategoryConnection",
   items:  Array<Category | null >,
   nextToken?: string | null,
-  startedAt?: number | null,
 };
 
 export enum AwardsBody {
@@ -373,7 +342,6 @@ export type ModelContenderConnection = {
   __typename: "ModelContenderConnection",
   items:  Array<Contender | null >,
   nextToken?: string | null,
-  startedAt?: number | null,
 };
 
 export type Movie = {
@@ -383,9 +351,6 @@ export type Movie = {
   studio?: string | null,
   createdAt: string,
   updatedAt: string,
-  _version: number,
-  _deleted?: boolean | null,
-  _lastChangedAt: number,
 };
 
 export type Person = {
@@ -394,9 +359,6 @@ export type Person = {
   tmdbId: number,
   createdAt: string,
   updatedAt: string,
-  _version: number,
-  _deleted?: boolean | null,
-  _lastChangedAt: number,
 };
 
 export type Song = {
@@ -407,9 +369,6 @@ export type Song = {
   movie: Movie,
   createdAt: string,
   updatedAt: string,
-  _version: number,
-  _deleted?: boolean | null,
-  _lastChangedAt: number,
   songMovieId: string,
 };
 
@@ -418,12 +377,10 @@ export type UpdatePredictionSetInput = {
   userId?: string | null,
   eventId?: string | null,
   categoryId?: string | null,
-  _version?: number | null,
 };
 
 export type DeletePredictionSetInput = {
   id: string,
-  _version?: number | null,
 };
 
 export type CreatePredictionInput = {
@@ -432,7 +389,6 @@ export type CreatePredictionInput = {
   predictionSetId: string,
   contenderId: string,
   ranking: number,
-  _version?: number | null,
   predictionSetPredictionsId?: string | null,
   contenderPredictionsId?: string | null,
 };
@@ -467,14 +423,12 @@ export type UpdatePredictionInput = {
   predictionSetId?: string | null,
   contenderId?: string | null,
   ranking?: number | null,
-  _version?: number | null,
   predictionSetPredictionsId?: string | null,
   contenderPredictionsId?: string | null,
 };
 
 export type DeletePredictionInput = {
   id: string,
-  _version?: number | null,
 };
 
 export type CreateEventInput = {
@@ -484,7 +438,6 @@ export type CreateEventInput = {
   type: EventType,
   expiration?: string | null,
   isActive?: string | null,
-  _version?: number | null,
 };
 
 export type ModelEventConditionInput = {
@@ -515,12 +468,10 @@ export type UpdateEventInput = {
   type?: EventType | null,
   expiration?: string | null,
   isActive?: string | null,
-  _version?: number | null,
 };
 
 export type DeleteEventInput = {
   id: string,
-  _version?: number | null,
 };
 
 export type CreateCategoryInput = {
@@ -528,7 +479,6 @@ export type CreateCategoryInput = {
   name: CategoryName,
   type: CategoryType,
   eventId: string,
-  _version?: number | null,
   eventCategoriesId?: string | null,
 };
 
@@ -557,13 +507,11 @@ export type UpdateCategoryInput = {
   name?: CategoryName | null,
   type?: CategoryType | null,
   eventId?: string | null,
-  _version?: number | null,
   eventCategoriesId?: string | null,
 };
 
 export type DeleteCategoryInput = {
   id: string,
-  _version?: number | null,
 };
 
 export type CreateContenderInput = {
@@ -573,7 +521,6 @@ export type CreateContenderInput = {
   numberOfUsersPredictingWin: number,
   numberOfUsersPredictingNom: number,
   numberOfUsersPredictingUnranked: number,
-  _version?: number | null,
   categoryContendersId?: string | null,
   contenderMovieId: string,
   contenderPersonId?: string | null,
@@ -609,7 +556,6 @@ export type UpdateContenderInput = {
   numberOfUsersPredictingWin?: number | null,
   numberOfUsersPredictingNom?: number | null,
   numberOfUsersPredictingUnranked?: number | null,
-  _version?: number | null,
   categoryContendersId?: string | null,
   contenderMovieId: string,
   contenderPersonId?: string | null,
@@ -618,14 +564,12 @@ export type UpdateContenderInput = {
 
 export type DeleteContenderInput = {
   id: string,
-  _version?: number | null,
 };
 
 export type CreateMovieInput = {
   id?: string | null,
   tmdbId: number,
   studio?: string | null,
-  _version?: number | null,
 };
 
 export type ModelMovieConditionInput = {
@@ -640,18 +584,15 @@ export type UpdateMovieInput = {
   id: string,
   tmdbId?: number | null,
   studio?: string | null,
-  _version?: number | null,
 };
 
 export type DeleteMovieInput = {
   id: string,
-  _version?: number | null,
 };
 
 export type CreatePersonInput = {
   id?: string | null,
   tmdbId: number,
-  _version?: number | null,
 };
 
 export type ModelPersonConditionInput = {
@@ -664,19 +605,16 @@ export type ModelPersonConditionInput = {
 export type UpdatePersonInput = {
   id: string,
   tmdbId?: number | null,
-  _version?: number | null,
 };
 
 export type DeletePersonInput = {
   id: string,
-  _version?: number | null,
 };
 
 export type CreateSongInput = {
   id?: string | null,
   title: string,
   artist: string,
-  _version?: number | null,
   songMovieId: string,
 };
 
@@ -693,13 +631,11 @@ export type UpdateSongInput = {
   id: string,
   title?: string | null,
   artist?: string | null,
-  _version?: number | null,
   songMovieId: string,
 };
 
 export type DeleteSongInput = {
   id: string,
-  _version?: number | null,
 };
 
 export type ModelUserFilterInput = {
@@ -725,7 +661,6 @@ export type ModelUserConnection = {
   __typename: "ModelUserConnection",
   items:  Array<User | null >,
   nextToken?: string | null,
-  startedAt?: number | null,
 };
 
 export type ModelRelationshipsFilterInput = {
@@ -751,7 +686,6 @@ export type ModelPredictionSetConnection = {
   __typename: "ModelPredictionSetConnection",
   items:  Array<PredictionSet | null >,
   nextToken?: string | null,
-  startedAt?: number | null,
 };
 
 export type ModelPredictionFilterInput = {
@@ -783,7 +717,6 @@ export type ModelEventConnection = {
   __typename: "ModelEventConnection",
   items:  Array<Event | null >,
   nextToken?: string | null,
-  startedAt?: number | null,
 };
 
 export type ModelCategoryFilterInput = {
@@ -826,7 +759,6 @@ export type ModelMovieConnection = {
   __typename: "ModelMovieConnection",
   items:  Array<Movie | null >,
   nextToken?: string | null,
-  startedAt?: number | null,
 };
 
 export type ModelPersonFilterInput = {
@@ -841,7 +773,6 @@ export type ModelPersonConnection = {
   __typename: "ModelPersonConnection",
   items:  Array<Person | null >,
   nextToken?: string | null,
-  startedAt?: number | null,
 };
 
 export type ModelSongFilterInput = {
@@ -858,7 +789,6 @@ export type ModelSongConnection = {
   __typename: "ModelSongConnection",
   items:  Array<Song | null >,
   nextToken?: string | null,
-  startedAt?: number | null,
 };
 
 export type CreateUserMutationVariables = {
@@ -879,18 +809,13 @@ export type CreateUserMutation = {
     followers?:  {
       __typename: "ModelRelationshipsConnection",
       nextToken?: string | null,
-      startedAt?: number | null,
     } | null,
     following?:  {
       __typename: "ModelRelationshipsConnection",
       nextToken?: string | null,
-      startedAt?: number | null,
     } | null,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
   } | null,
 };
 
@@ -912,18 +837,13 @@ export type UpdateUserMutation = {
     followers?:  {
       __typename: "ModelRelationshipsConnection",
       nextToken?: string | null,
-      startedAt?: number | null,
     } | null,
     following?:  {
       __typename: "ModelRelationshipsConnection",
       nextToken?: string | null,
-      startedAt?: number | null,
     } | null,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
   } | null,
 };
 
@@ -945,18 +865,13 @@ export type DeleteUserMutation = {
     followers?:  {
       __typename: "ModelRelationshipsConnection",
       nextToken?: string | null,
-      startedAt?: number | null,
     } | null,
     following?:  {
       __typename: "ModelRelationshipsConnection",
       nextToken?: string | null,
-      startedAt?: number | null,
     } | null,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
   } | null,
 };
 
@@ -982,9 +897,6 @@ export type CreateRelationshipsMutation = {
       role: UserRole,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     },
     followingUser:  {
       __typename: "User",
@@ -997,15 +909,9 @@ export type CreateRelationshipsMutation = {
       role: UserRole,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     },
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
   } | null,
 };
 
@@ -1031,9 +937,6 @@ export type UpdateRelationshipsMutation = {
       role: UserRole,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     },
     followingUser:  {
       __typename: "User",
@@ -1046,15 +949,9 @@ export type UpdateRelationshipsMutation = {
       role: UserRole,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     },
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
   } | null,
 };
 
@@ -1080,9 +977,6 @@ export type DeleteRelationshipsMutation = {
       role: UserRole,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     },
     followingUser:  {
       __typename: "User",
@@ -1095,15 +989,9 @@ export type DeleteRelationshipsMutation = {
       role: UserRole,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     },
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
   } | null,
 };
 
@@ -1122,13 +1010,9 @@ export type CreatePredictionSetMutation = {
     predictions?:  {
       __typename: "ModelPredictionConnection",
       nextToken?: string | null,
-      startedAt?: number | null,
     } | null,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
   } | null,
 };
 
@@ -1147,13 +1031,9 @@ export type UpdatePredictionSetMutation = {
     predictions?:  {
       __typename: "ModelPredictionConnection",
       nextToken?: string | null,
-      startedAt?: number | null,
     } | null,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
   } | null,
 };
 
@@ -1172,13 +1052,9 @@ export type DeletePredictionSetMutation = {
     predictions?:  {
       __typename: "ModelPredictionConnection",
       nextToken?: string | null,
-      startedAt?: number | null,
     } | null,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
   } | null,
 };
 
@@ -1204,9 +1080,6 @@ export type CreatePredictionMutation = {
       numberOfUsersPredictingUnranked: number,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
       categoryContendersId?: string | null,
       contenderMovieId: string,
       contenderPersonId?: string | null,
@@ -1215,9 +1088,6 @@ export type CreatePredictionMutation = {
     ranking: number,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     predictionSetPredictionsId?: string | null,
     contenderPredictionsId?: string | null,
   } | null,
@@ -1245,9 +1115,6 @@ export type UpdatePredictionMutation = {
       numberOfUsersPredictingUnranked: number,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
       categoryContendersId?: string | null,
       contenderMovieId: string,
       contenderPersonId?: string | null,
@@ -1256,9 +1123,6 @@ export type UpdatePredictionMutation = {
     ranking: number,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     predictionSetPredictionsId?: string | null,
     contenderPredictionsId?: string | null,
   } | null,
@@ -1286,9 +1150,6 @@ export type DeletePredictionMutation = {
       numberOfUsersPredictingUnranked: number,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
       categoryContendersId?: string | null,
       contenderMovieId: string,
       contenderPersonId?: string | null,
@@ -1297,9 +1158,6 @@ export type DeletePredictionMutation = {
     ranking: number,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     predictionSetPredictionsId?: string | null,
     contenderPredictionsId?: string | null,
   } | null,
@@ -1317,7 +1175,6 @@ export type CreateEventMutation = {
     categories?:  {
       __typename: "ModelCategoryConnection",
       nextToken?: string | null,
-      startedAt?: number | null,
     } | null,
     awardsBody: AwardsBody,
     year: number,
@@ -1326,9 +1183,6 @@ export type CreateEventMutation = {
     isActive?: string | null,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
   } | null,
 };
 
@@ -1344,7 +1198,6 @@ export type UpdateEventMutation = {
     categories?:  {
       __typename: "ModelCategoryConnection",
       nextToken?: string | null,
-      startedAt?: number | null,
     } | null,
     awardsBody: AwardsBody,
     year: number,
@@ -1353,9 +1206,6 @@ export type UpdateEventMutation = {
     isActive?: string | null,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
   } | null,
 };
 
@@ -1371,7 +1221,6 @@ export type DeleteEventMutation = {
     categories?:  {
       __typename: "ModelCategoryConnection",
       nextToken?: string | null,
-      startedAt?: number | null,
     } | null,
     awardsBody: AwardsBody,
     year: number,
@@ -1380,9 +1229,6 @@ export type DeleteEventMutation = {
     isActive?: string | null,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
   } | null,
 };
 
@@ -1408,20 +1254,13 @@ export type CreateCategoryMutation = {
       isActive?: string | null,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     },
     contenders?:  {
       __typename: "ModelContenderConnection",
       nextToken?: string | null,
-      startedAt?: number | null,
     } | null,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     eventCategoriesId?: string | null,
   } | null,
 };
@@ -1448,20 +1287,13 @@ export type UpdateCategoryMutation = {
       isActive?: string | null,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     },
     contenders?:  {
       __typename: "ModelContenderConnection",
       nextToken?: string | null,
-      startedAt?: number | null,
     } | null,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     eventCategoriesId?: string | null,
   } | null,
 };
@@ -1488,20 +1320,13 @@ export type DeleteCategoryMutation = {
       isActive?: string | null,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     },
     contenders?:  {
       __typename: "ModelContenderConnection",
       nextToken?: string | null,
-      startedAt?: number | null,
     } | null,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     eventCategoriesId?: string | null,
   } | null,
 };
@@ -1524,9 +1349,6 @@ export type CreateContenderMutation = {
       eventId: string,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
       eventCategoriesId?: string | null,
     },
     movie:  {
@@ -1536,9 +1358,6 @@ export type CreateContenderMutation = {
       studio?: string | null,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     },
     person?:  {
       __typename: "Person",
@@ -1546,9 +1365,6 @@ export type CreateContenderMutation = {
       tmdbId: number,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     } | null,
     song?:  {
       __typename: "Song",
@@ -1557,15 +1373,11 @@ export type CreateContenderMutation = {
       artist: string,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
       songMovieId: string,
     } | null,
     predictions?:  {
       __typename: "ModelPredictionConnection",
       nextToken?: string | null,
-      startedAt?: number | null,
     } | null,
     didReceiveNominationOrWin?: boolean | null,
     numberOfUsersPredictingWin: number,
@@ -1573,9 +1385,6 @@ export type CreateContenderMutation = {
     numberOfUsersPredictingUnranked: number,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     categoryContendersId?: string | null,
     contenderMovieId: string,
     contenderPersonId?: string | null,
@@ -1601,9 +1410,6 @@ export type UpdateContenderMutation = {
       eventId: string,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
       eventCategoriesId?: string | null,
     },
     movie:  {
@@ -1613,9 +1419,6 @@ export type UpdateContenderMutation = {
       studio?: string | null,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     },
     person?:  {
       __typename: "Person",
@@ -1623,9 +1426,6 @@ export type UpdateContenderMutation = {
       tmdbId: number,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     } | null,
     song?:  {
       __typename: "Song",
@@ -1634,15 +1434,11 @@ export type UpdateContenderMutation = {
       artist: string,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
       songMovieId: string,
     } | null,
     predictions?:  {
       __typename: "ModelPredictionConnection",
       nextToken?: string | null,
-      startedAt?: number | null,
     } | null,
     didReceiveNominationOrWin?: boolean | null,
     numberOfUsersPredictingWin: number,
@@ -1650,9 +1446,6 @@ export type UpdateContenderMutation = {
     numberOfUsersPredictingUnranked: number,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     categoryContendersId?: string | null,
     contenderMovieId: string,
     contenderPersonId?: string | null,
@@ -1678,9 +1471,6 @@ export type DeleteContenderMutation = {
       eventId: string,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
       eventCategoriesId?: string | null,
     },
     movie:  {
@@ -1690,9 +1480,6 @@ export type DeleteContenderMutation = {
       studio?: string | null,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     },
     person?:  {
       __typename: "Person",
@@ -1700,9 +1487,6 @@ export type DeleteContenderMutation = {
       tmdbId: number,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     } | null,
     song?:  {
       __typename: "Song",
@@ -1711,15 +1495,11 @@ export type DeleteContenderMutation = {
       artist: string,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
       songMovieId: string,
     } | null,
     predictions?:  {
       __typename: "ModelPredictionConnection",
       nextToken?: string | null,
-      startedAt?: number | null,
     } | null,
     didReceiveNominationOrWin?: boolean | null,
     numberOfUsersPredictingWin: number,
@@ -1727,9 +1507,6 @@ export type DeleteContenderMutation = {
     numberOfUsersPredictingUnranked: number,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     categoryContendersId?: string | null,
     contenderMovieId: string,
     contenderPersonId?: string | null,
@@ -1750,9 +1527,6 @@ export type CreateMovieMutation = {
     studio?: string | null,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
   } | null,
 };
 
@@ -1769,9 +1543,6 @@ export type UpdateMovieMutation = {
     studio?: string | null,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
   } | null,
 };
 
@@ -1788,9 +1559,6 @@ export type DeleteMovieMutation = {
     studio?: string | null,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
   } | null,
 };
 
@@ -1806,9 +1574,6 @@ export type CreatePersonMutation = {
     tmdbId: number,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
   } | null,
 };
 
@@ -1824,9 +1589,6 @@ export type UpdatePersonMutation = {
     tmdbId: number,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
   } | null,
 };
 
@@ -1842,9 +1604,6 @@ export type DeletePersonMutation = {
     tmdbId: number,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
   } | null,
 };
 
@@ -1866,15 +1625,9 @@ export type CreateSongMutation = {
       studio?: string | null,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     },
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     songMovieId: string,
   } | null,
 };
@@ -1897,15 +1650,9 @@ export type UpdateSongMutation = {
       studio?: string | null,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     },
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     songMovieId: string,
   } | null,
 };
@@ -1928,15 +1675,9 @@ export type DeleteSongMutation = {
       studio?: string | null,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     },
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     songMovieId: string,
   } | null,
 };
@@ -1958,18 +1699,13 @@ export type GetUserQuery = {
     followers?:  {
       __typename: "ModelRelationshipsConnection",
       nextToken?: string | null,
-      startedAt?: number | null,
     } | null,
     following?:  {
       __typename: "ModelRelationshipsConnection",
       nextToken?: string | null,
-      startedAt?: number | null,
     } | null,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
   } | null,
 };
 
@@ -1995,42 +1731,8 @@ export type ListUsersQuery = {
       role: UserRole,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     } | null >,
     nextToken?: string | null,
-    startedAt?: number | null,
-  } | null,
-};
-
-export type SyncUsersQueryVariables = {
-  filter?: ModelUserFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-  lastSync?: number | null,
-};
-
-export type SyncUsersQuery = {
-  syncUsers?:  {
-    __typename: "ModelUserConnection",
-    items:  Array< {
-      __typename: "User",
-      id: string,
-      email: string,
-      username?: string | null,
-      name?: string | null,
-      bio?: string | null,
-      image?: string | null,
-      role: UserRole,
-      createdAt: string,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-    } | null >,
-    nextToken?: string | null,
-    startedAt?: number | null,
   } | null,
 };
 
@@ -2055,9 +1757,6 @@ export type GetRelationshipsQuery = {
       role: UserRole,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     },
     followingUser:  {
       __typename: "User",
@@ -2070,15 +1769,9 @@ export type GetRelationshipsQuery = {
       role: UserRole,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     },
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
   } | null,
 };
 
@@ -2100,38 +1793,8 @@ export type ListRelationshipsQuery = {
       followingUserId: string,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     } | null >,
     nextToken?: string | null,
-    startedAt?: number | null,
-  } | null,
-};
-
-export type SyncRelationshipsQueryVariables = {
-  filter?: ModelRelationshipsFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-  lastSync?: number | null,
-};
-
-export type SyncRelationshipsQuery = {
-  syncRelationships?:  {
-    __typename: "ModelRelationshipsConnection",
-    items:  Array< {
-      __typename: "Relationships",
-      id: string,
-      followedUserId: string,
-      followingUserId: string,
-      createdAt: string,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-    } | null >,
-    nextToken?: string | null,
-    startedAt?: number | null,
   } | null,
 };
 
@@ -2149,13 +1812,9 @@ export type GetPredictionSetQuery = {
     predictions?:  {
       __typename: "ModelPredictionConnection",
       nextToken?: string | null,
-      startedAt?: number | null,
     } | null,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
   } | null,
 };
 
@@ -2178,39 +1837,8 @@ export type ListPredictionSetsQuery = {
       categoryId: string,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     } | null >,
     nextToken?: string | null,
-    startedAt?: number | null,
-  } | null,
-};
-
-export type SyncPredictionSetsQueryVariables = {
-  filter?: ModelPredictionSetFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-  lastSync?: number | null,
-};
-
-export type SyncPredictionSetsQuery = {
-  syncPredictionSets?:  {
-    __typename: "ModelPredictionSetConnection",
-    items:  Array< {
-      __typename: "PredictionSet",
-      id: string,
-      userId: string,
-      eventId: string,
-      categoryId: string,
-      createdAt: string,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-    } | null >,
-    nextToken?: string | null,
-    startedAt?: number | null,
   } | null,
 };
 
@@ -2235,9 +1863,6 @@ export type GetPredictionQuery = {
       numberOfUsersPredictingUnranked: number,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
       categoryContendersId?: string | null,
       contenderMovieId: string,
       contenderPersonId?: string | null,
@@ -2246,9 +1871,6 @@ export type GetPredictionQuery = {
     ranking: number,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     predictionSetPredictionsId?: string | null,
     contenderPredictionsId?: string | null,
   } | null,
@@ -2274,44 +1896,10 @@ export type ListPredictionsQuery = {
       ranking: number,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
       predictionSetPredictionsId?: string | null,
       contenderPredictionsId?: string | null,
     } | null >,
     nextToken?: string | null,
-    startedAt?: number | null,
-  } | null,
-};
-
-export type SyncPredictionsQueryVariables = {
-  filter?: ModelPredictionFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-  lastSync?: number | null,
-};
-
-export type SyncPredictionsQuery = {
-  syncPredictions?:  {
-    __typename: "ModelPredictionConnection",
-    items:  Array< {
-      __typename: "Prediction",
-      id: string,
-      userId: string,
-      predictionSetId: string,
-      contenderId: string,
-      ranking: number,
-      createdAt: string,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-      predictionSetPredictionsId?: string | null,
-      contenderPredictionsId?: string | null,
-    } | null >,
-    nextToken?: string | null,
-    startedAt?: number | null,
   } | null,
 };
 
@@ -2326,7 +1914,6 @@ export type GetEventQuery = {
     categories?:  {
       __typename: "ModelCategoryConnection",
       nextToken?: string | null,
-      startedAt?: number | null,
     } | null,
     awardsBody: AwardsBody,
     year: number,
@@ -2335,9 +1922,6 @@ export type GetEventQuery = {
     isActive?: string | null,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
   } | null,
 };
 
@@ -2362,41 +1946,8 @@ export type ListEventsQuery = {
       isActive?: string | null,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     } | null >,
     nextToken?: string | null,
-    startedAt?: number | null,
-  } | null,
-};
-
-export type SyncEventsQueryVariables = {
-  filter?: ModelEventFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-  lastSync?: number | null,
-};
-
-export type SyncEventsQuery = {
-  syncEvents?:  {
-    __typename: "ModelEventConnection",
-    items:  Array< {
-      __typename: "Event",
-      id: string,
-      awardsBody: AwardsBody,
-      year: number,
-      type: EventType,
-      expiration?: string | null,
-      isActive?: string | null,
-      createdAt: string,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-    } | null >,
-    nextToken?: string | null,
-    startedAt?: number | null,
   } | null,
 };
 
@@ -2421,20 +1972,13 @@ export type GetCategoryQuery = {
       isActive?: string | null,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     },
     contenders?:  {
       __typename: "ModelContenderConnection",
       nextToken?: string | null,
-      startedAt?: number | null,
     } | null,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     eventCategoriesId?: string | null,
   } | null,
 };
@@ -2458,41 +2002,9 @@ export type ListCategoriesQuery = {
       eventId: string,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
       eventCategoriesId?: string | null,
     } | null >,
     nextToken?: string | null,
-    startedAt?: number | null,
-  } | null,
-};
-
-export type SyncCategoriesQueryVariables = {
-  filter?: ModelCategoryFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-  lastSync?: number | null,
-};
-
-export type SyncCategoriesQuery = {
-  syncCategories?:  {
-    __typename: "ModelCategoryConnection",
-    items:  Array< {
-      __typename: "Category",
-      id: string,
-      name: CategoryName,
-      type: CategoryType,
-      eventId: string,
-      createdAt: string,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-      eventCategoriesId?: string | null,
-    } | null >,
-    nextToken?: string | null,
-    startedAt?: number | null,
   } | null,
 };
 
@@ -2513,9 +2025,6 @@ export type GetContenderQuery = {
       eventId: string,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
       eventCategoriesId?: string | null,
     },
     movie:  {
@@ -2525,9 +2034,6 @@ export type GetContenderQuery = {
       studio?: string | null,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     },
     person?:  {
       __typename: "Person",
@@ -2535,9 +2041,6 @@ export type GetContenderQuery = {
       tmdbId: number,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     } | null,
     song?:  {
       __typename: "Song",
@@ -2546,15 +2049,11 @@ export type GetContenderQuery = {
       artist: string,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
       songMovieId: string,
     } | null,
     predictions?:  {
       __typename: "ModelPredictionConnection",
       nextToken?: string | null,
-      startedAt?: number | null,
     } | null,
     didReceiveNominationOrWin?: boolean | null,
     numberOfUsersPredictingWin: number,
@@ -2562,9 +2061,6 @@ export type GetContenderQuery = {
     numberOfUsersPredictingUnranked: number,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     categoryContendersId?: string | null,
     contenderMovieId: string,
     contenderPersonId?: string | null,
@@ -2593,49 +2089,12 @@ export type ListContendersQuery = {
       numberOfUsersPredictingUnranked: number,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
       categoryContendersId?: string | null,
       contenderMovieId: string,
       contenderPersonId?: string | null,
       contenderSongId?: string | null,
     } | null >,
     nextToken?: string | null,
-    startedAt?: number | null,
-  } | null,
-};
-
-export type SyncContendersQueryVariables = {
-  filter?: ModelContenderFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-  lastSync?: number | null,
-};
-
-export type SyncContendersQuery = {
-  syncContenders?:  {
-    __typename: "ModelContenderConnection",
-    items:  Array< {
-      __typename: "Contender",
-      id: string,
-      categoryId: string,
-      didReceiveNominationOrWin?: boolean | null,
-      numberOfUsersPredictingWin: number,
-      numberOfUsersPredictingNom: number,
-      numberOfUsersPredictingUnranked: number,
-      createdAt: string,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-      categoryContendersId?: string | null,
-      contenderMovieId: string,
-      contenderPersonId?: string | null,
-      contenderSongId?: string | null,
-    } | null >,
-    nextToken?: string | null,
-    startedAt?: number | null,
   } | null,
 };
 
@@ -2651,9 +2110,6 @@ export type GetMovieQuery = {
     studio?: string | null,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
   } | null,
 };
 
@@ -2675,38 +2131,8 @@ export type ListMoviesQuery = {
       studio?: string | null,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     } | null >,
     nextToken?: string | null,
-    startedAt?: number | null,
-  } | null,
-};
-
-export type SyncMoviesQueryVariables = {
-  filter?: ModelMovieFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-  lastSync?: number | null,
-};
-
-export type SyncMoviesQuery = {
-  syncMovies?:  {
-    __typename: "ModelMovieConnection",
-    items:  Array< {
-      __typename: "Movie",
-      id: string,
-      tmdbId: number,
-      studio?: string | null,
-      createdAt: string,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-    } | null >,
-    nextToken?: string | null,
-    startedAt?: number | null,
   } | null,
 };
 
@@ -2721,9 +2147,6 @@ export type GetPersonQuery = {
     tmdbId: number,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
   } | null,
 };
 
@@ -2744,37 +2167,8 @@ export type ListPeopleQuery = {
       tmdbId: number,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     } | null >,
     nextToken?: string | null,
-    startedAt?: number | null,
-  } | null,
-};
-
-export type SyncPeopleQueryVariables = {
-  filter?: ModelPersonFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-  lastSync?: number | null,
-};
-
-export type SyncPeopleQuery = {
-  syncPeople?:  {
-    __typename: "ModelPersonConnection",
-    items:  Array< {
-      __typename: "Person",
-      id: string,
-      tmdbId: number,
-      createdAt: string,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-    } | null >,
-    nextToken?: string | null,
-    startedAt?: number | null,
   } | null,
 };
 
@@ -2795,15 +2189,9 @@ export type GetSongQuery = {
       studio?: string | null,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     },
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     songMovieId: string,
   } | null,
 };
@@ -2826,40 +2214,9 @@ export type ListSongsQuery = {
       artist: string,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
       songMovieId: string,
     } | null >,
     nextToken?: string | null,
-    startedAt?: number | null,
-  } | null,
-};
-
-export type SyncSongsQueryVariables = {
-  filter?: ModelSongFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-  lastSync?: number | null,
-};
-
-export type SyncSongsQuery = {
-  syncSongs?:  {
-    __typename: "ModelSongConnection",
-    items:  Array< {
-      __typename: "Song",
-      id: string,
-      title: string,
-      artist: string,
-      createdAt: string,
-      updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-      songMovieId: string,
-    } | null >,
-    nextToken?: string | null,
-    startedAt?: number | null,
   } | null,
 };
 
@@ -2881,12 +2238,8 @@ export type QueryRelationshipsByFollowedUserQuery = {
       followingUserId: string,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     } | null >,
     nextToken?: string | null,
-    startedAt?: number | null,
   } | null,
 };
 
@@ -2908,12 +2261,8 @@ export type QueryRelationshipsByFollowingUserQuery = {
       followingUserId: string,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     } | null >,
     nextToken?: string | null,
-    startedAt?: number | null,
   } | null,
 };
 
@@ -2930,18 +2279,13 @@ export type OnCreateUserSubscription = {
     followers?:  {
       __typename: "ModelRelationshipsConnection",
       nextToken?: string | null,
-      startedAt?: number | null,
     } | null,
     following?:  {
       __typename: "ModelRelationshipsConnection",
       nextToken?: string | null,
-      startedAt?: number | null,
     } | null,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
   } | null,
 };
 
@@ -2958,18 +2302,13 @@ export type OnUpdateUserSubscription = {
     followers?:  {
       __typename: "ModelRelationshipsConnection",
       nextToken?: string | null,
-      startedAt?: number | null,
     } | null,
     following?:  {
       __typename: "ModelRelationshipsConnection",
       nextToken?: string | null,
-      startedAt?: number | null,
     } | null,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
   } | null,
 };
 
@@ -2986,18 +2325,13 @@ export type OnDeleteUserSubscription = {
     followers?:  {
       __typename: "ModelRelationshipsConnection",
       nextToken?: string | null,
-      startedAt?: number | null,
     } | null,
     following?:  {
       __typename: "ModelRelationshipsConnection",
       nextToken?: string | null,
-      startedAt?: number | null,
     } | null,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
   } | null,
 };
 
@@ -3018,9 +2352,6 @@ export type OnCreateRelationshipsSubscription = {
       role: UserRole,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     },
     followingUser:  {
       __typename: "User",
@@ -3033,15 +2364,9 @@ export type OnCreateRelationshipsSubscription = {
       role: UserRole,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     },
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
   } | null,
 };
 
@@ -3062,9 +2387,6 @@ export type OnUpdateRelationshipsSubscription = {
       role: UserRole,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     },
     followingUser:  {
       __typename: "User",
@@ -3077,15 +2399,9 @@ export type OnUpdateRelationshipsSubscription = {
       role: UserRole,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     },
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
   } | null,
 };
 
@@ -3106,9 +2422,6 @@ export type OnDeleteRelationshipsSubscription = {
       role: UserRole,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     },
     followingUser:  {
       __typename: "User",
@@ -3121,15 +2434,9 @@ export type OnDeleteRelationshipsSubscription = {
       role: UserRole,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     },
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
   } | null,
 };
 
@@ -3143,13 +2450,9 @@ export type OnCreatePredictionSetSubscription = {
     predictions?:  {
       __typename: "ModelPredictionConnection",
       nextToken?: string | null,
-      startedAt?: number | null,
     } | null,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
   } | null,
 };
 
@@ -3163,13 +2466,9 @@ export type OnUpdatePredictionSetSubscription = {
     predictions?:  {
       __typename: "ModelPredictionConnection",
       nextToken?: string | null,
-      startedAt?: number | null,
     } | null,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
   } | null,
 };
 
@@ -3183,13 +2482,9 @@ export type OnDeletePredictionSetSubscription = {
     predictions?:  {
       __typename: "ModelPredictionConnection",
       nextToken?: string | null,
-      startedAt?: number | null,
     } | null,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
   } | null,
 };
 
@@ -3210,9 +2505,6 @@ export type OnCreatePredictionSubscription = {
       numberOfUsersPredictingUnranked: number,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
       categoryContendersId?: string | null,
       contenderMovieId: string,
       contenderPersonId?: string | null,
@@ -3221,9 +2513,6 @@ export type OnCreatePredictionSubscription = {
     ranking: number,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     predictionSetPredictionsId?: string | null,
     contenderPredictionsId?: string | null,
   } | null,
@@ -3246,9 +2535,6 @@ export type OnUpdatePredictionSubscription = {
       numberOfUsersPredictingUnranked: number,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
       categoryContendersId?: string | null,
       contenderMovieId: string,
       contenderPersonId?: string | null,
@@ -3257,9 +2543,6 @@ export type OnUpdatePredictionSubscription = {
     ranking: number,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     predictionSetPredictionsId?: string | null,
     contenderPredictionsId?: string | null,
   } | null,
@@ -3282,9 +2565,6 @@ export type OnDeletePredictionSubscription = {
       numberOfUsersPredictingUnranked: number,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
       categoryContendersId?: string | null,
       contenderMovieId: string,
       contenderPersonId?: string | null,
@@ -3293,9 +2573,6 @@ export type OnDeletePredictionSubscription = {
     ranking: number,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     predictionSetPredictionsId?: string | null,
     contenderPredictionsId?: string | null,
   } | null,
@@ -3308,7 +2585,6 @@ export type OnCreateEventSubscription = {
     categories?:  {
       __typename: "ModelCategoryConnection",
       nextToken?: string | null,
-      startedAt?: number | null,
     } | null,
     awardsBody: AwardsBody,
     year: number,
@@ -3317,9 +2593,6 @@ export type OnCreateEventSubscription = {
     isActive?: string | null,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
   } | null,
 };
 
@@ -3330,7 +2603,6 @@ export type OnUpdateEventSubscription = {
     categories?:  {
       __typename: "ModelCategoryConnection",
       nextToken?: string | null,
-      startedAt?: number | null,
     } | null,
     awardsBody: AwardsBody,
     year: number,
@@ -3339,9 +2611,6 @@ export type OnUpdateEventSubscription = {
     isActive?: string | null,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
   } | null,
 };
 
@@ -3352,7 +2621,6 @@ export type OnDeleteEventSubscription = {
     categories?:  {
       __typename: "ModelCategoryConnection",
       nextToken?: string | null,
-      startedAt?: number | null,
     } | null,
     awardsBody: AwardsBody,
     year: number,
@@ -3361,9 +2629,6 @@ export type OnDeleteEventSubscription = {
     isActive?: string | null,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
   } | null,
 };
 
@@ -3384,20 +2649,13 @@ export type OnCreateCategorySubscription = {
       isActive?: string | null,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     },
     contenders?:  {
       __typename: "ModelContenderConnection",
       nextToken?: string | null,
-      startedAt?: number | null,
     } | null,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     eventCategoriesId?: string | null,
   } | null,
 };
@@ -3419,20 +2677,13 @@ export type OnUpdateCategorySubscription = {
       isActive?: string | null,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     },
     contenders?:  {
       __typename: "ModelContenderConnection",
       nextToken?: string | null,
-      startedAt?: number | null,
     } | null,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     eventCategoriesId?: string | null,
   } | null,
 };
@@ -3454,20 +2705,13 @@ export type OnDeleteCategorySubscription = {
       isActive?: string | null,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     },
     contenders?:  {
       __typename: "ModelContenderConnection",
       nextToken?: string | null,
-      startedAt?: number | null,
     } | null,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     eventCategoriesId?: string | null,
   } | null,
 };
@@ -3485,9 +2729,6 @@ export type OnCreateContenderSubscription = {
       eventId: string,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
       eventCategoriesId?: string | null,
     },
     movie:  {
@@ -3497,9 +2738,6 @@ export type OnCreateContenderSubscription = {
       studio?: string | null,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     },
     person?:  {
       __typename: "Person",
@@ -3507,9 +2745,6 @@ export type OnCreateContenderSubscription = {
       tmdbId: number,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     } | null,
     song?:  {
       __typename: "Song",
@@ -3518,15 +2753,11 @@ export type OnCreateContenderSubscription = {
       artist: string,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
       songMovieId: string,
     } | null,
     predictions?:  {
       __typename: "ModelPredictionConnection",
       nextToken?: string | null,
-      startedAt?: number | null,
     } | null,
     didReceiveNominationOrWin?: boolean | null,
     numberOfUsersPredictingWin: number,
@@ -3534,9 +2765,6 @@ export type OnCreateContenderSubscription = {
     numberOfUsersPredictingUnranked: number,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     categoryContendersId?: string | null,
     contenderMovieId: string,
     contenderPersonId?: string | null,
@@ -3557,9 +2785,6 @@ export type OnUpdateContenderSubscription = {
       eventId: string,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
       eventCategoriesId?: string | null,
     },
     movie:  {
@@ -3569,9 +2794,6 @@ export type OnUpdateContenderSubscription = {
       studio?: string | null,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     },
     person?:  {
       __typename: "Person",
@@ -3579,9 +2801,6 @@ export type OnUpdateContenderSubscription = {
       tmdbId: number,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     } | null,
     song?:  {
       __typename: "Song",
@@ -3590,15 +2809,11 @@ export type OnUpdateContenderSubscription = {
       artist: string,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
       songMovieId: string,
     } | null,
     predictions?:  {
       __typename: "ModelPredictionConnection",
       nextToken?: string | null,
-      startedAt?: number | null,
     } | null,
     didReceiveNominationOrWin?: boolean | null,
     numberOfUsersPredictingWin: number,
@@ -3606,9 +2821,6 @@ export type OnUpdateContenderSubscription = {
     numberOfUsersPredictingUnranked: number,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     categoryContendersId?: string | null,
     contenderMovieId: string,
     contenderPersonId?: string | null,
@@ -3629,9 +2841,6 @@ export type OnDeleteContenderSubscription = {
       eventId: string,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
       eventCategoriesId?: string | null,
     },
     movie:  {
@@ -3641,9 +2850,6 @@ export type OnDeleteContenderSubscription = {
       studio?: string | null,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     },
     person?:  {
       __typename: "Person",
@@ -3651,9 +2857,6 @@ export type OnDeleteContenderSubscription = {
       tmdbId: number,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     } | null,
     song?:  {
       __typename: "Song",
@@ -3662,15 +2865,11 @@ export type OnDeleteContenderSubscription = {
       artist: string,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
       songMovieId: string,
     } | null,
     predictions?:  {
       __typename: "ModelPredictionConnection",
       nextToken?: string | null,
-      startedAt?: number | null,
     } | null,
     didReceiveNominationOrWin?: boolean | null,
     numberOfUsersPredictingWin: number,
@@ -3678,9 +2877,6 @@ export type OnDeleteContenderSubscription = {
     numberOfUsersPredictingUnranked: number,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     categoryContendersId?: string | null,
     contenderMovieId: string,
     contenderPersonId?: string | null,
@@ -3696,9 +2892,6 @@ export type OnCreateMovieSubscription = {
     studio?: string | null,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
   } | null,
 };
 
@@ -3710,9 +2903,6 @@ export type OnUpdateMovieSubscription = {
     studio?: string | null,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
   } | null,
 };
 
@@ -3724,9 +2914,6 @@ export type OnDeleteMovieSubscription = {
     studio?: string | null,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
   } | null,
 };
 
@@ -3737,9 +2924,6 @@ export type OnCreatePersonSubscription = {
     tmdbId: number,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
   } | null,
 };
 
@@ -3750,9 +2934,6 @@ export type OnUpdatePersonSubscription = {
     tmdbId: number,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
   } | null,
 };
 
@@ -3763,9 +2944,6 @@ export type OnDeletePersonSubscription = {
     tmdbId: number,
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
   } | null,
 };
 
@@ -3782,15 +2960,9 @@ export type OnCreateSongSubscription = {
       studio?: string | null,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     },
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     songMovieId: string,
   } | null,
 };
@@ -3808,15 +2980,9 @@ export type OnUpdateSongSubscription = {
       studio?: string | null,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     },
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     songMovieId: string,
   } | null,
 };
@@ -3834,15 +3000,9 @@ export type OnDeleteSongSubscription = {
       studio?: string | null,
       createdAt: string,
       updatedAt: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
     },
     createdAt: string,
     updatedAt: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     songMovieId: string,
   } | null,
 };

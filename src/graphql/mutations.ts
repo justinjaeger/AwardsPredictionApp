@@ -17,17 +17,12 @@ export const createUser = /* GraphQL */ `
       role
       followers {
         nextToken
-        startedAt
       }
       following {
         nextToken
-        startedAt
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
   }
 `;
@@ -46,17 +41,12 @@ export const updateUser = /* GraphQL */ `
       role
       followers {
         nextToken
-        startedAt
       }
       following {
         nextToken
-        startedAt
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
   }
 `;
@@ -75,17 +65,12 @@ export const deleteUser = /* GraphQL */ `
       role
       followers {
         nextToken
-        startedAt
       }
       following {
         nextToken
-        startedAt
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
   }
 `;
@@ -108,9 +93,6 @@ export const createRelationships = /* GraphQL */ `
         role
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
       }
       followingUser {
         id
@@ -122,15 +104,9 @@ export const createRelationships = /* GraphQL */ `
         role
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
   }
 `;
@@ -153,9 +129,6 @@ export const updateRelationships = /* GraphQL */ `
         role
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
       }
       followingUser {
         id
@@ -167,15 +140,9 @@ export const updateRelationships = /* GraphQL */ `
         role
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
   }
 `;
@@ -198,9 +165,6 @@ export const deleteRelationships = /* GraphQL */ `
         role
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
       }
       followingUser {
         id
@@ -212,15 +176,9 @@ export const deleteRelationships = /* GraphQL */ `
         role
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
   }
 `;
@@ -236,13 +194,9 @@ export const createPredictionSet = /* GraphQL */ `
       categoryId
       predictions {
         nextToken
-        startedAt
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
   }
 `;
@@ -258,13 +212,9 @@ export const updatePredictionSet = /* GraphQL */ `
       categoryId
       predictions {
         nextToken
-        startedAt
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
   }
 `;
@@ -280,13 +230,9 @@ export const deletePredictionSet = /* GraphQL */ `
       categoryId
       predictions {
         nextToken
-        startedAt
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
   }
 `;
@@ -309,9 +255,6 @@ export const createPrediction = /* GraphQL */ `
         numberOfUsersPredictingUnranked
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         categoryContendersId
         contenderMovieId
         contenderPersonId
@@ -320,9 +263,6 @@ export const createPrediction = /* GraphQL */ `
       ranking
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       predictionSetPredictionsId
       contenderPredictionsId
     }
@@ -347,9 +287,6 @@ export const updatePrediction = /* GraphQL */ `
         numberOfUsersPredictingUnranked
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         categoryContendersId
         contenderMovieId
         contenderPersonId
@@ -358,9 +295,6 @@ export const updatePrediction = /* GraphQL */ `
       ranking
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       predictionSetPredictionsId
       contenderPredictionsId
     }
@@ -385,9 +319,6 @@ export const deletePrediction = /* GraphQL */ `
         numberOfUsersPredictingUnranked
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         categoryContendersId
         contenderMovieId
         contenderPersonId
@@ -396,9 +327,6 @@ export const deletePrediction = /* GraphQL */ `
       ranking
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       predictionSetPredictionsId
       contenderPredictionsId
     }
@@ -413,7 +341,6 @@ export const createEvent = /* GraphQL */ `
       id
       categories {
         nextToken
-        startedAt
       }
       awardsBody
       year
@@ -422,9 +349,6 @@ export const createEvent = /* GraphQL */ `
       isActive
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
   }
 `;
@@ -437,7 +361,6 @@ export const updateEvent = /* GraphQL */ `
       id
       categories {
         nextToken
-        startedAt
       }
       awardsBody
       year
@@ -446,9 +369,6 @@ export const updateEvent = /* GraphQL */ `
       isActive
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
   }
 `;
@@ -461,7 +381,6 @@ export const deleteEvent = /* GraphQL */ `
       id
       categories {
         nextToken
-        startedAt
       }
       awardsBody
       year
@@ -470,9 +389,6 @@ export const deleteEvent = /* GraphQL */ `
       isActive
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
   }
 `;
@@ -495,19 +411,12 @@ export const createCategory = /* GraphQL */ `
         isActive
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
       }
       contenders {
         nextToken
-        startedAt
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       eventCategoriesId
     }
   }
@@ -531,19 +440,12 @@ export const updateCategory = /* GraphQL */ `
         isActive
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
       }
       contenders {
         nextToken
-        startedAt
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       eventCategoriesId
     }
   }
@@ -567,19 +469,12 @@ export const deleteCategory = /* GraphQL */ `
         isActive
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
       }
       contenders {
         nextToken
-        startedAt
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       eventCategoriesId
     }
   }
@@ -599,9 +494,6 @@ export const createContender = /* GraphQL */ `
         eventId
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         eventCategoriesId
       }
       movie {
@@ -610,18 +502,12 @@ export const createContender = /* GraphQL */ `
         studio
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
       }
       person {
         id
         tmdbId
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
       }
       song {
         id
@@ -629,14 +515,10 @@ export const createContender = /* GraphQL */ `
         artist
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         songMovieId
       }
       predictions {
         nextToken
-        startedAt
       }
       didReceiveNominationOrWin
       numberOfUsersPredictingWin
@@ -644,9 +526,6 @@ export const createContender = /* GraphQL */ `
       numberOfUsersPredictingUnranked
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       categoryContendersId
       contenderMovieId
       contenderPersonId
@@ -669,9 +548,6 @@ export const updateContender = /* GraphQL */ `
         eventId
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         eventCategoriesId
       }
       movie {
@@ -680,18 +556,12 @@ export const updateContender = /* GraphQL */ `
         studio
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
       }
       person {
         id
         tmdbId
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
       }
       song {
         id
@@ -699,14 +569,10 @@ export const updateContender = /* GraphQL */ `
         artist
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         songMovieId
       }
       predictions {
         nextToken
-        startedAt
       }
       didReceiveNominationOrWin
       numberOfUsersPredictingWin
@@ -714,9 +580,6 @@ export const updateContender = /* GraphQL */ `
       numberOfUsersPredictingUnranked
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       categoryContendersId
       contenderMovieId
       contenderPersonId
@@ -739,9 +602,6 @@ export const deleteContender = /* GraphQL */ `
         eventId
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         eventCategoriesId
       }
       movie {
@@ -750,18 +610,12 @@ export const deleteContender = /* GraphQL */ `
         studio
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
       }
       person {
         id
         tmdbId
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
       }
       song {
         id
@@ -769,14 +623,10 @@ export const deleteContender = /* GraphQL */ `
         artist
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         songMovieId
       }
       predictions {
         nextToken
-        startedAt
       }
       didReceiveNominationOrWin
       numberOfUsersPredictingWin
@@ -784,9 +634,6 @@ export const deleteContender = /* GraphQL */ `
       numberOfUsersPredictingUnranked
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       categoryContendersId
       contenderMovieId
       contenderPersonId
@@ -805,9 +652,6 @@ export const createMovie = /* GraphQL */ `
       studio
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
   }
 `;
@@ -822,9 +666,6 @@ export const updateMovie = /* GraphQL */ `
       studio
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
   }
 `;
@@ -839,9 +680,6 @@ export const deleteMovie = /* GraphQL */ `
       studio
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
   }
 `;
@@ -855,9 +693,6 @@ export const createPerson = /* GraphQL */ `
       tmdbId
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
   }
 `;
@@ -871,9 +706,6 @@ export const updatePerson = /* GraphQL */ `
       tmdbId
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
   }
 `;
@@ -887,9 +719,6 @@ export const deletePerson = /* GraphQL */ `
       tmdbId
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
   }
 `;
@@ -908,15 +737,9 @@ export const createSong = /* GraphQL */ `
         studio
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       songMovieId
     }
   }
@@ -936,15 +759,9 @@ export const updateSong = /* GraphQL */ `
         studio
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       songMovieId
     }
   }
@@ -964,15 +781,9 @@ export const deleteSong = /* GraphQL */ `
         studio
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       songMovieId
     }
   }

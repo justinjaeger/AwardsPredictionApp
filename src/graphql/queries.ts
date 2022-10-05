@@ -14,17 +14,12 @@ export const getUser = /* GraphQL */ `
       role
       followers {
         nextToken
-        startedAt
       }
       following {
         nextToken
-        startedAt
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
   }
 `;
@@ -53,44 +48,8 @@ export const listUsers = /* GraphQL */ `
         role
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
       }
       nextToken
-      startedAt
-    }
-  }
-`;
-export const syncUsers = /* GraphQL */ `
-  query SyncUsers(
-    $filter: ModelUserFilterInput
-    $limit: Int
-    $nextToken: String
-    $lastSync: AWSTimestamp
-  ) {
-    syncUsers(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
-      items {
-        id
-        email
-        username
-        name
-        bio
-        image
-        role
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
-      nextToken
-      startedAt
     }
   }
 `;
@@ -110,9 +69,6 @@ export const getRelationships = /* GraphQL */ `
         role
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
       }
       followingUser {
         id
@@ -124,15 +80,9 @@ export const getRelationships = /* GraphQL */ `
         role
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
   }
 `;
@@ -157,40 +107,8 @@ export const listRelationships = /* GraphQL */ `
         followingUserId
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
       }
       nextToken
-      startedAt
-    }
-  }
-`;
-export const syncRelationships = /* GraphQL */ `
-  query SyncRelationships(
-    $filter: ModelRelationshipsFilterInput
-    $limit: Int
-    $nextToken: String
-    $lastSync: AWSTimestamp
-  ) {
-    syncRelationships(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
-      items {
-        id
-        followedUserId
-        followingUserId
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
-      nextToken
-      startedAt
     }
   }
 `;
@@ -203,13 +121,9 @@ export const getPredictionSet = /* GraphQL */ `
       categoryId
       predictions {
         nextToken
-        startedAt
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
   }
 `;
@@ -235,41 +149,8 @@ export const listPredictionSets = /* GraphQL */ `
         categoryId
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
       }
       nextToken
-      startedAt
-    }
-  }
-`;
-export const syncPredictionSets = /* GraphQL */ `
-  query SyncPredictionSets(
-    $filter: ModelPredictionSetFilterInput
-    $limit: Int
-    $nextToken: String
-    $lastSync: AWSTimestamp
-  ) {
-    syncPredictionSets(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
-      items {
-        id
-        userId
-        eventId
-        categoryId
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
-      nextToken
-      startedAt
     }
   }
 `;
@@ -289,9 +170,6 @@ export const getPrediction = /* GraphQL */ `
         numberOfUsersPredictingUnranked
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         categoryContendersId
         contenderMovieId
         contenderPersonId
@@ -300,9 +178,6 @@ export const getPrediction = /* GraphQL */ `
       ranking
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       predictionSetPredictionsId
       contenderPredictionsId
     }
@@ -331,46 +206,10 @@ export const listPredictions = /* GraphQL */ `
         ranking
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         predictionSetPredictionsId
         contenderPredictionsId
       }
       nextToken
-      startedAt
-    }
-  }
-`;
-export const syncPredictions = /* GraphQL */ `
-  query SyncPredictions(
-    $filter: ModelPredictionFilterInput
-    $limit: Int
-    $nextToken: String
-    $lastSync: AWSTimestamp
-  ) {
-    syncPredictions(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
-      items {
-        id
-        userId
-        predictionSetId
-        contenderId
-        ranking
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        predictionSetPredictionsId
-        contenderPredictionsId
-      }
-      nextToken
-      startedAt
     }
   }
 `;
@@ -380,7 +219,6 @@ export const getEvent = /* GraphQL */ `
       id
       categories {
         nextToken
-        startedAt
       }
       awardsBody
       year
@@ -389,9 +227,6 @@ export const getEvent = /* GraphQL */ `
       isActive
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
   }
 `;
@@ -419,43 +254,8 @@ export const listEvents = /* GraphQL */ `
         isActive
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
       }
       nextToken
-      startedAt
-    }
-  }
-`;
-export const syncEvents = /* GraphQL */ `
-  query SyncEvents(
-    $filter: ModelEventFilterInput
-    $limit: Int
-    $nextToken: String
-    $lastSync: AWSTimestamp
-  ) {
-    syncEvents(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
-      items {
-        id
-        awardsBody
-        year
-        type
-        expiration
-        isActive
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
-      nextToken
-      startedAt
     }
   }
 `;
@@ -475,19 +275,12 @@ export const getCategory = /* GraphQL */ `
         isActive
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
       }
       contenders {
         nextToken
-        startedAt
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       eventCategoriesId
     }
   }
@@ -514,43 +307,9 @@ export const listCategories = /* GraphQL */ `
         eventId
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         eventCategoriesId
       }
       nextToken
-      startedAt
-    }
-  }
-`;
-export const syncCategories = /* GraphQL */ `
-  query SyncCategories(
-    $filter: ModelCategoryFilterInput
-    $limit: Int
-    $nextToken: String
-    $lastSync: AWSTimestamp
-  ) {
-    syncCategories(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
-      items {
-        id
-        name
-        type
-        eventId
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        eventCategoriesId
-      }
-      nextToken
-      startedAt
     }
   }
 `;
@@ -566,9 +325,6 @@ export const getContender = /* GraphQL */ `
         eventId
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         eventCategoriesId
       }
       movie {
@@ -577,18 +333,12 @@ export const getContender = /* GraphQL */ `
         studio
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
       }
       person {
         id
         tmdbId
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
       }
       song {
         id
@@ -596,14 +346,10 @@ export const getContender = /* GraphQL */ `
         artist
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         songMovieId
       }
       predictions {
         nextToken
-        startedAt
       }
       didReceiveNominationOrWin
       numberOfUsersPredictingWin
@@ -611,9 +357,6 @@ export const getContender = /* GraphQL */ `
       numberOfUsersPredictingUnranked
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       categoryContendersId
       contenderMovieId
       contenderPersonId
@@ -645,51 +388,12 @@ export const listContenders = /* GraphQL */ `
         numberOfUsersPredictingUnranked
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         categoryContendersId
         contenderMovieId
         contenderPersonId
         contenderSongId
       }
       nextToken
-      startedAt
-    }
-  }
-`;
-export const syncContenders = /* GraphQL */ `
-  query SyncContenders(
-    $filter: ModelContenderFilterInput
-    $limit: Int
-    $nextToken: String
-    $lastSync: AWSTimestamp
-  ) {
-    syncContenders(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
-      items {
-        id
-        categoryId
-        didReceiveNominationOrWin
-        numberOfUsersPredictingWin
-        numberOfUsersPredictingNom
-        numberOfUsersPredictingUnranked
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        categoryContendersId
-        contenderMovieId
-        contenderPersonId
-        contenderSongId
-      }
-      nextToken
-      startedAt
     }
   }
 `;
@@ -701,9 +405,6 @@ export const getMovie = /* GraphQL */ `
       studio
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
   }
 `;
@@ -728,40 +429,8 @@ export const listMovies = /* GraphQL */ `
         studio
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
       }
       nextToken
-      startedAt
-    }
-  }
-`;
-export const syncMovies = /* GraphQL */ `
-  query SyncMovies(
-    $filter: ModelMovieFilterInput
-    $limit: Int
-    $nextToken: String
-    $lastSync: AWSTimestamp
-  ) {
-    syncMovies(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
-      items {
-        id
-        tmdbId
-        studio
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
-      nextToken
-      startedAt
     }
   }
 `;
@@ -772,9 +441,6 @@ export const getPerson = /* GraphQL */ `
       tmdbId
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
   }
 `;
@@ -798,39 +464,8 @@ export const listPeople = /* GraphQL */ `
         tmdbId
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
       }
       nextToken
-      startedAt
-    }
-  }
-`;
-export const syncPeople = /* GraphQL */ `
-  query SyncPeople(
-    $filter: ModelPersonFilterInput
-    $limit: Int
-    $nextToken: String
-    $lastSync: AWSTimestamp
-  ) {
-    syncPeople(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
-      items {
-        id
-        tmdbId
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
-      nextToken
-      startedAt
     }
   }
 `;
@@ -846,15 +481,9 @@ export const getSong = /* GraphQL */ `
         studio
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       songMovieId
     }
   }
@@ -880,42 +509,9 @@ export const listSongs = /* GraphQL */ `
         artist
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         songMovieId
       }
       nextToken
-      startedAt
-    }
-  }
-`;
-export const syncSongs = /* GraphQL */ `
-  query SyncSongs(
-    $filter: ModelSongFilterInput
-    $limit: Int
-    $nextToken: String
-    $lastSync: AWSTimestamp
-  ) {
-    syncSongs(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
-      items {
-        id
-        title
-        artist
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        songMovieId
-      }
-      nextToken
-      startedAt
     }
   }
 `;
@@ -940,12 +536,8 @@ export const queryRelationshipsByFollowedUser = /* GraphQL */ `
         followingUserId
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
       }
       nextToken
-      startedAt
     }
   }
 `;
@@ -970,12 +562,8 @@ export const queryRelationshipsByFollowingUser = /* GraphQL */ `
         followingUserId
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
       }
       nextToken
-      startedAt
     }
   }
 `;
