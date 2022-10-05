@@ -23,10 +23,6 @@ export const createUser = /* GraphQL */ `
         nextToken
         startedAt
       }
-      leaderboardScores {
-        nextToken
-        startedAt
-      }
       createdAt
       updatedAt
       _version
@@ -56,10 +52,6 @@ export const updateUser = /* GraphQL */ `
         nextToken
         startedAt
       }
-      leaderboardScores {
-        nextToken
-        startedAt
-      }
       createdAt
       updatedAt
       _version
@@ -86,10 +78,6 @@ export const deleteUser = /* GraphQL */ `
         startedAt
       }
       following {
-        nextToken
-        startedAt
-      }
-      leaderboardScores {
         nextToken
         startedAt
       }
@@ -316,9 +304,9 @@ export const createPrediction = /* GraphQL */ `
         id
         categoryId
         didReceiveNominationOrWin
+        numberOfUsersPredictingWin
         numberOfUsersPredictingNom
         numberOfUsersPredictingUnranked
-        numberOfUsersPredictingWin
         createdAt
         updatedAt
         _version
@@ -354,9 +342,9 @@ export const updatePrediction = /* GraphQL */ `
         id
         categoryId
         didReceiveNominationOrWin
+        numberOfUsersPredictingWin
         numberOfUsersPredictingNom
         numberOfUsersPredictingUnranked
-        numberOfUsersPredictingWin
         createdAt
         updatedAt
         _version
@@ -392,9 +380,9 @@ export const deletePrediction = /* GraphQL */ `
         id
         categoryId
         didReceiveNominationOrWin
+        numberOfUsersPredictingWin
         numberOfUsersPredictingNom
         numberOfUsersPredictingUnranked
-        numberOfUsersPredictingWin
         createdAt
         updatedAt
         _version
@@ -427,18 +415,10 @@ export const createEvent = /* GraphQL */ `
         nextToken
         startedAt
       }
-      leaderboard {
-        nextToken
-        startedAt
-      }
       awardsBody
       year
       type
       expiration
-      usersPredicting {
-        nextToken
-        startedAt
-      }
       isActive
       createdAt
       updatedAt
@@ -459,18 +439,10 @@ export const updateEvent = /* GraphQL */ `
         nextToken
         startedAt
       }
-      leaderboard {
-        nextToken
-        startedAt
-      }
       awardsBody
       year
       type
       expiration
-      usersPredicting {
-        nextToken
-        startedAt
-      }
       isActive
       createdAt
       updatedAt
@@ -491,219 +463,16 @@ export const deleteEvent = /* GraphQL */ `
         nextToken
         startedAt
       }
-      leaderboard {
-        nextToken
-        startedAt
-      }
       awardsBody
       year
       type
       expiration
-      usersPredicting {
-        nextToken
-        startedAt
-      }
       isActive
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
-    }
-  }
-`;
-export const createUserPredictingEvent = /* GraphQL */ `
-  mutation CreateUserPredictingEvent(
-    $input: CreateUserPredictingEventInput!
-    $condition: ModelUserPredictingEventConditionInput
-  ) {
-    createUserPredictingEvent(input: $input, condition: $condition) {
-      id
-      eventId
-      userId
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-      eventUsersPredictingId
-    }
-  }
-`;
-export const updateUserPredictingEvent = /* GraphQL */ `
-  mutation UpdateUserPredictingEvent(
-    $input: UpdateUserPredictingEventInput!
-    $condition: ModelUserPredictingEventConditionInput
-  ) {
-    updateUserPredictingEvent(input: $input, condition: $condition) {
-      id
-      eventId
-      userId
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-      eventUsersPredictingId
-    }
-  }
-`;
-export const deleteUserPredictingEvent = /* GraphQL */ `
-  mutation DeleteUserPredictingEvent(
-    $input: DeleteUserPredictingEventInput!
-    $condition: ModelUserPredictingEventConditionInput
-  ) {
-    deleteUserPredictingEvent(input: $input, condition: $condition) {
-      id
-      eventId
-      userId
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-      eventUsersPredictingId
-    }
-  }
-`;
-export const createLeaderboardPosition = /* GraphQL */ `
-  mutation CreateLeaderboardPosition(
-    $input: CreateLeaderboardPositionInput!
-    $condition: ModelLeaderboardPositionConditionInput
-  ) {
-    createLeaderboardPosition(input: $input, condition: $condition) {
-      id
-      userId
-      eventId
-      event {
-        id
-        awardsBody
-        year
-        type
-        expiration
-        isActive
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
-      user {
-        id
-        email
-        username
-        name
-        bio
-        image
-        role
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
-      accuracy
-      ranking
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-      userLeaderboardScoresId
-    }
-  }
-`;
-export const updateLeaderboardPosition = /* GraphQL */ `
-  mutation UpdateLeaderboardPosition(
-    $input: UpdateLeaderboardPositionInput!
-    $condition: ModelLeaderboardPositionConditionInput
-  ) {
-    updateLeaderboardPosition(input: $input, condition: $condition) {
-      id
-      userId
-      eventId
-      event {
-        id
-        awardsBody
-        year
-        type
-        expiration
-        isActive
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
-      user {
-        id
-        email
-        username
-        name
-        bio
-        image
-        role
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
-      accuracy
-      ranking
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-      userLeaderboardScoresId
-    }
-  }
-`;
-export const deleteLeaderboardPosition = /* GraphQL */ `
-  mutation DeleteLeaderboardPosition(
-    $input: DeleteLeaderboardPositionInput!
-    $condition: ModelLeaderboardPositionConditionInput
-  ) {
-    deleteLeaderboardPosition(input: $input, condition: $condition) {
-      id
-      userId
-      eventId
-      event {
-        id
-        awardsBody
-        year
-        type
-        expiration
-        isActive
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
-      user {
-        id
-        email
-        username
-        name
-        bio
-        image
-        role
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
-      accuracy
-      ranking
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-      userLeaderboardScoresId
     }
   }
 `;
@@ -865,18 +634,14 @@ export const createContender = /* GraphQL */ `
         _lastChangedAt
         songMovieId
       }
-      snapshots {
-        nextToken
-        startedAt
-      }
       predictions {
         nextToken
         startedAt
       }
       didReceiveNominationOrWin
+      numberOfUsersPredictingWin
       numberOfUsersPredictingNom
       numberOfUsersPredictingUnranked
-      numberOfUsersPredictingWin
       createdAt
       updatedAt
       _version
@@ -939,18 +704,14 @@ export const updateContender = /* GraphQL */ `
         _lastChangedAt
         songMovieId
       }
-      snapshots {
-        nextToken
-        startedAt
-      }
       predictions {
         nextToken
         startedAt
       }
       didReceiveNominationOrWin
+      numberOfUsersPredictingWin
       numberOfUsersPredictingNom
       numberOfUsersPredictingUnranked
-      numberOfUsersPredictingWin
       createdAt
       updatedAt
       _version
@@ -1013,18 +774,14 @@ export const deleteContender = /* GraphQL */ `
         _lastChangedAt
         songMovieId
       }
-      snapshots {
-        nextToken
-        startedAt
-      }
       predictions {
         nextToken
         startedAt
       }
       didReceiveNominationOrWin
+      numberOfUsersPredictingWin
       numberOfUsersPredictingNom
       numberOfUsersPredictingUnranked
-      numberOfUsersPredictingWin
       createdAt
       updatedAt
       _version
@@ -1034,153 +791,6 @@ export const deleteContender = /* GraphQL */ `
       contenderMovieId
       contenderPersonId
       contenderSongId
-    }
-  }
-`;
-export const createContenderSnapshot = /* GraphQL */ `
-  mutation CreateContenderSnapshot(
-    $input: CreateContenderSnapshotInput!
-    $condition: ModelContenderSnapshotConditionInput
-  ) {
-    createContenderSnapshot(input: $input, condition: $condition) {
-      id
-      contenderId
-      contender {
-        id
-        categoryId
-        didReceiveNominationOrWin
-        numberOfUsersPredictingNom
-        numberOfUsersPredictingUnranked
-        numberOfUsersPredictingWin
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        categoryContendersId
-        contenderMovieId
-        contenderPersonId
-        contenderSongId
-      }
-      categoryId
-      category {
-        id
-        name
-        type
-        eventId
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        eventCategoriesId
-      }
-      numberOfUsersPredictingNom
-      numberOfUsersPredictingUnranked
-      numberOfUsersPredictingWin
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-    }
-  }
-`;
-export const updateContenderSnapshot = /* GraphQL */ `
-  mutation UpdateContenderSnapshot(
-    $input: UpdateContenderSnapshotInput!
-    $condition: ModelContenderSnapshotConditionInput
-  ) {
-    updateContenderSnapshot(input: $input, condition: $condition) {
-      id
-      contenderId
-      contender {
-        id
-        categoryId
-        didReceiveNominationOrWin
-        numberOfUsersPredictingNom
-        numberOfUsersPredictingUnranked
-        numberOfUsersPredictingWin
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        categoryContendersId
-        contenderMovieId
-        contenderPersonId
-        contenderSongId
-      }
-      categoryId
-      category {
-        id
-        name
-        type
-        eventId
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        eventCategoriesId
-      }
-      numberOfUsersPredictingNom
-      numberOfUsersPredictingUnranked
-      numberOfUsersPredictingWin
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-    }
-  }
-`;
-export const deleteContenderSnapshot = /* GraphQL */ `
-  mutation DeleteContenderSnapshot(
-    $input: DeleteContenderSnapshotInput!
-    $condition: ModelContenderSnapshotConditionInput
-  ) {
-    deleteContenderSnapshot(input: $input, condition: $condition) {
-      id
-      contenderId
-      contender {
-        id
-        categoryId
-        didReceiveNominationOrWin
-        numberOfUsersPredictingNom
-        numberOfUsersPredictingUnranked
-        numberOfUsersPredictingWin
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        categoryContendersId
-        contenderMovieId
-        contenderPersonId
-        contenderSongId
-      }
-      categoryId
-      category {
-        id
-        name
-        type
-        eventId
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        eventCategoriesId
-      }
-      numberOfUsersPredictingNom
-      numberOfUsersPredictingUnranked
-      numberOfUsersPredictingWin
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
   }
 `;

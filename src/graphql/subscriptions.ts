@@ -20,10 +20,6 @@ export const onCreateUser = /* GraphQL */ `
         nextToken
         startedAt
       }
-      leaderboardScores {
-        nextToken
-        startedAt
-      }
       createdAt
       updatedAt
       _version
@@ -50,10 +46,6 @@ export const onUpdateUser = /* GraphQL */ `
         nextToken
         startedAt
       }
-      leaderboardScores {
-        nextToken
-        startedAt
-      }
       createdAt
       updatedAt
       _version
@@ -77,10 +69,6 @@ export const onDeleteUser = /* GraphQL */ `
         startedAt
       }
       following {
-        nextToken
-        startedAt
-      }
-      leaderboardScores {
         nextToken
         startedAt
       }
@@ -286,9 +274,9 @@ export const onCreatePrediction = /* GraphQL */ `
         id
         categoryId
         didReceiveNominationOrWin
+        numberOfUsersPredictingWin
         numberOfUsersPredictingNom
         numberOfUsersPredictingUnranked
-        numberOfUsersPredictingWin
         createdAt
         updatedAt
         _version
@@ -321,9 +309,9 @@ export const onUpdatePrediction = /* GraphQL */ `
         id
         categoryId
         didReceiveNominationOrWin
+        numberOfUsersPredictingWin
         numberOfUsersPredictingNom
         numberOfUsersPredictingUnranked
-        numberOfUsersPredictingWin
         createdAt
         updatedAt
         _version
@@ -356,9 +344,9 @@ export const onDeletePrediction = /* GraphQL */ `
         id
         categoryId
         didReceiveNominationOrWin
+        numberOfUsersPredictingWin
         numberOfUsersPredictingNom
         numberOfUsersPredictingUnranked
-        numberOfUsersPredictingWin
         createdAt
         updatedAt
         _version
@@ -388,18 +376,10 @@ export const onCreateEvent = /* GraphQL */ `
         nextToken
         startedAt
       }
-      leaderboard {
-        nextToken
-        startedAt
-      }
       awardsBody
       year
       type
       expiration
-      usersPredicting {
-        nextToken
-        startedAt
-      }
       isActive
       createdAt
       updatedAt
@@ -417,18 +397,10 @@ export const onUpdateEvent = /* GraphQL */ `
         nextToken
         startedAt
       }
-      leaderboard {
-        nextToken
-        startedAt
-      }
       awardsBody
       year
       type
       expiration
-      usersPredicting {
-        nextToken
-        startedAt
-      }
       isActive
       createdAt
       updatedAt
@@ -446,201 +418,16 @@ export const onDeleteEvent = /* GraphQL */ `
         nextToken
         startedAt
       }
-      leaderboard {
-        nextToken
-        startedAt
-      }
       awardsBody
       year
       type
       expiration
-      usersPredicting {
-        nextToken
-        startedAt
-      }
       isActive
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
-    }
-  }
-`;
-export const onCreateUserPredictingEvent = /* GraphQL */ `
-  subscription OnCreateUserPredictingEvent {
-    onCreateUserPredictingEvent {
-      id
-      eventId
-      userId
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-      eventUsersPredictingId
-    }
-  }
-`;
-export const onUpdateUserPredictingEvent = /* GraphQL */ `
-  subscription OnUpdateUserPredictingEvent {
-    onUpdateUserPredictingEvent {
-      id
-      eventId
-      userId
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-      eventUsersPredictingId
-    }
-  }
-`;
-export const onDeleteUserPredictingEvent = /* GraphQL */ `
-  subscription OnDeleteUserPredictingEvent {
-    onDeleteUserPredictingEvent {
-      id
-      eventId
-      userId
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-      eventUsersPredictingId
-    }
-  }
-`;
-export const onCreateLeaderboardPosition = /* GraphQL */ `
-  subscription OnCreateLeaderboardPosition {
-    onCreateLeaderboardPosition {
-      id
-      userId
-      eventId
-      event {
-        id
-        awardsBody
-        year
-        type
-        expiration
-        isActive
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
-      user {
-        id
-        email
-        username
-        name
-        bio
-        image
-        role
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
-      accuracy
-      ranking
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-      userLeaderboardScoresId
-    }
-  }
-`;
-export const onUpdateLeaderboardPosition = /* GraphQL */ `
-  subscription OnUpdateLeaderboardPosition {
-    onUpdateLeaderboardPosition {
-      id
-      userId
-      eventId
-      event {
-        id
-        awardsBody
-        year
-        type
-        expiration
-        isActive
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
-      user {
-        id
-        email
-        username
-        name
-        bio
-        image
-        role
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
-      accuracy
-      ranking
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-      userLeaderboardScoresId
-    }
-  }
-`;
-export const onDeleteLeaderboardPosition = /* GraphQL */ `
-  subscription OnDeleteLeaderboardPosition {
-    onDeleteLeaderboardPosition {
-      id
-      userId
-      eventId
-      event {
-        id
-        awardsBody
-        year
-        type
-        expiration
-        isActive
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
-      user {
-        id
-        email
-        username
-        name
-        bio
-        image
-        role
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
-      accuracy
-      ranking
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-      userLeaderboardScoresId
     }
   }
 `;
@@ -790,18 +577,14 @@ export const onCreateContender = /* GraphQL */ `
         _lastChangedAt
         songMovieId
       }
-      snapshots {
-        nextToken
-        startedAt
-      }
       predictions {
         nextToken
         startedAt
       }
       didReceiveNominationOrWin
+      numberOfUsersPredictingWin
       numberOfUsersPredictingNom
       numberOfUsersPredictingUnranked
-      numberOfUsersPredictingWin
       createdAt
       updatedAt
       _version
@@ -861,18 +644,14 @@ export const onUpdateContender = /* GraphQL */ `
         _lastChangedAt
         songMovieId
       }
-      snapshots {
-        nextToken
-        startedAt
-      }
       predictions {
         nextToken
         startedAt
       }
       didReceiveNominationOrWin
+      numberOfUsersPredictingWin
       numberOfUsersPredictingNom
       numberOfUsersPredictingUnranked
-      numberOfUsersPredictingWin
       createdAt
       updatedAt
       _version
@@ -932,18 +711,14 @@ export const onDeleteContender = /* GraphQL */ `
         _lastChangedAt
         songMovieId
       }
-      snapshots {
-        nextToken
-        startedAt
-      }
       predictions {
         nextToken
         startedAt
       }
       didReceiveNominationOrWin
+      numberOfUsersPredictingWin
       numberOfUsersPredictingNom
       numberOfUsersPredictingUnranked
-      numberOfUsersPredictingWin
       createdAt
       updatedAt
       _version
@@ -953,144 +728,6 @@ export const onDeleteContender = /* GraphQL */ `
       contenderMovieId
       contenderPersonId
       contenderSongId
-    }
-  }
-`;
-export const onCreateContenderSnapshot = /* GraphQL */ `
-  subscription OnCreateContenderSnapshot {
-    onCreateContenderSnapshot {
-      id
-      contenderId
-      contender {
-        id
-        categoryId
-        didReceiveNominationOrWin
-        numberOfUsersPredictingNom
-        numberOfUsersPredictingUnranked
-        numberOfUsersPredictingWin
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        categoryContendersId
-        contenderMovieId
-        contenderPersonId
-        contenderSongId
-      }
-      categoryId
-      category {
-        id
-        name
-        type
-        eventId
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        eventCategoriesId
-      }
-      numberOfUsersPredictingNom
-      numberOfUsersPredictingUnranked
-      numberOfUsersPredictingWin
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-    }
-  }
-`;
-export const onUpdateContenderSnapshot = /* GraphQL */ `
-  subscription OnUpdateContenderSnapshot {
-    onUpdateContenderSnapshot {
-      id
-      contenderId
-      contender {
-        id
-        categoryId
-        didReceiveNominationOrWin
-        numberOfUsersPredictingNom
-        numberOfUsersPredictingUnranked
-        numberOfUsersPredictingWin
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        categoryContendersId
-        contenderMovieId
-        contenderPersonId
-        contenderSongId
-      }
-      categoryId
-      category {
-        id
-        name
-        type
-        eventId
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        eventCategoriesId
-      }
-      numberOfUsersPredictingNom
-      numberOfUsersPredictingUnranked
-      numberOfUsersPredictingWin
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-    }
-  }
-`;
-export const onDeleteContenderSnapshot = /* GraphQL */ `
-  subscription OnDeleteContenderSnapshot {
-    onDeleteContenderSnapshot {
-      id
-      contenderId
-      contender {
-        id
-        categoryId
-        didReceiveNominationOrWin
-        numberOfUsersPredictingNom
-        numberOfUsersPredictingUnranked
-        numberOfUsersPredictingWin
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        categoryContendersId
-        contenderMovieId
-        contenderPersonId
-        contenderSongId
-      }
-      categoryId
-      category {
-        id
-        name
-        type
-        eventId
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        eventCategoriesId
-      }
-      numberOfUsersPredictingNom
-      numberOfUsersPredictingUnranked
-      numberOfUsersPredictingWin
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
   }
 `;

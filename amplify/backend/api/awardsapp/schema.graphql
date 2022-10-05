@@ -96,7 +96,6 @@ type User @model @auth(rules: [{allow: public}]) {
     # under the hood, @hasMany configures a default secondary index on the related table to enable you to query the related model from the source model
     followers: [Relationships] @hasMany(indexName: "byFollowedUser", fields: ["id"])
     following: [Relationships] @hasMany(indexName: "byFollowingUser", fields: ["id"])
-    leaderboardScores: [LeaderboardPosition] @hasMany
 }
 
 type Relationships @model @auth(rules: [{ allow: public }]) {
@@ -133,35 +132,11 @@ type Prediction @model @auth(rules: [{ allow: public }]) {
 type Event @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
     categories: [Category] @hasMany # Retrieve categories on an event record
-    leaderboard: [LeaderboardPosition] @hasMany(indexName: "byEventByRanking", fields: ["id"])
     awardsBody: AwardsBody!
     year: Int!
     type: EventType!
     expiration: AWSDateTime
-    usersPredicting: [UserPredictingEvent] @hasMany
     isActive: String @default(value: "x") # essentially boolean
-}
-
-# Created to keep track of how many users are predicting an event (logged when user clicks event)
-type UserPredictingEvent @model @auth(rules: [{ allow: public }]) {
-    id: ID! @primaryKey(sortKeyFields: ["eventId", "userId"])
-    eventId: ID!
-    userId: ID!
-}
-
-# a record of the user's leaderboard ranking
-type LeaderboardPosition @model @auth(rules: [{ allow: public }]) {
-    id: ID! @primaryKey(sortKeyFields: ["userId", "eventId"])
-    userId: ID!
-    eventId: ID! @index( # because we want it to sort the results by ranking
-        name: "byEventByRanking", 
-        queryField: "queryLeaderboardPositionByEventByRanking", 
-        sortKeyFields: ["ranking"],
-    )
-    event: Event! @belongsTo(fields: ["eventId"])
-    user: User! @belongsTo(fields: ["userId"])
-    accuracy: String
-    ranking: Int
 }
 
 type Category @model @auth(rules: [{ allow: public }]) {
@@ -181,33 +156,12 @@ type Contender @model @auth(rules: [{ allow: public }]) {
     movie: Movie! @hasOne
     person: Person @hasOne # optional - only applies to acting categories
     song: Song @hasOne # optional - only applies to the song category
-    snapshots: [ContenderSnapshot] @hasMany(indexName: "byContenderByDate", fields: ["id"])
     predictions: [Prediction] @hasMany
     didReceiveNominationOrWin: Boolean
     # Stats for displaying leaderboard (must update manually when we change predictions)
-    numberOfUsersPredictingNom: Int
-    numberOfUsersPredictingUnranked: Int
-    numberOfUsersPredictingWin: Int
-}
-
-# Purpose of this table is to retrieve Global Prediction History
-# write to ContenderSnapshot at certain time every day
-# to query for contender snapshot, we need to first have the list of contenders, then get the "snapshots" property from it and pass the date we want
-type ContenderSnapshot @model @auth(rules: [{ allow: public }]) {
-    id: ID! @primaryKey
-    contenderId: ID! @index(
-        name: "byContenderByDate",
-        queryField: "queryContenderSnapshotByContenderByDate",
-        sortKeyFields: ["createdAt"],
-    )
-    contender: Contender! @belongsTo(fields: ["contenderId"])
-    categoryId: ID!
-    category: Category! @hasOne(fields: ["categoryId"])
-    # Stats for displaying leaderboard (must update manually when we change predictions)
-    numberOfUsersPredictingNom: Int
-    numberOfUsersPredictingUnranked: Int
-    numberOfUsersPredictingWin: Int
-    createdAt: AWSDateTime
+    numberOfUsersPredictingWin: Int!
+    numberOfUsersPredictingNom: Int!
+    numberOfUsersPredictingUnranked: Int!
 }
 
 type Movie @model @auth(rules: [{ allow: public }]) {
@@ -227,4 +181,5 @@ type Song @model @auth(rules: [{ allow: public }]) {
     artist: String!
     movie: Movie! @hasOne
 }
+
 
