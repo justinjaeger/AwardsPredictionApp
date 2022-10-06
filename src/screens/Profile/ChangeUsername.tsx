@@ -43,10 +43,10 @@ const ChangeUsername = () => {
     setLoading(true);
     if (!user) return;
     const { data: u } = await ApiServices.updateUsername(user.id, username);
+    setLoading(false);
     if (!u) return;
     Snackbar.success('Username updated');
     navigation.goBack();
-    setLoading(false);
   };
 
   return (

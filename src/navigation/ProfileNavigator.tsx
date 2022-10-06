@@ -2,6 +2,7 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import Profile from '../screens/Profile';
 import ChangeUsername from '../screens/Profile/ChangeUsername';
+import BackButton from '../components/Buttons/BackButton';
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -17,7 +18,7 @@ const ProfileNavigator = () => (
     <Screen
       name="ChangeUsername"
       component={ChangeUsername}
-      options={{ headerTitle: 'Create Username' }}
+      options={{ headerTitle: 'Create Username', headerLeft: BackButton }}
     />
   </Navigator>
 );

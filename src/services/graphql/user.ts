@@ -1,4 +1,4 @@
-import { API, graphqlOperation } from 'aws-amplify';
+import { API } from 'aws-amplify';
 import { GraphQLQuery } from '@aws-amplify/api';
 import {
   CreateUserInput,
@@ -14,9 +14,9 @@ import { User } from '../../models';
 
 export const getAllUsers = async (): Promise<iApiResponse<User[]>> => {
   try {
-    const res = await API.graphql<GraphQLQuery<ListUsersQuery>>(
-      graphqlOperation(queries.listUsers),
-    );
+    const res = await API.graphql<GraphQLQuery<ListUsersQuery>>({
+      query: queries.listUsers,
+    });
     if (!res.data) {
       throw new Error(JSON.stringify(res.errors));
     }
@@ -32,9 +32,10 @@ export const getAllUsers = async (): Promise<iApiResponse<User[]>> => {
 
 export const getUserById = async (id: string): Promise<iApiResponse<User>> => {
   try {
-    const res = await API.graphql<GraphQLQuery<GetUserQuery>>(
-      graphqlOperation(queries.getUser, { id }),
-    );
+    const res = await API.graphql<GraphQLQuery<GetUserQuery>>({
+      query: queries.getUser,
+      variables: { id },
+    });
     if (!res.data) {
       throw new Error(JSON.stringify(res.errors));
     }
@@ -47,9 +48,10 @@ export const getUserById = async (id: string): Promise<iApiResponse<User>> => {
 
 export const getUserByEmail = async (email: string): Promise<iApiResponse<User>> => {
   try {
-    const res = await API.graphql<GraphQLQuery<ListUsersQuery>>(
-      graphqlOperation(queries.listUsers, { email }),
-    );
+    const res = await API.graphql<GraphQLQuery<ListUsersQuery>>({
+      query: queries.listUsers,
+      variables: { email },
+    });
     if (!res.data) {
       throw new Error(JSON.stringify(res.errors));
     }
@@ -69,10 +71,10 @@ export const getUserByEmail = async (email: string): Promise<iApiResponse<User>>
 // create a new user after confirming email
 export const createUser = async (input: CreateUserInput): Promise<iApiResponse<User>> => {
   try {
-    const res = await API.graphql<GraphQLQuery<CreateUserMutation>>(
-      graphqlOperation(mutations.createUser, { input }),
-    );
-    console.error('res', res);
+    const res = await API.graphql<GraphQLQuery<CreateUserMutation>>({
+      query: mutations.createUser,
+      variables: { input },
+    });
     if (!res.data) {
       throw new Error(JSON.stringify(res.errors));
     }
@@ -98,9 +100,10 @@ export const updateUsername = async (
       throw new Error('This username is already taken');
     }
     // If not taken, create new username
-    const res = await API.graphql<GraphQLQuery<UpdateUserMutation>>(
-      graphqlOperation(mutations.updateUser, { input: { id, username } }),
-    );
+    const res = await API.graphql<GraphQLQuery<UpdateUserMutation>>({
+      query: mutations.updateUser,
+      variables: { input: { id, username } },
+    });
     if (res.data) {
       const user = res.data.updateUser;
       if (user) {
@@ -117,9 +120,11 @@ export const getUsersByUsername = async (
   username: string,
 ): Promise<iApiResponse<User[]>> => {
   try {
-    const res = await API.graphql<GraphQLQuery<ListUsersQuery>>(
-      graphqlOperation(queries.listUsers, { username }),
-    );
+    const filter = { username: { eq: username } };
+    const res = await API.graphql<GraphQLQuery<ListUsersQuery>>({
+      query: queries.listUsers,
+      variables: { filter },
+    });
     if (!res.data) {
       throw new Error(JSON.stringify(res.errors));
     }

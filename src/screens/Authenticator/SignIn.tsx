@@ -34,7 +34,6 @@ const SignIn = (p: any) => {
     setLoading(true);
     setContextEmail(email);
     AuthServices.signIn(email, password).then(async (res) => {
-      console.error('ressssss', res);
       if (res.status === 'success') {
         if (res.message) {
           // display message that verification code has been sent to email
@@ -44,9 +43,7 @@ const SignIn = (p: any) => {
             duration: 5000,
           });
         } else {
-          console.error('else');
           const { data: user } = await ApiServices.getUserByEmail(email);
-          console.error('user', user);
           if (!user) return;
           dispatch(loginUser({ userId: user.id, userEmail: user.email }));
           goBack();

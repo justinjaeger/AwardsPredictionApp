@@ -21,12 +21,10 @@ const Profile = () => {
 
   useEffect(() => {
     if (!userId) return;
-    console.error('userid', userId);
     ApiServices.getUserById(userId).then(({ data: u }) => {
-      //   console.error('u', u);
       setUser(u);
     });
-  }, []);
+  }, [userId]);
 
   const logIn = () => {
     navigation.navigate('Authenticator');

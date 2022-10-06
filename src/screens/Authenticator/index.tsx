@@ -12,8 +12,6 @@ import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../../store';
 import { ScrollView, View } from 'react-native';
 import COLORS from '../../constants/colors';
-import AuthServices from '../../services/auth';
-import Snackbar from '../../components/Snackbar';
 
 const headerTitles: { [key in iAuthState]: string } = {
   signIn: 'Log In',
@@ -28,7 +26,7 @@ const headerTitles: { [key in iAuthState]: string } = {
 
 const Auth = () => {
   const navigation = useNavigation();
-  const { isLoggedIn, userEmail } = useAuth();
+  const { userEmail } = useAuth();
   const [authState, setAuthState] = useState<iAuthState>('signIn');
 
   useLayoutEffect(() => {
@@ -41,18 +39,6 @@ const Auth = () => {
   useEffect(() => {
     setAuthState(userEmail ? 'signIn' : 'signUp');
   }, [userEmail]);
-
-  useEffect(() => {
-    // if this scenario occurs, something is wrong and user should be removed
-    // this might happen if the Authenticator thinks the user is logged in, but the sign up request has failed
-    if (isLoggedIn === false && authState === 'signedIn') {
-      // AuthServices.deleteUser();
-      // setAuthState('signUp');
-      AuthServices.signOut();
-      setAuthState('signIn');
-      Snackbar.error('Sorry, something went wrong. Please try signing up again.');
-    }
-  }, [isLoggedIn, authState]);
 
   return (
     <AuthProvider>
