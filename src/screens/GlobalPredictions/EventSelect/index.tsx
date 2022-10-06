@@ -1,10 +1,11 @@
 import { useNavigation } from '@react-navigation/native';
-import { DataStore } from 'aws-amplify';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { ScrollView } from 'react-native';
 import { TouchableText } from '../../../components/Buttons';
 import { AWARDS_BODY_TO_STRING } from '../../../constants/awardsBodies';
 import { AwardsBody, Event } from '../../../models';
+import ApiServices from '../../../services/graphql';
+import { useAsyncEffect } from '../../../util/hooks';
 import sortByObjectOrder from '../../../util/sortByObjectOrder';
 import { eventToString } from '../../../util/stringConversions';
 
@@ -13,11 +14,11 @@ const EventSelect = () => {
 
   const [events, setEvents] = useState<Event[]>([]);
 
-  useEffect(() => {
-    const sub = DataStore.observeQuery(Event).subscribe(({ items }) => {
-      setEvents(items);
-    });
-    return () => sub.unsubscribe();
+  useAsyncEffect(async () => {
+    const { data: es } = await ApiServices.getAllEvents();
+    if (es) {
+      setEvents(es);
+    }
   }, []);
 
   const onSelectEvent = (e: Event) => {

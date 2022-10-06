@@ -13,9 +13,23 @@ export const getUser = /* GraphQL */ `
       image
       role
       followers {
+        items {
+          id
+          followedUserId
+          followingUserId
+          createdAt
+          updatedAt
+        }
         nextToken
       }
       following {
+        items {
+          id
+          followedUserId
+          followingUserId
+          createdAt
+          updatedAt
+        }
         nextToken
       }
       createdAt
@@ -46,6 +60,12 @@ export const listUsers = /* GraphQL */ `
         bio
         image
         role
+        followers {
+          nextToken
+        }
+        following {
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -67,6 +87,12 @@ export const getRelationships = /* GraphQL */ `
         bio
         image
         role
+        followers {
+          nextToken
+        }
+        following {
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -78,6 +104,12 @@ export const getRelationships = /* GraphQL */ `
         bio
         image
         role
+        followers {
+          nextToken
+        }
+        following {
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -105,6 +137,28 @@ export const listRelationships = /* GraphQL */ `
         id
         followedUserId
         followingUserId
+        followedUser {
+          id
+          email
+          username
+          name
+          bio
+          image
+          role
+          createdAt
+          updatedAt
+        }
+        followingUser {
+          id
+          email
+          username
+          name
+          bio
+          image
+          role
+          createdAt
+          updatedAt
+        }
         createdAt
         updatedAt
       }
@@ -120,6 +174,17 @@ export const getPredictionSet = /* GraphQL */ `
       eventId
       categoryId
       predictions {
+        items {
+          id
+          userId
+          predictionSetId
+          contenderId
+          ranking
+          createdAt
+          updatedAt
+          predictionSetPredictionsId
+          contenderPredictionsId
+        }
         nextToken
       }
       createdAt
@@ -147,6 +212,9 @@ export const listPredictionSets = /* GraphQL */ `
         userId
         eventId
         categoryId
+        predictions {
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -164,6 +232,39 @@ export const getPrediction = /* GraphQL */ `
       contender {
         id
         categoryId
+        category {
+          id
+          name
+          type
+          eventId
+          createdAt
+          updatedAt
+          eventCategoriesId
+        }
+        movie {
+          id
+          tmdbId
+          studio
+          createdAt
+          updatedAt
+        }
+        person {
+          id
+          tmdbId
+          createdAt
+          updatedAt
+        }
+        song {
+          id
+          title
+          artist
+          createdAt
+          updatedAt
+          songMovieId
+        }
+        predictions {
+          nextToken
+        }
         didReceiveNominationOrWin
         numberOfUsersPredictingWin
         numberOfUsersPredictingNom
@@ -203,6 +304,20 @@ export const listPredictions = /* GraphQL */ `
         userId
         predictionSetId
         contenderId
+        contender {
+          id
+          categoryId
+          didReceiveNominationOrWin
+          numberOfUsersPredictingWin
+          numberOfUsersPredictingNom
+          numberOfUsersPredictingUnranked
+          createdAt
+          updatedAt
+          categoryContendersId
+          contenderMovieId
+          contenderPersonId
+          contenderSongId
+        }
         ranking
         createdAt
         updatedAt
@@ -218,6 +333,15 @@ export const getEvent = /* GraphQL */ `
     getEvent(id: $id) {
       id
       categories {
+        items {
+          id
+          name
+          type
+          eventId
+          createdAt
+          updatedAt
+          eventCategoriesId
+        }
         nextToken
       }
       awardsBody
@@ -247,6 +371,9 @@ export const listEvents = /* GraphQL */ `
     ) {
       items {
         id
+        categories {
+          nextToken
+        }
         awardsBody
         year
         type
@@ -268,6 +395,9 @@ export const getCategory = /* GraphQL */ `
       eventId
       event {
         id
+        categories {
+          nextToken
+        }
         awardsBody
         year
         type
@@ -277,6 +407,20 @@ export const getCategory = /* GraphQL */ `
         updatedAt
       }
       contenders {
+        items {
+          id
+          categoryId
+          didReceiveNominationOrWin
+          numberOfUsersPredictingWin
+          numberOfUsersPredictingNom
+          numberOfUsersPredictingUnranked
+          createdAt
+          updatedAt
+          categoryContendersId
+          contenderMovieId
+          contenderPersonId
+          contenderSongId
+        }
         nextToken
       }
       createdAt
@@ -305,6 +449,19 @@ export const listCategories = /* GraphQL */ `
         name
         type
         eventId
+        event {
+          id
+          awardsBody
+          year
+          type
+          expiration
+          isActive
+          createdAt
+          updatedAt
+        }
+        contenders {
+          nextToken
+        }
         createdAt
         updatedAt
         eventCategoriesId
@@ -323,6 +480,19 @@ export const getContender = /* GraphQL */ `
         name
         type
         eventId
+        event {
+          id
+          awardsBody
+          year
+          type
+          expiration
+          isActive
+          createdAt
+          updatedAt
+        }
+        contenders {
+          nextToken
+        }
         createdAt
         updatedAt
         eventCategoriesId
@@ -344,11 +514,29 @@ export const getContender = /* GraphQL */ `
         id
         title
         artist
+        movie {
+          id
+          tmdbId
+          studio
+          createdAt
+          updatedAt
+        }
         createdAt
         updatedAt
         songMovieId
       }
       predictions {
+        items {
+          id
+          userId
+          predictionSetId
+          contenderId
+          ranking
+          createdAt
+          updatedAt
+          predictionSetPredictionsId
+          contenderPredictionsId
+        }
         nextToken
       }
       didReceiveNominationOrWin
@@ -382,6 +570,39 @@ export const listContenders = /* GraphQL */ `
       items {
         id
         categoryId
+        category {
+          id
+          name
+          type
+          eventId
+          createdAt
+          updatedAt
+          eventCategoriesId
+        }
+        movie {
+          id
+          tmdbId
+          studio
+          createdAt
+          updatedAt
+        }
+        person {
+          id
+          tmdbId
+          createdAt
+          updatedAt
+        }
+        song {
+          id
+          title
+          artist
+          createdAt
+          updatedAt
+          songMovieId
+        }
+        predictions {
+          nextToken
+        }
         didReceiveNominationOrWin
         numberOfUsersPredictingWin
         numberOfUsersPredictingNom
@@ -507,6 +728,13 @@ export const listSongs = /* GraphQL */ `
         id
         title
         artist
+        movie {
+          id
+          tmdbId
+          studio
+          createdAt
+          updatedAt
+        }
         createdAt
         updatedAt
         songMovieId
@@ -534,6 +762,28 @@ export const queryRelationshipsByFollowedUser = /* GraphQL */ `
         id
         followedUserId
         followingUserId
+        followedUser {
+          id
+          email
+          username
+          name
+          bio
+          image
+          role
+          createdAt
+          updatedAt
+        }
+        followingUser {
+          id
+          email
+          username
+          name
+          bio
+          image
+          role
+          createdAt
+          updatedAt
+        }
         createdAt
         updatedAt
       }
@@ -560,6 +810,28 @@ export const queryRelationshipsByFollowingUser = /* GraphQL */ `
         id
         followedUserId
         followingUserId
+        followedUser {
+          id
+          email
+          username
+          name
+          bio
+          image
+          role
+          createdAt
+          updatedAt
+        }
+        followingUser {
+          id
+          email
+          username
+          name
+          bio
+          image
+          role
+          createdAt
+          updatedAt
+        }
         createdAt
         updatedAt
       }

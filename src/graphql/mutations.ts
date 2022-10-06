@@ -16,9 +16,23 @@ export const createUser = /* GraphQL */ `
       image
       role
       followers {
+        items {
+          id
+          followedUserId
+          followingUserId
+          createdAt
+          updatedAt
+        }
         nextToken
       }
       following {
+        items {
+          id
+          followedUserId
+          followingUserId
+          createdAt
+          updatedAt
+        }
         nextToken
       }
       createdAt
@@ -40,9 +54,23 @@ export const updateUser = /* GraphQL */ `
       image
       role
       followers {
+        items {
+          id
+          followedUserId
+          followingUserId
+          createdAt
+          updatedAt
+        }
         nextToken
       }
       following {
+        items {
+          id
+          followedUserId
+          followingUserId
+          createdAt
+          updatedAt
+        }
         nextToken
       }
       createdAt
@@ -64,9 +92,23 @@ export const deleteUser = /* GraphQL */ `
       image
       role
       followers {
+        items {
+          id
+          followedUserId
+          followingUserId
+          createdAt
+          updatedAt
+        }
         nextToken
       }
       following {
+        items {
+          id
+          followedUserId
+          followingUserId
+          createdAt
+          updatedAt
+        }
         nextToken
       }
       createdAt
@@ -91,6 +133,12 @@ export const createRelationships = /* GraphQL */ `
         bio
         image
         role
+        followers {
+          nextToken
+        }
+        following {
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -102,6 +150,12 @@ export const createRelationships = /* GraphQL */ `
         bio
         image
         role
+        followers {
+          nextToken
+        }
+        following {
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -127,6 +181,12 @@ export const updateRelationships = /* GraphQL */ `
         bio
         image
         role
+        followers {
+          nextToken
+        }
+        following {
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -138,6 +198,12 @@ export const updateRelationships = /* GraphQL */ `
         bio
         image
         role
+        followers {
+          nextToken
+        }
+        following {
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -163,6 +229,12 @@ export const deleteRelationships = /* GraphQL */ `
         bio
         image
         role
+        followers {
+          nextToken
+        }
+        following {
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -174,6 +246,12 @@ export const deleteRelationships = /* GraphQL */ `
         bio
         image
         role
+        followers {
+          nextToken
+        }
+        following {
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -193,6 +271,17 @@ export const createPredictionSet = /* GraphQL */ `
       eventId
       categoryId
       predictions {
+        items {
+          id
+          userId
+          predictionSetId
+          contenderId
+          ranking
+          createdAt
+          updatedAt
+          predictionSetPredictionsId
+          contenderPredictionsId
+        }
         nextToken
       }
       createdAt
@@ -211,6 +300,17 @@ export const updatePredictionSet = /* GraphQL */ `
       eventId
       categoryId
       predictions {
+        items {
+          id
+          userId
+          predictionSetId
+          contenderId
+          ranking
+          createdAt
+          updatedAt
+          predictionSetPredictionsId
+          contenderPredictionsId
+        }
         nextToken
       }
       createdAt
@@ -229,6 +329,17 @@ export const deletePredictionSet = /* GraphQL */ `
       eventId
       categoryId
       predictions {
+        items {
+          id
+          userId
+          predictionSetId
+          contenderId
+          ranking
+          createdAt
+          updatedAt
+          predictionSetPredictionsId
+          contenderPredictionsId
+        }
         nextToken
       }
       createdAt
@@ -249,6 +360,39 @@ export const createPrediction = /* GraphQL */ `
       contender {
         id
         categoryId
+        category {
+          id
+          name
+          type
+          eventId
+          createdAt
+          updatedAt
+          eventCategoriesId
+        }
+        movie {
+          id
+          tmdbId
+          studio
+          createdAt
+          updatedAt
+        }
+        person {
+          id
+          tmdbId
+          createdAt
+          updatedAt
+        }
+        song {
+          id
+          title
+          artist
+          createdAt
+          updatedAt
+          songMovieId
+        }
+        predictions {
+          nextToken
+        }
         didReceiveNominationOrWin
         numberOfUsersPredictingWin
         numberOfUsersPredictingNom
@@ -281,6 +425,39 @@ export const updatePrediction = /* GraphQL */ `
       contender {
         id
         categoryId
+        category {
+          id
+          name
+          type
+          eventId
+          createdAt
+          updatedAt
+          eventCategoriesId
+        }
+        movie {
+          id
+          tmdbId
+          studio
+          createdAt
+          updatedAt
+        }
+        person {
+          id
+          tmdbId
+          createdAt
+          updatedAt
+        }
+        song {
+          id
+          title
+          artist
+          createdAt
+          updatedAt
+          songMovieId
+        }
+        predictions {
+          nextToken
+        }
         didReceiveNominationOrWin
         numberOfUsersPredictingWin
         numberOfUsersPredictingNom
@@ -313,6 +490,39 @@ export const deletePrediction = /* GraphQL */ `
       contender {
         id
         categoryId
+        category {
+          id
+          name
+          type
+          eventId
+          createdAt
+          updatedAt
+          eventCategoriesId
+        }
+        movie {
+          id
+          tmdbId
+          studio
+          createdAt
+          updatedAt
+        }
+        person {
+          id
+          tmdbId
+          createdAt
+          updatedAt
+        }
+        song {
+          id
+          title
+          artist
+          createdAt
+          updatedAt
+          songMovieId
+        }
+        predictions {
+          nextToken
+        }
         didReceiveNominationOrWin
         numberOfUsersPredictingWin
         numberOfUsersPredictingNom
@@ -340,6 +550,15 @@ export const createEvent = /* GraphQL */ `
     createEvent(input: $input, condition: $condition) {
       id
       categories {
+        items {
+          id
+          name
+          type
+          eventId
+          createdAt
+          updatedAt
+          eventCategoriesId
+        }
         nextToken
       }
       awardsBody
@@ -360,6 +579,15 @@ export const updateEvent = /* GraphQL */ `
     updateEvent(input: $input, condition: $condition) {
       id
       categories {
+        items {
+          id
+          name
+          type
+          eventId
+          createdAt
+          updatedAt
+          eventCategoriesId
+        }
         nextToken
       }
       awardsBody
@@ -380,6 +608,15 @@ export const deleteEvent = /* GraphQL */ `
     deleteEvent(input: $input, condition: $condition) {
       id
       categories {
+        items {
+          id
+          name
+          type
+          eventId
+          createdAt
+          updatedAt
+          eventCategoriesId
+        }
         nextToken
       }
       awardsBody
@@ -404,6 +641,9 @@ export const createCategory = /* GraphQL */ `
       eventId
       event {
         id
+        categories {
+          nextToken
+        }
         awardsBody
         year
         type
@@ -413,6 +653,20 @@ export const createCategory = /* GraphQL */ `
         updatedAt
       }
       contenders {
+        items {
+          id
+          categoryId
+          didReceiveNominationOrWin
+          numberOfUsersPredictingWin
+          numberOfUsersPredictingNom
+          numberOfUsersPredictingUnranked
+          createdAt
+          updatedAt
+          categoryContendersId
+          contenderMovieId
+          contenderPersonId
+          contenderSongId
+        }
         nextToken
       }
       createdAt
@@ -433,6 +687,9 @@ export const updateCategory = /* GraphQL */ `
       eventId
       event {
         id
+        categories {
+          nextToken
+        }
         awardsBody
         year
         type
@@ -442,6 +699,20 @@ export const updateCategory = /* GraphQL */ `
         updatedAt
       }
       contenders {
+        items {
+          id
+          categoryId
+          didReceiveNominationOrWin
+          numberOfUsersPredictingWin
+          numberOfUsersPredictingNom
+          numberOfUsersPredictingUnranked
+          createdAt
+          updatedAt
+          categoryContendersId
+          contenderMovieId
+          contenderPersonId
+          contenderSongId
+        }
         nextToken
       }
       createdAt
@@ -462,6 +733,9 @@ export const deleteCategory = /* GraphQL */ `
       eventId
       event {
         id
+        categories {
+          nextToken
+        }
         awardsBody
         year
         type
@@ -471,6 +745,20 @@ export const deleteCategory = /* GraphQL */ `
         updatedAt
       }
       contenders {
+        items {
+          id
+          categoryId
+          didReceiveNominationOrWin
+          numberOfUsersPredictingWin
+          numberOfUsersPredictingNom
+          numberOfUsersPredictingUnranked
+          createdAt
+          updatedAt
+          categoryContendersId
+          contenderMovieId
+          contenderPersonId
+          contenderSongId
+        }
         nextToken
       }
       createdAt
@@ -492,6 +780,19 @@ export const createContender = /* GraphQL */ `
         name
         type
         eventId
+        event {
+          id
+          awardsBody
+          year
+          type
+          expiration
+          isActive
+          createdAt
+          updatedAt
+        }
+        contenders {
+          nextToken
+        }
         createdAt
         updatedAt
         eventCategoriesId
@@ -513,11 +814,29 @@ export const createContender = /* GraphQL */ `
         id
         title
         artist
+        movie {
+          id
+          tmdbId
+          studio
+          createdAt
+          updatedAt
+        }
         createdAt
         updatedAt
         songMovieId
       }
       predictions {
+        items {
+          id
+          userId
+          predictionSetId
+          contenderId
+          ranking
+          createdAt
+          updatedAt
+          predictionSetPredictionsId
+          contenderPredictionsId
+        }
         nextToken
       }
       didReceiveNominationOrWin
@@ -546,6 +865,19 @@ export const updateContender = /* GraphQL */ `
         name
         type
         eventId
+        event {
+          id
+          awardsBody
+          year
+          type
+          expiration
+          isActive
+          createdAt
+          updatedAt
+        }
+        contenders {
+          nextToken
+        }
         createdAt
         updatedAt
         eventCategoriesId
@@ -567,11 +899,29 @@ export const updateContender = /* GraphQL */ `
         id
         title
         artist
+        movie {
+          id
+          tmdbId
+          studio
+          createdAt
+          updatedAt
+        }
         createdAt
         updatedAt
         songMovieId
       }
       predictions {
+        items {
+          id
+          userId
+          predictionSetId
+          contenderId
+          ranking
+          createdAt
+          updatedAt
+          predictionSetPredictionsId
+          contenderPredictionsId
+        }
         nextToken
       }
       didReceiveNominationOrWin
@@ -600,6 +950,19 @@ export const deleteContender = /* GraphQL */ `
         name
         type
         eventId
+        event {
+          id
+          awardsBody
+          year
+          type
+          expiration
+          isActive
+          createdAt
+          updatedAt
+        }
+        contenders {
+          nextToken
+        }
         createdAt
         updatedAt
         eventCategoriesId
@@ -621,11 +984,29 @@ export const deleteContender = /* GraphQL */ `
         id
         title
         artist
+        movie {
+          id
+          tmdbId
+          studio
+          createdAt
+          updatedAt
+        }
         createdAt
         updatedAt
         songMovieId
       }
       predictions {
+        items {
+          id
+          userId
+          predictionSetId
+          contenderId
+          ranking
+          createdAt
+          updatedAt
+          predictionSetPredictionsId
+          contenderPredictionsId
+        }
         nextToken
       }
       didReceiveNominationOrWin

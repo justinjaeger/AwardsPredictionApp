@@ -1,5 +1,4 @@
 import { useNavigation } from '@react-navigation/native';
-import { DataStore } from 'aws-amplify';
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView, ScrollView, StyleProp, View, ViewStyle } from 'react-native';
 import { TouchableText } from '../../components/Buttons';
@@ -29,27 +28,21 @@ const Dev = () => {
 
   // EVENTS
   useEffect(() => {
-    // later we'll just use userId to get the user whose profile it is, but I want all users for experiment
-    const sub = DataStore.observeQuery(Event).subscribe(({ items }) => {
-      setEvents(items);
+    ApiServices.getAllEvents().then(({ data: es }) => {
+      if (es) {
+        setEvents(es);
+      }
     });
-    return () => sub.unsubscribe();
   }, []);
 
   // CATEGORIES
   useEffect(() => {
-    // later we'll just use userId to get the user whose profile it is, but I want all users for experiment
-    const sub = DataStore.observeQuery(Category).subscribe(({ items }) => {
-      setCategories(items);
+    ApiServices.getAllCategories().then(({ data: cs }) => {
+      if (cs) {
+        setCategories(cs);
+      }
     });
-    return () => sub.unsubscribe();
   }, []);
-
-  const clear = () => {
-    DataStore.clear()
-      .then((res) => console.error('cleared data store', res))
-      .catch((err) => console.error('err clearing data store', err));
-  };
 
   const clearAllCache = () => {
     TmdbMovieCache.clearAll();
@@ -75,11 +68,6 @@ const Dev = () => {
           onPress={() => {
             navigation.navigate('ApproveSongs');
           }}
-          style={{ marginTop: 10 }}
-        />
-        <TouchableText
-          text={'Clear/Sync DataStore'}
-          onPress={clear}
           style={{ marginTop: 10 }}
         />
         <TouchableText
