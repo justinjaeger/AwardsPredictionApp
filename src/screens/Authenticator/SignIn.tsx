@@ -44,8 +44,9 @@ const SignIn = (p: any) => {
           });
         } else {
           const { data: user } = await ApiServices.getUserByEmail(email);
-          if (!user) return;
-          dispatch(loginUser({ userId: user.id, userEmail: user.email }));
+          const u = user?.listUsers?.items[0];
+          if (!u) return;
+          dispatch(loginUser({ userId: u.id, userEmail: u.email }));
           goBack();
         }
       }

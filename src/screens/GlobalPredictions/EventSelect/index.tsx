@@ -1,18 +1,20 @@
-import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { ScrollView } from 'react-native';
+import { ListEventsQuery } from '../../../API';
 import { TouchableText } from '../../../components/Buttons';
 import { AWARDS_BODY_TO_STRING } from '../../../constants/awardsBodies';
-import { AwardsBody, Event } from '../../../models';
+import { EventType, AwardsBody, Event } from '../../../models';
+
+import { GlobalParamList } from '../../../navigation/types';
 import ApiServices from '../../../services/graphql';
-import { useAsyncEffect } from '../../../util/hooks';
+import { useAsyncEffect, useTypedNavigation } from '../../../util/hooks';
 import sortByObjectOrder from '../../../util/sortByObjectOrder';
 import { eventToString } from '../../../util/stringConversions';
 
 const EventSelect = () => {
-  const navigation = useNavigation();
+  const navigation = useTypedNavigation<GlobalParamList>();
 
-  const [events, setEvents] = useState<Event[]>([]);
+  const [events, setEvents] = useState<ListEventsQuery>();
 
   useAsyncEffect(async () => {
     const { data: es } = await ApiServices.getAllEvents();
@@ -21,14 +23,15 @@ const EventSelect = () => {
     }
   }, []);
 
-  const onSelectEvent = (e: Event) => {
-    navigation.navigate('CategorySelect', { event: e });
+  const onSelectEvent = (eventId: string) => {
+    navigation.navigate('CategorySelect', { eventId });
   };
 
+  const es = (events?.listEvents?.items || []) as Event[]; // since only awardsBody property matters this is ok
   const orderedEvents = sortByObjectOrder<AwardsBody, Event>(
     AWARDS_BODY_TO_STRING,
-    events,
-    events.map((e) => AwardsBody[e.awardsBody]),
+    es,
+    es.map((e: Event) => AwardsBody[e.awardsBody]),
   );
 
   return (
@@ -37,8 +40,12 @@ const EventSelect = () => {
     >
       {orderedEvents.map((event) => (
         <TouchableText
-          text={eventToString(event)}
-          onPress={() => onSelectEvent(event)}
+          text={eventToString(
+            AwardsBody[event.awardsBody],
+            EventType[event.type],
+            event.year,
+          )}
+          onPress={() => onSelectEvent(event.id)}
           style={{ margin: 10 }}
         />
       ))}

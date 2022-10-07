@@ -48,10 +48,11 @@ const ConfirmSignUp = (p: any) => {
           email,
           role: UserRole.USER,
         });
-        if (!user) return; // maybe display status message
+        const u = user?.createUser;
+        if (!u) return; // maybe display status message
         AuthServices.signIn(email, password).then((res) => {
           if (res.status === 'success') {
-            dispatch(loginUser({ userId: user.id, userEmail: user.email }));
+            dispatch(loginUser({ userId: u.id, userEmail: u.email }));
             goBack();
           }
         });

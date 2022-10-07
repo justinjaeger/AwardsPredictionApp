@@ -26,7 +26,7 @@ export const createMockEvents = () => {
     const newEvent = await DataStore.save(new Event(event));
     console.log('created event', newEvent);
     // create categories on event
-    const category = getAwardsBodyCategories(event as Event);
+    const category = getAwardsBodyCategories(event.awardsBody, event.year);
     const categoryList = Object.entries(category) as [
       CategoryName,
       iCategoryData | undefined,

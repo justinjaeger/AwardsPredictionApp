@@ -4,14 +4,21 @@ import React, { useLayoutEffect, useState } from 'react';
 import { ScrollView } from 'react-native';
 import { TouchableText } from '../../components/Buttons';
 import ContenderListItem from '../../components/List/ContenderList/ContenderListItem';
-import { getAwardsBodyCategories } from '../../constants/categories';
 import { PosterSize } from '../../constants/posterDimensions';
-import { CategoryType, Contender, Prediction } from '../../models';
+import {
+  EventType,
+  AwardsBody,
+  CategoryType,
+  Contender,
+  Prediction,
+  CategoryName,
+} from '../../models';
+
 import { PersonalParamList } from '../../navigation/types';
 import DS from '../../services/datastore';
 import { useAuth } from '../../store';
 import { useSubscriptionEffect } from '../../util/hooks';
-import { eventToString } from '../../util/stringConversions';
+import { fullEventToString } from '../../util/stringConversions';
 
 type iAddContenderItem = {
   selected: boolean;
@@ -40,14 +47,15 @@ const AddContenders = () => {
 
   // Set header title
   useLayoutEffect(() => {
-    const categoryList = getAwardsBodyCategories(category.event);
+    const e = category.event;
+    if (!e) return;
     navigation.setOptions({
-      headerTitle:
-        'Best' +
-        ' ' +
-        categoryList[category.name]?.name +
-        ' ' +
-        eventToString(category.event),
+      headerTitle: fullEventToString(
+        AwardsBody[e.awardsBody],
+        EventType[e.type],
+        e.year,
+        CategoryName[category.name],
+      ),
     });
   }, [navigation, category.name, category.event]);
 

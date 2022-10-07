@@ -12,7 +12,7 @@ export type MainParamList = {
 export type GlobalParamList = {
   EventSelect: undefined;
   CategorySelect: {
-    event: Event;
+    eventId: string;
   };
   Contenders: {
     category: Category;

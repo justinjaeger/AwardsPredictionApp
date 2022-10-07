@@ -3,12 +3,18 @@ import { DataStore } from 'aws-amplify';
 import React, { useLayoutEffect, useState } from 'react';
 import { ScrollView } from 'react-native';
 import ContenderList from '../../../components/List/ContenderList';
-import { getAwardsBodyCategories } from '../../../constants/categories';
-import { CategoryType, Contender } from '../../../models';
+import {
+  EventType,
+  AwardsBody,
+  CategoryType,
+  Contender,
+  CategoryName,
+} from '../../../models';
+
 import { GlobalParamList } from '../../../navigation/types';
 import DS from '../../../services/datastore';
 import { useSubscriptionEffect } from '../../../util/hooks';
-import { eventToString } from '../../../util/stringConversions';
+import { fullEventToString } from '../../../util/stringConversions';
 
 // TODO: no list order yet. eventually have to define something
 const Contenders = () => {
@@ -21,14 +27,15 @@ const Contenders = () => {
 
   // Set header title
   useLayoutEffect(() => {
-    const categoryList = getAwardsBodyCategories(category.event);
+    const e = category.event;
+    if (!e) return;
     navigation.setOptions({
-      headerTitle:
-        'Best' +
-        ' ' +
-        categoryList[category.name]?.name +
-        ' ' +
-        eventToString(category.event),
+      headerTitle: fullEventToString(
+        AwardsBody[e.awardsBody],
+        EventType[e.type],
+        e.year,
+        CategoryName[category.name],
+      ),
     });
   }, [navigation, category.name, category.event]);
 

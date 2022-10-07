@@ -1,6 +1,7 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import React, { useLayoutEffect, useState } from 'react';
 import { ScrollView } from 'react-native';
+import { GetEventQuery, ListCategoriesQuery } from '../../../API';
 import { TouchableText } from '../../../components/Buttons';
 import { getAwardsBodyCategories } from '../../../constants/categories';
 import { Category, CategoryName } from '../../../models';
@@ -12,36 +13,51 @@ import { eventToString } from '../../../util/stringConversions';
 
 const CategorySelect = () => {
   const {
-    params: { event },
+    params: { eventId },
   } = useRoute<RouteProp<GlobalParamList, 'CategorySelect'>>();
   const navigation = useNavigation();
 
-  const [categories, setCategories] = useState<Category[]>([]);
-
-  // Set header title
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerTitle: eventToString(event),
-    });
-  }, [navigation, event]);
+  const [event, setEvent] = useState<GetEventQuery>();
+  const [categories, setCategories] = useState<ListCategoriesQuery>();
 
   useAsyncEffect(async () => {
-    const { data: cs } = await ApiServices.getCategoriesByEvent(event.id);
+    const { data: e } = await ApiServices.getEvent(eventId);
+    if (!e?.getEvent) return;
+    setEvent(e);
+    const { data: cs } = await ApiServices.getCategoriesByEvent(e?.getEvent?.id);
     if (cs) {
       setCategories(cs);
     }
-  }, []);
+  }, [eventId]);
 
-  const onSelectCategory = (c: Category) => {
-    navigation.navigate('Contenders', { category: c });
+  // Set header title
+  useLayoutEffect(() => {
+    const e = event?.getEvent;
+    if (!e) return;
+    if (event?.getEvent) {
+      navigation.setOptions({
+        headerTitle: eventToString(e.awardsBody, e.type, e.year),
+      });
+    }
+  }, [navigation, event]);
+
+  const onSelectCategory = (categoryId: string) => {
+    navigation.navigate('Contenders', { categoryId });
   };
 
-  const categoryList = getAwardsBodyCategories(event);
+  // TODO: better loading state
+  if (!event?.getEvent) return null;
 
+  const categoryList = getAwardsBodyCategories(
+    event.getEvent.awardsBody,
+    event.getEvent.year,
+  );
+
+  const cs = (categories?.listCategories?.items || []) as Category[];
   const orderedCategories = sortByObjectOrder<CategoryName, Category>(
     categoryList,
-    categories,
-    categories.map((c) => CategoryName[c.name]),
+    cs,
+    cs.map((c) => CategoryName[c.name]),
   );
 
   return (
@@ -53,7 +69,7 @@ const CategorySelect = () => {
         return (
           <TouchableText
             text={catData?.name || ''}
-            onPress={() => onSelectCategory(c)}
+            onPress={() => onSelectCategory(c.id)}
             style={{ margin: 10 }}
             key={c.id}
           />

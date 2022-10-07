@@ -2,7 +2,7 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import React, { useLayoutEffect } from 'react';
 import { ScrollView } from 'react-native';
 import { CreateContenderParamList } from '../../navigation/types';
-import { Category, CategoryType } from '../../models';
+import { Category, CategoryType, AwardsBody } from '../../models';
 import { getAwardsBodyCategories } from '../../constants/categories';
 import CreateFilm from './CreateFilm';
 import CreatePerformance from './CreatePerformance';
@@ -19,7 +19,9 @@ const CreateContender = () => {
 
   // Set header title
   useLayoutEffect(() => {
-    const categoryList = getAwardsBodyCategories(category.event);
+    const e = category.event;
+    if (!e) return;
+    const categoryList = getAwardsBodyCategories(AwardsBody[e.awardsBody], e.year);
     const headerTitle = `Add ${categoryList[category.name]?.name || 'Contender'}`;
     navigation.setOptions({
       headerTitle,

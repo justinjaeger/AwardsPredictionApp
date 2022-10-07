@@ -1,9 +1,9 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView, ScrollView, StyleProp, View, ViewStyle } from 'react-native';
+import { ListCategoriesQuery, ListEventsQuery, ListUsersQuery } from '../../API';
 import { TouchableText } from '../../components/Buttons';
 import { Body, SubHeader } from '../../components/Text';
-import { User, Event, Category } from '../../models';
 import { createMockEvents, deleteMockEvents } from '../../scripts/mocks/events';
 import { deleteMockUsers, createMockUsers } from '../../scripts/mocks/users';
 import TmdbMovieCache from '../../services/cache/tmdbMovie';
@@ -13,9 +13,9 @@ import ApiServices from '../../services/graphql';
 const Dev = () => {
   const navigation = useNavigation();
 
-  const [users, setUsers] = useState<User[]>([]);
-  const [events, setEvents] = useState<Event[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [users, setUsers] = useState<ListUsersQuery>();
+  const [events, setEvents] = useState<ListEventsQuery>();
+  const [categories, setCategories] = useState<ListCategoriesQuery>();
 
   // USERS
   useEffect(() => {
@@ -93,7 +93,7 @@ const Dev = () => {
           onPress={deleteMockUsers}
           style={{ marginTop: 10 }}
         />
-        {users?.map((u) => (
+        {users?.listUsers?.items.map((u) => (
           <View style={{ margin: 5 }}>
             <Body>{JSON.stringify(u)}</Body>
           </View>
@@ -111,7 +111,7 @@ const Dev = () => {
           onPress={deleteMockEvents}
           style={{ marginTop: 10 }}
         />
-        {events?.map((e) => (
+        {events?.listEvents?.items.map((e) => (
           <View style={{ margin: 5 }}>
             <Body>{JSON.stringify(e)}</Body>
           </View>
@@ -119,7 +119,7 @@ const Dev = () => {
         <View style={{ ...sectionStyles }}>
           <SubHeader>CATEGORIES:</SubHeader>
         </View>
-        {categories?.map((c) => (
+        {categories?.listCategories?.items.map((c) => (
           <View style={{ margin: 5 }}>
             <Body>{JSON.stringify(c)}</Body>
           </View>

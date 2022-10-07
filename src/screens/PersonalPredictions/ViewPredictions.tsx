@@ -3,13 +3,12 @@ import React, { useLayoutEffect, useState } from 'react';
 import { ScrollView } from 'react-native';
 import { TouchableText } from '../../components/Buttons';
 import ContenderList from '../../components/List/ContenderList';
-import { getAwardsBodyCategories } from '../../constants/categories';
-import { Contender } from '../../models';
+import { CategoryName, EventType, AwardsBody, Contender } from '../../models';
 import { PersonalParamList } from '../../navigation/types';
 import DS from '../../services/datastore';
 import { useAuth } from '../../store';
 import { useSubscriptionEffect } from '../../util/hooks';
-import { eventToString } from '../../util/stringConversions';
+import { fullEventToString } from '../../util/stringConversions';
 
 const ViewPredictions = () => {
   const {
@@ -23,14 +22,15 @@ const ViewPredictions = () => {
   // Set header title (NOTE: dupliated from Global, combine these screens via top tabs eventually)
   // Move all duplicated stuff into shared menu like "add contender" (maybe that's in a FAB popout)
   useLayoutEffect(() => {
-    const categoryList = getAwardsBodyCategories(category.event);
+    const e = category.event;
+    if (!e) return;
     navigation.setOptions({
-      headerTitle:
-        'Best' +
-        ' ' +
-        categoryList[category.name]?.name +
-        ' ' +
-        eventToString(category.event),
+      headerTitle: fullEventToString(
+        AwardsBody[e.awardsBody],
+        EventType[e.type],
+        e.year,
+        CategoryName[category.name],
+      ),
     });
   }, [navigation, category.name, category.event]);
 
