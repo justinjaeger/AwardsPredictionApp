@@ -17,7 +17,7 @@ const EventSelect = () => {
   const [events, setEvents] = useState<ListEventsQuery>();
 
   useAsyncEffect(async () => {
-    const { data: es } = await ApiServices.getAllEvents();
+    const { data: es } = await ApiServices.getAllEvents(); // TODO: change back to getAllEvents
     if (es) {
       setEvents(es);
     }

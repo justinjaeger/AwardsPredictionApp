@@ -1,15 +1,17 @@
 import { API } from 'aws-amplify';
 import { GraphQLQuery } from '@aws-amplify/api';
 import {
-  CreateUserInput,
   CreateUserMutation,
+  DeleteUserMutation,
   GetUserQuery,
   ListUsersQuery,
+  ModelUserFilterInput,
   UpdateUserMutation,
 } from '../../API';
 import * as mutations from '../../graphql/mutations';
 import * as queries from '../../graphql/queries';
 import { handleError, iApiResponse } from '../utils';
+import { UserRole } from '../../models';
 
 export const getAllUsers = async (): Promise<iApiResponse<ListUsersQuery>> => {
   try {
@@ -24,7 +26,7 @@ export const getAllUsers = async (): Promise<iApiResponse<ListUsersQuery>> => {
     }
     return { status: 'success', data };
   } catch (err) {
-    return handleError('error getting user by email', err);
+    return handleError('error getting all users', err);
   }
 };
 
@@ -43,6 +45,7 @@ export const getUser = async (id: string): Promise<iApiResponse<GetUserQuery>> =
   }
 };
 
+// Use this to enforce uniqueness
 export const getUserByEmail = async (
   email: string,
 ): Promise<iApiResponse<ListUsersQuery>> => {
@@ -68,12 +71,22 @@ export const getUserByEmail = async (
 
 // create a new user after confirming email
 export const createUser = async (
-  input: CreateUserInput,
+  email: string,
+  role?: UserRole,
 ): Promise<iApiResponse<CreateUserMutation>> => {
   try {
+    // Enforce uniqueness!!
+    const { data: maybeUsers } = await getUserByEmail(email);
+    if (!maybeUsers?.listUsers) {
+      return { status: 'error' };
+    }
+    if (maybeUsers.listUsers.items.length > 0) {
+      throw new Error('A user with this email already exists');
+    }
+    // Create user
     const { data, errors } = await API.graphql<GraphQLQuery<CreateUserMutation>>({
       query: mutations.createUser,
-      variables: { input },
+      variables: { input: { email, role: role || UserRole.USER } },
     });
     if (!data) {
       throw new Error(JSON.stringify(errors));
@@ -117,7 +130,7 @@ export const getUsersByUsername = async (
   username: string,
 ): Promise<iApiResponse<ListUsersQuery>> => {
   try {
-    const filter = { username: { eq: username } };
+    const filter: ModelUserFilterInput = { username: { eq: username } };
     const { data, errors } = await API.graphql<GraphQLQuery<ListUsersQuery>>({
       query: queries.listUsers,
       variables: { filter },
@@ -131,5 +144,22 @@ export const getUsersByUsername = async (
     return { status: 'success', data };
   } catch (err) {
     return handleError('error getting users by username', err);
+  }
+};
+
+export const deleteUser = async (
+  id: string,
+): Promise<iApiResponse<DeleteUserMutation>> => {
+  try {
+    const { data, errors } = await API.graphql<GraphQLQuery<DeleteUserMutation>>({
+      query: queries.listUsers,
+      variables: { id },
+    });
+    if (!data?.deleteUser) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data };
+  } catch (err) {
+    return handleError('error deleting user', err);
   }
 };
