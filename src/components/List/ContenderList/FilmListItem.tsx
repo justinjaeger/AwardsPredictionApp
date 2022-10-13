@@ -11,16 +11,16 @@ import Poster from '../../Images/Poster';
 import { BodyLarge } from '../../Text';
 
 type iFilmListItemProps = {
-  movie: Movie;
-  contender: Contender;
-  category: Category;
+  movieId: string;
+  contenderId: string;
+  categoryId: string;
   ranking?: number;
   size?: PosterSize;
   onPress: () => void;
 };
 
 const FilmListItem = (props: iFilmListItemProps) => {
-  const { movie, contender, category, ranking, size, onPress } = props;
+  const { movieId, contenderId, categoryId, ranking, size, onPress } = props;
 
   const movieTmdbId = movie.tmdbId;
 

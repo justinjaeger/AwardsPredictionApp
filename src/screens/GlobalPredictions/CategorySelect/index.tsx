@@ -1,4 +1,4 @@
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { RouteProp, useRoute } from '@react-navigation/native';
 import React, { useLayoutEffect, useState } from 'react';
 import { ScrollView } from 'react-native';
 import { GetEventQuery, ListCategoriesQuery } from '../../../API';
@@ -7,7 +7,7 @@ import { getAwardsBodyCategories } from '../../../constants/categories';
 import { Category, CategoryName } from '../../../models';
 import { GlobalParamList } from '../../../navigation/types';
 import ApiServices from '../../../services/graphql';
-import { useAsyncEffect } from '../../../util/hooks';
+import { useAsyncEffect, useTypedNavigation } from '../../../util/hooks';
 import sortByObjectOrder from '../../../util/sortByObjectOrder';
 import { eventToString } from '../../../util/stringConversions';
 
@@ -15,7 +15,7 @@ const CategorySelect = () => {
   const {
     params: { eventId },
   } = useRoute<RouteProp<GlobalParamList, 'CategorySelect'>>();
-  const navigation = useNavigation();
+  const navigation = useTypedNavigation<GlobalParamList>();
 
   const [event, setEvent] = useState<GetEventQuery>();
   const [categories, setCategories] = useState<ListCategoriesQuery>();

@@ -15,11 +15,11 @@ export type GlobalParamList = {
     eventId: string;
   };
   Contenders: {
-    category: Category;
+    categoryId: string;
   };
   ContenderDetails: {
     categoryType: CategoryType;
-    contender: Contender;
+    contenderId: string;
     personTmdb?: number | undefined;
   };
 };

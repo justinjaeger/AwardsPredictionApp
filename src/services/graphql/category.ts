@@ -1,10 +1,32 @@
 import { API } from 'aws-amplify';
 import { GraphQLQuery } from '@aws-amplify/api';
-import { CreateCategoryMutation, ListCategoriesQuery } from '../../API';
+import {
+  CreateCategoryMutation,
+  GetCategoryQuery,
+  GetCategoryQueryVariables,
+  ListCategoriesQuery,
+} from '../../API';
 import * as mutations from '../../graphql/mutations';
 import * as queries from '../../graphql/queries';
-import { handleError, iApiResponse } from '../utils';
+import { GraphqlAPI, handleError, iApiResponse } from '../utils';
 import { CategoryName, CategoryType } from '../../models';
+
+export const getCategoryById = async (
+  id: string,
+): Promise<iApiResponse<GetCategoryQuery>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<
+      GetCategoryQuery,
+      GetCategoryQueryVariables
+    >(queries.getCategory, { id });
+    if (!data?.getCategory) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data };
+  } catch (err) {
+    return handleError('error getting category by id', err);
+  }
+};
 
 export const getAllCategories = async (): Promise<iApiResponse<ListCategoriesQuery>> => {
   try {
@@ -21,7 +43,7 @@ export const getAllCategories = async (): Promise<iApiResponse<ListCategoriesQue
     }
     return { status: 'success', data };
   } catch (err) {
-    return handleError('error getting user by email', err);
+    return handleError('error getting all categories', err);
   }
 };
 

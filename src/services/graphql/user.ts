@@ -147,6 +147,7 @@ export const getUsersByUsername = async (
   }
 };
 
+// NOTE: Only for mock purposes. Should never really DELETE a user
 export const deleteUser = async (
   id: string,
 ): Promise<iApiResponse<DeleteUserMutation>> => {

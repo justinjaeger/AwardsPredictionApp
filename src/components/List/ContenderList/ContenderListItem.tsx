@@ -1,30 +1,31 @@
 import React, { useState } from 'react';
 import { TouchableHighlight } from 'react-native';
+import { GetCategoryQuery, GetContenderQuery, GetMovieQuery } from '../../../API';
 import COLORS from '../../../constants/colors';
 import { PosterSize } from '../../../constants/posterDimensions';
-import { Category, CategoryType, Contender, Movie } from '../../../models';
-import DS from '../../../services/datastore';
+import { CategoryType } from '../../../models';
+import ApiServices from '../../../services/graphql';
 import { useAsyncEffect } from '../../../util/hooks';
 import FilmListItem from './FilmListItem';
 import PerformanceListItem from './PerformanceListItem';
 import SongListItem from './SongListItem';
 
 type iContenderListItemProps = {
-  category: Category;
-  contender: Contender;
+  categoryId: string;
+  contenderId: string;
   ranking: number;
   selected?: boolean;
   isSelectable?: boolean;
   disabled?: boolean;
   size?: PosterSize;
-  onPressThumbnail?: (c: Contender) => Promise<void>;
-  onPressItem?: (c: Contender) => Promise<void>;
+  onPressThumbnail?: (contenderId: string) => void;
+  onPressItem?: (contenderId: string) => void;
 };
 
 const ContenderListItem = (props: iContenderListItemProps) => {
   const {
-    category,
-    contender,
+    categoryId,
+    contenderId,
     ranking,
     size,
     selected: _selected,
@@ -35,29 +36,49 @@ const ContenderListItem = (props: iContenderListItemProps) => {
   } = props;
 
   const [selected, setSelected] = useState<boolean>(_selected || false);
-  const [movie, setMovie] = useState<Movie | undefined>();
+  const [movie, setMovie] = useState<GetMovieQuery>();
+  const [category, setCategory] = useState<GetCategoryQuery>();
+  const [contender, setContender] = useState<GetContenderQuery>();
+
+  const movieId = contender?.getContender?.contenderMovieId;
+  const categoryType = category?.getCategory?.type;
+  const songId = contender?.getContender?.contenderSongId;
+  const tmdbMovieId = movie?.getMovie?.tmdbId;
+
+  // NOTE: later, we'll just have the category live in context instead of fetching every new component / passing via nav props
+  useAsyncEffect(async () => {
+    const { data } = await ApiServices.getCategoryById(categoryId);
+    setCategory(data);
+  }, [categoryId]);
+
+  // NOTE: later, we'll just have the contender live in context instead of fetching every new component / passing via nav props
+  useAsyncEffect(async () => {
+    const { data } = await ApiServices.getContenderById(contenderId);
+    setContender(data);
+  }, [contenderId]);
 
   const onPress = () => {
     if (disabled) return;
-    onPressThumbnail && onPressThumbnail(contender);
+    onPressThumbnail && onPressThumbnail(contenderId);
   };
 
   useAsyncEffect(async () => {
-    const movieId = contender.contenderMovieId;
-    const { data: movie } = await DS.getMovieById(movieId);
+    if (!movieId) return;
+    const { data: movie } = await ApiServices.getMovie(movieId);
     setMovie(movie);
-  }, [contender.contenderMovieId]);
+  }, [movieId]);
 
-  if (!movie) return null;
+  if (!movie || !categoryType) return null;
 
   let component: JSX.Element = <></>;
-  switch (CategoryType[category.type]) {
+  switch (CategoryType[categoryType]) {
     case CategoryType.FILM:
+      if (!movieId) return null;
       component = (
         <FilmListItem
-          contender={contender}
-          category={category}
-          movie={movie}
+          contenderId={contenderId}
+          categoryId={categoryId}
+          movieId={movieId}
           ranking={ranking}
           size={size}
           onPress={onPress}
@@ -67,7 +88,7 @@ const ContenderListItem = (props: iContenderListItemProps) => {
     case CategoryType.PERFORMANCE:
       component = (
         <PerformanceListItem
-          contender={contender}
+          contenderId={contenderId}
           ranking={ranking}
           size={size}
           onPress={onPress}
@@ -75,11 +96,11 @@ const ContenderListItem = (props: iContenderListItemProps) => {
       );
       break;
     case CategoryType.SONG:
-      if (!contender.contenderSongId) return null;
+      if (!songId || !tmdbMovieId) return null;
       component = (
         <SongListItem
-          tmdbMovieId={movie?.tmdbId}
-          songId={contender.contenderSongId}
+          tmdbMovieId={tmdbMovieId}
+          songId={songId}
           ranking={ranking}
           size={size}
           onPress={onPress}
@@ -95,7 +116,7 @@ const ContenderListItem = (props: iContenderListItemProps) => {
         if (isSelectable) {
           setSelected(!selected);
         }
-        onPressItem && onPressItem(contender);
+        onPressItem && onPressItem(contenderId);
       }}
       style={{
         backgroundColor: selected ? COLORS.success : 'transparent',

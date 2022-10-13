@@ -1,93 +1,94 @@
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { DataStore } from 'aws-amplify';
+import { RouteProp, useRoute } from '@react-navigation/native';
 import React, { useLayoutEffect, useState } from 'react';
 import { ScrollView } from 'react-native';
+import { GetCategoryQuery, ListContendersQuery } from '../../../API';
 import ContenderList from '../../../components/List/ContenderList';
-import {
-  EventType,
-  AwardsBody,
-  CategoryType,
-  Contender,
-  CategoryName,
-} from '../../../models';
-
+import { EventType, AwardsBody, CategoryType, CategoryName } from '../../../models';
 import { GlobalParamList } from '../../../navigation/types';
-import DS from '../../../services/datastore';
-import { useSubscriptionEffect } from '../../../util/hooks';
+import ApiServices from '../../../services/graphql';
+import {
+  useAsyncEffect,
+  useSubscriptionEffect,
+  useTypedNavigation,
+} from '../../../util/hooks';
 import { fullEventToString } from '../../../util/stringConversions';
 
-// TODO: no list order yet. eventually have to define something
 const Contenders = () => {
   const {
-    params: { category },
+    params: { categoryId },
   } = useRoute<RouteProp<GlobalParamList, 'Contenders'>>();
-  const navigation = useNavigation();
+  const navigation = useTypedNavigation<GlobalParamList>();
 
-  const [contenders, setContenders] = useState<Contender[]>([]);
+  const [category, setCategory] = useState<GetCategoryQuery>();
+  const [contenders, setContenders] = useState<ListContendersQuery>();
+
+  // NOTE: later, we'll just have the category live in context instead of fetching every new component / passing via nav props
+  useAsyncEffect(async () => {
+    const { data } = await ApiServices.getCategoryById(categoryId);
+    setCategory(data);
+  }, [categoryId]);
 
   // Set header title
   useLayoutEffect(() => {
-    const e = category.event;
-    if (!e) return;
+    const c = category?.getCategory;
+    if (!c) return;
+    const e = c.event;
     navigation.setOptions({
       headerTitle: fullEventToString(
         AwardsBody[e.awardsBody],
         EventType[e.type],
         e.year,
-        CategoryName[category.name],
+        CategoryName[c.name],
       ),
     });
-  }, [navigation, category.name, category.event]);
+  }, [navigation, category]);
 
   useSubscriptionEffect(async () => {
-    const _contenders = (await DataStore.query(Contender)).filter(
-      (c) => c.category?.id === category.id,
-    );
-    // TODO: order contenders in display
-    // const orderedContenders = _contenders.sort((c1,c2)=>{
-    //     if (c1.)
-    // })
-    setContenders(_contenders);
+    const c = category?.getCategory;
+    if (!c) return;
+    const { data } = await ApiServices.getContendersByCategory(c.id);
+    setContenders(data);
   }, []);
 
-  const onPressFilm = async (contender: Contender) => {
+  const onPressFilm = (contenderId: string) => {
+    if (!category?.getCategory) return;
     navigation.navigate('ContenderDetails', {
-      contender,
-      categoryType: category.type,
+      contenderId,
+      categoryType: category.getCategory?.type,
     });
   };
 
-  const onPressPerformance = async (contender: Contender) => {
-    let personTmdb;
-    if (contender.contenderPersonId) {
-      const { data: p } = await DS.getPersonById(contender.contenderPersonId);
-      if (p) {
-        personTmdb = p.tmdbId;
-      }
-    }
+  const onPressPerformance = async (contenderId: string, personId: string) => {
+    if (!category?.getCategory) return;
+    const { data } = await ApiServices.getPerson(personId);
+    if (!data?.getPerson) return;
+    const personTmdb = data.getPerson.tmdbId;
     navigation.navigate('ContenderDetails', {
-      contender,
-      categoryType: category.type,
+      contenderId,
+      categoryType: category.getCategory?.type,
       personTmdb,
     });
   };
 
-  const onPressThumbnail = (() => {
-    switch (CategoryType[category.type]) {
-      case CategoryType.FILM:
-      case CategoryType.SONG:
-        return onPressFilm;
-      case CategoryType.PERFORMANCE:
-        return onPressPerformance;
+  const onPressThumbnail = (contenderId: string, personId?: string) => {
+    if (!category?.getCategory) return;
+    const cType = CategoryType[category?.getCategory.type];
+    if (cType === CategoryType.PERFORMANCE && personId) {
+      onPressPerformance(contenderId, personId);
+    } else {
+      onPressFilm(contenderId);
     }
-  })();
+  };
+
+  // TODO: better loading state
+  if (!contenders?.listContenders || !category?.getCategory) return null;
 
   return (
     <ScrollView
       contentContainerStyle={{ alignItems: 'center', marginTop: 40, paddingBottom: 100 }}
     >
       <ContenderList
-        category={category}
+        categoryId={category.getCategory.id}
         contenders={contenders}
         onPressThumbnail={onPressThumbnail}
       />

@@ -10,14 +10,14 @@ import Poster from '../../Images/Poster';
 import { BodyLarge } from '../../Text';
 
 type iPerformanceListItemProps = {
-  contender: Contender;
+  contenderId: string;
   ranking?: number;
   size?: PosterSize;
   onPress: () => void;
 };
 
 const PerformanceListItem = (props: iPerformanceListItemProps) => {
-  const { contender, ranking, size, onPress } = props;
+  const { contenderId, ranking, size, onPress } = props;
 
   const [person, setPerson] = useState<iCachedTmdbPerson | undefined>();
   const [tmdbMovie, setTmdbMovie] = useState<iCachedTmdbMovie | undefined>();

@@ -1,27 +1,56 @@
 import React, { useState } from 'react';
 import { TouchableHighlight, View } from 'react-native';
+import { ListContendersQuery } from '../../../API';
 import COLORS from '../../../constants/colors';
-import { Category, Contender } from '../../../models';
+import { getContenderRank } from '../../../util/getContenderRank';
 import { useSubscriptionEffect } from '../../../util/hooks';
 import { BodyLarge } from '../../Text';
 import ContenderListItem from './ContenderListItem';
 
 type iContenderListProps = {
-  category: Category;
-  contenders: Contender[];
+  categoryId: string;
+  contenders: ListContendersQuery;
   isSelectable?: boolean; // makes items appear "on" or "off"
-  onPressThumbnail?: (c: Contender) => Promise<void>;
-  onPressItem?: (c: Contender) => Promise<void>;
+  onPressThumbnail?: (contenderId: string) => void;
+  onPressItem?: (contenderId: string) => void;
 };
 
 const ContenderList = (props: iContenderListProps) => {
-  const { category, contenders, isSelectable, onPressThumbnail, onPressItem } = props;
+  const {
+    categoryId,
+    contenders: _contenders,
+    isSelectable,
+    onPressThumbnail,
+    onPressItem,
+  } = props;
 
-  const [data, setData] = useState<Contender[]>([]);
+  const [data, setData] = useState<ListContendersQuery>();
 
   useSubscriptionEffect(async () => {
-    setData(contenders);
-  }, [contenders]);
+    setData(_contenders);
+  }, [_contenders]);
+
+  const contenders = data?.listContenders;
+
+  // TODO: better loading state
+  if (!contenders) return null;
+
+  // TODO: order contenders in display
+  const orderedContenders = contenders.items.sort((c1, c2) => {
+    if (!c1 || !c2) return 0;
+    const c1Rank = getContenderRank(
+      c1.numberOfUsersPredictingWin,
+      c1.numberOfUsersPredictingNom,
+      c1.numberOfUsersPredictingUnranked,
+    );
+    const c2Rank = getContenderRank(
+      c2.numberOfUsersPredictingWin,
+      c2.numberOfUsersPredictingNom,
+      c2.numberOfUsersPredictingUnranked,
+    );
+    if (c1Rank > c2Rank) return 1;
+    return -1;
+  });
 
   return (
     <TouchableHighlight
@@ -33,7 +62,7 @@ const ContenderList = (props: iContenderListProps) => {
       }}
     >
       <>
-        {data.length === 0 ? (
+        {orderedContenders.length === 0 ? (
           <View
             style={{
               width: '100%',
@@ -45,17 +74,20 @@ const ContenderList = (props: iContenderListProps) => {
             <BodyLarge>No films in this list</BodyLarge>
           </View>
         ) : null}
-        {data.map((c, i) => (
-          <ContenderListItem
-            contender={c}
-            ranking={i + 1}
-            category={category}
-            onPressItem={onPressItem}
-            onPressThumbnail={onPressThumbnail}
-            selected={false}
-            isSelectable={isSelectable}
-          />
-        ))}
+        {orderedContenders.map((c, i) => {
+          if (!c) return null; // should never happen
+          return (
+            <ContenderListItem
+              contenderId={c.id}
+              ranking={i + 1}
+              categoryId={categoryId}
+              onPressItem={onPressItem}
+              onPressThumbnail={onPressThumbnail}
+              selected={false}
+              isSelectable={isSelectable}
+            />
+          );
+        })}
       </>
     </TouchableHighlight>
   );
