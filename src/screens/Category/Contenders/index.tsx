@@ -1,11 +1,18 @@
 import { RouteProp, useRoute } from '@react-navigation/native';
 import React, { useLayoutEffect, useState } from 'react';
 import { ScrollView } from 'react-native';
-import { GetCategoryQuery, ListContendersQuery } from '../../../API';
+import {
+  AwardsBody,
+  CategoryName,
+  CategoryType,
+  EventType,
+  GetCategoryQuery,
+  ListContendersQuery,
+} from '../../../API';
 import ContenderList from '../../../components/List/ContenderList';
-import { EventType, AwardsBody, CategoryType, CategoryName } from '../../../models';
 import { GlobalParamList } from '../../../navigation/types';
 import ApiServices from '../../../services/graphql';
+import { getContenderRank } from '../../../util/getContenderRank';
 import {
   useAsyncEffect,
   useSubscriptionEffect,
@@ -13,6 +20,7 @@ import {
 } from '../../../util/hooks';
 import { fullEventToString } from '../../../util/stringConversions';
 
+// NOTE: Similar to ViewPredictions
 const Contenders = () => {
   const {
     params: { categoryId },
@@ -83,13 +91,29 @@ const Contenders = () => {
   // TODO: better loading state
   if (!contenders?.listContenders || !category?.getCategory) return null;
 
+  const orderedContenders = contenders.listContenders.items.sort((c1, c2) => {
+    if (!c1 || !c2) return 0;
+    const c1Rank = getContenderRank(
+      c1.numberOfUsersPredictingWin,
+      c1.numberOfUsersPredictingNom,
+      c1.numberOfUsersPredictingUnranked,
+    );
+    const c2Rank = getContenderRank(
+      c2.numberOfUsersPredictingWin,
+      c2.numberOfUsersPredictingNom,
+      c2.numberOfUsersPredictingUnranked,
+    );
+    if (c1Rank > c2Rank) return 1;
+    return -1;
+  });
+
   return (
     <ScrollView
       contentContainerStyle={{ alignItems: 'center', marginTop: 40, paddingBottom: 100 }}
     >
       <ContenderList
         categoryId={category.getCategory.id}
-        contenders={contenders}
+        orderedContenderIds={orderedContenders.map((c) => c?.id || '')}
         onPressThumbnail={onPressThumbnail}
       />
     </ScrollView>

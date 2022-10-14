@@ -27,6 +27,20 @@ export const getMovie = async (id: string): Promise<iApiResponse<GetMovieQuery>>
   }
 };
 
+export const getAllMovies = async (): Promise<iApiResponse<ListMoviesQuery>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<ListMoviesQuery, ListMoviesQueryVariables>(
+      queries.listMovies,
+    );
+    if (!data?.listMovies) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data };
+  } catch (err) {
+    return handleError('error getting all movies', err);
+  }
+};
+
 /**
  * enforce tmdb being unique
  */

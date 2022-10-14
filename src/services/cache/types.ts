@@ -1,4 +1,4 @@
-import { CategoryName } from '../../models';
+import { CategoryName } from '../../API';
 
 export type iCategoryDetails = { [key in CategoryName]: string[] | undefined };
 

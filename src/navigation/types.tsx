@@ -1,4 +1,4 @@
-import { Category, CategoryType, Contender, Event } from '../models';
+import { CategoryType } from '../API';
 
 export type MainParamList = {
   BottomTabNavigator: undefined;
@@ -30,18 +30,21 @@ export type PersonalParamList = {
     event: Event;
   };
   Contenders: {
-    category: Category;
+    categoryId: string;
   };
   CreateContender: {
-    category: Category;
+    categoryId: string;
   };
   ContenderDetails: {
     categoryType: CategoryType;
-    contender: Contender;
+    contenderId: string;
     personTmdb?: number | undefined;
   };
   AddContenders: {
-    category: Category;
+    categoryId: string;
+  };
+  EditPredictions: {
+    categoryId: string;
   };
 };
 
@@ -51,11 +54,11 @@ export type DevParamList = {
 
 export type CreateContenderParamList = {
   CreateContender: {
-    category: Category;
+    categoryId: string;
   };
   ConfirmContender: {
     tmdbId: number;
-    category: Category;
+    categoryId: string;
   };
 };
 

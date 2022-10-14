@@ -1,6 +1,5 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Category, Contender } from '../../../models';
 import { BodyLarge } from '../../Text';
 import {
   NestableScrollContainer,
@@ -11,18 +10,19 @@ import ContenderListItemDraggable from './ContenderListItemDraggable';
 import { PosterSize } from '../../../constants/posterDimensions';
 
 type iContenderListProps = {
-  category: Category;
-  contenders: Contender[];
+  categoryId: string;
+  contenderIds: string[];
   isSelectable?: boolean; // makes items appear "on" or "off"
-  onDragEnd: (cs: Contender[]) => void;
-  onPressThumbnail?: (c: Contender) => Promise<void>;
-  onPressItem?: (c: Contender) => Promise<void>;
+  onDragEnd: (contenderIds: string[]) => void;
+  onPressThumbnail?: (contenderId: string) => void;
+  onPressItem?: (contenderId: string) => void;
 };
 
+// NOTE: Has a lot in common with ContenderList
 const ContenderList = (props: iContenderListProps) => {
   const {
-    category,
-    contenders,
+    categoryId,
+    contenderIds,
     isSelectable,
     onDragEnd,
     onPressThumbnail,
@@ -31,7 +31,7 @@ const ContenderList = (props: iContenderListProps) => {
 
   return (
     <View style={{ width: '100%' }}>
-      {contenders.length === 0 ? (
+      {contenderIds.length === 0 ? (
         <View
           style={{
             width: '100%',
@@ -45,29 +45,33 @@ const ContenderList = (props: iContenderListProps) => {
       {/* @ts-ignore not actually broken */}
       <NestableScrollContainer>
         <NestableDraggableFlatList
-          data={contenders}
-          keyExtractor={(item) => item.id}
+          data={contenderIds}
+          keyExtractor={(item) => item}
           style={{}}
           contentContainerStyle={{
             paddingBottom: PosterSize.SMALL,
             paddingTop: 20,
           }}
-          renderItem={({ item: contender, index, drag, isActive }) => (
-            <ScaleDecorator>
-              <ContenderListItemDraggable
-                contender={contender}
-                ranking={(index || 0) + 1}
-                category={category}
-                onPressItem={onPressItem}
-                onPressThumbnail={onPressThumbnail}
-                selected={false}
-                isSelectable={isSelectable}
-                drag={drag}
-                isActive={isActive}
-              />
-            </ScaleDecorator>
-          )}
-          onDragEnd={({ data }) => onDragEnd(data)}
+          renderItem={({ item: contenderId, index, drag, isActive }) => {
+            return (
+              <ScaleDecorator>
+                <ContenderListItemDraggable
+                  contenderId={contenderId}
+                  ranking={(index || 0) + 1}
+                  categoryId={categoryId}
+                  onPressItem={onPressItem}
+                  onPressThumbnail={onPressThumbnail}
+                  selected={false}
+                  isSelectable={isSelectable}
+                  drag={drag}
+                  isActive={isActive}
+                />
+              </ScaleDecorator>
+            );
+          }}
+          onDragEnd={({ data }) => {
+            onDragEnd(data);
+          }}
         />
       </NestableScrollContainer>
     </View>

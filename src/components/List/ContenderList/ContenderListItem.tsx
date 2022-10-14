@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import { TouchableHighlight } from 'react-native';
-import { GetCategoryQuery, GetContenderQuery, GetMovieQuery } from '../../../API';
+import {
+  CategoryType,
+  GetCategoryQuery,
+  GetContenderQuery,
+  GetMovieQuery,
+} from '../../../API';
 import COLORS from '../../../constants/colors';
 import { PosterSize } from '../../../constants/posterDimensions';
-import { CategoryType } from '../../../models';
 import ApiServices from '../../../services/graphql';
 import { useAsyncEffect } from '../../../util/hooks';
 import FilmListItem from './FilmListItem';
@@ -40,10 +44,14 @@ const ContenderListItem = (props: iContenderListItemProps) => {
   const [category, setCategory] = useState<GetCategoryQuery>();
   const [contender, setContender] = useState<GetContenderQuery>();
 
-  const movieId = contender?.getContender?.contenderMovieId;
   const categoryType = category?.getCategory?.type;
+  const categoryName = category?.getCategory?.name;
+  const movieId = contender?.getContender?.contenderMovieId;
+  const contenderPersonId = contender?.getContender?.contenderPersonId;
+  const contenderMovieId = contender?.getContender?.contenderMovieId;
   const songId = contender?.getContender?.contenderSongId;
   const tmdbMovieId = movie?.getMovie?.tmdbId;
+  const movieStudio = movie?.getMovie?.studio;
 
   // NOTE: later, we'll just have the category live in context instead of fetching every new component / passing via nav props
   useAsyncEffect(async () => {
@@ -68,7 +76,15 @@ const ContenderListItem = (props: iContenderListItemProps) => {
     setMovie(movie);
   }, [movieId]);
 
-  if (!movie || !categoryType) return null;
+  if (
+    !movie ||
+    !categoryType ||
+    !tmdbMovieId ||
+    !categoryName ||
+    !contenderPersonId ||
+    !contenderMovieId
+  )
+    return null;
 
   let component: JSX.Element = <></>;
   switch (CategoryType[categoryType]) {
@@ -77,8 +93,9 @@ const ContenderListItem = (props: iContenderListItemProps) => {
       component = (
         <FilmListItem
           contenderId={contenderId}
-          categoryId={categoryId}
-          movieId={movieId}
+          categoryName={categoryName}
+          movieTmdbId={tmdbMovieId}
+          movieStudio={movieStudio || undefined}
           ranking={ranking}
           size={size}
           onPress={onPress}
@@ -88,7 +105,8 @@ const ContenderListItem = (props: iContenderListItemProps) => {
     case CategoryType.PERFORMANCE:
       component = (
         <PerformanceListItem
-          contenderId={contenderId}
+          contenderPersonId={contenderPersonId}
+          contenderMovieId={contenderMovieId}
           ranking={ranking}
           size={size}
           onPress={onPress}

@@ -11,6 +11,8 @@ import {
   GetPredictionSetQueryVariables,
   ListPredictionSetsQuery,
   ListPredictionSetsQueryVariables,
+  ListPredictionsQuery,
+  ListPredictionsQueryVariables,
 } from '../../API';
 import * as mutations from '../../graphql/mutations';
 import * as queries from '../../graphql/queries';
@@ -219,5 +221,26 @@ export const createOrUpdatePredictions = async (
     // return { status: 'success', data: sorted };
   } catch (err) {
     return handleError('error creating or updating predictions', err);
+  }
+};
+
+export const getPredictionsByContender = async (
+  contenderId: string,
+): Promise<iApiResponse<ListPredictionsQuery>> => {
+  try {
+    // Get all prediction sets matching params (should only be one)
+    const { data, errors } = await GraphqlAPI<
+      ListPredictionsQuery,
+      ListPredictionsQueryVariables
+    >(queries.listPredictions, {
+      filter: { contenderId: { eq: contenderId } },
+    });
+    if (!data?.listPredictions) {
+      throw new Error(JSON.stringify(errors));
+    }
+    // Return GetPredictionSet result
+    return { status: 'success', data };
+  } catch (err) {
+    return handleError('error prediction set', err);
   }
 };

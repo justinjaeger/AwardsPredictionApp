@@ -1,28 +1,35 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { View } from 'react-native';
+import { CategoryName } from '../../../API';
 import { PosterSize } from '../../../constants/posterDimensions';
-import { CategoryName, Category, Movie, Contender } from '../../../models';
-
 import { iCachedTmdbMovie } from '../../../services/cache/types';
-import DS from '../../../services/datastore';
-import { iNumberPredicting } from '../../../services/datastore/contender';
+import ApiServices from '../../../services/graphql';
+import { iNumberPredicting } from '../../../services/graphql/contender';
 import TmdbServices from '../../../services/tmdb';
+import { useAsyncEffect } from '../../../util/hooks';
 import Poster from '../../Images/Poster';
 import { BodyLarge } from '../../Text';
 
 type iFilmListItemProps = {
-  movieId: string;
+  movieTmdbId: number;
+  movieStudio: string | undefined;
   contenderId: string;
-  categoryId: string;
+  categoryName: CategoryName;
   ranking?: number;
   size?: PosterSize;
   onPress: () => void;
 };
 
 const FilmListItem = (props: iFilmListItemProps) => {
-  const { movieId, contenderId, categoryId, ranking, size, onPress } = props;
-
-  const movieTmdbId = movie.tmdbId;
+  const {
+    movieTmdbId,
+    movieStudio,
+    contenderId,
+    categoryName,
+    ranking,
+    size,
+    onPress,
+  } = props;
 
   // TODO: based on category.name (CategoryName), display a distinct piece of information with the film like who the directors or screenwriters are
 
@@ -31,18 +38,17 @@ const FilmListItem = (props: iFilmListItemProps) => {
     undefined,
   );
 
-  useEffect(() => {
+  useAsyncEffect(async () => {
     TmdbServices.getTmdbMovie(movieTmdbId).then((m) => {
       if (m.status === 'success') {
         setTmdbMovie(m.data);
       }
     });
-    DS.getNumberPredicting(contender).then(({ data }) => {
-      setNumPredicting(data);
-    });
+    const { data } = await ApiServices.getNumberPredicting(contenderId);
+    setNumPredicting(data);
   }, [movieTmdbId]);
 
-  const categoryInfo = tmdbMovie?.categoryInfo?.[category.name];
+  const categoryInfo = tmdbMovie?.categoryInfo?.[categoryName];
 
   return (
     <View
@@ -64,9 +70,9 @@ const FilmListItem = (props: iFilmListItemProps) => {
           <BodyLarge style={{ marginTop: 10, marginLeft: 10 }}>
             {tmdbMovie?.title || ''}
           </BodyLarge>
-          {category.name === CategoryName.PICTURE ? (
+          {categoryName === CategoryName.PICTURE ? (
             <BodyLarge style={{ marginTop: 10, marginLeft: 10 }}>
-              {movie.studio || ''}
+              {movieStudio || ''}
             </BodyLarge>
           ) : null}
           {categoryInfo ? (

@@ -1,33 +1,33 @@
-import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { SubmitButton } from '../../components/Buttons';
 import SearchInput from '../../components/Inputs/SearchInput';
 import SearchResultsList from '../../components/List/SearchResultsList';
 import TmdbServices from '../../services/tmdb';
 import { iSearchData } from '../../services/tmdb/search';
-import DS from '../../services/datastore';
 import Snackbar from '../../components/Snackbar';
 import ContenderDetails from '../../components/ContenderDetails';
 import { Body } from '../../components/Text';
 import TmdbMovieCache from '../../services/cache/tmdbMovie';
 import { iCreateContenderProps } from '.';
-import { CategoryType, Movie } from '../../models';
 import { IconButton } from '../../components/Buttons/IconButton';
 import { View } from 'react-native';
+import { useTypedNavigation } from '../../util/hooks';
+import { CreateContenderParamList } from '../../navigation/types';
+import ApiServices from '../../services/graphql';
+import { CategoryType, GetMovieQuery } from '../../API';
 
 const MAX_CHAR_COUNT = 100;
 
 // TODO: should only be able to do this if logged in
 const CreateFilm = (props: iCreateContenderProps) => {
-  const { category } = props;
+  const { categoryId, categoryType, eventYear } = props;
 
-  const navigation = useNavigation();
+  const navigation = useTypedNavigation<CreateContenderParamList>();
 
-  const event = category.event;
-  const minReleaseYear = event.year - 1;
+  const minReleaseYear = eventYear - 1;
 
   const [searchResults, setSearchResults] = useState<iSearchData>([]);
-  const [movie, setMovie] = useState<Movie | undefined>();
+  const [movie, setMovie] = useState<GetMovieQuery>();
   const [loading, setLoading] = useState<boolean>(false);
   const [searchMessage, setSearchMessage] = useState<string>('');
 
@@ -47,10 +47,15 @@ const CreateFilm = (props: iCreateContenderProps) => {
   };
 
   const onSelectMovie = async (tmdbId: number) => {
+    const movieId = movie?.getMovie?.id;
+    if (!movieId) return;
     try {
-      const { data: movie } = await DS.getOrCreateMovie(tmdbId);
+      const { data: movie } = await ApiServices.getOrCreateMovie(tmdbId);
       if (movie) {
-        const { data: contender } = await DS.getContender(category, movie);
+        const { data: contender } = await ApiServices.getOrCreateFilmContender({
+          categoryId,
+          movieId,
+        });
         if (contender) {
           Snackbar.error('This movie has already been added');
           return;
@@ -63,13 +68,17 @@ const CreateFilm = (props: iCreateContenderProps) => {
   };
 
   const onConfirmContender = async () => {
-    if (!movie) return;
+    const m = movie?.getMovie;
+    if (!m) return;
     setLoading(true);
-    await DS.getOrCreateContender(category, movie);
+    await ApiServices.getOrCreateFilmContender({
+      categoryId,
+      movieId: m.id,
+    });
     setLoading(false);
     navigation.goBack();
-    const m = await TmdbMovieCache.get(movie.tmdbId);
-    Snackbar.success(`Added ${m?.title || 'film'} to predictions`);
+    const tmdbMovie = await TmdbMovieCache.get(m.tmdbId);
+    Snackbar.success(`Added ${tmdbMovie?.title || 'film'} to predictions`);
   };
 
   const removeFilm = () => {
@@ -89,15 +98,20 @@ const CreateFilm = (props: iCreateContenderProps) => {
     },
   }));
 
+  const m = movie?.getMovie;
+
   return (
     <>
-      {movie ? (
+      {m ? (
         <>
           <View style={{ position: 'absolute', right: 30, top: 10, zIndex: 2 }}>
             <IconButton iconProps={{ name: 'close-outline' }} onPress={removeFilm} />
           </View>
           <SubmitButton text={'Confirm'} onPress={onConfirmContender} loading={loading} />
-          <ContenderDetails movie={movie} categoryType={CategoryType[category.type]} />
+          <ContenderDetails
+            movieTmdbId={m.tmdbId}
+            categoryType={CategoryType[categoryType]}
+          />
         </>
       ) : (
         <>

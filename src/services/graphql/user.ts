@@ -7,11 +7,11 @@ import {
   ListUsersQuery,
   ModelUserFilterInput,
   UpdateUserMutation,
+  UserRole,
 } from '../../API';
 import * as mutations from '../../graphql/mutations';
 import * as queries from '../../graphql/queries';
 import { handleError, iApiResponse } from '../utils';
-import { UserRole } from '../../models';
 
 export const getAllUsers = async (): Promise<iApiResponse<ListUsersQuery>> => {
   try {

@@ -11,6 +11,9 @@ import {
 import * as mutations from '../../graphql/mutations';
 import * as queries from '../../graphql/queries';
 import { GraphqlAPI, handleError, iApiResponse } from '../utils';
+import { getEvent } from './event';
+import { getCategorySlots } from '../../constants/categories';
+import { getPredictionsByContender } from './prediction';
 
 type iContenderParams = {
   categoryId: string;
@@ -167,5 +170,63 @@ export const getContendersByCategory = async (
     return { status: 'success', data };
   } catch (err) {
     return handleError('error getting contenders by category', err);
+  }
+};
+
+export type iNumberPredicting = {
+  predictingWin: number;
+  predictingNom: number;
+  predictingUnranked: number;
+};
+
+export const getNumberPredicting = async (
+  contenderId: string,
+): Promise<iApiResponse<iNumberPredicting>> => {
+  // Get all predictions where contenderId = contenderId
+  // This works because the predictions table is now just the MOST RECENT PREDICTIONS
+  try {
+    const { data: contender } = await getContenderById(contenderId);
+    const c = contender?.getContender;
+    if (!c) {
+      return { status: 'error' };
+    }
+    const category = c.category;
+
+    // this is weird and broken and it's because of datastore
+    const eventId = category?.event?.id || category.eventCategoriesId;
+    if (!eventId) {
+      throw new Error('No event id in createOrUpdatePredictions');
+    }
+    const { data: event } = await getEvent(eventId);
+    const e = event?.getEvent;
+    if (!e) {
+      return { status: 'error' };
+    }
+
+    const slots = getCategorySlots(e.year, e.awardsBody, category.name);
+
+    const { data: predictions } = await getPredictionsByContender(contenderId);
+    if (!predictions?.listPredictions) {
+      return { status: 'error' };
+    }
+
+    const result = predictions?.listPredictions.items.reduce(
+      (acc: iNumberPredicting, p) => {
+        if (!p) return acc;
+        if (p.ranking === 1) {
+          acc.predictingWin += 1;
+        } else if (p.ranking <= slots) {
+          acc.predictingNom += 1;
+        } else {
+          acc.predictingUnranked += 1;
+        }
+        return acc;
+      },
+      { predictingWin: 0, predictingNom: 0, predictingUnranked: 0 },
+    );
+
+    return { status: 'success', data: result };
+  } catch (err) {
+    return handleError('error getting num predicting', err);
   }
 };

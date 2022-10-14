@@ -1,48 +1,49 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
 import { PosterSize } from '../../../constants/posterDimensions';
-import { Contender } from '../../../models';
 import { iCachedTmdbMovie, iCachedTmdbPerson } from '../../../services/cache/types';
-import DS from '../../../services/datastore';
+import ApiServices from '../../../services/graphql';
 import TmdbServices from '../../../services/tmdb';
 import { useSubscriptionEffect } from '../../../util/hooks';
 import Poster from '../../Images/Poster';
 import { BodyLarge } from '../../Text';
 
 type iPerformanceListItemProps = {
-  contenderId: string;
+  contenderPersonId: string;
+  contenderMovieId: string;
   ranking?: number;
   size?: PosterSize;
   onPress: () => void;
 };
 
 const PerformanceListItem = (props: iPerformanceListItemProps) => {
-  const { contenderId, ranking, size, onPress } = props;
+  const { contenderPersonId, contenderMovieId, ranking, size, onPress } = props;
 
   const [person, setPerson] = useState<iCachedTmdbPerson | undefined>();
   const [tmdbMovie, setTmdbMovie] = useState<iCachedTmdbMovie | undefined>();
 
   useSubscriptionEffect(async () => {
     // get tmdb person info
-    if (contender.contenderPersonId) {
-      const { data: p } = await DS.getPersonById(contender.contenderPersonId);
-      if (p) {
-        TmdbServices.getTmdbPerson(p.tmdbId).then((p) => {
-          if (p.status === 'success') {
-            setPerson(p.data);
-          }
-        });
-      }
+    if (contenderPersonId) {
+      const { data: person } = await ApiServices.getPerson(contenderPersonId);
+      const p = person?.getPerson;
+      if (!p) return;
+      TmdbServices.getTmdbPerson(p.tmdbId).then((p) => {
+        if (p.status === 'success') {
+          setPerson(p.data);
+        }
+      });
     }
-    const { data: movie } = await DS.getMovieById(contender.contenderMovieId);
-    if (!movie) return;
+    const { data: movie } = await ApiServices.getMovie(contenderMovieId);
+    const m = movie?.getMovie;
+    if (!m) return;
     // get movie tmdb info
-    TmdbServices.getTmdbMovie(movie.tmdbId).then((m) => {
+    TmdbServices.getTmdbMovie(m.tmdbId).then((m) => {
       if (m.status === 'success') {
         setTmdbMovie(m.data);
       }
     });
-  }, [contender]);
+  }, [contenderPersonId, contenderMovieId]);
 
   // TODO: create better loading state
 

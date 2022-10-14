@@ -1,15 +1,16 @@
 import { RouteProp, useRoute } from '@react-navigation/native';
 import React, { useLayoutEffect, useState } from 'react';
 import { ScrollView } from 'react-native';
-import { GetEventQuery, ListCategoriesQuery } from '../../../API';
+import { CategoryName, GetEventQuery, ListCategoriesQuery } from '../../../API';
 import { TouchableText } from '../../../components/Buttons';
 import { getAwardsBodyCategories } from '../../../constants/categories';
-import { Category, CategoryName } from '../../../models';
 import { GlobalParamList } from '../../../navigation/types';
 import ApiServices from '../../../services/graphql';
 import { useAsyncEffect, useTypedNavigation } from '../../../util/hooks';
 import sortByObjectOrder from '../../../util/sortByObjectOrder';
 import { eventToString } from '../../../util/stringConversions';
+
+type iFormattedCategories = { catId: string; catName: CategoryName };
 
 const CategorySelect = () => {
   const {
@@ -53,25 +54,29 @@ const CategorySelect = () => {
     event.getEvent.year,
   );
 
-  const cs = (categories?.listCategories?.items || []) as Category[];
-  const orderedCategories = sortByObjectOrder<CategoryName, Category>(
+  const cats = categories?.listCategories?.items || [];
+  const formattedCats: iFormattedCategories[] = cats.map((c) => ({
+    catId: c?.id || '',
+    catName: c ? CategoryName[c.name] : CategoryName.PICTURE, // C should never actually be undefined
+  }));
+  const orderedCategories = sortByObjectOrder<CategoryName, iFormattedCategories>(
     categoryList,
-    cs,
-    cs.map((c) => CategoryName[c.name]),
+    formattedCats,
+    cats.map((cat) => (cat ? CategoryName[cat.name] : CategoryName.PICTURE)), // Should never actually default to CategoryName.PICTURE
   );
 
   return (
     <ScrollView
       contentContainerStyle={{ alignItems: 'center', marginTop: 40, paddingBottom: 100 }}
     >
-      {orderedCategories.map((c) => {
-        const catData = categoryList[CategoryName[c.name]] || undefined;
+      {orderedCategories.map(({ catId, catName }) => {
+        const catData = categoryList[CategoryName[catName]] || undefined;
         return (
           <TouchableText
             text={catData?.name || ''}
-            onPress={() => onSelectCategory(c.id)}
+            onPress={() => onSelectCategory(catId)}
             style={{ margin: 10 }}
-            key={c.id}
+            key={catId}
           />
         );
       })}

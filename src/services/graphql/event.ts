@@ -6,11 +6,12 @@ import {
   GetEventQuery,
   DeleteEventMutation,
   ModelEventFilterInput,
+  AwardsBody,
+  EventType,
 } from '../../API';
 import * as mutations from '../../graphql/mutations';
 import * as queries from '../../graphql/queries';
 import { handleError, iApiResponse } from '../utils';
-import { AwardsBody, EventType } from '../../models';
 
 export const getAllEvents = async (): Promise<iApiResponse<ListEventsQuery>> => {
   try {

@@ -1,166 +1,154 @@
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { DataStore } from 'aws-amplify';
+import { RouteProp, useRoute } from '@react-navigation/native';
 import React, { useLayoutEffect, useState } from 'react';
 import { ScrollView } from 'react-native';
+import {
+  AwardsBody,
+  CategoryName,
+  CategoryType,
+  EventType,
+  GetCategoryQuery,
+  ListContendersQuery,
+} from '../../API';
 import { TouchableText } from '../../components/Buttons';
 import ContenderListItem from '../../components/List/ContenderList/ContenderListItem';
 import { PosterSize } from '../../constants/posterDimensions';
-import {
-  EventType,
-  AwardsBody,
-  CategoryType,
-  Contender,
-  Prediction,
-  CategoryName,
-} from '../../models';
-
 import { PersonalParamList } from '../../navigation/types';
-import DS from '../../services/datastore';
+import ApiServices from '../../services/graphql';
 import { useAuth } from '../../store';
-import { useSubscriptionEffect } from '../../util/hooks';
+import {
+  useAsyncEffect,
+  useSubscriptionEffect,
+  useTypedNavigation,
+} from '../../util/hooks';
+import { removeFromArray } from '../../util/removeFromArray';
 import { fullEventToString } from '../../util/stringConversions';
 
-type iAddContenderItem = {
-  selected: boolean;
-  contender: Contender;
-};
-
-type iPredictionData = {
-  contender: Contender;
-  ranking: number;
-}[];
-
 // TODO: really, this is adding OR deleting contenders
+// NOTE: this is very similar to Contenders, some code is duplicated
 
 const AddContenders = () => {
   const {
-    params: { category },
+    params: { categoryId },
   } = useRoute<RouteProp<PersonalParamList, 'AddContenders'>>();
-  const navigation = useNavigation();
+  const navigation = useTypedNavigation<PersonalParamList>();
   const { userId } = useAuth();
 
   const [loading, setLoading] = useState<boolean>(false);
-  const [initialPredictions, setInitialPredictions] = useState<Prediction[]>([]);
-  const [contenderData, setContenderData] = useState<iAddContenderItem[]>([]);
+  const [contenders, setContenders] = useState<ListContendersQuery>();
+  const [category, setCategory] = useState<GetCategoryQuery>();
+  const [selectedContenderIds, setSelectedContenderIds] = useState<string[]>([]);
+  const [initiallySelectedContenderIds, setInitiallySelectedContenderIds] = useState<
+    string[]
+  >([]);
 
-  const selectedContenders = contenderData.filter((cd) => cd.selected);
+  const cat = category?.getCategory;
+
+  // NOTE: later, we'll just have the category live in context instead of fetching every new component / passing via nav props
+  useAsyncEffect(async () => {
+    const { data } = await ApiServices.getCategoryById(categoryId);
+    setCategory(data);
+  }, [categoryId]);
 
   // Set header title
   useLayoutEffect(() => {
-    const e = category.event;
-    if (!e) return;
+    if (!cat) return;
+    const e = cat.event;
     navigation.setOptions({
       headerTitle: fullEventToString(
         AwardsBody[e.awardsBody],
         EventType[e.type],
         e.year,
-        CategoryName[category.name],
+        CategoryName[cat.name],
       ),
     });
-  }, [navigation, category.name, category.event]);
+  }, [navigation, cat]);
 
   // get initial list of contenders and mark whether they are selected or not
   useSubscriptionEffect(async () => {
-    if (!userId) return;
-    const { data: predictions } = await DS.getPredictions(userId, category);
-    if (!predictions) return;
-    setInitialPredictions(predictions);
-    const initiallySelectedContenderIds = predictions.map((p) => p.contender.id);
-    const allContenders = (await DataStore.query(Contender))
-      .filter((c) => c.category?.id === category.id)
-      .map((c) => {
-        const selected = initiallySelectedContenderIds.includes(c.id);
-        return {
-          selected,
-          contender: c,
-        };
-      });
-    setContenderData(allContenders);
+    if (!userId || !cat) return;
+    const { data: pSet } = await ApiServices.getPredictionsSet({
+      userId,
+      categoryId,
+      eventId: cat.event.id,
+    });
+    const predictions = pSet?.getPredictionSet?.predictions;
+    if (!predictions) {
+      return console.error('no predictions found from getPredictionSet query');
+    }
+    // this is basically get contenders by category id
+    const { data: cs } = await ApiServices.getContendersByCategory(cat.id);
+    setContenders(cs);
+    const initiallySelectedContendersIds = cs?.listContenders?.items.map(
+      (c) => c?.id || '',
+    );
+    if (!initiallySelectedContendersIds) return;
+    setInitiallySelectedContenderIds(initiallySelectedContendersIds);
+    setSelectedContenderIds(initiallySelectedContendersIds);
   }, []);
 
-  const onPressFilm = async (contender: Contender) => {
+  const onPressFilm = async (contenderId: string) => {
+    if (!cat) return;
     navigation.navigate('ContenderDetails', {
-      contender,
-      categoryType: category.type,
+      categoryType: cat.type,
+      contenderId,
     });
   };
 
-  const onPressPerformance = async (contender: Contender) => {
-    let personTmdb;
-    if (contender.contenderPersonId) {
-      const { data: p } = await DS.getPersonById(contender.contenderPersonId);
-      if (p) {
-        personTmdb = p.tmdbId;
-      }
-    }
+  const onPressPerformance = async (contenderId: string, personId: string) => {
+    if (!cat) return;
+    const { data } = await ApiServices.getPerson(personId);
+    if (!data?.getPerson) return;
+    const personTmdb = data.getPerson.tmdbId;
     navigation.navigate('ContenderDetails', {
-      contender,
-      categoryType: category.type,
+      contenderId,
+      categoryType: cat.type,
       personTmdb,
     });
   };
 
-  const onPressThumbnail = (() => {
-    switch (CategoryType[category.type]) {
-      case CategoryType.FILM:
-      case CategoryType.SONG:
-        return onPressFilm;
-      case CategoryType.PERFORMANCE:
-        return onPressPerformance;
+  const onPressThumbnail = (contenderId: string, personId?: string) => {
+    if (!category?.getCategory) return;
+    const cType = CategoryType[category?.getCategory.type];
+    if (cType === CategoryType.PERFORMANCE && personId) {
+      onPressPerformance(contenderId, personId);
+    } else {
+      onPressFilm(contenderId);
     }
-  })();
+  };
 
-  const onPressItem = async (c: Contender) => {
-    const newContenderData = contenderData.map((cd) => {
-      if (cd.contender.id === c.id) {
-        return {
-          contender: cd.contender,
-          selected: !cd.selected,
-        };
-      }
-      return cd;
-    });
-    setContenderData(newContenderData);
+  const onPressItem = async (contenderId: string) => {
+    const isAlreadySelected = selectedContenderIds.includes(contenderId);
+    const newSelected = isAlreadySelected
+      ? removeFromArray<string>(selectedContenderIds, contenderId)
+      : [...selectedContenderIds, contenderId];
+    setSelectedContenderIds(newSelected);
   };
 
   const onSave = async () => {
     if (!userId) return;
     setLoading(true);
-    const initialContenderIds = initialPredictions.map((p) => p.contender.id);
-    const selectedContenderIds = selectedContenders.map((sc) => sc.contender.id);
     const addedContenderIds = selectedContenderIds.filter(
-      (id) => !initialContenderIds.includes(id),
+      (id) => !initiallySelectedContenderIds.includes(id),
     );
-    const deletedContenderIds = initialContenderIds.filter(
+    const deletedContenderIds = initiallySelectedContenderIds.filter(
       (id) => !selectedContenderIds.includes(id),
     );
     // format initial predictions and remove deleted contenders
-    const notDeletedContenders = initialPredictions.reduce((acc: Contender[], p) => {
-      // filter out deleted contenders; format predictions as iPredictionData
-      if (!deletedContenderIds.includes(p.contender.id)) {
-        acc.push(p.contender);
-      }
-      return acc;
-    }, []);
-    // format the added contenders
-    const addedContenders = selectedContenders.reduce((acc: Contender[], c) => {
-      // filter out deleted contenders; format predictions as iPredictionData
-      if (addedContenderIds.includes(c.contender.id)) {
-        acc.push(c.contender);
-      }
-      return acc;
-    }, []);
+    const notDeletedContenderIds = initiallySelectedContenderIds.filter(
+      (id) => !deletedContenderIds.includes(id),
+    );
+    const updatedContenderIds = [...notDeletedContenderIds, ...addedContenderIds];
     // set the ranking order according to insertion order into the array
-    const newPredictionData: iPredictionData = [
-      ...notDeletedContenders,
-      ...addedContenders,
-    ].map((c, i) => ({
-      contender: c,
+    const newPredictionData = updatedContenderIds.map((c, i) => ({
+      contenderId: c,
       ranking: i + 1,
     }));
-    const { data: newPredictions } = await DS.createOrUpdatePredictions(
-      userId,
-      category,
+    const eventId = cat?.eventId;
+    if (!eventId) {
+      return console.error('no eventId property on category');
+    }
+    const { data: newPredictions } = await ApiServices.createOrUpdatePredictions(
+      { userId, categoryId, eventId },
       newPredictionData,
     );
     if (newPredictions) {
@@ -168,6 +156,10 @@ const AddContenders = () => {
     }
     setLoading(false);
   };
+
+  const _contenders = contenders?.listContenders;
+
+  if (!_contenders) return null;
 
   return (
     <ScrollView
@@ -178,26 +170,30 @@ const AddContenders = () => {
         width: '100%',
       }}
     >
-      {contenderData.map((c, i) => (
-        <ContenderListItem
-          contender={c.contender}
-          ranking={i + 1}
-          category={category}
-          onPressItem={onPressItem}
-          onPressThumbnail={onPressThumbnail}
-          selected={c.selected}
-          size={PosterSize.SMALL}
-          isSelectable
-          disabled={loading}
-        />
-      ))}
-      {contenderData.length > 0 ? (
+      {_contenders?.items.map((c, i) => {
+        const contenderId = c?.id;
+        if (!contenderId) return null;
+        return (
+          <ContenderListItem
+            contenderId={contenderId}
+            ranking={i + 1}
+            categoryId={categoryId}
+            onPressItem={onPressItem}
+            onPressThumbnail={onPressThumbnail}
+            selected={selectedContenderIds.includes(contenderId)}
+            size={PosterSize.SMALL}
+            isSelectable
+            disabled={loading}
+          />
+        );
+      })}
+      {_contenders.items.length > 0 ? (
         <TouchableText text={'Save'} onPress={onSave} style={{ margin: 10 }} />
       ) : null}
       <TouchableText
         text={'Submit a contender'}
         onPress={() => {
-          navigation.navigate('CreateContender', { category });
+          navigation.navigate('CreateContender', { categoryId: 'asdf' });
         }}
         style={{ margin: 10 }}
       />

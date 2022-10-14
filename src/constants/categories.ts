@@ -1,4 +1,4 @@
-import { AwardsBody, CategoryName, CategoryType } from '../models';
+import { AwardsBody, CategoryName, CategoryType } from '../API';
 
 export type iCategoryData = { name: string; type: CategoryType; slots?: number };
 

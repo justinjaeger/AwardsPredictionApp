@@ -1,67 +1,107 @@
 import React, { useState } from 'react';
 import { TouchableHighlight } from 'react-native';
+import {
+  CategoryType,
+  GetCategoryQuery,
+  GetContenderQuery,
+  GetMovieQuery,
+} from '../../../API';
 import COLORS from '../../../constants/colors';
 import { PosterSize } from '../../../constants/posterDimensions';
-import { Category, CategoryType, Contender, Movie } from '../../../models';
-import DS from '../../../services/datastore';
+import ApiServices from '../../../services/graphql';
 import { useAsyncEffect } from '../../../util/hooks';
 import FilmListItem from './FilmListItem';
 import PerformanceListItem from './PerformanceListItem';
 import SongListItem from './SongListItem';
 
 type iContenderListItemDraggableProps = {
-  category: Category;
-  contender: Contender;
+  categoryId: string;
+  contenderId: string;
   ranking: number;
   drag: () => void;
   isActive: boolean;
   selected?: boolean;
   isSelectable?: boolean;
   disabled?: boolean;
-  onPressThumbnail?: (c: Contender) => Promise<void>;
-  onPressItem?: (c: Contender) => Promise<void>;
+  size?: PosterSize;
+  onPressThumbnail?: (contenderId: string) => void;
+  onPressItem?: (contenderId: string) => void;
 };
 
 const ContenderListItemDraggable = (props: iContenderListItemDraggableProps) => {
   const {
-    category,
-    drag,
-    isActive,
-    contender,
+    categoryId,
+    contenderId,
     ranking,
+    size,
     selected: _selected,
     isSelectable,
     disabled,
+    isActive,
+    drag,
     onPressThumbnail,
     onPressItem,
   } = props;
 
   const [selected, setSelected] = useState<boolean>(_selected || false);
-  const [movie, setMovie] = useState<Movie | undefined>();
+  const [movie, setMovie] = useState<GetMovieQuery>();
+  const [category, setCategory] = useState<GetCategoryQuery>();
+  const [contender, setContender] = useState<GetContenderQuery>();
+
+  const categoryType = category?.getCategory?.type;
+  const categoryName = category?.getCategory?.name;
+  const movieId = contender?.getContender?.contenderMovieId;
+  const contenderPersonId = contender?.getContender?.contenderPersonId;
+  const contenderMovieId = contender?.getContender?.contenderMovieId;
+  const songId = contender?.getContender?.contenderSongId;
+  const tmdbMovieId = movie?.getMovie?.tmdbId;
+  const movieStudio = movie?.getMovie?.studio;
+
+  // NOTE: later, we'll just have the category live in context instead of fetching every new component / passing via nav props
+  useAsyncEffect(async () => {
+    const { data } = await ApiServices.getCategoryById(categoryId);
+    setCategory(data);
+  }, [categoryId]);
+
+  // NOTE: later, we'll just have the contender live in context instead of fetching every new component / passing via nav props
+  useAsyncEffect(async () => {
+    const { data } = await ApiServices.getContenderById(contenderId);
+    setContender(data);
+  }, [contenderId]);
 
   const onPress = () => {
     if (disabled) return;
-    onPressThumbnail && onPressThumbnail(contender);
+    onPressThumbnail && onPressThumbnail(contenderId);
   };
 
   useAsyncEffect(async () => {
-    const movieId = contender.contenderMovieId;
-    const { data: movie } = await DS.getMovieById(movieId);
+    if (!movieId) return;
+    const { data: movie } = await ApiServices.getMovie(movieId);
     setMovie(movie);
-  }, [contender.contenderMovieId]);
+  }, [movieId]);
 
-  if (!movie) return null;
+  if (
+    !movie ||
+    !categoryType ||
+    !tmdbMovieId ||
+    !categoryName ||
+    !contenderPersonId ||
+    !contenderMovieId
+  )
+    return null;
 
-  const size = PosterSize.SMALL;
+  const _size = PosterSize.SMALL;
 
   let component: JSX.Element = <></>;
-  switch (CategoryType[category.type]) {
+  switch (CategoryType[categoryType]) {
     case CategoryType.FILM:
+      if (!movieId) return null;
       component = (
         <FilmListItem
-          contender={contender}
-          category={category}
-          movie={movie}
+          contenderId={contenderId}
+          categoryName={categoryName}
+          movieTmdbId={tmdbMovieId}
+          movieStudio={movieStudio || undefined}
           ranking={ranking}
           size={size}
           onPress={onPress}
@@ -71,7 +111,8 @@ const ContenderListItemDraggable = (props: iContenderListItemDraggableProps) => 
     case CategoryType.PERFORMANCE:
       component = (
         <PerformanceListItem
-          contender={contender}
+          contenderPersonId={contenderPersonId}
+          contenderMovieId={contenderMovieId}
           ranking={ranking}
           size={size}
           onPress={onPress}
@@ -79,13 +120,13 @@ const ContenderListItemDraggable = (props: iContenderListItemDraggableProps) => 
       );
       break;
     case CategoryType.SONG:
-      if (!contender.contenderSongId) return null;
+      if (!songId || !tmdbMovieId) return null;
       component = (
         <SongListItem
-          tmdbMovieId={movie?.tmdbId}
-          songId={contender.contenderSongId}
+          tmdbMovieId={tmdbMovieId}
+          songId={songId}
           ranking={ranking}
-          size={size}
+          size={_size}
           onPress={onPress}
         />
       );
@@ -99,12 +140,12 @@ const ContenderListItemDraggable = (props: iContenderListItemDraggableProps) => 
         if (isSelectable) {
           setSelected(!selected);
         }
-        onPressItem && onPressItem(contender);
+        onPressItem && onPressItem(contenderId);
       }}
       style={{
         backgroundColor: selected ? COLORS.success : 'transparent',
         width: '100%',
-        height: size,
+        height: _size,
       }}
       underlayColor={onPressItem ? COLORS.border : 'transparent'}
       onLongPress={drag}

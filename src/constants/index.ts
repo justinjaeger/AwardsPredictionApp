@@ -1,8 +1,8 @@
-import { EventType } from '../models';
-
 /**
  * Misc constants
  */
+
+import { EventType } from '../API';
 
 export const TMDB_IMAGE_URL = 'https://image.tmdb.org/t/p/original';
 

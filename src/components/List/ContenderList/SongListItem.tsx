@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
+import { GetSongQuery } from '../../../API';
 import { PosterSize } from '../../../constants/posterDimensions';
-import { Song } from '../../../models';
 import { iCachedTmdbMovie } from '../../../services/cache/types';
-import DS from '../../../services/datastore';
+import ApiServices from '../../../services/graphql';
 import TmdbServices from '../../../services/tmdb';
 import { useAsyncEffect } from '../../../util/hooks';
 import Poster from '../../Images/Poster';
@@ -21,7 +21,7 @@ const SongListItem = (props: iSongListItemProps) => {
   const { songId, ranking, tmdbMovieId, size, onPress } = props;
 
   const [movie, setMovie] = useState<iCachedTmdbMovie | undefined>();
-  const [song, setSong] = useState<Song | undefined>();
+  const [song, setSong] = useState<GetSongQuery>();
 
   useEffect(() => {
     TmdbServices.getTmdbMovie(tmdbMovieId).then((m) => {
@@ -32,12 +32,13 @@ const SongListItem = (props: iSongListItemProps) => {
   }, [tmdbMovieId]);
 
   useAsyncEffect(async () => {
-    const { data: song } = await DS.getSongById(songId);
+    const { data: song } = await ApiServices.getSong(songId);
     setSong(song);
   }, [songId]);
 
   // TODO: create better loading state
-  if (!song) return null;
+  const s = song?.getSong;
+  if (!s) return null;
 
   return (
     <View
@@ -56,8 +57,8 @@ const SongListItem = (props: iSongListItemProps) => {
           onPress={onPress}
         />
         <View style={{ flexDirection: 'column' }}>
-          <BodyLarge style={{ marginTop: 10, marginLeft: 10 }}>{song.title}</BodyLarge>
-          <BodyLarge style={{ marginTop: 10, marginLeft: 10 }}>{song.artist}</BodyLarge>
+          <BodyLarge style={{ marginTop: 10, marginLeft: 10 }}>{s.title}</BodyLarge>
+          <BodyLarge style={{ marginTop: 10, marginLeft: 10 }}>{s.artist}</BodyLarge>
           <BodyLarge style={{ marginTop: 10, marginLeft: 10 }}>
             {movie?.title || ''}
           </BodyLarge>

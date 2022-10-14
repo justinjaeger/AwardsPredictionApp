@@ -1,7 +1,7 @@
+import { AwardsBody, CategoryName, EventType } from '../API';
 import { EVENT_TYPE_TO_STRING } from '../constants';
 import { AWARDS_BODY_TO_PLURAL_STRING } from '../constants/awardsBodies';
 import { getAwardsBodyCategories } from '../constants/categories';
-import { AwardsBody, CategoryName, EventType } from '../models';
 
 /**
  * "2022 Academy Awards (Nominations)"

@@ -1,5 +1,5 @@
+import { AwardsBody, CategoryName, EventType } from '../../API';
 import { getAwardsBodyCategories, iCategoryData } from '../../constants/categories';
-import { AwardsBody, EventType, CategoryName } from '../../models';
 import ApiServices from '../../services/graphql';
 
 const EVENTS = [

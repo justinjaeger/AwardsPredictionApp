@@ -5,8 +5,8 @@ import { iTmdbMovieCreditsResponse, iTmdbMovieResponse, iTmdbResponse } from './
 import { TMDB_URL } from '.';
 import TmdbMovieCache from '../cache/tmdbMovie';
 import { iCachedTmdbMovie } from '../cache/types';
-import { CategoryName } from '../../models';
 import { ALL_CATEGORIES } from '../../constants/categories';
+import { CategoryName } from '../../API';
 
 export const getTmdbMovie = async (
   tmdbId: number,

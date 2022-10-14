@@ -1,65 +1,99 @@
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { RouteProp, useRoute } from '@react-navigation/native';
 import React, { useLayoutEffect, useState } from 'react';
 import { View } from 'react-native';
+import { AwardsBody, CategoryName, EventType, GetCategoryQuery } from '../../API';
 import { TouchableText } from '../../components/Buttons';
 import ContenderListDraggable from '../../components/List/ContenderList/ContenderListDraggable';
-import { AwardsBody, CategoryName, Contender, EventType } from '../../models';
 import { PersonalParamList } from '../../navigation/types';
-import DS from '../../services/datastore';
-import { iPredictionData } from '../../services/datastore/user/predictions';
+import ApiServices from '../../services/graphql';
 import { useAuth } from '../../store';
-import { useSubscriptionEffect } from '../../util/hooks';
+import {
+  useAsyncEffect,
+  useSubscriptionEffect,
+  useTypedNavigation,
+} from '../../util/hooks';
 import { fullEventToString } from '../../util/stringConversions';
 
+// NOTE: Similar to Add Contenders, somewhat
 const EditPredictions = () => {
   const {
-    params: { category },
+    params: { categoryId },
   } = useRoute<RouteProp<PersonalParamList, 'Contenders'>>();
-  const navigation = useNavigation();
+  const navigation = useTypedNavigation<PersonalParamList>();
   const { userId } = useAuth();
 
-  const [contenders, setContenders] = useState<Contender[]>([]);
+  const [category, setCategory] = useState<GetCategoryQuery>();
+  const [contenderIds, setContenderIds] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+
+  const cat = category?.getCategory;
+
+  // NOTE: later, we'll just have the category live in context instead of fetching every new component / passing via nav props
+  useAsyncEffect(async () => {
+    const { data } = await ApiServices.getCategoryById(categoryId);
+    setCategory(data);
+  }, [categoryId]);
 
   // Set header title (NOTE: dupliated from Global, combine these screens via top tabs eventually)
   // Move all duplicated stuff into shared menu like "add contender" (maybe that's in a FAB popout)
   useLayoutEffect(() => {
-    const e = category.event;
+    if (!cat) return;
+    const e = cat.event;
     if (!e) return;
     navigation.setOptions({
       headerTitle: fullEventToString(
         AwardsBody[e.awardsBody],
         EventType[e.type],
         e.year,
-        CategoryName[category.name],
+        CategoryName[cat.name],
       ),
     });
-  }, [navigation, category.name, category.event]);
+  }, [navigation, cat]);
 
+  // Get predictions as list of sorted contender Ids
   useSubscriptionEffect(async () => {
-    if (!userId) return;
-    const { data: ps } = await DS.getPredictions(userId, category);
-    if (!ps) return;
-    const sortedContenders = (ps || [])
-      .sort((a, b) => (a.ranking > b.ranking ? 1 : -1))
-      .map((p) => p.contender);
-    setContenders(sortedContenders);
+    if (!userId || !cat) return;
+    const { data: pSet } = await ApiServices.getPredictionsSet({
+      userId,
+      categoryId,
+      eventId: cat.event.id,
+    });
+    const predictions = pSet?.getPredictionSet?.predictions;
+    if (!predictions) {
+      return console.error('no predictions found from getPredictionSet query');
+    }
+    const sortedContenderIds = (predictions.items || [])
+      .sort((a, b) => {
+        if (!a || !b) return 0;
+        return a.ranking > b.ranking ? 1 : -1;
+      })
+      .map((p) => p?.contenderId || '');
+    setContenderIds(sortedContenderIds);
   }, []);
 
-  const onPressThumbnail = async (c: Contender) => {
+  const onPressThumbnail = async (cId: string) => {
     // do nothing for now?
   };
 
   const onSaveContenders = async () => {
     if (!userId) return;
-    const predictionData: iPredictionData = contenders.map((c, i) => ({
-      contender: c,
+    setLoading(true);
+    const newPredictionData = contenderIds.map((id, i) => ({
+      contenderId: id,
       ranking: i + 1,
     }));
-    setLoading(true);
-    await DS.createOrUpdatePredictions(userId, category, predictionData);
+    const eventId = cat?.eventId;
+    if (!eventId) {
+      return console.error('no eventId property on category');
+    }
+    const { data: newPredictions } = await ApiServices.createOrUpdatePredictions(
+      { userId, categoryId, eventId },
+      newPredictionData,
+    );
+    if (newPredictions) {
+      navigation.goBack();
+    }
     setLoading(false);
-    navigation.goBack();
   };
 
   return (
@@ -67,7 +101,7 @@ const EditPredictions = () => {
       <TouchableText
         text={'Add or delete contenders'}
         onPress={() => {
-          navigation.navigate('AddContenders', { category });
+          navigation.navigate('AddContenders', { categoryId });
         }}
         loading={loading}
         style={{ margin: 10 }}
@@ -79,9 +113,9 @@ const EditPredictions = () => {
         style={{ margin: 10 }}
       />
       <ContenderListDraggable
-        category={category}
-        contenders={contenders}
-        onDragEnd={setContenders}
+        categoryId={categoryId}
+        contenderIds={contenderIds}
+        onDragEnd={setContenderIds}
         onPressThumbnail={onPressThumbnail}
       />
     </View>

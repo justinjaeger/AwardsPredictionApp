@@ -7,38 +7,39 @@ import { BodyLarge, SubHeader } from '../Text';
 import { PosterSize } from '../../constants/posterDimensions';
 import { iCachedTmdbMovie } from '../../services/cache/types';
 import TmdbServices from '../../services/tmdb';
-import { Movie, Song } from '../../models';
 import { useAsyncEffect } from '../../util/hooks';
-import DS from '../../services/datastore';
+import ApiServices from '../../services/graphql';
+import { GetSongQuery } from '../../API';
 
 type iSongDetailsProps = {
-  movie: Movie;
+  movieTmdbId: number;
   songId: string;
 };
 
 const SongDetails = (props: iSongDetailsProps) => {
-  const { movie, songId } = props;
+  const { movieTmdbId, songId } = props;
 
   const navigation = useNavigation();
 
   const [movieDetails, setMovieDetails] = useState<iCachedTmdbMovie | undefined>();
-  const [song, setSong] = useState<Song | undefined>();
+  const [song, setSong] = useState<GetSongQuery>();
 
   useAsyncEffect(async () => {
-    const { data: song } = await DS.getSongById(songId);
+    const { data: song } = await ApiServices.getSong(songId);
     setSong(song);
   }, [songId]);
 
-  const movieTmdbId = movie.tmdbId;
+  const songTitle = song?.getSong?.title;
+  const songArtist = song?.getSong?.artist;
 
   // Set header title
   useLayoutEffect(() => {
-    if (song) {
+    if (songTitle) {
       navigation.setOptions({
-        headerTitle: song.title,
+        headerTitle: songTitle,
       });
     }
-  }, [navigation, song]);
+  }, [navigation, songTitle]);
 
   useEffect(() => {
     TmdbServices.getTmdbMovie(movieTmdbId).then((res) => {
@@ -68,11 +69,11 @@ const SongDetails = (props: iSongDetailsProps) => {
       <View style={{ alignItems: 'flex-start' }}>
         <View style={{ flexDirection: 'column', marginTop: 5 }}>
           <BodyLarge style={{ fontWeight: '800', marginBottom: 5 }}>{'Song'}</BodyLarge>
-          <BodyLarge>{song?.title || ''}</BodyLarge>
+          <BodyLarge>{songTitle || ''}</BodyLarge>
         </View>
         <View style={{ flexDirection: 'column', marginTop: 5 }}>
           <BodyLarge style={{ fontWeight: '800', marginBottom: 5 }}>{'Artist'}</BodyLarge>
-          <BodyLarge>{song?.artist || ''}</BodyLarge>
+          <BodyLarge>{songArtist || ''}</BodyLarge>
         </View>
       </View>
     </View>

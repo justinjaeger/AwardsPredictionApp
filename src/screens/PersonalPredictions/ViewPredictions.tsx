@@ -1,51 +1,77 @@
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { RouteProp, useRoute } from '@react-navigation/native';
 import React, { useLayoutEffect, useState } from 'react';
 import { ScrollView } from 'react-native';
+import { AwardsBody, CategoryName, EventType, GetCategoryQuery } from '../../API';
 import { TouchableText } from '../../components/Buttons';
 import ContenderList from '../../components/List/ContenderList';
-import { CategoryName, EventType, AwardsBody, Contender } from '../../models';
 import { PersonalParamList } from '../../navigation/types';
-import DS from '../../services/datastore';
+import ApiServices from '../../services/graphql';
 import { useAuth } from '../../store';
-import { useSubscriptionEffect } from '../../util/hooks';
+import {
+  useAsyncEffect,
+  useSubscriptionEffect,
+  useTypedNavigation,
+} from '../../util/hooks';
 import { fullEventToString } from '../../util/stringConversions';
 
+// NOTE: Similar to Category/Contenders
 const ViewPredictions = () => {
   const {
-    params: { category },
+    params: { categoryId },
   } = useRoute<RouteProp<PersonalParamList, 'Contenders'>>();
-  const navigation = useNavigation();
+  const navigation = useTypedNavigation<PersonalParamList>();
   const { userId } = useAuth();
 
-  const [contenders, setContenders] = useState<Contender[]>([]);
+  const [category, setCategory] = useState<GetCategoryQuery>();
+  const [contenderIds, setContenderIds] = useState<string[]>([]);
+
+  const cat = category?.getCategory;
+
+  // NOTE: later, we'll just have the category live in context instead of fetching every new component / passing via nav props
+  useAsyncEffect(async () => {
+    const { data } = await ApiServices.getCategoryById(categoryId);
+    setCategory(data);
+  }, [categoryId]);
 
   // Set header title (NOTE: dupliated from Global, combine these screens via top tabs eventually)
   // Move all duplicated stuff into shared menu like "add contender" (maybe that's in a FAB popout)
   useLayoutEffect(() => {
-    const e = category.event;
-    if (!e) return;
+    const c = category?.getCategory;
+    if (!c) return;
+    const e = c.event;
     navigation.setOptions({
       headerTitle: fullEventToString(
         AwardsBody[e.awardsBody],
         EventType[e.type],
         e.year,
-        CategoryName[category.name],
+        CategoryName[c.name],
       ),
     });
-  }, [navigation, category.name, category.event]);
+  }, [navigation, category]);
 
   // NOTE: same logic exists in EditPredictions
+  // Get predictions as list of sorted contender Ids
   useSubscriptionEffect(async () => {
-    if (!userId) return;
-    const { data: ps } = await DS.getPredictions(userId, category);
-    if (!ps) return;
-    const sortedContenders = (ps || [])
-      .sort((a, b) => (a.ranking > b.ranking ? 1 : -1))
-      .map((p) => p.contender);
-    setContenders(sortedContenders);
+    if (!userId || !cat) return;
+    const { data: pSet } = await ApiServices.getPredictionsSet({
+      userId,
+      categoryId,
+      eventId: cat.event.id,
+    });
+    const predictions = pSet?.getPredictionSet?.predictions;
+    if (!predictions) {
+      return console.error('no predictions found from getPredictionSet query');
+    }
+    const sortedContenderIds = (predictions.items || [])
+      .sort((a, b) => {
+        if (!a || !b) return 0;
+        return a.ranking > b.ranking ? 1 : -1;
+      })
+      .map((p) => p?.contenderId || '');
+    setContenderIds(sortedContenderIds);
   }, []);
 
-  const onPressThumbnail = async (c: Contender) => {
+  const onPressThumbnail = async (contenderId: string) => {
     // do nothing for now?
   };
 
@@ -53,18 +79,18 @@ const ViewPredictions = () => {
     <ScrollView
       contentContainerStyle={{ alignItems: 'center', marginTop: 40, paddingBottom: 200 }}
     >
-      {contenders.length > 0 ? (
+      {contenderIds.length > 0 ? (
         <>
           <TouchableText
             text={'Edit Predictions'}
             onPress={() => {
-              navigation.navigate('EditPredictions', { category });
+              navigation.navigate('EditPredictions', { categoryId });
             }}
             style={{ margin: 10 }}
           />
           <ContenderList
-            category={category}
-            contenders={contenders}
+            categoryId={categoryId}
+            orderedContenderIds={contenderIds}
             onPressThumbnail={onPressThumbnail}
           />
         </>
@@ -72,7 +98,7 @@ const ViewPredictions = () => {
         <TouchableText
           text={'Add to list'}
           onPress={() => {
-            navigation.navigate('AddContenders', { category });
+            navigation.navigate('AddContenders', { categoryId });
           }}
           style={{ margin: 10 }}
         />

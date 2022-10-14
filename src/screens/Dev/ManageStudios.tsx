@@ -1,42 +1,60 @@
-import { DataStore } from 'aws-amplify';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
+import { ListMoviesQuery } from '../../API';
 import { TouchableText } from '../../components/Buttons';
 import Poster from '../../components/Images/Poster';
 import FormInput from '../../components/Inputs/FormInput';
 import { BodyLarge } from '../../components/Text';
 import { PosterSize } from '../../constants/posterDimensions';
-import { Movie } from '../../models';
 import { iCachedTmdbMovie } from '../../services/cache/types';
-import DS from '../../services/datastore';
+import ApiServices from '../../services/graphql';
 import TmdbServices from '../../services/tmdb';
+import { useAsyncEffect } from '../../util/hooks';
 
 // TODO: no list order yet. eventually have to define something
 const ManageStudios = () => {
-  const [movies, setMovies] = useState<Movie[] | undefined>();
+  const [movies, setMovies] = useState<ListMoviesQuery>();
 
-  useEffect(() => {
-    const sub = DataStore.observeQuery(Movie).subscribe(({ items }) => {
-      const sortedItems = items.sort((m) => (!!m.studio === false ? -1 : 1));
-      setMovies(sortedItems);
-    });
-    return () => sub.unsubscribe();
+  useAsyncEffect(async () => {
+    const { data } = await ApiServices.getAllMovies();
+    setMovies(data);
   }, []);
+
+  const ms = movies?.listMovies?.items;
+
+  if (!ms) return null;
+
+  const sortedItems = ms.sort((m) => {
+    if (!m) return 0;
+    return !!m.studio === false ? -1 : 1;
+  });
 
   return (
     <ScrollView
       contentContainerStyle={{ alignItems: 'center', marginTop: 40, paddingBottom: 100 }}
     >
-      {movies ? movies.map((m) => <StudioItem movie={m} />) : null}
+      {sortedItems.map((m) => {
+        if (!m) return null;
+        return (
+          <StudioItem
+            movieTmdbId={m.tmdbId}
+            movieId={m.id}
+            movieStudio={m.studio || undefined}
+          />
+        );
+      })}
     </ScrollView>
   );
 };
 
 export default ManageStudios;
 
-const StudioItem = (props: { movie: Movie }) => {
-  const { movie } = props;
-  const movieTmdbId = movie.tmdbId;
+const StudioItem = (props: {
+  movieTmdbId: number;
+  movieId: string;
+  movieStudio?: string | undefined;
+}) => {
+  const { movieTmdbId, movieId, movieStudio } = props;
 
   const [tmdbMovie, setTmdbMovie] = useState<iCachedTmdbMovie | undefined>();
   const [studio, setStudio] = useState<string>('');
@@ -50,7 +68,7 @@ const StudioItem = (props: { movie: Movie }) => {
   }, [movieTmdbId]);
 
   const onSubmitStudio = async () => {
-    await DS.updateStudio(movie.id, studio);
+    await ApiServices.updateStudio(movieId, studio);
     setStudio('');
   };
 
@@ -73,7 +91,7 @@ const StudioItem = (props: { movie: Movie }) => {
             {tmdbMovie?.title || ''}
           </BodyLarge>
           <BodyLarge style={{ marginTop: 10, marginLeft: 10 }}>
-            {movie.studio || ''}
+            {movieStudio || ''}
           </BodyLarge>
           <View
             style={{

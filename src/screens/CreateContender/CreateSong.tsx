@@ -1,37 +1,41 @@
-import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { SubmitButton } from '../../components/Buttons';
 import SearchInput from '../../components/Inputs/SearchInput';
 import SearchResultsList from '../../components/List/SearchResultsList';
 import TmdbServices from '../../services/tmdb';
 import { iSearchData } from '../../services/tmdb/search';
-import DS from '../../services/datastore';
 import Snackbar from '../../components/Snackbar';
 import ContenderDetails from '../../components/ContenderDetails';
 import { Body } from '../../components/Text';
 import { iCreateContenderProps } from '.';
-import { CategoryType, Movie } from '../../models';
 import { IconButton } from '../../components/Buttons/IconButton';
 import { View } from 'react-native';
 import FormInput from '../../components/Inputs/FormInput';
+import ApiServices from '../../services/graphql';
+import { CategoryType, GetMovieQuery } from '../../API';
+import { useTypedNavigation } from '../../util/hooks';
+import { CreateContenderParamList } from '../../navigation/types';
 
 const MAX_CHAR_COUNT = 100;
 
 // TODO: should only be able to do this if logged in
 const CreateSong = (props: iCreateContenderProps) => {
-  const { category } = props;
+  const { categoryId, eventYear } = props;
 
-  const navigation = useNavigation();
+  const navigation = useTypedNavigation<CreateContenderParamList>();
 
-  const event = category.event;
-  const minReleaseYear = event.year - 1;
+  const minReleaseYear = eventYear - 1;
 
   const [searchResults, setSearchResults] = useState<iSearchData>([]);
-  const [movie, setMovie] = useState<Movie | undefined>();
+  const [movie, setMovie] = useState<GetMovieQuery>();
   const [loading, setLoading] = useState<boolean>(false);
   const [searchMessage, setSearchMessage] = useState<string>('');
   const [songTitle, setSongTitle] = useState<string>('');
   const [artist, setArtist] = useState<string>('');
+
+  const movieId = movie?.getMovie?.id;
+  const movieTmdbId = movie?.getMovie?.tmdbId;
+  const movieStudio = movie?.getMovie?.studio;
 
   const handleSearch = (s: string) => {
     if (s === '') {
@@ -50,23 +54,29 @@ const CreateSong = (props: iCreateContenderProps) => {
 
   const onSelectMovie = async (tmdbId: number) => {
     try {
-      const { data: movie } = await DS.getOrCreateMovie(tmdbId);
-      if (movie) {
-        setMovie(movie);
-      }
+      const { data: movie } = await ApiServices.getOrCreateMovie(tmdbId);
+      setMovie(movie);
     } catch (err) {
       console.error('error selecting search result', err);
     }
   };
 
   const onConfirmSong = async () => {
-    if (!movie) return;
+    if (!movieId) return;
     setLoading(true);
-    const { data: song } = await DS.getOrCreateSong(songTitle, artist, movie);
-    if (!song) return;
-    await DS.getOrCreateSongContender(category, movie, song);
+    const { data: song } = await ApiServices.getOrCreateSong({
+      title: songTitle,
+      artist,
+      movieId,
+    });
+    if (!song?.getSong) return;
+    await ApiServices.getOrCreateSongContender({
+      categoryId,
+      movieId,
+      songId: song.getSong.id,
+    });
     navigation.goBack();
-    Snackbar.success(`Added ${song.title || 'film'} to predictions`);
+    Snackbar.success(`Added ${song.getSong?.id || 'film'} to predictions`);
     setLoading(false);
   };
 
@@ -114,7 +124,8 @@ const CreateSong = (props: iCreateContenderProps) => {
               <IconButton iconProps={{ name: 'close-outline' }} onPress={removeFilm} />
             </View>
             <ContenderDetails
-              movie={movie}
+              movieTmdbId={movieTmdbId}
+              movieStudio={movieStudio || undefined}
               categoryType={CategoryType.FILM} // Imporant because we're entering details in the screen and can't display them yet
             />
           </View>

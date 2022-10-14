@@ -1,56 +1,26 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { TouchableHighlight, View } from 'react-native';
-import { ListContendersQuery } from '../../../API';
 import COLORS from '../../../constants/colors';
-import { getContenderRank } from '../../../util/getContenderRank';
-import { useSubscriptionEffect } from '../../../util/hooks';
 import { BodyLarge } from '../../Text';
 import ContenderListItem from './ContenderListItem';
 
 type iContenderListProps = {
   categoryId: string;
-  contenders: ListContendersQuery;
+  orderedContenderIds: string[];
   isSelectable?: boolean; // makes items appear "on" or "off"
   onPressThumbnail?: (contenderId: string) => void;
   onPressItem?: (contenderId: string) => void;
 };
 
+// NOTE: Has a lot in common with ContenderListDraggable
 const ContenderList = (props: iContenderListProps) => {
   const {
     categoryId,
-    contenders: _contenders,
+    orderedContenderIds,
     isSelectable,
     onPressThumbnail,
     onPressItem,
   } = props;
-
-  const [data, setData] = useState<ListContendersQuery>();
-
-  useSubscriptionEffect(async () => {
-    setData(_contenders);
-  }, [_contenders]);
-
-  const contenders = data?.listContenders;
-
-  // TODO: better loading state
-  if (!contenders) return null;
-
-  // TODO: order contenders in display
-  const orderedContenders = contenders.items.sort((c1, c2) => {
-    if (!c1 || !c2) return 0;
-    const c1Rank = getContenderRank(
-      c1.numberOfUsersPredictingWin,
-      c1.numberOfUsersPredictingNom,
-      c1.numberOfUsersPredictingUnranked,
-    );
-    const c2Rank = getContenderRank(
-      c2.numberOfUsersPredictingWin,
-      c2.numberOfUsersPredictingNom,
-      c2.numberOfUsersPredictingUnranked,
-    );
-    if (c1Rank > c2Rank) return 1;
-    return -1;
-  });
 
   return (
     <TouchableHighlight
@@ -62,7 +32,7 @@ const ContenderList = (props: iContenderListProps) => {
       }}
     >
       <>
-        {orderedContenders.length === 0 ? (
+        {orderedContenderIds.length === 0 ? (
           <View
             style={{
               width: '100%',
@@ -74,11 +44,10 @@ const ContenderList = (props: iContenderListProps) => {
             <BodyLarge>No films in this list</BodyLarge>
           </View>
         ) : null}
-        {orderedContenders.map((c, i) => {
-          if (!c) return null; // should never happen
+        {orderedContenderIds.map((id, i) => {
           return (
             <ContenderListItem
-              contenderId={c.id}
+              contenderId={id}
               ranking={i + 1}
               categoryId={categoryId}
               onPressItem={onPressItem}

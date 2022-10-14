@@ -1,6 +1,8 @@
 import { API } from 'aws-amplify';
 import { GraphQLQuery } from '@aws-amplify/api';
 import {
+  CategoryName,
+  CategoryType,
   CreateCategoryMutation,
   GetCategoryQuery,
   GetCategoryQueryVariables,
@@ -9,7 +11,6 @@ import {
 import * as mutations from '../../graphql/mutations';
 import * as queries from '../../graphql/queries';
 import { GraphqlAPI, handleError, iApiResponse } from '../utils';
-import { CategoryName, CategoryType } from '../../models';
 
 export const getCategoryById = async (
   id: string,
