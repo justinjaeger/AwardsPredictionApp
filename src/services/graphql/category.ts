@@ -3,6 +3,8 @@ import {
   CategoryType,
   CreateCategoryMutation,
   CreateCategoryMutationVariables,
+  DeleteCategoryMutation,
+  DeleteCategoryMutationVariables,
   GetCategoryQuery,
   GetCategoryQueryVariables,
   ListCategoriesQuery,
@@ -57,7 +59,7 @@ export const getCategoriesByEvent = async (
     }
     return { status: 'success', data };
   } catch (err) {
-    return handleError('error getting user by email', err);
+    return handleError('error getting categories by event', err);
   }
 };
 
@@ -81,5 +83,24 @@ export const createCategory = async (
     return { status: 'success', data };
   } catch (err) {
     return handleError('error creating category', err);
+  }
+};
+
+export const deleteCategory = async (
+  id: string,
+): Promise<iApiResponse<DeleteCategoryMutation>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<
+      DeleteCategoryMutation,
+      DeleteCategoryMutationVariables
+    >(mutations.deleteCategory, { input: { id } });
+    console.error('deleteCattt', data);
+    if (!data?.deleteCategory) {
+      throw new Error(JSON.stringify(errors));
+    }
+    console.error('deleteCat', data);
+    return { status: 'success', data };
+  } catch (err) {
+    return handleError('error deleting category', err);
   }
 };

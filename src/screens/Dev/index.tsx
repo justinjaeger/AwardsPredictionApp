@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { SafeAreaView, ScrollView, StyleProp, View, ViewStyle } from 'react-native';
 import { ListCategoriesQuery, ListEventsQuery, ListUsersQuery } from '../../API';
 import { TouchableText } from '../../components/Buttons';
@@ -9,6 +9,7 @@ import { deleteMockUsers, createMockUsers } from '../../scripts/mocks/users';
 import TmdbMovieCache from '../../services/cache/tmdbMovie';
 import TmdbPersonCache from '../../services/cache/tmdbPerson';
 import ApiServices from '../../services/graphql';
+import { useSubscriptionEffect } from '../../util/hooks';
 
 const Dev = () => {
   const navigation = useNavigation();
@@ -18,30 +19,27 @@ const Dev = () => {
   const [categories, setCategories] = useState<ListCategoriesQuery>();
 
   // USERS
-  useEffect(() => {
-    ApiServices.getAllUsers().then(({ data: us }) => {
-      if (us) {
-        setUsers(us);
-      }
-    });
+  useSubscriptionEffect(async () => {
+    const { data: us } = await ApiServices.getAllUsers();
+    if (us) {
+      setUsers(us);
+    }
   }, []);
 
   // EVENTS
-  useEffect(() => {
-    ApiServices.getAllEvents().then(({ data: es }) => {
-      if (es) {
-        setEvents(es);
-      }
-    });
+  useSubscriptionEffect(async () => {
+    const { data: es } = await ApiServices.getAllEvents();
+    if (es) {
+      setEvents(es);
+    }
   }, []);
 
   // CATEGORIES
-  useEffect(() => {
-    ApiServices.getAllCategories().then(({ data: cs }) => {
-      if (cs) {
-        setCategories(cs);
-      }
-    });
+  useSubscriptionEffect(async () => {
+    const { data: cs } = await ApiServices.getAllCategories();
+    if (cs) {
+      setCategories(cs);
+    }
   }, []);
 
   const clearAllCache = () => {
@@ -108,7 +106,9 @@ const Dev = () => {
         />
         <TouchableText
           text={'Delete mock events'}
-          onPress={deleteMockEvents}
+          onPress={() => {
+            deleteMockEvents();
+          }}
           style={{ marginTop: 10 }}
         />
         {events?.listEvents?.items.map((e) => (

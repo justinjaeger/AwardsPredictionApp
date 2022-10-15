@@ -5,7 +5,11 @@ import { TouchableText } from '../../../components/Buttons';
 import { AWARDS_BODY_TO_STRING } from '../../../constants/awardsBodies';
 import { GlobalParamList } from '../../../navigation/types';
 import ApiServices from '../../../services/graphql';
-import { useAsyncEffect, useTypedNavigation } from '../../../util/hooks';
+import {
+  useAsyncEffect,
+  useSubscriptionEffect,
+  useTypedNavigation,
+} from '../../../util/hooks';
 import sortByObjectOrder from '../../../util/sortByObjectOrder';
 import { eventToString } from '../../../util/stringConversions';
 
@@ -21,7 +25,7 @@ const EventSelect = () => {
 
   const [events, setEvents] = useState<ListEventsQuery>();
 
-  useAsyncEffect(async () => {
+  useSubscriptionEffect(async () => {
     const { data: es } = await ApiServices.getAllEvents(); // TODO: change back to getAllEvents
     if (es) {
       setEvents(es);

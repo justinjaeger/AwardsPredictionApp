@@ -57,9 +57,6 @@ export const getUserByEmail = async (
     if (!data?.listUsers) {
       throw new Error(JSON.stringify(errors));
     }
-    if (data.listUsers?.items.length === 0) {
-      throw new Error('No user found with this email');
-    }
     return { status: 'success', data };
   } catch (err) {
     return handleError('error getting user by email', err);
