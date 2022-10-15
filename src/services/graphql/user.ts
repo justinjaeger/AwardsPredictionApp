@@ -1,28 +1,28 @@
-import { API } from 'aws-amplify';
-import { GraphQLQuery } from '@aws-amplify/api';
 import {
   CreateUserMutation,
+  CreateUserMutationVariables,
   DeleteUserMutation,
+  DeleteUserMutationVariables,
   GetUserQuery,
+  GetUserQueryVariables,
   ListUsersQuery,
+  ListUsersQueryVariables,
   ModelUserFilterInput,
   UpdateUserMutation,
+  UpdateUserMutationVariables,
   UserRole,
 } from '../../API';
 import * as mutations from '../../graphql/mutations';
 import * as queries from '../../graphql/queries';
-import { handleError, iApiResponse } from '../utils';
+import { GraphqlAPI, handleError, iApiResponse } from '../utils';
 
 export const getAllUsers = async (): Promise<iApiResponse<ListUsersQuery>> => {
   try {
-    const { data, errors } = await API.graphql<GraphQLQuery<ListUsersQuery>>({
-      query: queries.listUsers,
-    });
-    if (!data) {
+    const { data, errors } = await GraphqlAPI<ListUsersQuery, ListUsersQueryVariables>(
+      queries.listUsers,
+    );
+    if (!data?.listUsers) {
       throw new Error(JSON.stringify(errors));
-    }
-    if (!data.listUsers) {
-      throw new Error('listUsers property not returned in getAllUsers response');
     }
     return { status: 'success', data };
   } catch (err) {
@@ -32,11 +32,11 @@ export const getAllUsers = async (): Promise<iApiResponse<ListUsersQuery>> => {
 
 export const getUser = async (id: string): Promise<iApiResponse<GetUserQuery>> => {
   try {
-    const { data, errors } = await API.graphql<GraphQLQuery<GetUserQuery>>({
-      query: queries.getUser,
-      variables: { id },
-    });
-    if (!data) {
+    const { data, errors } = await GraphqlAPI<GetUserQuery, GetUserQueryVariables>(
+      queries.getUser,
+      { id },
+    );
+    if (!data?.getUser) {
       throw new Error(JSON.stringify(errors));
     }
     return { status: 'success', data: data };
@@ -50,15 +50,12 @@ export const getUserByEmail = async (
   email: string,
 ): Promise<iApiResponse<ListUsersQuery>> => {
   try {
-    const { data, errors } = await API.graphql<GraphQLQuery<ListUsersQuery>>({
-      query: queries.listUsers,
-      variables: { email },
-    });
-    if (!data) {
+    const { data, errors } = await GraphqlAPI<ListUsersQuery, ListUsersQueryVariables>(
+      queries.listUsers,
+      { filter: { email: { eq: email } } },
+    );
+    if (!data?.listUsers) {
       throw new Error(JSON.stringify(errors));
-    }
-    if (!data.listUsers) {
-      throw new Error('listUsers property not returned in response');
     }
     if (data.listUsers?.items.length === 0) {
       throw new Error('No user found with this email');
@@ -84,11 +81,11 @@ export const createUser = async (
       throw new Error('A user with this email already exists');
     }
     // Create user
-    const { data, errors } = await API.graphql<GraphQLQuery<CreateUserMutation>>({
-      query: mutations.createUser,
-      variables: { input: { email, role: role || UserRole.USER } },
-    });
-    if (!data) {
+    const { data, errors } = await GraphqlAPI<
+      CreateUserMutation,
+      CreateUserMutationVariables
+    >(mutations.createUser, { input: { email, role: role || UserRole.USER } });
+    if (!data?.createUser) {
       throw new Error(JSON.stringify(errors));
     }
     return { status: 'success', data };
@@ -113,10 +110,10 @@ export const updateUsername = async (
       throw new Error('This username is already taken');
     }
     // If not taken, create new username
-    const { data, errors } = await API.graphql<GraphQLQuery<UpdateUserMutation>>({
-      query: mutations.updateUser,
-      variables: { input: { id, username } },
-    });
+    const { data, errors } = await GraphqlAPI<
+      UpdateUserMutation,
+      UpdateUserMutationVariables
+    >(mutations.updateUser, { input: { id, username } });
     if (data) {
       return { status: 'success', data };
     }
@@ -131,15 +128,12 @@ export const getUsersByUsername = async (
 ): Promise<iApiResponse<ListUsersQuery>> => {
   try {
     const filter: ModelUserFilterInput = { username: { eq: username } };
-    const { data, errors } = await API.graphql<GraphQLQuery<ListUsersQuery>>({
-      query: queries.listUsers,
-      variables: { filter },
-    });
-    if (!data) {
+    const { data, errors } = await GraphqlAPI<ListUsersQuery, ListUsersQueryVariables>(
+      queries.listUsers,
+      { filter },
+    );
+    if (!data?.listUsers) {
       throw new Error(JSON.stringify(errors));
-    }
-    if (!data.listUsers) {
-      throw new Error('listUsers property not returned in response');
     }
     return { status: 'success', data };
   } catch (err) {
@@ -152,10 +146,10 @@ export const deleteUser = async (
   id: string,
 ): Promise<iApiResponse<DeleteUserMutation>> => {
   try {
-    const { data, errors } = await API.graphql<GraphQLQuery<DeleteUserMutation>>({
-      query: queries.listUsers,
-      variables: { id },
-    });
+    const { data, errors } = await GraphqlAPI<
+      DeleteUserMutation,
+      DeleteUserMutationVariables
+    >(mutations.deleteUser, { input: { id } });
     if (!data?.deleteUser) {
       throw new Error(JSON.stringify(errors));
     }

@@ -103,6 +103,6 @@ export const getOrCreateSong = async (
     const { data } = await getSong(songId);
     return { status: 'success', data };
   } catch (err) {
-    return handleError('error getting all events', err);
+    return handleError('error getting or creating song', err);
   }
 };

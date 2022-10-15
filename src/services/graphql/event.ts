@@ -1,28 +1,26 @@
-import { API } from 'aws-amplify';
-import { GraphQLQuery } from '@aws-amplify/api';
 import {
   ListEventsQuery,
   CreateEventMutation,
   GetEventQuery,
   DeleteEventMutation,
-  ModelEventFilterInput,
   AwardsBody,
   EventType,
+  ListEventsQueryVariables,
+  GetEventQueryVariables,
+  CreateEventMutationVariables,
+  DeleteEventMutationVariables,
 } from '../../API';
 import * as mutations from '../../graphql/mutations';
 import * as queries from '../../graphql/queries';
-import { handleError, iApiResponse } from '../utils';
+import { GraphqlAPI, handleError, iApiResponse } from '../utils';
 
 export const getAllEvents = async (): Promise<iApiResponse<ListEventsQuery>> => {
   try {
-    const { data, errors } = await API.graphql<GraphQLQuery<ListEventsQuery>>({
-      query: queries.listEvents,
-    });
-    if (!data) {
+    const { data, errors } = await GraphqlAPI<ListEventsQuery, ListEventsQueryVariables>(
+      queries.listEvents,
+    );
+    if (!data?.listEvents) {
       throw new Error(JSON.stringify(errors));
-    }
-    if (!data.listEvents) {
-      throw new Error('listEvents property not returned in getAllEvents response');
     }
     return { status: 'success', data };
   } catch (err) {
@@ -32,15 +30,12 @@ export const getAllEvents = async (): Promise<iApiResponse<ListEventsQuery>> => 
 
 export const getEvent = async (id: string): Promise<iApiResponse<GetEventQuery>> => {
   try {
-    const { data, errors } = await API.graphql<GraphQLQuery<GetEventQuery>>({
-      query: queries.getEvent,
-      variables: { id },
-    });
-    if (!data) {
+    const { data, errors } = await GraphqlAPI<GetEventQuery, GetEventQueryVariables>(
+      queries.getEvent,
+      { id },
+    );
+    if (!data?.getEvent) {
       throw new Error(JSON.stringify(errors));
-    }
-    if (!data.getEvent) {
-      throw new Error('getEvent property not returned in getAllEvents response');
     }
     return { status: 'success', data };
   } catch (err) {
@@ -54,21 +49,19 @@ export const getUniqueEvents = async (
   type: EventType,
 ): Promise<iApiResponse<ListEventsQuery>> => {
   try {
-    const filter: ModelEventFilterInput = {
-      awardsBody: { eq: awardsBody },
-      year: { eq: year },
-      type: { eq: type },
-    };
     // enforce uniqueness - don't allow duplicate events to be created
-    const { data, errors } = await API.graphql<GraphQLQuery<ListEventsQuery>>({
-      query: queries.listEvents,
-      variables: { filter },
-    });
-    if (!data) {
+    const { data, errors } = await GraphqlAPI<ListEventsQuery, ListEventsQueryVariables>(
+      queries.listEvents,
+      {
+        filter: {
+          awardsBody: { eq: awardsBody },
+          year: { eq: year },
+          type: { eq: type },
+        },
+      },
+    );
+    if (!data?.listEvents) {
       throw new Error(JSON.stringify(errors));
-    }
-    if (!data.listEvents) {
-      throw new Error('listEvents property not returned in getEvents response');
     }
     return { status: 'success', data };
   } catch (err) {
@@ -90,16 +83,16 @@ export const createEvent = async (
     }
 
     // Create event
-    const { data, errors } = await API.graphql<GraphQLQuery<CreateEventMutation>>({
-      query: mutations.createEvent,
+    const { data, errors } = await GraphqlAPI<
+      CreateEventMutation,
+      CreateEventMutationVariables
+    >(
+      mutations.createEvent,
       // NOTE: check if obeys @default setting in schema.graphql for isActive field, which is x by default
-      variables: { input: { awardsBody, year, type } },
-    });
-    if (!data) {
+      { input: { awardsBody, year, type } },
+    );
+    if (!data?.createEvent) {
       throw new Error(JSON.stringify(errors));
-    }
-    if (!data.createEvent) {
-      throw new Error('createEvent property not returned in getAllEvents response');
     }
     return { status: 'success', data };
   } catch (err) {
@@ -112,16 +105,16 @@ export const deleteEvent = async (
   id: string,
 ): Promise<iApiResponse<DeleteEventMutation>> => {
   try {
-    const { data, errors } = await API.graphql<GraphQLQuery<DeleteEventMutation>>({
-      query: mutations.deleteEvent,
+    const { data, errors } = await GraphqlAPI<
+      DeleteEventMutation,
+      DeleteEventMutationVariables
+    >(
+      mutations.deleteEvent,
       // NOTE: check if obeys @default setting in schema.graphql for isActive field, which is x by default
-      variables: { input: { id } },
-    });
-    if (!data) {
+      { input: { id } },
+    );
+    if (!data?.deleteEvent) {
       throw new Error(JSON.stringify(errors));
-    }
-    if (!data.deleteEvent) {
-      throw new Error('deleteEvent property not returned in deleteEvent response');
     }
     return { status: 'success', data };
   } catch (err) {

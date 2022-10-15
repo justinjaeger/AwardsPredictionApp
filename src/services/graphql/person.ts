@@ -89,6 +89,6 @@ export const getOrCreatePerson = async (
     const { data } = await getPerson(personId);
     return { status: 'success', data };
   } catch (err) {
-    return handleError('error getting all events', err);
+    return handleError('error getting or creating person', err);
   }
 };
