@@ -4,6 +4,7 @@ import { ScrollView } from 'react-native';
 import { AwardsBody, CategoryName, EventType, GetCategoryQuery } from '../../API';
 import { TouchableText } from '../../components/Buttons';
 import ContenderList from '../../components/List/ContenderList';
+import { Body } from '../../components/Text';
 import { PersonalParamList } from '../../navigation/types';
 import ApiServices from '../../services/graphql';
 import { useAuth } from '../../store';
@@ -58,18 +59,19 @@ const ViewPredictions = () => {
       categoryId,
       eventId: cat.event.id,
     });
-    const predictions = pSet?.getPredictionSet?.predictions;
-    if (!predictions) {
-      return console.error('no predictions found from getPredictionSet query');
-    }
-    const sortedContenderIds = (predictions.items || [])
+    const pSetId = pSet?.getPredictionSet?.id;
+    if (!pSetId) return; // means user just hasn't made predictions
+    const { data } = await ApiServices.getPredictionsByPredictionSetId(pSetId);
+    const predictions = data?.listPredictions;
+    if (!predictions) return;
+    const sortedContenderIds = (predictions?.items || [])
       .sort((a, b) => {
         if (!a || !b) return 0;
         return a.ranking > b.ranking ? 1 : -1;
       })
       .map((p) => p?.contenderId || '');
     setContenderIds(sortedContenderIds);
-  }, []);
+  }, [cat]);
 
   const onPressThumbnail = async (contenderId: string) => {
     // do nothing for now?
@@ -95,14 +97,15 @@ const ViewPredictions = () => {
           />
         </>
       ) : (
-        <TouchableText
-          text={'Add to list'}
-          onPress={() => {
-            navigation.navigate('AddContenders', { categoryId });
-          }}
-          style={{ margin: 10 }}
-        />
+        <Body>No predictions yet. Add some. Or it's just loading</Body>
       )}
+      <TouchableText
+        text={'Add to list'}
+        onPress={() => {
+          navigation.navigate('AddContenders', { categoryId });
+        }}
+        style={{ margin: 10 }}
+      />
     </ScrollView>
   );
 };

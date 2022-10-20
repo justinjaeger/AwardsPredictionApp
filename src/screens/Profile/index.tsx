@@ -9,7 +9,7 @@ import { useAuth } from '../../store';
 import { useNavigation } from '@react-navigation/native';
 import { Body } from '../../components/Text';
 import ApiServices from '../../services/graphql';
-import { useAsyncEffect } from '../../util/hooks';
+import { useSubscriptionEffect } from '../../util/hooks';
 import { GetUserQuery } from '../../API';
 
 const Profile = () => {
@@ -20,7 +20,7 @@ const Profile = () => {
   const [user, setUser] = useState<GetUserQuery>();
   const [loading, setLoading] = useState<boolean>(false);
 
-  useAsyncEffect(async () => {
+  useSubscriptionEffect(async () => {
     if (!userId) return;
     const { data: u } = await ApiServices.getUser(userId);
     if (u) {

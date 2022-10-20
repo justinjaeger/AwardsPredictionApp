@@ -18,7 +18,7 @@ type iContenderListItemProps = {
   categoryId: string;
   contenderId: string;
   ranking: number;
-  selected?: boolean;
+  selected: boolean;
   isSelectable?: boolean;
   disabled?: boolean;
   size?: PosterSize;
@@ -32,14 +32,19 @@ const ContenderListItem = (props: iContenderListItemProps) => {
     contenderId,
     ranking,
     size,
-    selected: _selected,
+    selected: initiallySelected,
     isSelectable,
     disabled,
     onPressThumbnail,
     onPressItem,
   } = props;
 
-  const [selected, setSelected] = useState<boolean>(_selected || false);
+  //   console.error('initiallySelected', initiallySelected);
+  const [selected, setSelected] = useState<boolean>(initiallySelected);
+  //   console.error('selected', selected);
+
+  // TODO: this selected COULD be updating with a useEffect with initiallySelected as a dependency
+
   const [movie, setMovie] = useState<GetMovieQuery>();
   const [category, setCategory] = useState<GetCategoryQuery>();
   const [contender, setContender] = useState<GetContenderQuery>();
@@ -59,16 +64,11 @@ const ContenderListItem = (props: iContenderListItemProps) => {
     setCategory(data);
   }, [categoryId]);
 
-  // NOTE: later, we'll just have the contender live in context instead of fetching every new component / passing via nav props
+  //   // NOTE: later, we'll just have the contender live in context instead of fetching every new component / passing via nav props
   useAsyncEffect(async () => {
     const { data } = await ApiServices.getContenderById(contenderId);
     setContender(data);
   }, [contenderId]);
-
-  const onPress = () => {
-    if (disabled) return;
-    onPressThumbnail && onPressThumbnail(contenderId);
-  };
 
   useAsyncEffect(async () => {
     if (!movieId) return;
@@ -76,15 +76,14 @@ const ContenderListItem = (props: iContenderListItemProps) => {
     setMovie(movie);
   }, [movieId]);
 
-  if (
-    !movie ||
-    !categoryType ||
-    !tmdbMovieId ||
-    !categoryName ||
-    !contenderPersonId ||
-    !contenderMovieId
-  )
-    return null;
+  const onPress = () => {
+    if (disabled) return;
+    onPressThumbnail && onPressThumbnail(contenderId);
+  };
+
+  if (!movie || !categoryType || !tmdbMovieId || !categoryName || !contenderMovieId) {
+    return <></>;
+  }
 
   let component: JSX.Element = <></>;
   switch (CategoryType[categoryType]) {
@@ -103,6 +102,7 @@ const ContenderListItem = (props: iContenderListItemProps) => {
       );
       break;
     case CategoryType.PERFORMANCE:
+      if (!contenderPersonId) break;
       component = (
         <PerformanceListItem
           contenderPersonId={contenderPersonId}

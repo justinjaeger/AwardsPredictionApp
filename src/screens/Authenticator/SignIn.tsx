@@ -20,10 +20,15 @@ const SignIn = (p: any) => {
   const dispatch = useDispatch();
   const { goBack } = useNavigation();
   const { userEmail } = useAuth();
-  const { email: contextEmail, setEmail: setContextEmail } = useAuthenticator();
+  const {
+    email: contextEmail,
+    setEmail: setContextEmail,
+    password: contextPasword,
+    setPassword: setContextPassword,
+  } = useAuthenticator();
 
-  const [password, setPassword] = useState<string>('');
   const [email, setEmail] = useState<string>(userEmail || contextEmail || '');
+  const [password, setPassword] = useState<string>(contextPasword || '');
   const [loading, setLoading] = useState<boolean>(false);
 
   const navigate = (authState: iAuthState) => {
@@ -68,10 +73,19 @@ const SignIn = (p: any) => {
       <FormInput
         label="Email"
         value={email}
-        setValue={setEmail}
+        setValue={(v) => {
+          setContextEmail(v);
+          setEmail(v);
+        }}
         textContentType="emailAddress"
       />
-      <PasswordInput value={password} setValue={setPassword} />
+      <PasswordInput
+        value={password}
+        setValue={(v) => {
+          setPassword(v);
+          setContextPassword(v);
+        }}
+      />
       <SubmitButton
         text={'Log in'}
         onPress={signIn}

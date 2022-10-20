@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { BodyLarge } from '../../Text';
 import {
@@ -22,12 +22,18 @@ type iContenderListProps = {
 const ContenderList = (props: iContenderListProps) => {
   const {
     categoryId,
-    contenderIds,
+    contenderIds: _contenderIds,
     isSelectable,
     onDragEnd,
     onPressThumbnail,
     onPressItem,
   } = props;
+
+  const [contenderIds, setContenderIds] = useState<string[]>(_contenderIds || []);
+
+  useEffect(() => {
+    setContenderIds(_contenderIds);
+  }, [_contenderIds]);
 
   return (
     <View style={{ width: '100%' }}>
@@ -53,6 +59,7 @@ const ContenderList = (props: iContenderListProps) => {
             paddingTop: 20,
           }}
           renderItem={({ item: contenderId, index, drag, isActive }) => {
+            console.error('contenderId', contenderId);
             return (
               <ScaleDecorator>
                 <ContenderListItemDraggable

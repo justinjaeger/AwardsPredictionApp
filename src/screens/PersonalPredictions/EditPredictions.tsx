@@ -53,23 +53,25 @@ const EditPredictions = () => {
   // Get predictions as list of sorted contender Ids
   useSubscriptionEffect(async () => {
     if (!userId || !cat) return;
+    // get list of categoryIds of user's personal selections
     const { data: pSet } = await ApiServices.getPredictionsSet({
       userId,
       categoryId,
       eventId: cat.event.id,
     });
-    const predictions = pSet?.getPredictionSet?.predictions;
-    if (!predictions) {
-      return console.error('no predictions found from getPredictionSet query');
-    }
-    const sortedContenderIds = (predictions.items || [])
+    const pSetId = pSet?.getPredictionSet?.id;
+    if (!pSetId) return; // means user just hasn't made predictions
+    const { data } = await ApiServices.getPredictionsByPredictionSetId(pSetId);
+    const predictions = data?.listPredictions;
+    if (!predictions) return;
+    const sortedContenderIds = (predictions?.items || [])
       .sort((a, b) => {
         if (!a || !b) return 0;
         return a.ranking > b.ranking ? 1 : -1;
       })
       .map((p) => p?.contenderId || '');
     setContenderIds(sortedContenderIds);
-  }, []);
+  }, [cat]);
 
   const onPressThumbnail = async (cId: string) => {
     // do nothing for now?
@@ -86,13 +88,11 @@ const EditPredictions = () => {
     if (!eventId) {
       return console.error('no eventId property on category');
     }
-    const { data: newPredictions } = await ApiServices.createOrUpdatePredictions(
+    await ApiServices.createOrUpdatePredictions(
       { userId, categoryId, eventId },
       newPredictionData,
     );
-    if (newPredictions) {
-      navigation.goBack();
-    }
+    navigation.goBack();
     setLoading(false);
   };
 

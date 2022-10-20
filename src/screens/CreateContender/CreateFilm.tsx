@@ -47,17 +47,15 @@ const CreateFilm = (props: iCreateContenderProps) => {
   };
 
   const onSelectMovie = async (tmdbId: number) => {
-    const movieId = movie?.getMovie?.id;
-    if (!movieId) return;
     try {
       const { data: movie } = await ApiServices.getOrCreateMovie(tmdbId);
-      if (movie) {
+      const movieId = movie?.getMovie?.id;
+      if (movieId) {
         const { data: contender } = await ApiServices.getOrCreateFilmContender({
           categoryId,
           movieId,
         });
-        if (contender) {
-          Snackbar.error('This movie has already been added');
+        if (!contender) {
           return;
         }
       }

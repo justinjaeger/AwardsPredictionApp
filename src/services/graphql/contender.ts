@@ -192,7 +192,7 @@ export const getNumberPredicting = async (
     }
     const category = c.category;
 
-    // this is weird and broken and it's because of datastore
+    // this is weird
     const eventId = category?.event?.id || category.eventCategoriesId;
     if (!eventId) {
       throw new Error('No event id in createOrUpdatePredictions');

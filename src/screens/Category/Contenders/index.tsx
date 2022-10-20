@@ -7,7 +7,6 @@ import {
   CategoryType,
   EventType,
   GetCategoryQuery,
-  ListContendersQuery,
 } from '../../../API';
 import ContenderList from '../../../components/List/ContenderList';
 import { GlobalParamList } from '../../../navigation/types';
@@ -20,6 +19,11 @@ import {
 } from '../../../util/hooks';
 import { fullEventToString } from '../../../util/stringConversions';
 
+type iSortedContenders = {
+  points: number;
+  contenderId: string;
+}[];
+
 // NOTE: Similar to ViewPredictions
 const Contenders = () => {
   const {
@@ -28,7 +32,7 @@ const Contenders = () => {
   const navigation = useTypedNavigation<GlobalParamList>();
 
   const [category, setCategory] = useState<GetCategoryQuery>();
-  const [contenders, setContenders] = useState<ListContendersQuery>();
+  const [rankedContenders, setRankedContenders] = useState<iSortedContenders>([]);
 
   // NOTE: later, we'll just have the category live in context instead of fetching every new component / passing via nav props
   useAsyncEffect(async () => {
@@ -55,8 +59,32 @@ const Contenders = () => {
     const c = category?.getCategory;
     if (!c) return;
     const { data } = await ApiServices.getContendersByCategory(c.id);
-    setContenders(data);
-  }, []);
+    const cs = data?.listContenders?.items;
+    if (!cs) return;
+    const contendersWithRank: iSortedContenders = await Promise.all(
+      cs.map(async (c) => {
+        const nullResult = { points: 0, contenderId: '' }; // never going to actually happen
+        if (!c?.id) return nullResult;
+        const { data } = await ApiServices.getNumberPredicting(c.id);
+        if (!data) return nullResult;
+        const rank = getContenderRank(
+          data?.predictingWin,
+          data?.predictingNom,
+          data?.predictingUnranked,
+        );
+        return {
+          contenderId: c.id,
+          points: rank,
+        };
+      }),
+    );
+    const sortedContenders = contendersWithRank.sort((c1, c2) => {
+      if (!c1 || !c2) return 0;
+      if (c1.points > c2.points) return -1;
+      return 1;
+    });
+    setRankedContenders(sortedContenders);
+  }, [category]);
 
   const onPressFilm = (contenderId: string) => {
     if (!category?.getCategory) return;
@@ -88,32 +116,13 @@ const Contenders = () => {
     }
   };
 
-  // TODO: better loading state
-  if (!contenders?.listContenders || !category?.getCategory) return null;
-
-  const orderedContenders = contenders.listContenders.items.sort((c1, c2) => {
-    if (!c1 || !c2) return 0;
-    const c1Rank = getContenderRank(
-      c1.numberOfUsersPredictingWin,
-      c1.numberOfUsersPredictingNom,
-      c1.numberOfUsersPredictingUnranked,
-    );
-    const c2Rank = getContenderRank(
-      c2.numberOfUsersPredictingWin,
-      c2.numberOfUsersPredictingNom,
-      c2.numberOfUsersPredictingUnranked,
-    );
-    if (c1Rank > c2Rank) return 1;
-    return -1;
-  });
-
   return (
     <ScrollView
       contentContainerStyle={{ alignItems: 'center', marginTop: 40, paddingBottom: 100 }}
     >
       <ContenderList
-        categoryId={category.getCategory.id}
-        orderedContenderIds={orderedContenders.map((c) => c?.id || '')}
+        categoryId={categoryId}
+        orderedContenderIds={rankedContenders.map((c) => c?.contenderId || '')}
         onPressThumbnail={onPressThumbnail}
       />
     </ScrollView>

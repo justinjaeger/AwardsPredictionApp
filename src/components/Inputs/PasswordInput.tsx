@@ -5,7 +5,7 @@ import { EvaStatus } from '@ui-kitten/components/devsupport';
 
 const PasswordInput = (props: {
   value: string;
-  setValue: React.Dispatch<React.SetStateAction<string>>;
+  setValue: (v: string) => void;
   caption?: string;
   onBlur?: () => void;
   status?: EvaStatus;

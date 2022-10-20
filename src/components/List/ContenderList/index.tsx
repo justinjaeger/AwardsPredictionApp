@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { TouchableHighlight, View } from 'react-native';
 import COLORS from '../../../constants/colors';
 import { BodyLarge } from '../../Text';
@@ -22,6 +22,12 @@ const ContenderList = (props: iContenderListProps) => {
     onPressItem,
   } = props;
 
+  const [contenerIds, setContenderIds] = useState<string[]>([]);
+
+  useEffect(() => {
+    setContenderIds(orderedContenderIds);
+  }, [orderedContenderIds]);
+
   return (
     <TouchableHighlight
       style={{
@@ -32,7 +38,7 @@ const ContenderList = (props: iContenderListProps) => {
       }}
     >
       <>
-        {orderedContenderIds.length === 0 ? (
+        {contenerIds.length === 0 ? (
           <View
             style={{
               width: '100%',
@@ -44,7 +50,7 @@ const ContenderList = (props: iContenderListProps) => {
             <BodyLarge>No films in this list</BodyLarge>
           </View>
         ) : null}
-        {orderedContenderIds.map((id, i) => {
+        {contenerIds.map((id, i) => {
           return (
             <ContenderListItem
               contenderId={id}

@@ -33,7 +33,6 @@ const ContenderListItemDraggable = (props: iContenderListItemDraggableProps) => 
     categoryId,
     contenderId,
     ranking,
-    size,
     selected: _selected,
     isSelectable,
     disabled,
@@ -80,14 +79,8 @@ const ContenderListItemDraggable = (props: iContenderListItemDraggableProps) => 
     setMovie(movie);
   }, [movieId]);
 
-  if (
-    !movie ||
-    !categoryType ||
-    !tmdbMovieId ||
-    !categoryName ||
-    !contenderPersonId ||
-    !contenderMovieId
-  )
+  // NOTE: bleow is same logic as ContenderListItem
+  if (!movie || !categoryType || !tmdbMovieId || !categoryName || !contenderMovieId)
     return null;
 
   const _size = PosterSize.SMALL;
@@ -103,18 +96,19 @@ const ContenderListItemDraggable = (props: iContenderListItemDraggableProps) => 
           movieTmdbId={tmdbMovieId}
           movieStudio={movieStudio || undefined}
           ranking={ranking}
-          size={size}
+          size={_size}
           onPress={onPress}
         />
       );
       break;
     case CategoryType.PERFORMANCE:
+      if (!contenderPersonId) break;
       component = (
         <PerformanceListItem
           contenderPersonId={contenderPersonId}
           contenderMovieId={contenderMovieId}
           ranking={ranking}
-          size={size}
+          size={_size}
           onPress={onPress}
         />
       );

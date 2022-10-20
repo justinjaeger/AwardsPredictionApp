@@ -138,13 +138,33 @@ export const getPredictionsSet = async (
     }
     const predictionSetId = maybePreSets.listPredictionSets.items[0]?.id; // bc should only be one
     if (!predictionSetId) {
-      throw new Error('No prediction set with these parameters');
+      return { status: 'success' };
     }
     // Return GetPredictionSet result
     const { data } = await getPredictionSetById(predictionSetId);
     return { status: 'success', data };
   } catch (err) {
     return handleError('error prediction set', err);
+  }
+};
+
+export const getPredictionsByPredictionSetId = async (
+  pSetId: string,
+): Promise<iApiResponse<ListPredictionsQuery>> => {
+  try {
+    // Get all prediction sets matching params (should only be one)
+    const { data: maybePreSets, errors } = await GraphqlAPI<
+      ListPredictionsQuery,
+      ListPredictionsQueryVariables
+    >(queries.listPredictions, {
+      filter: { predictionSetId: { eq: pSetId } },
+    });
+    if (!maybePreSets?.listPredictions) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data: maybePreSets };
+  } catch (err) {
+    return handleError('error predictions', err);
   }
 };
 
@@ -164,28 +184,32 @@ export const createOrUpdatePredictions = async (
     // get prediction set (user + category)
     const { data: pSet } = await getPredictionsSet(params);
     const oldPredictionSet = pSet?.getPredictionSet;
-    if (!oldPredictionSet) {
-      return { status: 'error' };
-    }
-    const oldPredictions = oldPredictionSet.predictions?.items;
-    if (!oldPredictions) {
-      throw new Error(
-        'Cannot get predictions[] from PredictionSet. Consider changing schema',
+    if (oldPredictionSet) {
+      // predictions are NOT being returned here. This is a problem, it's not querying efficiently. It's forcing me to do another request
+      // this isn't an error, it just means there are no current predictions
+      const oldPredictions = oldPredictionSet.predictions?.items;
+      if (!oldPredictions) {
+        throw new Error(
+          'Cannot get predictions[] from PredictionSet. Consider changing schema',
+        );
+      }
+      if (!pSet?.getPredictionSet?.id) return { status: 'error' };
+      const { data: ps } = await getPredictionsByPredictionSetId(
+        pSet.getPredictionSet.id,
       );
-    }
-
-    // delete all predictions within prediction set
-    await Promise.all(
-      oldPredictions.map(async (p) => {
-        if (!p?.id) return;
-        return await deletePrediction(p?.id);
-      }),
-    );
-
-    // delete existing prediction set
-    const { status } = await deletePredictionSet(oldPredictionSet.id);
-    if (status !== 'success') {
-      return { status: 'error' };
+      if (!ps?.listPredictions) return { status: 'error' };
+      // delete all predictions within prediction set
+      await Promise.all(
+        ps?.listPredictions.items.map(async (p) => {
+          if (!p?.id) return;
+          return deletePrediction(p.id);
+        }),
+      );
+      // delete existing prediction set
+      const { status } = await deletePredictionSet(oldPredictionSet.id);
+      if (status !== 'success') {
+        return { status: 'error' };
+      }
     }
 
     // create new prediction set
@@ -196,7 +220,7 @@ export const createOrUpdatePredictions = async (
     }
 
     // create new predictions
-    const result = await Promise.all(
+    await Promise.all(
       predictionData.map(async (p) => {
         return await createPrediction({
           userId,
@@ -207,18 +231,7 @@ export const createOrUpdatePredictions = async (
       }),
     );
 
-    const newPredictions = result.map((r) => r.data?.createPrediction);
-
-    // return in order
-    const sorted = newPredictions.sort((a, b) => {
-      if (!a || !b) return 0;
-      return a.ranking > b.ranking ? 1 : -1;
-    });
-
-    console.error('update pred RESULT', sorted);
-
     return { status: 'success' };
-    // return { status: 'success', data: sorted };
   } catch (err) {
     return handleError('error creating or updating predictions', err);
   }

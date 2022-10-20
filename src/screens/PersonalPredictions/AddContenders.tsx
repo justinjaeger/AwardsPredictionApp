@@ -1,27 +1,15 @@
 import { RouteProp, useRoute } from '@react-navigation/native';
-import React, { useLayoutEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { ScrollView } from 'react-native';
-import {
-  AwardsBody,
-  CategoryName,
-  CategoryType,
-  EventType,
-  GetCategoryQuery,
-  ListContendersQuery,
-} from '../../API';
+import { CategoryType, GetCategoryQuery, ListContendersQuery } from '../../API';
 import { TouchableText } from '../../components/Buttons';
 import ContenderListItem from '../../components/List/ContenderList/ContenderListItem';
 import { PosterSize } from '../../constants/posterDimensions';
 import { PersonalParamList } from '../../navigation/types';
 import ApiServices from '../../services/graphql';
 import { useAuth } from '../../store';
-import {
-  useAsyncEffect,
-  useSubscriptionEffect,
-  useTypedNavigation,
-} from '../../util/hooks';
+import { useSubscriptionEffect, useTypedNavigation } from '../../util/hooks';
 import { removeFromArray } from '../../util/removeFromArray';
-import { fullEventToString } from '../../util/stringConversions';
 
 // TODO: really, this is adding OR deleting contenders
 // NOTE: this is very similar to Contenders, some code is duplicated
@@ -44,47 +32,49 @@ const AddContenders = () => {
   const cat = category?.getCategory;
 
   // NOTE: later, we'll just have the category live in context instead of fetching every new component / passing via nav props
-  useAsyncEffect(async () => {
+  useSubscriptionEffect(async () => {
     const { data } = await ApiServices.getCategoryById(categoryId);
     setCategory(data);
   }, [categoryId]);
 
-  // Set header title
-  useLayoutEffect(() => {
-    if (!cat) return;
-    const e = cat.event;
-    navigation.setOptions({
-      headerTitle: fullEventToString(
-        AwardsBody[e.awardsBody],
-        EventType[e.type],
-        e.year,
-        CategoryName[cat.name],
-      ),
-    });
-  }, [navigation, cat]);
-
-  // get initial list of contenders and mark whether they are selected or not
   useSubscriptionEffect(async () => {
     if (!userId || !cat) return;
+    // get / set all contenders
+    const { data: cs } = await ApiServices.getContendersByCategory(cat.id);
+    // TODO (going to have this done in Contender): sort by highest global ranking
+
+    // because we can't set this before the selected contenders are set, if there are any
+    const executeBeforeReturn = () => {
+      setContenders(cs);
+    };
+
+    // get list of categoryIds of user's personal selections
     const { data: pSet } = await ApiServices.getPredictionsSet({
       userId,
       categoryId,
       eventId: cat.event.id,
     });
-    const predictions = pSet?.getPredictionSet?.predictions;
+    const pSetId = pSet?.getPredictionSet?.id;
+    if (!pSetId) {
+      executeBeforeReturn();
+      return;
+    } // means user just hasn't made predictions
+    const { data } = await ApiServices.getPredictionsByPredictionSetId(pSetId);
+    const predictions = data?.listPredictions;
     if (!predictions) {
-      return console.error('no predictions found from getPredictionSet query');
+      executeBeforeReturn();
+      return;
     }
-    // this is basically get contenders by category id
-    const { data: cs } = await ApiServices.getContendersByCategory(cat.id);
-    setContenders(cs);
-    const initiallySelectedContendersIds = cs?.listContenders?.items.map(
-      (c) => c?.id || '',
-    );
-    if (!initiallySelectedContendersIds) return;
-    setInitiallySelectedContenderIds(initiallySelectedContendersIds);
-    setSelectedContenderIds(initiallySelectedContendersIds);
-  }, []);
+    const sortedContenderIds = (predictions?.items || [])
+      .sort((a, b) => {
+        if (!a || !b) return 0;
+        return a.ranking > b.ranking ? 1 : -1;
+      })
+      .map((p) => p?.contenderId || '');
+    setInitiallySelectedContenderIds(sortedContenderIds);
+    setSelectedContenderIds(sortedContenderIds);
+    executeBeforeReturn();
+  }, [cat]);
 
   const onPressFilm = async (contenderId: string) => {
     if (!cat) return;
@@ -147,19 +137,15 @@ const AddContenders = () => {
     if (!eventId) {
       return console.error('no eventId property on category');
     }
-    const { data: newPredictions } = await ApiServices.createOrUpdatePredictions(
+    await ApiServices.createOrUpdatePredictions(
       { userId, categoryId, eventId },
       newPredictionData,
     );
-    if (newPredictions) {
-      navigation.goBack();
-    }
+    navigation.goBack();
     setLoading(false);
   };
 
   const _contenders = contenders?.listContenders;
-
-  if (!_contenders) return null;
 
   return (
     <ScrollView
@@ -173,6 +159,7 @@ const AddContenders = () => {
       {_contenders?.items.map((c, i) => {
         const contenderId = c?.id;
         if (!contenderId) return null;
+        const selected = selectedContenderIds.includes(contenderId);
         return (
           <ContenderListItem
             contenderId={contenderId}
@@ -180,20 +167,20 @@ const AddContenders = () => {
             categoryId={categoryId}
             onPressItem={onPressItem}
             onPressThumbnail={onPressThumbnail}
-            selected={selectedContenderIds.includes(contenderId)}
+            selected={selected}
             size={PosterSize.SMALL}
             isSelectable
             disabled={loading}
           />
         );
       })}
-      {_contenders.items.length > 0 ? (
+      {_contenders && _contenders.items.length > 0 ? (
         <TouchableText text={'Save'} onPress={onSave} style={{ margin: 10 }} />
       ) : null}
       <TouchableText
         text={'Submit a contender'}
         onPress={() => {
-          navigation.navigate('CreateContender', { categoryId: 'asdf' });
+          navigation.navigate('CreateContender', { categoryId });
         }}
         style={{ margin: 10 }}
       />

@@ -16,11 +16,12 @@ const SignUp = (p: any) => {
   const {
     email: contextEmail,
     setEmail: setContextEmail,
+    password: contextPasword,
     setPassword: setContextPassword,
   } = useAuthenticator();
 
-  const [password, setPassword] = useState<string>('');
   const [email, setEmail] = useState<string>(contextEmail || '');
+  const [password, setPassword] = useState<string>(contextPasword || '');
   const [emailStatus, setEmailStatus] = useState<EvaStatus | undefined>(undefined);
   const [passwordStatus, setPasswordStatus] = useState<EvaStatus | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(false);
@@ -33,7 +34,6 @@ const SignUp = (p: any) => {
   };
 
   const signUp = () => {
-    setContextEmail(email);
     setLoading(true);
     AuthServices.signUp(email, password).then((res) => {
       if (res.status === 'success') {
@@ -50,7 +50,10 @@ const SignUp = (p: any) => {
       <FormInput
         label="Email"
         value={email}
-        setValue={setEmail}
+        setValue={(v) => {
+          setContextEmail(v);
+          setEmail(v);
+        }}
         textContentType="emailAddress"
         status={emailStatus}
         caption={emailStatus === 'danger' ? 'Not a valid email address' : ''}
@@ -64,7 +67,10 @@ const SignUp = (p: any) => {
       />
       <PasswordInput
         value={password}
-        setValue={setPassword}
+        setValue={(v) => {
+          setPassword(v);
+          setContextPassword(v);
+        }}
         status={passwordStatus}
         caption={passwordStatus === 'danger' ? 'Must contain at least 8 characters.' : ''}
         onBlur={() => {
@@ -80,6 +86,7 @@ const SignUp = (p: any) => {
         onPress={signUp}
         disabled={!validPassword || !validEmail}
         loading={loading}
+        style={{ marginTop: 30 }}
       />
       <SignupRow style={{ marginTop: 30 }}>
         <Body>Already have an account?</Body>
