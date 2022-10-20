@@ -15,26 +15,6 @@ export const createUser = /* GraphQL */ `
       bio
       image
       role
-      followers {
-        items {
-          id
-          followedUserId
-          followingUserId
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-      following {
-        items {
-          id
-          followedUserId
-          followingUserId
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
       createdAt
       updatedAt
     }
@@ -53,26 +33,6 @@ export const updateUser = /* GraphQL */ `
       bio
       image
       role
-      followers {
-        items {
-          id
-          followedUserId
-          followingUserId
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-      following {
-        items {
-          id
-          followedUserId
-          followingUserId
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
       createdAt
       updatedAt
     }
@@ -91,170 +51,6 @@ export const deleteUser = /* GraphQL */ `
       bio
       image
       role
-      followers {
-        items {
-          id
-          followedUserId
-          followingUserId
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-      following {
-        items {
-          id
-          followedUserId
-          followingUserId
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const createRelationships = /* GraphQL */ `
-  mutation CreateRelationships(
-    $input: CreateRelationshipsInput!
-    $condition: ModelRelationshipsConditionInput
-  ) {
-    createRelationships(input: $input, condition: $condition) {
-      id
-      followedUserId
-      followingUserId
-      followedUser {
-        id
-        email
-        username
-        name
-        bio
-        image
-        role
-        followers {
-          nextToken
-        }
-        following {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
-      followingUser {
-        id
-        email
-        username
-        name
-        bio
-        image
-        role
-        followers {
-          nextToken
-        }
-        following {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const updateRelationships = /* GraphQL */ `
-  mutation UpdateRelationships(
-    $input: UpdateRelationshipsInput!
-    $condition: ModelRelationshipsConditionInput
-  ) {
-    updateRelationships(input: $input, condition: $condition) {
-      id
-      followedUserId
-      followingUserId
-      followedUser {
-        id
-        email
-        username
-        name
-        bio
-        image
-        role
-        followers {
-          nextToken
-        }
-        following {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
-      followingUser {
-        id
-        email
-        username
-        name
-        bio
-        image
-        role
-        followers {
-          nextToken
-        }
-        following {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const deleteRelationships = /* GraphQL */ `
-  mutation DeleteRelationships(
-    $input: DeleteRelationshipsInput!
-    $condition: ModelRelationshipsConditionInput
-  ) {
-    deleteRelationships(input: $input, condition: $condition) {
-      id
-      followedUserId
-      followingUserId
-      followedUser {
-        id
-        email
-        username
-        name
-        bio
-        image
-        role
-        followers {
-          nextToken
-        }
-        following {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
-      followingUser {
-        id
-        email
-        username
-        name
-        bio
-        image
-        role
-        followers {
-          nextToken
-        }
-        following {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
       createdAt
       updatedAt
     }
@@ -274,8 +70,6 @@ export const createPredictionSet = /* GraphQL */ `
         items {
           id
           userId
-          predictionSetId
-          contenderId
           ranking
           createdAt
           updatedAt
@@ -303,8 +97,6 @@ export const updatePredictionSet = /* GraphQL */ `
         items {
           id
           userId
-          predictionSetId
-          contenderId
           ranking
           createdAt
           updatedAt
@@ -332,8 +124,6 @@ export const deletePredictionSet = /* GraphQL */ `
         items {
           id
           userId
-          predictionSetId
-          contenderId
           ranking
           createdAt
           updatedAt
@@ -355,16 +145,12 @@ export const createPrediction = /* GraphQL */ `
     createPrediction(input: $input, condition: $condition) {
       id
       userId
-      predictionSetId
-      contenderId
       contender {
         id
-        categoryId
         category {
           id
           name
           type
-          eventId
           createdAt
           updatedAt
           eventCategoriesId
@@ -394,9 +180,6 @@ export const createPrediction = /* GraphQL */ `
           nextToken
         }
         didReceiveNominationOrWin
-        numberOfUsersPredictingWin
-        numberOfUsersPredictingNom
-        numberOfUsersPredictingUnranked
         createdAt
         updatedAt
         categoryContendersId
@@ -420,16 +203,12 @@ export const updatePrediction = /* GraphQL */ `
     updatePrediction(input: $input, condition: $condition) {
       id
       userId
-      predictionSetId
-      contenderId
       contender {
         id
-        categoryId
         category {
           id
           name
           type
-          eventId
           createdAt
           updatedAt
           eventCategoriesId
@@ -459,9 +238,6 @@ export const updatePrediction = /* GraphQL */ `
           nextToken
         }
         didReceiveNominationOrWin
-        numberOfUsersPredictingWin
-        numberOfUsersPredictingNom
-        numberOfUsersPredictingUnranked
         createdAt
         updatedAt
         categoryContendersId
@@ -485,16 +261,12 @@ export const deletePrediction = /* GraphQL */ `
     deletePrediction(input: $input, condition: $condition) {
       id
       userId
-      predictionSetId
-      contenderId
       contender {
         id
-        categoryId
         category {
           id
           name
           type
-          eventId
           createdAt
           updatedAt
           eventCategoriesId
@@ -524,9 +296,6 @@ export const deletePrediction = /* GraphQL */ `
           nextToken
         }
         didReceiveNominationOrWin
-        numberOfUsersPredictingWin
-        numberOfUsersPredictingNom
-        numberOfUsersPredictingUnranked
         createdAt
         updatedAt
         categoryContendersId
@@ -554,7 +323,6 @@ export const createEvent = /* GraphQL */ `
           id
           name
           type
-          eventId
           createdAt
           updatedAt
           eventCategoriesId
@@ -583,7 +351,6 @@ export const updateEvent = /* GraphQL */ `
           id
           name
           type
-          eventId
           createdAt
           updatedAt
           eventCategoriesId
@@ -612,7 +379,6 @@ export const deleteEvent = /* GraphQL */ `
           id
           name
           type
-          eventId
           createdAt
           updatedAt
           eventCategoriesId
@@ -638,7 +404,6 @@ export const createCategory = /* GraphQL */ `
       id
       name
       type
-      eventId
       event {
         id
         categories {
@@ -655,11 +420,7 @@ export const createCategory = /* GraphQL */ `
       contenders {
         items {
           id
-          categoryId
           didReceiveNominationOrWin
-          numberOfUsersPredictingWin
-          numberOfUsersPredictingNom
-          numberOfUsersPredictingUnranked
           createdAt
           updatedAt
           categoryContendersId
@@ -684,7 +445,6 @@ export const updateCategory = /* GraphQL */ `
       id
       name
       type
-      eventId
       event {
         id
         categories {
@@ -701,11 +461,7 @@ export const updateCategory = /* GraphQL */ `
       contenders {
         items {
           id
-          categoryId
           didReceiveNominationOrWin
-          numberOfUsersPredictingWin
-          numberOfUsersPredictingNom
-          numberOfUsersPredictingUnranked
           createdAt
           updatedAt
           categoryContendersId
@@ -730,7 +486,6 @@ export const deleteCategory = /* GraphQL */ `
       id
       name
       type
-      eventId
       event {
         id
         categories {
@@ -747,11 +502,7 @@ export const deleteCategory = /* GraphQL */ `
       contenders {
         items {
           id
-          categoryId
           didReceiveNominationOrWin
-          numberOfUsersPredictingWin
-          numberOfUsersPredictingNom
-          numberOfUsersPredictingUnranked
           createdAt
           updatedAt
           categoryContendersId
@@ -774,12 +525,10 @@ export const createContender = /* GraphQL */ `
   ) {
     createContender(input: $input, condition: $condition) {
       id
-      categoryId
       category {
         id
         name
         type
-        eventId
         event {
           id
           awardsBody
@@ -829,8 +578,6 @@ export const createContender = /* GraphQL */ `
         items {
           id
           userId
-          predictionSetId
-          contenderId
           ranking
           createdAt
           updatedAt
@@ -840,9 +587,6 @@ export const createContender = /* GraphQL */ `
         nextToken
       }
       didReceiveNominationOrWin
-      numberOfUsersPredictingWin
-      numberOfUsersPredictingNom
-      numberOfUsersPredictingUnranked
       createdAt
       updatedAt
       categoryContendersId
@@ -859,12 +603,10 @@ export const updateContender = /* GraphQL */ `
   ) {
     updateContender(input: $input, condition: $condition) {
       id
-      categoryId
       category {
         id
         name
         type
-        eventId
         event {
           id
           awardsBody
@@ -914,8 +656,6 @@ export const updateContender = /* GraphQL */ `
         items {
           id
           userId
-          predictionSetId
-          contenderId
           ranking
           createdAt
           updatedAt
@@ -925,9 +665,6 @@ export const updateContender = /* GraphQL */ `
         nextToken
       }
       didReceiveNominationOrWin
-      numberOfUsersPredictingWin
-      numberOfUsersPredictingNom
-      numberOfUsersPredictingUnranked
       createdAt
       updatedAt
       categoryContendersId
@@ -944,12 +681,10 @@ export const deleteContender = /* GraphQL */ `
   ) {
     deleteContender(input: $input, condition: $condition) {
       id
-      categoryId
       category {
         id
         name
         type
-        eventId
         event {
           id
           awardsBody
@@ -999,8 +734,6 @@ export const deleteContender = /* GraphQL */ `
         items {
           id
           userId
-          predictionSetId
-          contenderId
           ranking
           createdAt
           updatedAt
@@ -1010,9 +743,6 @@ export const deleteContender = /* GraphQL */ `
         nextToken
       }
       didReceiveNominationOrWin
-      numberOfUsersPredictingWin
-      numberOfUsersPredictingNom
-      numberOfUsersPredictingUnranked
       createdAt
       updatedAt
       categoryContendersId

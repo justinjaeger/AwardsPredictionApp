@@ -12,26 +12,6 @@ export const getUser = /* GraphQL */ `
       bio
       image
       role
-      followers {
-        items {
-          id
-          followedUserId
-          followingUserId
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-      following {
-        items {
-          id
-          followedUserId
-          followingUserId
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
       createdAt
       updatedAt
     }
@@ -60,105 +40,6 @@ export const listUsers = /* GraphQL */ `
         bio
         image
         role
-        followers {
-          nextToken
-        }
-        following {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-  }
-`;
-export const getRelationships = /* GraphQL */ `
-  query GetRelationships($id: ID!) {
-    getRelationships(id: $id) {
-      id
-      followedUserId
-      followingUserId
-      followedUser {
-        id
-        email
-        username
-        name
-        bio
-        image
-        role
-        followers {
-          nextToken
-        }
-        following {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
-      followingUser {
-        id
-        email
-        username
-        name
-        bio
-        image
-        role
-        followers {
-          nextToken
-        }
-        following {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const listRelationships = /* GraphQL */ `
-  query ListRelationships(
-    $id: ID
-    $filter: ModelRelationshipsFilterInput
-    $limit: Int
-    $nextToken: String
-    $sortDirection: ModelSortDirection
-  ) {
-    listRelationships(
-      id: $id
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      sortDirection: $sortDirection
-    ) {
-      items {
-        id
-        followedUserId
-        followingUserId
-        followedUser {
-          id
-          email
-          username
-          name
-          bio
-          image
-          role
-          createdAt
-          updatedAt
-        }
-        followingUser {
-          id
-          email
-          username
-          name
-          bio
-          image
-          role
-          createdAt
-          updatedAt
-        }
         createdAt
         updatedAt
       }
@@ -177,8 +58,6 @@ export const getPredictionSet = /* GraphQL */ `
         items {
           id
           userId
-          predictionSetId
-          contenderId
           ranking
           createdAt
           updatedAt
@@ -227,16 +106,12 @@ export const getPrediction = /* GraphQL */ `
     getPrediction(id: $id) {
       id
       userId
-      predictionSetId
-      contenderId
       contender {
         id
-        categoryId
         category {
           id
           name
           type
-          eventId
           createdAt
           updatedAt
           eventCategoriesId
@@ -266,9 +141,6 @@ export const getPrediction = /* GraphQL */ `
           nextToken
         }
         didReceiveNominationOrWin
-        numberOfUsersPredictingWin
-        numberOfUsersPredictingNom
-        numberOfUsersPredictingUnranked
         createdAt
         updatedAt
         categoryContendersId
@@ -302,15 +174,9 @@ export const listPredictions = /* GraphQL */ `
       items {
         id
         userId
-        predictionSetId
-        contenderId
         contender {
           id
-          categoryId
           didReceiveNominationOrWin
-          numberOfUsersPredictingWin
-          numberOfUsersPredictingNom
-          numberOfUsersPredictingUnranked
           createdAt
           updatedAt
           categoryContendersId
@@ -337,7 +203,6 @@ export const getEvent = /* GraphQL */ `
           id
           name
           type
-          eventId
           createdAt
           updatedAt
           eventCategoriesId
@@ -392,7 +257,6 @@ export const getCategory = /* GraphQL */ `
       id
       name
       type
-      eventId
       event {
         id
         categories {
@@ -409,11 +273,7 @@ export const getCategory = /* GraphQL */ `
       contenders {
         items {
           id
-          categoryId
           didReceiveNominationOrWin
-          numberOfUsersPredictingWin
-          numberOfUsersPredictingNom
-          numberOfUsersPredictingUnranked
           createdAt
           updatedAt
           categoryContendersId
@@ -448,7 +308,6 @@ export const listCategories = /* GraphQL */ `
         id
         name
         type
-        eventId
         event {
           id
           awardsBody
@@ -474,12 +333,10 @@ export const getContender = /* GraphQL */ `
   query GetContender($id: ID!) {
     getContender(id: $id) {
       id
-      categoryId
       category {
         id
         name
         type
-        eventId
         event {
           id
           awardsBody
@@ -529,8 +386,6 @@ export const getContender = /* GraphQL */ `
         items {
           id
           userId
-          predictionSetId
-          contenderId
           ranking
           createdAt
           updatedAt
@@ -540,9 +395,6 @@ export const getContender = /* GraphQL */ `
         nextToken
       }
       didReceiveNominationOrWin
-      numberOfUsersPredictingWin
-      numberOfUsersPredictingNom
-      numberOfUsersPredictingUnranked
       createdAt
       updatedAt
       categoryContendersId
@@ -569,12 +421,10 @@ export const listContenders = /* GraphQL */ `
     ) {
       items {
         id
-        categoryId
         category {
           id
           name
           type
-          eventId
           createdAt
           updatedAt
           eventCategoriesId
@@ -604,9 +454,6 @@ export const listContenders = /* GraphQL */ `
           nextToken
         }
         didReceiveNominationOrWin
-        numberOfUsersPredictingWin
-        numberOfUsersPredictingNom
-        numberOfUsersPredictingUnranked
         createdAt
         updatedAt
         categoryContendersId
@@ -738,102 +585,6 @@ export const listSongs = /* GraphQL */ `
         createdAt
         updatedAt
         songMovieId
-      }
-      nextToken
-    }
-  }
-`;
-export const queryRelationshipsByFollowedUser = /* GraphQL */ `
-  query QueryRelationshipsByFollowedUser(
-    $followedUserId: ID!
-    $sortDirection: ModelSortDirection
-    $filter: ModelRelationshipsFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    queryRelationshipsByFollowedUser(
-      followedUserId: $followedUserId
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        followedUserId
-        followingUserId
-        followedUser {
-          id
-          email
-          username
-          name
-          bio
-          image
-          role
-          createdAt
-          updatedAt
-        }
-        followingUser {
-          id
-          email
-          username
-          name
-          bio
-          image
-          role
-          createdAt
-          updatedAt
-        }
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-  }
-`;
-export const queryRelationshipsByFollowingUser = /* GraphQL */ `
-  query QueryRelationshipsByFollowingUser(
-    $followingUserId: ID!
-    $sortDirection: ModelSortDirection
-    $filter: ModelRelationshipsFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    queryRelationshipsByFollowingUser(
-      followingUserId: $followingUserId
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        followedUserId
-        followingUserId
-        followedUser {
-          id
-          email
-          username
-          name
-          bio
-          image
-          role
-          createdAt
-          updatedAt
-        }
-        followingUser {
-          id
-          email
-          username
-          name
-          bio
-          image
-          role
-          createdAt
-          updatedAt
-        }
-        createdAt
-        updatedAt
       }
       nextToken
     }

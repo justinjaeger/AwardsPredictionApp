@@ -12,26 +12,6 @@ export const onCreateUser = /* GraphQL */ `
       bio
       image
       role
-      followers {
-        items {
-          id
-          followedUserId
-          followingUserId
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-      following {
-        items {
-          id
-          followedUserId
-          followingUserId
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
       createdAt
       updatedAt
     }
@@ -47,26 +27,6 @@ export const onUpdateUser = /* GraphQL */ `
       bio
       image
       role
-      followers {
-        items {
-          id
-          followedUserId
-          followingUserId
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-      following {
-        items {
-          id
-          followedUserId
-          followingUserId
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
       createdAt
       updatedAt
     }
@@ -82,161 +42,6 @@ export const onDeleteUser = /* GraphQL */ `
       bio
       image
       role
-      followers {
-        items {
-          id
-          followedUserId
-          followingUserId
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-      following {
-        items {
-          id
-          followedUserId
-          followingUserId
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onCreateRelationships = /* GraphQL */ `
-  subscription OnCreateRelationships {
-    onCreateRelationships {
-      id
-      followedUserId
-      followingUserId
-      followedUser {
-        id
-        email
-        username
-        name
-        bio
-        image
-        role
-        followers {
-          nextToken
-        }
-        following {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
-      followingUser {
-        id
-        email
-        username
-        name
-        bio
-        image
-        role
-        followers {
-          nextToken
-        }
-        following {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onUpdateRelationships = /* GraphQL */ `
-  subscription OnUpdateRelationships {
-    onUpdateRelationships {
-      id
-      followedUserId
-      followingUserId
-      followedUser {
-        id
-        email
-        username
-        name
-        bio
-        image
-        role
-        followers {
-          nextToken
-        }
-        following {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
-      followingUser {
-        id
-        email
-        username
-        name
-        bio
-        image
-        role
-        followers {
-          nextToken
-        }
-        following {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onDeleteRelationships = /* GraphQL */ `
-  subscription OnDeleteRelationships {
-    onDeleteRelationships {
-      id
-      followedUserId
-      followingUserId
-      followedUser {
-        id
-        email
-        username
-        name
-        bio
-        image
-        role
-        followers {
-          nextToken
-        }
-        following {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
-      followingUser {
-        id
-        email
-        username
-        name
-        bio
-        image
-        role
-        followers {
-          nextToken
-        }
-        following {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
       createdAt
       updatedAt
     }
@@ -253,8 +58,6 @@ export const onCreatePredictionSet = /* GraphQL */ `
         items {
           id
           userId
-          predictionSetId
-          contenderId
           ranking
           createdAt
           updatedAt
@@ -279,8 +82,6 @@ export const onUpdatePredictionSet = /* GraphQL */ `
         items {
           id
           userId
-          predictionSetId
-          contenderId
           ranking
           createdAt
           updatedAt
@@ -305,8 +106,6 @@ export const onDeletePredictionSet = /* GraphQL */ `
         items {
           id
           userId
-          predictionSetId
-          contenderId
           ranking
           createdAt
           updatedAt
@@ -325,16 +124,12 @@ export const onCreatePrediction = /* GraphQL */ `
     onCreatePrediction {
       id
       userId
-      predictionSetId
-      contenderId
       contender {
         id
-        categoryId
         category {
           id
           name
           type
-          eventId
           createdAt
           updatedAt
           eventCategoriesId
@@ -364,9 +159,6 @@ export const onCreatePrediction = /* GraphQL */ `
           nextToken
         }
         didReceiveNominationOrWin
-        numberOfUsersPredictingWin
-        numberOfUsersPredictingNom
-        numberOfUsersPredictingUnranked
         createdAt
         updatedAt
         categoryContendersId
@@ -387,16 +179,12 @@ export const onUpdatePrediction = /* GraphQL */ `
     onUpdatePrediction {
       id
       userId
-      predictionSetId
-      contenderId
       contender {
         id
-        categoryId
         category {
           id
           name
           type
-          eventId
           createdAt
           updatedAt
           eventCategoriesId
@@ -426,9 +214,6 @@ export const onUpdatePrediction = /* GraphQL */ `
           nextToken
         }
         didReceiveNominationOrWin
-        numberOfUsersPredictingWin
-        numberOfUsersPredictingNom
-        numberOfUsersPredictingUnranked
         createdAt
         updatedAt
         categoryContendersId
@@ -449,16 +234,12 @@ export const onDeletePrediction = /* GraphQL */ `
     onDeletePrediction {
       id
       userId
-      predictionSetId
-      contenderId
       contender {
         id
-        categoryId
         category {
           id
           name
           type
-          eventId
           createdAt
           updatedAt
           eventCategoriesId
@@ -488,9 +269,6 @@ export const onDeletePrediction = /* GraphQL */ `
           nextToken
         }
         didReceiveNominationOrWin
-        numberOfUsersPredictingWin
-        numberOfUsersPredictingNom
-        numberOfUsersPredictingUnranked
         createdAt
         updatedAt
         categoryContendersId
@@ -515,7 +293,6 @@ export const onCreateEvent = /* GraphQL */ `
           id
           name
           type
-          eventId
           createdAt
           updatedAt
           eventCategoriesId
@@ -541,7 +318,6 @@ export const onUpdateEvent = /* GraphQL */ `
           id
           name
           type
-          eventId
           createdAt
           updatedAt
           eventCategoriesId
@@ -567,7 +343,6 @@ export const onDeleteEvent = /* GraphQL */ `
           id
           name
           type
-          eventId
           createdAt
           updatedAt
           eventCategoriesId
@@ -590,7 +365,6 @@ export const onCreateCategory = /* GraphQL */ `
       id
       name
       type
-      eventId
       event {
         id
         categories {
@@ -607,11 +381,7 @@ export const onCreateCategory = /* GraphQL */ `
       contenders {
         items {
           id
-          categoryId
           didReceiveNominationOrWin
-          numberOfUsersPredictingWin
-          numberOfUsersPredictingNom
-          numberOfUsersPredictingUnranked
           createdAt
           updatedAt
           categoryContendersId
@@ -633,7 +403,6 @@ export const onUpdateCategory = /* GraphQL */ `
       id
       name
       type
-      eventId
       event {
         id
         categories {
@@ -650,11 +419,7 @@ export const onUpdateCategory = /* GraphQL */ `
       contenders {
         items {
           id
-          categoryId
           didReceiveNominationOrWin
-          numberOfUsersPredictingWin
-          numberOfUsersPredictingNom
-          numberOfUsersPredictingUnranked
           createdAt
           updatedAt
           categoryContendersId
@@ -676,7 +441,6 @@ export const onDeleteCategory = /* GraphQL */ `
       id
       name
       type
-      eventId
       event {
         id
         categories {
@@ -693,11 +457,7 @@ export const onDeleteCategory = /* GraphQL */ `
       contenders {
         items {
           id
-          categoryId
           didReceiveNominationOrWin
-          numberOfUsersPredictingWin
-          numberOfUsersPredictingNom
-          numberOfUsersPredictingUnranked
           createdAt
           updatedAt
           categoryContendersId
@@ -717,12 +477,10 @@ export const onCreateContender = /* GraphQL */ `
   subscription OnCreateContender {
     onCreateContender {
       id
-      categoryId
       category {
         id
         name
         type
-        eventId
         event {
           id
           awardsBody
@@ -772,8 +530,6 @@ export const onCreateContender = /* GraphQL */ `
         items {
           id
           userId
-          predictionSetId
-          contenderId
           ranking
           createdAt
           updatedAt
@@ -783,9 +539,6 @@ export const onCreateContender = /* GraphQL */ `
         nextToken
       }
       didReceiveNominationOrWin
-      numberOfUsersPredictingWin
-      numberOfUsersPredictingNom
-      numberOfUsersPredictingUnranked
       createdAt
       updatedAt
       categoryContendersId
@@ -799,12 +552,10 @@ export const onUpdateContender = /* GraphQL */ `
   subscription OnUpdateContender {
     onUpdateContender {
       id
-      categoryId
       category {
         id
         name
         type
-        eventId
         event {
           id
           awardsBody
@@ -854,8 +605,6 @@ export const onUpdateContender = /* GraphQL */ `
         items {
           id
           userId
-          predictionSetId
-          contenderId
           ranking
           createdAt
           updatedAt
@@ -865,9 +614,6 @@ export const onUpdateContender = /* GraphQL */ `
         nextToken
       }
       didReceiveNominationOrWin
-      numberOfUsersPredictingWin
-      numberOfUsersPredictingNom
-      numberOfUsersPredictingUnranked
       createdAt
       updatedAt
       categoryContendersId
@@ -881,12 +627,10 @@ export const onDeleteContender = /* GraphQL */ `
   subscription OnDeleteContender {
     onDeleteContender {
       id
-      categoryId
       category {
         id
         name
         type
-        eventId
         event {
           id
           awardsBody
@@ -936,8 +680,6 @@ export const onDeleteContender = /* GraphQL */ `
         items {
           id
           userId
-          predictionSetId
-          contenderId
           ranking
           createdAt
           updatedAt
@@ -947,9 +689,6 @@ export const onDeleteContender = /* GraphQL */ `
         nextToken
       }
       didReceiveNominationOrWin
-      numberOfUsersPredictingWin
-      numberOfUsersPredictingNom
-      numberOfUsersPredictingUnranked
       createdAt
       updatedAt
       categoryContendersId

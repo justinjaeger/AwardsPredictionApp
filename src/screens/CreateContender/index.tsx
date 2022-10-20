@@ -36,7 +36,7 @@ const CreateContender = () => {
   // Set header title
   useLayoutEffect(() => {
     const e = cat?.event;
-    if (!e) return;
+    if (!e || !cat) return;
     const categoryList = getAwardsBodyCategories(AwardsBody[e.awardsBody], e.year);
     const headerTitle = `Add ${categoryList[cat.name]?.name || 'Contender'}`;
     navigation.setOptions({

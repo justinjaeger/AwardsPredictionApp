@@ -53,7 +53,7 @@ export const getCategoriesByEvent = async (
     const { data, errors } = await GraphqlAPI<
       ListCategoriesQuery,
       ListCategoriesQueryVariables
-    >(queries.listCategories, { filter: { eventId: { eq: eventId } } });
+    >(queries.listCategories, { filter: { eventCategoriesId: { eq: eventId } } });
     if (!data?.listCategories) {
       throw new Error(JSON.stringify(errors));
     }
@@ -75,7 +75,7 @@ export const createCategory = async (
     >(
       mutations.createCategory,
       // NOTE: check if obeys @default setting in schema.graphql for isActive field, which is x by default
-      { input: { name, type, eventId } },
+      { input: { name, type, eventCategoriesId: eventId } },
     );
     if (!data?.createCategory) {
       throw new Error(JSON.stringify(errors));

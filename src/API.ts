@@ -84,25 +84,6 @@ export type User = {
   bio?: string | null,
   image?: string | null,
   role: UserRole,
-  followers?: ModelRelationshipsConnection | null,
-  following?: ModelRelationshipsConnection | null,
-  createdAt: string,
-  updatedAt: string,
-};
-
-export type ModelRelationshipsConnection = {
-  __typename: "ModelRelationshipsConnection",
-  items:  Array<Relationships | null >,
-  nextToken?: string | null,
-};
-
-export type Relationships = {
-  __typename: "Relationships",
-  id: string,
-  followedUserId: string,
-  followingUserId: string,
-  followedUser: User,
-  followingUser: User,
   createdAt: string,
   updatedAt: string,
 };
@@ -121,18 +102,20 @@ export type DeleteUserInput = {
   id: string,
 };
 
-export type CreateRelationshipsInput = {
+export type CreatePredictionSetInput = {
   id?: string | null,
-  followedUserId: string,
-  followingUserId: string,
+  userId: string,
+  eventId: string,
+  categoryId: string,
 };
 
-export type ModelRelationshipsConditionInput = {
-  followedUserId?: ModelIDInput | null,
-  followingUserId?: ModelIDInput | null,
-  and?: Array< ModelRelationshipsConditionInput | null > | null,
-  or?: Array< ModelRelationshipsConditionInput | null > | null,
-  not?: ModelRelationshipsConditionInput | null,
+export type ModelPredictionSetConditionInput = {
+  userId?: ModelIDInput | null,
+  eventId?: ModelIDInput | null,
+  categoryId?: ModelIDInput | null,
+  and?: Array< ModelPredictionSetConditionInput | null > | null,
+  or?: Array< ModelPredictionSetConditionInput | null > | null,
+  not?: ModelPredictionSetConditionInput | null,
 };
 
 export type ModelIDInput = {
@@ -149,32 +132,6 @@ export type ModelIDInput = {
   attributeExists?: boolean | null,
   attributeType?: ModelAttributeTypes | null,
   size?: ModelSizeInput | null,
-};
-
-export type UpdateRelationshipsInput = {
-  id: string,
-  followedUserId?: string | null,
-  followingUserId?: string | null,
-};
-
-export type DeleteRelationshipsInput = {
-  id: string,
-};
-
-export type CreatePredictionSetInput = {
-  id?: string | null,
-  userId: string,
-  eventId: string,
-  categoryId: string,
-};
-
-export type ModelPredictionSetConditionInput = {
-  userId?: ModelIDInput | null,
-  eventId?: ModelIDInput | null,
-  categoryId?: ModelIDInput | null,
-  and?: Array< ModelPredictionSetConditionInput | null > | null,
-  or?: Array< ModelPredictionSetConditionInput | null > | null,
-  not?: ModelPredictionSetConditionInput | null,
 };
 
 export type PredictionSet = {
@@ -198,8 +155,6 @@ export type Prediction = {
   __typename: "Prediction",
   id: string,
   userId: string,
-  predictionSetId: string,
-  contenderId: string,
   contender: Contender,
   ranking: number,
   createdAt: string,
@@ -211,16 +166,12 @@ export type Prediction = {
 export type Contender = {
   __typename: "Contender",
   id: string,
-  categoryId: string,
   category: Category,
   movie: Movie,
   person?: Person | null,
   song?: Song | null,
   predictions?: ModelPredictionConnection | null,
   didReceiveNominationOrWin?: boolean | null,
-  numberOfUsersPredictingWin: number,
-  numberOfUsersPredictingNom: number,
-  numberOfUsersPredictingUnranked: number,
   createdAt: string,
   updatedAt: string,
   categoryContendersId?: string | null,
@@ -234,7 +185,6 @@ export type Category = {
   id: string,
   name: CategoryName,
   type: CategoryType,
-  eventId: string,
   event: Event,
   contenders?: ModelContenderConnection | null,
   createdAt: string,
@@ -386,8 +336,6 @@ export type DeletePredictionSetInput = {
 export type CreatePredictionInput = {
   id?: string | null,
   userId: string,
-  predictionSetId: string,
-  contenderId: string,
   ranking: number,
   predictionSetPredictionsId?: string | null,
   contenderPredictionsId?: string | null,
@@ -395,8 +343,6 @@ export type CreatePredictionInput = {
 
 export type ModelPredictionConditionInput = {
   userId?: ModelIDInput | null,
-  predictionSetId?: ModelIDInput | null,
-  contenderId?: ModelIDInput | null,
   ranking?: ModelIntInput | null,
   and?: Array< ModelPredictionConditionInput | null > | null,
   or?: Array< ModelPredictionConditionInput | null > | null,
@@ -420,8 +366,6 @@ export type ModelIntInput = {
 export type UpdatePredictionInput = {
   id: string,
   userId?: string | null,
-  predictionSetId?: string | null,
-  contenderId?: string | null,
   ranking?: number | null,
   predictionSetPredictionsId?: string | null,
   contenderPredictionsId?: string | null,
@@ -478,14 +422,12 @@ export type CreateCategoryInput = {
   id?: string | null,
   name: CategoryName,
   type: CategoryType,
-  eventId: string,
   eventCategoriesId?: string | null,
 };
 
 export type ModelCategoryConditionInput = {
   name?: ModelCategoryNameInput | null,
   type?: ModelCategoryTypeInput | null,
-  eventId?: ModelIDInput | null,
   and?: Array< ModelCategoryConditionInput | null > | null,
   or?: Array< ModelCategoryConditionInput | null > | null,
   not?: ModelCategoryConditionInput | null,
@@ -506,7 +448,6 @@ export type UpdateCategoryInput = {
   id: string,
   name?: CategoryName | null,
   type?: CategoryType | null,
-  eventId?: string | null,
   eventCategoriesId?: string | null,
 };
 
@@ -516,11 +457,7 @@ export type DeleteCategoryInput = {
 
 export type CreateContenderInput = {
   id?: string | null,
-  categoryId: string,
   didReceiveNominationOrWin?: boolean | null,
-  numberOfUsersPredictingWin: number,
-  numberOfUsersPredictingNom: number,
-  numberOfUsersPredictingUnranked: number,
   categoryContendersId?: string | null,
   contenderMovieId: string,
   contenderPersonId?: string | null,
@@ -528,11 +465,7 @@ export type CreateContenderInput = {
 };
 
 export type ModelContenderConditionInput = {
-  categoryId?: ModelIDInput | null,
   didReceiveNominationOrWin?: ModelBooleanInput | null,
-  numberOfUsersPredictingWin?: ModelIntInput | null,
-  numberOfUsersPredictingNom?: ModelIntInput | null,
-  numberOfUsersPredictingUnranked?: ModelIntInput | null,
   and?: Array< ModelContenderConditionInput | null > | null,
   or?: Array< ModelContenderConditionInput | null > | null,
   not?: ModelContenderConditionInput | null,
@@ -551,11 +484,7 @@ export type ModelBooleanInput = {
 
 export type UpdateContenderInput = {
   id: string,
-  categoryId?: string | null,
   didReceiveNominationOrWin?: boolean | null,
-  numberOfUsersPredictingWin?: number | null,
-  numberOfUsersPredictingNom?: number | null,
-  numberOfUsersPredictingUnranked?: number | null,
   categoryContendersId?: string | null,
   contenderMovieId: string,
   contenderPersonId?: string | null,
@@ -663,15 +592,6 @@ export type ModelUserConnection = {
   nextToken?: string | null,
 };
 
-export type ModelRelationshipsFilterInput = {
-  id?: ModelIDInput | null,
-  followedUserId?: ModelIDInput | null,
-  followingUserId?: ModelIDInput | null,
-  and?: Array< ModelRelationshipsFilterInput | null > | null,
-  or?: Array< ModelRelationshipsFilterInput | null > | null,
-  not?: ModelRelationshipsFilterInput | null,
-};
-
 export type ModelPredictionSetFilterInput = {
   id?: ModelIDInput | null,
   userId?: ModelIDInput | null,
@@ -691,8 +611,6 @@ export type ModelPredictionSetConnection = {
 export type ModelPredictionFilterInput = {
   id?: ModelIDInput | null,
   userId?: ModelIDInput | null,
-  predictionSetId?: ModelIDInput | null,
-  contenderId?: ModelIDInput | null,
   ranking?: ModelIntInput | null,
   and?: Array< ModelPredictionFilterInput | null > | null,
   or?: Array< ModelPredictionFilterInput | null > | null,
@@ -723,7 +641,6 @@ export type ModelCategoryFilterInput = {
   id?: ModelIDInput | null,
   name?: ModelCategoryNameInput | null,
   type?: ModelCategoryTypeInput | null,
-  eventId?: ModelIDInput | null,
   and?: Array< ModelCategoryFilterInput | null > | null,
   or?: Array< ModelCategoryFilterInput | null > | null,
   not?: ModelCategoryFilterInput | null,
@@ -732,11 +649,7 @@ export type ModelCategoryFilterInput = {
 
 export type ModelContenderFilterInput = {
   id?: ModelIDInput | null,
-  categoryId?: ModelIDInput | null,
   didReceiveNominationOrWin?: ModelBooleanInput | null,
-  numberOfUsersPredictingWin?: ModelIntInput | null,
-  numberOfUsersPredictingNom?: ModelIntInput | null,
-  numberOfUsersPredictingUnranked?: ModelIntInput | null,
   and?: Array< ModelContenderFilterInput | null > | null,
   or?: Array< ModelContenderFilterInput | null > | null,
   not?: ModelContenderFilterInput | null,
@@ -806,30 +719,6 @@ export type CreateUserMutation = {
     bio?: string | null,
     image?: string | null,
     role: UserRole,
-    followers?:  {
-      __typename: "ModelRelationshipsConnection",
-      items:  Array< {
-        __typename: "Relationships",
-        id: string,
-        followedUserId: string,
-        followingUserId: string,
-        createdAt: string,
-        updatedAt: string,
-      } | null >,
-      nextToken?: string | null,
-    } | null,
-    following?:  {
-      __typename: "ModelRelationshipsConnection",
-      items:  Array< {
-        __typename: "Relationships",
-        id: string,
-        followedUserId: string,
-        followingUserId: string,
-        createdAt: string,
-        updatedAt: string,
-      } | null >,
-      nextToken?: string | null,
-    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -850,30 +739,6 @@ export type UpdateUserMutation = {
     bio?: string | null,
     image?: string | null,
     role: UserRole,
-    followers?:  {
-      __typename: "ModelRelationshipsConnection",
-      items:  Array< {
-        __typename: "Relationships",
-        id: string,
-        followedUserId: string,
-        followingUserId: string,
-        createdAt: string,
-        updatedAt: string,
-      } | null >,
-      nextToken?: string | null,
-    } | null,
-    following?:  {
-      __typename: "ModelRelationshipsConnection",
-      items:  Array< {
-        __typename: "Relationships",
-        id: string,
-        followedUserId: string,
-        followingUserId: string,
-        createdAt: string,
-        updatedAt: string,
-      } | null >,
-      nextToken?: string | null,
-    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -894,198 +759,6 @@ export type DeleteUserMutation = {
     bio?: string | null,
     image?: string | null,
     role: UserRole,
-    followers?:  {
-      __typename: "ModelRelationshipsConnection",
-      items:  Array< {
-        __typename: "Relationships",
-        id: string,
-        followedUserId: string,
-        followingUserId: string,
-        createdAt: string,
-        updatedAt: string,
-      } | null >,
-      nextToken?: string | null,
-    } | null,
-    following?:  {
-      __typename: "ModelRelationshipsConnection",
-      items:  Array< {
-        __typename: "Relationships",
-        id: string,
-        followedUserId: string,
-        followingUserId: string,
-        createdAt: string,
-        updatedAt: string,
-      } | null >,
-      nextToken?: string | null,
-    } | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type CreateRelationshipsMutationVariables = {
-  input: CreateRelationshipsInput,
-  condition?: ModelRelationshipsConditionInput | null,
-};
-
-export type CreateRelationshipsMutation = {
-  createRelationships?:  {
-    __typename: "Relationships",
-    id: string,
-    followedUserId: string,
-    followingUserId: string,
-    followedUser:  {
-      __typename: "User",
-      id: string,
-      email: string,
-      username?: string | null,
-      name?: string | null,
-      bio?: string | null,
-      image?: string | null,
-      role: UserRole,
-      followers?:  {
-        __typename: "ModelRelationshipsConnection",
-        nextToken?: string | null,
-      } | null,
-      following?:  {
-        __typename: "ModelRelationshipsConnection",
-        nextToken?: string | null,
-      } | null,
-      createdAt: string,
-      updatedAt: string,
-    },
-    followingUser:  {
-      __typename: "User",
-      id: string,
-      email: string,
-      username?: string | null,
-      name?: string | null,
-      bio?: string | null,
-      image?: string | null,
-      role: UserRole,
-      followers?:  {
-        __typename: "ModelRelationshipsConnection",
-        nextToken?: string | null,
-      } | null,
-      following?:  {
-        __typename: "ModelRelationshipsConnection",
-        nextToken?: string | null,
-      } | null,
-      createdAt: string,
-      updatedAt: string,
-    },
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type UpdateRelationshipsMutationVariables = {
-  input: UpdateRelationshipsInput,
-  condition?: ModelRelationshipsConditionInput | null,
-};
-
-export type UpdateRelationshipsMutation = {
-  updateRelationships?:  {
-    __typename: "Relationships",
-    id: string,
-    followedUserId: string,
-    followingUserId: string,
-    followedUser:  {
-      __typename: "User",
-      id: string,
-      email: string,
-      username?: string | null,
-      name?: string | null,
-      bio?: string | null,
-      image?: string | null,
-      role: UserRole,
-      followers?:  {
-        __typename: "ModelRelationshipsConnection",
-        nextToken?: string | null,
-      } | null,
-      following?:  {
-        __typename: "ModelRelationshipsConnection",
-        nextToken?: string | null,
-      } | null,
-      createdAt: string,
-      updatedAt: string,
-    },
-    followingUser:  {
-      __typename: "User",
-      id: string,
-      email: string,
-      username?: string | null,
-      name?: string | null,
-      bio?: string | null,
-      image?: string | null,
-      role: UserRole,
-      followers?:  {
-        __typename: "ModelRelationshipsConnection",
-        nextToken?: string | null,
-      } | null,
-      following?:  {
-        __typename: "ModelRelationshipsConnection",
-        nextToken?: string | null,
-      } | null,
-      createdAt: string,
-      updatedAt: string,
-    },
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type DeleteRelationshipsMutationVariables = {
-  input: DeleteRelationshipsInput,
-  condition?: ModelRelationshipsConditionInput | null,
-};
-
-export type DeleteRelationshipsMutation = {
-  deleteRelationships?:  {
-    __typename: "Relationships",
-    id: string,
-    followedUserId: string,
-    followingUserId: string,
-    followedUser:  {
-      __typename: "User",
-      id: string,
-      email: string,
-      username?: string | null,
-      name?: string | null,
-      bio?: string | null,
-      image?: string | null,
-      role: UserRole,
-      followers?:  {
-        __typename: "ModelRelationshipsConnection",
-        nextToken?: string | null,
-      } | null,
-      following?:  {
-        __typename: "ModelRelationshipsConnection",
-        nextToken?: string | null,
-      } | null,
-      createdAt: string,
-      updatedAt: string,
-    },
-    followingUser:  {
-      __typename: "User",
-      id: string,
-      email: string,
-      username?: string | null,
-      name?: string | null,
-      bio?: string | null,
-      image?: string | null,
-      role: UserRole,
-      followers?:  {
-        __typename: "ModelRelationshipsConnection",
-        nextToken?: string | null,
-      } | null,
-      following?:  {
-        __typename: "ModelRelationshipsConnection",
-        nextToken?: string | null,
-      } | null,
-      createdAt: string,
-      updatedAt: string,
-    },
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1109,8 +782,6 @@ export type CreatePredictionSetMutation = {
         __typename: "Prediction",
         id: string,
         userId: string,
-        predictionSetId: string,
-        contenderId: string,
         ranking: number,
         createdAt: string,
         updatedAt: string,
@@ -1142,8 +813,6 @@ export type UpdatePredictionSetMutation = {
         __typename: "Prediction",
         id: string,
         userId: string,
-        predictionSetId: string,
-        contenderId: string,
         ranking: number,
         createdAt: string,
         updatedAt: string,
@@ -1175,8 +844,6 @@ export type DeletePredictionSetMutation = {
         __typename: "Prediction",
         id: string,
         userId: string,
-        predictionSetId: string,
-        contenderId: string,
         ranking: number,
         createdAt: string,
         updatedAt: string,
@@ -1200,18 +867,14 @@ export type CreatePredictionMutation = {
     __typename: "Prediction",
     id: string,
     userId: string,
-    predictionSetId: string,
-    contenderId: string,
     contender:  {
       __typename: "Contender",
       id: string,
-      categoryId: string,
       category:  {
         __typename: "Category",
         id: string,
         name: CategoryName,
         type: CategoryType,
-        eventId: string,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -1245,9 +908,6 @@ export type CreatePredictionMutation = {
         nextToken?: string | null,
       } | null,
       didReceiveNominationOrWin?: boolean | null,
-      numberOfUsersPredictingWin: number,
-      numberOfUsersPredictingNom: number,
-      numberOfUsersPredictingUnranked: number,
       createdAt: string,
       updatedAt: string,
       categoryContendersId?: string | null,
@@ -1273,18 +933,14 @@ export type UpdatePredictionMutation = {
     __typename: "Prediction",
     id: string,
     userId: string,
-    predictionSetId: string,
-    contenderId: string,
     contender:  {
       __typename: "Contender",
       id: string,
-      categoryId: string,
       category:  {
         __typename: "Category",
         id: string,
         name: CategoryName,
         type: CategoryType,
-        eventId: string,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -1318,9 +974,6 @@ export type UpdatePredictionMutation = {
         nextToken?: string | null,
       } | null,
       didReceiveNominationOrWin?: boolean | null,
-      numberOfUsersPredictingWin: number,
-      numberOfUsersPredictingNom: number,
-      numberOfUsersPredictingUnranked: number,
       createdAt: string,
       updatedAt: string,
       categoryContendersId?: string | null,
@@ -1346,18 +999,14 @@ export type DeletePredictionMutation = {
     __typename: "Prediction",
     id: string,
     userId: string,
-    predictionSetId: string,
-    contenderId: string,
     contender:  {
       __typename: "Contender",
       id: string,
-      categoryId: string,
       category:  {
         __typename: "Category",
         id: string,
         name: CategoryName,
         type: CategoryType,
-        eventId: string,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -1391,9 +1040,6 @@ export type DeletePredictionMutation = {
         nextToken?: string | null,
       } | null,
       didReceiveNominationOrWin?: boolean | null,
-      numberOfUsersPredictingWin: number,
-      numberOfUsersPredictingNom: number,
-      numberOfUsersPredictingUnranked: number,
       createdAt: string,
       updatedAt: string,
       categoryContendersId?: string | null,
@@ -1425,7 +1071,6 @@ export type CreateEventMutation = {
         id: string,
         name: CategoryName,
         type: CategoryType,
-        eventId: string,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -1458,7 +1103,6 @@ export type UpdateEventMutation = {
         id: string,
         name: CategoryName,
         type: CategoryType,
-        eventId: string,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -1491,7 +1135,6 @@ export type DeleteEventMutation = {
         id: string,
         name: CategoryName,
         type: CategoryType,
-        eventId: string,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -1519,7 +1162,6 @@ export type CreateCategoryMutation = {
     id: string,
     name: CategoryName,
     type: CategoryType,
-    eventId: string,
     event:  {
       __typename: "Event",
       id: string,
@@ -1540,11 +1182,7 @@ export type CreateCategoryMutation = {
       items:  Array< {
         __typename: "Contender",
         id: string,
-        categoryId: string,
         didReceiveNominationOrWin?: boolean | null,
-        numberOfUsersPredictingWin: number,
-        numberOfUsersPredictingNom: number,
-        numberOfUsersPredictingUnranked: number,
         createdAt: string,
         updatedAt: string,
         categoryContendersId?: string | null,
@@ -1571,7 +1209,6 @@ export type UpdateCategoryMutation = {
     id: string,
     name: CategoryName,
     type: CategoryType,
-    eventId: string,
     event:  {
       __typename: "Event",
       id: string,
@@ -1592,11 +1229,7 @@ export type UpdateCategoryMutation = {
       items:  Array< {
         __typename: "Contender",
         id: string,
-        categoryId: string,
         didReceiveNominationOrWin?: boolean | null,
-        numberOfUsersPredictingWin: number,
-        numberOfUsersPredictingNom: number,
-        numberOfUsersPredictingUnranked: number,
         createdAt: string,
         updatedAt: string,
         categoryContendersId?: string | null,
@@ -1623,7 +1256,6 @@ export type DeleteCategoryMutation = {
     id: string,
     name: CategoryName,
     type: CategoryType,
-    eventId: string,
     event:  {
       __typename: "Event",
       id: string,
@@ -1644,11 +1276,7 @@ export type DeleteCategoryMutation = {
       items:  Array< {
         __typename: "Contender",
         id: string,
-        categoryId: string,
         didReceiveNominationOrWin?: boolean | null,
-        numberOfUsersPredictingWin: number,
-        numberOfUsersPredictingNom: number,
-        numberOfUsersPredictingUnranked: number,
         createdAt: string,
         updatedAt: string,
         categoryContendersId?: string | null,
@@ -1673,13 +1301,11 @@ export type CreateContenderMutation = {
   createContender?:  {
     __typename: "Contender",
     id: string,
-    categoryId: string,
     category:  {
       __typename: "Category",
       id: string,
       name: CategoryName,
       type: CategoryType,
-      eventId: string,
       event:  {
         __typename: "Event",
         id: string,
@@ -1737,8 +1363,6 @@ export type CreateContenderMutation = {
         __typename: "Prediction",
         id: string,
         userId: string,
-        predictionSetId: string,
-        contenderId: string,
         ranking: number,
         createdAt: string,
         updatedAt: string,
@@ -1748,9 +1372,6 @@ export type CreateContenderMutation = {
       nextToken?: string | null,
     } | null,
     didReceiveNominationOrWin?: boolean | null,
-    numberOfUsersPredictingWin: number,
-    numberOfUsersPredictingNom: number,
-    numberOfUsersPredictingUnranked: number,
     createdAt: string,
     updatedAt: string,
     categoryContendersId?: string | null,
@@ -1769,13 +1390,11 @@ export type UpdateContenderMutation = {
   updateContender?:  {
     __typename: "Contender",
     id: string,
-    categoryId: string,
     category:  {
       __typename: "Category",
       id: string,
       name: CategoryName,
       type: CategoryType,
-      eventId: string,
       event:  {
         __typename: "Event",
         id: string,
@@ -1833,8 +1452,6 @@ export type UpdateContenderMutation = {
         __typename: "Prediction",
         id: string,
         userId: string,
-        predictionSetId: string,
-        contenderId: string,
         ranking: number,
         createdAt: string,
         updatedAt: string,
@@ -1844,9 +1461,6 @@ export type UpdateContenderMutation = {
       nextToken?: string | null,
     } | null,
     didReceiveNominationOrWin?: boolean | null,
-    numberOfUsersPredictingWin: number,
-    numberOfUsersPredictingNom: number,
-    numberOfUsersPredictingUnranked: number,
     createdAt: string,
     updatedAt: string,
     categoryContendersId?: string | null,
@@ -1865,13 +1479,11 @@ export type DeleteContenderMutation = {
   deleteContender?:  {
     __typename: "Contender",
     id: string,
-    categoryId: string,
     category:  {
       __typename: "Category",
       id: string,
       name: CategoryName,
       type: CategoryType,
-      eventId: string,
       event:  {
         __typename: "Event",
         id: string,
@@ -1929,8 +1541,6 @@ export type DeleteContenderMutation = {
         __typename: "Prediction",
         id: string,
         userId: string,
-        predictionSetId: string,
-        contenderId: string,
         ranking: number,
         createdAt: string,
         updatedAt: string,
@@ -1940,9 +1550,6 @@ export type DeleteContenderMutation = {
       nextToken?: string | null,
     } | null,
     didReceiveNominationOrWin?: boolean | null,
-    numberOfUsersPredictingWin: number,
-    numberOfUsersPredictingNom: number,
-    numberOfUsersPredictingUnranked: number,
     createdAt: string,
     updatedAt: string,
     categoryContendersId?: string | null,
@@ -2134,30 +1741,6 @@ export type GetUserQuery = {
     bio?: string | null,
     image?: string | null,
     role: UserRole,
-    followers?:  {
-      __typename: "ModelRelationshipsConnection",
-      items:  Array< {
-        __typename: "Relationships",
-        id: string,
-        followedUserId: string,
-        followingUserId: string,
-        createdAt: string,
-        updatedAt: string,
-      } | null >,
-      nextToken?: string | null,
-    } | null,
-    following?:  {
-      __typename: "ModelRelationshipsConnection",
-      items:  Array< {
-        __typename: "Relationships",
-        id: string,
-        followedUserId: string,
-        followingUserId: string,
-        createdAt: string,
-        updatedAt: string,
-      } | null >,
-      nextToken?: string | null,
-    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2183,116 +1766,6 @@ export type ListUsersQuery = {
       bio?: string | null,
       image?: string | null,
       role: UserRole,
-      followers?:  {
-        __typename: "ModelRelationshipsConnection",
-        nextToken?: string | null,
-      } | null,
-      following?:  {
-        __typename: "ModelRelationshipsConnection",
-        nextToken?: string | null,
-      } | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
-};
-
-export type GetRelationshipsQueryVariables = {
-  id: string,
-};
-
-export type GetRelationshipsQuery = {
-  getRelationships?:  {
-    __typename: "Relationships",
-    id: string,
-    followedUserId: string,
-    followingUserId: string,
-    followedUser:  {
-      __typename: "User",
-      id: string,
-      email: string,
-      username?: string | null,
-      name?: string | null,
-      bio?: string | null,
-      image?: string | null,
-      role: UserRole,
-      followers?:  {
-        __typename: "ModelRelationshipsConnection",
-        nextToken?: string | null,
-      } | null,
-      following?:  {
-        __typename: "ModelRelationshipsConnection",
-        nextToken?: string | null,
-      } | null,
-      createdAt: string,
-      updatedAt: string,
-    },
-    followingUser:  {
-      __typename: "User",
-      id: string,
-      email: string,
-      username?: string | null,
-      name?: string | null,
-      bio?: string | null,
-      image?: string | null,
-      role: UserRole,
-      followers?:  {
-        __typename: "ModelRelationshipsConnection",
-        nextToken?: string | null,
-      } | null,
-      following?:  {
-        __typename: "ModelRelationshipsConnection",
-        nextToken?: string | null,
-      } | null,
-      createdAt: string,
-      updatedAt: string,
-    },
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type ListRelationshipsQueryVariables = {
-  id?: string | null,
-  filter?: ModelRelationshipsFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-  sortDirection?: ModelSortDirection | null,
-};
-
-export type ListRelationshipsQuery = {
-  listRelationships?:  {
-    __typename: "ModelRelationshipsConnection",
-    items:  Array< {
-      __typename: "Relationships",
-      id: string,
-      followedUserId: string,
-      followingUserId: string,
-      followedUser:  {
-        __typename: "User",
-        id: string,
-        email: string,
-        username?: string | null,
-        name?: string | null,
-        bio?: string | null,
-        image?: string | null,
-        role: UserRole,
-        createdAt: string,
-        updatedAt: string,
-      },
-      followingUser:  {
-        __typename: "User",
-        id: string,
-        email: string,
-        username?: string | null,
-        name?: string | null,
-        bio?: string | null,
-        image?: string | null,
-        role: UserRole,
-        createdAt: string,
-        updatedAt: string,
-      },
       createdAt: string,
       updatedAt: string,
     } | null >,
@@ -2317,8 +1790,6 @@ export type GetPredictionSetQuery = {
         __typename: "Prediction",
         id: string,
         userId: string,
-        predictionSetId: string,
-        contenderId: string,
         ranking: number,
         createdAt: string,
         updatedAt: string,
@@ -2369,18 +1840,14 @@ export type GetPredictionQuery = {
     __typename: "Prediction",
     id: string,
     userId: string,
-    predictionSetId: string,
-    contenderId: string,
     contender:  {
       __typename: "Contender",
       id: string,
-      categoryId: string,
       category:  {
         __typename: "Category",
         id: string,
         name: CategoryName,
         type: CategoryType,
-        eventId: string,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -2414,9 +1881,6 @@ export type GetPredictionQuery = {
         nextToken?: string | null,
       } | null,
       didReceiveNominationOrWin?: boolean | null,
-      numberOfUsersPredictingWin: number,
-      numberOfUsersPredictingNom: number,
-      numberOfUsersPredictingUnranked: number,
       createdAt: string,
       updatedAt: string,
       categoryContendersId?: string | null,
@@ -2447,16 +1911,10 @@ export type ListPredictionsQuery = {
       __typename: "Prediction",
       id: string,
       userId: string,
-      predictionSetId: string,
-      contenderId: string,
       contender:  {
         __typename: "Contender",
         id: string,
-        categoryId: string,
         didReceiveNominationOrWin?: boolean | null,
-        numberOfUsersPredictingWin: number,
-        numberOfUsersPredictingNom: number,
-        numberOfUsersPredictingUnranked: number,
         createdAt: string,
         updatedAt: string,
         categoryContendersId?: string | null,
@@ -2489,7 +1947,6 @@ export type GetEventQuery = {
         id: string,
         name: CategoryName,
         type: CategoryType,
-        eventId: string,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -2546,7 +2003,6 @@ export type GetCategoryQuery = {
     id: string,
     name: CategoryName,
     type: CategoryType,
-    eventId: string,
     event:  {
       __typename: "Event",
       id: string,
@@ -2567,11 +2023,7 @@ export type GetCategoryQuery = {
       items:  Array< {
         __typename: "Contender",
         id: string,
-        categoryId: string,
         didReceiveNominationOrWin?: boolean | null,
-        numberOfUsersPredictingWin: number,
-        numberOfUsersPredictingNom: number,
-        numberOfUsersPredictingUnranked: number,
         createdAt: string,
         updatedAt: string,
         categoryContendersId?: string | null,
@@ -2603,7 +2055,6 @@ export type ListCategoriesQuery = {
       id: string,
       name: CategoryName,
       type: CategoryType,
-      eventId: string,
       event:  {
         __typename: "Event",
         id: string,
@@ -2635,13 +2086,11 @@ export type GetContenderQuery = {
   getContender?:  {
     __typename: "Contender",
     id: string,
-    categoryId: string,
     category:  {
       __typename: "Category",
       id: string,
       name: CategoryName,
       type: CategoryType,
-      eventId: string,
       event:  {
         __typename: "Event",
         id: string,
@@ -2699,8 +2148,6 @@ export type GetContenderQuery = {
         __typename: "Prediction",
         id: string,
         userId: string,
-        predictionSetId: string,
-        contenderId: string,
         ranking: number,
         createdAt: string,
         updatedAt: string,
@@ -2710,9 +2157,6 @@ export type GetContenderQuery = {
       nextToken?: string | null,
     } | null,
     didReceiveNominationOrWin?: boolean | null,
-    numberOfUsersPredictingWin: number,
-    numberOfUsersPredictingNom: number,
-    numberOfUsersPredictingUnranked: number,
     createdAt: string,
     updatedAt: string,
     categoryContendersId?: string | null,
@@ -2736,13 +2180,11 @@ export type ListContendersQuery = {
     items:  Array< {
       __typename: "Contender",
       id: string,
-      categoryId: string,
       category:  {
         __typename: "Category",
         id: string,
         name: CategoryName,
         type: CategoryType,
-        eventId: string,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -2776,9 +2218,6 @@ export type ListContendersQuery = {
         nextToken?: string | null,
       } | null,
       didReceiveNominationOrWin?: boolean | null,
-      numberOfUsersPredictingWin: number,
-      numberOfUsersPredictingNom: number,
-      numberOfUsersPredictingUnranked: number,
       createdAt: string,
       updatedAt: string,
       categoryContendersId?: string | null,
@@ -2920,100 +2359,6 @@ export type ListSongsQuery = {
   } | null,
 };
 
-export type QueryRelationshipsByFollowedUserQueryVariables = {
-  followedUserId: string,
-  sortDirection?: ModelSortDirection | null,
-  filter?: ModelRelationshipsFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type QueryRelationshipsByFollowedUserQuery = {
-  queryRelationshipsByFollowedUser?:  {
-    __typename: "ModelRelationshipsConnection",
-    items:  Array< {
-      __typename: "Relationships",
-      id: string,
-      followedUserId: string,
-      followingUserId: string,
-      followedUser:  {
-        __typename: "User",
-        id: string,
-        email: string,
-        username?: string | null,
-        name?: string | null,
-        bio?: string | null,
-        image?: string | null,
-        role: UserRole,
-        createdAt: string,
-        updatedAt: string,
-      },
-      followingUser:  {
-        __typename: "User",
-        id: string,
-        email: string,
-        username?: string | null,
-        name?: string | null,
-        bio?: string | null,
-        image?: string | null,
-        role: UserRole,
-        createdAt: string,
-        updatedAt: string,
-      },
-      createdAt: string,
-      updatedAt: string,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
-};
-
-export type QueryRelationshipsByFollowingUserQueryVariables = {
-  followingUserId: string,
-  sortDirection?: ModelSortDirection | null,
-  filter?: ModelRelationshipsFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type QueryRelationshipsByFollowingUserQuery = {
-  queryRelationshipsByFollowingUser?:  {
-    __typename: "ModelRelationshipsConnection",
-    items:  Array< {
-      __typename: "Relationships",
-      id: string,
-      followedUserId: string,
-      followingUserId: string,
-      followedUser:  {
-        __typename: "User",
-        id: string,
-        email: string,
-        username?: string | null,
-        name?: string | null,
-        bio?: string | null,
-        image?: string | null,
-        role: UserRole,
-        createdAt: string,
-        updatedAt: string,
-      },
-      followingUser:  {
-        __typename: "User",
-        id: string,
-        email: string,
-        username?: string | null,
-        name?: string | null,
-        bio?: string | null,
-        image?: string | null,
-        role: UserRole,
-        createdAt: string,
-        updatedAt: string,
-      },
-      createdAt: string,
-      updatedAt: string,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
-};
-
 export type OnCreateUserSubscription = {
   onCreateUser?:  {
     __typename: "User",
@@ -3024,30 +2369,6 @@ export type OnCreateUserSubscription = {
     bio?: string | null,
     image?: string | null,
     role: UserRole,
-    followers?:  {
-      __typename: "ModelRelationshipsConnection",
-      items:  Array< {
-        __typename: "Relationships",
-        id: string,
-        followedUserId: string,
-        followingUserId: string,
-        createdAt: string,
-        updatedAt: string,
-      } | null >,
-      nextToken?: string | null,
-    } | null,
-    following?:  {
-      __typename: "ModelRelationshipsConnection",
-      items:  Array< {
-        __typename: "Relationships",
-        id: string,
-        followedUserId: string,
-        followingUserId: string,
-        createdAt: string,
-        updatedAt: string,
-      } | null >,
-      nextToken?: string | null,
-    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -3063,30 +2384,6 @@ export type OnUpdateUserSubscription = {
     bio?: string | null,
     image?: string | null,
     role: UserRole,
-    followers?:  {
-      __typename: "ModelRelationshipsConnection",
-      items:  Array< {
-        __typename: "Relationships",
-        id: string,
-        followedUserId: string,
-        followingUserId: string,
-        createdAt: string,
-        updatedAt: string,
-      } | null >,
-      nextToken?: string | null,
-    } | null,
-    following?:  {
-      __typename: "ModelRelationshipsConnection",
-      items:  Array< {
-        __typename: "Relationships",
-        id: string,
-        followedUserId: string,
-        followingUserId: string,
-        createdAt: string,
-        updatedAt: string,
-      } | null >,
-      nextToken?: string | null,
-    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -3102,183 +2399,6 @@ export type OnDeleteUserSubscription = {
     bio?: string | null,
     image?: string | null,
     role: UserRole,
-    followers?:  {
-      __typename: "ModelRelationshipsConnection",
-      items:  Array< {
-        __typename: "Relationships",
-        id: string,
-        followedUserId: string,
-        followingUserId: string,
-        createdAt: string,
-        updatedAt: string,
-      } | null >,
-      nextToken?: string | null,
-    } | null,
-    following?:  {
-      __typename: "ModelRelationshipsConnection",
-      items:  Array< {
-        __typename: "Relationships",
-        id: string,
-        followedUserId: string,
-        followingUserId: string,
-        createdAt: string,
-        updatedAt: string,
-      } | null >,
-      nextToken?: string | null,
-    } | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type OnCreateRelationshipsSubscription = {
-  onCreateRelationships?:  {
-    __typename: "Relationships",
-    id: string,
-    followedUserId: string,
-    followingUserId: string,
-    followedUser:  {
-      __typename: "User",
-      id: string,
-      email: string,
-      username?: string | null,
-      name?: string | null,
-      bio?: string | null,
-      image?: string | null,
-      role: UserRole,
-      followers?:  {
-        __typename: "ModelRelationshipsConnection",
-        nextToken?: string | null,
-      } | null,
-      following?:  {
-        __typename: "ModelRelationshipsConnection",
-        nextToken?: string | null,
-      } | null,
-      createdAt: string,
-      updatedAt: string,
-    },
-    followingUser:  {
-      __typename: "User",
-      id: string,
-      email: string,
-      username?: string | null,
-      name?: string | null,
-      bio?: string | null,
-      image?: string | null,
-      role: UserRole,
-      followers?:  {
-        __typename: "ModelRelationshipsConnection",
-        nextToken?: string | null,
-      } | null,
-      following?:  {
-        __typename: "ModelRelationshipsConnection",
-        nextToken?: string | null,
-      } | null,
-      createdAt: string,
-      updatedAt: string,
-    },
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type OnUpdateRelationshipsSubscription = {
-  onUpdateRelationships?:  {
-    __typename: "Relationships",
-    id: string,
-    followedUserId: string,
-    followingUserId: string,
-    followedUser:  {
-      __typename: "User",
-      id: string,
-      email: string,
-      username?: string | null,
-      name?: string | null,
-      bio?: string | null,
-      image?: string | null,
-      role: UserRole,
-      followers?:  {
-        __typename: "ModelRelationshipsConnection",
-        nextToken?: string | null,
-      } | null,
-      following?:  {
-        __typename: "ModelRelationshipsConnection",
-        nextToken?: string | null,
-      } | null,
-      createdAt: string,
-      updatedAt: string,
-    },
-    followingUser:  {
-      __typename: "User",
-      id: string,
-      email: string,
-      username?: string | null,
-      name?: string | null,
-      bio?: string | null,
-      image?: string | null,
-      role: UserRole,
-      followers?:  {
-        __typename: "ModelRelationshipsConnection",
-        nextToken?: string | null,
-      } | null,
-      following?:  {
-        __typename: "ModelRelationshipsConnection",
-        nextToken?: string | null,
-      } | null,
-      createdAt: string,
-      updatedAt: string,
-    },
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type OnDeleteRelationshipsSubscription = {
-  onDeleteRelationships?:  {
-    __typename: "Relationships",
-    id: string,
-    followedUserId: string,
-    followingUserId: string,
-    followedUser:  {
-      __typename: "User",
-      id: string,
-      email: string,
-      username?: string | null,
-      name?: string | null,
-      bio?: string | null,
-      image?: string | null,
-      role: UserRole,
-      followers?:  {
-        __typename: "ModelRelationshipsConnection",
-        nextToken?: string | null,
-      } | null,
-      following?:  {
-        __typename: "ModelRelationshipsConnection",
-        nextToken?: string | null,
-      } | null,
-      createdAt: string,
-      updatedAt: string,
-    },
-    followingUser:  {
-      __typename: "User",
-      id: string,
-      email: string,
-      username?: string | null,
-      name?: string | null,
-      bio?: string | null,
-      image?: string | null,
-      role: UserRole,
-      followers?:  {
-        __typename: "ModelRelationshipsConnection",
-        nextToken?: string | null,
-      } | null,
-      following?:  {
-        __typename: "ModelRelationshipsConnection",
-        nextToken?: string | null,
-      } | null,
-      createdAt: string,
-      updatedAt: string,
-    },
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -3297,8 +2417,6 @@ export type OnCreatePredictionSetSubscription = {
         __typename: "Prediction",
         id: string,
         userId: string,
-        predictionSetId: string,
-        contenderId: string,
         ranking: number,
         createdAt: string,
         updatedAt: string,
@@ -3325,8 +2443,6 @@ export type OnUpdatePredictionSetSubscription = {
         __typename: "Prediction",
         id: string,
         userId: string,
-        predictionSetId: string,
-        contenderId: string,
         ranking: number,
         createdAt: string,
         updatedAt: string,
@@ -3353,8 +2469,6 @@ export type OnDeletePredictionSetSubscription = {
         __typename: "Prediction",
         id: string,
         userId: string,
-        predictionSetId: string,
-        contenderId: string,
         ranking: number,
         createdAt: string,
         updatedAt: string,
@@ -3373,18 +2487,14 @@ export type OnCreatePredictionSubscription = {
     __typename: "Prediction",
     id: string,
     userId: string,
-    predictionSetId: string,
-    contenderId: string,
     contender:  {
       __typename: "Contender",
       id: string,
-      categoryId: string,
       category:  {
         __typename: "Category",
         id: string,
         name: CategoryName,
         type: CategoryType,
-        eventId: string,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -3418,9 +2528,6 @@ export type OnCreatePredictionSubscription = {
         nextToken?: string | null,
       } | null,
       didReceiveNominationOrWin?: boolean | null,
-      numberOfUsersPredictingWin: number,
-      numberOfUsersPredictingNom: number,
-      numberOfUsersPredictingUnranked: number,
       createdAt: string,
       updatedAt: string,
       categoryContendersId?: string | null,
@@ -3441,18 +2548,14 @@ export type OnUpdatePredictionSubscription = {
     __typename: "Prediction",
     id: string,
     userId: string,
-    predictionSetId: string,
-    contenderId: string,
     contender:  {
       __typename: "Contender",
       id: string,
-      categoryId: string,
       category:  {
         __typename: "Category",
         id: string,
         name: CategoryName,
         type: CategoryType,
-        eventId: string,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -3486,9 +2589,6 @@ export type OnUpdatePredictionSubscription = {
         nextToken?: string | null,
       } | null,
       didReceiveNominationOrWin?: boolean | null,
-      numberOfUsersPredictingWin: number,
-      numberOfUsersPredictingNom: number,
-      numberOfUsersPredictingUnranked: number,
       createdAt: string,
       updatedAt: string,
       categoryContendersId?: string | null,
@@ -3509,18 +2609,14 @@ export type OnDeletePredictionSubscription = {
     __typename: "Prediction",
     id: string,
     userId: string,
-    predictionSetId: string,
-    contenderId: string,
     contender:  {
       __typename: "Contender",
       id: string,
-      categoryId: string,
       category:  {
         __typename: "Category",
         id: string,
         name: CategoryName,
         type: CategoryType,
-        eventId: string,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -3554,9 +2650,6 @@ export type OnDeletePredictionSubscription = {
         nextToken?: string | null,
       } | null,
       didReceiveNominationOrWin?: boolean | null,
-      numberOfUsersPredictingWin: number,
-      numberOfUsersPredictingNom: number,
-      numberOfUsersPredictingUnranked: number,
       createdAt: string,
       updatedAt: string,
       categoryContendersId?: string | null,
@@ -3583,7 +2676,6 @@ export type OnCreateEventSubscription = {
         id: string,
         name: CategoryName,
         type: CategoryType,
-        eventId: string,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -3611,7 +2703,6 @@ export type OnUpdateEventSubscription = {
         id: string,
         name: CategoryName,
         type: CategoryType,
-        eventId: string,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -3639,7 +2730,6 @@ export type OnDeleteEventSubscription = {
         id: string,
         name: CategoryName,
         type: CategoryType,
-        eventId: string,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -3662,7 +2752,6 @@ export type OnCreateCategorySubscription = {
     id: string,
     name: CategoryName,
     type: CategoryType,
-    eventId: string,
     event:  {
       __typename: "Event",
       id: string,
@@ -3683,11 +2772,7 @@ export type OnCreateCategorySubscription = {
       items:  Array< {
         __typename: "Contender",
         id: string,
-        categoryId: string,
         didReceiveNominationOrWin?: boolean | null,
-        numberOfUsersPredictingWin: number,
-        numberOfUsersPredictingNom: number,
-        numberOfUsersPredictingUnranked: number,
         createdAt: string,
         updatedAt: string,
         categoryContendersId?: string | null,
@@ -3709,7 +2794,6 @@ export type OnUpdateCategorySubscription = {
     id: string,
     name: CategoryName,
     type: CategoryType,
-    eventId: string,
     event:  {
       __typename: "Event",
       id: string,
@@ -3730,11 +2814,7 @@ export type OnUpdateCategorySubscription = {
       items:  Array< {
         __typename: "Contender",
         id: string,
-        categoryId: string,
         didReceiveNominationOrWin?: boolean | null,
-        numberOfUsersPredictingWin: number,
-        numberOfUsersPredictingNom: number,
-        numberOfUsersPredictingUnranked: number,
         createdAt: string,
         updatedAt: string,
         categoryContendersId?: string | null,
@@ -3756,7 +2836,6 @@ export type OnDeleteCategorySubscription = {
     id: string,
     name: CategoryName,
     type: CategoryType,
-    eventId: string,
     event:  {
       __typename: "Event",
       id: string,
@@ -3777,11 +2856,7 @@ export type OnDeleteCategorySubscription = {
       items:  Array< {
         __typename: "Contender",
         id: string,
-        categoryId: string,
         didReceiveNominationOrWin?: boolean | null,
-        numberOfUsersPredictingWin: number,
-        numberOfUsersPredictingNom: number,
-        numberOfUsersPredictingUnranked: number,
         createdAt: string,
         updatedAt: string,
         categoryContendersId?: string | null,
@@ -3801,13 +2876,11 @@ export type OnCreateContenderSubscription = {
   onCreateContender?:  {
     __typename: "Contender",
     id: string,
-    categoryId: string,
     category:  {
       __typename: "Category",
       id: string,
       name: CategoryName,
       type: CategoryType,
-      eventId: string,
       event:  {
         __typename: "Event",
         id: string,
@@ -3865,8 +2938,6 @@ export type OnCreateContenderSubscription = {
         __typename: "Prediction",
         id: string,
         userId: string,
-        predictionSetId: string,
-        contenderId: string,
         ranking: number,
         createdAt: string,
         updatedAt: string,
@@ -3876,9 +2947,6 @@ export type OnCreateContenderSubscription = {
       nextToken?: string | null,
     } | null,
     didReceiveNominationOrWin?: boolean | null,
-    numberOfUsersPredictingWin: number,
-    numberOfUsersPredictingNom: number,
-    numberOfUsersPredictingUnranked: number,
     createdAt: string,
     updatedAt: string,
     categoryContendersId?: string | null,
@@ -3892,13 +2960,11 @@ export type OnUpdateContenderSubscription = {
   onUpdateContender?:  {
     __typename: "Contender",
     id: string,
-    categoryId: string,
     category:  {
       __typename: "Category",
       id: string,
       name: CategoryName,
       type: CategoryType,
-      eventId: string,
       event:  {
         __typename: "Event",
         id: string,
@@ -3956,8 +3022,6 @@ export type OnUpdateContenderSubscription = {
         __typename: "Prediction",
         id: string,
         userId: string,
-        predictionSetId: string,
-        contenderId: string,
         ranking: number,
         createdAt: string,
         updatedAt: string,
@@ -3967,9 +3031,6 @@ export type OnUpdateContenderSubscription = {
       nextToken?: string | null,
     } | null,
     didReceiveNominationOrWin?: boolean | null,
-    numberOfUsersPredictingWin: number,
-    numberOfUsersPredictingNom: number,
-    numberOfUsersPredictingUnranked: number,
     createdAt: string,
     updatedAt: string,
     categoryContendersId?: string | null,
@@ -3983,13 +3044,11 @@ export type OnDeleteContenderSubscription = {
   onDeleteContender?:  {
     __typename: "Contender",
     id: string,
-    categoryId: string,
     category:  {
       __typename: "Category",
       id: string,
       name: CategoryName,
       type: CategoryType,
-      eventId: string,
       event:  {
         __typename: "Event",
         id: string,
@@ -4047,8 +3106,6 @@ export type OnDeleteContenderSubscription = {
         __typename: "Prediction",
         id: string,
         userId: string,
-        predictionSetId: string,
-        contenderId: string,
         ranking: number,
         createdAt: string,
         updatedAt: string,
@@ -4058,9 +3115,6 @@ export type OnDeleteContenderSubscription = {
       nextToken?: string | null,
     } | null,
     didReceiveNominationOrWin?: boolean | null,
-    numberOfUsersPredictingWin: number,
-    numberOfUsersPredictingNom: number,
-    numberOfUsersPredictingUnranked: number,
     createdAt: string,
     updatedAt: string,
     categoryContendersId?: string | null,

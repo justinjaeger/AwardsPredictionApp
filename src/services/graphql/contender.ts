@@ -46,7 +46,7 @@ const getUniqueContenders = async (
   const { categoryId, movieId, personId, songId } = params;
   // Create filter based on params passed
   const filter: ModelContenderFilterInput = {
-    categoryId: { eq: categoryId },
+    categoryContendersId: { eq: categoryId },
     contenderMovieId: { eq: movieId },
   };
   if (personId) {
@@ -78,11 +78,8 @@ const createContender = async (
   const { categoryId, movieId, personId, songId } = params;
   // Create input according to params passed
   const input: CreateContenderInput = {
-    categoryId,
+    categoryContendersId: categoryId,
     contenderMovieId: movieId,
-    numberOfUsersPredictingNom: 0,
-    numberOfUsersPredictingUnranked: 0,
-    numberOfUsersPredictingWin: 0,
   };
   if (personId) {
     input.contenderPersonId = personId;
@@ -161,7 +158,7 @@ export const getContendersByCategory = async (
       ListContendersQueryVariables
     >(queries.listContenders, {
       filter: {
-        categoryId: { eq: categoryId },
+        categoryContendersId: { eq: categoryId },
       },
     });
     if (!data?.listContenders) {

@@ -70,7 +70,7 @@ const AddContenders = () => {
         if (!a || !b) return 0;
         return a.ranking > b.ranking ? 1 : -1;
       })
-      .map((p) => p?.contenderId || '');
+      .map((p) => p?.contenderPredictionsId || '');
     setInitiallySelectedContenderIds(sortedContenderIds);
     setSelectedContenderIds(sortedContenderIds);
     executeBeforeReturn();
@@ -133,7 +133,7 @@ const AddContenders = () => {
       contenderId: c,
       ranking: i + 1,
     }));
-    const eventId = cat?.eventId;
+    const eventId = cat?.eventCategoriesId;
     if (!eventId) {
       return console.error('no eventId property on category');
     }

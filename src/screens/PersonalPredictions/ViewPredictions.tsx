@@ -69,7 +69,7 @@ const ViewPredictions = () => {
         if (!a || !b) return 0;
         return a.ranking > b.ranking ? 1 : -1;
       })
-      .map((p) => p?.contenderId || '');
+      .map((p) => p?.contenderPredictionsId || '');
     setContenderIds(sortedContenderIds);
   }, [cat]);
 

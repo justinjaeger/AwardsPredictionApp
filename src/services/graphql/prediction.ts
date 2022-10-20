@@ -93,7 +93,12 @@ const createPrediction = async (
       CreatePredictionMutation,
       CreatePredictionMutationVariables
     >(mutations.createPrediction, {
-      input: { userId, predictionSetId, contenderId, ranking },
+      input: {
+        userId,
+        predictionSetPredictionsId: predictionSetId,
+        contenderPredictionsId: contenderId,
+        ranking,
+      },
     });
     if (!data?.createPrediction) {
       throw new Error(JSON.stringify(errors));
@@ -157,7 +162,7 @@ export const getPredictionsByPredictionSetId = async (
       ListPredictionsQuery,
       ListPredictionsQueryVariables
     >(queries.listPredictions, {
-      filter: { predictionSetId: { eq: pSetId } },
+      filter: { predictionSetPredictionsId: { eq: pSetId } },
     });
     if (!maybePreSets?.listPredictions) {
       throw new Error(JSON.stringify(errors));
@@ -246,7 +251,7 @@ export const getPredictionsByContender = async (
       ListPredictionsQuery,
       ListPredictionsQueryVariables
     >(queries.listPredictions, {
-      filter: { contenderId: { eq: contenderId } },
+      filter: { contenderPredictionsId: { eq: contenderId } },
     });
     if (!data?.listPredictions) {
       throw new Error(JSON.stringify(errors));
