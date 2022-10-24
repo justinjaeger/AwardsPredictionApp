@@ -1,13 +1,9 @@
 import React, { useState } from 'react';
 import { TouchableHighlight } from 'react-native';
-import {
-  CategoryType,
-  GetCategoryQuery,
-  GetContenderQuery,
-  GetMovieQuery,
-} from '../../../API';
+import { CategoryType, GetContenderQuery, GetMovieQuery } from '../../../API';
 import COLORS from '../../../constants/colors';
 import { PosterSize } from '../../../constants/posterDimensions';
+import { useCategory } from '../../../context/CategoryContext';
 import ApiServices from '../../../services/graphql';
 import { useAsyncEffect } from '../../../util/hooks';
 import FilmListItem from './FilmListItem';
@@ -15,7 +11,6 @@ import PerformanceListItem from './PerformanceListItem';
 import SongListItem from './SongListItem';
 
 type iContenderListItemProps = {
-  categoryId: string;
   contenderId: string;
   ranking: number;
   selected: boolean;
@@ -28,7 +23,6 @@ type iContenderListItemProps = {
 
 const ContenderListItem = (props: iContenderListItemProps) => {
   const {
-    categoryId,
     contenderId,
     ranking,
     size,
@@ -38,15 +32,13 @@ const ContenderListItem = (props: iContenderListItemProps) => {
     onPressThumbnail,
     onPressItem,
   } = props;
+  const { category } = useCategory();
 
-  //   console.error('initiallySelected', initiallySelected);
   const [selected, setSelected] = useState<boolean>(initiallySelected);
-  //   console.error('selected', selected);
 
   // TODO: this selected COULD be updating with a useEffect with initiallySelected as a dependency
 
   const [movie, setMovie] = useState<GetMovieQuery>();
-  const [category, setCategory] = useState<GetCategoryQuery>();
   const [contender, setContender] = useState<GetContenderQuery>();
 
   const categoryType = category?.getCategory?.type;
@@ -57,12 +49,6 @@ const ContenderListItem = (props: iContenderListItemProps) => {
   const songId = contender?.getContender?.contenderSongId;
   const tmdbMovieId = movie?.getMovie?.tmdbId;
   const movieStudio = movie?.getMovie?.studio;
-
-  // NOTE: later, we'll just have the category live in context instead of fetching every new component / passing via nav props
-  useAsyncEffect(async () => {
-    const { data } = await ApiServices.getCategoryById(categoryId);
-    setCategory(data);
-  }, [categoryId]);
 
   //   // NOTE: later, we'll just have the contender live in context instead of fetching every new component / passing via nav props
   useAsyncEffect(async () => {

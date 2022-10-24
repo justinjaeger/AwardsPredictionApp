@@ -1,15 +1,13 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import CategorySelect from '../screens/GlobalPredictions/CategorySelect';
 import BackButton from '../components/Buttons/BackButton';
-import EventSelect from '../screens/GlobalPredictions/EventSelect';
-import ViewPredictions from '../screens/PersonalPredictions/ViewPredictions';
-import AddContenders from '../screens/PersonalPredictions/AddContenders';
-import CreateContender from '../screens/CreateContender';
-import EditPredictions from '../screens/PersonalPredictions/EditPredictions';
-import ContenderDetailsScreen from '../screens/Category/ContenderDetailsScreen';
+import CreateContender from '../screens/Predictions/Personal/CreateContender';
+import EditPredictions from '../screens/Predictions/Personal/EditPredictions';
+import { PersonalParamList } from './types';
+import AddPredictions from '../screens/Predictions/Personal/AddPredictions.tsx';
+import ContenderDetailsScreen from '../screens/Predictions/ContenderDetailsScreen';
 
-const { Navigator, Screen } = createStackNavigator();
+const { Navigator, Screen } = createStackNavigator<PersonalParamList>();
 
 /**
  * TODO: the current Login component is actually the protected auth route.
@@ -19,35 +17,12 @@ const { Navigator, Screen } = createStackNavigator();
 
 const PersonalPredictionsNavigator = () => (
   <Navigator
-    initialRouteName="EventSelect"
+    initialRouteName="EditPredictions"
     headerMode={'screen'}
     screenOptions={{
       animationTypeForReplace: 'push',
     }}
   >
-    <Screen
-      name="EventSelect"
-      component={EventSelect}
-      options={{
-        headerTitle: 'Events (Personal)',
-      }}
-    />
-    <Screen
-      name="CategorySelect"
-      component={CategorySelect}
-      options={{
-        headerTitle: 'Categories',
-        headerLeft: BackButton,
-      }}
-    />
-    <Screen
-      name="Contenders"
-      component={ViewPredictions}
-      options={{
-        headerTitle: 'Contenders',
-        headerLeft: BackButton,
-      }}
-    />
     <Screen
       name="EditPredictions"
       component={EditPredictions}
@@ -57,8 +32,8 @@ const PersonalPredictionsNavigator = () => (
       }}
     />
     <Screen
-      name="AddContenders"
-      component={AddContenders}
+      name="AddPredictions"
+      component={AddPredictions}
       options={{
         headerTitle: 'Add Contenders',
         headerLeft: BackButton,
@@ -76,7 +51,7 @@ const PersonalPredictionsNavigator = () => (
       name="ContenderDetails"
       component={ContenderDetailsScreen}
       options={{
-        headerTitle: '',
+        headerTitle: 'Contender Details',
         headerLeft: BackButton,
       }}
     />

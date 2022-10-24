@@ -11,7 +11,7 @@ export const useTypedNavigation = <ParamList>() => {
   const navigation = useNavigation();
   const navigate = (
     routeName: keyof ParamList,
-    params: NavigationParams<ParamList, keyof ParamList>,
+    params?: NavigationParams<ParamList, keyof ParamList>,
   ) =>
     navigation.navigate(
       // @ts-ignore

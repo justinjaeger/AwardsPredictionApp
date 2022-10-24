@@ -11,7 +11,7 @@ import {
 import * as mutations from '../../graphql/mutations';
 import * as queries from '../../graphql/queries';
 import { GraphqlAPI, handleError, iApiResponse } from '../utils';
-import { getEvent } from './event';
+import { getEventById } from './event';
 import { getCategorySlots } from '../../constants/categories';
 import { getPredictionsByContender } from './prediction';
 
@@ -194,7 +194,7 @@ export const getNumberPredicting = async (
     if (!eventId) {
       throw new Error('No event id in createOrUpdatePredictions');
     }
-    const { data: event } = await getEvent(eventId);
+    const { data: event } = await getEventById(eventId);
     const e = event?.getEvent;
     if (!e) {
       return { status: 'error' };

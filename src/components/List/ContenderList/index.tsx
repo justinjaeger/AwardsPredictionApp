@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { TouchableHighlight, View } from 'react-native';
 import COLORS from '../../../constants/colors';
+import { useCategory } from '../../../context/CategoryContext';
+import { PredictionsParamList } from '../../../navigation/types';
+import { useTypedNavigation } from '../../../util/hooks';
+import { TouchableText } from '../../Buttons';
 import { BodyLarge } from '../../Text';
 import ContenderListItem from './ContenderListItem';
 
 type iContenderListProps = {
-  categoryId: string;
   orderedContenderIds: string[];
   isSelectable?: boolean; // makes items appear "on" or "off"
   onPressThumbnail?: (contenderId: string) => void;
@@ -14,13 +17,9 @@ type iContenderListProps = {
 
 // NOTE: Has a lot in common with ContenderListDraggable
 const ContenderList = (props: iContenderListProps) => {
-  const {
-    categoryId,
-    orderedContenderIds,
-    isSelectable,
-    onPressThumbnail,
-    onPressItem,
-  } = props;
+  const { orderedContenderIds, isSelectable, onPressThumbnail, onPressItem } = props;
+  const { personalCommunityTab } = useCategory();
+  const navigation = useTypedNavigation<PredictionsParamList>();
 
   const [contenerIds, setContenderIds] = useState<string[]>([]);
 
@@ -50,12 +49,22 @@ const ContenderList = (props: iContenderListProps) => {
             <BodyLarge>No films in this list</BodyLarge>
           </View>
         ) : null}
+        {personalCommunityTab === 'personal' ? (
+          <>
+            <TouchableText
+              text={'Edit Predictions'}
+              onPress={() => {
+                navigation.navigate('PersonalPredictions');
+              }}
+              style={{ margin: 10 }}
+            />
+          </>
+        ) : null}
         {contenerIds.map((id, i) => {
           return (
             <ContenderListItem
               contenderId={id}
               ranking={i + 1}
-              categoryId={categoryId}
               onPressItem={onPressItem}
               onPressThumbnail={onPressThumbnail}
               selected={false}

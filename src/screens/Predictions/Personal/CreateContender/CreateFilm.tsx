@@ -1,35 +1,37 @@
 import React, { useState } from 'react';
-import { SubmitButton } from '../../components/Buttons';
-import SearchInput from '../../components/Inputs/SearchInput';
-import SearchResultsList from '../../components/List/SearchResultsList';
-import TmdbServices from '../../services/tmdb';
-import { iSearchData } from '../../services/tmdb/search';
-import Snackbar from '../../components/Snackbar';
-import ContenderDetails from '../../components/ContenderDetails';
-import { Body } from '../../components/Text';
-import TmdbMovieCache from '../../services/cache/tmdbMovie';
-import { iCreateContenderProps } from '.';
-import { IconButton } from '../../components/Buttons/IconButton';
+import { SubmitButton } from '../../../../components/Buttons';
+import SearchInput from '../../../../components/Inputs/SearchInput';
+import SearchResultsList from '../../../../components/List/SearchResultsList';
+import TmdbServices from '../../../../services/tmdb';
+import { iSearchData } from '../../../../services/tmdb/search';
+import Snackbar from '../../../../components/Snackbar';
+import ContenderDetails from '../../../../components/ContenderDetails';
+import { Body } from '../../../../components/Text';
+import TmdbMovieCache from '../../../../services/cache/tmdbMovie';
+import { IconButton } from '../../../../components/Buttons/IconButton';
 import { View } from 'react-native';
-import { useTypedNavigation } from '../../util/hooks';
-import { CreateContenderParamList } from '../../navigation/types';
-import ApiServices from '../../services/graphql';
-import { CategoryType, GetMovieQuery } from '../../API';
+import { useTypedNavigation } from '../../../../util/hooks';
+import { CreateContenderParamList } from '../../../../navigation/types';
+import ApiServices from '../../../../services/graphql';
+import { CategoryType, GetMovieQuery } from '../../../../API';
+import { useCategory } from '../../../../context/CategoryContext';
 
 const MAX_CHAR_COUNT = 100;
 
 // TODO: should only be able to do this if logged in
-const CreateFilm = (props: iCreateContenderProps) => {
-  const { categoryId, categoryType, eventYear } = props;
-
+const CreateFilm = () => {
+  const { category } = useCategory();
   const navigation = useTypedNavigation<CreateContenderParamList>();
-
-  const minReleaseYear = eventYear - 1;
 
   const [searchResults, setSearchResults] = useState<iSearchData>([]);
   const [movie, setMovie] = useState<GetMovieQuery>();
   const [loading, setLoading] = useState<boolean>(false);
   const [searchMessage, setSearchMessage] = useState<string>('');
+
+  const cat = category?.getCategory;
+  if (!cat) return null;
+
+  const minReleaseYear = cat.event.year - 1;
 
   const handleSearch = (s: string) => {
     if (s === '') {
@@ -52,7 +54,7 @@ const CreateFilm = (props: iCreateContenderProps) => {
       const movieId = movie?.getMovie?.id;
       if (movieId) {
         const { data: contender } = await ApiServices.getOrCreateFilmContender({
-          categoryId,
+          categoryId: cat.id,
           movieId,
         });
         if (!contender) {
@@ -70,7 +72,7 @@ const CreateFilm = (props: iCreateContenderProps) => {
     if (!m) return;
     setLoading(true);
     await ApiServices.getOrCreateFilmContender({
-      categoryId,
+      categoryId: cat.id,
       movieId: m.id,
     });
     setLoading(false);
@@ -108,7 +110,7 @@ const CreateFilm = (props: iCreateContenderProps) => {
           <SubmitButton text={'Confirm'} onPress={onConfirmContender} loading={loading} />
           <ContenderDetails
             movieTmdbId={m.tmdbId}
-            categoryType={CategoryType[categoryType]}
+            categoryType={CategoryType[cat.type]}
           />
         </>
       ) : (

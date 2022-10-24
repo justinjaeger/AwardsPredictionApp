@@ -80,10 +80,6 @@ enum CategoryName {
     BREAKTHROUGH
 }
 
-enum CateogrySet {
-  ACADEMY_AWARDS_2023,
-}
-
 type User @model @auth(rules: [{allow: public}]) {
     id: ID! @primaryKey
     email: String!
@@ -95,15 +91,15 @@ type User @model @auth(rules: [{allow: public}]) {
 
 type PredictionSet @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
-    userId: ID! 
-    eventId: ID!
-    categoryId: ID!
-    predictions: [Prediction] @hasMany # NOTE: this field is NOT being returned, but don't know why
+    user: User! @hasOne
+    event: Event! @hasOne
+    category: Category! @hasOne
+    predictions: [Prediction] @hasMany
 }
 
 type Prediction @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
-    userId: ID!
+    user: User! @hasOne
     contender: Contender! @belongsTo
     ranking: Int!
 }

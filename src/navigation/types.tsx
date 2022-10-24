@@ -9,43 +9,27 @@ export type MainParamList = {
   };
 };
 
-export type GlobalParamList = {
+export type PredictionsParamList = {
   EventSelect: undefined;
-  CategorySelect: {
-    eventId: string;
-  };
-  Contenders: {
-    categoryId: string;
-  };
+  EventPredictions: undefined;
+  Category: undefined;
   ContenderDetails: {
     categoryType: CategoryType;
     contenderId: string;
     personTmdb?: number | undefined;
   };
+  PersonalPredictions: undefined;
 };
 
 export type PersonalParamList = {
-  EventSelect: undefined;
-  CategorySelect: {
-    event: Event;
-  };
-  Contenders: {
-    categoryId: string;
-  };
-  CreateContender: {
-    categoryId: string;
-  };
+  EditPredictions: undefined;
+  AddPredictions: undefined;
+  CreateContender: undefined;
   ContenderDetails: {
     categoryType: CategoryType;
     contenderId: string;
     personTmdb?: number | undefined;
-  };
-  AddContenders: {
-    categoryId: string;
-  };
-  EditPredictions: {
-    categoryId: string;
-  };
+  }; // duplicated but it's better for the typed navigation
 };
 
 export type DevParamList = {

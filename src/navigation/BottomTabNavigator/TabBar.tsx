@@ -54,23 +54,13 @@ const TabBar = (props: ITabBarProps) => {
           };
           const icon = (() => {
             switch (route.name) {
-              case 'GlobalPredictions':
+              case 'Predictions':
                 return (
                   <View key={index}>
                     {isFocused ? (
                       <CustomIcon name={'home'} />
                     ) : (
                       <CustomIcon name={'home-outline'} />
-                    )}
-                  </View>
-                );
-              case 'PersonalPredictions':
-                return (
-                  <View key={index}>
-                    {isFocused ? (
-                      <CustomIcon name={'edit'} />
-                    ) : (
-                      <CustomIcon name={'edit-outline'} />
                     )}
                   </View>
                 );

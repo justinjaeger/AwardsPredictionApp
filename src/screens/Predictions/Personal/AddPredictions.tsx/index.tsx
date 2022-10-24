@@ -1,44 +1,36 @@
-import { RouteProp, useRoute } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { ScrollView } from 'react-native';
-import { CategoryType, GetCategoryQuery, ListContendersQuery } from '../../API';
-import { TouchableText } from '../../components/Buttons';
-import ContenderListItem from '../../components/List/ContenderList/ContenderListItem';
-import { PosterSize } from '../../constants/posterDimensions';
-import { PersonalParamList } from '../../navigation/types';
-import ApiServices from '../../services/graphql';
-import { useAuth } from '../../store';
-import { useSubscriptionEffect, useTypedNavigation } from '../../util/hooks';
-import { removeFromArray } from '../../util/removeFromArray';
+import { CategoryType, ListContendersQuery } from '../../../../API';
+import { TouchableText } from '../../../../components/Buttons';
+import ContenderListItem from '../../../../components/List/ContenderList/ContenderListItem';
+import { PosterSize } from '../../../../constants/posterDimensions';
+import { PersonalParamList } from '../../../../navigation/types';
+import ApiServices from '../../../../services/graphql';
+import { useAuth } from '../../../../store';
+import { useSubscriptionEffect, useTypedNavigation } from '../../../../util/hooks';
+import { removeFromArray } from '../../../../util/removeFromArray';
+import { useCategory } from '../../../../context/CategoryContext';
 
 // TODO: really, this is adding OR deleting contenders
 // NOTE: this is very similar to Contenders, some code is duplicated
 
-const AddContenders = () => {
-  const {
-    params: { categoryId },
-  } = useRoute<RouteProp<PersonalParamList, 'AddContenders'>>();
+const AddPredictions = () => {
   const navigation = useTypedNavigation<PersonalParamList>();
   const { userId } = useAuth();
+  const { category } = useCategory();
 
   const [loading, setLoading] = useState<boolean>(false);
   const [contenders, setContenders] = useState<ListContendersQuery>();
-  const [category, setCategory] = useState<GetCategoryQuery>();
   const [selectedContenderIds, setSelectedContenderIds] = useState<string[]>([]);
   const [initiallySelectedContenderIds, setInitiallySelectedContenderIds] = useState<
     string[]
   >([]);
 
   const cat = category?.getCategory;
-
-  // NOTE: later, we'll just have the category live in context instead of fetching every new component / passing via nav props
-  useSubscriptionEffect(async () => {
-    const { data } = await ApiServices.getCategoryById(categoryId);
-    setCategory(data);
-  }, [categoryId]);
+  const categoryId = cat?.id;
 
   useSubscriptionEffect(async () => {
-    if (!userId || !cat) return;
+    if (!userId || !categoryId) return;
     // get / set all contenders
     const { data: cs } = await ApiServices.getContendersByCategory(cat.id);
     // TODO (going to have this done in Contender): sort by highest global ranking
@@ -115,7 +107,7 @@ const AddContenders = () => {
   };
 
   const onSave = async () => {
-    if (!userId) return;
+    if (!userId || !categoryId) return;
     setLoading(true);
     const addedContenderIds = selectedContenderIds.filter(
       (id) => !initiallySelectedContenderIds.includes(id),
@@ -164,7 +156,6 @@ const AddContenders = () => {
           <ContenderListItem
             contenderId={contenderId}
             ranking={i + 1}
-            categoryId={categoryId}
             onPressItem={onPressItem}
             onPressThumbnail={onPressThumbnail}
             selected={selected}
@@ -180,7 +171,7 @@ const AddContenders = () => {
       <TouchableText
         text={'Submit a contender'}
         onPress={() => {
-          navigation.navigate('CreateContender', { categoryId });
+          navigation.navigate('CreateContender');
         }}
         style={{ margin: 10 }}
       />
@@ -188,4 +179,4 @@ const AddContenders = () => {
   );
 };
 
-export default AddContenders;
+export default AddPredictions;

@@ -74,7 +74,13 @@ const createPredictionSet = async (
     const { data, errors } = await GraphqlAPI<
       CreatePredictionSetMutation,
       CreatePredictionSetMutationVariables
-    >(mutations.createPredictionSet, { input: { userId, categoryId, eventId } });
+    >(mutations.createPredictionSet, {
+      input: {
+        predictionSetUserId: userId,
+        predictionSetCategoryId: categoryId,
+        predictionSetEventId: eventId,
+      },
+    });
     if (!data?.createPredictionSet) {
       throw new Error(JSON.stringify(errors));
     }
@@ -94,7 +100,7 @@ const createPrediction = async (
       CreatePredictionMutationVariables
     >(mutations.createPrediction, {
       input: {
-        userId,
+        predictionUserId: userId,
         predictionSetPredictionsId: predictionSetId,
         contenderPredictionsId: contenderId,
         ranking,
@@ -136,7 +142,10 @@ export const getPredictionsSet = async (
       ListPredictionSetsQuery,
       ListPredictionSetsQueryVariables
     >(queries.listPredictionSets, {
-      filter: { userId: { eq: userId }, categoryId: { eq: categoryId } },
+      filter: {
+        predictionSetUserId: { eq: userId },
+        predictionSetCategoryId: { eq: categoryId },
+      },
     });
     if (!maybePreSets?.listPredictionSets) {
       throw new Error(JSON.stringify(errors));
@@ -158,18 +167,67 @@ export const getPredictionsByPredictionSetId = async (
 ): Promise<iApiResponse<ListPredictionsQuery>> => {
   try {
     // Get all prediction sets matching params (should only be one)
-    const { data: maybePreSets, errors } = await GraphqlAPI<
+    const { data: maybePredictions, errors } = await GraphqlAPI<
       ListPredictionsQuery,
       ListPredictionsQueryVariables
     >(queries.listPredictions, {
       filter: { predictionSetPredictionsId: { eq: pSetId } },
     });
-    if (!maybePreSets?.listPredictions) {
+    if (!maybePredictions?.listPredictions) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data: maybePredictions };
+  } catch (err) {
+    return handleError('error predictions', err);
+  }
+};
+
+// TODO: make lambda function since sorta big
+export const getPersonalPredictionsByEvent = async (
+  eventId: string,
+  userId: string,
+): Promise<iApiResponse<ListPredictionSetsQuery>> => {
+  try {
+    //
+    const { data: maybePreSets, errors } = await GraphqlAPI<
+      ListPredictionSetsQuery,
+      ListPredictionSetsQueryVariables
+    >(queries.listPredictionSets, {
+      filter: {
+        predictionSetEventId: { eq: eventId },
+        predictionSetUserId: { eq: userId },
+      },
+    });
+    if (!maybePreSets?.listPredictionSets) {
       throw new Error(JSON.stringify(errors));
     }
     return { status: 'success', data: maybePreSets };
   } catch (err) {
-    return handleError('error predictions', err);
+    return handleError('error getting personal predictions', err);
+  }
+};
+
+// TODO: make lambda function since sorta big
+// INCOMPLETE: this needs to get ALL prediction sets for every user
+// This is going to be complicated.
+// For that we can basically forEach getContendersByCategory; or even lazy load those results
+export const getCommunityPredictionsByCategory = async (
+  categoryId: string,
+): Promise<iApiResponse<ListPredictionSetsQuery>> => {
+  try {
+    //
+    const { data: maybePreSets, errors } = await GraphqlAPI<
+      ListPredictionSetsQuery,
+      ListPredictionSetsQueryVariables
+    >(queries.listPredictionSets, {
+      filter: { predictionSetCategoryId: { eq: categoryId } },
+    });
+    if (!maybePreSets?.listPredictionSets) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data: maybePreSets };
+  } catch (err) {
+    return handleError('error getting personal predictions', err);
   }
 };
 

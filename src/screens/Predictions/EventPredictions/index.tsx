@@ -1,31 +1,31 @@
-import { RouteProp, useRoute } from '@react-navigation/native';
 import React, { useLayoutEffect, useState } from 'react';
 import { ScrollView } from 'react-native';
-import { CategoryName, GetEventQuery, ListCategoriesQuery } from '../../../API';
+import { CategoryName, ListCategoriesQuery } from '../../../API';
 import { TouchableText } from '../../../components/Buttons';
 import { getAwardsBodyCategories } from '../../../constants/categories';
-import { GlobalParamList } from '../../../navigation/types';
+import { PredictionsParamList } from '../../../navigation/types';
 import ApiServices from '../../../services/graphql';
 import { useAsyncEffect, useTypedNavigation } from '../../../util/hooks';
 import sortByObjectOrder from '../../../util/sortByObjectOrder';
 import { eventToString } from '../../../util/stringConversions';
+import { useCategory } from '../../../context/CategoryContext';
+import { usePredictions } from '../../../context/PredictionContext';
+import { Body } from '../../../components/Text';
 
 type iFormattedCategories = { catId: string; catName: CategoryName };
 
 const CategorySelect = () => {
-  const {
-    params: { eventId },
-  } = useRoute<RouteProp<GlobalParamList, 'CategorySelect'>>();
-  const navigation = useTypedNavigation<GlobalParamList>();
+  const { event, setCategory } = useCategory();
+  const { predictionData } = usePredictions();
+  const navigation = useTypedNavigation<PredictionsParamList>();
 
-  const [event, setEvent] = useState<GetEventQuery>();
   const [categories, setCategories] = useState<ListCategoriesQuery>();
 
+  const eventId = event?.getEvent?.id;
+
   useAsyncEffect(async () => {
-    const { data: e } = await ApiServices.getEvent(eventId);
-    if (!e?.getEvent) return;
-    setEvent(e);
-    const { data: cs } = await ApiServices.getCategoriesByEvent(e?.getEvent?.id);
+    if (!eventId) return;
+    const { data: cs } = await ApiServices.getCategoriesByEvent(eventId);
     if (cs) {
       setCategories(cs);
     }
@@ -42,8 +42,9 @@ const CategorySelect = () => {
     }
   }, [navigation, event]);
 
-  const onSelectCategory = (categoryId: string) => {
-    navigation.navigate('Contenders', { categoryId });
+  const onSelectCategory = async (catId: string) => {
+    await setCategory(catId);
+    navigation.navigate('Category');
   };
 
   // TODO: better loading state
@@ -65,6 +66,8 @@ const CategorySelect = () => {
     cats.map((cat) => (cat ? CategoryName[cat.name] : CategoryName.PICTURE)), // Should never actually default to CategoryName.PICTURE
   );
 
+  // now display the prediction data underneath the categories
+
   return (
     <ScrollView
       contentContainerStyle={{ alignItems: 'center', marginTop: 40, paddingBottom: 100 }}
@@ -72,12 +75,17 @@ const CategorySelect = () => {
       {orderedCategories.map(({ catId, catName }) => {
         const catData = categoryList[CategoryName[catName]] || undefined;
         return (
-          <TouchableText
-            text={catData?.name || ''}
-            onPress={() => onSelectCategory(catId)}
-            style={{ margin: 10 }}
-            key={catId}
-          />
+          <>
+            <TouchableText
+              text={catData?.name || ''}
+              onPress={() => onSelectCategory(catId)}
+              style={{ margin: 10 }}
+              key={catId}
+            />
+            {predictionData[catId]?.map((p) => (
+              <Body>{p.contenderId}</Body>
+            ))}
+          </>
         );
       })}
     </ScrollView>

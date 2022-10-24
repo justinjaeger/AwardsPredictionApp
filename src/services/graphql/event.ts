@@ -29,7 +29,7 @@ export const getAllEvents = async (): Promise<iApiResponse<ListEventsQuery>> => 
   }
 };
 
-export const getEvent = async (id: string): Promise<iApiResponse<GetEventQuery>> => {
+export const getEventById = async (id: string): Promise<iApiResponse<GetEventQuery>> => {
   try {
     const { data, errors } = await GraphqlAPI<GetEventQuery, GetEventQueryVariables>(
       queries.getEvent,

@@ -10,7 +10,6 @@ import ContenderListItemDraggable from './ContenderListItemDraggable';
 import { PosterSize } from '../../../constants/posterDimensions';
 
 type iContenderListProps = {
-  categoryId: string;
   contenderIds: string[];
   isSelectable?: boolean; // makes items appear "on" or "off"
   onDragEnd: (contenderIds: string[]) => void;
@@ -21,7 +20,6 @@ type iContenderListProps = {
 // NOTE: Has a lot in common with ContenderList
 const ContenderList = (props: iContenderListProps) => {
   const {
-    categoryId,
     contenderIds: _contenderIds,
     isSelectable,
     onDragEnd,
@@ -65,7 +63,6 @@ const ContenderList = (props: iContenderListProps) => {
                 <ContenderListItemDraggable
                   contenderId={contenderId}
                   ranking={(index || 0) + 1}
-                  categoryId={categoryId}
                   onPressItem={onPressItem}
                   onPressThumbnail={onPressThumbnail}
                   selected={false}

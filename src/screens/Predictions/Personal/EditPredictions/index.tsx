@@ -1,38 +1,25 @@
-import { RouteProp, useRoute } from '@react-navigation/native';
 import React, { useLayoutEffect, useState } from 'react';
 import { View } from 'react-native';
-import { AwardsBody, CategoryName, EventType, GetCategoryQuery } from '../../API';
-import { TouchableText } from '../../components/Buttons';
-import ContenderListDraggable from '../../components/List/ContenderList/ContenderListDraggable';
-import { PersonalParamList } from '../../navigation/types';
-import ApiServices from '../../services/graphql';
-import { useAuth } from '../../store';
-import {
-  useAsyncEffect,
-  useSubscriptionEffect,
-  useTypedNavigation,
-} from '../../util/hooks';
-import { fullEventToString } from '../../util/stringConversions';
+import { AwardsBody, CategoryName, EventType } from '../../../../API';
+import { TouchableText } from '../../../../components/Buttons';
+import ContenderListDraggable from '../../../../components/List/ContenderList/ContenderListDraggable';
+import { PersonalParamList } from '../../../../navigation/types';
+import ApiServices from '../../../../services/graphql';
+import { useAuth } from '../../../../store';
+import { useSubscriptionEffect, useTypedNavigation } from '../../../../util/hooks';
+import { fullEventToString } from '../../../../util/stringConversions';
+import { useCategory } from '../../../../context/CategoryContext';
 
 // NOTE: Similar to Add Contenders, somewhat
 const EditPredictions = () => {
-  const {
-    params: { categoryId },
-  } = useRoute<RouteProp<PersonalParamList, 'Contenders'>>();
+  const { category } = useCategory();
   const navigation = useTypedNavigation<PersonalParamList>();
   const { userId } = useAuth();
 
-  const [category, setCategory] = useState<GetCategoryQuery>();
   const [contenderIds, setContenderIds] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   const cat = category?.getCategory;
-
-  // NOTE: later, we'll just have the category live in context instead of fetching every new component / passing via nav props
-  useAsyncEffect(async () => {
-    const { data } = await ApiServices.getCategoryById(categoryId);
-    setCategory(data);
-  }, [categoryId]);
 
   // Set header title (NOTE: dupliated from Global, combine these screens via top tabs eventually)
   // Move all duplicated stuff into shared menu like "add contender" (maybe that's in a FAB popout)
@@ -56,7 +43,7 @@ const EditPredictions = () => {
     // get list of categoryIds of user's personal selections
     const { data: pSet } = await ApiServices.getPredictionsSet({
       userId,
-      categoryId,
+      categoryId: cat.id,
       eventId: cat.event.id,
     });
     const pSetId = pSet?.getPredictionSet?.id;
@@ -78,7 +65,7 @@ const EditPredictions = () => {
   };
 
   const onSaveContenders = async () => {
-    if (!userId) return;
+    if (!userId || !cat) return;
     setLoading(true);
     const newPredictionData = contenderIds.map((id, i) => ({
       contenderId: id,
@@ -89,7 +76,7 @@ const EditPredictions = () => {
       return console.error('no eventId property on category');
     }
     await ApiServices.createOrUpdatePredictions(
-      { userId, categoryId, eventId },
+      { userId, categoryId: cat.id, eventId },
       newPredictionData,
     );
     navigation.goBack();
@@ -101,7 +88,7 @@ const EditPredictions = () => {
       <TouchableText
         text={'Add or delete contenders'}
         onPress={() => {
-          navigation.navigate('AddContenders', { categoryId });
+          navigation.navigate('AddPredictions');
         }}
         loading={loading}
         style={{ margin: 10 }}
@@ -113,7 +100,6 @@ const EditPredictions = () => {
         style={{ margin: 10 }}
       />
       <ContenderListDraggable
-        categoryId={categoryId}
         contenderIds={contenderIds}
         onDragEnd={setContenderIds}
         onPressThumbnail={onPressThumbnail}

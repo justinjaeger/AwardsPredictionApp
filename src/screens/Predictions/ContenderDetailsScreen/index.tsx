@@ -3,14 +3,14 @@ import React, { useState } from 'react';
 import { ScrollView } from 'react-native';
 import { GetContenderQuery } from '../../../API';
 import ContenderDetails from '../../../components/ContenderDetails';
-import { GlobalParamList } from '../../../navigation/types';
+import { PredictionsParamList } from '../../../navigation/types';
 import ApiServices from '../../../services/graphql';
 import { useAsyncEffect } from '../../../util/hooks';
 
 const ContenderDetailsScreen = () => {
   const {
     params: { categoryType, contenderId, personTmdb },
-  } = useRoute<RouteProp<GlobalParamList, 'ContenderDetails'>>();
+  } = useRoute<RouteProp<PredictionsParamList, 'ContenderDetails'>>();
 
   const [contender, setContender] = useState<GetContenderQuery>();
 

@@ -1,30 +1,27 @@
 import React, { useState } from 'react';
-import { SubmitButton } from '../../components/Buttons';
-import SearchInput from '../../components/Inputs/SearchInput';
-import SearchResultsList from '../../components/List/SearchResultsList';
-import TmdbServices from '../../services/tmdb';
-import { iSearchData } from '../../services/tmdb/search';
-import Snackbar from '../../components/Snackbar';
-import ContenderDetails from '../../components/ContenderDetails';
-import { Body } from '../../components/Text';
-import { iCreateContenderProps } from '.';
-import { IconButton } from '../../components/Buttons/IconButton';
+import { SubmitButton } from '../../../../components/Buttons';
+import SearchInput from '../../../../components/Inputs/SearchInput';
+import SearchResultsList from '../../../../components/List/SearchResultsList';
+import TmdbServices from '../../../../services/tmdb';
+import { iSearchData } from '../../../../services/tmdb/search';
+import Snackbar from '../../../../components/Snackbar';
+import ContenderDetails from '../../../../components/ContenderDetails';
+import { Body } from '../../../../components/Text';
+import { IconButton } from '../../../../components/Buttons/IconButton';
 import { View } from 'react-native';
-import FormInput from '../../components/Inputs/FormInput';
-import ApiServices from '../../services/graphql';
-import { CategoryType, GetMovieQuery } from '../../API';
-import { useTypedNavigation } from '../../util/hooks';
-import { CreateContenderParamList } from '../../navigation/types';
+import FormInput from '../../../../components/Inputs/FormInput';
+import ApiServices from '../../../../services/graphql';
+import { CategoryType, GetMovieQuery } from '../../../../API';
+import { useTypedNavigation } from '../../../../util/hooks';
+import { CreateContenderParamList } from '../../../../navigation/types';
+import { useCategory } from '../../../../context/CategoryContext';
 
 const MAX_CHAR_COUNT = 100;
 
 // TODO: should only be able to do this if logged in
-const CreateSong = (props: iCreateContenderProps) => {
-  const { categoryId, eventYear } = props;
-
+const CreateSong = () => {
+  const { category } = useCategory();
   const navigation = useTypedNavigation<CreateContenderParamList>();
-
-  const minReleaseYear = eventYear - 1;
 
   const [searchResults, setSearchResults] = useState<iSearchData>([]);
   const [movie, setMovie] = useState<GetMovieQuery>();
@@ -32,6 +29,11 @@ const CreateSong = (props: iCreateContenderProps) => {
   const [searchMessage, setSearchMessage] = useState<string>('');
   const [songTitle, setSongTitle] = useState<string>('');
   const [artist, setArtist] = useState<string>('');
+
+  const cat = category?.getCategory;
+  if (!cat) return null;
+
+  const minReleaseYear = cat.event.year - 1;
 
   const movieId = movie?.getMovie?.id;
   const movieTmdbId = movie?.getMovie?.tmdbId;
@@ -71,7 +73,7 @@ const CreateSong = (props: iCreateContenderProps) => {
     });
     if (!song?.getSong) return;
     await ApiServices.getOrCreateSongContender({
-      categoryId,
+      categoryId: cat.id,
       movieId,
       songId: song.getSong.id,
     });
