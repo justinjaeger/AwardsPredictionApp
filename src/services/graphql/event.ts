@@ -40,7 +40,8 @@ export const getEventById = async (id: string): Promise<iApiResponse<GetEventQue
     }
     return { status: 'success', data };
   } catch (err) {
-    return handleError('error getting event', err);
+    console.error('ERR', err);
+    return handleError('error getting event by id', err);
   }
 };
 

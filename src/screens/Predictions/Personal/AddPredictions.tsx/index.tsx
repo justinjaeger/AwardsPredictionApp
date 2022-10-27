@@ -10,6 +10,7 @@ import { useAuth } from '../../../../store';
 import { useSubscriptionEffect, useTypedNavigation } from '../../../../util/hooks';
 import { removeFromArray } from '../../../../util/removeFromArray';
 import { useCategory } from '../../../../context/CategoryContext';
+import { usePredictions } from '../../../../context/PredictionContext';
 
 // TODO: really, this is adding OR deleting contenders
 // NOTE: this is very similar to Contenders, some code is duplicated
@@ -17,8 +18,12 @@ import { useCategory } from '../../../../context/CategoryContext';
 const AddPredictions = () => {
   const navigation = useTypedNavigation<PersonalParamList>();
   const { userId } = useAuth();
+  const { predictionData } = usePredictions();
   const { category } = useCategory();
 
+  const initialPredictionData = predictionData;
+
+  // TODO: can do this screen AFTER global predictions are gotten, because we need these
   const [loading, setLoading] = useState<boolean>(false);
   const [contenders, setContenders] = useState<ListContendersQuery>();
   const [selectedContenderIds, setSelectedContenderIds] = useState<string[]>([]);
@@ -133,6 +138,7 @@ const AddPredictions = () => {
       { userId, categoryId, eventId },
       newPredictionData,
     );
+    // TODO: must update PredictionContext (refresh it basically)
     navigation.goBack();
     setLoading(false);
   };

@@ -149,6 +149,27 @@ export const getOrCreateSongContender = async (params: {
   songId: string;
 }) => getOrCreateContender(params);
 
+export const getContendersByEvent = async (
+  eventId: string,
+): Promise<iApiResponse<ListContendersQuery>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<
+      ListContendersQuery,
+      ListContendersQueryVariables
+    >(queries.listContenders, {
+      filter: {
+        eventContendersId: { eq: eventId },
+      },
+    });
+    if (!data?.listContenders) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data };
+  } catch (err) {
+    return handleError('error getting contenders by event', err);
+  }
+};
+
 export const getContendersByCategory = async (
   categoryId: string,
 ): Promise<iApiResponse<ListContendersQuery>> => {

@@ -1,118 +1,81 @@
-import React, { useLayoutEffect, useState } from 'react';
-import { ScrollView } from 'react-native';
-import { AwardsBody, CategoryName, CategoryType, EventType } from '../../../API';
-import ContenderList from '../../../components/List/ContenderList';
-import { PredictionsParamList } from '../../../navigation/types';
-import ApiServices from '../../../services/graphql';
-import { getContenderRank } from '../../../util/getContenderRank';
-import { useSubscriptionEffect, useTypedNavigation } from '../../../util/hooks';
-import { fullEventToString } from '../../../util/stringConversions';
+import React from 'react';
+import { ScrollView, TouchableHighlight, View } from 'react-native';
+import { TouchableText } from '../../../components/Buttons';
+import ContenderListItem from '../../../components/List/ContenderList/ContenderListItem';
+import { BodyLarge } from '../../../components/Text';
+import COLORS from '../../../constants/colors';
+import { PosterSize } from '../../../constants/posterDimensions';
 import { useCategory } from '../../../context/CategoryContext';
 import { usePredictions } from '../../../context/PredictionContext';
+import { PredictionsParamList } from '../../../navigation/types';
+import { useTypedNavigation } from '../../../util/hooks';
 
-type iSortedContenders = {
-  points: number;
-  contenderId: string;
-}[];
+type iContenderListProps = {
+  isSelectable?: boolean; // makes items appear "on" or "off"
+  onPressItem?: (contenderId: string) => void;
+};
 
-// NOTE: Similar to ViewPredictions
-const Category = () => {
-  const { category } = useCategory();
-  const { predictionData } = usePredictions();
+// NOTE: Has a lot in common with ContenderListDraggable
+const Category = (props: iContenderListProps) => {
+  const { isSelectable, onPressItem } = props;
+
+  const { category, personalCommunityTab } = useCategory();
+  const { predictionData, displayContenderInfo } = usePredictions();
   const navigation = useTypedNavigation<PredictionsParamList>();
 
-  const [rankedContenders, setRankedContenders] = useState<iSortedContenders>([]);
+  if (!category?.getCategory?.id) return null; // would be an error
 
-  // Set header title
-  useLayoutEffect(() => {
-    const c = category?.getCategory;
-    if (!c) return;
-    const e = c.event;
-    navigation.setOptions({
-      headerTitle: fullEventToString(
-        AwardsBody[e.awardsBody],
-        EventType[e.type],
-        e.year,
-        CategoryName[c.name],
-      ),
-    });
-  }, [navigation, category]);
-
-  //   useSubscriptionEffect(async () => {
-  //     const c = category?.getCategory;
-  //     if (!c) return;
-  //     const { data } = await ApiServices.getContendersByCategory(c.id);
-  //     const cs = data?.listContenders?.items;
-  //     if (!cs) return;
-  //     const contendersWithRank: iSortedContenders = await Promise.all(
-  //       cs.map(async (c) => {
-  //         const nullResult = { points: 0, contenderId: '' }; // never going to actually happen
-  //         if (!c?.id) return nullResult;
-  //         const { data } = await ApiServices.getNumberPredicting(c.id);
-  //         if (!data) return nullResult;
-  //         const rank = getContenderRank(
-  //           data?.predictingWin,
-  //           data?.predictingNom,
-  //           data?.predictingUnranked,
-  //         );
-  //         return {
-  //           contenderId: c.id,
-  //           points: rank,
-  //         };
-  //       }),
-  //     );
-  //     const sortedContenders = contendersWithRank.sort((c1, c2) => {
-  //       if (!c1 || !c2) return 0;
-  //       if (c1.points > c2.points) return -1;
-  //       return 1;
-  //     });
-  //     setRankedContenders(sortedContenders);
-  //   }, [category]);
-
-  const categoryId = category?.getCategory?.id;
-  if (!categoryId) return;
-
-  const onPressFilm = (contenderId: string) => {
-    if (!category?.getCategory) return;
-    navigation.navigate('ContenderDetails', {
-      contenderId,
-      categoryType: category.getCategory?.type,
-    });
-  };
-
-  const onPressPerformance = async (contenderId: string, personId: string) => {
-    if (!category?.getCategory) return;
-    const { data } = await ApiServices.getPerson(personId);
-    if (!data?.getPerson) return;
-    const personTmdb = data.getPerson.tmdbId;
-    navigation.navigate('ContenderDetails', {
-      contenderId,
-      categoryType: category.getCategory?.type,
-      personTmdb,
-    });
-  };
-
-  const onPressThumbnail = (contenderId: string, personId?: string) => {
-    if (!category?.getCategory) return;
-    const cType = CategoryType[category?.getCategory.type];
-    if (cType === CategoryType.PERFORMANCE && personId) {
-      onPressPerformance(contenderId, personId);
-    } else {
-      onPressFilm(contenderId);
-    }
-  };
-
-  const predictions = predictionData[categoryId];
-  console.error('predictions', predictions);
+  const categoryPredictions = predictionData[category.getCategory.id];
 
   return (
     <ScrollView
       contentContainerStyle={{ alignItems: 'center', marginTop: 40, paddingBottom: 100 }}
     >
-      <ContenderList
-        orderedContenderIds={predictions.map((p) => p.contenderId || '')}
-        onPressThumbnail={onPressThumbnail}
-      />
+      <TouchableHighlight
+        style={{
+          display: 'flex',
+          height: '100%',
+          width: '100%',
+          backgroundColor: COLORS.lightestGray,
+        }}
+      >
+        <>
+          {categoryPredictions.length === 0 ? (
+            <View
+              style={{
+                width: '100%',
+                height: '100%',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <BodyLarge>No films in this list</BodyLarge>
+            </View>
+          ) : null}
+          {personalCommunityTab === 'personal' ? (
+            <>
+              <TouchableText
+                text={'Edit Predictions'}
+                onPress={() => {
+                  navigation.navigate('PersonalPredictions');
+                }}
+                style={{ margin: 10 }}
+              />
+            </>
+          ) : null}
+          {categoryPredictions.map((prediction, i) => (
+            <ContenderListItem
+              prediction={prediction}
+              ranking={i + 1}
+              onPressItem={onPressItem}
+              onPressThumbnail={displayContenderInfo}
+              selected={false}
+              isSelectable={isSelectable}
+              size={PosterSize.MEDIUM}
+            />
+          ))}
+        </>
+      </TouchableHighlight>
     </ScrollView>
   );
 };

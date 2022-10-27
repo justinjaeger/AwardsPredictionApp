@@ -112,6 +112,7 @@ type Event @model @auth(rules: [{ allow: public }]) {
     type: EventType!
     expiration: AWSDateTime
     isActive: String @default(value: "x") # essentially boolean
+    contenders: [Contender] @hasMany
 }
 
 type Category @model @auth(rules: [{ allow: public }]) {
@@ -126,6 +127,7 @@ type Category @model @auth(rules: [{ allow: public }]) {
 type Contender @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
     category: Category! @belongsTo # belongsTo is for bi-directional relationships. Category also hasMany contenders
+    event: Event! @belongsTo
     movie: Movie! @hasOne
     person: Person @hasOne # optional - only applies to acting categories
     song: Song @hasOne # optional - only applies to the song category

@@ -39,6 +39,7 @@ const EventSelect = () => {
   useSubscriptionEffect(async () => {
     const { data: es } = await ApiServices.getAllEvents(); // TODO: change back to getAllEvents
     if (es) {
+      console.error('EVENTS', es);
       setEvents(es);
     }
   }, []);

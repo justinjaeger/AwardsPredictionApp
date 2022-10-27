@@ -10,7 +10,7 @@ import sortByObjectOrder from '../../../util/sortByObjectOrder';
 import { eventToString } from '../../../util/stringConversions';
 import { useCategory } from '../../../context/CategoryContext';
 import { usePredictions } from '../../../context/PredictionContext';
-import { Body } from '../../../components/Text';
+import PosterFromTmdbId from '../../../components/Images/PosterFromTmdbId';
 
 type iFormattedCategories = { catId: string; catName: CategoryName };
 
@@ -82,9 +82,14 @@ const CategorySelect = () => {
               style={{ margin: 10 }}
               key={catId}
             />
-            {predictionData[catId]?.map((p) => (
-              <Body>{p.contenderId}</Body>
-            ))}
+            {predictionData[catId]?.map((p) =>
+              p.contenderMovie ? (
+                <PosterFromTmdbId
+                  movieTmdbId={p.contenderMovie.tmdbId}
+                  personTmdbId={p?.contenderPerson?.tmdbId}
+                />
+              ) : null,
+            )}
           </>
         );
       })}

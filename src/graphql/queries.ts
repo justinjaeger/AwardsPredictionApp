@@ -71,15 +71,32 @@ export const getPredictionSet = /* GraphQL */ `
             type
             event {
               id
+              categories {
+                nextToken
+              }
               awardsBody
               year
               type
               expiration
               isActive
+              contenders {
+                nextToken
+              }
               createdAt
               updatedAt
             }
             contenders {
+              items {
+                id
+                didReceiveNominationOrWin
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
               nextToken
             }
             createdAt
@@ -93,34 +110,6 @@ export const getPredictionSet = /* GraphQL */ `
         type
         expiration
         isActive
-        createdAt
-        updatedAt
-      }
-      category {
-        id
-        name
-        type
-        event {
-          id
-          categories {
-            items {
-              id
-              name
-              type
-              createdAt
-              updatedAt
-              eventCategoriesId
-            }
-            nextToken
-          }
-          awardsBody
-          year
-          type
-          expiration
-          isActive
-          createdAt
-          updatedAt
-        }
         contenders {
           items {
             id
@@ -128,9 +117,38 @@ export const getPredictionSet = /* GraphQL */ `
               id
               name
               type
+              event {
+                id
+                awardsBody
+                year
+                type
+                expiration
+                isActive
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
               createdAt
               updatedAt
               eventCategoriesId
+            }
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              type
+              expiration
+              isActive
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
             }
             movie {
               id
@@ -149,16 +167,221 @@ export const getPredictionSet = /* GraphQL */ `
               id
               title
               artist
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
               createdAt
               updatedAt
               songMovieId
             }
             predictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                predictionSetPredictionsId
+                contenderPredictionsId
+                predictionUserId
+              }
               nextToken
             }
             didReceiveNominationOrWin
             createdAt
             updatedAt
+            eventContendersId
+            categoryContendersId
+            contenderMovieId
+            contenderPersonId
+            contenderSongId
+          }
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      category {
+        id
+        name
+        type
+        event {
+          id
+          categories {
+            items {
+              id
+              name
+              type
+              event {
+                id
+                awardsBody
+                year
+                type
+                expiration
+                isActive
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+              eventCategoriesId
+            }
+            nextToken
+          }
+          awardsBody
+          year
+          type
+          expiration
+          isActive
+          contenders {
+            items {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                type
+                expiration
+                isActive
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              didReceiveNominationOrWin
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              contenderMovieId
+              contenderPersonId
+              contenderSongId
+            }
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        contenders {
+          items {
+            id
+            category {
+              id
+              name
+              type
+              event {
+                id
+                awardsBody
+                year
+                type
+                expiration
+                isActive
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+              eventCategoriesId
+            }
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              type
+              expiration
+              isActive
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+            }
+            movie {
+              id
+              tmdbId
+              studio
+              createdAt
+              updatedAt
+            }
+            person {
+              id
+              tmdbId
+              createdAt
+              updatedAt
+            }
+            song {
+              id
+              title
+              artist
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              createdAt
+              updatedAt
+              songMovieId
+            }
+            predictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                predictionSetPredictionsId
+                contenderPredictionsId
+                predictionUserId
+              }
+              nextToken
+            }
+            didReceiveNominationOrWin
+            createdAt
+            updatedAt
+            eventContendersId
             categoryContendersId
             contenderMovieId
             contenderPersonId
@@ -190,9 +413,38 @@ export const getPredictionSet = /* GraphQL */ `
               id
               name
               type
+              event {
+                id
+                awardsBody
+                year
+                type
+                expiration
+                isActive
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
               createdAt
               updatedAt
               eventCategoriesId
+            }
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              type
+              expiration
+              isActive
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
             }
             movie {
               id
@@ -211,16 +463,33 @@ export const getPredictionSet = /* GraphQL */ `
               id
               title
               artist
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
               createdAt
               updatedAt
               songMovieId
             }
             predictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                predictionSetPredictionsId
+                contenderPredictionsId
+                predictionUserId
+              }
               nextToken
             }
             didReceiveNominationOrWin
             createdAt
             updatedAt
+            eventContendersId
             categoryContendersId
             contenderMovieId
             contenderPersonId
@@ -278,6 +547,19 @@ export const listPredictionSets = /* GraphQL */ `
               id
               name
               type
+              event {
+                id
+                awardsBody
+                year
+                type
+                expiration
+                isActive
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
               createdAt
               updatedAt
               eventCategoriesId
@@ -289,6 +571,62 @@ export const listPredictionSets = /* GraphQL */ `
           type
           expiration
           isActive
+          contenders {
+            items {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                type
+                expiration
+                isActive
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              didReceiveNominationOrWin
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              contenderMovieId
+              contenderPersonId
+              contenderSongId
+            }
+            nextToken
+          }
           createdAt
           updatedAt
         }
@@ -299,6 +637,14 @@ export const listPredictionSets = /* GraphQL */ `
           event {
             id
             categories {
+              items {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
               nextToken
             }
             awardsBody
@@ -306,15 +652,72 @@ export const listPredictionSets = /* GraphQL */ `
             type
             expiration
             isActive
+            contenders {
+              items {
+                id
+                didReceiveNominationOrWin
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              nextToken
+            }
             createdAt
             updatedAt
           }
           contenders {
             items {
               id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                type
+                expiration
+                isActive
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
               didReceiveNominationOrWin
               createdAt
               updatedAt
+              eventContendersId
               categoryContendersId
               contenderMovieId
               contenderPersonId
@@ -342,9 +745,52 @@ export const listPredictionSets = /* GraphQL */ `
             }
             contender {
               id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                type
+                expiration
+                isActive
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
               didReceiveNominationOrWin
               createdAt
               updatedAt
+              eventContendersId
               categoryContendersId
               contenderMovieId
               contenderPersonId
@@ -393,6 +839,14 @@ export const getPrediction = /* GraphQL */ `
           event {
             id
             categories {
+              items {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
               nextToken
             }
             awardsBody
@@ -400,15 +854,72 @@ export const getPrediction = /* GraphQL */ `
             type
             expiration
             isActive
+            contenders {
+              items {
+                id
+                didReceiveNominationOrWin
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              nextToken
+            }
             createdAt
             updatedAt
           }
           contenders {
             items {
               id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                type
+                expiration
+                isActive
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
               didReceiveNominationOrWin
               createdAt
               updatedAt
+              eventContendersId
               categoryContendersId
               contenderMovieId
               contenderPersonId
@@ -419,6 +930,96 @@ export const getPrediction = /* GraphQL */ `
           createdAt
           updatedAt
           eventCategoriesId
+        }
+        event {
+          id
+          categories {
+            items {
+              id
+              name
+              type
+              event {
+                id
+                awardsBody
+                year
+                type
+                expiration
+                isActive
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+              eventCategoriesId
+            }
+            nextToken
+          }
+          awardsBody
+          year
+          type
+          expiration
+          isActive
+          contenders {
+            items {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                type
+                expiration
+                isActive
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              didReceiveNominationOrWin
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              contenderMovieId
+              contenderPersonId
+              contenderSongId
+            }
+            nextToken
+          }
+          createdAt
+          updatedAt
         }
         movie {
           id
@@ -464,9 +1065,52 @@ export const getPrediction = /* GraphQL */ `
             }
             contender {
               id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                type
+                expiration
+                isActive
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
               didReceiveNominationOrWin
               createdAt
               updatedAt
+              eventContendersId
               categoryContendersId
               contenderMovieId
               contenderPersonId
@@ -484,6 +1128,7 @@ export const getPrediction = /* GraphQL */ `
         didReceiveNominationOrWin
         createdAt
         updatedAt
+        eventContendersId
         categoryContendersId
         contenderMovieId
         contenderPersonId
@@ -534,20 +1179,72 @@ export const listPredictions = /* GraphQL */ `
             type
             event {
               id
+              categories {
+                nextToken
+              }
               awardsBody
               year
               type
               expiration
               isActive
+              contenders {
+                nextToken
+              }
               createdAt
               updatedAt
             }
             contenders {
+              items {
+                id
+                didReceiveNominationOrWin
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
               nextToken
             }
             createdAt
             updatedAt
             eventCategoriesId
+          }
+          event {
+            id
+            categories {
+              items {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              nextToken
+            }
+            awardsBody
+            year
+            type
+            expiration
+            isActive
+            contenders {
+              items {
+                id
+                didReceiveNominationOrWin
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              nextToken
+            }
+            createdAt
+            updatedAt
           }
           movie {
             id
@@ -580,6 +1277,28 @@ export const listPredictions = /* GraphQL */ `
           predictions {
             items {
               id
+              user {
+                id
+                email
+                username
+                name
+                bio
+                image
+                role
+                createdAt
+                updatedAt
+              }
+              contender {
+                id
+                didReceiveNominationOrWin
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
               ranking
               createdAt
               updatedAt
@@ -592,6 +1311,7 @@ export const listPredictions = /* GraphQL */ `
           didReceiveNominationOrWin
           createdAt
           updatedAt
+          eventContendersId
           categoryContendersId
           contenderMovieId
           contenderPersonId
@@ -620,6 +1340,14 @@ export const getEvent = /* GraphQL */ `
           event {
             id
             categories {
+              items {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
               nextToken
             }
             awardsBody
@@ -627,15 +1355,72 @@ export const getEvent = /* GraphQL */ `
             type
             expiration
             isActive
+            contenders {
+              items {
+                id
+                didReceiveNominationOrWin
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              nextToken
+            }
             createdAt
             updatedAt
           }
           contenders {
             items {
               id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                type
+                expiration
+                isActive
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
               didReceiveNominationOrWin
               createdAt
               updatedAt
+              eventContendersId
               categoryContendersId
               contenderMovieId
               contenderPersonId
@@ -654,6 +1439,155 @@ export const getEvent = /* GraphQL */ `
       type
       expiration
       isActive
+      contenders {
+        items {
+          id
+          category {
+            id
+            name
+            type
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              type
+              expiration
+              isActive
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+            }
+            contenders {
+              items {
+                id
+                didReceiveNominationOrWin
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              nextToken
+            }
+            createdAt
+            updatedAt
+            eventCategoriesId
+          }
+          event {
+            id
+            categories {
+              items {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              nextToken
+            }
+            awardsBody
+            year
+            type
+            expiration
+            isActive
+            contenders {
+              items {
+                id
+                didReceiveNominationOrWin
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              nextToken
+            }
+            createdAt
+            updatedAt
+          }
+          movie {
+            id
+            tmdbId
+            studio
+            createdAt
+            updatedAt
+          }
+          person {
+            id
+            tmdbId
+            createdAt
+            updatedAt
+          }
+          song {
+            id
+            title
+            artist
+            movie {
+              id
+              tmdbId
+              studio
+              createdAt
+              updatedAt
+            }
+            createdAt
+            updatedAt
+            songMovieId
+          }
+          predictions {
+            items {
+              id
+              user {
+                id
+                email
+                username
+                name
+                bio
+                image
+                role
+                createdAt
+                updatedAt
+              }
+              contender {
+                id
+                didReceiveNominationOrWin
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              ranking
+              createdAt
+              updatedAt
+              predictionSetPredictionsId
+              contenderPredictionsId
+              predictionUserId
+            }
+            nextToken
+          }
+          didReceiveNominationOrWin
+          createdAt
+          updatedAt
+          eventContendersId
+          categoryContendersId
+          contenderMovieId
+          contenderPersonId
+          contenderSongId
+        }
+        nextToken
+      }
       createdAt
       updatedAt
     }
@@ -683,15 +1617,32 @@ export const listEvents = /* GraphQL */ `
             type
             event {
               id
+              categories {
+                nextToken
+              }
               awardsBody
               year
               type
               expiration
               isActive
+              contenders {
+                nextToken
+              }
               createdAt
               updatedAt
             }
             contenders {
+              items {
+                id
+                didReceiveNominationOrWin
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
               nextToken
             }
             createdAt
@@ -705,6 +1656,97 @@ export const listEvents = /* GraphQL */ `
         type
         expiration
         isActive
+        contenders {
+          items {
+            id
+            category {
+              id
+              name
+              type
+              event {
+                id
+                awardsBody
+                year
+                type
+                expiration
+                isActive
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+              eventCategoriesId
+            }
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              type
+              expiration
+              isActive
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+            }
+            movie {
+              id
+              tmdbId
+              studio
+              createdAt
+              updatedAt
+            }
+            person {
+              id
+              tmdbId
+              createdAt
+              updatedAt
+            }
+            song {
+              id
+              title
+              artist
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              createdAt
+              updatedAt
+              songMovieId
+            }
+            predictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                predictionSetPredictionsId
+                contenderPredictionsId
+                predictionUserId
+              }
+              nextToken
+            }
+            didReceiveNominationOrWin
+            createdAt
+            updatedAt
+            eventContendersId
+            categoryContendersId
+            contenderMovieId
+            contenderPersonId
+            contenderSongId
+          }
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -727,15 +1769,32 @@ export const getCategory = /* GraphQL */ `
             type
             event {
               id
+              categories {
+                nextToken
+              }
               awardsBody
               year
               type
               expiration
               isActive
+              contenders {
+                nextToken
+              }
               createdAt
               updatedAt
             }
             contenders {
+              items {
+                id
+                didReceiveNominationOrWin
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
               nextToken
             }
             createdAt
@@ -749,6 +1808,97 @@ export const getCategory = /* GraphQL */ `
         type
         expiration
         isActive
+        contenders {
+          items {
+            id
+            category {
+              id
+              name
+              type
+              event {
+                id
+                awardsBody
+                year
+                type
+                expiration
+                isActive
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+              eventCategoriesId
+            }
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              type
+              expiration
+              isActive
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+            }
+            movie {
+              id
+              tmdbId
+              studio
+              createdAt
+              updatedAt
+            }
+            person {
+              id
+              tmdbId
+              createdAt
+              updatedAt
+            }
+            song {
+              id
+              title
+              artist
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              createdAt
+              updatedAt
+              songMovieId
+            }
+            predictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                predictionSetPredictionsId
+                contenderPredictionsId
+                predictionUserId
+              }
+              nextToken
+            }
+            didReceiveNominationOrWin
+            createdAt
+            updatedAt
+            eventContendersId
+            categoryContendersId
+            contenderMovieId
+            contenderPersonId
+            contenderSongId
+          }
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -761,20 +1911,72 @@ export const getCategory = /* GraphQL */ `
             type
             event {
               id
+              categories {
+                nextToken
+              }
               awardsBody
               year
               type
               expiration
               isActive
+              contenders {
+                nextToken
+              }
               createdAt
               updatedAt
             }
             contenders {
+              items {
+                id
+                didReceiveNominationOrWin
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
               nextToken
             }
             createdAt
             updatedAt
             eventCategoriesId
+          }
+          event {
+            id
+            categories {
+              items {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              nextToken
+            }
+            awardsBody
+            year
+            type
+            expiration
+            isActive
+            contenders {
+              items {
+                id
+                didReceiveNominationOrWin
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              nextToken
+            }
+            createdAt
+            updatedAt
           }
           movie {
             id
@@ -807,6 +2009,28 @@ export const getCategory = /* GraphQL */ `
           predictions {
             items {
               id
+              user {
+                id
+                email
+                username
+                name
+                bio
+                image
+                role
+                createdAt
+                updatedAt
+              }
+              contender {
+                id
+                didReceiveNominationOrWin
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
               ranking
               createdAt
               updatedAt
@@ -819,6 +2043,7 @@ export const getCategory = /* GraphQL */ `
           didReceiveNominationOrWin
           createdAt
           updatedAt
+          eventContendersId
           categoryContendersId
           contenderMovieId
           contenderPersonId
@@ -858,6 +2083,19 @@ export const listCategories = /* GraphQL */ `
               id
               name
               type
+              event {
+                id
+                awardsBody
+                year
+                type
+                expiration
+                isActive
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
               createdAt
               updatedAt
               eventCategoriesId
@@ -869,6 +2107,62 @@ export const listCategories = /* GraphQL */ `
           type
           expiration
           isActive
+          contenders {
+            items {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                type
+                expiration
+                isActive
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              didReceiveNominationOrWin
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              contenderMovieId
+              contenderPersonId
+              contenderSongId
+            }
+            nextToken
+          }
           createdAt
           updatedAt
         }
@@ -879,9 +2173,38 @@ export const listCategories = /* GraphQL */ `
               id
               name
               type
+              event {
+                id
+                awardsBody
+                year
+                type
+                expiration
+                isActive
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
               createdAt
               updatedAt
               eventCategoriesId
+            }
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              type
+              expiration
+              isActive
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
             }
             movie {
               id
@@ -900,16 +2223,33 @@ export const listCategories = /* GraphQL */ `
               id
               title
               artist
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
               createdAt
               updatedAt
               songMovieId
             }
             predictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                predictionSetPredictionsId
+                contenderPredictionsId
+                predictionUserId
+              }
               nextToken
             }
             didReceiveNominationOrWin
             createdAt
             updatedAt
+            eventContendersId
             categoryContendersId
             contenderMovieId
             contenderPersonId
@@ -940,6 +2280,19 @@ export const getContender = /* GraphQL */ `
               id
               name
               type
+              event {
+                id
+                awardsBody
+                year
+                type
+                expiration
+                isActive
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
               createdAt
               updatedAt
               eventCategoriesId
@@ -951,6 +2304,62 @@ export const getContender = /* GraphQL */ `
           type
           expiration
           isActive
+          contenders {
+            items {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                type
+                expiration
+                isActive
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              didReceiveNominationOrWin
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              contenderMovieId
+              contenderPersonId
+              contenderSongId
+            }
+            nextToken
+          }
           createdAt
           updatedAt
         }
@@ -961,9 +2370,38 @@ export const getContender = /* GraphQL */ `
               id
               name
               type
+              event {
+                id
+                awardsBody
+                year
+                type
+                expiration
+                isActive
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
               createdAt
               updatedAt
               eventCategoriesId
+            }
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              type
+              expiration
+              isActive
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
             }
             movie {
               id
@@ -982,16 +2420,33 @@ export const getContender = /* GraphQL */ `
               id
               title
               artist
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
               createdAt
               updatedAt
               songMovieId
             }
             predictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                predictionSetPredictionsId
+                contenderPredictionsId
+                predictionUserId
+              }
               nextToken
             }
             didReceiveNominationOrWin
             createdAt
             updatedAt
+            eventContendersId
             categoryContendersId
             contenderMovieId
             contenderPersonId
@@ -1002,6 +2457,148 @@ export const getContender = /* GraphQL */ `
         createdAt
         updatedAt
         eventCategoriesId
+      }
+      event {
+        id
+        categories {
+          items {
+            id
+            name
+            type
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              type
+              expiration
+              isActive
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+            }
+            contenders {
+              items {
+                id
+                didReceiveNominationOrWin
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              nextToken
+            }
+            createdAt
+            updatedAt
+            eventCategoriesId
+          }
+          nextToken
+        }
+        awardsBody
+        year
+        type
+        expiration
+        isActive
+        contenders {
+          items {
+            id
+            category {
+              id
+              name
+              type
+              event {
+                id
+                awardsBody
+                year
+                type
+                expiration
+                isActive
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+              eventCategoriesId
+            }
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              type
+              expiration
+              isActive
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+            }
+            movie {
+              id
+              tmdbId
+              studio
+              createdAt
+              updatedAt
+            }
+            person {
+              id
+              tmdbId
+              createdAt
+              updatedAt
+            }
+            song {
+              id
+              title
+              artist
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              createdAt
+              updatedAt
+              songMovieId
+            }
+            predictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                predictionSetPredictionsId
+                contenderPredictionsId
+                predictionUserId
+              }
+              nextToken
+            }
+            didReceiveNominationOrWin
+            createdAt
+            updatedAt
+            eventContendersId
+            categoryContendersId
+            contenderMovieId
+            contenderPersonId
+            contenderSongId
+          }
+          nextToken
+        }
+        createdAt
+        updatedAt
       }
       movie {
         id
@@ -1051,9 +2648,38 @@ export const getContender = /* GraphQL */ `
               id
               name
               type
+              event {
+                id
+                awardsBody
+                year
+                type
+                expiration
+                isActive
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
               createdAt
               updatedAt
               eventCategoriesId
+            }
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              type
+              expiration
+              isActive
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
             }
             movie {
               id
@@ -1072,16 +2698,33 @@ export const getContender = /* GraphQL */ `
               id
               title
               artist
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
               createdAt
               updatedAt
               songMovieId
             }
             predictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                predictionSetPredictionsId
+                contenderPredictionsId
+                predictionUserId
+              }
               nextToken
             }
             didReceiveNominationOrWin
             createdAt
             updatedAt
+            eventContendersId
             categoryContendersId
             contenderMovieId
             contenderPersonId
@@ -1099,6 +2742,7 @@ export const getContender = /* GraphQL */ `
       didReceiveNominationOrWin
       createdAt
       updatedAt
+      eventContendersId
       categoryContendersId
       contenderMovieId
       contenderPersonId
@@ -1130,6 +2774,14 @@ export const listContenders = /* GraphQL */ `
           event {
             id
             categories {
+              items {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
               nextToken
             }
             awardsBody
@@ -1137,15 +2789,72 @@ export const listContenders = /* GraphQL */ `
             type
             expiration
             isActive
+            contenders {
+              items {
+                id
+                didReceiveNominationOrWin
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              nextToken
+            }
             createdAt
             updatedAt
           }
           contenders {
             items {
               id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                type
+                expiration
+                isActive
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
               didReceiveNominationOrWin
               createdAt
               updatedAt
+              eventContendersId
               categoryContendersId
               contenderMovieId
               contenderPersonId
@@ -1156,6 +2865,96 @@ export const listContenders = /* GraphQL */ `
           createdAt
           updatedAt
           eventCategoriesId
+        }
+        event {
+          id
+          categories {
+            items {
+              id
+              name
+              type
+              event {
+                id
+                awardsBody
+                year
+                type
+                expiration
+                isActive
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+              eventCategoriesId
+            }
+            nextToken
+          }
+          awardsBody
+          year
+          type
+          expiration
+          isActive
+          contenders {
+            items {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                type
+                expiration
+                isActive
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              didReceiveNominationOrWin
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              contenderMovieId
+              contenderPersonId
+              contenderSongId
+            }
+            nextToken
+          }
+          createdAt
+          updatedAt
         }
         movie {
           id
@@ -1201,9 +3000,52 @@ export const listContenders = /* GraphQL */ `
             }
             contender {
               id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                type
+                expiration
+                isActive
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
               didReceiveNominationOrWin
               createdAt
               updatedAt
+              eventContendersId
               categoryContendersId
               contenderMovieId
               contenderPersonId
@@ -1221,6 +3063,7 @@ export const listContenders = /* GraphQL */ `
         didReceiveNominationOrWin
         createdAt
         updatedAt
+        eventContendersId
         categoryContendersId
         contenderMovieId
         contenderPersonId

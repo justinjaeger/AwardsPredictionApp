@@ -34,6 +34,7 @@ export const CategoryProvider = (props: { children: React.ReactNode }) => {
   );
 
   const setEvent = async (eventId: string) => {
+    console.error('setEvent', eventId);
     const { data } = await ApiServices.getEventById(eventId);
     _setEvent(data);
   };
