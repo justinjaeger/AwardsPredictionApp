@@ -6,7 +6,7 @@ import { BodyLarge } from '../../../components/Text';
 import COLORS from '../../../constants/colors';
 import { PosterSize } from '../../../constants/posterDimensions';
 import { useCategory } from '../../../context/CategoryContext';
-import { usePredictions } from '../../../context/PredictionContext';
+import { iPrediction, usePredictions } from '../../../context/PredictionContext';
 import { PredictionsParamList } from '../../../navigation/types';
 import { useTypedNavigation } from '../../../util/hooks';
 
@@ -23,9 +23,12 @@ const Category = (props: iContenderListProps) => {
   const { predictionData, displayContenderInfo } = usePredictions();
   const navigation = useTypedNavigation<PredictionsParamList>();
 
-  if (!category?.getCategory?.id) return null; // would be an error
+  const ps: iPrediction[] | undefined =
+    category?.getCategory?.id && predictionData[category?.getCategory?.id]
+      ? predictionData[category.getCategory.id] // this might be undefined
+      : [];
 
-  const categoryPredictions = predictionData[category.getCategory.id];
+  const categoryPredictions = ps || [];
 
   return (
     <ScrollView

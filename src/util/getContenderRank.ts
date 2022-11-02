@@ -9,6 +9,7 @@ export const getContenderRank = (numPredicting: iNumberPredicting): number => {
 
   return (
     predictingWin * pointsForWin +
-    predictingNom * pointsForNom * predictingUnranked * pointsForUnranked
+    predictingNom * pointsForNom +
+    predictingUnranked * pointsForUnranked
   );
 };

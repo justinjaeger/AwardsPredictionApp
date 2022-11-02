@@ -2,50 +2,39 @@ import React, { useState } from 'react';
 import { View } from 'react-native';
 import { PosterSize } from '../../../constants/posterDimensions';
 import { iCachedTmdbMovie, iCachedTmdbPerson } from '../../../services/cache/types';
-import ApiServices from '../../../services/graphql';
 import TmdbServices from '../../../services/tmdb';
 import { useSubscriptionEffect } from '../../../util/hooks';
 import Poster from '../../Images/Poster';
 import { BodyLarge } from '../../Text';
 
 type iPerformanceListItemProps = {
-  contenderPersonId: string;
-  contenderMovieId: string;
+  tmdbPersonId: number;
+  tmdbMovieId: number;
   ranking?: number;
   size?: PosterSize;
   onPress: () => void;
 };
 
 const PerformanceListItem = (props: iPerformanceListItemProps) => {
-  const { contenderPersonId, contenderMovieId, ranking, size, onPress } = props;
+  const { tmdbPersonId, tmdbMovieId, ranking, size, onPress } = props;
 
-  const [person, setPerson] = useState<iCachedTmdbPerson | undefined>();
+  const [tmdbPerson, setTmdbPerson] = useState<iCachedTmdbPerson | undefined>();
   const [tmdbMovie, setTmdbMovie] = useState<iCachedTmdbMovie | undefined>();
 
   useSubscriptionEffect(async () => {
     // get tmdb person info
-    if (contenderPersonId) {
-      const { data: person } = await ApiServices.getPerson(contenderPersonId);
-      const p = person?.getPerson;
-      if (!p) return;
-      TmdbServices.getTmdbPerson(p.tmdbId).then((p) => {
-        if (p.status === 'success') {
-          setPerson(p.data);
-        }
-      });
-    }
-    const { data: movie } = await ApiServices.getMovie(contenderMovieId);
-    const m = movie?.getMovie;
-    if (!m) return;
+    TmdbServices.getTmdbPerson(tmdbPersonId).then((p) => {
+      if (p.status === 'success') {
+        setTmdbPerson(p.data);
+      }
+    });
     // get movie tmdb info
-    TmdbServices.getTmdbMovie(m.tmdbId).then((m) => {
+    TmdbServices.getTmdbMovie(tmdbMovieId).then((m) => {
       if (m.status === 'success') {
         setTmdbMovie(m.data);
       }
     });
-  }, [contenderPersonId, contenderMovieId]);
-
-  // TODO: create better loading state
+  }, [tmdbMovieId, tmdbPersonId]);
 
   return (
     <View
@@ -58,14 +47,14 @@ const PerformanceListItem = (props: iPerformanceListItemProps) => {
       <View style={{ flexDirection: 'row' }}>
         <BodyLarge style={{ marginLeft: 10 }}>{ranking?.toString() || ''}</BodyLarge>
         <Poster
-          path={person?.profilePath || null}
-          title={person?.name || ''}
+          path={tmdbPerson?.profilePath || null}
+          title={tmdbPerson?.name || ''}
           size={size}
           onPress={onPress}
         />
         <View style={{ flexDirection: 'column' }}>
           <BodyLarge style={{ marginTop: 10, marginLeft: 10 }}>
-            {person?.name || ''}
+            {tmdbPerson?.name || ''}
           </BodyLarge>
           {tmdbMovie ? (
             <BodyLarge style={{ marginTop: 10, marginLeft: 10 }}>

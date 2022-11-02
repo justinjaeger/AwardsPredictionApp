@@ -14,7 +14,11 @@ const ProfileNavigator = () => (
       animationTypeForReplace: 'push',
     }}
   >
-    <Screen name="Proflie" component={Profile} options={{ headerTitle: 'My Profile' }} />
+    <Screen
+      name="Proflie"
+      component={Profile}
+      options={{ headerTitle: 'My Profile', headerLeft: BackButton }}
+    />
     <Screen
       name="ChangeUsername"
       component={ChangeUsername}

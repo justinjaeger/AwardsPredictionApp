@@ -64,16 +64,16 @@ const TabBar = (props: ITabBarProps) => {
                     )}
                   </View>
                 );
-              case 'Profile':
-                return (
-                  <View key={index}>
-                    {isFocused ? (
-                      <CustomIcon name={'person'} />
-                    ) : (
-                      <CustomIcon name={'person-outline'} />
-                    )}
-                  </View>
-                );
+              //   case 'Profile':
+              //     return (
+              //       <View key={index}>
+              //         {isFocused ? (
+              //           <CustomIcon name={'person'} />
+              //         ) : (
+              //           <CustomIcon name={'person-outline'} />
+              //         )}
+              //       </View>
+              //     );
               case 'Dev':
                 return (
                   <View key={index}>

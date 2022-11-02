@@ -11,7 +11,7 @@ const BottomTabNavigator = () => {
   return (
     <Tab.Navigator tabBar={(p: ITabBarProps) => <TabBar {...p} />}>
       <Tab.Screen name="Predictions" component={PredictionsNavigator} />
-      <Tab.Screen name="Profile" component={ProfileNavigator} />
+      {/* <Tab.Screen name="Profile" component={ProfileNavigator} /> */}
       <Tab.Screen name="Dev" component={DevNavigator} />
     </Tab.Navigator>
   );

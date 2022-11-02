@@ -1,27 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
-import { GetSongQuery } from '../../../API';
 import { PosterSize } from '../../../constants/posterDimensions';
 import { iCachedTmdbMovie } from '../../../services/cache/types';
-import ApiServices from '../../../services/graphql';
 import TmdbServices from '../../../services/tmdb';
-import { useAsyncEffect } from '../../../util/hooks';
 import Poster from '../../Images/Poster';
 import { BodyLarge } from '../../Text';
 
 type iSongListItemProps = {
   tmdbMovieId: number;
-  songId: string;
+  artist: string;
+  title: string;
   ranking?: number;
   size?: PosterSize;
   onPress: () => void;
 };
 
 const SongListItem = (props: iSongListItemProps) => {
-  const { songId, ranking, tmdbMovieId, size, onPress } = props;
+  const { artist, title, ranking, tmdbMovieId, size, onPress } = props;
 
   const [movie, setMovie] = useState<iCachedTmdbMovie | undefined>();
-  const [song, setSong] = useState<GetSongQuery>();
 
   useEffect(() => {
     TmdbServices.getTmdbMovie(tmdbMovieId).then((m) => {
@@ -30,15 +27,6 @@ const SongListItem = (props: iSongListItemProps) => {
       }
     });
   }, [tmdbMovieId]);
-
-  useAsyncEffect(async () => {
-    const { data: song } = await ApiServices.getSong(songId);
-    setSong(song);
-  }, [songId]);
-
-  // TODO: create better loading state
-  const s = song?.getSong;
-  if (!s) return null;
 
   return (
     <View
@@ -57,8 +45,8 @@ const SongListItem = (props: iSongListItemProps) => {
           onPress={onPress}
         />
         <View style={{ flexDirection: 'column' }}>
-          <BodyLarge style={{ marginTop: 10, marginLeft: 10 }}>{s.title}</BodyLarge>
-          <BodyLarge style={{ marginTop: 10, marginLeft: 10 }}>{s.artist}</BodyLarge>
+          <BodyLarge style={{ marginTop: 10, marginLeft: 10 }}>{title}</BodyLarge>
+          <BodyLarge style={{ marginTop: 10, marginLeft: 10 }}>{artist}</BodyLarge>
           <BodyLarge style={{ marginTop: 10, marginLeft: 10 }}>
             {movie?.title || ''}
           </BodyLarge>

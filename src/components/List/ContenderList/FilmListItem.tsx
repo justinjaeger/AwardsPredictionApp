@@ -3,7 +3,6 @@ import { View } from 'react-native';
 import { CategoryName } from '../../../API';
 import { PosterSize } from '../../../constants/posterDimensions';
 import { iCachedTmdbMovie } from '../../../services/cache/types';
-import ApiServices from '../../../services/graphql';
 import { iNumberPredicting } from '../../../services/graphql/contender';
 import TmdbServices from '../../../services/tmdb';
 import { useAsyncEffect } from '../../../util/hooks';
@@ -11,10 +10,10 @@ import Poster from '../../Images/Poster';
 import { BodyLarge } from '../../Text';
 
 type iFilmListItemProps = {
-  movieTmdbId: number;
+  tmdbMovieId: number;
   movieStudio: string | undefined;
-  contenderId: string;
   categoryName: CategoryName;
+  communityRankings: iNumberPredicting | undefined;
   ranking?: number;
   size?: PosterSize;
   onPress: () => void;
@@ -22,9 +21,9 @@ type iFilmListItemProps = {
 
 const FilmListItem = (props: iFilmListItemProps) => {
   const {
-    movieTmdbId,
+    communityRankings,
+    tmdbMovieId,
     movieStudio,
-    contenderId,
     categoryName,
     ranking,
     size,
@@ -34,19 +33,13 @@ const FilmListItem = (props: iFilmListItemProps) => {
   // TODO: based on category.name (CategoryName), display a distinct piece of information with the film like who the directors or screenwriters are
 
   const [tmdbMovie, setTmdbMovie] = useState<iCachedTmdbMovie | undefined>();
-  const [numPredicting, setNumPredicting] = useState<iNumberPredicting | undefined>(
-    undefined,
-  );
 
   useAsyncEffect(async () => {
-    TmdbServices.getTmdbMovie(movieTmdbId).then((m) => {
-      if (m.status === 'success') {
-        setTmdbMovie(m.data);
-      }
-    });
-    const { data } = await ApiServices.getNumberPredicting(contenderId);
-    setNumPredicting(data);
-  }, [movieTmdbId]);
+    const { status, data } = await TmdbServices.getTmdbMovie(tmdbMovieId);
+    if (status === 'success') {
+      setTmdbMovie(data);
+    }
+  }, [tmdbMovieId]);
 
   const categoryInfo = tmdbMovie?.categoryInfo?.[categoryName];
 
@@ -78,17 +71,17 @@ const FilmListItem = (props: iFilmListItemProps) => {
           {categoryInfo ? (
             <BodyLarge style={{ marginLeft: 10 }}>{categoryInfo.join(', ')}</BodyLarge>
           ) : null}
-          {size !== PosterSize.SMALL ? (
+          {communityRankings && size !== PosterSize.SMALL ? (
             <>
               <BodyLarge
                 style={{ marginLeft: 10 }}
-              >{`pred win: ${numPredicting?.predictingWin}`}</BodyLarge>
+              >{`pred win: ${communityRankings.predictingWin}`}</BodyLarge>
               <BodyLarge
                 style={{ marginLeft: 10 }}
-              >{`pred nom: ${numPredicting?.predictingNom}`}</BodyLarge>
+              >{`pred nom: ${communityRankings.predictingNom}`}</BodyLarge>
               <BodyLarge
                 style={{ marginLeft: 10 }}
-              >{`pred unranked: ${numPredicting?.predictingUnranked}`}</BodyLarge>
+              >{`pred unranked: ${communityRankings.predictingUnranked}`}</BodyLarge>
             </>
           ) : null}
         </View>

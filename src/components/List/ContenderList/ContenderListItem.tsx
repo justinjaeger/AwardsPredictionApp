@@ -44,10 +44,8 @@ const ContenderListItem = (props: iContenderListItemProps) => {
   const contenderId = prediction?.contenderId;
   const categoryType = category?.getCategory?.type;
   const categoryName = category?.getCategory?.name;
-  const movieId = prediction?.contenderMovie?.id;
-  const contenderPersonId = prediction?.contenderPerson?.id;
-  const songId = prediction?.contenderSongId;
   const tmdbMovieId = prediction?.contenderMovie?.tmdbId;
+  const tmdbPersonId = prediction?.contenderPerson?.tmdbId;
   const movieStudio = prediction?.contenderMovie?.studio;
 
   const onPress = () => {
@@ -64,12 +62,11 @@ const ContenderListItem = (props: iContenderListItemProps) => {
   let component: JSX.Element = <></>;
   switch (CategoryType[categoryType]) {
     case CategoryType.FILM:
-      if (!movieId) return null;
       component = (
         <FilmListItem
-          contenderId={contenderId}
+          communityRankings={prediction.communityRankings}
           categoryName={categoryName}
-          movieTmdbId={tmdbMovieId}
+          tmdbMovieId={tmdbMovieId}
           movieStudio={movieStudio || undefined}
           ranking={ranking}
           size={_size}
@@ -78,11 +75,11 @@ const ContenderListItem = (props: iContenderListItemProps) => {
       );
       break;
     case CategoryType.PERFORMANCE:
-      if (!contenderPersonId) break;
+      if (!tmdbPersonId) break;
       component = (
         <PerformanceListItem
-          contenderPersonId={contenderPersonId}
-          contenderMovieId={movieId || ''}
+          tmdbPersonId={tmdbPersonId}
+          tmdbMovieId={tmdbMovieId}
           ranking={ranking}
           size={_size}
           onPress={onPress}
@@ -90,11 +87,11 @@ const ContenderListItem = (props: iContenderListItemProps) => {
       );
       break;
     case CategoryType.SONG:
-      if (!songId || !tmdbMovieId) return null;
       component = (
         <SongListItem
           tmdbMovieId={tmdbMovieId}
-          songId={songId}
+          artist={prediction.contenderSong?.artist || ''}
+          title={prediction.contenderSong?.title || ''}
           ranking={ranking}
           size={_size}
           onPress={onPress}

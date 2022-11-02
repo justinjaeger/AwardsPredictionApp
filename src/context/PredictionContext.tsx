@@ -1,11 +1,11 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { CategoryType } from '../API';
 import { getCategorySlots } from '../constants/categories';
+import { PredictionsParamList } from '../navigation/types';
 import ApiServices from '../services/graphql';
 import { useAuth } from '../store';
-import { getContenderRank } from '../util/getContenderRank';
-import { useAsyncEffect } from '../util/hooks';
+import { useAsyncEffect, useTypedNavigation } from '../util/hooks';
 import { useCategory } from './CategoryContext';
 
 export type iNumberPredicting = {
@@ -32,9 +32,16 @@ export type iPrediction = {
         tmdbId: number;
       }
     | undefined;
-  contenderSongId?: string | null;
+  contenderSong?:
+    | {
+        id: string;
+        title: string;
+        artist: string;
+      }
+    | undefined;
 };
-type iPredictionData = {
+
+export type iPredictionData = {
   [categoryId: string]: iPrediction[];
 };
 
@@ -52,6 +59,7 @@ export const PredictionProvider = (props: { children: React.ReactNode }) => {
   const { event, category, personalCommunityTab } = useCategory();
   const { userId } = useAuth();
   const navigation = useNavigation();
+  const typedNavigation = useTypedNavigation<PredictionsParamList>();
 
   const [personalPredictionData, setPersonalPredictionData] = useState<iPredictionData>(
     {},
@@ -63,6 +71,12 @@ export const PredictionProvider = (props: { children: React.ReactNode }) => {
 
   // Get all predictions and pass the data down via context
   // make it contextual for personal or community tab
+
+  useEffect(() => {
+    if (!userId && personalCommunityTab === 'personal') {
+      typedNavigation.navigate('Profile');
+    }
+  }, [userId, personalCommunityTab]);
 
   const eventId = event?.getEvent?.id;
   const eventYear = event?.getEvent?.year;
@@ -100,6 +114,7 @@ export const PredictionProvider = (props: { children: React.ReactNode }) => {
     return data;
   };
 
+  // TODO: to not overload server with requests every time they load, can call this periodically as LAMBDA function
   const getCommunityPredictions = async () => {
     if (!eventId) return;
     const { data: _contenders } = await ApiServices.getContendersByEvent(eventId);
@@ -133,12 +148,12 @@ export const PredictionProvider = (props: { children: React.ReactNode }) => {
         }
       });
       const communityPrediction: iPrediction = {
-        ranking: getContenderRank(np),
+        ranking: 0,
         communityRankings: np,
         contenderId: con.id || '', // won't happpen
-        contenderMovie: con.movie || undefined,
+        contenderMovie: con.movie || undefined, // won't happen
         contenderPerson: con.person || undefined,
-        contenderSongId: con.contenderSongId,
+        contenderSong: con.song || undefined,
       };
       if (!data[categoryId]) data[categoryId] = [];
       data[categoryId].push(communityPrediction);
@@ -172,6 +187,7 @@ export const PredictionProvider = (props: { children: React.ReactNode }) => {
       // TODO:
       const communityPredictions = await getCommunityPredictions();
       if (!communityPredictions) return;
+      console.error('communityPredictions', communityPredictions);
       setCommunityPredictionData(communityPredictions);
       setDataToDisplay(communityPredictions);
     }

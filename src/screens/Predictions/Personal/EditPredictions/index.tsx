@@ -23,10 +23,12 @@ const EditPredictions = () => {
   const navigation = useTypedNavigation<PersonalParamList>();
   const { userId } = useAuth();
 
-  //   if (!category?.getCategory?.id) return null; // would be an error
-  const categoryPredictions = category?.getCategory?.id
-    ? predictionData[category.getCategory.id]
-    : [];
+  const ps: iPrediction[] | undefined =
+    category?.getCategory?.id && predictionData[category?.getCategory?.id]
+      ? predictionData[category.getCategory.id] // this might be undefined
+      : [];
+
+  const categoryPredictions = ps || [];
 
   //   const [contenderIds, setContenderIds] = useState<string[]>([]);
   const [predictions, setPredictions] = useState<iPrediction[]>(categoryPredictions);
