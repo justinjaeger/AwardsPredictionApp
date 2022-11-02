@@ -15,14 +15,9 @@ import ApiServices from '../../../services/graphql';
 import { useSubscriptionEffect, useTypedNavigation } from '../../../util/hooks';
 import sortByObjectOrder from '../../../util/sortByObjectOrder';
 import { useCategory } from '../../../context/CategoryContext';
-
-type iFormattedEvents = {
-  eventId: string;
-  awardsBody: AwardsBody;
-  eventType: EventType;
-  eventYear: number;
-  expiration: string | undefined; // AWSDateTime
-};
+import PredictionTabsNavigator from '../../../navigation/PredictionTabsNavigator';
+import { usePredictions } from '../../../store';
+import { iEvent } from '../../../store/types';
 
 export const getEventName = (awardsBody: AwardsBody, eventType: EventType) => {
   const ab = AWARDS_BODY_TO_PLURAL_STRING[AwardsBody[awardsBody]];
@@ -31,38 +26,40 @@ export const getEventName = (awardsBody: AwardsBody, eventType: EventType) => {
 };
 
 const EventSelect = () => {
-  const { setEvent } = useCategory();
+  const { events } = usePredictions();
+  const { setEventId } = useCategory();
   const navigation = useTypedNavigation<PredictionsParamList>();
 
-  const [events, setEvents] = useState<ListEventsQuery>();
+  //   const [events, setEvents] = useState<ListEventsQuery>();
 
-  useSubscriptionEffect(async () => {
-    const { data: es } = await ApiServices.getAllEvents(); // TODO: change back to getAllEvents
-    if (es) {
-      console.error('EVENTS', es);
-      setEvents(es);
-    }
-  }, []);
+  //   useSubscriptionEffect(async () => {
+  //     const { data: es } = await ApiServices.getAllEvents(); // TODO: change back to getAllEvents
+  //     if (es) {
+  //       console.error('EVENTS', es);
+  //       setEvents(es);
+  //     }
+  //   }, []);
 
   const onSelectEvent = async (eventId: string) => {
-    await setEvent(eventId);
+    setEventId(eventId);
     navigation.navigate('EventPredictions');
   };
 
-  const es = events?.listEvents?.items || []; // since only awardsBody property matters this is ok
-  const formattedEvents: iFormattedEvents[] = es.map((e) => ({
-    eventId: e?.id || '',
-    awardsBody: e ? AwardsBody[e.awardsBody] : AwardsBody.ACADEMY_AWARDS,
-    eventType: e ? EventType[e.type] : EventType.NOMINATION,
-    eventYear: e?.year || 0,
-    expiration: e?.expiration || undefined,
-  }));
-  const orderedEvents = sortByObjectOrder<AwardsBody, iFormattedEvents>(
+  //   const es = events?.listEvents?.items || []; // since only awardsBody property matters this is ok
+  //   const formattedEvents: iFormattedEvents[] = es.map((e) => ({
+  //     eventId: e?.id || '',
+  //     awardsBody: e ? AwardsBody[e.awardsBody] : AwardsBody.ACADEMY_AWARDS,
+  //     eventType: e ? EventType[e.type] : EventType.NOMINATION,
+  //     eventYear: e?.year || 0,
+  //     expiration: e?.expiration || undefined,
+  //   }));
+  const eventList = Object.values(events);
+  const orderedEvents = sortByObjectOrder<AwardsBody, iEvent>(
     AWARDS_BODY_TO_STRING,
-    formattedEvents,
-    es.map((e) => (e ? AwardsBody[e.awardsBody] : AwardsBody.ACADEMY_AWARDS)),
+    Object.values(eventList),
+    eventList.map((e) => AwardsBody[e.awardsBody]),
   );
-  const groupedByYear = _.groupBy(orderedEvents, (e) => e.eventYear);
+  const groupedByYear = _.groupBy(orderedEvents, (e) => e.year);
 
   return (
     <ScrollView
@@ -76,11 +73,11 @@ const EventSelect = () => {
       {Object.entries(groupedByYear).map(([key, val]) => (
         <>
           <SubHeader style={{ marginBottom: 10 }}>{key}</SubHeader>
-          {val.map(({ eventId, eventType, awardsBody, expiration }) => (
+          {val.map(({ id, type, awardsBody, expiration }) => (
             <View style={{ height: 100, backgroundColor: COLORS.white }}>
               <TouchableText
-                text={getEventName(awardsBody, eventType)}
-                onPress={() => onSelectEvent(eventId)}
+                text={getEventName(awardsBody, type)}
+                onPress={() => onSelectEvent(id)}
                 style={{ margin: 10 }}
               />
               <Body
@@ -94,4 +91,13 @@ const EventSelect = () => {
   );
 };
 
-export default EventSelect;
+const TabsWrapper = () => {
+  return PredictionTabsNavigator(
+    () => <EventSelect />,
+    () => <EventSelect />,
+  );
+};
+
+export default TabsWrapper;
+
+// export default EventSelect;

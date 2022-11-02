@@ -1,41 +1,39 @@
-import { iActionTypes } from '../actions/auth';
-export interface iSuperAuth {
-  auth: iAuth;
-}
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-export interface iAuth {
+export interface iAuthState {
   isLoggedIn: boolean;
   userId: string | undefined;
   userEmail: string | undefined;
 }
 
-const initialState: iAuth = {
+const initialState: iAuthState = {
   isLoggedIn: false,
   userId: undefined,
   userEmail: undefined,
 };
 
-export const authReducer = (
-  state = initialState,
-  action: { type: keyof typeof iActionTypes; payload: any },
-) => {
-  switch (action.type) {
-    case iActionTypes.LOGIN_USER:
-      console.error('logging in');
-      return {
-        ...state,
-        isLoggedIn: true,
-        userId: action.payload.userId,
-        userEmail: action.payload.userEmail,
-      };
-    case iActionTypes.LOGOUT_USER:
-      console.error('logging out');
-      return {
-        ...state,
-        isLoggedIn: false,
-        userId: undefined,
-      };
-    default:
-      return state;
-  }
-};
+export const authSlice = createSlice({
+  name: 'auth',
+  initialState,
+  reducers: {
+    loginUser: (
+      state,
+      action: PayloadAction<{
+        userId: string;
+        userEmail: string;
+      }>,
+    ) => {
+      state.isLoggedIn = true;
+      state.userId = action.payload.userId;
+      state.userEmail = action.payload.userEmail;
+    },
+    logoutUser: (state) => {
+      state.isLoggedIn = false;
+      state.userId = undefined;
+    },
+  },
+});
+
+export const { loginUser, logoutUser } = authSlice.actions;
+
+export default authSlice.reducer;

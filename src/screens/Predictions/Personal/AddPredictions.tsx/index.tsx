@@ -19,7 +19,7 @@ const AddPredictions = () => {
   const navigation = useTypedNavigation<PersonalParamList>();
   const { userId } = useAuth();
   const { predictionData } = usePredictions();
-  const { category } = useCategory();
+  const { event, category } = useCategory();
 
   const initialPredictionData = predictionData;
 

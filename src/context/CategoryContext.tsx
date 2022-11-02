@@ -9,6 +9,8 @@ import ApiServices from '../services/graphql';
 type iPersonalCommunityTab = 'personal' | 'community';
 
 type iCategoryContext = {
+  eventId: string | undefined;
+  setEventId: (id: string) => void;
   event: GetEventQuery | undefined;
   setEvent: (id: string) => Promise<void>;
   category: GetCategoryQuery | undefined;
@@ -18,6 +20,8 @@ type iCategoryContext = {
 };
 
 const CategoryContext = createContext<iCategoryContext>({
+  eventId: undefined,
+  setEventId: () => {},
   event: undefined,
   setEvent: () => new Promise(() => {}),
   category: undefined,
@@ -27,11 +31,17 @@ const CategoryContext = createContext<iCategoryContext>({
 });
 
 export const CategoryProvider = (props: { children: React.ReactNode }) => {
+  const [eventId, _setEventId] = useState<string>();
   const [event, _setEvent] = useState<GetEventQuery>();
   const [category, _setCategory] = useState<GetCategoryQuery>();
   const [personalCommunityTab, setPersonalCommunityTab] = useState<iPersonalCommunityTab>(
     'community',
   );
+
+  //   console.error('pct', personalCommunityTab);
+  const setEventId = (eventId: string) => {
+    _setEventId(eventId);
+  };
 
   const setEvent = async (eventId: string) => {
     console.error('setEvent', eventId);
@@ -53,6 +63,8 @@ export const CategoryProvider = (props: { children: React.ReactNode }) => {
         setCategory,
         personalCommunityTab,
         setPersonalCommunityTab,
+        eventId,
+        setEventId,
       }}
     >
       {props.children}

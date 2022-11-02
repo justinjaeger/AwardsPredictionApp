@@ -7,9 +7,9 @@ import AuthServices from '../../services/auth';
 import Snackbar from '../../components/Snackbar';
 import { useAuthenticator } from './context';
 import { useDispatch } from 'react-redux';
-import { loginUser } from '../../store/actions/auth';
 import { useNavigation } from '@react-navigation/native';
 import ApiServices from '../../services/graphql';
+import { loginUser } from '../../store/reducers/auth';
 
 const ConfirmSignUp = (p: any) => {
   const props = p as iAuthScreenProps; // typecasting because props are automatically passed from Authenticator

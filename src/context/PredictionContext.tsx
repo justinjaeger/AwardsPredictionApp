@@ -72,11 +72,11 @@ export const PredictionProvider = (props: { children: React.ReactNode }) => {
   // Get all predictions and pass the data down via context
   // make it contextual for personal or community tab
 
-  useEffect(() => {
-    if (!userId && personalCommunityTab === 'personal') {
-      typedNavigation.navigate('Profile');
-    }
-  }, [userId, personalCommunityTab]);
+  //   useEffect(() => {
+  //     if (!userId && personalCommunityTab === 'personal') {
+  //       typedNavigation.navigate('Profile');
+  //     }
+  //   }, [userId, personalCommunityTab]);
 
   const eventId = event?.getEvent?.id;
   const eventYear = event?.getEvent?.year;

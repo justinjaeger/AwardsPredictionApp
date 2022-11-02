@@ -2,8 +2,6 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import BackButton from '../components/Buttons/BackButton';
 import { CategoryProvider } from '../context/CategoryContext';
-import PersonalCommunityTabs from './PersonalCommunityTabs.tsx';
-import PersonalPredictionsNavigator from './PersonalPredictionsNavigator';
 import ContenderDetailsScreen from '../screens/Predictions/ContenderDetailsScreen';
 import { PredictionsParamList } from './types';
 import Category from '../screens/Predictions/Category';
@@ -11,6 +9,7 @@ import EventSelect from '../screens/Predictions/EventSelect';
 import EventPredictions from '../screens/Predictions/EventPredictions';
 import { PredictionProvider } from '../context/PredictionContext';
 import ProfileNavigator from './ProfileNavigator';
+import PersonalPredictionsNavigator from './PersonalPredictionsNavigator';
 
 const { Navigator, Screen } = createStackNavigator<PredictionsParamList>();
 
@@ -74,7 +73,6 @@ const PredictionsNavigatorWrapper = () => {
     <CategoryProvider>
       <PredictionProvider>
         <PredictionsNavigator />
-        <PersonalCommunityTabs />
       </PredictionProvider>
     </CategoryProvider>
   );
