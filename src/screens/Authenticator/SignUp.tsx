@@ -30,6 +30,7 @@ const SignUp = (p: any) => {
   const validEmail = email.length > 0 && email.includes('.') && email.includes('@');
 
   const navigate = (authState: iAuthState) => {
+    console.error('navigate signup', authState);
     props.onStateChange(authState, {});
   };
 

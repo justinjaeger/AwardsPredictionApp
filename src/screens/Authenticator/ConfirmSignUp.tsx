@@ -6,10 +6,10 @@ import { SubmitButton, TouchableText } from '../../components/Buttons';
 import AuthServices from '../../services/auth';
 import Snackbar from '../../components/Snackbar';
 import { useAuthenticator } from './context';
-import { useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import ApiServices from '../../services/graphql';
 import { loginUser } from '../../store/reducers/auth';
+import { useAppDispatch } from '../../store';
 
 const ConfirmSignUp = (p: any) => {
   const props = p as iAuthScreenProps; // typecasting because props are automatically passed from Authenticator
@@ -18,7 +18,7 @@ const ConfirmSignUp = (p: any) => {
     setEmail: setContextEmail,
     password: contextPassword,
   } = useAuthenticator();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { goBack } = useNavigation();
 
   const [code, setCode] = useState<string>('');

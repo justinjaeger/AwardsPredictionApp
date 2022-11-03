@@ -1,122 +1,76 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import React from 'react';
 import { ScrollView } from 'react-native';
-import { CategoryName, ListCategoriesQuery } from '../../../API';
+import { CategoryName } from '../../../API';
 import { TouchableText } from '../../../components/Buttons';
 import { getAwardsBodyCategories } from '../../../constants/categories';
 import { PredictionsParamList } from '../../../navigation/types';
-import ApiServices from '../../../services/graphql';
-import { useAsyncEffect, useTypedNavigation } from '../../../util/hooks';
+import { useTypedNavigation } from '../../../util/hooks';
 import sortByObjectOrder from '../../../util/sortByObjectOrder';
-import { eventToString } from '../../../util/stringConversions';
 import { useCategory } from '../../../context/CategoryContext';
 import PosterFromTmdbId from '../../../components/Images/PosterFromTmdbId';
-import { useAppDispatch, useAuth, usePredictions } from '../../../store';
-import {
-  iCategory,
-  iIndexedPredictionsByCategory,
-  iPrediction,
-} from '../../../store/types';
+import { useAuth } from '../../../store';
+import { iCategory, iEvent, iPrediction } from '../../../store/types';
 import PredictionTabsNavigator from '../../../navigation/PredictionTabsNavigator';
-import { thunkGetPersonalPredictionsByEvent } from '../../../store/thunks/getPersonalPredictionsByEvent';
-import { thunkGetGlobalPredictionsByEvent } from '../../../store/thunks/getGlobalPredictionsByEvent';
 import { Body } from '../../../components/Text';
-
-type iFormattedCategories = { catId: string; catName: CategoryName };
+import { useQuery } from '@tanstack/react-query';
+import getCommunityPredictionsByEvent from '../../../services/queryFuncs/getCommunityPredictionsByEvent';
+import getPersonalPredictionsByEvent from '../../../services/queryFuncs/getPersonalPredictionsByEvent';
 
 const CategorySelect = (props: { tab: 'personal' | 'community' }) => {
   const { tab } = props;
 
-  const dispatch = useAppDispatch();
-  const { eventId, setCategory } = useCategory();
-  //   const { userId } = useAuth();
-  const userId = '4228868b-5300-4791-ab73-769a81de34a1'; // TODO: this is just a workaround because auth is broken
-  const { events, globalPredictions, personalPredictions } = usePredictions();
+  const { event: _event, setCategory } = useCategory();
+  const { userId } = useAuth();
   const navigation = useTypedNavigation<PredictionsParamList>();
 
-  //   const [eventPredictions, setEventPredictions] = useState<
-  //     iIndexedPredictionsByCategory | undefined
-  //   >();
+  if (!_event?.id) {
+    console.error('NO EVENT IN useCategory');
+  }
+  const event = _event as iEvent; // FLAG because declaring
 
-  const predictionData = tab === 'personal' ? personalPredictions : globalPredictions;
-  const pd: iIndexedPredictionsByCategory | undefined = eventId
-    ? predictionData[eventId] || {}
-    : {};
+  const queryFn =
+    tab === 'community'
+      ? () => getCommunityPredictionsByEvent(event)
+      : () => getPersonalPredictionsByEvent(event.id, userId || '');
 
-  // TODO: We want this to be available up front in the redux store, need to create a getAllPredictions thing instead of waiting for them to click on a category... maybe. if we just have to laod once, not so bad
-  useEffect(() => {
-    if (!eventId || !userId) return;
-    const event = events[eventId];
-    if (!pd) {
-      console.error('fetching ', tab);
-      if (tab === 'personal') {
-        dispatch(thunkGetPersonalPredictionsByEvent(event, userId));
-      } else {
-        dispatch(thunkGetGlobalPredictionsByEvent(event));
-      }
-    }
-  }, [pd]);
+  const { data: predictionData, isLoading } = useQuery({
+    queryKey: ['getPredictions'],
+    queryFn: queryFn,
+  });
+
+  if (isLoading) return null;
+  if (!predictionData) return null;
 
   if (!userId) {
     return <Body>You miust sign in </Body>;
   }
+  if (!event) return null;
 
-  //   const [categories, setCategories] = useState<ListCategoriesQuery>();
-
-  //   useAsyncEffect(async () => {
-  //     if (!eventId) return;
-  //     const { data: cs } = await ApiServices.getCategoriesByEvent(eventId);
-  //     if (cs) {
-  //       setCategories(cs);
-  //     }
-  //   }, [eventId]);
-
-  if (!eventId) return null;
-  //   const predictionData = tab === 'personal' ? personalPredictions : globalPredictions;
-  //   const pd: iIndexedPredictionsByCategory | undefined = predictionData[eventId];
-
-  const event = events[eventId];
-
-  // Set header title
-  //   useLayoutEffect(() => {
-  //     navigation.setOptions({
-  //       headerTitle: eventToString(e.awardsBody, e.type, e.year),
-  //     });
-  //   }, [navigation, event]);
-
-  const onSelectCategory = async (catId: string) => {
-    await setCategory(catId);
+  const onSelectCategory = async (category: iCategory) => {
+    setCategory(category);
     navigation.navigate('Category');
   };
 
-  //   const categoryList = getAwardsBodyCategories(event.awardsBody, event.year);
-
-  //   const cats = categories?.listCategories?.items || [];
   const categoryList = Object.values(event.categories);
-  //   const formattedCats: iFormattedCategories[] = categoryList.map((c) => ({
-  //     catId: c.id,
-  //     catName: CategoryName[c.name],
-  //   }));
   const orderedCategories = sortByObjectOrder<CategoryName, iCategory>(
     getAwardsBodyCategories(event.awardsBody, event.year),
     categoryList,
     categoryList.map((cat) => CategoryName[cat.name]),
   );
 
-  // now display the prediction data underneath the categories
-
   return (
     <ScrollView
       contentContainerStyle={{ alignItems: 'center', marginTop: 40, paddingBottom: 100 }}
     >
-      {orderedCategories.map(({ id, name }) => {
-        const catPredictions: iPrediction[] | undefined = pd[id];
+      {orderedCategories.map((category) => {
+        const catPredictions: iPrediction[] | undefined = predictionData[category.id];
         return (
           <>
             <TouchableText
-              text={name}
-              onPress={() => onSelectCategory(id)}
+              text={category.name}
+              onPress={() => onSelectCategory(category)}
               style={{ margin: 10 }}
-              key={id}
+              key={category.id}
             />
             {catPredictions?.map((p) =>
               p.contenderMovie ? (
@@ -141,5 +95,3 @@ const TabsWrapper = () => {
 };
 
 export default TabsWrapper;
-
-// export default CategorySelect;

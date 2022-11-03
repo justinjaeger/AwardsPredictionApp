@@ -1,9 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   iIndexedEvents,
-  iIndexedPredictions,
+  iIndexedPredictionsByCategory,
   iIndexedPredictionsByEvent,
 } from '../types';
+import thunkGetPersonalPredictionsByEvent from '../thunks/getPersonalPredictionsByEvent';
 
 interface iPredictionState {
   events: iIndexedEvents;
@@ -33,7 +34,7 @@ export const predictionsSlice = createSlice({
       state,
       action: PayloadAction<{
         eventId: string;
-        globalPredictionData: iIndexedPredictions;
+        globalPredictionData: iIndexedPredictionsByCategory;
       }>,
     ) => {
       state.globalPredictions = {
@@ -45,7 +46,7 @@ export const predictionsSlice = createSlice({
       state,
       action: PayloadAction<{
         eventId: string;
-        personalPredictionData: iIndexedPredictions;
+        personalPredictionData: iIndexedPredictionsByCategory;
       }>,
     ) => {
       state.globalPredictions = {

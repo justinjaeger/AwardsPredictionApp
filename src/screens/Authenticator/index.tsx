@@ -12,6 +12,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../../store';
 import { ScrollView, View } from 'react-native';
 import COLORS from '../../constants/colors';
+import SignedIn from './SignedIn';
 
 const headerTitles: { [key in iAuthState]: string } = {
   signIn: 'Log In',
@@ -27,6 +28,7 @@ const headerTitles: { [key in iAuthState]: string } = {
 const Auth = () => {
   const navigation = useNavigation();
   const { userEmail } = useAuth();
+
   const [authState, setAuthState] = useState<iAuthState>('signIn');
 
   useLayoutEffect(() => {
@@ -62,6 +64,7 @@ const Auth = () => {
             {authState === 'confirmSignUp' ? <ConfirmSignUp /> : <></>}
             {authState === 'forgotPassword' ? <ForgotPassword /> : <></>}
             {authState === 'requireNewPassword' ? <RequireNewPassword /> : <></>}
+            {authState === 'signedIn' ? <SignedIn /> : <></>}
           </Authenticator>
         </View>
       </ScrollView>

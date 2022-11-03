@@ -1,19 +1,14 @@
-import { AnyAction } from 'redux';
-import { ThunkAction } from 'redux-thunk';
-import { RootState } from '..';
-
 import { getCategorySlots } from '../../constants/categories';
-import ApiServices from '../../services/graphql';
-import { sortPredictions } from '../../util/sortPredictions';
-import { getGlobalPredictionsByEvent } from '../reducers/predictions';
 import {
   iEvent,
   iIndexedPredictionsByCategory,
   iNumberPredicting,
   iPrediction,
-} from '../types';
+} from '../../store/types';
+import { sortPredictions } from '../../util/sortPredictions';
+import ApiServices from '../graphql';
 
-const getData = async (event: iEvent) => {
+const getCommunityPredictionsByEvent = async (event: iEvent) => {
   const eventId = event.id;
   const { data: _contenders } = await ApiServices.getContendersByEvent(eventId);
   const contenders = _contenders?.listContenders?.items;
@@ -65,18 +60,4 @@ const getData = async (event: iEvent) => {
   return sortedData;
 };
 
-const thunkGetGlobalPredictionsByEvent = (
-  event: iEvent,
-): ThunkAction<void, RootState, unknown, AnyAction> => async (dispatch) => {
-  const asyncReponse = await getData(event);
-  if (asyncReponse) {
-    dispatch(
-      getGlobalPredictionsByEvent({
-        eventId: event.id,
-        globalPredictionData: asyncReponse,
-      }),
-    );
-  }
-};
-
-export default thunkGetGlobalPredictionsByEvent;
+export default getCommunityPredictionsByEvent;

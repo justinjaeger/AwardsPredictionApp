@@ -1,14 +1,8 @@
-import { AnyAction } from 'redux';
-import { ThunkAction } from 'redux-thunk';
-import { RootState } from '..';
-import ApiServices from '../../services/graphql';
+import { iIndexedPredictionsByCategory } from '../../store/types';
 import { sortPredictions } from '../../util/sortPredictions';
-import { getPersonalPredictionsByEvent } from '../reducers/predictions';
-import { iEvent, iIndexedPredictionsByCategory } from '../types';
+import ApiServices from '../graphql';
 
-const getData = async (event: iEvent, userId: string) => {
-  console.error('thunkGetPersonalPredictionsByEvent');
-  const eventId = event.id;
+const getPersonalPredictionsByEvent = async (eventId: string, userId: string) => {
   const { data: predictionSets } = await ApiServices.getPersonalPredictionsByEvent(
     eventId,
     userId,
@@ -32,19 +26,4 @@ const getData = async (event: iEvent, userId: string) => {
   return data;
 };
 
-const thunkGetPersonalPredictionsByEvent = (
-  event: iEvent,
-  userId: string,
-): ThunkAction<void, RootState, unknown, AnyAction> => async (dispatch) => {
-  const asyncReponse = await getData(event, userId);
-  if (asyncReponse) {
-    dispatch(
-      getPersonalPredictionsByEvent({
-        eventId: event.id,
-        personalPredictionData: asyncReponse,
-      }),
-    );
-  }
-};
-
-export default thunkGetPersonalPredictionsByEvent;
+export default getPersonalPredictionsByEvent;

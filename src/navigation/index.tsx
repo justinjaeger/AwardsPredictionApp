@@ -8,19 +8,19 @@ import { thunkGetAllEvents } from '../store/thunks/getAllEventsAndCategories';
 
 // onReady={() => RNBootSplash.hide()} (could add to NavigationContainer)
 const Navigation = () => {
-  const [loading, setLoading] = useState<boolean>(true);
+  //   const [loading, setLoading] = useState<boolean>(true);
 
-  const dispatch = useAppDispatch();
+  //   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    dispatch(thunkGetAllEvents())
-      .then((res) => {
-        console.error('res', res);
-      })
-      .catch((err) => {
-        console.error('err', err);
-      });
-  }, []);
+  //   useEffect(() => {
+  //     dispatch(thunkGetAllEvents())
+  //       .then((res) => {
+  //         console.error('res', res);
+  //       })
+  //       .catch((err) => {
+  //         console.error('err', err);
+  //       });
+  //   }, []);
 
   return (
     <NavigationContainer>

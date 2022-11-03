@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useState } from 'react';
-import { GetCategoryQuery, GetEventQuery } from '../API';
-import ApiServices from '../services/graphql';
+import { iCategory, iEvent } from '../store/types';
 
 /**
  * Context that wraps the "read only" screens shared by global and personal
@@ -11,10 +10,10 @@ type iPersonalCommunityTab = 'personal' | 'community';
 type iCategoryContext = {
   eventId: string | undefined;
   setEventId: (id: string) => void;
-  event: GetEventQuery | undefined;
-  setEvent: (id: string) => Promise<void>;
-  category: GetCategoryQuery | undefined;
-  setCategory: (id: string) => Promise<void>;
+  event: iEvent | undefined;
+  setEvent: (event: iEvent) => Promise<void>;
+  category: iCategory | undefined;
+  setCategory: (category: iCategory) => Promise<void>;
   personalCommunityTab: iPersonalCommunityTab;
   setPersonalCommunityTab: (d: iPersonalCommunityTab) => void;
 };
@@ -32,26 +31,22 @@ const CategoryContext = createContext<iCategoryContext>({
 
 export const CategoryProvider = (props: { children: React.ReactNode }) => {
   const [eventId, _setEventId] = useState<string>();
-  const [event, _setEvent] = useState<GetEventQuery>();
-  const [category, _setCategory] = useState<GetCategoryQuery>();
+  const [event, _setEvent] = useState<iEvent>();
+  const [category, _setCategory] = useState<iCategory>();
   const [personalCommunityTab, setPersonalCommunityTab] = useState<iPersonalCommunityTab>(
     'community',
   );
 
-  //   console.error('pct', personalCommunityTab);
   const setEventId = (eventId: string) => {
     _setEventId(eventId);
   };
 
-  const setEvent = async (eventId: string) => {
-    console.error('setEvent', eventId);
-    const { data } = await ApiServices.getEventById(eventId);
-    _setEvent(data);
+  const setEvent = async (event: iEvent) => {
+    _setEvent(event);
   };
 
-  const setCategory = async (categoryId: string) => {
-    const { data } = await ApiServices.getCategoryById(categoryId);
-    _setCategory(data);
+  const setCategory = async (cateogry: iCategory) => {
+    _setCategory(cateogry);
   };
 
   return (
