@@ -10,13 +10,11 @@ import { useAuthenticator } from './context';
 import { useNavigation } from '@react-navigation/native';
 import { SignupRow } from './styles';
 import { Body } from '../../components/Text';
-import { useAppDispatch, useAuth } from '../../store';
 import ApiServices from '../../services/graphql';
-import { loginUser } from '../../store/reducers/auth';
+import { useAuth } from '../../context/UserContext';
 
 const SignIn = (p: any) => {
   const props = p as iAuthScreenProps; // typecasting because props are automatically passed from Authenticator
-  const dispatch = useAppDispatch();
   const { goBack } = useNavigation();
   const { userEmail } = useAuth();
   const {
@@ -25,6 +23,7 @@ const SignIn = (p: any) => {
     password: contextPasword,
     setPassword: setContextPassword,
   } = useAuthenticator();
+  const { signInUser } = useAuth();
 
   const [email, setEmail] = useState<string>(userEmail || contextEmail || '');
   const [password, setPassword] = useState<string>(contextPasword || '');
@@ -50,7 +49,7 @@ const SignIn = (p: any) => {
           const { data: user } = await ApiServices.getUserByEmail(email);
           const u = user?.listUsers?.items[0];
           if (!u) return;
-          dispatch(loginUser({ userId: u.id, userEmail: u.email }));
+          signInUser(u.id, u.email);
           goBack();
         }
       }

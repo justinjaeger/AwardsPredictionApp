@@ -7,8 +7,9 @@ import { Provider as StoreProvider } from 'react-redux';
 // import { PersistGate } from 'redux-persist/integration/react';
 import Navigation from './navigation';
 import theme from './theme';
-import { persistor, store } from './store';
+import { store } from './store';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { UserProvider } from './context/UserContext';
 
 const queryClient = new QueryClient();
 
@@ -20,7 +21,9 @@ const App = () => {
         <StoreProvider store={store}>
           {/* <PersistGate loading={null} persistor={persistor}> */}
           <ApplicationProvider {...eva} theme={{ ...theme }}>
-            <Navigation />
+            <UserProvider>
+              <Navigation />
+            </UserProvider>
           </ApplicationProvider>
           {/* </PersistGate> */}
         </StoreProvider>

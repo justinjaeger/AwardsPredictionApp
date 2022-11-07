@@ -1,7 +1,6 @@
 import React, { useLayoutEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import Snackbar from '../../components/Snackbar';
-import { useAuth } from '../../store';
 import { useNavigation } from '@react-navigation/native';
 import FormInput from '../../components/Inputs/FormInput';
 import { EvaStatus } from '@ui-kitten/components/devsupport/typings';
@@ -9,6 +8,7 @@ import { SubmitButton } from '../../components/Buttons';
 import ApiServices from '../../services/graphql';
 import { useAsyncEffect } from '../../util/hooks';
 import { GetUserQuery } from '../../API';
+import { useAuth } from '../../context/UserContext';
 
 const ChangeUsername = () => {
   const { userId } = useAuth();

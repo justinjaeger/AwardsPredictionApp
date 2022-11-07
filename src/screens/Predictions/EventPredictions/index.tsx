@@ -8,13 +8,13 @@ import { useTypedNavigation } from '../../../util/hooks';
 import sortByObjectOrder from '../../../util/sortByObjectOrder';
 import { useCategory } from '../../../context/CategoryContext';
 import PosterFromTmdbId from '../../../components/Images/PosterFromTmdbId';
-import { useAuth } from '../../../store';
 import { iCategory, iEvent, iPrediction } from '../../../store/types';
 import PredictionTabsNavigator from '../../../navigation/PredictionTabsNavigator';
 import { Body } from '../../../components/Text';
 import { useQuery } from '@tanstack/react-query';
 import getCommunityPredictionsByEvent from '../../../services/queryFuncs/getCommunityPredictionsByEvent';
 import getPersonalPredictionsByEvent from '../../../services/queryFuncs/getPersonalPredictionsByEvent';
+import { useAuth } from '../../../context/UserContext';
 
 const CategorySelect = (props: { tab: 'personal' | 'community' }) => {
   const { tab } = props;

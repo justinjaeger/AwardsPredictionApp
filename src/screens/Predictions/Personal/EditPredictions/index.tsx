@@ -3,7 +3,6 @@ import { View } from 'react-native';
 import { TouchableText } from '../../../../components/Buttons';
 import { PersonalParamList } from '../../../../navigation/types';
 import ApiServices from '../../../../services/graphql';
-import { useAuth } from '../../../../store';
 import { useTypedNavigation } from '../../../../util/hooks';
 import { useCategory } from '../../../../context/CategoryContext';
 import { iPrediction, usePredictions } from '../../../../context/PredictionContext';
@@ -15,6 +14,7 @@ import {
 } from 'react-native-draggable-flatlist';
 import { PosterSize } from '../../../../constants/posterDimensions';
 import ContenderListItem from '../../../../components/List/ContenderList/ContenderListItem';
+import { useAuth } from '../../../../context/UserContext';
 
 // NOTE: Similar to Add Contenders, somewhat
 const EditPredictions = () => {

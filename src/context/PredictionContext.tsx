@@ -4,9 +4,9 @@ import { CategoryType } from '../API';
 import { getCategorySlots } from '../constants/categories';
 import { PredictionsParamList } from '../navigation/types';
 import ApiServices from '../services/graphql';
-import { useAuth } from '../store';
 import { useAsyncEffect, useTypedNavigation } from '../util/hooks';
 import { useCategory } from './CategoryContext';
+import { useAuth } from './UserContext';
 
 export type iNumberPredicting = {
   predictingWin: number;

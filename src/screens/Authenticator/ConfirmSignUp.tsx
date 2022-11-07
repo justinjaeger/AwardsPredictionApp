@@ -8,8 +8,7 @@ import Snackbar from '../../components/Snackbar';
 import { useAuthenticator } from './context';
 import { useNavigation } from '@react-navigation/native';
 import ApiServices from '../../services/graphql';
-import { loginUser } from '../../store/reducers/auth';
-import { useAppDispatch } from '../../store';
+import { useAuth } from '../../context/UserContext';
 
 const ConfirmSignUp = (p: any) => {
   const props = p as iAuthScreenProps; // typecasting because props are automatically passed from Authenticator
@@ -18,8 +17,8 @@ const ConfirmSignUp = (p: any) => {
     setEmail: setContextEmail,
     password: contextPassword,
   } = useAuthenticator();
-  const dispatch = useAppDispatch();
   const { goBack } = useNavigation();
+  const { signInUser } = useAuth();
 
   const [code, setCode] = useState<string>('');
   const [email, setEmail] = useState<string>(contextEmail || '');
@@ -48,7 +47,7 @@ const ConfirmSignUp = (p: any) => {
         if (!u) return; // maybe display status message
         AuthServices.signIn(email, password).then((res) => {
           if (res.status === 'success') {
-            dispatch(loginUser({ userId: u.id, userEmail: u.email }));
+            signInUser(u.id, u.email);
             goBack();
           }
         });

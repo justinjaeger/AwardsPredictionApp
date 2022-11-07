@@ -6,11 +6,11 @@ import ContenderListItem from '../../../../components/List/ContenderList/Contend
 import { PosterSize } from '../../../../constants/posterDimensions';
 import { PersonalParamList } from '../../../../navigation/types';
 import ApiServices from '../../../../services/graphql';
-import { useAuth } from '../../../../store';
 import { useSubscriptionEffect, useTypedNavigation } from '../../../../util/hooks';
 import { removeFromArray } from '../../../../util/removeFromArray';
 import { useCategory } from '../../../../context/CategoryContext';
 import { usePredictions } from '../../../../context/PredictionContext';
+import { useAuth } from '../../../../context/UserContext';
 
 // TODO: really, this is adding OR deleting contenders
 // NOTE: this is very similar to Contenders, some code is duplicated

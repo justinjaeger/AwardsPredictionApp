@@ -37,6 +37,6 @@ export const useAppDispatch: () => AppDispatch = useDispatch;
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 // SELECTORS: how to access data from redux store
-export const useAuth = () => useAppSelector((state: RootState) => state.auth);
+// export const useAuth = () => useAppSelector((state: RootState) => state.auth);
 export const usePredictions = () =>
   useAppSelector((state: RootState) => state.predictions);

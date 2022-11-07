@@ -9,10 +9,10 @@ import ForgotPassword from './ForgotPassword';
 import RequireNewPassword from './RequireNewPassword';
 import SignIn from './SignIn';
 import { useNavigation } from '@react-navigation/native';
-import { useAuth } from '../../store';
 import { ScrollView, View } from 'react-native';
 import COLORS from '../../constants/colors';
 import SignedIn from './SignedIn';
+import { useAuth } from '../../context/UserContext';
 
 const headerTitles: { [key in iAuthState]: string } = {
   signIn: 'Log In',
