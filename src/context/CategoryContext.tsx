@@ -1,4 +1,6 @@
+import { useNavigation } from '@react-navigation/native';
 import React, { createContext, useContext, useState } from 'react';
+import { CategoryType } from '../API';
 import { iCategory, iEvent } from '../store/types';
 
 /**
@@ -16,6 +18,7 @@ type iCategoryContext = {
   setCategory: (category: iCategory) => Promise<void>;
   personalCommunityTab: iPersonalCommunityTab;
   setPersonalCommunityTab: (d: iPersonalCommunityTab) => void;
+  displayContenderInfo: (contenderId: string, personTmdbId?: number) => void;
 };
 
 const CategoryContext = createContext<iCategoryContext>({
@@ -27,9 +30,12 @@ const CategoryContext = createContext<iCategoryContext>({
   setCategory: () => new Promise(() => {}),
   personalCommunityTab: 'community',
   setPersonalCommunityTab: () => {},
+  displayContenderInfo: () => {},
 });
 
 export const CategoryProvider = (props: { children: React.ReactNode }) => {
+  const navigation = useNavigation();
+
   const [eventId, _setEventId] = useState<string>();
   const [event, _setEvent] = useState<iEvent>();
   const [category, _setCategory] = useState<iCategory>();
@@ -49,6 +55,33 @@ export const CategoryProvider = (props: { children: React.ReactNode }) => {
     _setCategory(cateogry);
   };
 
+  const displayFilm = (contenderId: string) => {
+    if (!category) return;
+    navigation.navigate('ContenderDetails', {
+      contenderId,
+      categoryType: category.type,
+    });
+  };
+
+  const displayPerformance = async (contenderId: string, personTmdb: number) => {
+    if (!category) return;
+    navigation.navigate('ContenderDetails', {
+      contenderId,
+      categoryType: category.type,
+      personTmdb,
+    });
+  };
+
+  const displayContenderInfo = (contenderId: string, personTmdb?: number) => {
+    if (!category) return;
+    const cType = CategoryType[category.type];
+    if (cType === CategoryType.PERFORMANCE && personTmdb) {
+      displayPerformance(contenderId, personTmdb);
+    } else {
+      displayFilm(contenderId);
+    }
+  };
+
   return (
     <CategoryContext.Provider
       value={{
@@ -60,6 +93,7 @@ export const CategoryProvider = (props: { children: React.ReactNode }) => {
         setPersonalCommunityTab,
         eventId,
         setEventId,
+        displayContenderInfo,
       }}
     >
       {props.children}

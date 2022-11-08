@@ -13,7 +13,10 @@ export type PredictionsParamList = {
   Profile: undefined;
   EventSelect: undefined;
   EventPredictions: undefined;
-  Category: undefined;
+  Category: {
+    isSelectable?: boolean;
+    onPressItem?: (contenderId: string) => void;
+  };
   ContenderDetails: {
     categoryType: CategoryType;
     contenderId: string;

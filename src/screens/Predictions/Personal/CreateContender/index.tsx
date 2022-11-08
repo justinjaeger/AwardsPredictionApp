@@ -8,28 +8,30 @@ import CreateSong from './CreateSong';
 import { useTypedNavigation } from '../../../../util/hooks';
 import { AwardsBody, CategoryType } from '../../../../API';
 import { useCategory } from '../../../../context/CategoryContext';
+import { iCategory, iEvent } from '../../../../store/types';
 
 // TODO: should only be able to do this if logged in
 const CreateContender = () => {
-  const { category } = useCategory();
+  const { category: _category, event: _event } = useCategory();
   const navigation = useTypedNavigation<CreateContenderParamList>();
 
-  const cat = category?.getCategory;
+  const category = _category as iCategory;
+  const event = _event as iEvent;
 
-  // Set header title
+  // Set header title (TODO: delete)
   useLayoutEffect(() => {
-    const e = cat?.event;
-    if (!e || !cat) return;
-    const categoryList = getAwardsBodyCategories(AwardsBody[e.awardsBody], e.year);
-    const headerTitle = `Add ${categoryList[cat.name]?.name || 'Contender'}`;
+    const categoryList = getAwardsBodyCategories(
+      AwardsBody[event.awardsBody],
+      event.year,
+    );
+    const headerTitle = `Add ${categoryList[category.name]?.name || 'Contender'}`;
     navigation.setOptions({
       headerTitle,
     });
   }, [navigation]);
 
   const CreateComponent = (() => {
-    if (!cat) return null;
-    switch (CategoryType[cat.type]) {
+    switch (CategoryType[category.type]) {
       case CategoryType.FILM:
         return <CreateFilm />;
       case CategoryType.PERFORMANCE:

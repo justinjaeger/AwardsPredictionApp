@@ -1,5 +1,13 @@
 import { AwardsBody, CategoryName, CategoryType, EventType } from '../API';
 
+export enum QueryKeys {
+  EVENTS = 'events',
+  PERSONAL_CATEGORY = 'personal-predictions-by-category',
+  PERSONAL_EVENT = 'personal-predictions-by-event',
+  COMMUNITY_CATEGORY = 'community-predictions-by-category',
+  COMMUNITY_EVENT = 'community-predictions-by-event',
+}
+
 export type iNumberPredicting = {
   predictingWin: number;
   predictingNom: number;

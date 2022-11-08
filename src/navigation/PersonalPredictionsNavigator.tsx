@@ -35,7 +35,7 @@ const PersonalPredictionsNavigator = () => (
       name="AddPredictions"
       component={AddPredictions}
       options={{
-        headerTitle: 'Add Contenders',
+        headerTitle: 'Add Predictions',
         headerLeft: BackButton,
       }}
     />

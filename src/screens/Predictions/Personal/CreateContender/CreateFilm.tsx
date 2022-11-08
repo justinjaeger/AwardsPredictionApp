@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SubmitButton } from '../../../../components/Buttons';
 import SearchInput from '../../../../components/Inputs/SearchInput';
 import SearchResultsList from '../../../../components/List/SearchResultsList';
@@ -15,23 +15,55 @@ import { CreateContenderParamList } from '../../../../navigation/types';
 import ApiServices from '../../../../services/graphql';
 import { CategoryType, GetMovieQuery } from '../../../../API';
 import { useCategory } from '../../../../context/CategoryContext';
+import { iCategory, iEvent, QueryKeys } from '../../../../store/types';
+import { useIsFetching, useMutation, useQueryClient } from '@tanstack/react-query';
 
 const MAX_CHAR_COUNT = 100;
 
 // TODO: should only be able to do this if logged in
 const CreateFilm = () => {
-  const { category } = useCategory();
+  const { category: _category, event: _event } = useCategory();
   const navigation = useTypedNavigation<CreateContenderParamList>();
+  const queryClient = useQueryClient();
+  const isFetching = useIsFetching();
+
+  const category = _category as iCategory;
+  const event = _event as iEvent;
+
+  // when adding a contender to the list of overall contenders
+  const createContender = useMutation({
+    mutationFn: async (params: {
+      eventId: string;
+      categoryId: string;
+      movieId: string;
+    }) => {
+      return ApiServices.getOrCreateFilmContender({
+        eventId: params.eventId,
+        categoryId: params.categoryId,
+        movieId: params.movieId,
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.COMMUNITY_CATEGORY] });
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.COMMUNITY_EVENT] });
+    },
+  });
 
   const [searchResults, setSearchResults] = useState<iSearchData>([]);
   const [movie, setMovie] = useState<GetMovieQuery>();
   const [loading, setLoading] = useState<boolean>(false);
   const [searchMessage, setSearchMessage] = useState<string>('');
+  const [navigateBackWhenDoneFetching, setDone] = useState<boolean>(false);
 
-  const cat = category?.getCategory;
-  if (!cat) return null;
+  // fires when everything is saved
+  useEffect(() => {
+    if (isFetching === 0 && navigateBackWhenDoneFetching === true) {
+      navigation.goBack();
+      setDone(false);
+    }
+  }, [isFetching]);
 
-  const minReleaseYear = cat.event.year - 1;
+  const minReleaseYear = event.year - 1;
 
   const handleSearch = (s: string) => {
     if (s === '') {
@@ -54,7 +86,8 @@ const CreateFilm = () => {
       const movieId = movie?.getMovie?.id;
       if (movieId) {
         const { data: contender } = await ApiServices.getOrCreateFilmContender({
-          categoryId: cat.id,
+          eventId: event.id,
+          categoryId: category.id,
           movieId,
         });
         if (!contender) {
@@ -71,14 +104,16 @@ const CreateFilm = () => {
     const m = movie?.getMovie;
     if (!m) return;
     setLoading(true);
-    await ApiServices.getOrCreateFilmContender({
-      categoryId: cat.id,
+    // TODO: make into mutation
+    await createContender.mutate({
+      eventId: event.id,
+      categoryId: category.id,
       movieId: m.id,
     });
     setLoading(false);
-    navigation.goBack();
     const tmdbMovie = await TmdbMovieCache.get(m.tmdbId);
     Snackbar.success(`Added ${tmdbMovie?.title || 'film'} to predictions`);
+    setDone(true);
   };
 
   const removeFilm = () => {
@@ -110,7 +145,7 @@ const CreateFilm = () => {
           <SubmitButton text={'Confirm'} onPress={onConfirmContender} loading={loading} />
           <ContenderDetails
             movieTmdbId={m.tmdbId}
-            categoryType={CategoryType[cat.type]}
+            categoryType={CategoryType[category.type]}
           />
         </>
       ) : (

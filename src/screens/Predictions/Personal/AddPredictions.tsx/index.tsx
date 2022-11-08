@@ -1,118 +1,131 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollView } from 'react-native';
-import { CategoryType, ListContendersQuery } from '../../../../API';
+import { CategoryType } from '../../../../API';
 import { TouchableText } from '../../../../components/Buttons';
 import ContenderListItem from '../../../../components/List/ContenderList/ContenderListItem';
 import { PosterSize } from '../../../../constants/posterDimensions';
 import { PersonalParamList } from '../../../../navigation/types';
 import ApiServices from '../../../../services/graphql';
-import { useSubscriptionEffect, useTypedNavigation } from '../../../../util/hooks';
+import { useTypedNavigation } from '../../../../util/hooks';
 import { removeFromArray } from '../../../../util/removeFromArray';
 import { useCategory } from '../../../../context/CategoryContext';
-import { usePredictions } from '../../../../context/PredictionContext';
 import { useAuth } from '../../../../context/UserContext';
+import { iCategory, iEvent, iPrediction, QueryKeys } from '../../../../store/types';
+import {
+  useIsFetching,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
+import getPersonalPredictionsByCategory from '../../../../services/queryFuncs/getPersonalPredictionsByCategory';
+import getCommunityPredictionsByCategory from '../../../../services/queryFuncs/getCommunityPredictionsByCategory';
+import {
+  iPredictionData,
+  iPredictionSetParams,
+} from '../../../../services/graphql/prediction';
+import { Body } from '../../../../components/Text';
 
 // TODO: really, this is adding OR deleting contenders
 // NOTE: this is very similar to Contenders, some code is duplicated
 
 const AddPredictions = () => {
   const navigation = useTypedNavigation<PersonalParamList>();
-  const { userId } = useAuth();
-  const { predictionData } = usePredictions();
-  const { event, category } = useCategory();
+  const { userId: _userId } = useAuth();
+  const { category: _category, event: _event } = useCategory();
+  const queryClient = useQueryClient();
+  const isFetching = useIsFetching();
 
-  const initialPredictionData = predictionData;
+  const category = _category as iCategory;
+  const event = _event as iEvent;
+  const userId = _userId as string;
+
+  const { data: personalPredictions, isLoading: isLoadingPersonal } = useQuery({
+    queryKey: [QueryKeys.PERSONAL_CATEGORY],
+    queryFn: () => getPersonalPredictionsByCategory(category.id, userId),
+  });
+
+  const { data: communityPredictions, isLoading: isLoadingCommunity } = useQuery({
+    queryKey: [QueryKeys.COMMUNITY_CATEGORY],
+    queryFn: () => getCommunityPredictionsByCategory(category),
+  });
+
+  const updatePredictions = useMutation({
+    mutationFn: async (params: {
+      predictionSetParams: iPredictionSetParams;
+      predictionData: iPredictionData;
+    }) => {
+      return ApiServices.createOrUpdatePredictions(
+        params.predictionSetParams,
+        params.predictionData,
+      );
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.PERSONAL_CATEGORY] });
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.PERSONAL_EVENT] });
+    },
+  });
 
   // TODO: can do this screen AFTER global predictions are gotten, because we need these
+  // Need global predictions AND personal per category
   const [loading, setLoading] = useState<boolean>(false);
-  const [contenders, setContenders] = useState<ListContendersQuery>();
-  const [selectedContenderIds, setSelectedContenderIds] = useState<string[]>([]);
-  const [initiallySelectedContenderIds, setInitiallySelectedContenderIds] = useState<
-    string[]
-  >([]);
+  const [navigateBackWhenDoneFetching, setDone] = useState<boolean>(false);
+  const [selectedPredictions, setSelectedPredictions] = useState<iPrediction[]>([]);
 
-  const cat = category?.getCategory;
-  const categoryId = cat?.id;
-
-  useSubscriptionEffect(async () => {
-    if (!userId || !categoryId) return;
-    // get / set all contenders
-    const { data: cs } = await ApiServices.getContendersByCategory(cat.id);
-    // TODO (going to have this done in Contender): sort by highest global ranking
-
-    // because we can't set this before the selected contenders are set, if there are any
-    const executeBeforeReturn = () => {
-      setContenders(cs);
-    };
-
-    // get list of categoryIds of user's personal selections
-    const { data: pSet } = await ApiServices.getPredictionsSet({
-      userId,
-      categoryId,
-      eventId: cat.event.id,
-    });
-    const pSetId = pSet?.getPredictionSet?.id;
-    if (!pSetId) {
-      executeBeforeReturn();
-      return;
-    } // means user just hasn't made predictions
-    const { data } = await ApiServices.getPredictionsByPredictionSetId(pSetId);
-    const predictions = data?.listPredictions;
-    if (!predictions) {
-      executeBeforeReturn();
-      return;
+  // we want to copy it to a local state to easily edit it
+  useEffect(() => {
+    if (personalPredictions) {
+      setSelectedPredictions(personalPredictions);
     }
-    const sortedContenderIds = (predictions?.items || [])
-      .sort((a, b) => {
-        if (!a || !b) return 0;
-        return a.ranking > b.ranking ? 1 : -1;
-      })
-      .map((p) => p?.contenderPredictionsId || '');
-    setInitiallySelectedContenderIds(sortedContenderIds);
-    setSelectedContenderIds(sortedContenderIds);
-    executeBeforeReturn();
-  }, [cat]);
+  }, [personalPredictions]);
+
+  // fires when everything is saved
+  useEffect(() => {
+    if (isFetching === 0 && navigateBackWhenDoneFetching === true) {
+      navigation.goBack();
+      setDone(false);
+    }
+  }, [isFetching]);
+
+  // Declare contender id arrays
+  const selectedContenderIds = selectedPredictions.map((sp) => sp.contenderId);
+  const initiallySelectedContenderIds = (personalPredictions || []).map(
+    (pp) => pp.contenderId,
+  );
 
   const onPressFilm = async (contenderId: string) => {
-    if (!cat) return;
     navigation.navigate('ContenderDetails', {
-      categoryType: cat.type,
-      contenderId,
+      categoryType: category.type,
+      contenderId: contenderId,
     });
   };
 
-  const onPressPerformance = async (contenderId: string, personId: string) => {
-    if (!cat) return;
-    const { data } = await ApiServices.getPerson(personId);
-    if (!data?.getPerson) return;
-    const personTmdb = data.getPerson.tmdbId;
+  const onPressPerformance = async (contenderId: string, personTmdbId: number) => {
     navigation.navigate('ContenderDetails', {
-      contenderId,
-      categoryType: cat.type,
-      personTmdb,
+      contenderId: contenderId,
+      categoryType: category.type,
+      personTmdb: personTmdbId,
     });
   };
 
-  const onPressThumbnail = (contenderId: string, personId?: string) => {
-    if (!category?.getCategory) return;
-    const cType = CategoryType[category?.getCategory.type];
-    if (cType === CategoryType.PERFORMANCE && personId) {
-      onPressPerformance(contenderId, personId);
+  const onPressThumbnail = (contenderId: string, personTmdbId?: number) => {
+    const cType = CategoryType[category.type];
+    if (cType === CategoryType.PERFORMANCE && personTmdbId) {
+      onPressPerformance(contenderId, personTmdbId);
     } else {
       onPressFilm(contenderId);
     }
   };
 
-  const onPressItem = async (contenderId: string) => {
+  const onPressItem = async (prediction: iPrediction) => {
+    const contenderId = prediction.contenderId;
     const isAlreadySelected = selectedContenderIds.includes(contenderId);
     const newSelected = isAlreadySelected
-      ? removeFromArray<string>(selectedContenderIds, contenderId)
-      : [...selectedContenderIds, contenderId];
-    setSelectedContenderIds(newSelected);
+      ? removeFromArray<iPrediction>(selectedPredictions, prediction)
+      : [...selectedPredictions, prediction];
+    setSelectedPredictions(newSelected);
   };
 
   const onSave = async () => {
-    if (!userId || !categoryId) return;
     setLoading(true);
     const addedContenderIds = selectedContenderIds.filter(
       (id) => !initiallySelectedContenderIds.includes(id),
@@ -130,20 +143,16 @@ const AddPredictions = () => {
       contenderId: c,
       ranking: i + 1,
     }));
-    const eventId = cat?.eventCategoriesId;
-    if (!eventId) {
-      return console.error('no eventId property on category');
-    }
-    await ApiServices.createOrUpdatePredictions(
-      { userId, categoryId, eventId },
-      newPredictionData,
-    );
-    // TODO: must update PredictionContext (refresh it basically)
-    navigation.goBack();
-    setLoading(false);
+    await updatePredictions.mutate({
+      predictionSetParams: { userId, categoryId: category.id, eventId: event.id },
+      predictionData: newPredictionData,
+    });
+    setDone(true);
   };
 
-  const _contenders = contenders?.listContenders;
+  if (!communityPredictions || isLoadingPersonal || isLoadingCommunity) {
+    return null;
+  }
 
   return (
     <ScrollView
@@ -154,13 +163,16 @@ const AddPredictions = () => {
         width: '100%',
       }}
     >
-      {_contenders?.items.map((c, i) => {
-        const contenderId = c?.id;
-        if (!contenderId) return null;
-        const selected = selectedContenderIds.includes(contenderId);
+      {communityPredictions.length === 0 ? (
+        <Body>No Predictions yet! Add some</Body>
+      ) : null}
+      {communityPredictions.map((cp, i) => {
+        const selected = selectedPredictions
+          .map((sp) => sp.contenderId)
+          .includes(cp.contenderId);
         return (
           <ContenderListItem
-            contenderId={contenderId}
+            prediction={cp}
             ranking={i + 1}
             onPressItem={onPressItem}
             onPressThumbnail={onPressThumbnail}
@@ -171,9 +183,7 @@ const AddPredictions = () => {
           />
         );
       })}
-      {_contenders && _contenders.items.length > 0 ? (
-        <TouchableText text={'Save'} onPress={onSave} style={{ margin: 10 }} />
-      ) : null}
+      <TouchableText text={'Save'} onPress={onSave} style={{ margin: 10 }} />
       <TouchableText
         text={'Submit a contender'}
         onPress={() => {

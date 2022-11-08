@@ -33,6 +33,7 @@ const FilmListItem = (props: iFilmListItemProps) => {
   // TODO: based on category.name (CategoryName), display a distinct piece of information with the film like who the directors or screenwriters are
 
   const [tmdbMovie, setTmdbMovie] = useState<iCachedTmdbMovie | undefined>();
+  console.error('tmdbMovie', tmdbMovie);
 
   useAsyncEffect(async () => {
     const { status, data } = await TmdbServices.getTmdbMovie(tmdbMovieId);

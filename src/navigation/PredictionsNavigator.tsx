@@ -7,7 +7,6 @@ import { PredictionsParamList } from './types';
 import Category from '../screens/Predictions/Category';
 import EventSelect from '../screens/Predictions/EventSelect';
 import EventPredictions from '../screens/Predictions/EventPredictions';
-import { PredictionProvider } from '../context/PredictionContext';
 import ProfileNavigator from './ProfileNavigator';
 import PersonalPredictionsNavigator from './PersonalPredictionsNavigator';
 
@@ -71,9 +70,7 @@ const PredictionsNavigator = () => {
 const PredictionsNavigatorWrapper = () => {
   return (
     <CategoryProvider>
-      <PredictionProvider>
-        <PredictionsNavigator />
-      </PredictionProvider>
+      <PredictionsNavigator />
     </CategoryProvider>
   );
 };

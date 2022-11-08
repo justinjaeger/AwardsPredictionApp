@@ -15,11 +15,15 @@ import { CategoryType, GetMovieQuery, GetPersonQuery } from '../../../../API';
 import { useTypedNavigation } from '../../../../util/hooks';
 import { CreateContenderParamList } from '../../../../navigation/types';
 import { useCategory } from '../../../../context/CategoryContext';
+import { iCategory, iEvent } from '../../../../store/types';
 
 // TODO: should only be able to do this if logged in
 const CreatePerformance = () => {
-  const { category } = useCategory();
+  const { category: _category, event: _event } = useCategory();
   const navigation = useTypedNavigation<CreateContenderParamList>();
+
+  const category = _category as iCategory;
+  const event = _event as iEvent;
 
   const [personSearchResults, setPersonSearchResults] = useState<iSearchData>([]);
   const [movieSearch, setMovieSearch] = useState<iSearchData>([]);
@@ -28,10 +32,7 @@ const CreatePerformance = () => {
   const [person, setPerson] = useState<GetPersonQuery>();
   const [movie, setMovie] = useState<GetMovieQuery>();
 
-  const cat = category?.getCategory;
-  if (!cat) return null;
-
-  const minReleaseYear = cat.event.year - 1;
+  const minReleaseYear = event.year - 1;
 
   const movieId = movie?.getMovie?.id;
   const movieStudio = movie?.getMovie?.studio;
@@ -88,7 +89,7 @@ const CreatePerformance = () => {
     const { data: person } = await ApiServices.getOrCreatePerson(personTmdbId);
     if (!person) return;
     await ApiServices.getOrCreatePerformance({
-      categoryId: cat.id,
+      categoryId: category.id,
       movieId,
       personId,
     });
@@ -129,7 +130,7 @@ const CreatePerformance = () => {
                 personTmdbId={personTmdbId}
                 movieTmdbId={movieTmdbId}
                 movieStudio={movieStudio || undefined}
-                categoryType={CategoryType[cat.type]}
+                categoryType={CategoryType[category.type]}
               />
               <SubmitButton
                 text={'Confirm'}
@@ -141,7 +142,7 @@ const CreatePerformance = () => {
             <>
               <ContenderDetails
                 personTmdbId={personTmdbId}
-                categoryType={CategoryType[cat.type]}
+                categoryType={CategoryType[category.type]}
               />
               <Body>Which movie?</Body>
               <SearchResultsList data={creditsData} />
@@ -152,7 +153,9 @@ const CreatePerformance = () => {
         <>
           <SearchInput
             placeholder={
-              cat.type === CategoryType.PERFORMANCE ? 'Search Actors' : 'Search Movies'
+              category.type === CategoryType.PERFORMANCE
+                ? 'Search Actors'
+                : 'Search Movies'
             }
             handleSearch={(s: string) => handleSearch(s)}
             style={{ width: '80%' }}

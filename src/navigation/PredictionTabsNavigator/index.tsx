@@ -7,6 +7,7 @@ const PredictionTabsNavigator = (
   community: ComponentType<unknown>,
   personal: ComponentType<unknown>,
 ) => {
+  console.error('PredictionTabsNavigator');
   const { personalCommunityTab, setPersonalCommunityTab } = useCategory();
   const layout = useWindowDimensions();
 

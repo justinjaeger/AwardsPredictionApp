@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TouchableHighlight } from 'react-native';
 import { CategoryType } from '../../../API';
 import COLORS from '../../../constants/colors';
@@ -20,8 +20,8 @@ type iContenderListItemProps = {
     isActive: boolean;
     drag: () => void;
   };
-  onPressThumbnail?: (contenderId: string) => void;
-  onPressItem?: (contenderId: string) => void;
+  onPressThumbnail?: (contenderId: string, personTmdbId?: number) => void;
+  onPressItem?: (prediction: iPrediction) => void;
 };
 
 const ContenderListItem = (props: iContenderListItemProps) => {
@@ -41,31 +41,34 @@ const ContenderListItem = (props: iContenderListItemProps) => {
 
   const [selected, setSelected] = useState<boolean>(initiallySelected);
 
-  const contenderId = prediction?.contenderId;
-  const categoryType = category?.getCategory?.type;
-  const categoryName = category?.getCategory?.name;
-  const tmdbMovieId = prediction?.contenderMovie?.tmdbId;
-  const tmdbPersonId = prediction?.contenderPerson?.tmdbId;
-  const movieStudio = prediction?.contenderMovie?.studio;
+  useEffect(() => {
+    setSelected(initiallySelected);
+  }, [initiallySelected]);
+
+  if (!category) return null;
+
+  const tmdbMovieId = prediction.contenderMovie?.tmdbId;
+  const tmdbPersonId = prediction.contenderPerson?.tmdbId;
+  const movieStudio = prediction.contenderMovie?.studio;
 
   const onPress = () => {
     if (disabled) return;
-    onPressThumbnail && onPressThumbnail(contenderId);
+    onPressThumbnail && onPressThumbnail(prediction.contenderId);
   };
 
-  if (!categoryType || !tmdbMovieId || !categoryName) {
-    return <></>;
+  if (!tmdbMovieId) {
+    return null;
   }
 
   const _size = size || PosterSize.SMALL;
 
   let component: JSX.Element = <></>;
-  switch (CategoryType[categoryType]) {
+  switch (CategoryType[category.type]) {
     case CategoryType.FILM:
       component = (
         <FilmListItem
           communityRankings={prediction.communityRankings}
-          categoryName={categoryName}
+          categoryName={category.name}
           tmdbMovieId={tmdbMovieId}
           movieStudio={movieStudio || undefined}
           ranking={ranking}
@@ -107,7 +110,7 @@ const ContenderListItem = (props: iContenderListItemProps) => {
         if (isSelectable) {
           setSelected(!selected);
         }
-        onPressItem && onPressItem(contenderId);
+        onPressItem && onPressItem(prediction);
       }}
       style={{
         backgroundColor: selected ? COLORS.success : 'transparent',

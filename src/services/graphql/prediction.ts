@@ -19,7 +19,7 @@ import * as queries from '../../graphql/queries';
 import { GraphqlAPI, handleError, iApiResponse } from '../utils';
 
 // there can only be one prediction set from these parameters
-type iPredictionSetParams = {
+export type iPredictionSetParams = {
   userId: string;
   categoryId: string;
   eventId: string;
@@ -203,7 +203,32 @@ export const getPersonalPredictionsByEvent = async (
     }
     return { status: 'success', data: maybePreSets };
   } catch (err) {
-    return handleError('error getting personal predictions', err);
+    return handleError('error getting personal predictions by event', err);
+  }
+};
+
+// TODO: make lambda function since sorta big
+export const getPersonalPredictionsByCategory = async (
+  categoryId: string,
+  userId: string,
+): Promise<iApiResponse<ListPredictionSetsQuery>> => {
+  try {
+    //
+    const { data: maybePreSets, errors } = await GraphqlAPI<
+      ListPredictionSetsQuery,
+      ListPredictionSetsQueryVariables
+    >(queries.listPredictionSets, {
+      filter: {
+        predictionSetCategoryId: { eq: categoryId },
+        predictionSetUserId: { eq: userId },
+      },
+    });
+    if (!maybePreSets?.listPredictionSets) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data: maybePreSets };
+  } catch (err) {
+    return handleError('error getting personal predictions by category', err);
   }
 };
 

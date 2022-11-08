@@ -18,9 +18,8 @@ const PosterFromMovieTmdbId = (props: iPosterFromTmdbProps & { movieTmdbId: numb
   const [movieDetails, setMovieDetails] = useState<iCachedTmdbMovie>();
 
   useAsyncEffect(async () => {
-    TmdbServices.getTmdbMovie(movieTmdbId).then((res) => {
-      setMovieDetails(res.data);
-    });
+    const { data } = await TmdbServices.getTmdbMovie(movieTmdbId);
+    setMovieDetails(data);
   }, [movieTmdbId]);
 
   const { posterPath: path, title } = movieDetails || {};
@@ -71,4 +70,4 @@ const PosterFromTmdbId = (
     <PosterFromMovieTmdbId {...props} />
   );
 
-export default PosterFromTmdbId;
+export default React.memo(PosterFromTmdbId);

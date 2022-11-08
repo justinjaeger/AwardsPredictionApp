@@ -1,3 +1,4 @@
+import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 import { ScrollView, TouchableHighlight, View } from 'react-native';
 import { TouchableText } from '../../../components/Buttons';
@@ -6,29 +7,51 @@ import { BodyLarge } from '../../../components/Text';
 import COLORS from '../../../constants/colors';
 import { PosterSize } from '../../../constants/posterDimensions';
 import { useCategory } from '../../../context/CategoryContext';
-import { iPrediction, usePredictions } from '../../../context/PredictionContext';
+import { useAuth } from '../../../context/UserContext';
+import PredictionTabsNavigator from '../../../navigation/PredictionTabsNavigator';
 import { PredictionsParamList } from '../../../navigation/types';
+import getCommunityPredictionsByCategory from '../../../services/queryFuncs/getCommunityPredictionsByCategory';
+import getPersonalPredictionsByCategory from '../../../services/queryFuncs/getPersonalPredictionsByCategory';
+import { iCategory, iPrediction, QueryKeys } from '../../../store/types';
 import { useTypedNavigation } from '../../../util/hooks';
 
-type iContenderListProps = {
+type iCategoryProps = {
+  personalPredictions: iPrediction[];
+  communityPredictions: iPrediction[];
   isSelectable?: boolean; // makes items appear "on" or "off"
-  onPressItem?: (contenderId: string) => void;
+  onPressItem?: (prediction: iPrediction) => void;
+};
+
+type iContenderListProps = {
+  tab: 'community' | 'personal';
+  isSelectable?: boolean; // makes items appear "on" or "off"
+  onPressItem?: (prediction: iPrediction) => void;
 };
 
 // NOTE: Has a lot in common with ContenderListDraggable
-const Category = (props: iContenderListProps) => {
-  const { isSelectable, onPressItem } = props;
+export const Category = (props: iContenderListProps) => {
+  const { tab, isSelectable, onPressItem } = props;
 
-  const { category, personalCommunityTab } = useCategory();
-  const { predictionData, displayContenderInfo } = usePredictions();
+  const { category: _category, displayContenderInfo } = useCategory();
+  const { userId: _userId } = useAuth();
   const navigation = useTypedNavigation<PredictionsParamList>();
 
-  const ps: iPrediction[] | undefined =
-    category?.getCategory?.id && predictionData[category?.getCategory?.id]
-      ? predictionData[category.getCategory.id] // this might be undefined
-      : [];
+  const category = _category as iCategory;
+  const userId = _userId as string;
 
-  const categoryPredictions = ps || [];
+  const { data: predictions, isLoading } = useQuery({
+    queryKey: [
+      tab === 'community' ? QueryKeys.COMMUNITY_CATEGORY : QueryKeys.PERSONAL_CATEGORY,
+    ],
+    queryFn:
+      tab === 'community'
+        ? () => getCommunityPredictionsByCategory(category)
+        : () => getPersonalPredictionsByCategory(category.id, userId),
+  });
+
+  if (isLoading || !predictions) {
+    return null;
+  }
 
   return (
     <ScrollView
@@ -43,7 +66,7 @@ const Category = (props: iContenderListProps) => {
         }}
       >
         <>
-          {categoryPredictions.length === 0 ? (
+          {predictions && predictions.length === 0 ? (
             <View
               style={{
                 width: '100%',
@@ -55,7 +78,7 @@ const Category = (props: iContenderListProps) => {
               <BodyLarge>No films in this list</BodyLarge>
             </View>
           ) : null}
-          {personalCommunityTab === 'personal' ? (
+          {tab === 'personal' ? (
             <>
               <TouchableText
                 text={'Edit Predictions'}
@@ -66,11 +89,13 @@ const Category = (props: iContenderListProps) => {
               />
             </>
           ) : null}
-          {categoryPredictions.map((prediction, i) => (
+          {predictions.map((prediction, i) => (
             <ContenderListItem
               prediction={prediction}
               ranking={i + 1}
-              onPressItem={onPressItem}
+              onPressItem={(item) => {
+                onPressItem && onPressItem(item);
+              }}
               onPressThumbnail={displayContenderInfo}
               selected={false}
               isSelectable={isSelectable}
@@ -83,4 +108,16 @@ const Category = (props: iContenderListProps) => {
   );
 };
 
-export default Category;
+const TabsWrapper = (props: iCategoryProps) => {
+  const { isSelectable, onPressItem } = props;
+  return PredictionTabsNavigator(
+    () => (
+      <Category tab={'community'} isSelectable={isSelectable} onPressItem={onPressItem} />
+    ),
+    () => (
+      <Category tab={'personal'} isSelectable={isSelectable} onPressItem={onPressItem} />
+    ),
+  );
+};
+
+export default TabsWrapper;

@@ -14,8 +14,7 @@ import { PredictionsParamList } from '../../../navigation/types';
 import { useTypedNavigation } from '../../../util/hooks';
 import sortByObjectOrder from '../../../util/sortByObjectOrder';
 import { useCategory } from '../../../context/CategoryContext';
-import PredictionTabsNavigator from '../../../navigation/PredictionTabsNavigator';
-import { iEvent } from '../../../store/types';
+import { iEvent, QueryKeys } from '../../../store/types';
 import { useQuery } from '@tanstack/react-query';
 import getAllEvents from '../../../services/queryFuncs/getAllEvents';
 
@@ -30,7 +29,7 @@ const EventSelect = () => {
   const navigation = useTypedNavigation<PredictionsParamList>();
 
   const { data: events, isLoading } = useQuery({
-    queryKey: ['allEvents'],
+    queryKey: [QueryKeys.EVENTS],
     queryFn: getAllEvents,
   });
   if (isLoading) return null;
@@ -82,11 +81,4 @@ const EventSelect = () => {
   );
 };
 
-const TabsWrapper = () => {
-  return PredictionTabsNavigator(
-    () => <EventSelect />,
-    () => <EventSelect />,
-  );
-};
-
-export default TabsWrapper;
+export default EventSelect;

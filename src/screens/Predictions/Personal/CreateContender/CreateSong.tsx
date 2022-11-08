@@ -15,13 +15,17 @@ import { CategoryType, GetMovieQuery } from '../../../../API';
 import { useTypedNavigation } from '../../../../util/hooks';
 import { CreateContenderParamList } from '../../../../navigation/types';
 import { useCategory } from '../../../../context/CategoryContext';
+import { iCategory, iEvent } from '../../../../store/types';
 
 const MAX_CHAR_COUNT = 100;
 
 // TODO: should only be able to do this if logged in
 const CreateSong = () => {
-  const { category } = useCategory();
+  const { category: _category, event: _event } = useCategory();
   const navigation = useTypedNavigation<CreateContenderParamList>();
+
+  const category = _category as iCategory;
+  const event = _event as iEvent;
 
   const [searchResults, setSearchResults] = useState<iSearchData>([]);
   const [movie, setMovie] = useState<GetMovieQuery>();
@@ -30,10 +34,7 @@ const CreateSong = () => {
   const [songTitle, setSongTitle] = useState<string>('');
   const [artist, setArtist] = useState<string>('');
 
-  const cat = category?.getCategory;
-  if (!cat) return null;
-
-  const minReleaseYear = cat.event.year - 1;
+  const minReleaseYear = event.year - 1;
 
   const movieId = movie?.getMovie?.id;
   const movieTmdbId = movie?.getMovie?.tmdbId;
@@ -73,7 +74,7 @@ const CreateSong = () => {
     });
     if (!song?.getSong) return;
     await ApiServices.getOrCreateSongContender({
-      categoryId: cat.id,
+      categoryId: category.id,
       movieId,
       songId: song.getSong.id,
     });

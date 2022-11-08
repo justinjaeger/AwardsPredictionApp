@@ -16,6 +16,7 @@ import { getCategorySlots } from '../../constants/categories';
 import { getPredictionsByContender } from './prediction';
 
 type iContenderParams = {
+  eventId: string;
   categoryId: string;
   movieId: string;
   personId?: string;
@@ -35,7 +36,7 @@ export const getContenderById = async (
     }
     return { status: 'success', data };
   } catch (err) {
-    return handleError('error getting movie by id', err);
+    return handleError('error getting contender by id', err);
   }
 };
 
@@ -68,18 +69,19 @@ const getUniqueContenders = async (
     }
     return { status: 'success', data };
   } catch (err) {
-    return handleError('error getting movie by id', err);
+    return handleError('error getting unique contenders', err);
   }
 };
 
 const createContender = async (
   params: iContenderParams,
 ): Promise<iApiResponse<CreateContenderMutation>> => {
-  const { categoryId, movieId, personId, songId } = params;
+  const { eventId, categoryId, movieId, personId, songId } = params;
   // Create input according to params passed
   const input: CreateContenderInput = {
     categoryContendersId: categoryId,
     contenderMovieId: movieId,
+    eventContendersId: eventId,
   };
   if (personId) {
     input.contenderPersonId = personId;
@@ -100,7 +102,7 @@ const createContender = async (
     }
     return { status: 'success', data };
   } catch (err) {
-    return handleError('error creating movie', err);
+    return handleError('error creating contender', err);
   }
 };
 
@@ -133,17 +135,20 @@ const getOrCreateContender = async (
 
 // This is all to enforce uniqueness. Not how above functions are NOT exported
 export const getOrCreateFilmContender = async (params: {
+  eventId: string;
   categoryId: string;
   movieId: string;
 }) => getOrCreateContender(params);
 
 export const getOrCreatePerformance = async (params: {
+  eventId: string;
   categoryId: string;
   movieId: string;
   personId: string;
 }) => getOrCreateContender(params);
 
 export const getOrCreateSongContender = async (params: {
+  eventId: string;
   categoryId: string;
   movieId: string;
   songId: string;
