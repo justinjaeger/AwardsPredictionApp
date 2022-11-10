@@ -156,10 +156,7 @@ const EditPredictions = () => {
 };
 
 const TabsWrapper = () => {
-  return PredictionTabsNavigator(
-    () => <Category tab={'community'} />,
-    () => <EditPredictions />,
-  );
+  return PredictionTabsNavigator(<Category tab={'community'} />, <EditPredictions />);
 };
 
 export default TabsWrapper;

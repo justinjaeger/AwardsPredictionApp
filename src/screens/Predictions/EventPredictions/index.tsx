@@ -40,8 +40,8 @@ const EventPredictions = (props: { tab: 'personal' | 'community' }) => {
 
   if (isLoading) return null;
   if (!predictionData) return null;
-  if (!userId) {
-    return <Body>You miust sign in </Body>;
+  if (!userId && tab === 'personal') {
+    return <Body>You must sign in </Body>;
   }
   if (!event) return null;
 
@@ -56,8 +56,6 @@ const EventPredictions = (props: { tab: 'personal' | 'community' }) => {
     categoryList,
     categoryList.map((cat) => CategoryName[cat.name]),
   );
-
-  console.log('asshole');
 
   return (
     <ScrollView
@@ -90,8 +88,8 @@ const EventPredictions = (props: { tab: 'personal' | 'community' }) => {
 
 const TabsWrapper = () => {
   return PredictionTabsNavigator(
-    () => <EventPredictions tab={'community'} />,
-    () => <EventPredictions tab={'personal'} />,
+    <EventPredictions tab={'community'} />,
+    <EventPredictions tab={'personal'} />,
   );
 };
 

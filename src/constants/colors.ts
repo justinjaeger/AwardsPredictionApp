@@ -8,6 +8,7 @@ const COLORS = {
   lightestGray: theme['grayscale-100'],
   border: theme['grayscale-400'],
   white: theme['grayscale-100'],
+  text: theme['grayscale-800'],
 };
 
 export default COLORS;

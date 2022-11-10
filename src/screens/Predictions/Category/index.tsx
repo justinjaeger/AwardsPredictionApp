@@ -111,12 +111,8 @@ export const Category = (props: iContenderListProps) => {
 const TabsWrapper = (props: iCategoryProps) => {
   const { isSelectable, onPressItem } = props;
   return PredictionTabsNavigator(
-    () => (
-      <Category tab={'community'} isSelectable={isSelectable} onPressItem={onPressItem} />
-    ),
-    () => (
-      <Category tab={'personal'} isSelectable={isSelectable} onPressItem={onPressItem} />
-    ),
+    <Category tab={'community'} isSelectable={isSelectable} onPressItem={onPressItem} />,
+    <Category tab={'personal'} isSelectable={isSelectable} onPressItem={onPressItem} />,
   );
 };
 
