@@ -1,18 +1,21 @@
 import { useQuery } from '@tanstack/react-query';
-import React from 'react';
-import { ScrollView, TouchableHighlight, View } from 'react-native';
-import { TouchableText } from '../../../components/Buttons';
+import React, { useLayoutEffect } from 'react';
+import { ScrollView, TouchableHighlight, useWindowDimensions, View } from 'react-native';
+import { CategoryName } from '../../../API';
+import { IconButtonOutlined } from '../../../components/Buttons/IconButton';
 import ContenderListItem from '../../../components/List/ContenderList/ContenderListItem';
+import MovieList from '../../../components/MovieList';
 import { BodyLarge } from '../../../components/Text';
-import COLORS from '../../../constants/colors';
+import { getAwardsBodyCategories } from '../../../constants/categories';
 import { PosterSize } from '../../../constants/posterDimensions';
+import theme from '../../../constants/theme';
 import { useCategory } from '../../../context/CategoryContext';
 import { useAuth } from '../../../context/UserContext';
 import PredictionTabsNavigator from '../../../navigation/PredictionTabsNavigator';
 import { PredictionsParamList } from '../../../navigation/types';
 import getCommunityPredictionsByCategory from '../../../services/queryFuncs/getCommunityPredictionsByCategory';
 import getPersonalPredictionsByCategory from '../../../services/queryFuncs/getPersonalPredictionsByCategory';
-import { iCategory, iPrediction, QueryKeys } from '../../../store/types';
+import { iCategory, iEvent, iPrediction, QueryKeys } from '../../../store/types';
 import { useTypedNavigation } from '../../../util/hooks';
 
 type iCategoryProps = {
@@ -32,12 +35,24 @@ type iContenderListProps = {
 export const Category = (props: iContenderListProps) => {
   const { tab, isSelectable, onPressItem } = props;
 
-  const { category: _category, displayContenderInfo } = useCategory();
+  const { width } = useWindowDimensions();
+  const { category: _category, displayContenderInfo, event: _event } = useCategory();
   const { userId: _userId } = useAuth();
   const navigation = useTypedNavigation<PredictionsParamList>();
 
   const category = _category as iCategory;
+  const event = _event as iEvent;
   const userId = _userId as string;
+
+  // Set the header
+  useLayoutEffect(() => {
+    const awardsBodyCategories = getAwardsBodyCategories(event.awardsBody, event.year);
+    const headerTitle =
+      'Best ' + awardsBodyCategories[CategoryName[category.name]]?.name || '';
+    navigation.setOptions({
+      headerTitle,
+    });
+  }, [navigation]);
 
   const { data: predictions, isLoading } = useQuery({
     queryKey: [
@@ -55,14 +70,17 @@ export const Category = (props: iContenderListProps) => {
 
   return (
     <ScrollView
-      contentContainerStyle={{ alignItems: 'center', marginTop: 40, paddingBottom: 100 }}
+      contentContainerStyle={{
+        alignItems: 'center',
+
+        paddingBottom: 100,
+      }}
     >
       <TouchableHighlight
         style={{
           display: 'flex',
           height: '100%',
           width: '100%',
-          backgroundColor: COLORS.lightestGray,
         }}
       >
         <>
@@ -78,17 +96,25 @@ export const Category = (props: iContenderListProps) => {
               <BodyLarge>No films in this list</BodyLarge>
             </View>
           ) : null}
-          {tab === 'personal' ? (
-            <>
-              <TouchableText
-                text={'Edit Predictions'}
+          <View
+            style={{
+              margin: theme.windowMargin,
+              alignItems: 'flex-end',
+            }}
+          >
+            {tab === 'personal' ? (
+              <IconButtonOutlined
                 onPress={() => {
                   navigation.navigate('PersonalPredictions');
                 }}
-                style={{ margin: 10 }}
+                iconProps={{
+                  name: 'edit-outline',
+                }}
+                styles={{ width: width / 5 - theme.posterMargin * 2 }}
               />
-            </>
-          ) : null}
+            ) : null}
+          </View>
+          <MovieList predictions={predictions} />
           {predictions.map((prediction, i) => (
             <ContenderListItem
               prediction={prediction}
@@ -99,7 +125,7 @@ export const Category = (props: iContenderListProps) => {
               onPressThumbnail={displayContenderInfo}
               selected={false}
               isSelectable={isSelectable}
-              size={PosterSize.MEDIUM}
+              posterWidth={(width - theme.windowMargin * 2 + theme.posterMargin) / 5}
             />
           ))}
         </>

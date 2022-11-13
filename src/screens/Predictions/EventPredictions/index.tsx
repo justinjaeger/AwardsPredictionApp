@@ -1,20 +1,22 @@
-import React from 'react';
-import { ScrollView } from 'react-native';
+import React, { useLayoutEffect } from 'react';
+import { ScrollView, TouchableHighlight, View } from 'react-native';
 import { CategoryName } from '../../../API';
-import { TouchableText } from '../../../components/Buttons';
-import { getAwardsBodyCategories } from '../../../constants/categories';
+import { getAwardsBodyCategories, getCategorySlots } from '../../../constants/categories';
 import { PredictionsParamList } from '../../../navigation/types';
 import { useTypedNavigation } from '../../../util/hooks';
 import sortByObjectOrder from '../../../util/sortByObjectOrder';
 import { useCategory } from '../../../context/CategoryContext';
-import PosterFromTmdbId from '../../../components/Images/PosterFromTmdbId';
 import { iCategory, iEvent, iPrediction, QueryKeys } from '../../../store/types';
 import PredictionTabsNavigator from '../../../navigation/PredictionTabsNavigator';
-import { Body } from '../../../components/Text';
+import { Body, SubHeader } from '../../../components/Text';
 import { useQuery } from '@tanstack/react-query';
 import getCommunityPredictionsByEvent from '../../../services/queryFuncs/getCommunityPredictionsByEvent';
 import getPersonalPredictionsByEvent from '../../../services/queryFuncs/getPersonalPredictionsByEvent';
 import { useAuth } from '../../../context/UserContext';
+import COLORS from '../../../constants/colors';
+import theme from '../../../constants/theme';
+import MovieList from '../../../components/MovieList';
+import { eventToString } from '../../../util/stringConversions';
 
 const EventPredictions = (props: { tab: 'personal' | 'community' }) => {
   const { tab } = props;
@@ -23,10 +25,14 @@ const EventPredictions = (props: { tab: 'personal' | 'community' }) => {
   const { userId } = useAuth();
   const navigation = useTypedNavigation<PredictionsParamList>();
 
-  if (!_event?.id) {
-    console.error('NO EVENT IN useCategory');
-  }
-  const event = _event as iEvent; // FLAG because declaring
+  const event = _event as iEvent;
+
+  useLayoutEffect(() => {
+    const headerTitle = eventToString(event.awardsBody, event.type, event.year);
+    navigation.setOptions({
+      headerTitle,
+    });
+  }, [navigation]);
 
   const { data: predictionData, isLoading } = useQuery({
     queryKey: [
@@ -50,36 +56,50 @@ const EventPredictions = (props: { tab: 'personal' | 'community' }) => {
     navigation.navigate('Category');
   };
 
+  const awardsBodyCategories = getAwardsBodyCategories(event.awardsBody, event.year);
   const categoryList = Object.values(event.categories);
   const orderedCategories = sortByObjectOrder<CategoryName, iCategory>(
-    getAwardsBodyCategories(event.awardsBody, event.year),
+    awardsBodyCategories,
     categoryList,
     categoryList.map((cat) => CategoryName[cat.name]),
   );
 
   return (
     <ScrollView
-      contentContainerStyle={{ alignItems: 'center', marginTop: 40, paddingBottom: 100 }}
+      style={{ backgroundColor: COLORS.primary }}
+      contentContainerStyle={{
+        alignItems: 'center',
+        paddingBottom: 100,
+      }}
     >
       {orderedCategories.map((category) => {
         const catPredictions: iPrediction[] | undefined = predictionData[category.id];
+        const slots = getCategorySlots(event.year, event.awardsBody, category.name);
+        const truncatedPredictions = (catPredictions || [])?.slice(0, slots);
         return (
-          <>
-            <TouchableText
-              text={category.name}
-              onPress={() => onSelectCategory(category)}
-              style={{ margin: 10 }}
-              key={category.id}
-            />
-            {(catPredictions || []).map((p) =>
-              p.contenderMovie ? (
-                <PosterFromTmdbId
-                  movieTmdbId={p.contenderMovie.tmdbId}
-                  personTmdbId={p.contenderPerson?.tmdbId}
-                />
-              ) : null,
-            )}
-          </>
+          <TouchableHighlight
+            key={category.id}
+            style={{
+              width: '100%',
+              alignItems: 'flex-start',
+            }}
+            underlayColor={COLORS.secondaryDark}
+            onPress={() => onSelectCategory(category)}
+          >
+            <View>
+              <SubHeader
+                style={{
+                  color: COLORS.lightest,
+                  marginLeft: theme.windowMargin,
+                  marginBottom: theme.windowMargin,
+                  marginTop: theme.windowMargin,
+                }}
+              >
+                {awardsBodyCategories[CategoryName[category.name]]?.name || ''}
+              </SubHeader>
+              <MovieList predictions={truncatedPredictions} />
+            </View>
+          </TouchableHighlight>
         );
       })}
     </ScrollView>

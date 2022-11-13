@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
-import { PosterSize } from '../../../constants/posterDimensions';
+import {
+  getPosterDimensionsByWidth,
+  PosterSize,
+} from '../../../constants/posterDimensions';
 import { iCachedTmdbMovie, iCachedTmdbPerson } from '../../../services/cache/types';
 import TmdbServices from '../../../services/tmdb';
 import { useSubscriptionEffect } from '../../../util/hooks';
@@ -12,11 +15,12 @@ type iPerformanceListItemProps = {
   tmdbMovieId: number;
   ranking?: number;
   size?: PosterSize;
+  width?: number;
   onPress: () => void;
 };
 
 const PerformanceListItem = (props: iPerformanceListItemProps) => {
-  const { tmdbPersonId, tmdbMovieId, ranking, size, onPress } = props;
+  const { tmdbPersonId, tmdbMovieId, ranking, size, width, onPress } = props;
 
   const [tmdbPerson, setTmdbPerson] = useState<iCachedTmdbPerson | undefined>();
   const [tmdbMovie, setTmdbMovie] = useState<iCachedTmdbMovie | undefined>();
@@ -36,11 +40,15 @@ const PerformanceListItem = (props: iPerformanceListItemProps) => {
     });
   }, [tmdbMovieId, tmdbPersonId]);
 
+  const height = width
+    ? getPosterDimensionsByWidth(width).height
+    : size || PosterSize.MEDIUM;
+
   return (
     <View
       style={{
         width: '100%',
-        height: size || PosterSize.MEDIUM,
+        height,
         marginTop: 10,
       }}
     >
@@ -50,6 +58,7 @@ const PerformanceListItem = (props: iPerformanceListItemProps) => {
           path={tmdbPerson?.profilePath || null}
           title={tmdbPerson?.name || ''}
           size={size}
+          width={width}
           onPress={onPress}
         />
         <View style={{ flexDirection: 'column' }}>

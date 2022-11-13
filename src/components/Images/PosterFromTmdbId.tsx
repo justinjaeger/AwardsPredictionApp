@@ -8,12 +8,14 @@ import Poster from './Poster';
 
 type iPosterFromTmdbProps = {
   size?: PosterSize; // 1 is 27*40px, defualt is 5
+  width?: number;
+  ranking?: number;
   onPress?: () => void;
   styles?: StyleProp<ImageStyle>;
 };
 
 const PosterFromMovieTmdbId = (props: iPosterFromTmdbProps & { movieTmdbId: number }) => {
-  const { movieTmdbId, size, onPress, styles } = props;
+  const { movieTmdbId, size, width, onPress, ranking, styles } = props;
 
   const [movieDetails, setMovieDetails] = useState<iCachedTmdbMovie>();
 
@@ -28,7 +30,9 @@ const PosterFromMovieTmdbId = (props: iPosterFromTmdbProps & { movieTmdbId: numb
     <Poster
       path={path || null} // this will render the loading state if null
       title={title || ''}
+      width={width}
       size={size}
+      ranking={ranking}
       onPress={onPress}
       styles={styles}
     />
@@ -38,7 +42,7 @@ const PosterFromMovieTmdbId = (props: iPosterFromTmdbProps & { movieTmdbId: numb
 const PosterFromPersonTmdbId = (
   props: iPosterFromTmdbProps & { personTmdbId: number },
 ) => {
-  const { personTmdbId, size, onPress, styles } = props;
+  const { personTmdbId, size, onPress, width, ranking, styles } = props;
 
   const [personDetails, setPersonDetails] = useState<iCachedTmdbPerson>();
 
@@ -55,6 +59,8 @@ const PosterFromPersonTmdbId = (
       path={path || null} // this will render the loading state if null
       title={title || ''}
       size={size}
+      width={width}
+      ranking={ranking}
       onPress={onPress}
       styles={styles}
     />

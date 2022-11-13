@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text } from '@ui-kitten/components';
 import { StyleProp, TextStyle } from 'react-native';
+import COLORS from '../../constants/colors';
 
 interface iTextProps {
   children: string;
@@ -17,7 +18,15 @@ export const Header = (props: iTextProps) => {
 
 export const SubHeader = (props: iTextProps) => {
   return (
-    <Text category={'h6'} style={props.style}>
+    <Text
+      category={'h6'}
+      style={{
+        fontWeight: '700',
+        color: COLORS.lightest,
+        // @ts-ignore
+        ...props.style,
+      }}
+    >
       {props.children}
     </Text>
   );
@@ -33,7 +42,15 @@ export const Body = (props: iTextProps) => {
 
 export const BodyLarge = (props: iTextProps) => {
   return (
-    <Text category={'p1'} style={props.style}>
+    <Text
+      category={'p1'}
+      style={{
+        fontWeight: '700',
+        color: COLORS.lightest,
+        // @ts-ignore
+        ...props.style,
+      }}
+    >
       {props.children}
     </Text>
   );

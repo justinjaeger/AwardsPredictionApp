@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
-import { PosterSize } from '../../../constants/posterDimensions';
+import {
+  getPosterDimensionsByWidth,
+  PosterSize,
+} from '../../../constants/posterDimensions';
 import { iCachedTmdbMovie } from '../../../services/cache/types';
 import TmdbServices from '../../../services/tmdb';
 import Poster from '../../Images/Poster';
@@ -12,11 +15,12 @@ type iSongListItemProps = {
   title: string;
   ranking?: number;
   size?: PosterSize;
+  width?: number;
   onPress: () => void;
 };
 
 const SongListItem = (props: iSongListItemProps) => {
-  const { artist, title, ranking, tmdbMovieId, size, onPress } = props;
+  const { artist, title, ranking, tmdbMovieId, size, width, onPress } = props;
 
   const [movie, setMovie] = useState<iCachedTmdbMovie | undefined>();
 
@@ -28,11 +32,15 @@ const SongListItem = (props: iSongListItemProps) => {
     });
   }, [tmdbMovieId]);
 
+  const height = width
+    ? getPosterDimensionsByWidth(width).height
+    : size || PosterSize.MEDIUM;
+
   return (
     <View
       style={{
         width: '100%',
-        height: size || PosterSize.MEDIUM,
+        height,
         marginTop: 10,
       }}
     >

@@ -46,5 +46,6 @@ module.exports = {
     'eslint-comments/no-unused-disable': 0,
     'sonarjs/cognitive-complexity': 0,
     'react-hooks/exhaustive-deps': 0,
+    'import/no-named-as-default': 0,
   },
 };

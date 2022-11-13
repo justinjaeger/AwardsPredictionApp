@@ -5,6 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import MainNavigator from './MainNavigator';
 import { useAppDispatch } from '../store';
 import { thunkGetAllEvents } from '../store/thunks/getAllEventsAndCategories';
+import { View } from 'react-native';
 
 // onReady={() => RNBootSplash.hide()} (could add to NavigationContainer)
 const Navigation = () => {

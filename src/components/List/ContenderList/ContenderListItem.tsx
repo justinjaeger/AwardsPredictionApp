@@ -16,6 +16,7 @@ type iContenderListItemProps = {
   isSelectable?: boolean;
   disabled?: boolean;
   size?: PosterSize;
+  posterWidth?: number;
   draggable?: {
     isActive: boolean;
     drag: () => void;
@@ -33,6 +34,7 @@ const ContenderListItem = (props: iContenderListItemProps) => {
     isSelectable,
     disabled,
     draggable,
+    posterWidth,
     onPressThumbnail,
     onPressItem,
   } = props;
@@ -72,6 +74,7 @@ const ContenderListItem = (props: iContenderListItemProps) => {
           tmdbMovieId={tmdbMovieId}
           movieStudio={movieStudio || undefined}
           ranking={ranking}
+          width={posterWidth}
           size={_size}
           onPress={onPress}
         />
@@ -84,6 +87,7 @@ const ContenderListItem = (props: iContenderListItemProps) => {
           tmdbPersonId={tmdbPersonId}
           tmdbMovieId={tmdbMovieId}
           ranking={ranking}
+          width={posterWidth}
           size={_size}
           onPress={onPress}
         />
@@ -96,6 +100,7 @@ const ContenderListItem = (props: iContenderListItemProps) => {
           artist={prediction.contenderSong?.artist || ''}
           title={prediction.contenderSong?.title || ''}
           ranking={ranking}
+          width={posterWidth}
           size={_size}
           onPress={onPress}
         />
@@ -115,7 +120,6 @@ const ContenderListItem = (props: iContenderListItemProps) => {
       style={{
         backgroundColor: selected ? COLORS.success : 'transparent',
         width: '100%',
-        height: _size,
       }}
       underlayColor={onPressItem ? COLORS.border : 'transparent'}
       onLongPress={drag}

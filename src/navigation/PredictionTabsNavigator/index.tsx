@@ -1,34 +1,63 @@
 import { useFocusEffect } from '@react-navigation/native';
-import { Button } from '@ui-kitten/components';
 import React, { useRef, useState } from 'react';
-import { Animated, ScrollView, useWindowDimensions, View } from 'react-native';
+import {
+  Animated,
+  ScrollView,
+  TouchableHighlight,
+  useWindowDimensions,
+  View,
+} from 'react-native';
+import { BodyLarge } from '../../components/Text';
 import COLORS from '../../constants/colors';
 import { useCategory } from '../../context/CategoryContext';
+
+const HIGHLIGHT_COLOR = COLORS.secondary;
+
+const PredictionTab = (props: {
+  text: string;
+  selected: boolean;
+  onPress: () => void;
+}) => {
+  const { text, selected, onPress } = props;
+  return (
+    <TouchableHighlight
+      style={{
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100%',
+        width: '50%',
+        borderRadius: 0,
+      }}
+      onPress={onPress}
+      underlayColor={COLORS.secondaryDark}
+    >
+      <View style={{ zIndex: 3 }}>
+        <BodyLarge
+          style={{ zIndex: 3, color: selected ? HIGHLIGHT_COLOR : COLORS.white }}
+        >
+          {text}
+        </BodyLarge>
+      </View>
+    </TouchableHighlight>
+  );
+};
 
 const PredictionTabsNavigator = (community: JSX.Element, personal: JSX.Element) => {
   const { width } = useWindowDimensions();
   const { personalCommunityTab, setPersonalCommunityTab } = useCategory();
   const scrollBarPositionTwo = width / 2;
 
-  const [initialTab, setInitialTab] = useState<'personal' | 'community'>(
-    personalCommunityTab,
-  );
+  const [initialTab] = useState<'personal' | 'community'>(personalCommunityTab);
 
   const scrollViewRef = useRef<ScrollView>(null);
   const scrollBarAnim = useRef(
     new Animated.Value(initialTab === 'community' ? 0 : scrollBarPositionTwo),
   ).current;
 
-  const bottomTabStyles = {
-    width: '50%',
-    borderRadius: 0,
-  };
-
-  const SCROLL_BAR_WIDTH = width / 2 - 20;
+  const SCROLL_BAR_WIDTH = width / 2;
 
   useFocusEffect(
     React.useCallback(() => {
-      setInitialTab(personalCommunityTab);
       if (personalCommunityTab === 'community') {
         openCommunityTab(true);
       } else {
@@ -75,42 +104,36 @@ const PredictionTabsNavigator = (community: JSX.Element, personal: JSX.Element) 
         <View style={{ width, height: '100%' }}>{community}</View>
         <View style={{ width, height: '100%' }}>{personal}</View>
       </ScrollView>
-
       <View
         style={{
           flexDirection: 'row',
-          borderTopWidth: 1,
-          borderColor: COLORS.border,
           height: 60,
           width,
+          backgroundColor: COLORS.primaryLight,
         }}
       >
         <Animated.View
           style={{
             position: 'absolute',
             top: 0,
-            left: 10,
             transform: [{ translateX: scrollBarAnim }],
             width: SCROLL_BAR_WIDTH,
-            backgroundColor: COLORS.primary,
-            height: 5,
+            backgroundColor: HIGHLIGHT_COLOR,
+            height: 4,
             borderRadius: 5,
+            zIndex: 2,
           }}
         />
-        <Button
-          style={bottomTabStyles}
-          appearance="ghost"
+        <PredictionTab
+          text={'Community'}
           onPress={() => openCommunityTab()}
-        >
-          Community
-        </Button>
-        <Button
-          style={bottomTabStyles}
-          appearance="ghost"
+          selected={personalCommunityTab === 'community'}
+        />
+        <PredictionTab
+          text={'Personal'}
           onPress={() => openPersonalTab()}
-        >
-          Personal
-        </Button>
+          selected={personalCommunityTab === 'personal'}
+        />
       </View>
     </>
   );

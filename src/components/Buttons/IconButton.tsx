@@ -1,7 +1,9 @@
 import React from 'react';
-import { StyleProp, ViewStyle } from 'react-native';
+import { StyleProp, TouchableHighlight, ViewStyle } from 'react-native';
 import { Button } from '@ui-kitten/components';
 import CustomIcon, { iCustomIconProps } from '../CustomIcon';
+import theme from '../../constants/theme';
+import COLORS from '../../constants/colors';
 
 /**
  * https://akveo.github.io/eva-icons/#/
@@ -28,8 +30,36 @@ export const IconButton = (props: iIconButtonProps) => {
       }
       appearance="ghost"
       status="danger"
-      accessoryLeft={() => <CustomIcon {...iconProps} styles={{ borderRadius: 100 }} />}
+      accessoryLeft={() => (
+        <CustomIcon
+          {...iconProps}
+          color={COLORS.primary}
+          styles={{ borderRadius: 100 }}
+        />
+      )}
       onPress={onPress}
     />
+  );
+};
+
+export const IconButtonOutlined = (props: iIconButtonProps) => {
+  const { onPress, iconProps, styles } = props;
+  return (
+    <TouchableHighlight
+      style={{
+        borderRadius: theme.borderRadius,
+        backgroundColor: COLORS.primaryLight,
+        height: SIZE + 5,
+        width: SIZE + 5,
+        alignItems: 'center',
+        justifyContent: 'center',
+        // @ts-ignore
+        ...styles,
+      }}
+      underlayColor={COLORS.secondaryDark}
+      onPress={onPress}
+    >
+      <CustomIcon {...iconProps} size={24} styles={{ borderRadius: 100, top: 1 }} />
+    </TouchableHighlight>
   );
 };

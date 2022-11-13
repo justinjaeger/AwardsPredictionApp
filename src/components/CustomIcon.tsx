@@ -24,7 +24,7 @@ const CustomIcon = (props: iCustomIconProps) => {
         height: size || 32,
         ...styles,
       }}
-      fill={color || COLORS.primary}
+      fill={color || COLORS.white}
     />
   );
 };
