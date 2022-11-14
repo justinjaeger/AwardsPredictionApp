@@ -2,7 +2,7 @@ import { AnyAction } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import { RootState } from '..';
 import ApiServices from '../../services/graphql';
-import { sortPredictions } from '../../util/sortPredictions';
+import { sortPersonalPredictions } from '../../util/sortPredictions';
 import { getPersonalPredictionsByEvent } from '../reducers/predictions';
 import { iEvent, iIndexedPredictionsByCategory } from '../types';
 
@@ -26,7 +26,7 @@ const getData = async (event: iEvent, userId: string) => {
       contenderPerson: p?.contender.person || undefined,
       contenderSongId: p?.contender.contenderSongId,
     }));
-    const sortedPredictions = sortPredictions(predictions);
+    const sortedPredictions = sortPersonalPredictions(predictions);
     data[categoryId] = sortedPredictions;
   });
   return data;

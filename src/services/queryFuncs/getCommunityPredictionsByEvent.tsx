@@ -5,7 +5,7 @@ import {
   iNumberPredicting,
   iPrediction,
 } from '../../store/types';
-import { sortPredictions } from '../../util/sortPredictions';
+import { sortCommunityPredictions } from '../../util/sortPredictions';
 import ApiServices from '../graphql';
 
 const getCommunityPredictionsByEvent = async (event: iEvent) => {
@@ -54,7 +54,7 @@ const getCommunityPredictionsByEvent = async (event: iEvent) => {
   // sort all prediction lists within categories
   const sortedData: iIndexedPredictionsByCategory = {};
   Object.entries(data).forEach(([catId, ps]) => {
-    const sortedPs = sortPredictions(ps);
+    const sortedPs = sortCommunityPredictions(ps);
     sortedData[catId] = sortedPs;
   });
   return sortedData;

@@ -1,5 +1,5 @@
 import { iPrediction } from '../../store/types';
-import { sortPredictions } from '../../util/sortPredictions';
+import { sortPersonalPredictions } from '../../util/sortPredictions';
 import ApiServices from '../graphql';
 
 const getPersonalPredictionsByCategory = async (
@@ -30,7 +30,7 @@ const getPersonalPredictionsByCategory = async (
     contenderPerson: p?.contender.person || undefined,
     contenderSongId: p?.contender.contenderSongId,
   }));
-  return sortPredictions(predictions);
+  return sortPersonalPredictions(predictions);
 };
 
 export default getPersonalPredictionsByCategory;

@@ -1,5 +1,5 @@
 import { iIndexedPredictionsByCategory } from '../../store/types';
-import { sortPredictions } from '../../util/sortPredictions';
+import { sortPersonalPredictions } from '../../util/sortPredictions';
 import ApiServices from '../graphql';
 
 const getPersonalPredictionsByEvent = async (eventId: string, userId: string) => {
@@ -20,7 +20,7 @@ const getPersonalPredictionsByEvent = async (eventId: string, userId: string) =>
       contenderPerson: p?.contender.person || undefined,
       contenderSongId: p?.contender.contenderSongId,
     }));
-    const sortedPredictions = sortPredictions(predictions);
+    const sortedPredictions = sortPersonalPredictions(predictions);
     data[categoryId] = sortedPredictions;
   });
   return data;

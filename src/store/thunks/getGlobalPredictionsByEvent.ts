@@ -4,7 +4,7 @@ import { RootState } from '..';
 
 import { getCategorySlots } from '../../constants/categories';
 import ApiServices from '../../services/graphql';
-import { sortPredictions } from '../../util/sortPredictions';
+import { sortCommunityPredictions } from '../../util/sortPredictions';
 import { getGlobalPredictionsByEvent } from '../reducers/predictions';
 import {
   iEvent,
@@ -59,7 +59,7 @@ const getData = async (event: iEvent) => {
   // sort all prediction lists within categories
   const sortedData: iIndexedPredictionsByCategory = {};
   Object.entries(data).forEach(([catId, ps]) => {
-    const sortedPs = sortPredictions(ps);
+    const sortedPs = sortCommunityPredictions(ps);
     sortedData[catId] = sortedPs;
   });
   return sortedData;
