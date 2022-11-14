@@ -32,9 +32,49 @@ export const SubHeader = (props: iTextProps) => {
   );
 };
 
+export const Label = (props: iTextProps) => {
+  return (
+    <Text
+      category={'label'}
+      style={{
+        fontWeight: '400',
+        color: COLORS.lightest,
+        // @ts-ignore
+        ...props.style,
+      }}
+    >
+      {props.children}
+    </Text>
+  );
+};
+
+export const LabelBold = (props: iTextProps) => {
+  return (
+    <Text
+      category={'label'}
+      style={{
+        fontWeight: '700',
+        color: COLORS.lightest,
+        // @ts-ignore
+        ...props.style,
+      }}
+    >
+      {props.children}
+    </Text>
+  );
+};
+
 export const Body = (props: iTextProps) => {
   return (
-    <Text category={'p2'} style={props.style}>
+    <Text
+      category={'p2'}
+      style={{
+        fontWeight: '400',
+        color: COLORS.lightest,
+        // @ts-ignore
+        ...props.style,
+      }}
+    >
       {props.children}
     </Text>
   );

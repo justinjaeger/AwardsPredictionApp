@@ -38,7 +38,12 @@ const WebViewScreen = () => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
-      <WebView ref={webviewRef} source={{ uri }} renderLoading={LoadingIndicatorView} />
+      <WebView
+        ref={webviewRef}
+        source={{ uri }}
+        renderLoading={LoadingIndicatorView}
+        mediaPlaybackRequiresUserAction={false}
+      />
       <View
         style={{
           borderTopWidth: 1,

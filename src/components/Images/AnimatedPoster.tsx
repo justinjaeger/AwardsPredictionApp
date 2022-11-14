@@ -1,20 +1,15 @@
-import React, { useState } from 'react';
-import { ImageStyle, StyleProp, TouchableHighlight, View } from 'react-native';
-import FastImage from 'react-native-fast-image';
+import React from 'react';
+import { Animated, ImageStyle, StyleProp, TouchableHighlight, View } from 'react-native';
 import COLORS from '../../constants/colors';
-import {
-  getPosterDimensionsByWidth,
-  PosterSize,
-  POSTER_SIZE,
-} from '../../constants/posterDimensions';
 import { TMDB_IMAGE_URL } from '../../constants';
 import { Body } from '../Text';
 import theme from '../../constants/theme';
 
-type iPosterProps = {
+type iAnimatedPosterProps = {
   title: string;
   path: string | null; // comes after TMDB_IMAGE_URL/
-  width?: number; // 1 is 27*40px, defualt is 5
+  animatedWidth: Animated.Value;
+  animatedHeight: Animated.Value;
   ranking?: number;
   onPress?: () => void;
   styles?: StyleProp<ImageStyle>;
@@ -24,32 +19,22 @@ type iPosterProps = {
  * TODO: add a blank image and blank movie poster for when poster is small
  */
 
-const Poster = (props: iPosterProps) => {
-  const { path, title, width: _width, ranking, onPress, styles } = props;
+const AnimatedPoster = (props: iAnimatedPosterProps) => {
+  const { path, title, animatedWidth, animatedHeight, ranking, onPress, styles } = props;
 
-  const width = _width || PosterSize.MEDIUM;
-
-  const [isPressed, setIsPressed] = useState<boolean>(false);
-
-  const posterDimensions = width
-    ? getPosterDimensionsByWidth(width - theme.posterMargin * 2)
-    : POSTER_SIZE[PosterSize.MEDIUM];
-
-  const style: StyleProp<ImageStyle> = {
+  const style: any = {
     ...(styles as Record<string, unknown>),
-    ...posterDimensions,
+    width: animatedWidth,
+    height: animatedHeight,
     borderWidth: 1,
     borderColor: COLORS.secondary,
     borderRadius: 5,
     margin: theme.posterMargin,
-    opacity: isPressed ? 0.8 : 1,
   };
 
   return (
     <TouchableHighlight
       onPress={onPress || undefined}
-      onPressIn={() => setIsPressed(true)}
-      onPressOut={() => setIsPressed(false)}
       underlayColor={'#FFF'}
       disabled={!onPress}
     >
@@ -82,14 +67,14 @@ const Poster = (props: iPosterProps) => {
           </View>
         ) : null}
         {path ? (
-          <FastImage
+          <Animated.Image
             style={style as Record<string, unknown>}
             source={{
               uri: `${TMDB_IMAGE_URL}/${path}`,
             }}
           />
         ) : (
-          <View
+          <Animated.View
             style={{
               ...(style as Record<string, unknown>),
               justifyContent: 'center',
@@ -98,22 +83,20 @@ const Poster = (props: iPosterProps) => {
               padding: theme.posterMargin,
             }}
           >
-            {(width || 0) > PosterSize.SMALL ? (
-              <Body
-                style={{
-                  textAlign: 'center',
-                  color: COLORS.primaryLightest,
-                  fontSize: 10,
-                }}
-              >
-                {title}
-              </Body>
-            ) : null}
-          </View>
+            <Body
+              style={{
+                textAlign: 'center',
+                color: COLORS.primaryLightest,
+                fontSize: 10,
+              }}
+            >
+              {title}
+            </Body>
+          </Animated.View>
         )}
       </>
     </TouchableHighlight>
   );
 };
 
-export default Poster;
+export default AnimatedPoster;

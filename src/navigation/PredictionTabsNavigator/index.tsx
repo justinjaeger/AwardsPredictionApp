@@ -109,7 +109,7 @@ const PredictionTabsNavigator = (community: JSX.Element, personal: JSX.Element) 
           flexDirection: 'row',
           height: 60,
           width,
-          backgroundColor: COLORS.primaryLight,
+          backgroundColor: COLORS.primary,
         }}
       >
         <Animated.View

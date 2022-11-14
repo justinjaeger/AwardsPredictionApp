@@ -43,8 +43,6 @@ export const CategoryProvider = (props: { children: React.ReactNode }) => {
     'community',
   );
 
-  console.error('context', personalCommunityTab);
-
   const setEventId = (eventId: string) => {
     _setEventId(eventId);
   };

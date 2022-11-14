@@ -55,7 +55,7 @@ const FilmDetails = (props: iFilmDetailsProps) => {
       {movieDetails ? (
         <Poster
           path={movieDetails.posterPath}
-          size={PosterSize.LARGE}
+          width={PosterSize.LARGE}
           title={movieDetails.title}
         />
       ) : null}

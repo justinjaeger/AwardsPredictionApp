@@ -1,5 +1,5 @@
-import React, { useLayoutEffect } from 'react';
-import { ScrollView, TouchableHighlight, View } from 'react-native';
+import React, { useEffect, useLayoutEffect, useRef } from 'react';
+import { Animated, TouchableHighlight, View } from 'react-native';
 import { CategoryName } from '../../../API';
 import { getAwardsBodyCategories, getCategorySlots } from '../../../constants/categories';
 import { PredictionsParamList } from '../../../navigation/types';
@@ -17,6 +17,8 @@ import COLORS from '../../../constants/colors';
 import theme from '../../../constants/theme';
 import MovieList from '../../../components/MovieList';
 import { eventToString } from '../../../util/stringConversions';
+import LoadingStatue from '../../../components/LoadingStatue';
+import BackgroundWrapper from '../../../components/BackgroundWrapper';
 
 const EventPredictions = (props: { tab: 'personal' | 'community' }) => {
   const { tab } = props;
@@ -25,8 +27,12 @@ const EventPredictions = (props: { tab: 'personal' | 'community' }) => {
   const { userId } = useAuth();
   const navigation = useTypedNavigation<PredictionsParamList>();
 
+  const loadingOpacity = useRef(new Animated.Value(1)).current;
+  const bodyOpacity = useRef(new Animated.Value(0)).current;
+
   const event = _event as iEvent;
 
+  // define the header
   useLayoutEffect(() => {
     const headerTitle = eventToString(event.awardsBody, event.type, event.year);
     navigation.setOptions({
@@ -44,12 +50,26 @@ const EventPredictions = (props: { tab: 'personal' | 'community' }) => {
         : () => getPersonalPredictionsByEvent(event.id, userId || ''),
   });
 
-  if (isLoading) return null;
-  if (!predictionData) return null;
+  useEffect(() => {
+    if (!isLoading) {
+      Animated.timing(loadingOpacity, {
+        toValue: 0,
+        duration: 500,
+        useNativeDriver: true,
+      }).start();
+      setTimeout(() => {
+        Animated.timing(bodyOpacity, {
+          toValue: 1,
+          duration: 500,
+          useNativeDriver: true,
+        }).start();
+      }, 500);
+    }
+  }, [isLoading]);
+
   if (!userId && tab === 'personal') {
     return <Body>You must sign in </Body>;
   }
-  if (!event) return null;
 
   const onSelectCategory = async (category: iCategory) => {
     setCategory(category);
@@ -65,44 +85,62 @@ const EventPredictions = (props: { tab: 'personal' | 'community' }) => {
   );
 
   return (
-    <ScrollView
-      style={{ backgroundColor: COLORS.primary }}
-      contentContainerStyle={{
-        alignItems: 'center',
-        paddingBottom: 100,
-      }}
-    >
-      {orderedCategories.map((category) => {
-        const catPredictions: iPrediction[] | undefined = predictionData[category.id];
-        const slots = getCategorySlots(event.year, event.awardsBody, category.name);
-        const truncatedPredictions = (catPredictions || [])?.slice(0, slots);
-        return (
-          <TouchableHighlight
-            key={category.id}
-            style={{
-              width: '100%',
-              alignItems: 'flex-start',
-            }}
-            underlayColor={COLORS.secondaryDark}
-            onPress={() => onSelectCategory(category)}
-          >
-            <View>
-              <SubHeader
+    <BackgroundWrapper>
+      <>
+        <Animated.View
+          style={{
+            position: 'absolute',
+            width: '100%',
+            height: '80%',
+            alignItems: 'center',
+            justifyContent: 'center',
+            opacity: loadingOpacity,
+          }}
+        >
+          <LoadingStatue />
+        </Animated.View>
+        <Animated.ScrollView
+          style={{ opacity: bodyOpacity }}
+          contentContainerStyle={{
+            alignItems: 'center',
+            paddingBottom: 100,
+          }}
+        >
+          {orderedCategories.map((category) => {
+            const catPredictions: iPrediction[] | undefined = (predictionData || {})[
+              category.id
+            ];
+            const slots = getCategorySlots(event.year, event.awardsBody, category.name);
+            const truncatedPredictions = (catPredictions || [])?.slice(0, slots);
+            return (
+              <TouchableHighlight
+                key={category.id}
                 style={{
-                  color: COLORS.lightest,
-                  marginLeft: theme.windowMargin,
-                  marginBottom: theme.windowMargin,
-                  marginTop: theme.windowMargin,
+                  width: '100%',
+                  alignItems: 'flex-start',
                 }}
+                underlayColor={COLORS.secondaryDark}
+                onPress={() => onSelectCategory(category)}
               >
-                {awardsBodyCategories[CategoryName[category.name]]?.name || ''}
-              </SubHeader>
-              <MovieList predictions={truncatedPredictions} />
-            </View>
-          </TouchableHighlight>
-        );
-      })}
-    </ScrollView>
+                <View>
+                  <SubHeader
+                    style={{
+                      color: COLORS.lightest,
+                      marginLeft: theme.windowMargin,
+                      marginBottom: theme.windowMargin,
+                      marginTop: theme.windowMargin,
+                    }}
+                  >
+                    {awardsBodyCategories[CategoryName[category.name]]?.name || ''}
+                  </SubHeader>
+                  <MovieList predictions={truncatedPredictions} />
+                </View>
+              </TouchableHighlight>
+            );
+          })}
+        </Animated.ScrollView>
+      </>
+    </BackgroundWrapper>
   );
 };
 
