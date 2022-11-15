@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { View } from 'react-native';
-import { TouchableText } from '../../../../components/Buttons';
+import React, { useState } from 'react';
+import { Animated, View } from 'react-native';
 import { PersonalParamList } from '../../../../navigation/types';
 import ApiServices from '../../../../services/graphql';
 import { useTypedNavigation } from '../../../../util/hooks';
@@ -22,15 +21,19 @@ import {
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
-import getPersonalPredictionsByCategory from '../../../../services/queryFuncs/getPersonalPredictionsByCategory';
 import {
   iPredictionData,
   iPredictionSetParams,
 } from '../../../../services/graphql/prediction';
 import PredictionTabsNavigator from '../../../../navigation/PredictionTabsNavigator';
 import { Category } from '../../Category';
+import getCommunityPredictionsByEvent from '../../../../services/queryFuncs/getCommunityPredictionsByEvent';
+import BackgroundWrapper from '../../../../components/BackgroundWrapper';
+import { CategoryHeader } from '../../styles';
+import HeaderButton from '../../../../components/HeaderButton';
+import theme from '../../../../constants/theme';
+import LoadingStatue from '../../../../components/LoadingStatue';
 
-// NOTE: Similar to Add Contenders, somewhat
 const EditPredictions = () => {
   const { event: _event, category: _category, displayContenderInfo } = useCategory();
   const navigation = useTypedNavigation<PersonalParamList>();
@@ -42,10 +45,12 @@ const EditPredictions = () => {
   const event = _event as iEvent;
   const userId = _userId as string;
 
-  const { data: serverPredictions, isLoading } = useQuery({
-    queryKey: [QueryKeys.PERSONAL_CATEGORY],
-    queryFn: () => getPersonalPredictionsByCategory(category.id, userId),
+  // We use the SAME KEY as the previous screen, because it avoids a re-fetch of the data which was available previously
+  const { data: predictionData } = useQuery({
+    queryKey: [QueryKeys.PERSONAL_EVENT],
+    queryFn: () => getCommunityPredictionsByEvent(event),
   });
+  const serverPredictions = (predictionData || {})[category.id];
 
   const updatePredictions = useMutation({
     mutationFn: async (params: {
@@ -57,23 +62,19 @@ const EditPredictions = () => {
         params.predictionData,
       );
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [QueryKeys.PERSONAL_CATEGORY] });
-      queryClient.invalidateQueries({ queryKey: [QueryKeys.PERSONAL_EVENT] });
+    onSuccess: async () => {
+      console.error('isFetching1', isFetching);
+      await queryClient.invalidateQueries({ queryKey: [QueryKeys.PERSONAL_EVENT] });
+      console.error('isFetching2', isFetching);
+      await queryClient.invalidateQueries({ queryKey: [QueryKeys.COMMUNITY_EVENT] });
+      console.error('isFetching3', isFetching);
+      setLoading(false);
+      navigation.goBack();
     },
   });
 
   const [predictions, setPredictions] = useState<iPrediction[]>(serverPredictions || []);
   const [loading, setLoading] = useState<boolean>(false);
-  const [navigateBackWhenDoneFetching, setDone] = useState<boolean>(false);
-
-  // fires when everything is saved
-  useEffect(() => {
-    if (isFetching === 0 && navigateBackWhenDoneFetching === true) {
-      navigation.goBack();
-      setDone(false);
-    }
-  }, [isFetching]);
 
   const onSaveContenders = async () => {
     setLoading(true);
@@ -81,77 +82,76 @@ const EditPredictions = () => {
       contenderId: p.contenderId,
       ranking: i + 1,
     }));
-    await updatePredictions.mutate({
+    updatePredictions.mutate({
       predictionSetParams: { userId, categoryId: category.id, eventId: event.id },
       predictionData: newPredictionData,
     });
-    setDone(true);
-    setLoading(false);
   };
 
-  if (isLoading) return null;
-
   return (
-    <View style={{ alignItems: 'center', marginTop: 40, paddingBottom: 200 }}>
-      <TouchableText
-        text={'Add or delete contenders'}
-        onPress={() => {
-          navigation.navigate('AddPredictions');
-        }}
-        loading={loading}
-        style={{ margin: 10 }}
-      />
-      <TouchableText
-        text={'Save'}
-        onPress={onSaveContenders}
-        loading={loading}
-        style={{ margin: 10 }}
-      />
+    <BackgroundWrapper>
       <>
-        {predictions.length === 0 ? (
-          <View
+        <CategoryHeader>
+          <View />
+          <Animated.View
             style={{
-              width: '100%',
-              height: '100%',
+              flexDirection: 'row',
+              width: 120,
+              justifyContent: 'flex-end',
               alignItems: 'center',
-              justifyContent: 'center',
             }}
           >
-            <BodyLarge>No films in this list</BodyLarge>
-          </View>
-        ) : null}
-        {/* @ts-ignore not actually broken */}
-        <NestableScrollContainer>
-          <NestableDraggableFlatList
-            data={predictions}
-            keyExtractor={(item) => item.contenderId}
-            style={{}}
-            contentContainerStyle={{
-              paddingBottom: PosterSize.SMALL,
-              paddingTop: 20,
-            }}
-            renderItem={({ item: prediction, index, drag, isActive }) => (
-              <ScaleDecorator>
-                <ContenderListItem
-                  prediction={prediction}
-                  ranking={(index || 0) + 1}
-                  onPressThumbnail={displayContenderInfo}
-                  selected={false}
-                  isSelectable={false}
-                  draggable={{
-                    drag,
-                    isActive,
-                  }}
-                />
-              </ScaleDecorator>
-            )}
-            onDragEnd={({ data }) => {
-              setPredictions(data);
-            }}
-          />
-        </NestableScrollContainer>
+            <HeaderButton
+              onPress={() => {
+                navigation.navigate('AddPredictions');
+              }}
+              icon={'plus'}
+            />
+            <HeaderButton onPress={() => onSaveContenders()} icon={'save'} />
+          </Animated.View>
+        </CategoryHeader>
+        <View style={{ alignItems: 'center', width: '100%' }}>
+          <>
+            {predictions.length === 0 ? (
+              <View style={{ marginTop: 10 }}>
+                <BodyLarge>No films in this list</BodyLarge>
+              </View>
+            ) : null}
+            {loading ? <LoadingStatue /> : null}
+            {/* @ts-ignore not actually broken */}
+            <NestableScrollContainer>
+              <NestableDraggableFlatList
+                data={predictions}
+                keyExtractor={(item) => item.contenderId}
+                contentContainerStyle={{
+                  paddingBottom: PosterSize.SMALL,
+                  paddingTop: theme.windowMargin,
+                }}
+                renderItem={({ item: prediction, index, drag, isActive }) => (
+                  <ScaleDecorator>
+                    <ContenderListItem
+                      tab={'personal'}
+                      prediction={prediction}
+                      ranking={(index || 0) + 1}
+                      onPressThumbnail={displayContenderInfo}
+                      selected={false}
+                      draggable={{
+                        drag,
+                        isActive,
+                      }}
+                      toggleSelected={() => {}}
+                    />
+                  </ScaleDecorator>
+                )}
+                onDragEnd={({ data }) => {
+                  setPredictions(data);
+                }}
+              />
+            </NestableScrollContainer>
+          </>
+        </View>
       </>
-    </View>
+    </BackgroundWrapper>
   );
 };
 

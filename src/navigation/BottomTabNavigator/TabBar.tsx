@@ -24,13 +24,14 @@ const TabBar = (props: ITabBarProps) => {
       edges={['bottom']}
       style={{
         borderTopWidth: 1,
-        borderColor: COLORS.border,
+        // borderColor: COLORS.border,
         shadowOpacity: 0.2,
         shadowRadius: 10,
         shadowOffset: {
           height: -5,
           width: 0,
         },
+        backgroundColor: COLORS.primaryLight,
       }}
     >
       <View

@@ -273,7 +273,6 @@ export const createOrUpdatePredictions = async (
     const { data: pSet } = await getPredictionsSet(params);
     const oldPredictionSet = pSet?.getPredictionSet;
     if (oldPredictionSet) {
-      // predictions are NOT being returned here. This is a problem, it's not querying efficiently. It's forcing me to do another request
       // this isn't an error, it just means there are no current predictions
       const oldPredictions = oldPredictionSet.predictions?.items;
       if (!oldPredictions) {

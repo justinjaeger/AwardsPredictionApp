@@ -10,6 +10,7 @@ import EventPredictions from '../screens/Predictions/EventPredictions';
 import ProfileNavigator from './ProfileNavigator';
 import PersonalPredictionsNavigator from './PersonalPredictionsNavigator';
 import theme from '../constants/theme';
+import { headerSettings } from '../constants';
 
 const { Navigator, Screen } = createStackNavigator<PredictionsParamList>();
 
@@ -22,23 +23,27 @@ const PredictionsNavigator = () => {
         options={{
           headerShown: false,
           headerTitle: 'Profile',
+          headerTitleStyle: {
+            color: 'white',
+          },
         }}
       />
       <Screen
         name="EventSelect"
         component={EventSelect}
         options={{
-          headerTitle: 'Events (Global)',
+          headerTitle: 'Event Select',
           cardStyle: theme.cardStyle,
+          ...headerSettings,
         }}
       />
       <Screen
         name="EventPredictions"
         component={EventPredictions}
         options={{
-          headerTitle: 'Event',
+          headerTitle: 'Event Predictions',
           headerLeft: BackButton,
-          cardStyle: theme.cardStyle,
+          ...headerSettings,
         }}
       />
       <Screen
@@ -48,6 +53,7 @@ const PredictionsNavigator = () => {
           headerTitle: 'Category',
           headerLeft: BackButton,
           cardStyle: theme.cardStyle,
+          ...headerSettings,
         }}
       />
       <Screen
@@ -57,6 +63,7 @@ const PredictionsNavigator = () => {
           headerTitle: 'Contender Details',
           headerLeft: BackButton,
           cardStyle: theme.cardStyle,
+          ...headerSettings,
         }}
       />
       <Screen
@@ -67,6 +74,7 @@ const PredictionsNavigator = () => {
           headerShown: false,
           headerLeft: BackButton,
           cardStyle: theme.cardStyle,
+          ...headerSettings,
         }}
       />
     </Navigator>

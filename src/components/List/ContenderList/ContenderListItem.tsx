@@ -16,6 +16,7 @@ import AnimatedPoster from '../../Images/AnimatedPoster';
 import { BodyLarge, Label, LabelBold } from '../../Text';
 
 type iContenderListItemProps = {
+  tab: 'community' | 'personal';
   prediction: iPrediction;
   ranking: number;
   selected: boolean;
@@ -35,6 +36,7 @@ const TIMING_FADE = 500;
 
 const ContenderListItem = (props: iContenderListItemProps) => {
   const {
+    tab,
     prediction,
     selected,
     toggleSelected,
@@ -244,7 +246,7 @@ const ContenderListItem = (props: iContenderListItemProps) => {
                 <Label style={{ marginLeft: 10 }}>{categoryInfo.join(', ')}</Label>
               ) : null}
             </Animated.View>
-            {communityRankings ? (
+            {tab === 'community' && communityRankings ? (
               <View
                 style={{
                   width: RIGHT_COL_WIDTH,

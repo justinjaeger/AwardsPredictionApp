@@ -6,6 +6,7 @@ import EditPredictions from '../screens/Predictions/Personal/EditPredictions';
 import { PersonalParamList } from './types';
 import AddPredictions from '../screens/Predictions/Personal/AddPredictions.tsx';
 import ContenderDetailsScreen from '../screens/Predictions/ContenderDetailsScreen';
+import { headerSettings } from '../constants';
 
 const { Navigator, Screen } = createStackNavigator<PersonalParamList>();
 
@@ -29,6 +30,7 @@ const PersonalPredictionsNavigator = () => (
       options={{
         headerTitle: 'Edit Predictions',
         headerLeft: BackButton,
+        ...headerSettings,
       }}
     />
     <Screen
@@ -37,6 +39,7 @@ const PersonalPredictionsNavigator = () => (
       options={{
         headerTitle: 'Add Predictions',
         headerLeft: BackButton,
+        ...headerSettings,
       }}
     />
     <Screen
@@ -45,6 +48,7 @@ const PersonalPredictionsNavigator = () => (
       options={{
         headerTitle: 'Add Contender',
         headerLeft: BackButton,
+        ...headerSettings,
       }}
     />
     <Screen
@@ -53,6 +57,7 @@ const PersonalPredictionsNavigator = () => (
       options={{
         headerTitle: 'Contender Details',
         headerLeft: BackButton,
+        ...headerSettings,
       }}
     />
   </Navigator>

@@ -12,13 +12,14 @@ import COLORS from '../../constants/colors';
 type iIconButtonProps = {
   onPress: () => void;
   iconProps: iCustomIconProps;
+  color?: string;
   styles?: StyleProp<ViewStyle>;
 };
 
 const SIZE = 30;
 
 export const IconButton = (props: iIconButtonProps) => {
-  const { onPress, iconProps, styles } = props;
+  const { onPress, iconProps, color, styles } = props;
   return (
     <Button
       style={
@@ -33,7 +34,7 @@ export const IconButton = (props: iIconButtonProps) => {
       accessoryLeft={() => (
         <CustomIcon
           {...iconProps}
-          color={COLORS.primary}
+          color={color || COLORS.white}
           styles={{ borderRadius: 100 }}
         />
       )}

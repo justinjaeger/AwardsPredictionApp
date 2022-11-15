@@ -3,7 +3,6 @@ import { ScrollView } from 'react-native';
 import { CategoryType } from '../../../../API';
 import { TouchableText } from '../../../../components/Buttons';
 import ContenderListItem from '../../../../components/List/ContenderList/ContenderListItem';
-import { PosterSize } from '../../../../constants/posterDimensions';
 import { PersonalParamList } from '../../../../navigation/types';
 import ApiServices from '../../../../services/graphql';
 import { useTypedNavigation } from '../../../../util/hooks';
@@ -17,13 +16,12 @@ import {
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
-import getPersonalPredictionsByCategory from '../../../../services/queryFuncs/getPersonalPredictionsByCategory';
-import getCommunityPredictionsByCategory from '../../../../services/queryFuncs/getCommunityPredictionsByCategory';
 import {
   iPredictionData,
   iPredictionSetParams,
 } from '../../../../services/graphql/prediction';
 import { Body } from '../../../../components/Text';
+import getCommunityPredictionsByEvent from '../../../../services/queryFuncs/getCommunityPredictionsByEvent';
 
 // TODO: really, this is adding OR deleting contenders
 // NOTE: this is very similar to Contenders, some code is duplicated
@@ -39,15 +37,19 @@ const AddPredictions = () => {
   const event = _event as iEvent;
   const userId = _userId as string;
 
-  const { data: personalPredictions, isLoading: isLoadingPersonal } = useQuery({
-    queryKey: [QueryKeys.PERSONAL_CATEGORY],
-    queryFn: () => getPersonalPredictionsByCategory(category.id, userId),
+  // We use the SAME KEY as the previous screen, because it avoids a re-fetch of the data which was available previously
+  const { data: personalData, isLoading: isLoadingPersonal } = useQuery({
+    queryKey: [QueryKeys.PERSONAL_EVENT],
+    queryFn: () => getCommunityPredictionsByEvent(event),
   });
+  const personalPredictions = (personalData || {})[category.id];
 
-  const { data: communityPredictions, isLoading: isLoadingCommunity } = useQuery({
-    queryKey: [QueryKeys.COMMUNITY_CATEGORY],
-    queryFn: () => getCommunityPredictionsByCategory(category),
+  // We use the SAME KEY as the previous screen, because it avoids a re-fetch of the data which was available previously
+  const { data: communityData, isLoading: isLoadingCommunity } = useQuery({
+    queryKey: [QueryKeys.COMMUNITY_EVENT],
+    queryFn: () => getCommunityPredictionsByEvent(event),
   });
+  const communityPredictions = (communityData || {})[category.id];
 
   const updatePredictions = useMutation({
     mutationFn: async (params: {
@@ -60,8 +62,8 @@ const AddPredictions = () => {
       );
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [QueryKeys.PERSONAL_CATEGORY] });
       queryClient.invalidateQueries({ queryKey: [QueryKeys.PERSONAL_EVENT] });
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.COMMUNITY_EVENT] });
     },
   });
 
@@ -177,9 +179,11 @@ const AddPredictions = () => {
             onPressItem={onPressItem}
             onPressThumbnail={onPressThumbnail}
             selected={selected}
-            size={PosterSize.SMALL}
-            isSelectable
+            // size={PosterSize.SMALL}
+            // isSelectable
             disabled={loading}
+            tab={'personal'}
+            toggleSelected={() => {}}
           />
         );
       })}

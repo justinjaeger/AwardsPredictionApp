@@ -44,7 +44,7 @@ const CreateFilm = () => {
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [QueryKeys.COMMUNITY_CATEGORY] });
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.PERSONAL_EVENT] });
       queryClient.invalidateQueries({ queryKey: [QueryKeys.COMMUNITY_EVENT] });
     },
   });

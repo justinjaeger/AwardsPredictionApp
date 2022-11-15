@@ -8,6 +8,7 @@ import {
   View,
 } from 'react-native';
 import { BodyLarge } from '../../components/Text';
+import { BOTTOM_TAB_HEIGHT } from '../../constants';
 import COLORS from '../../constants/colors';
 import { useCategory } from '../../context/CategoryContext';
 
@@ -107,7 +108,7 @@ const PredictionTabsNavigator = (community: JSX.Element, personal: JSX.Element) 
       <View
         style={{
           flexDirection: 'row',
-          height: 60,
+          height: BOTTOM_TAB_HEIGHT,
           width,
           backgroundColor: COLORS.primary,
         }}

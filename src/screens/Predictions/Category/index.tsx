@@ -3,12 +3,11 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Animated, ScrollView, View } from 'react-native';
 import { CategoryName } from '../../../API';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
-import { IconButtonOutlined } from '../../../components/Buttons/IconButton';
+import HeaderButton from '../../../components/HeaderButton';
 import ContenderListItem from '../../../components/List/ContenderList/ContenderListItem';
 import MovieList from '../../../components/MovieList';
 import { BodyLarge } from '../../../components/Text';
 import { getAwardsBodyCategories } from '../../../constants/categories';
-import COLORS from '../../../constants/colors';
 import theme from '../../../constants/theme';
 import { useCategory } from '../../../context/CategoryContext';
 import { useAuth } from '../../../context/UserContext';
@@ -18,27 +17,10 @@ import getCommunityPredictionsByEvent from '../../../services/queryFuncs/getComm
 import getPersonalPredictionsByEvent from '../../../services/queryFuncs/getPersonalPredictionsByEvent';
 import { iCategory, iEvent, QueryKeys } from '../../../store/types';
 import { useTypedNavigation } from '../../../util/hooks';
+import { CategoryHeader } from '../styles';
 
 type iContenderListProps = {
   tab: 'community' | 'personal';
-};
-
-const HeaderButton = (props: { icon: string; onPress: () => void }) => {
-  const { icon, onPress } = props;
-  return (
-    <IconButtonOutlined
-      onPress={onPress}
-      iconProps={{
-        name: icon,
-      }}
-      styles={{
-        width: 40,
-        height: 40,
-        marginRight: theme.posterMargin,
-        marginLeft: theme.posterMargin,
-      }}
-    />
-  );
 };
 
 const TIMING = 250;
@@ -138,14 +120,7 @@ export const Category = (props: iContenderListProps) => {
           }}
         >
           <>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                padding: theme.windowMargin,
-                backgroundColor: COLORS.primary,
-              }}
-            >
+            <CategoryHeader>
               <View
                 style={{
                   flexDirection: 'row',
@@ -167,25 +142,27 @@ export const Category = (props: iContenderListProps) => {
                   />
                 ) : null}
               </View>
-              <Animated.View
-                style={{
-                  flexDirection: 'row',
-                  width: 120,
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  opacity: listOpacity,
-                }}
-              >
-                <View>
-                  <BodyLarge style={{ textAlign: 'right' }}>Predict</BodyLarge>
-                  <BodyLarge style={{ textAlign: 'right' }}>Nom</BodyLarge>
-                </View>
-                <View>
-                  <BodyLarge style={{ textAlign: 'right' }}>Predict</BodyLarge>
-                  <BodyLarge style={{ textAlign: 'right' }}>Win</BodyLarge>
-                </View>
-              </Animated.View>
-            </View>
+              {tab === 'community' ? (
+                <Animated.View
+                  style={{
+                    flexDirection: 'row',
+                    width: 120,
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    opacity: listOpacity,
+                  }}
+                >
+                  <View>
+                    <BodyLarge style={{ textAlign: 'right' }}>Predict</BodyLarge>
+                    <BodyLarge style={{ textAlign: 'right' }}>Nom</BodyLarge>
+                  </View>
+                  <View>
+                    <BodyLarge style={{ textAlign: 'right' }}>Predict</BodyLarge>
+                    <BodyLarge style={{ textAlign: 'right' }}>Win</BodyLarge>
+                  </View>
+                </Animated.View>
+              ) : null}
+            </CategoryHeader>
             <ScrollView
               contentContainerStyle={{
                 paddingBottom: 100,
@@ -198,6 +175,7 @@ export const Category = (props: iContenderListProps) => {
               <Animated.View style={{ opacity: listOpacity }}>
                 {predictions.map((prediction, i) => (
                   <ContenderListItem
+                    tab={tab}
                     prediction={prediction}
                     ranking={i + 1}
                     selected={selectedContenderId === prediction.contenderId}
