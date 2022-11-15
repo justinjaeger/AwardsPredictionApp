@@ -6,12 +6,9 @@ import { PredictionsParamList } from '../../../navigation/types';
 import { useTypedNavigation } from '../../../util/hooks';
 import sortByObjectOrder from '../../../util/sortByObjectOrder';
 import { useCategory } from '../../../context/CategoryContext';
-import { iCategory, iEvent, iPrediction, QueryKeys } from '../../../store/types';
+import { iCategory, iEvent, iPrediction } from '../../../store/types';
 import PredictionTabsNavigator from '../../../navigation/PredictionTabsNavigator';
 import { Body, SubHeader } from '../../../components/Text';
-import { useQuery } from '@tanstack/react-query';
-import getCommunityPredictionsByEvent from '../../../services/queryFuncs/getCommunityPredictionsByEvent';
-import getPersonalPredictionsByEvent from '../../../services/queryFuncs/getPersonalPredictionsByEvent';
 import { useAuth } from '../../../context/UserContext';
 import COLORS from '../../../constants/colors';
 import theme from '../../../constants/theme';
@@ -19,18 +16,20 @@ import MovieList from '../../../components/MovieList';
 import { eventToString } from '../../../util/stringConversions';
 import LoadingStatue from '../../../components/LoadingStatue';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
+import useQueryCommunityOrPersonalEvent from '../../../hooks/getCommunityOrPersonalEvent';
 
 const EventPredictions = (props: { tab: 'personal' | 'community' }) => {
   const { tab } = props;
 
   const { event: _event, setCategory } = useCategory();
-  const { userId } = useAuth();
+  const { userId: _userId } = useAuth();
   const navigation = useTypedNavigation<PredictionsParamList>();
 
   const loadingOpacity = useRef(new Animated.Value(1)).current;
   const bodyOpacity = useRef(new Animated.Value(0)).current;
 
   const event = _event as iEvent;
+  const userId = _userId as string;
 
   // define the header
   useLayoutEffect(() => {
@@ -40,15 +39,11 @@ const EventPredictions = (props: { tab: 'personal' | 'community' }) => {
     });
   }, [navigation]);
 
-  const { data: predictionData, isLoading } = useQuery({
-    queryKey: [
-      tab === 'community' ? QueryKeys.COMMUNITY_EVENT : QueryKeys.PERSONAL_EVENT,
-    ],
-    queryFn:
-      tab === 'community'
-        ? () => getCommunityPredictionsByEvent(event)
-        : () => getPersonalPredictionsByEvent(event.id, userId || ''),
-  });
+  const { data: predictionData, isLoading } = useQueryCommunityOrPersonalEvent(
+    tab,
+    event,
+    userId,
+  );
 
   useEffect(() => {
     if (!isLoading) {

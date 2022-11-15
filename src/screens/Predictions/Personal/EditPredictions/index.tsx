@@ -15,41 +15,32 @@ import { PosterSize } from '../../../../constants/posterDimensions';
 import ContenderListItem from '../../../../components/List/ContenderList/ContenderListItem';
 import { useAuth } from '../../../../context/UserContext';
 import { iCategory, iEvent, QueryKeys } from '../../../../store/types';
-import {
-  useIsFetching,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   iPredictionData,
   iPredictionSetParams,
 } from '../../../../services/graphql/prediction';
 import PredictionTabsNavigator from '../../../../navigation/PredictionTabsNavigator';
 import { Category } from '../../Category';
-import getCommunityPredictionsByEvent from '../../../../services/queryFuncs/getCommunityPredictionsByEvent';
 import BackgroundWrapper from '../../../../components/BackgroundWrapper';
 import { CategoryHeader } from '../../styles';
 import HeaderButton from '../../../../components/HeaderButton';
 import theme from '../../../../constants/theme';
 import LoadingStatue from '../../../../components/LoadingStatue';
+import useQueryPersonalEvent from '../../../../hooks/getPersonalEvent';
 
 const EditPredictions = () => {
   const { event: _event, category: _category, displayContenderInfo } = useCategory();
   const navigation = useTypedNavigation<PersonalParamList>();
   const { userId: _userId } = useAuth();
   const queryClient = useQueryClient();
-  const isFetching = useIsFetching();
 
   const category = _category as iCategory;
   const event = _event as iEvent;
   const userId = _userId as string;
 
   // We use the SAME KEY as the previous screen, because it avoids a re-fetch of the data which was available previously
-  const { data: predictionData } = useQuery({
-    queryKey: [QueryKeys.PERSONAL_EVENT],
-    queryFn: () => getCommunityPredictionsByEvent(event),
-  });
+  const { data: predictionData } = useQueryPersonalEvent(event.id, userId);
   const serverPredictions = (predictionData || {})[category.id];
 
   const updatePredictions = useMutation({
@@ -63,11 +54,8 @@ const EditPredictions = () => {
       );
     },
     onSuccess: async () => {
-      console.error('isFetching1', isFetching);
       await queryClient.invalidateQueries({ queryKey: [QueryKeys.PERSONAL_EVENT] });
-      console.error('isFetching2', isFetching);
       await queryClient.invalidateQueries({ queryKey: [QueryKeys.COMMUNITY_EVENT] });
-      console.error('isFetching3', isFetching);
       setLoading(false);
       navigation.goBack();
     },

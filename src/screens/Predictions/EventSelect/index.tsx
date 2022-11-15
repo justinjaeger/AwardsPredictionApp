@@ -13,12 +13,11 @@ import { PredictionsParamList } from '../../../navigation/types';
 import { useTypedNavigation } from '../../../util/hooks';
 import sortByObjectOrder from '../../../util/sortByObjectOrder';
 import { useCategory } from '../../../context/CategoryContext';
-import { iEvent, QueryKeys } from '../../../store/types';
-import { useQuery } from '@tanstack/react-query';
-import getAllEvents from '../../../services/queryFuncs/getAllEvents';
+import { iEvent } from '../../../store/types';
 import theme from '../../../constants/theme';
 import LoadingStatue from '../../../components/LoadingStatue';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
+import useQueryAllEvents from '../../../hooks/getAllEvents';
 
 export const getEventName = (awardsBody: AwardsBody, eventType: EventType) => {
   const ab = AWARDS_BODY_TO_PLURAL_STRING[AwardsBody[awardsBody]];
@@ -34,10 +33,7 @@ const EventSelect = () => {
   const loadingOpacity = useRef(new Animated.Value(1)).current;
   const bodyOpacity = useRef(new Animated.Value(0)).current;
 
-  const { data: events, isLoading } = useQuery({
-    queryKey: [QueryKeys.EVENTS],
-    queryFn: getAllEvents,
-  });
+  const { data: events, isLoading } = useQueryAllEvents();
 
   useEffect(() => {
     if (!isLoading) {

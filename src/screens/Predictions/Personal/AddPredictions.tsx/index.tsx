@@ -4,24 +4,16 @@ import { CategoryType } from '../../../../API';
 import { TouchableText } from '../../../../components/Buttons';
 import ContenderListItem from '../../../../components/List/ContenderList/ContenderListItem';
 import { PersonalParamList } from '../../../../navigation/types';
-import ApiServices from '../../../../services/graphql';
 import { useTypedNavigation } from '../../../../util/hooks';
 import { removeFromArray } from '../../../../util/removeFromArray';
 import { useCategory } from '../../../../context/CategoryContext';
 import { useAuth } from '../../../../context/UserContext';
-import { iCategory, iEvent, iPrediction, QueryKeys } from '../../../../store/types';
-import {
-  useIsFetching,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from '@tanstack/react-query';
-import {
-  iPredictionData,
-  iPredictionSetParams,
-} from '../../../../services/graphql/prediction';
+import { iCategory, iEvent, iPrediction } from '../../../../store/types';
+import { useIsFetching } from '@tanstack/react-query';
 import { Body } from '../../../../components/Text';
-import getCommunityPredictionsByEvent from '../../../../services/queryFuncs/getCommunityPredictionsByEvent';
+import useQueryCommunityEvent from '../../../../hooks/getCommunityEvent';
+import useQueryPersonalEvent from '../../../../hooks/getPersonalEvent';
+import useMutationUpdatePredictions from '../../../../hooks/updatePredictions';
 
 // TODO: really, this is adding OR deleting contenders
 // NOTE: this is very similar to Contenders, some code is duplicated
@@ -30,7 +22,6 @@ const AddPredictions = () => {
   const navigation = useTypedNavigation<PersonalParamList>();
   const { userId: _userId } = useAuth();
   const { category: _category, event: _event } = useCategory();
-  const queryClient = useQueryClient();
   const isFetching = useIsFetching();
 
   const category = _category as iCategory;
@@ -38,34 +29,19 @@ const AddPredictions = () => {
   const userId = _userId as string;
 
   // We use the SAME KEY as the previous screen, because it avoids a re-fetch of the data which was available previously
-  const { data: personalData, isLoading: isLoadingPersonal } = useQuery({
-    queryKey: [QueryKeys.PERSONAL_EVENT],
-    queryFn: () => getCommunityPredictionsByEvent(event),
-  });
+  const { data: personalData, isLoading: isLoadingPersonal } = useQueryPersonalEvent(
+    event.id,
+    userId,
+  );
   const personalPredictions = (personalData || {})[category.id];
 
   // We use the SAME KEY as the previous screen, because it avoids a re-fetch of the data which was available previously
-  const { data: communityData, isLoading: isLoadingCommunity } = useQuery({
-    queryKey: [QueryKeys.COMMUNITY_EVENT],
-    queryFn: () => getCommunityPredictionsByEvent(event),
-  });
+  const { data: communityData, isLoading: isLoadingCommunity } = useQueryCommunityEvent(
+    event,
+  );
   const communityPredictions = (communityData || {})[category.id];
 
-  const updatePredictions = useMutation({
-    mutationFn: async (params: {
-      predictionSetParams: iPredictionSetParams;
-      predictionData: iPredictionData;
-    }) => {
-      return ApiServices.createOrUpdatePredictions(
-        params.predictionSetParams,
-        params.predictionData,
-      );
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [QueryKeys.PERSONAL_EVENT] });
-      queryClient.invalidateQueries({ queryKey: [QueryKeys.COMMUNITY_EVENT] });
-    },
-  });
+  const { mutate: updatePredictions } = useMutationUpdatePredictions();
 
   // TODO: can do this screen AFTER global predictions are gotten, because we need these
   // Need global predictions AND personal per category
@@ -145,7 +121,7 @@ const AddPredictions = () => {
       contenderId: c,
       ranking: i + 1,
     }));
-    await updatePredictions.mutate({
+    await updatePredictions({
       predictionSetParams: { userId, categoryId: category.id, eventId: event.id },
       predictionData: newPredictionData,
     });

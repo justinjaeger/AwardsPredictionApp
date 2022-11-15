@@ -1,4 +1,3 @@
-import { useQuery } from '@tanstack/react-query';
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Animated, ScrollView, View } from 'react-native';
 import { CategoryName } from '../../../API';
@@ -11,11 +10,10 @@ import { getAwardsBodyCategories } from '../../../constants/categories';
 import theme from '../../../constants/theme';
 import { useCategory } from '../../../context/CategoryContext';
 import { useAuth } from '../../../context/UserContext';
+import useQueryCommunityOrPersonalEvent from '../../../hooks/getCommunityOrPersonalEvent';
 import PredictionTabsNavigator from '../../../navigation/PredictionTabsNavigator';
 import { PredictionsParamList } from '../../../navigation/types';
-import getCommunityPredictionsByEvent from '../../../services/queryFuncs/getCommunityPredictionsByEvent';
-import getPersonalPredictionsByEvent from '../../../services/queryFuncs/getPersonalPredictionsByEvent';
-import { iCategory, iEvent, QueryKeys } from '../../../store/types';
+import { iCategory, iEvent } from '../../../store/types';
 import { useTypedNavigation } from '../../../util/hooks';
 import { CategoryHeader } from '../styles';
 
@@ -59,15 +57,11 @@ export const Category = (props: iContenderListProps) => {
   }, [navigation]);
 
   // We use the SAME KEY as the previous screen, because it avoids a re-fetch of the data which was available previously
-  const { data: predictionData, isLoading } = useQuery({
-    queryKey: [
-      tab === 'community' ? QueryKeys.COMMUNITY_EVENT : QueryKeys.PERSONAL_EVENT,
-    ],
-    queryFn:
-      tab === 'community'
-        ? () => getCommunityPredictionsByEvent(event)
-        : () => getPersonalPredictionsByEvent(event.id, userId || ''),
-  });
+  const { data: predictionData, isLoading } = useQueryCommunityOrPersonalEvent(
+    tab,
+    event,
+    userId,
+  );
   const predictions = (predictionData || {})[category.id];
 
   useEffect(() => {
