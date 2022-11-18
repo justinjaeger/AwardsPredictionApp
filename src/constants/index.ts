@@ -17,7 +17,7 @@ export const EVENT_TYPE_TO_STRING: {
 };
 
 export const headerStyle = {
-  backgroundColor: 'rgba(0,0,0,0.4)',
+  backgroundColor: COLORS.redDark,
 };
 export const headerTitleStyle = { color: COLORS.white };
 export const headerSettings: any = {

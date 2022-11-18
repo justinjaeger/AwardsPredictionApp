@@ -3,7 +3,8 @@ import React from 'react';
 import theme from '../../constants/theme';
 import { IconButton } from './IconButton';
 
-const BackButton = () => {
+const BackButton = (props: { onPress?: () => void }) => {
+  const { onPress } = props;
   const navigation = useNavigation();
 
   return (
@@ -12,7 +13,13 @@ const BackButton = () => {
         name: 'arrow-ios-back-outline',
         styles: { width: 20, height: 30 },
       }}
-      onPress={navigation.goBack}
+      onPress={() => {
+        if (onPress) {
+          onPress();
+        } else {
+          navigation.goBack();
+        }
+      }}
       styles={{ width: 30, height: 30, marginLeft: theme.windowMargin }}
     />
   );

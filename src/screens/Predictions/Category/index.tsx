@@ -1,68 +1,36 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { Animated, ScrollView, View } from 'react-native';
-import { CategoryName } from '../../../API';
-import BackgroundWrapper from '../../../components/BackgroundWrapper';
-import HeaderButton from '../../../components/HeaderButton';
-import ContenderListItem from '../../../components/List/ContenderList/ContenderListItem';
-import MovieList from '../../../components/MovieList';
-import { BodyLarge } from '../../../components/Text';
-import { getAwardsBodyCategories } from '../../../constants/categories';
-import theme from '../../../constants/theme';
-import { useCategory } from '../../../context/CategoryContext';
-import { useAuth } from '../../../context/UserContext';
-import useQueryCommunityOrPersonalEvent from '../../../hooks/getCommunityOrPersonalEvent';
 import PredictionTabsNavigator from '../../../navigation/PredictionTabsNavigator';
-import { PredictionsParamList } from '../../../navigation/types';
-import { iCategory, iEvent } from '../../../store/types';
+import CategoryCommunity from './CategoryCommunity';
+import CategoryPersonal from './CategoryPersonal';
+import { Animated } from 'react-native';
 import { useTypedNavigation } from '../../../util/hooks';
-import { CategoryHeader } from '../styles';
-
-type iContenderListProps = {
-  tab: 'community' | 'personal';
-};
+import { PredictionsParamList } from '../../../navigation/types';
+import { getAwardsBodyCategories } from '../../../constants/categories';
+import { CategoryName } from '../../../API';
+import { useCategory } from '../../../context/CategoryContext';
 
 const TIMING = 250;
 
-// NOTE: Has a lot in common with ContenderListDraggable
-export const Category = (props: iContenderListProps) => {
-  const { tab } = props;
+export type iCategoryListProps = {
+  display: 'list' | 'grid';
+  toggleDisplay: () => void;
+  gridOpacity: Animated.Value;
+  listOpacity: Animated.Value;
+};
 
+const TabsWrapper = () => {
   const gridOpacity = useRef(new Animated.Value(0)).current;
   const listOpacity = useRef(new Animated.Value(0)).current;
 
-  const { category: _category, displayContenderInfo, event: _event } = useCategory();
-  const { userId: _userId } = useAuth();
+  const { category, event } = useCategory();
   const navigation = useTypedNavigation<PredictionsParamList>();
 
-  const category = _category as iCategory;
-  const event = _event as iEvent;
-  const userId = _userId as string;
-
   const [display, setDisplay] = useState<'list' | 'grid'>('list');
-  const [selectedContenderId, setSelectedContenderId] = useState<string | undefined>();
 
   const toggleDisplay = () => {
     if (display === 'list') setDisplay('grid');
     if (display === 'grid') setDisplay('list');
   };
-
-  // Set the header
-  useLayoutEffect(() => {
-    const awardsBodyCategories = getAwardsBodyCategories(event.awardsBody, event.year);
-    const headerTitle =
-      'Best ' + awardsBodyCategories[CategoryName[category.name]]?.name || '';
-    navigation.setOptions({
-      headerTitle,
-    });
-  }, [navigation]);
-
-  // We use the SAME KEY as the previous screen, because it avoids a re-fetch of the data which was available previously
-  const { data: predictionData, isLoading } = useQueryCommunityOrPersonalEvent(
-    tab,
-    event,
-    userId,
-  );
-  const predictions = (predictionData || {})[category.id];
 
   useEffect(() => {
     if (display === 'grid') {
@@ -95,122 +63,30 @@ export const Category = (props: iContenderListProps) => {
     }
   }, [display]);
 
-  if (isLoading || !predictions) {
-    return null;
-  }
+  // Set the header
+  useLayoutEffect(() => {
+    if (!category || !event) return;
+    const awardsBodyCategories = getAwardsBodyCategories(event.awardsBody, event.year);
+    const headerTitle =
+      'Best ' + awardsBodyCategories[CategoryName[category.name]]?.name || '';
+    navigation.setOptions({
+      headerTitle,
+    });
+  }, [navigation]);
 
-  return (
-    <BackgroundWrapper>
-      <View
-        style={{
-          alignItems: 'center',
-        }}
-      >
-        <View
-          style={{
-            display: 'flex',
-            height: '100%',
-            width: '100%',
-          }}
-        >
-          <>
-            <CategoryHeader>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'flex-start',
-                }}
-              >
-                <HeaderButton
-                  onPress={() => {
-                    toggleDisplay();
-                  }}
-                  icon={display === 'grid' ? 'list' : display === 'list' ? 'grid' : ''}
-                />
-                {tab === 'personal' ? (
-                  <HeaderButton
-                    onPress={() => {
-                      navigation.navigate('PersonalPredictions');
-                    }}
-                    icon={'edit-outline'}
-                  />
-                ) : null}
-              </View>
-              {tab === 'community' ? (
-                <Animated.View
-                  style={{
-                    flexDirection: 'row',
-                    width: 120,
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    opacity: listOpacity,
-                  }}
-                >
-                  <View>
-                    <BodyLarge style={{ textAlign: 'right' }}>Predict</BodyLarge>
-                    <BodyLarge style={{ textAlign: 'right' }}>Nom</BodyLarge>
-                  </View>
-                  <View>
-                    <BodyLarge style={{ textAlign: 'right' }}>Predict</BodyLarge>
-                    <BodyLarge style={{ textAlign: 'right' }}>Win</BodyLarge>
-                  </View>
-                </Animated.View>
-              ) : null}
-            </CategoryHeader>
-            <ScrollView
-              contentContainerStyle={{
-                paddingBottom: 100,
-                marginTop: theme.windowMargin,
-              }}
-            >
-              <Animated.View style={{ opacity: gridOpacity, position: 'absolute' }}>
-                <MovieList predictions={predictions} />
-              </Animated.View>
-              <Animated.View style={{ opacity: listOpacity }}>
-                {predictions.map((prediction, i) => (
-                  <ContenderListItem
-                    tab={tab}
-                    prediction={prediction}
-                    ranking={i + 1}
-                    selected={selectedContenderId === prediction.contenderId}
-                    toggleSelected={(id: string) => {
-                      if (selectedContenderId === id) {
-                        setSelectedContenderId(undefined);
-                      } else {
-                        setSelectedContenderId(id);
-                      }
-                    }}
-                    onPressItem={(item) => {
-                      setSelectedContenderId(item.contenderId);
-                    }}
-                    onPressThumbnail={displayContenderInfo}
-                  />
-                ))}
-              </Animated.View>
-            </ScrollView>
-            {predictions && predictions.length === 0 ? (
-              <View
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <BodyLarge>No films in this list</BodyLarge>
-              </View>
-            ) : null}
-          </>
-        </View>
-      </View>
-    </BackgroundWrapper>
-  );
-};
-
-const TabsWrapper = () => {
   return PredictionTabsNavigator(
-    <Category tab={'community'} />,
-    <Category tab={'personal'} />,
+    <CategoryCommunity
+      display={display}
+      toggleDisplay={toggleDisplay}
+      gridOpacity={gridOpacity}
+      listOpacity={listOpacity}
+    />,
+    <CategoryPersonal
+      display={display}
+      toggleDisplay={toggleDisplay}
+      gridOpacity={gridOpacity}
+      listOpacity={listOpacity}
+    />,
   );
 };
 

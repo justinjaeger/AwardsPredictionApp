@@ -20,8 +20,6 @@ import {
   iPredictionData,
   iPredictionSetParams,
 } from '../../../../services/graphql/prediction';
-import PredictionTabsNavigator from '../../../../navigation/PredictionTabsNavigator';
-import { Category } from '../../Category';
 import BackgroundWrapper from '../../../../components/BackgroundWrapper';
 import { CategoryHeader } from '../../styles';
 import HeaderButton from '../../../../components/HeaderButton';
@@ -143,8 +141,4 @@ const EditPredictions = () => {
   );
 };
 
-const TabsWrapper = () => {
-  return PredictionTabsNavigator(<Category tab={'community'} />, <EditPredictions />);
-};
-
-export default TabsWrapper;
+export default EditPredictions;

@@ -16,7 +16,7 @@ type iCategoryContext = {
   setEvent: (event: iEvent) => Promise<void>;
   category: iCategory | undefined;
   setCategory: (category: iCategory) => Promise<void>;
-  personalCommunityTab: iPersonalCommunityTab;
+  personalCommunityTab: iPersonalCommunityTab | undefined;
   setPersonalCommunityTab: (d: iPersonalCommunityTab) => void;
   displayContenderInfo: (contenderId: string, personTmdbId?: number) => void;
 };
@@ -33,15 +33,18 @@ const CategoryContext = createContext<iCategoryContext>({
   displayContenderInfo: () => {},
 });
 
+// TODO: think we can delete eventId since not using it
+
 export const CategoryProvider = (props: { children: React.ReactNode }) => {
   const navigation = useNavigation();
 
   const [eventId, _setEventId] = useState<string>();
   const [event, _setEvent] = useState<iEvent>();
   const [category, _setCategory] = useState<iCategory>();
-  const [personalCommunityTab, setPersonalCommunityTab] = useState<iPersonalCommunityTab>(
-    'community',
-  );
+  const [
+    personalCommunityTab,
+    setPersonalCommunityTab,
+  ] = useState<iPersonalCommunityTab>();
 
   const setEventId = (eventId: string) => {
     _setEventId(eventId);

@@ -4,7 +4,7 @@ import theme from '../../constants/theme';
 import { iPrediction } from '../../store/types';
 import PosterFromTmdbId from '../Images/PosterFromTmdbId';
 
-const MovieList = (props: { predictions: iPrediction[] }) => {
+const MovieGrid = (props: { predictions: iPrediction[] }) => {
   const { predictions } = props;
   const { width } = useWindowDimensions();
 
@@ -32,4 +32,4 @@ const MovieList = (props: { predictions: iPrediction[] }) => {
   );
 };
 
-export default MovieList;
+export default MovieGrid;

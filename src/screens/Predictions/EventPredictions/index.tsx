@@ -12,11 +12,11 @@ import { Body, SubHeader } from '../../../components/Text';
 import { useAuth } from '../../../context/UserContext';
 import COLORS from '../../../constants/colors';
 import theme from '../../../constants/theme';
-import MovieList from '../../../components/MovieList';
 import { eventToString } from '../../../util/stringConversions';
 import LoadingStatue from '../../../components/LoadingStatue';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import useQueryCommunityOrPersonalEvent from '../../../hooks/getCommunityOrPersonalEvent';
+import MovieGrid from '../../../components/MovieGrid';
 
 const EventPredictions = (props: { tab: 'personal' | 'community' }) => {
   const { tab } = props;
@@ -128,7 +128,7 @@ const EventPredictions = (props: { tab: 'personal' | 'community' }) => {
                   >
                     {awardsBodyCategories[CategoryName[category.name]]?.name || ''}
                   </SubHeader>
-                  <MovieList predictions={truncatedPredictions} />
+                  <MovieGrid predictions={truncatedPredictions} />
                 </View>
               </TouchableHighlight>
             );

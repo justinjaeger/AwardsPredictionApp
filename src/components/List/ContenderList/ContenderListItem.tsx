@@ -12,6 +12,7 @@ import { iCachedTmdbMovie, iCachedTmdbPerson } from '../../../services/cache/typ
 import TmdbServices from '../../../services/tmdb';
 import { iCategory } from '../../../store/types';
 import { useAsyncEffect } from '../../../util/hooks';
+import CustomIcon from '../../CustomIcon';
 import AnimatedPoster from '../../Images/AnimatedPoster';
 import { BodyLarge, Label, LabelBold } from '../../Text';
 
@@ -81,59 +82,31 @@ const ContenderListItem = (props: iContenderListItemProps) => {
   const { height } = getPosterDimensionsByWidth(width);
 
   useEffect(() => {
-    if (selected) {
-      Animated.timing(imageWidth, {
-        toValue: width,
-        duration: TIMING,
-        useNativeDriver: false,
-      }).start();
-      Animated.timing(imageHeight, {
-        toValue: height,
-        duration: TIMING,
-        useNativeDriver: false,
-      }).start();
-      Animated.timing(hiddenOpacity, {
-        toValue: 1,
-        duration: TIMING_FADE,
-        useNativeDriver: true,
-      }).start();
-      Animated.timing(bodyWidth, {
-        toValue: BODY_WIDTH_SELECTED,
-        duration: TIMING,
-        useNativeDriver: false,
-      }).start();
-      Animated.timing(itemWidth, {
-        toValue: ITEM_WIDTH_SELECTED,
-        duration: TIMING,
-        useNativeDriver: false,
-      }).start();
-    } else {
-      Animated.timing(imageWidth, {
-        toValue: width,
-        duration: TIMING,
-        useNativeDriver: false,
-      }).start();
-      Animated.timing(imageHeight, {
-        toValue: height,
-        duration: TIMING,
-        useNativeDriver: false,
-      }).start();
-      Animated.timing(hiddenOpacity, {
-        toValue: 0,
-        duration: TIMING_FADE,
-        useNativeDriver: true,
-      }).start();
-      Animated.timing(bodyWidth, {
-        toValue: BODY_WIDTH_UNSELECTED,
-        duration: TIMING,
-        useNativeDriver: false,
-      }).start();
-      Animated.timing(itemWidth, {
-        toValue: ITEM_WIDTH_UNSELECTED,
-        duration: TIMING,
-        useNativeDriver: false,
-      }).start();
-    }
+    Animated.timing(imageWidth, {
+      toValue: width,
+      duration: TIMING,
+      useNativeDriver: false,
+    }).start();
+    Animated.timing(imageHeight, {
+      toValue: height,
+      duration: TIMING,
+      useNativeDriver: false,
+    }).start();
+    Animated.timing(hiddenOpacity, {
+      toValue: selected ? 1 : 0,
+      duration: TIMING_FADE,
+      useNativeDriver: true,
+    }).start();
+    Animated.timing(bodyWidth, {
+      toValue: selected ? BODY_WIDTH_SELECTED : BODY_WIDTH_UNSELECTED,
+      duration: TIMING,
+      useNativeDriver: false,
+    }).start();
+    Animated.timing(itemWidth, {
+      toValue: selected ? ITEM_WIDTH_SELECTED : ITEM_WIDTH_UNSELECTED,
+      duration: TIMING,
+      useNativeDriver: false,
+    }).start();
   }, [selected]);
 
   useAsyncEffect(async () => {
@@ -193,7 +166,8 @@ const ContenderListItem = (props: iContenderListItemProps) => {
 
   const categoryName = CategoryName[category.name];
   const categoryInfo = tmdbMovie?.categoryInfo?.[categoryName];
-  const communityRankings = prediction.communityRankings;
+  const communityRankings =
+    tab === 'community' ? prediction.communityRankings : undefined;
 
   return (
     <TouchableHighlight
@@ -201,7 +175,7 @@ const ContenderListItem = (props: iContenderListItemProps) => {
         toggleSelected(prediction.contenderId);
       }}
       style={{
-        backgroundColor: 'transparent',
+        backgroundColor: isActive ? COLORS.goldDark : 'transparent',
         width: '100%',
         paddingTop: theme.windowMargin / 4,
         paddingBottom: theme.windowMargin / 4,
@@ -246,7 +220,7 @@ const ContenderListItem = (props: iContenderListItemProps) => {
                 <Label style={{ marginLeft: 10 }}>{categoryInfo.join(', ')}</Label>
               ) : null}
             </Animated.View>
-            {tab === 'community' && communityRankings ? (
+            {communityRankings ? (
               <View
                 style={{
                   width: RIGHT_COL_WIDTH,
@@ -262,12 +236,17 @@ const ContenderListItem = (props: iContenderListItemProps) => {
                 </BodyLarge>
               </View>
             ) : null}
+            {tab === 'personal' ? (
+              <View style={{ height: '100%', justifyContent: 'center', marginRight: 5 }}>
+                <CustomIcon name={'menu'} color={COLORS.white} size={24} />
+              </View>
+            ) : null}
           </View>
           {selected && tmdbMovie ? (
             <Animated.View
               style={{
                 opacity: hiddenOpacity,
-                width: BODY_WIDTH_UNSELECTED,
+                width: '94%',
                 marginLeft: theme.windowMargin,
               }}
             >

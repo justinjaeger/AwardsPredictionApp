@@ -48,7 +48,9 @@ const PredictionTabsNavigator = (community: JSX.Element, personal: JSX.Element) 
   const { personalCommunityTab, setPersonalCommunityTab } = useCategory();
   const scrollBarPositionTwo = width / 2;
 
-  const [initialTab] = useState<'personal' | 'community'>(personalCommunityTab);
+  const [initialTab] = useState<'personal' | 'community'>(
+    personalCommunityTab || 'community',
+  );
 
   const scrollViewRef = useRef<ScrollView>(null);
   const scrollBarAnim = useRef(

@@ -1,10 +1,13 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
 import ApiServices from '../services/graphql';
 import { iPredictionData, iPredictionSetParams } from '../services/graphql/prediction';
 import { QueryKeys } from '../store/types';
 
 const useMutationUpdatePredictions = () => {
   const queryClient = useQueryClient();
+
+  const [isComplete, setIsComplete] = useState<boolean>(false);
 
   const { mutate, isLoading } = useMutation({
     mutationFn: async (params: {
@@ -16,13 +19,14 @@ const useMutationUpdatePredictions = () => {
         params.predictionData,
       );
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [QueryKeys.PERSONAL_EVENT] });
-      queryClient.invalidateQueries({ queryKey: [QueryKeys.COMMUNITY_EVENT] });
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: [QueryKeys.PERSONAL_EVENT] });
+      await queryClient.invalidateQueries({ queryKey: [QueryKeys.COMMUNITY_EVENT] });
+      setIsComplete(true);
     },
   });
 
-  return { mutate, isLoading };
+  return { mutate, isLoading, isComplete };
 };
 
 export default useMutationUpdatePredictions;

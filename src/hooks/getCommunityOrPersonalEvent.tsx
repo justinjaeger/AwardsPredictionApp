@@ -8,6 +8,9 @@ const useQueryCommunityOrPersonalEvent = (
   event: iEvent,
   userId?: string | undefined,
 ) => {
+  if (tab === 'personal' && userId === undefined) {
+    console.error('ERROR: userId cannot be undefined if tab is personal');
+  }
   const { data, isLoading } = useQuery({
     queryKey: [
       tab === 'community' ? QueryKeys.COMMUNITY_EVENT : QueryKeys.PERSONAL_EVENT,

@@ -66,79 +66,76 @@ const EventSelect = () => {
   const groupedByYear = _.groupBy(orderedEvents, (e) => e.year);
 
   return (
-    <>
-      {/* <NavigationHeader text={['Select Event']} disableBack /> */}
-      <BackgroundWrapper>
-        <>
-          <Animated.View
-            style={{
-              position: 'absolute',
-              width: '100%',
-              height: '80%',
-              alignItems: 'center',
-              justifyContent: 'center',
-              opacity: loadingOpacity,
-            }}
-          >
-            <LoadingStatue />
-          </Animated.View>
-          <Animated.ScrollView
-            style={{ opacity: bodyOpacity }}
-            contentContainerStyle={{
-              alignSelf: 'flex-start',
-              marginTop: theme.windowMargin,
-              paddingBottom: 100,
-              marginLeft: theme.windowMargin,
-            }}
-          >
-            {Object.entries(groupedByYear).map(([key, val]) => (
-              <>
-                <SubHeader style={{ marginBottom: theme.windowMargin }}>{key}</SubHeader>
-                <View style={{ flexWrap: 'wrap', flexDirection: 'row' }}>
-                  {[...val, ...val, ...val, ...val].map((event) => {
-                    const { type, awardsBody, expiration } = event;
-                    return (
-                      <TouchableHighlight
-                        style={{
-                          height: 100,
-                          backgroundColor: 'rgba(0,0,0,0.1)',
-                          borderRadius: theme.borderRadius,
-                          borderWidth: 1,
-                          borderColor: COLORS.white,
-                          marginBottom: theme.windowMargin,
-                          marginRight: theme.windowMargin,
-                          width: width / 2 - theme.windowMargin - 5,
-                          padding: 5,
-                          justifyContent: 'space-between',
-                        }}
-                        underlayColor={COLORS.secondaryDark}
-                        onPress={() => onSelectEvent(event)}
-                      >
-                        <>
-                          <View>
-                            <SubHeader>
-                              {AWARDS_BODY_TO_PLURAL_STRING[AwardsBody[awardsBody]]}
-                            </SubHeader>
-                            <BodyLarge>{EVENT_TYPE_TO_STRING[type]}</BodyLarge>
-                          </View>
-                          <Body
-                            style={{
-                              alignSelf: 'flex-end',
-                              justifyContent: 'flex-end',
-                              color: COLORS.white,
-                            }}
-                          >{`Date: ${expiration || 'TBD'}`}</Body>
-                        </>
-                      </TouchableHighlight>
-                    );
-                  })}
-                </View>
-              </>
-            ))}
-          </Animated.ScrollView>
-        </>
-      </BackgroundWrapper>
-    </>
+    <BackgroundWrapper>
+      <>
+        <Animated.View
+          style={{
+            position: 'absolute',
+            width: '100%',
+            height: '80%',
+            alignItems: 'center',
+            justifyContent: 'center',
+            opacity: loadingOpacity,
+          }}
+        >
+          <LoadingStatue />
+        </Animated.View>
+        <Animated.ScrollView
+          style={{ opacity: bodyOpacity }}
+          contentContainerStyle={{
+            alignSelf: 'flex-start',
+            marginTop: theme.windowMargin,
+            paddingBottom: 100,
+            marginLeft: theme.windowMargin,
+          }}
+        >
+          {Object.entries(groupedByYear).map(([key, val]) => (
+            <>
+              <SubHeader style={{ marginBottom: theme.windowMargin }}>{key}</SubHeader>
+              <View style={{ flexWrap: 'wrap', flexDirection: 'row' }}>
+                {[...val, ...val, ...val, ...val].map((event) => {
+                  const { type, awardsBody, expiration } = event;
+                  return (
+                    <TouchableHighlight
+                      style={{
+                        height: 100,
+                        backgroundColor: 'rgba(0,0,0,0.1)',
+                        borderRadius: theme.borderRadius,
+                        borderWidth: 1,
+                        borderColor: COLORS.white,
+                        marginBottom: theme.windowMargin,
+                        marginRight: theme.windowMargin,
+                        width: width / 2 - theme.windowMargin - 5,
+                        padding: 5,
+                        justifyContent: 'space-between',
+                      }}
+                      underlayColor={COLORS.secondaryMiddle}
+                      onPress={() => onSelectEvent(event)}
+                    >
+                      <>
+                        <View>
+                          <SubHeader>
+                            {AWARDS_BODY_TO_PLURAL_STRING[AwardsBody[awardsBody]]}
+                          </SubHeader>
+                          <BodyLarge>{EVENT_TYPE_TO_STRING[type]}</BodyLarge>
+                        </View>
+                        <Body
+                          style={{
+                            alignSelf: 'flex-end',
+                            justifyContent: 'flex-end',
+                            color: COLORS.white,
+                          }}
+                        >{`Date: ${expiration || 'TBD'}`}</Body>
+                      </>
+                    </TouchableHighlight>
+                  );
+                })}
+              </View>
+            </>
+          ))}
+        </Animated.ScrollView>
+      </>
+    </BackgroundWrapper>
   );
 };
 
