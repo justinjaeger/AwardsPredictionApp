@@ -18,7 +18,7 @@ export type iCategoryListProps = {
   listOpacity: Animated.Value;
 };
 
-const TabsWrapper = () => {
+const Category = () => {
   const gridOpacity = useRef(new Animated.Value(0)).current;
   const listOpacity = useRef(new Animated.Value(0)).current;
 
@@ -90,4 +90,4 @@ const TabsWrapper = () => {
   );
 };
 
-export default TabsWrapper;
+export default Category;
