@@ -7,8 +7,6 @@ import {
   DeletePredictionMutationVariables,
   DeletePredictionSetMutation,
   DeletePredictionSetMutationVariables,
-  GetPredictionSetQuery,
-  GetPredictionSetQueryVariables,
   ListPredictionSetsQuery,
   ListPredictionSetsQueryVariables,
   ListPredictionsQuery,
@@ -32,24 +30,39 @@ type iPredictionParams = {
   ranking: number;
 };
 
-const getPredictionSetById = async (
-  id: string,
-): Promise<iApiResponse<GetPredictionSetQuery>> => {
+// NOTE: Should be atomic
+const deletePredictions = async (
+  params: iPredictionSetParams,
+): Promise<iApiResponse<any>> => {
   try {
-    const { data, errors } = await GraphqlAPI<
-      GetPredictionSetQuery,
-      GetPredictionSetQueryVariables
-    >(queries.getPredictionSet, { id });
-    if (!data?.getPredictionSet) {
-      throw new Error(JSON.stringify(errors));
+    // get prediction sets (user + category)
+    const { data: pSets } = await getPredictionSets(params);
+    const predictionSets = pSets?.listPredictionSets?.items;
+    if (!predictionSets) {
+      // no prediction sets found, which is fine
+      return { status: 'success' };
     }
-    return { status: 'success', data };
+
+    // Delete all predictions associated (there should only be one, but for safety, loop through)
+    predictionSets.forEach(async (ps) => {
+      if (!ps?.predictions) return;
+      await Promise.all(
+        ps.predictions.items.map(async (p) => {
+          if (!p?.id) return;
+          return deletePrediction(p.id);
+        }),
+      );
+      // Delete prediction set
+      await deletePredictionSetById(ps.id);
+    });
+
+    return { status: 'success' };
   } catch (err) {
-    return handleError('error getting prediction set', err);
+    return handleError('error deleting predictions by prediction set', err);
   }
 };
 
-const deletePredictionSet = async (
+const deletePredictionSetById = async (
   id: string,
 ): Promise<iApiResponse<DeletePredictionSetMutation>> => {
   try {
@@ -132,13 +145,13 @@ const deletePrediction = async (
   }
 };
 
-export const getPredictionsSet = async (
+export const getPredictionSets = async (
   params: iPredictionSetParams,
-): Promise<iApiResponse<GetPredictionSetQuery>> => {
+): Promise<iApiResponse<ListPredictionSetsQuery>> => {
   const { userId, categoryId } = params;
   try {
     // Get all prediction sets matching params (should only be one)
-    const { data: maybePreSets, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPI<
       ListPredictionSetsQuery,
       ListPredictionSetsQueryVariables
     >(queries.listPredictionSets, {
@@ -147,15 +160,9 @@ export const getPredictionsSet = async (
         predictionSetCategoryId: { eq: categoryId },
       },
     });
-    if (!maybePreSets?.listPredictionSets) {
+    if (!data?.listPredictionSets) {
       throw new Error(JSON.stringify(errors));
     }
-    const predictionSetId = maybePreSets.listPredictionSets.items[0]?.id; // bc should only be one
-    if (!predictionSetId) {
-      return { status: 'success' };
-    }
-    // Return GetPredictionSet result
-    const { data } = await getPredictionSetById(predictionSetId);
     return { status: 'success', data };
   } catch (err) {
     return handleError('error prediction set', err);
@@ -269,34 +276,9 @@ export const createOrUpdatePredictions = async (
 ): Promise<iApiResponse<any>> => {
   const { userId } = params;
   try {
-    // get prediction set (user + category)
-    const { data: pSet } = await getPredictionsSet(params);
-    const oldPredictionSet = pSet?.getPredictionSet;
-    if (oldPredictionSet) {
-      // this isn't an error, it just means there are no current predictions
-      const oldPredictions = oldPredictionSet.predictions?.items;
-      if (!oldPredictions) {
-        throw new Error(
-          'Cannot get predictions[] from PredictionSet. Consider changing schema',
-        );
-      }
-      if (!pSet?.getPredictionSet?.id) return { status: 'error' };
-      const { data: ps } = await getPredictionsByPredictionSetId(
-        pSet.getPredictionSet.id,
-      );
-      if (!ps?.listPredictions) return { status: 'error' };
-      // delete all predictions within prediction set
-      await Promise.all(
-        ps?.listPredictions.items.map(async (p) => {
-          if (!p?.id) return;
-          return deletePrediction(p.id);
-        }),
-      );
-      // delete existing prediction set
-      const { status } = await deletePredictionSet(oldPredictionSet.id);
-      if (status !== 'success') {
-        return { status: 'error' };
-      }
+    const { status } = await deletePredictions(params);
+    if (status !== 'success') {
+      throw new Error('error deleting predictions in createOrUpdatePredictions');
     }
 
     // create new prediction set
