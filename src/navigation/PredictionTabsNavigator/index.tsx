@@ -59,7 +59,6 @@ const PredictionTabsNavigator = (community: JSX.Element, personal: JSX.Element) 
   const SCROLL_BAR_WIDTH = width / 2;
 
   useEffect(() => {
-    console.log(Math.random());
     personalCommunityTab === 'community' ? openCommunityTab() : openPersonalTab();
   }); // we WANT no dependencies, or else the last scrollViewRef state will persist, depite possibly having changed it
 

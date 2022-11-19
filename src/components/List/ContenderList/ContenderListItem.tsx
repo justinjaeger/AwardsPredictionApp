@@ -52,7 +52,7 @@ const ContenderListItem = (props: iContenderListItemProps) => {
 
   const LARGE_POSTER = windowWidth / 3;
   const SMALL_POSTER = windowWidth / 10;
-  const RIGHT_COL_WIDTH = 75;
+  const RIGHT_COL_WIDTH = tab === 'personal' ? 45 : 75;
   const BODY_WIDTH_SELECTED =
     windowWidth - LARGE_POSTER - theme.windowMargin * 2 - RIGHT_COL_WIDTH;
   const BODY_WIDTH_UNSELECTED =
@@ -237,7 +237,13 @@ const ContenderListItem = (props: iContenderListItemProps) => {
               </View>
             ) : null}
             {tab === 'personal' ? (
-              <View style={{ height: '100%', justifyContent: 'center', marginRight: 5 }}>
+              <View
+                style={{
+                  height: SMALL_POSTER,
+                  justifyContent: 'center',
+                  marginRight: 13,
+                }}
+              >
                 <CustomIcon name={'menu'} color={COLORS.white} size={24} />
               </View>
             ) : null}

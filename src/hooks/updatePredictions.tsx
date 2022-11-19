@@ -7,13 +7,14 @@ import { QueryKeys } from '../store/types';
 const useMutationUpdatePredictions = () => {
   const queryClient = useQueryClient();
 
-  const [isComplete, setIsComplete] = useState<boolean>(false);
+  const [isComplete, setIsComplete] = useState<boolean>(true);
 
   const { mutate, isLoading } = useMutation({
     mutationFn: async (params: {
       predictionSetParams: iPredictionSetParams;
       predictionData: iPredictionData;
     }) => {
+      setIsComplete(false);
       return ApiServices.createOrUpdatePredictions(
         params.predictionSetParams,
         params.predictionData,
