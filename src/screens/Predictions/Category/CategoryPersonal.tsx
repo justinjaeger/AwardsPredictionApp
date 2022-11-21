@@ -1,11 +1,7 @@
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { Alert, Animated, View } from 'react-native';
-import {
-  NestableDraggableFlatList,
-  ScaleDecorator,
-  NestableScrollContainer,
-} from 'react-native-draggable-flatlist';
+import DraggableFlatList, { ScaleDecorator } from 'react-native-draggable-flatlist';
 import { iCategoryListProps } from '.';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import BackButton from '../../../components/Buttons/BackButton';
@@ -124,19 +120,12 @@ const CategoryPersonal = (props: iCategoryListProps) => {
       <BackgroundWrapper>
         <View
           style={{
-            display: 'flex',
             height: '100%',
             width: '100%',
             alignItems: 'center',
           }}
         >
-          <CategoryHeader
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              width: '100%',
-            }}
-          >
+          <CategoryHeader>
             <View style={{ flexDirection: 'row' }}>
               {!isEditing ? (
                 <HeaderButton
@@ -184,59 +173,67 @@ const CategoryPersonal = (props: iCategoryListProps) => {
               />
             </View>
           </CategoryHeader>
-          {/* @ts-ignore not actually broken */}
-          <NestableScrollContainer
-            style={{ height: '100%' }}
-            contentContainerStyle={{ paddingBottom: 100 }}
+          <Animated.ScrollView
+            style={{
+              display: delayedDisplay === 'grid' ? 'flex' : 'none',
+              opacity: gridOpacity,
+            }}
+            contentContainerStyle={{
+              paddingBottom: 100,
+              marginTop: theme.windowMargin,
+            }}
           >
-            {delayedDisplay === 'grid' ? (
-              <Animated.View style={{ opacity: gridOpacity }}>
-                <MovieGrid predictions={predictions} />
-              </Animated.View>
-            ) : delayedDisplay === 'list' ? (
-              <Animated.View style={{ opacity: listOpacity }}>
-                <NestableDraggableFlatList
-                  data={predictions}
-                  keyExtractor={(item) => item.contenderId}
-                  contentContainerStyle={{
-                    paddingBottom: PosterSize.SMALL,
-                    paddingTop: theme.windowMargin,
-                  }}
-                  renderItem={({ item: prediction, index, drag, isActive }) => (
-                    <ScaleDecorator activeScale={0.9}>
-                      <ContenderListItem
-                        variant={'personal'}
-                        prediction={prediction}
-                        ranking={(index || 0) + 1}
-                        selected={selectedContenderId === prediction.contenderId}
-                        onPressItem={(item) => {
-                          const id = item.contenderId;
-                          if (selectedContenderId === id) {
-                            setSelectedContenderId(undefined);
-                          } else {
-                            setSelectedContenderId(id);
-                          }
-                        }}
-                        onPressThumbnail={(prediction) =>
-                          displayContenderInfo(
-                            prediction.contenderId,
-                            prediction.contenderPerson?.tmdbId,
-                          )
-                        }
-                        draggable={{
-                          drag,
-                          isActive,
-                        }}
-                      />
-                    </ScaleDecorator>
-                  )}
-                  onDragEnd={({ data }) => {
-                    setPredictions(data);
-                  }}
-                />
-              </Animated.View>
-            ) : null}
-          </NestableScrollContainer>
+            <Animated.View style={{ opacity: gridOpacity }}>
+              <MovieGrid predictions={predictions} />
+            </Animated.View>
+          </Animated.ScrollView>
+          <Animated.View
+            style={{
+              display: delayedDisplay === 'list' ? 'flex' : 'none',
+              opacity: listOpacity,
+            }}
+          >
+            <DraggableFlatList
+              data={predictions}
+              keyExtractor={(item) => item.contenderId}
+              style={{ width: '100%' }}
+              contentContainerStyle={{
+                paddingBottom: PosterSize.SMALL,
+                paddingTop: theme.windowMargin,
+              }}
+              renderItem={({ item: prediction, index, drag, isActive }) => (
+                <ScaleDecorator activeScale={0.9}>
+                  <ContenderListItem
+                    variant={'personal'}
+                    prediction={prediction}
+                    ranking={(index || 0) + 1}
+                    selected={selectedContenderId === prediction.contenderId}
+                    onPressItem={(item) => {
+                      const id = item.contenderId;
+                      if (selectedContenderId === id) {
+                        setSelectedContenderId(undefined);
+                      } else {
+                        setSelectedContenderId(id);
+                      }
+                    }}
+                    onPressThumbnail={(prediction) =>
+                      displayContenderInfo(
+                        prediction.contenderId,
+                        prediction.contenderPerson?.tmdbId,
+                      )
+                    }
+                    draggable={{
+                      drag,
+                      isActive,
+                    }}
+                  />
+                </ScaleDecorator>
+              )}
+              onDragEnd={({ data }) => {
+                setPredictions(data);
+              }}
+            />
+          </Animated.View>
           {predictions && predictions.length === 0 ? (
             <View
               style={{

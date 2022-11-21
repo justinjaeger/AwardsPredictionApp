@@ -64,10 +64,11 @@ const ContenderListItem = (props: iContenderListItemProps) => {
   const { category: _category } = useCategory();
   const category = _category as iCategory;
 
-  const imageWidth = useRef(new Animated.Value(selected ? LARGE_POSTER : SMALL_POSTER))
-    .current;
-  const imageHeight = useRef(new Animated.Value(selected ? LARGE_POSTER : SMALL_POSTER))
-    .current;
+  const width = selected ? LARGE_POSTER : SMALL_POSTER;
+  const { height } = getPosterDimensionsByWidth(width);
+
+  const imageWidth = useRef(new Animated.Value(width)).current;
+  const imageHeight = useRef(new Animated.Value(height)).current;
   const hiddenOpacity = useRef(new Animated.Value(0)).current;
   const itemWidth = useRef(new Animated.Value(ITEM_WIDTH_UNSELECTED)).current;
   const bodyWidth = useRef(new Animated.Value(BODY_WIDTH_UNSELECTED)).current;
@@ -78,9 +79,6 @@ const ContenderListItem = (props: iContenderListItemProps) => {
   const tmdbMovieId = prediction.contenderMovie?.tmdbId;
   const tmdbPersonId = prediction.contenderPerson?.tmdbId;
   const movieStudio = prediction.contenderMovie?.studio;
-
-  const width = selected ? LARGE_POSTER : SMALL_POSTER;
-  const { height } = getPosterDimensionsByWidth(width);
 
   useEffect(() => {
     Animated.timing(imageWidth, {
@@ -180,18 +178,14 @@ const ContenderListItem = (props: iContenderListItemProps) => {
         width: '100%',
         paddingTop: theme.windowMargin / 4,
         paddingBottom: theme.windowMargin / 4,
+        flexDirection: 'row',
+        paddingLeft: theme.windowMargin,
       }}
       underlayColor={COLORS.secondaryDark}
       onLongPress={drag}
       disabled={isActive}
     >
-      <View
-        style={{
-          width: '100%',
-          flexDirection: 'row',
-          marginLeft: theme.windowMargin,
-        }}
-      >
+      <>
         <AnimatedPoster
           path={tmdbMovie?.posterPath || null}
           title={tmdbMovie?.title || ''}
@@ -227,6 +221,7 @@ const ContenderListItem = (props: iContenderListItemProps) => {
                   width: RIGHT_COL_WIDTH,
                   flexDirection: 'row',
                   justifyContent: 'space-between',
+                  paddingRight: theme.windowMargin,
                 }}
               >
                 <BodyLarge style={{ textAlign: 'right' }}>
@@ -253,49 +248,44 @@ const ContenderListItem = (props: iContenderListItemProps) => {
             <Animated.View
               style={{
                 opacity: hiddenOpacity,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                marginTop: theme.windowMargin,
                 width: '94%',
                 marginLeft: theme.windowMargin,
               }}
             >
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  marginTop: theme.windowMargin,
+              <ExternalLinkButton
+                text={'IMDb'}
+                onPress={() => {
+                  navigation.navigate('WebView', {
+                    uri: `https://www.imdb.com/title/${tmdbMovie.imdbId}/?mode=desktop`,
+                    title: tmdbMovie?.title || '',
+                  });
                 }}
-              >
-                <ExternalLinkButton
-                  text={'IMDb'}
-                  onPress={() => {
-                    navigation.navigate('WebView', {
-                      uri: `https://www.imdb.com/title/${tmdbMovie.imdbId}/?mode=desktop`,
-                      title: tmdbMovie?.title || '',
-                    });
-                  }}
-                />
-                <ExternalLinkButton
-                  text={'Cast'}
-                  onPress={() => {
-                    navigation.navigate('WebView', {
-                      uri: `https://www.imdb.com/title/${tmdbMovie.imdbId}/fullcredits/cast/`,
-                      title: tmdbMovie?.title || '',
-                    });
-                  }}
-                />
-                <ExternalLinkButton
-                  text={'Crew'}
-                  onPress={() => {
-                    navigation.navigate('WebView', {
-                      uri: `https://www.imdb.com/title/${tmdbMovie.imdbId}/fullcredits/`,
-                      title: tmdbMovie?.title || '',
-                    });
-                  }}
-                />
-              </View>
+              />
+              <ExternalLinkButton
+                text={'Cast'}
+                onPress={() => {
+                  navigation.navigate('WebView', {
+                    uri: `https://www.imdb.com/title/${tmdbMovie.imdbId}/fullcredits/cast/`,
+                    title: tmdbMovie?.title || '',
+                  });
+                }}
+              />
+              <ExternalLinkButton
+                text={'Crew'}
+                onPress={() => {
+                  navigation.navigate('WebView', {
+                    uri: `https://www.imdb.com/title/${tmdbMovie.imdbId}/fullcredits/`,
+                    title: tmdbMovie?.title || '',
+                  });
+                }}
+              />
             </Animated.View>
           ) : null}
         </Animated.View>
-      </View>
+      </>
     </TouchableHighlight>
   );
 };

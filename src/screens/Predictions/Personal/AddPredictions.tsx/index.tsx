@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Alert, ScrollView, View } from 'react-native';
+import { Alert, FlatList, View } from 'react-native';
 import ContenderListItem from '../../../../components/List/ContenderList/ContenderListItem';
 import { PersonalParamList, PredictionsParamList } from '../../../../navigation/types';
 import { useTypedNavigation } from '../../../../util/hooks';
 import { useCategory } from '../../../../context/CategoryContext';
 import { iCategory, iEvent, iPrediction } from '../../../../store/types';
-import { Body } from '../../../../components/Text';
+import { BodyLarge } from '../../../../components/Text';
 import useQueryCommunityEvent from '../../../../hooks/getCommunityEvent';
 import { removePredictionFromList } from '../../../../util/removePredictionFromList';
 import { CategoryHeader } from '../../styles';
@@ -124,14 +124,14 @@ const AddPredictions = () => {
   return (
     <>
       <BackgroundWrapper>
-        <>
-          <CategoryHeader
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              width: '100%',
-            }}
-          >
+        <View
+          style={{
+            height: '100%',
+            width: '100%',
+            alignItems: 'center',
+          }}
+        >
+          <CategoryHeader>
             <View style={{ flexDirection: 'row' }} />
             <View style={{ flexDirection: 'row' }}>
               {isEditing ? <HeaderButton onPress={() => onSave()} icon={'save'} /> : null}
@@ -143,23 +143,17 @@ const AddPredictions = () => {
               />
             </View>
           </CategoryHeader>
-          <ScrollView
-            contentContainerStyle={{
-              alignItems: 'center',
-              paddingBottom: 100,
-              width: '100%',
-            }}
-          >
-            {communityPredictions.length === 0 ? (
-              <Body>No Predictions yet! Add some</Body>
-            ) : null}
-            {communityPredictions.map((cp, i) => {
+          <FlatList
+            data={communityPredictions}
+            keyExtractor={(item) => item.contenderId}
+            style={{ width: '100%' }}
+            renderItem={({ item: prediction, index: i }) => {
               const highlighted = selectedPredictions
                 .map((sp) => sp.contenderId)
-                .includes(cp.contenderId);
+                .includes(prediction.contenderId);
               return (
                 <ContenderListItem
-                  prediction={cp}
+                  prediction={prediction}
                   ranking={i + 1}
                   onPressItem={onPressItem}
                   onPressThumbnail={(item) => {
@@ -170,14 +164,26 @@ const AddPredictions = () => {
                       setSelectedContenderId(id);
                     }
                   }}
-                  selected={selectedContenderId === cp.contenderId}
+                  selected={selectedContenderId === prediction.contenderId}
                   highlighted={highlighted}
                   variant={'add'}
                 />
               );
-            })}
-          </ScrollView>
-        </>
+            }}
+          />
+          {communityPredictions && communityPredictions.length === 0 ? (
+            <View
+              style={{
+                width: '100%',
+                height: '100%',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <BodyLarge>No films in this list</BodyLarge>
+            </View>
+          ) : null}
+        </View>
       </BackgroundWrapper>
     </>
   );

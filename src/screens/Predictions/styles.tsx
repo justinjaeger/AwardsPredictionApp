@@ -7,4 +7,5 @@ export const CategoryHeader = styled.View({
   justifyContent: 'space-between',
   padding: theme.windowMargin,
   backgroundColor: 'transparent',
+  width: '100%',
 });

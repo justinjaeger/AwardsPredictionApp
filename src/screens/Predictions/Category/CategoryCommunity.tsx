@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Animated, ScrollView, View } from 'react-native';
+import { Animated, View } from 'react-native';
 import { iCategoryListProps } from '.';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import HeaderButton from '../../../components/HeaderButton';
@@ -38,19 +38,12 @@ const CategoryCommunity = (props: iCategoryListProps) => {
     <BackgroundWrapper>
       <View
         style={{
-          display: 'flex',
           height: '100%',
           width: '100%',
           alignItems: 'center',
         }}
       >
-        <CategoryHeader
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            width: '100%',
-          }}
-        >
+        <CategoryHeader>
           <View style={{ flexDirection: 'row' }}>
             <HeaderButton
               onPress={() => {
@@ -59,64 +52,70 @@ const CategoryCommunity = (props: iCategoryListProps) => {
               icon={display === 'grid' ? 'list' : display === 'list' ? 'grid' : ''}
             />
           </View>
-          <View>
-            <Animated.View
-              style={{
-                flexDirection: 'row',
-                width: 120,
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                opacity: listOpacity,
-              }}
-            >
-              <View>
-                <BodyLarge style={{ textAlign: 'right' }}>Predict</BodyLarge>
-                <BodyLarge style={{ textAlign: 'right' }}>Nom</BodyLarge>
-              </View>
-              <View>
-                <BodyLarge style={{ textAlign: 'right' }}>Predict</BodyLarge>
-                <BodyLarge style={{ textAlign: 'right' }}>Win</BodyLarge>
-              </View>
-            </Animated.View>
-          </View>
+          <Animated.View
+            style={{
+              flexDirection: 'row',
+              width: 120,
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              opacity: listOpacity,
+            }}
+          >
+            <View>
+              <BodyLarge style={{ textAlign: 'right' }}>Predict</BodyLarge>
+              <BodyLarge style={{ textAlign: 'right' }}>Nom</BodyLarge>
+            </View>
+            <View>
+              <BodyLarge style={{ textAlign: 'right' }}>Predict</BodyLarge>
+              <BodyLarge style={{ textAlign: 'right' }}>Win</BodyLarge>
+            </View>
+          </Animated.View>
         </CategoryHeader>
-        <ScrollView
+        <Animated.ScrollView
+          style={{
+            display: delayedDisplay === 'grid' ? 'flex' : 'none',
+            opacity: gridOpacity,
+          }}
           contentContainerStyle={{
             paddingBottom: 100,
             marginTop: theme.windowMargin,
           }}
         >
-          {delayedDisplay === 'grid' ? (
-            <Animated.View style={{ opacity: gridOpacity }}>
-              <MovieGrid predictions={predictions} />
-            </Animated.View>
-          ) : delayedDisplay === 'list' ? (
-            <Animated.View style={{ opacity: listOpacity }}>
-              {predictions.map((prediction, i) => (
-                <ContenderListItem
-                  variant={'community'}
-                  prediction={prediction}
-                  ranking={i + 1}
-                  selected={selectedContenderId === prediction.contenderId}
-                  onPressItem={(item) => {
-                    const id = item.contenderId;
-                    if (selectedContenderId === id) {
-                      setSelectedContenderId(undefined);
-                    } else {
-                      setSelectedContenderId(id);
-                    }
-                  }}
-                  onPressThumbnail={(prediction) =>
-                    displayContenderInfo(
-                      prediction.contenderId,
-                      prediction.contenderPerson?.tmdbId,
-                    )
-                  }
-                />
-              ))}
-            </Animated.View>
-          ) : null}
-        </ScrollView>
+          <Animated.View style={{ opacity: gridOpacity }}>
+            <MovieGrid predictions={predictions} />
+          </Animated.View>
+        </Animated.ScrollView>
+        <Animated.FlatList
+          data={predictions}
+          keyExtractor={(item) => item.contenderId}
+          style={{
+            display: delayedDisplay === 'list' ? 'flex' : 'none',
+            opacity: listOpacity,
+            width: '100%',
+          }}
+          renderItem={({ item: prediction, index: i }) => (
+            <ContenderListItem
+              variant={'community'}
+              prediction={prediction}
+              ranking={i + 1}
+              selected={selectedContenderId === prediction.contenderId}
+              onPressItem={(item) => {
+                const id = item.contenderId;
+                if (selectedContenderId === id) {
+                  setSelectedContenderId(undefined);
+                } else {
+                  setSelectedContenderId(id);
+                }
+              }}
+              onPressThumbnail={(prediction) =>
+                displayContenderInfo(
+                  prediction.contenderId,
+                  prediction.contenderPerson?.tmdbId,
+                )
+              }
+            />
+          )}
+        />
         {predictions && predictions.length === 0 ? (
           <View
             style={{
