@@ -27,7 +27,7 @@ import { CategoryHeader } from '../styles';
 
 // NOTE: Has a lot in common with ContenderListDraggable
 const CategoryPersonal = (props: iCategoryListProps) => {
-  const { display, toggleDisplay, gridOpacity, listOpacity } = props;
+  const { display, delayedDisplay, toggleDisplay, gridOpacity, listOpacity } = props;
 
   const { category: _category, displayContenderInfo, event: _event } = useCategory();
   const { userId: _userId } = useAuth();
@@ -124,141 +124,131 @@ const CategoryPersonal = (props: iCategoryListProps) => {
       <BackgroundWrapper>
         <View
           style={{
+            display: 'flex',
+            height: '100%',
+            width: '100%',
             alignItems: 'center',
           }}
         >
-          <View
+          <CategoryHeader
             style={{
-              display: 'flex',
-              height: '100%',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
               width: '100%',
             }}
           >
-            <>
-              <CategoryHeader
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  width: '100%',
-                }}
-              >
-                <View style={{ flexDirection: 'row' }}>
-                  {!isEditing ? (
-                    <HeaderButton
-                      onPress={() => {
-                        toggleDisplay();
-                      }}
-                      icon={
-                        display === 'grid' ? 'list' : display === 'list' ? 'grid' : ''
-                      }
-                    />
-                  ) : (
-                    <HeaderButton
-                      onPress={() => {
-                        Alert.alert('Undo recent changes?', '', [
-                          {
-                            text: 'Cancel',
-                            onPress: () => {},
-                            style: 'cancel',
-                          },
-                          {
-                            text: 'Undo',
-                            onPress: () => {
-                              setPredictions(initialPredictions);
-                              setIsEditing(false);
-                            },
-                          },
-                        ]);
-                      }}
-                      icon={'undo'}
-                    />
-                  )}
-                </View>
-                <View style={{ flexDirection: 'row' }}>
-                  {isEditing ? (
-                    <HeaderButton onPress={() => onSaveContenders()} icon={'save'} />
-                  ) : null}
-                  <HeaderButton
-                    onPress={() => {
-                      navigation.navigate('AddPredictions', {
-                        initialPredictions: predictions,
-                        onFinish: (predictions: iPrediction[]) => {
-                          setPredictions(predictions);
-                        },
-                      });
-                    }}
-                    icon={'plus'}
-                  />
-                </View>
-              </CategoryHeader>
-              <View>
-                {/* @ts-ignore not actually broken */}
-                <NestableScrollContainer contentContainerStyle={{ paddingBottom: 100 }}>
-                  <Animated.View
-                    style={{
-                      opacity: gridOpacity,
-                      position: 'absolute',
-                    }}
-                  >
-                    <MovieGrid predictions={predictions} />
-                  </Animated.View>
-                  <Animated.View style={{ opacity: listOpacity }}>
-                    <NestableDraggableFlatList
-                      data={predictions}
-                      keyExtractor={(item) => item.contenderId}
-                      contentContainerStyle={{
-                        paddingBottom: PosterSize.SMALL,
-                        paddingTop: theme.windowMargin,
-                      }}
-                      renderItem={({ item: prediction, index, drag, isActive }) => (
-                        <ScaleDecorator activeScale={0.9}>
-                          <ContenderListItem
-                            variant={'personal'}
-                            prediction={prediction}
-                            ranking={(index || 0) + 1}
-                            selected={selectedContenderId === prediction.contenderId}
-                            onPressItem={(item) => {
-                              const id = item.contenderId;
-                              if (selectedContenderId === id) {
-                                setSelectedContenderId(undefined);
-                              } else {
-                                setSelectedContenderId(id);
-                              }
-                            }}
-                            onPressThumbnail={(prediction) =>
-                              displayContenderInfo(
-                                prediction.contenderId,
-                                prediction.contenderPerson?.tmdbId,
-                              )
-                            }
-                            draggable={{
-                              drag,
-                              isActive,
-                            }}
-                          />
-                        </ScaleDecorator>
-                      )}
-                      onDragEnd={({ data }) => {
-                        setPredictions(data);
-                      }}
-                    />
-                  </Animated.View>
-                </NestableScrollContainer>
-              </View>
-              {predictions && predictions.length === 0 ? (
-                <View
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    alignItems: 'center',
-                    justifyContent: 'center',
+            <View style={{ flexDirection: 'row' }}>
+              {!isEditing ? (
+                <HeaderButton
+                  onPress={() => {
+                    toggleDisplay();
                   }}
-                >
-                  <BodyLarge>No films in this list</BodyLarge>
-                </View>
+                  icon={display === 'grid' ? 'list' : display === 'list' ? 'grid' : ''}
+                />
+              ) : (
+                <HeaderButton
+                  onPress={() => {
+                    Alert.alert('Undo recent changes?', '', [
+                      {
+                        text: 'Cancel',
+                        onPress: () => {},
+                        style: 'cancel',
+                      },
+                      {
+                        text: 'Undo',
+                        onPress: () => {
+                          setPredictions(initialPredictions);
+                          setIsEditing(false);
+                        },
+                      },
+                    ]);
+                  }}
+                  icon={'undo'}
+                />
+              )}
+            </View>
+            <View style={{ flexDirection: 'row' }}>
+              {isEditing ? (
+                <HeaderButton onPress={() => onSaveContenders()} icon={'save'} />
               ) : null}
-            </>
-          </View>
+              <HeaderButton
+                onPress={() => {
+                  navigation.navigate('AddPredictions', {
+                    initialPredictions: predictions,
+                    onFinish: (predictions: iPrediction[]) => {
+                      setPredictions(predictions);
+                    },
+                  });
+                }}
+                icon={'plus'}
+              />
+            </View>
+          </CategoryHeader>
+          {/* @ts-ignore not actually broken */}
+          <NestableScrollContainer
+            style={{ height: '100%' }}
+            contentContainerStyle={{ paddingBottom: 100 }}
+          >
+            {delayedDisplay === 'grid' ? (
+              <Animated.View style={{ opacity: gridOpacity }}>
+                <MovieGrid predictions={predictions} />
+              </Animated.View>
+            ) : delayedDisplay === 'list' ? (
+              <Animated.View style={{ opacity: listOpacity }}>
+                <NestableDraggableFlatList
+                  data={predictions}
+                  keyExtractor={(item) => item.contenderId}
+                  contentContainerStyle={{
+                    paddingBottom: PosterSize.SMALL,
+                    paddingTop: theme.windowMargin,
+                  }}
+                  renderItem={({ item: prediction, index, drag, isActive }) => (
+                    <ScaleDecorator activeScale={0.9}>
+                      <ContenderListItem
+                        variant={'personal'}
+                        prediction={prediction}
+                        ranking={(index || 0) + 1}
+                        selected={selectedContenderId === prediction.contenderId}
+                        onPressItem={(item) => {
+                          const id = item.contenderId;
+                          if (selectedContenderId === id) {
+                            setSelectedContenderId(undefined);
+                          } else {
+                            setSelectedContenderId(id);
+                          }
+                        }}
+                        onPressThumbnail={(prediction) =>
+                          displayContenderInfo(
+                            prediction.contenderId,
+                            prediction.contenderPerson?.tmdbId,
+                          )
+                        }
+                        draggable={{
+                          drag,
+                          isActive,
+                        }}
+                      />
+                    </ScaleDecorator>
+                  )}
+                  onDragEnd={({ data }) => {
+                    setPredictions(data);
+                  }}
+                />
+              </Animated.View>
+            ) : null}
+          </NestableScrollContainer>
+          {predictions && predictions.length === 0 ? (
+            <View
+              style={{
+                width: '100%',
+                height: '100%',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <BodyLarge>No films in this list</BodyLarge>
+            </View>
+          ) : null}
         </View>
       </BackgroundWrapper>
     </>

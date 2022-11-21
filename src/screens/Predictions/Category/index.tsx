@@ -13,6 +13,7 @@ const TIMING = 250;
 
 export type iCategoryListProps = {
   display: 'list' | 'grid';
+  delayedDisplay: 'list' | 'grid';
   toggleDisplay: () => void;
   gridOpacity: Animated.Value;
   listOpacity: Animated.Value;
@@ -26,6 +27,7 @@ const Category = () => {
   const navigation = useTypedNavigation<PredictionsParamList>();
 
   const [display, setDisplay] = useState<'list' | 'grid'>('list');
+  const [delayedDisplay, setDelayedDisplay] = useState<'list' | 'grid'>('list');
 
   const toggleDisplay = () => {
     if (display === 'list') setDisplay('grid');
@@ -45,6 +47,7 @@ const Category = () => {
           duration: TIMING,
           useNativeDriver: true,
         }).start();
+        setDelayedDisplay('grid');
       }, TIMING);
     }
     if (display === 'list') {
@@ -59,6 +62,7 @@ const Category = () => {
           duration: TIMING,
           useNativeDriver: true,
         }).start();
+        setDelayedDisplay('list');
       }, TIMING);
     }
   }, [display]);
@@ -77,12 +81,14 @@ const Category = () => {
   return PredictionTabsNavigator(
     <CategoryCommunity
       display={display}
+      delayedDisplay={delayedDisplay}
       toggleDisplay={toggleDisplay}
       gridOpacity={gridOpacity}
       listOpacity={listOpacity}
     />,
     <CategoryPersonal
       display={display}
+      delayedDisplay={delayedDisplay}
       toggleDisplay={toggleDisplay}
       gridOpacity={gridOpacity}
       listOpacity={listOpacity}
