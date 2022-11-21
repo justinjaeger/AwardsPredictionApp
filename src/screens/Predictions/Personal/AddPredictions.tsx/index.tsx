@@ -1,39 +1,32 @@
-import React, { useEffect, useState } from 'react';
-import { ScrollView } from 'react-native';
-import { CategoryType } from '../../../../API';
-import { TouchableText } from '../../../../components/Buttons';
+import React, { useState, useEffect } from 'react';
+import { Alert, ScrollView, View } from 'react-native';
 import ContenderListItem from '../../../../components/List/ContenderList/ContenderListItem';
-import { PersonalParamList } from '../../../../navigation/types';
+import { PersonalParamList, PredictionsParamList } from '../../../../navigation/types';
 import { useTypedNavigation } from '../../../../util/hooks';
-import { removeFromArray } from '../../../../util/removeFromArray';
 import { useCategory } from '../../../../context/CategoryContext';
-import { useAuth } from '../../../../context/UserContext';
 import { iCategory, iEvent, iPrediction } from '../../../../store/types';
-import { useIsFetching } from '@tanstack/react-query';
 import { Body } from '../../../../components/Text';
 import useQueryCommunityEvent from '../../../../hooks/getCommunityEvent';
-import useQueryPersonalEvent from '../../../../hooks/getPersonalEvent';
-import useMutationUpdatePredictions from '../../../../hooks/updatePredictions';
+import { removePredictionFromList } from '../../../../util/removePredictionFromList';
+import { CategoryHeader } from '../../styles';
+import HeaderButton from '../../../../components/HeaderButton';
+import BackgroundWrapper from '../../../../components/BackgroundWrapper';
+import { RouteProp, useRoute } from '@react-navigation/native';
+import BackButton from '../../../../components/Buttons/BackButton';
+import _ from 'lodash';
 
 // TODO: really, this is adding OR deleting contenders
-// NOTE: this is very similar to Contenders, some code is duplicated
 
 const AddPredictions = () => {
+  const {
+    params: { initialPredictions, onFinish },
+  } = useRoute<RouteProp<PredictionsParamList, 'AddPredictions'>>();
+
   const navigation = useTypedNavigation<PersonalParamList>();
-  const { userId: _userId } = useAuth();
   const { category: _category, event: _event } = useCategory();
-  const isFetching = useIsFetching();
 
   const category = _category as iCategory;
   const event = _event as iEvent;
-  const userId = _userId as string;
-
-  // We use the SAME KEY as the previous screen, because it avoids a re-fetch of the data which was available previously
-  const { data: personalData, isLoading: isLoadingPersonal } = useQueryPersonalEvent(
-    event.id,
-    userId,
-  );
-  const personalPredictions = (personalData || {})[category.id];
 
   // We use the SAME KEY as the previous screen, because it avoids a re-fetch of the data which was available previously
   const { data: communityData, isLoading: isLoadingCommunity } = useQueryCommunityEvent(
@@ -41,137 +34,152 @@ const AddPredictions = () => {
   );
   const communityPredictions = (communityData || {})[category.id];
 
-  const { mutate: updatePredictions } = useMutationUpdatePredictions();
-
-  // TODO: can do this screen AFTER global predictions are gotten, because we need these
-  // Need global predictions AND personal per category
-  const [loading, setLoading] = useState<boolean>(false);
-  const [navigateBackWhenDoneFetching, setDone] = useState<boolean>(false);
-  const [selectedPredictions, setSelectedPredictions] = useState<iPrediction[]>([]);
-
-  // we want to copy it to a local state to easily edit it
-  useEffect(() => {
-    if (personalPredictions) {
-      setSelectedPredictions(personalPredictions);
-    }
-  }, [personalPredictions]);
-
-  // fires when everything is saved
-  useEffect(() => {
-    if (isFetching === 0 && navigateBackWhenDoneFetching === true) {
-      navigation.goBack();
-      setDone(false);
-    }
-  }, [isFetching]);
-
-  // Declare contender id arrays
-  const selectedContenderIds = selectedPredictions.map((sp) => sp.contenderId);
-  const initiallySelectedContenderIds = (personalPredictions || []).map(
-    (pp) => pp.contenderId,
+  const [selectedPredictions, setSelectedPredictions] = useState<iPrediction[]>(
+    initialPredictions,
   );
+  const [selectedContenderId, setSelectedContenderId] = useState<string | undefined>(); // this selection is whether the film is big or not
+  const [isEditing, setIsEditing] = useState<boolean>(false);
 
-  const onPressFilm = async (contenderId: string) => {
-    navigation.navigate('ContenderDetails', {
-      categoryType: category.type,
-      contenderId: contenderId,
+  const selectedContenderIds = selectedPredictions.map((sp) => sp.contenderId);
+  const initiallySelectedContenderIds = initialPredictions.map((p) => p.contenderId);
+
+  // keeps track of whether we've edited the predictions from their initial state
+  useEffect(() => {
+    // make sure to call .sort() because the order doesn't matter, it's disregarded in the onFinish func
+    const resultIsSame = _.isEqual(
+      selectedContenderIds.sort(),
+      initiallySelectedContenderIds.sort(),
+    );
+    setIsEditing(!resultIsSame);
+  }, [selectedPredictions]);
+
+  // set custom back arrow functionality
+  useEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => (
+        <BackButton
+          onPress={() => {
+            const onGoBack = () => {
+              navigation.goBack();
+            };
+            if (isEditing) {
+              Alert.alert('Unsaved Changes', 'Still go back?', [
+                {
+                  text: 'Cancel',
+                  onPress: () => {},
+                  style: 'cancel',
+                },
+                { text: 'Go Back', onPress: onGoBack },
+              ]);
+            } else {
+              onGoBack();
+            }
+          }}
+        />
+      ),
     });
-  };
-
-  const onPressPerformance = async (contenderId: string, personTmdbId: number) => {
-    navigation.navigate('ContenderDetails', {
-      contenderId: contenderId,
-      categoryType: category.type,
-      personTmdb: personTmdbId,
-    });
-  };
-
-  const onPressThumbnail = (contenderId: string, personTmdbId?: number) => {
-    const cType = CategoryType[category.type];
-    if (cType === CategoryType.PERFORMANCE && personTmdbId) {
-      onPressPerformance(contenderId, personTmdbId);
-    } else {
-      onPressFilm(contenderId);
-    }
-  };
+  }, [navigation]);
 
   const onPressItem = async (prediction: iPrediction) => {
     const contenderId = prediction.contenderId;
     const isAlreadySelected = selectedContenderIds.includes(contenderId);
     const newSelected = isAlreadySelected
-      ? removeFromArray<iPrediction>(selectedPredictions, prediction)
+      ? removePredictionFromList(selectedPredictions, prediction)
       : [...selectedPredictions, prediction];
     setSelectedPredictions(newSelected);
   };
 
   const onSave = async () => {
-    setLoading(true);
+    // Below: we have to re-order the predictions so that the NEW films are at the bottom, so it doesn't change the previous order
+    // films that we JUST added
     const addedContenderIds = selectedContenderIds.filter(
       (id) => !initiallySelectedContenderIds.includes(id),
     );
+    // films that we JUST deleted
     const deletedContenderIds = initiallySelectedContenderIds.filter(
       (id) => !selectedContenderIds.includes(id),
     );
-    // format initial predictions and remove deleted contenders
+    // films that remain on the list
     const notDeletedContenderIds = initiallySelectedContenderIds.filter(
       (id) => !deletedContenderIds.includes(id),
     );
+    // place the films that were UNCHANGED at the top, in the same order, with the new ones at the bottom
     const updatedContenderIds = [...notDeletedContenderIds, ...addedContenderIds];
-    // set the ranking order according to insertion order into the array
-    const newPredictionData = updatedContenderIds.map((c, i) => ({
-      contenderId: c,
-      ranking: i + 1,
-    }));
-    await updatePredictions({
-      predictionSetParams: { userId, categoryId: category.id, eventId: event.id },
-      predictionData: newPredictionData,
-    });
-    setDone(true);
+    // doesn't need to be a reduce, but since "find" can technically return a null value, even though it shouldn't, this is more typesafe
+    const sortedPredictions = updatedContenderIds.reduce((acc: iPrediction[], id) => {
+      const prediction = selectedPredictions.find((p) => p.contenderId === id);
+      if (prediction) {
+        acc.push(prediction);
+      }
+      return acc;
+    }, []);
+    onFinish(sortedPredictions);
+    navigation.goBack();
   };
 
-  if (!communityPredictions || isLoadingPersonal || isLoadingCommunity) {
+  if (!communityPredictions || isLoadingCommunity) {
     return null;
   }
 
   return (
-    <ScrollView
-      contentContainerStyle={{
-        alignItems: 'center',
-        marginTop: 40,
-        paddingBottom: 100,
-        width: '100%',
-      }}
-    >
-      {communityPredictions.length === 0 ? (
-        <Body>No Predictions yet! Add some</Body>
-      ) : null}
-      {communityPredictions.map((cp, i) => {
-        const selected = selectedPredictions
-          .map((sp) => sp.contenderId)
-          .includes(cp.contenderId);
-        return (
-          <ContenderListItem
-            prediction={cp}
-            ranking={i + 1}
-            onPressItem={onPressItem}
-            onPressThumbnail={onPressThumbnail}
-            selected={selected}
-            // size={PosterSize.SMALL}
-            // isSelectable
-            disabled={loading}
-            tab={'personal'}
-            toggleSelected={() => {}}
-          />
-        );
-      })}
-      <TouchableText text={'Save'} onPress={onSave} style={{ margin: 10 }} />
-      <TouchableText
-        text={'Submit a contender'}
-        onPress={() => {
-          navigation.navigate('CreateContender');
-        }}
-        style={{ margin: 10 }}
-      />
-    </ScrollView>
+    <>
+      <BackgroundWrapper>
+        <>
+          <CategoryHeader
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              width: '100%',
+            }}
+          >
+            <View style={{ flexDirection: 'row' }} />
+            <View style={{ flexDirection: 'row' }}>
+              {isEditing ? <HeaderButton onPress={() => onSave()} icon={'save'} /> : null}
+              <HeaderButton
+                onPress={() => {
+                  navigation.navigate('CreateContender');
+                }}
+                icon={'plus'}
+              />
+            </View>
+          </CategoryHeader>
+          <ScrollView
+            contentContainerStyle={{
+              alignItems: 'center',
+              paddingBottom: 100,
+              width: '100%',
+            }}
+          >
+            {communityPredictions.length === 0 ? (
+              <Body>No Predictions yet! Add some</Body>
+            ) : null}
+            {communityPredictions.map((cp, i) => {
+              const highlighted = selectedPredictions
+                .map((sp) => sp.contenderId)
+                .includes(cp.contenderId);
+              return (
+                <ContenderListItem
+                  prediction={cp}
+                  ranking={i + 1}
+                  onPressItem={onPressItem}
+                  onPressThumbnail={(item) => {
+                    const id = item.contenderId;
+                    if (selectedContenderId === id) {
+                      setSelectedContenderId(undefined);
+                    } else {
+                      setSelectedContenderId(id);
+                    }
+                  }}
+                  selected={selectedContenderId === cp.contenderId}
+                  highlighted={highlighted}
+                  variant={'add'}
+                />
+              );
+            })}
+          </ScrollView>
+        </>
+      </BackgroundWrapper>
+    </>
   );
 };
 

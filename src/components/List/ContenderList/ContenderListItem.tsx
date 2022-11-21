@@ -17,19 +17,19 @@ import AnimatedPoster from '../../Images/AnimatedPoster';
 import { BodyLarge, Label, LabelBold } from '../../Text';
 
 type iContenderListItemProps = {
-  tab: 'community' | 'personal';
+  variant: 'community' | 'personal' | 'add';
   prediction: iPrediction;
   ranking: number;
   selected: boolean;
-  toggleSelected: (id: string) => void;
   disabled?: boolean;
+  highlighted?: boolean;
   posterWidth?: number;
   draggable?: {
     isActive: boolean;
     drag: () => void;
   };
-  onPressThumbnail?: (contenderId: string, personTmdbId?: number) => void;
-  onPressItem?: (prediction: iPrediction) => void;
+  onPressItem: (prediction: iPrediction) => void;
+  onPressThumbnail?: (prediction: iPrediction) => void;
 };
 
 const TIMING = 250;
@@ -37,14 +37,15 @@ const TIMING_FADE = 500;
 
 const ContenderListItem = (props: iContenderListItemProps) => {
   const {
-    tab,
+    variant,
     prediction,
     selected,
-    toggleSelected,
     ranking,
     disabled,
     draggable,
+    highlighted,
     onPressThumbnail,
+    onPressItem,
   } = props;
   const { isActive, drag } = draggable || {};
   const navigation = useNavigation();
@@ -52,7 +53,7 @@ const ContenderListItem = (props: iContenderListItemProps) => {
 
   const LARGE_POSTER = windowWidth / 3;
   const SMALL_POSTER = windowWidth / 10;
-  const RIGHT_COL_WIDTH = tab === 'personal' ? 45 : 75;
+  const RIGHT_COL_WIDTH = variant === 'personal' ? 45 : variant === 'community' ? 75 : 10;
   const BODY_WIDTH_SELECTED =
     windowWidth - LARGE_POSTER - theme.windowMargin * 2 - RIGHT_COL_WIDTH;
   const BODY_WIDTH_UNSELECTED =
@@ -134,9 +135,9 @@ const ContenderListItem = (props: iContenderListItemProps) => {
     }
   }, [tmdbMovieId]);
 
-  const onPress = () => {
+  const onPressPoster = () => {
     if (disabled) return;
-    onPressThumbnail && onPressThumbnail(prediction.contenderId);
+    onPressThumbnail && onPressThumbnail(prediction);
   };
 
   if (!tmdbMovieId) {
@@ -167,15 +168,15 @@ const ContenderListItem = (props: iContenderListItemProps) => {
   const categoryName = CategoryName[category.name];
   const categoryInfo = tmdbMovie?.categoryInfo?.[categoryName];
   const communityRankings =
-    tab === 'community' ? prediction.communityRankings : undefined;
+    variant === 'community' ? prediction.communityRankings : undefined;
 
   return (
     <TouchableHighlight
       onPress={() => {
-        toggleSelected(prediction.contenderId);
+        onPressItem(prediction);
       }}
       style={{
-        backgroundColor: isActive ? COLORS.goldDark : 'transparent',
+        backgroundColor: isActive || highlighted ? COLORS.goldDark : 'transparent',
         width: '100%',
         paddingTop: theme.windowMargin / 4,
         paddingBottom: theme.windowMargin / 4,
@@ -197,7 +198,7 @@ const ContenderListItem = (props: iContenderListItemProps) => {
           animatedWidth={imageWidth}
           animatedHeight={imageHeight}
           ranking={ranking}
-          onPress={onPress}
+          onPress={onPressPoster}
         />
         <Animated.View
           style={{
@@ -236,7 +237,7 @@ const ContenderListItem = (props: iContenderListItemProps) => {
                 </BodyLarge>
               </View>
             ) : null}
-            {tab === 'personal' ? (
+            {variant === 'personal' ? (
               <View
                 style={{
                   height: SMALL_POSTER,

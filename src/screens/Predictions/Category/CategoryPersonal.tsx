@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
-import { Animated, View } from 'react-native';
+import { Alert, Animated, View } from 'react-native';
 import {
   NestableDraggableFlatList,
   ScaleDecorator,
@@ -57,6 +57,42 @@ const CategoryPersonal = (props: iCategoryListProps) => {
     }
   }, [isComplete]);
 
+  // keeps track of whether we've edited the predictions from their initial state
+  useEffect(() => {
+    const resultIsSame = _.isEqual(
+      predictions.map((p) => p.contenderId),
+      initialPredictions.map((p) => p.contenderId),
+    );
+    setIsEditing(!resultIsSame);
+  }, [predictions]);
+
+  // set custom back arrow functionality
+  useEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => (
+        <BackButton
+          onPress={() => {
+            const onGoBack = () => {
+              navigation.goBack();
+            };
+            if (isEditing) {
+              Alert.alert('Go back without saving?', '', [
+                {
+                  text: 'Cancel',
+                  onPress: () => {},
+                  style: 'cancel',
+                },
+                { text: 'Go Back', onPress: onGoBack },
+              ]);
+            } else {
+              onGoBack();
+            }
+          }}
+        />
+      ),
+    });
+  }, [navigation]);
+
   const onSaveContenders = async () => {
     if (_.isEqual(initialPredictions, predictions)) {
       setIsEditing(false);
@@ -71,21 +107,6 @@ const CategoryPersonal = (props: iCategoryListProps) => {
       predictionData: newPredictionData,
     });
   };
-
-  // set custom back arrow functionality
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: () => (
-        <BackButton
-          onPress={() => {
-            // TODO: warn that about to go back if needed
-            console.error('backkkk');
-            navigation.goBack();
-          }}
-        />
-      ),
-    });
-  }, [navigation]);
 
   if (isLoading) {
     return null;
@@ -134,10 +155,20 @@ const CategoryPersonal = (props: iCategoryListProps) => {
                   ) : (
                     <HeaderButton
                       onPress={() => {
-                        // TODO: give a warning first
-                        setPredictions(initialPredictions);
-
-                        setIsEditing(false);
+                        Alert.alert('Undo recent changes?', '', [
+                          {
+                            text: 'Cancel',
+                            onPress: () => {},
+                            style: 'cancel',
+                          },
+                          {
+                            text: 'Undo',
+                            onPress: () => {
+                              setPredictions(initialPredictions);
+                              setIsEditing(false);
+                            },
+                          },
+                        ]);
                       }}
                       icon={'undo'}
                     />
@@ -149,14 +180,17 @@ const CategoryPersonal = (props: iCategoryListProps) => {
                   ) : null}
                   <HeaderButton
                     onPress={() => {
-                      //   navigation.navigate('AddPredictions');
+                      navigation.navigate('AddPredictions', {
+                        initialPredictions: predictions,
+                        onFinish: (predictions: iPrediction[]) => {
+                          setPredictions(predictions);
+                        },
+                      });
                     }}
                     icon={'plus'}
                   />
                 </View>
               </CategoryHeader>
-              {/* {loading ? <LoadingStatue /> : null} */}
-              {/* {loading ? <LoadingStatueModal visible={!isComplete} /> : null} */}
               <View>
                 {/* @ts-ignore not actually broken */}
                 <NestableScrollContainer contentContainerStyle={{ paddingBottom: 100 }}>
@@ -179,21 +213,24 @@ const CategoryPersonal = (props: iCategoryListProps) => {
                       renderItem={({ item: prediction, index, drag, isActive }) => (
                         <ScaleDecorator activeScale={0.9}>
                           <ContenderListItem
-                            tab={'personal'}
+                            variant={'personal'}
                             prediction={prediction}
                             ranking={(index || 0) + 1}
                             selected={selectedContenderId === prediction.contenderId}
-                            toggleSelected={(id: string) => {
+                            onPressItem={(item) => {
+                              const id = item.contenderId;
                               if (selectedContenderId === id) {
                                 setSelectedContenderId(undefined);
                               } else {
                                 setSelectedContenderId(id);
                               }
                             }}
-                            onPressItem={(item) => {
-                              setSelectedContenderId(item.contenderId);
-                            }}
-                            onPressThumbnail={displayContenderInfo}
+                            onPressThumbnail={(prediction) =>
+                              displayContenderInfo(
+                                prediction.contenderId,
+                                prediction.contenderPerson?.tmdbId,
+                              )
+                            }
                             draggable={{
                               drag,
                               isActive,
@@ -202,12 +239,6 @@ const CategoryPersonal = (props: iCategoryListProps) => {
                         </ScaleDecorator>
                       )}
                       onDragEnd={({ data }) => {
-                        // have to compare string[] or else it knows that new version is not DEEPLY equal, but we only care if shallow
-                        const resultIsSame = _.isEqual(
-                          data.map((c) => c.contenderId),
-                          initialPredictions.map((c) => c.contenderId),
-                        );
-                        setIsEditing(!resultIsSame);
                         setPredictions(data);
                       }}
                     />

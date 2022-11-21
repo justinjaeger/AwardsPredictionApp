@@ -1,4 +1,5 @@
 import { CategoryType } from '../API';
+import { iPrediction } from '../store/types';
 
 export type MainParamList = {
   BottomTabNavigator: undefined;
@@ -23,6 +24,11 @@ export type PredictionsParamList = {
     personTmdb?: number | undefined;
   };
   PersonalPredictions: undefined;
+  AddPredictions: {
+    initialPredictions: iPrediction[];
+    onFinish: (predictions: iPrediction[]) => void;
+  };
+  CreateContender: undefined;
 };
 
 export type PersonalParamList = {

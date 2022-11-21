@@ -97,21 +97,24 @@ const CategoryCommunity = (props: iCategoryListProps) => {
               <Animated.View style={{ opacity: listOpacity }}>
                 {predictions.map((prediction, i) => (
                   <ContenderListItem
-                    tab={'community'}
+                    variant={'community'}
                     prediction={prediction}
                     ranking={i + 1}
                     selected={selectedContenderId === prediction.contenderId}
-                    toggleSelected={(id: string) => {
+                    onPressItem={(item) => {
+                      const id = item.contenderId;
                       if (selectedContenderId === id) {
                         setSelectedContenderId(undefined);
                       } else {
                         setSelectedContenderId(id);
                       }
                     }}
-                    onPressItem={(item) => {
-                      setSelectedContenderId(item.contenderId);
-                    }}
-                    onPressThumbnail={displayContenderInfo}
+                    onPressThumbnail={(prediction) =>
+                      displayContenderInfo(
+                        prediction.contenderId,
+                        prediction.contenderPerson?.tmdbId,
+                      )
+                    }
                   />
                 ))}
               </Animated.View>

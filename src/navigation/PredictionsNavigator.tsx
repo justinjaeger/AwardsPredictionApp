@@ -11,6 +11,8 @@ import ProfileNavigator from './ProfileNavigator';
 import PersonalPredictionsNavigator from './PersonalPredictionsNavigator';
 import theme from '../constants/theme';
 import { headerSettings } from '../constants';
+import CreateContender from '../screens/Predictions/Personal/CreateContender';
+import AddPredictions from '../screens/Predictions/Personal/AddPredictions.tsx';
 
 const { Navigator, Screen } = createStackNavigator<PredictionsParamList>();
 
@@ -74,6 +76,24 @@ const PredictionsNavigator = () => {
           headerShown: false,
           headerLeft: BackButton,
           cardStyle: theme.cardStyle,
+          ...headerSettings,
+        }}
+      />
+      <Screen
+        name="AddPredictions"
+        component={AddPredictions}
+        options={{
+          headerTitle: 'Add Predictions',
+          headerLeft: BackButton,
+          ...headerSettings,
+        }}
+      />
+      <Screen
+        name="CreateContender"
+        component={CreateContender}
+        options={{
+          headerTitle: 'Add Contender',
+          headerLeft: BackButton,
           ...headerSettings,
         }}
       />

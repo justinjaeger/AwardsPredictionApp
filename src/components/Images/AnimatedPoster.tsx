@@ -1,5 +1,5 @@
 import React from 'react';
-import { Animated, ImageStyle, StyleProp, TouchableHighlight, View } from 'react-native';
+import { Animated, ImageStyle, StyleProp, TouchableOpacity, View } from 'react-native';
 import COLORS from '../../constants/colors';
 import { TMDB_IMAGE_URL } from '../../constants';
 import { Body } from '../Text';
@@ -33,11 +33,7 @@ const AnimatedPoster = (props: iAnimatedPosterProps) => {
   };
 
   return (
-    <TouchableHighlight
-      onPress={onPress || undefined}
-      underlayColor={'#FFF'}
-      disabled={!onPress}
-    >
+    <View>
       <>
         {ranking !== undefined ? (
           <View
@@ -67,12 +63,18 @@ const AnimatedPoster = (props: iAnimatedPosterProps) => {
           </View>
         ) : null}
         {path ? (
-          <Animated.Image
-            style={style as Record<string, unknown>}
-            source={{
-              uri: `${TMDB_IMAGE_URL}/${path}`,
-            }}
-          />
+          <TouchableOpacity
+            onPress={onPress || undefined}
+            disabled={!onPress}
+            activeOpacity={0.6}
+          >
+            <Animated.Image
+              style={style as Record<string, unknown>}
+              source={{
+                uri: `${TMDB_IMAGE_URL}/${path}`,
+              }}
+            />
+          </TouchableOpacity>
         ) : (
           <Animated.View
             style={{
@@ -95,7 +97,7 @@ const AnimatedPoster = (props: iAnimatedPosterProps) => {
           </Animated.View>
         )}
       </>
-    </TouchableHighlight>
+    </View>
   );
 };
 
