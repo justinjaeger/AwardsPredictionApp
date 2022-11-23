@@ -1,16 +1,14 @@
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { Alert, Animated, View } from 'react-native';
-import DraggableFlatList, { ScaleDecorator } from 'react-native-draggable-flatlist';
 import { iCategoryListProps } from '.';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import BackButton from '../../../components/Buttons/BackButton';
 import HeaderButton from '../../../components/HeaderButton';
-import ContenderListItem from '../../../components/List/ContenderList/ContenderListItem';
 import LoadingStatueModal from '../../../components/LoadingStatueModal';
 import MovieGrid from '../../../components/MovieGrid';
+import MovieListDraggable from '../../../components/MovieList/MovieListDraggable';
 import { Body, BodyLarge } from '../../../components/Text';
-import { PosterSize } from '../../../constants/posterDimensions';
 import theme from '../../../constants/theme';
 import { useCategory } from '../../../context/CategoryContext';
 import { useAuth } from '../../../context/UserContext';
@@ -25,7 +23,7 @@ import { CategoryHeader } from '../styles';
 const CategoryPersonal = (props: iCategoryListProps) => {
   const { display, delayedDisplay, toggleDisplay, gridOpacity, listOpacity } = props;
 
-  const { category: _category, displayContenderInfo, event: _event } = useCategory();
+  const { category: _category, event: _event } = useCategory();
   const { userId: _userId } = useAuth();
   const navigation = useTypedNavigation<PredictionsParamList>();
 
@@ -43,7 +41,6 @@ const CategoryPersonal = (props: iCategoryListProps) => {
   const initialPredictions = (predictionData || {})[category.id];
 
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [selectedContenderId, setSelectedContenderId] = useState<string | undefined>();
   const [predictions, setPredictions] = useState<iPrediction[]>(initialPredictions || []);
 
   // when mutation is complete, this block runs
@@ -193,45 +190,9 @@ const CategoryPersonal = (props: iCategoryListProps) => {
               opacity: listOpacity,
             }}
           >
-            <DraggableFlatList
-              data={predictions}
-              keyExtractor={(item) => item.contenderId}
-              style={{ width: '100%' }}
-              contentContainerStyle={{
-                paddingBottom: PosterSize.SMALL,
-                paddingTop: theme.windowMargin,
-              }}
-              renderItem={({ item: prediction, index, drag, isActive }) => (
-                <ScaleDecorator activeScale={0.9}>
-                  <ContenderListItem
-                    variant={'personal'}
-                    prediction={prediction}
-                    ranking={(index || 0) + 1}
-                    selected={selectedContenderId === prediction.contenderId}
-                    onPressItem={(item) => {
-                      const id = item.contenderId;
-                      if (selectedContenderId === id) {
-                        setSelectedContenderId(undefined);
-                      } else {
-                        setSelectedContenderId(id);
-                      }
-                    }}
-                    onPressThumbnail={(prediction) =>
-                      displayContenderInfo(
-                        prediction.contenderId,
-                        prediction.contenderPerson?.tmdbId,
-                      )
-                    }
-                    draggable={{
-                      drag,
-                      isActive,
-                    }}
-                  />
-                </ScaleDecorator>
-              )}
-              onDragEnd={({ data }) => {
-                setPredictions(data);
-              }}
+            <MovieListDraggable
+              predictions={predictions}
+              setPredictions={(ps) => setPredictions(ps)}
             />
           </Animated.View>
           {predictions && predictions.length === 0 ? (

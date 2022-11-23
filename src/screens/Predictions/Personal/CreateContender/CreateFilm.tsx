@@ -1,69 +1,44 @@
-import React, { useEffect, useState } from 'react';
-import { SubmitButton } from '../../../../components/Buttons';
+import React, { useState } from 'react';
 import SearchInput from '../../../../components/Inputs/SearchInput';
-import SearchResultsList from '../../../../components/List/SearchResultsList';
 import TmdbServices from '../../../../services/tmdb';
 import { iSearchData } from '../../../../services/tmdb/search';
 import Snackbar from '../../../../components/Snackbar';
-import ContenderDetails from '../../../../components/ContenderDetails';
 import { Body } from '../../../../components/Text';
 import TmdbMovieCache from '../../../../services/cache/tmdbMovie';
-import { IconButton } from '../../../../components/Buttons/IconButton';
-import { View } from 'react-native';
-import { useTypedNavigation } from '../../../../util/hooks';
-import { CreateContenderParamList } from '../../../../navigation/types';
-import ApiServices from '../../../../services/graphql';
-import { CategoryType, GetMovieQuery } from '../../../../API';
+import { TouchableHighlight, View } from 'react-native';
 import { useCategory } from '../../../../context/CategoryContext';
-import { iCategory, iEvent, QueryKeys } from '../../../../store/types';
-import { useIsFetching, useMutation, useQueryClient } from '@tanstack/react-query';
-
-const MAX_CHAR_COUNT = 100;
+import { iCategory, iEvent, iPrediction } from '../../../../store/types';
+import COLORS from '../../../../constants/colors';
+import MovieListSearch from '../../../../components/MovieList/MovieListSearch';
+import LoadingStatueModal from '../../../../components/LoadingStatueModal';
+import useMutationCreateContender from '../../../../hooks/createContender';
+import theme from '../../../../constants/theme';
+import { useAsyncEffect } from '../../../../util/hooks';
 
 // TODO: should only be able to do this if logged in
 const CreateFilm = () => {
   const { category: _category, event: _event } = useCategory();
-  const navigation = useTypedNavigation<CreateContenderParamList>();
-  const queryClient = useQueryClient();
-  const isFetching = useIsFetching();
 
   const category = _category as iCategory;
   const event = _event as iEvent;
 
   // when adding a contender to the list of overall contenders
-  const createContender = useMutation({
-    mutationFn: async (params: {
-      eventId: string;
-      categoryId: string;
-      movieId: string;
-    }) => {
-      return ApiServices.getOrCreateFilmContender({
-        eventId: params.eventId,
-        categoryId: params.categoryId,
-        movieId: params.movieId,
-      });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [QueryKeys.PERSONAL_EVENT] });
-      queryClient.invalidateQueries({ queryKey: [QueryKeys.COMMUNITY_EVENT] });
-    },
-  });
+  const { mutate, isComplete } = useMutationCreateContender();
 
   const [searchResults, setSearchResults] = useState<iSearchData>([]);
-  const [movie, setMovie] = useState<GetMovieQuery>();
-  const [loading, setLoading] = useState<boolean>(false);
   const [searchMessage, setSearchMessage] = useState<string>('');
-  const [navigateBackWhenDoneFetching, setDone] = useState<boolean>(false);
-
-  // fires when everything is saved
-  useEffect(() => {
-    if (isFetching === 0 && navigateBackWhenDoneFetching === true) {
-      navigation.goBack();
-      setDone(false);
-    }
-  }, [isFetching]);
+  const [selectedTmdbId, setSelectedTmdbId] = useState<number | undefined>();
 
   const minReleaseYear = event.year - 1;
+
+  useAsyncEffect(async () => {
+    if (isComplete && selectedTmdbId) {
+      const tmdbMovie = await TmdbMovieCache.get(selectedTmdbId);
+      Snackbar.success(`Added ${tmdbMovie?.title || 'film'} to predictions`);
+      setSelectedTmdbId(undefined);
+      setSearchResults([]);
+    }
+  }, [isComplete]);
 
   const handleSearch = (s: string) => {
     if (s === '') {
@@ -71,7 +46,7 @@ const CreateFilm = () => {
       return setSearchResults([]);
     }
     TmdbServices.searchMovies(s, minReleaseYear).then((res) => {
-      setMovie(undefined);
+      setSelectedTmdbId(undefined);
       const r = res.data || [];
       setSearchResults(r);
       if (r.length === 0) {
@@ -80,87 +55,88 @@ const CreateFilm = () => {
     });
   };
 
-  const onSelectMovie = async (tmdbId: number) => {
-    try {
-      const { data: movie } = await ApiServices.getOrCreateMovie(tmdbId);
-      const movieId = movie?.getMovie?.id;
-      if (movieId) {
-        const { data: contender } = await ApiServices.getOrCreateFilmContender({
-          eventId: event.id,
-          categoryId: category.id,
-          movieId,
-        });
-        if (!contender) {
-          return;
-        }
-      }
-      setMovie(movie);
-    } catch (err) {
-      console.error('error selecting search result', err);
-    }
-  };
-
   const onConfirmContender = async () => {
-    const m = movie?.getMovie;
-    if (!m) return;
-    setLoading(true);
-    // TODO: make into mutation
-    await createContender.mutate({
+    if (!selectedTmdbId) return;
+    await mutate({
       eventId: event.id,
       categoryId: category.id,
-      movieId: m.id,
+      movieTmdbId: selectedTmdbId,
     });
-    setLoading(false);
-    const tmdbMovie = await TmdbMovieCache.get(m.tmdbId);
-    Snackbar.success(`Added ${tmdbMovie?.title || 'film'} to predictions`);
-    setDone(true);
   };
 
-  const removeFilm = () => {
-    setMovie(undefined);
-  };
-
-  const movieData = searchResults.map((m) => ({
-    title: m.title,
-    description: m.description
-      ? m.description.length > MAX_CHAR_COUNT
-        ? m.description.slice(0, MAX_CHAR_COUNT) + '...'
-        : m.description
-      : '',
-    image: m.image,
-    onPress: () => {
-      onSelectMovie(m.tmdbId);
+  // these are sort of "fake" values
+  const movieData: iPrediction[] = searchResults.map((m) => ({
+    ranking: 0,
+    contenderId: m.tmdbId.toString(),
+    contenderMovie: {
+      id: m.tmdbId.toString(),
+      tmdbId: m.tmdbId,
+      studio: m.description,
     },
   }));
 
-  const m = movie?.getMovie;
+  // TODO: add button at bottom to save, which calls onConfirmContender
 
   return (
     <>
-      {m ? (
-        <>
-          <View style={{ position: 'absolute', right: 30, top: 10, zIndex: 2 }}>
-            <IconButton iconProps={{ name: 'close-outline' }} onPress={removeFilm} />
-          </View>
-          <SubmitButton text={'Confirm'} onPress={onConfirmContender} loading={loading} />
-          <ContenderDetails
-            movieTmdbId={m.tmdbId}
-            categoryType={CategoryType[category.type]}
-          />
-        </>
-      ) : (
-        <>
+      <LoadingStatueModal visible={!isComplete} text={'Saving changes...'} />
+      <View
+        style={{
+          height: '100%',
+          width: '100%',
+          alignItems: 'center',
+          flex: 1,
+        }}
+      >
+        <View style={{ width: '100%', alignItems: 'center', height: '100%' }}>
           <SearchInput
             placeholder={'Search Movies'}
             handleSearch={(s: string) => handleSearch(s)}
-            style={{ width: '80%' }}
+            style={{ width: '80%', marginTop: '5%' }}
           />
           {searchResults.length === 0 ? (
-            <Body style={{ marginTop: 40 }}>{searchMessage}</Body>
+            <Body style={{ marginTop: 40, color: COLORS.white }}>{searchMessage}</Body>
           ) : null}
-          <SearchResultsList data={movieData} />
-        </>
-      )}
+          <View
+            style={{
+              height: '100%',
+              width: '100%',
+              alignItems: 'center',
+            }}
+          >
+            <MovieListSearch
+              predictions={movieData}
+              onSelect={(tmdbId) => setSelectedTmdbId(tmdbId)}
+            />
+          </View>
+        </View>
+        <View
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            width: '100%',
+            alignItems: 'center',
+          }}
+        >
+          <TouchableHighlight
+            style={{
+              width: '50%',
+              backgroundColor: selectedTmdbId ? COLORS.goldDark : COLORS.primaryLight,
+              borderRadius: theme.borderRadius,
+              borderWidth: 1,
+              borderColor: COLORS.primaryLightest,
+              alignItems: 'center',
+              padding: 15,
+              margin: 10,
+            }}
+            disabled={!selectedTmdbId}
+            onPress={onConfirmContender}
+            underlayColor={COLORS.primary}
+          >
+            <Body>Submit</Body>
+          </TouchableHighlight>
+        </View>
+      </View>
     </>
   );
 };

@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Animated, View } from 'react-native';
 import { iCategoryListProps } from '.';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import HeaderButton from '../../../components/HeaderButton';
-import ContenderListItem from '../../../components/List/ContenderList/ContenderListItem';
 import MovieGrid from '../../../components/MovieGrid';
+import MovieListCommunity from '../../../components/MovieList/MovieListCommunity';
 import { BodyLarge } from '../../../components/Text';
 import theme from '../../../constants/theme';
 import { useCategory } from '../../../context/CategoryContext';
@@ -16,12 +16,10 @@ import { CategoryHeader } from '../styles';
 const CategoryCommunity = (props: iCategoryListProps) => {
   const { display, delayedDisplay, toggleDisplay, gridOpacity, listOpacity } = props;
 
-  const { category: _category, displayContenderInfo, event: _event } = useCategory();
+  const { category: _category, event: _event } = useCategory();
 
   const category = _category as iCategory;
   const event = _event as iEvent;
-
-  const [selectedContenderId, setSelectedContenderId] = useState<string | undefined>();
 
   // We use the SAME KEY as the previous screen, because it avoids a re-fetch of the data which was available previously
   const { data: predictionData, isLoading } = useQueryCommunityOrPersonalEvent(
@@ -85,37 +83,15 @@ const CategoryCommunity = (props: iCategoryListProps) => {
             <MovieGrid predictions={predictions} />
           </Animated.View>
         </Animated.ScrollView>
-        <Animated.FlatList
-          data={predictions}
-          keyExtractor={(item) => item.contenderId}
+        <Animated.View
           style={{
             display: delayedDisplay === 'list' ? 'flex' : 'none',
             opacity: listOpacity,
             width: '100%',
           }}
-          renderItem={({ item: prediction, index: i }) => (
-            <ContenderListItem
-              variant={'community'}
-              prediction={prediction}
-              ranking={i + 1}
-              selected={selectedContenderId === prediction.contenderId}
-              onPressItem={(item) => {
-                const id = item.contenderId;
-                if (selectedContenderId === id) {
-                  setSelectedContenderId(undefined);
-                } else {
-                  setSelectedContenderId(id);
-                }
-              }}
-              onPressThumbnail={(prediction) =>
-                displayContenderInfo(
-                  prediction.contenderId,
-                  prediction.contenderPerson?.tmdbId,
-                )
-              }
-            />
-          )}
-        />
+        >
+          <MovieListCommunity predictions={predictions} />
+        </Animated.View>
         {predictions && predictions.length === 0 ? (
           <View
             style={{

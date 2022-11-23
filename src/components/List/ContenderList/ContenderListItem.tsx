@@ -17,7 +17,7 @@ import AnimatedPoster from '../../Images/AnimatedPoster';
 import { BodyLarge, Label, LabelBold } from '../../Text';
 
 type iContenderListItemProps = {
-  variant: 'community' | 'personal' | 'add';
+  variant: 'community' | 'personal' | 'selectable' | 'search';
   prediction: iPrediction;
   ranking: number;
   selected: boolean;
@@ -191,7 +191,7 @@ const ContenderListItem = (props: iContenderListItemProps) => {
           title={tmdbMovie?.title || ''}
           animatedWidth={imageWidth}
           animatedHeight={imageHeight}
-          ranking={ranking}
+          ranking={variant !== 'search' ? ranking : undefined}
           onPress={onPressPoster}
         />
         <Animated.View
@@ -208,9 +208,18 @@ const ContenderListItem = (props: iContenderListItemProps) => {
               justifyContent: 'space-between',
             }}
           >
-            <Animated.View style={{ width: bodyWidth }}>
+            <Animated.View style={{ width: bodyWidth, paddingBottom: 0 }}>
               <BodyLarge style={{ marginLeft: 10 }}>{title}</BodyLarge>
-              <Label style={{ marginTop: 1, marginLeft: 10 }}>{subtitle}</Label>
+              <Label
+                style={{
+                  marginTop: 0,
+                  marginLeft: 10,
+                  overflow: 'hidden',
+                  maxHeight: height * 0.8,
+                }}
+              >
+                {subtitle}
+              </Label>
               {categoryInfo ? (
                 <Label style={{ marginLeft: 10 }}>{categoryInfo.join(', ')}</Label>
               ) : null}

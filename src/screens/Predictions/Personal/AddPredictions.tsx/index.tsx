@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { Alert, FlatList, View } from 'react-native';
-import ContenderListItem from '../../../../components/List/ContenderList/ContenderListItem';
+import { Alert, View } from 'react-native';
 import { PersonalParamList, PredictionsParamList } from '../../../../navigation/types';
 import { useTypedNavigation } from '../../../../util/hooks';
 import { useCategory } from '../../../../context/CategoryContext';
 import { iCategory, iEvent, iPrediction } from '../../../../store/types';
 import { BodyLarge } from '../../../../components/Text';
 import useQueryCommunityEvent from '../../../../hooks/getCommunityEvent';
-import { removePredictionFromList } from '../../../../util/removePredictionFromList';
 import { CategoryHeader } from '../../styles';
 import HeaderButton from '../../../../components/HeaderButton';
 import BackgroundWrapper from '../../../../components/BackgroundWrapper';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import BackButton from '../../../../components/Buttons/BackButton';
 import _ from 'lodash';
+import MovieListSelectable from '../../../../components/MovieList/MovieListSelectable';
 
 // TODO: really, this is adding OR deleting contenders
 
@@ -37,7 +36,6 @@ const AddPredictions = () => {
   const [selectedPredictions, setSelectedPredictions] = useState<iPrediction[]>(
     initialPredictions,
   );
-  const [selectedContenderId, setSelectedContenderId] = useState<string | undefined>(); // this selection is whether the film is big or not
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
   const selectedContenderIds = selectedPredictions.map((sp) => sp.contenderId);
@@ -80,15 +78,6 @@ const AddPredictions = () => {
     });
   }, [navigation]);
 
-  const onPressItem = async (prediction: iPrediction) => {
-    const contenderId = prediction.contenderId;
-    const isAlreadySelected = selectedContenderIds.includes(contenderId);
-    const newSelected = isAlreadySelected
-      ? removePredictionFromList(selectedPredictions, prediction)
-      : [...selectedPredictions, prediction];
-    setSelectedPredictions(newSelected);
-  };
-
   const onSave = async () => {
     // Below: we have to re-order the predictions so that the NEW films are at the bottom, so it doesn't change the previous order
     // films that we JUST added
@@ -122,70 +111,45 @@ const AddPredictions = () => {
   }
 
   return (
-    <>
-      <BackgroundWrapper>
-        <View
-          style={{
-            height: '100%',
-            width: '100%',
-            alignItems: 'center',
-          }}
-        >
-          <CategoryHeader>
-            <View style={{ flexDirection: 'row' }} />
-            <View style={{ flexDirection: 'row' }}>
-              {isEditing ? <HeaderButton onPress={() => onSave()} icon={'save'} /> : null}
-              <HeaderButton
-                onPress={() => {
-                  navigation.navigate('CreateContender');
-                }}
-                icon={'plus'}
-              />
-            </View>
-          </CategoryHeader>
-          <FlatList
-            data={communityPredictions}
-            keyExtractor={(item) => item.contenderId}
-            style={{ width: '100%' }}
-            renderItem={({ item: prediction, index: i }) => {
-              const highlighted = selectedPredictions
-                .map((sp) => sp.contenderId)
-                .includes(prediction.contenderId);
-              return (
-                <ContenderListItem
-                  prediction={prediction}
-                  ranking={i + 1}
-                  onPressItem={onPressItem}
-                  onPressThumbnail={(item) => {
-                    const id = item.contenderId;
-                    if (selectedContenderId === id) {
-                      setSelectedContenderId(undefined);
-                    } else {
-                      setSelectedContenderId(id);
-                    }
-                  }}
-                  selected={selectedContenderId === prediction.contenderId}
-                  highlighted={highlighted}
-                  variant={'add'}
-                />
-              );
-            }}
-          />
-          {communityPredictions && communityPredictions.length === 0 ? (
-            <View
-              style={{
-                width: '100%',
-                height: '100%',
-                alignItems: 'center',
-                justifyContent: 'center',
+    <BackgroundWrapper>
+      <View
+        style={{
+          height: '100%',
+          width: '100%',
+          alignItems: 'center',
+        }}
+      >
+        <CategoryHeader>
+          <View style={{ flexDirection: 'row' }} />
+          <View style={{ flexDirection: 'row' }}>
+            {isEditing ? <HeaderButton onPress={() => onSave()} icon={'save'} /> : null}
+            <HeaderButton
+              onPress={() => {
+                navigation.navigate('CreateContender');
               }}
-            >
-              <BodyLarge>No films in this list</BodyLarge>
-            </View>
-          ) : null}
-        </View>
-      </BackgroundWrapper>
-    </>
+              icon={'plus'}
+            />
+          </View>
+        </CategoryHeader>
+        <MovieListSelectable
+          predictions={communityPredictions}
+          selectedPredictions={selectedPredictions}
+          setSelectedPredictions={(ps) => setSelectedPredictions(ps)}
+        />
+        {communityPredictions && communityPredictions.length === 0 ? (
+          <View
+            style={{
+              width: '100%',
+              height: '100%',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <BodyLarge>No films in this list</BodyLarge>
+          </View>
+        ) : null}
+      </View>
+    </BackgroundWrapper>
   );
 };
 

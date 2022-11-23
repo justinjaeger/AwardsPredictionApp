@@ -14,6 +14,7 @@ import { GraphqlAPI, handleError, iApiResponse } from '../utils';
 import { getEventById } from './event';
 import { getCategorySlots } from '../../constants/categories';
 import { getPredictionsByContender } from './prediction';
+import ApiServices from '.';
 
 type iContenderParams = {
   eventId: string;
@@ -21,6 +22,44 @@ type iContenderParams = {
   movieId: string;
   personId?: string;
   songId?: string;
+};
+
+export const createFilmContender = async (params: {
+  eventId: string;
+  categoryId: string;
+  movieTmdbId: number;
+}): Promise<iApiResponse<any>> => {
+  const { eventId, categoryId, movieTmdbId } = params;
+  try {
+    const { data: movieResponse } = await ApiServices.getOrCreateMovie(movieTmdbId);
+    const movieId = movieResponse?.getMovie?.id;
+    if (!movieId) {
+      return { status: 'error' };
+    }
+    const contenderParams = {
+      eventId,
+      categoryId,
+      movieId,
+    };
+    // get contenders with unique-defining params
+    const { data: maybeContenders } = await getUniqueContenders(contenderParams);
+    if (!maybeContenders?.listContenders) {
+      return { status: 'error' };
+    }
+    let contenderId = maybeContenders.listContenders.items[0]?.id || undefined;
+    // if no contender exists, create one
+    if (!contenderId) {
+      const { data: newMovie } = await createContender(contenderParams);
+      const cId = newMovie?.createContender?.id;
+      if (!cId) {
+        return { status: 'error' };
+      }
+      contenderId = cId;
+    }
+    return { status: 'success' };
+  } catch (err) {
+    return handleError('error getting or creating contender', err);
+  }
 };
 
 export const getContenderById = async (

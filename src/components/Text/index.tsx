@@ -67,7 +67,7 @@ export const LabelBold = (props: iTextProps) => {
 export const Body = (props: iTextProps) => {
   return (
     <Text
-      category={'p2'}
+      category={'p1'}
       style={{
         fontWeight: '400',
         color: COLORS.lightest,

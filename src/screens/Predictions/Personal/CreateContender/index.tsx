@@ -1,5 +1,4 @@
 import React, { useLayoutEffect } from 'react';
-import { ScrollView } from 'react-native';
 import { CreateContenderParamList } from '../../../../navigation/types';
 import { getAwardsBodyCategories } from '../../../../constants/categories';
 import CreateFilm from './CreateFilm';
@@ -9,6 +8,7 @@ import { useTypedNavigation } from '../../../../util/hooks';
 import { AwardsBody, CategoryType } from '../../../../API';
 import { useCategory } from '../../../../context/CategoryContext';
 import { iCategory, iEvent } from '../../../../store/types';
+import BackgroundWrapper from '../../../../components/BackgroundWrapper';
 
 // TODO: should only be able to do this if logged in
 const CreateContender = () => {
@@ -41,18 +41,7 @@ const CreateContender = () => {
     }
   })();
 
-  return (
-    <ScrollView
-      contentContainerStyle={{
-        alignItems: 'center',
-        marginTop: 20,
-        width: '100%',
-        paddingBottom: 100,
-      }}
-    >
-      {CreateComponent}
-    </ScrollView>
-  );
+  return <BackgroundWrapper>{CreateComponent}</BackgroundWrapper>;
 };
 
 export default CreateContender;

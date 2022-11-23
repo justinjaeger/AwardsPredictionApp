@@ -37,7 +37,7 @@ const WebViewScreen = () => {
   );
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.primary, width: '100%' }}>
       <WebView
         ref={webviewRef}
         source={{ uri }}
@@ -46,11 +46,8 @@ const WebViewScreen = () => {
       />
       <View
         style={{
-          borderTopWidth: 1,
-          borderColor: COLORS.border,
           alignItems: 'center',
           flexDirection: 'row',
-          paddingHorizontal: 16,
           justifyContent: 'space-between',
           height: BOTTOM_TAB_HEIGHT,
         }}
@@ -77,7 +74,7 @@ const WebViewScreen = () => {
             styles: { color: COLORS.primary, width: 30, height: 30 },
           }}
           onPress={webViewNext}
-          styles={{ width: 30, height: 30, marginLeft: 10 }}
+          styles={{ width: 30, height: 30, marginRight: 10 }}
         />
       </View>
     </SafeAreaView>

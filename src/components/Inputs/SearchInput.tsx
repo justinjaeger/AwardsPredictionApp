@@ -39,12 +39,27 @@ const SearchInput = (props: {
         label={label}
         value={searchInput}
         placeholder={placeholder}
+        placeholderTextColor={COLORS.border}
         onChangeText={setSearchInput}
         caption={caption}
         onBlur={onBlur}
         status={status || 'basic'}
-        style={{ marginBottom: 10, borderRadius: 100, ...style }}
-        textStyle={{ marginLeft: 10, marginRight: '20%', height: INPUT_HEIGHT - 15 }}
+        style={{
+          marginBottom: 10,
+          borderRadius: 100,
+          borderWidth: 0,
+          backgroundColor: COLORS.primaryLight,
+          color: 'green',
+          ...style,
+        }}
+        selectionColor={COLORS.border} // the cursor
+        textStyle={{
+          marginLeft: 10,
+          marginRight: '20%',
+          height: INPUT_HEIGHT - 15,
+          fontSize: 16,
+          color: COLORS.white,
+        }}
         autoFocus
         accessoryLeft={() => (
           <CustomIcon
@@ -54,6 +69,7 @@ const SearchInput = (props: {
             styles={{ marginLeft: 10 }}
           />
         )}
+        keyboardAppearance={'dark'}
       />
       {searching ? (
         <View
@@ -65,7 +81,11 @@ const SearchInput = (props: {
             height: INPUT_HEIGHT,
           }}
         >
-          <Spinner size="medium" status="primary" />
+          <Spinner
+            size="medium"
+            status="secondary"
+            style={{ borderColor: COLORS.border }}
+          />
         </View>
       ) : null}
     </View>
