@@ -29,7 +29,7 @@ const MovieListDraggable = (props: iMovieListProps) => {
       keyExtractor={(item) => item.contenderId}
       style={{ width: '100%' }}
       contentContainerStyle={{
-        // paddingBottom: PosterSize.SMALL,
+        paddingBottom: 100,
         paddingTop: theme.windowMargin,
       }}
       renderItem={({ item: prediction, index, drag, isActive }) => (

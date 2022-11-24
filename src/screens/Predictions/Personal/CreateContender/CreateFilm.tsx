@@ -5,15 +5,16 @@ import { iSearchData } from '../../../../services/tmdb/search';
 import Snackbar from '../../../../components/Snackbar';
 import { Body } from '../../../../components/Text';
 import TmdbMovieCache from '../../../../services/cache/tmdbMovie';
-import { TouchableHighlight, View } from 'react-native';
+import { View } from 'react-native';
 import { useCategory } from '../../../../context/CategoryContext';
 import { iCategory, iEvent, iPrediction } from '../../../../store/types';
 import COLORS from '../../../../constants/colors';
 import MovieListSearch from '../../../../components/MovieList/MovieListSearch';
 import LoadingStatueModal from '../../../../components/LoadingStatueModal';
 import useMutationCreateContender from '../../../../hooks/createContender';
-import theme from '../../../../constants/theme';
 import { useAsyncEffect } from '../../../../util/hooks';
+import useQueryCommunityEvent from '../../../../hooks/getCommunityEvent';
+import { FAB } from '../../../../components/Buttons/FAB';
 
 // TODO: should only be able to do this if logged in
 const CreateFilm = () => {
@@ -25,25 +26,35 @@ const CreateFilm = () => {
   // when adding a contender to the list of overall contenders
   const { mutate, isComplete } = useMutationCreateContender();
 
+  const { data: communityData } = useQueryCommunityEvent(event);
+  const communityPredictions = (communityData || {})[category.id];
+
   const [searchResults, setSearchResults] = useState<iSearchData>([]);
   const [searchMessage, setSearchMessage] = useState<string>('');
   const [selectedTmdbId, setSelectedTmdbId] = useState<number | undefined>();
+  const [resetSearchHack, setResetSearchHack] = useState<boolean>(false);
 
   const minReleaseYear = event.year - 1;
+
+  const resetSearch = () => {
+    setSelectedTmdbId(undefined);
+    setSearchMessage('');
+    setSearchResults([]);
+    setResetSearchHack(!resetSearchHack); // resets searchbar
+  };
 
   useAsyncEffect(async () => {
     if (isComplete && selectedTmdbId) {
       const tmdbMovie = await TmdbMovieCache.get(selectedTmdbId);
       Snackbar.success(`Added ${tmdbMovie?.title || 'film'} to predictions`);
-      setSelectedTmdbId(undefined);
-      setSearchResults([]);
+      resetSearch();
     }
   }, [isComplete]);
 
   const handleSearch = (s: string) => {
     if (s === '') {
-      setSearchMessage('');
-      return setSearchResults([]);
+      resetSearch();
+      return;
     }
     TmdbServices.searchMovies(s, minReleaseYear).then((res) => {
       setSelectedTmdbId(undefined);
@@ -57,6 +68,14 @@ const CreateFilm = () => {
 
   const onConfirmContender = async () => {
     if (!selectedTmdbId) return;
+    // can check that selectedTmdbId is not already associated with a contender in our category list
+    const maybeAlreadyExistingContender = communityPredictions.find(
+      (p) => p.contenderMovie?.tmdbId === selectedTmdbId,
+    );
+    if (maybeAlreadyExistingContender) {
+      Snackbar.warning('This film has already been added');
+      return;
+    }
     await mutate({
       eventId: event.id,
       categoryId: category.id,
@@ -75,8 +94,6 @@ const CreateFilm = () => {
     },
   }));
 
-  // TODO: add button at bottom to save, which calls onConfirmContender
-
   return (
     <>
       <LoadingStatueModal visible={!isComplete} text={'Saving changes...'} />
@@ -90,6 +107,7 @@ const CreateFilm = () => {
       >
         <View style={{ width: '100%', alignItems: 'center', height: '100%' }}>
           <SearchInput
+            resetSearchHack={resetSearchHack}
             placeholder={'Search Movies'}
             handleSearch={(s: string) => handleSearch(s)}
             style={{ width: '80%', marginTop: '5%' }}
@@ -106,36 +124,22 @@ const CreateFilm = () => {
           >
             <MovieListSearch
               predictions={movieData}
-              onSelect={(tmdbId) => setSelectedTmdbId(tmdbId)}
+              onSelect={(tmdbId) => {
+                if (selectedTmdbId === tmdbId) {
+                  setSelectedTmdbId(undefined);
+                } else {
+                  setSelectedTmdbId(tmdbId);
+                }
+              }}
             />
           </View>
         </View>
-        <View
-          style={{
-            position: 'absolute',
-            bottom: 0,
-            width: '100%',
-            alignItems: 'center',
-          }}
-        >
-          <TouchableHighlight
-            style={{
-              width: '50%',
-              backgroundColor: selectedTmdbId ? COLORS.goldDark : COLORS.primaryLight,
-              borderRadius: theme.borderRadius,
-              borderWidth: 1,
-              borderColor: COLORS.primaryLightest,
-              alignItems: 'center',
-              padding: 15,
-              margin: 10,
-            }}
-            disabled={!selectedTmdbId}
-            onPress={onConfirmContender}
-            underlayColor={COLORS.primary}
-          >
-            <Body>Submit</Body>
-          </TouchableHighlight>
-        </View>
+        <FAB
+          iconName="checkmark"
+          text="Add"
+          onPress={onConfirmContender}
+          visible={selectedTmdbId !== undefined}
+        />
       </View>
     </>
   );

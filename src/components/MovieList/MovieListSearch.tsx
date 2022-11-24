@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FlatList } from 'react-native';
 import { iPrediction } from '../../store/types';
 import ContenderListItem from '../List/ContenderList/ContenderListItem';
@@ -12,6 +12,11 @@ const MovieListSearch = (props: iMovieListProps) => {
   const { predictions, onSelect } = props;
 
   const [selectedTmdbId, setSelectedTmdbId] = useState<number | undefined>(undefined);
+
+  // reset whenever list data changes
+  useEffect(() => {
+    setSelectedTmdbId(undefined);
+  }, [predictions.length]);
 
   const getTmdbId = (prediction: iPrediction) => {
     return parseInt(prediction.contenderId, 10);

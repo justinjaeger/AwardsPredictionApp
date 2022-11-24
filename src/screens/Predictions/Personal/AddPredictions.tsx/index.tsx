@@ -13,6 +13,7 @@ import { RouteProp, useRoute } from '@react-navigation/native';
 import BackButton from '../../../../components/Buttons/BackButton';
 import _ from 'lodash';
 import MovieListSelectable from '../../../../components/MovieList/MovieListSelectable';
+import { FAB } from '../../../../components/Buttons/FAB';
 
 // TODO: really, this is adding OR deleting contenders
 
@@ -122,7 +123,6 @@ const AddPredictions = () => {
         <CategoryHeader>
           <View style={{ flexDirection: 'row' }} />
           <View style={{ flexDirection: 'row' }}>
-            {isEditing ? <HeaderButton onPress={() => onSave()} icon={'save'} /> : null}
             <HeaderButton
               onPress={() => {
                 navigation.navigate('CreateContender');
@@ -148,6 +148,7 @@ const AddPredictions = () => {
             <BodyLarge>No films in this list</BodyLarge>
           </View>
         ) : null}
+        <FAB iconName="checkmark" text="Save" onPress={onSave} visible={isEditing} />
       </View>
     </BackgroundWrapper>
   );

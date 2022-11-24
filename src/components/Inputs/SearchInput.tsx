@@ -10,6 +10,7 @@ const INPUT_HEIGHT = 50;
 
 const SearchInput = (props: {
   handleSearch: (s: string) => void;
+  resetSearchHack?: boolean;
   label?: string;
   placeholder?: string;
   caption?: string;
@@ -17,11 +18,26 @@ const SearchInput = (props: {
   status?: EvaStatus;
   style?: any;
 }) => {
-  const { handleSearch, label, placeholder, caption, onBlur, status, style } = props;
+  const {
+    handleSearch,
+    resetSearchHack,
+    label,
+    placeholder,
+    caption,
+    onBlur,
+    status,
+    style,
+  } = props;
 
   const [searchInput, setSearchInput] = useState<string>('');
   const [searching, setSearching] = useState<boolean>(false);
   const debouncedSearch = useDebounce(searchInput, 500, { trailing: true });
+
+  // Enables us to reset the search bar from the outer component
+  useEffect(() => {
+    setSearchInput('');
+    setSearching(false);
+  }, [resetSearchHack]);
 
   useEffect(() => {
     setSearching(true);
@@ -75,7 +91,7 @@ const SearchInput = (props: {
         <View
           style={{
             position: 'absolute',
-            top: 0,
+            top: 18,
             right: 20,
             justifyContent: 'center',
             height: INPUT_HEIGHT,

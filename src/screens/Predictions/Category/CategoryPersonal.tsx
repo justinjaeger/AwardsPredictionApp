@@ -4,6 +4,7 @@ import { Alert, Animated, View } from 'react-native';
 import { iCategoryListProps } from '.';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import BackButton from '../../../components/Buttons/BackButton';
+import { FAB } from '../../../components/Buttons/FAB';
 import HeaderButton from '../../../components/HeaderButton';
 import LoadingStatueModal from '../../../components/LoadingStatueModal';
 import MovieGrid from '../../../components/MovieGrid';
@@ -154,9 +155,6 @@ const CategoryPersonal = (props: iCategoryListProps) => {
               )}
             </View>
             <View style={{ flexDirection: 'row' }}>
-              {isEditing ? (
-                <HeaderButton onPress={() => onSaveContenders()} icon={'save'} />
-              ) : null}
               <HeaderButton
                 onPress={() => {
                   navigation.navigate('AddPredictions', {
@@ -207,6 +205,12 @@ const CategoryPersonal = (props: iCategoryListProps) => {
               <BodyLarge>No films in this list</BodyLarge>
             </View>
           ) : null}
+          <FAB
+            iconName="checkmark"
+            text="Save"
+            onPress={onSaveContenders}
+            visible={isEditing}
+          />
         </View>
       </BackgroundWrapper>
     </>

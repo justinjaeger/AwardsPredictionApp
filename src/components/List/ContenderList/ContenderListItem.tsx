@@ -1,7 +1,9 @@
 /* eslint-disable sonarjs/no-duplicate-string */
+import MaskedView from '@react-native-masked-view/masked-view';
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useRef, useState } from 'react';
 import { Animated, TouchableHighlight, useWindowDimensions, View } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 import { CategoryName, CategoryType } from '../../../API';
 import COLORS from '../../../constants/colors';
 import { getPosterDimensionsByWidth } from '../../../constants/posterDimensions';
@@ -168,6 +170,8 @@ const ContenderListItem = (props: iContenderListItemProps) => {
   const communityRankings =
     variant === 'community' ? prediction.communityRankings : undefined;
 
+  const fadeBottom = selected !== true && variant === 'search';
+
   return (
     <TouchableHighlight
       onPress={() => {
@@ -197,9 +201,9 @@ const ContenderListItem = (props: iContenderListItemProps) => {
         <Animated.View
           style={{
             flexDirection: 'column',
-            height,
             justifyContent: 'space-between',
             width: itemWidth,
+            height: imageHeight,
           }}
         >
           <View
@@ -208,22 +212,42 @@ const ContenderListItem = (props: iContenderListItemProps) => {
               justifyContent: 'space-between',
             }}
           >
-            <Animated.View style={{ width: bodyWidth, paddingBottom: 0 }}>
-              <BodyLarge style={{ marginLeft: 10 }}>{title}</BodyLarge>
-              <Label
-                style={{
-                  marginTop: 0,
-                  marginLeft: 10,
-                  overflow: 'hidden',
-                  maxHeight: height * 0.8,
-                }}
-              >
-                {subtitle}
-              </Label>
-              {categoryInfo ? (
-                <Label style={{ marginLeft: 10 }}>{categoryInfo.join(', ')}</Label>
-              ) : null}
-            </Animated.View>
+            <MaskedView
+              maskElement={
+                <LinearGradient
+                  colors={[
+                    'rgba(0,0,0,1)',
+                    'rgba(0,0,0,1)',
+                    'rgba(0,0,0,1)',
+                    fadeBottom ? 'rgba(0,0,0,0.1)' : 'rgba(0,0,0,1)',
+                    fadeBottom ? 'transparent' : 'rgba(0,0,0,1)',
+                  ]}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 0, y: 1 }}
+                  style={{
+                    flex: 1,
+                    maxHeight: fadeBottom ? height + 15 : height - 30,
+                    minHeight: fadeBottom ? undefined : height,
+                    overflow: 'hidden',
+                  }}
+                />
+              }
+            >
+              <Animated.View style={{ width: bodyWidth }}>
+                <BodyLarge style={{ marginLeft: 10 }}>{title}</BodyLarge>
+                <Label
+                  style={{
+                    marginTop: 0,
+                    marginLeft: 10,
+                  }}
+                >
+                  {subtitle}
+                </Label>
+                {categoryInfo ? (
+                  <Label style={{ marginLeft: 10 }}>{categoryInfo.join(', ')}</Label>
+                ) : null}
+              </Animated.View>
+            </MaskedView>
             {communityRankings ? (
               <View
                 style={{
@@ -256,6 +280,8 @@ const ContenderListItem = (props: iContenderListItemProps) => {
           {selected && tmdbMovie ? (
             <Animated.View
               style={{
+                position: 'absolute',
+                bottom: 0,
                 opacity: hiddenOpacity,
                 flexDirection: 'row',
                 justifyContent: 'space-between',

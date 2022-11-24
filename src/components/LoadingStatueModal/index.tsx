@@ -27,7 +27,7 @@ const LoadingStatueModal = (props: iLoadingStatueModalProps) => {
       <Modal
         visible={visible}
         backdropStyle={{
-          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          backgroundColor: 'rgba(0, 0, 0, 0.7)',
         }}
       >
         <LoadingStatue />
