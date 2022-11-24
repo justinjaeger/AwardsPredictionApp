@@ -6,12 +6,13 @@ import {
   PosterSize,
 } from '../../../constants/posterDimensions';
 import theme from '../../../constants/theme';
-import { iCachedTmdbMovie, iCachedTmdbPerson } from '../../../services/cache/types';
-import { iNumberPredicting } from '../../../services/graphql/contender';
+import { iCachedTmdbMovie } from '../../../services/cache/types';
 import TmdbServices from '../../../services/tmdb';
+import { iNumberPredicting } from '../../../store/types';
+import { getNumPredicting } from '../../../util/getNumPredicting';
 import { useAsyncEffect } from '../../../util/hooks';
 import Poster from '../../Images/Poster';
-import { Body, BodyLarge, Label } from '../../Text';
+import { BodyLarge, Label } from '../../Text';
 
 type iFilmListItemProps = {
   tmdbMovieId: number;
@@ -39,7 +40,6 @@ const FilmListItem = (props: iFilmListItemProps) => {
   // TODO: based on category.name (CategoryName), display a distinct piece of information with the film like who the directors or screenwriters are
 
   const [tmdbMovie, setTmdbMovie] = useState<iCachedTmdbMovie | undefined>();
-  const [tmdbPerson, setTmdbPerson] = useState<iCachedTmdbPerson | undefined>();
 
   useAsyncEffect(async () => {
     const { status, data } = await TmdbServices.getTmdbMovie(tmdbMovieId);
@@ -53,6 +53,8 @@ const FilmListItem = (props: iFilmListItemProps) => {
   const height = width
     ? getPosterDimensionsByWidth(width).height
     : size || PosterSize.MEDIUM;
+
+  const { win, nom } = getNumPredicting(communityRankings || {});
 
   return (
     <View
@@ -80,15 +82,8 @@ const FilmListItem = (props: iFilmListItemProps) => {
         ) : null}
         {communityRankings && size !== PosterSize.SMALL ? (
           <>
-            <BodyLarge
-              style={{ marginLeft: 10 }}
-            >{`pred win: ${communityRankings.predictingWin}`}</BodyLarge>
-            <BodyLarge
-              style={{ marginLeft: 10 }}
-            >{`pred nom: ${communityRankings.predictingNom}`}</BodyLarge>
-            <BodyLarge
-              style={{ marginLeft: 10 }}
-            >{`pred unranked: ${communityRankings.predictingUnranked}`}</BodyLarge>
+            <BodyLarge style={{ marginLeft: 10 }}>{`pred win: ${win}`}</BodyLarge>
+            <BodyLarge style={{ marginLeft: 10 }}>{`pred nom: ${nom}`}</BodyLarge>
           </>
         ) : null}
       </View>

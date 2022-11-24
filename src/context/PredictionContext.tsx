@@ -1,18 +1,13 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import { CategoryType } from '../API';
 import { getCategorySlots } from '../constants/categories';
 import { PredictionsParamList } from '../navigation/types';
 import ApiServices from '../services/graphql';
+import { iNumberPredicting } from '../store/types';
 import { useAsyncEffect, useTypedNavigation } from '../util/hooks';
 import { useCategory } from './CategoryContext';
 import { useAuth } from './UserContext';
-
-export type iNumberPredicting = {
-  predictingWin: number;
-  predictingNom: number;
-  predictingUnranked: number;
-};
 
 // represents predictions for ONE predictionSet
 export type iPrediction = {
@@ -132,20 +127,13 @@ export const PredictionProvider = (props: { children: React.ReactNode }) => {
       if (!eventYear || !categoryName || !awardsBody) return; // shouldn't happen
       const slots = getCategorySlots(eventYear, awardsBody, categoryName);
 
-      const np: iNumberPredicting = {
-        predictingWin: 0,
-        predictingNom: 0,
-        predictingUnranked: 0,
-      };
+      const np: iNumberPredicting = {};
       contenderPredictions.forEach((cp) => {
         const someUsersRanking = cp?.ranking || 0;
-        if (someUsersRanking === 1) {
-          np.predictingWin += 1;
-        } else if (someUsersRanking <= slots) {
-          np.predictingNom += 1;
-        } else {
-          np.predictingUnranked += 1;
+        if (!np[someUsersRanking]) {
+          np[someUsersRanking] = 0;
         }
+        np[someUsersRanking] += 1;
       });
       const communityPrediction: iPrediction = {
         ranking: 0,

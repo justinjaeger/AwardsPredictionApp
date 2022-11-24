@@ -13,6 +13,7 @@ import { iPrediction } from '../../../context/PredictionContext';
 import { iCachedTmdbMovie, iCachedTmdbPerson } from '../../../services/cache/types';
 import TmdbServices from '../../../services/tmdb';
 import { iCategory } from '../../../store/types';
+import { getNumPredicting } from '../../../util/getNumPredicting';
 import { useAsyncEffect } from '../../../util/hooks';
 import CustomIcon from '../../CustomIcon';
 import AnimatedPoster from '../../Images/AnimatedPoster';
@@ -172,6 +173,8 @@ const ContenderListItem = (props: iContenderListItemProps) => {
 
   const fadeBottom = selected !== true && variant === 'search';
 
+  const { win, nom } = getNumPredicting(communityRankings || {});
+
   return (
     <TouchableHighlight
       onPress={() => {
@@ -257,12 +260,8 @@ const ContenderListItem = (props: iContenderListItemProps) => {
                   paddingRight: theme.windowMargin,
                 }}
               >
-                <BodyLarge style={{ textAlign: 'right' }}>
-                  {communityRankings.predictingWin.toString()}
-                </BodyLarge>
-                <BodyLarge style={{ textAlign: 'right' }}>
-                  {communityRankings.predictingNom.toString()}
-                </BodyLarge>
+                <BodyLarge style={{ textAlign: 'right' }}>{nom.toString()}</BodyLarge>
+                <BodyLarge style={{ textAlign: 'right' }}>{win.toString()}</BodyLarge>
               </View>
             ) : null}
             {variant === 'personal' ? (

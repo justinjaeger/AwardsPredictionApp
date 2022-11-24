@@ -15,6 +15,7 @@ import { getEventById } from './event';
 import { getCategorySlots } from '../../constants/categories';
 import { getPredictionsByContender } from './prediction';
 import ApiServices from '.';
+import { iNumberPredicting } from '../../store/types';
 
 type iContenderParams = {
   eventId: string;
@@ -235,12 +236,6 @@ export const getContendersByCategory = async (
   }
 };
 
-export type iNumberPredicting = {
-  predictingWin: number;
-  predictingNom: number;
-  predictingUnranked: number;
-};
-
 export const getNumberPredicting = async (
   contenderId: string,
 ): Promise<iApiResponse<iNumberPredicting>> => {
@@ -272,20 +267,28 @@ export const getNumberPredicting = async (
       return { status: 'error' };
     }
 
-    const result = predictions?.listPredictions.items.reduce(
-      (acc: iNumberPredicting, p) => {
-        if (!p) return acc;
-        if (p.ranking === 1) {
-          acc.predictingWin += 1;
-        } else if (p.ranking <= slots) {
-          acc.predictingNom += 1;
-        } else {
-          acc.predictingUnranked += 1;
-        }
-        return acc;
-      },
-      { predictingWin: 0, predictingNom: 0, predictingUnranked: 0 },
-    );
+    const result: iNumberPredicting = {};
+    predictions?.listPredictions.items.forEach((cp) => {
+      const someUsersRanking = cp?.ranking || 0;
+      if (!result[someUsersRanking]) {
+        result[someUsersRanking] = 0;
+      }
+      result[someUsersRanking] += 1;
+    });
+    // const result = predictions?.listPredictions.items.reduce(
+    //   (acc: iNumberPredicting, p) => {
+    //     if (!p) return acc;
+    //     if (p.ranking === 1) {
+    //       acc.predictingWin += 1;
+    //     } else if (p.ranking <= slots) {
+    //       acc.predictingNom += 1;
+    //     } else {
+    //       acc.predictingUnranked += 1;
+    //     }
+    //     return acc;
+    //   },
+    //   { predictingWin: 0, predictingNom: 0, predictingUnranked: 0 },
+    // );
 
     return { status: 'success', data: result };
   } catch (err) {

@@ -6,10 +6,9 @@ export enum QueryKeys {
   COMMUNITY_EVENT = 'community-predictions-by-event',
 }
 
+// ex: { 1: 142 } (ranking, numberPredictingRanking)
 export type iNumberPredicting = {
-  predictingWin: number;
-  predictingNom: number;
-  predictingUnranked: number;
+  [ranking: number]: number;
 };
 
 // represents predictions for ONE predictionSet

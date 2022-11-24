@@ -1,4 +1,3 @@
-import { getCategorySlots } from '../../constants/categories';
 import {
   iEvent,
   iIndexedPredictionsByCategory,
@@ -23,22 +22,14 @@ const getCommunityPredictionsByEvent = async (event: iEvent) => {
     if (!contenderPredictions) return;
 
     if (!categoryName) return; // shouldn't happen
-    const slots = getCategorySlots(event.year, event.awardsBody, categoryName);
 
-    const np: iNumberPredicting = {
-      predictingWin: 0,
-      predictingNom: 0,
-      predictingUnranked: 0,
-    };
+    const np: iNumberPredicting = {};
     contenderPredictions.forEach((cp) => {
       const someUsersRanking = cp?.ranking || 0;
-      if (someUsersRanking === 1) {
-        np.predictingWin += 1;
-      } else if (someUsersRanking <= slots) {
-        np.predictingNom += 1;
-      } else {
-        np.predictingUnranked += 1;
+      if (!np[someUsersRanking]) {
+        np[someUsersRanking] = 0;
       }
+      np[someUsersRanking] += 1;
     });
     const communityPrediction: iPrediction = {
       ranking: 0,
