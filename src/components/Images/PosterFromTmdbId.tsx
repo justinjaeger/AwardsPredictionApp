@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import { ImageStyle, StyleProp } from 'react-native';
-import { PosterSize } from '../../constants/posterDimensions';
 import { iCachedTmdbMovie, iCachedTmdbPerson } from '../../services/cache/types';
 import TmdbServices from '../../services/tmdb';
 import { useAsyncEffect } from '../../util/hooks';
 import Poster from './Poster';
 
 type iPosterFromTmdbProps = {
-  size?: PosterSize; // 1 is 27*40px, defualt is 5
   width?: number;
   ranking?: number;
   onPress?: () => void;
@@ -15,7 +13,7 @@ type iPosterFromTmdbProps = {
 };
 
 const PosterFromMovieTmdbId = (props: iPosterFromTmdbProps & { movieTmdbId: number }) => {
-  const { movieTmdbId, size, width, onPress, ranking, styles } = props;
+  const { movieTmdbId, width, onPress, ranking, styles } = props;
 
   const [movieDetails, setMovieDetails] = useState<iCachedTmdbMovie>();
 
@@ -31,7 +29,6 @@ const PosterFromMovieTmdbId = (props: iPosterFromTmdbProps & { movieTmdbId: numb
       path={path || null} // this will render the loading state if null
       title={title || ''}
       width={width}
-      size={size}
       ranking={ranking}
       onPress={onPress}
       styles={styles}
@@ -42,7 +39,7 @@ const PosterFromMovieTmdbId = (props: iPosterFromTmdbProps & { movieTmdbId: numb
 const PosterFromPersonTmdbId = (
   props: iPosterFromTmdbProps & { personTmdbId: number },
 ) => {
-  const { personTmdbId, size, onPress, width, ranking, styles } = props;
+  const { personTmdbId, onPress, width, ranking, styles } = props;
 
   const [personDetails, setPersonDetails] = useState<iCachedTmdbPerson>();
 
@@ -58,7 +55,6 @@ const PosterFromPersonTmdbId = (
     <Poster
       path={path || null} // this will render the loading state if null
       title={title || ''}
-      size={size}
       width={width}
       ranking={ranking}
       onPress={onPress}

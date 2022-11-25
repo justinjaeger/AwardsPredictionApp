@@ -1,6 +1,10 @@
+import { Divider } from '@ui-kitten/components';
 import React, { useState } from 'react';
 import { FlatList } from 'react-native';
-import { iPrediction } from '../../store/types';
+import { getCategorySlots } from '../../constants/categories';
+import COLORS from '../../constants/colors';
+import { useCategory } from '../../context/CategoryContext';
+import { iCategory, iEvent, iPrediction } from '../../store/types';
 import ContenderListItem from '../List/ContenderList/ContenderListItem';
 
 type iMovieListProps = {
@@ -9,6 +13,10 @@ type iMovieListProps = {
 
 const MovieListCommunity = (props: iMovieListProps) => {
   const { predictions } = props;
+  const { event: _event, category: _category } = useCategory();
+
+  const event = _event as iEvent;
+  const category = _category as iCategory;
 
   const [selectedContenderId, setSelectedContenderId] = useState<string | undefined>(); // this selection is whether the film is big or not
 
@@ -21,28 +29,40 @@ const MovieListCommunity = (props: iMovieListProps) => {
     }
   };
 
+  const slots = getCategorySlots(event.year, event?.awardsBody, category.name);
+
   return (
     <FlatList
       data={predictions}
       keyExtractor={(item) => item.contenderId}
       style={{ width: '100%' }}
-      renderItem={({ item: prediction, index: i }) => {
+      contentContainerStyle={{ paddingBottom: 100 }}
+      renderItem={({ item: prediction, index }) => {
+        const isMoreThanSlots = index > slots;
+        const ranking = isMoreThanSlots ? index : index + 1;
         return (
-          <ContenderListItem
-            prediction={prediction}
-            ranking={i + 1}
-            onPressItem={onPressItem}
-            onPressThumbnail={(item) => {
-              const id = item.contenderId;
-              if (selectedContenderId === id) {
-                setSelectedContenderId(undefined);
-              } else {
-                setSelectedContenderId(id);
-              }
-            }}
-            selected={selectedContenderId === prediction.contenderId}
-            variant={'community'}
-          />
+          <>
+            {index === slots ? (
+              <Divider
+                style={{ margin: 10, borderWidth: 0.5, borderColor: COLORS.goldDark }}
+              />
+            ) : null}
+            <ContenderListItem
+              prediction={prediction}
+              ranking={ranking}
+              onPressItem={onPressItem}
+              onPressThumbnail={(item) => {
+                const id = item.contenderId;
+                if (selectedContenderId === id) {
+                  setSelectedContenderId(undefined);
+                } else {
+                  setSelectedContenderId(id);
+                }
+              }}
+              selected={selectedContenderId === prediction.contenderId}
+              variant={'community'}
+            />
+          </>
         );
       }}
     />
