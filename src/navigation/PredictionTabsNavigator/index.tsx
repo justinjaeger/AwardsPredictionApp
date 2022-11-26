@@ -33,7 +33,11 @@ const PredictionTab = (props: {
     >
       <View style={{ zIndex: 3 }}>
         <BodyLarge
-          style={{ zIndex: 3, color: selected ? HIGHLIGHT_COLOR : COLORS.white }}
+          style={{
+            zIndex: 3,
+            color: selected ? HIGHLIGHT_COLOR : COLORS.white,
+            textAlign: 'center',
+          }}
         >
           {text}
         </BodyLarge>
@@ -121,12 +125,12 @@ const PredictionTabsNavigator = (community: JSX.Element, personal: JSX.Element) 
           }}
         />
         <PredictionTab
-          text={'Community'}
+          text={'Community Predictions'}
           onPress={() => openCommunityTab()}
           selected={personalCommunityTab === 'community'}
         />
         <PredictionTab
-          text={'Personal'}
+          text={'My Predictions'}
           onPress={() => openPersonalTab()}
           selected={personalCommunityTab === 'personal'}
         />
