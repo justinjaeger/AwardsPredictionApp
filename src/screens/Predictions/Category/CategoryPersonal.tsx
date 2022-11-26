@@ -18,7 +18,7 @@ import useQueryCommunityOrPersonalEvent from '../../../hooks/getCommunityOrPerso
 import useMutationUpdatePredictions from '../../../hooks/updatePredictions';
 import { PredictionsParamList } from '../../../navigation/types';
 import { iCategory, iEvent, iPrediction } from '../../../store/types';
-import { useTypedNavigation } from '../../../util/hooks';
+import { useAsyncReference, useTypedNavigation } from '../../../util/hooks';
 import { CategoryHeader } from '../styles';
 
 // NOTE: Has a lot in common with ContenderListDraggable
@@ -33,9 +33,14 @@ const CategoryPersonal = (props: iCategoryListProps) => {
   const event = _event as iEvent;
   const userId = _userId as string;
 
+  const [goBackOnComplete, setGoBackOnComplete] = useAsyncReference<boolean>(false);
+
   const onComplete = () => {
     setIsEditing(false);
     Snackbar.success('Changes saved!');
+    if (goBackOnComplete.current) {
+      navigation.goBack();
+    }
   };
 
   // We use the SAME KEY as the previous screen, because it avoids a re-fetch of the data which was available previously
@@ -64,19 +69,13 @@ const CategoryPersonal = (props: iCategoryListProps) => {
     navigation.setOptions({
       headerLeft: () => (
         <BackButton
-          onPress={() => {
+          onPress={async () => {
             const onGoBack = () => {
               navigation.goBack();
             };
             if (isEditing) {
-              Alert.alert('Go back without saving?', '', [
-                {
-                  text: 'Cancel',
-                  onPress: () => {},
-                  style: 'cancel',
-                },
-                { text: 'Go Back', onPress: onGoBack },
-              ]);
+              setGoBackOnComplete(true);
+              onSaveContenders();
             } else {
               onGoBack();
             }
@@ -150,6 +149,9 @@ const CategoryPersonal = (props: iCategoryListProps) => {
             <View style={{ flexDirection: 'row' }}>
               <HeaderButton
                 onPress={() => {
+                  if (display === 'grid') {
+                    toggleDisplay();
+                  }
                   navigation.navigate('AddPredictions', {
                     initialPredictions: predictions,
                     onFinish: (predictions: iPrediction[]) => {
@@ -201,7 +203,7 @@ const CategoryPersonal = (props: iCategoryListProps) => {
             />
           </Animated.View>
           <FAB
-            iconName="checkmark"
+            iconName="save-outline"
             text="Save"
             onPress={onSaveContenders}
             visible={isEditing}

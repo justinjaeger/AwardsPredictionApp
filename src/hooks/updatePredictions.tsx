@@ -22,7 +22,8 @@ const useMutationUpdatePredictions = (onComplete?: () => void) => {
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: [QueryKeys.PERSONAL_EVENT] });
-      await queryClient.invalidateQueries({ queryKey: [QueryKeys.COMMUNITY_EVENT] });
+      // NOT doing the below makes it faster but the community predictions will take a little bit to sync
+      // await queryClient.invalidateQueries({ queryKey: [QueryKeys.COMMUNITY_EVENT] });
       setIsComplete(true);
       onComplete && onComplete();
     },
