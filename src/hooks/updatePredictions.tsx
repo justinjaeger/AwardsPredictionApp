@@ -4,7 +4,7 @@ import ApiServices from '../services/graphql';
 import { iPredictionData, iPredictionSetParams } from '../services/graphql/prediction';
 import { QueryKeys } from '../store/types';
 
-const useMutationUpdatePredictions = () => {
+const useMutationUpdatePredictions = (onComplete?: () => void) => {
   const queryClient = useQueryClient();
 
   const [isComplete, setIsComplete] = useState<boolean>(true);
@@ -24,6 +24,7 @@ const useMutationUpdatePredictions = () => {
       await queryClient.invalidateQueries({ queryKey: [QueryKeys.PERSONAL_EVENT] });
       await queryClient.invalidateQueries({ queryKey: [QueryKeys.COMMUNITY_EVENT] });
       setIsComplete(true);
+      onComplete && onComplete();
     },
   });
 

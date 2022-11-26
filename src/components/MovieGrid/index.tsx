@@ -8,8 +8,8 @@ import { useCategory } from '../../context/CategoryContext';
 import { iPrediction } from '../../store/types';
 import PosterFromTmdbId from '../Images/PosterFromTmdbId';
 
-const MovieGrid = (props: { predictions: iPrediction[] }) => {
-  const { predictions } = props;
+const MovieGrid = (props: { predictions: iPrediction[]; noLine?: boolean }) => {
+  const { predictions, noLine } = props;
   const { width } = useWindowDimensions();
   const { event, category } = useCategory();
 
@@ -30,7 +30,7 @@ const MovieGrid = (props: { predictions: iPrediction[] }) => {
     >
       {predictions.map((p, i) => (
         <>
-          {i === slots ? (
+          {!noLine && i === slots ? (
             <Divider
               style={{
                 width: '100%',

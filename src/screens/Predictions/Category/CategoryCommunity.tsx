@@ -26,7 +26,7 @@ const CategoryCommunity = (props: iCategoryListProps) => {
     'community',
     event,
   );
-  const predictions = (predictionData || {})[category.id];
+  const predictions = predictionData ? predictionData[category.id] || [] : [];
 
   if (isLoading || !predictions) {
     return null;
@@ -34,13 +34,7 @@ const CategoryCommunity = (props: iCategoryListProps) => {
 
   return (
     <BackgroundWrapper>
-      <View
-        style={{
-          height: '100%',
-          width: '100%',
-          alignItems: 'center',
-        }}
-      >
+      <>
         <CategoryHeader>
           <View style={{ flexDirection: 'row' }}>
             <HeaderButton
@@ -69,6 +63,18 @@ const CategoryCommunity = (props: iCategoryListProps) => {
             </View>
           </Animated.View>
         </CategoryHeader>
+        {predictions && predictions.length === 0 ? (
+          <View
+            style={{
+              width: '100%',
+              marginTop: 20,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <BodyLarge>No films in this category</BodyLarge>
+          </View>
+        ) : null}
         <Animated.ScrollView
           style={{
             display: delayedDisplay === 'grid' ? 'flex' : 'none',
@@ -92,19 +98,7 @@ const CategoryCommunity = (props: iCategoryListProps) => {
         >
           <MovieListCommunity predictions={predictions} />
         </Animated.View>
-        {predictions && predictions.length === 0 ? (
-          <View
-            style={{
-              width: '100%',
-              height: '100%',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <BodyLarge>No films in this list</BodyLarge>
-          </View>
-        ) : null}
-      </View>
+      </>
     </BackgroundWrapper>
   );
 };

@@ -6,7 +6,7 @@ const BackgroundWrapper = (props: { children: React.ReactChild }) => {
     <ImageBackground
       source={require('../../assets/background/awards-background.png')}
       resizeMode="cover"
-      style={{ flex: 1 }}
+      style={{ flex: 1, height: '100%', width: '100%', alignItems: 'center' }}
     >
       {props.children}
     </ImageBackground>

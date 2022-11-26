@@ -128,7 +128,7 @@ const EventPredictions = (props: { tab: 'personal' | 'community' }) => {
                   >
                     {awardsBodyCategories[CategoryName[category.name]]?.name || ''}
                   </SubHeader>
-                  <MovieGrid predictions={truncatedPredictions} />
+                  <MovieGrid predictions={truncatedPredictions} noLine />
                 </View>
               </TouchableHighlight>
             );

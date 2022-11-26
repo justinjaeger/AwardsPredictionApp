@@ -29,10 +29,8 @@ const AddPredictions = () => {
   const event = _event as iEvent;
 
   // We use the SAME KEY as the previous screen, because it avoids a re-fetch of the data which was available previously
-  const { data: communityData, isLoading: isLoadingCommunity } = useQueryCommunityEvent(
-    event,
-  );
-  const communityPredictions = (communityData || {})[category.id];
+  const { data: communityData } = useQueryCommunityEvent(event);
+  const communityPredictions = communityData ? communityData[category.id] || [] : [];
 
   const [selectedPredictions, setSelectedPredictions] = useState<iPrediction[]>(
     initialPredictions,
@@ -107,19 +105,16 @@ const AddPredictions = () => {
     navigation.goBack();
   };
 
-  if (!communityPredictions || isLoadingCommunity) {
-    return null;
-  }
+  // navigate to create contender if no contenders yet
+  useEffect(() => {
+    if (!communityPredictions || communityPredictions.length === 0) {
+      navigation.navigate('CreateContender');
+    }
+  }, []);
 
   return (
     <BackgroundWrapper>
-      <View
-        style={{
-          height: '100%',
-          width: '100%',
-          alignItems: 'center',
-        }}
-      >
+      <>
         <CategoryHeader>
           <View style={{ flexDirection: 'row' }} />
           <View style={{ flexDirection: 'row' }}>
@@ -131,25 +126,40 @@ const AddPredictions = () => {
             />
           </View>
         </CategoryHeader>
+        {!communityPredictions || communityPredictions.length === 0 ? (
+          <View
+            style={{
+              width: '100%',
+              marginTop: 20,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <BodyLarge style={{ textAlign: 'center', lineHeight: 30 }}>
+              {'No predictions yet.\nAdd some!'}
+            </BodyLarge>
+          </View>
+        ) : selectedPredictions.length === 0 ? (
+          <View
+            style={{
+              width: '100%',
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginBottom: 20,
+            }}
+          >
+            <BodyLarge style={{ textAlign: 'center', lineHeight: 30 }}>
+              {'No predictions selected.\nTap contender to add!'}
+            </BodyLarge>
+          </View>
+        ) : null}
         <MovieListSelectable
           predictions={communityPredictions}
           selectedPredictions={selectedPredictions}
           setSelectedPredictions={(ps) => setSelectedPredictions(ps)}
         />
-        {communityPredictions && communityPredictions.length === 0 ? (
-          <View
-            style={{
-              width: '100%',
-              height: '100%',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <BodyLarge>No films in this list</BodyLarge>
-          </View>
-        ) : null}
         <FAB iconName="checkmark" text="Save" onPress={onSave} visible={isEditing} />
-      </View>
+      </>
     </BackgroundWrapper>
   );
 };

@@ -27,7 +27,7 @@ const CreateFilm = () => {
   const { mutate, isComplete } = useMutationCreateContender();
 
   const { data: communityData } = useQueryCommunityEvent(event);
-  const communityPredictions = (communityData || {})[category.id];
+  const communityPredictions = communityData ? communityData[category.id] || [] : [];
 
   const [searchResults, setSearchResults] = useState<iSearchData>([]);
   const [searchMessage, setSearchMessage] = useState<string>('');

@@ -9,6 +9,7 @@ import HeaderButton from '../../../components/HeaderButton';
 import LoadingStatueModal from '../../../components/LoadingStatueModal';
 import MovieGrid from '../../../components/MovieGrid';
 import MovieListDraggable from '../../../components/MovieList/MovieListDraggable';
+import Snackbar from '../../../components/Snackbar';
 import { Body, BodyLarge } from '../../../components/Text';
 import theme from '../../../constants/theme';
 import { useCategory } from '../../../context/CategoryContext';
@@ -32,24 +33,22 @@ const CategoryPersonal = (props: iCategoryListProps) => {
   const event = _event as iEvent;
   const userId = _userId as string;
 
+  const onComplete = () => {
+    setIsEditing(false);
+    Snackbar.success('Changes saved!');
+  };
+
   // We use the SAME KEY as the previous screen, because it avoids a re-fetch of the data which was available previously
-  const { mutate, isComplete } = useMutationUpdatePredictions();
+  const { mutate, isComplete } = useMutationUpdatePredictions(onComplete);
   const { data: predictionData, isLoading } = useQueryCommunityOrPersonalEvent(
     'personal',
     event,
     userId,
   );
-  const initialPredictions = (predictionData || {})[category.id];
+  const initialPredictions = predictionData ? predictionData[category.id] || [] : [];
 
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [predictions, setPredictions] = useState<iPrediction[]>(initialPredictions || []);
-
-  // when mutation is complete, this block runs
-  useEffect(() => {
-    if (isComplete) {
-      setIsEditing(false);
-    }
-  }, [isComplete]);
 
   // keeps track of whether we've edited the predictions from their initial state
   useEffect(() => {
@@ -116,13 +115,7 @@ const CategoryPersonal = (props: iCategoryListProps) => {
     <>
       <LoadingStatueModal visible={!isComplete} text={'Saving changes...'} />
       <BackgroundWrapper>
-        <View
-          style={{
-            height: '100%',
-            width: '100%',
-            alignItems: 'center',
-          }}
-        >
+        <>
           <CategoryHeader>
             <View style={{ flexDirection: 'row' }}>
               {!isEditing ? (
@@ -168,6 +161,20 @@ const CategoryPersonal = (props: iCategoryListProps) => {
               />
             </View>
           </CategoryHeader>
+          {predictions && predictions.length === 0 ? (
+            <View
+              style={{
+                width: '100%',
+                marginTop: 20,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <BodyLarge style={{ textAlign: 'center', lineHeight: 30 }}>
+                {'No predictions yet.\nAdd some!'}
+              </BodyLarge>
+            </View>
+          ) : null}
           <Animated.ScrollView
             style={{
               display: delayedDisplay === 'grid' ? 'flex' : 'none',
@@ -193,25 +200,13 @@ const CategoryPersonal = (props: iCategoryListProps) => {
               setPredictions={(ps) => setPredictions(ps)}
             />
           </Animated.View>
-          {predictions && predictions.length === 0 ? (
-            <View
-              style={{
-                width: '100%',
-                height: '100%',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <BodyLarge>No films in this list</BodyLarge>
-            </View>
-          ) : null}
           <FAB
             iconName="checkmark"
             text="Save"
             onPress={onSaveContenders}
             visible={isEditing}
           />
-        </View>
+        </>
       </BackgroundWrapper>
     </>
   );
