@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Alert, View } from 'react-native';
-import { PersonalParamList, PredictionsParamList } from '../../../../navigation/types';
+import { PredictionsParamList } from '../../../../navigation/types';
 import { useTypedNavigation } from '../../../../util/hooks';
 import { useCategory } from '../../../../context/CategoryContext';
 import { iCategory, iEvent, iPrediction } from '../../../../store/types';
@@ -22,7 +22,7 @@ const AddPredictions = () => {
     params: { initialPredictions, onFinish },
   } = useRoute<RouteProp<PredictionsParamList, 'AddPredictions'>>();
 
-  const navigation = useTypedNavigation<PersonalParamList>();
+  const navigation = useTypedNavigation<PredictionsParamList>();
   const { category: _category, event: _event } = useCategory();
 
   const category = _category as iCategory;
@@ -60,14 +60,7 @@ const AddPredictions = () => {
               navigation.goBack();
             };
             if (isEditing) {
-              Alert.alert('Unsaved Changes', 'Still go back?', [
-                {
-                  text: 'Cancel',
-                  onPress: () => {},
-                  style: 'cancel',
-                },
-                { text: 'Go Back', onPress: onGoBack },
-              ]);
+              onSave();
             } else {
               onGoBack();
             }
@@ -105,10 +98,14 @@ const AddPredictions = () => {
     navigation.goBack();
   };
 
+  const navigateToCreateContender = () => {
+    navigation.navigate('CreateContender');
+  };
+
   // navigate to create contender if no contenders yet
   useEffect(() => {
     if (!communityPredictions || communityPredictions.length === 0) {
-      navigation.navigate('CreateContender');
+      navigateToCreateContender();
     }
   }, []);
 
@@ -116,11 +113,32 @@ const AddPredictions = () => {
     <BackgroundWrapper>
       <>
         <CategoryHeader>
-          <View style={{ flexDirection: 'row' }} />
+          <View style={{ flexDirection: 'row' }}>
+            {isEditing ? (
+              <HeaderButton
+                onPress={() => {
+                  Alert.alert('Undo recent changes?', '', [
+                    {
+                      text: 'Cancel',
+                      onPress: () => {},
+                      style: 'cancel',
+                    },
+                    {
+                      text: 'Undo',
+                      onPress: () => {
+                        setSelectedPredictions(initialPredictions);
+                      },
+                    },
+                  ]);
+                }}
+                icon={'undo'}
+              />
+            ) : null}
+          </View>
           <View style={{ flexDirection: 'row' }}>
             <HeaderButton
               onPress={() => {
-                navigation.navigate('CreateContender');
+                navigateToCreateContender();
               }}
               icon={'plus'}
             />
@@ -158,7 +176,7 @@ const AddPredictions = () => {
           selectedPredictions={selectedPredictions}
           setSelectedPredictions={(ps) => setSelectedPredictions(ps)}
         />
-        <FAB iconName="checkmark" text="Save" onPress={onSave} visible={isEditing} />
+        <FAB iconName="checkmark" text="Done" onPress={onSave} visible={isEditing} />
       </>
     </BackgroundWrapper>
   );

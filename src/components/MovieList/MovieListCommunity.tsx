@@ -61,6 +61,7 @@ const MovieListCommunity = (props: iMovieListProps) => {
               }}
               selected={selectedContenderId === prediction.contenderId}
               variant={'community'}
+              categoryType={category.type}
             />
           </>
         );

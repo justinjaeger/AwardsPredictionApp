@@ -42,7 +42,7 @@ export const getTmdbPerson = async (
       data,
     };
   } catch (err) {
-    return handleError('error searching tmdb', err);
+    return handleError('error in getTmdbPerson', err);
   }
 };
 
@@ -65,7 +65,7 @@ export const getTmdbPersonMovieCredits = async (
         if (releaseYear) {
           return releaseYear >= minReleaseYear;
         } else {
-          return 0;
+          return true;
         }
       })
       .map((c) => ({
@@ -74,13 +74,11 @@ export const getTmdbPersonMovieCredits = async (
         image: c.poster_path,
         tmdbId: c.id,
       }));
-    // do only most recent data
-
     return {
       status: 'success',
       data,
     };
   } catch (err) {
-    return handleError('error searching tmdb', err);
+    return handleError('error in getTmdbPersonMovieCredits', err);
   }
 };

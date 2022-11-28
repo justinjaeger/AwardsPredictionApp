@@ -3,18 +3,18 @@ import { View } from 'react-native';
 import { SubmitButton } from '../../components/Buttons';
 import AuthServices from '../../services/auth';
 import { Body } from '../../components/Text';
-import { useAppDispatch } from '../../store';
-import { logoutUser } from '../../store/reducers/auth';
+import { useAuth } from '../../context/UserContext';
 
 const SignedIn = () => {
-  const dispatch = useAppDispatch();
+  const { signOutUser } = useAuth();
 
   const [loading, setLoading] = useState<boolean>(false);
 
   const signOut = async () => {
     setLoading(true);
-    AuthServices.signOut();
-    dispatch(logoutUser());
+    AuthServices.signOut().then(() => {
+      signOutUser();
+    });
   };
 
   return (

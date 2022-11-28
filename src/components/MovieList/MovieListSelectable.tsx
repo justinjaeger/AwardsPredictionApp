@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { FlatList } from 'react-native';
-import { iPrediction } from '../../store/types';
+import { useCategory } from '../../context/CategoryContext';
+import { iCategory, iPrediction } from '../../store/types';
 import { removePredictionFromList } from '../../util/removePredictionFromList';
 import ContenderListItem from '../List/ContenderList/ContenderListItem';
 
@@ -12,6 +13,8 @@ type iMovieListProps = {
 
 const MovieListSelectable = (props: iMovieListProps) => {
   const { predictions, selectedPredictions, setSelectedPredictions } = props;
+  const { category: _category } = useCategory();
+  const category = _category as iCategory;
 
   const [selectedContenderId, setSelectedContenderId] = useState<string | undefined>(); // this selection is whether the film is big or not
 
@@ -52,6 +55,7 @@ const MovieListSelectable = (props: iMovieListProps) => {
             selected={selectedContenderId === prediction.contenderId}
             highlighted={highlighted}
             variant={'selectable'}
+            categoryType={category.type}
           />
         );
       }}

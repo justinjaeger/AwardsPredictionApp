@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { FlatList } from 'react-native';
+import { CategoryType } from '../../API';
 import { iPrediction } from '../../store/types';
 import ContenderListItem from '../List/ContenderList/ContenderListItem';
 
 type iMovieListProps = {
   predictions: iPrediction[];
+  categoryType: CategoryType;
+  disablePaddingBottom?: boolean;
   onSelect: (id: number) => void;
 };
 
 const MovieListSearch = (props: iMovieListProps) => {
-  const { predictions, onSelect } = props;
+  const { predictions, categoryType, disablePaddingBottom, onSelect } = props;
 
   const [selectedTmdbId, setSelectedTmdbId] = useState<number | undefined>(undefined);
 
@@ -37,7 +40,7 @@ const MovieListSearch = (props: iMovieListProps) => {
       data={predictions}
       keyExtractor={(item) => item.contenderId}
       style={{ width: '100%' }}
-      contentContainerStyle={{ paddingBottom: 200 }}
+      contentContainerStyle={{ paddingBottom: disablePaddingBottom ? 0 : 200 }}
       renderItem={({ item: prediction, index: i }) => {
         const tmdbId = getTmdbId(prediction);
         const selected = tmdbId === selectedTmdbId;
@@ -50,6 +53,7 @@ const MovieListSearch = (props: iMovieListProps) => {
             selected={selected}
             highlighted={selected}
             variant={'search'}
+            categoryType={categoryType}
           />
         );
       }}

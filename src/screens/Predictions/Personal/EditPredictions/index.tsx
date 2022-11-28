@@ -4,7 +4,6 @@ import { PersonalParamList } from '../../../../navigation/types';
 import ApiServices from '../../../../services/graphql';
 import { useTypedNavigation } from '../../../../util/hooks';
 import { useCategory } from '../../../../context/CategoryContext';
-import { iPrediction } from '../../../../context/PredictionContext';
 import { BodyLarge } from '../../../../components/Text';
 import {
   NestableDraggableFlatList,
@@ -14,7 +13,7 @@ import {
 import { PosterSize } from '../../../../constants/posterDimensions';
 import ContenderListItem from '../../../../components/List/ContenderList/ContenderListItem';
 import { useAuth } from '../../../../context/UserContext';
-import { iCategory, iEvent, QueryKeys } from '../../../../store/types';
+import { iCategory, iEvent, iPrediction, QueryKeys } from '../../../../store/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   iPredictionData,
@@ -126,6 +125,7 @@ const EditPredictions = () => {
                         isActive,
                       }}
                       toggleSelected={() => {}}
+                      categoryType={category.type}
                     />
                   </ScaleDecorator>
                 )}

@@ -64,12 +64,12 @@ const PosterFromPersonTmdbId = (
 };
 
 const PosterFromTmdbId = (
-  props: iPosterFromTmdbProps & { movieTmdbId: number; personTmdbId?: number },
+  props: iPosterFromTmdbProps & { movieTmdbId?: number; personTmdbId?: number },
 ) =>
   props.personTmdbId ? (
     <PosterFromPersonTmdbId {...props} personTmdbId={props.personTmdbId} />
-  ) : (
-    <PosterFromMovieTmdbId {...props} />
-  );
+  ) : props.movieTmdbId ? (
+    <PosterFromMovieTmdbId {...props} movieTmdbId={props.movieTmdbId} />
+  ) : null;
 
 export default React.memo(PosterFromTmdbId);

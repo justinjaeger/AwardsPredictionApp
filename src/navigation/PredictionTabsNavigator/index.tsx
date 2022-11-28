@@ -125,7 +125,7 @@ const PredictionTabsNavigator = (community: JSX.Element, personal: JSX.Element) 
           }}
         />
         <PredictionTab
-          text={'Community Predictions'}
+          text={'Community'}
           onPress={() => openCommunityTab()}
           selected={personalCommunityTab === 'community'}
         />

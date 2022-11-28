@@ -72,6 +72,7 @@ const MovieListDraggable = (props: iMovieListProps) => {
                   drag,
                   isActive,
                 }}
+                categoryType={category.type}
               />
             </ScaleDecorator>
           </>

@@ -4,7 +4,6 @@ import { View } from 'react-native';
 import { TouchableText } from '../Buttons';
 import Poster from '../Images/Poster';
 import { BodyLarge, SubHeader } from '../Text';
-import { PosterSize } from '../../constants/posterDimensions';
 import { iCachedTmdbMovie, iCachedTmdbPerson } from '../../services/cache/types';
 import TmdbServices from '../../services/tmdb';
 
@@ -61,11 +60,7 @@ const PerformanceDetails = (props: iPerformanceDetailsProps) => {
     <>
       <SubHeader style={{ margin: 10 }}>{personDetails.name || ''}</SubHeader>
       {personDetails ? (
-        <Poster
-          path={personDetails.profilePath}
-          size={PosterSize.LARGE}
-          title={personDetails.name}
-        />
+        <Poster path={personDetails.profilePath} title={personDetails.name} />
       ) : null}
       <TouchableText
         text={'View in Imdb'}
@@ -88,11 +83,7 @@ const PerformanceDetails = (props: iPerformanceDetailsProps) => {
       {movieDetails ? (
         <>
           <SubHeader style={{ margin: 10 }}>{movieDetails.title || ''}</SubHeader>
-          <Poster
-            path={movieDetails.posterPath}
-            size={PosterSize.LARGE}
-            title={movieDetails.title}
-          />
+          <Poster path={movieDetails.posterPath} title={movieDetails.title} />
           <TouchableText
             text={'View in Imdb'}
             onPress={() => {

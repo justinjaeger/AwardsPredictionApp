@@ -15,6 +15,7 @@ import useMutationCreateContender from '../../../../hooks/createContender';
 import { useAsyncEffect } from '../../../../util/hooks';
 import useQueryCommunityEvent from '../../../../hooks/getCommunityEvent';
 import { FAB } from '../../../../components/Buttons/FAB';
+import { CategoryType } from '../../../../API';
 
 // TODO: should only be able to do this if logged in
 const CreateFilm = () => {
@@ -96,7 +97,7 @@ const CreateFilm = () => {
 
   return (
     <>
-      <LoadingStatueModal visible={!isComplete} text={'Saving changes...'} />
+      <LoadingStatueModal visible={!isComplete} text={'Saving film...'} />
       <View
         style={{
           height: '100%',
@@ -131,6 +132,7 @@ const CreateFilm = () => {
                   setSelectedTmdbId(tmdbId);
                 }
               }}
+              categoryType={CategoryType.FILM}
             />
           </View>
         </View>

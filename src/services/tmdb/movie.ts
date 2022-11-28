@@ -106,6 +106,6 @@ export const getTmdbMovie = async (
       data,
     };
   } catch (err) {
-    return handleError('error searching tmdb', err);
+    return handleError('error in getTmdbMovie', err);
   }
 };

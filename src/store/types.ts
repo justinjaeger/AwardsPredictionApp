@@ -16,7 +16,7 @@ export type iPrediction = {
   ranking: number; // PERSONAL ONLY
   communityRankings?: iNumberPredicting; // COMMUNITY ONLY
   contenderId: string;
-  contenderMovie:
+  contenderMovie?:
     | {
         id: string;
         tmdbId: number;

@@ -9,10 +9,9 @@ import COLORS from '../../../constants/colors';
 import { getPosterDimensionsByWidth } from '../../../constants/posterDimensions';
 import theme from '../../../constants/theme';
 import { useCategory } from '../../../context/CategoryContext';
-import { iPrediction } from '../../../context/PredictionContext';
 import { iCachedTmdbMovie, iCachedTmdbPerson } from '../../../services/cache/types';
 import TmdbServices from '../../../services/tmdb';
-import { iCategory } from '../../../store/types';
+import { iCategory, iPrediction } from '../../../store/types';
 import { getNumPredicting } from '../../../util/getNumPredicting';
 import { useAsyncEffect } from '../../../util/hooks';
 import CustomIcon from '../../CustomIcon';
@@ -22,6 +21,7 @@ import { BodyLarge, Label, LabelBold } from '../../Text';
 type iContenderListItemProps = {
   variant: 'community' | 'personal' | 'selectable' | 'search';
   prediction: iPrediction;
+  categoryType: CategoryType;
   ranking: number;
   selected: boolean;
   disabled?: boolean;
@@ -47,6 +47,7 @@ const ContenderListItem = (props: iContenderListItemProps) => {
     disabled,
     draggable,
     highlighted,
+    categoryType,
     onPressThumbnail,
     onPressItem,
   } = props;
@@ -112,27 +113,21 @@ const ContenderListItem = (props: iContenderListItemProps) => {
   }, [selected]);
 
   useAsyncEffect(async () => {
-    if (!tmdbMovieId) {
-      console.error('No tmdbMovieId !!');
-      return;
-    }
-    // get tmdb person info
     if (tmdbPersonId) {
+      // get tmdb person info
       const { data: personData, status: personStatus } = await TmdbServices.getTmdbPerson(
         tmdbPersonId,
       );
       if (personStatus === 'success') {
         setTmdbPerson(personData);
       }
-      const { status, data } = await TmdbServices.getTmdbMovie(tmdbMovieId);
+    }
+    if (tmdbMovieId) {
+      // get movie tmdb info
+      const { data, status } = await TmdbServices.getTmdbMovie(tmdbMovieId);
       if (status === 'success') {
         setTmdbMovie(data);
       }
-    }
-    // get movie tmdb info
-    const { data, status } = await TmdbServices.getTmdbMovie(tmdbMovieId);
-    if (status === 'success') {
-      setTmdbMovie(data);
     }
   }, [tmdbMovieId]);
 
@@ -141,13 +136,9 @@ const ContenderListItem = (props: iContenderListItemProps) => {
     onPressThumbnail && onPressThumbnail(prediction);
   };
 
-  if (!tmdbMovieId) {
-    return null;
-  }
-
   let title = '';
   let subtitle = '';
-  switch (CategoryType[category.type]) {
+  switch (categoryType) {
     case CategoryType.FILM:
       title = tmdbMovie?.title || '';
       subtitle = movieStudio || '';
@@ -175,6 +166,8 @@ const ContenderListItem = (props: iContenderListItemProps) => {
 
   const { win, nom } = getNumPredicting(communityRankings || {});
 
+  const showBotomButtons = selected && tmdbMovie;
+
   return (
     <TouchableHighlight
       onPress={() => {
@@ -194,7 +187,11 @@ const ContenderListItem = (props: iContenderListItemProps) => {
     >
       <>
         <AnimatedPoster
-          path={tmdbMovie?.posterPath || null}
+          path={
+            categoryType === CategoryType.PERFORMANCE
+              ? tmdbPerson?.profilePath || null
+              : tmdbMovie?.posterPath || null
+          }
           title={tmdbMovie?.title || ''}
           animatedWidth={imageWidth}
           animatedHeight={imageHeight}
@@ -229,14 +226,20 @@ const ContenderListItem = (props: iContenderListItemProps) => {
                   end={{ x: 0, y: 1 }}
                   style={{
                     flex: 1,
-                    maxHeight: fadeBottom ? height + 15 : height - 30,
+                    maxHeight: fadeBottom ? height + 15 : height,
                     minHeight: fadeBottom ? undefined : height,
                     overflow: 'hidden',
+                    height: '100%',
                   }}
                 />
               }
             >
-              <Animated.View style={{ width: bodyWidth }}>
+              <Animated.View
+                style={{
+                  width: bodyWidth,
+                  paddingBottom: showBotomButtons ? 70 : 0, // For not conflicting with the bottom buttons
+                }}
+              >
                 <BodyLarge style={{ marginLeft: 10 }}>{title}</BodyLarge>
                 <Label
                   style={{
@@ -276,7 +279,8 @@ const ContenderListItem = (props: iContenderListItemProps) => {
               </View>
             ) : null}
           </View>
-          {selected && tmdbMovie ? (
+          {/* TODO: Instead of linking to IMDB, display a bunch of info from TMDB */}
+          {showBotomButtons ? (
             <Animated.View
               style={{
                 position: 'absolute',

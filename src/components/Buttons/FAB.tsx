@@ -5,14 +5,15 @@ import CustomIcon from '../CustomIcon';
 import { SubHeader } from '../Text';
 
 type iFABProps = {
-  iconName: string;
+  iconName?: string;
   text?: string;
   onPress: () => void;
   visible?: boolean;
+  bottomPercentage?: string;
 };
 
 export const FAB = (props: iFABProps) => {
-  const { iconName, text, onPress, visible } = props;
+  const { iconName, text, onPress, visible, bottomPercentage } = props;
 
   const buttonX = useRef(new Animated.Value(0)).current;
   const buttonOpacity = useRef(new Animated.Value(0)).current;
@@ -34,7 +35,7 @@ export const FAB = (props: iFABProps) => {
     <Animated.View
       style={{
         position: 'absolute',
-        bottom: '1%',
+        bottom: bottomPercentage || '1%',
         alignSelf: 'flex-end',
         transform: [{ translateX: buttonX }],
         opacity: buttonOpacity,
@@ -54,7 +55,9 @@ export const FAB = (props: iFABProps) => {
         underlayColor={COLORS.goldDark}
       >
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <CustomIcon name={iconName} color={COLORS.white} size={24} />
+          {iconName ? (
+            <CustomIcon name={iconName} color={COLORS.white} size={24} />
+          ) : null}
           {text ? (
             <SubHeader style={{ marginLeft: 5, marginRight: 5 }}>{text}</SubHeader>
           ) : null}

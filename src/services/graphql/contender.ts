@@ -12,7 +12,6 @@ import * as mutations from '../../graphql/mutations';
 import * as queries from '../../graphql/queries';
 import { GraphqlAPI, handleError, iApiResponse } from '../utils';
 import { getEventById } from './event';
-import { getCategorySlots } from '../../constants/categories';
 import { getPredictionsByContender } from './prediction';
 import ApiServices from '.';
 import { iNumberPredicting } from '../../store/types';
@@ -60,6 +59,51 @@ export const createFilmContender = async (params: {
     return { status: 'success' };
   } catch (err) {
     return handleError('error getting or creating contender', err);
+  }
+};
+
+export const createActingContender = async (params: {
+  eventId: string;
+  categoryId: string;
+  movieTmdbId: number;
+  personTmdbId: number;
+}): Promise<iApiResponse<any>> => {
+  const { eventId, categoryId, movieTmdbId, personTmdbId } = params;
+  try {
+    const { data: movieResponse } = await ApiServices.getOrCreateMovie(movieTmdbId);
+    const movieId = movieResponse?.getMovie?.id;
+    if (!movieId) {
+      return { status: 'error' };
+    }
+    const { data: personResponse } = await ApiServices.getOrCreatePerson(personTmdbId);
+    const personId = personResponse?.getPerson?.id;
+    if (!personId) {
+      return { status: 'error' };
+    }
+    const contenderParams = {
+      eventId,
+      categoryId,
+      movieId,
+      personId,
+    };
+    // get contenders with unique-defining params
+    const { data: maybeContenders } = await getUniqueContenders(contenderParams);
+    if (!maybeContenders?.listContenders) {
+      return { status: 'error' };
+    }
+    let contenderId = maybeContenders.listContenders.items[0]?.id || undefined;
+    // if no contender exists, create one
+    if (!contenderId) {
+      const { data: newMovie } = await createContender(contenderParams);
+      const cId = newMovie?.createContender?.id;
+      if (!cId) {
+        return { status: 'error' };
+      }
+      contenderId = cId;
+    }
+    return { status: 'success' };
+  } catch (err) {
+    return handleError('error getting or creating acting contender', err);
   }
 };
 
@@ -260,8 +304,6 @@ export const getNumberPredicting = async (
       return { status: 'error' };
     }
 
-    const slots = getCategorySlots(e.year, e.awardsBody, category.name);
-
     const { data: predictions } = await getPredictionsByContender(contenderId);
     if (!predictions?.listPredictions) {
       return { status: 'error' };
@@ -275,20 +317,6 @@ export const getNumberPredicting = async (
       }
       result[someUsersRanking] += 1;
     });
-    // const result = predictions?.listPredictions.items.reduce(
-    //   (acc: iNumberPredicting, p) => {
-    //     if (!p) return acc;
-    //     if (p.ranking === 1) {
-    //       acc.predictingWin += 1;
-    //     } else if (p.ranking <= slots) {
-    //       acc.predictingNom += 1;
-    //     } else {
-    //       acc.predictingUnranked += 1;
-    //     }
-    //     return acc;
-    //   },
-    //   { predictingWin: 0, predictingNom: 0, predictingUnranked: 0 },
-    // );
 
     return { status: 'success', data: result };
   } catch (err) {
