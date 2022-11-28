@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { createContext, useContext, useState } from 'react';
 import { CategoryType } from '../API';
-import { iCategory, iEvent } from '../store/types';
+import { iCategory, iEvent } from '../types';
 
 /**
  * Context that wraps the "read only" screens shared by global and personal

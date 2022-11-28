@@ -6,7 +6,7 @@ import CreateSong from './CreateSong';
 import { useTypedNavigation } from '../../../util/hooks';
 import { AwardsBody, CategoryType } from '../../../API';
 import { useCategory } from '../../../context/CategoryContext';
-import { iCategory, iEvent } from '../../../store/types';
+import { iCategory, iEvent } from '../../../types';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import { PredictionsParamList } from '../../../navigation/types';
 

@@ -8,7 +8,7 @@ import {
 import theme from '../../../constants/theme';
 import { iCachedTmdbMovie } from '../../../services/cache/types';
 import TmdbServices from '../../../services/tmdb';
-import { iNumberPredicting } from '../../../store/types';
+import { iNumberPredicting } from '../../../types';
 import { getNumPredicting } from '../../../util/getNumPredicting';
 import { useAsyncEffect } from '../../../util/hooks';
 import Poster from '../../Images/Poster';

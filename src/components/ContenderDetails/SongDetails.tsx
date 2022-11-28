@@ -4,7 +4,6 @@ import { View } from 'react-native';
 import { TouchableText } from '../Buttons';
 import Poster from '../Images/Poster';
 import { BodyLarge, SubHeader } from '../Text';
-import { PosterSize } from '../../constants/posterDimensions';
 import { iCachedTmdbMovie } from '../../services/cache/types';
 import TmdbServices from '../../services/tmdb';
 import { useAsyncEffect } from '../../util/hooks';
@@ -52,11 +51,7 @@ const SongDetails = (props: iSongDetailsProps) => {
   return (
     <View style={{ width: '100%' }}>
       <SubHeader style={{ margin: 10 }}>{movieDetails.title || ''}</SubHeader>
-      <Poster
-        path={movieDetails.posterPath}
-        size={PosterSize.LARGE}
-        title={movieDetails.title}
-      />
+      <Poster path={movieDetails.posterPath} title={movieDetails.title} />
       <TouchableText
         text={'View in Imdb'}
         onPress={() => {

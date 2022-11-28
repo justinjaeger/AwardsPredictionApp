@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FlatList } from 'react-native';
 import { CategoryType } from '../../API';
-import { iPrediction } from '../../store/types';
+import { iPrediction } from '../../types';
 import ContenderListItem from '../List/ContenderList/ContenderListItem';
 
 type iMovieListProps = {

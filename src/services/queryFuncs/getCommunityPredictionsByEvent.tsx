@@ -3,7 +3,7 @@ import {
   iIndexedPredictionsByCategory,
   iNumberPredicting,
   iPrediction,
-} from '../../store/types';
+} from '../../types';
 import { sortCommunityPredictions } from '../../util/sortPredictions';
 import ApiServices from '../graphql';
 

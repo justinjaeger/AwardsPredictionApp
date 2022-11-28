@@ -17,7 +17,7 @@ import { useAuth } from '../../../context/UserContext';
 import useQueryCommunityOrPersonalEvent from '../../../hooks/getCommunityOrPersonalEvent';
 import useMutationUpdatePredictions from '../../../hooks/updatePredictions';
 import { PredictionsParamList } from '../../../navigation/types';
-import { iCategory, iEvent, iPrediction } from '../../../store/types';
+import { iCategory, iEvent, iPrediction } from '../../../types';
 import { useAsyncReference, useTypedNavigation } from '../../../util/hooks';
 import { CategoryHeader } from '../styles';
 

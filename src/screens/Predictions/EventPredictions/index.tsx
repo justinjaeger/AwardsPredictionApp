@@ -6,7 +6,7 @@ import { PredictionsParamList } from '../../../navigation/types';
 import { useTypedNavigation } from '../../../util/hooks';
 import sortByObjectOrder from '../../../util/sortByObjectOrder';
 import { useCategory } from '../../../context/CategoryContext';
-import { iCategory, iEvent, iPrediction } from '../../../store/types';
+import { iCategory, iEvent, iPrediction } from '../../../types';
 import PredictionTabsNavigator from '../../../navigation/PredictionTabsNavigator';
 import { Body, SubHeader } from '../../../components/Text';
 import { useAuth } from '../../../context/UserContext';

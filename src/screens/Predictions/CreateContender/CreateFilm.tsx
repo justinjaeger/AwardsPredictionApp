@@ -7,7 +7,7 @@ import { Body } from '../../../components/Text';
 import TmdbMovieCache from '../../../services/cache/tmdbMovie';
 import { View } from 'react-native';
 import { useCategory } from '../../../context/CategoryContext';
-import { iCategory, iEvent, iPrediction } from '../../../store/types';
+import { iCategory, iEvent, iPrediction } from '../../../types';
 import COLORS from '../../../constants/colors';
 import MovieListSearch from '../../../components/MovieList/MovieListSearch';
 import LoadingStatueModal from '../../../components/LoadingStatueModal';

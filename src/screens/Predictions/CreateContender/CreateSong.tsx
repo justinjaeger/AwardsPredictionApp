@@ -14,7 +14,7 @@ import ApiServices from '../../../services/graphql';
 import { CategoryType, GetMovieQuery } from '../../../API';
 import { useTypedNavigation } from '../../../util/hooks';
 import { useCategory } from '../../../context/CategoryContext';
-import { iCategory, iEvent } from '../../../store/types';
+import { iCategory, iEvent } from '../../../types';
 import { PredictionsParamList } from '../../../navigation/types';
 
 const MAX_CHAR_COUNT = 100;

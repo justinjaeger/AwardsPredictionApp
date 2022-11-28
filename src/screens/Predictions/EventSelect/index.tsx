@@ -13,7 +13,7 @@ import { PredictionsParamList } from '../../../navigation/types';
 import { useTypedNavigation } from '../../../util/hooks';
 import sortByObjectOrder from '../../../util/sortByObjectOrder';
 import { useCategory } from '../../../context/CategoryContext';
-import { iEvent } from '../../../store/types';
+import { iEvent } from '../../../types';
 import theme from '../../../constants/theme';
 import LoadingStatue from '../../../components/LoadingStatue';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';

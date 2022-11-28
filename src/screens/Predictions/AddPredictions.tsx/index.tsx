@@ -3,7 +3,7 @@ import { Alert, View } from 'react-native';
 import { PredictionsParamList } from '../../../navigation/types';
 import { useTypedNavigation } from '../../../util/hooks';
 import { useCategory } from '../../../context/CategoryContext';
-import { iCategory, iEvent, iPrediction } from '../../../store/types';
+import { iCategory, iEvent, iPrediction } from '../../../types';
 import { BodyLarge } from '../../../components/Text';
 import useQueryCommunityEvent from '../../../hooks/getCommunityEvent';
 import { CategoryHeader } from '../styles';

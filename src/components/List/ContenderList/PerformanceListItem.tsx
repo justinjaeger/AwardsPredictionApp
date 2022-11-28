@@ -57,7 +57,6 @@ const PerformanceListItem = (props: iPerformanceListItemProps) => {
         <Poster
           path={tmdbPerson?.profilePath || null}
           title={tmdbPerson?.name || ''}
-          size={size}
           width={width}
           onPress={onPress}
         />

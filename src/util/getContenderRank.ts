@@ -1,4 +1,4 @@
-import { iNumberPredicting } from '../store/types';
+import { iNumberPredicting } from '../types';
 
 /**
  * assigns a point value based on where users are ranking the film in their lists

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Divider, List, ListItem } from '@ui-kitten/components';
 import Poster from '../Images/Poster';
-import { PosterSize } from '../../constants/posterDimensions';
 
 type iSearchListItem = {
   title: string;
@@ -27,9 +26,7 @@ const SearchResultsList = (props: iSearchResultsListProps) => {
           title={item.title}
           description={item.description}
           onPress={item.onPress}
-          accessoryLeft={() => (
-            <Poster path={item.image} title={item.title} size={PosterSize.SMALL} />
-          )}
+          accessoryLeft={() => <Poster path={item.image} title={item.title} />}
         />
       )}
     />

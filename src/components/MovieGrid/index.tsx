@@ -5,7 +5,7 @@ import { getCategorySlots } from '../../constants/categories';
 import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
 import { useCategory } from '../../context/CategoryContext';
-import { iPrediction } from '../../store/types';
+import { iPrediction } from '../../types';
 import PosterFromTmdbId from '../Images/PosterFromTmdbId';
 
 const MovieGrid = (props: { predictions: iPrediction[]; noLine?: boolean }) => {

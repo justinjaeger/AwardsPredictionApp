@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FlatList } from 'react-native';
 import { useCategory } from '../../context/CategoryContext';
-import { iCategory, iPrediction } from '../../store/types';
+import { iCategory, iPrediction } from '../../types';
 import { removePredictionFromList } from '../../util/removePredictionFromList';
 import ContenderListItem from '../List/ContenderList/ContenderListItem';
 

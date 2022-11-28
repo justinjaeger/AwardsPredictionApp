@@ -9,7 +9,7 @@ import { BodyLarge } from '../../../components/Text';
 import theme from '../../../constants/theme';
 import { useCategory } from '../../../context/CategoryContext';
 import useQueryCommunityOrPersonalEvent from '../../../hooks/getCommunityOrPersonalEvent';
-import { iCategory, iEvent } from '../../../store/types';
+import { iCategory, iEvent } from '../../../types';
 import { CategoryHeader } from '../styles';
 
 // NOTE: Has a lot in common with ContenderListDraggable

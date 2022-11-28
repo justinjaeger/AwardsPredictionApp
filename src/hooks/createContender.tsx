@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import ApiServices from '../services/graphql';
-import { QueryKeys } from '../store/types';
+import { QueryKeys } from '../types';
 
 const useMutationCreateContender = () => {
   const queryClient = useQueryClient();

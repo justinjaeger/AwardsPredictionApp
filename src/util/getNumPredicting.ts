@@ -1,4 +1,4 @@
-import { iNumberPredicting } from '../store/types';
+import { iNumberPredicting } from '../types';
 
 export const getNumPredicting = (np: iNumberPredicting): { win: number; nom: number } => {
   const keys = Object.keys(np);

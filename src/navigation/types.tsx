@@ -1,5 +1,5 @@
 import { CategoryType } from '../API';
-import { iPrediction } from '../store/types';
+import { iPrediction } from '../types';
 
 export type MainParamList = {
   BottomTabNavigator: undefined;

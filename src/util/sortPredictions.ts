@@ -1,4 +1,4 @@
-import { iPrediction } from '../store/types';
+import { iPrediction } from '../types';
 import { getContenderRank } from './getContenderRank';
 
 export const sortPersonalPredictions = (ps: iPrediction[]) =>

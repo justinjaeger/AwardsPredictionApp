@@ -5,8 +5,11 @@ import {
   CreateContenderMutationVariables,
   ModelContenderFilterInput,
   CreateContenderInput,
+  GetContenderQuery,
+  GetContenderQueryVariables,
 } from '../../API';
 import * as mutations from '../../graphql/mutations';
+import * as queries from '../../graphql/queries';
 import * as customQueries from '../../graphqlCustom/queries';
 import { GraphqlAPI, handleError, iApiResponse } from '../utils';
 import ApiServices from '.';
@@ -192,6 +195,25 @@ export const getContendersByEvent = async (
       },
     });
     if (!data?.listContenders) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data };
+  } catch (err) {
+    return handleError('error getting contenders by event', err);
+  }
+};
+
+export const getContenderById = async (
+  contenderId: string,
+): Promise<iApiResponse<GetContenderQuery>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<
+      GetContenderQuery,
+      GetContenderQueryVariables
+    >(queries.getContender, {
+      id: contenderId,
+    });
+    if (!data?.getContender) {
       throw new Error(JSON.stringify(errors));
     }
     return { status: 'success', data };

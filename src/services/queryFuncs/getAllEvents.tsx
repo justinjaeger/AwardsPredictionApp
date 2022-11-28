@@ -1,4 +1,4 @@
-import { iIndexedCategories, iIndexedEvents } from '../../store/types';
+import { iIndexedCategories, iIndexedEvents } from '../../types';
 import ApiServices from '../graphql';
 
 const getAllEvents = async () => {

@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import getAllEvents from '../services/queryFuncs/getAllEvents';
-import { QueryKeys } from '../store/types';
+import { QueryKeys } from '../types';
 
 const useQueryAllEvents = () => {
   const { isLoading, data } = useQuery({

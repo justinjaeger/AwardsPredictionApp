@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import getCommunityPredictionsByEvent from '../services/queryFuncs/getCommunityPredictionsByEvent';
 import getPersonalPredictionsByEvent from '../services/queryFuncs/getPersonalPredictionsByEvent';
-import { iEvent, QueryKeys } from '../store/types';
+import { iEvent, QueryKeys } from '../types';
 
 const useQueryCommunityOrPersonalEvent = (
   tab: 'personal' | 'community',

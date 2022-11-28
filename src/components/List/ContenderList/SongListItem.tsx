@@ -49,7 +49,6 @@ const SongListItem = (props: iSongListItemProps) => {
         <Poster
           path={movie?.posterPath || null}
           title={movie?.title || ''}
-          size={size}
           onPress={onPress}
         />
         <View style={{ flexDirection: 'column' }}>

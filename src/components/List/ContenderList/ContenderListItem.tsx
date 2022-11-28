@@ -11,7 +11,7 @@ import theme from '../../../constants/theme';
 import { useCategory } from '../../../context/CategoryContext';
 import { iCachedTmdbMovie, iCachedTmdbPerson } from '../../../services/cache/types';
 import TmdbServices from '../../../services/tmdb';
-import { iCategory, iPrediction } from '../../../store/types';
+import { iCategory, iPrediction } from '../../../types';
 import { getNumPredicting } from '../../../util/getNumPredicting';
 import { useAsyncEffect } from '../../../util/hooks';
 import CustomIcon from '../../CustomIcon';
@@ -280,7 +280,7 @@ const ContenderListItem = (props: iContenderListItemProps) => {
             ) : null}
           </View>
           {/* TODO: Instead of linking to IMDB, display a bunch of info from TMDB */}
-          {showBotomButtons ? (
+          {showBotomButtons && tmdbMovie ? (
             <Animated.View
               style={{
                 position: 'absolute',

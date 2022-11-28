@@ -4,7 +4,7 @@ import { FlatList } from 'react-native';
 import { getCategorySlots } from '../../constants/categories';
 import COLORS from '../../constants/colors';
 import { useCategory } from '../../context/CategoryContext';
-import { iCategory, iEvent, iPrediction } from '../../store/types';
+import { iCategory, iEvent, iPrediction } from '../../types';
 import ContenderListItem from '../List/ContenderList/ContenderListItem';
 
 type iMovieListProps = {
