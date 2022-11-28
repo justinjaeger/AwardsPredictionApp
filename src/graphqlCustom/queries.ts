@@ -174,3 +174,41 @@ export const listEvents = /* GraphQL */ `
     }
   }
 `;
+
+export const listCategories = /* GraphQL */ `
+  query ListCategories(
+    $id: ID
+    $filter: ModelCategoryFilterInput
+    $limit: Int
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listCategories(
+      id: $id
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        id
+        name
+        type
+        event {
+          id
+          awardsBody
+          year
+          type
+          expiration
+          isActive
+          createdAt
+          updatedAt
+        }
+        createdAt
+        updatedAt
+        eventCategoriesId
+      }
+      nextToken
+    }
+  }
+`;

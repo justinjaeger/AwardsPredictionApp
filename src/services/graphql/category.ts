@@ -5,38 +5,20 @@ import {
   CreateCategoryMutationVariables,
   DeleteCategoryMutation,
   DeleteCategoryMutationVariables,
-  GetCategoryQuery,
-  GetCategoryQueryVariables,
   ListCategoriesQuery,
   ListCategoriesQueryVariables,
 } from '../../API';
 import * as mutations from '../../graphql/mutations';
-import * as queries from '../../graphql/queries';
+import * as customQueries from '../../graphqlCustom/queries';
 import { GraphqlAPI, handleError, iApiResponse } from '../utils';
 
-export const getCategoryById = async (
-  id: string,
-): Promise<iApiResponse<GetCategoryQuery>> => {
-  try {
-    const { data, errors } = await GraphqlAPI<
-      GetCategoryQuery,
-      GetCategoryQueryVariables
-    >(queries.getCategory, { id });
-    if (!data?.getCategory) {
-      throw new Error(JSON.stringify(errors));
-    }
-    return { status: 'success', data };
-  } catch (err) {
-    return handleError('error getting category by id', err);
-  }
-};
-
+// Only used in DEV (so temporary)
 export const getAllCategories = async (): Promise<iApiResponse<ListCategoriesQuery>> => {
   try {
     const { data, errors } = await GraphqlAPI<
       ListCategoriesQuery,
       ListCategoriesQueryVariables
-    >(queries.listCategories);
+    >(customQueries.listCategories);
     if (!data?.listCategories) {
       throw new Error(JSON.stringify(errors));
     }
@@ -53,7 +35,7 @@ export const getCategoriesByEvent = async (
     const { data, errors } = await GraphqlAPI<
       ListCategoriesQuery,
       ListCategoriesQueryVariables
-    >(queries.listCategories, { filter: { eventCategoriesId: { eq: eventId } } });
+    >(customQueries.listCategories, { filter: { eventCategoriesId: { eq: eventId } } });
     if (!data?.listCategories) {
       throw new Error(JSON.stringify(errors));
     }

@@ -9,11 +9,8 @@ import {
   DeletePredictionSetMutationVariables,
   ListPredictionSetsQuery,
   ListPredictionSetsQueryVariables,
-  ListPredictionsQuery,
-  ListPredictionsQueryVariables,
 } from '../../API';
 import * as mutations from '../../graphql/mutations';
-import * as queries from '../../graphql/queries';
 import * as customQueries from '../../graphqlCustom/queries';
 import { GraphqlAPI, handleError, iApiResponse } from '../utils';
 
@@ -155,7 +152,7 @@ export const getPredictionSets = async (
     const { data, errors } = await GraphqlAPI<
       ListPredictionSetsQuery,
       ListPredictionSetsQueryVariables
-    >(queries.listPredictionSets, {
+    >(customQueries.listPredictionSets, {
       filter: {
         predictionSetUserId: { eq: userId },
         predictionSetCategoryId: { eq: categoryId },
@@ -167,26 +164,6 @@ export const getPredictionSets = async (
     return { status: 'success', data };
   } catch (err) {
     return handleError('error prediction set', err);
-  }
-};
-
-export const getPredictionsByPredictionSetId = async (
-  pSetId: string,
-): Promise<iApiResponse<ListPredictionsQuery>> => {
-  try {
-    // Get all prediction sets matching params (should only be one)
-    const { data: maybePredictions, errors } = await GraphqlAPI<
-      ListPredictionsQuery,
-      ListPredictionsQueryVariables
-    >(queries.listPredictions, {
-      filter: { predictionSetPredictionsId: { eq: pSetId } },
-    });
-    if (!maybePredictions?.listPredictions) {
-      throw new Error(JSON.stringify(errors));
-    }
-    return { status: 'success', data: maybePredictions };
-  } catch (err) {
-    return handleError('error predictions', err);
   }
 };
 
@@ -255,26 +232,5 @@ export const createOrUpdatePredictions = async (
     return { status: 'success' };
   } catch (err) {
     return handleError('error creating or updating predictions', err);
-  }
-};
-
-export const getPredictionsByContender = async (
-  contenderId: string,
-): Promise<iApiResponse<ListPredictionsQuery>> => {
-  try {
-    // Get all prediction sets matching params (should only be one)
-    const { data, errors } = await GraphqlAPI<
-      ListPredictionsQuery,
-      ListPredictionsQueryVariables
-    >(queries.listPredictions, {
-      filter: { contenderPredictionsId: { eq: contenderId } },
-    });
-    if (!data?.listPredictions) {
-      throw new Error(JSON.stringify(errors));
-    }
-    // Return GetPredictionSet result
-    return { status: 'success', data };
-  } catch (err) {
-    return handleError('error prediction set', err);
   }
 };

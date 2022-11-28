@@ -1,17 +1,14 @@
 import {
   ListEventsQuery,
   CreateEventMutation,
-  GetEventQuery,
   DeleteEventMutation,
   AwardsBody,
   EventType,
   ListEventsQueryVariables,
-  GetEventQueryVariables,
   CreateEventMutationVariables,
   DeleteEventMutationVariables,
 } from '../../API';
 import * as mutations from '../../graphql/mutations';
-import * as queries from '../../graphql/queries';
 import * as customQueries from '../../graphqlCustom/queries';
 import { GraphqlAPI, handleError, iApiResponse } from '../utils';
 import { deleteCategory, getCategoriesByEvent } from './category';
@@ -30,22 +27,6 @@ export const getAllEvents = async (): Promise<iApiResponse<ListEventsQuery>> => 
   }
 };
 
-export const getEventById = async (id: string): Promise<iApiResponse<GetEventQuery>> => {
-  try {
-    const { data, errors } = await GraphqlAPI<GetEventQuery, GetEventQueryVariables>(
-      queries.getEvent,
-      { id },
-    );
-    if (!data?.getEvent) {
-      throw new Error(JSON.stringify(errors));
-    }
-    return { status: 'success', data };
-  } catch (err) {
-    console.error('ERR', err);
-    return handleError('error getting event by id', err);
-  }
-};
-
 export const getUniqueEvents = async (
   awardsBody: AwardsBody,
   year: number,
@@ -54,7 +35,7 @@ export const getUniqueEvents = async (
   try {
     // enforce uniqueness - don't allow duplicate events to be created
     const { data, errors } = await GraphqlAPI<ListEventsQuery, ListEventsQueryVariables>(
-      queries.listEvents,
+      customQueries.listEvents,
       {
         filter: {
           awardsBody: { eq: awardsBody },
