@@ -7,10 +7,10 @@ import { BodyLarge, SubHeader } from '../Text';
 import { PosterSize } from '../../constants/posterDimensions';
 import { iCachedTmdbMovie } from '../../services/cache/types';
 import TmdbServices from '../../services/tmdb';
-import { Movie } from '../../models';
 
 type iFilmDetailsProps = {
-  movie: Movie;
+  movieTmdbId: number;
+  movieStudio?: string | undefined;
 };
 
 // TODO: based on category.name (CategoryName), display a distinct piece of information with the film like who the directors or screenwriters are
@@ -18,13 +18,11 @@ type iFilmDetailsProps = {
 // This is also where we want to take a look at stats in the future, so we do need the contender passed into the details screen
 
 const FilmDetails = (props: iFilmDetailsProps) => {
-  const { movie } = props;
+  const { movieTmdbId, movieStudio } = props;
 
   const navigation = useNavigation();
 
   const [movieDetails, setContenderDetails] = useState<iCachedTmdbMovie | undefined>();
-
-  const movieTmdbId = movie.tmdbId;
 
   // Set header title
   useLayoutEffect(() => {
@@ -57,7 +55,7 @@ const FilmDetails = (props: iFilmDetailsProps) => {
       {movieDetails ? (
         <Poster
           path={movieDetails.posterPath}
-          size={PosterSize.LARGE}
+          width={PosterSize.LARGE}
           title={movieDetails.title}
         />
       ) : null}
@@ -93,7 +91,7 @@ const FilmDetails = (props: iFilmDetailsProps) => {
           <BodyLarge style={{ fontWeight: '800', marginBottom: 5 }}>
             {'Distributor'}
           </BodyLarge>
-          <BodyLarge>{movie.studio || ''}</BodyLarge>
+          <BodyLarge>{movieStudio || ''}</BodyLarge>
         </View>
         <View style={{ flexDirection: 'column', marginTop: 5 }}>
           <BodyLarge style={{ fontWeight: '800', marginBottom: 5 }}>{'Plot'}</BodyLarge>

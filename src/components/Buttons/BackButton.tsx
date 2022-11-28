@@ -1,19 +1,26 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import COLORS from '../../constants/colors';
+import theme from '../../constants/theme';
 import { IconButton } from './IconButton';
 
-const BackButton = () => {
+const BackButton = (props: { onPress?: () => void }) => {
+  const { onPress } = props;
   const navigation = useNavigation();
 
   return (
     <IconButton
       iconProps={{
         name: 'arrow-ios-back-outline',
-        styles: { color: COLORS.primary, width: 20, height: 30 },
+        styles: { width: 20, height: 30 },
       }}
-      onPress={navigation.goBack}
-      styles={{ width: 30, height: 30, marginLeft: 10 }}
+      onPress={() => {
+        if (onPress) {
+          onPress();
+        } else {
+          navigation.goBack();
+        }
+      }}
+      styles={{ width: 30, height: 30, marginLeft: theme.windowMargin }}
     />
   );
 };

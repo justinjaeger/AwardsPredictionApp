@@ -1,4 +1,4 @@
-import { AwardsBody } from '../models';
+import { AwardsBody } from '../API';
 
 export const AWARDS_BODY_TO_STRING: {
   [key in AwardsBody]: string;

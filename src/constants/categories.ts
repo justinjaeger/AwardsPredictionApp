@@ -1,4 +1,4 @@
-import { AwardsBody, Category, CategoryName, CategoryType, Event } from '../models';
+import { AwardsBody, CategoryName, CategoryType } from '../API';
 
 export type iCategoryData = { name: string; type: CategoryType; slots?: number };
 
@@ -6,17 +6,24 @@ type iCategoryObject = {
   [key in CategoryName]: iCategoryData | undefined;
 };
 
-export const getCategorySlots = (event: Event, category: Category) => {
-  const awardsBodyCategory = getAwardsBodyCategories(event);
+export const getCategorySlots = (
+  year: number,
+  awardsBody: AwardsBody,
+  categoryName: CategoryName,
+) => {
+  const awardsBodyCategory = getAwardsBodyCategories(awardsBody, year);
   // Get number of slots in category (5 by default)
-  return awardsBodyCategory[CategoryName[category.name]]?.slots || 5;
+  return awardsBodyCategory[categoryName]?.slots || 5;
 };
 
-export const getAwardsBodyCategories = (event: Event): iCategoryObject => {
-  switch (event.awardsBody) {
+export const getAwardsBodyCategories = (
+  awardsBody: AwardsBody,
+  year: number,
+): iCategoryObject => {
+  switch (awardsBody) {
     case AwardsBody.ACADEMY_AWARDS:
       // This is just an example of how to use this when an awards body updates their category list
-      if (event.year > 2022) {
+      if (year > 2022) {
         return ACADEMY_AWARDS_CATEGORIES_V1;
       }
       return ACADEMY_AWARDS_CATEGORIES_V1;

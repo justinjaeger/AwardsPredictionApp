@@ -55,7 +55,7 @@ export const searchMovies = async (
       })),
     };
   } catch (err) {
-    return handleError('error searching tmdb', err);
+    return handleError('error in searchMovies', err);
   }
 };
 
@@ -85,6 +85,6 @@ export const searchPeople = async (
       })),
     };
   } catch (err) {
-    return handleError('error searching tmdb', err);
+    return handleError('error in searchPeople', err);
   }
 };

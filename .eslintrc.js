@@ -28,7 +28,7 @@ module.exports = {
     'linebreak-style': ['error', 'unix'],
     semi: ['error', 'always'],
     'comma-dangle': ['error', 'always-multiline'],
-    '@typescript-eslint/indent': ['error', 2],
+    // '@typescript-eslint/indent': ['error', 2],
     '@typescript-eslint/no-explicit-any': 0,
     '@typescript-eslint/no-var-requires': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 0,
@@ -46,5 +46,6 @@ module.exports = {
     'eslint-comments/no-unused-disable': 0,
     'sonarjs/cognitive-complexity': 0,
     'react-hooks/exhaustive-deps': 0,
+    'import/no-named-as-default': 0,
   },
 };

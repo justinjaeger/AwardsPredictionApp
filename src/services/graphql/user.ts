@@ -1,70 +1,157 @@
-import { API, graphqlOperation } from 'aws-amplify';
-import { GraphQLQuery } from '@aws-amplify/api';
 import {
   CreateUserMutation,
   CreateUserMutationVariables,
+  DeleteUserMutation,
+  DeleteUserMutationVariables,
+  GetUserQuery,
+  GetUserQueryVariables,
   ListUsersQuery,
   ListUsersQueryVariables,
+  ModelUserFilterInput,
   UpdateUserMutation,
   UpdateUserMutationVariables,
-  User,
+  UserRole,
 } from '../../API';
 import * as mutations from '../../graphql/mutations';
 import * as queries from '../../graphql/queries';
-import { handleError, iApiResponse } from '../utils';
+import { GraphqlAPI, handleError, iApiResponse } from '../utils';
+
+export const getAllUsers = async (): Promise<iApiResponse<ListUsersQuery>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<ListUsersQuery, ListUsersQueryVariables>(
+      queries.listUsers,
+    );
+    if (!data?.listUsers) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data };
+  } catch (err) {
+    return handleError('error getting all users', err);
+  }
+};
+
+export const getUser = async (id: string): Promise<iApiResponse<GetUserQuery>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<GetUserQuery, GetUserQueryVariables>(
+      queries.getUser,
+      { id },
+    );
+    if (!data?.getUser) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data: data };
+  } catch (err) {
+    return handleError('error getting user by id', err);
+  }
+};
+
+// Use this to enforce uniqueness
+export const getUserByEmail = async (
+  email: string,
+): Promise<iApiResponse<ListUsersQuery>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<ListUsersQuery, ListUsersQueryVariables>(
+      queries.listUsers,
+      { filter: { email: { eq: email } } },
+    );
+    if (!data?.listUsers) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data };
+  } catch (err) {
+    return handleError('error getting user by email', err);
+  }
+};
 
 // create a new user after confirming email
 export const createUser = async (
-  variables: CreateUserMutationVariables,
+  email: string,
+  role?: UserRole,
 ): Promise<iApiResponse<CreateUserMutation>> => {
   try {
-    const res = await API.graphql<GraphQLQuery<CreateUserMutation>>(
-      graphqlOperation(mutations.createUser, variables),
-    );
-    if (!res.data) {
-      throw new Error(JSON.stringify(res.errors));
+    // Enforce uniqueness!!
+    const { data: maybeUsers } = await getUserByEmail(email);
+    if (!maybeUsers?.listUsers) {
+      return { status: 'error' };
     }
-    return { status: 'success', data: res.data };
+    if (maybeUsers.listUsers.items.length > 0) {
+      throw new Error('A user with this email already exists');
+    }
+    // Create user
+    const { data, errors } = await GraphqlAPI<
+      CreateUserMutation,
+      CreateUserMutationVariables
+    >(mutations.createUser, { input: { email, role: role || UserRole.USER } });
+    if (!data?.createUser) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data };
   } catch (err) {
     return handleError('error creating user', err);
   }
 };
 
-export const getUsersByFilter = async (
-  variables: ListUsersQueryVariables,
-): Promise<iApiResponse<User[]>> => {
+// verify that username is unique, then update
+export const updateUsername = async (
+  id: string,
+  username: string,
+): Promise<iApiResponse<UpdateUserMutation>> => {
   try {
-    const res = await API.graphql<GraphQLQuery<ListUsersQuery>>(
-      graphqlOperation(queries.listUsers, variables),
-    );
-    if (res.data) {
-      const users = res.data.listUsers?.items;
-      if (users) {
-        return { status: 'success', data: users as User[] };
-      }
+    // First, validate that username is not already taken
+    const { data: listUsersQuery } = await getUsersByUsername(username);
+    const maybeUsers = listUsersQuery?.listUsers?.items;
+    if (!maybeUsers) {
+      throw new Error('An error occured fetching users with this username');
     }
-    throw new Error(JSON.stringify(res.errors));
+    if (maybeUsers.length !== 0) {
+      throw new Error('This username is already taken');
+    }
+    // If not taken, create new username
+    const { data, errors } = await GraphqlAPI<
+      UpdateUserMutation,
+      UpdateUserMutationVariables
+    >(mutations.updateUser, { input: { id, username } });
+    if (data) {
+      return { status: 'success', data };
+    }
+    throw new Error(JSON.stringify(errors));
   } catch (err) {
-    return handleError('error retrieving username', err);
+    return handleError('error updating username', err);
   }
 };
 
-// update username (only call after verifying that it's unique)
-export const updateUsername = async (
-  variables: UpdateUserMutationVariables,
-): Promise<iApiResponse<User>> => {
+export const getUsersByUsername = async (
+  username: string,
+): Promise<iApiResponse<ListUsersQuery>> => {
   try {
-    const res = await API.graphql<GraphQLQuery<UpdateUserMutation>>(
-      graphqlOperation(mutations.updateUser, variables),
+    const filter: ModelUserFilterInput = { username: { eq: username } };
+    const { data, errors } = await GraphqlAPI<ListUsersQuery, ListUsersQueryVariables>(
+      queries.listUsers,
+      { filter },
     );
-    if (res.data) {
-      const user = res.data.updateUser;
-      if (user) {
-        return { status: 'success', data: user as User };
-      }
+    if (!data?.listUsers) {
+      throw new Error(JSON.stringify(errors));
     }
-    throw new Error(JSON.stringify(res.errors));
+    return { status: 'success', data };
   } catch (err) {
-    return handleError('error updating username', err);
+    return handleError('error getting users by username', err);
+  }
+};
+
+// NOTE: Only for mock purposes. Should never really DELETE a user
+export const deleteUser = async (
+  id: string,
+): Promise<iApiResponse<DeleteUserMutation>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<
+      DeleteUserMutation,
+      DeleteUserMutationVariables
+    >(mutations.deleteUser, { input: { id } });
+    if (!data?.deleteUser) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data };
+  } catch (err) {
+    return handleError('error deleting user', err);
   }
 };

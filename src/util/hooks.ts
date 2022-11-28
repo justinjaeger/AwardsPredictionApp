@@ -1,6 +1,26 @@
 import { useNavigation } from '@react-navigation/native';
 import _ from 'lodash';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+
+type NavigationParams<
+  ParamList,
+  RouteName extends keyof ParamList
+> = ParamList[RouteName];
+
+export const useTypedNavigation = <ParamList>() => {
+  const navigation = useNavigation();
+  const navigate = (
+    routeName: keyof ParamList,
+    params?: NavigationParams<ParamList, keyof ParamList>,
+  ) =>
+    navigation.navigate(
+      // @ts-ignore
+      routeName,
+      // @ts-ignore
+      params,
+    );
+  return { ...navigation, navigate };
+};
 
 export const useAsyncEffect = (effect: () => Promise<void>, deps: any[]) => {
   useEffect(() => {
@@ -51,4 +71,21 @@ export const useDebounce = <T>(value: T, delay = 1000, options?: _.DebounceSetti
   useEffect(() => debounce(value), [value]);
 
   return debouncedValue;
+};
+
+/**
+ * MUST pass the REF back, then invoke the value with ref.current, or else it doesn't work
+ */
+export const useAsyncReference = <T>(
+  value: T,
+): [React.MutableRefObject<T>, (value: T) => void] => {
+  const ref = useRef<T>(value);
+  const [, forceRender] = useState(false);
+
+  const updateState = (newState: T) => {
+    ref.current = newState;
+    forceRender((s) => !s);
+  };
+
+  return [ref, updateState];
 };

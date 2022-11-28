@@ -1,58 +1,56 @@
 import { useNavigation } from '@react-navigation/native';
-import { DataStore } from 'aws-amplify';
-import React, { useEffect, useState } from 'react';
-import { SafeAreaView, ScrollView, View } from 'react-native';
+import React, { useState } from 'react';
+import { SafeAreaView, ScrollView, StyleProp, View, ViewStyle } from 'react-native';
+import { ListCategoriesQuery, ListEventsQuery, ListUsersQuery } from '../../API';
 import { TouchableText } from '../../components/Buttons';
 import { Body, SubHeader } from '../../components/Text';
-import { User, Event, Category } from '../../models';
 import { createMockEvents, deleteMockEvents } from '../../scripts/mocks/events';
 import { deleteMockUsers, createMockUsers } from '../../scripts/mocks/users';
 import TmdbMovieCache from '../../services/cache/tmdbMovie';
 import TmdbPersonCache from '../../services/cache/tmdbPerson';
+import ApiServices from '../../services/graphql';
+import { useSubscriptionEffect } from '../../util/hooks';
 
 const Dev = () => {
   const navigation = useNavigation();
 
-  const [users, setUsers] = useState<User[]>([]);
-  const [events, setEvents] = useState<Event[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [users, setUsers] = useState<ListUsersQuery>();
+  const [events, setEvents] = useState<ListEventsQuery>();
+  const [categories, setCategories] = useState<ListCategoriesQuery>();
 
   // USERS
-  useEffect(() => {
-    // later we'll just use userId to get the user whose profile it is, but I want all users for experiment
-    const sub = DataStore.observeQuery(User).subscribe(({ items }) => {
-      setUsers(items);
-    });
-    return () => sub.unsubscribe();
+  useSubscriptionEffect(async () => {
+    const { data: us } = await ApiServices.getAllUsers();
+    if (us) {
+      setUsers(us);
+    }
   }, []);
 
   // EVENTS
-  useEffect(() => {
-    // later we'll just use userId to get the user whose profile it is, but I want all users for experiment
-    const sub = DataStore.observeQuery(Event).subscribe(({ items }) => {
-      setEvents(items);
-    });
-    return () => sub.unsubscribe();
+  useSubscriptionEffect(async () => {
+    const { data: es } = await ApiServices.getAllEvents();
+    if (es) {
+      setEvents(es);
+    }
   }, []);
 
-  //   CATEGORIES
-  useEffect(() => {
-    // later we'll just use userId to get the user whose profile it is, but I want all users for experiment
-    const sub = DataStore.observeQuery(Category).subscribe(({ items }) => {
-      setCategories(items);
-    });
-    return () => sub.unsubscribe();
+  // CATEGORIES
+  useSubscriptionEffect(async () => {
+    const { data: cs } = await ApiServices.getAllCategories();
+    if (cs) {
+      setCategories(cs);
+    }
   }, []);
-
-  const clear = () => {
-    DataStore.clear()
-      .then((res) => console.error('cleared data store', res))
-      .catch((err) => console.error('err clearing data store', err));
-  };
 
   const clearAllCache = () => {
     TmdbMovieCache.clearAll();
     TmdbPersonCache.clearAll();
+  };
+
+  const sectionStyles: StyleProp<ViewStyle> = {
+    alignItems: 'flex-start',
+    width: '100%',
+    marginTop: 10,
   };
 
   return (
@@ -71,11 +69,6 @@ const Dev = () => {
           style={{ marginTop: 10 }}
         />
         <TouchableText
-          text={'Clear/Sync DataStore'}
-          onPress={clear}
-          style={{ marginTop: 10 }}
-        />
-        <TouchableText
           text={'Clear Cache'}
           onPress={clearAllCache}
           style={{ marginTop: 10 }}
@@ -85,7 +78,7 @@ const Dev = () => {
           onPress={() => navigation.navigate('ManageStudios')}
           style={{ marginTop: 10 }}
         />
-        <View style={{ alignItems: 'flex-start', width: '100%', marginTop: 10 }}>
+        <View style={{ ...sectionStyles }}>
           <SubHeader>USERS:</SubHeader>
         </View>
         <TouchableText
@@ -98,12 +91,12 @@ const Dev = () => {
           onPress={deleteMockUsers}
           style={{ marginTop: 10 }}
         />
-        {users?.map((u) => (
+        {users?.listUsers?.items.map((u) => (
           <View style={{ margin: 5 }}>
             <Body>{JSON.stringify(u)}</Body>
           </View>
         ))}
-        <View style={{ alignItems: 'flex-start', width: '100%', marginTop: 10 }}>
+        <View style={{ ...sectionStyles }}>
           <SubHeader>EVENTS:</SubHeader>
         </View>
         <TouchableText
@@ -113,18 +106,20 @@ const Dev = () => {
         />
         <TouchableText
           text={'Delete mock events'}
-          onPress={deleteMockEvents}
+          onPress={() => {
+            deleteMockEvents();
+          }}
           style={{ marginTop: 10 }}
         />
-        {events?.map((e) => (
+        {events?.listEvents?.items.map((e) => (
           <View style={{ margin: 5 }}>
             <Body>{JSON.stringify(e)}</Body>
           </View>
         ))}
-        <View style={{ alignItems: 'flex-start', width: '100%', marginTop: 10 }}>
+        <View style={{ ...sectionStyles }}>
           <SubHeader>CATEGORIES:</SubHeader>
         </View>
-        {categories?.map((c) => (
+        {categories?.listCategories?.items.map((c) => (
           <View style={{ margin: 5 }}>
             <Body>{JSON.stringify(c)}</Body>
           </View>

@@ -3,29 +3,24 @@ import React from 'react';
 import { IconRegistry, ApplicationProvider } from '@ui-kitten/components';
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import * as eva from '@eva-design/eva';
-import { Provider as StoreProvider } from 'react-redux';
-import { persistor, store } from './store/configureStore';
-import { PersistGate } from 'redux-persist/integration/react';
 import Navigation from './navigation';
 import theme from './theme';
-// import { Hub } from 'aws-amplify';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { UserProvider } from './context/UserContext';
+
+const queryClient = new QueryClient();
 
 const App = () => {
-  // https://docs.amplify.aws/lib/utilities/hub/q/platform/js/#listening-for-messages
-  //   Hub.listen(/.*/, (data) => {
-  //     console.log('Listening for all messages: ', data.payload.data);
-  //   });
-
   return (
     <>
-      <IconRegistry icons={EvaIconsPack} />
-      <StoreProvider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
-          <ApplicationProvider {...eva} theme={{ ...theme }}>
+      <QueryClientProvider client={queryClient}>
+        <IconRegistry icons={EvaIconsPack} />
+        <ApplicationProvider {...eva} theme={{ ...theme }}>
+          <UserProvider>
             <Navigation />
-          </ApplicationProvider>
-        </PersistGate>
-      </StoreProvider>
+          </UserProvider>
+        </ApplicationProvider>
+      </QueryClientProvider>
     </>
   );
 };

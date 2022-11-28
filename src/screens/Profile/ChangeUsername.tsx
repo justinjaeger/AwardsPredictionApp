@@ -1,33 +1,32 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import Snackbar from '../../components/Snackbar';
-import { useAuth } from '../../store';
 import { useNavigation } from '@react-navigation/native';
 import FormInput from '../../components/Inputs/FormInput';
 import { EvaStatus } from '@ui-kitten/components/devsupport/typings';
 import { SubmitButton } from '../../components/Buttons';
-import { DataStore } from 'aws-amplify';
-import { User } from '../../models';
+import ApiServices from '../../services/graphql';
+import { useAsyncEffect } from '../../util/hooks';
+import { GetUserQuery } from '../../API';
+import { useAuth } from '../../context/UserContext';
 
 const ChangeUsername = () => {
   const { userId } = useAuth();
   const navigation = useNavigation();
 
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<GetUserQuery>();
   const [username, setUsername] = useState<string>('');
   const [usernameStatus, setUsernameStatus] = useState<EvaStatus | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(false);
 
   const validUsername = username.length >= 8;
-  const currentUsername = user?.username;
+  const usernameBeforeEdit = user?.getUser?.username || undefined;
 
-  useEffect(() => {
+  useAsyncEffect(async () => {
     if (userId) {
-      DataStore.query(User, userId).then((u) => {
-        if (u) {
-          setUser(u);
-          setUsername(u.username || '');
-        }
+      ApiServices.getUser(userId).then(({ data: u }) => {
+        setUser(u);
+        setUsername(u?.getUser?.username || '');
       });
       setUser(undefined);
     }
@@ -36,28 +35,18 @@ const ChangeUsername = () => {
   useLayoutEffect(() => {
     // This is the best way to change the header
     navigation.setOptions({
-      headerTitle: currentUsername ? 'Update Username' : 'Create Username',
+      headerTitle: usernameBeforeEdit ? 'Update Username' : 'Create Username',
     });
-  }, [currentUsername, navigation]);
+  }, [usernameBeforeEdit, navigation]);
 
   const updateUsername = async () => {
     setLoading(true);
-    if (!user) return;
-    const potentialUsersWithUsername = await DataStore.query(User, (u) =>
-      u.username('eq', username),
-    );
-    if (potentialUsersWithUsername.length > 0) {
-      Snackbar.error('This username is taken');
-    } else {
-      await DataStore.save(
-        User.copyOf(user, (updated) => {
-          updated.username = username;
-        }),
-      );
-      Snackbar.success('Username updated');
-      navigation.goBack();
-    }
+    if (!user?.getUser?.id) return;
+    const { data: u } = await ApiServices.updateUsername(user?.getUser?.id, username);
     setLoading(false);
+    if (!u) return;
+    Snackbar.success('Username updated');
+    navigation.goBack();
   };
 
   return (
@@ -83,9 +72,9 @@ const ChangeUsername = () => {
           }}
         />
         <SubmitButton
-          text={currentUsername ? 'Update' : 'Create'}
+          text={usernameBeforeEdit ? 'Update' : 'Create'}
           onPress={updateUsername}
-          disabled={!validUsername || currentUsername === username}
+          disabled={!validUsername || usernameBeforeEdit === username}
           loading={loading}
         />
       </View>

@@ -10,6 +10,7 @@ const INPUT_HEIGHT = 50;
 
 const SearchInput = (props: {
   handleSearch: (s: string) => void;
+  resetSearchHack?: boolean;
   label?: string;
   placeholder?: string;
   caption?: string;
@@ -17,11 +18,26 @@ const SearchInput = (props: {
   status?: EvaStatus;
   style?: any;
 }) => {
-  const { handleSearch, label, placeholder, caption, onBlur, status, style } = props;
+  const {
+    handleSearch,
+    resetSearchHack,
+    label,
+    placeholder,
+    caption,
+    onBlur,
+    status,
+    style,
+  } = props;
 
   const [searchInput, setSearchInput] = useState<string>('');
   const [searching, setSearching] = useState<boolean>(false);
   const debouncedSearch = useDebounce(searchInput, 500, { trailing: true });
+
+  // Enables us to reset the search bar from the outer component
+  useEffect(() => {
+    setSearchInput('');
+    setSearching(false);
+  }, [resetSearchHack]);
 
   useEffect(() => {
     setSearching(true);
@@ -39,12 +55,27 @@ const SearchInput = (props: {
         label={label}
         value={searchInput}
         placeholder={placeholder}
+        placeholderTextColor={COLORS.border}
         onChangeText={setSearchInput}
         caption={caption}
         onBlur={onBlur}
         status={status || 'basic'}
-        style={{ marginBottom: 10, borderRadius: 100, ...style }}
-        textStyle={{ marginLeft: 10, marginRight: '20%', height: INPUT_HEIGHT - 15 }}
+        style={{
+          marginBottom: 10,
+          borderRadius: 100,
+          borderWidth: 0,
+          backgroundColor: COLORS.primaryLight,
+          color: 'green',
+          ...style,
+        }}
+        selectionColor={COLORS.border} // the cursor
+        textStyle={{
+          marginLeft: 10,
+          marginRight: '20%',
+          height: INPUT_HEIGHT - 15,
+          fontSize: 16,
+          color: COLORS.white,
+        }}
         autoFocus
         accessoryLeft={() => (
           <CustomIcon
@@ -54,18 +85,23 @@ const SearchInput = (props: {
             styles={{ marginLeft: 10 }}
           />
         )}
+        keyboardAppearance={'dark'}
       />
       {searching ? (
         <View
           style={{
             position: 'absolute',
-            top: 0,
+            top: 18,
             right: 20,
             justifyContent: 'center',
             height: INPUT_HEIGHT,
           }}
         >
-          <Spinner size="medium" status="primary" />
+          <Spinner
+            size="medium"
+            status="secondary"
+            style={{ borderColor: COLORS.border }}
+          />
         </View>
       ) : null}
     </View>

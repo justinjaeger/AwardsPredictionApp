@@ -3,7 +3,13 @@ const getPosterDimensions = (height: number) => ({
   width: height * (27 / 40),
 });
 
+export const getPosterDimensionsByWidth = (width: number) => ({
+  height: width * (40 / 27),
+  width,
+});
+
 export enum PosterSize {
+  XSMALL = 40,
   SMALL = 60,
   MEDIUM = 120,
   LARGE = 240,
@@ -15,6 +21,7 @@ export const POSTER_SIZE: {
     height: number;
   };
 } = {
+  [PosterSize.XSMALL]: getPosterDimensions(PosterSize.XSMALL),
   [PosterSize.SMALL]: getPosterDimensions(PosterSize.SMALL),
   [PosterSize.MEDIUM]: getPosterDimensions(PosterSize.MEDIUM),
   [PosterSize.LARGE]: getPosterDimensions(PosterSize.LARGE),

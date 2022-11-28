@@ -1,91 +1,91 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { View } from 'react-native';
-import { PosterSize } from '../../../constants/posterDimensions';
-import { CategoryName, Category, Movie, Contender } from '../../../models';
-
+import { CategoryName } from '../../../API';
+import {
+  getPosterDimensionsByWidth,
+  PosterSize,
+} from '../../../constants/posterDimensions';
+import theme from '../../../constants/theme';
 import { iCachedTmdbMovie } from '../../../services/cache/types';
-import DS from '../../../services/datastore';
-import { iNumberPredicting } from '../../../services/datastore/contender';
 import TmdbServices from '../../../services/tmdb';
+import { iNumberPredicting } from '../../../types';
+import { getNumPredicting } from '../../../util/getNumPredicting';
+import { useAsyncEffect } from '../../../util/hooks';
 import Poster from '../../Images/Poster';
-import { BodyLarge } from '../../Text';
+import { BodyLarge, Label } from '../../Text';
 
 type iFilmListItemProps = {
-  movie: Movie;
-  contender: Contender;
-  category: Category;
+  tmdbMovieId: number;
+  movieStudio: string | undefined;
+  categoryName: CategoryName;
+  communityRankings: iNumberPredicting | undefined;
   ranking?: number;
   size?: PosterSize;
+  width?: number;
   onPress: () => void;
 };
 
 const FilmListItem = (props: iFilmListItemProps) => {
-  const { movie, contender, category, ranking, size, onPress } = props;
-
-  const movieTmdbId = movie.tmdbId;
+  const {
+    communityRankings,
+    tmdbMovieId,
+    movieStudio,
+    categoryName,
+    ranking,
+    size,
+    width,
+    onPress,
+  } = props;
 
   // TODO: based on category.name (CategoryName), display a distinct piece of information with the film like who the directors or screenwriters are
 
   const [tmdbMovie, setTmdbMovie] = useState<iCachedTmdbMovie | undefined>();
-  const [numPredicting, setNumPredicting] = useState<iNumberPredicting | undefined>(
-    undefined,
-  );
 
-  useEffect(() => {
-    TmdbServices.getTmdbMovie(movieTmdbId).then((m) => {
-      if (m.status === 'success') {
-        setTmdbMovie(m.data);
-      }
-    });
-    DS.getNumberPredicting(contender).then(({ data }) => {
-      setNumPredicting(data);
-    });
-  }, [movieTmdbId]);
+  useAsyncEffect(async () => {
+    const { status, data } = await TmdbServices.getTmdbMovie(tmdbMovieId);
+    if (status === 'success') {
+      setTmdbMovie(data);
+    }
+  }, [tmdbMovieId]);
 
-  const categoryInfo = tmdbMovie?.categoryInfo?.[category.name];
+  const categoryInfo = tmdbMovie?.categoryInfo?.[categoryName];
+
+  const height = width
+    ? getPosterDimensionsByWidth(width).height
+    : size || PosterSize.MEDIUM;
+
+  const { win, nom } = getNumPredicting(communityRankings || {});
 
   return (
     <View
       style={{
         width: '100%',
-        height: size || PosterSize.MEDIUM,
-        marginTop: 10,
+        flexDirection: 'row',
+        marginLeft: theme.windowMargin,
+        height,
       }}
     >
-      <View style={{ flexDirection: 'row' }}>
-        <BodyLarge style={{ marginLeft: 10 }}>{ranking?.toString() || ''}</BodyLarge>
-        <Poster
-          path={tmdbMovie?.posterPath || null}
-          title={tmdbMovie?.title || ''}
-          size={size}
-          onPress={onPress}
-        />
-        <View style={{ flexDirection: 'column' }}>
-          <BodyLarge style={{ marginTop: 10, marginLeft: 10 }}>
-            {tmdbMovie?.title || ''}
-          </BodyLarge>
-          {category.name === CategoryName.PICTURE ? (
-            <BodyLarge style={{ marginTop: 10, marginLeft: 10 }}>
-              {movie.studio || ''}
-            </BodyLarge>
-          ) : null}
-          {categoryInfo ? (
-            <BodyLarge style={{ marginLeft: 10 }}>{categoryInfo.join(', ')}</BodyLarge>
-          ) : null}
-          {size !== PosterSize.SMALL ? (
-            <>
-              <BodyLarge
-                style={{ marginLeft: 10 }}
-              >{`pred win: ${numPredicting?.predictingWin}`}</BodyLarge>
-              <BodyLarge
-                style={{ marginLeft: 10 }}
-              >{`pred nom: ${numPredicting?.predictingNom}`}</BodyLarge>
-              <BodyLarge
-                style={{ marginLeft: 10 }}
-              >{`pred unranked: ${numPredicting?.predictingUnranked}`}</BodyLarge>
-            </>
-          ) : null}
-        </View>
+      <Poster
+        path={tmdbMovie?.posterPath || null}
+        title={tmdbMovie?.title || ''}
+        width={width}
+        ranking={ranking}
+        onPress={onPress}
+      />
+      <View style={{ flexDirection: 'column' }}>
+        <BodyLarge style={{ marginLeft: 10 }}>{tmdbMovie?.title || ''}</BodyLarge>
+        {categoryName === CategoryName.PICTURE ? (
+          <Label style={{ marginTop: 1, marginLeft: 10 }}>{movieStudio || ''}</Label>
+        ) : null}
+        {categoryInfo ? (
+          <BodyLarge style={{ marginLeft: 10 }}>{categoryInfo.join(', ')}</BodyLarge>
+        ) : null}
+        {communityRankings && size !== PosterSize.SMALL ? (
+          <>
+            <BodyLarge style={{ marginLeft: 10 }}>{`pred win: ${win}`}</BodyLarge>
+            <BodyLarge style={{ marginLeft: 10 }}>{`pred nom: ${nom}`}</BodyLarge>
+          </>
+        ) : null}
       </View>
     </View>
   );

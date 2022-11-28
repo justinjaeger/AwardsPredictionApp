@@ -24,13 +24,13 @@ const TabBar = (props: ITabBarProps) => {
       edges={['bottom']}
       style={{
         borderTopWidth: 1,
-        borderColor: COLORS.border,
         shadowOpacity: 0.2,
         shadowRadius: 10,
         shadowOffset: {
           height: -5,
           width: 0,
         },
+        backgroundColor: COLORS.primary,
       }}
     >
       <View
@@ -54,23 +54,13 @@ const TabBar = (props: ITabBarProps) => {
           };
           const icon = (() => {
             switch (route.name) {
-              case 'GlobalPredictions':
+              case 'Predictions':
                 return (
                   <View key={index}>
                     {isFocused ? (
                       <CustomIcon name={'home'} />
                     ) : (
                       <CustomIcon name={'home-outline'} />
-                    )}
-                  </View>
-                );
-              case 'PersonalPredictions':
-                return (
-                  <View key={index}>
-                    {isFocused ? (
-                      <CustomIcon name={'edit'} />
-                    ) : (
-                      <CustomIcon name={'edit-outline'} />
                     )}
                   </View>
                 );

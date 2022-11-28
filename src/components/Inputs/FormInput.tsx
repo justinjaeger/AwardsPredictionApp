@@ -7,7 +7,7 @@ import { titleCase } from 'title-case';
 const FormInput = (props: {
   label: string;
   value: string;
-  setValue: React.Dispatch<React.SetStateAction<string>>;
+  setValue: (v: string) => void;
   textContentType?: iTextContentType;
   caption?: string;
   onBlur?: () => void;

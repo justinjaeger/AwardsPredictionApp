@@ -7,24 +7,26 @@ import { SubmitButton, TouchableText } from '../../components/Buttons';
 import AuthServices from '../../services/auth';
 import Snackbar from '../../components/Snackbar';
 import { useAuthenticator } from './context';
-import { loginUser } from '../../store/actions/auth';
-import { useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import { SignupRow } from './styles';
 import { Body } from '../../components/Text';
-import { useAuth } from '../../store';
-import { DataStore } from 'aws-amplify';
-import { User } from '../../models';
+import ApiServices from '../../services/graphql';
+import { useAuth } from '../../context/UserContext';
 
 const SignIn = (p: any) => {
   const props = p as iAuthScreenProps; // typecasting because props are automatically passed from Authenticator
-  const dispatch = useDispatch();
   const { goBack } = useNavigation();
   const { userEmail } = useAuth();
-  const { email: contextEmail, setEmail: setContextEmail } = useAuthenticator();
+  const {
+    email: contextEmail,
+    setEmail: setContextEmail,
+    password: contextPasword,
+    setPassword: setContextPassword,
+  } = useAuthenticator();
+  const { signInUser } = useAuth();
 
-  const [password, setPassword] = useState<string>('');
   const [email, setEmail] = useState<string>(userEmail || contextEmail || '');
+  const [password, setPassword] = useState<string>(contextPasword || '');
   const [loading, setLoading] = useState<boolean>(false);
 
   const navigate = (authState: iAuthState) => {
@@ -44,12 +46,11 @@ const SignIn = (p: any) => {
             duration: 5000,
           });
         } else {
-          const users = await DataStore.query(User, (u) => u.email('eq', email));
-          if (users.length > 0) {
-            const user = users[0];
-            dispatch(loginUser({ userId: user.id, userEmail: user.email }));
-            goBack();
-          }
+          const { data: user } = await ApiServices.getUserByEmail(email);
+          const u = user?.listUsers?.items[0];
+          if (!u) return;
+          signInUser(u.id, u.email);
+          goBack();
         }
       }
       setLoading(false);
@@ -70,15 +71,25 @@ const SignIn = (p: any) => {
       <FormInput
         label="Email"
         value={email}
-        setValue={setEmail}
+        setValue={(v) => {
+          setContextEmail(v);
+          setEmail(v);
+        }}
         textContentType="emailAddress"
       />
-      <PasswordInput value={password} setValue={setPassword} />
+      <PasswordInput
+        value={password}
+        setValue={(v) => {
+          setPassword(v);
+          setContextPassword(v);
+        }}
+      />
       <SubmitButton
         text={'Log in'}
         onPress={signIn}
         disabled={password.length < 8}
         loading={loading}
+        style={{ marginTop: 30 }}
       />
       <SignupRow style={{ marginTop: 30 }}>
         <Body>Don't have an account?</Body>

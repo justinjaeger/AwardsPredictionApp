@@ -1,70 +1,68 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
-import { PosterSize } from '../../../constants/posterDimensions';
-import { Contender } from '../../../models';
+import {
+  getPosterDimensionsByWidth,
+  PosterSize,
+} from '../../../constants/posterDimensions';
 import { iCachedTmdbMovie, iCachedTmdbPerson } from '../../../services/cache/types';
-import DS from '../../../services/datastore';
 import TmdbServices from '../../../services/tmdb';
 import { useSubscriptionEffect } from '../../../util/hooks';
 import Poster from '../../Images/Poster';
 import { BodyLarge } from '../../Text';
 
 type iPerformanceListItemProps = {
-  contender: Contender;
+  tmdbPersonId: number;
+  tmdbMovieId: number;
   ranking?: number;
   size?: PosterSize;
+  width?: number;
   onPress: () => void;
 };
 
 const PerformanceListItem = (props: iPerformanceListItemProps) => {
-  const { contender, ranking, size, onPress } = props;
+  const { tmdbPersonId, tmdbMovieId, ranking, size, width, onPress } = props;
 
-  const [person, setPerson] = useState<iCachedTmdbPerson | undefined>();
+  const [tmdbPerson, setTmdbPerson] = useState<iCachedTmdbPerson | undefined>();
   const [tmdbMovie, setTmdbMovie] = useState<iCachedTmdbMovie | undefined>();
 
   useSubscriptionEffect(async () => {
     // get tmdb person info
-    if (contender.contenderPersonId) {
-      const { data: p } = await DS.getPersonById(contender.contenderPersonId);
-      if (p) {
-        TmdbServices.getTmdbPerson(p.tmdbId).then((p) => {
-          if (p.status === 'success') {
-            setPerson(p.data);
-          }
-        });
+    TmdbServices.getTmdbPerson(tmdbPersonId).then((p) => {
+      if (p.status === 'success') {
+        setTmdbPerson(p.data);
       }
-    }
-    const { data: movie } = await DS.getMovieById(contender.contenderMovieId);
-    if (!movie) return;
+    });
     // get movie tmdb info
-    TmdbServices.getTmdbMovie(movie.tmdbId).then((m) => {
+    TmdbServices.getTmdbMovie(tmdbMovieId).then((m) => {
       if (m.status === 'success') {
         setTmdbMovie(m.data);
       }
     });
-  }, [contender]);
+  }, [tmdbMovieId, tmdbPersonId]);
 
-  // TODO: create better loading state
+  const height = width
+    ? getPosterDimensionsByWidth(width).height
+    : size || PosterSize.MEDIUM;
 
   return (
     <View
       style={{
         width: '100%',
-        height: size || PosterSize.MEDIUM,
+        height,
         marginTop: 10,
       }}
     >
       <View style={{ flexDirection: 'row' }}>
         <BodyLarge style={{ marginLeft: 10 }}>{ranking?.toString() || ''}</BodyLarge>
         <Poster
-          path={person?.profilePath || null}
-          title={person?.name || ''}
-          size={size}
+          path={tmdbPerson?.profilePath || null}
+          title={tmdbPerson?.name || ''}
+          width={width}
           onPress={onPress}
         />
         <View style={{ flexDirection: 'column' }}>
           <BodyLarge style={{ marginTop: 10, marginLeft: 10 }}>
-            {person?.name || ''}
+            {tmdbPerson?.name || ''}
           </BodyLarge>
           {tmdbMovie ? (
             <BodyLarge style={{ marginTop: 10, marginLeft: 10 }}>

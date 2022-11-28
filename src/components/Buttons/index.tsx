@@ -1,5 +1,8 @@
 import React from 'react';
 import { Button, Spinner } from '@ui-kitten/components';
+import COLORS from '../../constants/colors';
+import { TouchableOpacity } from 'react-native';
+import { Label } from '../Text';
 
 interface iButtonProps {
   text: string;
@@ -34,14 +37,26 @@ export const SmallButton = (props: iButtonProps) => (
 );
 
 export const TouchableText = (props: iButtonProps) => (
-  <Button
+  <TouchableOpacity
     onPress={props.onPress}
-    status="primary"
-    size="small"
+    // status="primary"
+    // size="small"
     disabled={props.disabled}
-    appearance={'ghost'}
-    style={props.style}
+    // appearance={'ghost'}
+    style={{
+      fontWeight: '400',
+      color: COLORS.lightest,
+      // @ts-ignore
+      ...props.style,
+    }}
   >
-    {props.text}
-  </Button>
+    <Label
+      style={{
+        // textDecorationLine: 'underline',
+        color: COLORS.secondary,
+      }}
+    >
+      {props.text}
+    </Label>
+  </TouchableOpacity>
 );

@@ -1,4 +1,5 @@
-import { Category, CategoryType, Contender, Event } from '../models';
+import { CategoryType } from '../API';
+import { iPrediction } from '../types';
 
 export type MainParamList = {
   BottomTabNavigator: undefined;
@@ -9,60 +10,30 @@ export type MainParamList = {
   };
 };
 
-export type GlobalParamList = {
+export type PredictionsParamList = {
+  Profile: undefined;
   EventSelect: undefined;
-  CategorySelect: {
-    event: Event;
-  };
-  Contenders: {
-    category: Category;
+  EventPredictions: undefined;
+  Category: {
+    isSelectable?: boolean;
+    onPressItem?: (contenderId: string) => void;
   };
   ContenderDetails: {
     categoryType: CategoryType;
-    contender: Contender;
+    contenderId: string;
     personTmdb?: number | undefined;
   };
-};
-
-export type PersonalParamList = {
-  EventSelect: undefined;
-  CategorySelect: {
-    event: Event;
+  AddPredictions: {
+    initialPredictions: iPrediction[];
+    onFinish: (predictions: iPrediction[]) => void;
   };
-  Contenders: {
-    category: Category;
-  };
-  CreateContender: {
-    category: Category;
-  };
-  ContenderDetails: {
-    categoryType: CategoryType;
-    contender: Contender;
-    personTmdb?: number | undefined;
-  };
-  AddContenders: {
-    category: Category;
-  };
+  CreateContender: undefined;
 };
 
 export type DevParamList = {
   Dev: undefined;
 };
 
-export type CreateContenderParamList = {
-  CreateContender: {
-    category: Category;
-  };
-  ConfirmContender: {
-    tmdbId: number;
-    category: Category;
-  };
-};
-
 export type ProfileParamList = {
   Profile: undefined;
-};
-
-export type PersonalPredictionsParamList = {
-  PersonalPredictions: undefined;
 };
