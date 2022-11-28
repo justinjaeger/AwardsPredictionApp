@@ -17,12 +17,8 @@ const getCommunityPredictionsByEvent = async (event: iEvent) => {
   contenders.forEach((con) => {
     if (!con) return;
     const categoryId = con.categoryContendersId || '';
-    const categoryName = con.category.name;
     const contenderPredictions = con?.predictions?.items;
     if (!contenderPredictions) return;
-
-    if (!categoryName) return; // shouldn't happen
-
     const np: iNumberPredicting = {};
     contenderPredictions.forEach((cp) => {
       const someUsersRanking = cp?.ranking || 0;

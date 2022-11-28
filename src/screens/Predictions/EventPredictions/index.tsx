@@ -95,9 +95,9 @@ const EventPredictions = (props: { tab: 'personal' | 'community' }) => {
           <LoadingStatue />
         </Animated.View>
         <Animated.ScrollView
-          style={{ opacity: bodyOpacity }}
+          style={{ opacity: bodyOpacity, width: '100%' }}
           contentContainerStyle={{
-            alignItems: 'center',
+            alignItems: 'flex-start',
             paddingBottom: 100,
           }}
         >
