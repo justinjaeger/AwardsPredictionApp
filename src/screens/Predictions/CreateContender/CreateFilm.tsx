@@ -47,7 +47,7 @@ const CreateFilm = () => {
   useAsyncEffect(async () => {
     if (isComplete && selectedTmdbId) {
       const tmdbMovie = await TmdbMovieCache.get(selectedTmdbId);
-      Snackbar.success(`Added ${tmdbMovie?.title || 'film'} to predictions`);
+      Snackbar.success(`Added ${tmdbMovie?.title || 'film'} to list`);
       resetSearch();
     }
   }, [isComplete]);

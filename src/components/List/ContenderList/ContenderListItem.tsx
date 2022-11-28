@@ -136,12 +136,18 @@ const ContenderListItem = (props: iContenderListItemProps) => {
     onPressThumbnail && onPressThumbnail(prediction);
   };
 
+  const categoryName = CategoryName[category.name];
+  const catInfo = tmdbMovie?.categoryInfo?.[categoryName];
+  const categoryInfo = catInfo ? catInfo?.join(', ') : undefined;
+  const communityRankings =
+    variant === 'community' ? prediction.communityRankings : undefined;
+
   let title = '';
   let subtitle = '';
   switch (categoryType) {
     case CategoryType.FILM:
       title = tmdbMovie?.title || '';
-      subtitle = movieStudio || '';
+      subtitle = categoryInfo || movieStudio || '';
       break;
     case CategoryType.PERFORMANCE:
       if (!tmdbPerson) break;
@@ -153,11 +159,6 @@ const ContenderListItem = (props: iContenderListItemProps) => {
       subtitle = tmdbMovie?.title || '';
       break;
   }
-
-  const categoryName = CategoryName[category.name];
-  const categoryInfo = tmdbMovie?.categoryInfo?.[categoryName];
-  const communityRankings =
-    variant === 'community' ? prediction.communityRankings : undefined;
 
   const fadeBottom = selected !== true && variant === 'search';
 
@@ -224,7 +225,7 @@ const ContenderListItem = (props: iContenderListItemProps) => {
                   style={{
                     flex: 1,
                     maxHeight: fadeBottom ? height + 15 : height,
-                    minHeight: fadeBottom ? undefined : height,
+                    minHeight: height,
                     overflow: 'hidden',
                     height: '100%',
                   }}
@@ -246,9 +247,6 @@ const ContenderListItem = (props: iContenderListItemProps) => {
                 >
                   {subtitle}
                 </Label>
-                {categoryInfo ? (
-                  <Label style={{ marginLeft: 10 }}>{categoryInfo.join(', ')}</Label>
-                ) : null}
               </Animated.View>
             </MaskedView>
             {communityRankings ? (

@@ -167,7 +167,7 @@ const AddPredictions = () => {
             }}
           >
             <BodyLarge style={{ textAlign: 'center', lineHeight: 30 }}>
-              {'No predictions selected.\nTap contender to add!'}
+              {'No predictions selected. Tap to add!'}
             </BodyLarge>
           </View>
         ) : null}
