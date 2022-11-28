@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 /** Async Storage Functions (to persist data when user closes app)
  * We're not exporting the async functions because we ONLY want to use them in here, or else syncing persisted state with this context is annoying
+ * The purpose of this is to keep this context in sync with the async storage for the user's login info
  */
 
 enum AsyncStorageKeys {
