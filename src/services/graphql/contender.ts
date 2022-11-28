@@ -165,10 +165,25 @@ export const createActingContender = async (params: {
 export const createSongContender = async (params: {
   eventId: string;
   categoryId: string;
-  movieId: string;
-  songId: string;
+  movieTmdbId: number;
+  title: string;
+  artist: string;
 }): Promise<iApiResponse<any>> => {
-  const { eventId, categoryId, movieId, songId } = params;
+  const { eventId, categoryId, movieTmdbId, title, artist } = params;
+  const { data: movieResponse } = await ApiServices.getOrCreateMovie(movieTmdbId);
+  const movieId = movieResponse?.getMovie?.id;
+  if (!movieId) {
+    return { status: 'error' };
+  }
+  const { data: personResponse } = await ApiServices.getOrCreateSong({
+    title,
+    artist,
+    movieId,
+  });
+  const songId = personResponse?.getSong?.id;
+  if (!songId) {
+    return { status: 'error' };
+  }
   try {
     const contenderParams = {
       eventId,

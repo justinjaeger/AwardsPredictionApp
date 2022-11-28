@@ -149,10 +149,7 @@ const ContenderListItem = (props: iContenderListItemProps) => {
       subtitle = tmdbMovie?.title || '';
       break;
     case CategoryType.SONG:
-      title =
-        (prediction.contenderSong?.title || '') +
-        ', ' +
-        (prediction.contenderSong?.artist || '');
+      title = prediction.contenderSong?.title || '';
       subtitle = tmdbMovie?.title || '';
       break;
   }

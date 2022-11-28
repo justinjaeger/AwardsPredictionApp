@@ -65,7 +65,7 @@ const BasicModal = (props: iBasicModalProps) => {
                 height: height || '50%',
                 position: 'relative',
                 backgroundColor: COLORS.primary,
-                borderRadius: theme.borderRadius,
+                borderRadius: 10,
                 overflow: 'hidden',
               }}
             >

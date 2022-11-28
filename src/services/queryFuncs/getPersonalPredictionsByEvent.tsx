@@ -18,7 +18,7 @@ const getPersonalPredictionsByEvent = async (eventId: string, userId: string) =>
       contenderId: p?.contenderPredictionsId || '',
       contenderMovie: p?.contender.movie || undefined,
       contenderPerson: p?.contender.person || undefined,
-      contenderSongId: p?.contender.song || undefined,
+      contenderSong: p?.contender.song || undefined,
     }));
     const sortedPredictions = sortPersonalPredictions(predictions);
     data[categoryId] = sortedPredictions;
