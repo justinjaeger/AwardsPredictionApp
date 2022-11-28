@@ -8,11 +8,10 @@ import Category from '../screens/Predictions/Category';
 import EventSelect from '../screens/Predictions/EventSelect';
 import EventPredictions from '../screens/Predictions/EventPredictions';
 import ProfileNavigator from './ProfileNavigator';
-import PersonalPredictionsNavigator from './PersonalPredictionsNavigator';
 import theme from '../constants/theme';
 import { headerSettings } from '../constants';
-import CreateContender from '../screens/Predictions/Personal/CreateContender';
-import AddPredictions from '../screens/Predictions/Personal/AddPredictions.tsx';
+import CreateContender from '../screens/Predictions/CreateContender';
+import AddPredictions from '../screens/Predictions/AddPredictions.tsx';
 
 const { Navigator, Screen } = createStackNavigator<PredictionsParamList>();
 
@@ -63,17 +62,6 @@ const PredictionsNavigator = () => {
         component={ContenderDetailsScreen}
         options={{
           headerTitle: 'Contender Details',
-          headerLeft: BackButton,
-          cardStyle: theme.cardStyle,
-          ...headerSettings,
-        }}
-      />
-      <Screen
-        name="PersonalPredictions"
-        component={PersonalPredictionsNavigator}
-        options={{
-          headerTitle: 'Personal Predictions',
-          headerShown: false,
           headerLeft: BackButton,
           cardStyle: theme.cardStyle,
           ...headerSettings,

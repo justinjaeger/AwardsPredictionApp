@@ -1,28 +1,28 @@
 import React, { useState } from 'react';
-import { SubmitButton } from '../../../../components/Buttons';
-import SearchInput from '../../../../components/Inputs/SearchInput';
-import SearchResultsList from '../../../../components/List/SearchResultsList';
-import TmdbServices from '../../../../services/tmdb';
-import { iSearchData } from '../../../../services/tmdb/search';
-import Snackbar from '../../../../components/Snackbar';
-import ContenderDetails from '../../../../components/ContenderDetails';
-import { Body } from '../../../../components/Text';
-import { IconButton } from '../../../../components/Buttons/IconButton';
+import { SubmitButton } from '../../../components/Buttons';
+import SearchInput from '../../../components/Inputs/SearchInput';
+import SearchResultsList from '../../../components/List/SearchResultsList';
+import TmdbServices from '../../../services/tmdb';
+import { iSearchData } from '../../../services/tmdb/search';
+import Snackbar from '../../../components/Snackbar';
+import ContenderDetails from '../../../components/ContenderDetails';
+import { Body } from '../../../components/Text';
+import { IconButton } from '../../../components/Buttons/IconButton';
 import { View } from 'react-native';
-import FormInput from '../../../../components/Inputs/FormInput';
-import ApiServices from '../../../../services/graphql';
-import { CategoryType, GetMovieQuery } from '../../../../API';
-import { useTypedNavigation } from '../../../../util/hooks';
-import { CreateContenderParamList } from '../../../../navigation/types';
-import { useCategory } from '../../../../context/CategoryContext';
-import { iCategory, iEvent } from '../../../../store/types';
+import FormInput from '../../../components/Inputs/FormInput';
+import ApiServices from '../../../services/graphql';
+import { CategoryType, GetMovieQuery } from '../../../API';
+import { useTypedNavigation } from '../../../util/hooks';
+import { useCategory } from '../../../context/CategoryContext';
+import { iCategory, iEvent } from '../../../store/types';
+import { PredictionsParamList } from '../../../navigation/types';
 
 const MAX_CHAR_COUNT = 100;
 
 // TODO: should only be able to do this if logged in
 const CreateSong = () => {
   const { category: _category, event: _event } = useCategory();
-  const navigation = useTypedNavigation<CreateContenderParamList>();
+  const navigation = useTypedNavigation<PredictionsParamList>();
 
   const category = _category as iCategory;
   const event = _event as iEvent;
@@ -73,7 +73,8 @@ const CreateSong = () => {
       movieId,
     });
     if (!song?.getSong) return;
-    await ApiServices.getOrCreateSongContender({
+    await ApiServices.createSongContender({
+      eventId: event.id,
       categoryId: category.id,
       movieId,
       songId: song.getSong.id,

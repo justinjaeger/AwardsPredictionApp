@@ -1,19 +1,19 @@
 import React, { useLayoutEffect } from 'react';
-import { CreateContenderParamList } from '../../../../navigation/types';
-import { getAwardsBodyCategories } from '../../../../constants/categories';
+import { getAwardsBodyCategories } from '../../../constants/categories';
 import CreateFilm from './CreateFilm';
 import CreatePerformance from './CreatePerformance';
 import CreateSong from './CreateSong';
-import { useTypedNavigation } from '../../../../util/hooks';
-import { AwardsBody, CategoryType } from '../../../../API';
-import { useCategory } from '../../../../context/CategoryContext';
-import { iCategory, iEvent } from '../../../../store/types';
-import BackgroundWrapper from '../../../../components/BackgroundWrapper';
+import { useTypedNavigation } from '../../../util/hooks';
+import { AwardsBody, CategoryType } from '../../../API';
+import { useCategory } from '../../../context/CategoryContext';
+import { iCategory, iEvent } from '../../../store/types';
+import BackgroundWrapper from '../../../components/BackgroundWrapper';
+import { PredictionsParamList } from '../../../navigation/types';
 
 // TODO: should only be able to do this if logged in
 const CreateContender = () => {
   const { category: _category, event: _event } = useCategory();
-  const navigation = useTypedNavigation<CreateContenderParamList>();
+  const navigation = useTypedNavigation<PredictionsParamList>();
 
   const category = _category as iCategory;
   const event = _event as iEvent;

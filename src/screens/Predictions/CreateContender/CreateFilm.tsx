@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
-import SearchInput from '../../../../components/Inputs/SearchInput';
-import TmdbServices from '../../../../services/tmdb';
-import { iSearchData } from '../../../../services/tmdb/search';
-import Snackbar from '../../../../components/Snackbar';
-import { Body } from '../../../../components/Text';
-import TmdbMovieCache from '../../../../services/cache/tmdbMovie';
+import SearchInput from '../../../components/Inputs/SearchInput';
+import TmdbServices from '../../../services/tmdb';
+import { iSearchData } from '../../../services/tmdb/search';
+import Snackbar from '../../../components/Snackbar';
+import { Body } from '../../../components/Text';
+import TmdbMovieCache from '../../../services/cache/tmdbMovie';
 import { View } from 'react-native';
-import { useCategory } from '../../../../context/CategoryContext';
-import { iCategory, iEvent, iPrediction } from '../../../../store/types';
-import COLORS from '../../../../constants/colors';
-import MovieListSearch from '../../../../components/MovieList/MovieListSearch';
-import LoadingStatueModal from '../../../../components/LoadingStatueModal';
-import useMutationCreateContender from '../../../../hooks/createContender';
-import { useAsyncEffect } from '../../../../util/hooks';
-import useQueryCommunityEvent from '../../../../hooks/getCommunityEvent';
-import { FAB } from '../../../../components/Buttons/FAB';
-import { CategoryType } from '../../../../API';
+import { useCategory } from '../../../context/CategoryContext';
+import { iCategory, iEvent, iPrediction } from '../../../store/types';
+import COLORS from '../../../constants/colors';
+import MovieListSearch from '../../../components/MovieList/MovieListSearch';
+import LoadingStatueModal from '../../../components/LoadingStatueModal';
+import useMutationCreateContender from '../../../hooks/createContender';
+import { useAsyncEffect } from '../../../util/hooks';
+import useQueryCommunityEvent from '../../../hooks/getCommunityEvent';
+import { FAB } from '../../../components/Buttons/FAB';
+import { CategoryType } from '../../../API';
 
 // TODO: should only be able to do this if logged in
 const CreateFilm = () => {

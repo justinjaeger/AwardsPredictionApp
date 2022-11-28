@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { Alert, View } from 'react-native';
-import { PredictionsParamList } from '../../../../navigation/types';
-import { useTypedNavigation } from '../../../../util/hooks';
-import { useCategory } from '../../../../context/CategoryContext';
-import { iCategory, iEvent, iPrediction } from '../../../../store/types';
-import { BodyLarge } from '../../../../components/Text';
-import useQueryCommunityEvent from '../../../../hooks/getCommunityEvent';
-import { CategoryHeader } from '../../styles';
-import HeaderButton from '../../../../components/HeaderButton';
-import BackgroundWrapper from '../../../../components/BackgroundWrapper';
+import { PredictionsParamList } from '../../../navigation/types';
+import { useTypedNavigation } from '../../../util/hooks';
+import { useCategory } from '../../../context/CategoryContext';
+import { iCategory, iEvent, iPrediction } from '../../../store/types';
+import { BodyLarge } from '../../../components/Text';
+import useQueryCommunityEvent from '../../../hooks/getCommunityEvent';
+import { CategoryHeader } from '../styles';
+import HeaderButton from '../../../components/HeaderButton';
+import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import { RouteProp, useRoute } from '@react-navigation/native';
-import BackButton from '../../../../components/Buttons/BackButton';
+import BackButton from '../../../components/Buttons/BackButton';
 import _ from 'lodash';
-import MovieListSelectable from '../../../../components/MovieList/MovieListSelectable';
-import { FAB } from '../../../../components/Buttons/FAB';
+import MovieListSelectable from '../../../components/MovieList/MovieListSelectable';
+import { FAB } from '../../../components/Buttons/FAB';
 
 // TODO: really, this is adding OR deleting contenders
 

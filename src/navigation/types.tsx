@@ -23,7 +23,6 @@ export type PredictionsParamList = {
     contenderId: string;
     personTmdb?: number | undefined;
   };
-  PersonalPredictions: undefined;
   AddPredictions: {
     initialPredictions: iPrediction[];
     onFinish: (predictions: iPrediction[]) => void;
@@ -31,35 +30,10 @@ export type PredictionsParamList = {
   CreateContender: undefined;
 };
 
-export type PersonalParamList = {
-  EditPredictions: undefined;
-  AddPredictions: undefined;
-  CreateContender: undefined;
-  ContenderDetails: {
-    categoryType: CategoryType;
-    contenderId: string;
-    personTmdb?: number | undefined;
-  }; // duplicated but it's better for the typed navigation
-};
-
 export type DevParamList = {
   Dev: undefined;
 };
 
-export type CreateContenderParamList = {
-  CreateContender: {
-    categoryId: string;
-  };
-  ConfirmContender: {
-    tmdbId: number;
-    categoryId: string;
-  };
-};
-
 export type ProfileParamList = {
   Profile: undefined;
-};
-
-export type PersonalPredictionsParamList = {
-  PersonalPredictions: undefined;
 };
