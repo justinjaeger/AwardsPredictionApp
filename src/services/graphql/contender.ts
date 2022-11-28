@@ -10,6 +10,7 @@ import {
 } from '../../API';
 import * as mutations from '../../graphql/mutations';
 import * as queries from '../../graphql/queries';
+import * as customQueries from '../../graphqlCustom/queries';
 import { GraphqlAPI, handleError, iApiResponse } from '../utils';
 import { getEventById } from './event';
 import { getPredictionsByContender } from './prediction';
@@ -245,7 +246,7 @@ export const getContendersByEvent = async (
     const { data, errors } = await GraphqlAPI<
       ListContendersQuery,
       ListContendersQueryVariables
-    >(queries.listContenders, {
+    >(customQueries.listContenders, {
       filter: {
         eventContendersId: { eq: eventId },
       },

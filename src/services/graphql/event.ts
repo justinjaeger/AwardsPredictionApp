@@ -12,13 +12,14 @@ import {
 } from '../../API';
 import * as mutations from '../../graphql/mutations';
 import * as queries from '../../graphql/queries';
+import * as customQueries from '../../graphqlCustom/queries';
 import { GraphqlAPI, handleError, iApiResponse } from '../utils';
 import { deleteCategory, getCategoriesByEvent } from './category';
 
 export const getAllEvents = async (): Promise<iApiResponse<ListEventsQuery>> => {
   try {
     const { data, errors } = await GraphqlAPI<ListEventsQuery, ListEventsQueryVariables>(
-      queries.listEvents,
+      customQueries.listEvents,
     );
     if (!data?.listEvents) {
       throw new Error(JSON.stringify(errors));

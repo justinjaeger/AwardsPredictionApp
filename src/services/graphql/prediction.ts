@@ -14,6 +14,7 @@ import {
 } from '../../API';
 import * as mutations from '../../graphql/mutations';
 import * as queries from '../../graphql/queries';
+import * as customQueries from '../../graphqlCustom/queries';
 import { GraphqlAPI, handleError, iApiResponse } from '../utils';
 
 // there can only be one prediction set from these parameters
@@ -199,7 +200,7 @@ export const getPersonalPredictionsByEvent = async (
     const { data: maybePreSets, errors } = await GraphqlAPI<
       ListPredictionSetsQuery,
       ListPredictionSetsQueryVariables
-    >(queries.listPredictionSets, {
+    >(customQueries.listPredictionSets, {
       filter: {
         predictionSetEventId: { eq: eventId },
         predictionSetUserId: { eq: userId },
@@ -211,55 +212,6 @@ export const getPersonalPredictionsByEvent = async (
     return { status: 'success', data: maybePreSets };
   } catch (err) {
     return handleError('error getting personal predictions by event', err);
-  }
-};
-
-// TODO: make lambda function since sorta big
-export const getPersonalPredictionsByCategory = async (
-  categoryId: string,
-  userId: string,
-): Promise<iApiResponse<ListPredictionSetsQuery>> => {
-  try {
-    //
-    const { data: maybePreSets, errors } = await GraphqlAPI<
-      ListPredictionSetsQuery,
-      ListPredictionSetsQueryVariables
-    >(queries.listPredictionSets, {
-      filter: {
-        predictionSetCategoryId: { eq: categoryId },
-        predictionSetUserId: { eq: userId },
-      },
-    });
-    if (!maybePreSets?.listPredictionSets) {
-      throw new Error(JSON.stringify(errors));
-    }
-    return { status: 'success', data: maybePreSets };
-  } catch (err) {
-    return handleError('error getting personal predictions by category', err);
-  }
-};
-
-// TODO: make lambda function since sorta big
-// INCOMPLETE: this needs to get ALL prediction sets for every user
-// This is going to be complicated.
-// For that we can basically forEach getContendersByCategory; or even lazy load those results
-export const getCommunityPredictionsByCategory = async (
-  categoryId: string,
-): Promise<iApiResponse<ListPredictionSetsQuery>> => {
-  try {
-    //
-    const { data: maybePreSets, errors } = await GraphqlAPI<
-      ListPredictionSetsQuery,
-      ListPredictionSetsQueryVariables
-    >(queries.listPredictionSets, {
-      filter: { predictionSetCategoryId: { eq: categoryId } },
-    });
-    if (!maybePreSets?.listPredictionSets) {
-      throw new Error(JSON.stringify(errors));
-    }
-    return { status: 'success', data: maybePreSets };
-  } catch (err) {
-    return handleError('error getting personal predictions', err);
   }
 };
 
