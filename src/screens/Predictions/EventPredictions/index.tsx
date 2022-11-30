@@ -33,7 +33,7 @@ const EventPredictions = (props: { tab: 'personal' | 'community' }) => {
 
   // define the header
   useLayoutEffect(() => {
-    const headerTitle = eventToString(event.awardsBody, event.type, event.year);
+    const headerTitle = eventToString(event.awardsBody, event.year);
     navigation.setOptions({
       headerTitle,
     });

@@ -1,4 +1,4 @@
-import { AwardsBody, CategoryName, CategoryType, EventType } from '../API';
+import { AwardsBody, CategoryName, CategoryType } from '../API';
 
 export enum QueryKeys {
   EVENTS = 'events',
@@ -61,7 +61,6 @@ export type iEvent = {
   categories: iIndexedCategories;
   awardsBody: AwardsBody;
   year: number;
-  type: EventType;
   expiration: string;
   isActive: string | undefined;
 };

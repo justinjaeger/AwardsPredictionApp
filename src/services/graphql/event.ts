@@ -3,7 +3,6 @@ import {
   CreateEventMutation,
   DeleteEventMutation,
   AwardsBody,
-  EventType,
   ListEventsQueryVariables,
   CreateEventMutationVariables,
   DeleteEventMutationVariables,
@@ -30,7 +29,6 @@ export const getAllEvents = async (): Promise<iApiResponse<ListEventsQuery>> => 
 export const getUniqueEvents = async (
   awardsBody: AwardsBody,
   year: number,
-  type: EventType,
 ): Promise<iApiResponse<ListEventsQuery>> => {
   try {
     // enforce uniqueness - don't allow duplicate events to be created
@@ -40,7 +38,6 @@ export const getUniqueEvents = async (
         filter: {
           awardsBody: { eq: awardsBody },
           year: { eq: year },
-          type: { eq: type },
         },
       },
     );
@@ -56,11 +53,10 @@ export const getUniqueEvents = async (
 export const createEvent = async (
   awardsBody: AwardsBody,
   year: number,
-  type: EventType,
 ): Promise<iApiResponse<CreateEventMutation>> => {
   try {
     // enforce uniqueness - don't allow duplicate events to be created
-    const { data: d } = await getUniqueEvents(awardsBody, year, type);
+    const { data: d } = await getUniqueEvents(awardsBody, year);
     if (!d) return { status: 'error' };
     if (d.listEvents?.items.length !== 0) {
       return { status: 'error', message: 'This event has already been created' };
@@ -73,7 +69,7 @@ export const createEvent = async (
     >(
       mutations.createEvent,
       // NOTE: check if obeys @default setting in schema.graphql for isActive field, which is x by default
-      { input: { awardsBody, year, type } },
+      { input: { awardsBody, year } },
     );
     if (!data?.createEvent) {
       throw new Error(JSON.stringify(errors));
