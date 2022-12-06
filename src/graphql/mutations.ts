@@ -95,9 +95,7 @@ export const createPredictionSet = /* GraphQL */ `
               winsOpen
               nominationDateTime
               winDateTime
-              type
-              expiration
-              isActive
+              status
               createdAt
               updatedAt
             }
@@ -138,9 +136,7 @@ export const createPredictionSet = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -165,9 +161,7 @@ export const createPredictionSet = /* GraphQL */ `
               winsOpen
               nominationDateTime
               winDateTime
-              type
-              expiration
-              isActive
+              status
               createdAt
               updatedAt
             }
@@ -227,9 +221,7 @@ export const createPredictionSet = /* GraphQL */ `
         winsOpen
         nominationDateTime
         winDateTime
-        type
-        expiration
-        isActive
+        status
         createdAt
         updatedAt
       }
@@ -252,9 +244,7 @@ export const createPredictionSet = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -288,9 +278,7 @@ export const createPredictionSet = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -333,9 +321,7 @@ export const createPredictionSet = /* GraphQL */ `
           winsOpen
           nominationDateTime
           winDateTime
-          type
-          expiration
-          isActive
+          status
           createdAt
           updatedAt
         }
@@ -354,9 +340,7 @@ export const createPredictionSet = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -381,9 +365,7 @@ export const createPredictionSet = /* GraphQL */ `
               winsOpen
               nominationDateTime
               winDateTime
-              type
-              expiration
-              isActive
+              status
               createdAt
               updatedAt
             }
@@ -471,9 +453,7 @@ export const createPredictionSet = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -498,9 +478,7 @@ export const createPredictionSet = /* GraphQL */ `
               winsOpen
               nominationDateTime
               winDateTime
-              type
-              expiration
-              isActive
+              status
               createdAt
               updatedAt
             }
@@ -611,9 +589,7 @@ export const updatePredictionSet = /* GraphQL */ `
               winsOpen
               nominationDateTime
               winDateTime
-              type
-              expiration
-              isActive
+              status
               createdAt
               updatedAt
             }
@@ -654,9 +630,7 @@ export const updatePredictionSet = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -681,9 +655,7 @@ export const updatePredictionSet = /* GraphQL */ `
               winsOpen
               nominationDateTime
               winDateTime
-              type
-              expiration
-              isActive
+              status
               createdAt
               updatedAt
             }
@@ -743,9 +715,7 @@ export const updatePredictionSet = /* GraphQL */ `
         winsOpen
         nominationDateTime
         winDateTime
-        type
-        expiration
-        isActive
+        status
         createdAt
         updatedAt
       }
@@ -768,9 +738,7 @@ export const updatePredictionSet = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -804,9 +772,7 @@ export const updatePredictionSet = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -849,9 +815,7 @@ export const updatePredictionSet = /* GraphQL */ `
           winsOpen
           nominationDateTime
           winDateTime
-          type
-          expiration
-          isActive
+          status
           createdAt
           updatedAt
         }
@@ -870,9 +834,7 @@ export const updatePredictionSet = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -897,9 +859,7 @@ export const updatePredictionSet = /* GraphQL */ `
               winsOpen
               nominationDateTime
               winDateTime
-              type
-              expiration
-              isActive
+              status
               createdAt
               updatedAt
             }
@@ -987,9 +947,7 @@ export const updatePredictionSet = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -1014,9 +972,7 @@ export const updatePredictionSet = /* GraphQL */ `
               winsOpen
               nominationDateTime
               winDateTime
-              type
-              expiration
-              isActive
+              status
               createdAt
               updatedAt
             }
@@ -1127,9 +1083,7 @@ export const deletePredictionSet = /* GraphQL */ `
               winsOpen
               nominationDateTime
               winDateTime
-              type
-              expiration
-              isActive
+              status
               createdAt
               updatedAt
             }
@@ -1170,9 +1124,7 @@ export const deletePredictionSet = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -1197,9 +1149,7 @@ export const deletePredictionSet = /* GraphQL */ `
               winsOpen
               nominationDateTime
               winDateTime
-              type
-              expiration
-              isActive
+              status
               createdAt
               updatedAt
             }
@@ -1259,9 +1209,7 @@ export const deletePredictionSet = /* GraphQL */ `
         winsOpen
         nominationDateTime
         winDateTime
-        type
-        expiration
-        isActive
+        status
         createdAt
         updatedAt
       }
@@ -1284,9 +1232,7 @@ export const deletePredictionSet = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -1320,9 +1266,7 @@ export const deletePredictionSet = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -1365,9 +1309,7 @@ export const deletePredictionSet = /* GraphQL */ `
           winsOpen
           nominationDateTime
           winDateTime
-          type
-          expiration
-          isActive
+          status
           createdAt
           updatedAt
         }
@@ -1386,9 +1328,7 @@ export const deletePredictionSet = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -1413,9 +1353,7 @@ export const deletePredictionSet = /* GraphQL */ `
               winsOpen
               nominationDateTime
               winDateTime
-              type
-              expiration
-              isActive
+              status
               createdAt
               updatedAt
             }
@@ -1503,9 +1441,7 @@ export const deletePredictionSet = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -1530,9 +1466,7 @@ export const deletePredictionSet = /* GraphQL */ `
               winsOpen
               nominationDateTime
               winDateTime
-              type
-              expiration
-              isActive
+              status
               createdAt
               updatedAt
             }
@@ -1643,9 +1577,7 @@ export const createHistoryPredictionSet = /* GraphQL */ `
               winsOpen
               nominationDateTime
               winDateTime
-              type
-              expiration
-              isActive
+              status
               createdAt
               updatedAt
             }
@@ -1686,9 +1618,7 @@ export const createHistoryPredictionSet = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -1713,9 +1643,7 @@ export const createHistoryPredictionSet = /* GraphQL */ `
               winsOpen
               nominationDateTime
               winDateTime
-              type
-              expiration
-              isActive
+              status
               createdAt
               updatedAt
             }
@@ -1775,9 +1703,7 @@ export const createHistoryPredictionSet = /* GraphQL */ `
         winsOpen
         nominationDateTime
         winDateTime
-        type
-        expiration
-        isActive
+        status
         createdAt
         updatedAt
       }
@@ -1800,9 +1726,7 @@ export const createHistoryPredictionSet = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -1836,9 +1760,7 @@ export const createHistoryPredictionSet = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -1881,9 +1803,7 @@ export const createHistoryPredictionSet = /* GraphQL */ `
           winsOpen
           nominationDateTime
           winDateTime
-          type
-          expiration
-          isActive
+          status
           createdAt
           updatedAt
         }
@@ -1902,9 +1822,7 @@ export const createHistoryPredictionSet = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -1929,9 +1847,7 @@ export const createHistoryPredictionSet = /* GraphQL */ `
               winsOpen
               nominationDateTime
               winDateTime
-              type
-              expiration
-              isActive
+              status
               createdAt
               updatedAt
             }
@@ -2019,9 +1935,7 @@ export const createHistoryPredictionSet = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -2046,9 +1960,7 @@ export const createHistoryPredictionSet = /* GraphQL */ `
               winsOpen
               nominationDateTime
               winDateTime
-              type
-              expiration
-              isActive
+              status
               createdAt
               updatedAt
             }
@@ -2159,9 +2071,7 @@ export const updateHistoryPredictionSet = /* GraphQL */ `
               winsOpen
               nominationDateTime
               winDateTime
-              type
-              expiration
-              isActive
+              status
               createdAt
               updatedAt
             }
@@ -2202,9 +2112,7 @@ export const updateHistoryPredictionSet = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -2229,9 +2137,7 @@ export const updateHistoryPredictionSet = /* GraphQL */ `
               winsOpen
               nominationDateTime
               winDateTime
-              type
-              expiration
-              isActive
+              status
               createdAt
               updatedAt
             }
@@ -2291,9 +2197,7 @@ export const updateHistoryPredictionSet = /* GraphQL */ `
         winsOpen
         nominationDateTime
         winDateTime
-        type
-        expiration
-        isActive
+        status
         createdAt
         updatedAt
       }
@@ -2316,9 +2220,7 @@ export const updateHistoryPredictionSet = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -2352,9 +2254,7 @@ export const updateHistoryPredictionSet = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -2397,9 +2297,7 @@ export const updateHistoryPredictionSet = /* GraphQL */ `
           winsOpen
           nominationDateTime
           winDateTime
-          type
-          expiration
-          isActive
+          status
           createdAt
           updatedAt
         }
@@ -2418,9 +2316,7 @@ export const updateHistoryPredictionSet = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -2445,9 +2341,7 @@ export const updateHistoryPredictionSet = /* GraphQL */ `
               winsOpen
               nominationDateTime
               winDateTime
-              type
-              expiration
-              isActive
+              status
               createdAt
               updatedAt
             }
@@ -2535,9 +2429,7 @@ export const updateHistoryPredictionSet = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -2562,9 +2454,7 @@ export const updateHistoryPredictionSet = /* GraphQL */ `
               winsOpen
               nominationDateTime
               winDateTime
-              type
-              expiration
-              isActive
+              status
               createdAt
               updatedAt
             }
@@ -2675,9 +2565,7 @@ export const deleteHistoryPredictionSet = /* GraphQL */ `
               winsOpen
               nominationDateTime
               winDateTime
-              type
-              expiration
-              isActive
+              status
               createdAt
               updatedAt
             }
@@ -2718,9 +2606,7 @@ export const deleteHistoryPredictionSet = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -2745,9 +2631,7 @@ export const deleteHistoryPredictionSet = /* GraphQL */ `
               winsOpen
               nominationDateTime
               winDateTime
-              type
-              expiration
-              isActive
+              status
               createdAt
               updatedAt
             }
@@ -2807,9 +2691,7 @@ export const deleteHistoryPredictionSet = /* GraphQL */ `
         winsOpen
         nominationDateTime
         winDateTime
-        type
-        expiration
-        isActive
+        status
         createdAt
         updatedAt
       }
@@ -2832,9 +2714,7 @@ export const deleteHistoryPredictionSet = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -2868,9 +2748,7 @@ export const deleteHistoryPredictionSet = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -2913,9 +2791,7 @@ export const deleteHistoryPredictionSet = /* GraphQL */ `
           winsOpen
           nominationDateTime
           winDateTime
-          type
-          expiration
-          isActive
+          status
           createdAt
           updatedAt
         }
@@ -2934,9 +2810,7 @@ export const deleteHistoryPredictionSet = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -2961,9 +2835,7 @@ export const deleteHistoryPredictionSet = /* GraphQL */ `
               winsOpen
               nominationDateTime
               winDateTime
-              type
-              expiration
-              isActive
+              status
               createdAt
               updatedAt
             }
@@ -3051,9 +2923,7 @@ export const deleteHistoryPredictionSet = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -3078,9 +2948,7 @@ export const deleteHistoryPredictionSet = /* GraphQL */ `
               winsOpen
               nominationDateTime
               winDateTime
-              type
-              expiration
-              isActive
+              status
               createdAt
               updatedAt
             }
@@ -3209,9 +3077,7 @@ export const createPrediction = /* GraphQL */ `
             winsOpen
             nominationDateTime
             winDateTime
-            type
-            expiration
-            isActive
+            status
             createdAt
             updatedAt
           }
@@ -3234,9 +3100,7 @@ export const createPrediction = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -3294,9 +3158,7 @@ export const createPrediction = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -3330,9 +3192,7 @@ export const createPrediction = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -3375,9 +3235,7 @@ export const createPrediction = /* GraphQL */ `
           winsOpen
           nominationDateTime
           winDateTime
-          type
-          expiration
-          isActive
+          status
           createdAt
           updatedAt
         }
@@ -3441,9 +3299,7 @@ export const createPrediction = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -3566,9 +3422,7 @@ export const updatePrediction = /* GraphQL */ `
             winsOpen
             nominationDateTime
             winDateTime
-            type
-            expiration
-            isActive
+            status
             createdAt
             updatedAt
           }
@@ -3591,9 +3445,7 @@ export const updatePrediction = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -3651,9 +3503,7 @@ export const updatePrediction = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -3687,9 +3537,7 @@ export const updatePrediction = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -3732,9 +3580,7 @@ export const updatePrediction = /* GraphQL */ `
           winsOpen
           nominationDateTime
           winDateTime
-          type
-          expiration
-          isActive
+          status
           createdAt
           updatedAt
         }
@@ -3798,9 +3644,7 @@ export const updatePrediction = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -3923,9 +3767,7 @@ export const deletePrediction = /* GraphQL */ `
             winsOpen
             nominationDateTime
             winDateTime
-            type
-            expiration
-            isActive
+            status
             createdAt
             updatedAt
           }
@@ -3948,9 +3790,7 @@ export const deletePrediction = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -4008,9 +3848,7 @@ export const deletePrediction = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -4044,9 +3882,7 @@ export const deletePrediction = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -4089,9 +3925,7 @@ export const deletePrediction = /* GraphQL */ `
           winsOpen
           nominationDateTime
           winDateTime
-          type
-          expiration
-          isActive
+          status
           createdAt
           updatedAt
         }
@@ -4155,9 +3989,7 @@ export const deletePrediction = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -4268,9 +4100,7 @@ export const createEvent = /* GraphQL */ `
             winsOpen
             nominationDateTime
             winDateTime
-            type
-            expiration
-            isActive
+            status
             createdAt
             updatedAt
           }
@@ -4293,9 +4123,7 @@ export const createEvent = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -4363,9 +4191,7 @@ export const createEvent = /* GraphQL */ `
               winsOpen
               nominationDateTime
               winDateTime
-              type
-              expiration
-              isActive
+              status
               createdAt
               updatedAt
             }
@@ -4420,9 +4246,7 @@ export const createEvent = /* GraphQL */ `
             winsOpen
             nominationDateTime
             winDateTime
-            type
-            expiration
-            isActive
+            status
             createdAt
             updatedAt
           }
@@ -4504,9 +4328,7 @@ export const createEvent = /* GraphQL */ `
       winsOpen
       nominationDateTime
       winDateTime
-      type
-      expiration
-      isActive
+      status
       createdAt
       updatedAt
     }
@@ -4557,9 +4379,7 @@ export const updateEvent = /* GraphQL */ `
             winsOpen
             nominationDateTime
             winDateTime
-            type
-            expiration
-            isActive
+            status
             createdAt
             updatedAt
           }
@@ -4582,9 +4402,7 @@ export const updateEvent = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -4652,9 +4470,7 @@ export const updateEvent = /* GraphQL */ `
               winsOpen
               nominationDateTime
               winDateTime
-              type
-              expiration
-              isActive
+              status
               createdAt
               updatedAt
             }
@@ -4709,9 +4525,7 @@ export const updateEvent = /* GraphQL */ `
             winsOpen
             nominationDateTime
             winDateTime
-            type
-            expiration
-            isActive
+            status
             createdAt
             updatedAt
           }
@@ -4793,9 +4607,7 @@ export const updateEvent = /* GraphQL */ `
       winsOpen
       nominationDateTime
       winDateTime
-      type
-      expiration
-      isActive
+      status
       createdAt
       updatedAt
     }
@@ -4846,9 +4658,7 @@ export const deleteEvent = /* GraphQL */ `
             winsOpen
             nominationDateTime
             winDateTime
-            type
-            expiration
-            isActive
+            status
             createdAt
             updatedAt
           }
@@ -4871,9 +4681,7 @@ export const deleteEvent = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -4941,9 +4749,7 @@ export const deleteEvent = /* GraphQL */ `
               winsOpen
               nominationDateTime
               winDateTime
-              type
-              expiration
-              isActive
+              status
               createdAt
               updatedAt
             }
@@ -4998,9 +4804,7 @@ export const deleteEvent = /* GraphQL */ `
             winsOpen
             nominationDateTime
             winDateTime
-            type
-            expiration
-            isActive
+            status
             createdAt
             updatedAt
           }
@@ -5082,9 +4886,7 @@ export const deleteEvent = /* GraphQL */ `
       winsOpen
       nominationDateTime
       winDateTime
-      type
-      expiration
-      isActive
+      status
       createdAt
       updatedAt
     }
@@ -5120,9 +4922,7 @@ export const createCategory = /* GraphQL */ `
               winsOpen
               nominationDateTime
               winDateTime
-              type
-              expiration
-              isActive
+              status
               createdAt
               updatedAt
             }
@@ -5163,9 +4963,7 @@ export const createCategory = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -5190,9 +4988,7 @@ export const createCategory = /* GraphQL */ `
               winsOpen
               nominationDateTime
               winDateTime
-              type
-              expiration
-              isActive
+              status
               createdAt
               updatedAt
             }
@@ -5252,9 +5048,7 @@ export const createCategory = /* GraphQL */ `
         winsOpen
         nominationDateTime
         winDateTime
-        type
-        expiration
-        isActive
+        status
         createdAt
         updatedAt
       }
@@ -5279,9 +5073,7 @@ export const createCategory = /* GraphQL */ `
               winsOpen
               nominationDateTime
               winDateTime
-              type
-              expiration
-              isActive
+              status
               createdAt
               updatedAt
             }
@@ -5336,9 +5128,7 @@ export const createCategory = /* GraphQL */ `
             winsOpen
             nominationDateTime
             winDateTime
-            type
-            expiration
-            isActive
+            status
             createdAt
             updatedAt
           }
@@ -5452,9 +5242,7 @@ export const updateCategory = /* GraphQL */ `
               winsOpen
               nominationDateTime
               winDateTime
-              type
-              expiration
-              isActive
+              status
               createdAt
               updatedAt
             }
@@ -5495,9 +5283,7 @@ export const updateCategory = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -5522,9 +5308,7 @@ export const updateCategory = /* GraphQL */ `
               winsOpen
               nominationDateTime
               winDateTime
-              type
-              expiration
-              isActive
+              status
               createdAt
               updatedAt
             }
@@ -5584,9 +5368,7 @@ export const updateCategory = /* GraphQL */ `
         winsOpen
         nominationDateTime
         winDateTime
-        type
-        expiration
-        isActive
+        status
         createdAt
         updatedAt
       }
@@ -5611,9 +5393,7 @@ export const updateCategory = /* GraphQL */ `
               winsOpen
               nominationDateTime
               winDateTime
-              type
-              expiration
-              isActive
+              status
               createdAt
               updatedAt
             }
@@ -5668,9 +5448,7 @@ export const updateCategory = /* GraphQL */ `
             winsOpen
             nominationDateTime
             winDateTime
-            type
-            expiration
-            isActive
+            status
             createdAt
             updatedAt
           }
@@ -5784,9 +5562,7 @@ export const deleteCategory = /* GraphQL */ `
               winsOpen
               nominationDateTime
               winDateTime
-              type
-              expiration
-              isActive
+              status
               createdAt
               updatedAt
             }
@@ -5827,9 +5603,7 @@ export const deleteCategory = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -5854,9 +5628,7 @@ export const deleteCategory = /* GraphQL */ `
               winsOpen
               nominationDateTime
               winDateTime
-              type
-              expiration
-              isActive
+              status
               createdAt
               updatedAt
             }
@@ -5916,9 +5688,7 @@ export const deleteCategory = /* GraphQL */ `
         winsOpen
         nominationDateTime
         winDateTime
-        type
-        expiration
-        isActive
+        status
         createdAt
         updatedAt
       }
@@ -5943,9 +5713,7 @@ export const deleteCategory = /* GraphQL */ `
               winsOpen
               nominationDateTime
               winDateTime
-              type
-              expiration
-              isActive
+              status
               createdAt
               updatedAt
             }
@@ -6000,9 +5768,7 @@ export const deleteCategory = /* GraphQL */ `
             winsOpen
             nominationDateTime
             winDateTime
-            type
-            expiration
-            isActive
+            status
             createdAt
             updatedAt
           }
@@ -6112,9 +5878,7 @@ export const createContender = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -6148,9 +5912,7 @@ export const createContender = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -6193,9 +5955,7 @@ export const createContender = /* GraphQL */ `
           winsOpen
           nominationDateTime
           winDateTime
-          type
-          expiration
-          isActive
+          status
           createdAt
           updatedAt
         }
@@ -6214,9 +5974,7 @@ export const createContender = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -6241,9 +5999,7 @@ export const createContender = /* GraphQL */ `
               winsOpen
               nominationDateTime
               winDateTime
-              type
-              expiration
-              isActive
+              status
               createdAt
               updatedAt
             }
@@ -6324,9 +6080,7 @@ export const createContender = /* GraphQL */ `
               winsOpen
               nominationDateTime
               winDateTime
-              type
-              expiration
-              isActive
+              status
               createdAt
               updatedAt
             }
@@ -6367,9 +6121,7 @@ export const createContender = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -6394,9 +6146,7 @@ export const createContender = /* GraphQL */ `
               winsOpen
               nominationDateTime
               winDateTime
-              type
-              expiration
-              isActive
+              status
               createdAt
               updatedAt
             }
@@ -6456,9 +6206,7 @@ export const createContender = /* GraphQL */ `
         winsOpen
         nominationDateTime
         winDateTime
-        type
-        expiration
-        isActive
+        status
         createdAt
         updatedAt
       }
@@ -6518,9 +6266,7 @@ export const createContender = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -6545,9 +6291,7 @@ export const createContender = /* GraphQL */ `
               winsOpen
               nominationDateTime
               winDateTime
-              type
-              expiration
-              isActive
+              status
               createdAt
               updatedAt
             }
@@ -6648,9 +6392,7 @@ export const updateContender = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -6684,9 +6426,7 @@ export const updateContender = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -6729,9 +6469,7 @@ export const updateContender = /* GraphQL */ `
           winsOpen
           nominationDateTime
           winDateTime
-          type
-          expiration
-          isActive
+          status
           createdAt
           updatedAt
         }
@@ -6750,9 +6488,7 @@ export const updateContender = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -6777,9 +6513,7 @@ export const updateContender = /* GraphQL */ `
               winsOpen
               nominationDateTime
               winDateTime
-              type
-              expiration
-              isActive
+              status
               createdAt
               updatedAt
             }
@@ -6860,9 +6594,7 @@ export const updateContender = /* GraphQL */ `
               winsOpen
               nominationDateTime
               winDateTime
-              type
-              expiration
-              isActive
+              status
               createdAt
               updatedAt
             }
@@ -6903,9 +6635,7 @@ export const updateContender = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -6930,9 +6660,7 @@ export const updateContender = /* GraphQL */ `
               winsOpen
               nominationDateTime
               winDateTime
-              type
-              expiration
-              isActive
+              status
               createdAt
               updatedAt
             }
@@ -6992,9 +6720,7 @@ export const updateContender = /* GraphQL */ `
         winsOpen
         nominationDateTime
         winDateTime
-        type
-        expiration
-        isActive
+        status
         createdAt
         updatedAt
       }
@@ -7054,9 +6780,7 @@ export const updateContender = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -7081,9 +6805,7 @@ export const updateContender = /* GraphQL */ `
               winsOpen
               nominationDateTime
               winDateTime
-              type
-              expiration
-              isActive
+              status
               createdAt
               updatedAt
             }
@@ -7184,9 +6906,7 @@ export const deleteContender = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -7220,9 +6940,7 @@ export const deleteContender = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -7265,9 +6983,7 @@ export const deleteContender = /* GraphQL */ `
           winsOpen
           nominationDateTime
           winDateTime
-          type
-          expiration
-          isActive
+          status
           createdAt
           updatedAt
         }
@@ -7286,9 +7002,7 @@ export const deleteContender = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -7313,9 +7027,7 @@ export const deleteContender = /* GraphQL */ `
               winsOpen
               nominationDateTime
               winDateTime
-              type
-              expiration
-              isActive
+              status
               createdAt
               updatedAt
             }
@@ -7396,9 +7108,7 @@ export const deleteContender = /* GraphQL */ `
               winsOpen
               nominationDateTime
               winDateTime
-              type
-              expiration
-              isActive
+              status
               createdAt
               updatedAt
             }
@@ -7439,9 +7149,7 @@ export const deleteContender = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -7466,9 +7174,7 @@ export const deleteContender = /* GraphQL */ `
               winsOpen
               nominationDateTime
               winDateTime
-              type
-              expiration
-              isActive
+              status
               createdAt
               updatedAt
             }
@@ -7528,9 +7234,7 @@ export const deleteContender = /* GraphQL */ `
         winsOpen
         nominationDateTime
         winDateTime
-        type
-        expiration
-        isActive
+        status
         createdAt
         updatedAt
       }
@@ -7590,9 +7294,7 @@ export const deleteContender = /* GraphQL */ `
                 winsOpen
                 nominationDateTime
                 winDateTime
-                type
-                expiration
-                isActive
+                status
                 createdAt
                 updatedAt
               }
@@ -7617,9 +7319,7 @@ export const deleteContender = /* GraphQL */ `
               winsOpen
               nominationDateTime
               winDateTime
-              type
-              expiration
-              isActive
+              status
               createdAt
               updatedAt
             }

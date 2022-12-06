@@ -30,6 +30,14 @@ enum EventType {
     NOMINATION
 }
 
+enum EventStatus {
+    NOMS_STAGING # before nominations go public
+    NOMS_LIVE # when everyone can predict nominations
+    WINS_STAGING # when nominations are being announced + prepared
+    WINS_LIVE # when everyone can predict wins
+    ARCHIVED # when winners have been announced and such
+}
+
 enum CategoryType {
     FILM
     PERFORMANCE
@@ -124,9 +132,7 @@ type Event @model @auth(rules: [{ allow: public }]) {
     winsOpen: String @default(value: "x")
     nominationDateTime: AWSDateTime # nullable. must have ability to set as admin
     winDateTime: AWSDateTime # nullable. must have ability to set as admin
-    type: EventType! #DELETE
-    expiration: AWSDateTime #DELETE
-    isActive: String @default(value: "x") #DELETE
+    status: EventStatus  @default(value: "NOMS_STAGING")
 }
 
 type Category @model @auth(rules: [{ allow: public }]) {
