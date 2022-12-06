@@ -9,8 +9,9 @@ import HeaderButton from '../../../components/HeaderButton';
 import LoadingStatueModal from '../../../components/LoadingStatueModal';
 import MovieGrid from '../../../components/MovieGrid';
 import MovieListDraggable from '../../../components/MovieList/MovieListDraggable';
+import SignedOutState from '../../../components/SignedOutState';
 import Snackbar from '../../../components/Snackbar';
-import { Body, BodyLarge } from '../../../components/Text';
+import { BodyLarge } from '../../../components/Text';
 import theme from '../../../constants/theme';
 import { useCategory } from '../../../context/CategoryContext';
 import { useAuth } from '../../../context/UserContext';
@@ -47,8 +48,8 @@ const CategoryPersonal = (props: iCategoryListProps) => {
   const { mutate, isComplete } = useMutationUpdatePredictions(onComplete);
   const { data: predictionData, isLoading } = useQueryCommunityOrPersonalEvent(
     'personal',
-    event,
-    userId,
+    !!userId,
+    { event, userId },
   );
   const initialPredictions = predictionData ? predictionData[category.id] || [] : [];
 
@@ -105,9 +106,7 @@ const CategoryPersonal = (props: iCategoryListProps) => {
   }
 
   if (!userId) {
-    <BackgroundWrapper>
-      <Body>You must sign in to make predictions</Body>
-    </BackgroundWrapper>;
+    return <SignedOutState />;
   }
 
   return (

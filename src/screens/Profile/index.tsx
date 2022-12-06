@@ -9,6 +9,7 @@ import ApiServices from '../../services/graphql';
 import { useSubscriptionEffect } from '../../util/hooks';
 import { GetUserQuery } from '../../API';
 import { useAuth } from '../../context/UserContext';
+import BackgroundWrapper from '../../components/BackgroundWrapper';
 
 const Profile = () => {
   const { userId, userEmail, signOutUser } = useAuth(); // later import userId
@@ -42,22 +43,27 @@ const Profile = () => {
   };
 
   return (
-    <ScrollView contentContainerStyle={{ alignItems: 'center', marginTop: 40 }}>
-      {!userId ? (
-        <SubmitButton text={userEmail ? 'Log in' : 'Create Account'} onPress={logIn} />
-      ) : (
-        <>
-          <SubmitButton text={'Log out'} onPress={logOut} loading={loading} />
-          <TouchableText
-            text={user?.getUser?.username ? 'Change Username' : 'Create Username'}
-            onPress={() => {
-              navigation.navigate('ChangeUsername', { user });
-            }}
-          />
-          <Body>{JSON.stringify(user)}</Body>
-        </>
-      )}
-    </ScrollView>
+    <BackgroundWrapper>
+      <ScrollView
+        contentContainerStyle={{ alignItems: 'center', marginTop: 40, width: '100%' }}
+      >
+        {!userId ? (
+          <SubmitButton text={userEmail ? 'Log in' : 'Create Account'} onPress={logIn} />
+        ) : (
+          <>
+            <SubmitButton text={'Log out'} onPress={logOut} loading={loading} />
+            <TouchableText
+              text={user?.getUser?.username ? 'Change Username' : 'Create Username'}
+              onPress={() => {
+                navigation.navigate('ChangeUsername', { user });
+              }}
+              style={{ marginTop: 30 }}
+            />
+            <Body style={{ marginTop: 30 }}>{JSON.stringify(user)}</Body>
+          </>
+        )}
+      </ScrollView>
+    </BackgroundWrapper>
   );
 };
 

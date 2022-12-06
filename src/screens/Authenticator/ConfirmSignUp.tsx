@@ -9,6 +9,7 @@ import { useAuthenticator } from './context';
 import { useNavigation } from '@react-navigation/native';
 import ApiServices from '../../services/graphql';
 import { useAuth } from '../../context/UserContext';
+import COLORS from '../../constants/colors';
 
 const ConfirmSignUp = (p: any) => {
   const props = p as iAuthScreenProps; // typecasting because props are automatically passed from Authenticator
@@ -65,7 +66,7 @@ const ConfirmSignUp = (p: any) => {
   };
 
   return (
-    <View style={{ width: '100%' }}>
+    <View style={{ width: '100%', backgroundColor: COLORS.primary }}>
       {!contextEmail ? (
         <FormInput
           label="Email"

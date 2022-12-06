@@ -1,6 +1,7 @@
 import theme from '../theme';
 
 const COLORS = {
+  primaryDark: '#101010',
   primary: theme['grayscale-900'],
   primaryLight: theme['grayscale-800'],
   primaryLightest: theme['grayscale-200'],
@@ -22,6 +23,8 @@ const COLORS = {
   lightestGray: theme['grayscale-100'],
   border: theme['grayscale-400'],
   text: theme['grayscale-900'],
+  disabled: 'rgba(255,255,255,0.2)',
+  disabledText: 'rgba(255,255,255,0.55)',
 };
 
 export default COLORS;

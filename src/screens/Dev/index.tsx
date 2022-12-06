@@ -4,6 +4,7 @@ import { SafeAreaView, ScrollView, StyleProp, View, ViewStyle } from 'react-nati
 import { ListCategoriesQuery, ListEventsQuery, ListUsersQuery } from '../../API';
 import { TouchableText } from '../../components/Buttons';
 import { Body, SubHeader } from '../../components/Text';
+import COLORS from '../../constants/colors';
 import { createMockEvents, deleteMockEvents } from '../../scripts/mocks/events';
 import { deleteMockUsers, createMockUsers } from '../../scripts/mocks/users';
 import TmdbMovieCache from '../../services/cache/tmdbMovie';
@@ -54,7 +55,7 @@ const Dev = () => {
   };
 
   return (
-    <SafeAreaView style={{ height: '100%' }}>
+    <SafeAreaView style={{ height: '100%', backgroundColor: COLORS.primary }}>
       <ScrollView
         contentContainerStyle={{
           alignItems: 'center',
@@ -62,23 +63,16 @@ const Dev = () => {
         }}
       >
         <TouchableText
-          text={'Approve songs'}
-          onPress={() => {
-            navigation.navigate('ApproveSongs');
-          }}
-          style={{ marginTop: 10 }}
+          text={'Manage Studios'}
+          onPress={() => navigation.navigate('ManageStudios')}
+          style={{ marginTop: 30 }}
         />
         <TouchableText
           text={'Clear Cache'}
           onPress={clearAllCache}
-          style={{ marginTop: 10 }}
+          style={{ marginTop: 30 }}
         />
-        <TouchableText
-          text={'Manage Studios'}
-          onPress={() => navigation.navigate('ManageStudios')}
-          style={{ marginTop: 10 }}
-        />
-        <View style={{ ...sectionStyles }}>
+        <View style={{ ...sectionStyles, marginTop: 30 }}>
           <SubHeader>USERS:</SubHeader>
         </View>
         <TouchableText

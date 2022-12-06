@@ -6,6 +6,7 @@ import { SubmitButton, TouchableText } from '../../components/Buttons';
 import AuthServices from '../../services/auth';
 import Snackbar from '../../components/Snackbar';
 import { useAuthenticator } from './context';
+import COLORS from '../../constants/colors';
 
 const ForgotPassword = (p: any) => {
   const props = p as iAuthScreenProps; // typecasting because props are automatically passed from Authenticator
@@ -30,7 +31,7 @@ const ForgotPassword = (p: any) => {
   };
 
   return (
-    <View style={{ width: '100%' }}>
+    <View style={{ width: '100%', backgroundColor: COLORS.primary }}>
       <FormInput
         label="Email"
         value={email}

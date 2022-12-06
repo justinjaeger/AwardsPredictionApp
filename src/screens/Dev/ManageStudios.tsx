@@ -57,7 +57,7 @@ const StudioItem = (props: {
   const { movieTmdbId, movieId, movieStudio } = props;
 
   const [tmdbMovie, setTmdbMovie] = useState<iCachedTmdbMovie | undefined>();
-  const [studio, setStudio] = useState<string>('');
+  const [studio, setStudio] = useState<string>(movieStudio || '');
 
   useEffect(() => {
     TmdbServices.getTmdbMovie(movieTmdbId).then((m) => {
@@ -69,12 +69,12 @@ const StudioItem = (props: {
 
   const onSubmitStudio = async () => {
     await ApiServices.updateStudio(movieId, studio);
-    setStudio('');
   };
 
   return (
     <View
       style={{
+        key: movieId,
         width: '100%',
         height: PosterSize.MEDIUM,
         marginTop: 10,
@@ -83,6 +83,7 @@ const StudioItem = (props: {
       <View style={{ flexDirection: 'row' }}>
         <Poster
           path={tmdbMovie?.posterPath || null}
+          width={100}
           title={tmdbMovie?.title || ''}
           onPress={() => {}}
         />
@@ -96,11 +97,12 @@ const StudioItem = (props: {
           <View
             style={{
               flexDirection: 'row',
-              width: '100%',
+              width: '50%',
+              justifyContent: 'space-between',
             }}
           >
             <FormInput label={'studio'} value={studio} setValue={setStudio} />
-            <TouchableText text={'submit'} onPress={onSubmitStudio} />
+            <TouchableText text={'SUBMIT'} onPress={onSubmitStudio} />
           </View>
         </View>
       </View>

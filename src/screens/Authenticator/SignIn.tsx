@@ -12,6 +12,7 @@ import { SignupRow } from './styles';
 import { Body } from '../../components/Text';
 import ApiServices from '../../services/graphql';
 import { useAuth } from '../../context/UserContext';
+import COLORS from '../../constants/colors';
 
 const SignIn = (p: any) => {
   const props = p as iAuthScreenProps; // typecasting because props are automatically passed from Authenticator
@@ -67,7 +68,7 @@ const SignIn = (p: any) => {
   };
 
   return (
-    <View style={{ width: '100%' }}>
+    <View style={{ width: '100%', backgroundColor: COLORS.primary }}>
       <FormInput
         label="Email"
         value={email}
@@ -92,19 +93,19 @@ const SignIn = (p: any) => {
         style={{ marginTop: 30 }}
       />
       <SignupRow style={{ marginTop: 30 }}>
-        <Body>Don't have an account?</Body>
+        <Body style={{ marginRight: 5 }}>Don't have an account?</Body>
         <TouchableText text={'Sign up'} onPress={() => navigate('signUp')} />
       </SignupRow>
       <TouchableText
         text={'Forgot my password'}
         onPress={() => navigate('forgotPassword')}
-        style={{ marginTop: 10 }}
+        style={{ marginTop: 30 }}
       />
       {email ? (
         <TouchableText
           text={'Resend confirmation code'}
           onPress={resendVerificationCode}
-          style={{ marginTop: 10 }}
+          style={{ marginTop: 30 }}
         />
       ) : null}
     </View>

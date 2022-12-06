@@ -3,6 +3,8 @@ import { Input } from '@ui-kitten/components';
 import { iTextContentType } from './types';
 import { EvaStatus } from '@ui-kitten/components/devsupport';
 import { titleCase } from 'title-case';
+import COLORS from '../../constants/colors';
+import { Body } from '../Text';
 
 const FormInput = (props: {
   label: string;
@@ -40,7 +42,7 @@ const FormInput = (props: {
 
   return (
     <Input
-      label={label}
+      label={() => <Body style={{ marginBottom: 5 }}>{label}</Body>}
       value={value}
       placeholder=""
       onChangeText={onChangeText}
@@ -48,7 +50,12 @@ const FormInput = (props: {
       caption={caption}
       onBlur={onBlur}
       status={status || 'basic'}
-      style={{ marginBottom: 10 }}
+      textStyle={{ color: COLORS.white }}
+      style={{
+        marginBottom: 10,
+        backgroundColor: COLORS.primary,
+        borderColor: COLORS.white,
+      }}
     />
   );
 };
