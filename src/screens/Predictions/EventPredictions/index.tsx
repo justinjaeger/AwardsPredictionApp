@@ -8,7 +8,7 @@ import sortByObjectOrder from '../../../util/sortByObjectOrder';
 import { useCategory } from '../../../context/CategoryContext';
 import { iCategory, iEvent, iPrediction } from '../../../types';
 import PredictionTabsNavigator from '../../../navigation/PredictionTabsNavigator';
-import { Body, SubHeader } from '../../../components/Text';
+import { SubHeader } from '../../../components/Text';
 import { useAuth } from '../../../context/UserContext';
 import COLORS from '../../../constants/colors';
 import theme from '../../../constants/theme';
@@ -17,6 +17,7 @@ import LoadingStatue from '../../../components/LoadingStatue';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import useQueryCommunityOrPersonalEvent from '../../../hooks/getCommunityOrPersonalEvent';
 import MovieGrid from '../../../components/MovieGrid';
+import SignedOutState from '../../../components/SignedOutState';
 
 const EventPredictions = (props: { tab: 'personal' | 'community' }) => {
   const { tab } = props;
@@ -41,8 +42,8 @@ const EventPredictions = (props: { tab: 'personal' | 'community' }) => {
 
   const { data: predictionData, isLoading } = useQueryCommunityOrPersonalEvent(
     tab,
-    event,
-    userId,
+    !!userId,
+    { event, userId },
   );
 
   useEffect(() => {
@@ -63,7 +64,7 @@ const EventPredictions = (props: { tab: 'personal' | 'community' }) => {
   }, [isLoading]);
 
   if (!userId && tab === 'personal') {
-    return <Body>You must sign in </Body>;
+    return <SignedOutState />;
   }
 
   const onSelectCategory = async (category: iCategory) => {

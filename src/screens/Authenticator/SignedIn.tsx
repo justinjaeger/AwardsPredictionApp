@@ -4,6 +4,7 @@ import { SubmitButton } from '../../components/Buttons';
 import AuthServices from '../../services/auth';
 import { Body } from '../../components/Text';
 import { useAuth } from '../../context/UserContext';
+import COLORS from '../../constants/colors';
 
 const SignedIn = () => {
   const { signOutUser } = useAuth();
@@ -18,7 +19,7 @@ const SignedIn = () => {
   };
 
   return (
-    <View style={{ width: '100%' }}>
+    <View style={{ width: '100%', backgroundColor: COLORS.primary }}>
       <Body>You are signed in</Body>
       <SubmitButton
         text={'Sign out'}

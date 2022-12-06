@@ -2,6 +2,7 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import Authenticator from '../screens/Authenticator';
 import BackButton from '../components/Buttons/BackButton';
+import { headerSettings } from '../constants';
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -18,6 +19,7 @@ const AuthenticatorNavigator = () => (
       component={Authenticator}
       options={{
         headerLeft: BackButton,
+        ...headerSettings,
       }}
     />
   </Navigator>

@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Icon, Input } from '@ui-kitten/components';
 import { ImageProps, TouchableWithoutFeedback } from 'react-native';
 import { EvaStatus } from '@ui-kitten/components/devsupport';
+import COLORS from '../../constants/colors';
+import { Body } from '../Text';
 
 const PasswordInput = (props: {
   value: string;
@@ -23,7 +25,7 @@ const PasswordInput = (props: {
   return (
     <Input
       value={value}
-      label="Password"
+      label={() => <Body style={{ marginBottom: 5 }}>{'Password'}</Body>}
       placeholder=""
       caption={caption}
       accessoryRight={showPassIcon}
@@ -32,6 +34,12 @@ const PasswordInput = (props: {
       onChangeText={(nextValue) => setValue(nextValue)}
       onBlur={onBlur}
       status={status}
+      textStyle={{ color: COLORS.white }}
+      style={{
+        marginBottom: 10,
+        backgroundColor: COLORS.primary,
+        borderColor: COLORS.white,
+      }}
     />
   );
 };

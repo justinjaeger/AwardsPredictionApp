@@ -1,8 +1,9 @@
 import React from 'react';
-import { Button, Spinner } from '@ui-kitten/components';
+import { Spinner } from '@ui-kitten/components';
 import COLORS from '../../constants/colors';
-import { TouchableOpacity } from 'react-native';
-import { Label } from '../Text';
+import { TouchableHighlight, TouchableOpacity } from 'react-native';
+import { BodyLarge } from '../Text';
+import theme from '../../constants/theme';
 
 interface iButtonProps {
   text: string;
@@ -13,50 +14,53 @@ interface iButtonProps {
 }
 
 export const SubmitButton = (props: iButtonProps) => (
-  <Button
+  <TouchableHighlight
     onPress={props.onPress}
-    status="primary"
-    size="giant"
     disabled={props.disabled || props.loading}
-    style={{ ...props.style }}
+    style={{
+      width: '50%',
+      alignSelf: 'center',
+      backgroundColor: props.disabled ? COLORS.disabled : COLORS.goldDark,
+      padding: 20,
+      borderRadius: theme.borderRadius,
+      ...props.style,
+    }}
+    underlayColor={COLORS.secondary}
   >
-    {props.loading ? () => <Spinner size="medium" status="control" /> : props.text}
-  </Button>
-);
-
-export const SmallButton = (props: iButtonProps) => (
-  <Button
-    onPress={props.onPress}
-    status="primary"
-    size="small"
-    disabled={props.disabled || props.loading}
-    style={{ ...props.style }}
-  >
-    {props.loading ? () => <Spinner size="medium" status="control" /> : props.text}
-  </Button>
+    <>
+      {props.loading ? (
+        () => <Spinner size="medium" status="control" />
+      ) : (
+        <BodyLarge
+          style={{
+            textAlign: 'center',
+            color: props.disabled ? COLORS.disabledText : COLORS.white,
+          }}
+        >
+          {props.text}
+        </BodyLarge>
+      )}
+    </>
+  </TouchableHighlight>
 );
 
 export const TouchableText = (props: iButtonProps) => (
   <TouchableOpacity
     onPress={props.onPress}
-    // status="primary"
-    // size="small"
     disabled={props.disabled}
-    // appearance={'ghost'}
     style={{
       fontWeight: '400',
       color: COLORS.lightest,
-      // @ts-ignore
       ...props.style,
     }}
   >
-    <Label
+    <BodyLarge
       style={{
-        // textDecorationLine: 'underline',
         color: COLORS.secondary,
+        textAlign: 'center',
       }}
     >
       {props.text}
-    </Label>
+    </BodyLarge>
   </TouchableOpacity>
 );

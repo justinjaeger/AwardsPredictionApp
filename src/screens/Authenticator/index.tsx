@@ -10,9 +10,9 @@ import RequireNewPassword from './RequireNewPassword';
 import SignIn from './SignIn';
 import { useNavigation } from '@react-navigation/native';
 import { ScrollView, View } from 'react-native';
-import COLORS from '../../constants/colors';
 import SignedIn from './SignedIn';
 import { useAuth } from '../../context/UserContext';
+import COLORS from '../../constants/colors';
 
 const headerTitles: { [key in iAuthState]: string } = {
   signIn: 'Log In',
@@ -45,7 +45,7 @@ const Auth = () => {
   return (
     <AuthProvider>
       <ScrollView
-        style={{ width: '100%', backgroundColor: COLORS.white }}
+        style={{ width: '100%', backgroundColor: COLORS.primary }}
         contentContainerStyle={{
           alignItems: 'center',
           marginTop: 40,

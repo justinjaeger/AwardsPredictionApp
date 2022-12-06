@@ -5,9 +5,10 @@ import { iEvent, QueryKeys } from '../types';
 
 const useQueryCommunityOrPersonalEvent = (
   tab: 'personal' | 'community',
-  event: iEvent,
-  userId?: string | undefined,
+  fetchPersonalEnabled: boolean,
+  params: { event: iEvent; userId?: string | undefined },
 ) => {
+  const { event, userId } = params;
   if (tab === 'personal' && userId === undefined) {
     console.error('ERROR: userId cannot be undefined if tab is personal');
   }
@@ -19,6 +20,7 @@ const useQueryCommunityOrPersonalEvent = (
       tab === 'community'
         ? () => getCommunityPredictionsByEvent(event)
         : () => getPersonalPredictionsByEvent(event.id, userId || ''),
+    enabled: tab === 'personal' ? fetchPersonalEnabled : true,
   });
 
   return { data, isLoading };

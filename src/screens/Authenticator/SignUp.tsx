@@ -10,6 +10,7 @@ import { EvaStatus } from '@ui-kitten/components/devsupport';
 import { Body } from '../../components/Text';
 import { SignupRow } from './styles';
 import Snackbar from '../../components/Snackbar';
+import COLORS from '../../constants/colors';
 
 const SignUp = (p: any) => {
   const props = p as iAuthScreenProps; // typecasting because props are automatically passed from Authenticator
@@ -47,7 +48,7 @@ const SignUp = (p: any) => {
   };
 
   return (
-    <View style={{ width: '100%' }}>
+    <View style={{ width: '100%', backgroundColor: COLORS.primary }}>
       <FormInput
         label="Email"
         value={email}
@@ -90,14 +91,14 @@ const SignUp = (p: any) => {
         style={{ marginTop: 30 }}
       />
       <SignupRow style={{ marginTop: 30 }}>
-        <Body>Already have an account?</Body>
+        <Body style={{ marginRight: 5 }}>Already have an account?</Body>
         <TouchableText text={'Sign in'} onPress={() => navigate('signIn')} />
       </SignupRow>
       <SignupRow>
         <TouchableText
           text={'Enter confirmation code'}
           onPress={() => navigate('confirmSignUp')}
-          style={{ marginTop: 10 }}
+          style={{ marginTop: 30 }}
         />
       </SignupRow>
     </View>

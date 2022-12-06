@@ -6,6 +6,7 @@ import AuthServices from '../../services/auth';
 import Snackbar from '../../components/Snackbar';
 import { useAuthenticator } from './context';
 import { SubmitButton, TouchableText } from '../../components/Buttons';
+import COLORS from '../../constants/colors';
 
 const RequireNewPassword = (p: any) => {
   const props = p as iAuthScreenProps; // typecasting because props are automatically passed from Authenticator
@@ -33,7 +34,7 @@ const RequireNewPassword = (p: any) => {
   };
 
   return (
-    <View style={{ width: '100%' }}>
+    <View style={{ width: '100%', backgroundColor: COLORS.primary }}>
       <FormInput label="New Password" value={password} setValue={setPassword} />
       <FormInput label="Code" value={code} setValue={setCode} />
       <SubmitButton text={'Submit'} onPress={submit} loading={loading} />
