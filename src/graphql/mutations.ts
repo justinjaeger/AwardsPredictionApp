@@ -88,12 +88,16 @@ export const createPredictionSet = /* GraphQL */ `
               }
               awardsBody
               year
-              type
-              expiration
-              isActive
               contenders {
                 nextToken
               }
+              nominationsOpen
+              winsOpen
+              nominationDateTime
+              winDateTime
+              type
+              expiration
+              isActive
               createdAt
               updatedAt
             }
@@ -119,9 +123,6 @@ export const createPredictionSet = /* GraphQL */ `
         }
         awardsBody
         year
-        type
-        expiration
-        isActive
         contenders {
           items {
             id
@@ -133,6 +134,10 @@ export const createPredictionSet = /* GraphQL */ `
                 id
                 awardsBody
                 year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
                 type
                 expiration
                 isActive
@@ -153,12 +158,16 @@ export const createPredictionSet = /* GraphQL */ `
               }
               awardsBody
               year
-              type
-              expiration
-              isActive
               contenders {
                 nextToken
               }
+              nominationsOpen
+              winsOpen
+              nominationDateTime
+              winDateTime
+              type
+              expiration
+              isActive
               createdAt
               updatedAt
             }
@@ -197,6 +206,7 @@ export const createPredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
                 predictionSetPredictionsId
+                historyPredictionSetPredictionsId
                 contenderPredictionsId
                 predictionUserId
               }
@@ -213,6 +223,13 @@ export const createPredictionSet = /* GraphQL */ `
           }
           nextToken
         }
+        nominationsOpen
+        winsOpen
+        nominationDateTime
+        winDateTime
+        type
+        expiration
+        isActive
         createdAt
         updatedAt
       }
@@ -231,6 +248,10 @@ export const createPredictionSet = /* GraphQL */ `
                 id
                 awardsBody
                 year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
                 type
                 expiration
                 isActive
@@ -248,9 +269,6 @@ export const createPredictionSet = /* GraphQL */ `
           }
           awardsBody
           year
-          type
-          expiration
-          isActive
           contenders {
             items {
               id
@@ -266,6 +284,10 @@ export const createPredictionSet = /* GraphQL */ `
                 id
                 awardsBody
                 year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
                 type
                 expiration
                 isActive
@@ -307,6 +329,13 @@ export const createPredictionSet = /* GraphQL */ `
             }
             nextToken
           }
+          nominationsOpen
+          winsOpen
+          nominationDateTime
+          winDateTime
+          type
+          expiration
+          isActive
           createdAt
           updatedAt
         }
@@ -321,6 +350,10 @@ export const createPredictionSet = /* GraphQL */ `
                 id
                 awardsBody
                 year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
                 type
                 expiration
                 isActive
@@ -341,12 +374,16 @@ export const createPredictionSet = /* GraphQL */ `
               }
               awardsBody
               year
-              type
-              expiration
-              isActive
               contenders {
                 nextToken
               }
+              nominationsOpen
+              winsOpen
+              nominationDateTime
+              winDateTime
+              type
+              expiration
+              isActive
               createdAt
               updatedAt
             }
@@ -385,6 +422,7 @@ export const createPredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
                 predictionSetPredictionsId
+                historyPredictionSetPredictionsId
                 contenderPredictionsId
                 predictionUserId
               }
@@ -429,6 +467,10 @@ export const createPredictionSet = /* GraphQL */ `
                 id
                 awardsBody
                 year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
                 type
                 expiration
                 isActive
@@ -449,12 +491,16 @@ export const createPredictionSet = /* GraphQL */ `
               }
               awardsBody
               year
-              type
-              expiration
-              isActive
               contenders {
                 nextToken
               }
+              nominationsOpen
+              winsOpen
+              nominationDateTime
+              winDateTime
+              type
+              expiration
+              isActive
               createdAt
               updatedAt
             }
@@ -493,6 +539,7 @@ export const createPredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
                 predictionSetPredictionsId
+                historyPredictionSetPredictionsId
                 contenderPredictionsId
                 predictionUserId
               }
@@ -511,6 +558,7 @@ export const createPredictionSet = /* GraphQL */ `
           createdAt
           updatedAt
           predictionSetPredictionsId
+          historyPredictionSetPredictionsId
           contenderPredictionsId
           predictionUserId
         }
@@ -556,12 +604,16 @@ export const updatePredictionSet = /* GraphQL */ `
               }
               awardsBody
               year
-              type
-              expiration
-              isActive
               contenders {
                 nextToken
               }
+              nominationsOpen
+              winsOpen
+              nominationDateTime
+              winDateTime
+              type
+              expiration
+              isActive
               createdAt
               updatedAt
             }
@@ -587,9 +639,6 @@ export const updatePredictionSet = /* GraphQL */ `
         }
         awardsBody
         year
-        type
-        expiration
-        isActive
         contenders {
           items {
             id
@@ -601,6 +650,10 @@ export const updatePredictionSet = /* GraphQL */ `
                 id
                 awardsBody
                 year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
                 type
                 expiration
                 isActive
@@ -621,12 +674,16 @@ export const updatePredictionSet = /* GraphQL */ `
               }
               awardsBody
               year
-              type
-              expiration
-              isActive
               contenders {
                 nextToken
               }
+              nominationsOpen
+              winsOpen
+              nominationDateTime
+              winDateTime
+              type
+              expiration
+              isActive
               createdAt
               updatedAt
             }
@@ -665,6 +722,7 @@ export const updatePredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
                 predictionSetPredictionsId
+                historyPredictionSetPredictionsId
                 contenderPredictionsId
                 predictionUserId
               }
@@ -681,6 +739,13 @@ export const updatePredictionSet = /* GraphQL */ `
           }
           nextToken
         }
+        nominationsOpen
+        winsOpen
+        nominationDateTime
+        winDateTime
+        type
+        expiration
+        isActive
         createdAt
         updatedAt
       }
@@ -699,6 +764,10 @@ export const updatePredictionSet = /* GraphQL */ `
                 id
                 awardsBody
                 year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
                 type
                 expiration
                 isActive
@@ -716,9 +785,6 @@ export const updatePredictionSet = /* GraphQL */ `
           }
           awardsBody
           year
-          type
-          expiration
-          isActive
           contenders {
             items {
               id
@@ -734,6 +800,10 @@ export const updatePredictionSet = /* GraphQL */ `
                 id
                 awardsBody
                 year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
                 type
                 expiration
                 isActive
@@ -775,6 +845,13 @@ export const updatePredictionSet = /* GraphQL */ `
             }
             nextToken
           }
+          nominationsOpen
+          winsOpen
+          nominationDateTime
+          winDateTime
+          type
+          expiration
+          isActive
           createdAt
           updatedAt
         }
@@ -789,6 +866,10 @@ export const updatePredictionSet = /* GraphQL */ `
                 id
                 awardsBody
                 year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
                 type
                 expiration
                 isActive
@@ -809,12 +890,16 @@ export const updatePredictionSet = /* GraphQL */ `
               }
               awardsBody
               year
-              type
-              expiration
-              isActive
               contenders {
                 nextToken
               }
+              nominationsOpen
+              winsOpen
+              nominationDateTime
+              winDateTime
+              type
+              expiration
+              isActive
               createdAt
               updatedAt
             }
@@ -853,6 +938,7 @@ export const updatePredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
                 predictionSetPredictionsId
+                historyPredictionSetPredictionsId
                 contenderPredictionsId
                 predictionUserId
               }
@@ -897,6 +983,10 @@ export const updatePredictionSet = /* GraphQL */ `
                 id
                 awardsBody
                 year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
                 type
                 expiration
                 isActive
@@ -917,12 +1007,16 @@ export const updatePredictionSet = /* GraphQL */ `
               }
               awardsBody
               year
-              type
-              expiration
-              isActive
               contenders {
                 nextToken
               }
+              nominationsOpen
+              winsOpen
+              nominationDateTime
+              winDateTime
+              type
+              expiration
+              isActive
               createdAt
               updatedAt
             }
@@ -961,6 +1055,7 @@ export const updatePredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
                 predictionSetPredictionsId
+                historyPredictionSetPredictionsId
                 contenderPredictionsId
                 predictionUserId
               }
@@ -979,6 +1074,7 @@ export const updatePredictionSet = /* GraphQL */ `
           createdAt
           updatedAt
           predictionSetPredictionsId
+          historyPredictionSetPredictionsId
           contenderPredictionsId
           predictionUserId
         }
@@ -1024,12 +1120,16 @@ export const deletePredictionSet = /* GraphQL */ `
               }
               awardsBody
               year
-              type
-              expiration
-              isActive
               contenders {
                 nextToken
               }
+              nominationsOpen
+              winsOpen
+              nominationDateTime
+              winDateTime
+              type
+              expiration
+              isActive
               createdAt
               updatedAt
             }
@@ -1055,9 +1155,6 @@ export const deletePredictionSet = /* GraphQL */ `
         }
         awardsBody
         year
-        type
-        expiration
-        isActive
         contenders {
           items {
             id
@@ -1069,6 +1166,10 @@ export const deletePredictionSet = /* GraphQL */ `
                 id
                 awardsBody
                 year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
                 type
                 expiration
                 isActive
@@ -1089,12 +1190,16 @@ export const deletePredictionSet = /* GraphQL */ `
               }
               awardsBody
               year
-              type
-              expiration
-              isActive
               contenders {
                 nextToken
               }
+              nominationsOpen
+              winsOpen
+              nominationDateTime
+              winDateTime
+              type
+              expiration
+              isActive
               createdAt
               updatedAt
             }
@@ -1133,6 +1238,7 @@ export const deletePredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
                 predictionSetPredictionsId
+                historyPredictionSetPredictionsId
                 contenderPredictionsId
                 predictionUserId
               }
@@ -1149,6 +1255,13 @@ export const deletePredictionSet = /* GraphQL */ `
           }
           nextToken
         }
+        nominationsOpen
+        winsOpen
+        nominationDateTime
+        winDateTime
+        type
+        expiration
+        isActive
         createdAt
         updatedAt
       }
@@ -1167,6 +1280,10 @@ export const deletePredictionSet = /* GraphQL */ `
                 id
                 awardsBody
                 year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
                 type
                 expiration
                 isActive
@@ -1184,9 +1301,6 @@ export const deletePredictionSet = /* GraphQL */ `
           }
           awardsBody
           year
-          type
-          expiration
-          isActive
           contenders {
             items {
               id
@@ -1202,6 +1316,10 @@ export const deletePredictionSet = /* GraphQL */ `
                 id
                 awardsBody
                 year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
                 type
                 expiration
                 isActive
@@ -1243,6 +1361,13 @@ export const deletePredictionSet = /* GraphQL */ `
             }
             nextToken
           }
+          nominationsOpen
+          winsOpen
+          nominationDateTime
+          winDateTime
+          type
+          expiration
+          isActive
           createdAt
           updatedAt
         }
@@ -1257,6 +1382,10 @@ export const deletePredictionSet = /* GraphQL */ `
                 id
                 awardsBody
                 year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
                 type
                 expiration
                 isActive
@@ -1277,12 +1406,16 @@ export const deletePredictionSet = /* GraphQL */ `
               }
               awardsBody
               year
-              type
-              expiration
-              isActive
               contenders {
                 nextToken
               }
+              nominationsOpen
+              winsOpen
+              nominationDateTime
+              winDateTime
+              type
+              expiration
+              isActive
               createdAt
               updatedAt
             }
@@ -1321,6 +1454,7 @@ export const deletePredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
                 predictionSetPredictionsId
+                historyPredictionSetPredictionsId
                 contenderPredictionsId
                 predictionUserId
               }
@@ -1365,6 +1499,10 @@ export const deletePredictionSet = /* GraphQL */ `
                 id
                 awardsBody
                 year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
                 type
                 expiration
                 isActive
@@ -1385,12 +1523,16 @@ export const deletePredictionSet = /* GraphQL */ `
               }
               awardsBody
               year
-              type
-              expiration
-              isActive
               contenders {
                 nextToken
               }
+              nominationsOpen
+              winsOpen
+              nominationDateTime
+              winDateTime
+              type
+              expiration
+              isActive
               createdAt
               updatedAt
             }
@@ -1429,6 +1571,7 @@ export const deletePredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
                 predictionSetPredictionsId
+                historyPredictionSetPredictionsId
                 contenderPredictionsId
                 predictionUserId
               }
@@ -1447,6 +1590,7 @@ export const deletePredictionSet = /* GraphQL */ `
           createdAt
           updatedAt
           predictionSetPredictionsId
+          historyPredictionSetPredictionsId
           contenderPredictionsId
           predictionUserId
         }
@@ -1457,6 +1601,1554 @@ export const deletePredictionSet = /* GraphQL */ `
       predictionSetUserId
       predictionSetEventId
       predictionSetCategoryId
+    }
+  }
+`;
+export const createHistoryPredictionSet = /* GraphQL */ `
+  mutation CreateHistoryPredictionSet(
+    $input: CreateHistoryPredictionSetInput!
+    $condition: ModelHistoryPredictionSetConditionInput
+  ) {
+    createHistoryPredictionSet(input: $input, condition: $condition) {
+      id
+      user {
+        id
+        email
+        username
+        name
+        bio
+        image
+        role
+        createdAt
+        updatedAt
+      }
+      event {
+        id
+        categories {
+          items {
+            id
+            name
+            type
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              contenders {
+                nextToken
+              }
+              nominationsOpen
+              winsOpen
+              nominationDateTime
+              winDateTime
+              type
+              expiration
+              isActive
+              createdAt
+              updatedAt
+            }
+            contenders {
+              items {
+                id
+                didReceiveNominationOrWin
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              nextToken
+            }
+            createdAt
+            updatedAt
+            eventCategoriesId
+          }
+          nextToken
+        }
+        awardsBody
+        year
+        contenders {
+          items {
+            id
+            category {
+              id
+              name
+              type
+              event {
+                id
+                awardsBody
+                year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
+                type
+                expiration
+                isActive
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+              eventCategoriesId
+            }
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              contenders {
+                nextToken
+              }
+              nominationsOpen
+              winsOpen
+              nominationDateTime
+              winDateTime
+              type
+              expiration
+              isActive
+              createdAt
+              updatedAt
+            }
+            movie {
+              id
+              tmdbId
+              studio
+              createdAt
+              updatedAt
+            }
+            person {
+              id
+              tmdbId
+              createdAt
+              updatedAt
+            }
+            song {
+              id
+              title
+              artist
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              createdAt
+              updatedAt
+              songMovieId
+            }
+            predictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                predictionSetPredictionsId
+                historyPredictionSetPredictionsId
+                contenderPredictionsId
+                predictionUserId
+              }
+              nextToken
+            }
+            didReceiveNominationOrWin
+            createdAt
+            updatedAt
+            eventContendersId
+            categoryContendersId
+            contenderMovieId
+            contenderPersonId
+            contenderSongId
+          }
+          nextToken
+        }
+        nominationsOpen
+        winsOpen
+        nominationDateTime
+        winDateTime
+        type
+        expiration
+        isActive
+        createdAt
+        updatedAt
+      }
+      category {
+        id
+        name
+        type
+        event {
+          id
+          categories {
+            items {
+              id
+              name
+              type
+              event {
+                id
+                awardsBody
+                year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
+                type
+                expiration
+                isActive
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+              eventCategoriesId
+            }
+            nextToken
+          }
+          awardsBody
+          year
+          contenders {
+            items {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
+                type
+                expiration
+                isActive
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              didReceiveNominationOrWin
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              contenderMovieId
+              contenderPersonId
+              contenderSongId
+            }
+            nextToken
+          }
+          nominationsOpen
+          winsOpen
+          nominationDateTime
+          winDateTime
+          type
+          expiration
+          isActive
+          createdAt
+          updatedAt
+        }
+        contenders {
+          items {
+            id
+            category {
+              id
+              name
+              type
+              event {
+                id
+                awardsBody
+                year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
+                type
+                expiration
+                isActive
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+              eventCategoriesId
+            }
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              contenders {
+                nextToken
+              }
+              nominationsOpen
+              winsOpen
+              nominationDateTime
+              winDateTime
+              type
+              expiration
+              isActive
+              createdAt
+              updatedAt
+            }
+            movie {
+              id
+              tmdbId
+              studio
+              createdAt
+              updatedAt
+            }
+            person {
+              id
+              tmdbId
+              createdAt
+              updatedAt
+            }
+            song {
+              id
+              title
+              artist
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              createdAt
+              updatedAt
+              songMovieId
+            }
+            predictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                predictionSetPredictionsId
+                historyPredictionSetPredictionsId
+                contenderPredictionsId
+                predictionUserId
+              }
+              nextToken
+            }
+            didReceiveNominationOrWin
+            createdAt
+            updatedAt
+            eventContendersId
+            categoryContendersId
+            contenderMovieId
+            contenderPersonId
+            contenderSongId
+          }
+          nextToken
+        }
+        createdAt
+        updatedAt
+        eventCategoriesId
+      }
+      predictions {
+        items {
+          id
+          user {
+            id
+            email
+            username
+            name
+            bio
+            image
+            role
+            createdAt
+            updatedAt
+          }
+          contender {
+            id
+            category {
+              id
+              name
+              type
+              event {
+                id
+                awardsBody
+                year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
+                type
+                expiration
+                isActive
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+              eventCategoriesId
+            }
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              contenders {
+                nextToken
+              }
+              nominationsOpen
+              winsOpen
+              nominationDateTime
+              winDateTime
+              type
+              expiration
+              isActive
+              createdAt
+              updatedAt
+            }
+            movie {
+              id
+              tmdbId
+              studio
+              createdAt
+              updatedAt
+            }
+            person {
+              id
+              tmdbId
+              createdAt
+              updatedAt
+            }
+            song {
+              id
+              title
+              artist
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              createdAt
+              updatedAt
+              songMovieId
+            }
+            predictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                predictionSetPredictionsId
+                historyPredictionSetPredictionsId
+                contenderPredictionsId
+                predictionUserId
+              }
+              nextToken
+            }
+            didReceiveNominationOrWin
+            createdAt
+            updatedAt
+            eventContendersId
+            categoryContendersId
+            contenderMovieId
+            contenderPersonId
+            contenderSongId
+          }
+          ranking
+          createdAt
+          updatedAt
+          predictionSetPredictionsId
+          historyPredictionSetPredictionsId
+          contenderPredictionsId
+          predictionUserId
+        }
+        nextToken
+      }
+      createdAt
+      updatedAt
+      historyPredictionSetUserId
+      historyPredictionSetEventId
+      historyPredictionSetCategoryId
+    }
+  }
+`;
+export const updateHistoryPredictionSet = /* GraphQL */ `
+  mutation UpdateHistoryPredictionSet(
+    $input: UpdateHistoryPredictionSetInput!
+    $condition: ModelHistoryPredictionSetConditionInput
+  ) {
+    updateHistoryPredictionSet(input: $input, condition: $condition) {
+      id
+      user {
+        id
+        email
+        username
+        name
+        bio
+        image
+        role
+        createdAt
+        updatedAt
+      }
+      event {
+        id
+        categories {
+          items {
+            id
+            name
+            type
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              contenders {
+                nextToken
+              }
+              nominationsOpen
+              winsOpen
+              nominationDateTime
+              winDateTime
+              type
+              expiration
+              isActive
+              createdAt
+              updatedAt
+            }
+            contenders {
+              items {
+                id
+                didReceiveNominationOrWin
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              nextToken
+            }
+            createdAt
+            updatedAt
+            eventCategoriesId
+          }
+          nextToken
+        }
+        awardsBody
+        year
+        contenders {
+          items {
+            id
+            category {
+              id
+              name
+              type
+              event {
+                id
+                awardsBody
+                year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
+                type
+                expiration
+                isActive
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+              eventCategoriesId
+            }
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              contenders {
+                nextToken
+              }
+              nominationsOpen
+              winsOpen
+              nominationDateTime
+              winDateTime
+              type
+              expiration
+              isActive
+              createdAt
+              updatedAt
+            }
+            movie {
+              id
+              tmdbId
+              studio
+              createdAt
+              updatedAt
+            }
+            person {
+              id
+              tmdbId
+              createdAt
+              updatedAt
+            }
+            song {
+              id
+              title
+              artist
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              createdAt
+              updatedAt
+              songMovieId
+            }
+            predictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                predictionSetPredictionsId
+                historyPredictionSetPredictionsId
+                contenderPredictionsId
+                predictionUserId
+              }
+              nextToken
+            }
+            didReceiveNominationOrWin
+            createdAt
+            updatedAt
+            eventContendersId
+            categoryContendersId
+            contenderMovieId
+            contenderPersonId
+            contenderSongId
+          }
+          nextToken
+        }
+        nominationsOpen
+        winsOpen
+        nominationDateTime
+        winDateTime
+        type
+        expiration
+        isActive
+        createdAt
+        updatedAt
+      }
+      category {
+        id
+        name
+        type
+        event {
+          id
+          categories {
+            items {
+              id
+              name
+              type
+              event {
+                id
+                awardsBody
+                year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
+                type
+                expiration
+                isActive
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+              eventCategoriesId
+            }
+            nextToken
+          }
+          awardsBody
+          year
+          contenders {
+            items {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
+                type
+                expiration
+                isActive
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              didReceiveNominationOrWin
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              contenderMovieId
+              contenderPersonId
+              contenderSongId
+            }
+            nextToken
+          }
+          nominationsOpen
+          winsOpen
+          nominationDateTime
+          winDateTime
+          type
+          expiration
+          isActive
+          createdAt
+          updatedAt
+        }
+        contenders {
+          items {
+            id
+            category {
+              id
+              name
+              type
+              event {
+                id
+                awardsBody
+                year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
+                type
+                expiration
+                isActive
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+              eventCategoriesId
+            }
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              contenders {
+                nextToken
+              }
+              nominationsOpen
+              winsOpen
+              nominationDateTime
+              winDateTime
+              type
+              expiration
+              isActive
+              createdAt
+              updatedAt
+            }
+            movie {
+              id
+              tmdbId
+              studio
+              createdAt
+              updatedAt
+            }
+            person {
+              id
+              tmdbId
+              createdAt
+              updatedAt
+            }
+            song {
+              id
+              title
+              artist
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              createdAt
+              updatedAt
+              songMovieId
+            }
+            predictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                predictionSetPredictionsId
+                historyPredictionSetPredictionsId
+                contenderPredictionsId
+                predictionUserId
+              }
+              nextToken
+            }
+            didReceiveNominationOrWin
+            createdAt
+            updatedAt
+            eventContendersId
+            categoryContendersId
+            contenderMovieId
+            contenderPersonId
+            contenderSongId
+          }
+          nextToken
+        }
+        createdAt
+        updatedAt
+        eventCategoriesId
+      }
+      predictions {
+        items {
+          id
+          user {
+            id
+            email
+            username
+            name
+            bio
+            image
+            role
+            createdAt
+            updatedAt
+          }
+          contender {
+            id
+            category {
+              id
+              name
+              type
+              event {
+                id
+                awardsBody
+                year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
+                type
+                expiration
+                isActive
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+              eventCategoriesId
+            }
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              contenders {
+                nextToken
+              }
+              nominationsOpen
+              winsOpen
+              nominationDateTime
+              winDateTime
+              type
+              expiration
+              isActive
+              createdAt
+              updatedAt
+            }
+            movie {
+              id
+              tmdbId
+              studio
+              createdAt
+              updatedAt
+            }
+            person {
+              id
+              tmdbId
+              createdAt
+              updatedAt
+            }
+            song {
+              id
+              title
+              artist
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              createdAt
+              updatedAt
+              songMovieId
+            }
+            predictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                predictionSetPredictionsId
+                historyPredictionSetPredictionsId
+                contenderPredictionsId
+                predictionUserId
+              }
+              nextToken
+            }
+            didReceiveNominationOrWin
+            createdAt
+            updatedAt
+            eventContendersId
+            categoryContendersId
+            contenderMovieId
+            contenderPersonId
+            contenderSongId
+          }
+          ranking
+          createdAt
+          updatedAt
+          predictionSetPredictionsId
+          historyPredictionSetPredictionsId
+          contenderPredictionsId
+          predictionUserId
+        }
+        nextToken
+      }
+      createdAt
+      updatedAt
+      historyPredictionSetUserId
+      historyPredictionSetEventId
+      historyPredictionSetCategoryId
+    }
+  }
+`;
+export const deleteHistoryPredictionSet = /* GraphQL */ `
+  mutation DeleteHistoryPredictionSet(
+    $input: DeleteHistoryPredictionSetInput!
+    $condition: ModelHistoryPredictionSetConditionInput
+  ) {
+    deleteHistoryPredictionSet(input: $input, condition: $condition) {
+      id
+      user {
+        id
+        email
+        username
+        name
+        bio
+        image
+        role
+        createdAt
+        updatedAt
+      }
+      event {
+        id
+        categories {
+          items {
+            id
+            name
+            type
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              contenders {
+                nextToken
+              }
+              nominationsOpen
+              winsOpen
+              nominationDateTime
+              winDateTime
+              type
+              expiration
+              isActive
+              createdAt
+              updatedAt
+            }
+            contenders {
+              items {
+                id
+                didReceiveNominationOrWin
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              nextToken
+            }
+            createdAt
+            updatedAt
+            eventCategoriesId
+          }
+          nextToken
+        }
+        awardsBody
+        year
+        contenders {
+          items {
+            id
+            category {
+              id
+              name
+              type
+              event {
+                id
+                awardsBody
+                year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
+                type
+                expiration
+                isActive
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+              eventCategoriesId
+            }
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              contenders {
+                nextToken
+              }
+              nominationsOpen
+              winsOpen
+              nominationDateTime
+              winDateTime
+              type
+              expiration
+              isActive
+              createdAt
+              updatedAt
+            }
+            movie {
+              id
+              tmdbId
+              studio
+              createdAt
+              updatedAt
+            }
+            person {
+              id
+              tmdbId
+              createdAt
+              updatedAt
+            }
+            song {
+              id
+              title
+              artist
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              createdAt
+              updatedAt
+              songMovieId
+            }
+            predictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                predictionSetPredictionsId
+                historyPredictionSetPredictionsId
+                contenderPredictionsId
+                predictionUserId
+              }
+              nextToken
+            }
+            didReceiveNominationOrWin
+            createdAt
+            updatedAt
+            eventContendersId
+            categoryContendersId
+            contenderMovieId
+            contenderPersonId
+            contenderSongId
+          }
+          nextToken
+        }
+        nominationsOpen
+        winsOpen
+        nominationDateTime
+        winDateTime
+        type
+        expiration
+        isActive
+        createdAt
+        updatedAt
+      }
+      category {
+        id
+        name
+        type
+        event {
+          id
+          categories {
+            items {
+              id
+              name
+              type
+              event {
+                id
+                awardsBody
+                year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
+                type
+                expiration
+                isActive
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+              eventCategoriesId
+            }
+            nextToken
+          }
+          awardsBody
+          year
+          contenders {
+            items {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
+                type
+                expiration
+                isActive
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              didReceiveNominationOrWin
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              contenderMovieId
+              contenderPersonId
+              contenderSongId
+            }
+            nextToken
+          }
+          nominationsOpen
+          winsOpen
+          nominationDateTime
+          winDateTime
+          type
+          expiration
+          isActive
+          createdAt
+          updatedAt
+        }
+        contenders {
+          items {
+            id
+            category {
+              id
+              name
+              type
+              event {
+                id
+                awardsBody
+                year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
+                type
+                expiration
+                isActive
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+              eventCategoriesId
+            }
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              contenders {
+                nextToken
+              }
+              nominationsOpen
+              winsOpen
+              nominationDateTime
+              winDateTime
+              type
+              expiration
+              isActive
+              createdAt
+              updatedAt
+            }
+            movie {
+              id
+              tmdbId
+              studio
+              createdAt
+              updatedAt
+            }
+            person {
+              id
+              tmdbId
+              createdAt
+              updatedAt
+            }
+            song {
+              id
+              title
+              artist
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              createdAt
+              updatedAt
+              songMovieId
+            }
+            predictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                predictionSetPredictionsId
+                historyPredictionSetPredictionsId
+                contenderPredictionsId
+                predictionUserId
+              }
+              nextToken
+            }
+            didReceiveNominationOrWin
+            createdAt
+            updatedAt
+            eventContendersId
+            categoryContendersId
+            contenderMovieId
+            contenderPersonId
+            contenderSongId
+          }
+          nextToken
+        }
+        createdAt
+        updatedAt
+        eventCategoriesId
+      }
+      predictions {
+        items {
+          id
+          user {
+            id
+            email
+            username
+            name
+            bio
+            image
+            role
+            createdAt
+            updatedAt
+          }
+          contender {
+            id
+            category {
+              id
+              name
+              type
+              event {
+                id
+                awardsBody
+                year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
+                type
+                expiration
+                isActive
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+              eventCategoriesId
+            }
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              contenders {
+                nextToken
+              }
+              nominationsOpen
+              winsOpen
+              nominationDateTime
+              winDateTime
+              type
+              expiration
+              isActive
+              createdAt
+              updatedAt
+            }
+            movie {
+              id
+              tmdbId
+              studio
+              createdAt
+              updatedAt
+            }
+            person {
+              id
+              tmdbId
+              createdAt
+              updatedAt
+            }
+            song {
+              id
+              title
+              artist
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              createdAt
+              updatedAt
+              songMovieId
+            }
+            predictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                predictionSetPredictionsId
+                historyPredictionSetPredictionsId
+                contenderPredictionsId
+                predictionUserId
+              }
+              nextToken
+            }
+            didReceiveNominationOrWin
+            createdAt
+            updatedAt
+            eventContendersId
+            categoryContendersId
+            contenderMovieId
+            contenderPersonId
+            contenderSongId
+          }
+          ranking
+          createdAt
+          updatedAt
+          predictionSetPredictionsId
+          historyPredictionSetPredictionsId
+          contenderPredictionsId
+          predictionUserId
+        }
+        nextToken
+      }
+      createdAt
+      updatedAt
+      historyPredictionSetUserId
+      historyPredictionSetEventId
+      historyPredictionSetCategoryId
     }
   }
 `;
@@ -1499,9 +3191,6 @@ export const createPrediction = /* GraphQL */ `
             }
             awardsBody
             year
-            type
-            expiration
-            isActive
             contenders {
               items {
                 id
@@ -1516,6 +3205,13 @@ export const createPrediction = /* GraphQL */ `
               }
               nextToken
             }
+            nominationsOpen
+            winsOpen
+            nominationDateTime
+            winDateTime
+            type
+            expiration
+            isActive
             createdAt
             updatedAt
           }
@@ -1534,6 +3230,10 @@ export const createPrediction = /* GraphQL */ `
                 id
                 awardsBody
                 year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
                 type
                 expiration
                 isActive
@@ -1590,6 +3290,10 @@ export const createPrediction = /* GraphQL */ `
                 id
                 awardsBody
                 year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
                 type
                 expiration
                 isActive
@@ -1607,9 +3311,6 @@ export const createPrediction = /* GraphQL */ `
           }
           awardsBody
           year
-          type
-          expiration
-          isActive
           contenders {
             items {
               id
@@ -1625,6 +3326,10 @@ export const createPrediction = /* GraphQL */ `
                 id
                 awardsBody
                 year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
                 type
                 expiration
                 isActive
@@ -1666,6 +3371,13 @@ export const createPrediction = /* GraphQL */ `
             }
             nextToken
           }
+          nominationsOpen
+          winsOpen
+          nominationDateTime
+          winDateTime
+          type
+          expiration
+          isActive
           createdAt
           updatedAt
         }
@@ -1725,6 +3437,10 @@ export const createPrediction = /* GraphQL */ `
                 id
                 awardsBody
                 year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
                 type
                 expiration
                 isActive
@@ -1768,6 +3484,7 @@ export const createPrediction = /* GraphQL */ `
             createdAt
             updatedAt
             predictionSetPredictionsId
+            historyPredictionSetPredictionsId
             contenderPredictionsId
             predictionUserId
           }
@@ -1786,6 +3503,7 @@ export const createPrediction = /* GraphQL */ `
       createdAt
       updatedAt
       predictionSetPredictionsId
+      historyPredictionSetPredictionsId
       contenderPredictionsId
       predictionUserId
     }
@@ -1830,9 +3548,6 @@ export const updatePrediction = /* GraphQL */ `
             }
             awardsBody
             year
-            type
-            expiration
-            isActive
             contenders {
               items {
                 id
@@ -1847,6 +3562,13 @@ export const updatePrediction = /* GraphQL */ `
               }
               nextToken
             }
+            nominationsOpen
+            winsOpen
+            nominationDateTime
+            winDateTime
+            type
+            expiration
+            isActive
             createdAt
             updatedAt
           }
@@ -1865,6 +3587,10 @@ export const updatePrediction = /* GraphQL */ `
                 id
                 awardsBody
                 year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
                 type
                 expiration
                 isActive
@@ -1921,6 +3647,10 @@ export const updatePrediction = /* GraphQL */ `
                 id
                 awardsBody
                 year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
                 type
                 expiration
                 isActive
@@ -1938,9 +3668,6 @@ export const updatePrediction = /* GraphQL */ `
           }
           awardsBody
           year
-          type
-          expiration
-          isActive
           contenders {
             items {
               id
@@ -1956,6 +3683,10 @@ export const updatePrediction = /* GraphQL */ `
                 id
                 awardsBody
                 year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
                 type
                 expiration
                 isActive
@@ -1997,6 +3728,13 @@ export const updatePrediction = /* GraphQL */ `
             }
             nextToken
           }
+          nominationsOpen
+          winsOpen
+          nominationDateTime
+          winDateTime
+          type
+          expiration
+          isActive
           createdAt
           updatedAt
         }
@@ -2056,6 +3794,10 @@ export const updatePrediction = /* GraphQL */ `
                 id
                 awardsBody
                 year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
                 type
                 expiration
                 isActive
@@ -2099,6 +3841,7 @@ export const updatePrediction = /* GraphQL */ `
             createdAt
             updatedAt
             predictionSetPredictionsId
+            historyPredictionSetPredictionsId
             contenderPredictionsId
             predictionUserId
           }
@@ -2117,6 +3860,7 @@ export const updatePrediction = /* GraphQL */ `
       createdAt
       updatedAt
       predictionSetPredictionsId
+      historyPredictionSetPredictionsId
       contenderPredictionsId
       predictionUserId
     }
@@ -2161,9 +3905,6 @@ export const deletePrediction = /* GraphQL */ `
             }
             awardsBody
             year
-            type
-            expiration
-            isActive
             contenders {
               items {
                 id
@@ -2178,6 +3919,13 @@ export const deletePrediction = /* GraphQL */ `
               }
               nextToken
             }
+            nominationsOpen
+            winsOpen
+            nominationDateTime
+            winDateTime
+            type
+            expiration
+            isActive
             createdAt
             updatedAt
           }
@@ -2196,6 +3944,10 @@ export const deletePrediction = /* GraphQL */ `
                 id
                 awardsBody
                 year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
                 type
                 expiration
                 isActive
@@ -2252,6 +4004,10 @@ export const deletePrediction = /* GraphQL */ `
                 id
                 awardsBody
                 year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
                 type
                 expiration
                 isActive
@@ -2269,9 +4025,6 @@ export const deletePrediction = /* GraphQL */ `
           }
           awardsBody
           year
-          type
-          expiration
-          isActive
           contenders {
             items {
               id
@@ -2287,6 +4040,10 @@ export const deletePrediction = /* GraphQL */ `
                 id
                 awardsBody
                 year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
                 type
                 expiration
                 isActive
@@ -2328,6 +4085,13 @@ export const deletePrediction = /* GraphQL */ `
             }
             nextToken
           }
+          nominationsOpen
+          winsOpen
+          nominationDateTime
+          winDateTime
+          type
+          expiration
+          isActive
           createdAt
           updatedAt
         }
@@ -2387,6 +4151,10 @@ export const deletePrediction = /* GraphQL */ `
                 id
                 awardsBody
                 year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
                 type
                 expiration
                 isActive
@@ -2430,6 +4198,7 @@ export const deletePrediction = /* GraphQL */ `
             createdAt
             updatedAt
             predictionSetPredictionsId
+            historyPredictionSetPredictionsId
             contenderPredictionsId
             predictionUserId
           }
@@ -2448,6 +4217,7 @@ export const deletePrediction = /* GraphQL */ `
       createdAt
       updatedAt
       predictionSetPredictionsId
+      historyPredictionSetPredictionsId
       contenderPredictionsId
       predictionUserId
     }
@@ -2480,9 +4250,6 @@ export const createEvent = /* GraphQL */ `
             }
             awardsBody
             year
-            type
-            expiration
-            isActive
             contenders {
               items {
                 id
@@ -2497,6 +4264,13 @@ export const createEvent = /* GraphQL */ `
               }
               nextToken
             }
+            nominationsOpen
+            winsOpen
+            nominationDateTime
+            winDateTime
+            type
+            expiration
+            isActive
             createdAt
             updatedAt
           }
@@ -2515,6 +4289,10 @@ export const createEvent = /* GraphQL */ `
                 id
                 awardsBody
                 year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
                 type
                 expiration
                 isActive
@@ -2564,9 +4342,6 @@ export const createEvent = /* GraphQL */ `
       }
       awardsBody
       year
-      type
-      expiration
-      isActive
       contenders {
         items {
           id
@@ -2581,12 +4356,16 @@ export const createEvent = /* GraphQL */ `
               }
               awardsBody
               year
-              type
-              expiration
-              isActive
               contenders {
                 nextToken
               }
+              nominationsOpen
+              winsOpen
+              nominationDateTime
+              winDateTime
+              type
+              expiration
+              isActive
               createdAt
               updatedAt
             }
@@ -2623,9 +4402,6 @@ export const createEvent = /* GraphQL */ `
             }
             awardsBody
             year
-            type
-            expiration
-            isActive
             contenders {
               items {
                 id
@@ -2640,6 +4416,13 @@ export const createEvent = /* GraphQL */ `
               }
               nextToken
             }
+            nominationsOpen
+            winsOpen
+            nominationDateTime
+            winDateTime
+            type
+            expiration
+            isActive
             createdAt
             updatedAt
           }
@@ -2700,6 +4483,7 @@ export const createEvent = /* GraphQL */ `
               createdAt
               updatedAt
               predictionSetPredictionsId
+              historyPredictionSetPredictionsId
               contenderPredictionsId
               predictionUserId
             }
@@ -2716,6 +4500,13 @@ export const createEvent = /* GraphQL */ `
         }
         nextToken
       }
+      nominationsOpen
+      winsOpen
+      nominationDateTime
+      winDateTime
+      type
+      expiration
+      isActive
       createdAt
       updatedAt
     }
@@ -2748,9 +4539,6 @@ export const updateEvent = /* GraphQL */ `
             }
             awardsBody
             year
-            type
-            expiration
-            isActive
             contenders {
               items {
                 id
@@ -2765,6 +4553,13 @@ export const updateEvent = /* GraphQL */ `
               }
               nextToken
             }
+            nominationsOpen
+            winsOpen
+            nominationDateTime
+            winDateTime
+            type
+            expiration
+            isActive
             createdAt
             updatedAt
           }
@@ -2783,6 +4578,10 @@ export const updateEvent = /* GraphQL */ `
                 id
                 awardsBody
                 year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
                 type
                 expiration
                 isActive
@@ -2832,9 +4631,6 @@ export const updateEvent = /* GraphQL */ `
       }
       awardsBody
       year
-      type
-      expiration
-      isActive
       contenders {
         items {
           id
@@ -2849,12 +4645,16 @@ export const updateEvent = /* GraphQL */ `
               }
               awardsBody
               year
-              type
-              expiration
-              isActive
               contenders {
                 nextToken
               }
+              nominationsOpen
+              winsOpen
+              nominationDateTime
+              winDateTime
+              type
+              expiration
+              isActive
               createdAt
               updatedAt
             }
@@ -2891,9 +4691,6 @@ export const updateEvent = /* GraphQL */ `
             }
             awardsBody
             year
-            type
-            expiration
-            isActive
             contenders {
               items {
                 id
@@ -2908,6 +4705,13 @@ export const updateEvent = /* GraphQL */ `
               }
               nextToken
             }
+            nominationsOpen
+            winsOpen
+            nominationDateTime
+            winDateTime
+            type
+            expiration
+            isActive
             createdAt
             updatedAt
           }
@@ -2968,6 +4772,7 @@ export const updateEvent = /* GraphQL */ `
               createdAt
               updatedAt
               predictionSetPredictionsId
+              historyPredictionSetPredictionsId
               contenderPredictionsId
               predictionUserId
             }
@@ -2984,6 +4789,13 @@ export const updateEvent = /* GraphQL */ `
         }
         nextToken
       }
+      nominationsOpen
+      winsOpen
+      nominationDateTime
+      winDateTime
+      type
+      expiration
+      isActive
       createdAt
       updatedAt
     }
@@ -3016,9 +4828,6 @@ export const deleteEvent = /* GraphQL */ `
             }
             awardsBody
             year
-            type
-            expiration
-            isActive
             contenders {
               items {
                 id
@@ -3033,6 +4842,13 @@ export const deleteEvent = /* GraphQL */ `
               }
               nextToken
             }
+            nominationsOpen
+            winsOpen
+            nominationDateTime
+            winDateTime
+            type
+            expiration
+            isActive
             createdAt
             updatedAt
           }
@@ -3051,6 +4867,10 @@ export const deleteEvent = /* GraphQL */ `
                 id
                 awardsBody
                 year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
                 type
                 expiration
                 isActive
@@ -3100,9 +4920,6 @@ export const deleteEvent = /* GraphQL */ `
       }
       awardsBody
       year
-      type
-      expiration
-      isActive
       contenders {
         items {
           id
@@ -3117,12 +4934,16 @@ export const deleteEvent = /* GraphQL */ `
               }
               awardsBody
               year
-              type
-              expiration
-              isActive
               contenders {
                 nextToken
               }
+              nominationsOpen
+              winsOpen
+              nominationDateTime
+              winDateTime
+              type
+              expiration
+              isActive
               createdAt
               updatedAt
             }
@@ -3159,9 +4980,6 @@ export const deleteEvent = /* GraphQL */ `
             }
             awardsBody
             year
-            type
-            expiration
-            isActive
             contenders {
               items {
                 id
@@ -3176,6 +4994,13 @@ export const deleteEvent = /* GraphQL */ `
               }
               nextToken
             }
+            nominationsOpen
+            winsOpen
+            nominationDateTime
+            winDateTime
+            type
+            expiration
+            isActive
             createdAt
             updatedAt
           }
@@ -3236,6 +5061,7 @@ export const deleteEvent = /* GraphQL */ `
               createdAt
               updatedAt
               predictionSetPredictionsId
+              historyPredictionSetPredictionsId
               contenderPredictionsId
               predictionUserId
             }
@@ -3252,6 +5078,13 @@ export const deleteEvent = /* GraphQL */ `
         }
         nextToken
       }
+      nominationsOpen
+      winsOpen
+      nominationDateTime
+      winDateTime
+      type
+      expiration
+      isActive
       createdAt
       updatedAt
     }
@@ -3280,12 +5113,16 @@ export const createCategory = /* GraphQL */ `
               }
               awardsBody
               year
-              type
-              expiration
-              isActive
               contenders {
                 nextToken
               }
+              nominationsOpen
+              winsOpen
+              nominationDateTime
+              winDateTime
+              type
+              expiration
+              isActive
               createdAt
               updatedAt
             }
@@ -3311,9 +5148,6 @@ export const createCategory = /* GraphQL */ `
         }
         awardsBody
         year
-        type
-        expiration
-        isActive
         contenders {
           items {
             id
@@ -3325,6 +5159,10 @@ export const createCategory = /* GraphQL */ `
                 id
                 awardsBody
                 year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
                 type
                 expiration
                 isActive
@@ -3345,12 +5183,16 @@ export const createCategory = /* GraphQL */ `
               }
               awardsBody
               year
-              type
-              expiration
-              isActive
               contenders {
                 nextToken
               }
+              nominationsOpen
+              winsOpen
+              nominationDateTime
+              winDateTime
+              type
+              expiration
+              isActive
               createdAt
               updatedAt
             }
@@ -3389,6 +5231,7 @@ export const createCategory = /* GraphQL */ `
                 createdAt
                 updatedAt
                 predictionSetPredictionsId
+                historyPredictionSetPredictionsId
                 contenderPredictionsId
                 predictionUserId
               }
@@ -3405,6 +5248,13 @@ export const createCategory = /* GraphQL */ `
           }
           nextToken
         }
+        nominationsOpen
+        winsOpen
+        nominationDateTime
+        winDateTime
+        type
+        expiration
+        isActive
         createdAt
         updatedAt
       }
@@ -3422,12 +5272,16 @@ export const createCategory = /* GraphQL */ `
               }
               awardsBody
               year
-              type
-              expiration
-              isActive
               contenders {
                 nextToken
               }
+              nominationsOpen
+              winsOpen
+              nominationDateTime
+              winDateTime
+              type
+              expiration
+              isActive
               createdAt
               updatedAt
             }
@@ -3464,9 +5318,6 @@ export const createCategory = /* GraphQL */ `
             }
             awardsBody
             year
-            type
-            expiration
-            isActive
             contenders {
               items {
                 id
@@ -3481,6 +5332,13 @@ export const createCategory = /* GraphQL */ `
               }
               nextToken
             }
+            nominationsOpen
+            winsOpen
+            nominationDateTime
+            winDateTime
+            type
+            expiration
+            isActive
             createdAt
             updatedAt
           }
@@ -3541,6 +5399,7 @@ export const createCategory = /* GraphQL */ `
               createdAt
               updatedAt
               predictionSetPredictionsId
+              historyPredictionSetPredictionsId
               contenderPredictionsId
               predictionUserId
             }
@@ -3586,12 +5445,16 @@ export const updateCategory = /* GraphQL */ `
               }
               awardsBody
               year
-              type
-              expiration
-              isActive
               contenders {
                 nextToken
               }
+              nominationsOpen
+              winsOpen
+              nominationDateTime
+              winDateTime
+              type
+              expiration
+              isActive
               createdAt
               updatedAt
             }
@@ -3617,9 +5480,6 @@ export const updateCategory = /* GraphQL */ `
         }
         awardsBody
         year
-        type
-        expiration
-        isActive
         contenders {
           items {
             id
@@ -3631,6 +5491,10 @@ export const updateCategory = /* GraphQL */ `
                 id
                 awardsBody
                 year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
                 type
                 expiration
                 isActive
@@ -3651,12 +5515,16 @@ export const updateCategory = /* GraphQL */ `
               }
               awardsBody
               year
-              type
-              expiration
-              isActive
               contenders {
                 nextToken
               }
+              nominationsOpen
+              winsOpen
+              nominationDateTime
+              winDateTime
+              type
+              expiration
+              isActive
               createdAt
               updatedAt
             }
@@ -3695,6 +5563,7 @@ export const updateCategory = /* GraphQL */ `
                 createdAt
                 updatedAt
                 predictionSetPredictionsId
+                historyPredictionSetPredictionsId
                 contenderPredictionsId
                 predictionUserId
               }
@@ -3711,6 +5580,13 @@ export const updateCategory = /* GraphQL */ `
           }
           nextToken
         }
+        nominationsOpen
+        winsOpen
+        nominationDateTime
+        winDateTime
+        type
+        expiration
+        isActive
         createdAt
         updatedAt
       }
@@ -3728,12 +5604,16 @@ export const updateCategory = /* GraphQL */ `
               }
               awardsBody
               year
-              type
-              expiration
-              isActive
               contenders {
                 nextToken
               }
+              nominationsOpen
+              winsOpen
+              nominationDateTime
+              winDateTime
+              type
+              expiration
+              isActive
               createdAt
               updatedAt
             }
@@ -3770,9 +5650,6 @@ export const updateCategory = /* GraphQL */ `
             }
             awardsBody
             year
-            type
-            expiration
-            isActive
             contenders {
               items {
                 id
@@ -3787,6 +5664,13 @@ export const updateCategory = /* GraphQL */ `
               }
               nextToken
             }
+            nominationsOpen
+            winsOpen
+            nominationDateTime
+            winDateTime
+            type
+            expiration
+            isActive
             createdAt
             updatedAt
           }
@@ -3847,6 +5731,7 @@ export const updateCategory = /* GraphQL */ `
               createdAt
               updatedAt
               predictionSetPredictionsId
+              historyPredictionSetPredictionsId
               contenderPredictionsId
               predictionUserId
             }
@@ -3892,12 +5777,16 @@ export const deleteCategory = /* GraphQL */ `
               }
               awardsBody
               year
-              type
-              expiration
-              isActive
               contenders {
                 nextToken
               }
+              nominationsOpen
+              winsOpen
+              nominationDateTime
+              winDateTime
+              type
+              expiration
+              isActive
               createdAt
               updatedAt
             }
@@ -3923,9 +5812,6 @@ export const deleteCategory = /* GraphQL */ `
         }
         awardsBody
         year
-        type
-        expiration
-        isActive
         contenders {
           items {
             id
@@ -3937,6 +5823,10 @@ export const deleteCategory = /* GraphQL */ `
                 id
                 awardsBody
                 year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
                 type
                 expiration
                 isActive
@@ -3957,12 +5847,16 @@ export const deleteCategory = /* GraphQL */ `
               }
               awardsBody
               year
-              type
-              expiration
-              isActive
               contenders {
                 nextToken
               }
+              nominationsOpen
+              winsOpen
+              nominationDateTime
+              winDateTime
+              type
+              expiration
+              isActive
               createdAt
               updatedAt
             }
@@ -4001,6 +5895,7 @@ export const deleteCategory = /* GraphQL */ `
                 createdAt
                 updatedAt
                 predictionSetPredictionsId
+                historyPredictionSetPredictionsId
                 contenderPredictionsId
                 predictionUserId
               }
@@ -4017,6 +5912,13 @@ export const deleteCategory = /* GraphQL */ `
           }
           nextToken
         }
+        nominationsOpen
+        winsOpen
+        nominationDateTime
+        winDateTime
+        type
+        expiration
+        isActive
         createdAt
         updatedAt
       }
@@ -4034,12 +5936,16 @@ export const deleteCategory = /* GraphQL */ `
               }
               awardsBody
               year
-              type
-              expiration
-              isActive
               contenders {
                 nextToken
               }
+              nominationsOpen
+              winsOpen
+              nominationDateTime
+              winDateTime
+              type
+              expiration
+              isActive
               createdAt
               updatedAt
             }
@@ -4076,9 +5982,6 @@ export const deleteCategory = /* GraphQL */ `
             }
             awardsBody
             year
-            type
-            expiration
-            isActive
             contenders {
               items {
                 id
@@ -4093,6 +5996,13 @@ export const deleteCategory = /* GraphQL */ `
               }
               nextToken
             }
+            nominationsOpen
+            winsOpen
+            nominationDateTime
+            winDateTime
+            type
+            expiration
+            isActive
             createdAt
             updatedAt
           }
@@ -4153,6 +6063,7 @@ export const deleteCategory = /* GraphQL */ `
               createdAt
               updatedAt
               predictionSetPredictionsId
+              historyPredictionSetPredictionsId
               contenderPredictionsId
               predictionUserId
             }
@@ -4197,6 +6108,10 @@ export const createContender = /* GraphQL */ `
                 id
                 awardsBody
                 year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
                 type
                 expiration
                 isActive
@@ -4214,9 +6129,6 @@ export const createContender = /* GraphQL */ `
           }
           awardsBody
           year
-          type
-          expiration
-          isActive
           contenders {
             items {
               id
@@ -4232,6 +6144,10 @@ export const createContender = /* GraphQL */ `
                 id
                 awardsBody
                 year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
                 type
                 expiration
                 isActive
@@ -4273,6 +6189,13 @@ export const createContender = /* GraphQL */ `
             }
             nextToken
           }
+          nominationsOpen
+          winsOpen
+          nominationDateTime
+          winDateTime
+          type
+          expiration
+          isActive
           createdAt
           updatedAt
         }
@@ -4287,6 +6210,10 @@ export const createContender = /* GraphQL */ `
                 id
                 awardsBody
                 year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
                 type
                 expiration
                 isActive
@@ -4307,12 +6234,16 @@ export const createContender = /* GraphQL */ `
               }
               awardsBody
               year
-              type
-              expiration
-              isActive
               contenders {
                 nextToken
               }
+              nominationsOpen
+              winsOpen
+              nominationDateTime
+              winDateTime
+              type
+              expiration
+              isActive
               createdAt
               updatedAt
             }
@@ -4351,6 +6282,7 @@ export const createContender = /* GraphQL */ `
                 createdAt
                 updatedAt
                 predictionSetPredictionsId
+                historyPredictionSetPredictionsId
                 contenderPredictionsId
                 predictionUserId
               }
@@ -4385,12 +6317,16 @@ export const createContender = /* GraphQL */ `
               }
               awardsBody
               year
-              type
-              expiration
-              isActive
               contenders {
                 nextToken
               }
+              nominationsOpen
+              winsOpen
+              nominationDateTime
+              winDateTime
+              type
+              expiration
+              isActive
               createdAt
               updatedAt
             }
@@ -4416,9 +6352,6 @@ export const createContender = /* GraphQL */ `
         }
         awardsBody
         year
-        type
-        expiration
-        isActive
         contenders {
           items {
             id
@@ -4430,6 +6363,10 @@ export const createContender = /* GraphQL */ `
                 id
                 awardsBody
                 year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
                 type
                 expiration
                 isActive
@@ -4450,12 +6387,16 @@ export const createContender = /* GraphQL */ `
               }
               awardsBody
               year
-              type
-              expiration
-              isActive
               contenders {
                 nextToken
               }
+              nominationsOpen
+              winsOpen
+              nominationDateTime
+              winDateTime
+              type
+              expiration
+              isActive
               createdAt
               updatedAt
             }
@@ -4494,6 +6435,7 @@ export const createContender = /* GraphQL */ `
                 createdAt
                 updatedAt
                 predictionSetPredictionsId
+                historyPredictionSetPredictionsId
                 contenderPredictionsId
                 predictionUserId
               }
@@ -4510,6 +6452,13 @@ export const createContender = /* GraphQL */ `
           }
           nextToken
         }
+        nominationsOpen
+        winsOpen
+        nominationDateTime
+        winDateTime
+        type
+        expiration
+        isActive
         createdAt
         updatedAt
       }
@@ -4565,6 +6514,10 @@ export const createContender = /* GraphQL */ `
                 id
                 awardsBody
                 year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
                 type
                 expiration
                 isActive
@@ -4585,12 +6538,16 @@ export const createContender = /* GraphQL */ `
               }
               awardsBody
               year
-              type
-              expiration
-              isActive
               contenders {
                 nextToken
               }
+              nominationsOpen
+              winsOpen
+              nominationDateTime
+              winDateTime
+              type
+              expiration
+              isActive
               createdAt
               updatedAt
             }
@@ -4629,6 +6586,7 @@ export const createContender = /* GraphQL */ `
                 createdAt
                 updatedAt
                 predictionSetPredictionsId
+                historyPredictionSetPredictionsId
                 contenderPredictionsId
                 predictionUserId
               }
@@ -4647,6 +6605,7 @@ export const createContender = /* GraphQL */ `
           createdAt
           updatedAt
           predictionSetPredictionsId
+          historyPredictionSetPredictionsId
           contenderPredictionsId
           predictionUserId
         }
@@ -4685,6 +6644,10 @@ export const updateContender = /* GraphQL */ `
                 id
                 awardsBody
                 year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
                 type
                 expiration
                 isActive
@@ -4702,9 +6665,6 @@ export const updateContender = /* GraphQL */ `
           }
           awardsBody
           year
-          type
-          expiration
-          isActive
           contenders {
             items {
               id
@@ -4720,6 +6680,10 @@ export const updateContender = /* GraphQL */ `
                 id
                 awardsBody
                 year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
                 type
                 expiration
                 isActive
@@ -4761,6 +6725,13 @@ export const updateContender = /* GraphQL */ `
             }
             nextToken
           }
+          nominationsOpen
+          winsOpen
+          nominationDateTime
+          winDateTime
+          type
+          expiration
+          isActive
           createdAt
           updatedAt
         }
@@ -4775,6 +6746,10 @@ export const updateContender = /* GraphQL */ `
                 id
                 awardsBody
                 year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
                 type
                 expiration
                 isActive
@@ -4795,12 +6770,16 @@ export const updateContender = /* GraphQL */ `
               }
               awardsBody
               year
-              type
-              expiration
-              isActive
               contenders {
                 nextToken
               }
+              nominationsOpen
+              winsOpen
+              nominationDateTime
+              winDateTime
+              type
+              expiration
+              isActive
               createdAt
               updatedAt
             }
@@ -4839,6 +6818,7 @@ export const updateContender = /* GraphQL */ `
                 createdAt
                 updatedAt
                 predictionSetPredictionsId
+                historyPredictionSetPredictionsId
                 contenderPredictionsId
                 predictionUserId
               }
@@ -4873,12 +6853,16 @@ export const updateContender = /* GraphQL */ `
               }
               awardsBody
               year
-              type
-              expiration
-              isActive
               contenders {
                 nextToken
               }
+              nominationsOpen
+              winsOpen
+              nominationDateTime
+              winDateTime
+              type
+              expiration
+              isActive
               createdAt
               updatedAt
             }
@@ -4904,9 +6888,6 @@ export const updateContender = /* GraphQL */ `
         }
         awardsBody
         year
-        type
-        expiration
-        isActive
         contenders {
           items {
             id
@@ -4918,6 +6899,10 @@ export const updateContender = /* GraphQL */ `
                 id
                 awardsBody
                 year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
                 type
                 expiration
                 isActive
@@ -4938,12 +6923,16 @@ export const updateContender = /* GraphQL */ `
               }
               awardsBody
               year
-              type
-              expiration
-              isActive
               contenders {
                 nextToken
               }
+              nominationsOpen
+              winsOpen
+              nominationDateTime
+              winDateTime
+              type
+              expiration
+              isActive
               createdAt
               updatedAt
             }
@@ -4982,6 +6971,7 @@ export const updateContender = /* GraphQL */ `
                 createdAt
                 updatedAt
                 predictionSetPredictionsId
+                historyPredictionSetPredictionsId
                 contenderPredictionsId
                 predictionUserId
               }
@@ -4998,6 +6988,13 @@ export const updateContender = /* GraphQL */ `
           }
           nextToken
         }
+        nominationsOpen
+        winsOpen
+        nominationDateTime
+        winDateTime
+        type
+        expiration
+        isActive
         createdAt
         updatedAt
       }
@@ -5053,6 +7050,10 @@ export const updateContender = /* GraphQL */ `
                 id
                 awardsBody
                 year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
                 type
                 expiration
                 isActive
@@ -5073,12 +7074,16 @@ export const updateContender = /* GraphQL */ `
               }
               awardsBody
               year
-              type
-              expiration
-              isActive
               contenders {
                 nextToken
               }
+              nominationsOpen
+              winsOpen
+              nominationDateTime
+              winDateTime
+              type
+              expiration
+              isActive
               createdAt
               updatedAt
             }
@@ -5117,6 +7122,7 @@ export const updateContender = /* GraphQL */ `
                 createdAt
                 updatedAt
                 predictionSetPredictionsId
+                historyPredictionSetPredictionsId
                 contenderPredictionsId
                 predictionUserId
               }
@@ -5135,6 +7141,7 @@ export const updateContender = /* GraphQL */ `
           createdAt
           updatedAt
           predictionSetPredictionsId
+          historyPredictionSetPredictionsId
           contenderPredictionsId
           predictionUserId
         }
@@ -5173,6 +7180,10 @@ export const deleteContender = /* GraphQL */ `
                 id
                 awardsBody
                 year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
                 type
                 expiration
                 isActive
@@ -5190,9 +7201,6 @@ export const deleteContender = /* GraphQL */ `
           }
           awardsBody
           year
-          type
-          expiration
-          isActive
           contenders {
             items {
               id
@@ -5208,6 +7216,10 @@ export const deleteContender = /* GraphQL */ `
                 id
                 awardsBody
                 year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
                 type
                 expiration
                 isActive
@@ -5249,6 +7261,13 @@ export const deleteContender = /* GraphQL */ `
             }
             nextToken
           }
+          nominationsOpen
+          winsOpen
+          nominationDateTime
+          winDateTime
+          type
+          expiration
+          isActive
           createdAt
           updatedAt
         }
@@ -5263,6 +7282,10 @@ export const deleteContender = /* GraphQL */ `
                 id
                 awardsBody
                 year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
                 type
                 expiration
                 isActive
@@ -5283,12 +7306,16 @@ export const deleteContender = /* GraphQL */ `
               }
               awardsBody
               year
-              type
-              expiration
-              isActive
               contenders {
                 nextToken
               }
+              nominationsOpen
+              winsOpen
+              nominationDateTime
+              winDateTime
+              type
+              expiration
+              isActive
               createdAt
               updatedAt
             }
@@ -5327,6 +7354,7 @@ export const deleteContender = /* GraphQL */ `
                 createdAt
                 updatedAt
                 predictionSetPredictionsId
+                historyPredictionSetPredictionsId
                 contenderPredictionsId
                 predictionUserId
               }
@@ -5361,12 +7389,16 @@ export const deleteContender = /* GraphQL */ `
               }
               awardsBody
               year
-              type
-              expiration
-              isActive
               contenders {
                 nextToken
               }
+              nominationsOpen
+              winsOpen
+              nominationDateTime
+              winDateTime
+              type
+              expiration
+              isActive
               createdAt
               updatedAt
             }
@@ -5392,9 +7424,6 @@ export const deleteContender = /* GraphQL */ `
         }
         awardsBody
         year
-        type
-        expiration
-        isActive
         contenders {
           items {
             id
@@ -5406,6 +7435,10 @@ export const deleteContender = /* GraphQL */ `
                 id
                 awardsBody
                 year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
                 type
                 expiration
                 isActive
@@ -5426,12 +7459,16 @@ export const deleteContender = /* GraphQL */ `
               }
               awardsBody
               year
-              type
-              expiration
-              isActive
               contenders {
                 nextToken
               }
+              nominationsOpen
+              winsOpen
+              nominationDateTime
+              winDateTime
+              type
+              expiration
+              isActive
               createdAt
               updatedAt
             }
@@ -5470,6 +7507,7 @@ export const deleteContender = /* GraphQL */ `
                 createdAt
                 updatedAt
                 predictionSetPredictionsId
+                historyPredictionSetPredictionsId
                 contenderPredictionsId
                 predictionUserId
               }
@@ -5486,6 +7524,13 @@ export const deleteContender = /* GraphQL */ `
           }
           nextToken
         }
+        nominationsOpen
+        winsOpen
+        nominationDateTime
+        winDateTime
+        type
+        expiration
+        isActive
         createdAt
         updatedAt
       }
@@ -5541,6 +7586,10 @@ export const deleteContender = /* GraphQL */ `
                 id
                 awardsBody
                 year
+                nominationsOpen
+                winsOpen
+                nominationDateTime
+                winDateTime
                 type
                 expiration
                 isActive
@@ -5561,12 +7610,16 @@ export const deleteContender = /* GraphQL */ `
               }
               awardsBody
               year
-              type
-              expiration
-              isActive
               contenders {
                 nextToken
               }
+              nominationsOpen
+              winsOpen
+              nominationDateTime
+              winDateTime
+              type
+              expiration
+              isActive
               createdAt
               updatedAt
             }
@@ -5605,6 +7658,7 @@ export const deleteContender = /* GraphQL */ `
                 createdAt
                 updatedAt
                 predictionSetPredictionsId
+                historyPredictionSetPredictionsId
                 contenderPredictionsId
                 predictionUserId
               }
@@ -5623,6 +7677,7 @@ export const deleteContender = /* GraphQL */ `
           createdAt
           updatedAt
           predictionSetPredictionsId
+          historyPredictionSetPredictionsId
           contenderPredictionsId
           predictionUserId
         }

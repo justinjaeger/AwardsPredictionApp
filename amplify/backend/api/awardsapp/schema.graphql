@@ -24,6 +24,7 @@ enum AwardsBody {
   MPSE
 }
 
+#DEPRICATED
 enum EventType {
     WIN
     NOMINATION
@@ -89,7 +90,16 @@ type User @model @auth(rules: [{allow: public}]) {
     image: String
     role: UserRole! @default(value: "USER")}
 
+# CURRENT predictions only
 type PredictionSet @model @auth(rules: [{ allow: public }]) {
+    id: ID! @primaryKey
+    user: User! @hasOne
+    event: Event! @hasOne
+    category: Category! @hasOne
+    predictions: [Prediction] @hasMany
+}
+
+type HistoryPredictionSet @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
     user: User! @hasOne
     event: Event! @hasOne
@@ -109,10 +119,14 @@ type Event @model @auth(rules: [{ allow: public }]) {
     categories: [Category] @hasMany # Retrieve categories on an event record
     awardsBody: AwardsBody!
     year: Int!
-    type: EventType!
-    expiration: AWSDateTime
-    isActive: String @default(value: "x") # essentially boolean
     contenders: [Contender] @hasMany
+    nominationsOpen: String @default(value: "x")
+    winsOpen: String @default(value: "x")
+    nominationDateTime: AWSDateTime # nullable. must have ability to set as admin
+    winDateTime: AWSDateTime # nullable. must have ability to set as admin
+    type: EventType! #DELETE
+    expiration: AWSDateTime #DELETE
+    isActive: String @default(value: "x") #DELETE
 }
 
 type Category @model @auth(rules: [{ allow: public }]) {
@@ -132,7 +146,7 @@ type Contender @model @auth(rules: [{ allow: public }]) {
     person: Person @hasOne # optional - only applies to acting categories
     song: Song @hasOne # optional - only applies to the song category
     predictions: [Prediction] @hasMany
-    didReceiveNominationOrWin: Boolean
+    didReceiveNominationOrWin: Boolean #DELETE
 }
 
 type Movie @model @auth(rules: [{ allow: public }]) {
