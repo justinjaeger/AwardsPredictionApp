@@ -1,19 +1,15 @@
-import { AwardsBody, CategoryName, EventType } from '../../API';
+import { AwardsBody, CategoryName } from '../../API';
 import { getAwardsBodyCategories, iCategoryData } from '../../constants/categories';
 import ApiServices from '../../services/graphql';
 
 const EVENTS = [
-  { awardsBody: AwardsBody.ACADEMY_AWARDS, year: 2023, type: EventType.NOMINATION }, // expect isActive to have a value of "x"
-  //   { awardsBody: AwardsBody.GOLDEN_GLOBES, year: 2023, type: EventType.NOMINATION },
+  { awardsBody: AwardsBody.ACADEMY_AWARDS, year: 2023 }, // expect isActive to have a value of "x"
+  //   { awardsBody: AwardsBody.GOLDEN_GLOBES, year: 2023 },
 ];
 
 export const createMockEvents = () => {
   EVENTS.forEach(async (event) => {
-    const { data: e } = await ApiServices.createEvent(
-      event.awardsBody,
-      event.year,
-      event.type,
-    );
+    const { data: e } = await ApiServices.createEvent(event.awardsBody, event.year);
     if (!e) return;
     console.log('created event', e);
     const eventId = e?.createEvent?.id;
@@ -40,7 +36,6 @@ export const deleteMockEvents = () => {
     const { data: maybeEvents } = await ApiServices.getUniqueEvents(
       event.awardsBody,
       event.year,
-      event.type,
     );
     if (!maybeEvents || !maybeEvents.listEvents) {
       return console.error('error in deleteMockEvents');

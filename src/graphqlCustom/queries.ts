@@ -164,9 +164,6 @@ export const listEvents = /* GraphQL */ `
         }
         awardsBody
         year
-        type
-        expiration
-        isActive
         createdAt
         updatedAt
       }
@@ -198,9 +195,6 @@ export const listCategories = /* GraphQL */ `
           id
           awardsBody
           year
-          type
-          expiration
-          isActive
           createdAt
           updatedAt
         }

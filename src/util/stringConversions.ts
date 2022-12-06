@@ -1,20 +1,14 @@
-import { AwardsBody, CategoryName, EventType } from '../API';
-import { EVENT_TYPE_TO_STRING } from '../constants';
+import { AwardsBody, CategoryName } from '../API';
 import { AWARDS_BODY_TO_PLURAL_STRING } from '../constants/awardsBodies';
 import { getAwardsBodyCategories } from '../constants/categories';
 
 /**
  * "2022 Academy Awards (Nominations)"
  */
-export const eventToString = (
-  awardsBody: AwardsBody,
-  eventType: EventType,
-  year: number,
-) => {
+export const eventToString = (awardsBody: AwardsBody, year: number) => {
   const ab = AWARDS_BODY_TO_PLURAL_STRING[AwardsBody[awardsBody]];
-  const et = EVENT_TYPE_TO_STRING[eventType];
   const y = year;
-  return y + ' ' + ab + ' (' + et + ')';
+  return y + ' ' + ab;
 };
 
 /**
@@ -22,11 +16,10 @@ export const eventToString = (
  */
 export const fullEventToString = (
   awardsBody: AwardsBody,
-  eventType: EventType,
   year: number,
   categoryName: CategoryName,
 ) => {
   const categoryList = getAwardsBodyCategories(awardsBody, year);
-  const event = eventToString(awardsBody, eventType, year);
+  const event = eventToString(awardsBody, year);
   return 'Best' + ' ' + categoryList[categoryName]?.name + ' ' + event;
 };

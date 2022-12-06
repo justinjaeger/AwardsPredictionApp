@@ -41,7 +41,7 @@ const deletePredictions = async (
       return { status: 'success' };
     }
 
-    // Delete all predictions associated (there should only be one, but for safety, loop through)
+    // Delete all predictions associated (there should only be one predictionSet, but for safety, loop through)
     predictionSets.forEach(async (ps) => {
       if (!ps?.predictions) return;
       await Promise.all(

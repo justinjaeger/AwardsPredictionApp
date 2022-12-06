@@ -1,9 +1,8 @@
 import _ from 'lodash';
 import React, { useEffect, useRef } from 'react';
 import { Animated, TouchableHighlight, useWindowDimensions, View } from 'react-native';
-import { AwardsBody, EventType } from '../../../API';
-import { Body, BodyLarge, SubHeader } from '../../../components/Text';
-import { EVENT_TYPE_TO_STRING } from '../../../constants';
+import { AwardsBody } from '../../../API';
+import { Body, SubHeader } from '../../../components/Text';
 import {
   AWARDS_BODY_TO_PLURAL_STRING,
   AWARDS_BODY_TO_STRING,
@@ -19,10 +18,8 @@ import LoadingStatue from '../../../components/LoadingStatue';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import useQueryAllEvents from '../../../hooks/getAllEvents';
 
-export const getEventName = (awardsBody: AwardsBody, eventType: EventType) => {
-  const ab = AWARDS_BODY_TO_PLURAL_STRING[AwardsBody[awardsBody]];
-  const et = EVENT_TYPE_TO_STRING[eventType];
-  return ab + ' (' + et + ')';
+export const getEventName = (awardsBody: AwardsBody) => {
+  return AWARDS_BODY_TO_PLURAL_STRING[AwardsBody[awardsBody]];
 };
 
 const EventSelect = () => {
@@ -94,7 +91,7 @@ const EventSelect = () => {
               <SubHeader style={{ marginBottom: theme.windowMargin }}>{key}</SubHeader>
               <View style={{ flexWrap: 'wrap', flexDirection: 'row' }}>
                 {[...val, ...val, ...val, ...val].map((event) => {
-                  const { type, awardsBody, expiration } = event;
+                  const { awardsBody, expiration } = event;
                   return (
                     <TouchableHighlight
                       style={{
@@ -117,7 +114,6 @@ const EventSelect = () => {
                           <SubHeader>
                             {AWARDS_BODY_TO_PLURAL_STRING[AwardsBody[awardsBody]]}
                           </SubHeader>
-                          <BodyLarge>{EVENT_TYPE_TO_STRING[type]}</BodyLarge>
                         </View>
                         <Body
                           style={{
