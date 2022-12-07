@@ -73,8 +73,8 @@ const StudioItem = (props: {
 
   return (
     <View
+      key={movieId}
       style={{
-        key: movieId,
         width: '100%',
         height: PosterSize.MEDIUM,
         marginTop: 10,
