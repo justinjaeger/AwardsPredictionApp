@@ -9,6 +9,7 @@ import ApiServices from '../../services/graphql';
 import { useAsyncEffect } from '../../util/hooks';
 import { GetUserQuery } from '../../API';
 import { useAuth } from '../../context/UserContext';
+import { getHeaderTitle } from '../../constants';
 
 const ChangeUsername = () => {
   const { userId } = useAuth();
@@ -35,7 +36,9 @@ const ChangeUsername = () => {
   useLayoutEffect(() => {
     // This is the best way to change the header
     navigation.setOptions({
-      headerTitle: usernameBeforeEdit ? 'Update Username' : 'Create Username',
+      headerTitle: getHeaderTitle(
+        usernameBeforeEdit ? 'Update Username' : 'Create Username',
+      ),
     });
   }, [usernameBeforeEdit, navigation]);
 

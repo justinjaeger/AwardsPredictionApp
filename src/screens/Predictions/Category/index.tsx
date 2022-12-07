@@ -8,6 +8,8 @@ import { PredictionsParamList } from '../../../navigation/types';
 import { getAwardsBodyCategories } from '../../../constants/categories';
 import { CategoryName } from '../../../API';
 import { useCategory } from '../../../context/CategoryContext';
+import { eventToString } from '../../../util/stringConversions';
+import { getHeaderTitle } from '../../../constants';
 
 const TIMING = 250;
 
@@ -71,10 +73,11 @@ const Category = () => {
   useLayoutEffect(() => {
     if (!category || !event) return;
     const awardsBodyCategories = getAwardsBodyCategories(event.awardsBody, event.year);
-    const headerTitle =
-      'Best ' + awardsBodyCategories[CategoryName[category.name]]?.name || '';
+    const eventName = eventToString(event.awardsBody, event.year);
+    const categoryName = awardsBodyCategories[CategoryName[category.name]]?.name || '';
+    const headerTitle = eventName + '\n' + 'Best ' + categoryName;
     navigation.setOptions({
-      headerTitle,
+      headerTitle: getHeaderTitle(headerTitle),
     });
   }, [navigation]);
 

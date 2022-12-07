@@ -3,7 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Profile from '../screens/Profile';
 import ChangeUsername from '../screens/Profile/ChangeUsername';
 import BackButton from '../components/Buttons/BackButton';
-import { headerSettings } from '../constants';
+import { getHeaderTitle, headerSettings } from '../constants';
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -18,13 +18,17 @@ const ProfileNavigator = () => (
     <Screen
       name="Proflie"
       component={Profile}
-      options={{ headerTitle: 'My Profile', headerLeft: BackButton, ...headerSettings }}
+      options={{
+        headerTitle: getHeaderTitle('My Profile'),
+        headerLeft: BackButton,
+        ...headerSettings,
+      }}
     />
     <Screen
       name="ChangeUsername"
       component={ChangeUsername}
       options={{
-        headerTitle: 'Create Username',
+        headerTitle: getHeaderTitle('Create Username'),
         headerLeft: BackButton,
         ...headerSettings,
       }}

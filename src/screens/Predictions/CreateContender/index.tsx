@@ -9,6 +9,7 @@ import { useCategory } from '../../../context/CategoryContext';
 import { iCategory, iEvent } from '../../../types';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import { PredictionsParamList } from '../../../navigation/types';
+import { getHeaderTitle } from '../../../constants';
 
 // TODO: should only be able to do this if logged in
 const CreateContender = () => {
@@ -26,7 +27,7 @@ const CreateContender = () => {
     );
     const headerTitle = `Add ${categoryList[category.name]?.name || 'Contender'}`;
     navigation.setOptions({
-      headerTitle,
+      headerTitle: getHeaderTitle(headerTitle),
     });
   }, [navigation]);
 
