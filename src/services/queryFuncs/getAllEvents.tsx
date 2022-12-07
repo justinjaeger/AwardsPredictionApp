@@ -27,8 +27,6 @@ const getAllEvents = async () => {
       awardsBody: e.awardsBody,
       year: e.year,
       type: e.type,
-      expiration: e.expiration || '',
-      isActive: e.isActive || undefined,
     };
   });
   return indexedEvents;

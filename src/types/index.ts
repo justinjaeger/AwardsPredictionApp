@@ -61,8 +61,6 @@ export type iEvent = {
   categories: iIndexedCategories;
   awardsBody: AwardsBody;
   year: number;
-  expiration: string;
-  isActive: string | undefined;
 };
 
 export type iIndexedEvents = {

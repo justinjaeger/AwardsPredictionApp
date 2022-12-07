@@ -4,6 +4,7 @@ import { Animated, TouchableHighlight, useWindowDimensions, View } from 'react-n
 import { AwardsBody } from '../../../API';
 import { Body, SubHeader } from '../../../components/Text';
 import {
+  AWARDS_BODY_TO_IMAGE,
   AWARDS_BODY_TO_PLURAL_STRING,
   AWARDS_BODY_TO_STRING,
 } from '../../../constants/awardsBodies';
@@ -17,6 +18,7 @@ import theme from '../../../constants/theme';
 import LoadingStatue from '../../../components/LoadingStatue';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import useQueryAllEvents from '../../../hooks/getAllEvents';
+import AwardsBodyImage from '../../../components/AwardsBodyImage';
 
 export const getEventName = (awardsBody: AwardsBody) => {
   return AWARDS_BODY_TO_PLURAL_STRING[AwardsBody[awardsBody]];
@@ -91,37 +93,42 @@ const EventSelect = () => {
               <SubHeader style={{ marginBottom: theme.windowMargin }}>{key}</SubHeader>
               <View style={{ flexWrap: 'wrap', flexDirection: 'row' }}>
                 {[...val, ...val, ...val, ...val].map((event) => {
-                  const { awardsBody, expiration } = event;
+                  const { awardsBody } = event;
                   return (
                     <TouchableHighlight
                       style={{
-                        height: 100,
+                        height: 80,
                         backgroundColor: 'rgba(0,0,0,0.1)',
                         borderRadius: theme.borderRadius,
                         borderWidth: 1,
                         borderColor: COLORS.white,
                         marginBottom: theme.windowMargin,
                         marginRight: theme.windowMargin,
-                        width: width / 2 - theme.windowMargin - 5,
+                        width: width - theme.windowMargin * 2,
                         padding: 5,
-                        justifyContent: 'space-between',
+                        justifyContent: 'center',
                       }}
                       underlayColor={COLORS.secondaryMiddle}
                       onPress={() => onSelectEvent(event)}
                     >
                       <>
-                        <View>
-                          <SubHeader>
-                            {AWARDS_BODY_TO_PLURAL_STRING[AwardsBody[awardsBody]]}
-                          </SubHeader>
+                        <View style={{ flexDirection: 'row' }}>
+                          <AwardsBodyImage
+                            source={AWARDS_BODY_TO_IMAGE[AwardsBody[awardsBody]]}
+                          />
+                          <View>
+                            <SubHeader>
+                              {AWARDS_BODY_TO_PLURAL_STRING[AwardsBody[awardsBody]]}
+                            </SubHeader>
+                          </View>
+                          <Body
+                            style={{
+                              alignSelf: 'flex-end',
+                              justifyContent: 'flex-end',
+                              color: COLORS.white,
+                            }}
+                          >{`Date: ${'TBD'}`}</Body>
                         </View>
-                        <Body
-                          style={{
-                            alignSelf: 'flex-end',
-                            justifyContent: 'flex-end',
-                            color: COLORS.white,
-                          }}
-                        >{`Date: ${expiration || 'TBD'}`}</Body>
                       </>
                     </TouchableHighlight>
                   );
