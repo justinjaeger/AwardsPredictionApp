@@ -79,8 +79,6 @@ export const onCreatePredictionSet = /* GraphQL */ `
               contenders {
                 nextToken
               }
-              nominationsOpen
-              winsOpen
               nominationDateTime
               winDateTime
               status
@@ -120,8 +118,6 @@ export const onCreatePredictionSet = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -145,8 +141,6 @@ export const onCreatePredictionSet = /* GraphQL */ `
               contenders {
                 nextToken
               }
-              nominationsOpen
-              winsOpen
               nominationDateTime
               winDateTime
               status
@@ -205,8 +199,6 @@ export const onCreatePredictionSet = /* GraphQL */ `
           }
           nextToken
         }
-        nominationsOpen
-        winsOpen
         nominationDateTime
         winDateTime
         status
@@ -228,8 +220,6 @@ export const onCreatePredictionSet = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -262,8 +252,6 @@ export const onCreatePredictionSet = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -305,8 +293,6 @@ export const onCreatePredictionSet = /* GraphQL */ `
             }
             nextToken
           }
-          nominationsOpen
-          winsOpen
           nominationDateTime
           winDateTime
           status
@@ -324,8 +310,6 @@ export const onCreatePredictionSet = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -349,8 +333,6 @@ export const onCreatePredictionSet = /* GraphQL */ `
               contenders {
                 nextToken
               }
-              nominationsOpen
-              winsOpen
               nominationDateTime
               winDateTime
               status
@@ -437,8 +419,6 @@ export const onCreatePredictionSet = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -462,8 +442,6 @@ export const onCreatePredictionSet = /* GraphQL */ `
               contenders {
                 nextToken
               }
-              nominationsOpen
-              winsOpen
               nominationDateTime
               winDateTime
               status
@@ -570,8 +548,6 @@ export const onUpdatePredictionSet = /* GraphQL */ `
               contenders {
                 nextToken
               }
-              nominationsOpen
-              winsOpen
               nominationDateTime
               winDateTime
               status
@@ -611,8 +587,6 @@ export const onUpdatePredictionSet = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -636,8 +610,6 @@ export const onUpdatePredictionSet = /* GraphQL */ `
               contenders {
                 nextToken
               }
-              nominationsOpen
-              winsOpen
               nominationDateTime
               winDateTime
               status
@@ -696,8 +668,6 @@ export const onUpdatePredictionSet = /* GraphQL */ `
           }
           nextToken
         }
-        nominationsOpen
-        winsOpen
         nominationDateTime
         winDateTime
         status
@@ -719,8 +689,6 @@ export const onUpdatePredictionSet = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -753,8 +721,6 @@ export const onUpdatePredictionSet = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -796,8 +762,6 @@ export const onUpdatePredictionSet = /* GraphQL */ `
             }
             nextToken
           }
-          nominationsOpen
-          winsOpen
           nominationDateTime
           winDateTime
           status
@@ -815,8 +779,6 @@ export const onUpdatePredictionSet = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -840,8 +802,6 @@ export const onUpdatePredictionSet = /* GraphQL */ `
               contenders {
                 nextToken
               }
-              nominationsOpen
-              winsOpen
               nominationDateTime
               winDateTime
               status
@@ -928,8 +888,6 @@ export const onUpdatePredictionSet = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -953,8 +911,6 @@ export const onUpdatePredictionSet = /* GraphQL */ `
               contenders {
                 nextToken
               }
-              nominationsOpen
-              winsOpen
               nominationDateTime
               winDateTime
               status
@@ -1061,8 +1017,6 @@ export const onDeletePredictionSet = /* GraphQL */ `
               contenders {
                 nextToken
               }
-              nominationsOpen
-              winsOpen
               nominationDateTime
               winDateTime
               status
@@ -1102,8 +1056,6 @@ export const onDeletePredictionSet = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -1127,8 +1079,6 @@ export const onDeletePredictionSet = /* GraphQL */ `
               contenders {
                 nextToken
               }
-              nominationsOpen
-              winsOpen
               nominationDateTime
               winDateTime
               status
@@ -1187,8 +1137,6 @@ export const onDeletePredictionSet = /* GraphQL */ `
           }
           nextToken
         }
-        nominationsOpen
-        winsOpen
         nominationDateTime
         winDateTime
         status
@@ -1210,8 +1158,6 @@ export const onDeletePredictionSet = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -1244,8 +1190,6 @@ export const onDeletePredictionSet = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -1287,8 +1231,6 @@ export const onDeletePredictionSet = /* GraphQL */ `
             }
             nextToken
           }
-          nominationsOpen
-          winsOpen
           nominationDateTime
           winDateTime
           status
@@ -1306,8 +1248,6 @@ export const onDeletePredictionSet = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -1331,8 +1271,6 @@ export const onDeletePredictionSet = /* GraphQL */ `
               contenders {
                 nextToken
               }
-              nominationsOpen
-              winsOpen
               nominationDateTime
               winDateTime
               status
@@ -1419,8 +1357,6 @@ export const onDeletePredictionSet = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -1444,8 +1380,6 @@ export const onDeletePredictionSet = /* GraphQL */ `
               contenders {
                 nextToken
               }
-              nominationsOpen
-              winsOpen
               nominationDateTime
               winDateTime
               status
@@ -1552,8 +1486,6 @@ export const onCreateHistoryPredictionSet = /* GraphQL */ `
               contenders {
                 nextToken
               }
-              nominationsOpen
-              winsOpen
               nominationDateTime
               winDateTime
               status
@@ -1593,8 +1525,6 @@ export const onCreateHistoryPredictionSet = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -1618,8 +1548,6 @@ export const onCreateHistoryPredictionSet = /* GraphQL */ `
               contenders {
                 nextToken
               }
-              nominationsOpen
-              winsOpen
               nominationDateTime
               winDateTime
               status
@@ -1678,8 +1606,6 @@ export const onCreateHistoryPredictionSet = /* GraphQL */ `
           }
           nextToken
         }
-        nominationsOpen
-        winsOpen
         nominationDateTime
         winDateTime
         status
@@ -1701,8 +1627,6 @@ export const onCreateHistoryPredictionSet = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -1735,8 +1659,6 @@ export const onCreateHistoryPredictionSet = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -1778,8 +1700,6 @@ export const onCreateHistoryPredictionSet = /* GraphQL */ `
             }
             nextToken
           }
-          nominationsOpen
-          winsOpen
           nominationDateTime
           winDateTime
           status
@@ -1797,8 +1717,6 @@ export const onCreateHistoryPredictionSet = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -1822,8 +1740,6 @@ export const onCreateHistoryPredictionSet = /* GraphQL */ `
               contenders {
                 nextToken
               }
-              nominationsOpen
-              winsOpen
               nominationDateTime
               winDateTime
               status
@@ -1910,8 +1826,6 @@ export const onCreateHistoryPredictionSet = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -1935,8 +1849,6 @@ export const onCreateHistoryPredictionSet = /* GraphQL */ `
               contenders {
                 nextToken
               }
-              nominationsOpen
-              winsOpen
               nominationDateTime
               winDateTime
               status
@@ -2043,8 +1955,6 @@ export const onUpdateHistoryPredictionSet = /* GraphQL */ `
               contenders {
                 nextToken
               }
-              nominationsOpen
-              winsOpen
               nominationDateTime
               winDateTime
               status
@@ -2084,8 +1994,6 @@ export const onUpdateHistoryPredictionSet = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -2109,8 +2017,6 @@ export const onUpdateHistoryPredictionSet = /* GraphQL */ `
               contenders {
                 nextToken
               }
-              nominationsOpen
-              winsOpen
               nominationDateTime
               winDateTime
               status
@@ -2169,8 +2075,6 @@ export const onUpdateHistoryPredictionSet = /* GraphQL */ `
           }
           nextToken
         }
-        nominationsOpen
-        winsOpen
         nominationDateTime
         winDateTime
         status
@@ -2192,8 +2096,6 @@ export const onUpdateHistoryPredictionSet = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -2226,8 +2128,6 @@ export const onUpdateHistoryPredictionSet = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -2269,8 +2169,6 @@ export const onUpdateHistoryPredictionSet = /* GraphQL */ `
             }
             nextToken
           }
-          nominationsOpen
-          winsOpen
           nominationDateTime
           winDateTime
           status
@@ -2288,8 +2186,6 @@ export const onUpdateHistoryPredictionSet = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -2313,8 +2209,6 @@ export const onUpdateHistoryPredictionSet = /* GraphQL */ `
               contenders {
                 nextToken
               }
-              nominationsOpen
-              winsOpen
               nominationDateTime
               winDateTime
               status
@@ -2401,8 +2295,6 @@ export const onUpdateHistoryPredictionSet = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -2426,8 +2318,6 @@ export const onUpdateHistoryPredictionSet = /* GraphQL */ `
               contenders {
                 nextToken
               }
-              nominationsOpen
-              winsOpen
               nominationDateTime
               winDateTime
               status
@@ -2534,8 +2424,6 @@ export const onDeleteHistoryPredictionSet = /* GraphQL */ `
               contenders {
                 nextToken
               }
-              nominationsOpen
-              winsOpen
               nominationDateTime
               winDateTime
               status
@@ -2575,8 +2463,6 @@ export const onDeleteHistoryPredictionSet = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -2600,8 +2486,6 @@ export const onDeleteHistoryPredictionSet = /* GraphQL */ `
               contenders {
                 nextToken
               }
-              nominationsOpen
-              winsOpen
               nominationDateTime
               winDateTime
               status
@@ -2660,8 +2544,6 @@ export const onDeleteHistoryPredictionSet = /* GraphQL */ `
           }
           nextToken
         }
-        nominationsOpen
-        winsOpen
         nominationDateTime
         winDateTime
         status
@@ -2683,8 +2565,6 @@ export const onDeleteHistoryPredictionSet = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -2717,8 +2597,6 @@ export const onDeleteHistoryPredictionSet = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -2760,8 +2638,6 @@ export const onDeleteHistoryPredictionSet = /* GraphQL */ `
             }
             nextToken
           }
-          nominationsOpen
-          winsOpen
           nominationDateTime
           winDateTime
           status
@@ -2779,8 +2655,6 @@ export const onDeleteHistoryPredictionSet = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -2804,8 +2678,6 @@ export const onDeleteHistoryPredictionSet = /* GraphQL */ `
               contenders {
                 nextToken
               }
-              nominationsOpen
-              winsOpen
               nominationDateTime
               winDateTime
               status
@@ -2892,8 +2764,6 @@ export const onDeleteHistoryPredictionSet = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -2917,8 +2787,6 @@ export const onDeleteHistoryPredictionSet = /* GraphQL */ `
               contenders {
                 nextToken
               }
-              nominationsOpen
-              winsOpen
               nominationDateTime
               winDateTime
               status
@@ -3043,8 +2911,6 @@ export const onCreatePrediction = /* GraphQL */ `
               }
               nextToken
             }
-            nominationsOpen
-            winsOpen
             nominationDateTime
             winDateTime
             status
@@ -3066,8 +2932,6 @@ export const onCreatePrediction = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -3124,8 +2988,6 @@ export const onCreatePrediction = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -3158,8 +3020,6 @@ export const onCreatePrediction = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -3201,8 +3061,6 @@ export const onCreatePrediction = /* GraphQL */ `
             }
             nextToken
           }
-          nominationsOpen
-          winsOpen
           nominationDateTime
           winDateTime
           status
@@ -3265,8 +3123,6 @@ export const onCreatePrediction = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -3385,8 +3241,6 @@ export const onUpdatePrediction = /* GraphQL */ `
               }
               nextToken
             }
-            nominationsOpen
-            winsOpen
             nominationDateTime
             winDateTime
             status
@@ -3408,8 +3262,6 @@ export const onUpdatePrediction = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -3466,8 +3318,6 @@ export const onUpdatePrediction = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -3500,8 +3350,6 @@ export const onUpdatePrediction = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -3543,8 +3391,6 @@ export const onUpdatePrediction = /* GraphQL */ `
             }
             nextToken
           }
-          nominationsOpen
-          winsOpen
           nominationDateTime
           winDateTime
           status
@@ -3607,8 +3453,6 @@ export const onUpdatePrediction = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -3727,8 +3571,6 @@ export const onDeletePrediction = /* GraphQL */ `
               }
               nextToken
             }
-            nominationsOpen
-            winsOpen
             nominationDateTime
             winDateTime
             status
@@ -3750,8 +3592,6 @@ export const onDeletePrediction = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -3808,8 +3648,6 @@ export const onDeletePrediction = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -3842,8 +3680,6 @@ export const onDeletePrediction = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -3885,8 +3721,6 @@ export const onDeletePrediction = /* GraphQL */ `
             }
             nextToken
           }
-          nominationsOpen
-          winsOpen
           nominationDateTime
           winDateTime
           status
@@ -3949,8 +3783,6 @@ export const onDeletePrediction = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -4057,8 +3889,6 @@ export const onCreateEvent = /* GraphQL */ `
               }
               nextToken
             }
-            nominationsOpen
-            winsOpen
             nominationDateTime
             winDateTime
             status
@@ -4080,8 +3910,6 @@ export const onCreateEvent = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -4148,8 +3976,6 @@ export const onCreateEvent = /* GraphQL */ `
               contenders {
                 nextToken
               }
-              nominationsOpen
-              winsOpen
               nominationDateTime
               winDateTime
               status
@@ -4203,8 +4029,6 @@ export const onCreateEvent = /* GraphQL */ `
               }
               nextToken
             }
-            nominationsOpen
-            winsOpen
             nominationDateTime
             winDateTime
             status
@@ -4285,8 +4109,6 @@ export const onCreateEvent = /* GraphQL */ `
         }
         nextToken
       }
-      nominationsOpen
-      winsOpen
       nominationDateTime
       winDateTime
       status
@@ -4333,8 +4155,6 @@ export const onUpdateEvent = /* GraphQL */ `
               }
               nextToken
             }
-            nominationsOpen
-            winsOpen
             nominationDateTime
             winDateTime
             status
@@ -4356,8 +4176,6 @@ export const onUpdateEvent = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -4424,8 +4242,6 @@ export const onUpdateEvent = /* GraphQL */ `
               contenders {
                 nextToken
               }
-              nominationsOpen
-              winsOpen
               nominationDateTime
               winDateTime
               status
@@ -4479,8 +4295,6 @@ export const onUpdateEvent = /* GraphQL */ `
               }
               nextToken
             }
-            nominationsOpen
-            winsOpen
             nominationDateTime
             winDateTime
             status
@@ -4561,8 +4375,6 @@ export const onUpdateEvent = /* GraphQL */ `
         }
         nextToken
       }
-      nominationsOpen
-      winsOpen
       nominationDateTime
       winDateTime
       status
@@ -4609,8 +4421,6 @@ export const onDeleteEvent = /* GraphQL */ `
               }
               nextToken
             }
-            nominationsOpen
-            winsOpen
             nominationDateTime
             winDateTime
             status
@@ -4632,8 +4442,6 @@ export const onDeleteEvent = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -4700,8 +4508,6 @@ export const onDeleteEvent = /* GraphQL */ `
               contenders {
                 nextToken
               }
-              nominationsOpen
-              winsOpen
               nominationDateTime
               winDateTime
               status
@@ -4755,8 +4561,6 @@ export const onDeleteEvent = /* GraphQL */ `
               }
               nextToken
             }
-            nominationsOpen
-            winsOpen
             nominationDateTime
             winDateTime
             status
@@ -4837,8 +4641,6 @@ export const onDeleteEvent = /* GraphQL */ `
         }
         nextToken
       }
-      nominationsOpen
-      winsOpen
       nominationDateTime
       winDateTime
       status
@@ -4870,8 +4672,6 @@ export const onCreateCategory = /* GraphQL */ `
               contenders {
                 nextToken
               }
-              nominationsOpen
-              winsOpen
               nominationDateTime
               winDateTime
               status
@@ -4911,8 +4711,6 @@ export const onCreateCategory = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -4936,8 +4734,6 @@ export const onCreateCategory = /* GraphQL */ `
               contenders {
                 nextToken
               }
-              nominationsOpen
-              winsOpen
               nominationDateTime
               winDateTime
               status
@@ -4996,8 +4792,6 @@ export const onCreateCategory = /* GraphQL */ `
           }
           nextToken
         }
-        nominationsOpen
-        winsOpen
         nominationDateTime
         winDateTime
         status
@@ -5021,8 +4815,6 @@ export const onCreateCategory = /* GraphQL */ `
               contenders {
                 nextToken
               }
-              nominationsOpen
-              winsOpen
               nominationDateTime
               winDateTime
               status
@@ -5076,8 +4868,6 @@ export const onCreateCategory = /* GraphQL */ `
               }
               nextToken
             }
-            nominationsOpen
-            winsOpen
             nominationDateTime
             winDateTime
             status
@@ -5187,8 +4977,6 @@ export const onUpdateCategory = /* GraphQL */ `
               contenders {
                 nextToken
               }
-              nominationsOpen
-              winsOpen
               nominationDateTime
               winDateTime
               status
@@ -5228,8 +5016,6 @@ export const onUpdateCategory = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -5253,8 +5039,6 @@ export const onUpdateCategory = /* GraphQL */ `
               contenders {
                 nextToken
               }
-              nominationsOpen
-              winsOpen
               nominationDateTime
               winDateTime
               status
@@ -5313,8 +5097,6 @@ export const onUpdateCategory = /* GraphQL */ `
           }
           nextToken
         }
-        nominationsOpen
-        winsOpen
         nominationDateTime
         winDateTime
         status
@@ -5338,8 +5120,6 @@ export const onUpdateCategory = /* GraphQL */ `
               contenders {
                 nextToken
               }
-              nominationsOpen
-              winsOpen
               nominationDateTime
               winDateTime
               status
@@ -5393,8 +5173,6 @@ export const onUpdateCategory = /* GraphQL */ `
               }
               nextToken
             }
-            nominationsOpen
-            winsOpen
             nominationDateTime
             winDateTime
             status
@@ -5504,8 +5282,6 @@ export const onDeleteCategory = /* GraphQL */ `
               contenders {
                 nextToken
               }
-              nominationsOpen
-              winsOpen
               nominationDateTime
               winDateTime
               status
@@ -5545,8 +5321,6 @@ export const onDeleteCategory = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -5570,8 +5344,6 @@ export const onDeleteCategory = /* GraphQL */ `
               contenders {
                 nextToken
               }
-              nominationsOpen
-              winsOpen
               nominationDateTime
               winDateTime
               status
@@ -5630,8 +5402,6 @@ export const onDeleteCategory = /* GraphQL */ `
           }
           nextToken
         }
-        nominationsOpen
-        winsOpen
         nominationDateTime
         winDateTime
         status
@@ -5655,8 +5425,6 @@ export const onDeleteCategory = /* GraphQL */ `
               contenders {
                 nextToken
               }
-              nominationsOpen
-              winsOpen
               nominationDateTime
               winDateTime
               status
@@ -5710,8 +5478,6 @@ export const onDeleteCategory = /* GraphQL */ `
               }
               nextToken
             }
-            nominationsOpen
-            winsOpen
             nominationDateTime
             winDateTime
             status
@@ -5817,8 +5583,6 @@ export const onCreateContender = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -5851,8 +5615,6 @@ export const onCreateContender = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -5894,8 +5656,6 @@ export const onCreateContender = /* GraphQL */ `
             }
             nextToken
           }
-          nominationsOpen
-          winsOpen
           nominationDateTime
           winDateTime
           status
@@ -5913,8 +5673,6 @@ export const onCreateContender = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -5938,8 +5696,6 @@ export const onCreateContender = /* GraphQL */ `
               contenders {
                 nextToken
               }
-              nominationsOpen
-              winsOpen
               nominationDateTime
               winDateTime
               status
@@ -6019,8 +5775,6 @@ export const onCreateContender = /* GraphQL */ `
               contenders {
                 nextToken
               }
-              nominationsOpen
-              winsOpen
               nominationDateTime
               winDateTime
               status
@@ -6060,8 +5814,6 @@ export const onCreateContender = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -6085,8 +5837,6 @@ export const onCreateContender = /* GraphQL */ `
               contenders {
                 nextToken
               }
-              nominationsOpen
-              winsOpen
               nominationDateTime
               winDateTime
               status
@@ -6145,8 +5895,6 @@ export const onCreateContender = /* GraphQL */ `
           }
           nextToken
         }
-        nominationsOpen
-        winsOpen
         nominationDateTime
         winDateTime
         status
@@ -6205,8 +5953,6 @@ export const onCreateContender = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -6230,8 +5976,6 @@ export const onCreateContender = /* GraphQL */ `
               contenders {
                 nextToken
               }
-              nominationsOpen
-              winsOpen
               nominationDateTime
               winDateTime
               status
@@ -6328,8 +6072,6 @@ export const onUpdateContender = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -6362,8 +6104,6 @@ export const onUpdateContender = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -6405,8 +6145,6 @@ export const onUpdateContender = /* GraphQL */ `
             }
             nextToken
           }
-          nominationsOpen
-          winsOpen
           nominationDateTime
           winDateTime
           status
@@ -6424,8 +6162,6 @@ export const onUpdateContender = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -6449,8 +6185,6 @@ export const onUpdateContender = /* GraphQL */ `
               contenders {
                 nextToken
               }
-              nominationsOpen
-              winsOpen
               nominationDateTime
               winDateTime
               status
@@ -6530,8 +6264,6 @@ export const onUpdateContender = /* GraphQL */ `
               contenders {
                 nextToken
               }
-              nominationsOpen
-              winsOpen
               nominationDateTime
               winDateTime
               status
@@ -6571,8 +6303,6 @@ export const onUpdateContender = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -6596,8 +6326,6 @@ export const onUpdateContender = /* GraphQL */ `
               contenders {
                 nextToken
               }
-              nominationsOpen
-              winsOpen
               nominationDateTime
               winDateTime
               status
@@ -6656,8 +6384,6 @@ export const onUpdateContender = /* GraphQL */ `
           }
           nextToken
         }
-        nominationsOpen
-        winsOpen
         nominationDateTime
         winDateTime
         status
@@ -6716,8 +6442,6 @@ export const onUpdateContender = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -6741,8 +6465,6 @@ export const onUpdateContender = /* GraphQL */ `
               contenders {
                 nextToken
               }
-              nominationsOpen
-              winsOpen
               nominationDateTime
               winDateTime
               status
@@ -6839,8 +6561,6 @@ export const onDeleteContender = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -6873,8 +6593,6 @@ export const onDeleteContender = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -6916,8 +6634,6 @@ export const onDeleteContender = /* GraphQL */ `
             }
             nextToken
           }
-          nominationsOpen
-          winsOpen
           nominationDateTime
           winDateTime
           status
@@ -6935,8 +6651,6 @@ export const onDeleteContender = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -6960,8 +6674,6 @@ export const onDeleteContender = /* GraphQL */ `
               contenders {
                 nextToken
               }
-              nominationsOpen
-              winsOpen
               nominationDateTime
               winDateTime
               status
@@ -7041,8 +6753,6 @@ export const onDeleteContender = /* GraphQL */ `
               contenders {
                 nextToken
               }
-              nominationsOpen
-              winsOpen
               nominationDateTime
               winDateTime
               status
@@ -7082,8 +6792,6 @@ export const onDeleteContender = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -7107,8 +6815,6 @@ export const onDeleteContender = /* GraphQL */ `
               contenders {
                 nextToken
               }
-              nominationsOpen
-              winsOpen
               nominationDateTime
               winDateTime
               status
@@ -7167,8 +6873,6 @@ export const onDeleteContender = /* GraphQL */ `
           }
           nextToken
         }
-        nominationsOpen
-        winsOpen
         nominationDateTime
         winDateTime
         status
@@ -7227,8 +6931,6 @@ export const onDeleteContender = /* GraphQL */ `
                 id
                 awardsBody
                 year
-                nominationsOpen
-                winsOpen
                 nominationDateTime
                 winDateTime
                 status
@@ -7252,8 +6954,6 @@ export const onDeleteContender = /* GraphQL */ `
               contenders {
                 nextToken
               }
-              nominationsOpen
-              winsOpen
               nominationDateTime
               winDateTime
               status
