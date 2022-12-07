@@ -6,6 +6,7 @@ import Poster from '../Images/Poster';
 import { BodyLarge, SubHeader } from '../Text';
 import { iCachedTmdbMovie, iCachedTmdbPerson } from '../../services/cache/types';
 import TmdbServices from '../../services/tmdb';
+import { getHeaderTitle } from '../../constants';
 
 type iPerformanceDetailsProps = {
   personTmdbId: number;
@@ -26,11 +27,11 @@ const PerformanceDetails = (props: iPerformanceDetailsProps) => {
     const movieTitle = movieDetails.title;
     if (personDetails) {
       navigation.setOptions({
-        headerTitle: `${personDetails.name} - ${movieTitle}`,
+        headerTitle: getHeaderTitle(`${personDetails.name} - ${movieTitle}`),
       });
     } else {
       navigation.setOptions({
-        headerTitle: movieTitle,
+        headerTitle: getHeaderTitle(movieTitle),
       });
     }
   }, [navigation, personDetails, movieDetails]);

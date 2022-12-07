@@ -1,7 +1,8 @@
-import { AwardsBody, CategoryName, CategoryType } from '../API';
+import { AwardsBody, CategoryName, CategoryType, EventStatus, UserRole } from '../API';
 
 export enum QueryKeys {
   EVENTS = 'events',
+  USER = 'user',
   PERSONAL_EVENT = 'personal-predictions-by-event',
   COMMUNITY_EVENT = 'community-predictions-by-event',
 }
@@ -61,10 +62,21 @@ export type iEvent = {
   categories: iIndexedCategories;
   awardsBody: AwardsBody;
   year: number;
-  expiration: string;
-  isActive: string | undefined;
+  status: EventStatus;
+  nominationDateTime: string | undefined;
+  winDateTime: string | undefined;
 };
 
 export type iIndexedEvents = {
   [eventId: string]: iEvent;
+};
+
+export type iUser = {
+  id: string;
+  email: string;
+  username: string | undefined;
+  name: string | undefined;
+  bio: string | undefined;
+  image: string | undefined;
+  role: UserRole;
 };

@@ -9,7 +9,7 @@ import EventSelect from '../screens/Predictions/EventSelect';
 import EventPredictions from '../screens/Predictions/EventPredictions';
 import ProfileNavigator from './ProfileNavigator';
 import theme from '../constants/theme';
-import { headerSettings } from '../constants';
+import { getHeaderTitle, headerSettings, tallHeaderSettings } from '../constants';
 import CreateContender from '../screens/Predictions/CreateContender';
 import AddPredictions from '../screens/Predictions/AddPredictions.tsx';
 
@@ -33,7 +33,7 @@ const PredictionsNavigator = () => {
         name="EventSelect"
         component={EventSelect}
         options={{
-          headerTitle: 'Event Select',
+          headerTitle: getHeaderTitle('Event Select'),
           cardStyle: theme.cardStyle,
           ...headerSettings,
         }}
@@ -42,7 +42,7 @@ const PredictionsNavigator = () => {
         name="EventPredictions"
         component={EventPredictions}
         options={{
-          headerTitle: 'Event Predictions',
+          headerTitle: getHeaderTitle('Event Predictions'),
           headerLeft: BackButton,
           ...headerSettings,
         }}
@@ -51,17 +51,17 @@ const PredictionsNavigator = () => {
         name="Category"
         component={Category}
         options={{
-          headerTitle: 'Category',
+          headerTitle: getHeaderTitle('Category'),
           headerLeft: BackButton,
           cardStyle: theme.cardStyle,
-          ...headerSettings,
+          ...tallHeaderSettings,
         }}
       />
       <Screen
         name="ContenderDetails"
         component={ContenderDetailsScreen}
         options={{
-          headerTitle: 'Contender Details',
+          headerTitle: getHeaderTitle('Contender Details'),
           headerLeft: BackButton,
           cardStyle: theme.cardStyle,
           ...headerSettings,
@@ -71,7 +71,7 @@ const PredictionsNavigator = () => {
         name="AddPredictions"
         component={AddPredictions}
         options={{
-          headerTitle: 'Add Predictions',
+          headerTitle: getHeaderTitle('Add Predictions'),
           headerLeft: BackButton,
           ...headerSettings,
         }}
@@ -80,7 +80,7 @@ const PredictionsNavigator = () => {
         name="CreateContender"
         component={CreateContender}
         options={{
-          headerTitle: 'Add Contender',
+          headerTitle: getHeaderTitle('Add Contender'),
           headerLeft: BackButton,
           ...headerSettings,
         }}

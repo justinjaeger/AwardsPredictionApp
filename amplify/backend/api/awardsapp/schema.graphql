@@ -128,11 +128,9 @@ type Event @model @auth(rules: [{ allow: public }]) {
     awardsBody: AwardsBody!
     year: Int!
     contenders: [Contender] @hasMany
-    nominationsOpen: String @default(value: "x")
-    winsOpen: String @default(value: "x")
     nominationDateTime: AWSDateTime # nullable. must have ability to set as admin
     winDateTime: AWSDateTime # nullable. must have ability to set as admin
-    status: EventStatus  @default(value: "NOMS_STAGING")
+    status: EventStatus @default(value: "NOMS_STAGING")
 }
 
 type Category @model @auth(rules: [{ allow: public }]) {

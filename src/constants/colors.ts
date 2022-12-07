@@ -11,6 +11,7 @@ const COLORS = {
   secondaryDark: theme['color-gold-900'],
   goldLight: theme['color-gold-100'],
   gold: theme['color-gold-500'],
+  goldMedium: '#7D6A3E',
   goldDark: theme['color-gold-900'],
   redLight: theme['color-red-100'],
   red: theme['color-red-500'],

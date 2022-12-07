@@ -164,6 +164,9 @@ export const listEvents = /* GraphQL */ `
         }
         awardsBody
         year
+        status
+        nominationDateTime
+        winDateTime
         createdAt
         updatedAt
       }
@@ -195,6 +198,9 @@ export const listCategories = /* GraphQL */ `
           id
           awardsBody
           year
+          status
+          nominationDateTime
+          winDateTime
           createdAt
           updatedAt
         }

@@ -3,7 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Dev from '../screens/Dev';
 import ManageStudios from '../screens/Dev/ManageStudios';
 import BackButton from '../components/Buttons/BackButton';
-import { headerSettings } from '../constants';
+import { getHeaderTitle, headerSettings } from '../constants';
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -18,13 +18,13 @@ const DevNavigator = () => (
     <Screen
       name="Dev"
       component={Dev}
-      options={{ headerTitle: 'Dev Console', ...headerSettings }}
+      options={{ headerTitle: getHeaderTitle('Dev Console'), ...headerSettings }}
     />
     <Screen
       name="ManageStudios"
       component={ManageStudios}
       options={{
-        headerTitle: 'Manage Studios',
+        headerTitle: getHeaderTitle('Manage Studios'),
         headerLeft: BackButton,
         ...headerSettings,
       }}

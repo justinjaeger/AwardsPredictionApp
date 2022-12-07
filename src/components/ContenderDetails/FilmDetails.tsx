@@ -7,6 +7,7 @@ import { BodyLarge, SubHeader } from '../Text';
 import { PosterSize } from '../../constants/posterDimensions';
 import { iCachedTmdbMovie } from '../../services/cache/types';
 import TmdbServices from '../../services/tmdb';
+import { getHeaderTitle } from '../../constants';
 
 type iFilmDetailsProps = {
   movieTmdbId: number;
@@ -28,7 +29,7 @@ const FilmDetails = (props: iFilmDetailsProps) => {
   useLayoutEffect(() => {
     if (movieDetails) {
       navigation.setOptions({
-        headerTitle: movieDetails.title,
+        headerTitle: getHeaderTitle(movieDetails.title),
       });
     }
   }, [navigation, movieDetails]);

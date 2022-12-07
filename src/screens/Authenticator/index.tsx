@@ -13,6 +13,7 @@ import { ScrollView, View } from 'react-native';
 import SignedIn from './SignedIn';
 import { useAuth } from '../../context/UserContext';
 import COLORS from '../../constants/colors';
+import { getHeaderTitle } from '../../constants';
 
 const headerTitles: { [key in iAuthState]: string } = {
   signIn: 'Log In',
@@ -34,7 +35,7 @@ const Auth = () => {
   useLayoutEffect(() => {
     // This is the best way to change the header
     navigation.setOptions({
-      headerTitle: headerTitles[authState],
+      headerTitle: getHeaderTitle(headerTitles[authState]),
     });
   }, [authState, navigation]);
 

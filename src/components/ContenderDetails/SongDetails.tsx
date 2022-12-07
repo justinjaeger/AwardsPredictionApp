@@ -9,6 +9,7 @@ import TmdbServices from '../../services/tmdb';
 import { useAsyncEffect } from '../../util/hooks';
 import ApiServices from '../../services/graphql';
 import { GetSongQuery } from '../../API';
+import { getHeaderTitle } from '../../constants';
 
 type iSongDetailsProps = {
   movieTmdbId: number;
@@ -35,7 +36,7 @@ const SongDetails = (props: iSongDetailsProps) => {
   useLayoutEffect(() => {
     if (songTitle) {
       navigation.setOptions({
-        headerTitle: songTitle,
+        headerTitle: getHeaderTitle(songTitle),
       });
     }
   }, [navigation, songTitle]);

@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import React, { useEffect, useRef } from 'react';
 import { Animated, TouchableHighlight, useWindowDimensions, View } from 'react-native';
-import { AwardsBody } from '../../../API';
+import { AwardsBody, EventStatus, UserRole } from '../../../API';
 import { Body, SubHeader } from '../../../components/Text';
 import {
   AWARDS_BODY_TO_PLURAL_STRING,
@@ -17,6 +17,10 @@ import theme from '../../../constants/theme';
 import LoadingStatue from '../../../components/LoadingStatue';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import useQueryAllEvents from '../../../hooks/getAllEvents';
+import AwardsBodyImage from '../../../components/AwardsBodyImage';
+import { EVENT_STATUS_TO_STRING } from '../../../constants/events';
+import { useAuth } from '../../../context/UserContext';
+import useQueryGetUser from '../../../hooks/getUser';
 
 export const getEventName = (awardsBody: AwardsBody) => {
   return AWARDS_BODY_TO_PLURAL_STRING[AwardsBody[awardsBody]];
@@ -25,12 +29,14 @@ export const getEventName = (awardsBody: AwardsBody) => {
 const EventSelect = () => {
   const { width } = useWindowDimensions();
   const { setEvent } = useCategory();
+  const { userId } = useAuth();
   const navigation = useTypedNavigation<PredictionsParamList>();
 
   const loadingOpacity = useRef(new Animated.Value(1)).current;
   const bodyOpacity = useRef(new Animated.Value(0)).current;
 
   const { data: events, isLoading } = useQueryAllEvents();
+  const { data: user } = useQueryGetUser(userId);
 
   useEffect(() => {
     if (!isLoading) {
@@ -62,6 +68,8 @@ const EventSelect = () => {
   );
   const groupedByYear = _.groupBy(orderedEvents, (e) => e.year);
 
+  const userIsAdmin = user ? user.role === UserRole.ADMIN : false;
+
   return (
     <BackgroundWrapper>
       <>
@@ -86,42 +94,50 @@ const EventSelect = () => {
             marginLeft: theme.windowMargin,
           }}
         >
-          {Object.entries(groupedByYear).map(([key, val]) => (
+          {Object.entries(groupedByYear).map(([key, events]) => (
             <>
               <SubHeader style={{ marginBottom: theme.windowMargin }}>{key}</SubHeader>
               <View style={{ flexWrap: 'wrap', flexDirection: 'row' }}>
-                {[...val, ...val, ...val, ...val].map((event) => {
-                  const { awardsBody, expiration } = event;
+                {events.map((event) => {
+                  const { awardsBody, status } = event;
+                  const eventIsAdminOnly = status === EventStatus.NOMS_STAGING;
+                  if (eventIsAdminOnly && !userIsAdmin) return null; // don't display events with status NOMS_STAGING to non-admin
                   return (
                     <TouchableHighlight
                       style={{
-                        height: 100,
+                        height: 80,
                         backgroundColor: 'rgba(0,0,0,0.1)',
                         borderRadius: theme.borderRadius,
                         borderWidth: 1,
                         borderColor: COLORS.white,
                         marginBottom: theme.windowMargin,
                         marginRight: theme.windowMargin,
-                        width: width / 2 - theme.windowMargin - 5,
+                        width: width - theme.windowMargin * 2,
                         padding: 5,
-                        justifyContent: 'space-between',
+                        justifyContent: 'center',
                       }}
                       underlayColor={COLORS.secondaryMiddle}
                       onPress={() => onSelectEvent(event)}
                     >
                       <>
-                        <View>
-                          <SubHeader>
-                            {AWARDS_BODY_TO_PLURAL_STRING[AwardsBody[awardsBody]]}
-                          </SubHeader>
+                        <View style={{ flexDirection: 'row' }}>
+                          <AwardsBodyImage awardsBody={awardsBody} />
+                          <View
+                            style={{
+                              flexDirection: 'column',
+                              justifyContent: 'space-around',
+                            }}
+                          >
+                            <SubHeader>
+                              {AWARDS_BODY_TO_PLURAL_STRING[awardsBody]}
+                            </SubHeader>
+                            <Body
+                              style={{
+                                color: COLORS.white,
+                              }}
+                            >{`${EVENT_STATUS_TO_STRING[status]}`}</Body>
+                          </View>
                         </View>
-                        <Body
-                          style={{
-                            alignSelf: 'flex-end',
-                            justifyContent: 'flex-end',
-                            color: COLORS.white,
-                          }}
-                        >{`Date: ${expiration || 'TBD'}`}</Body>
                       </>
                     </TouchableHighlight>
                   );
