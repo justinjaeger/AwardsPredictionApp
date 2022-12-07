@@ -5,6 +5,12 @@ import criticsChoice from '../assets/awardsBodies/criticsChoice.png';
 import goldenGlobes from '../assets/awardsBodies/goldenGlobes.png';
 import pga from '../assets/awardsBodies/pga.png';
 import sag from '../assets/awardsBodies/sag.png';
+import academyAwardWhite from '../assets/awardsBodies/academyAwardsWhite.png';
+import baftaWhite from '../assets/awardsBodies/baftaWhite.png';
+import criticsChoiceWhite from '../assets/awardsBodies/criticsChoiceWhite.png';
+import goldenGlobesWhite from '../assets/awardsBodies/goldenGlobesWhite.png';
+import pgaWhite from '../assets/awardsBodies/pgaWhite.png';
+import sagWhite from '../assets/awardsBodies/sagWhite.png';
 
 export const AWARDS_BODY_TO_STRING: {
   [key in AwardsBody]: string;
@@ -49,5 +55,24 @@ export const AWARDS_BODY_TO_IMAGE: {
   [AwardsBody.MPSE]: undefined,
   [AwardsBody.PGA]: pga,
   [AwardsBody.SAG]: sag,
+  [AwardsBody.WGA]: undefined,
+};
+
+export const AWARDS_BODY_TO_IMAGE_WHITE: {
+  [key in AwardsBody]: any | undefined;
+} = {
+  [AwardsBody.ACADEMY_AWARDS]: academyAwardWhite,
+  [AwardsBody.ADG]: undefined,
+  [AwardsBody.ASC]: undefined,
+  [AwardsBody.BAFTA]: baftaWhite,
+  [AwardsBody.CDG]: undefined,
+  [AwardsBody.CRITICS_CHOICE]: criticsChoiceWhite,
+  [AwardsBody.DGA]: undefined,
+  [AwardsBody.GOLDEN_GLOBES]: goldenGlobesWhite,
+  [AwardsBody.HCA]: undefined,
+  [AwardsBody.MAKEUP_GUILD]: undefined,
+  [AwardsBody.MPSE]: undefined,
+  [AwardsBody.PGA]: pgaWhite,
+  [AwardsBody.SAG]: sagWhite,
   [AwardsBody.WGA]: undefined,
 };

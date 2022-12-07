@@ -1,4 +1,7 @@
 import React from 'react';
+import { View } from 'react-native';
+import { AwardsBody } from '../API';
+import AwardsBodyImage from '../components/AwardsBodyImage';
 import { SubHeader } from '../components/Text';
 import COLORS from './colors';
 
@@ -9,25 +12,27 @@ import COLORS from './colors';
 export const TMDB_IMAGE_URL = 'https://image.tmdb.org/t/p/original';
 
 export const BOTTOM_TAB_HEIGHT = 50;
+export const HEADER_HEIGHT = 40;
 
 export const getHeaderTitle = (title: string) => {
   return () => <SubHeader>{title}</SubHeader>;
 };
 
+export const getHeaderTitleWithTrophy = (title: string, awardsBody: AwardsBody) => {
+  return () => (
+    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+      <AwardsBodyImage awardsBody={awardsBody} white size={HEADER_HEIGHT} />
+      <SubHeader>{title}</SubHeader>
+    </View>
+  );
+};
+
 export const headerStyle = {
   backgroundColor: COLORS.goldDark,
-};
-export const headerStyleTall = {
-  ...headerStyle,
-  height: 120,
+  height: 105,
 };
 export const headerTitleStyle = { color: COLORS.white };
 export const headerSettings: any = {
   headerStyle,
-  headerTitleStyle,
-};
-
-export const tallHeaderSettings: any = {
-  headerStyle: headerStyleTall,
   headerTitleStyle,
 };
