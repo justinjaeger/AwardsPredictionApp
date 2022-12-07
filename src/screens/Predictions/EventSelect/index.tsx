@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Animated, TouchableHighlight, useWindowDimensions, View } from 'react-native';
 import { AwardsBody, EventStatus, UserRole } from '../../../API';
 import { Body, SubHeader } from '../../../components/Text';
@@ -37,6 +37,8 @@ const EventSelect = () => {
 
   const { data: events, isLoading } = useQueryAllEvents();
   const { data: user } = useQueryGetUser(userId);
+
+  const [highlightedEvent, setHighlightedEvent] = useState<string>('');
 
   useEffect(() => {
     if (!isLoading) {
@@ -118,10 +120,15 @@ const EventSelect = () => {
                       }}
                       underlayColor={COLORS.secondaryMiddle}
                       onPress={() => onSelectEvent(event)}
+                      onPressIn={() => setHighlightedEvent(event.id)}
+                      onPressOut={() => setHighlightedEvent('')}
                     >
                       <>
                         <View style={{ flexDirection: 'row' }}>
-                          <AwardsBodyImage awardsBody={awardsBody} />
+                          <AwardsBodyImage
+                            awardsBody={awardsBody}
+                            white={highlightedEvent === event.id}
+                          />
                           <View
                             style={{
                               flexDirection: 'column',

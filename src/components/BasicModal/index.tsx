@@ -8,9 +8,9 @@ import {
 } from 'react-native';
 import theme from '../../constants/theme';
 import COLORS from '../../constants/colors';
-import { HEADER_HEIGHT } from '../NavigationHeader';
 import { BodyLarge } from '../Text';
 import HeaderButton from '../HeaderButton';
+import { HEADER_HEIGHT } from '../../constants';
 
 type iBasicModalProps = {
   visible: boolean;

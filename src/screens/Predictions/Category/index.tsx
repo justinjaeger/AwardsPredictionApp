@@ -9,7 +9,7 @@ import { getAwardsBodyCategories } from '../../../constants/categories';
 import { CategoryName } from '../../../API';
 import { useCategory } from '../../../context/CategoryContext';
 import { eventToString } from '../../../util/stringConversions';
-import { getHeaderTitle } from '../../../constants';
+import { getHeaderTitle, getHeaderTitleWithTrophy } from '../../../constants';
 
 const TIMING = 250;
 
@@ -77,7 +77,7 @@ const Category = () => {
     const categoryName = awardsBodyCategories[CategoryName[category.name]]?.name || '';
     const headerTitle = eventName + '\n' + 'Best ' + categoryName;
     navigation.setOptions({
-      headerTitle: getHeaderTitle(headerTitle),
+      headerTitle: getHeaderTitleWithTrophy(headerTitle, event.awardsBody),
     });
   }, [navigation]);
 

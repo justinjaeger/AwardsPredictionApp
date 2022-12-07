@@ -2,13 +2,12 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { HEADER_HEIGHT } from '../../constants';
 import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
 import BackButton from '../Buttons/BackButton';
 import HeaderButton from '../HeaderButton';
 import { BodyLarge } from '../Text';
-
-export const HEADER_HEIGHT = 40;
 
 type iNavigationHeaderProps = {
   text: string[];

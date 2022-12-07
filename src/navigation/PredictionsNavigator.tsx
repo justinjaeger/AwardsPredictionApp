@@ -9,7 +9,7 @@ import EventSelect from '../screens/Predictions/EventSelect';
 import EventPredictions from '../screens/Predictions/EventPredictions';
 import ProfileNavigator from './ProfileNavigator';
 import theme from '../constants/theme';
-import { getHeaderTitle, headerSettings, tallHeaderSettings } from '../constants';
+import { getHeaderTitle, headerSettings } from '../constants';
 import CreateContender from '../screens/Predictions/CreateContender';
 import AddPredictions from '../screens/Predictions/AddPredictions.tsx';
 
@@ -54,7 +54,7 @@ const PredictionsNavigator = () => {
           headerTitle: getHeaderTitle('Category'),
           headerLeft: BackButton,
           cardStyle: theme.cardStyle,
-          ...tallHeaderSettings,
+          ...headerSettings,
         }}
       />
       <Screen
