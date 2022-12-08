@@ -172,7 +172,7 @@ const ContenderListItem = (props: iContenderListItemProps) => {
         onPressItem(prediction);
       }}
       style={{
-        backgroundColor: isActive || highlighted ? COLORS.goldDark : 'transparent',
+        backgroundColor: isActive || highlighted ? COLORS.secondaryDark : 'transparent',
         width: '100%',
         paddingTop: theme.windowMargin / 4,
         paddingBottom: theme.windowMargin / 4,

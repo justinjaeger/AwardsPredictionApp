@@ -44,7 +44,7 @@ const MovieListCommunity = (props: iMovieListProps) => {
           <>
             {index === slots ? (
               <Divider
-                style={{ margin: 10, borderWidth: 0.5, borderColor: COLORS.goldDark }}
+                style={{ margin: 10, borderWidth: 0.5, borderColor: COLORS.secondaryDark }}
               />
             ) : null}
             <ContenderListItem

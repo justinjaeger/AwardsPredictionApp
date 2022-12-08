@@ -130,7 +130,7 @@ const EventSelect = () => {
                         padding: 5,
                         justifyContent: 'center',
                       }}
-                      underlayColor={COLORS.secondaryMiddle}
+                      underlayColor={COLORS.secondaryDark}
                       onPress={() => onSelectEvent(event)}
                       onPressIn={() => setHighlightedEvent(event.id)}
                       onPressOut={() => setHighlightedEvent('')}

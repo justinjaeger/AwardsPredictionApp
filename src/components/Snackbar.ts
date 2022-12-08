@@ -13,7 +13,7 @@ const Snackbar = {
     RNSnackbar.show({
       text,
       duration: RNSnackbar.LENGTH_LONG,
-      backgroundColor: COLORS.goldDark,
+      backgroundColor: COLORS.secondaryDark,
       ...params,
     }),
   error: (text: string, params?: Partial<SnackBarOptions>) =>

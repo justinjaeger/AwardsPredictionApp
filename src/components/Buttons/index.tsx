@@ -20,7 +20,7 @@ export const SubmitButton = (props: iButtonProps) => (
     style={{
       width: '50%',
       alignSelf: 'center',
-      backgroundColor: props.disabled ? COLORS.disabled : COLORS.goldDark,
+      backgroundColor: props.disabled ? COLORS.disabled : COLORS.secondaryDark,
       padding: 20,
       borderRadius: theme.borderRadius,
       ...props.style,

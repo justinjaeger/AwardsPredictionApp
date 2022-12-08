@@ -29,7 +29,7 @@ const PredictionTab = (props: {
         borderRadius: 0,
       }}
       onPress={onPress}
-      underlayColor={COLORS.goldDark}
+      underlayColor={COLORS.secondaryDark}
     >
       <View style={{ zIndex: 3 }}>
         <BodyBold
