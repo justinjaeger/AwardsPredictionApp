@@ -100,17 +100,6 @@ const AddPredictions = () => {
     navigation.goBack();
   };
 
-  const navigateToCreateContender = () => {
-    navigation.navigate('CreateContender');
-  };
-
-  // navigate to create contender if no contenders yet
-  useEffect(() => {
-    if (!communityPredictions || communityPredictions.length === 0) {
-      navigateToCreateContender();
-    }
-  }, []);
-
   const onSelectPredictionFromSearch = (prediction: iPrediction) => {
     const contenderId = prediction.contenderId;
     const isAlreadySelected = selectedContenderIds.includes(contenderId);

@@ -10,7 +10,6 @@ import Event from '../screens/Predictions/Event';
 import ProfileNavigator from './ProfileNavigator';
 import theme from '../constants/theme';
 import { getHeaderTitle, headerSettings } from '../constants';
-import CreateContender from '../screens/Predictions/CreateContender';
 import AddPredictions from '../screens/Predictions/AddPredictions.tsx';
 
 const { Navigator, Screen } = createStackNavigator<PredictionsParamList>();
@@ -72,15 +71,6 @@ const PredictionsNavigator = () => {
         component={AddPredictions}
         options={{
           headerTitle: getHeaderTitle('Add / Remove Predictions'),
-          headerLeft: BackButton,
-          ...headerSettings,
-        }}
-      />
-      <Screen
-        name="CreateContender"
-        component={CreateContender}
-        options={{
-          headerTitle: getHeaderTitle('Add Contender'),
           headerLeft: BackButton,
           ...headerSettings,
         }}

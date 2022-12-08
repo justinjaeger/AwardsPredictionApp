@@ -27,7 +27,6 @@ export type PredictionsParamList = {
     initialPredictions: iPrediction[];
     onFinish: (predictions: iPrediction[]) => void;
   };
-  CreateContender: undefined;
 };
 
 export type DevParamList = {
