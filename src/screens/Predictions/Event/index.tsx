@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Animated, TouchableHighlight, View } from 'react-native';
 import { CategoryName } from '../../../API';
 import { getAwardsBodyCategories, getCategorySlots } from '../../../constants/categories';
@@ -19,6 +19,8 @@ import useQueryCommunityOrPersonalEvent from '../../../hooks/getCommunityOrPerso
 import MovieGrid from '../../../components/MovieGrid';
 import SignedOutState from '../../../components/SignedOutState';
 import { getHeaderTitleWithTrophy } from '../../../constants';
+import { CategoryHeader } from '../styles';
+import HeaderButton from '../../../components/HeaderButton';
 
 const Event = (props: { tab: 'personal' | 'community' }) => {
   const { tab } = props;
@@ -32,6 +34,8 @@ const Event = (props: { tab: 'personal' | 'community' }) => {
 
   const event = _event as iEvent;
   const userId = _userId as string;
+
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   // define the header
   useLayoutEffect(() => {
@@ -81,6 +85,8 @@ const Event = (props: { tab: 'personal' | 'community' }) => {
     categoryList.map((cat) => CategoryName[cat.name]),
   );
 
+  const toggleDisplay = () => {};
+
   return (
     <BackgroundWrapper>
       <>
@@ -96,6 +102,16 @@ const Event = (props: { tab: 'personal' | 'community' }) => {
         >
           <LoadingStatue />
         </Animated.View>
+        <CategoryHeader>
+          <View style={{ flexDirection: 'row' }}>
+            <HeaderButton
+              onPress={() => {
+                setIsCollapsed(!isCollapsed);
+              }}
+              icon={isCollapsed ? 'list' : 'grid'}
+            />
+          </View>
+        </CategoryHeader>
         <Animated.ScrollView
           style={{ opacity: bodyOpacity, width: '100%' }}
           contentContainerStyle={{
@@ -128,9 +144,11 @@ const Event = (props: { tab: 'personal' | 'community' }) => {
                       marginTop: theme.windowMargin,
                     }}
                   >
-                    {awardsBodyCategories[CategoryName[category.name]]?.name || ''}
+                    {awardsBodyCategories[category.name]?.name || ''}
                   </SubHeader>
-                  <MovieGrid predictions={truncatedPredictions} noLine />
+                  {!isCollapsed ? (
+                    <MovieGrid predictions={truncatedPredictions} noLine />
+                  ) : null}
                 </View>
               </TouchableHighlight>
             );
