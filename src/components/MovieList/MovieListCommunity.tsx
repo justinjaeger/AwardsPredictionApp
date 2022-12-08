@@ -6,13 +6,15 @@ import COLORS from '../../constants/colors';
 import { useCategory } from '../../context/CategoryContext';
 import { iCategory, iEvent, iPrediction } from '../../types';
 import ContenderListItem from '../List/ContenderList/ContenderListItem';
+import ContenderListItemCondensed from '../List/ContenderList/ContenderListItemCondensed';
 
 type iMovieListProps = {
   predictions: iPrediction[];
+  condensed?: boolean;
 };
 
 const MovieListCommunity = (props: iMovieListProps) => {
-  const { predictions } = props;
+  const { predictions, condensed } = props;
   const { event: _event, category: _category } = useCategory();
 
   const event = _event as iEvent;
@@ -50,22 +52,41 @@ const MovieListCommunity = (props: iMovieListProps) => {
                 }}
               />
             ) : null}
-            <ContenderListItem
-              prediction={prediction}
-              ranking={ranking}
-              onPressItem={onPressItem}
-              onPressThumbnail={(item) => {
-                const id = item.contenderId;
-                if (selectedContenderId === id) {
-                  setSelectedContenderId(undefined);
-                } else {
-                  setSelectedContenderId(id);
-                }
-              }}
-              selected={selectedContenderId === prediction.contenderId}
-              variant={'community'}
-              categoryType={category.type}
-            />
+            {!condensed ? (
+              <ContenderListItem
+                prediction={prediction}
+                ranking={ranking}
+                onPressItem={onPressItem}
+                onPressThumbnail={(item) => {
+                  const id = item.contenderId;
+                  if (selectedContenderId === id) {
+                    setSelectedContenderId(undefined);
+                  } else {
+                    setSelectedContenderId(id);
+                  }
+                }}
+                selected={selectedContenderId === prediction.contenderId}
+                variant={'community'}
+                categoryType={category.type}
+              />
+            ) : (
+              <ContenderListItemCondensed
+                prediction={prediction}
+                ranking={ranking}
+                onPressItem={onPressItem}
+                onPressThumbnail={(item) => {
+                  const id = item.contenderId;
+                  if (selectedContenderId === id) {
+                    setSelectedContenderId(undefined);
+                  } else {
+                    setSelectedContenderId(id);
+                  }
+                }}
+                selected={selectedContenderId === prediction.contenderId}
+                variant={'community'}
+                categoryType={category.type}
+              />
+            )}
           </>
         );
       }}

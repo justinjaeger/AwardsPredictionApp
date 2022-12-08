@@ -14,7 +14,15 @@ import { iCategory, iEvent } from '../../../types';
 import { CategoryHeader } from '../styles';
 
 const CategoryCommunity = (props: iCategoryListProps) => {
-  const { display, delayedDisplay, toggleDisplay, gridOpacity, listOpacity } = props;
+  const {
+    display,
+    delayedDisplay,
+    toggleDisplay,
+    toggleCondensed,
+    gridOpacity,
+    listOpacity,
+    condensedOpacity,
+  } = props;
 
   const { category: _category, event: _event } = useCategory();
   const { userId } = useAuth();
@@ -33,6 +41,19 @@ const CategoryCommunity = (props: iCategoryListProps) => {
     return null;
   }
 
+  const RightColumnHeaders = () => (
+    <>
+      <View>
+        <BodyBold style={{ textAlign: 'right' }}>Predict</BodyBold>
+        <BodyBold style={{ textAlign: 'right' }}>Nom</BodyBold>
+      </View>
+      <View>
+        <BodyBold style={{ textAlign: 'right' }}>Predict</BodyBold>
+        <BodyBold style={{ textAlign: 'right' }}>Win</BodyBold>
+      </View>
+    </>
+  );
+
   return (
     <BackgroundWrapper>
       <>
@@ -42,9 +63,16 @@ const CategoryCommunity = (props: iCategoryListProps) => {
               onPress={() => {
                 toggleDisplay();
               }}
-              icon={display === 'grid' ? 'list' : display === 'list' ? 'grid' : ''}
+              icon={display === 'grid' ? 'list' : 'grid'}
             />
+            {display !== 'grid' ? (
+              <HeaderButton
+                onPress={toggleCondensed}
+                icon={display === 'list' ? 'collapse' : 'expand'}
+              />
+            ) : null}
           </View>
+
           <Animated.View
             style={{
               flexDirection: 'row',
@@ -52,16 +80,22 @@ const CategoryCommunity = (props: iCategoryListProps) => {
               justifyContent: 'space-between',
               alignItems: 'center',
               opacity: listOpacity,
+              display: delayedDisplay === 'list' ? 'flex' : 'none',
             }}
           >
-            <View>
-              <BodyBold style={{ textAlign: 'right' }}>Predict</BodyBold>
-              <BodyBold style={{ textAlign: 'right' }}>Nom</BodyBold>
-            </View>
-            <View>
-              <BodyBold style={{ textAlign: 'right' }}>Predict</BodyBold>
-              <BodyBold style={{ textAlign: 'right' }}>Win</BodyBold>
-            </View>
+            <RightColumnHeaders />
+          </Animated.View>
+          <Animated.View
+            style={{
+              flexDirection: 'row',
+              width: 120,
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              opacity: condensedOpacity,
+              display: delayedDisplay === 'condensed' ? 'flex' : 'none',
+            }}
+          >
+            <RightColumnHeaders />
           </Animated.View>
         </CategoryHeader>
         {predictions && predictions.length === 0 ? (
@@ -98,6 +132,14 @@ const CategoryCommunity = (props: iCategoryListProps) => {
           }}
         >
           <MovieListCommunity predictions={predictions} />
+        </Animated.View>
+        <Animated.View
+          style={{
+            display: delayedDisplay === 'condensed' ? 'flex' : 'none',
+            opacity: condensedOpacity,
+          }}
+        >
+          <MovieListCommunity predictions={predictions} condensed={true} />
         </Animated.View>
       </>
     </BackgroundWrapper>

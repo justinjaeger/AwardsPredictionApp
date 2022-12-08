@@ -24,7 +24,15 @@ import { CategoryHeader } from '../styles';
 
 // NOTE: Has a lot in common with ContenderListDraggable
 const CategoryPersonal = (props: iCategoryListProps) => {
-  const { display, delayedDisplay, toggleDisplay, gridOpacity, listOpacity } = props;
+  const {
+    display,
+    delayedDisplay,
+    toggleDisplay,
+    toggleCondensed,
+    gridOpacity,
+    listOpacity,
+    condensedOpacity,
+  } = props;
 
   const { category: _category, event: _event } = useCategory();
   const { userId: _userId } = useAuth();
@@ -121,7 +129,7 @@ const CategoryPersonal = (props: iCategoryListProps) => {
                   onPress={() => {
                     toggleDisplay();
                   }}
-                  icon={display === 'grid' ? 'list' : display === 'list' ? 'grid' : ''}
+                  icon={display === 'grid' ? 'list' : 'grid'}
                 />
               ) : (
                 <HeaderButton
@@ -144,6 +152,12 @@ const CategoryPersonal = (props: iCategoryListProps) => {
                   icon={'undo'}
                 />
               )}
+              {display !== 'grid' ? (
+                <HeaderButton
+                  onPress={toggleCondensed}
+                  icon={display === 'list' ? 'collapse' : 'expand'}
+                />
+              ) : null}
             </View>
             <View style={{ flexDirection: 'row' }}>
               <HeaderButton
@@ -199,6 +213,18 @@ const CategoryPersonal = (props: iCategoryListProps) => {
             <MovieListDraggable
               predictions={predictions}
               setPredictions={(ps) => setPredictions(ps)}
+            />
+          </Animated.View>
+          <Animated.View
+            style={{
+              display: delayedDisplay === 'condensed' ? 'flex' : 'none',
+              opacity: condensedOpacity,
+            }}
+          >
+            <MovieListDraggable
+              predictions={predictions}
+              setPredictions={(ps) => setPredictions(ps)}
+              condensed={true}
             />
           </Animated.View>
           <FAB

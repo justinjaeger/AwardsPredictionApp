@@ -13,32 +13,50 @@ import { getHeaderTitleWithTrophy } from '../../../constants';
 
 const TIMING = 250;
 
+export type iListDisplay = 'list' | 'grid' | 'condensed';
+
 export type iCategoryListProps = {
-  display: 'list' | 'grid';
-  delayedDisplay: 'list' | 'grid';
+  display: iListDisplay;
+  delayedDisplay: iListDisplay;
   toggleDisplay: () => void;
+  toggleCondensed: () => void;
   gridOpacity: Animated.Value;
   listOpacity: Animated.Value;
+  condensedOpacity: Animated.Value;
 };
 
 const Category = () => {
   const gridOpacity = useRef(new Animated.Value(0)).current;
   const listOpacity = useRef(new Animated.Value(0)).current;
+  const condensedOpacity = useRef(new Animated.Value(0)).current;
 
   const { category, event } = useCategory();
   const navigation = useTypedNavigation<PredictionsParamList>();
 
-  const [display, setDisplay] = useState<'list' | 'grid'>('list');
-  const [delayedDisplay, setDelayedDisplay] = useState<'list' | 'grid'>('list');
+  const [display, setDisplay] = useState<iListDisplay>('list');
+  const [delayedDisplay, setDelayedDisplay] = useState<iListDisplay>('list');
+
+  const toggleCondensed = () => {
+    if (display === 'list') setDisplay('condensed');
+    if (display === 'condensed') setDisplay('list');
+  };
 
   const toggleDisplay = () => {
-    if (display === 'list') setDisplay('grid');
-    if (display === 'grid') setDisplay('list');
+    if (display === 'grid') {
+      setDisplay('list');
+    } else {
+      setDisplay('grid');
+    }
   };
 
   useEffect(() => {
     if (display === 'grid') {
       Animated.timing(listOpacity, {
+        toValue: 0,
+        duration: TIMING,
+        useNativeDriver: true,
+      }).start();
+      Animated.timing(condensedOpacity, {
         toValue: 0,
         duration: TIMING,
         useNativeDriver: true,
@@ -50,10 +68,15 @@ const Category = () => {
           useNativeDriver: true,
         }).start();
         setDelayedDisplay('grid');
-      }, TIMING);
+      }, 0);
     }
     if (display === 'list') {
       Animated.timing(gridOpacity, {
+        toValue: 0,
+        duration: TIMING,
+        useNativeDriver: true,
+      }).start();
+      Animated.timing(condensedOpacity, {
         toValue: 0,
         duration: TIMING,
         useNativeDriver: true,
@@ -65,7 +88,27 @@ const Category = () => {
           useNativeDriver: true,
         }).start();
         setDelayedDisplay('list');
-      }, TIMING);
+      }, 0);
+    }
+    if (display === 'condensed') {
+      Animated.timing(gridOpacity, {
+        toValue: 0,
+        duration: TIMING,
+        useNativeDriver: true,
+      }).start();
+      Animated.timing(listOpacity, {
+        toValue: 0,
+        duration: TIMING,
+        useNativeDriver: true,
+      }).start();
+      setTimeout(() => {
+        Animated.timing(condensedOpacity, {
+          toValue: 1,
+          duration: TIMING,
+          useNativeDriver: true,
+        }).start();
+        setDelayedDisplay('condensed');
+      }, 0);
     }
   }, [display]);
 
@@ -86,15 +129,19 @@ const Category = () => {
       display={display}
       delayedDisplay={delayedDisplay}
       toggleDisplay={toggleDisplay}
+      toggleCondensed={toggleCondensed}
       gridOpacity={gridOpacity}
       listOpacity={listOpacity}
+      condensedOpacity={condensedOpacity}
     />,
     <CategoryPersonal
       display={display}
       delayedDisplay={delayedDisplay}
       toggleDisplay={toggleDisplay}
+      toggleCondensed={toggleCondensed}
       gridOpacity={gridOpacity}
       listOpacity={listOpacity}
+      condensedOpacity={condensedOpacity}
     />,
   );
 };
