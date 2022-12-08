@@ -18,7 +18,7 @@ import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import useQueryCommunityOrPersonalEvent from '../../../hooks/getCommunityOrPersonalEvent';
 import MovieGrid from '../../../components/MovieGrid';
 import SignedOutState from '../../../components/SignedOutState';
-import { getHeaderTitle, getHeaderTitleWithTrophy } from '../../../constants';
+import { getHeaderTitleWithTrophy } from '../../../constants';
 
 const EventPredictions = (props: { tab: 'personal' | 'community' }) => {
   const { tab } = props;
@@ -38,14 +38,6 @@ const EventPredictions = (props: { tab: 'personal' | 'community' }) => {
     const headerTitle = eventToString(event.awardsBody, event.year);
     navigation.setOptions({
       headerTitle: getHeaderTitleWithTrophy(headerTitle, event.awardsBody),
-      //   headerRight: () => (
-      //     <AwardsBodyImage
-      //       awardsBody={event.awardsBody}
-      //       white
-      //       size={HEADER_HEIGHT}
-      //       style={{ marginRight: 10 }}
-      //     />
-      //   ),
     });
   }, [navigation]);
 
