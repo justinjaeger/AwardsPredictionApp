@@ -16,7 +16,7 @@ import { getNumPredicting } from '../../../util/getNumPredicting';
 import { useAsyncEffect } from '../../../util/hooks';
 import CustomIcon from '../../CustomIcon';
 import AnimatedPoster from '../../Images/AnimatedPoster';
-import { BodyLarge, Label, LabelBold } from '../../Text';
+import { Body, SubHeader } from '../../Text';
 
 type iContenderListItemProps = {
   variant: 'community' | 'personal' | 'selectable' | 'search';
@@ -238,15 +238,15 @@ const ContenderListItem = (props: iContenderListItemProps) => {
                   paddingBottom: showBotomButtons ? 70 : 0, // For not conflicting with the bottom buttons
                 }}
               >
-                <BodyLarge style={{ marginLeft: 10 }}>{title}</BodyLarge>
-                <Label
+                <SubHeader style={{ marginLeft: 10 }}>{title}</SubHeader>
+                <Body
                   style={{
                     marginTop: 0,
                     marginLeft: 10,
                   }}
                 >
                   {subtitle}
-                </Label>
+                </Body>
               </Animated.View>
             </MaskedView>
             {communityRankings ? (
@@ -258,8 +258,8 @@ const ContenderListItem = (props: iContenderListItemProps) => {
                   paddingRight: theme.windowMargin,
                 }}
               >
-                <BodyLarge style={{ textAlign: 'right' }}>{nom.toString()}</BodyLarge>
-                <BodyLarge style={{ textAlign: 'right' }}>{win.toString()}</BodyLarge>
+                <Body style={{ textAlign: 'right' }}>{nom.toString()}</Body>
+                <Body style={{ textAlign: 'right' }}>{win.toString()}</Body>
               </View>
             ) : null}
             {variant === 'personal' ? (
@@ -330,21 +330,21 @@ const ExternalLinkButton = (props: { text: string; onPress: () => void }) => {
       onPress={onPress}
       style={{
         alignItems: 'center',
-        padding: 4,
+        padding: 5,
+        paddingHorizontal: 10,
         borderRadius: theme.borderRadius,
         backgroundColor: COLORS.secondary,
-        width: 50,
       }}
       underlayColor={COLORS.secondaryDark}
     >
-      <LabelBold
+      <Body
         style={{
           fontWeight: '700',
           color: COLORS.white,
         }}
       >
         {text}
-      </LabelBold>
+      </Body>
     </TouchableHighlight>
   );
 };

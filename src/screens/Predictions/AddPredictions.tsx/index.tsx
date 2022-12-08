@@ -4,7 +4,7 @@ import { PredictionsParamList } from '../../../navigation/types';
 import { useTypedNavigation } from '../../../util/hooks';
 import { useCategory } from '../../../context/CategoryContext';
 import { iCategory, iEvent, iPrediction } from '../../../types';
-import { BodyLarge } from '../../../components/Text';
+import { BodyBold } from '../../../components/Text';
 import useQueryCommunityEvent from '../../../hooks/getCommunityEvent';
 import { CategoryHeader } from '../styles';
 import HeaderButton from '../../../components/HeaderButton';
@@ -153,9 +153,9 @@ const AddPredictions = () => {
               justifyContent: 'center',
             }}
           >
-            <BodyLarge style={{ textAlign: 'center', lineHeight: 30 }}>
+            <BodyBold style={{ textAlign: 'center', lineHeight: 30 }}>
               {'No predictions yet.\nAdd some!'}
-            </BodyLarge>
+            </BodyBold>
           </View>
         ) : selectedPredictions.length === 0 ? (
           <View
@@ -166,9 +166,9 @@ const AddPredictions = () => {
               marginBottom: 20,
             }}
           >
-            <BodyLarge style={{ textAlign: 'center', lineHeight: 30 }}>
+            <BodyBold style={{ textAlign: 'center', lineHeight: 30 }}>
               {'No predictions selected. Tap to add!'}
-            </BodyLarge>
+            </BodyBold>
           </View>
         ) : null}
         <MovieListSelectable

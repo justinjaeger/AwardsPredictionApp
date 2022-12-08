@@ -3,7 +3,7 @@ import React, { useEffect, useState, useLayoutEffect } from 'react';
 import { View } from 'react-native';
 import { TouchableText } from '../Buttons';
 import Poster from '../Images/Poster';
-import { BodyLarge, SubHeader } from '../Text';
+import { Body, SubHeader } from '../Text';
 import { iCachedTmdbMovie, iCachedTmdbPerson } from '../../services/cache/types';
 import TmdbServices from '../../services/tmdb';
 import { getHeaderTitle } from '../../constants';
@@ -114,10 +114,10 @@ const PerformanceDetails = (props: iPerformanceDetailsProps) => {
           />
           <View style={{ alignItems: 'flex-start' }}>
             <View style={{ flexDirection: 'column', marginTop: 5 }}>
-              <BodyLarge>{movieDetails?.plot || ''}</BodyLarge>
+              <Body>{movieDetails?.plot || ''}</Body>
             </View>
             <View style={{ flexDirection: 'column', marginTop: 5 }}>
-              <BodyLarge
+              <Body
                 style={{
                   fontWeight: '800',
                   marginTop: 5,
@@ -126,8 +126,8 @@ const PerformanceDetails = (props: iPerformanceDetailsProps) => {
                 {movieDetails?.productionCompanies?.length > 1
                   ? 'Production Companies'
                   : 'Production Company'}
-              </BodyLarge>
-              <BodyLarge>{productionCompanies || ''}</BodyLarge>
+              </Body>
+              <Body>{productionCompanies || ''}</Body>
             </View>
           </View>
         </>

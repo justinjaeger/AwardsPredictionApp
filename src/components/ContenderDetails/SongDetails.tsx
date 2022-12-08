@@ -3,7 +3,7 @@ import React, { useEffect, useState, useLayoutEffect } from 'react';
 import { View } from 'react-native';
 import { TouchableText } from '../Buttons';
 import Poster from '../Images/Poster';
-import { BodyLarge, SubHeader } from '../Text';
+import { Body, SubHeader } from '../Text';
 import { iCachedTmdbMovie } from '../../services/cache/types';
 import TmdbServices from '../../services/tmdb';
 import { useAsyncEffect } from '../../util/hooks';
@@ -64,12 +64,12 @@ const SongDetails = (props: iSongDetailsProps) => {
       />
       <View style={{ alignItems: 'flex-start' }}>
         <View style={{ flexDirection: 'column', marginTop: 5 }}>
-          <BodyLarge style={{ fontWeight: '800', marginBottom: 5 }}>{'Song'}</BodyLarge>
-          <BodyLarge>{songTitle || ''}</BodyLarge>
+          <Body style={{ fontWeight: '800', marginBottom: 5 }}>{'Song'}</Body>
+          <Body>{songTitle || ''}</Body>
         </View>
         <View style={{ flexDirection: 'column', marginTop: 5 }}>
-          <BodyLarge style={{ fontWeight: '800', marginBottom: 5 }}>{'Artist'}</BodyLarge>
-          <BodyLarge>{songArtist || ''}</BodyLarge>
+          <Body style={{ fontWeight: '800', marginBottom: 5 }}>{'Artist'}</Body>
+          <Body>{songArtist || ''}</Body>
         </View>
       </View>
     </View>

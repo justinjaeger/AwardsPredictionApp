@@ -1,13 +1,10 @@
-import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { HEADER_HEIGHT } from '../../constants';
-import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
 import BackButton from '../Buttons/BackButton';
-import HeaderButton from '../HeaderButton';
-import { BodyLarge } from '../Text';
+import { BodyBold } from '../Text';
 
 type iNavigationHeaderProps = {
   text: string[];
@@ -16,7 +13,6 @@ type iNavigationHeaderProps = {
 
 const NavigationHeader = (props: iNavigationHeaderProps) => {
   const { text, disableBack } = props;
-  const navigation = useNavigation();
 
   return (
     <SafeAreaView
@@ -37,29 +33,9 @@ const NavigationHeader = (props: iNavigationHeaderProps) => {
         {!disableBack ? <BackButton /> : null}
         <View style={{ marginLeft: theme.windowMargin }}>
           {text.map((t) => (
-            <BodyLarge style={{ fontWeight: '600' }}>{t}</BodyLarge>
+            <BodyBold style={{ fontWeight: '600' }}>{t}</BodyBold>
           ))}
         </View>
-        {/* <View style={{ marginRight: theme.windowMargin, flexDirection: 'row' }}>
-          <HeaderButton
-            onPress={() => {
-              navigation.navigate('Profile');
-            }}
-            icon={'person'}
-            style={{
-              backgroundColor: COLORS.primaryLight,
-            }}
-          />
-          <HeaderButton
-            onPress={() => {
-              navigation.navigate('Dev');
-            }}
-            icon={'settings'}
-            style={{
-              backgroundColor: COLORS.primaryLight,
-            }}
-          />
-        </View> */}
       </View>
     </SafeAreaView>
   );

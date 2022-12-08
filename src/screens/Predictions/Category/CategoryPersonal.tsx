@@ -11,7 +11,7 @@ import MovieGrid from '../../../components/MovieGrid';
 import MovieListDraggable from '../../../components/MovieList/MovieListDraggable';
 import SignedOutState from '../../../components/SignedOutState';
 import Snackbar from '../../../components/Snackbar';
-import { BodyLarge } from '../../../components/Text';
+import { BodyBold } from '../../../components/Text';
 import theme from '../../../constants/theme';
 import { useCategory } from '../../../context/CategoryContext';
 import { useAuth } from '../../../context/UserContext';
@@ -171,9 +171,9 @@ const CategoryPersonal = (props: iCategoryListProps) => {
                 justifyContent: 'center',
               }}
             >
-              <BodyLarge style={{ textAlign: 'center', lineHeight: 30 }}>
+              <BodyBold style={{ textAlign: 'center', lineHeight: 30 }}>
                 {'No predictions yet.\nAdd some!'}
-              </BodyLarge>
+              </BodyBold>
             </View>
           ) : null}
           <Animated.ScrollView

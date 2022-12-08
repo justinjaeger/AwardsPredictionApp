@@ -5,7 +5,7 @@ import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import HeaderButton from '../../../components/HeaderButton';
 import MovieGrid from '../../../components/MovieGrid';
 import MovieListCommunity from '../../../components/MovieList/MovieListCommunity';
-import { BodyLarge } from '../../../components/Text';
+import { BodyBold } from '../../../components/Text';
 import theme from '../../../constants/theme';
 import { useCategory } from '../../../context/CategoryContext';
 import { useAuth } from '../../../context/UserContext';
@@ -56,12 +56,12 @@ const CategoryCommunity = (props: iCategoryListProps) => {
             }}
           >
             <View>
-              <BodyLarge style={{ textAlign: 'right' }}>Predict</BodyLarge>
-              <BodyLarge style={{ textAlign: 'right' }}>Nom</BodyLarge>
+              <BodyBold style={{ textAlign: 'right' }}>Predict</BodyBold>
+              <BodyBold style={{ textAlign: 'right' }}>Nom</BodyBold>
             </View>
             <View>
-              <BodyLarge style={{ textAlign: 'right' }}>Predict</BodyLarge>
-              <BodyLarge style={{ textAlign: 'right' }}>Win</BodyLarge>
+              <BodyBold style={{ textAlign: 'right' }}>Predict</BodyBold>
+              <BodyBold style={{ textAlign: 'right' }}>Win</BodyBold>
             </View>
           </Animated.View>
         </CategoryHeader>
@@ -74,7 +74,7 @@ const CategoryCommunity = (props: iCategoryListProps) => {
               justifyContent: 'center',
             }}
           >
-            <BodyLarge>No films in this category</BodyLarge>
+            <BodyBold>No films in this category</BodyBold>
           </View>
         ) : null}
         <Animated.ScrollView

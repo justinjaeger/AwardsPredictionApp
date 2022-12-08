@@ -2,7 +2,7 @@ import React from 'react';
 import { Spinner } from '@ui-kitten/components';
 import COLORS from '../../constants/colors';
 import { TouchableHighlight, TouchableOpacity } from 'react-native';
-import { BodyLarge } from '../Text';
+import { Body } from '../Text';
 import theme from '../../constants/theme';
 
 interface iButtonProps {
@@ -31,14 +31,14 @@ export const SubmitButton = (props: iButtonProps) => (
       {props.loading ? (
         () => <Spinner size="medium" status="control" />
       ) : (
-        <BodyLarge
+        <Body
           style={{
             textAlign: 'center',
             color: props.disabled ? COLORS.disabledText : COLORS.white,
           }}
         >
           {props.text}
-        </BodyLarge>
+        </Body>
       )}
     </>
   </TouchableHighlight>
@@ -54,13 +54,13 @@ export const TouchableText = (props: iButtonProps) => (
       ...props.style,
     }}
   >
-    <BodyLarge
+    <Body
       style={{
         color: COLORS.secondary,
         textAlign: 'center',
       }}
     >
       {props.text}
-    </BodyLarge>
+    </Body>
   </TouchableOpacity>
 );

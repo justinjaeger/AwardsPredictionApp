@@ -12,7 +12,7 @@ import { iNumberPredicting } from '../../../types';
 import { getNumPredicting } from '../../../util/getNumPredicting';
 import { useAsyncEffect } from '../../../util/hooks';
 import Poster from '../../Images/Poster';
-import { BodyLarge, Label } from '../../Text';
+import { Body, BodyBold } from '../../Text';
 
 type iFilmListItemProps = {
   tmdbMovieId: number;
@@ -73,17 +73,17 @@ const FilmListItem = (props: iFilmListItemProps) => {
         onPress={onPress}
       />
       <View style={{ flexDirection: 'column' }}>
-        <BodyLarge style={{ marginLeft: 10 }}>{tmdbMovie?.title || ''}</BodyLarge>
+        <BodyBold style={{ marginLeft: 10 }}>{tmdbMovie?.title || ''}</BodyBold>
         {categoryName === CategoryName.PICTURE ? (
-          <Label style={{ marginTop: 1, marginLeft: 10 }}>{movieStudio || ''}</Label>
+          <Body style={{ marginTop: 1, marginLeft: 10 }}>{movieStudio || ''}</Body>
         ) : null}
         {categoryInfo ? (
-          <BodyLarge style={{ marginLeft: 10 }}>{categoryInfo.join(', ')}</BodyLarge>
+          <BodyBold style={{ marginLeft: 10 }}>{categoryInfo.join(', ')}</BodyBold>
         ) : null}
         {communityRankings && size !== PosterSize.SMALL ? (
           <>
-            <BodyLarge style={{ marginLeft: 10 }}>{`pred win: ${win}`}</BodyLarge>
-            <BodyLarge style={{ marginLeft: 10 }}>{`pred nom: ${nom}`}</BodyLarge>
+            <BodyBold style={{ marginLeft: 10 }}>{`pred win: ${win}`}</BodyBold>
+            <BodyBold style={{ marginLeft: 10 }}>{`pred nom: ${nom}`}</BodyBold>
           </>
         ) : null}
       </View>

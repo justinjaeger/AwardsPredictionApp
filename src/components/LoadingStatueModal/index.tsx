@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { Modal } from '@ui-kitten/components';
 import LoadingStatue from '../LoadingStatue';
-import { BodyLarge } from '../Text';
+import { BodyBold } from '../Text';
 import { Animated, View } from 'react-native';
 
 type iLoadingStatueModalProps = {
@@ -32,7 +32,7 @@ const LoadingStatueModal = (props: iLoadingStatueModalProps) => {
       >
         <LoadingStatue />
         <View style={{ width: '100%', alignSelf: 'center' }}>
-          <BodyLarge style={{ textAlign: 'center' }}>{text || 'Loading...'}</BodyLarge>
+          <BodyBold style={{ textAlign: 'center' }}>{text || 'Loading...'}</BodyBold>
         </View>
       </Modal>
     </Animated.View>

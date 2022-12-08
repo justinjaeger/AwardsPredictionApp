@@ -8,7 +8,7 @@ import { iCachedTmdbMovie, iCachedTmdbPerson } from '../../../services/cache/typ
 import TmdbServices from '../../../services/tmdb';
 import { useSubscriptionEffect } from '../../../util/hooks';
 import Poster from '../../Images/Poster';
-import { BodyLarge } from '../../Text';
+import { BodyBold } from '../../Text';
 
 type iPerformanceListItemProps = {
   tmdbPersonId: number;
@@ -53,7 +53,7 @@ const PerformanceListItem = (props: iPerformanceListItemProps) => {
       }}
     >
       <View style={{ flexDirection: 'row' }}>
-        <BodyLarge style={{ marginLeft: 10 }}>{ranking?.toString() || ''}</BodyLarge>
+        <BodyBold style={{ marginLeft: 10 }}>{ranking?.toString() || ''}</BodyBold>
         <Poster
           path={tmdbPerson?.profilePath || null}
           title={tmdbPerson?.name || ''}
@@ -61,13 +61,13 @@ const PerformanceListItem = (props: iPerformanceListItemProps) => {
           onPress={onPress}
         />
         <View style={{ flexDirection: 'column' }}>
-          <BodyLarge style={{ marginTop: 10, marginLeft: 10 }}>
+          <BodyBold style={{ marginTop: 10, marginLeft: 10 }}>
             {tmdbPerson?.name || ''}
-          </BodyLarge>
+          </BodyBold>
           {tmdbMovie ? (
-            <BodyLarge style={{ marginTop: 10, marginLeft: 10 }}>
+            <BodyBold style={{ marginTop: 10, marginLeft: 10 }}>
               {tmdbMovie.title || ''}
-            </BodyLarge>
+            </BodyBold>
           ) : null}
         </View>
       </View>

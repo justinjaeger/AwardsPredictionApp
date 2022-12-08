@@ -3,7 +3,7 @@ import React, { useEffect, useState, useLayoutEffect } from 'react';
 import { View } from 'react-native';
 import { TouchableText } from '../Buttons';
 import Poster from '../Images/Poster';
-import { BodyLarge, SubHeader } from '../Text';
+import { Body, SubHeader } from '../Text';
 import { PosterSize } from '../../constants/posterDimensions';
 import { iCachedTmdbMovie } from '../../services/cache/types';
 import TmdbServices from '../../services/tmdb';
@@ -89,27 +89,23 @@ const FilmDetails = (props: iFilmDetailsProps) => {
       />
       <View style={{ alignItems: 'flex-start' }}>
         <View style={{ flexDirection: 'column', marginTop: 5 }}>
-          <BodyLarge style={{ fontWeight: '800', marginBottom: 5 }}>
-            {'Distributor'}
-          </BodyLarge>
-          <BodyLarge>{movieStudio || ''}</BodyLarge>
+          <Body style={{ fontWeight: '800', marginBottom: 5 }}>{'Distributor'}</Body>
+          <Body>{movieStudio || ''}</Body>
         </View>
         <View style={{ flexDirection: 'column', marginTop: 5 }}>
-          <BodyLarge style={{ fontWeight: '800', marginBottom: 5 }}>{'Plot'}</BodyLarge>
-          <BodyLarge>{movieDetails?.plot || ''}</BodyLarge>
+          <Body style={{ fontWeight: '800', marginBottom: 5 }}>{'Plot'}</Body>
+          <Body>{movieDetails?.plot || ''}</Body>
         </View>
         <View style={{ flexDirection: 'column', marginTop: 5 }}>
-          <BodyLarge style={{ fontWeight: '800', marginBottom: 5 }}>
-            {'Directed by'}
-          </BodyLarge>
-          <BodyLarge>{directors ? JSON.stringify(directors) : ''}</BodyLarge>
+          <Body style={{ fontWeight: '800', marginBottom: 5 }}>{'Directed by'}</Body>
+          <Body>{directors ? JSON.stringify(directors) : ''}</Body>
         </View>
         <View style={{ flexDirection: 'column', marginTop: 5 }}>
-          <BodyLarge style={{ fontWeight: '800', marginBottom: 5 }}>{'Cast'}</BodyLarge>
-          <BodyLarge>{formattedCast || ''}</BodyLarge>
+          <Body style={{ fontWeight: '800', marginBottom: 5 }}>{'Cast'}</Body>
+          <Body>{formattedCast || ''}</Body>
         </View>
         <View style={{ flexDirection: 'column', marginTop: 5 }}>
-          <BodyLarge
+          <Body
             style={{
               fontWeight: '800',
               marginTop: 5,
@@ -118,8 +114,8 @@ const FilmDetails = (props: iFilmDetailsProps) => {
             {movieDetails?.productionCompanies?.length > 1
               ? 'Production Companies'
               : 'Production Company'}
-          </BodyLarge>
-          <BodyLarge>{productionCompanies || ''}</BodyLarge>
+          </Body>
+          <Body>{productionCompanies || ''}</Body>
         </View>
       </View>
     </>

@@ -4,7 +4,7 @@ import { ListMoviesQuery } from '../../API';
 import { TouchableText } from '../../components/Buttons';
 import Poster from '../../components/Images/Poster';
 import FormInput from '../../components/Inputs/FormInput';
-import { BodyLarge } from '../../components/Text';
+import { BodyBold } from '../../components/Text';
 import { PosterSize } from '../../constants/posterDimensions';
 import { iCachedTmdbMovie } from '../../services/cache/types';
 import ApiServices from '../../services/graphql';
@@ -88,12 +88,12 @@ const StudioItem = (props: {
           onPress={() => {}}
         />
         <View style={{ flexDirection: 'column', width: '100%' }}>
-          <BodyLarge style={{ marginTop: 10, marginLeft: 10 }}>
+          <BodyBold style={{ marginTop: 10, marginLeft: 10 }}>
             {tmdbMovie?.title || ''}
-          </BodyLarge>
-          <BodyLarge style={{ marginTop: 10, marginLeft: 10 }}>
+          </BodyBold>
+          <BodyBold style={{ marginTop: 10, marginLeft: 10 }}>
             {movieStudio || ''}
-          </BodyLarge>
+          </BodyBold>
           <View
             style={{
               flexDirection: 'row',
