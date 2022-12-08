@@ -20,7 +20,7 @@ import MovieGrid from '../../../components/MovieGrid';
 import SignedOutState from '../../../components/SignedOutState';
 import { getHeaderTitleWithTrophy } from '../../../constants';
 
-const EventPredictions = (props: { tab: 'personal' | 'community' }) => {
+const Event = (props: { tab: 'personal' | 'community' }) => {
   const { tab } = props;
 
   const { event: _event, setCategory } = useCategory();
@@ -142,10 +142,7 @@ const EventPredictions = (props: { tab: 'personal' | 'community' }) => {
 };
 
 const TabsWrapper = () => {
-  return PredictionTabsNavigator(
-    <EventPredictions tab={'community'} />,
-    <EventPredictions tab={'personal'} />,
-  );
+  return PredictionTabsNavigator(<Event tab={'community'} />, <Event tab={'personal'} />);
 };
 
 export default TabsWrapper;

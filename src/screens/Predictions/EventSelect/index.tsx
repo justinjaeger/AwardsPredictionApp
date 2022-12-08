@@ -69,7 +69,7 @@ const EventSelect = () => {
 
   const onSelectEvent = async (event: iEvent) => {
     setEvent(event);
-    navigation.navigate('EventPredictions');
+    navigation.navigate('Event');
   };
 
   const eventList = Object.values(events || {});

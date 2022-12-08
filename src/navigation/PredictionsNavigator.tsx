@@ -6,7 +6,7 @@ import ContenderDetailsScreen from '../screens/Predictions/ContenderDetailsScree
 import { PredictionsParamList } from './types';
 import Category from '../screens/Predictions/Category';
 import EventSelect from '../screens/Predictions/EventSelect';
-import EventPredictions from '../screens/Predictions/EventPredictions';
+import Event from '../screens/Predictions/Event';
 import ProfileNavigator from './ProfileNavigator';
 import theme from '../constants/theme';
 import { getHeaderTitle, headerSettings } from '../constants';
@@ -39,8 +39,8 @@ const PredictionsNavigator = () => {
         }}
       />
       <Screen
-        name="EventPredictions"
-        component={EventPredictions}
+        name="Event"
+        component={Event}
         options={{
           headerTitle: getHeaderTitle('Event Predictions'),
           headerLeft: BackButton,
