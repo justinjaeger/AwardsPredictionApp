@@ -43,11 +43,9 @@ const EventSelect = () => {
   // just in case there's some refresh problem
   useEffect(() => {
     if (events === undefined) {
-      console.log('refetchEvents');
       refetchEvents();
     }
     if (user === undefined) {
-      console.log('refetchUser');
       refetchUser();
     }
   }, [events, user, userId]);
