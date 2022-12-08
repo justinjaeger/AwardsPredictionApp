@@ -1,48 +1,38 @@
-import React, { useLayoutEffect } from 'react';
-import { getAwardsBodyCategories } from '../../../constants/categories';
+import React from 'react';
 import CreateFilm from './CreateFilm';
 import CreatePerformance from './CreatePerformance';
 import CreateSong from './CreateSong';
-import { useTypedNavigation } from '../../../util/hooks';
-import { AwardsBody, CategoryType } from '../../../API';
+import { CategoryType } from '../../../API';
 import { useCategory } from '../../../context/CategoryContext';
-import { iCategory, iEvent } from '../../../types';
-import BackgroundWrapper from '../../../components/BackgroundWrapper';
-import { PredictionsParamList } from '../../../navigation/types';
-import { getHeaderTitle } from '../../../constants';
+import { iCategory, iPrediction } from '../../../types';
+
+export type iCreateContenderProps = {
+  onSelectPrediction: (p: iPrediction) => void;
+  onClose: () => void;
+};
 
 // TODO: should only be able to do this if logged in
-const CreateContender = () => {
-  const { category: _category, event: _event } = useCategory();
-  const navigation = useTypedNavigation<PredictionsParamList>();
+const CreateContender = (props: iCreateContenderProps & { onClose: () => void }) => {
+  const { onSelectPrediction, onClose } = props;
+
+  const { category: _category } = useCategory();
 
   const category = _category as iCategory;
-  const event = _event as iEvent;
-
-  // Set header title (TODO: delete)
-  useLayoutEffect(() => {
-    const categoryList = getAwardsBodyCategories(
-      AwardsBody[event.awardsBody],
-      event.year,
-    );
-    const headerTitle = `Add ${categoryList[category.name]?.name || 'Contender'}`;
-    navigation.setOptions({
-      headerTitle: getHeaderTitle(headerTitle),
-    });
-  }, [navigation]);
 
   const CreateComponent = (() => {
-    switch (CategoryType[category.type]) {
+    switch (category.type) {
       case CategoryType.FILM:
-        return <CreateFilm />;
+        return <CreateFilm onSelectPrediction={onSelectPrediction} onClose={onClose} />;
       case CategoryType.PERFORMANCE:
-        return <CreatePerformance />;
+        return (
+          <CreatePerformance onSelectPrediction={onSelectPrediction} onClose={onClose} />
+        );
       case CategoryType.SONG:
-        return <CreateSong />;
+        return <CreateSong onSelectPrediction={onSelectPrediction} onClose={onClose} />;
     }
   })();
 
-  return <BackgroundWrapper>{CreateComponent}</BackgroundWrapper>;
+  return <>{CreateComponent}</>;
 };
 
 export default CreateContender;

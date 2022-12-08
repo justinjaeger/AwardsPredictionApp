@@ -44,13 +44,16 @@ const MovieListDraggable = (props: iMovieListProps) => {
       }}
       renderItem={({ item: prediction, index: _index, drag, isActive }) => {
         const index = _index || 0;
-        const isMoreThanSlots = index > slots;
-        const ranking = isMoreThanSlots ? index : index + 1;
+        const ranking = index + 1;
         return (
           <>
             {index === slots ? (
               <Divider
-                style={{ margin: 10, borderWidth: 0.5, borderColor: COLORS.secondaryDark }}
+                style={{
+                  margin: 10,
+                  borderWidth: 0.5,
+                  borderColor: COLORS.secondaryDark,
+                }}
               />
             ) : null}
             <ScaleDecorator activeScale={0.9}>

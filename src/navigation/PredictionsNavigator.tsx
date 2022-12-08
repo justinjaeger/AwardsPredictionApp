@@ -71,7 +71,7 @@ const PredictionsNavigator = () => {
         name="AddPredictions"
         component={AddPredictions}
         options={{
-          headerTitle: getHeaderTitle('Add Predictions'),
+          headerTitle: getHeaderTitle('Add / Remove Predictions'),
           headerLeft: BackButton,
           ...headerSettings,
         }}

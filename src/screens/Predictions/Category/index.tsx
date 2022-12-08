@@ -9,7 +9,7 @@ import { getAwardsBodyCategories } from '../../../constants/categories';
 import { CategoryName } from '../../../API';
 import { useCategory } from '../../../context/CategoryContext';
 import { eventToString } from '../../../util/stringConversions';
-import { getHeaderTitle, getHeaderTitleWithTrophy } from '../../../constants';
+import { getHeaderTitleWithTrophy } from '../../../constants';
 
 const TIMING = 250;
 

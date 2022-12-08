@@ -13,7 +13,6 @@ import useQueryCommunityOrPersonalEvent from '../../../hooks/getCommunityOrPerso
 import { iCategory, iEvent } from '../../../types';
 import { CategoryHeader } from '../styles';
 
-// NOTE: Has a lot in common with ContenderListDraggable
 const CategoryCommunity = (props: iCategoryListProps) => {
   const { display, delayedDisplay, toggleDisplay, gridOpacity, listOpacity } = props;
 

@@ -5,6 +5,7 @@ import CustomIcon from '../CustomIcon';
 import COLORS from '../../constants/colors';
 import { useDebounce } from '../../util/hooks';
 import { View } from 'react-native';
+import { HEADER_HEIGHT } from '../../constants';
 
 const INPUT_HEIGHT = 50;
 
@@ -72,7 +73,7 @@ const SearchInput = (props: {
         textStyle={{
           marginLeft: 10,
           marginRight: '20%',
-          height: INPUT_HEIGHT - 15,
+          height: HEADER_HEIGHT - 15,
           fontSize: 16,
           color: COLORS.white,
         }}
@@ -91,10 +92,9 @@ const SearchInput = (props: {
         <View
           style={{
             position: 'absolute',
-            top: 18,
             right: 20,
             justifyContent: 'center',
-            height: INPUT_HEIGHT,
+            height: HEADER_HEIGHT,
           }}
         >
           <Spinner

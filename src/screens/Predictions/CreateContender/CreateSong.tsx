@@ -1,16 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import SearchInput from '../../../components/Inputs/SearchInput';
 import TmdbServices from '../../../services/tmdb';
 import { iSearchData } from '../../../services/tmdb/search';
-import Snackbar from '../../../components/Snackbar';
 import { Body } from '../../../components/Text';
-import { View } from 'react-native';
+import { useWindowDimensions, View } from 'react-native';
 import { useCategory } from '../../../context/CategoryContext';
 import { iCategory, iEvent, iPrediction } from '../../../types';
 import COLORS from '../../../constants/colors';
 import MovieListSearch from '../../../components/MovieList/MovieListSearch';
 import LoadingStatueModal from '../../../components/LoadingStatueModal';
-import { useAsyncEffect } from '../../../util/hooks';
 import useQueryCommunityEvent from '../../../hooks/getCommunityEvent';
 import { FAB } from '../../../components/Buttons/FAB';
 import { CategoryType } from '../../../API';
@@ -18,9 +16,17 @@ import BasicModal from '../../../components/BasicModal';
 import useMutationCreateSongContender from '../../../hooks/createSongContender';
 import { compareSongKeys, getSongKey } from '../../../util/songKeys';
 import FormInput from '../../../components/Inputs/FormInput';
+import { iCreateContenderProps } from '.';
+import { CategoryHeader } from '../styles';
+import HeaderButton from '../../../components/HeaderButton';
+import { SubmitButton } from '../../../components/Buttons';
+import SongListSelectable from '../../../components/MovieList/SongListSelectable';
 
 // TODO: should only be able to do this if logged in
-const CreateSong = () => {
+const CreateSong = (props: iCreateContenderProps) => {
+  const { onSelectPrediction, onClose } = props;
+  const { width } = useWindowDimensions();
+
   const { category: _category, event: _event } = useCategory();
 
   const category = _category as iCategory;
@@ -37,6 +43,7 @@ const CreateSong = () => {
   const [selectedMovieTmdbId, setSelectedMovieTmdbId] = useState<number | undefined>();
   const [resetSearchHack, setResetSearchHack] = useState<boolean>(false);
   const [showSongModal, setShowSongModal] = useState<boolean>(false);
+  const [modalState, setModalState] = useState<'select' | 'create'>('select');
   const [songTitle, setSongTitle] = useState<string>('');
   const [artist, setArtist] = useState<string>('');
 
@@ -50,10 +57,21 @@ const CreateSong = () => {
     setShowSongModal(false);
   };
 
-  useAsyncEffect(async () => {
+  const getSongPrediction = (tmdbId: number, title: string) => {
+    return communityPredictions.find((p) => {
+      const storedSongKey = getSongKey(p.contenderSong?.title || '', tmdbId);
+      const newSongKey = getSongKey(title, tmdbId);
+      return compareSongKeys(storedSongKey, newSongKey);
+    });
+  };
+
+  useEffect(() => {
     if (isComplete && selectedMovieTmdbId) {
-      Snackbar.success('Added song to predictions');
-      //   resetSearch();
+      const newPrediction = getSongPrediction(selectedMovieTmdbId, songTitle);
+      if (newPrediction) {
+        onSelectPrediction(newPrediction);
+        resetSearch();
+      }
     }
   }, [isComplete]);
 
@@ -74,19 +92,26 @@ const CreateSong = () => {
 
   const onSelectMovie = async () => {
     if (!selectedMovieTmdbId) return;
+    // get songs associated with movie
+    // if songs associated, show modal to select song
+    // if no songs associated, show modal to create song
+    const songs = communityPredictions.filter(
+      (p) => p.contenderMovie?.tmdbId === selectedMovieTmdbId,
+    );
+    setModalState(songs.length === 0 ? 'create' : 'select');
     setShowSongModal(true);
   };
 
   const onConfirmContender = async () => {
     if (!selectedMovieTmdbId) return;
     // can check that selectedTmdbId is not already associated with a contender in our category list
-    const maybeAlreadyExistingContender = communityPredictions.find((p) => {
-      const storedSongKey = getSongKey(p.contenderSong?.title || '', selectedMovieTmdbId);
-      const newSongKey = getSongKey(songTitle, selectedMovieTmdbId);
-      return compareSongKeys(storedSongKey, newSongKey);
-    });
-    if (maybeAlreadyExistingContender) {
-      Snackbar.warning('This song has already been added');
+    const maybeAlreadyExistingPrediction = getSongPrediction(
+      selectedMovieTmdbId,
+      songTitle,
+    );
+    if (maybeAlreadyExistingPrediction) {
+      // this song has already been added to community predictions
+      onSelectPrediction(maybeAlreadyExistingPrediction);
       return;
     }
     await mutate({
@@ -111,42 +136,17 @@ const CreateSong = () => {
   return (
     <>
       <LoadingStatueModal visible={!isComplete} text={'Saving song...'} />
-      <BasicModal
-        visible={showSongModal}
-        onClose={() => {
-          setShowSongModal(false);
-        }}
-        width={'90%'}
-        height={'70%'}
-        header={{ title: 'Enter Song Details' }}
-      >
-        <>
-          <View style={{ alignSelf: 'center', width: '80%', height: '100%' }}>
-            <FormInput
-              label="Song Title"
-              value={songTitle}
-              setValue={setSongTitle}
-              textContentType={'name'}
-            />
-            <FormInput
-              label="Artist"
-              value={artist}
-              setValue={setArtist}
-              textContentType={'name'}
-            />
-          </View>
-          <FAB
-            iconName="plus"
-            text="Submit"
-            onPress={() => {
-              setShowSongModal(false);
-              onConfirmContender();
-            }}
-            visible={songTitle.length > 0 && artist.length > 0}
-            bottomPercentage={'50%'}
-          />
-        </>
-      </BasicModal>
+      <CategoryHeader>
+        <SearchInput
+          resetSearchHack={resetSearchHack}
+          placeholder={'Search By Movie Title'}
+          handleSearch={(s: string) => handleSearch(s)}
+          style={{ width: width * 0.8 }}
+        />
+        <View style={{ flexDirection: 'row' }}>
+          <HeaderButton onPress={onClose} icon={'list'} />
+        </View>
+      </CategoryHeader>
       <View
         style={{
           height: '100%',
@@ -156,12 +156,6 @@ const CreateSong = () => {
         }}
       >
         <View style={{ width: '100%', alignItems: 'center', height: '100%' }}>
-          <SearchInput
-            resetSearchHack={resetSearchHack}
-            placeholder={'Search Movies'}
-            handleSearch={(s: string) => handleSearch(s)}
-            style={{ width: '80%', marginTop: '5%' }}
-          />
           {movieData.length === 0 ? (
             <Body style={{ marginTop: 40, color: COLORS.white }}>{searchMessage}</Body>
           ) : null}
@@ -190,6 +184,55 @@ const CreateSong = () => {
             ) : null}
           </View>
         </View>
+        <BasicModal
+          visible={showSongModal}
+          onClose={() => {
+            setShowSongModal(false);
+          }}
+          width={'90%'}
+          height={'70%'}
+          header={{
+            title: modalState === 'create' ? 'Enter Song Details' : 'Select Song',
+          }}
+        >
+          {modalState === 'create' ? (
+            <>
+              <View style={{ alignSelf: 'center', width: '80%', height: '100%' }}>
+                <FormInput
+                  label="Song Title"
+                  value={songTitle}
+                  setValue={setSongTitle}
+                  textContentType={'name'}
+                />
+                <FormInput
+                  label="Artist (optional)"
+                  value={artist}
+                  setValue={setArtist}
+                  textContentType={'name'}
+                />
+              </View>
+              <FAB
+                iconName="plus"
+                text="Submit"
+                onPress={() => {
+                  setShowSongModal(false);
+                  onConfirmContender();
+                }}
+                visible={songTitle.length > 0}
+                bottomPercentage={'50%'}
+              />
+            </>
+          ) : (
+            <SelectSongList
+              data={communityPredictions.filter(
+                (p) => p.contenderMovie?.tmdbId === selectedMovieTmdbId,
+              )}
+              getSongPrediction={getSongPrediction}
+              onCreateNew={() => setModalState('create')}
+              onSelectPrediction={onSelectPrediction}
+            />
+          )}
+        </BasicModal>
         <FAB
           iconName="plus"
           text="Add"
@@ -197,6 +240,61 @@ const CreateSong = () => {
           visible={selectedMovieTmdbId !== undefined}
         />
       </View>
+    </>
+  );
+};
+
+const SelectSongList = (props: {
+  data: iPrediction[];
+  getSongPrediction: (tmdbId: number, title: string) => iPrediction | undefined;
+  onCreateNew: () => void;
+  onSelectPrediction: (p: iPrediction) => void;
+}) => {
+  const { data, getSongPrediction, onCreateNew, onSelectPrediction } = props;
+
+  const [selectedSong, setSelectedSong] = useState<
+    { tmdbId: number; songTitle: string } | undefined
+  >(undefined);
+
+  return (
+    <>
+      <View style={{ height: '84%' }}>
+        <SongListSelectable
+          predictions={data}
+          onSelect={(tmdbId, songTitle) => {
+            if (!songTitle) return;
+            const songPrediction = getSongPrediction(tmdbId, songTitle);
+            if (selectedSong?.songTitle === songTitle) {
+              setSelectedSong(undefined);
+            } else if (songPrediction) {
+              setSelectedSong({ tmdbId, songTitle });
+            }
+          }}
+          disablePaddingBottom
+        />
+      </View>
+      <View style={{ height: '10%' }}>
+        {selectedSong === undefined ? (
+          <SubmitButton text={'Create New Song'} onPress={onCreateNew} />
+        ) : null}
+      </View>
+      <FAB
+        iconName="plus"
+        text="Add"
+        onPress={() => {
+          if (selectedSong) {
+            const prediction = getSongPrediction(
+              selectedSong.tmdbId,
+              selectedSong.songTitle,
+            );
+            if (prediction) {
+              onSelectPrediction(prediction);
+            }
+          }
+        }}
+        visible={selectedSong !== undefined}
+        bottomPercentage={'5%'}
+      />
     </>
   );
 };

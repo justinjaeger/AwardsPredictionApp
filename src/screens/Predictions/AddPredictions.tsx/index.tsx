@@ -14,8 +14,9 @@ import BackButton from '../../../components/Buttons/BackButton';
 import _ from 'lodash';
 import MovieListSelectable from '../../../components/MovieList/MovieListSelectable';
 import { FAB } from '../../../components/Buttons/FAB';
-
-// TODO: really, this is adding OR deleting contenders
+import CreateContender from '../CreateContender';
+import { CATEGORY_TYPE_TO_STRING } from '../../../constants/categories';
+import Snackbar from '../../../components/Snackbar';
 
 const AddPredictions = () => {
   const {
@@ -36,6 +37,7 @@ const AddPredictions = () => {
     initialPredictions,
   );
   const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [isSearching, setIsSearching] = useState<boolean>(false);
 
   const selectedContenderIds = selectedPredictions.map((sp) => sp.contenderId);
   const initiallySelectedContenderIds = initialPredictions.map((p) => p.contenderId);
@@ -109,74 +111,95 @@ const AddPredictions = () => {
     }
   }, []);
 
+  const onSelectPredictionFromSearch = (prediction: iPrediction) => {
+    const contenderId = prediction.contenderId;
+    const isAlreadySelected = selectedContenderIds.includes(contenderId);
+    if (isAlreadySelected) {
+      // alert user that contender is already selected
+      Snackbar.success(
+        `This ${CATEGORY_TYPE_TO_STRING[
+          category.type
+        ].toLowerCase()} is already in your predictions`,
+      );
+    } else {
+      Snackbar.success('Added to list');
+      const newSelected = [...selectedPredictions, prediction];
+      setSelectedPredictions(newSelected);
+    }
+  };
+
   return (
     <BackgroundWrapper>
       <>
-        <CategoryHeader>
-          <View style={{ flexDirection: 'row' }}>
-            {isEditing ? (
-              <HeaderButton
-                onPress={() => {
-                  Alert.alert('Undo recent changes?', '', [
-                    {
-                      text: 'Cancel',
-                      onPress: () => {},
-                      style: 'cancel',
-                    },
-                    {
-                      text: 'Undo',
-                      onPress: () => {
-                        setSelectedPredictions(initialPredictions);
-                      },
-                    },
-                  ]);
+        {isSearching ? (
+          <CreateContender
+            onSelectPrediction={onSelectPredictionFromSearch}
+            onClose={() => setIsSearching(false)}
+          />
+        ) : (
+          <>
+            <CategoryHeader>
+              <View style={{ flexDirection: 'row' }}>
+                {isEditing ? (
+                  <HeaderButton
+                    onPress={() => {
+                      Alert.alert('Undo recent changes?', '', [
+                        {
+                          text: 'Cancel',
+                          onPress: () => {},
+                          style: 'cancel',
+                        },
+                        {
+                          text: 'Undo',
+                          onPress: () => {
+                            setSelectedPredictions(initialPredictions);
+                          },
+                        },
+                      ]);
+                    }}
+                    icon={'undo'}
+                  />
+                ) : null}
+              </View>
+              <View style={{ flexDirection: 'row' }}>
+                <HeaderButton onPress={() => setIsSearching(true)} icon={'search'} />
+              </View>
+            </CategoryHeader>
+            {!communityPredictions || communityPredictions.length === 0 ? (
+              <View
+                style={{
+                  width: '100%',
+                  marginTop: 20,
+                  alignItems: 'center',
+                  justifyContent: 'center',
                 }}
-                icon={'undo'}
-              />
+              >
+                <BodyBold style={{ textAlign: 'center', lineHeight: 30 }}>
+                  {'No predictions yet.\nAdd some!'}
+                </BodyBold>
+              </View>
+            ) : selectedPredictions.length === 0 ? (
+              <View
+                style={{
+                  width: '100%',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginBottom: 20,
+                }}
+              >
+                <BodyBold style={{ textAlign: 'center', lineHeight: 30 }}>
+                  {'No predictions selected. Tap to add!'}
+                </BodyBold>
+              </View>
             ) : null}
-          </View>
-          <View style={{ flexDirection: 'row' }}>
-            <HeaderButton
-              onPress={() => {
-                navigateToCreateContender();
-              }}
-              icon={'plus'}
+            <MovieListSelectable
+              predictions={communityPredictions}
+              selectedPredictions={selectedPredictions}
+              setSelectedPredictions={(ps) => setSelectedPredictions(ps)}
             />
-          </View>
-        </CategoryHeader>
-        {!communityPredictions || communityPredictions.length === 0 ? (
-          <View
-            style={{
-              width: '100%',
-              marginTop: 20,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <BodyBold style={{ textAlign: 'center', lineHeight: 30 }}>
-              {'No predictions yet.\nAdd some!'}
-            </BodyBold>
-          </View>
-        ) : selectedPredictions.length === 0 ? (
-          <View
-            style={{
-              width: '100%',
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginBottom: 20,
-            }}
-          >
-            <BodyBold style={{ textAlign: 'center', lineHeight: 30 }}>
-              {'No predictions selected. Tap to add!'}
-            </BodyBold>
-          </View>
-        ) : null}
-        <MovieListSelectable
-          predictions={communityPredictions}
-          selectedPredictions={selectedPredictions}
-          setSelectedPredictions={(ps) => setSelectedPredictions(ps)}
-        />
-        <FAB iconName="checkmark" text="Done" onPress={onSave} visible={isEditing} />
+            <FAB iconName="checkmark" text="Done" onPress={onSave} visible={isEditing} />
+          </>
+        )}
       </>
     </BackgroundWrapper>
   );

@@ -38,13 +38,16 @@ const MovieListCommunity = (props: iMovieListProps) => {
       style={{ width: '100%' }}
       contentContainerStyle={{ paddingBottom: 100 }}
       renderItem={({ item: prediction, index }) => {
-        const isMoreThanSlots = index > slots;
-        const ranking = isMoreThanSlots ? index : index + 1;
+        const ranking = index + 1;
         return (
           <>
             {index === slots ? (
               <Divider
-                style={{ margin: 10, borderWidth: 0.5, borderColor: COLORS.secondaryDark }}
+                style={{
+                  margin: 10,
+                  borderWidth: 0.5,
+                  borderColor: COLORS.secondaryDark,
+                }}
               />
             ) : null}
             <ContenderListItem

@@ -6,7 +6,7 @@ import ContenderListItem from '../List/ContenderList/ContenderListItem';
 
 type iMovieListProps = {
   predictions: iPrediction[];
-  categoryType: CategoryType;
+  categoryType: CategoryType; // Don't do SONG though, use SongListSearch
   disablePaddingBottom?: boolean;
   onSelect: (id: number) => void;
 };
@@ -22,7 +22,11 @@ const MovieListSearch = (props: iMovieListProps) => {
   }, [predictions.length]);
 
   const getTmdbId = (prediction: iPrediction) => {
-    return parseInt(prediction.contenderId, 10);
+    if (categoryType === CategoryType.PERFORMANCE) {
+      return prediction.contenderPerson?.tmdbId || 0;
+    } else {
+      return prediction.contenderMovie?.tmdbId || 0;
+    }
   };
 
   const onPressItem = (prediction: iPrediction) => {

@@ -1,25 +1,29 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import SearchInput from '../../../components/Inputs/SearchInput';
 import TmdbServices from '../../../services/tmdb';
 import { iSearchData } from '../../../services/tmdb/search';
 import Snackbar from '../../../components/Snackbar';
 import { Body } from '../../../components/Text';
-import { View } from 'react-native';
+import { useWindowDimensions, View } from 'react-native';
 import { useCategory } from '../../../context/CategoryContext';
 import { iCategory, iEvent, iPrediction } from '../../../types';
 import COLORS from '../../../constants/colors';
 import MovieListSearch from '../../../components/MovieList/MovieListSearch';
 import LoadingStatueModal from '../../../components/LoadingStatueModal';
-import { useAsyncEffect } from '../../../util/hooks';
 import useQueryCommunityEvent from '../../../hooks/getCommunityEvent';
 import { FAB } from '../../../components/Buttons/FAB';
 import useMutationCreateActingContender from '../../../hooks/createActingContender';
-import TmdbPersonCache from '../../../services/cache/tmdbPerson';
-import { CategoryType } from '../../../API';
 import BasicModal from '../../../components/BasicModal';
+import { CategoryHeader } from '../styles';
+import HeaderButton from '../../../components/HeaderButton';
+import { iCreateContenderProps } from '.';
+import { CategoryType } from '../../../API';
 
 // TODO: should only be able to do this if logged in
-const CreatePerformance = () => {
+const CreatePerformance = (props: iCreateContenderProps) => {
+  const { onSelectPrediction, onClose } = props;
+  const { width } = useWindowDimensions();
+
   const { category: _category, event: _event } = useCategory();
 
   const category = _category as iCategory;
@@ -50,11 +54,21 @@ const CreatePerformance = () => {
     setResetSearchHack(!resetSearchHack); // resets searchbar
   };
 
-  useAsyncEffect(async () => {
-    if (isComplete && selectedPersonTmdbId) {
-      const tmdbPerson = await TmdbPersonCache.get(selectedPersonTmdbId);
-      Snackbar.success(`Added ${tmdbPerson?.name || 'actor'} to predictions`);
-      resetSearch();
+  const getPerformancePrediction = () => {
+    return communityPredictions.find(
+      (p) =>
+        p.contenderPerson?.tmdbId === selectedPersonTmdbId &&
+        p.contenderMovie?.tmdbId === selectedMovieTmdbId,
+    );
+  };
+
+  useEffect(() => {
+    if (isComplete && selectedPersonTmdbId && selectedMovieTmdbId) {
+      const newPrediction = getPerformancePrediction();
+      if (newPrediction) {
+        onSelectPrediction(newPrediction);
+        resetSearch();
+      }
     }
   }, [isComplete]);
 
@@ -90,6 +104,7 @@ const CreatePerformance = () => {
   };
 
   const onSelectPerson = async () => {
+    console.log('selectedPersonTmdbId', selectedPersonTmdbId);
     if (!selectedPersonTmdbId) return;
     getPersonRecentMovies(selectedPersonTmdbId);
   };
@@ -97,11 +112,10 @@ const CreatePerformance = () => {
   const onConfirmContender = async () => {
     if (!selectedMovieTmdbId || !selectedPersonTmdbId) return;
     // can check that selectedTmdbId is not already associated with a contender in our category list
-    const maybeAlreadyExistingContender = communityPredictions.find(
-      (p) => p.contenderPerson?.tmdbId === selectedPersonTmdbId,
-    );
-    if (maybeAlreadyExistingContender) {
-      Snackbar.warning('This performance has already been added');
+    const maybeAlreadyExistingPrediction = getPerformancePrediction();
+    if (maybeAlreadyExistingPrediction) {
+      // this performance has already been added
+      onSelectPrediction(maybeAlreadyExistingPrediction);
       return;
     }
     await mutate({
@@ -135,6 +149,17 @@ const CreatePerformance = () => {
   return (
     <>
       <LoadingStatueModal visible={!isComplete} text={'Saving performance...'} />
+      <CategoryHeader>
+        <SearchInput
+          resetSearchHack={resetSearchHack}
+          placeholder={'Search Actors'}
+          handleSearch={(s: string) => handleSearch(s)}
+          style={{ width: width * 0.8 }}
+        />
+        <View style={{ flexDirection: 'row' }}>
+          <HeaderButton onPress={onClose} icon={'list'} />
+        </View>
+      </CategoryHeader>
       <BasicModal
         visible={showMovieSelectModal}
         onClose={() => {
@@ -179,12 +204,6 @@ const CreatePerformance = () => {
         }}
       >
         <View style={{ width: '100%', alignItems: 'center', height: '100%' }}>
-          <SearchInput
-            resetSearchHack={resetSearchHack}
-            placeholder={'Search Actors'}
-            handleSearch={(s: string) => handleSearch(s)}
-            style={{ width: '80%', marginTop: '5%' }}
-          />
           {personData.length === 0 ? (
             <Body style={{ marginTop: 40, color: COLORS.white }}>{searchMessage}</Body>
           ) : null}
@@ -200,14 +219,15 @@ const CreatePerformance = () => {
                 <MovieListSearch
                   predictions={personData}
                   onSelect={(tmdbId) => {
+                    console.log('tmdbId', tmdbId);
                     if (selectedPersonTmdbId === tmdbId) {
                       setSelectedPersonTmdbId(undefined);
                     } else {
                       setSelectedPersonTmdbId(tmdbId);
                     }
                   }}
-                  categoryType={CategoryType.PERFORMANCE}
                   disablePaddingBottom
+                  categoryType={CategoryType.PERFORMANCE}
                 />
               </View>
             ) : null}

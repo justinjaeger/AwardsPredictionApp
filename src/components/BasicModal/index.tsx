@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import theme from '../../constants/theme';
 import COLORS from '../../constants/colors';
-import { Body } from '../Text';
+import { SubHeader } from '../Text';
 import HeaderButton from '../HeaderButton';
 import { HEADER_HEIGHT } from '../../constants';
 
@@ -81,7 +81,9 @@ const BasicModal = (props: iBasicModalProps) => {
                     borderBottomColor: COLORS.primaryLight,
                   }}
                 >
-                  <Body style={{ textAlign: 'center' }}>{header.title || ''}</Body>
+                  <SubHeader style={{ textAlign: 'center' }}>
+                    {header.title || ''}
+                  </SubHeader>
                   <View style={{ position: 'absolute', right: theme.windowMargin }}>
                     <HeaderButton
                       onPress={onClose}

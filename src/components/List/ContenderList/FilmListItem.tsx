@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
 import { CategoryName } from '../../../API';
+import { getCategorySlots } from '../../../constants/categories';
 import {
   getPosterDimensionsByWidth,
   PosterSize,
 } from '../../../constants/posterDimensions';
 import theme from '../../../constants/theme';
+import { useCategory } from '../../../context/CategoryContext';
 import { iCachedTmdbMovie } from '../../../services/cache/types';
 import TmdbServices from '../../../services/tmdb';
-import { iNumberPredicting } from '../../../types';
+import { iCategory, iEvent, iNumberPredicting } from '../../../types';
 import { getNumPredicting } from '../../../util/getNumPredicting';
 import { useAsyncEffect } from '../../../util/hooks';
 import Poster from '../../Images/Poster';
@@ -37,6 +39,10 @@ const FilmListItem = (props: iFilmListItemProps) => {
     onPress,
   } = props;
 
+  const { category: _category, event: _event } = useCategory();
+  const category = _category as iCategory;
+  const event = _event as iEvent;
+
   // TODO: based on category.name (CategoryName), display a distinct piece of information with the film like who the directors or screenwriters are
 
   const [tmdbMovie, setTmdbMovie] = useState<iCachedTmdbMovie | undefined>();
@@ -54,7 +60,10 @@ const FilmListItem = (props: iFilmListItemProps) => {
     ? getPosterDimensionsByWidth(width).height
     : size || PosterSize.MEDIUM;
 
-  const { win, nom } = getNumPredicting(communityRankings || {});
+  const { win, nom } = getNumPredicting(
+    communityRankings || {},
+    getCategorySlots(event.year, event.awardsBody, category.name),
+  );
 
   return (
     <View

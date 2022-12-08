@@ -4,14 +4,15 @@ import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useRef, useState } from 'react';
 import { Animated, TouchableHighlight, useWindowDimensions, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { CategoryName, CategoryType } from '../../../API';
+import { CategoryType } from '../../../API';
+import { getCategorySlots } from '../../../constants/categories';
 import COLORS from '../../../constants/colors';
 import { getPosterDimensionsByWidth } from '../../../constants/posterDimensions';
 import theme from '../../../constants/theme';
 import { useCategory } from '../../../context/CategoryContext';
 import { iCachedTmdbMovie, iCachedTmdbPerson } from '../../../services/cache/types';
 import TmdbServices from '../../../services/tmdb';
-import { iCategory, iPrediction } from '../../../types';
+import { iCategory, iEvent, iPrediction } from '../../../types';
 import { getNumPredicting } from '../../../util/getNumPredicting';
 import { useAsyncEffect } from '../../../util/hooks';
 import CustomIcon from '../../CustomIcon';
@@ -65,8 +66,9 @@ const ContenderListItem = (props: iContenderListItemProps) => {
   const ITEM_WIDTH_SELECTED = RIGHT_COL_WIDTH + BODY_WIDTH_SELECTED;
   const ITEM_WIDTH_UNSELECTED = RIGHT_COL_WIDTH + BODY_WIDTH_UNSELECTED;
 
-  const { category: _category } = useCategory();
+  const { category: _category, event: _event } = useCategory();
   const category = _category as iCategory;
+  const event = _event as iEvent;
 
   const width = selected ? LARGE_POSTER : SMALL_POSTER;
   const { height } = getPosterDimensionsByWidth(width);
@@ -136,7 +138,7 @@ const ContenderListItem = (props: iContenderListItemProps) => {
     onPressThumbnail && onPressThumbnail(prediction);
   };
 
-  const categoryName = CategoryName[category.name];
+  const categoryName = category.name;
   const catInfo = tmdbMovie?.categoryInfo?.[categoryName];
   const categoryInfo = catInfo ? catInfo?.join(', ') : undefined;
   const communityRankings =
@@ -162,7 +164,10 @@ const ContenderListItem = (props: iContenderListItemProps) => {
 
   const fadeBottom = selected !== true && variant === 'search';
 
-  const { win, nom } = getNumPredicting(communityRankings || {});
+  const { win, nom } = getNumPredicting(
+    communityRankings || {},
+    getCategorySlots(event.year, event.awardsBody, category.name),
+  );
 
   const showBotomButtons = selected && tmdbMovie;
 
