@@ -35,10 +35,22 @@ const EventSelect = () => {
   const loadingOpacity = useRef(new Animated.Value(1)).current;
   const bodyOpacity = useRef(new Animated.Value(0)).current;
 
-  const { data: events, isLoading } = useQueryAllEvents();
-  const { data: user } = useQueryGetUser(userId);
+  const { data: events, isLoading, refetch: refetchEvents } = useQueryAllEvents();
+  const { data: user, refetch: refetchUser } = useQueryGetUser(userId);
 
   const [highlightedEvent, setHighlightedEvent] = useState<string>('');
+
+  // just in case there's some refresh problem
+  useEffect(() => {
+    if (events === undefined) {
+      console.log('refetchEvents');
+      refetchEvents();
+    }
+    if (user === undefined) {
+      console.log('refetchUser');
+      refetchUser();
+    }
+  }, [events, user, userId]);
 
   useEffect(() => {
     if (!isLoading) {
@@ -96,9 +108,11 @@ const EventSelect = () => {
             marginLeft: theme.windowMargin,
           }}
         >
-          {Object.entries(groupedByYear).map(([key, events]) => (
+          {Object.entries(groupedByYear).map(([year, events]) => (
             <>
-              <SubHeader style={{ marginBottom: theme.windowMargin }}>{key}</SubHeader>
+              <SubHeader style={{ marginBottom: theme.windowMargin }}>{`${
+                parseInt(year, 10) - 1
+              }/${year.slice(2)}`}</SubHeader>
               <View style={{ flexWrap: 'wrap', flexDirection: 'row' }}>
                 {events.map((event) => {
                   const { awardsBody, status } = event;
