@@ -1,8 +1,7 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useLayoutEffect } from 'react';
 import PredictionTabsNavigator from '../../../navigation/PredictionTabsNavigator';
 import CategoryCommunity from './CategoryCommunity';
 import CategoryPersonal from './CategoryPersonal';
-import { Animated } from 'react-native';
 import { useTypedNavigation } from '../../../util/hooks';
 import { PredictionsParamList } from '../../../navigation/types';
 import { getAwardsBodyCategories } from '../../../constants/categories';
@@ -11,68 +10,9 @@ import { useCategory } from '../../../context/CategoryContext';
 import { eventToString } from '../../../util/stringConversions';
 import { getHeaderTitleWithTrophy } from '../../../constants';
 
-const TIMING = 250;
-
-export type iListDisplay = 'list' | 'grid';
-
-export type iCategoryListProps = {
-  display: iListDisplay;
-  delayedDisplay: iListDisplay;
-  toggleDisplay: () => void;
-  gridOpacity: Animated.Value;
-  listOpacity: Animated.Value;
-};
-
 const Category = () => {
-  const gridOpacity = useRef(new Animated.Value(0)).current;
-  const listOpacity = useRef(new Animated.Value(0)).current;
-
   const { category, event } = useCategory();
   const navigation = useTypedNavigation<PredictionsParamList>();
-
-  const [display, setDisplay] = useState<iListDisplay>('list');
-  const [delayedDisplay, setDelayedDisplay] = useState<iListDisplay>('list');
-
-  const toggleDisplay = () => {
-    if (display === 'grid') {
-      setDisplay('list');
-    } else {
-      setDisplay('grid');
-    }
-  };
-
-  useEffect(() => {
-    if (display === 'grid') {
-      Animated.timing(listOpacity, {
-        toValue: 0,
-        duration: TIMING,
-        useNativeDriver: true,
-      }).start();
-      setTimeout(() => {
-        Animated.timing(gridOpacity, {
-          toValue: 1,
-          duration: TIMING,
-          useNativeDriver: true,
-        }).start();
-        setDelayedDisplay('grid');
-      }, 0);
-    }
-    if (display === 'list') {
-      Animated.timing(gridOpacity, {
-        toValue: 0,
-        duration: TIMING,
-        useNativeDriver: true,
-      }).start();
-      setTimeout(() => {
-        Animated.timing(listOpacity, {
-          toValue: 1,
-          duration: TIMING,
-          useNativeDriver: true,
-        }).start();
-        setDelayedDisplay('list');
-      }, 0);
-    }
-  }, [display]);
 
   // Set the header
   useLayoutEffect(() => {
@@ -86,22 +26,7 @@ const Category = () => {
     });
   }, [navigation]);
 
-  return PredictionTabsNavigator(
-    <CategoryCommunity
-      display={display}
-      delayedDisplay={delayedDisplay}
-      toggleDisplay={toggleDisplay}
-      gridOpacity={gridOpacity}
-      listOpacity={listOpacity}
-    />,
-    <CategoryPersonal
-      display={display}
-      delayedDisplay={delayedDisplay}
-      toggleDisplay={toggleDisplay}
-      gridOpacity={gridOpacity}
-      listOpacity={listOpacity}
-    />,
-  );
+  return PredictionTabsNavigator(<CategoryCommunity />, <CategoryPersonal />);
 };
 
 export default Category;

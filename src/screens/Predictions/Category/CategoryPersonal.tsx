@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { Alert, Animated, View } from 'react-native';
-import { iCategoryListProps } from '.';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import BackButton from '../../../components/Buttons/BackButton';
 import { FAB } from '../../../components/Buttons/FAB';
@@ -16,6 +15,7 @@ import theme from '../../../constants/theme';
 import { useCategory } from '../../../context/CategoryContext';
 import { useAuth } from '../../../context/UserContext';
 import { useCollapsible } from '../../../hooks/animatedState/useCollapsible';
+import { useDisplay } from '../../../hooks/animatedState/useDisplay';
 import useQueryCommunityOrPersonalEvent from '../../../hooks/getCommunityOrPersonalEvent';
 import useMutationUpdatePredictions from '../../../hooks/updatePredictions';
 import { PredictionsParamList } from '../../../navigation/types';
@@ -24,15 +24,21 @@ import { useAsyncReference, useTypedNavigation } from '../../../util/hooks';
 import { CategoryHeader } from '../styles';
 
 // NOTE: Has a lot in common with ContenderListDraggable
-const CategoryPersonal = (props: iCategoryListProps) => {
-  const { display, delayedDisplay, toggleDisplay, gridOpacity, listOpacity } = props;
-
+const CategoryPersonal = () => {
+  const {
+    display,
+    delayedDisplay,
+    toggleDisplay,
+    gridOpacity,
+    listOpacity,
+  } = useDisplay();
   const {
     collapsedOpacity,
     expandedOpacity,
     isCollapsed,
     toggleCollapsed,
   } = useCollapsible();
+
   const { category: _category, event: _event } = useCategory();
   const { userId: _userId } = useAuth();
   const navigation = useTypedNavigation<PredictionsParamList>();

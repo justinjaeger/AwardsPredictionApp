@@ -1,6 +1,5 @@
 import React from 'react';
 import { Animated, View } from 'react-native';
-import { iCategoryListProps } from '.';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import HeaderButton from '../../../components/HeaderButton';
 import MovieGrid from '../../../components/MovieGrid';
@@ -10,19 +9,26 @@ import theme from '../../../constants/theme';
 import { useCategory } from '../../../context/CategoryContext';
 import { useAuth } from '../../../context/UserContext';
 import { useCollapsible } from '../../../hooks/animatedState/useCollapsible';
+import { useDisplay } from '../../../hooks/animatedState/useDisplay';
 import useQueryCommunityOrPersonalEvent from '../../../hooks/getCommunityOrPersonalEvent';
 import { iCategory, iEvent } from '../../../types';
 import { CategoryHeader } from '../styles';
 
-const CategoryCommunity = (props: iCategoryListProps) => {
-  const { display, delayedDisplay, toggleDisplay, gridOpacity, listOpacity } = props;
-
+const CategoryCommunity = () => {
+  const {
+    display,
+    delayedDisplay,
+    toggleDisplay,
+    gridOpacity,
+    listOpacity,
+  } = useDisplay();
   const {
     collapsedOpacity,
     expandedOpacity,
     isCollapsed,
     toggleCollapsed,
   } = useCollapsible();
+
   const { category: _category, event: _event } = useCategory();
   const { userId } = useAuth();
 
