@@ -33,7 +33,7 @@ const Event = (props: { tab: 'personal' | 'community' }) => {
   const event = _event as iEvent;
   const userId = _userId as string;
 
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
 
   // define the header
   useLayoutEffect(() => {

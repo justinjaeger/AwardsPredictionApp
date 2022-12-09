@@ -144,7 +144,7 @@ const CreateSong = (props: iCreateContenderProps) => {
           style={{ width: width * 0.8 }}
         />
         <View style={{ flexDirection: 'row' }}>
-          <HeaderButton onPress={onClose} icon={'list'} />
+          <HeaderButton onPress={onClose} icon={'close'} />
         </View>
       </CategoryHeader>
       <View
