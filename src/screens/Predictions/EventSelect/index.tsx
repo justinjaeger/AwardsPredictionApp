@@ -16,7 +16,7 @@ import { iEvent } from '../../../types';
 import theme from '../../../constants/theme';
 import LoadingStatue from '../../../components/LoadingStatue';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
-import useQueryAllEvents from '../../../hooks/getAllEvents';
+import useQueryAllEvents from '../../../hooks/queries/getAllEvents';
 import AwardsBodyImage from '../../../components/AwardsBodyImage';
 import { EVENT_STATUS_TO_STRING } from '../../../constants/events';
 import { useAuth } from '../../../context/UserContext';

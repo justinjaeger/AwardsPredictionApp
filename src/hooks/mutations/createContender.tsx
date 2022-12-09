@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
-import ApiServices from '../services/graphql';
-import { QueryKeys } from '../types';
+import ApiServices from '../../services/graphql';
+import { QueryKeys } from '../../types';
 
-const useMutationCreateActingContender = () => {
+const useMutationCreateContender = () => {
   const queryClient = useQueryClient();
 
   const [isComplete, setIsComplete] = useState<boolean>(true);
@@ -13,14 +13,12 @@ const useMutationCreateActingContender = () => {
       eventId: string;
       categoryId: string;
       movieTmdbId: number;
-      personTmdbId: number;
     }) => {
       setIsComplete(false);
-      return ApiServices.createActingContender({
+      return ApiServices.createFilmContender({
         eventId: params.eventId,
         categoryId: params.categoryId,
         movieTmdbId: params.movieTmdbId,
-        personTmdbId: params.personTmdbId,
       });
     },
     onSuccess: async () => {
@@ -32,4 +30,4 @@ const useMutationCreateActingContender = () => {
   return { mutate, isLoading, isComplete };
 };
 
-export default useMutationCreateActingContender;
+export default useMutationCreateContender;

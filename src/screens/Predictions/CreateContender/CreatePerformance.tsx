@@ -12,7 +12,7 @@ import MovieListSearch from '../../../components/MovieList/MovieListSearch';
 import LoadingStatueModal from '../../../components/LoadingStatueModal';
 import useQueryCommunityEvent from '../../../hooks/getCommunityEvent';
 import { FAB } from '../../../components/Buttons/FAB';
-import useMutationCreateActingContender from '../../../hooks/createActingContender';
+import useMutationCreateActingContender from '../../../hooks/mutations/createActingContender';
 import BasicModal from '../../../components/BasicModal';
 import { CategoryHeader } from '../styles';
 import HeaderButton from '../../../components/HeaderButton';

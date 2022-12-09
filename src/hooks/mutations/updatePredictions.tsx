@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
-import ApiServices from '../services/graphql';
-import { iPredictionData, iPredictionSetParams } from '../services/graphql/prediction';
-import { QueryKeys } from '../types';
+import ApiServices from '../../services/graphql';
+import { iPredictionData, iPredictionSetParams } from '../../services/graphql/prediction';
+import { QueryKeys } from '../../types';
 
 const useMutationUpdatePredictions = (onComplete?: () => void) => {
   const queryClient = useQueryClient();
