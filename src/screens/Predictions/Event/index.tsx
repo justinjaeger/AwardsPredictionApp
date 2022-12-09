@@ -1,26 +1,22 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { Animated, TouchableHighlight, View } from 'react-native';
-import { CategoryName } from '../../../API';
-import { getAwardsBodyCategories, getCategorySlots } from '../../../constants/categories';
+import { Animated, View } from 'react-native';
 import { PredictionsParamList } from '../../../navigation/types';
 import { useTypedNavigation } from '../../../util/hooks';
-import sortByObjectOrder from '../../../util/sortByObjectOrder';
 import { useCategory } from '../../../context/CategoryContext';
-import { iCategory, iEvent, iPrediction } from '../../../types';
+import { iCategory, iEvent } from '../../../types';
 import PredictionTabsNavigator from '../../../navigation/PredictionTabsNavigator';
-import { SubHeader } from '../../../components/Text';
 import { useAuth } from '../../../context/UserContext';
-import COLORS from '../../../constants/colors';
-import theme from '../../../constants/theme';
 import { eventToString } from '../../../util/stringConversions';
 import LoadingStatue from '../../../components/LoadingStatue';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import useQueryCommunityOrPersonalEvent from '../../../hooks/getCommunityOrPersonalEvent';
-import MovieGrid from '../../../components/MovieGrid';
 import SignedOutState from '../../../components/SignedOutState';
 import { getHeaderTitleWithTrophy } from '../../../constants';
 import { CategoryHeader } from '../styles';
 import HeaderButton from '../../../components/HeaderButton';
+import EventList from './EventList';
+
+const TIMING = 300;
 
 const Event = (props: { tab: 'personal' | 'community' }) => {
   const { tab } = props;
@@ -31,6 +27,8 @@ const Event = (props: { tab: 'personal' | 'community' }) => {
 
   const loadingOpacity = useRef(new Animated.Value(1)).current;
   const bodyOpacity = useRef(new Animated.Value(0)).current;
+  const collapsedOpacity = useRef(new Animated.Value(0)).current;
+  const expandedOpacity = useRef(new Animated.Value(1)).current;
 
   const event = _event as iEvent;
   const userId = _userId as string;
@@ -55,18 +53,44 @@ const Event = (props: { tab: 'personal' | 'community' }) => {
     if (!isLoading) {
       Animated.timing(loadingOpacity, {
         toValue: 0,
-        duration: 500,
+        duration: TIMING,
         useNativeDriver: true,
       }).start();
       setTimeout(() => {
         Animated.timing(bodyOpacity, {
           toValue: 1,
-          duration: 500,
+          duration: TIMING,
           useNativeDriver: true,
         }).start();
-      }, 500);
+      }, 250);
     }
   }, [isLoading]);
+
+  useEffect(() => {
+    if (isCollapsed) {
+      Animated.timing(expandedOpacity, {
+        toValue: 0,
+        duration: TIMING,
+        useNativeDriver: true,
+      }).start();
+      Animated.timing(collapsedOpacity, {
+        toValue: 1,
+        duration: TIMING,
+        useNativeDriver: true,
+      }).start();
+    } else {
+      Animated.timing(collapsedOpacity, {
+        toValue: 0,
+        duration: TIMING,
+        useNativeDriver: true,
+      }).start();
+      Animated.timing(expandedOpacity, {
+        toValue: 1,
+        duration: TIMING,
+        useNativeDriver: true,
+      }).start();
+    }
+  }, [isCollapsed]);
 
   if (!userId && tab === 'personal') {
     return <SignedOutState />;
@@ -76,16 +100,6 @@ const Event = (props: { tab: 'personal' | 'community' }) => {
     setCategory(category);
     navigation.navigate('Category');
   };
-
-  const awardsBodyCategories = getAwardsBodyCategories(event.awardsBody, event.year);
-  const categoryList = Object.values(event.categories);
-  const orderedCategories = sortByObjectOrder<CategoryName, iCategory>(
-    awardsBodyCategories,
-    categoryList,
-    categoryList.map((cat) => CategoryName[cat.name]),
-  );
-
-  const toggleDisplay = () => {};
 
   return (
     <BackgroundWrapper>
@@ -108,7 +122,7 @@ const Event = (props: { tab: 'personal' | 'community' }) => {
               onPress={() => {
                 setIsCollapsed(!isCollapsed);
               }}
-              icon={isCollapsed ? 'list' : 'grid'}
+              icon={isCollapsed ? 'expand' : 'collapse'}
             />
           </View>
         </CategoryHeader>
@@ -119,40 +133,32 @@ const Event = (props: { tab: 'personal' | 'community' }) => {
             paddingBottom: 100,
           }}
         >
-          {orderedCategories.map((category) => {
-            const catPredictions: iPrediction[] | undefined = (predictionData || {})[
-              category.id
-            ];
-            const slots = getCategorySlots(event.year, event.awardsBody, category.name);
-            const truncatedPredictions = (catPredictions || [])?.slice(0, slots);
-            return (
-              <TouchableHighlight
-                key={category.id}
-                style={{
-                  width: '100%',
-                  alignItems: 'flex-start',
-                }}
-                underlayColor={COLORS.secondaryDark}
-                onPress={() => onSelectCategory(category)}
-              >
-                <View>
-                  <SubHeader
-                    style={{
-                      color: COLORS.lightest,
-                      marginLeft: theme.windowMargin,
-                      marginBottom: theme.windowMargin,
-                      marginTop: theme.windowMargin,
-                    }}
-                  >
-                    {awardsBodyCategories[category.name]?.name || ''}
-                  </SubHeader>
-                  {!isCollapsed ? (
-                    <MovieGrid predictions={truncatedPredictions} noLine />
-                  ) : null}
-                </View>
-              </TouchableHighlight>
-            );
-          })}
+          <Animated.View
+            style={{
+              opacity: collapsedOpacity,
+              width: '100%',
+              display: isCollapsed ? 'flex' : 'none',
+            }}
+          >
+            <EventList
+              isCollapsed={true}
+              onSelectCategory={(category: iCategory) => onSelectCategory(category)}
+              predictionData={predictionData}
+            />
+          </Animated.View>
+          <Animated.View
+            style={{
+              opacity: expandedOpacity,
+              width: '100%',
+              display: isCollapsed ? 'none' : 'flex',
+            }}
+          >
+            <EventList
+              isCollapsed={false}
+              onSelectCategory={(category: iCategory) => onSelectCategory(category)}
+              predictionData={predictionData}
+            />
+          </Animated.View>
         </Animated.ScrollView>
       </>
     </BackgroundWrapper>
