@@ -68,6 +68,11 @@ const Dev = () => {
           style={{ marginTop: 30 }}
         />
         <TouchableText
+          text={'Manage Events'}
+          onPress={() => navigation.navigate('ManageEvents')}
+          style={{ marginTop: 30 }}
+        />
+        <TouchableText
           text={'Clear Cache'}
           onPress={clearAllCache}
           style={{ marginTop: 30 }}
