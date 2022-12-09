@@ -5,7 +5,7 @@ import { useTypedNavigation } from '../../../util/hooks';
 import { useCategory } from '../../../context/CategoryContext';
 import { iCategory, iEvent, iPrediction } from '../../../types';
 import { BodyBold } from '../../../components/Text';
-import useQueryCommunityEvent from '../../../hooks/getCommunityEvent';
+import useQueryCommunityEvent from '../../../hooks/queries/getCommunityEvent';
 import { CategoryHeader } from '../styles';
 import HeaderButton from '../../../components/HeaderButton';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';

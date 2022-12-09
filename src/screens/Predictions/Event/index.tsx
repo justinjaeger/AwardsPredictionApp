@@ -9,7 +9,7 @@ import { useAuth } from '../../../context/UserContext';
 import { eventToString } from '../../../util/stringConversions';
 import LoadingStatue from '../../../components/LoadingStatue';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
-import useQueryCommunityOrPersonalEvent from '../../../hooks/getCommunityOrPersonalEvent';
+import useQueryCommunityOrPersonalEvent from '../../../hooks/queries/getCommunityOrPersonalEvent';
 import SignedOutState from '../../../components/SignedOutState';
 import { getHeaderTitleWithTrophy } from '../../../constants';
 import { CategoryHeader } from '../styles';

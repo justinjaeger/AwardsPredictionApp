@@ -20,7 +20,7 @@ import useQueryAllEvents from '../../../hooks/queries/getAllEvents';
 import AwardsBodyImage from '../../../components/AwardsBodyImage';
 import { EVENT_STATUS_TO_STRING } from '../../../constants/events';
 import { useAuth } from '../../../context/UserContext';
-import useQueryGetUser from '../../../hooks/getUser';
+import useQueryGetUser from '../../../hooks/queries/getUser';
 
 export const getEventName = (awardsBody: AwardsBody) => {
   return AWARDS_BODY_TO_PLURAL_STRING[AwardsBody[awardsBody]];

@@ -10,7 +10,7 @@ import { useCategory } from '../../../context/CategoryContext';
 import { useAuth } from '../../../context/UserContext';
 import { useCollapsible } from '../../../hooks/animatedState/useCollapsible';
 import { useDisplay } from '../../../hooks/animatedState/useDisplay';
-import useQueryCommunityOrPersonalEvent from '../../../hooks/getCommunityOrPersonalEvent';
+import useQueryCommunityOrPersonalEvent from '../../../hooks/queries/getCommunityOrPersonalEvent';
 import { iCategory, iEvent } from '../../../types';
 import { CategoryHeader } from '../styles';
 

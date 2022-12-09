@@ -10,7 +10,7 @@ import { iCategory, iEvent, iPrediction } from '../../../types';
 import COLORS from '../../../constants/colors';
 import MovieListSearch from '../../../components/MovieList/MovieListSearch';
 import LoadingStatueModal from '../../../components/LoadingStatueModal';
-import useQueryCommunityEvent from '../../../hooks/getCommunityEvent';
+import useQueryCommunityEvent from '../../../hooks/queries/getCommunityEvent';
 import { FAB } from '../../../components/Buttons/FAB';
 import useMutationCreateActingContender from '../../../hooks/mutations/createActingContender';
 import BasicModal from '../../../components/BasicModal';
