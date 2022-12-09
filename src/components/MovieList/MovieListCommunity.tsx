@@ -10,11 +10,11 @@ import ContenderListItemCondensed from '../List/ContenderList/ContenderListItemC
 
 type iMovieListProps = {
   predictions: iPrediction[];
-  condensed?: boolean;
+  isCollapsed?: boolean;
 };
 
 const MovieListCommunity = (props: iMovieListProps) => {
-  const { predictions, condensed } = props;
+  const { predictions, isCollapsed } = props;
   const { event: _event, category: _category } = useCategory();
 
   const event = _event as iEvent;
@@ -52,7 +52,7 @@ const MovieListCommunity = (props: iMovieListProps) => {
                 }}
               />
             ) : null}
-            {!condensed ? (
+            {!isCollapsed ? (
               <ContenderListItem
                 prediction={prediction}
                 ranking={ranking}
@@ -72,16 +72,8 @@ const MovieListCommunity = (props: iMovieListProps) => {
             ) : (
               <ContenderListItemCondensed
                 prediction={prediction}
+                onPressItem={() => {}}
                 ranking={ranking}
-                onPressItem={onPressItem}
-                onPressThumbnail={(item) => {
-                  const id = item.contenderId;
-                  if (selectedContenderId === id) {
-                    setSelectedContenderId(undefined);
-                  } else {
-                    setSelectedContenderId(id);
-                  }
-                }}
                 selected={selectedContenderId === prediction.contenderId}
                 variant={'community'}
                 categoryType={category.type}

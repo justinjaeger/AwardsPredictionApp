@@ -12,11 +12,11 @@ import ContenderListItemCondensed from '../List/ContenderList/ContenderListItemC
 type iMovieListProps = {
   predictions: iPrediction[];
   setPredictions: (ps: iPrediction[]) => void;
-  condensed?: boolean;
+  isCollapsed?: boolean;
 };
 
 const MovieListDraggable = (props: iMovieListProps) => {
-  const { predictions, setPredictions, condensed } = props;
+  const { predictions, setPredictions, isCollapsed } = props;
   const { event: _event, category: _category } = useCategory();
 
   const event = _event as iEvent;
@@ -34,6 +34,15 @@ const MovieListDraggable = (props: iMovieListProps) => {
   };
 
   const slots = getCategorySlots(event.year, event?.awardsBody, category.name);
+
+  const onPressItem = (item: iPrediction) => {
+    const id = item.contenderId;
+    if (selectedContenderId === id) {
+      setSelectedContenderId(undefined);
+    } else {
+      setSelectedContenderId(id);
+    }
+  };
 
   return (
     <DraggableFlatList
@@ -59,20 +68,13 @@ const MovieListDraggable = (props: iMovieListProps) => {
               />
             ) : null}
             <ScaleDecorator activeScale={0.9}>
-              {!condensed ? (
+              {!isCollapsed ? (
                 <ContenderListItem
                   variant={'personal'}
                   prediction={prediction}
                   ranking={ranking}
                   selected={selectedContenderId === prediction.contenderId}
-                  onPressItem={(item) => {
-                    const id = item.contenderId;
-                    if (selectedContenderId === id) {
-                      setSelectedContenderId(undefined);
-                    } else {
-                      setSelectedContenderId(id);
-                    }
-                  }}
+                  onPressItem={onPressItem}
                   onPressThumbnail={onPressThumbnail}
                   draggable={{
                     drag,
@@ -86,14 +88,7 @@ const MovieListDraggable = (props: iMovieListProps) => {
                   prediction={prediction}
                   ranking={ranking}
                   selected={selectedContenderId === prediction.contenderId}
-                  onPressItem={(item) => {
-                    const id = item.contenderId;
-                    if (selectedContenderId === id) {
-                      setSelectedContenderId(undefined);
-                    } else {
-                      setSelectedContenderId(id);
-                    }
-                  }}
+                  onPressItem={onPressItem}
                   onPressThumbnail={onPressThumbnail}
                   draggable={{
                     drag,

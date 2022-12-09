@@ -28,10 +28,12 @@ const CategoryPersonal = (props: iCategoryListProps) => {
     display,
     delayedDisplay,
     toggleDisplay,
-    toggleCondensed,
+    toggleCollapsed,
     gridOpacity,
     listOpacity,
-    condensedOpacity,
+    collapsedOpacity,
+    expandedOpacity,
+    isCollapsed,
   } = props;
 
   const { category: _category, event: _event } = useCategory();
@@ -125,12 +127,14 @@ const CategoryPersonal = (props: iCategoryListProps) => {
           <CategoryHeader>
             <View style={{ flexDirection: 'row' }}>
               {!isEditing ? (
-                <HeaderButton
-                  onPress={() => {
-                    toggleDisplay();
-                  }}
-                  icon={display === 'grid' ? 'list' : 'grid'}
-                />
+                <>
+                  <HeaderButton
+                    onPress={() => {
+                      toggleDisplay();
+                    }}
+                    icon={display === 'grid' ? 'list' : 'grid'}
+                  />
+                </>
               ) : (
                 <HeaderButton
                   onPress={() => {
@@ -152,12 +156,12 @@ const CategoryPersonal = (props: iCategoryListProps) => {
                   icon={'undo'}
                 />
               )}
-              {display !== 'grid' ? (
+              <Animated.View style={{ opacity: listOpacity }}>
                 <HeaderButton
-                  onPress={toggleCondensed}
-                  icon={display === 'list' ? 'collapse' : 'expand'}
+                  onPress={toggleCollapsed}
+                  icon={isCollapsed ? 'collapse' : 'expand'}
                 />
-              ) : null}
+              </Animated.View>
             </View>
             <View style={{ flexDirection: 'row' }}>
               <HeaderButton
@@ -206,26 +210,33 @@ const CategoryPersonal = (props: iCategoryListProps) => {
           </Animated.ScrollView>
           <Animated.View
             style={{
-              display: delayedDisplay === 'list' ? 'flex' : 'none',
               opacity: listOpacity,
+              display: delayedDisplay === 'list' ? 'flex' : 'none',
             }}
           >
-            <MovieListDraggable
-              predictions={predictions}
-              setPredictions={(ps) => setPredictions(ps)}
-            />
-          </Animated.View>
-          <Animated.View
-            style={{
-              display: delayedDisplay === 'condensed' ? 'flex' : 'none',
-              opacity: condensedOpacity,
-            }}
-          >
-            <MovieListDraggable
-              predictions={predictions}
-              setPredictions={(ps) => setPredictions(ps)}
-              condensed={true}
-            />
+            <Animated.View
+              style={{
+                display: !isCollapsed ? 'flex' : 'none',
+                opacity: expandedOpacity,
+              }}
+            >
+              <MovieListDraggable
+                predictions={predictions}
+                setPredictions={(ps) => setPredictions(ps)}
+              />
+            </Animated.View>
+            <Animated.View
+              style={{
+                display: isCollapsed ? 'flex' : 'none',
+                opacity: collapsedOpacity,
+              }}
+            >
+              <MovieListDraggable
+                predictions={predictions}
+                setPredictions={(ps) => setPredictions(ps)}
+                isCollapsed
+              />
+            </Animated.View>
           </Animated.View>
           <FAB
             iconName="save-outline"

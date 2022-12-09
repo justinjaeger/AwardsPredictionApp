@@ -1,7 +1,5 @@
-/* eslint-disable sonarjs/no-duplicate-string */
 import React, { useState } from 'react';
 import { TouchableHighlight, useWindowDimensions, View } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
 import { CategoryType } from '../../../API';
 import { getCategorySlots } from '../../../constants/categories';
 import COLORS from '../../../constants/colors';
@@ -113,7 +111,7 @@ const ContenderListItemCondensed = (props: iContenderListItemProps) => {
         flexDirection: 'row',
         paddingLeft: theme.windowMargin,
       }}
-      underlayColor={COLORS.secondaryDark}
+      underlayColor={draggable ? COLORS.secondaryDark : 'transparent'}
       onLongPress={drag}
       disabled={isActive}
     >
