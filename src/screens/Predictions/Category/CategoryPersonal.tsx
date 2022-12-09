@@ -15,6 +15,7 @@ import { BodyBold } from '../../../components/Text';
 import theme from '../../../constants/theme';
 import { useCategory } from '../../../context/CategoryContext';
 import { useAuth } from '../../../context/UserContext';
+import { useCollapsible } from '../../../hooks/animatedState/useCollapsible';
 import useQueryCommunityOrPersonalEvent from '../../../hooks/getCommunityOrPersonalEvent';
 import useMutationUpdatePredictions from '../../../hooks/updatePredictions';
 import { PredictionsParamList } from '../../../navigation/types';
@@ -24,18 +25,14 @@ import { CategoryHeader } from '../styles';
 
 // NOTE: Has a lot in common with ContenderListDraggable
 const CategoryPersonal = (props: iCategoryListProps) => {
+  const { display, delayedDisplay, toggleDisplay, gridOpacity, listOpacity } = props;
+
   const {
-    display,
-    delayedDisplay,
-    toggleDisplay,
-    toggleCollapsed,
-    gridOpacity,
-    listOpacity,
     collapsedOpacity,
     expandedOpacity,
     isCollapsed,
-  } = props;
-
+    toggleCollapsed,
+  } = useCollapsible();
   const { category: _category, event: _event } = useCategory();
   const { userId: _userId } = useAuth();
   const navigation = useTypedNavigation<PredictionsParamList>();

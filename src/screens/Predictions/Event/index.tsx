@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef } from 'react';
 import { Animated, View } from 'react-native';
 import { PredictionsParamList } from '../../../navigation/types';
 import { useTypedNavigation } from '../../../util/hooks';
@@ -15,6 +15,7 @@ import { getHeaderTitleWithTrophy } from '../../../constants';
 import { CategoryHeader } from '../styles';
 import HeaderButton from '../../../components/HeaderButton';
 import EventList from './EventList';
+import { useCollapsible } from '../../../hooks/animatedState/useCollapsible';
 
 const TIMING = 300;
 
@@ -27,13 +28,16 @@ const Event = (props: { tab: 'personal' | 'community' }) => {
 
   const loadingOpacity = useRef(new Animated.Value(1)).current;
   const bodyOpacity = useRef(new Animated.Value(0)).current;
-  const collapsedOpacity = useRef(new Animated.Value(0)).current;
-  const expandedOpacity = useRef(new Animated.Value(1)).current;
 
   const event = _event as iEvent;
   const userId = _userId as string;
 
-  const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
+  const {
+    collapsedOpacity,
+    expandedOpacity,
+    isCollapsed,
+    toggleCollapsed,
+  } = useCollapsible();
 
   // define the header
   useLayoutEffect(() => {
@@ -66,32 +70,6 @@ const Event = (props: { tab: 'personal' | 'community' }) => {
     }
   }, [isLoading]);
 
-  useEffect(() => {
-    if (isCollapsed) {
-      Animated.timing(expandedOpacity, {
-        toValue: 0,
-        duration: TIMING,
-        useNativeDriver: true,
-      }).start();
-      Animated.timing(collapsedOpacity, {
-        toValue: 1,
-        duration: TIMING,
-        useNativeDriver: true,
-      }).start();
-    } else {
-      Animated.timing(collapsedOpacity, {
-        toValue: 0,
-        duration: TIMING,
-        useNativeDriver: true,
-      }).start();
-      Animated.timing(expandedOpacity, {
-        toValue: 1,
-        duration: TIMING,
-        useNativeDriver: true,
-      }).start();
-    }
-  }, [isCollapsed]);
-
   if (!userId && tab === 'personal') {
     return <SignedOutState />;
   }
@@ -119,9 +97,7 @@ const Event = (props: { tab: 'personal' | 'community' }) => {
         <CategoryHeader>
           <View style={{ flexDirection: 'row' }}>
             <HeaderButton
-              onPress={() => {
-                setIsCollapsed(!isCollapsed);
-              }}
+              onPress={toggleCollapsed}
               icon={isCollapsed ? 'expand' : 'collapse'}
             />
           </View>
