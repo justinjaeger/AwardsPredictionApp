@@ -6,7 +6,7 @@ import COLORS from '../../constants/colors';
 import TmdbMovieCache from '../../services/cache/tmdbMovie';
 import TmdbPersonCache from '../../services/cache/tmdbPerson';
 
-const Dev = () => {
+const Admin = () => {
   const navigation = useNavigation();
 
   const clearAllCache = () => {
@@ -42,4 +42,4 @@ const Dev = () => {
   );
 };
 
-export default Dev;
+export default Admin;

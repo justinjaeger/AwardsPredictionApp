@@ -29,8 +29,8 @@ export type PredictionsParamList = {
   };
 };
 
-export type DevParamList = {
-  Dev: undefined;
+export type AdminParamList = {
+  Admin: undefined;
 };
 
 export type ProfileParamList = {

@@ -101,8 +101,9 @@ const ManageEvents = () => {
                     if (eventIsAdminOnly && !userIsAdmin) return null; // don't display events with status NOMS_STAGING to non-admin
                     return (
                       <TouchableHighlight
+                        key={event.id}
                         style={{
-                          height: 200,
+                          flexDirection: 'column',
                           backgroundColor: 'rgba(0,0,0,0.1)',
                           borderRadius: theme.borderRadius,
                           borderWidth: 1,
@@ -110,7 +111,7 @@ const ManageEvents = () => {
                           marginBottom: theme.windowMargin,
                           marginRight: theme.windowMargin,
                           width: width - theme.windowMargin * 2,
-                          padding: 5,
+                          padding: 10,
                           justifyContent: 'flex-start',
                         }}
                         underlayColor={COLORS.secondaryDark}
@@ -146,6 +147,29 @@ const ManageEvents = () => {
                                 setOpenUpdateStatusModal(true);
                               }}
                               text={'Edit Status'}
+                              style={{ width: 'auto', padding: 5, marginLeft: 10 }}
+                            />
+                          </View>
+                          <View
+                            style={{
+                              flexDirection: 'row',
+                              alignItems: 'center',
+                              marginTop: 15,
+                            }}
+                          >
+                            <Body
+                              style={{
+                                color: COLORS.white,
+                              }}
+                            >
+                              {'Manage Contenders'}
+                            </Body>
+                            <SubmitButton
+                              onPress={() => {
+                                setSelectedEvent(event);
+                                setOpenUpdateStatusModal(true);
+                              }}
+                              text={'Manage Contenders'}
                               style={{ width: 'auto', padding: 5, marginLeft: 10 }}
                             />
                           </View>

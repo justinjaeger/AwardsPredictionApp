@@ -1,14 +1,15 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import Dev from '../screens/Dev';
-import ManageStudios from '../screens/Dev/ManageStudios';
 import BackButton from '../components/Buttons/BackButton';
 import { getHeaderTitle, headerSettings } from '../constants';
-import ManageEvents from '../screens/Dev/ManageEvents.tsx';
+import ManageEvents from '../screens/Admin/ManageEvents.tsx';
+import Admin from '../screens/Admin';
+import ManageStudios from '../screens/Admin/ManageStudios';
+import ManageContenders from '../screens/Admin/ManageContenders';
 
 const { Navigator, Screen } = createStackNavigator();
 
-const DevNavigator = () => (
+const AdminNavigator = () => (
   <Navigator
     initialRouteName="Proflie"
     headerMode={'screen'}
@@ -17,9 +18,9 @@ const DevNavigator = () => (
     }}
   >
     <Screen
-      name="Dev"
-      component={Dev}
-      options={{ headerTitle: getHeaderTitle('Dev Console'), ...headerSettings }}
+      name="Admin"
+      component={Admin}
+      options={{ headerTitle: getHeaderTitle('Admin Console'), ...headerSettings }}
     />
     <Screen
       name="ManageStudios"
@@ -39,7 +40,16 @@ const DevNavigator = () => (
         ...headerSettings,
       }}
     />
+    <Screen
+      name="ManageContenders"
+      component={ManageContenders}
+      options={{
+        headerTitle: getHeaderTitle('Manage Contenders'),
+        headerLeft: BackButton,
+        ...headerSettings,
+      }}
+    />
   </Navigator>
 );
 
-export default DevNavigator;
+export default AdminNavigator;

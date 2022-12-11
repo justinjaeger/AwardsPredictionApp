@@ -74,13 +74,13 @@ const TabBar = (props: ITabBarProps) => {
                     )}
                   </View>
                 );
-              case 'Dev':
+              case 'Admin':
                 return (
                   <View key={index}>
                     {isFocused ? (
-                      <CustomIcon name={'hard-drive'} />
+                      <CustomIcon name={'lock'} />
                     ) : (
-                      <CustomIcon name={'hard-drive-outline'} />
+                      <CustomIcon name={'lock-outline'} />
                     )}
                   </View>
                 );
