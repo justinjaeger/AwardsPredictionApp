@@ -34,7 +34,7 @@ const DevNavigator = () => (
       name="ManageEvents"
       component={ManageEvents}
       options={{
-        headerTitle: getHeaderTitle('Manage Studios'),
+        headerTitle: getHeaderTitle('Manage Events'),
         headerLeft: BackButton,
         ...headerSettings,
       }}

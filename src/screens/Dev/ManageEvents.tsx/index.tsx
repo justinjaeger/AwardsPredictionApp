@@ -8,10 +8,7 @@ import {
   AWARDS_BODY_TO_STRING,
 } from '../../../constants/awardsBodies';
 import COLORS from '../../../constants/colors';
-import { PredictionsParamList } from '../../../navigation/types';
-import { useTypedNavigation } from '../../../util/hooks';
 import sortByObjectOrder from '../../../util/sortByObjectOrder';
-import { useCategory } from '../../../context/CategoryContext';
 import { iEvent } from '../../../types';
 import theme from '../../../constants/theme';
 import LoadingStatue from '../../../components/LoadingStatue';
@@ -22,8 +19,8 @@ import { EVENT_STATUS_TO_STRING } from '../../../constants/events';
 import { useAuth } from '../../../context/UserContext';
 import useQueryGetUser from '../../../hooks/queries/getUser';
 import { SubmitButton } from '../../../components/Buttons';
-import BasicModal from '../../../components/BasicModal';
-import { FAB } from '../../../components/Buttons/FAB';
+import UpdateStatusModal from './UpdateStatusModal';
+import CreateEventModal from './CreateEventModal';
 
 export const getEventName = (awardsBody: AwardsBody) => {
   return AWARDS_BODY_TO_PLURAL_STRING[AwardsBody[awardsBody]];
@@ -31,16 +28,15 @@ export const getEventName = (awardsBody: AwardsBody) => {
 
 const ManageEvents = () => {
   const { width } = useWindowDimensions();
-  const { setEvent } = useCategory();
   const { userId } = useAuth();
-  const navigation = useTypedNavigation<PredictionsParamList>();
 
   const { data: events, isLoading, refetch: refetchEvents } = useQueryAllEvents();
   const { data: user, refetch: refetchUser } = useQueryGetUser(userId);
 
   const [highlightedEvent, setHighlightedEvent] = useState<string>('');
   const [selectedEvent, setSelectedEvent] = useState<iEvent | undefined>();
-  const [openEditStatusModal, setOpenEditStatusModal] = useState<boolean>(false);
+  const [openUpdateStatusModal, setOpenUpdateStatusModal] = useState<boolean>(false);
+  const [openCreateEventModal, setOpenCreateEventModal] = useState<boolean>(false);
 
   // just in case there's some refresh problem
   useEffect(() => {
@@ -51,11 +47,6 @@ const ManageEvents = () => {
       refetchUser();
     }
   }, [events, user, userId]);
-
-  const onSelectEvent = async (event: iEvent) => {
-    setEvent(event);
-    navigation.navigate('Event');
-  };
 
   const eventList = Object.values(events || {});
   const orderedEvents = sortByObjectOrder<AwardsBody, iEvent>(
@@ -91,6 +82,13 @@ const ManageEvents = () => {
               marginLeft: theme.windowMargin,
             }}
           >
+            <SubmitButton
+              onPress={() => {
+                setOpenCreateEventModal(true);
+              }}
+              text={'Create Event'}
+              style={{ width: 'auto', padding: 10, margin: 10 }}
+            />
             {Object.entries(groupedByYear).map(([year, events]) => (
               <>
                 <SubHeader style={{ marginBottom: theme.windowMargin }}>{`${
@@ -116,7 +114,6 @@ const ManageEvents = () => {
                           justifyContent: 'flex-start',
                         }}
                         underlayColor={COLORS.secondaryDark}
-                        onPress={() => onSelectEvent(event)}
                         onPressIn={() => setHighlightedEvent(event.id)}
                         onPressOut={() => setHighlightedEvent('')}
                       >
@@ -146,7 +143,7 @@ const ManageEvents = () => {
                             <SubmitButton
                               onPress={() => {
                                 setSelectedEvent(event);
-                                setOpenEditStatusModal(true);
+                                setOpenUpdateStatusModal(true);
                               }}
                               text={'Edit Status'}
                               style={{ width: 'auto', padding: 5, marginLeft: 10 }}
@@ -161,71 +158,20 @@ const ManageEvents = () => {
             ))}
           </Animated.ScrollView>
         )}
-        <EditStatusModal
-          visible={openEditStatusModal}
-          onClose={() => setOpenEditStatusModal(false)}
+        <UpdateStatusModal
+          visible={openUpdateStatusModal}
+          onClose={() => setOpenUpdateStatusModal(false)}
+          eventId={selectedEvent?.id}
+          onSaveSuccess={() => refetchEvents()}
           initialStatus={selectedEvent?.status}
+        />
+        <CreateEventModal
+          visible={openCreateEventModal}
+          onClose={() => setOpenCreateEventModal(false)}
+          onSaveSuccess={() => refetchEvents()}
         />
       </>
     </BackgroundWrapper>
-  );
-};
-
-const EditStatusModal = (props: {
-  visible: boolean;
-  onClose: () => void;
-  initialStatus: EventStatus | undefined;
-}) => {
-  const { visible, onClose, initialStatus } = props;
-  const [selectedStatus, setSelectedStatus] = useState<EventStatus | undefined>(
-    initialStatus,
-  );
-
-  useEffect(() => {
-    setSelectedStatus(initialStatus);
-  }, [initialStatus]);
-
-  return (
-    <BasicModal
-      visible={visible}
-      onClose={onClose}
-      width={'100%'}
-      height={'50%'}
-      header={{ title: 'Edit Status?' }}
-    >
-      <View style={{ flexDirection: 'column' }}>
-        {_.entries(EVENT_STATUS_TO_STRING).map(([key, value]) => {
-          // @ts-ignore
-          const status = EventStatus[key] as EventStatus;
-          return (
-            <>
-              <TouchableHighlight
-                style={{
-                  backgroundColor:
-                    selectedStatus === status ? COLORS.secondaryDark : 'transparent',
-                  height: 50,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-                onPress={() => {
-                  setSelectedStatus(status);
-                }}
-              >
-                <Body style={{ padding: 10 }}>{value}</Body>
-              </TouchableHighlight>
-              <FAB
-                iconName="checkmark"
-                text="Save"
-                onPress={() => {
-                  // ON SAVE, UPDATE EVENT STATUS
-                }}
-                visible={initialStatus !== selectedStatus}
-              />
-            </>
-          );
-        })}
-      </View>
-    </BasicModal>
   );
 };
 
