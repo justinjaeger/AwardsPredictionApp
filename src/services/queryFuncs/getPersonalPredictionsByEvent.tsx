@@ -1,3 +1,4 @@
+import { ContenderVisibility } from '../../API';
 import { iIndexedPredictionsByCategory } from '../../types';
 import { sortPersonalPredictions } from '../../util/sortPredictions';
 import ApiServices from '../graphql';
@@ -15,6 +16,7 @@ const getPersonalPredictionsByEvent = async (eventId: string, userId: string) =>
     const categoryId = ps?.predictionSetCategoryId || '';
     const predictions = (ps?.predictions?.items || []).map((p) => ({
       ranking: p?.ranking || 0,
+      visibility: p?.contender.visibility || ContenderVisibility.VISIBLE,
       contenderId: p?.contenderPredictionsId || '',
       contenderMovie: p?.contender.movie || undefined,
       contenderPerson: p?.contender.person || undefined,

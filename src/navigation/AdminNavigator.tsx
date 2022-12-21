@@ -6,6 +6,7 @@ import ManageEvents from '../screens/Admin/ManageEvents.tsx';
 import Admin from '../screens/Admin';
 import ManageStudios from '../screens/Admin/ManageStudios';
 import ManageContenders from '../screens/Admin/ManageContenders';
+import { CategoryProvider } from '../context/CategoryContext';
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -52,4 +53,12 @@ const AdminNavigator = () => (
   </Navigator>
 );
 
-export default AdminNavigator;
+const AdminNavigatorWrapper = () => {
+  return (
+    <CategoryProvider>
+      <AdminNavigator />
+    </CategoryProvider>
+  );
+};
+
+export default AdminNavigatorWrapper;

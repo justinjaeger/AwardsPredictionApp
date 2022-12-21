@@ -12,7 +12,7 @@ import LoadingStatueModal from '../../../components/LoadingStatueModal';
 import useMutationCreateContender from '../../../hooks/mutations/createContender';
 import useQueryCommunityEvent from '../../../hooks/queries/getCommunityEvent';
 import { FAB } from '../../../components/Buttons/FAB';
-import { CategoryType } from '../../../API';
+import { CategoryType, ContenderVisibility } from '../../../API';
 import { iCreateContenderProps } from '.';
 import { CategoryHeader } from '../styles';
 import HeaderButton from '../../../components/HeaderButton';
@@ -95,6 +95,7 @@ const CreateFilm = (props: iCreateContenderProps) => {
   // these are sort of "fake" values
   const movieData: iPrediction[] = searchResults.map((m) => ({
     ranking: 0,
+    visibility: ContenderVisibility.VISIBLE,
     contenderId: m.tmdbId.toString(),
     contenderMovie: {
       id: m.tmdbId.toString(),

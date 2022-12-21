@@ -1,4 +1,11 @@
-import { AwardsBody, CategoryName, CategoryType, EventStatus, UserRole } from '../API';
+import {
+  AwardsBody,
+  CategoryName,
+  CategoryType,
+  ContenderVisibility,
+  EventStatus,
+  UserRole,
+} from '../API';
 
 export enum QueryKeys {
   EVENTS = 'events',
@@ -15,6 +22,7 @@ export type iNumberPredicting = {
 // represents predictions for ONE predictionSet
 export type iPrediction = {
   ranking: number; // PERSONAL ONLY
+  visibility: ContenderVisibility;
   communityRankings?: iNumberPredicting; // COMMUNITY ONLY
   contenderId: string;
   contenderMovie?:

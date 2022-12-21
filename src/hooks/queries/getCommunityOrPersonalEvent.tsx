@@ -10,7 +10,7 @@ const useQueryCommunityOrPersonalEvent = (
 ) => {
   const { event, userId } = params;
   if (tab === 'personal' && userId === undefined) {
-    console.error('ERROR: userId cannot be undefined if tab is personal');
+    console.warn('The user is signed out');
   }
   const { data, isLoading } = useQuery({
     queryKey: [

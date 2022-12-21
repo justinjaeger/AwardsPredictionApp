@@ -118,6 +118,7 @@ const EventSelect = () => {
                   if (eventIsAdminOnly && !userIsAdmin) return null; // don't display events with status NOMS_STAGING to non-admin
                   return (
                     <TouchableHighlight
+                      key={year + awardsBody}
                       style={{
                         height: 80,
                         backgroundColor: 'rgba(0,0,0,0.1)',

@@ -31,6 +31,7 @@ export type PredictionsParamList = {
 
 export type AdminParamList = {
   Admin: undefined;
+  ManageContenders: undefined;
 };
 
 export type ProfileParamList = {

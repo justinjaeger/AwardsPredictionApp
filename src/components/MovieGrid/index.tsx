@@ -29,7 +29,7 @@ const MovieGrid = (props: { predictions: iPrediction[]; noLine?: boolean }) => {
       }}
     >
       {predictions.map((p, i) => (
-        <>
+        <View key={p.contenderId}>
           {!noLine && i === slots ? (
             <Divider
               style={{
@@ -49,7 +49,7 @@ const MovieGrid = (props: { predictions: iPrediction[]; noLine?: boolean }) => {
               ranking={i + 1}
             />
           ) : null}
-        </>
+        </View>
       ))}
     </View>
   );

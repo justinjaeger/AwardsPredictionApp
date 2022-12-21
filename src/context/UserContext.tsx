@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState } from 'react';
 import { useAsyncEffect } from '../util/hooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { UserRole } from '../API';
 
 /** Async Storage Functions (to persist data when user closes app)
  * We're not exporting the async functions because we ONLY want to use them in here, or else syncing persisted state with this context is annoying
@@ -10,11 +11,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 enum AsyncStorageKeys {
   USER_ID = 'userId',
   USER_EMAIL = 'userEmail',
+  USER_ROLE = 'userRole',
 }
 
-const asyncStorageSignIn = async (userId: string, email: string) => {
+const asyncStorageSignIn = async (userId: string, email: string, role: UserRole) => {
   await AsyncStorage.setItem(AsyncStorageKeys.USER_ID, userId);
   await AsyncStorage.setItem(AsyncStorageKeys.USER_EMAIL, email);
+  await AsyncStorage.setItem(AsyncStorageKeys.USER_ROLE, role);
 };
 
 const asyncStorageSignOut = async () => {
@@ -24,7 +27,8 @@ const asyncStorageSignOut = async () => {
 const asyncStorageGetUser = async () => {
   const userId = await AsyncStorage.getItem(AsyncStorageKeys.USER_ID);
   const email = await AsyncStorage.getItem(AsyncStorageKeys.USER_EMAIL);
-  return { userId, email };
+  const role = await AsyncStorage.getItem(AsyncStorageKeys.USER_ROLE);
+  return { userId, email, role };
 };
 
 /**
@@ -34,13 +38,15 @@ const asyncStorageGetUser = async () => {
 type iUserContext = {
   userId: string | undefined;
   userEmail: string | undefined;
-  signInUser: (id: string, email: string) => void;
+  userRole: UserRole | undefined;
+  signInUser: (id: string, email: string, role: UserRole) => void;
   signOutUser: () => void;
 };
 
 const UserContext = createContext<iUserContext>({
   userId: undefined,
   userEmail: undefined,
+  userRole: undefined,
   signInUser: () => {},
   signOutUser: () => {},
 });
@@ -48,25 +54,31 @@ const UserContext = createContext<iUserContext>({
 export const UserProvider = (props: { children: React.ReactNode }) => {
   const [userId, setUserId] = useState<string>();
   const [userEmail, setUserEmail] = useState<string>();
+  const [userRole, setUserRole] = useState<UserRole | undefined>(undefined);
 
   useAsyncEffect(async () => {
-    const { userId, email } = await asyncStorageGetUser();
+    const { userId, email, role } = await asyncStorageGetUser();
     if (userId) {
       setUserId(userId);
     }
     if (email) {
       setUserEmail(userEmail);
     }
+    if (role) {
+      setUserRole(role as UserRole);
+    }
   }, []);
 
-  const signInUser = (id: string, email: string) => {
+  const signInUser = (id: string, email: string, role: UserRole) => {
     setUserId(id);
     setUserEmail(email);
-    asyncStorageSignIn(id, email);
+    setUserRole(role);
+    asyncStorageSignIn(id, email, role);
   };
 
   const signOutUser = () => {
     setUserId(undefined);
+    setUserRole(undefined);
     asyncStorageSignOut();
   };
 
@@ -75,6 +87,7 @@ export const UserProvider = (props: { children: React.ReactNode }) => {
       value={{
         userId,
         userEmail,
+        userRole,
         signInUser,
         signOutUser,
       }}

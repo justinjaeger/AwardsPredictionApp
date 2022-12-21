@@ -17,7 +17,7 @@ import BasicModal from '../../../components/BasicModal';
 import { CategoryHeader } from '../styles';
 import HeaderButton from '../../../components/HeaderButton';
 import { iCreateContenderProps } from '.';
-import { CategoryType } from '../../../API';
+import { CategoryType, ContenderVisibility } from '../../../API';
 
 // TODO: should only be able to do this if logged in
 const CreatePerformance = (props: iCreateContenderProps) => {
@@ -129,6 +129,7 @@ const CreatePerformance = (props: iCreateContenderProps) => {
   // these are sort of "fake" values
   const movieData: iPrediction[] = movieSearchResults.map((m) => ({
     ranking: 0,
+    visibility: ContenderVisibility.VISIBLE,
     contenderId: m.tmdbId.toString(),
     contenderMovie: {
       id: m.tmdbId.toString(),
@@ -139,6 +140,7 @@ const CreatePerformance = (props: iCreateContenderProps) => {
   // these are sort of "fake" values
   const personData: iPrediction[] = personSearchResults.map((p) => ({
     ranking: 0,
+    visibility: ContenderVisibility.VISIBLE,
     contenderId: p.tmdbId.toString(),
     contenderPerson: {
       id: p.tmdbId.toString(),

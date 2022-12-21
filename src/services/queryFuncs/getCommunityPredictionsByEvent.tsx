@@ -1,3 +1,4 @@
+import { ContenderVisibility } from '../../API';
 import {
   iEvent,
   iIndexedPredictionsByCategory,
@@ -35,6 +36,7 @@ const getCommunityPredictionsByEvent = async (event: iEvent) => {
     });
     const communityPrediction: iPrediction = {
       ranking: 0,
+      visibility: con.visibility || ContenderVisibility.VISIBLE,
       communityRankings: rankings,
       contenderId: con.id || '', // won't happpen
       contenderMovie: con.movie || undefined, // won't happen

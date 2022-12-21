@@ -11,7 +11,7 @@ import MovieListSearch from '../../../components/MovieList/MovieListSearch';
 import LoadingStatueModal from '../../../components/LoadingStatueModal';
 import useQueryCommunityEvent from '../../../hooks/queries/getCommunityEvent';
 import { FAB } from '../../../components/Buttons/FAB';
-import { CategoryType } from '../../../API';
+import { CategoryType, ContenderVisibility } from '../../../API';
 import BasicModal from '../../../components/BasicModal';
 import useMutationCreateSongContender from '../../../hooks/mutations/createSongContender';
 import { compareSongKeys, getSongKey } from '../../../util/songKeys';
@@ -126,6 +126,7 @@ const CreateSong = (props: iCreateContenderProps) => {
   // these are sort of "fake" values
   const movieData: iPrediction[] = movieSearchResults.map((m) => ({
     ranking: 0,
+    visibility: ContenderVisibility.VISIBLE,
     contenderId: m.tmdbId.toString(),
     contenderMovie: {
       id: m.tmdbId.toString(),

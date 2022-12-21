@@ -21,6 +21,7 @@ import useQueryGetUser from '../../../hooks/queries/getUser';
 import { SubmitButton } from '../../../components/Buttons';
 import UpdateStatusModal from './UpdateStatusModal';
 import CreateEventModal from './CreateEventModal';
+import SelectCategoryModal from './SelectCategoryModal';
 
 export const getEventName = (awardsBody: AwardsBody) => {
   return AWARDS_BODY_TO_PLURAL_STRING[AwardsBody[awardsBody]];
@@ -37,6 +38,7 @@ const ManageEvents = () => {
   const [selectedEvent, setSelectedEvent] = useState<iEvent | undefined>();
   const [openUpdateStatusModal, setOpenUpdateStatusModal] = useState<boolean>(false);
   const [openCreateEventModal, setOpenCreateEventModal] = useState<boolean>(false);
+  const [openSelectCategoryModal, setOpenSelectCategoryModal] = useState<boolean>(false);
 
   // just in case there's some refresh problem
   useEffect(() => {
@@ -167,7 +169,7 @@ const ManageEvents = () => {
                             <SubmitButton
                               onPress={() => {
                                 setSelectedEvent(event);
-                                setOpenUpdateStatusModal(true);
+                                setOpenSelectCategoryModal(true);
                               }}
                               text={'Manage Contenders'}
                               style={{ width: 'auto', padding: 5, marginLeft: 10 }}
@@ -194,6 +196,13 @@ const ManageEvents = () => {
           onClose={() => setOpenCreateEventModal(false)}
           onSaveSuccess={() => refetchEvents()}
         />
+        {selectedEvent ? (
+          <SelectCategoryModal
+            visible={openSelectCategoryModal}
+            onClose={() => setOpenSelectCategoryModal(false)}
+            event={selectedEvent}
+          />
+        ) : null}
       </>
     </BackgroundWrapper>
   );
