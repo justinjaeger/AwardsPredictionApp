@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
-import { ListMoviesQuery } from '../../API';
-import { TouchableText } from '../../components/Buttons';
-import Poster from '../../components/Images/Poster';
-import FormInput from '../../components/Inputs/FormInput';
-import { BodyBold } from '../../components/Text';
-import { PosterSize } from '../../constants/posterDimensions';
-import { iCachedTmdbMovie } from '../../services/cache/types';
-import ApiServices from '../../services/graphql';
-import TmdbServices from '../../services/tmdb';
-import { useAsyncEffect } from '../../util/hooks';
+import { ListMoviesQuery } from '../../../API';
+import { TouchableText } from '../../../components/Buttons';
+import Poster from '../../../components/Images/Poster';
+import FormInput from '../../../components/Inputs/FormInput';
+import { BodyBold } from '../../../components/Text';
+import { PosterSize } from '../../../constants/posterDimensions';
+import { iCachedTmdbMovie } from '../../../services/cache/types';
+import ApiServices from '../../../services/graphql';
+import TmdbServices from '../../../services/tmdb';
+import { useAsyncEffect } from '../../../util/hooks';
 
 // TODO: no list order yet. eventually have to define something
 const ManageStudios = () => {
