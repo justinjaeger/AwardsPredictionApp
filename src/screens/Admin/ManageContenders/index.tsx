@@ -12,7 +12,7 @@ const ManageContenders = () => {
   const event = _event as iEvent;
   const category = _category as iCategory;
 
-  const { data: communityData } = useQueryCommunityEvent(event);
+  const { data: communityData } = useQueryCommunityEvent({ event, includeHidden: true });
   const contenders = communityData ? communityData[category.id] || [] : [];
 
   const [showManageContendersModal, setShowManageContendersModal] = useState<boolean>(

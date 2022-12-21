@@ -13,7 +13,6 @@ import {
   iIndexedPredictionsByCategory,
   iPrediction,
 } from '../../../types';
-import { filterHiddenContenders } from '../../../util/filterHiddenContenders';
 import sortByObjectOrder from '../../../util/sortByObjectOrder';
 
 type iEventListProps = {
@@ -42,11 +41,9 @@ const EventList = (props: iEventListProps) => {
         const catPredictions: iPrediction[] | undefined = (predictionData || {})[
           category.id
         ];
-        const filteredPredictions = catPredictions
-          ? filterHiddenContenders(catPredictions)
-          : [];
+        const predictions = catPredictions || [];
         const slots = getCategorySlots(event.year, event.awardsBody, category.name);
-        const truncatedPredictions = (filteredPredictions || [])?.slice(0, slots);
+        const truncatedPredictions = (predictions || [])?.slice(0, slots);
         return (
           <TouchableHighlight
             key={category.id}

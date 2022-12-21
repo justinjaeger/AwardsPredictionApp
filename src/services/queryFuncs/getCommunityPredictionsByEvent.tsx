@@ -9,7 +9,11 @@ import { isWithinLastMonth } from '../../util/isWithinLastMonth';
 import { sortCommunityPredictions } from '../../util/sortPredictions';
 import ApiServices from '../graphql';
 
-const getCommunityPredictionsByEvent = async (event: iEvent) => {
+const getCommunityPredictionsByEvent = async (
+  event: iEvent,
+  _includeHidden?: boolean,
+) => {
+  const includeHidden = _includeHidden === undefined ? false : _includeHidden; // default to false
   const eventId = event.id;
   const { data: _contenders } = await ApiServices.getContendersByEvent(eventId);
   const contenders = _contenders?.listContenders?.items;
@@ -43,6 +47,13 @@ const getCommunityPredictionsByEvent = async (event: iEvent) => {
       contenderPerson: con.person || undefined,
       contenderSong: con.song || undefined,
     };
+    // if hidden and we don't want to include hidden, skip
+    if (
+      communityPrediction.visibility === ContenderVisibility.HIDDEN &&
+      includeHidden !== true
+    ) {
+      return;
+    }
     if (!data[categoryId]) data[categoryId] = [];
     data[categoryId].push(communityPrediction);
   });

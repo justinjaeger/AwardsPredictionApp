@@ -30,7 +30,7 @@ const AddPredictions = () => {
   const event = _event as iEvent;
 
   // We use the SAME KEY as the previous screen, because it avoids a re-fetch of the data which was available previously
-  const { data: communityData } = useQueryCommunityEvent(event);
+  const { data: communityData } = useQueryCommunityEvent({ event });
   const communityPredictions = communityData ? communityData[category.id] || [] : [];
 
   const [selectedPredictions, setSelectedPredictions] = useState<iPrediction[]>(
