@@ -22,6 +22,8 @@ import { SubmitButton } from '../../../components/Buttons';
 import UpdateStatusModal from './UpdateStatusModal';
 import CreateEventModal from './CreateEventModal';
 import SelectCategoryModal from './SelectCategoryModal';
+import UpdateExpirationModal from './UpdateExpirationModal';
+import { formatDateTime } from '../../../util/formatDateTime';
 
 export const getEventName = (awardsBody: AwardsBody) => {
   return AWARDS_BODY_TO_PLURAL_STRING[AwardsBody[awardsBody]];
@@ -37,6 +39,9 @@ const ManageEvents = () => {
   const [highlightedEvent, setHighlightedEvent] = useState<string>('');
   const [selectedEvent, setSelectedEvent] = useState<iEvent | undefined>();
   const [openUpdateStatusModal, setOpenUpdateStatusModal] = useState<boolean>(false);
+  const [openUpdateExpirationModal, setOpenUpdateExpirationModal] = useState<boolean>(
+    false,
+  );
   const [openCreateEventModal, setOpenCreateEventModal] = useState<boolean>(false);
   const [openSelectCategoryModal, setOpenSelectCategoryModal] = useState<boolean>(false);
 
@@ -59,6 +64,34 @@ const ManageEvents = () => {
   const groupedByYear = _.groupBy(orderedEvents, (e) => e.year);
 
   const userIsAdmin = user ? user.role === UserRole.ADMIN : false;
+
+  const eventIsForNominations = (eventStatus: EventStatus) =>
+    [EventStatus.NOMS_LIVE, EventStatus.NOMS_STAGING].includes(eventStatus);
+
+  const EventProperty = (_props: {
+    event: iEvent;
+    label: string;
+    buttonLabel: string;
+    onPress: () => void;
+  }) => (
+    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+      <Body
+        style={{
+          color: COLORS.white,
+        }}
+      >
+        {_props.label}
+      </Body>
+      <SubmitButton
+        onPress={() => {
+          setSelectedEvent(_props.event);
+          _props.onPress();
+        }}
+        text={_props.buttonLabel}
+        style={{ width: 'auto', padding: 5, marginLeft: 10 }}
+      />
+    </View>
+  );
 
   return (
     <BackgroundWrapper>
@@ -101,6 +134,19 @@ const ManageEvents = () => {
                     const { awardsBody, status } = event;
                     const eventIsAdminOnly = status === EventStatus.NOMS_STAGING;
                     if (eventIsAdminOnly && !userIsAdmin) return null; // don't display events with status NOMS_STAGING to non-admin
+
+                    const nomDateTime = new Date(event?.nominationDateTime || '');
+                    const winDateTime = new Date(event?.winDateTime || '');
+                    const dateTime =
+                      EventStatus.ARCHIVED === event.status
+                        ? 'Archived'
+                        : eventIsForNominations(event.status)
+                        ? event.nominationDateTime
+                          ? formatDateTime(nomDateTime)
+                          : 'no nomination time set'
+                        : event.winDateTime
+                        ? formatDateTime(winDateTime)
+                        : 'no win time set';
                     return (
                       <TouchableHighlight
                         key={event.id}
@@ -137,44 +183,24 @@ const ManageEvents = () => {
                               </SubHeader>
                             </View>
                           </View>
-                          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <Body
-                              style={{
-                                color: COLORS.white,
-                              }}
-                            >{`${EVENT_STATUS_TO_STRING[status]}`}</Body>
-                            <SubmitButton
-                              onPress={() => {
-                                setSelectedEvent(event);
-                                setOpenUpdateStatusModal(true);
-                              }}
-                              text={'Edit Status'}
-                              style={{ width: 'auto', padding: 5, marginLeft: 10 }}
-                            />
-                          </View>
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                              alignItems: 'center',
-                              marginTop: 15,
-                            }}
-                          >
-                            <Body
-                              style={{
-                                color: COLORS.white,
-                              }}
-                            >
-                              {'Manage Contenders'}
-                            </Body>
-                            <SubmitButton
-                              onPress={() => {
-                                setSelectedEvent(event);
-                                setOpenSelectCategoryModal(true);
-                              }}
-                              text={'Manage Contenders'}
-                              style={{ width: 'auto', padding: 5, marginLeft: 10 }}
-                            />
-                          </View>
+                          <EventProperty
+                            label={EVENT_STATUS_TO_STRING[status]}
+                            buttonLabel={'Update Status'}
+                            event={event}
+                            onPress={() => setOpenUpdateStatusModal(true)}
+                          />
+                          <EventProperty
+                            label={dateTime}
+                            buttonLabel={'Update Expiration'}
+                            event={event}
+                            onPress={() => setOpenUpdateExpirationModal(true)}
+                          />
+                          <EventProperty
+                            label={'Manage Contenders'}
+                            buttonLabel={'Manage Contenders'}
+                            event={event}
+                            onPress={() => setOpenSelectCategoryModal(true)}
+                          />
                         </>
                       </TouchableHighlight>
                     );
@@ -191,6 +217,24 @@ const ManageEvents = () => {
           onSaveSuccess={() => refetchEvents()}
           initialStatus={selectedEvent?.status}
         />
+        {selectedEvent?.status && selectedEvent?.status !== EventStatus.ARCHIVED ? (
+          <UpdateExpirationModal
+            visible={openUpdateExpirationModal}
+            onClose={() => setOpenUpdateExpirationModal(false)}
+            eventId={selectedEvent.id}
+            onSaveSuccess={() => refetchEvents()}
+            initialDateTime={
+              eventIsForNominations(selectedEvent.status)
+                ? selectedEvent.nominationDateTime
+                : selectedEvent.winDateTime
+            }
+            propertyToUpdate={
+              eventIsForNominations(selectedEvent.status)
+                ? 'nominationDateTime'
+                : 'winDateTime'
+            }
+          />
+        ) : null}
         <CreateEventModal
           visible={openCreateEventModal}
           onClose={() => setOpenCreateEventModal(false)}
