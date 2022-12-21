@@ -30,6 +30,11 @@ enum EventType {
     NOMINATION
 }
 
+enum ContenderVisibility {
+    HIDDEN
+    VISIBLE
+}
+
 enum EventStatus {
     NOMS_STAGING # before nominations go public
     NOMS_LIVE # when everyone can predict nominations
@@ -150,6 +155,7 @@ type Contender @model @auth(rules: [{ allow: public }]) {
     person: Person @hasOne # optional - only applies to acting categories
     song: Song @hasOne # optional - only applies to the song category
     predictions: [Prediction] @hasMany
+    visibility: ContenderVisibility
     didReceiveNominationOrWin: Boolean #DELETE
 }
 

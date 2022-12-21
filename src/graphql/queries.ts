@@ -88,6 +88,7 @@ export const getPredictionSet = /* GraphQL */ `
             contenders {
               items {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -188,6 +189,7 @@ export const getPredictionSet = /* GraphQL */ `
               }
               nextToken
             }
+            visibility
             didReceiveNominationOrWin
             createdAt
             updatedAt
@@ -282,6 +284,7 @@ export const getPredictionSet = /* GraphQL */ `
               predictions {
                 nextToken
               }
+              visibility
               didReceiveNominationOrWin
               createdAt
               updatedAt
@@ -380,6 +383,7 @@ export const getPredictionSet = /* GraphQL */ `
               }
               nextToken
             }
+            visibility
             didReceiveNominationOrWin
             createdAt
             updatedAt
@@ -489,6 +493,7 @@ export const getPredictionSet = /* GraphQL */ `
               }
               nextToken
             }
+            visibility
             didReceiveNominationOrWin
             createdAt
             updatedAt
@@ -617,6 +622,7 @@ export const listPredictionSets = /* GraphQL */ `
               predictions {
                 nextToken
               }
+              visibility
               didReceiveNominationOrWin
               createdAt
               updatedAt
@@ -656,6 +662,7 @@ export const listPredictionSets = /* GraphQL */ `
             contenders {
               items {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -718,6 +725,7 @@ export const listPredictionSets = /* GraphQL */ `
               predictions {
                 nextToken
               }
+              visibility
               didReceiveNominationOrWin
               createdAt
               updatedAt
@@ -791,6 +799,7 @@ export const listPredictionSets = /* GraphQL */ `
               predictions {
                 nextToken
               }
+              visibility
               didReceiveNominationOrWin
               createdAt
               updatedAt
@@ -861,6 +870,7 @@ export const getHistoryPredictionSet = /* GraphQL */ `
             contenders {
               items {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -961,6 +971,7 @@ export const getHistoryPredictionSet = /* GraphQL */ `
               }
               nextToken
             }
+            visibility
             didReceiveNominationOrWin
             createdAt
             updatedAt
@@ -1055,6 +1066,7 @@ export const getHistoryPredictionSet = /* GraphQL */ `
               predictions {
                 nextToken
               }
+              visibility
               didReceiveNominationOrWin
               createdAt
               updatedAt
@@ -1153,6 +1165,7 @@ export const getHistoryPredictionSet = /* GraphQL */ `
               }
               nextToken
             }
+            visibility
             didReceiveNominationOrWin
             createdAt
             updatedAt
@@ -1262,6 +1275,7 @@ export const getHistoryPredictionSet = /* GraphQL */ `
               }
               nextToken
             }
+            visibility
             didReceiveNominationOrWin
             createdAt
             updatedAt
@@ -1390,6 +1404,7 @@ export const listHistoryPredictionSets = /* GraphQL */ `
               predictions {
                 nextToken
               }
+              visibility
               didReceiveNominationOrWin
               createdAt
               updatedAt
@@ -1429,6 +1444,7 @@ export const listHistoryPredictionSets = /* GraphQL */ `
             contenders {
               items {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -1491,6 +1507,7 @@ export const listHistoryPredictionSets = /* GraphQL */ `
               predictions {
                 nextToken
               }
+              visibility
               didReceiveNominationOrWin
               createdAt
               updatedAt
@@ -1564,6 +1581,7 @@ export const listHistoryPredictionSets = /* GraphQL */ `
               predictions {
                 nextToken
               }
+              visibility
               didReceiveNominationOrWin
               createdAt
               updatedAt
@@ -1632,6 +1650,7 @@ export const getPrediction = /* GraphQL */ `
             contenders {
               items {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -1694,6 +1713,7 @@ export const getPrediction = /* GraphQL */ `
               predictions {
                 nextToken
               }
+              visibility
               didReceiveNominationOrWin
               createdAt
               updatedAt
@@ -1782,6 +1802,7 @@ export const getPrediction = /* GraphQL */ `
               predictions {
                 nextToken
               }
+              visibility
               didReceiveNominationOrWin
               createdAt
               updatedAt
@@ -1885,6 +1906,7 @@ export const getPrediction = /* GraphQL */ `
               predictions {
                 nextToken
               }
+              visibility
               didReceiveNominationOrWin
               createdAt
               updatedAt
@@ -1904,6 +1926,7 @@ export const getPrediction = /* GraphQL */ `
           }
           nextToken
         }
+        visibility
         didReceiveNominationOrWin
         createdAt
         updatedAt
@@ -1976,6 +1999,7 @@ export const listPredictions = /* GraphQL */ `
             contenders {
               items {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -2009,6 +2033,7 @@ export const listPredictions = /* GraphQL */ `
             contenders {
               items {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -2070,6 +2095,7 @@ export const listPredictions = /* GraphQL */ `
               }
               contender {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -2089,6 +2115,7 @@ export const listPredictions = /* GraphQL */ `
             }
             nextToken
           }
+          visibility
           didReceiveNominationOrWin
           createdAt
           updatedAt
@@ -2137,6 +2164,7 @@ export const getEvent = /* GraphQL */ `
             contenders {
               items {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -2199,6 +2227,7 @@ export const getEvent = /* GraphQL */ `
               predictions {
                 nextToken
               }
+              visibility
               didReceiveNominationOrWin
               createdAt
               updatedAt
@@ -2244,6 +2273,7 @@ export const getEvent = /* GraphQL */ `
             contenders {
               items {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -2277,6 +2307,7 @@ export const getEvent = /* GraphQL */ `
             contenders {
               items {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -2338,6 +2369,7 @@ export const getEvent = /* GraphQL */ `
               }
               contender {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -2357,6 +2389,7 @@ export const getEvent = /* GraphQL */ `
             }
             nextToken
           }
+          visibility
           didReceiveNominationOrWin
           createdAt
           updatedAt
@@ -2417,6 +2450,7 @@ export const listEvents = /* GraphQL */ `
             contenders {
               items {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -2517,6 +2551,7 @@ export const listEvents = /* GraphQL */ `
               }
               nextToken
             }
+            visibility
             didReceiveNominationOrWin
             createdAt
             updatedAt
@@ -2570,6 +2605,7 @@ export const getCategory = /* GraphQL */ `
             contenders {
               items {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -2670,6 +2706,7 @@ export const getCategory = /* GraphQL */ `
               }
               nextToken
             }
+            visibility
             didReceiveNominationOrWin
             createdAt
             updatedAt
@@ -2713,6 +2750,7 @@ export const getCategory = /* GraphQL */ `
             contenders {
               items {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -2746,6 +2784,7 @@ export const getCategory = /* GraphQL */ `
             contenders {
               items {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -2807,6 +2846,7 @@ export const getCategory = /* GraphQL */ `
               }
               contender {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -2826,6 +2866,7 @@ export const getCategory = /* GraphQL */ `
             }
             nextToken
           }
+          visibility
           didReceiveNominationOrWin
           createdAt
           updatedAt
@@ -2935,6 +2976,7 @@ export const listCategories = /* GraphQL */ `
               predictions {
                 nextToken
               }
+              visibility
               didReceiveNominationOrWin
               createdAt
               updatedAt
@@ -3033,6 +3075,7 @@ export const listCategories = /* GraphQL */ `
               }
               nextToken
             }
+            visibility
             didReceiveNominationOrWin
             createdAt
             updatedAt
@@ -3133,6 +3176,7 @@ export const getContender = /* GraphQL */ `
               predictions {
                 nextToken
               }
+              visibility
               didReceiveNominationOrWin
               createdAt
               updatedAt
@@ -3231,6 +3275,7 @@ export const getContender = /* GraphQL */ `
               }
               nextToken
             }
+            visibility
             didReceiveNominationOrWin
             createdAt
             updatedAt
@@ -3272,6 +3317,7 @@ export const getContender = /* GraphQL */ `
             contenders {
               items {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -3372,6 +3418,7 @@ export const getContender = /* GraphQL */ `
               }
               nextToken
             }
+            visibility
             didReceiveNominationOrWin
             createdAt
             updatedAt
@@ -3511,6 +3558,7 @@ export const getContender = /* GraphQL */ `
               }
               nextToken
             }
+            visibility
             didReceiveNominationOrWin
             createdAt
             updatedAt
@@ -3530,6 +3578,7 @@ export const getContender = /* GraphQL */ `
         }
         nextToken
       }
+      visibility
       didReceiveNominationOrWin
       createdAt
       updatedAt
@@ -3580,6 +3629,7 @@ export const listContenders = /* GraphQL */ `
             contenders {
               items {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -3642,6 +3692,7 @@ export const listContenders = /* GraphQL */ `
               predictions {
                 nextToken
               }
+              visibility
               didReceiveNominationOrWin
               createdAt
               updatedAt
@@ -3730,6 +3781,7 @@ export const listContenders = /* GraphQL */ `
               predictions {
                 nextToken
               }
+              visibility
               didReceiveNominationOrWin
               createdAt
               updatedAt
@@ -3833,6 +3885,7 @@ export const listContenders = /* GraphQL */ `
               predictions {
                 nextToken
               }
+              visibility
               didReceiveNominationOrWin
               createdAt
               updatedAt
@@ -3852,6 +3905,7 @@ export const listContenders = /* GraphQL */ `
           }
           nextToken
         }
+        visibility
         didReceiveNominationOrWin
         createdAt
         updatedAt
