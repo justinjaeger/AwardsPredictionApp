@@ -74,7 +74,7 @@ const ManageEvents = () => {
     buttonLabel: string;
     onPress: () => void;
   }) => (
-    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+    <View style={{ flexDirection: 'row', alignItems: 'center', margin: 5 }}>
       <Body
         style={{
           color: COLORS.white,
@@ -125,7 +125,7 @@ const ManageEvents = () => {
               style={{ width: 'auto', padding: 10, margin: 10 }}
             />
             {Object.entries(groupedByYear).map(([year, events]) => (
-              <>
+              <View key={year}>
                 <SubHeader style={{ marginBottom: theme.windowMargin }}>{`${
                   parseInt(year, 10) - 1
                 }/${year.slice(2)}`}</SubHeader>
@@ -206,7 +206,7 @@ const ManageEvents = () => {
                     );
                   })}
                 </View>
-              </>
+              </View>
             ))}
           </Animated.ScrollView>
         )}

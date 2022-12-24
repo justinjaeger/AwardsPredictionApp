@@ -53,7 +53,7 @@ const UpdateStatusModal = (props: {
           // @ts-ignore
           const status = EventStatus[key] as EventStatus;
           return (
-            <>
+            <View key={key}>
               <TouchableHighlight
                 style={{
                   backgroundColor:
@@ -77,7 +77,7 @@ const UpdateStatusModal = (props: {
                 }}
                 visible={initialStatus !== selectedStatus}
               />
-            </>
+            </View>
           );
         })}
       </View>

@@ -30,6 +30,7 @@ const ManageStudios = () => {
         if (!m) return null;
         return (
           <StudioItem
+            key={m.id}
             movieTmdbId={m.tmdbId}
             movieId={m.id}
             movieStudio={m.studio || undefined}

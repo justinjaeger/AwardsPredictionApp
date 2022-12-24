@@ -62,21 +62,19 @@ const SelectCategoryModal = (props: {
             {categories.map((category) => {
               if (!category) return null;
               return (
-                <>
-                  <TouchableHighlight
-                    key={category.id}
-                    style={{
-                      height: ITEM_HEIGHT,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                    onPress={() => {
-                      onSelectCategory(category);
-                    }}
-                  >
-                    <Body style={{ padding: 10 }}>{category.name}</Body>
-                  </TouchableHighlight>
-                </>
+                <TouchableHighlight
+                  key={category.id}
+                  style={{
+                    height: ITEM_HEIGHT,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                  onPress={() => {
+                    onSelectCategory(category);
+                  }}
+                >
+                  <Body style={{ padding: 10 }}>{category.name}</Body>
+                </TouchableHighlight>
               );
             })}
           </>

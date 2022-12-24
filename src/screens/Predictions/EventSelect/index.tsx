@@ -107,7 +107,7 @@ const EventSelect = () => {
           }}
         >
           {Object.entries(groupedByYear).map(([year, events]) => (
-            <>
+            <View key={year}>
               <SubHeader style={{ marginBottom: theme.windowMargin }}>{`${
                 parseInt(year, 10) - 1
               }/${year.slice(2)}`}</SubHeader>
@@ -118,7 +118,7 @@ const EventSelect = () => {
                   if (eventIsAdminOnly && !userIsAdmin) return null; // don't display events with status NOMS_STAGING to non-admin
                   return (
                     <TouchableHighlight
-                      key={year + awardsBody}
+                      key={event.awardsBody + year}
                       style={{
                         height: 80,
                         backgroundColor: 'rgba(0,0,0,0.1)',
@@ -163,7 +163,7 @@ const EventSelect = () => {
                   );
                 })}
               </View>
-            </>
+            </View>
           ))}
         </Animated.ScrollView>
       </>

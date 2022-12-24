@@ -71,28 +71,27 @@ const CreateEventModal = (props: {
                 // @ts-ignore we know this is a valid key
                 const awardsBody = AwardsBody[key] as AwardsBody;
                 return (
-                  <>
-                    <TouchableHighlight
-                      style={{
-                        backgroundColor:
-                          selectedAwardsBody === awardsBody
-                            ? COLORS.secondaryDark
-                            : 'transparent',
-                        height: ITEM_HEIGHT,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
-                      onPress={() => {
-                        if (selectedAwardsBody === awardsBody) {
-                          setSelectedAwardsBody(undefined);
-                        } else {
-                          setSelectedAwardsBody(awardsBody);
-                        }
-                      }}
-                    >
-                      <Body style={{ padding: 10 }}>{value}</Body>
-                    </TouchableHighlight>
-                  </>
+                  <TouchableHighlight
+                    key={key}
+                    style={{
+                      backgroundColor:
+                        selectedAwardsBody === awardsBody
+                          ? COLORS.secondaryDark
+                          : 'transparent',
+                      height: ITEM_HEIGHT,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                    onPress={() => {
+                      if (selectedAwardsBody === awardsBody) {
+                        setSelectedAwardsBody(undefined);
+                      } else {
+                        setSelectedAwardsBody(awardsBody);
+                      }
+                    }}
+                  >
+                    <Body style={{ padding: 10 }}>{value}</Body>
+                  </TouchableHighlight>
                 );
               })}
             </>

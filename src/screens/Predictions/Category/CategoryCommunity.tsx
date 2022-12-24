@@ -100,6 +100,7 @@ const CategoryCommunity = () => {
           style={{
             display: delayedDisplay === 'grid' ? 'flex' : 'none',
             opacity: gridOpacity,
+            width: '100%',
           }}
           contentContainerStyle={{
             paddingBottom: 100,
