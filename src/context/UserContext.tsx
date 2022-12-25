@@ -22,6 +22,7 @@ const asyncStorageSignIn = async (userId: string, email: string, role: UserRole)
 
 const asyncStorageSignOut = async () => {
   await AsyncStorage.removeItem(AsyncStorageKeys.USER_ID);
+  await AsyncStorage.removeItem(AsyncStorageKeys.USER_ROLE);
 };
 
 const asyncStorageGetUser = async () => {
@@ -77,6 +78,7 @@ export const UserProvider = (props: { children: React.ReactNode }) => {
   };
 
   const signOutUser = () => {
+    // Notable: doesn't clear the email. This way if you're signed out it remembers who was last signed in
     setUserId(undefined);
     setUserRole(undefined);
     asyncStorageSignOut();
