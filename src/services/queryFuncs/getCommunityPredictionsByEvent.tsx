@@ -28,7 +28,7 @@ const getCommunityPredictionsByEvent = async (
     const rankings: iNumberPredicting = {};
     contenderPredictions.forEach((prediction) => {
       const lastUpdated = prediction?.updatedAt || '';
-      // if lastUpdated is not in the last month, don't count it
+      // if lastUpdated is not in the last month, don't count it. keep in mind last change reflects when user updated entire category
       const isRecentPrediction = isWithinLastMonth(lastUpdated);
       if (isRecentPrediction) {
         const someUsersRanking = prediction?.ranking || 0;
