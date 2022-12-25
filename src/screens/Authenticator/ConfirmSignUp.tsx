@@ -48,7 +48,7 @@ const ConfirmSignUp = (p: any) => {
         if (!u) return; // maybe display status message
         AuthServices.signIn(email, password).then((res) => {
           if (res.status === 'success') {
-            signInUser(u.id, u.email);
+            signInUser(u.id, u.email, u.role);
             goBack();
           }
         });

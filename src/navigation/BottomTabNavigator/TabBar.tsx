@@ -74,13 +74,13 @@ const TabBar = (props: ITabBarProps) => {
                     )}
                   </View>
                 );
-              case 'Dev':
+              case 'Admin':
                 return (
                   <View key={index}>
                     {isFocused ? (
-                      <CustomIcon name={'hard-drive'} />
+                      <CustomIcon name={'lock'} />
                     ) : (
-                      <CustomIcon name={'hard-drive-outline'} />
+                      <CustomIcon name={'lock-outline'} />
                     )}
                   </View>
                 );
@@ -88,6 +88,7 @@ const TabBar = (props: ITabBarProps) => {
           })();
           return (
             <TouchableOpacity
+              key={index}
               accessibilityRole="button"
               accessibilityState={isFocused ? { selected: true } : {}}
               accessibilityLabel={options.tabBarAccessibilityLabel}

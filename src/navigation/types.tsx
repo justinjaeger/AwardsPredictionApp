@@ -13,7 +13,7 @@ export type MainParamList = {
 export type PredictionsParamList = {
   Profile: undefined;
   EventSelect: undefined;
-  EventPredictions: undefined;
+  Event: undefined;
   Category: {
     isSelectable?: boolean;
     onPressItem?: (contenderId: string) => void;
@@ -27,11 +27,11 @@ export type PredictionsParamList = {
     initialPredictions: iPrediction[];
     onFinish: (predictions: iPrediction[]) => void;
   };
-  CreateContender: undefined;
 };
 
-export type DevParamList = {
-  Dev: undefined;
+export type AdminParamList = {
+  Admin: undefined;
+  ManageContenders: undefined;
 };
 
 export type ProfileParamList = {

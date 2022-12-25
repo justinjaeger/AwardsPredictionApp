@@ -5,7 +5,7 @@ import COLORS from '../../constants/colors';
 export const DetailContainer = styled.View({
   alignItems: 'center',
   padding: 20,
-  backgroundColor: COLORS.lightestGray,
+  backgroundColor: COLORS.lightest,
   borderRadius: 20,
   width: '90%',
 });

@@ -1,16 +1,16 @@
 import { useQuery } from '@tanstack/react-query';
-import getCommunityPredictionsByEvent from '../services/queryFuncs/getCommunityPredictionsByEvent';
-import getPersonalPredictionsByEvent from '../services/queryFuncs/getPersonalPredictionsByEvent';
-import { iEvent, QueryKeys } from '../types';
+import getCommunityPredictionsByEvent from '../../services/queryFuncs/getCommunityPredictionsByEvent';
+import getPersonalPredictionsByEvent from '../../services/queryFuncs/getPersonalPredictionsByEvent';
+import { iEvent, QueryKeys } from '../../types';
 
 const useQueryCommunityOrPersonalEvent = (
   tab: 'personal' | 'community',
   fetchPersonalEnabled: boolean,
-  params: { event: iEvent; userId?: string | undefined },
+  params: { event: iEvent; userId?: string | undefined; includeHidden?: boolean },
 ) => {
-  const { event, userId } = params;
+  const { event, userId, includeHidden } = params;
   if (tab === 'personal' && userId === undefined) {
-    console.error('ERROR: userId cannot be undefined if tab is personal');
+    console.warn('The user is signed out');
   }
   const { data, isLoading } = useQuery({
     queryKey: [
@@ -18,7 +18,7 @@ const useQueryCommunityOrPersonalEvent = (
     ],
     queryFn:
       tab === 'community'
-        ? () => getCommunityPredictionsByEvent(event)
+        ? () => getCommunityPredictionsByEvent(event, includeHidden)
         : () => getPersonalPredictionsByEvent(event.id, userId || ''),
     enabled: tab === 'personal' ? fetchPersonalEnabled : true,
   });

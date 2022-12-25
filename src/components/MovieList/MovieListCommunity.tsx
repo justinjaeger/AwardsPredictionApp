@@ -6,13 +6,15 @@ import COLORS from '../../constants/colors';
 import { useCategory } from '../../context/CategoryContext';
 import { iCategory, iEvent, iPrediction } from '../../types';
 import ContenderListItem from '../List/ContenderList/ContenderListItem';
+import ContenderListItemCondensed from '../List/ContenderList/ContenderListItemCondensed';
 
 type iMovieListProps = {
   predictions: iPrediction[];
+  isCollapsed?: boolean;
 };
 
 const MovieListCommunity = (props: iMovieListProps) => {
-  const { predictions } = props;
+  const { predictions, isCollapsed } = props;
   const { event: _event, category: _category } = useCategory();
 
   const event = _event as iEvent;
@@ -38,31 +40,45 @@ const MovieListCommunity = (props: iMovieListProps) => {
       style={{ width: '100%' }}
       contentContainerStyle={{ paddingBottom: 100 }}
       renderItem={({ item: prediction, index }) => {
-        const isMoreThanSlots = index > slots;
-        const ranking = isMoreThanSlots ? index : index + 1;
+        const ranking = index + 1;
         return (
           <>
             {index === slots ? (
               <Divider
-                style={{ margin: 10, borderWidth: 0.5, borderColor: COLORS.goldDark }}
+                style={{
+                  margin: 10,
+                  borderWidth: 0.5,
+                  borderColor: COLORS.secondaryDark,
+                }}
               />
             ) : null}
-            <ContenderListItem
-              prediction={prediction}
-              ranking={ranking}
-              onPressItem={onPressItem}
-              onPressThumbnail={(item) => {
-                const id = item.contenderId;
-                if (selectedContenderId === id) {
-                  setSelectedContenderId(undefined);
-                } else {
-                  setSelectedContenderId(id);
-                }
-              }}
-              selected={selectedContenderId === prediction.contenderId}
-              variant={'community'}
-              categoryType={category.type}
-            />
+            {!isCollapsed ? (
+              <ContenderListItem
+                prediction={prediction}
+                ranking={ranking}
+                onPressItem={onPressItem}
+                onPressThumbnail={(item) => {
+                  const id = item.contenderId;
+                  if (selectedContenderId === id) {
+                    setSelectedContenderId(undefined);
+                  } else {
+                    setSelectedContenderId(id);
+                  }
+                }}
+                selected={selectedContenderId === prediction.contenderId}
+                variant={'community'}
+                categoryType={category.type}
+              />
+            ) : (
+              <ContenderListItemCondensed
+                prediction={prediction}
+                onPressItem={() => {}}
+                ranking={ranking}
+                selected={selectedContenderId === prediction.contenderId}
+                variant={'community'}
+                categoryType={category.type}
+              />
+            )}
           </>
         );
       }}

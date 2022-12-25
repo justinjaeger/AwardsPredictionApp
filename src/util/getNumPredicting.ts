@@ -1,10 +1,13 @@
 import { iNumberPredicting } from '../types';
 
-export const getNumPredicting = (np: iNumberPredicting): { win: number; nom: number } => {
+export const getNumPredicting = (
+  np: iNumberPredicting,
+  slots: number,
+): { win: number; nom: number } => {
   const keys = Object.keys(np);
   const nom = keys.reduce((acc, key) => {
     const num = parseInt(key, 10);
-    if (num > 1 && num <= 10) {
+    if (num > 1 && num <= slots) {
       acc += np[num];
     }
     return acc;

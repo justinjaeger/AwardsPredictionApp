@@ -4,19 +4,20 @@ import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useRef, useState } from 'react';
 import { Animated, TouchableHighlight, useWindowDimensions, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { CategoryName, CategoryType } from '../../../API';
+import { CategoryType } from '../../../API';
+import { getCategorySlots } from '../../../constants/categories';
 import COLORS from '../../../constants/colors';
 import { getPosterDimensionsByWidth } from '../../../constants/posterDimensions';
 import theme from '../../../constants/theme';
 import { useCategory } from '../../../context/CategoryContext';
 import { iCachedTmdbMovie, iCachedTmdbPerson } from '../../../services/cache/types';
 import TmdbServices from '../../../services/tmdb';
-import { iCategory, iPrediction } from '../../../types';
+import { iCategory, iEvent, iPrediction } from '../../../types';
 import { getNumPredicting } from '../../../util/getNumPredicting';
 import { useAsyncEffect } from '../../../util/hooks';
 import CustomIcon from '../../CustomIcon';
 import AnimatedPoster from '../../Images/AnimatedPoster';
-import { BodyLarge, Label, LabelBold } from '../../Text';
+import { Body, SubHeader } from '../../Text';
 
 type iContenderListItemProps = {
   variant: 'community' | 'personal' | 'selectable' | 'search';
@@ -65,8 +66,9 @@ const ContenderListItem = (props: iContenderListItemProps) => {
   const ITEM_WIDTH_SELECTED = RIGHT_COL_WIDTH + BODY_WIDTH_SELECTED;
   const ITEM_WIDTH_UNSELECTED = RIGHT_COL_WIDTH + BODY_WIDTH_UNSELECTED;
 
-  const { category: _category } = useCategory();
+  const { category: _category, event: _event } = useCategory();
   const category = _category as iCategory;
+  const event = _event as iEvent;
 
   const width = selected ? LARGE_POSTER : SMALL_POSTER;
   const { height } = getPosterDimensionsByWidth(width);
@@ -136,7 +138,7 @@ const ContenderListItem = (props: iContenderListItemProps) => {
     onPressThumbnail && onPressThumbnail(prediction);
   };
 
-  const categoryName = CategoryName[category.name];
+  const categoryName = category.name;
   const catInfo = tmdbMovie?.categoryInfo?.[categoryName];
   const categoryInfo = catInfo ? catInfo?.join(', ') : undefined;
   const communityRankings =
@@ -162,7 +164,10 @@ const ContenderListItem = (props: iContenderListItemProps) => {
 
   const fadeBottom = selected !== true && variant === 'search';
 
-  const { win, nom } = getNumPredicting(communityRankings || {});
+  const { win, nom } = getNumPredicting(
+    communityRankings || {},
+    getCategorySlots(event.year, event.awardsBody, category.name),
+  );
 
   const showBotomButtons = selected && tmdbMovie;
 
@@ -172,7 +177,7 @@ const ContenderListItem = (props: iContenderListItemProps) => {
         onPressItem(prediction);
       }}
       style={{
-        backgroundColor: isActive || highlighted ? COLORS.goldDark : 'transparent',
+        backgroundColor: isActive || highlighted ? COLORS.secondaryDark : 'transparent',
         width: '100%',
         paddingTop: theme.windowMargin / 4,
         paddingBottom: theme.windowMargin / 4,
@@ -238,15 +243,15 @@ const ContenderListItem = (props: iContenderListItemProps) => {
                   paddingBottom: showBotomButtons ? 70 : 0, // For not conflicting with the bottom buttons
                 }}
               >
-                <BodyLarge style={{ marginLeft: 10 }}>{title}</BodyLarge>
-                <Label
+                <SubHeader style={{ marginLeft: 10 }}>{title}</SubHeader>
+                <Body
                   style={{
                     marginTop: 0,
                     marginLeft: 10,
                   }}
                 >
                   {subtitle}
-                </Label>
+                </Body>
               </Animated.View>
             </MaskedView>
             {communityRankings ? (
@@ -258,8 +263,8 @@ const ContenderListItem = (props: iContenderListItemProps) => {
                   paddingRight: theme.windowMargin,
                 }}
               >
-                <BodyLarge style={{ textAlign: 'right' }}>{nom.toString()}</BodyLarge>
-                <BodyLarge style={{ textAlign: 'right' }}>{win.toString()}</BodyLarge>
+                <Body style={{ textAlign: 'right' }}>{nom.toString()}</Body>
+                <Body style={{ textAlign: 'right' }}>{win.toString()}</Body>
               </View>
             ) : null}
             {variant === 'personal' ? (
@@ -330,21 +335,21 @@ const ExternalLinkButton = (props: { text: string; onPress: () => void }) => {
       onPress={onPress}
       style={{
         alignItems: 'center',
-        padding: 4,
+        padding: 5,
+        paddingHorizontal: 10,
         borderRadius: theme.borderRadius,
         backgroundColor: COLORS.secondary,
-        width: 50,
       }}
       underlayColor={COLORS.secondaryDark}
     >
-      <LabelBold
+      <Body
         style={{
           fontWeight: '700',
           color: COLORS.white,
         }}
       >
         {text}
-      </LabelBold>
+      </Body>
     </TouchableHighlight>
   );
 };

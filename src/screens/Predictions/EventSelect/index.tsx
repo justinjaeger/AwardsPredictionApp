@@ -16,11 +16,11 @@ import { iEvent } from '../../../types';
 import theme from '../../../constants/theme';
 import LoadingStatue from '../../../components/LoadingStatue';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
-import useQueryAllEvents from '../../../hooks/getAllEvents';
+import useQueryAllEvents from '../../../hooks/queries/getAllEvents';
 import AwardsBodyImage from '../../../components/AwardsBodyImage';
 import { EVENT_STATUS_TO_STRING } from '../../../constants/events';
 import { useAuth } from '../../../context/UserContext';
-import useQueryGetUser from '../../../hooks/getUser';
+import useQueryGetUser from '../../../hooks/queries/getUser';
 
 export const getEventName = (awardsBody: AwardsBody) => {
   return AWARDS_BODY_TO_PLURAL_STRING[AwardsBody[awardsBody]];
@@ -35,10 +35,20 @@ const EventSelect = () => {
   const loadingOpacity = useRef(new Animated.Value(1)).current;
   const bodyOpacity = useRef(new Animated.Value(0)).current;
 
-  const { data: events, isLoading } = useQueryAllEvents();
-  const { data: user } = useQueryGetUser(userId);
+  const { data: events, isLoading, refetch: refetchEvents } = useQueryAllEvents();
+  const { data: user, refetch: refetchUser } = useQueryGetUser(userId);
 
   const [highlightedEvent, setHighlightedEvent] = useState<string>('');
+
+  // just in case there's some refresh problem
+  useEffect(() => {
+    if (events === undefined) {
+      refetchEvents();
+    }
+    if (user === undefined) {
+      refetchUser();
+    }
+  }, [events, user, userId]);
 
   useEffect(() => {
     if (!isLoading) {
@@ -59,7 +69,7 @@ const EventSelect = () => {
 
   const onSelectEvent = async (event: iEvent) => {
     setEvent(event);
-    navigation.navigate('EventPredictions');
+    navigation.navigate('Event');
   };
 
   const eventList = Object.values(events || {});
@@ -96,9 +106,11 @@ const EventSelect = () => {
             marginLeft: theme.windowMargin,
           }}
         >
-          {Object.entries(groupedByYear).map(([key, events]) => (
-            <>
-              <SubHeader style={{ marginBottom: theme.windowMargin }}>{key}</SubHeader>
+          {Object.entries(groupedByYear).map(([year, events]) => (
+            <View key={year}>
+              <SubHeader style={{ marginBottom: theme.windowMargin }}>{`${
+                parseInt(year, 10) - 1
+              }/${year.slice(2)}`}</SubHeader>
               <View style={{ flexWrap: 'wrap', flexDirection: 'row' }}>
                 {events.map((event) => {
                   const { awardsBody, status } = event;
@@ -106,6 +118,7 @@ const EventSelect = () => {
                   if (eventIsAdminOnly && !userIsAdmin) return null; // don't display events with status NOMS_STAGING to non-admin
                   return (
                     <TouchableHighlight
+                      key={event.awardsBody + year}
                       style={{
                         height: 80,
                         backgroundColor: 'rgba(0,0,0,0.1)',
@@ -118,7 +131,7 @@ const EventSelect = () => {
                         padding: 5,
                         justifyContent: 'center',
                       }}
-                      underlayColor={COLORS.secondaryMiddle}
+                      underlayColor={COLORS.secondaryDark}
                       onPress={() => onSelectEvent(event)}
                       onPressIn={() => setHighlightedEvent(event.id)}
                       onPressOut={() => setHighlightedEvent('')}
@@ -150,7 +163,7 @@ const EventSelect = () => {
                   );
                 })}
               </View>
-            </>
+            </View>
           ))}
         </Animated.ScrollView>
       </>

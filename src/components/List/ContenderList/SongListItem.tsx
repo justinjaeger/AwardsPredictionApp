@@ -7,7 +7,7 @@ import {
 import { iCachedTmdbMovie } from '../../../services/cache/types';
 import TmdbServices from '../../../services/tmdb';
 import Poster from '../../Images/Poster';
-import { BodyLarge } from '../../Text';
+import { BodyBold } from '../../Text';
 
 type iSongListItemProps = {
   tmdbMovieId: number;
@@ -45,18 +45,18 @@ const SongListItem = (props: iSongListItemProps) => {
       }}
     >
       <View style={{ flexDirection: 'row' }}>
-        <BodyLarge style={{ marginLeft: 10 }}>{ranking?.toString() || ''}</BodyLarge>
+        <BodyBold style={{ marginLeft: 10 }}>{ranking?.toString() || ''}</BodyBold>
         <Poster
           path={movie?.posterPath || null}
           title={movie?.title || ''}
           onPress={onPress}
         />
         <View style={{ flexDirection: 'column' }}>
-          <BodyLarge style={{ marginTop: 10, marginLeft: 10 }}>{title}</BodyLarge>
-          <BodyLarge style={{ marginTop: 10, marginLeft: 10 }}>{artist}</BodyLarge>
-          <BodyLarge style={{ marginTop: 10, marginLeft: 10 }}>
+          <BodyBold style={{ marginTop: 10, marginLeft: 10 }}>{title}</BodyBold>
+          <BodyBold style={{ marginTop: 10, marginLeft: 10 }}>{artist}</BodyBold>
+          <BodyBold style={{ marginTop: 10, marginLeft: 10 }}>
             {movie?.title || ''}
-          </BodyLarge>
+          </BodyBold>
         </View>
       </View>
     </View>

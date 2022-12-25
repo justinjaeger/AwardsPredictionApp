@@ -28,7 +28,7 @@ export const getHeaderTitleWithTrophy = (title: string, awardsBody: AwardsBody) 
 };
 
 export const headerStyle = {
-  backgroundColor: COLORS.goldDark,
+  backgroundColor: COLORS.secondaryDark,
   height: 105,
 };
 export const headerTitleStyle = { color: COLORS.white };

@@ -11,13 +11,31 @@ const FormInput = (props: {
   value: string;
   setValue: (v: string) => void;
   textContentType?: iTextContentType;
+  isYear?: boolean;
   caption?: string;
   onBlur?: () => void;
   status?: EvaStatus;
+  style?: any;
 }) => {
-  const { label, value, setValue, textContentType, caption, onBlur, status } = props;
+  const {
+    label,
+    value,
+    setValue,
+    textContentType,
+    isYear,
+    caption,
+    onBlur,
+    status,
+    style,
+  } = props;
 
   const onChangeText = (v: string) => {
+    if (isYear) {
+      if (/^[0-9]*$/.test(v) === true && v.length <= 4) {
+        setValue(v.toLowerCase());
+      }
+      return;
+    }
     switch (textContentType) {
       case 'emailAddress':
         setValue(v.toLowerCase());
@@ -55,6 +73,7 @@ const FormInput = (props: {
         marginBottom: 10,
         backgroundColor: COLORS.primary,
         borderColor: COLORS.white,
+        ...style,
       }}
     />
   );

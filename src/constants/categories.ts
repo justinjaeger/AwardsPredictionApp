@@ -6,6 +6,12 @@ type iCategoryObject = {
   [key in CategoryName]: iCategoryData | undefined;
 };
 
+export const CATEGORY_TYPE_TO_STRING: { [key in CategoryType]: string } = {
+  [CategoryType.FILM]: 'Film',
+  [CategoryType.PERFORMANCE]: 'Performance',
+  [CategoryType.SONG]: 'Song',
+};
+
 export const getCategorySlots = (
   year: number,
   awardsBody: AwardsBody,

@@ -6,11 +6,10 @@ import ContenderDetailsScreen from '../screens/Predictions/ContenderDetailsScree
 import { PredictionsParamList } from './types';
 import Category from '../screens/Predictions/Category';
 import EventSelect from '../screens/Predictions/EventSelect';
-import EventPredictions from '../screens/Predictions/EventPredictions';
+import Event from '../screens/Predictions/Event';
 import ProfileNavigator from './ProfileNavigator';
 import theme from '../constants/theme';
 import { getHeaderTitle, headerSettings } from '../constants';
-import CreateContender from '../screens/Predictions/CreateContender';
 import AddPredictions from '../screens/Predictions/AddPredictions.tsx';
 
 const { Navigator, Screen } = createStackNavigator<PredictionsParamList>();
@@ -33,14 +32,14 @@ const PredictionsNavigator = () => {
         name="EventSelect"
         component={EventSelect}
         options={{
-          headerTitle: getHeaderTitle('Event Select'),
+          headerTitle: getHeaderTitle('Events'),
           cardStyle: theme.cardStyle,
           ...headerSettings,
         }}
       />
       <Screen
-        name="EventPredictions"
-        component={EventPredictions}
+        name="Event"
+        component={Event}
         options={{
           headerTitle: getHeaderTitle('Event Predictions'),
           headerLeft: BackButton,
@@ -71,16 +70,7 @@ const PredictionsNavigator = () => {
         name="AddPredictions"
         component={AddPredictions}
         options={{
-          headerTitle: getHeaderTitle('Add Predictions'),
-          headerLeft: BackButton,
-          ...headerSettings,
-        }}
-      />
-      <Screen
-        name="CreateContender"
-        component={CreateContender}
-        options={{
-          headerTitle: getHeaderTitle('Add Contender'),
+          headerTitle: getHeaderTitle('Add / Remove Predictions'),
           headerLeft: BackButton,
           ...headerSettings,
         }}

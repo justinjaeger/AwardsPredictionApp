@@ -8,14 +8,6 @@ interface iTextProps {
   style?: StyleProp<TextStyle>;
 }
 
-export const Header = (props: iTextProps) => {
-  return (
-    <Text category={'h1'} style={props.style}>
-      {props.children}
-    </Text>
-  );
-};
-
 export const SubHeader = (props: iTextProps) => {
   return (
     <Text
@@ -32,28 +24,12 @@ export const SubHeader = (props: iTextProps) => {
   );
 };
 
-export const Label = (props: iTextProps) => {
+export const SubHeaderLight = (props: iTextProps) => {
   return (
     <Text
-      category={'label'}
+      category={'h6'}
       style={{
         fontWeight: '400',
-        color: COLORS.lightest,
-        // @ts-ignore
-        ...props.style,
-      }}
-    >
-      {props.children}
-    </Text>
-  );
-};
-
-export const LabelBold = (props: iTextProps) => {
-  return (
-    <Text
-      category={'label'}
-      style={{
-        fontWeight: '700',
         color: COLORS.lightest,
         // @ts-ignore
         ...props.style,
@@ -80,7 +56,7 @@ export const Body = (props: iTextProps) => {
   );
 };
 
-export const BodyLarge = (props: iTextProps) => {
+export const BodyBold = (props: iTextProps) => {
   return (
     <Text
       category={'p1'}

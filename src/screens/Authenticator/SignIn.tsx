@@ -50,7 +50,7 @@ const SignIn = (p: any) => {
           const { data: user } = await ApiServices.getUserByEmail(email);
           const u = user?.listUsers?.items[0];
           if (!u) return;
-          signInUser(u.id, u.email);
+          signInUser(u.id, u.email, u.role);
           goBack();
         }
       }

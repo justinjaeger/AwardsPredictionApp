@@ -61,6 +61,7 @@ export const listContenders = /* GraphQL */ `
         contenderMovieId
         contenderPersonId
         contenderSongId
+        visibility
       }
     }
   }
@@ -117,6 +118,7 @@ export const listPredictionSets = /* GraphQL */ `
               contenderMovieId
               contenderPersonId
               contenderSongId
+              visibility
             }
             ranking
             createdAt

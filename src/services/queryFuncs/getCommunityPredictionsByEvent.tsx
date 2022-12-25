@@ -1,13 +1,19 @@
+import { ContenderVisibility } from '../../API';
 import {
   iEvent,
   iIndexedPredictionsByCategory,
   iNumberPredicting,
   iPrediction,
 } from '../../types';
+import { isWithinLastMonth } from '../../util/isWithinLastMonth';
 import { sortCommunityPredictions } from '../../util/sortPredictions';
 import ApiServices from '../graphql';
 
-const getCommunityPredictionsByEvent = async (event: iEvent) => {
+const getCommunityPredictionsByEvent = async (
+  event: iEvent,
+  _includeHidden?: boolean,
+) => {
+  const includeHidden = _includeHidden === undefined ? false : _includeHidden; // default to false
   const eventId = event.id;
   const { data: _contenders } = await ApiServices.getContendersByEvent(eventId);
   const contenders = _contenders?.listContenders?.items;
@@ -19,22 +25,35 @@ const getCommunityPredictionsByEvent = async (event: iEvent) => {
     const categoryId = con.categoryContendersId || '';
     const contenderPredictions = con?.predictions?.items;
     if (!contenderPredictions) return;
-    const np: iNumberPredicting = {};
-    contenderPredictions.forEach((cp) => {
-      const someUsersRanking = cp?.ranking || 0;
-      if (!np[someUsersRanking]) {
-        np[someUsersRanking] = 0;
+    const rankings: iNumberPredicting = {};
+    contenderPredictions.forEach((prediction) => {
+      const lastUpdated = prediction?.updatedAt || '';
+      // if lastUpdated is not in the last month, don't count it
+      const isRecentPrediction = isWithinLastMonth(lastUpdated);
+      if (isRecentPrediction) {
+        const someUsersRanking = prediction?.ranking || 0;
+        if (!rankings[someUsersRanking]) {
+          rankings[someUsersRanking] = 0;
+        }
+        rankings[someUsersRanking] += 1;
       }
-      np[someUsersRanking] += 1;
     });
     const communityPrediction: iPrediction = {
       ranking: 0,
-      communityRankings: np,
+      visibility: con.visibility || ContenderVisibility.VISIBLE,
+      communityRankings: rankings,
       contenderId: con.id || '', // won't happpen
       contenderMovie: con.movie || undefined, // won't happen
       contenderPerson: con.person || undefined,
       contenderSong: con.song || undefined,
     };
+    // if hidden and we don't want to include hidden, skip
+    if (
+      communityPrediction.visibility === ContenderVisibility.HIDDEN &&
+      includeHidden !== true
+    ) {
+      return;
+    }
     if (!data[categoryId]) data[categoryId] = [];
     data[categoryId].push(communityPrediction);
   });

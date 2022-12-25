@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
 import { CategoryName } from '../../../API';
+import { getCategorySlots } from '../../../constants/categories';
 import {
   getPosterDimensionsByWidth,
   PosterSize,
 } from '../../../constants/posterDimensions';
 import theme from '../../../constants/theme';
+import { useCategory } from '../../../context/CategoryContext';
 import { iCachedTmdbMovie } from '../../../services/cache/types';
 import TmdbServices from '../../../services/tmdb';
-import { iNumberPredicting } from '../../../types';
+import { iCategory, iEvent, iNumberPredicting } from '../../../types';
 import { getNumPredicting } from '../../../util/getNumPredicting';
 import { useAsyncEffect } from '../../../util/hooks';
 import Poster from '../../Images/Poster';
-import { BodyLarge, Label } from '../../Text';
+import { Body, BodyBold } from '../../Text';
 
 type iFilmListItemProps = {
   tmdbMovieId: number;
@@ -37,6 +39,10 @@ const FilmListItem = (props: iFilmListItemProps) => {
     onPress,
   } = props;
 
+  const { category: _category, event: _event } = useCategory();
+  const category = _category as iCategory;
+  const event = _event as iEvent;
+
   // TODO: based on category.name (CategoryName), display a distinct piece of information with the film like who the directors or screenwriters are
 
   const [tmdbMovie, setTmdbMovie] = useState<iCachedTmdbMovie | undefined>();
@@ -54,7 +60,10 @@ const FilmListItem = (props: iFilmListItemProps) => {
     ? getPosterDimensionsByWidth(width).height
     : size || PosterSize.MEDIUM;
 
-  const { win, nom } = getNumPredicting(communityRankings || {});
+  const { win, nom } = getNumPredicting(
+    communityRankings || {},
+    getCategorySlots(event.year, event.awardsBody, category.name),
+  );
 
   return (
     <View
@@ -73,17 +82,17 @@ const FilmListItem = (props: iFilmListItemProps) => {
         onPress={onPress}
       />
       <View style={{ flexDirection: 'column' }}>
-        <BodyLarge style={{ marginLeft: 10 }}>{tmdbMovie?.title || ''}</BodyLarge>
+        <BodyBold style={{ marginLeft: 10 }}>{tmdbMovie?.title || ''}</BodyBold>
         {categoryName === CategoryName.PICTURE ? (
-          <Label style={{ marginTop: 1, marginLeft: 10 }}>{movieStudio || ''}</Label>
+          <Body style={{ marginTop: 1, marginLeft: 10 }}>{movieStudio || ''}</Body>
         ) : null}
         {categoryInfo ? (
-          <BodyLarge style={{ marginLeft: 10 }}>{categoryInfo.join(', ')}</BodyLarge>
+          <BodyBold style={{ marginLeft: 10 }}>{categoryInfo.join(', ')}</BodyBold>
         ) : null}
         {communityRankings && size !== PosterSize.SMALL ? (
           <>
-            <BodyLarge style={{ marginLeft: 10 }}>{`pred win: ${win}`}</BodyLarge>
-            <BodyLarge style={{ marginLeft: 10 }}>{`pred nom: ${nom}`}</BodyLarge>
+            <BodyBold style={{ marginLeft: 10 }}>{`pred win: ${win}`}</BodyBold>
+            <BodyBold style={{ marginLeft: 10 }}>{`pred nom: ${nom}`}</BodyBold>
           </>
         ) : null}
       </View>

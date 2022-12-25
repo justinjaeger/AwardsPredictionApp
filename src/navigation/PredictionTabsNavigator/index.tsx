@@ -6,7 +6,7 @@ import {
   useWindowDimensions,
   View,
 } from 'react-native';
-import { BodyLarge } from '../../components/Text';
+import { BodyBold } from '../../components/Text';
 import { BOTTOM_TAB_HEIGHT } from '../../constants';
 import COLORS from '../../constants/colors';
 import { useCategory } from '../../context/CategoryContext';
@@ -29,10 +29,10 @@ const PredictionTab = (props: {
         borderRadius: 0,
       }}
       onPress={onPress}
-      underlayColor={COLORS.goldDark}
+      underlayColor={COLORS.secondaryDark}
     >
       <View style={{ zIndex: 3 }}>
-        <BodyLarge
+        <BodyBold
           style={{
             zIndex: 3,
             color: selected ? HIGHLIGHT_COLOR : COLORS.white,
@@ -40,7 +40,7 @@ const PredictionTab = (props: {
           }}
         >
           {text}
-        </BodyLarge>
+        </BodyBold>
       </View>
     </TouchableHighlight>
   );

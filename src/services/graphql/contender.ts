@@ -7,6 +7,9 @@ import {
   CreateContenderInput,
   GetContenderQuery,
   GetContenderQueryVariables,
+  ContenderVisibility,
+  UpdateContenderMutation,
+  UpdateContenderMutationVariables,
 } from '../../API';
 import * as mutations from '../../graphql/mutations';
 import * as queries from '../../graphql/queries';
@@ -55,6 +58,7 @@ const getUniqueContenders = async (
   }
 };
 
+// Every "create contender" function should call this
 const createContender = async (
   params: iContenderParams,
 ): Promise<iApiResponse<CreateContenderMutation>> => {
@@ -64,6 +68,7 @@ const createContender = async (
     categoryContendersId: categoryId,
     contenderMovieId: movieId,
     eventContendersId: eventId,
+    visibility: ContenderVisibility.VISIBLE,
   };
   if (personId) {
     input.contenderPersonId = personId;
@@ -233,6 +238,27 @@ export const getContenderById = async (
     }
     return { status: 'success', data };
   } catch (err) {
-    return handleError('error getting contenders by event', err);
+    return handleError('error getting contender by id', err);
+  }
+};
+
+export const updateContenderVisibilty = async (
+  contenderId: string,
+  contenderMovieId: string,
+  visibility: ContenderVisibility,
+): Promise<iApiResponse<UpdateContenderMutation>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<
+      UpdateContenderMutation,
+      UpdateContenderMutationVariables
+    >(mutations.updateContender, {
+      input: { id: contenderId, contenderMovieId, visibility },
+    });
+    if (!data?.updateContender) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data };
+  } catch (err) {
+    return handleError('error updating contender hidden', err);
   }
 };

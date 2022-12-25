@@ -7,14 +7,16 @@ import theme from '../../constants/theme';
 import { useCategory } from '../../context/CategoryContext';
 import { iCategory, iEvent, iPrediction } from '../../types';
 import ContenderListItem from '../List/ContenderList/ContenderListItem';
+import ContenderListItemCondensed from '../List/ContenderList/ContenderListItemCondensed';
 
 type iMovieListProps = {
   predictions: iPrediction[];
   setPredictions: (ps: iPrediction[]) => void;
+  isCollapsed?: boolean;
 };
 
 const MovieListDraggable = (props: iMovieListProps) => {
-  const { predictions, setPredictions } = props;
+  const { predictions, setPredictions, isCollapsed } = props;
   const { event: _event, category: _category } = useCategory();
 
   const event = _event as iEvent;
@@ -33,6 +35,15 @@ const MovieListDraggable = (props: iMovieListProps) => {
 
   const slots = getCategorySlots(event.year, event?.awardsBody, category.name);
 
+  const onPressItem = (item: iPrediction) => {
+    const id = item.contenderId;
+    if (selectedContenderId === id) {
+      setSelectedContenderId(undefined);
+    } else {
+      setSelectedContenderId(id);
+    }
+  };
+
   return (
     <DraggableFlatList
       data={predictions}
@@ -44,36 +55,48 @@ const MovieListDraggable = (props: iMovieListProps) => {
       }}
       renderItem={({ item: prediction, index: _index, drag, isActive }) => {
         const index = _index || 0;
-        const isMoreThanSlots = index > slots;
-        const ranking = isMoreThanSlots ? index : index + 1;
+        const ranking = index + 1;
         return (
           <>
             {index === slots ? (
               <Divider
-                style={{ margin: 10, borderWidth: 0.5, borderColor: COLORS.goldDark }}
+                style={{
+                  margin: 10,
+                  borderWidth: 0.5,
+                  borderColor: COLORS.secondaryDark,
+                }}
               />
             ) : null}
             <ScaleDecorator activeScale={0.9}>
-              <ContenderListItem
-                variant={'personal'}
-                prediction={prediction}
-                ranking={ranking}
-                selected={selectedContenderId === prediction.contenderId}
-                onPressItem={(item) => {
-                  const id = item.contenderId;
-                  if (selectedContenderId === id) {
-                    setSelectedContenderId(undefined);
-                  } else {
-                    setSelectedContenderId(id);
-                  }
-                }}
-                onPressThumbnail={onPressThumbnail}
-                draggable={{
-                  drag,
-                  isActive,
-                }}
-                categoryType={category.type}
-              />
+              {!isCollapsed ? (
+                <ContenderListItem
+                  variant={'personal'}
+                  prediction={prediction}
+                  ranking={ranking}
+                  selected={selectedContenderId === prediction.contenderId}
+                  onPressItem={onPressItem}
+                  onPressThumbnail={onPressThumbnail}
+                  draggable={{
+                    drag,
+                    isActive,
+                  }}
+                  categoryType={category.type}
+                />
+              ) : (
+                <ContenderListItemCondensed
+                  variant={'personal'}
+                  prediction={prediction}
+                  ranking={ranking}
+                  selected={selectedContenderId === prediction.contenderId}
+                  onPressItem={onPressItem}
+                  onPressThumbnail={onPressThumbnail}
+                  draggable={{
+                    drag,
+                    isActive,
+                  }}
+                  categoryType={category.type}
+                />
+              )}
             </ScaleDecorator>
           </>
         );

@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { Alert, Animated, View } from 'react-native';
-import { iCategoryListProps } from '.';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import BackButton from '../../../components/Buttons/BackButton';
 import { FAB } from '../../../components/Buttons/FAB';
@@ -11,20 +10,34 @@ import MovieGrid from '../../../components/MovieGrid';
 import MovieListDraggable from '../../../components/MovieList/MovieListDraggable';
 import SignedOutState from '../../../components/SignedOutState';
 import Snackbar from '../../../components/Snackbar';
-import { BodyLarge } from '../../../components/Text';
+import { BodyBold } from '../../../components/Text';
 import theme from '../../../constants/theme';
 import { useCategory } from '../../../context/CategoryContext';
 import { useAuth } from '../../../context/UserContext';
-import useQueryCommunityOrPersonalEvent from '../../../hooks/getCommunityOrPersonalEvent';
-import useMutationUpdatePredictions from '../../../hooks/updatePredictions';
+import { useCollapsible } from '../../../hooks/animatedState/useCollapsible';
+import { useDisplay } from '../../../hooks/animatedState/useDisplay';
+import useQueryCommunityOrPersonalEvent from '../../../hooks/queries/getCommunityOrPersonalEvent';
+import useMutationUpdatePredictions from '../../../hooks/mutations/updatePredictions';
 import { PredictionsParamList } from '../../../navigation/types';
 import { iCategory, iEvent, iPrediction } from '../../../types';
 import { useAsyncReference, useTypedNavigation } from '../../../util/hooks';
 import { CategoryHeader } from '../styles';
 
 // NOTE: Has a lot in common with ContenderListDraggable
-const CategoryPersonal = (props: iCategoryListProps) => {
-  const { display, delayedDisplay, toggleDisplay, gridOpacity, listOpacity } = props;
+const CategoryPersonal = () => {
+  const {
+    display,
+    delayedDisplay,
+    toggleDisplay,
+    gridOpacity,
+    listOpacity,
+  } = useDisplay();
+  const {
+    collapsedOpacity,
+    expandedOpacity,
+    isCollapsed,
+    toggleCollapsed,
+  } = useCollapsible();
 
   const { category: _category, event: _event } = useCategory();
   const { userId: _userId } = useAuth();
@@ -117,12 +130,14 @@ const CategoryPersonal = (props: iCategoryListProps) => {
           <CategoryHeader>
             <View style={{ flexDirection: 'row' }}>
               {!isEditing ? (
-                <HeaderButton
-                  onPress={() => {
-                    toggleDisplay();
-                  }}
-                  icon={display === 'grid' ? 'list' : display === 'list' ? 'grid' : ''}
-                />
+                <>
+                  <HeaderButton
+                    onPress={() => {
+                      toggleDisplay();
+                    }}
+                    icon={display === 'grid' ? 'list' : 'grid'}
+                  />
+                </>
               ) : (
                 <HeaderButton
                   onPress={() => {
@@ -144,6 +159,12 @@ const CategoryPersonal = (props: iCategoryListProps) => {
                   icon={'undo'}
                 />
               )}
+              <Animated.View style={{ opacity: listOpacity }}>
+                <HeaderButton
+                  onPress={toggleCollapsed}
+                  icon={isCollapsed ? 'collapse' : 'expand'}
+                />
+              </Animated.View>
             </View>
             <View style={{ flexDirection: 'row' }}>
               <HeaderButton
@@ -171,9 +192,9 @@ const CategoryPersonal = (props: iCategoryListProps) => {
                 justifyContent: 'center',
               }}
             >
-              <BodyLarge style={{ textAlign: 'center', lineHeight: 30 }}>
+              <BodyBold style={{ textAlign: 'center', lineHeight: 30 }}>
                 {'No predictions yet.\nAdd some!'}
-              </BodyLarge>
+              </BodyBold>
             </View>
           ) : null}
           <Animated.ScrollView
@@ -192,14 +213,33 @@ const CategoryPersonal = (props: iCategoryListProps) => {
           </Animated.ScrollView>
           <Animated.View
             style={{
-              display: delayedDisplay === 'list' ? 'flex' : 'none',
               opacity: listOpacity,
+              display: delayedDisplay === 'list' ? 'flex' : 'none',
             }}
           >
-            <MovieListDraggable
-              predictions={predictions}
-              setPredictions={(ps) => setPredictions(ps)}
-            />
+            <Animated.View
+              style={{
+                display: !isCollapsed ? 'flex' : 'none',
+                opacity: expandedOpacity,
+              }}
+            >
+              <MovieListDraggable
+                predictions={predictions}
+                setPredictions={(ps) => setPredictions(ps)}
+              />
+            </Animated.View>
+            <Animated.View
+              style={{
+                display: isCollapsed ? 'flex' : 'none',
+                opacity: collapsedOpacity,
+              }}
+            >
+              <MovieListDraggable
+                predictions={predictions}
+                setPredictions={(ps) => setPredictions(ps)}
+                isCollapsed
+              />
+            </Animated.View>
           </Animated.View>
           <FAB
             iconName="save-outline"

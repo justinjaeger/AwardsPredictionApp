@@ -1,21 +1,33 @@
 import React from 'react';
 import { Animated, View } from 'react-native';
-import { iCategoryListProps } from '.';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import HeaderButton from '../../../components/HeaderButton';
 import MovieGrid from '../../../components/MovieGrid';
 import MovieListCommunity from '../../../components/MovieList/MovieListCommunity';
-import { BodyLarge } from '../../../components/Text';
+import { BodyBold } from '../../../components/Text';
 import theme from '../../../constants/theme';
 import { useCategory } from '../../../context/CategoryContext';
 import { useAuth } from '../../../context/UserContext';
-import useQueryCommunityOrPersonalEvent from '../../../hooks/getCommunityOrPersonalEvent';
+import { useCollapsible } from '../../../hooks/animatedState/useCollapsible';
+import { useDisplay } from '../../../hooks/animatedState/useDisplay';
+import useQueryCommunityOrPersonalEvent from '../../../hooks/queries/getCommunityOrPersonalEvent';
 import { iCategory, iEvent } from '../../../types';
 import { CategoryHeader } from '../styles';
 
-// NOTE: Has a lot in common with ContenderListDraggable
-const CategoryCommunity = (props: iCategoryListProps) => {
-  const { display, delayedDisplay, toggleDisplay, gridOpacity, listOpacity } = props;
+const CategoryCommunity = () => {
+  const {
+    display,
+    delayedDisplay,
+    toggleDisplay,
+    gridOpacity,
+    listOpacity,
+  } = useDisplay();
+  const {
+    collapsedOpacity,
+    expandedOpacity,
+    isCollapsed,
+    toggleCollapsed,
+  } = useCollapsible();
 
   const { category: _category, event: _event } = useCategory();
   const { userId } = useAuth();
@@ -43,8 +55,14 @@ const CategoryCommunity = (props: iCategoryListProps) => {
               onPress={() => {
                 toggleDisplay();
               }}
-              icon={display === 'grid' ? 'list' : display === 'list' ? 'grid' : ''}
+              icon={display === 'grid' ? 'list' : 'grid'}
             />
+            <Animated.View style={{ opacity: listOpacity }}>
+              <HeaderButton
+                onPress={toggleCollapsed}
+                icon={isCollapsed ? 'collapse' : 'expand'}
+              />
+            </Animated.View>
           </View>
           <Animated.View
             style={{
@@ -53,15 +71,16 @@ const CategoryCommunity = (props: iCategoryListProps) => {
               justifyContent: 'space-between',
               alignItems: 'center',
               opacity: listOpacity,
+              display: delayedDisplay === 'list' ? 'flex' : 'none',
             }}
           >
             <View>
-              <BodyLarge style={{ textAlign: 'right' }}>Predict</BodyLarge>
-              <BodyLarge style={{ textAlign: 'right' }}>Nom</BodyLarge>
+              <BodyBold style={{ textAlign: 'right' }}>Predict</BodyBold>
+              <BodyBold style={{ textAlign: 'right' }}>Nom</BodyBold>
             </View>
             <View>
-              <BodyLarge style={{ textAlign: 'right' }}>Predict</BodyLarge>
-              <BodyLarge style={{ textAlign: 'right' }}>Win</BodyLarge>
+              <BodyBold style={{ textAlign: 'right' }}>Predict</BodyBold>
+              <BodyBold style={{ textAlign: 'right' }}>Win</BodyBold>
             </View>
           </Animated.View>
         </CategoryHeader>
@@ -74,13 +93,14 @@ const CategoryCommunity = (props: iCategoryListProps) => {
               justifyContent: 'center',
             }}
           >
-            <BodyLarge>No films in this category</BodyLarge>
+            <BodyBold>No films in this category</BodyBold>
           </View>
         ) : null}
         <Animated.ScrollView
           style={{
             display: delayedDisplay === 'grid' ? 'flex' : 'none',
             opacity: gridOpacity,
+            width: '100%',
           }}
           contentContainerStyle={{
             paddingBottom: 100,
@@ -93,12 +113,27 @@ const CategoryCommunity = (props: iCategoryListProps) => {
         </Animated.ScrollView>
         <Animated.View
           style={{
-            display: delayedDisplay === 'list' ? 'flex' : 'none',
             opacity: listOpacity,
-            width: '100%',
+            display: delayedDisplay === 'list' ? 'flex' : 'none',
           }}
         >
-          <MovieListCommunity predictions={predictions} />
+          <Animated.View
+            style={{
+              display: !isCollapsed ? 'flex' : 'none',
+              opacity: expandedOpacity,
+              width: '100%',
+            }}
+          >
+            <MovieListCommunity predictions={predictions} />
+          </Animated.View>
+          <Animated.View
+            style={{
+              display: isCollapsed ? 'flex' : 'none',
+              opacity: collapsedOpacity,
+            }}
+          >
+            <MovieListCommunity predictions={predictions} isCollapsed />
+          </Animated.View>
         </Animated.View>
       </>
     </BackgroundWrapper>

@@ -100,6 +100,7 @@ export const createPredictionSet = /* GraphQL */ `
             contenders {
               items {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -200,6 +201,7 @@ export const createPredictionSet = /* GraphQL */ `
               }
               nextToken
             }
+            visibility
             didReceiveNominationOrWin
             createdAt
             updatedAt
@@ -294,6 +296,7 @@ export const createPredictionSet = /* GraphQL */ `
               predictions {
                 nextToken
               }
+              visibility
               didReceiveNominationOrWin
               createdAt
               updatedAt
@@ -392,6 +395,7 @@ export const createPredictionSet = /* GraphQL */ `
               }
               nextToken
             }
+            visibility
             didReceiveNominationOrWin
             createdAt
             updatedAt
@@ -501,6 +505,7 @@ export const createPredictionSet = /* GraphQL */ `
               }
               nextToken
             }
+            visibility
             didReceiveNominationOrWin
             createdAt
             updatedAt
@@ -572,6 +577,7 @@ export const updatePredictionSet = /* GraphQL */ `
             contenders {
               items {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -672,6 +678,7 @@ export const updatePredictionSet = /* GraphQL */ `
               }
               nextToken
             }
+            visibility
             didReceiveNominationOrWin
             createdAt
             updatedAt
@@ -766,6 +773,7 @@ export const updatePredictionSet = /* GraphQL */ `
               predictions {
                 nextToken
               }
+              visibility
               didReceiveNominationOrWin
               createdAt
               updatedAt
@@ -864,6 +872,7 @@ export const updatePredictionSet = /* GraphQL */ `
               }
               nextToken
             }
+            visibility
             didReceiveNominationOrWin
             createdAt
             updatedAt
@@ -973,6 +982,7 @@ export const updatePredictionSet = /* GraphQL */ `
               }
               nextToken
             }
+            visibility
             didReceiveNominationOrWin
             createdAt
             updatedAt
@@ -1044,6 +1054,7 @@ export const deletePredictionSet = /* GraphQL */ `
             contenders {
               items {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -1144,6 +1155,7 @@ export const deletePredictionSet = /* GraphQL */ `
               }
               nextToken
             }
+            visibility
             didReceiveNominationOrWin
             createdAt
             updatedAt
@@ -1238,6 +1250,7 @@ export const deletePredictionSet = /* GraphQL */ `
               predictions {
                 nextToken
               }
+              visibility
               didReceiveNominationOrWin
               createdAt
               updatedAt
@@ -1336,6 +1349,7 @@ export const deletePredictionSet = /* GraphQL */ `
               }
               nextToken
             }
+            visibility
             didReceiveNominationOrWin
             createdAt
             updatedAt
@@ -1445,6 +1459,7 @@ export const deletePredictionSet = /* GraphQL */ `
               }
               nextToken
             }
+            visibility
             didReceiveNominationOrWin
             createdAt
             updatedAt
@@ -1516,6 +1531,7 @@ export const createHistoryPredictionSet = /* GraphQL */ `
             contenders {
               items {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -1616,6 +1632,7 @@ export const createHistoryPredictionSet = /* GraphQL */ `
               }
               nextToken
             }
+            visibility
             didReceiveNominationOrWin
             createdAt
             updatedAt
@@ -1710,6 +1727,7 @@ export const createHistoryPredictionSet = /* GraphQL */ `
               predictions {
                 nextToken
               }
+              visibility
               didReceiveNominationOrWin
               createdAt
               updatedAt
@@ -1808,6 +1826,7 @@ export const createHistoryPredictionSet = /* GraphQL */ `
               }
               nextToken
             }
+            visibility
             didReceiveNominationOrWin
             createdAt
             updatedAt
@@ -1917,6 +1936,7 @@ export const createHistoryPredictionSet = /* GraphQL */ `
               }
               nextToken
             }
+            visibility
             didReceiveNominationOrWin
             createdAt
             updatedAt
@@ -1988,6 +2008,7 @@ export const updateHistoryPredictionSet = /* GraphQL */ `
             contenders {
               items {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -2088,6 +2109,7 @@ export const updateHistoryPredictionSet = /* GraphQL */ `
               }
               nextToken
             }
+            visibility
             didReceiveNominationOrWin
             createdAt
             updatedAt
@@ -2182,6 +2204,7 @@ export const updateHistoryPredictionSet = /* GraphQL */ `
               predictions {
                 nextToken
               }
+              visibility
               didReceiveNominationOrWin
               createdAt
               updatedAt
@@ -2280,6 +2303,7 @@ export const updateHistoryPredictionSet = /* GraphQL */ `
               }
               nextToken
             }
+            visibility
             didReceiveNominationOrWin
             createdAt
             updatedAt
@@ -2389,6 +2413,7 @@ export const updateHistoryPredictionSet = /* GraphQL */ `
               }
               nextToken
             }
+            visibility
             didReceiveNominationOrWin
             createdAt
             updatedAt
@@ -2460,6 +2485,7 @@ export const deleteHistoryPredictionSet = /* GraphQL */ `
             contenders {
               items {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -2560,6 +2586,7 @@ export const deleteHistoryPredictionSet = /* GraphQL */ `
               }
               nextToken
             }
+            visibility
             didReceiveNominationOrWin
             createdAt
             updatedAt
@@ -2654,6 +2681,7 @@ export const deleteHistoryPredictionSet = /* GraphQL */ `
               predictions {
                 nextToken
               }
+              visibility
               didReceiveNominationOrWin
               createdAt
               updatedAt
@@ -2752,6 +2780,7 @@ export const deleteHistoryPredictionSet = /* GraphQL */ `
               }
               nextToken
             }
+            visibility
             didReceiveNominationOrWin
             createdAt
             updatedAt
@@ -2861,6 +2890,7 @@ export const deleteHistoryPredictionSet = /* GraphQL */ `
               }
               nextToken
             }
+            visibility
             didReceiveNominationOrWin
             createdAt
             updatedAt
@@ -2930,6 +2960,7 @@ export const createPrediction = /* GraphQL */ `
             contenders {
               items {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -2992,6 +3023,7 @@ export const createPrediction = /* GraphQL */ `
               predictions {
                 nextToken
               }
+              visibility
               didReceiveNominationOrWin
               createdAt
               updatedAt
@@ -3080,6 +3112,7 @@ export const createPrediction = /* GraphQL */ `
               predictions {
                 nextToken
               }
+              visibility
               didReceiveNominationOrWin
               createdAt
               updatedAt
@@ -3183,6 +3216,7 @@ export const createPrediction = /* GraphQL */ `
               predictions {
                 nextToken
               }
+              visibility
               didReceiveNominationOrWin
               createdAt
               updatedAt
@@ -3202,6 +3236,7 @@ export const createPrediction = /* GraphQL */ `
           }
           nextToken
         }
+        visibility
         didReceiveNominationOrWin
         createdAt
         updatedAt
@@ -3263,6 +3298,7 @@ export const updatePrediction = /* GraphQL */ `
             contenders {
               items {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -3325,6 +3361,7 @@ export const updatePrediction = /* GraphQL */ `
               predictions {
                 nextToken
               }
+              visibility
               didReceiveNominationOrWin
               createdAt
               updatedAt
@@ -3413,6 +3450,7 @@ export const updatePrediction = /* GraphQL */ `
               predictions {
                 nextToken
               }
+              visibility
               didReceiveNominationOrWin
               createdAt
               updatedAt
@@ -3516,6 +3554,7 @@ export const updatePrediction = /* GraphQL */ `
               predictions {
                 nextToken
               }
+              visibility
               didReceiveNominationOrWin
               createdAt
               updatedAt
@@ -3535,6 +3574,7 @@ export const updatePrediction = /* GraphQL */ `
           }
           nextToken
         }
+        visibility
         didReceiveNominationOrWin
         createdAt
         updatedAt
@@ -3596,6 +3636,7 @@ export const deletePrediction = /* GraphQL */ `
             contenders {
               items {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -3658,6 +3699,7 @@ export const deletePrediction = /* GraphQL */ `
               predictions {
                 nextToken
               }
+              visibility
               didReceiveNominationOrWin
               createdAt
               updatedAt
@@ -3746,6 +3788,7 @@ export const deletePrediction = /* GraphQL */ `
               predictions {
                 nextToken
               }
+              visibility
               didReceiveNominationOrWin
               createdAt
               updatedAt
@@ -3849,6 +3892,7 @@ export const deletePrediction = /* GraphQL */ `
               predictions {
                 nextToken
               }
+              visibility
               didReceiveNominationOrWin
               createdAt
               updatedAt
@@ -3868,6 +3912,7 @@ export const deletePrediction = /* GraphQL */ `
           }
           nextToken
         }
+        visibility
         didReceiveNominationOrWin
         createdAt
         updatedAt
@@ -3917,6 +3962,7 @@ export const createEvent = /* GraphQL */ `
             contenders {
               items {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -3979,6 +4025,7 @@ export const createEvent = /* GraphQL */ `
               predictions {
                 nextToken
               }
+              visibility
               didReceiveNominationOrWin
               createdAt
               updatedAt
@@ -4024,6 +4071,7 @@ export const createEvent = /* GraphQL */ `
             contenders {
               items {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -4057,6 +4105,7 @@ export const createEvent = /* GraphQL */ `
             contenders {
               items {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -4118,6 +4167,7 @@ export const createEvent = /* GraphQL */ `
               }
               contender {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -4137,6 +4187,7 @@ export const createEvent = /* GraphQL */ `
             }
             nextToken
           }
+          visibility
           didReceiveNominationOrWin
           createdAt
           updatedAt
@@ -4186,6 +4237,7 @@ export const updateEvent = /* GraphQL */ `
             contenders {
               items {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -4248,6 +4300,7 @@ export const updateEvent = /* GraphQL */ `
               predictions {
                 nextToken
               }
+              visibility
               didReceiveNominationOrWin
               createdAt
               updatedAt
@@ -4293,6 +4346,7 @@ export const updateEvent = /* GraphQL */ `
             contenders {
               items {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -4326,6 +4380,7 @@ export const updateEvent = /* GraphQL */ `
             contenders {
               items {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -4387,6 +4442,7 @@ export const updateEvent = /* GraphQL */ `
               }
               contender {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -4406,6 +4462,7 @@ export const updateEvent = /* GraphQL */ `
             }
             nextToken
           }
+          visibility
           didReceiveNominationOrWin
           createdAt
           updatedAt
@@ -4455,6 +4512,7 @@ export const deleteEvent = /* GraphQL */ `
             contenders {
               items {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -4517,6 +4575,7 @@ export const deleteEvent = /* GraphQL */ `
               predictions {
                 nextToken
               }
+              visibility
               didReceiveNominationOrWin
               createdAt
               updatedAt
@@ -4562,6 +4621,7 @@ export const deleteEvent = /* GraphQL */ `
             contenders {
               items {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -4595,6 +4655,7 @@ export const deleteEvent = /* GraphQL */ `
             contenders {
               items {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -4656,6 +4717,7 @@ export const deleteEvent = /* GraphQL */ `
               }
               contender {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -4675,6 +4737,7 @@ export const deleteEvent = /* GraphQL */ `
             }
             nextToken
           }
+          visibility
           didReceiveNominationOrWin
           createdAt
           updatedAt
@@ -4729,6 +4792,7 @@ export const createCategory = /* GraphQL */ `
             contenders {
               items {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -4829,6 +4893,7 @@ export const createCategory = /* GraphQL */ `
               }
               nextToken
             }
+            visibility
             didReceiveNominationOrWin
             createdAt
             updatedAt
@@ -4872,6 +4937,7 @@ export const createCategory = /* GraphQL */ `
             contenders {
               items {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -4905,6 +4971,7 @@ export const createCategory = /* GraphQL */ `
             contenders {
               items {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -4966,6 +5033,7 @@ export const createCategory = /* GraphQL */ `
               }
               contender {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -4985,6 +5053,7 @@ export const createCategory = /* GraphQL */ `
             }
             nextToken
           }
+          visibility
           didReceiveNominationOrWin
           createdAt
           updatedAt
@@ -5037,6 +5106,7 @@ export const updateCategory = /* GraphQL */ `
             contenders {
               items {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -5137,6 +5207,7 @@ export const updateCategory = /* GraphQL */ `
               }
               nextToken
             }
+            visibility
             didReceiveNominationOrWin
             createdAt
             updatedAt
@@ -5180,6 +5251,7 @@ export const updateCategory = /* GraphQL */ `
             contenders {
               items {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -5213,6 +5285,7 @@ export const updateCategory = /* GraphQL */ `
             contenders {
               items {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -5274,6 +5347,7 @@ export const updateCategory = /* GraphQL */ `
               }
               contender {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -5293,6 +5367,7 @@ export const updateCategory = /* GraphQL */ `
             }
             nextToken
           }
+          visibility
           didReceiveNominationOrWin
           createdAt
           updatedAt
@@ -5345,6 +5420,7 @@ export const deleteCategory = /* GraphQL */ `
             contenders {
               items {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -5445,6 +5521,7 @@ export const deleteCategory = /* GraphQL */ `
               }
               nextToken
             }
+            visibility
             didReceiveNominationOrWin
             createdAt
             updatedAt
@@ -5488,6 +5565,7 @@ export const deleteCategory = /* GraphQL */ `
             contenders {
               items {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -5521,6 +5599,7 @@ export const deleteCategory = /* GraphQL */ `
             contenders {
               items {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -5582,6 +5661,7 @@ export const deleteCategory = /* GraphQL */ `
               }
               contender {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -5601,6 +5681,7 @@ export const deleteCategory = /* GraphQL */ `
             }
             nextToken
           }
+          visibility
           didReceiveNominationOrWin
           createdAt
           updatedAt
@@ -5702,6 +5783,7 @@ export const createContender = /* GraphQL */ `
               predictions {
                 nextToken
               }
+              visibility
               didReceiveNominationOrWin
               createdAt
               updatedAt
@@ -5800,6 +5882,7 @@ export const createContender = /* GraphQL */ `
               }
               nextToken
             }
+            visibility
             didReceiveNominationOrWin
             createdAt
             updatedAt
@@ -5841,6 +5924,7 @@ export const createContender = /* GraphQL */ `
             contenders {
               items {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -5941,6 +6025,7 @@ export const createContender = /* GraphQL */ `
               }
               nextToken
             }
+            visibility
             didReceiveNominationOrWin
             createdAt
             updatedAt
@@ -6080,6 +6165,7 @@ export const createContender = /* GraphQL */ `
               }
               nextToken
             }
+            visibility
             didReceiveNominationOrWin
             createdAt
             updatedAt
@@ -6099,6 +6185,7 @@ export const createContender = /* GraphQL */ `
         }
         nextToken
       }
+      visibility
       didReceiveNominationOrWin
       createdAt
       updatedAt
@@ -6194,6 +6281,7 @@ export const updateContender = /* GraphQL */ `
               predictions {
                 nextToken
               }
+              visibility
               didReceiveNominationOrWin
               createdAt
               updatedAt
@@ -6292,6 +6380,7 @@ export const updateContender = /* GraphQL */ `
               }
               nextToken
             }
+            visibility
             didReceiveNominationOrWin
             createdAt
             updatedAt
@@ -6333,6 +6422,7 @@ export const updateContender = /* GraphQL */ `
             contenders {
               items {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -6433,6 +6523,7 @@ export const updateContender = /* GraphQL */ `
               }
               nextToken
             }
+            visibility
             didReceiveNominationOrWin
             createdAt
             updatedAt
@@ -6572,6 +6663,7 @@ export const updateContender = /* GraphQL */ `
               }
               nextToken
             }
+            visibility
             didReceiveNominationOrWin
             createdAt
             updatedAt
@@ -6591,6 +6683,7 @@ export const updateContender = /* GraphQL */ `
         }
         nextToken
       }
+      visibility
       didReceiveNominationOrWin
       createdAt
       updatedAt
@@ -6686,6 +6779,7 @@ export const deleteContender = /* GraphQL */ `
               predictions {
                 nextToken
               }
+              visibility
               didReceiveNominationOrWin
               createdAt
               updatedAt
@@ -6784,6 +6878,7 @@ export const deleteContender = /* GraphQL */ `
               }
               nextToken
             }
+            visibility
             didReceiveNominationOrWin
             createdAt
             updatedAt
@@ -6825,6 +6920,7 @@ export const deleteContender = /* GraphQL */ `
             contenders {
               items {
                 id
+                visibility
                 didReceiveNominationOrWin
                 createdAt
                 updatedAt
@@ -6925,6 +7021,7 @@ export const deleteContender = /* GraphQL */ `
               }
               nextToken
             }
+            visibility
             didReceiveNominationOrWin
             createdAt
             updatedAt
@@ -7064,6 +7161,7 @@ export const deleteContender = /* GraphQL */ `
               }
               nextToken
             }
+            visibility
             didReceiveNominationOrWin
             createdAt
             updatedAt
@@ -7083,6 +7181,7 @@ export const deleteContender = /* GraphQL */ `
         }
         nextToken
       }
+      visibility
       didReceiveNominationOrWin
       createdAt
       updatedAt

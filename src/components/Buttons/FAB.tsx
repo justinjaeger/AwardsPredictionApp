@@ -52,7 +52,7 @@ export const FAB = (props: iFABProps) => {
           margin: 10,
         }}
         onPress={onPress}
-        underlayColor={COLORS.goldDark}
+        underlayColor={COLORS.secondaryDark}
       >
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           {iconName ? (

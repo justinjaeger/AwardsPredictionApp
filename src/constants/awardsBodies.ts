@@ -18,7 +18,7 @@ export const AWARDS_BODY_TO_STRING: {
   [AwardsBody.ACADEMY_AWARDS]: 'Academy Award',
   [AwardsBody.ADG]: 'Art Directors Guild',
   [AwardsBody.ASC]: 'American Society of Cinematographers',
-  [AwardsBody.BAFTA]: 'British Academy of Film and Television',
+  [AwardsBody.BAFTA]: 'BAFTA',
   [AwardsBody.CDG]: 'Costume Designers Guild',
   [AwardsBody.CRITICS_CHOICE]: 'Critics Choice',
   [AwardsBody.DGA]: 'Directors Guild',

@@ -5,6 +5,7 @@ import CustomIcon from '../CustomIcon';
 import COLORS from '../../constants/colors';
 import { useDebounce } from '../../util/hooks';
 import { View } from 'react-native';
+import { HEADER_HEIGHT } from '../../constants';
 
 const INPUT_HEIGHT = 50;
 
@@ -55,7 +56,7 @@ const SearchInput = (props: {
         label={label}
         value={searchInput}
         placeholder={placeholder}
-        placeholderTextColor={COLORS.border}
+        placeholderTextColor={COLORS.gray}
         onChangeText={setSearchInput}
         caption={caption}
         onBlur={onBlur}
@@ -68,11 +69,11 @@ const SearchInput = (props: {
           color: 'green',
           ...style,
         }}
-        selectionColor={COLORS.border} // the cursor
+        selectionColor={COLORS.gray} // the cursor
         textStyle={{
           marginLeft: 10,
           marginRight: '20%',
-          height: INPUT_HEIGHT - 15,
+          height: HEADER_HEIGHT - 15,
           fontSize: 16,
           color: COLORS.white,
         }}
@@ -80,7 +81,7 @@ const SearchInput = (props: {
         accessoryLeft={() => (
           <CustomIcon
             name="search-outline"
-            color={COLORS.border}
+            color={COLORS.gray}
             size={25}
             styles={{ marginLeft: 10 }}
           />
@@ -91,16 +92,15 @@ const SearchInput = (props: {
         <View
           style={{
             position: 'absolute',
-            top: 18,
             right: 20,
             justifyContent: 'center',
-            height: INPUT_HEIGHT,
+            height: HEADER_HEIGHT,
           }}
         >
           <Spinner
             size="medium"
             status="secondary"
-            style={{ borderColor: COLORS.border }}
+            style={{ borderColor: COLORS.gray }}
           />
         </View>
       ) : null}

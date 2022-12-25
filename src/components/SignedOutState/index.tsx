@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import BackgroundWrapper from '../BackgroundWrapper';
 import { SubmitButton } from '../Buttons';
-import { BodyLarge } from '../Text';
+import { BodyBold } from '../Text';
 
 const SignedOutState = () => {
   const navigation = useNavigation();
@@ -10,9 +10,9 @@ const SignedOutState = () => {
   return (
     <BackgroundWrapper>
       <>
-        <BodyLarge style={{ marginTop: '10%', fontWeight: '400' }}>
+        <BodyBold style={{ marginTop: '10%', fontWeight: '400' }}>
           Sign in to make predictions.
-        </BodyLarge>
+        </BodyBold>
         <SubmitButton
           text={'Sign in'}
           onPress={() => {
