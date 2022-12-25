@@ -17,6 +17,7 @@ import { FAB } from '../../../components/Buttons/FAB';
 import CreateContender from '../CreateContender';
 import { CATEGORY_TYPE_TO_STRING } from '../../../constants/categories';
 import Snackbar from '../../../components/Snackbar';
+import { CategoryType } from '../../../API';
 
 const AddPredictions = () => {
   const {
@@ -164,7 +165,13 @@ const AddPredictions = () => {
                 }}
               >
                 <BodyBold style={{ textAlign: 'center', lineHeight: 30 }}>
-                  {'No predictions yet.\nAdd some!'}
+                  {`Search for ${
+                    category.type === CategoryType.FILM
+                      ? 'films'
+                      : category.type === CategoryType.PERFORMANCE
+                      ? 'performances'
+                      : 'songs'
+                  }`}
                 </BodyBold>
               </View>
             ) : selectedPredictions.length === 0 ? (

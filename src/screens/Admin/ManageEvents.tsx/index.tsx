@@ -15,7 +15,11 @@ import LoadingStatue from '../../../components/LoadingStatue';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import useQueryAllEvents from '../../../hooks/queries/getAllEvents';
 import AwardsBodyImage from '../../../components/AwardsBodyImage';
-import { EVENT_STATUS_TO_STRING } from '../../../constants/events';
+import {
+  eventIsForNominations,
+  EVENT_STATUS_TO_STRING,
+  getEventTime,
+} from '../../../constants/events';
 import { useAuth } from '../../../context/UserContext';
 import useQueryGetUser from '../../../hooks/queries/getUser';
 import { SubmitButton } from '../../../components/Buttons';
@@ -23,11 +27,6 @@ import UpdateStatusModal from './UpdateStatusModal';
 import CreateEventModal from './CreateEventModal';
 import SelectCategoryModal from './SelectCategoryModal';
 import UpdateExpirationModal from './UpdateExpirationModal';
-import { formatDateTime } from '../../../util/formatDateTime';
-
-export const getEventName = (awardsBody: AwardsBody) => {
-  return AWARDS_BODY_TO_PLURAL_STRING[AwardsBody[awardsBody]];
-};
 
 const ManageEvents = () => {
   const { width } = useWindowDimensions();
@@ -55,18 +54,15 @@ const ManageEvents = () => {
     }
   }, [events, user, userId]);
 
-  const eventList = Object.values(events || {});
+  const eventList = _.values(events || {});
   const orderedEvents = sortByObjectOrder<AwardsBody, iEvent>(
     AWARDS_BODY_TO_STRING,
-    Object.values(eventList),
+    _.values(eventList),
     eventList.map((e) => AwardsBody[e.awardsBody]),
   );
   const groupedByYear = _.groupBy(orderedEvents, (e) => e.year);
 
   const userIsAdmin = user ? user.role === UserRole.ADMIN : false;
-
-  const eventIsForNominations = (eventStatus: EventStatus) =>
-    [EventStatus.NOMS_LIVE, EventStatus.NOMS_STAGING].includes(eventStatus);
 
   const EventProperty = (_props: {
     event: iEvent;
@@ -124,90 +120,82 @@ const ManageEvents = () => {
               text={'Create Event'}
               style={{ width: 'auto', padding: 10, margin: 10 }}
             />
-            {Object.entries(groupedByYear).map(([year, events]) => (
-              <View key={year}>
-                <SubHeader style={{ marginBottom: theme.windowMargin }}>{`${
-                  parseInt(year, 10) - 1
-                }/${year.slice(2)}`}</SubHeader>
-                <View style={{ flexWrap: 'wrap', flexDirection: 'row' }}>
-                  {events.map((event) => {
-                    const { awardsBody, status } = event;
-                    const eventIsAdminOnly = status === EventStatus.NOMS_STAGING;
-                    if (eventIsAdminOnly && !userIsAdmin) return null; // don't display events with status NOMS_STAGING to non-admin
-
-                    const nomDateTime = new Date(event?.nominationDateTime || '');
-                    const winDateTime = new Date(event?.winDateTime || '');
-                    const dateTime =
-                      EventStatus.ARCHIVED === event.status
-                        ? 'Archived'
-                        : eventIsForNominations(event.status)
-                        ? event.nominationDateTime
-                          ? formatDateTime(nomDateTime)
-                          : 'no nomination time set'
-                        : event.winDateTime
-                        ? formatDateTime(winDateTime)
-                        : 'no win time set';
-                    return (
-                      <TouchableHighlight
-                        key={event.id}
-                        style={{
-                          flexDirection: 'column',
-                          backgroundColor: 'rgba(0,0,0,0.1)',
-                          borderRadius: theme.borderRadius,
-                          borderWidth: 1,
-                          borderColor: COLORS.white,
-                          marginBottom: theme.windowMargin,
-                          marginRight: theme.windowMargin,
-                          width: width - theme.windowMargin * 2,
-                          padding: 10,
-                          justifyContent: 'flex-start',
-                        }}
-                        underlayColor={COLORS.secondaryDark}
-                        onPressIn={() => setHighlightedEvent(event.id)}
-                        onPressOut={() => setHighlightedEvent('')}
-                      >
-                        <>
-                          <View style={{ flexDirection: 'row' }}>
-                            <AwardsBodyImage
-                              awardsBody={awardsBody}
-                              white={highlightedEvent === event.id}
-                            />
-                            <View
-                              style={{
-                                flexDirection: 'column',
-                                justifyContent: 'space-around',
-                              }}
-                            >
-                              <SubHeader>
-                                {AWARDS_BODY_TO_PLURAL_STRING[awardsBody]}
-                              </SubHeader>
+            {_.entries(groupedByYear)
+              .sort(([yearA], [yearB]) =>
+                parseInt(yearA, 10) > parseInt(yearB, 10) ? -1 : 1,
+              )
+              .map(([year, events]) => (
+                <View key={year}>
+                  <SubHeader style={{ marginBottom: theme.windowMargin }}>{`${
+                    parseInt(year, 10) - 1
+                  }/${year.slice(2)}`}</SubHeader>
+                  <View style={{ flexWrap: 'wrap', flexDirection: 'row' }}>
+                    {events.map((event) => {
+                      const { awardsBody, status } = event;
+                      const eventIsAdminOnly = status === EventStatus.NOMS_STAGING;
+                      if (eventIsAdminOnly && !userIsAdmin) return null; // don't display events with status NOMS_STAGING to non-admin
+                      const dateTime = getEventTime(event);
+                      return (
+                        <TouchableHighlight
+                          key={event.id}
+                          style={{
+                            flexDirection: 'column',
+                            backgroundColor: 'rgba(0,0,0,0.1)',
+                            borderRadius: theme.borderRadius,
+                            borderWidth: 1,
+                            borderColor: COLORS.white,
+                            marginBottom: theme.windowMargin,
+                            marginRight: theme.windowMargin,
+                            width: width - theme.windowMargin * 2,
+                            padding: 10,
+                            justifyContent: 'flex-start',
+                          }}
+                          underlayColor={COLORS.secondaryDark}
+                          onPressIn={() => setHighlightedEvent(event.id)}
+                          onPressOut={() => setHighlightedEvent('')}
+                        >
+                          <>
+                            <View style={{ flexDirection: 'row' }}>
+                              <AwardsBodyImage
+                                awardsBody={awardsBody}
+                                white={highlightedEvent === event.id}
+                              />
+                              <View
+                                style={{
+                                  flexDirection: 'column',
+                                  justifyContent: 'space-around',
+                                }}
+                              >
+                                <SubHeader>
+                                  {AWARDS_BODY_TO_PLURAL_STRING[awardsBody]}
+                                </SubHeader>
+                              </View>
                             </View>
-                          </View>
-                          <EventProperty
-                            label={EVENT_STATUS_TO_STRING[status]}
-                            buttonLabel={'Update Status'}
-                            event={event}
-                            onPress={() => setOpenUpdateStatusModal(true)}
-                          />
-                          <EventProperty
-                            label={dateTime}
-                            buttonLabel={'Update Expiration'}
-                            event={event}
-                            onPress={() => setOpenUpdateExpirationModal(true)}
-                          />
-                          <EventProperty
-                            label={'Manage Contenders'}
-                            buttonLabel={'Manage Contenders'}
-                            event={event}
-                            onPress={() => setOpenSelectCategoryModal(true)}
-                          />
-                        </>
-                      </TouchableHighlight>
-                    );
-                  })}
+                            <EventProperty
+                              label={EVENT_STATUS_TO_STRING[status]}
+                              buttonLabel={'Update Status'}
+                              event={event}
+                              onPress={() => setOpenUpdateStatusModal(true)}
+                            />
+                            <EventProperty
+                              label={dateTime === '' ? 'no time set' : dateTime}
+                              buttonLabel={'Update Expiration'}
+                              event={event}
+                              onPress={() => setOpenUpdateExpirationModal(true)}
+                            />
+                            <EventProperty
+                              label={'Manage Contenders'}
+                              buttonLabel={'Manage Contenders'}
+                              event={event}
+                              onPress={() => setOpenSelectCategoryModal(true)}
+                            />
+                          </>
+                        </TouchableHighlight>
+                      );
+                    })}
+                  </View>
                 </View>
-              </View>
-            ))}
+              ))}
           </Animated.ScrollView>
         )}
         <UpdateStatusModal

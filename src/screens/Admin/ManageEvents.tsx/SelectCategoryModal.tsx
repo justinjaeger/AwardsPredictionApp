@@ -44,7 +44,7 @@ const SelectCategoryModal = (props: {
       onClose={onClose}
       width={'100%'}
       height={'50%'}
-      header={{ title: 'Edit Status' }}
+      header={{ title: 'Select Category' }}
     >
       <View
         style={{
