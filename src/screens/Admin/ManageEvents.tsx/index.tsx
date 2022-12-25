@@ -15,7 +15,11 @@ import LoadingStatue from '../../../components/LoadingStatue';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import useQueryAllEvents from '../../../hooks/queries/getAllEvents';
 import AwardsBodyImage from '../../../components/AwardsBodyImage';
-import { EVENT_STATUS_TO_STRING } from '../../../constants/events';
+import {
+  eventIsForNominations,
+  EVENT_STATUS_TO_STRING,
+  getEventTime,
+} from '../../../constants/events';
 import { useAuth } from '../../../context/UserContext';
 import useQueryGetUser from '../../../hooks/queries/getUser';
 import { SubmitButton } from '../../../components/Buttons';
@@ -23,11 +27,6 @@ import UpdateStatusModal from './UpdateStatusModal';
 import CreateEventModal from './CreateEventModal';
 import SelectCategoryModal from './SelectCategoryModal';
 import UpdateExpirationModal from './UpdateExpirationModal';
-import { formatDateTime } from '../../../util/formatDateTime';
-
-export const getEventName = (awardsBody: AwardsBody) => {
-  return AWARDS_BODY_TO_PLURAL_STRING[AwardsBody[awardsBody]];
-};
 
 const ManageEvents = () => {
   const { width } = useWindowDimensions();
@@ -64,9 +63,6 @@ const ManageEvents = () => {
   const groupedByYear = _.groupBy(orderedEvents, (e) => e.year);
 
   const userIsAdmin = user ? user.role === UserRole.ADMIN : false;
-
-  const eventIsForNominations = (eventStatus: EventStatus) =>
-    [EventStatus.NOMS_LIVE, EventStatus.NOMS_STAGING].includes(eventStatus);
 
   const EventProperty = (_props: {
     event: iEvent;
@@ -138,19 +134,7 @@ const ManageEvents = () => {
                       const { awardsBody, status } = event;
                       const eventIsAdminOnly = status === EventStatus.NOMS_STAGING;
                       if (eventIsAdminOnly && !userIsAdmin) return null; // don't display events with status NOMS_STAGING to non-admin
-
-                      const nomDateTime = new Date(event?.nominationDateTime || '');
-                      const winDateTime = new Date(event?.winDateTime || '');
-                      const dateTime =
-                        EventStatus.ARCHIVED === event.status
-                          ? 'Archived'
-                          : eventIsForNominations(event.status)
-                          ? event.nominationDateTime
-                            ? formatDateTime(nomDateTime)
-                            : 'no nomination time set'
-                          : event.winDateTime
-                          ? formatDateTime(winDateTime)
-                          : 'no win time set';
+                      const dateTime = getEventTime(event);
                       return (
                         <TouchableHighlight
                           key={event.id}
@@ -194,7 +178,7 @@ const ManageEvents = () => {
                               onPress={() => setOpenUpdateStatusModal(true)}
                             />
                             <EventProperty
-                              label={dateTime}
+                              label={dateTime === '' ? 'no time set' : dateTime}
                               buttonLabel={'Update Expiration'}
                               event={event}
                               onPress={() => setOpenUpdateExpirationModal(true)}

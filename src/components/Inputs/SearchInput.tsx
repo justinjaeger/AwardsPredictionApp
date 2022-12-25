@@ -7,8 +7,6 @@ import { useDebounce } from '../../util/hooks';
 import { View } from 'react-native';
 import { HEADER_HEIGHT } from '../../constants';
 
-const INPUT_HEIGHT = 50;
-
 const SearchInput = (props: {
   handleSearch: (s: string) => void;
   resetSearchHack?: boolean;

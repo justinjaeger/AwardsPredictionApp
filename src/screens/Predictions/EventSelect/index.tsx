@@ -18,13 +18,11 @@ import LoadingStatue from '../../../components/LoadingStatue';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import useQueryAllEvents from '../../../hooks/queries/getAllEvents';
 import AwardsBodyImage from '../../../components/AwardsBodyImage';
-import { EVENT_STATUS_TO_STRING } from '../../../constants/events';
+import { EVENT_STATUS_TO_STRING, getEventTime } from '../../../constants/events';
 import { useAuth } from '../../../context/UserContext';
 import useQueryGetUser from '../../../hooks/queries/getUser';
 
-export const getEventName = (awardsBody: AwardsBody) => {
-  return AWARDS_BODY_TO_PLURAL_STRING[AwardsBody[awardsBody]];
-};
+const EVENT_ITEM_HEIGHT = 90;
 
 const EventSelect = () => {
   const { width } = useWindowDimensions();
@@ -121,19 +119,20 @@ const EventSelect = () => {
                     const { awardsBody, status } = event;
                     const eventIsAdminOnly = status === EventStatus.NOMS_STAGING;
                     if (eventIsAdminOnly && !userIsAdmin) return null; // don't display events with status NOMS_STAGING to non-admin
+                    const closeTime = getEventTime(event);
                     return (
                       <TouchableHighlight
                         key={event.awardsBody + year}
                         style={{
-                          height: 80,
+                          flexDirection: 'row',
+                          height: EVENT_ITEM_HEIGHT,
                           backgroundColor: 'rgba(0,0,0,0.1)',
                           borderRadius: theme.borderRadius,
                           borderWidth: 1,
                           borderColor: COLORS.white,
                           marginBottom: theme.windowMargin,
-                          marginRight: theme.windowMargin,
                           width: width - theme.windowMargin * 2,
-                          padding: 5,
+                          alignItems: 'center',
                           justifyContent: 'center',
                         }}
                         underlayColor={COLORS.secondaryDark}
@@ -142,25 +141,46 @@ const EventSelect = () => {
                         onPressOut={() => setHighlightedEvent('')}
                       >
                         <>
-                          <View style={{ flexDirection: 'row' }}>
+                          <View
+                            style={{
+                              width: '15%', // if changing this, also change component % below to match 100%
+                              height: '100%',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                            }}
+                          >
                             <AwardsBodyImage
                               awardsBody={awardsBody}
                               white={highlightedEvent === event.id}
+                              size={EVENT_ITEM_HEIGHT - 20}
                             />
-                            <View
+                          </View>
+                          <View
+                            style={{
+                              flexDirection: 'column',
+                              justifyContent: 'space-around',
+                              width: '85%', // if changing this, also change component % below to match 100%
+                              height: '100%',
+                              padding: 10,
+                              paddingLeft: 0,
+                            }}
+                          >
+                            <SubHeader>
+                              {AWARDS_BODY_TO_PLURAL_STRING[awardsBody]}
+                            </SubHeader>
+                            <Body
                               style={{
-                                flexDirection: 'column',
-                                justifyContent: 'space-around',
+                                color: COLORS.white,
                               }}
-                            >
-                              <SubHeader>
-                                {AWARDS_BODY_TO_PLURAL_STRING[awardsBody]}
-                              </SubHeader>
+                            >{`${EVENT_STATUS_TO_STRING[status]}`}</Body>
+                            <View style={{ alignItems: 'flex-end' }}>
                               <Body
                                 style={{
                                   color: COLORS.white,
                                 }}
-                              >{`${EVENT_STATUS_TO_STRING[status]}`}</Body>
+                              >
+                                {closeTime === '' ? '' : `Closes: ${closeTime}`}
+                              </Body>
                             </View>
                           </View>
                         </>

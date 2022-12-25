@@ -48,39 +48,41 @@ const UpdateStatusModal = (props: {
       height={'50%'}
       header={{ title: 'Edit Status' }}
     >
-      <View style={{ flexDirection: 'column' }}>
-        {_.entries(EVENT_STATUS_TO_STRING).map(([key, value]) => {
-          // @ts-ignore
-          const status = EventStatus[key] as EventStatus;
-          return (
-            <View key={key}>
-              <TouchableHighlight
-                style={{
-                  backgroundColor:
-                    selectedStatus === status ? COLORS.secondaryDark : 'transparent',
-                  height: 50,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-                onPress={() => {
-                  setSelectedStatus(status);
-                }}
-              >
-                <Body style={{ padding: 10 }}>{value}</Body>
-              </TouchableHighlight>
-              <FAB
-                iconName="checkmark"
-                text="Save"
-                onPress={() => {
-                  if (!selectedStatus) return;
-                  onUpdateEventStatus(selectedStatus);
-                }}
-                visible={initialStatus !== selectedStatus}
-              />
-            </View>
-          );
-        })}
-      </View>
+      <>
+        <View style={{ flexDirection: 'column' }}>
+          {_.entries(EVENT_STATUS_TO_STRING).map(([key, value]) => {
+            // @ts-ignore
+            const status = EventStatus[key] as EventStatus;
+            return (
+              <View key={key}>
+                <TouchableHighlight
+                  style={{
+                    backgroundColor:
+                      selectedStatus === status ? COLORS.secondaryDark : 'transparent',
+                    height: 50,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                  onPress={() => {
+                    setSelectedStatus(status);
+                  }}
+                >
+                  <Body style={{ padding: 10 }}>{value}</Body>
+                </TouchableHighlight>
+              </View>
+            );
+          })}
+        </View>
+        <FAB
+          iconName="checkmark"
+          text="Save"
+          onPress={() => {
+            if (!selectedStatus) return;
+            onUpdateEventStatus(selectedStatus);
+          }}
+          visible={initialStatus !== selectedStatus}
+        />
+      </>
     </BasicModal>
   );
 };

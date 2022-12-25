@@ -55,6 +55,8 @@ const CreateSong = (props: iCreateContenderProps) => {
     setSearchMessage('');
     setResetSearchHack(!resetSearchHack); // resets searchbar
     setShowSongModal(false);
+    setSongTitle('');
+    setArtist('');
   };
 
   const getSongPrediction = (tmdbId: number, title: string) => {
