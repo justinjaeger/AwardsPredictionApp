@@ -34,6 +34,7 @@ const ManageContendersModal = (props: {
       contenderMovieId,
       visibility: newVisibility,
     });
+    onSaveSuccess();
   };
 
   return (
@@ -50,10 +51,10 @@ const ManageContendersModal = (props: {
           <Body>{`Visibility: ${prediction.visibility}`}</Body>
           <SubmitButton
             onPress={() => onSetEventHidden()}
-            text={isVisible ? 'Unhide' : 'Hide'}
+            text={isVisible ? 'Hide' : 'Unhide'}
           />
         </View>
-      </BasicModal>{' '}
+      </BasicModal>
     </>
   );
 };

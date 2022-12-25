@@ -1,6 +1,7 @@
 import { Divider } from '@ui-kitten/components';
 import React, { useState } from 'react';
 import { FlatList } from 'react-native';
+import { ContenderVisibility } from '../../API';
 import { getCategorySlots } from '../../constants/categories';
 import COLORS from '../../constants/colors';
 import { useCategory } from '../../context/CategoryContext';
@@ -57,6 +58,11 @@ const MovieListAdmin = (props: iMovieListAdminProps) => {
                   setSelectedContenderId(id);
                 }
               }}
+              subtitle={
+                prediction.visibility === ContenderVisibility.HIDDEN
+                  ? 'hidden'
+                  : 'visible'
+              }
               selected={selectedContenderId === prediction.contenderId}
               variant={'community'}
               categoryType={category.type}

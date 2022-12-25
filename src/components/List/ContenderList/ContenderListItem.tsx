@@ -32,6 +32,7 @@ type iContenderListItemProps = {
     isActive: boolean;
     drag: () => void;
   };
+  subtitle?: string;
   onPressItem: (prediction: iPrediction) => void;
   onPressThumbnail?: (prediction: iPrediction) => void;
 };
@@ -49,6 +50,7 @@ const ContenderListItem = (props: iContenderListItemProps) => {
     draggable,
     highlighted,
     categoryType,
+    subtitle: _subtitle,
     onPressThumbnail,
     onPressItem,
   } = props;
@@ -250,7 +252,7 @@ const ContenderListItem = (props: iContenderListItemProps) => {
                     marginLeft: 10,
                   }}
                 >
-                  {subtitle}
+                  {_subtitle || subtitle}
                 </Body>
               </Animated.View>
             </MaskedView>

@@ -6,6 +6,7 @@ import { useCategory } from '../../../context/CategoryContext';
 import { iCategory, iEvent, iPrediction } from '../../../types';
 import MovieListAdmin from '../../../components/MovieList/MovieListAdmin';
 import ManageContendersModal from './ManageContendersModal';
+import BackgroundWrapper from '../../../components/BackgroundWrapper';
 
 const ManageContenders = () => {
   const { event: _event, category: _category } = useCategory();
@@ -28,24 +29,28 @@ const ManageContenders = () => {
 
   return (
     <>
-      {contenders && contenders.length === 0 ? (
-        <View
-          style={{
-            width: '100%',
-            marginTop: 20,
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <BodyBold>No contenders in this category</BodyBold>
-        </View>
-      ) : null}
-      <MovieListAdmin
-        predictions={contenders}
-        onPressItem={(p) => {
-          setSelectedPrediction(p);
-        }}
-      />
+      <BackgroundWrapper>
+        <>
+          {contenders && contenders.length === 0 ? (
+            <View
+              style={{
+                width: '100%',
+                marginTop: 20,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <BodyBold>No contenders in this category</BodyBold>
+            </View>
+          ) : null}
+          <MovieListAdmin
+            predictions={contenders}
+            onPressItem={(p) => {
+              setSelectedPrediction(p);
+            }}
+          />
+        </>
+      </BackgroundWrapper>
       {selectedPrediction ? (
         <ManageContendersModal
           visible={showManageContendersModal}
