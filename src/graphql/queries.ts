@@ -47,2096 +47,6 @@ export const listUsers = /* GraphQL */ `
     }
   }
 `;
-export const getPredictionSet = /* GraphQL */ `
-  query GetPredictionSet($id: ID!) {
-    getPredictionSet(id: $id) {
-      id
-      user {
-        id
-        email
-        username
-        name
-        bio
-        image
-        role
-        createdAt
-        updatedAt
-      }
-      event {
-        id
-        categories {
-          items {
-            id
-            name
-            type
-            event {
-              id
-              categories {
-                nextToken
-              }
-              awardsBody
-              year
-              contenders {
-                nextToken
-              }
-              nominationDateTime
-              winDateTime
-              status
-              createdAt
-              updatedAt
-            }
-            contenders {
-              items {
-                id
-                visibility
-                didReceiveNominationOrWin
-                createdAt
-                updatedAt
-                eventContendersId
-                categoryContendersId
-                contenderMovieId
-                contenderPersonId
-                contenderSongId
-              }
-              nextToken
-            }
-            createdAt
-            updatedAt
-            eventCategoriesId
-          }
-          nextToken
-        }
-        awardsBody
-        year
-        contenders {
-          items {
-            id
-            category {
-              id
-              name
-              type
-              event {
-                id
-                awardsBody
-                year
-                nominationDateTime
-                winDateTime
-                status
-                createdAt
-                updatedAt
-              }
-              contenders {
-                nextToken
-              }
-              createdAt
-              updatedAt
-              eventCategoriesId
-            }
-            event {
-              id
-              categories {
-                nextToken
-              }
-              awardsBody
-              year
-              contenders {
-                nextToken
-              }
-              nominationDateTime
-              winDateTime
-              status
-              createdAt
-              updatedAt
-            }
-            movie {
-              id
-              tmdbId
-              studio
-              createdAt
-              updatedAt
-            }
-            person {
-              id
-              tmdbId
-              createdAt
-              updatedAt
-            }
-            song {
-              id
-              title
-              artist
-              movie {
-                id
-                tmdbId
-                studio
-                createdAt
-                updatedAt
-              }
-              createdAt
-              updatedAt
-              songMovieId
-            }
-            predictions {
-              items {
-                id
-                ranking
-                createdAt
-                updatedAt
-                predictionSetPredictionsId
-                historyPredictionSetPredictionsId
-                contenderPredictionsId
-                predictionUserId
-              }
-              nextToken
-            }
-            visibility
-            didReceiveNominationOrWin
-            createdAt
-            updatedAt
-            eventContendersId
-            categoryContendersId
-            contenderMovieId
-            contenderPersonId
-            contenderSongId
-          }
-          nextToken
-        }
-        nominationDateTime
-        winDateTime
-        status
-        createdAt
-        updatedAt
-      }
-      category {
-        id
-        name
-        type
-        event {
-          id
-          categories {
-            items {
-              id
-              name
-              type
-              event {
-                id
-                awardsBody
-                year
-                nominationDateTime
-                winDateTime
-                status
-                createdAt
-                updatedAt
-              }
-              contenders {
-                nextToken
-              }
-              createdAt
-              updatedAt
-              eventCategoriesId
-            }
-            nextToken
-          }
-          awardsBody
-          year
-          contenders {
-            items {
-              id
-              category {
-                id
-                name
-                type
-                createdAt
-                updatedAt
-                eventCategoriesId
-              }
-              event {
-                id
-                awardsBody
-                year
-                nominationDateTime
-                winDateTime
-                status
-                createdAt
-                updatedAt
-              }
-              movie {
-                id
-                tmdbId
-                studio
-                createdAt
-                updatedAt
-              }
-              person {
-                id
-                tmdbId
-                createdAt
-                updatedAt
-              }
-              song {
-                id
-                title
-                artist
-                createdAt
-                updatedAt
-                songMovieId
-              }
-              predictions {
-                nextToken
-              }
-              visibility
-              didReceiveNominationOrWin
-              createdAt
-              updatedAt
-              eventContendersId
-              categoryContendersId
-              contenderMovieId
-              contenderPersonId
-              contenderSongId
-            }
-            nextToken
-          }
-          nominationDateTime
-          winDateTime
-          status
-          createdAt
-          updatedAt
-        }
-        contenders {
-          items {
-            id
-            category {
-              id
-              name
-              type
-              event {
-                id
-                awardsBody
-                year
-                nominationDateTime
-                winDateTime
-                status
-                createdAt
-                updatedAt
-              }
-              contenders {
-                nextToken
-              }
-              createdAt
-              updatedAt
-              eventCategoriesId
-            }
-            event {
-              id
-              categories {
-                nextToken
-              }
-              awardsBody
-              year
-              contenders {
-                nextToken
-              }
-              nominationDateTime
-              winDateTime
-              status
-              createdAt
-              updatedAt
-            }
-            movie {
-              id
-              tmdbId
-              studio
-              createdAt
-              updatedAt
-            }
-            person {
-              id
-              tmdbId
-              createdAt
-              updatedAt
-            }
-            song {
-              id
-              title
-              artist
-              movie {
-                id
-                tmdbId
-                studio
-                createdAt
-                updatedAt
-              }
-              createdAt
-              updatedAt
-              songMovieId
-            }
-            predictions {
-              items {
-                id
-                ranking
-                createdAt
-                updatedAt
-                predictionSetPredictionsId
-                historyPredictionSetPredictionsId
-                contenderPredictionsId
-                predictionUserId
-              }
-              nextToken
-            }
-            visibility
-            didReceiveNominationOrWin
-            createdAt
-            updatedAt
-            eventContendersId
-            categoryContendersId
-            contenderMovieId
-            contenderPersonId
-            contenderSongId
-          }
-          nextToken
-        }
-        createdAt
-        updatedAt
-        eventCategoriesId
-      }
-      predictions {
-        items {
-          id
-          user {
-            id
-            email
-            username
-            name
-            bio
-            image
-            role
-            createdAt
-            updatedAt
-          }
-          contender {
-            id
-            category {
-              id
-              name
-              type
-              event {
-                id
-                awardsBody
-                year
-                nominationDateTime
-                winDateTime
-                status
-                createdAt
-                updatedAt
-              }
-              contenders {
-                nextToken
-              }
-              createdAt
-              updatedAt
-              eventCategoriesId
-            }
-            event {
-              id
-              categories {
-                nextToken
-              }
-              awardsBody
-              year
-              contenders {
-                nextToken
-              }
-              nominationDateTime
-              winDateTime
-              status
-              createdAt
-              updatedAt
-            }
-            movie {
-              id
-              tmdbId
-              studio
-              createdAt
-              updatedAt
-            }
-            person {
-              id
-              tmdbId
-              createdAt
-              updatedAt
-            }
-            song {
-              id
-              title
-              artist
-              movie {
-                id
-                tmdbId
-                studio
-                createdAt
-                updatedAt
-              }
-              createdAt
-              updatedAt
-              songMovieId
-            }
-            predictions {
-              items {
-                id
-                ranking
-                createdAt
-                updatedAt
-                predictionSetPredictionsId
-                historyPredictionSetPredictionsId
-                contenderPredictionsId
-                predictionUserId
-              }
-              nextToken
-            }
-            visibility
-            didReceiveNominationOrWin
-            createdAt
-            updatedAt
-            eventContendersId
-            categoryContendersId
-            contenderMovieId
-            contenderPersonId
-            contenderSongId
-          }
-          ranking
-          createdAt
-          updatedAt
-          predictionSetPredictionsId
-          historyPredictionSetPredictionsId
-          contenderPredictionsId
-          predictionUserId
-        }
-        nextToken
-      }
-      createdAt
-      updatedAt
-      predictionSetUserId
-      predictionSetEventId
-      predictionSetCategoryId
-    }
-  }
-`;
-export const listPredictionSets = /* GraphQL */ `
-  query ListPredictionSets(
-    $id: ID
-    $filter: ModelPredictionSetFilterInput
-    $limit: Int
-    $nextToken: String
-    $sortDirection: ModelSortDirection
-  ) {
-    listPredictionSets(
-      id: $id
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      sortDirection: $sortDirection
-    ) {
-      items {
-        id
-        user {
-          id
-          email
-          username
-          name
-          bio
-          image
-          role
-          createdAt
-          updatedAt
-        }
-        event {
-          id
-          categories {
-            items {
-              id
-              name
-              type
-              event {
-                id
-                awardsBody
-                year
-                nominationDateTime
-                winDateTime
-                status
-                createdAt
-                updatedAt
-              }
-              contenders {
-                nextToken
-              }
-              createdAt
-              updatedAt
-              eventCategoriesId
-            }
-            nextToken
-          }
-          awardsBody
-          year
-          contenders {
-            items {
-              id
-              category {
-                id
-                name
-                type
-                createdAt
-                updatedAt
-                eventCategoriesId
-              }
-              event {
-                id
-                awardsBody
-                year
-                nominationDateTime
-                winDateTime
-                status
-                createdAt
-                updatedAt
-              }
-              movie {
-                id
-                tmdbId
-                studio
-                createdAt
-                updatedAt
-              }
-              person {
-                id
-                tmdbId
-                createdAt
-                updatedAt
-              }
-              song {
-                id
-                title
-                artist
-                createdAt
-                updatedAt
-                songMovieId
-              }
-              predictions {
-                nextToken
-              }
-              visibility
-              didReceiveNominationOrWin
-              createdAt
-              updatedAt
-              eventContendersId
-              categoryContendersId
-              contenderMovieId
-              contenderPersonId
-              contenderSongId
-            }
-            nextToken
-          }
-          nominationDateTime
-          winDateTime
-          status
-          createdAt
-          updatedAt
-        }
-        category {
-          id
-          name
-          type
-          event {
-            id
-            categories {
-              items {
-                id
-                name
-                type
-                createdAt
-                updatedAt
-                eventCategoriesId
-              }
-              nextToken
-            }
-            awardsBody
-            year
-            contenders {
-              items {
-                id
-                visibility
-                didReceiveNominationOrWin
-                createdAt
-                updatedAt
-                eventContendersId
-                categoryContendersId
-                contenderMovieId
-                contenderPersonId
-                contenderSongId
-              }
-              nextToken
-            }
-            nominationDateTime
-            winDateTime
-            status
-            createdAt
-            updatedAt
-          }
-          contenders {
-            items {
-              id
-              category {
-                id
-                name
-                type
-                createdAt
-                updatedAt
-                eventCategoriesId
-              }
-              event {
-                id
-                awardsBody
-                year
-                nominationDateTime
-                winDateTime
-                status
-                createdAt
-                updatedAt
-              }
-              movie {
-                id
-                tmdbId
-                studio
-                createdAt
-                updatedAt
-              }
-              person {
-                id
-                tmdbId
-                createdAt
-                updatedAt
-              }
-              song {
-                id
-                title
-                artist
-                createdAt
-                updatedAt
-                songMovieId
-              }
-              predictions {
-                nextToken
-              }
-              visibility
-              didReceiveNominationOrWin
-              createdAt
-              updatedAt
-              eventContendersId
-              categoryContendersId
-              contenderMovieId
-              contenderPersonId
-              contenderSongId
-            }
-            nextToken
-          }
-          createdAt
-          updatedAt
-          eventCategoriesId
-        }
-        predictions {
-          items {
-            id
-            user {
-              id
-              email
-              username
-              name
-              bio
-              image
-              role
-              createdAt
-              updatedAt
-            }
-            contender {
-              id
-              category {
-                id
-                name
-                type
-                createdAt
-                updatedAt
-                eventCategoriesId
-              }
-              event {
-                id
-                awardsBody
-                year
-                nominationDateTime
-                winDateTime
-                status
-                createdAt
-                updatedAt
-              }
-              movie {
-                id
-                tmdbId
-                studio
-                createdAt
-                updatedAt
-              }
-              person {
-                id
-                tmdbId
-                createdAt
-                updatedAt
-              }
-              song {
-                id
-                title
-                artist
-                createdAt
-                updatedAt
-                songMovieId
-              }
-              predictions {
-                nextToken
-              }
-              visibility
-              didReceiveNominationOrWin
-              createdAt
-              updatedAt
-              eventContendersId
-              categoryContendersId
-              contenderMovieId
-              contenderPersonId
-              contenderSongId
-            }
-            ranking
-            createdAt
-            updatedAt
-            predictionSetPredictionsId
-            historyPredictionSetPredictionsId
-            contenderPredictionsId
-            predictionUserId
-          }
-          nextToken
-        }
-        createdAt
-        updatedAt
-        predictionSetUserId
-        predictionSetEventId
-        predictionSetCategoryId
-      }
-      nextToken
-    }
-  }
-`;
-export const getHistoryPredictionSet = /* GraphQL */ `
-  query GetHistoryPredictionSet($id: ID!) {
-    getHistoryPredictionSet(id: $id) {
-      id
-      user {
-        id
-        email
-        username
-        name
-        bio
-        image
-        role
-        createdAt
-        updatedAt
-      }
-      event {
-        id
-        categories {
-          items {
-            id
-            name
-            type
-            event {
-              id
-              categories {
-                nextToken
-              }
-              awardsBody
-              year
-              contenders {
-                nextToken
-              }
-              nominationDateTime
-              winDateTime
-              status
-              createdAt
-              updatedAt
-            }
-            contenders {
-              items {
-                id
-                visibility
-                didReceiveNominationOrWin
-                createdAt
-                updatedAt
-                eventContendersId
-                categoryContendersId
-                contenderMovieId
-                contenderPersonId
-                contenderSongId
-              }
-              nextToken
-            }
-            createdAt
-            updatedAt
-            eventCategoriesId
-          }
-          nextToken
-        }
-        awardsBody
-        year
-        contenders {
-          items {
-            id
-            category {
-              id
-              name
-              type
-              event {
-                id
-                awardsBody
-                year
-                nominationDateTime
-                winDateTime
-                status
-                createdAt
-                updatedAt
-              }
-              contenders {
-                nextToken
-              }
-              createdAt
-              updatedAt
-              eventCategoriesId
-            }
-            event {
-              id
-              categories {
-                nextToken
-              }
-              awardsBody
-              year
-              contenders {
-                nextToken
-              }
-              nominationDateTime
-              winDateTime
-              status
-              createdAt
-              updatedAt
-            }
-            movie {
-              id
-              tmdbId
-              studio
-              createdAt
-              updatedAt
-            }
-            person {
-              id
-              tmdbId
-              createdAt
-              updatedAt
-            }
-            song {
-              id
-              title
-              artist
-              movie {
-                id
-                tmdbId
-                studio
-                createdAt
-                updatedAt
-              }
-              createdAt
-              updatedAt
-              songMovieId
-            }
-            predictions {
-              items {
-                id
-                ranking
-                createdAt
-                updatedAt
-                predictionSetPredictionsId
-                historyPredictionSetPredictionsId
-                contenderPredictionsId
-                predictionUserId
-              }
-              nextToken
-            }
-            visibility
-            didReceiveNominationOrWin
-            createdAt
-            updatedAt
-            eventContendersId
-            categoryContendersId
-            contenderMovieId
-            contenderPersonId
-            contenderSongId
-          }
-          nextToken
-        }
-        nominationDateTime
-        winDateTime
-        status
-        createdAt
-        updatedAt
-      }
-      category {
-        id
-        name
-        type
-        event {
-          id
-          categories {
-            items {
-              id
-              name
-              type
-              event {
-                id
-                awardsBody
-                year
-                nominationDateTime
-                winDateTime
-                status
-                createdAt
-                updatedAt
-              }
-              contenders {
-                nextToken
-              }
-              createdAt
-              updatedAt
-              eventCategoriesId
-            }
-            nextToken
-          }
-          awardsBody
-          year
-          contenders {
-            items {
-              id
-              category {
-                id
-                name
-                type
-                createdAt
-                updatedAt
-                eventCategoriesId
-              }
-              event {
-                id
-                awardsBody
-                year
-                nominationDateTime
-                winDateTime
-                status
-                createdAt
-                updatedAt
-              }
-              movie {
-                id
-                tmdbId
-                studio
-                createdAt
-                updatedAt
-              }
-              person {
-                id
-                tmdbId
-                createdAt
-                updatedAt
-              }
-              song {
-                id
-                title
-                artist
-                createdAt
-                updatedAt
-                songMovieId
-              }
-              predictions {
-                nextToken
-              }
-              visibility
-              didReceiveNominationOrWin
-              createdAt
-              updatedAt
-              eventContendersId
-              categoryContendersId
-              contenderMovieId
-              contenderPersonId
-              contenderSongId
-            }
-            nextToken
-          }
-          nominationDateTime
-          winDateTime
-          status
-          createdAt
-          updatedAt
-        }
-        contenders {
-          items {
-            id
-            category {
-              id
-              name
-              type
-              event {
-                id
-                awardsBody
-                year
-                nominationDateTime
-                winDateTime
-                status
-                createdAt
-                updatedAt
-              }
-              contenders {
-                nextToken
-              }
-              createdAt
-              updatedAt
-              eventCategoriesId
-            }
-            event {
-              id
-              categories {
-                nextToken
-              }
-              awardsBody
-              year
-              contenders {
-                nextToken
-              }
-              nominationDateTime
-              winDateTime
-              status
-              createdAt
-              updatedAt
-            }
-            movie {
-              id
-              tmdbId
-              studio
-              createdAt
-              updatedAt
-            }
-            person {
-              id
-              tmdbId
-              createdAt
-              updatedAt
-            }
-            song {
-              id
-              title
-              artist
-              movie {
-                id
-                tmdbId
-                studio
-                createdAt
-                updatedAt
-              }
-              createdAt
-              updatedAt
-              songMovieId
-            }
-            predictions {
-              items {
-                id
-                ranking
-                createdAt
-                updatedAt
-                predictionSetPredictionsId
-                historyPredictionSetPredictionsId
-                contenderPredictionsId
-                predictionUserId
-              }
-              nextToken
-            }
-            visibility
-            didReceiveNominationOrWin
-            createdAt
-            updatedAt
-            eventContendersId
-            categoryContendersId
-            contenderMovieId
-            contenderPersonId
-            contenderSongId
-          }
-          nextToken
-        }
-        createdAt
-        updatedAt
-        eventCategoriesId
-      }
-      predictions {
-        items {
-          id
-          user {
-            id
-            email
-            username
-            name
-            bio
-            image
-            role
-            createdAt
-            updatedAt
-          }
-          contender {
-            id
-            category {
-              id
-              name
-              type
-              event {
-                id
-                awardsBody
-                year
-                nominationDateTime
-                winDateTime
-                status
-                createdAt
-                updatedAt
-              }
-              contenders {
-                nextToken
-              }
-              createdAt
-              updatedAt
-              eventCategoriesId
-            }
-            event {
-              id
-              categories {
-                nextToken
-              }
-              awardsBody
-              year
-              contenders {
-                nextToken
-              }
-              nominationDateTime
-              winDateTime
-              status
-              createdAt
-              updatedAt
-            }
-            movie {
-              id
-              tmdbId
-              studio
-              createdAt
-              updatedAt
-            }
-            person {
-              id
-              tmdbId
-              createdAt
-              updatedAt
-            }
-            song {
-              id
-              title
-              artist
-              movie {
-                id
-                tmdbId
-                studio
-                createdAt
-                updatedAt
-              }
-              createdAt
-              updatedAt
-              songMovieId
-            }
-            predictions {
-              items {
-                id
-                ranking
-                createdAt
-                updatedAt
-                predictionSetPredictionsId
-                historyPredictionSetPredictionsId
-                contenderPredictionsId
-                predictionUserId
-              }
-              nextToken
-            }
-            visibility
-            didReceiveNominationOrWin
-            createdAt
-            updatedAt
-            eventContendersId
-            categoryContendersId
-            contenderMovieId
-            contenderPersonId
-            contenderSongId
-          }
-          ranking
-          createdAt
-          updatedAt
-          predictionSetPredictionsId
-          historyPredictionSetPredictionsId
-          contenderPredictionsId
-          predictionUserId
-        }
-        nextToken
-      }
-      createdAt
-      updatedAt
-      historyPredictionSetUserId
-      historyPredictionSetEventId
-      historyPredictionSetCategoryId
-    }
-  }
-`;
-export const listHistoryPredictionSets = /* GraphQL */ `
-  query ListHistoryPredictionSets(
-    $id: ID
-    $filter: ModelHistoryPredictionSetFilterInput
-    $limit: Int
-    $nextToken: String
-    $sortDirection: ModelSortDirection
-  ) {
-    listHistoryPredictionSets(
-      id: $id
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      sortDirection: $sortDirection
-    ) {
-      items {
-        id
-        user {
-          id
-          email
-          username
-          name
-          bio
-          image
-          role
-          createdAt
-          updatedAt
-        }
-        event {
-          id
-          categories {
-            items {
-              id
-              name
-              type
-              event {
-                id
-                awardsBody
-                year
-                nominationDateTime
-                winDateTime
-                status
-                createdAt
-                updatedAt
-              }
-              contenders {
-                nextToken
-              }
-              createdAt
-              updatedAt
-              eventCategoriesId
-            }
-            nextToken
-          }
-          awardsBody
-          year
-          contenders {
-            items {
-              id
-              category {
-                id
-                name
-                type
-                createdAt
-                updatedAt
-                eventCategoriesId
-              }
-              event {
-                id
-                awardsBody
-                year
-                nominationDateTime
-                winDateTime
-                status
-                createdAt
-                updatedAt
-              }
-              movie {
-                id
-                tmdbId
-                studio
-                createdAt
-                updatedAt
-              }
-              person {
-                id
-                tmdbId
-                createdAt
-                updatedAt
-              }
-              song {
-                id
-                title
-                artist
-                createdAt
-                updatedAt
-                songMovieId
-              }
-              predictions {
-                nextToken
-              }
-              visibility
-              didReceiveNominationOrWin
-              createdAt
-              updatedAt
-              eventContendersId
-              categoryContendersId
-              contenderMovieId
-              contenderPersonId
-              contenderSongId
-            }
-            nextToken
-          }
-          nominationDateTime
-          winDateTime
-          status
-          createdAt
-          updatedAt
-        }
-        category {
-          id
-          name
-          type
-          event {
-            id
-            categories {
-              items {
-                id
-                name
-                type
-                createdAt
-                updatedAt
-                eventCategoriesId
-              }
-              nextToken
-            }
-            awardsBody
-            year
-            contenders {
-              items {
-                id
-                visibility
-                didReceiveNominationOrWin
-                createdAt
-                updatedAt
-                eventContendersId
-                categoryContendersId
-                contenderMovieId
-                contenderPersonId
-                contenderSongId
-              }
-              nextToken
-            }
-            nominationDateTime
-            winDateTime
-            status
-            createdAt
-            updatedAt
-          }
-          contenders {
-            items {
-              id
-              category {
-                id
-                name
-                type
-                createdAt
-                updatedAt
-                eventCategoriesId
-              }
-              event {
-                id
-                awardsBody
-                year
-                nominationDateTime
-                winDateTime
-                status
-                createdAt
-                updatedAt
-              }
-              movie {
-                id
-                tmdbId
-                studio
-                createdAt
-                updatedAt
-              }
-              person {
-                id
-                tmdbId
-                createdAt
-                updatedAt
-              }
-              song {
-                id
-                title
-                artist
-                createdAt
-                updatedAt
-                songMovieId
-              }
-              predictions {
-                nextToken
-              }
-              visibility
-              didReceiveNominationOrWin
-              createdAt
-              updatedAt
-              eventContendersId
-              categoryContendersId
-              contenderMovieId
-              contenderPersonId
-              contenderSongId
-            }
-            nextToken
-          }
-          createdAt
-          updatedAt
-          eventCategoriesId
-        }
-        predictions {
-          items {
-            id
-            user {
-              id
-              email
-              username
-              name
-              bio
-              image
-              role
-              createdAt
-              updatedAt
-            }
-            contender {
-              id
-              category {
-                id
-                name
-                type
-                createdAt
-                updatedAt
-                eventCategoriesId
-              }
-              event {
-                id
-                awardsBody
-                year
-                nominationDateTime
-                winDateTime
-                status
-                createdAt
-                updatedAt
-              }
-              movie {
-                id
-                tmdbId
-                studio
-                createdAt
-                updatedAt
-              }
-              person {
-                id
-                tmdbId
-                createdAt
-                updatedAt
-              }
-              song {
-                id
-                title
-                artist
-                createdAt
-                updatedAt
-                songMovieId
-              }
-              predictions {
-                nextToken
-              }
-              visibility
-              didReceiveNominationOrWin
-              createdAt
-              updatedAt
-              eventContendersId
-              categoryContendersId
-              contenderMovieId
-              contenderPersonId
-              contenderSongId
-            }
-            ranking
-            createdAt
-            updatedAt
-            predictionSetPredictionsId
-            historyPredictionSetPredictionsId
-            contenderPredictionsId
-            predictionUserId
-          }
-          nextToken
-        }
-        createdAt
-        updatedAt
-        historyPredictionSetUserId
-        historyPredictionSetEventId
-        historyPredictionSetCategoryId
-      }
-      nextToken
-    }
-  }
-`;
-export const getPrediction = /* GraphQL */ `
-  query GetPrediction($id: ID!) {
-    getPrediction(id: $id) {
-      id
-      user {
-        id
-        email
-        username
-        name
-        bio
-        image
-        role
-        createdAt
-        updatedAt
-      }
-      contender {
-        id
-        category {
-          id
-          name
-          type
-          event {
-            id
-            categories {
-              items {
-                id
-                name
-                type
-                createdAt
-                updatedAt
-                eventCategoriesId
-              }
-              nextToken
-            }
-            awardsBody
-            year
-            contenders {
-              items {
-                id
-                visibility
-                didReceiveNominationOrWin
-                createdAt
-                updatedAt
-                eventContendersId
-                categoryContendersId
-                contenderMovieId
-                contenderPersonId
-                contenderSongId
-              }
-              nextToken
-            }
-            nominationDateTime
-            winDateTime
-            status
-            createdAt
-            updatedAt
-          }
-          contenders {
-            items {
-              id
-              category {
-                id
-                name
-                type
-                createdAt
-                updatedAt
-                eventCategoriesId
-              }
-              event {
-                id
-                awardsBody
-                year
-                nominationDateTime
-                winDateTime
-                status
-                createdAt
-                updatedAt
-              }
-              movie {
-                id
-                tmdbId
-                studio
-                createdAt
-                updatedAt
-              }
-              person {
-                id
-                tmdbId
-                createdAt
-                updatedAt
-              }
-              song {
-                id
-                title
-                artist
-                createdAt
-                updatedAt
-                songMovieId
-              }
-              predictions {
-                nextToken
-              }
-              visibility
-              didReceiveNominationOrWin
-              createdAt
-              updatedAt
-              eventContendersId
-              categoryContendersId
-              contenderMovieId
-              contenderPersonId
-              contenderSongId
-            }
-            nextToken
-          }
-          createdAt
-          updatedAt
-          eventCategoriesId
-        }
-        event {
-          id
-          categories {
-            items {
-              id
-              name
-              type
-              event {
-                id
-                awardsBody
-                year
-                nominationDateTime
-                winDateTime
-                status
-                createdAt
-                updatedAt
-              }
-              contenders {
-                nextToken
-              }
-              createdAt
-              updatedAt
-              eventCategoriesId
-            }
-            nextToken
-          }
-          awardsBody
-          year
-          contenders {
-            items {
-              id
-              category {
-                id
-                name
-                type
-                createdAt
-                updatedAt
-                eventCategoriesId
-              }
-              event {
-                id
-                awardsBody
-                year
-                nominationDateTime
-                winDateTime
-                status
-                createdAt
-                updatedAt
-              }
-              movie {
-                id
-                tmdbId
-                studio
-                createdAt
-                updatedAt
-              }
-              person {
-                id
-                tmdbId
-                createdAt
-                updatedAt
-              }
-              song {
-                id
-                title
-                artist
-                createdAt
-                updatedAt
-                songMovieId
-              }
-              predictions {
-                nextToken
-              }
-              visibility
-              didReceiveNominationOrWin
-              createdAt
-              updatedAt
-              eventContendersId
-              categoryContendersId
-              contenderMovieId
-              contenderPersonId
-              contenderSongId
-            }
-            nextToken
-          }
-          nominationDateTime
-          winDateTime
-          status
-          createdAt
-          updatedAt
-        }
-        movie {
-          id
-          tmdbId
-          studio
-          createdAt
-          updatedAt
-        }
-        person {
-          id
-          tmdbId
-          createdAt
-          updatedAt
-        }
-        song {
-          id
-          title
-          artist
-          movie {
-            id
-            tmdbId
-            studio
-            createdAt
-            updatedAt
-          }
-          createdAt
-          updatedAt
-          songMovieId
-        }
-        predictions {
-          items {
-            id
-            user {
-              id
-              email
-              username
-              name
-              bio
-              image
-              role
-              createdAt
-              updatedAt
-            }
-            contender {
-              id
-              category {
-                id
-                name
-                type
-                createdAt
-                updatedAt
-                eventCategoriesId
-              }
-              event {
-                id
-                awardsBody
-                year
-                nominationDateTime
-                winDateTime
-                status
-                createdAt
-                updatedAt
-              }
-              movie {
-                id
-                tmdbId
-                studio
-                createdAt
-                updatedAt
-              }
-              person {
-                id
-                tmdbId
-                createdAt
-                updatedAt
-              }
-              song {
-                id
-                title
-                artist
-                createdAt
-                updatedAt
-                songMovieId
-              }
-              predictions {
-                nextToken
-              }
-              visibility
-              didReceiveNominationOrWin
-              createdAt
-              updatedAt
-              eventContendersId
-              categoryContendersId
-              contenderMovieId
-              contenderPersonId
-              contenderSongId
-            }
-            ranking
-            createdAt
-            updatedAt
-            predictionSetPredictionsId
-            historyPredictionSetPredictionsId
-            contenderPredictionsId
-            predictionUserId
-          }
-          nextToken
-        }
-        visibility
-        didReceiveNominationOrWin
-        createdAt
-        updatedAt
-        eventContendersId
-        categoryContendersId
-        contenderMovieId
-        contenderPersonId
-        contenderSongId
-      }
-      ranking
-      createdAt
-      updatedAt
-      predictionSetPredictionsId
-      historyPredictionSetPredictionsId
-      contenderPredictionsId
-      predictionUserId
-    }
-  }
-`;
-export const listPredictions = /* GraphQL */ `
-  query ListPredictions(
-    $id: ID
-    $filter: ModelPredictionFilterInput
-    $limit: Int
-    $nextToken: String
-    $sortDirection: ModelSortDirection
-  ) {
-    listPredictions(
-      id: $id
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      sortDirection: $sortDirection
-    ) {
-      items {
-        id
-        user {
-          id
-          email
-          username
-          name
-          bio
-          image
-          role
-          createdAt
-          updatedAt
-        }
-        contender {
-          id
-          category {
-            id
-            name
-            type
-            event {
-              id
-              categories {
-                nextToken
-              }
-              awardsBody
-              year
-              contenders {
-                nextToken
-              }
-              nominationDateTime
-              winDateTime
-              status
-              createdAt
-              updatedAt
-            }
-            contenders {
-              items {
-                id
-                visibility
-                didReceiveNominationOrWin
-                createdAt
-                updatedAt
-                eventContendersId
-                categoryContendersId
-                contenderMovieId
-                contenderPersonId
-                contenderSongId
-              }
-              nextToken
-            }
-            createdAt
-            updatedAt
-            eventCategoriesId
-          }
-          event {
-            id
-            categories {
-              items {
-                id
-                name
-                type
-                createdAt
-                updatedAt
-                eventCategoriesId
-              }
-              nextToken
-            }
-            awardsBody
-            year
-            contenders {
-              items {
-                id
-                visibility
-                didReceiveNominationOrWin
-                createdAt
-                updatedAt
-                eventContendersId
-                categoryContendersId
-                contenderMovieId
-                contenderPersonId
-                contenderSongId
-              }
-              nextToken
-            }
-            nominationDateTime
-            winDateTime
-            status
-            createdAt
-            updatedAt
-          }
-          movie {
-            id
-            tmdbId
-            studio
-            createdAt
-            updatedAt
-          }
-          person {
-            id
-            tmdbId
-            createdAt
-            updatedAt
-          }
-          song {
-            id
-            title
-            artist
-            movie {
-              id
-              tmdbId
-              studio
-              createdAt
-              updatedAt
-            }
-            createdAt
-            updatedAt
-            songMovieId
-          }
-          predictions {
-            items {
-              id
-              user {
-                id
-                email
-                username
-                name
-                bio
-                image
-                role
-                createdAt
-                updatedAt
-              }
-              contender {
-                id
-                visibility
-                didReceiveNominationOrWin
-                createdAt
-                updatedAt
-                eventContendersId
-                categoryContendersId
-                contenderMovieId
-                contenderPersonId
-                contenderSongId
-              }
-              ranking
-              createdAt
-              updatedAt
-              predictionSetPredictionsId
-              historyPredictionSetPredictionsId
-              contenderPredictionsId
-              predictionUserId
-            }
-            nextToken
-          }
-          visibility
-          didReceiveNominationOrWin
-          createdAt
-          updatedAt
-          eventContendersId
-          categoryContendersId
-          contenderMovieId
-          contenderPersonId
-          contenderSongId
-        }
-        ranking
-        createdAt
-        updatedAt
-        predictionSetPredictionsId
-        historyPredictionSetPredictionsId
-        contenderPredictionsId
-        predictionUserId
-      }
-      nextToken
-    }
-  }
-`;
 export const getEvent = /* GraphQL */ `
   query GetEvent($id: ID!) {
     getEvent(id: $id) {
@@ -2165,7 +75,6 @@ export const getEvent = /* GraphQL */ `
               items {
                 id
                 visibility
-                didReceiveNominationOrWin
                 createdAt
                 updatedAt
                 eventContendersId
@@ -2227,8 +136,16 @@ export const getEvent = /* GraphQL */ `
               predictions {
                 nextToken
               }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
               visibility
-              didReceiveNominationOrWin
               createdAt
               updatedAt
               eventContendersId
@@ -2274,7 +191,6 @@ export const getEvent = /* GraphQL */ `
               items {
                 id
                 visibility
-                didReceiveNominationOrWin
                 createdAt
                 updatedAt
                 eventContendersId
@@ -2308,7 +224,6 @@ export const getEvent = /* GraphQL */ `
               items {
                 id
                 visibility
-                didReceiveNominationOrWin
                 createdAt
                 updatedAt
                 eventContendersId
@@ -2370,7 +285,6 @@ export const getEvent = /* GraphQL */ `
               contender {
                 id
                 visibility
-                didReceiveNominationOrWin
                 createdAt
                 updatedAt
                 eventContendersId
@@ -2382,15 +296,91 @@ export const getEvent = /* GraphQL */ `
               ranking
               createdAt
               updatedAt
-              predictionSetPredictionsId
-              historyPredictionSetPredictionsId
               contenderPredictionsId
+              predictionSetPredictionsId
               predictionUserId
             }
             nextToken
           }
+          historyPredictions {
+            items {
+              id
+              user {
+                id
+                email
+                username
+                name
+                bio
+                image
+                role
+                createdAt
+                updatedAt
+              }
+              contender {
+                id
+                visibility
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              ranking
+              createdAt
+              updatedAt
+              contenderHistoryPredictionsId
+              historyPredictionSetPredictionsId
+              historyPredictionUserId
+            }
+            nextToken
+          }
+          communityPredictions {
+            items {
+              id
+              contender {
+                id
+                visibility
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              ranking
+              createdAt
+              updatedAt
+              contenderCommunityPredictionsId
+              communityPredictionSetPredictionsId
+            }
+            nextToken
+          }
+          communityHistoryPredictions {
+            items {
+              id
+              contender {
+                id
+                visibility
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              ranking
+              createdAt
+              updatedAt
+              contenderCommunityHistoryPredictionsId
+              communintyHistoryPredictionSetPredictionsId
+            }
+            nextToken
+          }
           visibility
-          didReceiveNominationOrWin
           createdAt
           updatedAt
           eventContendersId
@@ -2451,7 +441,6 @@ export const listEvents = /* GraphQL */ `
               items {
                 id
                 visibility
-                didReceiveNominationOrWin
                 createdAt
                 updatedAt
                 eventContendersId
@@ -2544,15 +533,47 @@ export const listEvents = /* GraphQL */ `
                 ranking
                 createdAt
                 updatedAt
-                predictionSetPredictionsId
-                historyPredictionSetPredictionsId
                 contenderPredictionsId
+                predictionSetPredictionsId
                 predictionUserId
               }
               nextToken
             }
+            historyPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderHistoryPredictionsId
+                historyPredictionSetPredictionsId
+                historyPredictionUserId
+              }
+              nextToken
+            }
+            communityPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderCommunityPredictionsId
+                communityPredictionSetPredictionsId
+              }
+              nextToken
+            }
+            communityHistoryPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderCommunityHistoryPredictionsId
+                communintyHistoryPredictionSetPredictionsId
+              }
+              nextToken
+            }
             visibility
-            didReceiveNominationOrWin
             createdAt
             updatedAt
             eventContendersId
@@ -2606,7 +627,6 @@ export const getCategory = /* GraphQL */ `
               items {
                 id
                 visibility
-                didReceiveNominationOrWin
                 createdAt
                 updatedAt
                 eventContendersId
@@ -2699,15 +719,47 @@ export const getCategory = /* GraphQL */ `
                 ranking
                 createdAt
                 updatedAt
-                predictionSetPredictionsId
-                historyPredictionSetPredictionsId
                 contenderPredictionsId
+                predictionSetPredictionsId
                 predictionUserId
               }
               nextToken
             }
+            historyPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderHistoryPredictionsId
+                historyPredictionSetPredictionsId
+                historyPredictionUserId
+              }
+              nextToken
+            }
+            communityPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderCommunityPredictionsId
+                communityPredictionSetPredictionsId
+              }
+              nextToken
+            }
+            communityHistoryPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderCommunityHistoryPredictionsId
+                communintyHistoryPredictionSetPredictionsId
+              }
+              nextToken
+            }
             visibility
-            didReceiveNominationOrWin
             createdAt
             updatedAt
             eventContendersId
@@ -2751,7 +803,6 @@ export const getCategory = /* GraphQL */ `
               items {
                 id
                 visibility
-                didReceiveNominationOrWin
                 createdAt
                 updatedAt
                 eventContendersId
@@ -2785,7 +836,6 @@ export const getCategory = /* GraphQL */ `
               items {
                 id
                 visibility
-                didReceiveNominationOrWin
                 createdAt
                 updatedAt
                 eventContendersId
@@ -2847,7 +897,6 @@ export const getCategory = /* GraphQL */ `
               contender {
                 id
                 visibility
-                didReceiveNominationOrWin
                 createdAt
                 updatedAt
                 eventContendersId
@@ -2859,15 +908,91 @@ export const getCategory = /* GraphQL */ `
               ranking
               createdAt
               updatedAt
-              predictionSetPredictionsId
-              historyPredictionSetPredictionsId
               contenderPredictionsId
+              predictionSetPredictionsId
               predictionUserId
             }
             nextToken
           }
+          historyPredictions {
+            items {
+              id
+              user {
+                id
+                email
+                username
+                name
+                bio
+                image
+                role
+                createdAt
+                updatedAt
+              }
+              contender {
+                id
+                visibility
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              ranking
+              createdAt
+              updatedAt
+              contenderHistoryPredictionsId
+              historyPredictionSetPredictionsId
+              historyPredictionUserId
+            }
+            nextToken
+          }
+          communityPredictions {
+            items {
+              id
+              contender {
+                id
+                visibility
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              ranking
+              createdAt
+              updatedAt
+              contenderCommunityPredictionsId
+              communityPredictionSetPredictionsId
+            }
+            nextToken
+          }
+          communityHistoryPredictions {
+            items {
+              id
+              contender {
+                id
+                visibility
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              ranking
+              createdAt
+              updatedAt
+              contenderCommunityHistoryPredictionsId
+              communintyHistoryPredictionSetPredictionsId
+            }
+            nextToken
+          }
           visibility
-          didReceiveNominationOrWin
           createdAt
           updatedAt
           eventContendersId
@@ -2976,8 +1101,16 @@ export const listCategories = /* GraphQL */ `
               predictions {
                 nextToken
               }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
               visibility
-              didReceiveNominationOrWin
               createdAt
               updatedAt
               eventContendersId
@@ -3068,15 +1201,47 @@ export const listCategories = /* GraphQL */ `
                 ranking
                 createdAt
                 updatedAt
-                predictionSetPredictionsId
-                historyPredictionSetPredictionsId
                 contenderPredictionsId
+                predictionSetPredictionsId
                 predictionUserId
               }
               nextToken
             }
+            historyPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderHistoryPredictionsId
+                historyPredictionSetPredictionsId
+                historyPredictionUserId
+              }
+              nextToken
+            }
+            communityPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderCommunityPredictionsId
+                communityPredictionSetPredictionsId
+              }
+              nextToken
+            }
+            communityHistoryPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderCommunityHistoryPredictionsId
+                communintyHistoryPredictionSetPredictionsId
+              }
+              nextToken
+            }
             visibility
-            didReceiveNominationOrWin
             createdAt
             updatedAt
             eventContendersId
@@ -3176,8 +1341,16 @@ export const getContender = /* GraphQL */ `
               predictions {
                 nextToken
               }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
               visibility
-              didReceiveNominationOrWin
               createdAt
               updatedAt
               eventContendersId
@@ -3268,15 +1441,47 @@ export const getContender = /* GraphQL */ `
                 ranking
                 createdAt
                 updatedAt
-                predictionSetPredictionsId
-                historyPredictionSetPredictionsId
                 contenderPredictionsId
+                predictionSetPredictionsId
                 predictionUserId
               }
               nextToken
             }
+            historyPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderHistoryPredictionsId
+                historyPredictionSetPredictionsId
+                historyPredictionUserId
+              }
+              nextToken
+            }
+            communityPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderCommunityPredictionsId
+                communityPredictionSetPredictionsId
+              }
+              nextToken
+            }
+            communityHistoryPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderCommunityHistoryPredictionsId
+                communintyHistoryPredictionSetPredictionsId
+              }
+              nextToken
+            }
             visibility
-            didReceiveNominationOrWin
             createdAt
             updatedAt
             eventContendersId
@@ -3318,7 +1523,6 @@ export const getContender = /* GraphQL */ `
               items {
                 id
                 visibility
-                didReceiveNominationOrWin
                 createdAt
                 updatedAt
                 eventContendersId
@@ -3411,15 +1615,47 @@ export const getContender = /* GraphQL */ `
                 ranking
                 createdAt
                 updatedAt
-                predictionSetPredictionsId
-                historyPredictionSetPredictionsId
                 contenderPredictionsId
+                predictionSetPredictionsId
                 predictionUserId
               }
               nextToken
             }
+            historyPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderHistoryPredictionsId
+                historyPredictionSetPredictionsId
+                historyPredictionUserId
+              }
+              nextToken
+            }
+            communityPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderCommunityPredictionsId
+                communityPredictionSetPredictionsId
+              }
+              nextToken
+            }
+            communityHistoryPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderCommunityHistoryPredictionsId
+                communintyHistoryPredictionSetPredictionsId
+              }
+              nextToken
+            }
             visibility
-            didReceiveNominationOrWin
             createdAt
             updatedAt
             eventContendersId
@@ -3551,15 +1787,47 @@ export const getContender = /* GraphQL */ `
                 ranking
                 createdAt
                 updatedAt
-                predictionSetPredictionsId
-                historyPredictionSetPredictionsId
                 contenderPredictionsId
+                predictionSetPredictionsId
                 predictionUserId
               }
               nextToken
             }
+            historyPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderHistoryPredictionsId
+                historyPredictionSetPredictionsId
+                historyPredictionUserId
+              }
+              nextToken
+            }
+            communityPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderCommunityPredictionsId
+                communityPredictionSetPredictionsId
+              }
+              nextToken
+            }
+            communityHistoryPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderCommunityHistoryPredictionsId
+                communintyHistoryPredictionSetPredictionsId
+              }
+              nextToken
+            }
             visibility
-            didReceiveNominationOrWin
             createdAt
             updatedAt
             eventContendersId
@@ -3571,15 +1839,424 @@ export const getContender = /* GraphQL */ `
           ranking
           createdAt
           updatedAt
-          predictionSetPredictionsId
-          historyPredictionSetPredictionsId
           contenderPredictionsId
+          predictionSetPredictionsId
           predictionUserId
         }
         nextToken
       }
+      historyPredictions {
+        items {
+          id
+          user {
+            id
+            email
+            username
+            name
+            bio
+            image
+            role
+            createdAt
+            updatedAt
+          }
+          contender {
+            id
+            category {
+              id
+              name
+              type
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+              eventCategoriesId
+            }
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              contenders {
+                nextToken
+              }
+              nominationDateTime
+              winDateTime
+              status
+              createdAt
+              updatedAt
+            }
+            movie {
+              id
+              tmdbId
+              studio
+              createdAt
+              updatedAt
+            }
+            person {
+              id
+              tmdbId
+              createdAt
+              updatedAt
+            }
+            song {
+              id
+              title
+              artist
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              createdAt
+              updatedAt
+              songMovieId
+            }
+            predictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderPredictionsId
+                predictionSetPredictionsId
+                predictionUserId
+              }
+              nextToken
+            }
+            historyPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderHistoryPredictionsId
+                historyPredictionSetPredictionsId
+                historyPredictionUserId
+              }
+              nextToken
+            }
+            communityPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderCommunityPredictionsId
+                communityPredictionSetPredictionsId
+              }
+              nextToken
+            }
+            communityHistoryPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderCommunityHistoryPredictionsId
+                communintyHistoryPredictionSetPredictionsId
+              }
+              nextToken
+            }
+            visibility
+            createdAt
+            updatedAt
+            eventContendersId
+            categoryContendersId
+            contenderMovieId
+            contenderPersonId
+            contenderSongId
+          }
+          ranking
+          createdAt
+          updatedAt
+          contenderHistoryPredictionsId
+          historyPredictionSetPredictionsId
+          historyPredictionUserId
+        }
+        nextToken
+      }
+      communityPredictions {
+        items {
+          id
+          contender {
+            id
+            category {
+              id
+              name
+              type
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+              eventCategoriesId
+            }
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              contenders {
+                nextToken
+              }
+              nominationDateTime
+              winDateTime
+              status
+              createdAt
+              updatedAt
+            }
+            movie {
+              id
+              tmdbId
+              studio
+              createdAt
+              updatedAt
+            }
+            person {
+              id
+              tmdbId
+              createdAt
+              updatedAt
+            }
+            song {
+              id
+              title
+              artist
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              createdAt
+              updatedAt
+              songMovieId
+            }
+            predictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderPredictionsId
+                predictionSetPredictionsId
+                predictionUserId
+              }
+              nextToken
+            }
+            historyPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderHistoryPredictionsId
+                historyPredictionSetPredictionsId
+                historyPredictionUserId
+              }
+              nextToken
+            }
+            communityPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderCommunityPredictionsId
+                communityPredictionSetPredictionsId
+              }
+              nextToken
+            }
+            communityHistoryPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderCommunityHistoryPredictionsId
+                communintyHistoryPredictionSetPredictionsId
+              }
+              nextToken
+            }
+            visibility
+            createdAt
+            updatedAt
+            eventContendersId
+            categoryContendersId
+            contenderMovieId
+            contenderPersonId
+            contenderSongId
+          }
+          ranking
+          createdAt
+          updatedAt
+          contenderCommunityPredictionsId
+          communityPredictionSetPredictionsId
+        }
+        nextToken
+      }
+      communityHistoryPredictions {
+        items {
+          id
+          contender {
+            id
+            category {
+              id
+              name
+              type
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+              eventCategoriesId
+            }
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              contenders {
+                nextToken
+              }
+              nominationDateTime
+              winDateTime
+              status
+              createdAt
+              updatedAt
+            }
+            movie {
+              id
+              tmdbId
+              studio
+              createdAt
+              updatedAt
+            }
+            person {
+              id
+              tmdbId
+              createdAt
+              updatedAt
+            }
+            song {
+              id
+              title
+              artist
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              createdAt
+              updatedAt
+              songMovieId
+            }
+            predictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderPredictionsId
+                predictionSetPredictionsId
+                predictionUserId
+              }
+              nextToken
+            }
+            historyPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderHistoryPredictionsId
+                historyPredictionSetPredictionsId
+                historyPredictionUserId
+              }
+              nextToken
+            }
+            communityPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderCommunityPredictionsId
+                communityPredictionSetPredictionsId
+              }
+              nextToken
+            }
+            communityHistoryPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderCommunityHistoryPredictionsId
+                communintyHistoryPredictionSetPredictionsId
+              }
+              nextToken
+            }
+            visibility
+            createdAt
+            updatedAt
+            eventContendersId
+            categoryContendersId
+            contenderMovieId
+            contenderPersonId
+            contenderSongId
+          }
+          ranking
+          createdAt
+          updatedAt
+          contenderCommunityHistoryPredictionsId
+          communintyHistoryPredictionSetPredictionsId
+        }
+        nextToken
+      }
       visibility
-      didReceiveNominationOrWin
       createdAt
       updatedAt
       eventContendersId
@@ -3630,7 +2307,6 @@ export const listContenders = /* GraphQL */ `
               items {
                 id
                 visibility
-                didReceiveNominationOrWin
                 createdAt
                 updatedAt
                 eventContendersId
@@ -3692,8 +2368,16 @@ export const listContenders = /* GraphQL */ `
               predictions {
                 nextToken
               }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
               visibility
-              didReceiveNominationOrWin
               createdAt
               updatedAt
               eventContendersId
@@ -3781,8 +2465,16 @@ export const listContenders = /* GraphQL */ `
               predictions {
                 nextToken
               }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
               visibility
-              didReceiveNominationOrWin
               createdAt
               updatedAt
               eventContendersId
@@ -3885,8 +2577,16 @@ export const listContenders = /* GraphQL */ `
               predictions {
                 nextToken
               }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
               visibility
-              didReceiveNominationOrWin
               createdAt
               updatedAt
               eventContendersId
@@ -3898,15 +2598,244 @@ export const listContenders = /* GraphQL */ `
             ranking
             createdAt
             updatedAt
-            predictionSetPredictionsId
-            historyPredictionSetPredictionsId
             contenderPredictionsId
+            predictionSetPredictionsId
             predictionUserId
           }
           nextToken
         }
+        historyPredictions {
+          items {
+            id
+            user {
+              id
+              email
+              username
+              name
+              bio
+              image
+              role
+              createdAt
+              updatedAt
+            }
+            contender {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
+              visibility
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              contenderMovieId
+              contenderPersonId
+              contenderSongId
+            }
+            ranking
+            createdAt
+            updatedAt
+            contenderHistoryPredictionsId
+            historyPredictionSetPredictionsId
+            historyPredictionUserId
+          }
+          nextToken
+        }
+        communityPredictions {
+          items {
+            id
+            contender {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
+              visibility
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              contenderMovieId
+              contenderPersonId
+              contenderSongId
+            }
+            ranking
+            createdAt
+            updatedAt
+            contenderCommunityPredictionsId
+            communityPredictionSetPredictionsId
+          }
+          nextToken
+        }
+        communityHistoryPredictions {
+          items {
+            id
+            contender {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
+              visibility
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              contenderMovieId
+              contenderPersonId
+              contenderSongId
+            }
+            ranking
+            createdAt
+            updatedAt
+            contenderCommunityHistoryPredictionsId
+            communintyHistoryPredictionSetPredictionsId
+          }
+          nextToken
+        }
         visibility
-        didReceiveNominationOrWin
         createdAt
         updatedAt
         eventContendersId
@@ -4039,6 +2968,6890 @@ export const listSongs = /* GraphQL */ `
         createdAt
         updatedAt
         songMovieId
+      }
+      nextToken
+    }
+  }
+`;
+export const getPredictionSet = /* GraphQL */ `
+  query GetPredictionSet($id: ID!) {
+    getPredictionSet(id: $id) {
+      id
+      user {
+        id
+        email
+        username
+        name
+        bio
+        image
+        role
+        createdAt
+        updatedAt
+      }
+      event {
+        id
+        categories {
+          items {
+            id
+            name
+            type
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              contenders {
+                nextToken
+              }
+              nominationDateTime
+              winDateTime
+              status
+              createdAt
+              updatedAt
+            }
+            contenders {
+              items {
+                id
+                visibility
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              nextToken
+            }
+            createdAt
+            updatedAt
+            eventCategoriesId
+          }
+          nextToken
+        }
+        awardsBody
+        year
+        contenders {
+          items {
+            id
+            category {
+              id
+              name
+              type
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+              eventCategoriesId
+            }
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              contenders {
+                nextToken
+              }
+              nominationDateTime
+              winDateTime
+              status
+              createdAt
+              updatedAt
+            }
+            movie {
+              id
+              tmdbId
+              studio
+              createdAt
+              updatedAt
+            }
+            person {
+              id
+              tmdbId
+              createdAt
+              updatedAt
+            }
+            song {
+              id
+              title
+              artist
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              createdAt
+              updatedAt
+              songMovieId
+            }
+            predictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderPredictionsId
+                predictionSetPredictionsId
+                predictionUserId
+              }
+              nextToken
+            }
+            historyPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderHistoryPredictionsId
+                historyPredictionSetPredictionsId
+                historyPredictionUserId
+              }
+              nextToken
+            }
+            communityPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderCommunityPredictionsId
+                communityPredictionSetPredictionsId
+              }
+              nextToken
+            }
+            communityHistoryPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderCommunityHistoryPredictionsId
+                communintyHistoryPredictionSetPredictionsId
+              }
+              nextToken
+            }
+            visibility
+            createdAt
+            updatedAt
+            eventContendersId
+            categoryContendersId
+            contenderMovieId
+            contenderPersonId
+            contenderSongId
+          }
+          nextToken
+        }
+        nominationDateTime
+        winDateTime
+        status
+        createdAt
+        updatedAt
+      }
+      category {
+        id
+        name
+        type
+        event {
+          id
+          categories {
+            items {
+              id
+              name
+              type
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+              eventCategoriesId
+            }
+            nextToken
+          }
+          awardsBody
+          year
+          contenders {
+            items {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
+              visibility
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              contenderMovieId
+              contenderPersonId
+              contenderSongId
+            }
+            nextToken
+          }
+          nominationDateTime
+          winDateTime
+          status
+          createdAt
+          updatedAt
+        }
+        contenders {
+          items {
+            id
+            category {
+              id
+              name
+              type
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+              eventCategoriesId
+            }
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              contenders {
+                nextToken
+              }
+              nominationDateTime
+              winDateTime
+              status
+              createdAt
+              updatedAt
+            }
+            movie {
+              id
+              tmdbId
+              studio
+              createdAt
+              updatedAt
+            }
+            person {
+              id
+              tmdbId
+              createdAt
+              updatedAt
+            }
+            song {
+              id
+              title
+              artist
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              createdAt
+              updatedAt
+              songMovieId
+            }
+            predictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderPredictionsId
+                predictionSetPredictionsId
+                predictionUserId
+              }
+              nextToken
+            }
+            historyPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderHistoryPredictionsId
+                historyPredictionSetPredictionsId
+                historyPredictionUserId
+              }
+              nextToken
+            }
+            communityPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderCommunityPredictionsId
+                communityPredictionSetPredictionsId
+              }
+              nextToken
+            }
+            communityHistoryPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderCommunityHistoryPredictionsId
+                communintyHistoryPredictionSetPredictionsId
+              }
+              nextToken
+            }
+            visibility
+            createdAt
+            updatedAt
+            eventContendersId
+            categoryContendersId
+            contenderMovieId
+            contenderPersonId
+            contenderSongId
+          }
+          nextToken
+        }
+        createdAt
+        updatedAt
+        eventCategoriesId
+      }
+      predictions {
+        items {
+          id
+          user {
+            id
+            email
+            username
+            name
+            bio
+            image
+            role
+            createdAt
+            updatedAt
+          }
+          contender {
+            id
+            category {
+              id
+              name
+              type
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+              eventCategoriesId
+            }
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              contenders {
+                nextToken
+              }
+              nominationDateTime
+              winDateTime
+              status
+              createdAt
+              updatedAt
+            }
+            movie {
+              id
+              tmdbId
+              studio
+              createdAt
+              updatedAt
+            }
+            person {
+              id
+              tmdbId
+              createdAt
+              updatedAt
+            }
+            song {
+              id
+              title
+              artist
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              createdAt
+              updatedAt
+              songMovieId
+            }
+            predictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderPredictionsId
+                predictionSetPredictionsId
+                predictionUserId
+              }
+              nextToken
+            }
+            historyPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderHistoryPredictionsId
+                historyPredictionSetPredictionsId
+                historyPredictionUserId
+              }
+              nextToken
+            }
+            communityPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderCommunityPredictionsId
+                communityPredictionSetPredictionsId
+              }
+              nextToken
+            }
+            communityHistoryPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderCommunityHistoryPredictionsId
+                communintyHistoryPredictionSetPredictionsId
+              }
+              nextToken
+            }
+            visibility
+            createdAt
+            updatedAt
+            eventContendersId
+            categoryContendersId
+            contenderMovieId
+            contenderPersonId
+            contenderSongId
+          }
+          ranking
+          createdAt
+          updatedAt
+          contenderPredictionsId
+          predictionSetPredictionsId
+          predictionUserId
+        }
+        nextToken
+      }
+      type
+      createdAt
+      updatedAt
+      predictionSetUserId
+      predictionSetEventId
+      predictionSetCategoryId
+    }
+  }
+`;
+export const listPredictionSets = /* GraphQL */ `
+  query ListPredictionSets(
+    $id: ID
+    $filter: ModelPredictionSetFilterInput
+    $limit: Int
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listPredictionSets(
+      id: $id
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        id
+        user {
+          id
+          email
+          username
+          name
+          bio
+          image
+          role
+          createdAt
+          updatedAt
+        }
+        event {
+          id
+          categories {
+            items {
+              id
+              name
+              type
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+              eventCategoriesId
+            }
+            nextToken
+          }
+          awardsBody
+          year
+          contenders {
+            items {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
+              visibility
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              contenderMovieId
+              contenderPersonId
+              contenderSongId
+            }
+            nextToken
+          }
+          nominationDateTime
+          winDateTime
+          status
+          createdAt
+          updatedAt
+        }
+        category {
+          id
+          name
+          type
+          event {
+            id
+            categories {
+              items {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              nextToken
+            }
+            awardsBody
+            year
+            contenders {
+              items {
+                id
+                visibility
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              nextToken
+            }
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          contenders {
+            items {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
+              visibility
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              contenderMovieId
+              contenderPersonId
+              contenderSongId
+            }
+            nextToken
+          }
+          createdAt
+          updatedAt
+          eventCategoriesId
+        }
+        predictions {
+          items {
+            id
+            user {
+              id
+              email
+              username
+              name
+              bio
+              image
+              role
+              createdAt
+              updatedAt
+            }
+            contender {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
+              visibility
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              contenderMovieId
+              contenderPersonId
+              contenderSongId
+            }
+            ranking
+            createdAt
+            updatedAt
+            contenderPredictionsId
+            predictionSetPredictionsId
+            predictionUserId
+          }
+          nextToken
+        }
+        type
+        createdAt
+        updatedAt
+        predictionSetUserId
+        predictionSetEventId
+        predictionSetCategoryId
+      }
+      nextToken
+    }
+  }
+`;
+export const getPrediction = /* GraphQL */ `
+  query GetPrediction($id: ID!) {
+    getPrediction(id: $id) {
+      id
+      user {
+        id
+        email
+        username
+        name
+        bio
+        image
+        role
+        createdAt
+        updatedAt
+      }
+      contender {
+        id
+        category {
+          id
+          name
+          type
+          event {
+            id
+            categories {
+              items {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              nextToken
+            }
+            awardsBody
+            year
+            contenders {
+              items {
+                id
+                visibility
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              nextToken
+            }
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          contenders {
+            items {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
+              visibility
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              contenderMovieId
+              contenderPersonId
+              contenderSongId
+            }
+            nextToken
+          }
+          createdAt
+          updatedAt
+          eventCategoriesId
+        }
+        event {
+          id
+          categories {
+            items {
+              id
+              name
+              type
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+              eventCategoriesId
+            }
+            nextToken
+          }
+          awardsBody
+          year
+          contenders {
+            items {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
+              visibility
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              contenderMovieId
+              contenderPersonId
+              contenderSongId
+            }
+            nextToken
+          }
+          nominationDateTime
+          winDateTime
+          status
+          createdAt
+          updatedAt
+        }
+        movie {
+          id
+          tmdbId
+          studio
+          createdAt
+          updatedAt
+        }
+        person {
+          id
+          tmdbId
+          createdAt
+          updatedAt
+        }
+        song {
+          id
+          title
+          artist
+          movie {
+            id
+            tmdbId
+            studio
+            createdAt
+            updatedAt
+          }
+          createdAt
+          updatedAt
+          songMovieId
+        }
+        predictions {
+          items {
+            id
+            user {
+              id
+              email
+              username
+              name
+              bio
+              image
+              role
+              createdAt
+              updatedAt
+            }
+            contender {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
+              visibility
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              contenderMovieId
+              contenderPersonId
+              contenderSongId
+            }
+            ranking
+            createdAt
+            updatedAt
+            contenderPredictionsId
+            predictionSetPredictionsId
+            predictionUserId
+          }
+          nextToken
+        }
+        historyPredictions {
+          items {
+            id
+            user {
+              id
+              email
+              username
+              name
+              bio
+              image
+              role
+              createdAt
+              updatedAt
+            }
+            contender {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
+              visibility
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              contenderMovieId
+              contenderPersonId
+              contenderSongId
+            }
+            ranking
+            createdAt
+            updatedAt
+            contenderHistoryPredictionsId
+            historyPredictionSetPredictionsId
+            historyPredictionUserId
+          }
+          nextToken
+        }
+        communityPredictions {
+          items {
+            id
+            contender {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
+              visibility
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              contenderMovieId
+              contenderPersonId
+              contenderSongId
+            }
+            ranking
+            createdAt
+            updatedAt
+            contenderCommunityPredictionsId
+            communityPredictionSetPredictionsId
+          }
+          nextToken
+        }
+        communityHistoryPredictions {
+          items {
+            id
+            contender {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
+              visibility
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              contenderMovieId
+              contenderPersonId
+              contenderSongId
+            }
+            ranking
+            createdAt
+            updatedAt
+            contenderCommunityHistoryPredictionsId
+            communintyHistoryPredictionSetPredictionsId
+          }
+          nextToken
+        }
+        visibility
+        createdAt
+        updatedAt
+        eventContendersId
+        categoryContendersId
+        contenderMovieId
+        contenderPersonId
+        contenderSongId
+      }
+      ranking
+      createdAt
+      updatedAt
+      contenderPredictionsId
+      predictionSetPredictionsId
+      predictionUserId
+    }
+  }
+`;
+export const listPredictions = /* GraphQL */ `
+  query ListPredictions(
+    $id: ID
+    $filter: ModelPredictionFilterInput
+    $limit: Int
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listPredictions(
+      id: $id
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        id
+        user {
+          id
+          email
+          username
+          name
+          bio
+          image
+          role
+          createdAt
+          updatedAt
+        }
+        contender {
+          id
+          category {
+            id
+            name
+            type
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              contenders {
+                nextToken
+              }
+              nominationDateTime
+              winDateTime
+              status
+              createdAt
+              updatedAt
+            }
+            contenders {
+              items {
+                id
+                visibility
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              nextToken
+            }
+            createdAt
+            updatedAt
+            eventCategoriesId
+          }
+          event {
+            id
+            categories {
+              items {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              nextToken
+            }
+            awardsBody
+            year
+            contenders {
+              items {
+                id
+                visibility
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              nextToken
+            }
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          movie {
+            id
+            tmdbId
+            studio
+            createdAt
+            updatedAt
+          }
+          person {
+            id
+            tmdbId
+            createdAt
+            updatedAt
+          }
+          song {
+            id
+            title
+            artist
+            movie {
+              id
+              tmdbId
+              studio
+              createdAt
+              updatedAt
+            }
+            createdAt
+            updatedAt
+            songMovieId
+          }
+          predictions {
+            items {
+              id
+              user {
+                id
+                email
+                username
+                name
+                bio
+                image
+                role
+                createdAt
+                updatedAt
+              }
+              contender {
+                id
+                visibility
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              ranking
+              createdAt
+              updatedAt
+              contenderPredictionsId
+              predictionSetPredictionsId
+              predictionUserId
+            }
+            nextToken
+          }
+          historyPredictions {
+            items {
+              id
+              user {
+                id
+                email
+                username
+                name
+                bio
+                image
+                role
+                createdAt
+                updatedAt
+              }
+              contender {
+                id
+                visibility
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              ranking
+              createdAt
+              updatedAt
+              contenderHistoryPredictionsId
+              historyPredictionSetPredictionsId
+              historyPredictionUserId
+            }
+            nextToken
+          }
+          communityPredictions {
+            items {
+              id
+              contender {
+                id
+                visibility
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              ranking
+              createdAt
+              updatedAt
+              contenderCommunityPredictionsId
+              communityPredictionSetPredictionsId
+            }
+            nextToken
+          }
+          communityHistoryPredictions {
+            items {
+              id
+              contender {
+                id
+                visibility
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              ranking
+              createdAt
+              updatedAt
+              contenderCommunityHistoryPredictionsId
+              communintyHistoryPredictionSetPredictionsId
+            }
+            nextToken
+          }
+          visibility
+          createdAt
+          updatedAt
+          eventContendersId
+          categoryContendersId
+          contenderMovieId
+          contenderPersonId
+          contenderSongId
+        }
+        ranking
+        createdAt
+        updatedAt
+        contenderPredictionsId
+        predictionSetPredictionsId
+        predictionUserId
+      }
+      nextToken
+    }
+  }
+`;
+export const getHistoryPredictionSet = /* GraphQL */ `
+  query GetHistoryPredictionSet($id: ID!) {
+    getHistoryPredictionSet(id: $id) {
+      id
+      user {
+        id
+        email
+        username
+        name
+        bio
+        image
+        role
+        createdAt
+        updatedAt
+      }
+      event {
+        id
+        categories {
+          items {
+            id
+            name
+            type
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              contenders {
+                nextToken
+              }
+              nominationDateTime
+              winDateTime
+              status
+              createdAt
+              updatedAt
+            }
+            contenders {
+              items {
+                id
+                visibility
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              nextToken
+            }
+            createdAt
+            updatedAt
+            eventCategoriesId
+          }
+          nextToken
+        }
+        awardsBody
+        year
+        contenders {
+          items {
+            id
+            category {
+              id
+              name
+              type
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+              eventCategoriesId
+            }
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              contenders {
+                nextToken
+              }
+              nominationDateTime
+              winDateTime
+              status
+              createdAt
+              updatedAt
+            }
+            movie {
+              id
+              tmdbId
+              studio
+              createdAt
+              updatedAt
+            }
+            person {
+              id
+              tmdbId
+              createdAt
+              updatedAt
+            }
+            song {
+              id
+              title
+              artist
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              createdAt
+              updatedAt
+              songMovieId
+            }
+            predictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderPredictionsId
+                predictionSetPredictionsId
+                predictionUserId
+              }
+              nextToken
+            }
+            historyPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderHistoryPredictionsId
+                historyPredictionSetPredictionsId
+                historyPredictionUserId
+              }
+              nextToken
+            }
+            communityPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderCommunityPredictionsId
+                communityPredictionSetPredictionsId
+              }
+              nextToken
+            }
+            communityHistoryPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderCommunityHistoryPredictionsId
+                communintyHistoryPredictionSetPredictionsId
+              }
+              nextToken
+            }
+            visibility
+            createdAt
+            updatedAt
+            eventContendersId
+            categoryContendersId
+            contenderMovieId
+            contenderPersonId
+            contenderSongId
+          }
+          nextToken
+        }
+        nominationDateTime
+        winDateTime
+        status
+        createdAt
+        updatedAt
+      }
+      category {
+        id
+        name
+        type
+        event {
+          id
+          categories {
+            items {
+              id
+              name
+              type
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+              eventCategoriesId
+            }
+            nextToken
+          }
+          awardsBody
+          year
+          contenders {
+            items {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
+              visibility
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              contenderMovieId
+              contenderPersonId
+              contenderSongId
+            }
+            nextToken
+          }
+          nominationDateTime
+          winDateTime
+          status
+          createdAt
+          updatedAt
+        }
+        contenders {
+          items {
+            id
+            category {
+              id
+              name
+              type
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+              eventCategoriesId
+            }
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              contenders {
+                nextToken
+              }
+              nominationDateTime
+              winDateTime
+              status
+              createdAt
+              updatedAt
+            }
+            movie {
+              id
+              tmdbId
+              studio
+              createdAt
+              updatedAt
+            }
+            person {
+              id
+              tmdbId
+              createdAt
+              updatedAt
+            }
+            song {
+              id
+              title
+              artist
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              createdAt
+              updatedAt
+              songMovieId
+            }
+            predictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderPredictionsId
+                predictionSetPredictionsId
+                predictionUserId
+              }
+              nextToken
+            }
+            historyPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderHistoryPredictionsId
+                historyPredictionSetPredictionsId
+                historyPredictionUserId
+              }
+              nextToken
+            }
+            communityPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderCommunityPredictionsId
+                communityPredictionSetPredictionsId
+              }
+              nextToken
+            }
+            communityHistoryPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderCommunityHistoryPredictionsId
+                communintyHistoryPredictionSetPredictionsId
+              }
+              nextToken
+            }
+            visibility
+            createdAt
+            updatedAt
+            eventContendersId
+            categoryContendersId
+            contenderMovieId
+            contenderPersonId
+            contenderSongId
+          }
+          nextToken
+        }
+        createdAt
+        updatedAt
+        eventCategoriesId
+      }
+      predictions {
+        items {
+          id
+          user {
+            id
+            email
+            username
+            name
+            bio
+            image
+            role
+            createdAt
+            updatedAt
+          }
+          contender {
+            id
+            category {
+              id
+              name
+              type
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+              eventCategoriesId
+            }
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              contenders {
+                nextToken
+              }
+              nominationDateTime
+              winDateTime
+              status
+              createdAt
+              updatedAt
+            }
+            movie {
+              id
+              tmdbId
+              studio
+              createdAt
+              updatedAt
+            }
+            person {
+              id
+              tmdbId
+              createdAt
+              updatedAt
+            }
+            song {
+              id
+              title
+              artist
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              createdAt
+              updatedAt
+              songMovieId
+            }
+            predictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderPredictionsId
+                predictionSetPredictionsId
+                predictionUserId
+              }
+              nextToken
+            }
+            historyPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderHistoryPredictionsId
+                historyPredictionSetPredictionsId
+                historyPredictionUserId
+              }
+              nextToken
+            }
+            communityPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderCommunityPredictionsId
+                communityPredictionSetPredictionsId
+              }
+              nextToken
+            }
+            communityHistoryPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderCommunityHistoryPredictionsId
+                communintyHistoryPredictionSetPredictionsId
+              }
+              nextToken
+            }
+            visibility
+            createdAt
+            updatedAt
+            eventContendersId
+            categoryContendersId
+            contenderMovieId
+            contenderPersonId
+            contenderSongId
+          }
+          ranking
+          createdAt
+          updatedAt
+          contenderHistoryPredictionsId
+          historyPredictionSetPredictionsId
+          historyPredictionUserId
+        }
+        nextToken
+      }
+      type
+      createdAt
+      updatedAt
+      historyPredictionSetUserId
+      historyPredictionSetEventId
+      historyPredictionSetCategoryId
+    }
+  }
+`;
+export const listHistoryPredictionSets = /* GraphQL */ `
+  query ListHistoryPredictionSets(
+    $id: ID
+    $filter: ModelHistoryPredictionSetFilterInput
+    $limit: Int
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listHistoryPredictionSets(
+      id: $id
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        id
+        user {
+          id
+          email
+          username
+          name
+          bio
+          image
+          role
+          createdAt
+          updatedAt
+        }
+        event {
+          id
+          categories {
+            items {
+              id
+              name
+              type
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+              eventCategoriesId
+            }
+            nextToken
+          }
+          awardsBody
+          year
+          contenders {
+            items {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
+              visibility
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              contenderMovieId
+              contenderPersonId
+              contenderSongId
+            }
+            nextToken
+          }
+          nominationDateTime
+          winDateTime
+          status
+          createdAt
+          updatedAt
+        }
+        category {
+          id
+          name
+          type
+          event {
+            id
+            categories {
+              items {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              nextToken
+            }
+            awardsBody
+            year
+            contenders {
+              items {
+                id
+                visibility
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              nextToken
+            }
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          contenders {
+            items {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
+              visibility
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              contenderMovieId
+              contenderPersonId
+              contenderSongId
+            }
+            nextToken
+          }
+          createdAt
+          updatedAt
+          eventCategoriesId
+        }
+        predictions {
+          items {
+            id
+            user {
+              id
+              email
+              username
+              name
+              bio
+              image
+              role
+              createdAt
+              updatedAt
+            }
+            contender {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
+              visibility
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              contenderMovieId
+              contenderPersonId
+              contenderSongId
+            }
+            ranking
+            createdAt
+            updatedAt
+            contenderHistoryPredictionsId
+            historyPredictionSetPredictionsId
+            historyPredictionUserId
+          }
+          nextToken
+        }
+        type
+        createdAt
+        updatedAt
+        historyPredictionSetUserId
+        historyPredictionSetEventId
+        historyPredictionSetCategoryId
+      }
+      nextToken
+    }
+  }
+`;
+export const getHistoryPrediction = /* GraphQL */ `
+  query GetHistoryPrediction($id: ID!) {
+    getHistoryPrediction(id: $id) {
+      id
+      user {
+        id
+        email
+        username
+        name
+        bio
+        image
+        role
+        createdAt
+        updatedAt
+      }
+      contender {
+        id
+        category {
+          id
+          name
+          type
+          event {
+            id
+            categories {
+              items {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              nextToken
+            }
+            awardsBody
+            year
+            contenders {
+              items {
+                id
+                visibility
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              nextToken
+            }
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          contenders {
+            items {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
+              visibility
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              contenderMovieId
+              contenderPersonId
+              contenderSongId
+            }
+            nextToken
+          }
+          createdAt
+          updatedAt
+          eventCategoriesId
+        }
+        event {
+          id
+          categories {
+            items {
+              id
+              name
+              type
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+              eventCategoriesId
+            }
+            nextToken
+          }
+          awardsBody
+          year
+          contenders {
+            items {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
+              visibility
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              contenderMovieId
+              contenderPersonId
+              contenderSongId
+            }
+            nextToken
+          }
+          nominationDateTime
+          winDateTime
+          status
+          createdAt
+          updatedAt
+        }
+        movie {
+          id
+          tmdbId
+          studio
+          createdAt
+          updatedAt
+        }
+        person {
+          id
+          tmdbId
+          createdAt
+          updatedAt
+        }
+        song {
+          id
+          title
+          artist
+          movie {
+            id
+            tmdbId
+            studio
+            createdAt
+            updatedAt
+          }
+          createdAt
+          updatedAt
+          songMovieId
+        }
+        predictions {
+          items {
+            id
+            user {
+              id
+              email
+              username
+              name
+              bio
+              image
+              role
+              createdAt
+              updatedAt
+            }
+            contender {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
+              visibility
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              contenderMovieId
+              contenderPersonId
+              contenderSongId
+            }
+            ranking
+            createdAt
+            updatedAt
+            contenderPredictionsId
+            predictionSetPredictionsId
+            predictionUserId
+          }
+          nextToken
+        }
+        historyPredictions {
+          items {
+            id
+            user {
+              id
+              email
+              username
+              name
+              bio
+              image
+              role
+              createdAt
+              updatedAt
+            }
+            contender {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
+              visibility
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              contenderMovieId
+              contenderPersonId
+              contenderSongId
+            }
+            ranking
+            createdAt
+            updatedAt
+            contenderHistoryPredictionsId
+            historyPredictionSetPredictionsId
+            historyPredictionUserId
+          }
+          nextToken
+        }
+        communityPredictions {
+          items {
+            id
+            contender {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
+              visibility
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              contenderMovieId
+              contenderPersonId
+              contenderSongId
+            }
+            ranking
+            createdAt
+            updatedAt
+            contenderCommunityPredictionsId
+            communityPredictionSetPredictionsId
+          }
+          nextToken
+        }
+        communityHistoryPredictions {
+          items {
+            id
+            contender {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
+              visibility
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              contenderMovieId
+              contenderPersonId
+              contenderSongId
+            }
+            ranking
+            createdAt
+            updatedAt
+            contenderCommunityHistoryPredictionsId
+            communintyHistoryPredictionSetPredictionsId
+          }
+          nextToken
+        }
+        visibility
+        createdAt
+        updatedAt
+        eventContendersId
+        categoryContendersId
+        contenderMovieId
+        contenderPersonId
+        contenderSongId
+      }
+      ranking
+      createdAt
+      updatedAt
+      contenderHistoryPredictionsId
+      historyPredictionSetPredictionsId
+      historyPredictionUserId
+    }
+  }
+`;
+export const listHistoryPredictions = /* GraphQL */ `
+  query ListHistoryPredictions(
+    $id: ID
+    $filter: ModelHistoryPredictionFilterInput
+    $limit: Int
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listHistoryPredictions(
+      id: $id
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        id
+        user {
+          id
+          email
+          username
+          name
+          bio
+          image
+          role
+          createdAt
+          updatedAt
+        }
+        contender {
+          id
+          category {
+            id
+            name
+            type
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              contenders {
+                nextToken
+              }
+              nominationDateTime
+              winDateTime
+              status
+              createdAt
+              updatedAt
+            }
+            contenders {
+              items {
+                id
+                visibility
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              nextToken
+            }
+            createdAt
+            updatedAt
+            eventCategoriesId
+          }
+          event {
+            id
+            categories {
+              items {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              nextToken
+            }
+            awardsBody
+            year
+            contenders {
+              items {
+                id
+                visibility
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              nextToken
+            }
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          movie {
+            id
+            tmdbId
+            studio
+            createdAt
+            updatedAt
+          }
+          person {
+            id
+            tmdbId
+            createdAt
+            updatedAt
+          }
+          song {
+            id
+            title
+            artist
+            movie {
+              id
+              tmdbId
+              studio
+              createdAt
+              updatedAt
+            }
+            createdAt
+            updatedAt
+            songMovieId
+          }
+          predictions {
+            items {
+              id
+              user {
+                id
+                email
+                username
+                name
+                bio
+                image
+                role
+                createdAt
+                updatedAt
+              }
+              contender {
+                id
+                visibility
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              ranking
+              createdAt
+              updatedAt
+              contenderPredictionsId
+              predictionSetPredictionsId
+              predictionUserId
+            }
+            nextToken
+          }
+          historyPredictions {
+            items {
+              id
+              user {
+                id
+                email
+                username
+                name
+                bio
+                image
+                role
+                createdAt
+                updatedAt
+              }
+              contender {
+                id
+                visibility
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              ranking
+              createdAt
+              updatedAt
+              contenderHistoryPredictionsId
+              historyPredictionSetPredictionsId
+              historyPredictionUserId
+            }
+            nextToken
+          }
+          communityPredictions {
+            items {
+              id
+              contender {
+                id
+                visibility
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              ranking
+              createdAt
+              updatedAt
+              contenderCommunityPredictionsId
+              communityPredictionSetPredictionsId
+            }
+            nextToken
+          }
+          communityHistoryPredictions {
+            items {
+              id
+              contender {
+                id
+                visibility
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              ranking
+              createdAt
+              updatedAt
+              contenderCommunityHistoryPredictionsId
+              communintyHistoryPredictionSetPredictionsId
+            }
+            nextToken
+          }
+          visibility
+          createdAt
+          updatedAt
+          eventContendersId
+          categoryContendersId
+          contenderMovieId
+          contenderPersonId
+          contenderSongId
+        }
+        ranking
+        createdAt
+        updatedAt
+        contenderHistoryPredictionsId
+        historyPredictionSetPredictionsId
+        historyPredictionUserId
+      }
+      nextToken
+    }
+  }
+`;
+export const getCommunityPredictionSet = /* GraphQL */ `
+  query GetCommunityPredictionSet($id: ID!) {
+    getCommunityPredictionSet(id: $id) {
+      id
+      event {
+        id
+        categories {
+          items {
+            id
+            name
+            type
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              contenders {
+                nextToken
+              }
+              nominationDateTime
+              winDateTime
+              status
+              createdAt
+              updatedAt
+            }
+            contenders {
+              items {
+                id
+                visibility
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              nextToken
+            }
+            createdAt
+            updatedAt
+            eventCategoriesId
+          }
+          nextToken
+        }
+        awardsBody
+        year
+        contenders {
+          items {
+            id
+            category {
+              id
+              name
+              type
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+              eventCategoriesId
+            }
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              contenders {
+                nextToken
+              }
+              nominationDateTime
+              winDateTime
+              status
+              createdAt
+              updatedAt
+            }
+            movie {
+              id
+              tmdbId
+              studio
+              createdAt
+              updatedAt
+            }
+            person {
+              id
+              tmdbId
+              createdAt
+              updatedAt
+            }
+            song {
+              id
+              title
+              artist
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              createdAt
+              updatedAt
+              songMovieId
+            }
+            predictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderPredictionsId
+                predictionSetPredictionsId
+                predictionUserId
+              }
+              nextToken
+            }
+            historyPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderHistoryPredictionsId
+                historyPredictionSetPredictionsId
+                historyPredictionUserId
+              }
+              nextToken
+            }
+            communityPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderCommunityPredictionsId
+                communityPredictionSetPredictionsId
+              }
+              nextToken
+            }
+            communityHistoryPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderCommunityHistoryPredictionsId
+                communintyHistoryPredictionSetPredictionsId
+              }
+              nextToken
+            }
+            visibility
+            createdAt
+            updatedAt
+            eventContendersId
+            categoryContendersId
+            contenderMovieId
+            contenderPersonId
+            contenderSongId
+          }
+          nextToken
+        }
+        nominationDateTime
+        winDateTime
+        status
+        createdAt
+        updatedAt
+      }
+      category {
+        id
+        name
+        type
+        event {
+          id
+          categories {
+            items {
+              id
+              name
+              type
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+              eventCategoriesId
+            }
+            nextToken
+          }
+          awardsBody
+          year
+          contenders {
+            items {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
+              visibility
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              contenderMovieId
+              contenderPersonId
+              contenderSongId
+            }
+            nextToken
+          }
+          nominationDateTime
+          winDateTime
+          status
+          createdAt
+          updatedAt
+        }
+        contenders {
+          items {
+            id
+            category {
+              id
+              name
+              type
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+              eventCategoriesId
+            }
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              contenders {
+                nextToken
+              }
+              nominationDateTime
+              winDateTime
+              status
+              createdAt
+              updatedAt
+            }
+            movie {
+              id
+              tmdbId
+              studio
+              createdAt
+              updatedAt
+            }
+            person {
+              id
+              tmdbId
+              createdAt
+              updatedAt
+            }
+            song {
+              id
+              title
+              artist
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              createdAt
+              updatedAt
+              songMovieId
+            }
+            predictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderPredictionsId
+                predictionSetPredictionsId
+                predictionUserId
+              }
+              nextToken
+            }
+            historyPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderHistoryPredictionsId
+                historyPredictionSetPredictionsId
+                historyPredictionUserId
+              }
+              nextToken
+            }
+            communityPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderCommunityPredictionsId
+                communityPredictionSetPredictionsId
+              }
+              nextToken
+            }
+            communityHistoryPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderCommunityHistoryPredictionsId
+                communintyHistoryPredictionSetPredictionsId
+              }
+              nextToken
+            }
+            visibility
+            createdAt
+            updatedAt
+            eventContendersId
+            categoryContendersId
+            contenderMovieId
+            contenderPersonId
+            contenderSongId
+          }
+          nextToken
+        }
+        createdAt
+        updatedAt
+        eventCategoriesId
+      }
+      predictions {
+        items {
+          id
+          contender {
+            id
+            category {
+              id
+              name
+              type
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+              eventCategoriesId
+            }
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              contenders {
+                nextToken
+              }
+              nominationDateTime
+              winDateTime
+              status
+              createdAt
+              updatedAt
+            }
+            movie {
+              id
+              tmdbId
+              studio
+              createdAt
+              updatedAt
+            }
+            person {
+              id
+              tmdbId
+              createdAt
+              updatedAt
+            }
+            song {
+              id
+              title
+              artist
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              createdAt
+              updatedAt
+              songMovieId
+            }
+            predictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderPredictionsId
+                predictionSetPredictionsId
+                predictionUserId
+              }
+              nextToken
+            }
+            historyPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderHistoryPredictionsId
+                historyPredictionSetPredictionsId
+                historyPredictionUserId
+              }
+              nextToken
+            }
+            communityPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderCommunityPredictionsId
+                communityPredictionSetPredictionsId
+              }
+              nextToken
+            }
+            communityHistoryPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderCommunityHistoryPredictionsId
+                communintyHistoryPredictionSetPredictionsId
+              }
+              nextToken
+            }
+            visibility
+            createdAt
+            updatedAt
+            eventContendersId
+            categoryContendersId
+            contenderMovieId
+            contenderPersonId
+            contenderSongId
+          }
+          ranking
+          createdAt
+          updatedAt
+          contenderCommunityPredictionsId
+          communityPredictionSetPredictionsId
+        }
+        nextToken
+      }
+      type
+      createdAt
+      updatedAt
+      communityPredictionSetEventId
+      communityPredictionSetCategoryId
+    }
+  }
+`;
+export const listCommunityPredictionSets = /* GraphQL */ `
+  query ListCommunityPredictionSets(
+    $id: ID
+    $filter: ModelCommunityPredictionSetFilterInput
+    $limit: Int
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listCommunityPredictionSets(
+      id: $id
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        id
+        event {
+          id
+          categories {
+            items {
+              id
+              name
+              type
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+              eventCategoriesId
+            }
+            nextToken
+          }
+          awardsBody
+          year
+          contenders {
+            items {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
+              visibility
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              contenderMovieId
+              contenderPersonId
+              contenderSongId
+            }
+            nextToken
+          }
+          nominationDateTime
+          winDateTime
+          status
+          createdAt
+          updatedAt
+        }
+        category {
+          id
+          name
+          type
+          event {
+            id
+            categories {
+              items {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              nextToken
+            }
+            awardsBody
+            year
+            contenders {
+              items {
+                id
+                visibility
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              nextToken
+            }
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          contenders {
+            items {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
+              visibility
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              contenderMovieId
+              contenderPersonId
+              contenderSongId
+            }
+            nextToken
+          }
+          createdAt
+          updatedAt
+          eventCategoriesId
+        }
+        predictions {
+          items {
+            id
+            contender {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
+              visibility
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              contenderMovieId
+              contenderPersonId
+              contenderSongId
+            }
+            ranking
+            createdAt
+            updatedAt
+            contenderCommunityPredictionsId
+            communityPredictionSetPredictionsId
+          }
+          nextToken
+        }
+        type
+        createdAt
+        updatedAt
+        communityPredictionSetEventId
+        communityPredictionSetCategoryId
+      }
+      nextToken
+    }
+  }
+`;
+export const getCommunityPrediction = /* GraphQL */ `
+  query GetCommunityPrediction($id: ID!) {
+    getCommunityPrediction(id: $id) {
+      id
+      contender {
+        id
+        category {
+          id
+          name
+          type
+          event {
+            id
+            categories {
+              items {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              nextToken
+            }
+            awardsBody
+            year
+            contenders {
+              items {
+                id
+                visibility
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              nextToken
+            }
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          contenders {
+            items {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
+              visibility
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              contenderMovieId
+              contenderPersonId
+              contenderSongId
+            }
+            nextToken
+          }
+          createdAt
+          updatedAt
+          eventCategoriesId
+        }
+        event {
+          id
+          categories {
+            items {
+              id
+              name
+              type
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+              eventCategoriesId
+            }
+            nextToken
+          }
+          awardsBody
+          year
+          contenders {
+            items {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
+              visibility
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              contenderMovieId
+              contenderPersonId
+              contenderSongId
+            }
+            nextToken
+          }
+          nominationDateTime
+          winDateTime
+          status
+          createdAt
+          updatedAt
+        }
+        movie {
+          id
+          tmdbId
+          studio
+          createdAt
+          updatedAt
+        }
+        person {
+          id
+          tmdbId
+          createdAt
+          updatedAt
+        }
+        song {
+          id
+          title
+          artist
+          movie {
+            id
+            tmdbId
+            studio
+            createdAt
+            updatedAt
+          }
+          createdAt
+          updatedAt
+          songMovieId
+        }
+        predictions {
+          items {
+            id
+            user {
+              id
+              email
+              username
+              name
+              bio
+              image
+              role
+              createdAt
+              updatedAt
+            }
+            contender {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
+              visibility
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              contenderMovieId
+              contenderPersonId
+              contenderSongId
+            }
+            ranking
+            createdAt
+            updatedAt
+            contenderPredictionsId
+            predictionSetPredictionsId
+            predictionUserId
+          }
+          nextToken
+        }
+        historyPredictions {
+          items {
+            id
+            user {
+              id
+              email
+              username
+              name
+              bio
+              image
+              role
+              createdAt
+              updatedAt
+            }
+            contender {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
+              visibility
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              contenderMovieId
+              contenderPersonId
+              contenderSongId
+            }
+            ranking
+            createdAt
+            updatedAt
+            contenderHistoryPredictionsId
+            historyPredictionSetPredictionsId
+            historyPredictionUserId
+          }
+          nextToken
+        }
+        communityPredictions {
+          items {
+            id
+            contender {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
+              visibility
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              contenderMovieId
+              contenderPersonId
+              contenderSongId
+            }
+            ranking
+            createdAt
+            updatedAt
+            contenderCommunityPredictionsId
+            communityPredictionSetPredictionsId
+          }
+          nextToken
+        }
+        communityHistoryPredictions {
+          items {
+            id
+            contender {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
+              visibility
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              contenderMovieId
+              contenderPersonId
+              contenderSongId
+            }
+            ranking
+            createdAt
+            updatedAt
+            contenderCommunityHistoryPredictionsId
+            communintyHistoryPredictionSetPredictionsId
+          }
+          nextToken
+        }
+        visibility
+        createdAt
+        updatedAt
+        eventContendersId
+        categoryContendersId
+        contenderMovieId
+        contenderPersonId
+        contenderSongId
+      }
+      ranking
+      createdAt
+      updatedAt
+      contenderCommunityPredictionsId
+      communityPredictionSetPredictionsId
+    }
+  }
+`;
+export const listCommunityPredictions = /* GraphQL */ `
+  query ListCommunityPredictions(
+    $id: ID
+    $filter: ModelCommunityPredictionFilterInput
+    $limit: Int
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listCommunityPredictions(
+      id: $id
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        id
+        contender {
+          id
+          category {
+            id
+            name
+            type
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              contenders {
+                nextToken
+              }
+              nominationDateTime
+              winDateTime
+              status
+              createdAt
+              updatedAt
+            }
+            contenders {
+              items {
+                id
+                visibility
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              nextToken
+            }
+            createdAt
+            updatedAt
+            eventCategoriesId
+          }
+          event {
+            id
+            categories {
+              items {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              nextToken
+            }
+            awardsBody
+            year
+            contenders {
+              items {
+                id
+                visibility
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              nextToken
+            }
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          movie {
+            id
+            tmdbId
+            studio
+            createdAt
+            updatedAt
+          }
+          person {
+            id
+            tmdbId
+            createdAt
+            updatedAt
+          }
+          song {
+            id
+            title
+            artist
+            movie {
+              id
+              tmdbId
+              studio
+              createdAt
+              updatedAt
+            }
+            createdAt
+            updatedAt
+            songMovieId
+          }
+          predictions {
+            items {
+              id
+              user {
+                id
+                email
+                username
+                name
+                bio
+                image
+                role
+                createdAt
+                updatedAt
+              }
+              contender {
+                id
+                visibility
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              ranking
+              createdAt
+              updatedAt
+              contenderPredictionsId
+              predictionSetPredictionsId
+              predictionUserId
+            }
+            nextToken
+          }
+          historyPredictions {
+            items {
+              id
+              user {
+                id
+                email
+                username
+                name
+                bio
+                image
+                role
+                createdAt
+                updatedAt
+              }
+              contender {
+                id
+                visibility
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              ranking
+              createdAt
+              updatedAt
+              contenderHistoryPredictionsId
+              historyPredictionSetPredictionsId
+              historyPredictionUserId
+            }
+            nextToken
+          }
+          communityPredictions {
+            items {
+              id
+              contender {
+                id
+                visibility
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              ranking
+              createdAt
+              updatedAt
+              contenderCommunityPredictionsId
+              communityPredictionSetPredictionsId
+            }
+            nextToken
+          }
+          communityHistoryPredictions {
+            items {
+              id
+              contender {
+                id
+                visibility
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              ranking
+              createdAt
+              updatedAt
+              contenderCommunityHistoryPredictionsId
+              communintyHistoryPredictionSetPredictionsId
+            }
+            nextToken
+          }
+          visibility
+          createdAt
+          updatedAt
+          eventContendersId
+          categoryContendersId
+          contenderMovieId
+          contenderPersonId
+          contenderSongId
+        }
+        ranking
+        createdAt
+        updatedAt
+        contenderCommunityPredictionsId
+        communityPredictionSetPredictionsId
+      }
+      nextToken
+    }
+  }
+`;
+export const getCommunintyHistoryPredictionSet = /* GraphQL */ `
+  query GetCommunintyHistoryPredictionSet($id: ID!) {
+    getCommunintyHistoryPredictionSet(id: $id) {
+      id
+      event {
+        id
+        categories {
+          items {
+            id
+            name
+            type
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              contenders {
+                nextToken
+              }
+              nominationDateTime
+              winDateTime
+              status
+              createdAt
+              updatedAt
+            }
+            contenders {
+              items {
+                id
+                visibility
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              nextToken
+            }
+            createdAt
+            updatedAt
+            eventCategoriesId
+          }
+          nextToken
+        }
+        awardsBody
+        year
+        contenders {
+          items {
+            id
+            category {
+              id
+              name
+              type
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+              eventCategoriesId
+            }
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              contenders {
+                nextToken
+              }
+              nominationDateTime
+              winDateTime
+              status
+              createdAt
+              updatedAt
+            }
+            movie {
+              id
+              tmdbId
+              studio
+              createdAt
+              updatedAt
+            }
+            person {
+              id
+              tmdbId
+              createdAt
+              updatedAt
+            }
+            song {
+              id
+              title
+              artist
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              createdAt
+              updatedAt
+              songMovieId
+            }
+            predictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderPredictionsId
+                predictionSetPredictionsId
+                predictionUserId
+              }
+              nextToken
+            }
+            historyPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderHistoryPredictionsId
+                historyPredictionSetPredictionsId
+                historyPredictionUserId
+              }
+              nextToken
+            }
+            communityPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderCommunityPredictionsId
+                communityPredictionSetPredictionsId
+              }
+              nextToken
+            }
+            communityHistoryPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderCommunityHistoryPredictionsId
+                communintyHistoryPredictionSetPredictionsId
+              }
+              nextToken
+            }
+            visibility
+            createdAt
+            updatedAt
+            eventContendersId
+            categoryContendersId
+            contenderMovieId
+            contenderPersonId
+            contenderSongId
+          }
+          nextToken
+        }
+        nominationDateTime
+        winDateTime
+        status
+        createdAt
+        updatedAt
+      }
+      category {
+        id
+        name
+        type
+        event {
+          id
+          categories {
+            items {
+              id
+              name
+              type
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+              eventCategoriesId
+            }
+            nextToken
+          }
+          awardsBody
+          year
+          contenders {
+            items {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
+              visibility
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              contenderMovieId
+              contenderPersonId
+              contenderSongId
+            }
+            nextToken
+          }
+          nominationDateTime
+          winDateTime
+          status
+          createdAt
+          updatedAt
+        }
+        contenders {
+          items {
+            id
+            category {
+              id
+              name
+              type
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+              eventCategoriesId
+            }
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              contenders {
+                nextToken
+              }
+              nominationDateTime
+              winDateTime
+              status
+              createdAt
+              updatedAt
+            }
+            movie {
+              id
+              tmdbId
+              studio
+              createdAt
+              updatedAt
+            }
+            person {
+              id
+              tmdbId
+              createdAt
+              updatedAt
+            }
+            song {
+              id
+              title
+              artist
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              createdAt
+              updatedAt
+              songMovieId
+            }
+            predictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderPredictionsId
+                predictionSetPredictionsId
+                predictionUserId
+              }
+              nextToken
+            }
+            historyPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderHistoryPredictionsId
+                historyPredictionSetPredictionsId
+                historyPredictionUserId
+              }
+              nextToken
+            }
+            communityPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderCommunityPredictionsId
+                communityPredictionSetPredictionsId
+              }
+              nextToken
+            }
+            communityHistoryPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderCommunityHistoryPredictionsId
+                communintyHistoryPredictionSetPredictionsId
+              }
+              nextToken
+            }
+            visibility
+            createdAt
+            updatedAt
+            eventContendersId
+            categoryContendersId
+            contenderMovieId
+            contenderPersonId
+            contenderSongId
+          }
+          nextToken
+        }
+        createdAt
+        updatedAt
+        eventCategoriesId
+      }
+      predictions {
+        items {
+          id
+          contender {
+            id
+            category {
+              id
+              name
+              type
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+              eventCategoriesId
+            }
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              contenders {
+                nextToken
+              }
+              nominationDateTime
+              winDateTime
+              status
+              createdAt
+              updatedAt
+            }
+            movie {
+              id
+              tmdbId
+              studio
+              createdAt
+              updatedAt
+            }
+            person {
+              id
+              tmdbId
+              createdAt
+              updatedAt
+            }
+            song {
+              id
+              title
+              artist
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              createdAt
+              updatedAt
+              songMovieId
+            }
+            predictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderPredictionsId
+                predictionSetPredictionsId
+                predictionUserId
+              }
+              nextToken
+            }
+            historyPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderHistoryPredictionsId
+                historyPredictionSetPredictionsId
+                historyPredictionUserId
+              }
+              nextToken
+            }
+            communityPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderCommunityPredictionsId
+                communityPredictionSetPredictionsId
+              }
+              nextToken
+            }
+            communityHistoryPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderCommunityHistoryPredictionsId
+                communintyHistoryPredictionSetPredictionsId
+              }
+              nextToken
+            }
+            visibility
+            createdAt
+            updatedAt
+            eventContendersId
+            categoryContendersId
+            contenderMovieId
+            contenderPersonId
+            contenderSongId
+          }
+          ranking
+          createdAt
+          updatedAt
+          contenderCommunityHistoryPredictionsId
+          communintyHistoryPredictionSetPredictionsId
+        }
+        nextToken
+      }
+      type
+      createdAt
+      updatedAt
+      communintyHistoryPredictionSetEventId
+      communintyHistoryPredictionSetCategoryId
+    }
+  }
+`;
+export const listCommunintyHistoryPredictionSets = /* GraphQL */ `
+  query ListCommunintyHistoryPredictionSets(
+    $id: ID
+    $filter: ModelCommunintyHistoryPredictionSetFilterInput
+    $limit: Int
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listCommunintyHistoryPredictionSets(
+      id: $id
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        id
+        event {
+          id
+          categories {
+            items {
+              id
+              name
+              type
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+              eventCategoriesId
+            }
+            nextToken
+          }
+          awardsBody
+          year
+          contenders {
+            items {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
+              visibility
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              contenderMovieId
+              contenderPersonId
+              contenderSongId
+            }
+            nextToken
+          }
+          nominationDateTime
+          winDateTime
+          status
+          createdAt
+          updatedAt
+        }
+        category {
+          id
+          name
+          type
+          event {
+            id
+            categories {
+              items {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              nextToken
+            }
+            awardsBody
+            year
+            contenders {
+              items {
+                id
+                visibility
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              nextToken
+            }
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          contenders {
+            items {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
+              visibility
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              contenderMovieId
+              contenderPersonId
+              contenderSongId
+            }
+            nextToken
+          }
+          createdAt
+          updatedAt
+          eventCategoriesId
+        }
+        predictions {
+          items {
+            id
+            contender {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
+              visibility
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              contenderMovieId
+              contenderPersonId
+              contenderSongId
+            }
+            ranking
+            createdAt
+            updatedAt
+            contenderCommunityHistoryPredictionsId
+            communintyHistoryPredictionSetPredictionsId
+          }
+          nextToken
+        }
+        type
+        createdAt
+        updatedAt
+        communintyHistoryPredictionSetEventId
+        communintyHistoryPredictionSetCategoryId
+      }
+      nextToken
+    }
+  }
+`;
+export const getCommunityHistoryPrediction = /* GraphQL */ `
+  query GetCommunityHistoryPrediction($id: ID!) {
+    getCommunityHistoryPrediction(id: $id) {
+      id
+      contender {
+        id
+        category {
+          id
+          name
+          type
+          event {
+            id
+            categories {
+              items {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              nextToken
+            }
+            awardsBody
+            year
+            contenders {
+              items {
+                id
+                visibility
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              nextToken
+            }
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          contenders {
+            items {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
+              visibility
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              contenderMovieId
+              contenderPersonId
+              contenderSongId
+            }
+            nextToken
+          }
+          createdAt
+          updatedAt
+          eventCategoriesId
+        }
+        event {
+          id
+          categories {
+            items {
+              id
+              name
+              type
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+              eventCategoriesId
+            }
+            nextToken
+          }
+          awardsBody
+          year
+          contenders {
+            items {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
+              visibility
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              contenderMovieId
+              contenderPersonId
+              contenderSongId
+            }
+            nextToken
+          }
+          nominationDateTime
+          winDateTime
+          status
+          createdAt
+          updatedAt
+        }
+        movie {
+          id
+          tmdbId
+          studio
+          createdAt
+          updatedAt
+        }
+        person {
+          id
+          tmdbId
+          createdAt
+          updatedAt
+        }
+        song {
+          id
+          title
+          artist
+          movie {
+            id
+            tmdbId
+            studio
+            createdAt
+            updatedAt
+          }
+          createdAt
+          updatedAt
+          songMovieId
+        }
+        predictions {
+          items {
+            id
+            user {
+              id
+              email
+              username
+              name
+              bio
+              image
+              role
+              createdAt
+              updatedAt
+            }
+            contender {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
+              visibility
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              contenderMovieId
+              contenderPersonId
+              contenderSongId
+            }
+            ranking
+            createdAt
+            updatedAt
+            contenderPredictionsId
+            predictionSetPredictionsId
+            predictionUserId
+          }
+          nextToken
+        }
+        historyPredictions {
+          items {
+            id
+            user {
+              id
+              email
+              username
+              name
+              bio
+              image
+              role
+              createdAt
+              updatedAt
+            }
+            contender {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
+              visibility
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              contenderMovieId
+              contenderPersonId
+              contenderSongId
+            }
+            ranking
+            createdAt
+            updatedAt
+            contenderHistoryPredictionsId
+            historyPredictionSetPredictionsId
+            historyPredictionUserId
+          }
+          nextToken
+        }
+        communityPredictions {
+          items {
+            id
+            contender {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
+              visibility
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              contenderMovieId
+              contenderPersonId
+              contenderSongId
+            }
+            ranking
+            createdAt
+            updatedAt
+            contenderCommunityPredictionsId
+            communityPredictionSetPredictionsId
+          }
+          nextToken
+        }
+        communityHistoryPredictions {
+          items {
+            id
+            contender {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
+              visibility
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              contenderMovieId
+              contenderPersonId
+              contenderSongId
+            }
+            ranking
+            createdAt
+            updatedAt
+            contenderCommunityHistoryPredictionsId
+            communintyHistoryPredictionSetPredictionsId
+          }
+          nextToken
+        }
+        visibility
+        createdAt
+        updatedAt
+        eventContendersId
+        categoryContendersId
+        contenderMovieId
+        contenderPersonId
+        contenderSongId
+      }
+      ranking
+      createdAt
+      updatedAt
+      contenderCommunityHistoryPredictionsId
+      communintyHistoryPredictionSetPredictionsId
+    }
+  }
+`;
+export const listCommunityHistoryPredictions = /* GraphQL */ `
+  query ListCommunityHistoryPredictions(
+    $id: ID
+    $filter: ModelCommunityHistoryPredictionFilterInput
+    $limit: Int
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listCommunityHistoryPredictions(
+      id: $id
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        id
+        contender {
+          id
+          category {
+            id
+            name
+            type
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              contenders {
+                nextToken
+              }
+              nominationDateTime
+              winDateTime
+              status
+              createdAt
+              updatedAt
+            }
+            contenders {
+              items {
+                id
+                visibility
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              nextToken
+            }
+            createdAt
+            updatedAt
+            eventCategoriesId
+          }
+          event {
+            id
+            categories {
+              items {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              nextToken
+            }
+            awardsBody
+            year
+            contenders {
+              items {
+                id
+                visibility
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              nextToken
+            }
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          movie {
+            id
+            tmdbId
+            studio
+            createdAt
+            updatedAt
+          }
+          person {
+            id
+            tmdbId
+            createdAt
+            updatedAt
+          }
+          song {
+            id
+            title
+            artist
+            movie {
+              id
+              tmdbId
+              studio
+              createdAt
+              updatedAt
+            }
+            createdAt
+            updatedAt
+            songMovieId
+          }
+          predictions {
+            items {
+              id
+              user {
+                id
+                email
+                username
+                name
+                bio
+                image
+                role
+                createdAt
+                updatedAt
+              }
+              contender {
+                id
+                visibility
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              ranking
+              createdAt
+              updatedAt
+              contenderPredictionsId
+              predictionSetPredictionsId
+              predictionUserId
+            }
+            nextToken
+          }
+          historyPredictions {
+            items {
+              id
+              user {
+                id
+                email
+                username
+                name
+                bio
+                image
+                role
+                createdAt
+                updatedAt
+              }
+              contender {
+                id
+                visibility
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              ranking
+              createdAt
+              updatedAt
+              contenderHistoryPredictionsId
+              historyPredictionSetPredictionsId
+              historyPredictionUserId
+            }
+            nextToken
+          }
+          communityPredictions {
+            items {
+              id
+              contender {
+                id
+                visibility
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              ranking
+              createdAt
+              updatedAt
+              contenderCommunityPredictionsId
+              communityPredictionSetPredictionsId
+            }
+            nextToken
+          }
+          communityHistoryPredictions {
+            items {
+              id
+              contender {
+                id
+                visibility
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                contenderMovieId
+                contenderPersonId
+                contenderSongId
+              }
+              ranking
+              createdAt
+              updatedAt
+              contenderCommunityHistoryPredictionsId
+              communintyHistoryPredictionSetPredictionsId
+            }
+            nextToken
+          }
+          visibility
+          createdAt
+          updatedAt
+          eventContendersId
+          categoryContendersId
+          contenderMovieId
+          contenderPersonId
+          contenderSongId
+        }
+        ranking
+        createdAt
+        updatedAt
+        contenderCommunityHistoryPredictionsId
+        communintyHistoryPredictionSetPredictionsId
       }
       nextToken
     }

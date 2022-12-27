@@ -199,6 +199,7 @@ export type iPredictionData = {
 
 // NOTE: not sure what this will return yet...
 // NOTE: Should make this atomic
+// Deletes all predictions for PredictionSet associated with user+category, then creates a new prediction set and predictions
 export const createOrUpdatePredictions = async (
   params: iPredictionSetParams,
   predictionData: iPredictionData,

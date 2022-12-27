@@ -24,8 +24,7 @@ enum AwardsBody {
   MPSE
 }
 
-#DEPRICATED
-enum EventType {
+enum PredictionType {
     WIN
     NOMINATION
 }
@@ -103,29 +102,6 @@ type User @model @auth(rules: [{allow: public}]) {
     image: String
     role: UserRole! @default(value: "USER")}
 
-# CURRENT predictions only
-type PredictionSet @model @auth(rules: [{ allow: public }]) {
-    id: ID! @primaryKey
-    user: User! @hasOne
-    event: Event! @hasOne
-    category: Category! @hasOne
-    predictions: [Prediction] @hasMany
-}
-
-type HistoryPredictionSet @model @auth(rules: [{ allow: public }]) {
-    id: ID! @primaryKey
-    user: User! @hasOne
-    event: Event! @hasOne
-    category: Category! @hasOne
-    predictions: [Prediction] @hasMany
-}
-
-type Prediction @model @auth(rules: [{ allow: public }]) {
-    id: ID! @primaryKey
-    user: User! @hasOne
-    contender: Contender! @belongsTo
-    ranking: Int!
-}
 
 type Event @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
@@ -155,8 +131,10 @@ type Contender @model @auth(rules: [{ allow: public }]) {
     person: Person @hasOne # optional - only applies to acting categories
     song: Song @hasOne # optional - only applies to the song category
     predictions: [Prediction] @hasMany
+    historyPredictions: [HistoryPrediction] @hasMany
+    communityPredictions: [CommunityPrediction] @hasMany
+    communityHistoryPredictions: [CommunityHistoryPrediction] @hasMany
     visibility: ContenderVisibility
-    didReceiveNominationOrWin: Boolean #DELETE
 }
 
 type Movie @model @auth(rules: [{ allow: public }]) {
@@ -175,4 +153,66 @@ type Song @model @auth(rules: [{ allow: public }]) {
     title: String!
     artist: String!
     movie: Movie! @hasOne
+}
+
+# PREDICTIONS:
+
+# CURRENT PERSONAL
+type PredictionSet @model @auth(rules: [{ allow: public }]) {
+    id: ID! @primaryKey
+    user: User! @hasOne
+    event: Event! @hasOne
+    category: Category! @hasOne
+    predictions: [Prediction] @hasMany
+    type: PredictionType @default(value: "NOMINATION")
+}
+type Prediction @model @auth(rules: [{ allow: public }]) {
+    id: ID! @primaryKey
+    user: User! @hasOne
+    contender: Contender! @belongsTo
+    ranking: Int!
+}
+
+# HISTORY PERSONAL
+type HistoryPredictionSet @model @auth(rules: [{ allow: public }]) {
+    id: ID! @primaryKey
+    user: User! @hasOne
+    event: Event! @hasOne
+    category: Category! @hasOne
+    predictions: [HistoryPrediction] @hasMany
+    type: PredictionType @default(value: "NOMINATION")
+}
+type HistoryPrediction @model @auth(rules: [{ allow: public }]) {
+    id: ID! @primaryKey
+    user: User! @hasOne
+    contender: Contender! @belongsTo
+    ranking: Int!
+}
+
+# CURRENT COMMUINTY
+type CommunityPredictionSet @model @auth(rules: [{ allow: public }]) {
+    id: ID! @primaryKey
+    event: Event! @hasOne
+    category: Category! @hasOne
+    predictions: [CommunityPrediction] @hasMany
+    type: PredictionType @default(value: "NOMINATION")
+}
+type CommunityPrediction @model @auth(rules: [{ allow: public }]) {
+    id: ID! @primaryKey
+    contender: Contender! @belongsTo
+    ranking: Int!
+}
+
+# HISTORY COMMUINTY
+type CommunintyHistoryPredictionSet @model @auth(rules: [{ allow: public }]) {
+    id: ID! @primaryKey
+    event: Event! @hasOne
+    category: Category! @hasOne
+    predictions: [CommunityHistoryPrediction] @hasMany
+    type: PredictionType @default(value: "NOMINATION")
+}
+type CommunityHistoryPrediction @model @auth(rules: [{ allow: public }]) {
+    id: ID! @primaryKey
+    contender: Contender! @belongsTo
+    ranking: Int!
 }
