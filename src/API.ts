@@ -1083,6 +1083,14 @@ export type ModelCommunityHistoryPredictionFilterInput = {
   communintyHistoryPredictionSetPredictionsId?: ModelIDInput | null,
 };
 
+export type UpdateCommunityPredictionsMutationVariables = {
+  msg?: string | null,
+};
+
+export type UpdateCommunityPredictionsMutation = {
+  updateCommunityPredictions?: string | null,
+};
+
 export type CreateUserMutationVariables = {
   input: CreateUserInput,
   condition?: ModelUserConditionInput | null,

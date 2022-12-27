@@ -216,3 +216,9 @@ type CommunityHistoryPrediction @model @auth(rules: [{ allow: public }]) {
     contender: Contender! @belongsTo
     ranking: Int!
 }
+
+# CONNECT LAMBDA FUNCTIONS (Configures function for AppSync)
+# https://docs.amplify.aws/cli/graphql/custom-business-logic/#how-it-works
+type Mutation {
+  updateCommunityPredictions(msg: String): String @function(name: "updateCommunityPredictions-${env}")
+}

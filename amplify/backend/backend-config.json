@@ -46,5 +46,12 @@
         }
       }
     }
+  },
+  "function": {
+    "updateCommunityPredictions": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
   }
 }
