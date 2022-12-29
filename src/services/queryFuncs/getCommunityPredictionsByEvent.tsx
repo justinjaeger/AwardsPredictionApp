@@ -13,6 +13,7 @@ const getCommunityPredictionsByEvent = async (
   event: iEvent,
   _includeHidden?: boolean,
 ) => {
+  // TODO: move this logic to lambda function. Pull directly from CommunityPredictionSet
   const includeHidden = _includeHidden === undefined ? false : _includeHidden; // default to false
   const eventId = event.id;
   const { data: _contenders } = await ApiServices.getContendersByEvent(eventId);
@@ -22,6 +23,10 @@ const getCommunityPredictionsByEvent = async (
   const data: iIndexedPredictionsByCategory = {};
   contenders.forEach((con) => {
     if (!con) return;
+    // if hidden and we don't want to include hidden, skip
+    if (con.visibility === ContenderVisibility.HIDDEN && includeHidden !== true) {
+      return;
+    }
     const categoryId = con.categoryContendersId || '';
     const contenderPredictions = con?.predictions?.items;
     if (!contenderPredictions) return;
@@ -47,13 +52,6 @@ const getCommunityPredictionsByEvent = async (
       contenderPerson: con.person || undefined,
       contenderSong: con.song || undefined,
     };
-    // if hidden and we don't want to include hidden, skip
-    if (
-      communityPrediction.visibility === ContenderVisibility.HIDDEN &&
-      includeHidden !== true
-    ) {
-      return;
-    }
     if (!data[categoryId]) data[categoryId] = [];
     data[categoryId].push(communityPrediction);
   });

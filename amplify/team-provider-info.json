@@ -14,6 +14,12 @@
     "categories": {
       "auth": {
         "awardsappa4e66206": {}
+      },
+      "function": {
+        "updateCommunityPredictions": {
+          "deploymentBucketName": "amplify-awardsapp-dev-115717-deployment",
+          "s3Key": "amplify-builds/updateCommunityPredictions-6d505073592f454d3856-build.zip"
+        }
       }
     }
   }

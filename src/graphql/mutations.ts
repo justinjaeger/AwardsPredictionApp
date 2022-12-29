@@ -2,6 +2,11 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const updateCommunityPredictions = /* GraphQL */ `
+  mutation UpdateCommunityPredictions($msg: String) {
+    updateCommunityPredictions(msg: $msg)
+  }
+`;
 export const createUser = /* GraphQL */ `
   mutation CreateUser(
     $input: CreateUserInput!
