@@ -1,17 +1,17 @@
-import { iNumberPredicting } from '../types';
+import { iIndexedRankings } from '../types';
 
 export const getNumPredicting = (
-  np: iNumberPredicting,
+  ir: iIndexedRankings,
   slots: number,
 ): { win: number; nom: number } => {
-  const keys = Object.keys(np);
+  const keys = Object.keys(ir);
   const nom = keys.reduce((acc, key) => {
     const num = parseInt(key, 10);
     if (num > 1 && num <= slots) {
-      acc += np[num];
+      acc += ir[num];
     }
     return acc;
   }, 0);
-  const win = np[1] || 0;
+  const win = ir[1] || 0;
   return { win, nom };
 };

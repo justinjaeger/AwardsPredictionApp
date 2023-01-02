@@ -167,13 +167,11 @@ export const getPredictionSets = async (
   }
 };
 
-// TODO: make lambda function since sorta big
 export const getPersonalPredictionsByEvent = async (
   eventId: string,
   userId: string,
 ): Promise<iApiResponse<ListPredictionSetsQuery>> => {
   try {
-    //
     const { data: maybePreSets, errors } = await GraphqlAPI<
       ListPredictionSetsQuery,
       ListPredictionSetsQueryVariables

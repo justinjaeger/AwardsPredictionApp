@@ -201,7 +201,7 @@ type CommunityPredictionSet @model @auth(rules: [{ allow: public }]) {
 type CommunityPrediction @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
     contender: Contender! @belongsTo
-    ranking: Int!
+    indexedRankings: String # JSON stringified array of rankings (ts: { [place: number]: [numUsersPredicting: number]})
 }
 
 # HISTORY COMMUINTY
@@ -216,7 +216,7 @@ type CommunityHistoryPredictionSet @model @auth(rules: [{ allow: public }]) {
 type CommunityHistoryPrediction @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
     contender: Contender! @belongsTo
-    ranking: Int!
+    indexedRankings: String # JSON stringified array of rankings (ts: { [place: number]: [numUsersPredicting: number]})
 }
 
 # CONNECT LAMBDA FUNCTIONS (Configures function for AppSync)

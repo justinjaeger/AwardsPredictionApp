@@ -10,7 +10,7 @@ import theme from '../../../constants/theme';
 import { useCategory } from '../../../context/CategoryContext';
 import { iCachedTmdbMovie } from '../../../services/cache/types';
 import TmdbServices from '../../../services/tmdb';
-import { iCategory, iEvent, iNumberPredicting } from '../../../types';
+import { iCategory, iEvent, iIndexedRankings } from '../../../types';
 import { getNumPredicting } from '../../../util/getNumPredicting';
 import { useAsyncEffect } from '../../../util/hooks';
 import Poster from '../../Images/Poster';
@@ -20,7 +20,7 @@ type iFilmListItemProps = {
   tmdbMovieId: number;
   movieStudio: string | undefined;
   categoryName: CategoryName;
-  communityRankings: iNumberPredicting | undefined;
+  indexedRankings: iIndexedRankings | undefined;
   ranking?: number;
   size?: PosterSize;
   width?: number;
@@ -29,7 +29,7 @@ type iFilmListItemProps = {
 
 const FilmListItem = (props: iFilmListItemProps) => {
   const {
-    communityRankings,
+    indexedRankings,
     tmdbMovieId,
     movieStudio,
     categoryName,
@@ -61,7 +61,7 @@ const FilmListItem = (props: iFilmListItemProps) => {
     : size || PosterSize.MEDIUM;
 
   const { win, nom } = getNumPredicting(
-    communityRankings || {},
+    indexedRankings || {},
     getCategorySlots(event.year, event.awardsBody, category.name),
   );
 
@@ -89,7 +89,7 @@ const FilmListItem = (props: iFilmListItemProps) => {
         {categoryInfo ? (
           <BodyBold style={{ marginLeft: 10 }}>{categoryInfo.join(', ')}</BodyBold>
         ) : null}
-        {communityRankings && size !== PosterSize.SMALL ? (
+        {indexedRankings && size !== PosterSize.SMALL ? (
           <>
             <BodyBold style={{ marginLeft: 10 }}>{`pred win: ${win}`}</BodyBold>
             <BodyBold style={{ marginLeft: 10 }}>{`pred nom: ${nom}`}</BodyBold>

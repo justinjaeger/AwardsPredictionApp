@@ -143,8 +143,8 @@ const ContenderListItem = (props: iContenderListItemProps) => {
   const categoryName = category.name;
   const catInfo = tmdbMovie?.categoryInfo?.[categoryName];
   const categoryInfo = catInfo ? catInfo?.join(', ') : undefined;
-  const communityRankings =
-    variant === 'community' ? prediction.communityRankings : undefined;
+  const indexedRankings =
+    variant === 'community' ? prediction.indexedRankings : undefined;
 
   let title = '';
   let subtitle = '';
@@ -167,7 +167,7 @@ const ContenderListItem = (props: iContenderListItemProps) => {
   const fadeBottom = selected !== true && variant === 'search';
 
   const { win, nom } = getNumPredicting(
-    communityRankings || {},
+    indexedRankings || {},
     getCategorySlots(event.year, event.awardsBody, category.name),
   );
 
@@ -256,7 +256,7 @@ const ContenderListItem = (props: iContenderListItemProps) => {
                 </Body>
               </Animated.View>
             </MaskedView>
-            {communityRankings ? (
+            {indexedRankings ? (
               <View
                 style={{
                   width: RIGHT_COL_WIDTH,
