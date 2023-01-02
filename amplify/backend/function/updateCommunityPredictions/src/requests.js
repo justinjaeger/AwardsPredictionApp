@@ -7,6 +7,8 @@ const {
 const {
   createCommunityPredictionSetMutation,
   createCommunityPredictionMutation,
+  createCommunityHistoryPredictionSetMutation,
+  createCommunityHistoryPredictionMutation,
   deleteCommunityPredictionSetMutation,
   deleteCommunityPredictionMutation,
 } = require('./mutations');
@@ -104,6 +106,44 @@ const createCommunityPrediction = (predictionSetId, contenderId, ranking) =>
     }),
   });
 
+// ts: CreateCommunityHistoryPredictionSetMutationVariables
+const createCommunityHistoryPredictionSet = (eventId, categoryId, type = 'NOMINATION') =>
+  new Request(GRAPHQL_ENDPOINT, {
+    method: 'POST',
+    headers: {
+      'x-api-key': GRAPHQL_API_KEY,
+    },
+    body: JSON.stringify({
+      query: createCommunityHistoryPredictionSetMutation,
+      variables: {
+        input: {
+          eventId: eventId,
+          communityHistoryPredictionSetCategoryId: categoryId,
+          type,
+        },
+      },
+    }),
+  });
+
+// ts: CreateCommunityPredictionMutationVariables
+const createCommunityHistoryPrediction = (predictionSetId, contenderId, ranking) =>
+  new Request(GRAPHQL_ENDPOINT, {
+    method: 'POST',
+    headers: {
+      'x-api-key': GRAPHQL_API_KEY,
+    },
+    body: JSON.stringify({
+      query: createCommunityHistoryPredictionMutation,
+      variables: {
+        input: {
+          communityHistoryPredictionSetPredictionsId: predictionSetId,
+          ranking,
+          contenderCommunityHistoryPredictionsId: contenderId,
+        },
+      },
+    }),
+  });
+
 // DeleteCommunityPredictionSetMutationVariables
 const deleteCommunityPredictionSet = (predictionSetId) =>
   new Request(GRAPHQL_ENDPOINT, {
@@ -140,6 +180,8 @@ module.exports = {
   getCommunityPredictionSetsRequest,
   createCommunityPredictionSet,
   createCommunityPrediction,
+  createCommunityHistoryPredictionSet,
+  createCommunityHistoryPrediction,
   deleteCommunityPredictionSet,
   deleteCommunityPrediction,
 };

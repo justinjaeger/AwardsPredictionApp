@@ -6,6 +6,8 @@ const {
   getCommunityPredictionSetsRequest,
   createCommunityPredictionSet,
   createCommunityPrediction,
+  createCommunityHistoryPredictionSet,
+  createCommunityHistoryPrediction,
   deleteCommunityPredictionSet,
   deleteCommunityPrediction,
 } = require('./requests');
@@ -190,6 +192,7 @@ const getPredictionSetIds = async (eventIds) => {
 
 /**
  * creates new communityPredictionSet and corresponding predictions
+ * also creates historyPredictionSet if createHistoryRecord = true
  * indexedRankings: {
  *    [eventId: string]: {
  *        [categoryId: string]: {
@@ -201,7 +204,11 @@ const getPredictionSetIds = async (eventIds) => {
  * }
  * openEvents = { id: string, type: 'NOMINATION' | 'WIN' }[]
  */
-const createCommunityPredictions = async (indexedRankings = {}, openEvents = []) => {
+const createCommunityPredictions = async (
+  indexedRankings = {},
+  openEvents = [],
+  createHistoryRecord = false,
+) => {
   console.log('createCommunityPredictions');
 
   let responses;
@@ -210,6 +217,7 @@ const createCommunityPredictions = async (indexedRankings = {}, openEvents = [])
   try {
     // prepare createPredictionSet requests
     const createPredictionSetPromises = [];
+    const createHistoryPredictionSetPromises = [];
     for (const [eventId, indexedCategories] of Object.entries(indexedRankings)) {
       // get the event type (NOMINATION or WIN)
       const event = openEvents.find((event) => event.id === eventId);
@@ -217,6 +225,12 @@ const createCommunityPredictions = async (indexedRankings = {}, openEvents = [])
       for (const [categoryId] of Object.entries(indexedCategories)) {
         const req = fetch(createCommunityPredictionSet(eventId, categoryId, eventType));
         createPredictionSetPromises.push(req);
+        if (createHistoryRecord) {
+          const req = fetch(
+            createCommunityHistoryPredictionSet(eventId, categoryId, eventType),
+          );
+          createHistoryPredictionSetPromises.push(req);
+        }
       }
     }
 
@@ -249,6 +263,39 @@ const createCommunityPredictions = async (indexedRankings = {}, openEvents = [])
       'createPredictionPromises response:',
       responses.map((r) => r.status),
     );
+
+    // create history predictions
+    if (createHistoryRecord) {
+      // create history prediction sets
+      responses = await Promise.all(createHistoryPredictionSetPromises);
+      console.log('createHistoryPredictionSetPromises responses:', responses.length);
+
+      // prepare createHistoryPrediction requests
+      const createHistoryPredictionPromises = [];
+      for (const response of responses) {
+        body = await response.json();
+        // get params from body
+        const predictionSet = body.data.createCommunityHistoryPredictionSet;
+        const predictionSetId = predictionSet.id;
+        const eventId = predictionSet.eventId;
+        const categoryId = predictionSet.communityHistoryPredictionSetCategoryId;
+        // push createPrediction requests to array
+        const indexedContenders = indexedRankings[eventId][categoryId];
+        for (const [contenderId, indexedRankings] of Object.entries(indexedContenders)) {
+          const rank = getContenderRank(indexedRankings);
+          createHistoryPredictionPromises.push(
+            fetch(createCommunityHistoryPrediction(predictionSetId, contenderId, rank)),
+          );
+        }
+      }
+
+      // create history predictions in parallel
+      responses = await Promise.allSettled(createHistoryPredictionPromises);
+      console.log(
+        'createHistoryPredictionPromises response:',
+        responses.map((r) => r.status),
+      );
+    }
 
     return {
       status: 'success',
