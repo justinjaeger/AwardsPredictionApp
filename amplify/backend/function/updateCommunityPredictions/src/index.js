@@ -13,9 +13,29 @@ Amplify Params - DO NOT EDIT */ /**
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
  */
 
-// RECURRING INVOCATION: Every hour (modify with "amplify update function")
+/**
+   RECURRING INVOCATION: Every hour (modify with "amplify update function")
+     *** MUST UPDATE OCCURANCE_INTERVAL IF CHANGE THE INVOCATION INTERVAL
+   Once a day, it also creates a community HISTORY record
+   - difference between community prediction and history record is history record is never deleted (and less frequently updated)
+ */
 exports.handler = async () => {
-  //   return { statusCode: 200, body: JSON.stringify('Hello from Lambda!') }; // To test if working
+  const OCCURANCE_INTERVAL = 60; // in minutes
+  const HOUR_OF_HISTORY_RECORD = 12; // in hours out of 24 (13 is 1pm)
+
+  // get range in which we want to create history record
+  const occuranceInHours = OCCURANCE_INTERVAL / 60;
+  const timeToRecordHistory = new Date();
+  timeToRecordHistory.setHours(HOUR_OF_HISTORY_RECORD);
+  const timeHistoryExpires = new Date();
+  timeHistoryExpires.setHours(HOUR_OF_HISTORY_RECORD + occuranceInHours);
+
+  // if current time is within range, create history record
+  let createHistoryRecord = true; // SHOULD BE FALSE BY DEFAULT
+  const now = new Date();
+  if (now >= timeToRecordHistory && now < timeHistoryExpires) {
+    createHistoryRecord = true;
+  }
 
   let statusCode = 200;
   let error;
@@ -41,7 +61,11 @@ exports.handler = async () => {
     }
     const { formerPredictionSetIds, formerPredictionIds } = response.data;
 
-    response = await createCommunityPredictions(indexedRankings, openEvents);
+    response = await createCommunityPredictions(
+      indexedRankings,
+      openEvents,
+      createHistoryRecord,
+    );
     if (response.status === 'error') {
       throw new Error(response.data.errors);
     }

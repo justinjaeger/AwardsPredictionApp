@@ -376,7 +376,7 @@ export const onCreateEvent = /* GraphQL */ `
               createdAt
               updatedAt
               contenderCommunityHistoryPredictionsId
-              communintyHistoryPredictionSetPredictionsId
+              communityHistoryPredictionSetPredictionsId
             }
             nextToken
           }
@@ -728,7 +728,7 @@ export const onUpdateEvent = /* GraphQL */ `
               createdAt
               updatedAt
               contenderCommunityHistoryPredictionsId
-              communintyHistoryPredictionSetPredictionsId
+              communityHistoryPredictionSetPredictionsId
             }
             nextToken
           }
@@ -1080,7 +1080,7 @@ export const onDeleteEvent = /* GraphQL */ `
               createdAt
               updatedAt
               contenderCommunityHistoryPredictionsId
-              communintyHistoryPredictionSetPredictionsId
+              communityHistoryPredictionSetPredictionsId
             }
             nextToken
           }
@@ -1264,7 +1264,7 @@ export const onCreateCategory = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -1497,7 +1497,7 @@ export const onCreateCategory = /* GraphQL */ `
               createdAt
               updatedAt
               contenderCommunityHistoryPredictionsId
-              communintyHistoryPredictionSetPredictionsId
+              communityHistoryPredictionSetPredictionsId
             }
             nextToken
           }
@@ -1679,7 +1679,7 @@ export const onUpdateCategory = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -1912,7 +1912,7 @@ export const onUpdateCategory = /* GraphQL */ `
               createdAt
               updatedAt
               contenderCommunityHistoryPredictionsId
-              communintyHistoryPredictionSetPredictionsId
+              communityHistoryPredictionSetPredictionsId
             }
             nextToken
           }
@@ -2094,7 +2094,7 @@ export const onDeleteCategory = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -2327,7 +2327,7 @@ export const onDeleteCategory = /* GraphQL */ `
               createdAt
               updatedAt
               contenderCommunityHistoryPredictionsId
-              communintyHistoryPredictionSetPredictionsId
+              communityHistoryPredictionSetPredictionsId
             }
             nextToken
           }
@@ -2565,7 +2565,7 @@ export const onCreateContender = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -2739,7 +2739,7 @@ export const onCreateContender = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -2911,7 +2911,7 @@ export const onCreateContender = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -3056,7 +3056,7 @@ export const onCreateContender = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -3190,7 +3190,7 @@ export const onCreateContender = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -3323,7 +3323,7 @@ export const onCreateContender = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -3340,7 +3340,7 @@ export const onCreateContender = /* GraphQL */ `
           createdAt
           updatedAt
           contenderCommunityHistoryPredictionsId
-          communintyHistoryPredictionSetPredictionsId
+          communityHistoryPredictionSetPredictionsId
         }
         nextToken
       }
@@ -3572,7 +3572,7 @@ export const onUpdateContender = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -3746,7 +3746,7 @@ export const onUpdateContender = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -3918,7 +3918,7 @@ export const onUpdateContender = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -4063,7 +4063,7 @@ export const onUpdateContender = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -4197,7 +4197,7 @@ export const onUpdateContender = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -4330,7 +4330,7 @@ export const onUpdateContender = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -4347,7 +4347,7 @@ export const onUpdateContender = /* GraphQL */ `
           createdAt
           updatedAt
           contenderCommunityHistoryPredictionsId
-          communintyHistoryPredictionSetPredictionsId
+          communityHistoryPredictionSetPredictionsId
         }
         nextToken
       }
@@ -4579,7 +4579,7 @@ export const onDeleteContender = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -4753,7 +4753,7 @@ export const onDeleteContender = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -4925,7 +4925,7 @@ export const onDeleteContender = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -5070,7 +5070,7 @@ export const onDeleteContender = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -5204,7 +5204,7 @@ export const onDeleteContender = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -5337,7 +5337,7 @@ export const onDeleteContender = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -5354,7 +5354,7 @@ export const onDeleteContender = /* GraphQL */ `
           createdAt
           updatedAt
           contenderCommunityHistoryPredictionsId
-          communintyHistoryPredictionSetPredictionsId
+          communityHistoryPredictionSetPredictionsId
         }
         nextToken
       }
@@ -5659,7 +5659,7 @@ export const onCreatePredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -5893,7 +5893,7 @@ export const onCreatePredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -6035,7 +6035,7 @@ export const onCreatePredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -6236,7 +6236,7 @@ export const onUpdatePredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -6470,7 +6470,7 @@ export const onUpdatePredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -6612,7 +6612,7 @@ export const onUpdatePredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -6813,7 +6813,7 @@ export const onDeletePredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -7047,7 +7047,7 @@ export const onDeletePredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -7189,7 +7189,7 @@ export const onDeletePredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -7784,7 +7784,7 @@ export const onCreatePrediction = /* GraphQL */ `
             createdAt
             updatedAt
             contenderCommunityHistoryPredictionsId
-            communintyHistoryPredictionSetPredictionsId
+            communityHistoryPredictionSetPredictionsId
           }
           nextToken
         }
@@ -8370,7 +8370,7 @@ export const onUpdatePrediction = /* GraphQL */ `
             createdAt
             updatedAt
             contenderCommunityHistoryPredictionsId
-            communintyHistoryPredictionSetPredictionsId
+            communityHistoryPredictionSetPredictionsId
           }
           nextToken
         }
@@ -8956,7 +8956,7 @@ export const onDeletePrediction = /* GraphQL */ `
             createdAt
             updatedAt
             contenderCommunityHistoryPredictionsId
-            communintyHistoryPredictionSetPredictionsId
+            communityHistoryPredictionSetPredictionsId
           }
           nextToken
         }
@@ -9148,7 +9148,7 @@ export const onCreateHistoryPredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -9382,7 +9382,7 @@ export const onCreateHistoryPredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -9524,7 +9524,7 @@ export const onCreateHistoryPredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -9725,7 +9725,7 @@ export const onUpdateHistoryPredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -9959,7 +9959,7 @@ export const onUpdateHistoryPredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -10101,7 +10101,7 @@ export const onUpdateHistoryPredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -10302,7 +10302,7 @@ export const onDeleteHistoryPredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -10536,7 +10536,7 @@ export const onDeleteHistoryPredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -10678,7 +10678,7 @@ export const onDeleteHistoryPredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -11273,7 +11273,7 @@ export const onCreateHistoryPrediction = /* GraphQL */ `
             createdAt
             updatedAt
             contenderCommunityHistoryPredictionsId
-            communintyHistoryPredictionSetPredictionsId
+            communityHistoryPredictionSetPredictionsId
           }
           nextToken
         }
@@ -11859,7 +11859,7 @@ export const onUpdateHistoryPrediction = /* GraphQL */ `
             createdAt
             updatedAt
             contenderCommunityHistoryPredictionsId
-            communintyHistoryPredictionSetPredictionsId
+            communityHistoryPredictionSetPredictionsId
           }
           nextToken
         }
@@ -12445,7 +12445,7 @@ export const onDeleteHistoryPrediction = /* GraphQL */ `
             createdAt
             updatedAt
             contenderCommunityHistoryPredictionsId
-            communintyHistoryPredictionSetPredictionsId
+            communityHistoryPredictionSetPredictionsId
           }
           nextToken
         }
@@ -12627,7 +12627,7 @@ export const onCreateCommunityPredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -12861,7 +12861,7 @@ export const onCreateCommunityPredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -12992,7 +12992,7 @@ export const onCreateCommunityPredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -13180,7 +13180,7 @@ export const onUpdateCommunityPredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -13414,7 +13414,7 @@ export const onUpdateCommunityPredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -13545,7 +13545,7 @@ export const onUpdateCommunityPredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -13733,7 +13733,7 @@ export const onDeleteCommunityPredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -13967,7 +13967,7 @@ export const onDeleteCommunityPredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -14098,7 +14098,7 @@ export const onDeleteCommunityPredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -14679,7 +14679,7 @@ export const onCreateCommunityPrediction = /* GraphQL */ `
             createdAt
             updatedAt
             contenderCommunityHistoryPredictionsId
-            communintyHistoryPredictionSetPredictionsId
+            communityHistoryPredictionSetPredictionsId
           }
           nextToken
         }
@@ -15253,7 +15253,7 @@ export const onUpdateCommunityPrediction = /* GraphQL */ `
             createdAt
             updatedAt
             contenderCommunityHistoryPredictionsId
-            communintyHistoryPredictionSetPredictionsId
+            communityHistoryPredictionSetPredictionsId
           }
           nextToken
         }
@@ -15827,7 +15827,7 @@ export const onDeleteCommunityPrediction = /* GraphQL */ `
             createdAt
             updatedAt
             contenderCommunityHistoryPredictionsId
-            communintyHistoryPredictionSetPredictionsId
+            communityHistoryPredictionSetPredictionsId
           }
           nextToken
         }
@@ -15848,10 +15848,11 @@ export const onDeleteCommunityPrediction = /* GraphQL */ `
     }
   }
 `;
-export const onCreateCommunintyHistoryPredictionSet = /* GraphQL */ `
-  subscription OnCreateCommunintyHistoryPredictionSet {
-    onCreateCommunintyHistoryPredictionSet {
+export const onCreateCommunityHistoryPredictionSet = /* GraphQL */ `
+  subscription OnCreateCommunityHistoryPredictionSet {
+    onCreateCommunityHistoryPredictionSet {
       id
+      eventId
       event {
         id
         categories {
@@ -16007,7 +16008,7 @@ export const onCreateCommunintyHistoryPredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -16241,7 +16242,7 @@ export const onCreateCommunintyHistoryPredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -16372,7 +16373,7 @@ export const onCreateCommunintyHistoryPredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -16389,22 +16390,22 @@ export const onCreateCommunintyHistoryPredictionSet = /* GraphQL */ `
           createdAt
           updatedAt
           contenderCommunityHistoryPredictionsId
-          communintyHistoryPredictionSetPredictionsId
+          communityHistoryPredictionSetPredictionsId
         }
         nextToken
       }
       type
       createdAt
       updatedAt
-      communintyHistoryPredictionSetEventId
-      communintyHistoryPredictionSetCategoryId
+      communityHistoryPredictionSetCategoryId
     }
   }
 `;
-export const onUpdateCommunintyHistoryPredictionSet = /* GraphQL */ `
-  subscription OnUpdateCommunintyHistoryPredictionSet {
-    onUpdateCommunintyHistoryPredictionSet {
+export const onUpdateCommunityHistoryPredictionSet = /* GraphQL */ `
+  subscription OnUpdateCommunityHistoryPredictionSet {
+    onUpdateCommunityHistoryPredictionSet {
       id
+      eventId
       event {
         id
         categories {
@@ -16560,7 +16561,7 @@ export const onUpdateCommunintyHistoryPredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -16794,7 +16795,7 @@ export const onUpdateCommunintyHistoryPredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -16925,7 +16926,7 @@ export const onUpdateCommunintyHistoryPredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -16942,22 +16943,22 @@ export const onUpdateCommunintyHistoryPredictionSet = /* GraphQL */ `
           createdAt
           updatedAt
           contenderCommunityHistoryPredictionsId
-          communintyHistoryPredictionSetPredictionsId
+          communityHistoryPredictionSetPredictionsId
         }
         nextToken
       }
       type
       createdAt
       updatedAt
-      communintyHistoryPredictionSetEventId
-      communintyHistoryPredictionSetCategoryId
+      communityHistoryPredictionSetCategoryId
     }
   }
 `;
-export const onDeleteCommunintyHistoryPredictionSet = /* GraphQL */ `
-  subscription OnDeleteCommunintyHistoryPredictionSet {
-    onDeleteCommunintyHistoryPredictionSet {
+export const onDeleteCommunityHistoryPredictionSet = /* GraphQL */ `
+  subscription OnDeleteCommunityHistoryPredictionSet {
+    onDeleteCommunityHistoryPredictionSet {
       id
+      eventId
       event {
         id
         categories {
@@ -17113,7 +17114,7 @@ export const onDeleteCommunintyHistoryPredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -17347,7 +17348,7 @@ export const onDeleteCommunintyHistoryPredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -17478,7 +17479,7 @@ export const onDeleteCommunintyHistoryPredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
-                communintyHistoryPredictionSetPredictionsId
+                communityHistoryPredictionSetPredictionsId
               }
               nextToken
             }
@@ -17495,15 +17496,14 @@ export const onDeleteCommunintyHistoryPredictionSet = /* GraphQL */ `
           createdAt
           updatedAt
           contenderCommunityHistoryPredictionsId
-          communintyHistoryPredictionSetPredictionsId
+          communityHistoryPredictionSetPredictionsId
         }
         nextToken
       }
       type
       createdAt
       updatedAt
-      communintyHistoryPredictionSetEventId
-      communintyHistoryPredictionSetCategoryId
+      communityHistoryPredictionSetCategoryId
     }
   }
 `;
@@ -18060,7 +18060,7 @@ export const onCreateCommunityHistoryPrediction = /* GraphQL */ `
             createdAt
             updatedAt
             contenderCommunityHistoryPredictionsId
-            communintyHistoryPredictionSetPredictionsId
+            communityHistoryPredictionSetPredictionsId
           }
           nextToken
         }
@@ -18077,7 +18077,7 @@ export const onCreateCommunityHistoryPrediction = /* GraphQL */ `
       createdAt
       updatedAt
       contenderCommunityHistoryPredictionsId
-      communintyHistoryPredictionSetPredictionsId
+      communityHistoryPredictionSetPredictionsId
     }
   }
 `;
@@ -18634,7 +18634,7 @@ export const onUpdateCommunityHistoryPrediction = /* GraphQL */ `
             createdAt
             updatedAt
             contenderCommunityHistoryPredictionsId
-            communintyHistoryPredictionSetPredictionsId
+            communityHistoryPredictionSetPredictionsId
           }
           nextToken
         }
@@ -18651,7 +18651,7 @@ export const onUpdateCommunityHistoryPrediction = /* GraphQL */ `
       createdAt
       updatedAt
       contenderCommunityHistoryPredictionsId
-      communintyHistoryPredictionSetPredictionsId
+      communityHistoryPredictionSetPredictionsId
     }
   }
 `;
@@ -19208,7 +19208,7 @@ export const onDeleteCommunityHistoryPrediction = /* GraphQL */ `
             createdAt
             updatedAt
             contenderCommunityHistoryPredictionsId
-            communintyHistoryPredictionSetPredictionsId
+            communityHistoryPredictionSetPredictionsId
           }
           nextToken
         }
@@ -19225,7 +19225,7 @@ export const onDeleteCommunityHistoryPrediction = /* GraphQL */ `
       createdAt
       updatedAt
       contenderCommunityHistoryPredictionsId
-      communintyHistoryPredictionSetPredictionsId
+      communityHistoryPredictionSetPredictionsId
     }
   }
 `;
