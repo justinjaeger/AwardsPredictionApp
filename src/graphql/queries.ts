@@ -6491,6 +6491,7 @@ export const getCommunityPredictionSet = /* GraphQL */ `
   query GetCommunityPredictionSet($id: ID!) {
     getCommunityPredictionSet(id: $id) {
       id
+      eventId
       event {
         id
         categories {
@@ -7035,7 +7036,6 @@ export const getCommunityPredictionSet = /* GraphQL */ `
       type
       createdAt
       updatedAt
-      communityPredictionSetEventId
       communityPredictionSetCategoryId
     }
   }
@@ -7057,6 +7057,7 @@ export const listCommunityPredictionSets = /* GraphQL */ `
     ) {
       items {
         id
+        eventId
         event {
           id
           categories {
@@ -7340,7 +7341,6 @@ export const listCommunityPredictionSets = /* GraphQL */ `
         type
         createdAt
         updatedAt
-        communityPredictionSetEventId
         communityPredictionSetCategoryId
       }
       nextToken

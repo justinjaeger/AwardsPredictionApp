@@ -4,7 +4,7 @@ const createCommunityPredictionSetMutation = /* GraphQL */ `
   mutation CreateCommunityPredictionSet($input: CreateCommunityPredictionSetInput!) {
     createCommunityPredictionSet(input: $input) {
       id # communityPredictionSetId
-      communityPredictionSetEventId
+      eventId
       communityPredictionSetCategoryId
     }
   }

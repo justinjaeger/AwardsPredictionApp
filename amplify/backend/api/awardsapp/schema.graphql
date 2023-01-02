@@ -192,7 +192,8 @@ type HistoryPrediction @model @auth(rules: [{ allow: public }]) {
 # CURRENT COMMUINTY
 type CommunityPredictionSet @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
-    event: Event! @hasOne
+    eventId: ID! @index
+    event: Event! @hasOne(fields: ["eventId"]) # getCommunityPredictionSetByEventId
     category: Category! @hasOne
     predictions: [CommunityPrediction] @hasMany
     type: PredictionType @default(value: "NOMINATION")

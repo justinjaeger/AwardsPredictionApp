@@ -231,7 +231,7 @@ const createCommunityPredictions = async (indexedRankings = {}, openEvents = [])
       // get params from body
       const predictionSet = body.data.createCommunityPredictionSet;
       const predictionSetId = predictionSet.id;
-      const eventId = predictionSet.communityPredictionSetEventId;
+      const eventId = predictionSet.eventId;
       const categoryId = predictionSet.communityPredictionSetCategoryId;
       // push createPrediction requests to array
       const indexedContenders = indexedRankings[eventId][categoryId];
