@@ -12471,6 +12471,7 @@ export const onCreateCommunityPredictionSet = /* GraphQL */ `
   subscription OnCreateCommunityPredictionSet {
     onCreateCommunityPredictionSet {
       id
+      eventId
       event {
         id
         categories {
@@ -13015,7 +13016,6 @@ export const onCreateCommunityPredictionSet = /* GraphQL */ `
       type
       createdAt
       updatedAt
-      communityPredictionSetEventId
       communityPredictionSetCategoryId
     }
   }
@@ -13024,6 +13024,7 @@ export const onUpdateCommunityPredictionSet = /* GraphQL */ `
   subscription OnUpdateCommunityPredictionSet {
     onUpdateCommunityPredictionSet {
       id
+      eventId
       event {
         id
         categories {
@@ -13568,7 +13569,6 @@ export const onUpdateCommunityPredictionSet = /* GraphQL */ `
       type
       createdAt
       updatedAt
-      communityPredictionSetEventId
       communityPredictionSetCategoryId
     }
   }
@@ -13577,6 +13577,7 @@ export const onDeleteCommunityPredictionSet = /* GraphQL */ `
   subscription OnDeleteCommunityPredictionSet {
     onDeleteCommunityPredictionSet {
       id
+      eventId
       event {
         id
         categories {
@@ -14121,7 +14122,6 @@ export const onDeleteCommunityPredictionSet = /* GraphQL */ `
       type
       createdAt
       updatedAt
-      communityPredictionSetEventId
       communityPredictionSetCategoryId
     }
   }

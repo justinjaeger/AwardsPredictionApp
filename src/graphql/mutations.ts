@@ -12578,6 +12578,7 @@ export const createCommunityPredictionSet = /* GraphQL */ `
   ) {
     createCommunityPredictionSet(input: $input, condition: $condition) {
       id
+      eventId
       event {
         id
         categories {
@@ -13122,7 +13123,6 @@ export const createCommunityPredictionSet = /* GraphQL */ `
       type
       createdAt
       updatedAt
-      communityPredictionSetEventId
       communityPredictionSetCategoryId
     }
   }
@@ -13134,6 +13134,7 @@ export const updateCommunityPredictionSet = /* GraphQL */ `
   ) {
     updateCommunityPredictionSet(input: $input, condition: $condition) {
       id
+      eventId
       event {
         id
         categories {
@@ -13678,7 +13679,6 @@ export const updateCommunityPredictionSet = /* GraphQL */ `
       type
       createdAt
       updatedAt
-      communityPredictionSetEventId
       communityPredictionSetCategoryId
     }
   }
@@ -13690,6 +13690,7 @@ export const deleteCommunityPredictionSet = /* GraphQL */ `
   ) {
     deleteCommunityPredictionSet(input: $input, condition: $condition) {
       id
+      eventId
       event {
         id
         categories {
@@ -14234,7 +14235,6 @@ export const deleteCommunityPredictionSet = /* GraphQL */ `
       type
       createdAt
       updatedAt
-      communityPredictionSetEventId
       communityPredictionSetCategoryId
     }
   }

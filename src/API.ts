@@ -732,37 +732,37 @@ export type DeleteHistoryPredictionInput = {
 
 export type CreateCommunityPredictionSetInput = {
   id?: string | null,
+  eventId: string,
   type?: PredictionType | null,
-  communityPredictionSetEventId: string,
   communityPredictionSetCategoryId: string,
 };
 
 export type ModelCommunityPredictionSetConditionInput = {
+  eventId?: ModelIDInput | null,
   type?: ModelPredictionTypeInput | null,
   and?: Array< ModelCommunityPredictionSetConditionInput | null > | null,
   or?: Array< ModelCommunityPredictionSetConditionInput | null > | null,
   not?: ModelCommunityPredictionSetConditionInput | null,
-  communityPredictionSetEventId?: ModelIDInput | null,
   communityPredictionSetCategoryId?: ModelIDInput | null,
 };
 
 export type CommunityPredictionSet = {
   __typename: "CommunityPredictionSet",
   id: string,
+  eventId: string,
   event: Event,
   category: Category,
   predictions?: ModelCommunityPredictionConnection | null,
   type?: PredictionType | null,
   createdAt: string,
   updatedAt: string,
-  communityPredictionSetEventId: string,
   communityPredictionSetCategoryId: string,
 };
 
 export type UpdateCommunityPredictionSetInput = {
   id: string,
+  eventId?: string | null,
   type?: PredictionType | null,
-  communityPredictionSetEventId: string,
   communityPredictionSetCategoryId: string,
 };
 
@@ -1033,11 +1033,11 @@ export type ModelHistoryPredictionFilterInput = {
 
 export type ModelCommunityPredictionSetFilterInput = {
   id?: ModelIDInput | null,
+  eventId?: ModelIDInput | null,
   type?: ModelPredictionTypeInput | null,
   and?: Array< ModelCommunityPredictionSetFilterInput | null > | null,
   or?: Array< ModelCommunityPredictionSetFilterInput | null > | null,
   not?: ModelCommunityPredictionSetFilterInput | null,
-  communityPredictionSetEventId?: ModelIDInput | null,
   communityPredictionSetCategoryId?: ModelIDInput | null,
 };
 
@@ -15584,6 +15584,7 @@ export type CreateCommunityPredictionSetMutation = {
   createCommunityPredictionSet?:  {
     __typename: "CommunityPredictionSet",
     id: string,
+    eventId: string,
     event:  {
       __typename: "Event",
       id: string,
@@ -16214,7 +16215,6 @@ export type CreateCommunityPredictionSetMutation = {
     type?: PredictionType | null,
     createdAt: string,
     updatedAt: string,
-    communityPredictionSetEventId: string,
     communityPredictionSetCategoryId: string,
   } | null,
 };
@@ -16228,6 +16228,7 @@ export type UpdateCommunityPredictionSetMutation = {
   updateCommunityPredictionSet?:  {
     __typename: "CommunityPredictionSet",
     id: string,
+    eventId: string,
     event:  {
       __typename: "Event",
       id: string,
@@ -16858,7 +16859,6 @@ export type UpdateCommunityPredictionSetMutation = {
     type?: PredictionType | null,
     createdAt: string,
     updatedAt: string,
-    communityPredictionSetEventId: string,
     communityPredictionSetCategoryId: string,
   } | null,
 };
@@ -16872,6 +16872,7 @@ export type DeleteCommunityPredictionSetMutation = {
   deleteCommunityPredictionSet?:  {
     __typename: "CommunityPredictionSet",
     id: string,
+    eventId: string,
     event:  {
       __typename: "Event",
       id: string,
@@ -17502,7 +17503,6 @@ export type DeleteCommunityPredictionSetMutation = {
     type?: PredictionType | null,
     createdAt: string,
     updatedAt: string,
-    communityPredictionSetEventId: string,
     communityPredictionSetCategoryId: string,
   } | null,
 };
@@ -30870,6 +30870,7 @@ export type GetCommunityPredictionSetQuery = {
   getCommunityPredictionSet?:  {
     __typename: "CommunityPredictionSet",
     id: string,
+    eventId: string,
     event:  {
       __typename: "Event",
       id: string,
@@ -31500,7 +31501,6 @@ export type GetCommunityPredictionSetQuery = {
     type?: PredictionType | null,
     createdAt: string,
     updatedAt: string,
-    communityPredictionSetEventId: string,
     communityPredictionSetCategoryId: string,
   } | null,
 };
@@ -31519,6 +31519,7 @@ export type ListCommunityPredictionSetsQuery = {
     items:  Array< {
       __typename: "CommunityPredictionSet",
       id: string,
+      eventId: string,
       event:  {
         __typename: "Event",
         id: string,
@@ -31847,7 +31848,6 @@ export type ListCommunityPredictionSetsQuery = {
       type?: PredictionType | null,
       createdAt: string,
       updatedAt: string,
-      communityPredictionSetEventId: string,
       communityPredictionSetCategoryId: string,
     } | null >,
     nextToken?: string | null,
@@ -49057,6 +49057,7 @@ export type OnCreateCommunityPredictionSetSubscription = {
   onCreateCommunityPredictionSet?:  {
     __typename: "CommunityPredictionSet",
     id: string,
+    eventId: string,
     event:  {
       __typename: "Event",
       id: string,
@@ -49687,7 +49688,6 @@ export type OnCreateCommunityPredictionSetSubscription = {
     type?: PredictionType | null,
     createdAt: string,
     updatedAt: string,
-    communityPredictionSetEventId: string,
     communityPredictionSetCategoryId: string,
   } | null,
 };
@@ -49696,6 +49696,7 @@ export type OnUpdateCommunityPredictionSetSubscription = {
   onUpdateCommunityPredictionSet?:  {
     __typename: "CommunityPredictionSet",
     id: string,
+    eventId: string,
     event:  {
       __typename: "Event",
       id: string,
@@ -50326,7 +50327,6 @@ export type OnUpdateCommunityPredictionSetSubscription = {
     type?: PredictionType | null,
     createdAt: string,
     updatedAt: string,
-    communityPredictionSetEventId: string,
     communityPredictionSetCategoryId: string,
   } | null,
 };
@@ -50335,6 +50335,7 @@ export type OnDeleteCommunityPredictionSetSubscription = {
   onDeleteCommunityPredictionSet?:  {
     __typename: "CommunityPredictionSet",
     id: string,
+    eventId: string,
     event:  {
       __typename: "Event",
       id: string,
@@ -50965,7 +50966,6 @@ export type OnDeleteCommunityPredictionSetSubscription = {
     type?: PredictionType | null,
     createdAt: string,
     updatedAt: string,
-    communityPredictionSetEventId: string,
     communityPredictionSetCategoryId: string,
   } | null,
 };

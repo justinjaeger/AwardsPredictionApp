@@ -61,7 +61,7 @@ const getCommunityPredictionSetsRequest = (eventId) =>
     body: JSON.stringify({
       query: getCommunityPredictionSetsQuery,
       variables: {
-        filter: { communityPredictionSetEventId: { eq: eventId } },
+        filter: { eventId: { eq: eventId } },
       },
     }),
   });
@@ -77,7 +77,7 @@ const createCommunityPredictionSet = (eventId, categoryId, type = 'NOMINATION') 
       query: createCommunityPredictionSetMutation,
       variables: {
         input: {
-          communityPredictionSetEventId: eventId,
+          eventId: eventId,
           communityPredictionSetCategoryId: categoryId,
           type,
         },
