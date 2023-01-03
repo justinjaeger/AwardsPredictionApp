@@ -48,11 +48,7 @@ export type iPrediction = {
 };
 
 export type iIndexedPredictionsByCategory = {
-  [categoryId: string]: iPrediction[];
-};
-
-export type iIndexedPredictionsByEvent = {
-  [eventId: string]: iIndexedPredictionsByCategory;
+  [categoryId: string]: { updatedAt: string; predictions: iPrediction[] };
 };
 
 export type iCategory = {

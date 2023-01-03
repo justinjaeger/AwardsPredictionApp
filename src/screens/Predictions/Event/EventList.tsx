@@ -38,9 +38,7 @@ const EventList = (props: iEventListProps) => {
   return (
     <>
       {orderedCategories.map((category) => {
-        const catPredictions: iPrediction[] | undefined = (predictionData || {})[
-          category.id
-        ];
+        const catPredictions = predictionData?.[category.id]?.predictions || [];
         const predictions = catPredictions || [];
         const slots = getCategorySlots(event.year, event.awardsBody, category.name);
         const truncatedPredictions = (predictions || [])?.slice(0, slots);

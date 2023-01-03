@@ -37,7 +37,7 @@ const AddPredictions = () => {
     (p) => p.visibility === ContenderVisibility.HIDDEN,
   );
   const communityPredictions = communityData
-    ? [...communityData[category.id], ...hiddenPredictions] || []
+    ? [...(communityData[category.id]?.predictions || []), ...hiddenPredictions]
     : [];
 
   const [selectedPredictions, setSelectedPredictions] = useState<iPrediction[]>(

@@ -46,7 +46,7 @@ const getCommunityPredictionsByEvent = async (event: iEvent, includeHidden = fal
       });
     });
     const sortedPredictions = sortCommunityPredictions(predictions);
-    data[categoryId] = sortedPredictions;
+    data[categoryId] = { predictions: sortedPredictions, updatedAt: ps?.updatedAt || '' };
   });
   return data;
 };
