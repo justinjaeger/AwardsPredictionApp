@@ -7,12 +7,7 @@ import { getAwardsBodyCategories, getCategorySlots } from '../../../constants/ca
 import COLORS from '../../../constants/colors';
 import theme from '../../../constants/theme';
 import { useCategory } from '../../../context/CategoryContext';
-import {
-  iCategory,
-  iEvent,
-  iIndexedPredictionsByCategory,
-  iPrediction,
-} from '../../../types';
+import { iCategory, iEvent, iIndexedPredictionsByCategory } from '../../../types';
 import sortByObjectOrder from '../../../util/sortByObjectOrder';
 
 type iEventListProps = {
