@@ -9,11 +9,10 @@ const {
 /* Amplify Params - DO NOT EDIT
 	ENV
 	REGION
-Amplify Params - DO NOT EDIT */ /**
- * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
- */
+Amplify Params - DO NOT EDIT */
 
 /**
+   @type {import('@types/aws-lambda').APIGatewayProxyHandler}
    RECURRING INVOCATION: Every hour (modify with "amplify update function")
      *** MUST UPDATE OCCURANCE_INTERVAL IF CHANGE THE INVOCATION INTERVAL
    Once a day, it also creates a community HISTORY record
