@@ -16,6 +16,9 @@ import { CategoryHeader } from '../styles';
 import HeaderButton from '../../../components/HeaderButton';
 import EventList from './EventList';
 import { useCollapsible } from '../../../hooks/animatedState/useCollapsible';
+import _ from 'lodash';
+import { Body } from '../../../components/Text';
+import { formatDateTime } from '../../../util/formatDateTime';
 
 const TIMING = 300;
 
@@ -79,6 +82,23 @@ const Event = (props: { tab: 'personal' | 'community' }) => {
     navigation.navigate('Category');
   };
 
+  const iterablePredictionData = _.values(predictionData || {});
+
+  // only applies to community since all categories are updated at once
+  const lastUpdated =
+    tab === 'community'
+      ? // if community, all categories were last updated at same time
+        iterablePredictionData[0]?.updatedAt || ''
+      : // if personal, find the most recent updatedAt on category (bc this is for entire event)
+        iterablePredictionData.reduce((acc, prediction) => {
+          const curUpdatedAt = prediction.updatedAt;
+          if (acc === '' || curUpdatedAt > acc) {
+            acc = curUpdatedAt;
+          }
+          return acc;
+        }, '');
+  const lastUpdatedString = formatDateTime(new Date(lastUpdated || ''));
+
   return (
     <BackgroundWrapper>
       <>
@@ -101,6 +121,11 @@ const Event = (props: { tab: 'personal' | 'community' }) => {
               icon={isCollapsed ? 'expand' : 'collapse'}
             />
           </View>
+          {lastUpdated ? (
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Body>{`Updated: ${lastUpdatedString}`}</Body>
+            </View>
+          ) : null}
         </CategoryHeader>
         <Animated.ScrollView
           style={{ opacity: bodyOpacity, width: '100%' }}

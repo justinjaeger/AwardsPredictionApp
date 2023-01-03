@@ -36,7 +36,7 @@ const CreateSong = (props: iCreateContenderProps) => {
   const { mutate, isComplete } = useMutationCreateSongContender();
 
   const { data: communityData } = useQueryCommunityEvent({ event, includeHidden: true }); // because we use this to see if contender exists, we want to includes hidden contenders
-  const communityPredictions = communityData ? communityData[category.id] || [] : [];
+  const communityPredictions = communityData?.[category.id]?.predictions || [];
 
   const [movieSearchResults, setMovieSearchResults] = useState<iSearchData>([]);
   const [searchMessage, setSearchMessage] = useState<string>('');

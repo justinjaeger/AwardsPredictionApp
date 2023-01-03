@@ -1,5 +1,5 @@
 const fetch = require('node-fetch').default;
-const { isWithinLastMonth, getContenderRank, getPredictionType } = require('./utils');
+const { isWithinLastMonth, getPredictionType } = require('./utils');
 const {
   getOpenEventsRequest,
   getAllEventContendersRequest,
@@ -250,9 +250,8 @@ const createCommunityPredictions = async (
       // push createPrediction requests to array
       const indexedContenders = indexedRankings[eventId][categoryId];
       for (const [contenderId, indexedRankings] of Object.entries(indexedContenders)) {
-        const rank = getContenderRank(indexedRankings);
         createPredictionPromises.push(
-          fetch(createCommunityPrediction(predictionSetId, contenderId, rank)),
+          fetch(createCommunityPrediction(predictionSetId, contenderId, indexedRankings)),
         );
       }
     }
@@ -282,9 +281,14 @@ const createCommunityPredictions = async (
         // push createPrediction requests to array
         const indexedContenders = indexedRankings[eventId][categoryId];
         for (const [contenderId, indexedRankings] of Object.entries(indexedContenders)) {
-          const rank = getContenderRank(indexedRankings);
           createHistoryPredictionPromises.push(
-            fetch(createCommunityHistoryPrediction(predictionSetId, contenderId, rank)),
+            fetch(
+              createCommunityHistoryPrediction(
+                predictionSetId,
+                contenderId,
+                indexedRankings,
+              ),
+            ),
           );
         }
       }

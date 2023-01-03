@@ -124,6 +124,71 @@ export const listPredictionSets = /* GraphQL */ `
   }
 `;
 
+export const listCommunityPredictionSets = /* GraphQL */ `
+  query ListCommunityPredictionSets(
+    $id: ID
+    $filter: ModelCommunityPredictionSetFilterInput
+    $limit: Int
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listCommunityPredictionSets(
+      id: $id
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        id
+        predictions {
+          items {
+            id
+            contender {
+              id
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              visibility
+              createdAt
+              updatedAt
+            }
+            indexedRankings
+            createdAt
+            updatedAt
+            contenderCommunityPredictionsId
+            communityPredictionSetPredictionsId
+          }
+          nextToken
+        }
+        type
+        createdAt
+        updatedAt
+        communityPredictionSetCategoryId
+      }
+      nextToken
+    }
+  }
+`;
+
 export const listEvents = /* GraphQL */ `
   query ListEvents(
     $id: ID

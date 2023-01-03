@@ -18,7 +18,7 @@
       "function": {
         "updateCommunityPredictions": {
           "deploymentBucketName": "amplify-awardsapp-dev-115717-deployment",
-          "s3Key": "amplify-builds/updateCommunityPredictions-5956412f784950504175-build.zip"
+          "s3Key": "amplify-builds/updateCommunityPredictions-687a4b756c5031624e6b-build.zip"
         }
       }
     }

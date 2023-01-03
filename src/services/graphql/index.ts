@@ -3,6 +3,7 @@ import * as EventServices from './event';
 import * as CategoryServices from './category';
 import * as ContenderServices from './contender';
 import * as PredictionServices from './prediction';
+import * as CommunityPredictionServices from './communityPrediction';
 import * as MovieServices from './movie';
 import * as PersonServices from './person';
 import * as SongServices from './song';
@@ -17,6 +18,7 @@ const ApiServices = {
   ...MovieServices,
   ...ContenderServices,
   ...PredictionServices,
+  ...CommunityPredictionServices,
   ...PersonServices,
   ...SongServices,
 };

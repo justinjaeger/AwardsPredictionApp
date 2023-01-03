@@ -88,7 +88,8 @@ const createCommunityPredictionSet = (eventId, categoryId, type = 'NOMINATION') 
   });
 
 // ts: CreateCommunityPredictionMutationVariables
-const createCommunityPrediction = (predictionSetId, contenderId, ranking) =>
+// indexedRankings = { [place: number]: number }
+const createCommunityPrediction = (predictionSetId, contenderId, indexedRankings) =>
   new Request(GRAPHQL_ENDPOINT, {
     method: 'POST',
     headers: {
@@ -99,7 +100,7 @@ const createCommunityPrediction = (predictionSetId, contenderId, ranking) =>
       variables: {
         input: {
           communityPredictionSetPredictionsId: predictionSetId,
-          ranking,
+          indexedRankings: JSON.stringify(indexedRankings), // IMPORTANT: stringify indexedRankings
           contenderCommunityPredictionsId: contenderId,
         },
       },
@@ -126,7 +127,12 @@ const createCommunityHistoryPredictionSet = (eventId, categoryId, type = 'NOMINA
   });
 
 // ts: CreateCommunityPredictionMutationVariables
-const createCommunityHistoryPrediction = (predictionSetId, contenderId, ranking) =>
+// indexedRankings = { [place: number]: number }
+const createCommunityHistoryPrediction = (
+  predictionSetId,
+  contenderId,
+  indexedRankings,
+) =>
   new Request(GRAPHQL_ENDPOINT, {
     method: 'POST',
     headers: {
@@ -137,7 +143,7 @@ const createCommunityHistoryPrediction = (predictionSetId, contenderId, ranking)
       variables: {
         input: {
           communityHistoryPredictionSetPredictionsId: predictionSetId,
-          ranking,
+          indexedRankings: JSON.stringify(indexedRankings), // IMPORTANT: stringify indexedRankings
           contenderCommunityHistoryPredictionsId: contenderId,
         },
       },

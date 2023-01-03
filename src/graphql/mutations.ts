@@ -367,7 +367,7 @@ export const createEvent = /* GraphQL */ `
                 contenderPersonId
                 contenderSongId
               }
-              ranking
+              indexedRankings
               createdAt
               updatedAt
               contenderCommunityPredictionsId
@@ -389,7 +389,7 @@ export const createEvent = /* GraphQL */ `
                 contenderPersonId
                 contenderSongId
               }
-              ranking
+              indexedRankings
               createdAt
               updatedAt
               contenderCommunityHistoryPredictionsId
@@ -722,7 +722,7 @@ export const updateEvent = /* GraphQL */ `
                 contenderPersonId
                 contenderSongId
               }
-              ranking
+              indexedRankings
               createdAt
               updatedAt
               contenderCommunityPredictionsId
@@ -744,7 +744,7 @@ export const updateEvent = /* GraphQL */ `
                 contenderPersonId
                 contenderSongId
               }
-              ranking
+              indexedRankings
               createdAt
               updatedAt
               contenderCommunityHistoryPredictionsId
@@ -1077,7 +1077,7 @@ export const deleteEvent = /* GraphQL */ `
                 contenderPersonId
                 contenderSongId
               }
-              ranking
+              indexedRankings
               createdAt
               updatedAt
               contenderCommunityPredictionsId
@@ -1099,7 +1099,7 @@ export const deleteEvent = /* GraphQL */ `
                 contenderPersonId
                 contenderSongId
               }
-              ranking
+              indexedRankings
               createdAt
               updatedAt
               contenderCommunityHistoryPredictionsId
@@ -1275,7 +1275,7 @@ export const createCategory = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -1286,7 +1286,7 @@ export const createCategory = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -1497,7 +1497,7 @@ export const createCategory = /* GraphQL */ `
                 contenderPersonId
                 contenderSongId
               }
-              ranking
+              indexedRankings
               createdAt
               updatedAt
               contenderCommunityPredictionsId
@@ -1519,7 +1519,7 @@ export const createCategory = /* GraphQL */ `
                 contenderPersonId
                 contenderSongId
               }
-              ranking
+              indexedRankings
               createdAt
               updatedAt
               contenderCommunityHistoryPredictionsId
@@ -1693,7 +1693,7 @@ export const updateCategory = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -1704,7 +1704,7 @@ export const updateCategory = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -1915,7 +1915,7 @@ export const updateCategory = /* GraphQL */ `
                 contenderPersonId
                 contenderSongId
               }
-              ranking
+              indexedRankings
               createdAt
               updatedAt
               contenderCommunityPredictionsId
@@ -1937,7 +1937,7 @@ export const updateCategory = /* GraphQL */ `
                 contenderPersonId
                 contenderSongId
               }
-              ranking
+              indexedRankings
               createdAt
               updatedAt
               contenderCommunityHistoryPredictionsId
@@ -2111,7 +2111,7 @@ export const deleteCategory = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -2122,7 +2122,7 @@ export const deleteCategory = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -2333,7 +2333,7 @@ export const deleteCategory = /* GraphQL */ `
                 contenderPersonId
                 contenderSongId
               }
-              ranking
+              indexedRankings
               createdAt
               updatedAt
               contenderCommunityPredictionsId
@@ -2355,7 +2355,7 @@ export const deleteCategory = /* GraphQL */ `
                 contenderPersonId
                 contenderSongId
               }
-              ranking
+              indexedRankings
               createdAt
               updatedAt
               contenderCommunityHistoryPredictionsId
@@ -2585,7 +2585,7 @@ export const createContender = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -2596,7 +2596,7 @@ export const createContender = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -2759,7 +2759,7 @@ export const createContender = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -2770,7 +2770,7 @@ export const createContender = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -2931,7 +2931,7 @@ export const createContender = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -2942,7 +2942,7 @@ export const createContender = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -3076,7 +3076,7 @@ export const createContender = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -3087,7 +3087,7 @@ export const createContender = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -3210,7 +3210,7 @@ export const createContender = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -3221,7 +3221,7 @@ export const createContender = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -3238,7 +3238,7 @@ export const createContender = /* GraphQL */ `
             contenderPersonId
             contenderSongId
           }
-          ranking
+          indexedRankings
           createdAt
           updatedAt
           contenderCommunityPredictionsId
@@ -3343,7 +3343,7 @@ export const createContender = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -3354,7 +3354,7 @@ export const createContender = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -3371,7 +3371,7 @@ export const createContender = /* GraphQL */ `
             contenderPersonId
             contenderSongId
           }
-          ranking
+          indexedRankings
           createdAt
           updatedAt
           contenderCommunityHistoryPredictionsId
@@ -3595,7 +3595,7 @@ export const updateContender = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -3606,7 +3606,7 @@ export const updateContender = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -3769,7 +3769,7 @@ export const updateContender = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -3780,7 +3780,7 @@ export const updateContender = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -3941,7 +3941,7 @@ export const updateContender = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -3952,7 +3952,7 @@ export const updateContender = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -4086,7 +4086,7 @@ export const updateContender = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -4097,7 +4097,7 @@ export const updateContender = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -4220,7 +4220,7 @@ export const updateContender = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -4231,7 +4231,7 @@ export const updateContender = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -4248,7 +4248,7 @@ export const updateContender = /* GraphQL */ `
             contenderPersonId
             contenderSongId
           }
-          ranking
+          indexedRankings
           createdAt
           updatedAt
           contenderCommunityPredictionsId
@@ -4353,7 +4353,7 @@ export const updateContender = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -4364,7 +4364,7 @@ export const updateContender = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -4381,7 +4381,7 @@ export const updateContender = /* GraphQL */ `
             contenderPersonId
             contenderSongId
           }
-          ranking
+          indexedRankings
           createdAt
           updatedAt
           contenderCommunityHistoryPredictionsId
@@ -4605,7 +4605,7 @@ export const deleteContender = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -4616,7 +4616,7 @@ export const deleteContender = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -4779,7 +4779,7 @@ export const deleteContender = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -4790,7 +4790,7 @@ export const deleteContender = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -4951,7 +4951,7 @@ export const deleteContender = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -4962,7 +4962,7 @@ export const deleteContender = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -5096,7 +5096,7 @@ export const deleteContender = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -5107,7 +5107,7 @@ export const deleteContender = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -5230,7 +5230,7 @@ export const deleteContender = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -5241,7 +5241,7 @@ export const deleteContender = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -5258,7 +5258,7 @@ export const deleteContender = /* GraphQL */ `
             contenderPersonId
             contenderSongId
           }
-          ranking
+          indexedRankings
           createdAt
           updatedAt
           contenderCommunityPredictionsId
@@ -5363,7 +5363,7 @@ export const deleteContender = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -5374,7 +5374,7 @@ export const deleteContender = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -5391,7 +5391,7 @@ export const deleteContender = /* GraphQL */ `
             contenderPersonId
             contenderSongId
           }
-          ranking
+          indexedRankings
           createdAt
           updatedAt
           contenderCommunityHistoryPredictionsId
@@ -5715,7 +5715,7 @@ export const createPredictionSet = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -5726,7 +5726,7 @@ export const createPredictionSet = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -5949,7 +5949,7 @@ export const createPredictionSet = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -5960,7 +5960,7 @@ export const createPredictionSet = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -6091,7 +6091,7 @@ export const createPredictionSet = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -6102,7 +6102,7 @@ export const createPredictionSet = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -6295,7 +6295,7 @@ export const updatePredictionSet = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -6306,7 +6306,7 @@ export const updatePredictionSet = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -6529,7 +6529,7 @@ export const updatePredictionSet = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -6540,7 +6540,7 @@ export const updatePredictionSet = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -6671,7 +6671,7 @@ export const updatePredictionSet = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -6682,7 +6682,7 @@ export const updatePredictionSet = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -6875,7 +6875,7 @@ export const deletePredictionSet = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -6886,7 +6886,7 @@ export const deletePredictionSet = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -7109,7 +7109,7 @@ export const deletePredictionSet = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -7120,7 +7120,7 @@ export const deletePredictionSet = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -7251,7 +7251,7 @@ export const deletePredictionSet = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -7262,7 +7262,7 @@ export const deletePredictionSet = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -7787,7 +7787,7 @@ export const createPrediction = /* GraphQL */ `
               contenderPersonId
               contenderSongId
             }
-            ranking
+            indexedRankings
             createdAt
             updatedAt
             contenderCommunityPredictionsId
@@ -7860,7 +7860,7 @@ export const createPrediction = /* GraphQL */ `
               contenderPersonId
               contenderSongId
             }
-            ranking
+            indexedRankings
             createdAt
             updatedAt
             contenderCommunityHistoryPredictionsId
@@ -8376,7 +8376,7 @@ export const updatePrediction = /* GraphQL */ `
               contenderPersonId
               contenderSongId
             }
-            ranking
+            indexedRankings
             createdAt
             updatedAt
             contenderCommunityPredictionsId
@@ -8449,7 +8449,7 @@ export const updatePrediction = /* GraphQL */ `
               contenderPersonId
               contenderSongId
             }
-            ranking
+            indexedRankings
             createdAt
             updatedAt
             contenderCommunityHistoryPredictionsId
@@ -8965,7 +8965,7 @@ export const deletePrediction = /* GraphQL */ `
               contenderPersonId
               contenderSongId
             }
-            ranking
+            indexedRankings
             createdAt
             updatedAt
             contenderCommunityPredictionsId
@@ -9038,7 +9038,7 @@ export const deletePrediction = /* GraphQL */ `
               contenderPersonId
               contenderSongId
             }
-            ranking
+            indexedRankings
             createdAt
             updatedAt
             contenderCommunityHistoryPredictionsId
@@ -9222,7 +9222,7 @@ export const createHistoryPredictionSet = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -9233,7 +9233,7 @@ export const createHistoryPredictionSet = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -9456,7 +9456,7 @@ export const createHistoryPredictionSet = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -9467,7 +9467,7 @@ export const createHistoryPredictionSet = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -9598,7 +9598,7 @@ export const createHistoryPredictionSet = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -9609,7 +9609,7 @@ export const createHistoryPredictionSet = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -9802,7 +9802,7 @@ export const updateHistoryPredictionSet = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -9813,7 +9813,7 @@ export const updateHistoryPredictionSet = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -10036,7 +10036,7 @@ export const updateHistoryPredictionSet = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -10047,7 +10047,7 @@ export const updateHistoryPredictionSet = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -10178,7 +10178,7 @@ export const updateHistoryPredictionSet = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -10189,7 +10189,7 @@ export const updateHistoryPredictionSet = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -10382,7 +10382,7 @@ export const deleteHistoryPredictionSet = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -10393,7 +10393,7 @@ export const deleteHistoryPredictionSet = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -10616,7 +10616,7 @@ export const deleteHistoryPredictionSet = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -10627,7 +10627,7 @@ export const deleteHistoryPredictionSet = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -10758,7 +10758,7 @@ export const deleteHistoryPredictionSet = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -10769,7 +10769,7 @@ export const deleteHistoryPredictionSet = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -11294,7 +11294,7 @@ export const createHistoryPrediction = /* GraphQL */ `
               contenderPersonId
               contenderSongId
             }
-            ranking
+            indexedRankings
             createdAt
             updatedAt
             contenderCommunityPredictionsId
@@ -11367,7 +11367,7 @@ export const createHistoryPrediction = /* GraphQL */ `
               contenderPersonId
               contenderSongId
             }
-            ranking
+            indexedRankings
             createdAt
             updatedAt
             contenderCommunityHistoryPredictionsId
@@ -11883,7 +11883,7 @@ export const updateHistoryPrediction = /* GraphQL */ `
               contenderPersonId
               contenderSongId
             }
-            ranking
+            indexedRankings
             createdAt
             updatedAt
             contenderCommunityPredictionsId
@@ -11956,7 +11956,7 @@ export const updateHistoryPrediction = /* GraphQL */ `
               contenderPersonId
               contenderSongId
             }
-            ranking
+            indexedRankings
             createdAt
             updatedAt
             contenderCommunityHistoryPredictionsId
@@ -12472,7 +12472,7 @@ export const deleteHistoryPrediction = /* GraphQL */ `
               contenderPersonId
               contenderSongId
             }
-            ranking
+            indexedRankings
             createdAt
             updatedAt
             contenderCommunityPredictionsId
@@ -12545,7 +12545,7 @@ export const deleteHistoryPrediction = /* GraphQL */ `
               contenderPersonId
               contenderSongId
             }
-            ranking
+            indexedRankings
             createdAt
             updatedAt
             contenderCommunityHistoryPredictionsId
@@ -12719,7 +12719,7 @@ export const createCommunityPredictionSet = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -12730,7 +12730,7 @@ export const createCommunityPredictionSet = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -12953,7 +12953,7 @@ export const createCommunityPredictionSet = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -12964,7 +12964,7 @@ export const createCommunityPredictionSet = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -13084,7 +13084,7 @@ export const createCommunityPredictionSet = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -13095,7 +13095,7 @@ export const createCommunityPredictionSet = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -13112,7 +13112,7 @@ export const createCommunityPredictionSet = /* GraphQL */ `
             contenderPersonId
             contenderSongId
           }
-          ranking
+          indexedRankings
           createdAt
           updatedAt
           contenderCommunityPredictionsId
@@ -13275,7 +13275,7 @@ export const updateCommunityPredictionSet = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -13286,7 +13286,7 @@ export const updateCommunityPredictionSet = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -13509,7 +13509,7 @@ export const updateCommunityPredictionSet = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -13520,7 +13520,7 @@ export const updateCommunityPredictionSet = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -13640,7 +13640,7 @@ export const updateCommunityPredictionSet = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -13651,7 +13651,7 @@ export const updateCommunityPredictionSet = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -13668,7 +13668,7 @@ export const updateCommunityPredictionSet = /* GraphQL */ `
             contenderPersonId
             contenderSongId
           }
-          ranking
+          indexedRankings
           createdAt
           updatedAt
           contenderCommunityPredictionsId
@@ -13831,7 +13831,7 @@ export const deleteCommunityPredictionSet = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -13842,7 +13842,7 @@ export const deleteCommunityPredictionSet = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -14065,7 +14065,7 @@ export const deleteCommunityPredictionSet = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -14076,7 +14076,7 @@ export const deleteCommunityPredictionSet = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -14196,7 +14196,7 @@ export const deleteCommunityPredictionSet = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -14207,7 +14207,7 @@ export const deleteCommunityPredictionSet = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -14224,7 +14224,7 @@ export const deleteCommunityPredictionSet = /* GraphQL */ `
             contenderPersonId
             contenderSongId
           }
-          ranking
+          indexedRankings
           createdAt
           updatedAt
           contenderCommunityPredictionsId
@@ -14718,7 +14718,7 @@ export const createCommunityPrediction = /* GraphQL */ `
               contenderPersonId
               contenderSongId
             }
-            ranking
+            indexedRankings
             createdAt
             updatedAt
             contenderCommunityPredictionsId
@@ -14791,7 +14791,7 @@ export const createCommunityPrediction = /* GraphQL */ `
               contenderPersonId
               contenderSongId
             }
-            ranking
+            indexedRankings
             createdAt
             updatedAt
             contenderCommunityHistoryPredictionsId
@@ -14808,7 +14808,7 @@ export const createCommunityPrediction = /* GraphQL */ `
         contenderPersonId
         contenderSongId
       }
-      ranking
+      indexedRankings
       createdAt
       updatedAt
       contenderCommunityPredictionsId
@@ -15295,7 +15295,7 @@ export const updateCommunityPrediction = /* GraphQL */ `
               contenderPersonId
               contenderSongId
             }
-            ranking
+            indexedRankings
             createdAt
             updatedAt
             contenderCommunityPredictionsId
@@ -15368,7 +15368,7 @@ export const updateCommunityPrediction = /* GraphQL */ `
               contenderPersonId
               contenderSongId
             }
-            ranking
+            indexedRankings
             createdAt
             updatedAt
             contenderCommunityHistoryPredictionsId
@@ -15385,7 +15385,7 @@ export const updateCommunityPrediction = /* GraphQL */ `
         contenderPersonId
         contenderSongId
       }
-      ranking
+      indexedRankings
       createdAt
       updatedAt
       contenderCommunityPredictionsId
@@ -15872,7 +15872,7 @@ export const deleteCommunityPrediction = /* GraphQL */ `
               contenderPersonId
               contenderSongId
             }
-            ranking
+            indexedRankings
             createdAt
             updatedAt
             contenderCommunityPredictionsId
@@ -15945,7 +15945,7 @@ export const deleteCommunityPrediction = /* GraphQL */ `
               contenderPersonId
               contenderSongId
             }
-            ranking
+            indexedRankings
             createdAt
             updatedAt
             contenderCommunityHistoryPredictionsId
@@ -15962,7 +15962,7 @@ export const deleteCommunityPrediction = /* GraphQL */ `
         contenderPersonId
         contenderSongId
       }
-      ranking
+      indexedRankings
       createdAt
       updatedAt
       contenderCommunityPredictionsId
@@ -16118,7 +16118,7 @@ export const createCommunityHistoryPredictionSet = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -16129,7 +16129,7 @@ export const createCommunityHistoryPredictionSet = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -16352,7 +16352,7 @@ export const createCommunityHistoryPredictionSet = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -16363,7 +16363,7 @@ export const createCommunityHistoryPredictionSet = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -16483,7 +16483,7 @@ export const createCommunityHistoryPredictionSet = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -16494,7 +16494,7 @@ export const createCommunityHistoryPredictionSet = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -16511,7 +16511,7 @@ export const createCommunityHistoryPredictionSet = /* GraphQL */ `
             contenderPersonId
             contenderSongId
           }
-          ranking
+          indexedRankings
           createdAt
           updatedAt
           contenderCommunityHistoryPredictionsId
@@ -16674,7 +16674,7 @@ export const updateCommunityHistoryPredictionSet = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -16685,7 +16685,7 @@ export const updateCommunityHistoryPredictionSet = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -16908,7 +16908,7 @@ export const updateCommunityHistoryPredictionSet = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -16919,7 +16919,7 @@ export const updateCommunityHistoryPredictionSet = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -17039,7 +17039,7 @@ export const updateCommunityHistoryPredictionSet = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -17050,7 +17050,7 @@ export const updateCommunityHistoryPredictionSet = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -17067,7 +17067,7 @@ export const updateCommunityHistoryPredictionSet = /* GraphQL */ `
             contenderPersonId
             contenderSongId
           }
-          ranking
+          indexedRankings
           createdAt
           updatedAt
           contenderCommunityHistoryPredictionsId
@@ -17230,7 +17230,7 @@ export const deleteCommunityHistoryPredictionSet = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -17241,7 +17241,7 @@ export const deleteCommunityHistoryPredictionSet = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -17464,7 +17464,7 @@ export const deleteCommunityHistoryPredictionSet = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -17475,7 +17475,7 @@ export const deleteCommunityHistoryPredictionSet = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -17595,7 +17595,7 @@ export const deleteCommunityHistoryPredictionSet = /* GraphQL */ `
             communityPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityPredictionsId
@@ -17606,7 +17606,7 @@ export const deleteCommunityHistoryPredictionSet = /* GraphQL */ `
             communityHistoryPredictions {
               items {
                 id
-                ranking
+                indexedRankings
                 createdAt
                 updatedAt
                 contenderCommunityHistoryPredictionsId
@@ -17623,7 +17623,7 @@ export const deleteCommunityHistoryPredictionSet = /* GraphQL */ `
             contenderPersonId
             contenderSongId
           }
-          ranking
+          indexedRankings
           createdAt
           updatedAt
           contenderCommunityHistoryPredictionsId
@@ -18117,7 +18117,7 @@ export const createCommunityHistoryPrediction = /* GraphQL */ `
               contenderPersonId
               contenderSongId
             }
-            ranking
+            indexedRankings
             createdAt
             updatedAt
             contenderCommunityPredictionsId
@@ -18190,7 +18190,7 @@ export const createCommunityHistoryPrediction = /* GraphQL */ `
               contenderPersonId
               contenderSongId
             }
-            ranking
+            indexedRankings
             createdAt
             updatedAt
             contenderCommunityHistoryPredictionsId
@@ -18207,7 +18207,7 @@ export const createCommunityHistoryPrediction = /* GraphQL */ `
         contenderPersonId
         contenderSongId
       }
-      ranking
+      indexedRankings
       createdAt
       updatedAt
       contenderCommunityHistoryPredictionsId
@@ -18694,7 +18694,7 @@ export const updateCommunityHistoryPrediction = /* GraphQL */ `
               contenderPersonId
               contenderSongId
             }
-            ranking
+            indexedRankings
             createdAt
             updatedAt
             contenderCommunityPredictionsId
@@ -18767,7 +18767,7 @@ export const updateCommunityHistoryPrediction = /* GraphQL */ `
               contenderPersonId
               contenderSongId
             }
-            ranking
+            indexedRankings
             createdAt
             updatedAt
             contenderCommunityHistoryPredictionsId
@@ -18784,7 +18784,7 @@ export const updateCommunityHistoryPrediction = /* GraphQL */ `
         contenderPersonId
         contenderSongId
       }
-      ranking
+      indexedRankings
       createdAt
       updatedAt
       contenderCommunityHistoryPredictionsId
@@ -19271,7 +19271,7 @@ export const deleteCommunityHistoryPrediction = /* GraphQL */ `
               contenderPersonId
               contenderSongId
             }
-            ranking
+            indexedRankings
             createdAt
             updatedAt
             contenderCommunityPredictionsId
@@ -19344,7 +19344,7 @@ export const deleteCommunityHistoryPrediction = /* GraphQL */ `
               contenderPersonId
               contenderSongId
             }
-            ranking
+            indexedRankings
             createdAt
             updatedAt
             contenderCommunityHistoryPredictionsId
@@ -19361,7 +19361,7 @@ export const deleteCommunityHistoryPrediction = /* GraphQL */ `
         contenderPersonId
         contenderSongId
       }
-      ranking
+      indexedRankings
       createdAt
       updatedAt
       contenderCommunityHistoryPredictionsId

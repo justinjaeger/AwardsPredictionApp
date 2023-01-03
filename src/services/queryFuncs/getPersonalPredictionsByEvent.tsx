@@ -21,9 +21,10 @@ const getPersonalPredictionsByEvent = async (eventId: string, userId: string) =>
       contenderMovie: p?.contender.movie || undefined,
       contenderPerson: p?.contender.person || undefined,
       contenderSong: p?.contender.song || undefined,
+      lastUpdated: p?.updatedAt || '',
     }));
     const sortedPredictions = sortPersonalPredictions(predictions);
-    data[categoryId] = sortedPredictions;
+    data[categoryId] = { predictions: sortedPredictions, updatedAt: ps?.updatedAt || '' };
   });
   return data;
 };

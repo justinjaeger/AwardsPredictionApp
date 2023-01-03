@@ -1,7 +1,7 @@
 import React from 'react';
 import { Spinner } from '@ui-kitten/components';
 import COLORS from '../../constants/colors';
-import { TouchableHighlight, TouchableOpacity } from 'react-native';
+import { TouchableHighlight, TouchableOpacity, View } from 'react-native';
 import { BodyBold } from '../Text';
 import theme from '../../constants/theme';
 
@@ -21,15 +21,23 @@ export const SubmitButton = (props: iButtonProps) => (
       width: '50%',
       alignSelf: 'center',
       backgroundColor: props.disabled ? COLORS.disabled : COLORS.secondaryDark,
-      padding: 20,
       borderRadius: theme.borderRadius,
+      height: 50,
+      paddingLeft: 20,
+      paddingRight: 20,
       ...props.style,
     }}
     underlayColor={COLORS.secondary}
   >
-    <>
+    <View style={{ height: '100%', justifyContent: 'center' }}>
       {props.loading ? (
-        () => <Spinner size="medium" status="control" />
+        () => (
+          <Spinner
+            size="medium"
+            status="control"
+            style={{ backgroundColor: COLORS.white }}
+          />
+        )
       ) : (
         <BodyBold
           style={{
@@ -40,7 +48,7 @@ export const SubmitButton = (props: iButtonProps) => (
           {props.text}
         </BodyBold>
       )}
-    </>
+    </View>
   </TouchableHighlight>
 );
 

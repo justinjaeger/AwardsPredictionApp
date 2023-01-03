@@ -10,9 +10,9 @@ export const sortPersonalPredictions = (ps: iPrediction[]) =>
 
 export const sortCommunityPredictions = (ps: iPrediction[]) =>
   ps.sort((p1, p2) => {
-    if (!p1 || !p2 || !p1.communityRankings || !p2.communityRankings) return 0;
-    const rank1 = getContenderRank(p1.communityRankings);
-    const rank2 = getContenderRank(p2.communityRankings);
+    if (!p1 || !p2 || !p1.indexedRankings || !p2.indexedRankings) return 0;
+    const rank1 = getContenderRank(p1.indexedRankings);
+    const rank2 = getContenderRank(p2.indexedRankings);
     if (rank2 < rank1) return -1;
     return 1;
   });

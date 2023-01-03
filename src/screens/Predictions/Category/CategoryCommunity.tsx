@@ -12,6 +12,7 @@ import { useCollapsible } from '../../../hooks/animatedState/useCollapsible';
 import { useDisplay } from '../../../hooks/animatedState/useDisplay';
 import useQueryCommunityOrPersonalEvent from '../../../hooks/queries/getCommunityOrPersonalEvent';
 import { iCategory, iEvent } from '../../../types';
+import { formatDateTime } from '../../../util/formatDateTime';
 import { CategoryHeader } from '../styles';
 
 const CategoryCommunity = () => {
@@ -40,7 +41,11 @@ const CategoryCommunity = () => {
     data: predictionData,
     isLoading,
   } = useQueryCommunityOrPersonalEvent('community', !!userId, { event });
-  const predictions = predictionData ? predictionData[category.id] || [] : [];
+  const predictions = predictionData?.[category.id]?.predictions || [];
+
+  const lastUpdated = predictionData?.[category.id]?.updatedAt;
+  const lastUpdatedString = formatDateTime(new Date(lastUpdated || ''));
+  console.log('lastUpdatedString', lastUpdatedString); // TODO: can do something with this later
 
   if (isLoading || !predictions) {
     return null;

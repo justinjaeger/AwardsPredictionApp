@@ -15,7 +15,7 @@ export enum QueryKeys {
 }
 
 // ex: { 1: 142 } (ranking, numberPredictingRanking)
-export type iNumberPredicting = {
+export type iIndexedRankings = {
   [ranking: number]: number;
 };
 
@@ -23,7 +23,7 @@ export type iNumberPredicting = {
 export type iPrediction = {
   ranking: number; // PERSONAL ONLY
   visibility: ContenderVisibility;
-  communityRankings?: iNumberPredicting; // COMMUNITY ONLY
+  indexedRankings?: iIndexedRankings; // COMMUNITY ONLY
   contenderId: string;
   contenderMovie?:
     | {
@@ -48,11 +48,7 @@ export type iPrediction = {
 };
 
 export type iIndexedPredictionsByCategory = {
-  [categoryId: string]: iPrediction[];
-};
-
-export type iIndexedPredictionsByEvent = {
-  [eventId: string]: iIndexedPredictionsByCategory;
+  [categoryId: string]: { updatedAt: string; predictions: iPrediction[] };
 };
 
 export type iCategory = {

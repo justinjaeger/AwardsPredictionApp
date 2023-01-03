@@ -17,7 +17,7 @@ import { FAB } from '../../../components/Buttons/FAB';
 import CreateContender from '../CreateContender';
 import { CATEGORY_TYPE_TO_STRING } from '../../../constants/categories';
 import Snackbar from '../../../components/Snackbar';
-import { CategoryType } from '../../../API';
+import { CategoryType, ContenderVisibility } from '../../../API';
 
 const AddPredictions = () => {
   const {
@@ -32,7 +32,13 @@ const AddPredictions = () => {
 
   // We use the SAME KEY as the previous screen, because it avoids a re-fetch of the data which was available previously
   const { data: communityData } = useQueryCommunityEvent({ event });
-  const communityPredictions = communityData ? communityData[category.id] || [] : [];
+  // contenders should not be hidden if they're currently in your predictions, so we'll add those back in
+  const hiddenPredictions = initialPredictions.filter(
+    (p) => p.visibility === ContenderVisibility.HIDDEN,
+  );
+  const communityPredictions = communityData
+    ? [...(communityData[category.id]?.predictions || []), ...hiddenPredictions]
+    : [];
 
   const [selectedPredictions, setSelectedPredictions] = useState<iPrediction[]>(
     initialPredictions,

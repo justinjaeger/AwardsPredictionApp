@@ -33,7 +33,7 @@ const CreatePerformance = (props: iCreateContenderProps) => {
   const { mutate, isComplete } = useMutationCreateActingContender();
 
   const { data: communityData } = useQueryCommunityEvent({ event, includeHidden: true }); // because we use this to see if contender exists, we want to includes hidden contenders
-  const communityPredictions = communityData ? communityData[category.id] || [] : [];
+  const communityPredictions = communityData?.[category.id]?.predictions || [];
 
   const [personSearchResults, setPersonSearchResults] = useState<iSearchData>([]);
   const [movieSearchResults, setMovieSearchResults] = useState<iSearchData>([]);

@@ -76,8 +76,8 @@ const ContenderListItemCondensed = (props: iContenderListItemProps) => {
     }
   }, [tmdbMovieId]);
 
-  const communityRankings =
-    variant === 'community' ? prediction.communityRankings : undefined;
+  const indexedRankings =
+    variant === 'community' ? prediction.indexedRankings : undefined;
 
   let title = '';
   switch (categoryType) {
@@ -94,7 +94,7 @@ const ContenderListItemCondensed = (props: iContenderListItemProps) => {
   }
 
   const { win, nom } = getNumPredicting(
-    communityRankings || {},
+    indexedRankings || {},
     getCategorySlots(event.year, event.awardsBody, category.name),
   );
 
@@ -133,7 +133,7 @@ const ContenderListItemCondensed = (props: iContenderListItemProps) => {
           >
             <SubHeader style={{ marginLeft: 10 }}>{title}</SubHeader>
           </View>
-          {communityRankings ? (
+          {indexedRankings ? (
             <View style={{ flexDirection: 'row', paddingRight: theme.windowMargin }}>
               <View
                 style={{

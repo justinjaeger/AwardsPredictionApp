@@ -22,6 +22,7 @@ import { PredictionsParamList } from '../../../navigation/types';
 import { iCategory, iEvent, iPrediction } from '../../../types';
 import { useAsyncReference, useTypedNavigation } from '../../../util/hooks';
 import { CategoryHeader } from '../styles';
+import { formatDateTime } from '../../../util/formatDateTime';
 
 // NOTE: Has a lot in common with ContenderListDraggable
 const CategoryPersonal = () => {
@@ -64,7 +65,12 @@ const CategoryPersonal = () => {
     !!userId,
     { event, userId },
   );
-  const initialPredictions = predictionData ? predictionData[category.id] || [] : [];
+  const initialPredictions = predictionData
+    ? predictionData[category.id]?.predictions || []
+    : [];
+  const lastUpdated = predictionData?.[category.id]?.updatedAt;
+  const lastUpdatedString = formatDateTime(new Date(lastUpdated || ''));
+  console.log('lastUpdatedString', lastUpdatedString); // TODO: can do something with this later
 
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [predictions, setPredictions] = useState<iPrediction[]>(initialPredictions || []);

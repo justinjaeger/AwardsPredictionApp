@@ -7,12 +7,7 @@ import { getAwardsBodyCategories, getCategorySlots } from '../../../constants/ca
 import COLORS from '../../../constants/colors';
 import theme from '../../../constants/theme';
 import { useCategory } from '../../../context/CategoryContext';
-import {
-  iCategory,
-  iEvent,
-  iIndexedPredictionsByCategory,
-  iPrediction,
-} from '../../../types';
+import { iCategory, iEvent, iIndexedPredictionsByCategory } from '../../../types';
 import sortByObjectOrder from '../../../util/sortByObjectOrder';
 
 type iEventListProps = {
@@ -38,9 +33,7 @@ const EventList = (props: iEventListProps) => {
   return (
     <>
       {orderedCategories.map((category) => {
-        const catPredictions: iPrediction[] | undefined = (predictionData || {})[
-          category.id
-        ];
+        const catPredictions = predictionData?.[category.id]?.predictions || [];
         const predictions = catPredictions || [];
         const slots = getCategorySlots(event.year, event.awardsBody, category.name);
         const truncatedPredictions = (predictions || [])?.slice(0, slots);
