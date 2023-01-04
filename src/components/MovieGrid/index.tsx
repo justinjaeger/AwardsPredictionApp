@@ -34,7 +34,8 @@ const MovieGrid = (props: { predictions: iPrediction[]; noLine?: boolean }) => {
           {!noLine && i === slots ? (
             <Divider
               style={{
-                width: '100%',
+                position: 'absolute',
+                width: width - theme.windowMargin * 2,
                 marginTop: 10,
                 marginBottom: 10,
                 borderBottomWidth: 1,
@@ -43,12 +44,18 @@ const MovieGrid = (props: { predictions: iPrediction[]; noLine?: boolean }) => {
             />
           ) : null}
           {p.contenderMovie ? (
-            <PosterFromTmdbId
-              movieTmdbId={p.contenderMovie.tmdbId}
-              personTmdbId={p.contenderPerson?.tmdbId}
-              width={(width - theme.windowMargin * 2 + theme.posterMargin) / 5}
-              ranking={i + 1}
-            />
+            <>
+              {!noLine && slots && i >= slots && i < slots + 5 ? (
+                // we want to give a margin on top if this is the row beneath the divider (since divider is absolute pos)
+                <View style={{ marginTop: 20 }} />
+              ) : null}
+              <PosterFromTmdbId
+                movieTmdbId={p.contenderMovie.tmdbId}
+                personTmdbId={p.contenderPerson?.tmdbId}
+                width={(width - theme.windowMargin * 2 + theme.posterMargin) / 5}
+                ranking={i + 1}
+              />
+            </>
           ) : null}
         </View>
       ))}

@@ -33,7 +33,7 @@ const CreateSong = (props: iCreateContenderProps) => {
   const event = _event as iEvent;
 
   // when adding a contender to the list of overall contenders
-  const { mutate, isComplete } = useMutationCreateSongContender();
+  const { mutate, isComplete, response } = useMutationCreateSongContender();
 
   const { data: communityData } = useQueryCommunityEvent({ event, includeHidden: true }); // because we use this to see if contender exists, we want to includes hidden contenders
   const communityPredictions = communityData?.[category.id]?.predictions || [];
@@ -67,15 +67,13 @@ const CreateSong = (props: iCreateContenderProps) => {
     });
   };
 
+  // block runs after createContender mutation succeeds
   useEffect(() => {
-    if (isComplete && selectedMovieTmdbId) {
-      const newPrediction = getSongPrediction(selectedMovieTmdbId, songTitle);
-      if (newPrediction) {
-        onSelectPrediction(newPrediction);
-        resetSearch();
-      }
+    if (response) {
+      onSelectPrediction(response);
+      resetSearch();
     }
-  }, [isComplete]);
+  }, [response]);
 
   const handleSearch = (s: string) => {
     if (s === '') {

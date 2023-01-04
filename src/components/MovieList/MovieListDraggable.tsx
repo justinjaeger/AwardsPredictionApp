@@ -62,8 +62,7 @@ const MovieListDraggable = (props: iMovieListProps) => {
               <Divider
                 style={{
                   margin: 10,
-                  borderWidth: 0.5,
-                  borderColor: COLORS.secondaryDark,
+                  backgroundColor: isActive ? 'transparent' : COLORS.secondary,
                 }}
               />
             ) : null}

@@ -185,7 +185,7 @@ const CategoryPersonal = () => {
                     },
                   });
                 }}
-                icon={'plus'}
+                icon={'edit-outline'}
               />
             </View>
           </CategoryHeader>

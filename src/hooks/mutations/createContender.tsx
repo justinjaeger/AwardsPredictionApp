@@ -1,12 +1,11 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import ApiServices from '../../services/graphql';
-import { QueryKeys } from '../../types';
+import { iPrediction } from '../../types';
 
 const useMutationCreateContender = () => {
-  const queryClient = useQueryClient();
-
   const [isComplete, setIsComplete] = useState<boolean>(true);
+  const [response, setResponse] = useState<iPrediction | undefined>(undefined);
 
   const { mutate, isLoading } = useMutation({
     mutationFn: async (params: {
@@ -21,13 +20,13 @@ const useMutationCreateContender = () => {
         movieTmdbId: params.movieTmdbId,
       });
     },
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: [QueryKeys.COMMUNITY_EVENT] });
+    onSuccess: (res) => {
+      setResponse(res.data);
       setIsComplete(true);
     },
   });
 
-  return { mutate, isLoading, isComplete };
+  return { mutate, isLoading, isComplete, response };
 };
 
 export default useMutationCreateContender;
