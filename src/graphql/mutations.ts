@@ -92,6 +92,7 @@ export const createEvent = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -163,6 +164,7 @@ export const createEvent = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -208,6 +210,7 @@ export const createEvent = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -241,6 +244,7 @@ export const createEvent = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -302,6 +306,7 @@ export const createEvent = /* GraphQL */ `
               contender {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -336,6 +341,7 @@ export const createEvent = /* GraphQL */ `
               contender {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -359,6 +365,7 @@ export const createEvent = /* GraphQL */ `
               contender {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -381,6 +388,7 @@ export const createEvent = /* GraphQL */ `
               contender {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -398,6 +406,7 @@ export const createEvent = /* GraphQL */ `
             nextToken
           }
           visibility
+          accolade
           createdAt
           updatedAt
           eventContendersId
@@ -447,6 +456,7 @@ export const updateEvent = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -518,6 +528,7 @@ export const updateEvent = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -563,6 +574,7 @@ export const updateEvent = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -596,6 +608,7 @@ export const updateEvent = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -657,6 +670,7 @@ export const updateEvent = /* GraphQL */ `
               contender {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -691,6 +705,7 @@ export const updateEvent = /* GraphQL */ `
               contender {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -714,6 +729,7 @@ export const updateEvent = /* GraphQL */ `
               contender {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -736,6 +752,7 @@ export const updateEvent = /* GraphQL */ `
               contender {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -753,6 +770,7 @@ export const updateEvent = /* GraphQL */ `
             nextToken
           }
           visibility
+          accolade
           createdAt
           updatedAt
           eventContendersId
@@ -802,6 +820,7 @@ export const deleteEvent = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -873,6 +892,7 @@ export const deleteEvent = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -918,6 +938,7 @@ export const deleteEvent = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -951,6 +972,7 @@ export const deleteEvent = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -1012,6 +1034,7 @@ export const deleteEvent = /* GraphQL */ `
               contender {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -1046,6 +1069,7 @@ export const deleteEvent = /* GraphQL */ `
               contender {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -1069,6 +1093,7 @@ export const deleteEvent = /* GraphQL */ `
               contender {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -1091,6 +1116,7 @@ export const deleteEvent = /* GraphQL */ `
               contender {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -1108,6 +1134,7 @@ export const deleteEvent = /* GraphQL */ `
             nextToken
           }
           visibility
+          accolade
           createdAt
           updatedAt
           eventContendersId
@@ -1162,6 +1189,7 @@ export const createCategory = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -1295,6 +1323,7 @@ export const createCategory = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -1338,6 +1367,7 @@ export const createCategory = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -1371,6 +1401,7 @@ export const createCategory = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -1432,6 +1463,7 @@ export const createCategory = /* GraphQL */ `
               contender {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -1466,6 +1498,7 @@ export const createCategory = /* GraphQL */ `
               contender {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -1489,6 +1522,7 @@ export const createCategory = /* GraphQL */ `
               contender {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -1511,6 +1545,7 @@ export const createCategory = /* GraphQL */ `
               contender {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -1528,6 +1563,7 @@ export const createCategory = /* GraphQL */ `
             nextToken
           }
           visibility
+          accolade
           createdAt
           updatedAt
           eventContendersId
@@ -1580,6 +1616,7 @@ export const updateCategory = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -1713,6 +1750,7 @@ export const updateCategory = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -1756,6 +1794,7 @@ export const updateCategory = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -1789,6 +1828,7 @@ export const updateCategory = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -1850,6 +1890,7 @@ export const updateCategory = /* GraphQL */ `
               contender {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -1884,6 +1925,7 @@ export const updateCategory = /* GraphQL */ `
               contender {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -1907,6 +1949,7 @@ export const updateCategory = /* GraphQL */ `
               contender {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -1929,6 +1972,7 @@ export const updateCategory = /* GraphQL */ `
               contender {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -1946,6 +1990,7 @@ export const updateCategory = /* GraphQL */ `
             nextToken
           }
           visibility
+          accolade
           createdAt
           updatedAt
           eventContendersId
@@ -1998,6 +2043,7 @@ export const deleteCategory = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -2131,6 +2177,7 @@ export const deleteCategory = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -2174,6 +2221,7 @@ export const deleteCategory = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -2207,6 +2255,7 @@ export const deleteCategory = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -2268,6 +2317,7 @@ export const deleteCategory = /* GraphQL */ `
               contender {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -2302,6 +2352,7 @@ export const deleteCategory = /* GraphQL */ `
               contender {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -2325,6 +2376,7 @@ export const deleteCategory = /* GraphQL */ `
               contender {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -2347,6 +2399,7 @@ export const deleteCategory = /* GraphQL */ `
               contender {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -2364,6 +2417,7 @@ export const deleteCategory = /* GraphQL */ `
             nextToken
           }
           visibility
+          accolade
           createdAt
           updatedAt
           eventContendersId
@@ -2474,6 +2528,7 @@ export const createContender = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -2605,6 +2660,7 @@ export const createContender = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -2646,6 +2702,7 @@ export const createContender = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -2779,6 +2836,7 @@ export const createContender = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -2951,6 +3009,7 @@ export const createContender = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -3096,6 +3155,7 @@ export const createContender = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -3230,6 +3290,7 @@ export const createContender = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -3363,6 +3424,7 @@ export const createContender = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -3380,6 +3442,7 @@ export const createContender = /* GraphQL */ `
         nextToken
       }
       visibility
+      accolade
       createdAt
       updatedAt
       eventContendersId
@@ -3484,6 +3547,7 @@ export const updateContender = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -3615,6 +3679,7 @@ export const updateContender = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -3656,6 +3721,7 @@ export const updateContender = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -3789,6 +3855,7 @@ export const updateContender = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -3961,6 +4028,7 @@ export const updateContender = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -4106,6 +4174,7 @@ export const updateContender = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -4240,6 +4309,7 @@ export const updateContender = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -4373,6 +4443,7 @@ export const updateContender = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -4390,6 +4461,7 @@ export const updateContender = /* GraphQL */ `
         nextToken
       }
       visibility
+      accolade
       createdAt
       updatedAt
       eventContendersId
@@ -4494,6 +4566,7 @@ export const deleteContender = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -4625,6 +4698,7 @@ export const deleteContender = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -4666,6 +4740,7 @@ export const deleteContender = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -4799,6 +4874,7 @@ export const deleteContender = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -4971,6 +5047,7 @@ export const deleteContender = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -5116,6 +5193,7 @@ export const deleteContender = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -5250,6 +5328,7 @@ export const deleteContender = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -5383,6 +5462,7 @@ export const deleteContender = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -5400,6 +5480,7 @@ export const deleteContender = /* GraphQL */ `
         nextToken
       }
       visibility
+      accolade
       createdAt
       updatedAt
       eventContendersId
@@ -5602,6 +5683,7 @@ export const createPredictionSet = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -5735,6 +5817,7 @@ export const createPredictionSet = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -5838,6 +5921,7 @@ export const createPredictionSet = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -5969,6 +6053,7 @@ export const createPredictionSet = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -6111,6 +6196,7 @@ export const createPredictionSet = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -6182,6 +6268,7 @@ export const updatePredictionSet = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -6315,6 +6402,7 @@ export const updatePredictionSet = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -6418,6 +6506,7 @@ export const updatePredictionSet = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -6549,6 +6638,7 @@ export const updatePredictionSet = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -6691,6 +6781,7 @@ export const updatePredictionSet = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -6762,6 +6853,7 @@ export const deletePredictionSet = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -6895,6 +6987,7 @@ export const deletePredictionSet = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -6998,6 +7091,7 @@ export const deletePredictionSet = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -7129,6 +7223,7 @@ export const deletePredictionSet = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -7271,6 +7366,7 @@ export const deletePredictionSet = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -7340,6 +7436,7 @@ export const createPrediction = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -7411,6 +7508,7 @@ export const createPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -7508,6 +7606,7 @@ export const createPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -7620,6 +7719,7 @@ export const createPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -7705,6 +7805,7 @@ export const createPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -7779,6 +7880,7 @@ export const createPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -7852,6 +7954,7 @@ export const createPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -7869,6 +7972,7 @@ export const createPrediction = /* GraphQL */ `
           nextToken
         }
         visibility
+        accolade
         createdAt
         updatedAt
         eventContendersId
@@ -7929,6 +8033,7 @@ export const updatePrediction = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -8000,6 +8105,7 @@ export const updatePrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -8097,6 +8203,7 @@ export const updatePrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -8209,6 +8316,7 @@ export const updatePrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -8294,6 +8402,7 @@ export const updatePrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -8368,6 +8477,7 @@ export const updatePrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -8441,6 +8551,7 @@ export const updatePrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -8458,6 +8569,7 @@ export const updatePrediction = /* GraphQL */ `
           nextToken
         }
         visibility
+        accolade
         createdAt
         updatedAt
         eventContendersId
@@ -8518,6 +8630,7 @@ export const deletePrediction = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -8589,6 +8702,7 @@ export const deletePrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -8686,6 +8800,7 @@ export const deletePrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -8798,6 +8913,7 @@ export const deletePrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -8883,6 +8999,7 @@ export const deletePrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -8957,6 +9074,7 @@ export const deletePrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -9030,6 +9148,7 @@ export const deletePrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -9047,6 +9166,7 @@ export const deletePrediction = /* GraphQL */ `
           nextToken
         }
         visibility
+        accolade
         createdAt
         updatedAt
         eventContendersId
@@ -9109,6 +9229,7 @@ export const createHistoryPredictionSet = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -9242,6 +9363,7 @@ export const createHistoryPredictionSet = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -9345,6 +9467,7 @@ export const createHistoryPredictionSet = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -9476,6 +9599,7 @@ export const createHistoryPredictionSet = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -9618,6 +9742,7 @@ export const createHistoryPredictionSet = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -9689,6 +9814,7 @@ export const updateHistoryPredictionSet = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -9822,6 +9948,7 @@ export const updateHistoryPredictionSet = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -9925,6 +10052,7 @@ export const updateHistoryPredictionSet = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -10056,6 +10184,7 @@ export const updateHistoryPredictionSet = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -10198,6 +10327,7 @@ export const updateHistoryPredictionSet = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -10269,6 +10399,7 @@ export const deleteHistoryPredictionSet = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -10402,6 +10533,7 @@ export const deleteHistoryPredictionSet = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -10505,6 +10637,7 @@ export const deleteHistoryPredictionSet = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -10636,6 +10769,7 @@ export const deleteHistoryPredictionSet = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -10778,6 +10912,7 @@ export const deleteHistoryPredictionSet = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -10847,6 +10982,7 @@ export const createHistoryPrediction = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -10918,6 +11054,7 @@ export const createHistoryPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -11015,6 +11152,7 @@ export const createHistoryPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -11127,6 +11265,7 @@ export const createHistoryPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -11212,6 +11351,7 @@ export const createHistoryPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -11286,6 +11426,7 @@ export const createHistoryPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -11359,6 +11500,7 @@ export const createHistoryPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -11376,6 +11518,7 @@ export const createHistoryPrediction = /* GraphQL */ `
           nextToken
         }
         visibility
+        accolade
         createdAt
         updatedAt
         eventContendersId
@@ -11436,6 +11579,7 @@ export const updateHistoryPrediction = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -11507,6 +11651,7 @@ export const updateHistoryPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -11604,6 +11749,7 @@ export const updateHistoryPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -11716,6 +11862,7 @@ export const updateHistoryPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -11801,6 +11948,7 @@ export const updateHistoryPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -11875,6 +12023,7 @@ export const updateHistoryPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -11948,6 +12097,7 @@ export const updateHistoryPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -11965,6 +12115,7 @@ export const updateHistoryPrediction = /* GraphQL */ `
           nextToken
         }
         visibility
+        accolade
         createdAt
         updatedAt
         eventContendersId
@@ -12025,6 +12176,7 @@ export const deleteHistoryPrediction = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -12096,6 +12248,7 @@ export const deleteHistoryPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -12193,6 +12346,7 @@ export const deleteHistoryPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -12305,6 +12459,7 @@ export const deleteHistoryPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -12390,6 +12545,7 @@ export const deleteHistoryPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -12464,6 +12620,7 @@ export const deleteHistoryPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -12537,6 +12694,7 @@ export const deleteHistoryPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -12554,6 +12712,7 @@ export const deleteHistoryPrediction = /* GraphQL */ `
           nextToken
         }
         visibility
+        accolade
         createdAt
         updatedAt
         eventContendersId
@@ -12606,6 +12765,7 @@ export const createCommunityPredictionSet = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -12739,6 +12899,7 @@ export const createCommunityPredictionSet = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -12842,6 +13003,7 @@ export const createCommunityPredictionSet = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -12973,6 +13135,7 @@ export const createCommunityPredictionSet = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -13104,6 +13267,7 @@ export const createCommunityPredictionSet = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -13162,6 +13326,7 @@ export const updateCommunityPredictionSet = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -13295,6 +13460,7 @@ export const updateCommunityPredictionSet = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -13398,6 +13564,7 @@ export const updateCommunityPredictionSet = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -13529,6 +13696,7 @@ export const updateCommunityPredictionSet = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -13660,6 +13828,7 @@ export const updateCommunityPredictionSet = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -13718,6 +13887,7 @@ export const deleteCommunityPredictionSet = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -13851,6 +14021,7 @@ export const deleteCommunityPredictionSet = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -13954,6 +14125,7 @@ export const deleteCommunityPredictionSet = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -14085,6 +14257,7 @@ export const deleteCommunityPredictionSet = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -14216,6 +14389,7 @@ export const deleteCommunityPredictionSet = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -14271,6 +14445,7 @@ export const createCommunityPrediction = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -14342,6 +14517,7 @@ export const createCommunityPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -14439,6 +14615,7 @@ export const createCommunityPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -14551,6 +14728,7 @@ export const createCommunityPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -14636,6 +14814,7 @@ export const createCommunityPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -14710,6 +14889,7 @@ export const createCommunityPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -14783,6 +14963,7 @@ export const createCommunityPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -14800,6 +14981,7 @@ export const createCommunityPrediction = /* GraphQL */ `
           nextToken
         }
         visibility
+        accolade
         createdAt
         updatedAt
         eventContendersId
@@ -14848,6 +15030,7 @@ export const updateCommunityPrediction = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -14919,6 +15102,7 @@ export const updateCommunityPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -15016,6 +15200,7 @@ export const updateCommunityPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -15128,6 +15313,7 @@ export const updateCommunityPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -15213,6 +15399,7 @@ export const updateCommunityPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -15287,6 +15474,7 @@ export const updateCommunityPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -15360,6 +15548,7 @@ export const updateCommunityPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -15377,6 +15566,7 @@ export const updateCommunityPrediction = /* GraphQL */ `
           nextToken
         }
         visibility
+        accolade
         createdAt
         updatedAt
         eventContendersId
@@ -15425,6 +15615,7 @@ export const deleteCommunityPrediction = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -15496,6 +15687,7 @@ export const deleteCommunityPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -15593,6 +15785,7 @@ export const deleteCommunityPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -15705,6 +15898,7 @@ export const deleteCommunityPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -15790,6 +15984,7 @@ export const deleteCommunityPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -15864,6 +16059,7 @@ export const deleteCommunityPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -15937,6 +16133,7 @@ export const deleteCommunityPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -15954,6 +16151,7 @@ export const deleteCommunityPrediction = /* GraphQL */ `
           nextToken
         }
         visibility
+        accolade
         createdAt
         updatedAt
         eventContendersId
@@ -16005,6 +16203,7 @@ export const createCommunityHistoryPredictionSet = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -16138,6 +16337,7 @@ export const createCommunityHistoryPredictionSet = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -16241,6 +16441,7 @@ export const createCommunityHistoryPredictionSet = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -16372,6 +16573,7 @@ export const createCommunityHistoryPredictionSet = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -16503,6 +16705,7 @@ export const createCommunityHistoryPredictionSet = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -16561,6 +16764,7 @@ export const updateCommunityHistoryPredictionSet = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -16694,6 +16898,7 @@ export const updateCommunityHistoryPredictionSet = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -16797,6 +17002,7 @@ export const updateCommunityHistoryPredictionSet = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -16928,6 +17134,7 @@ export const updateCommunityHistoryPredictionSet = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -17059,6 +17266,7 @@ export const updateCommunityHistoryPredictionSet = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -17117,6 +17325,7 @@ export const deleteCommunityHistoryPredictionSet = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -17250,6 +17459,7 @@ export const deleteCommunityHistoryPredictionSet = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -17353,6 +17563,7 @@ export const deleteCommunityHistoryPredictionSet = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -17484,6 +17695,7 @@ export const deleteCommunityHistoryPredictionSet = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -17615,6 +17827,7 @@ export const deleteCommunityHistoryPredictionSet = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -17670,6 +17883,7 @@ export const createCommunityHistoryPrediction = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -17741,6 +17955,7 @@ export const createCommunityHistoryPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -17838,6 +18053,7 @@ export const createCommunityHistoryPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -17950,6 +18166,7 @@ export const createCommunityHistoryPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -18035,6 +18252,7 @@ export const createCommunityHistoryPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -18109,6 +18327,7 @@ export const createCommunityHistoryPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -18182,6 +18401,7 @@ export const createCommunityHistoryPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -18199,6 +18419,7 @@ export const createCommunityHistoryPrediction = /* GraphQL */ `
           nextToken
         }
         visibility
+        accolade
         createdAt
         updatedAt
         eventContendersId
@@ -18247,6 +18468,7 @@ export const updateCommunityHistoryPrediction = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -18318,6 +18540,7 @@ export const updateCommunityHistoryPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -18415,6 +18638,7 @@ export const updateCommunityHistoryPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -18527,6 +18751,7 @@ export const updateCommunityHistoryPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -18612,6 +18837,7 @@ export const updateCommunityHistoryPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -18686,6 +18912,7 @@ export const updateCommunityHistoryPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -18759,6 +18986,7 @@ export const updateCommunityHistoryPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -18776,6 +19004,7 @@ export const updateCommunityHistoryPrediction = /* GraphQL */ `
           nextToken
         }
         visibility
+        accolade
         createdAt
         updatedAt
         eventContendersId
@@ -18824,6 +19053,7 @@ export const deleteCommunityHistoryPrediction = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -18895,6 +19125,7 @@ export const deleteCommunityHistoryPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -18992,6 +19223,7 @@ export const deleteCommunityHistoryPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -19104,6 +19336,7 @@ export const deleteCommunityHistoryPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -19189,6 +19422,7 @@ export const deleteCommunityHistoryPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -19263,6 +19497,7 @@ export const deleteCommunityHistoryPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -19336,6 +19571,7 @@ export const deleteCommunityHistoryPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -19353,6 +19589,7 @@ export const deleteCommunityHistoryPrediction = /* GraphQL */ `
           nextToken
         }
         visibility
+        accolade
         createdAt
         updatedAt
         eventContendersId

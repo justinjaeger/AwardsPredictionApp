@@ -75,6 +75,7 @@ export const getEvent = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -146,6 +147,7 @@ export const getEvent = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -191,6 +193,7 @@ export const getEvent = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -224,6 +227,7 @@ export const getEvent = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -285,6 +289,7 @@ export const getEvent = /* GraphQL */ `
               contender {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -319,6 +324,7 @@ export const getEvent = /* GraphQL */ `
               contender {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -342,6 +348,7 @@ export const getEvent = /* GraphQL */ `
               contender {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -364,6 +371,7 @@ export const getEvent = /* GraphQL */ `
               contender {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -381,6 +389,7 @@ export const getEvent = /* GraphQL */ `
             nextToken
           }
           visibility
+          accolade
           createdAt
           updatedAt
           eventContendersId
@@ -441,6 +450,7 @@ export const listEvents = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -574,6 +584,7 @@ export const listEvents = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -627,6 +638,7 @@ export const getCategory = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -760,6 +772,7 @@ export const getCategory = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -803,6 +816,7 @@ export const getCategory = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -836,6 +850,7 @@ export const getCategory = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -897,6 +912,7 @@ export const getCategory = /* GraphQL */ `
               contender {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -931,6 +947,7 @@ export const getCategory = /* GraphQL */ `
               contender {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -954,6 +971,7 @@ export const getCategory = /* GraphQL */ `
               contender {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -976,6 +994,7 @@ export const getCategory = /* GraphQL */ `
               contender {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -993,6 +1012,7 @@ export const getCategory = /* GraphQL */ `
             nextToken
           }
           visibility
+          accolade
           createdAt
           updatedAt
           eventContendersId
@@ -1111,6 +1131,7 @@ export const listCategories = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -1242,6 +1263,7 @@ export const listCategories = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -1351,6 +1373,7 @@ export const getContender = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -1482,6 +1505,7 @@ export const getContender = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -1523,6 +1547,7 @@ export const getContender = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -1656,6 +1681,7 @@ export const getContender = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -1828,6 +1854,7 @@ export const getContender = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -1973,6 +2000,7 @@ export const getContender = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -2107,6 +2135,7 @@ export const getContender = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -2240,6 +2269,7 @@ export const getContender = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -2257,6 +2287,7 @@ export const getContender = /* GraphQL */ `
         nextToken
       }
       visibility
+      accolade
       createdAt
       updatedAt
       eventContendersId
@@ -2307,6 +2338,7 @@ export const listContenders = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -2378,6 +2410,7 @@ export const listContenders = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -2475,6 +2508,7 @@ export const listContenders = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -2587,6 +2621,7 @@ export const listContenders = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -2672,6 +2707,7 @@ export const listContenders = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -2746,6 +2782,7 @@ export const listContenders = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -2819,6 +2856,7 @@ export const listContenders = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -2836,6 +2874,7 @@ export const listContenders = /* GraphQL */ `
           nextToken
         }
         visibility
+        accolade
         createdAt
         updatedAt
         eventContendersId
@@ -3015,6 +3054,7 @@ export const getPredictionSet = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -3148,6 +3188,7 @@ export const getPredictionSet = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -3251,6 +3292,7 @@ export const getPredictionSet = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -3382,6 +3424,7 @@ export const getPredictionSet = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -3524,6 +3567,7 @@ export const getPredictionSet = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -3661,6 +3705,7 @@ export const listPredictionSets = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -3700,6 +3745,7 @@ export const listPredictionSets = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -3771,6 +3817,7 @@ export const listPredictionSets = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -3853,6 +3900,7 @@ export const listPredictionSets = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -3921,6 +3969,7 @@ export const getPrediction = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -3992,6 +4041,7 @@ export const getPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -4089,6 +4139,7 @@ export const getPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -4201,6 +4252,7 @@ export const getPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -4286,6 +4338,7 @@ export const getPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -4360,6 +4413,7 @@ export const getPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -4433,6 +4487,7 @@ export const getPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -4450,6 +4505,7 @@ export const getPrediction = /* GraphQL */ `
           nextToken
         }
         visibility
+        accolade
         createdAt
         updatedAt
         eventContendersId
@@ -4521,6 +4577,7 @@ export const listPredictions = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -4554,6 +4611,7 @@ export const listPredictions = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -4615,6 +4673,7 @@ export const listPredictions = /* GraphQL */ `
               contender {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -4649,6 +4708,7 @@ export const listPredictions = /* GraphQL */ `
               contender {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -4672,6 +4732,7 @@ export const listPredictions = /* GraphQL */ `
               contender {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -4694,6 +4755,7 @@ export const listPredictions = /* GraphQL */ `
               contender {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -4711,6 +4773,7 @@ export const listPredictions = /* GraphQL */ `
             nextToken
           }
           visibility
+          accolade
           createdAt
           updatedAt
           eventContendersId
@@ -4772,6 +4835,7 @@ export const getHistoryPredictionSet = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -4905,6 +4969,7 @@ export const getHistoryPredictionSet = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -5008,6 +5073,7 @@ export const getHistoryPredictionSet = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -5139,6 +5205,7 @@ export const getHistoryPredictionSet = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -5281,6 +5348,7 @@ export const getHistoryPredictionSet = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -5418,6 +5486,7 @@ export const listHistoryPredictionSets = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -5457,6 +5526,7 @@ export const listHistoryPredictionSets = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -5528,6 +5598,7 @@ export const listHistoryPredictionSets = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -5610,6 +5681,7 @@ export const listHistoryPredictionSets = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -5678,6 +5750,7 @@ export const getHistoryPrediction = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -5749,6 +5822,7 @@ export const getHistoryPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -5846,6 +5920,7 @@ export const getHistoryPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -5958,6 +6033,7 @@ export const getHistoryPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -6043,6 +6119,7 @@ export const getHistoryPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -6117,6 +6194,7 @@ export const getHistoryPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -6190,6 +6268,7 @@ export const getHistoryPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -6207,6 +6286,7 @@ export const getHistoryPrediction = /* GraphQL */ `
           nextToken
         }
         visibility
+        accolade
         createdAt
         updatedAt
         eventContendersId
@@ -6278,6 +6358,7 @@ export const listHistoryPredictions = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -6311,6 +6392,7 @@ export const listHistoryPredictions = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -6372,6 +6454,7 @@ export const listHistoryPredictions = /* GraphQL */ `
               contender {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -6406,6 +6489,7 @@ export const listHistoryPredictions = /* GraphQL */ `
               contender {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -6429,6 +6513,7 @@ export const listHistoryPredictions = /* GraphQL */ `
               contender {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -6451,6 +6536,7 @@ export const listHistoryPredictions = /* GraphQL */ `
               contender {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -6468,6 +6554,7 @@ export const listHistoryPredictions = /* GraphQL */ `
             nextToken
           }
           visibility
+          accolade
           createdAt
           updatedAt
           eventContendersId
@@ -6519,6 +6606,7 @@ export const getCommunityPredictionSet = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -6652,6 +6740,7 @@ export const getCommunityPredictionSet = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -6755,6 +6844,7 @@ export const getCommunityPredictionSet = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -6886,6 +6976,7 @@ export const getCommunityPredictionSet = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -7017,6 +7108,7 @@ export const getCommunityPredictionSet = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -7141,6 +7233,7 @@ export const listCommunityPredictionSets = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -7180,6 +7273,7 @@ export const listCommunityPredictionSets = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -7251,6 +7345,7 @@ export const listCommunityPredictionSets = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -7322,6 +7417,7 @@ export const listCommunityPredictionSets = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -7376,6 +7472,7 @@ export const getCommunityPrediction = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -7447,6 +7544,7 @@ export const getCommunityPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -7544,6 +7642,7 @@ export const getCommunityPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -7656,6 +7755,7 @@ export const getCommunityPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -7741,6 +7841,7 @@ export const getCommunityPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -7815,6 +7916,7 @@ export const getCommunityPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -7888,6 +7990,7 @@ export const getCommunityPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -7905,6 +8008,7 @@ export const getCommunityPrediction = /* GraphQL */ `
           nextToken
         }
         visibility
+        accolade
         createdAt
         updatedAt
         eventContendersId
@@ -7964,6 +8068,7 @@ export const listCommunityPredictions = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -7997,6 +8102,7 @@ export const listCommunityPredictions = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -8058,6 +8164,7 @@ export const listCommunityPredictions = /* GraphQL */ `
               contender {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -8092,6 +8199,7 @@ export const listCommunityPredictions = /* GraphQL */ `
               contender {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -8115,6 +8223,7 @@ export const listCommunityPredictions = /* GraphQL */ `
               contender {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -8137,6 +8246,7 @@ export const listCommunityPredictions = /* GraphQL */ `
               contender {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -8154,6 +8264,7 @@ export const listCommunityPredictions = /* GraphQL */ `
             nextToken
           }
           visibility
+          accolade
           createdAt
           updatedAt
           eventContendersId
@@ -8204,6 +8315,7 @@ export const getCommunityHistoryPredictionSet = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -8337,6 +8449,7 @@ export const getCommunityHistoryPredictionSet = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -8440,6 +8553,7 @@ export const getCommunityHistoryPredictionSet = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -8571,6 +8685,7 @@ export const getCommunityHistoryPredictionSet = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -8702,6 +8817,7 @@ export const getCommunityHistoryPredictionSet = /* GraphQL */ `
               nextToken
             }
             visibility
+            accolade
             createdAt
             updatedAt
             eventContendersId
@@ -8826,6 +8942,7 @@ export const listCommunityHistoryPredictionSets = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -8865,6 +8982,7 @@ export const listCommunityHistoryPredictionSets = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -8936,6 +9054,7 @@ export const listCommunityHistoryPredictionSets = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -9007,6 +9126,7 @@ export const listCommunityHistoryPredictionSets = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -9061,6 +9181,7 @@ export const getCommunityHistoryPrediction = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -9132,6 +9253,7 @@ export const getCommunityHistoryPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -9229,6 +9351,7 @@ export const getCommunityHistoryPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -9341,6 +9464,7 @@ export const getCommunityHistoryPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -9426,6 +9550,7 @@ export const getCommunityHistoryPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -9500,6 +9625,7 @@ export const getCommunityHistoryPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -9573,6 +9699,7 @@ export const getCommunityHistoryPrediction = /* GraphQL */ `
                 nextToken
               }
               visibility
+              accolade
               createdAt
               updatedAt
               eventContendersId
@@ -9590,6 +9717,7 @@ export const getCommunityHistoryPrediction = /* GraphQL */ `
           nextToken
         }
         visibility
+        accolade
         createdAt
         updatedAt
         eventContendersId
@@ -9649,6 +9777,7 @@ export const listCommunityHistoryPredictions = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -9682,6 +9811,7 @@ export const listCommunityHistoryPredictions = /* GraphQL */ `
               items {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -9743,6 +9873,7 @@ export const listCommunityHistoryPredictions = /* GraphQL */ `
               contender {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -9777,6 +9908,7 @@ export const listCommunityHistoryPredictions = /* GraphQL */ `
               contender {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -9800,6 +9932,7 @@ export const listCommunityHistoryPredictions = /* GraphQL */ `
               contender {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -9822,6 +9955,7 @@ export const listCommunityHistoryPredictions = /* GraphQL */ `
               contender {
                 id
                 visibility
+                accolade
                 createdAt
                 updatedAt
                 eventContendersId
@@ -9839,6 +9973,7 @@ export const listCommunityHistoryPredictions = /* GraphQL */ `
             nextToken
           }
           visibility
+          accolade
           createdAt
           updatedAt
           eventContendersId
