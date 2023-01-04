@@ -80,7 +80,7 @@ export const getEvent = /* GraphQL */ `
                 updatedAt
                 eventContendersId
                 categoryContendersId
-                contenderMovieId
+                movieContendersId
                 contenderPersonId
                 contenderSongId
               }
@@ -152,7 +152,7 @@ export const getEvent = /* GraphQL */ `
               updatedAt
               eventContendersId
               categoryContendersId
-              contenderMovieId
+              movieContendersId
               contenderPersonId
               contenderSongId
             }
@@ -198,7 +198,7 @@ export const getEvent = /* GraphQL */ `
                 updatedAt
                 eventContendersId
                 categoryContendersId
-                contenderMovieId
+                movieContendersId
                 contenderPersonId
                 contenderSongId
               }
@@ -232,7 +232,7 @@ export const getEvent = /* GraphQL */ `
                 updatedAt
                 eventContendersId
                 categoryContendersId
-                contenderMovieId
+                movieContendersId
                 contenderPersonId
                 contenderSongId
               }
@@ -248,6 +248,21 @@ export const getEvent = /* GraphQL */ `
             id
             tmdbId
             studio
+            contenders {
+              items {
+                id
+                visibility
+                accolade
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                movieContendersId
+                contenderPersonId
+                contenderSongId
+              }
+              nextToken
+            }
             createdAt
             updatedAt
           }
@@ -265,6 +280,9 @@ export const getEvent = /* GraphQL */ `
               id
               tmdbId
               studio
+              contenders {
+                nextToken
+              }
               createdAt
               updatedAt
             }
@@ -294,7 +312,7 @@ export const getEvent = /* GraphQL */ `
                 updatedAt
                 eventContendersId
                 categoryContendersId
-                contenderMovieId
+                movieContendersId
                 contenderPersonId
                 contenderSongId
               }
@@ -329,7 +347,7 @@ export const getEvent = /* GraphQL */ `
                 updatedAt
                 eventContendersId
                 categoryContendersId
-                contenderMovieId
+                movieContendersId
                 contenderPersonId
                 contenderSongId
               }
@@ -353,7 +371,7 @@ export const getEvent = /* GraphQL */ `
                 updatedAt
                 eventContendersId
                 categoryContendersId
-                contenderMovieId
+                movieContendersId
                 contenderPersonId
                 contenderSongId
               }
@@ -376,7 +394,7 @@ export const getEvent = /* GraphQL */ `
                 updatedAt
                 eventContendersId
                 categoryContendersId
-                contenderMovieId
+                movieContendersId
                 contenderPersonId
                 contenderSongId
               }
@@ -394,7 +412,7 @@ export const getEvent = /* GraphQL */ `
           updatedAt
           eventContendersId
           categoryContendersId
-          contenderMovieId
+          movieContendersId
           contenderPersonId
           contenderSongId
         }
@@ -455,7 +473,7 @@ export const listEvents = /* GraphQL */ `
                 updatedAt
                 eventContendersId
                 categoryContendersId
-                contenderMovieId
+                movieContendersId
                 contenderPersonId
                 contenderSongId
               }
@@ -513,6 +531,9 @@ export const listEvents = /* GraphQL */ `
               id
               tmdbId
               studio
+              contenders {
+                nextToken
+              }
               createdAt
               updatedAt
             }
@@ -589,7 +610,7 @@ export const listEvents = /* GraphQL */ `
             updatedAt
             eventContendersId
             categoryContendersId
-            contenderMovieId
+            movieContendersId
             contenderPersonId
             contenderSongId
           }
@@ -643,7 +664,7 @@ export const getCategory = /* GraphQL */ `
                 updatedAt
                 eventContendersId
                 categoryContendersId
-                contenderMovieId
+                movieContendersId
                 contenderPersonId
                 contenderSongId
               }
@@ -701,6 +722,9 @@ export const getCategory = /* GraphQL */ `
               id
               tmdbId
               studio
+              contenders {
+                nextToken
+              }
               createdAt
               updatedAt
             }
@@ -777,7 +801,7 @@ export const getCategory = /* GraphQL */ `
             updatedAt
             eventContendersId
             categoryContendersId
-            contenderMovieId
+            movieContendersId
             contenderPersonId
             contenderSongId
           }
@@ -821,7 +845,7 @@ export const getCategory = /* GraphQL */ `
                 updatedAt
                 eventContendersId
                 categoryContendersId
-                contenderMovieId
+                movieContendersId
                 contenderPersonId
                 contenderSongId
               }
@@ -855,7 +879,7 @@ export const getCategory = /* GraphQL */ `
                 updatedAt
                 eventContendersId
                 categoryContendersId
-                contenderMovieId
+                movieContendersId
                 contenderPersonId
                 contenderSongId
               }
@@ -871,6 +895,21 @@ export const getCategory = /* GraphQL */ `
             id
             tmdbId
             studio
+            contenders {
+              items {
+                id
+                visibility
+                accolade
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                movieContendersId
+                contenderPersonId
+                contenderSongId
+              }
+              nextToken
+            }
             createdAt
             updatedAt
           }
@@ -888,6 +927,9 @@ export const getCategory = /* GraphQL */ `
               id
               tmdbId
               studio
+              contenders {
+                nextToken
+              }
               createdAt
               updatedAt
             }
@@ -917,7 +959,7 @@ export const getCategory = /* GraphQL */ `
                 updatedAt
                 eventContendersId
                 categoryContendersId
-                contenderMovieId
+                movieContendersId
                 contenderPersonId
                 contenderSongId
               }
@@ -952,7 +994,7 @@ export const getCategory = /* GraphQL */ `
                 updatedAt
                 eventContendersId
                 categoryContendersId
-                contenderMovieId
+                movieContendersId
                 contenderPersonId
                 contenderSongId
               }
@@ -976,7 +1018,7 @@ export const getCategory = /* GraphQL */ `
                 updatedAt
                 eventContendersId
                 categoryContendersId
-                contenderMovieId
+                movieContendersId
                 contenderPersonId
                 contenderSongId
               }
@@ -999,7 +1041,7 @@ export const getCategory = /* GraphQL */ `
                 updatedAt
                 eventContendersId
                 categoryContendersId
-                contenderMovieId
+                movieContendersId
                 contenderPersonId
                 contenderSongId
               }
@@ -1017,7 +1059,7 @@ export const getCategory = /* GraphQL */ `
           updatedAt
           eventContendersId
           categoryContendersId
-          contenderMovieId
+          movieContendersId
           contenderPersonId
           contenderSongId
         }
@@ -1136,7 +1178,7 @@ export const listCategories = /* GraphQL */ `
               updatedAt
               eventContendersId
               categoryContendersId
-              contenderMovieId
+              movieContendersId
               contenderPersonId
               contenderSongId
             }
@@ -1192,6 +1234,9 @@ export const listCategories = /* GraphQL */ `
               id
               tmdbId
               studio
+              contenders {
+                nextToken
+              }
               createdAt
               updatedAt
             }
@@ -1268,7 +1313,7 @@ export const listCategories = /* GraphQL */ `
             updatedAt
             eventContendersId
             categoryContendersId
-            contenderMovieId
+            movieContendersId
             contenderPersonId
             contenderSongId
           }
@@ -1378,7 +1423,7 @@ export const getContender = /* GraphQL */ `
               updatedAt
               eventContendersId
               categoryContendersId
-              contenderMovieId
+              movieContendersId
               contenderPersonId
               contenderSongId
             }
@@ -1434,6 +1479,9 @@ export const getContender = /* GraphQL */ `
               id
               tmdbId
               studio
+              contenders {
+                nextToken
+              }
               createdAt
               updatedAt
             }
@@ -1510,7 +1558,7 @@ export const getContender = /* GraphQL */ `
             updatedAt
             eventContendersId
             categoryContendersId
-            contenderMovieId
+            movieContendersId
             contenderPersonId
             contenderSongId
           }
@@ -1552,7 +1600,7 @@ export const getContender = /* GraphQL */ `
                 updatedAt
                 eventContendersId
                 categoryContendersId
-                contenderMovieId
+                movieContendersId
                 contenderPersonId
                 contenderSongId
               }
@@ -1610,6 +1658,9 @@ export const getContender = /* GraphQL */ `
               id
               tmdbId
               studio
+              contenders {
+                nextToken
+              }
               createdAt
               updatedAt
             }
@@ -1686,7 +1737,7 @@ export const getContender = /* GraphQL */ `
             updatedAt
             eventContendersId
             categoryContendersId
-            contenderMovieId
+            movieContendersId
             contenderPersonId
             contenderSongId
           }
@@ -1702,6 +1753,135 @@ export const getContender = /* GraphQL */ `
         id
         tmdbId
         studio
+        contenders {
+          items {
+            id
+            category {
+              id
+              name
+              type
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+              eventCategoriesId
+            }
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              contenders {
+                nextToken
+              }
+              nominationDateTime
+              winDateTime
+              status
+              createdAt
+              updatedAt
+            }
+            movie {
+              id
+              tmdbId
+              studio
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+            }
+            person {
+              id
+              tmdbId
+              createdAt
+              updatedAt
+            }
+            song {
+              id
+              title
+              artist
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              createdAt
+              updatedAt
+              songMovieId
+            }
+            predictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderPredictionsId
+                predictionSetPredictionsId
+                predictionUserId
+              }
+              nextToken
+            }
+            historyPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderHistoryPredictionsId
+                historyPredictionSetPredictionsId
+                historyPredictionUserId
+              }
+              nextToken
+            }
+            communityPredictions {
+              items {
+                id
+                indexedRankings
+                createdAt
+                updatedAt
+                contenderCommunityPredictionsId
+                communityPredictionSetPredictionsId
+              }
+              nextToken
+            }
+            communityHistoryPredictions {
+              items {
+                id
+                indexedRankings
+                createdAt
+                updatedAt
+                contenderCommunityHistoryPredictionsId
+                communityHistoryPredictionSetPredictionsId
+              }
+              nextToken
+            }
+            visibility
+            accolade
+            createdAt
+            updatedAt
+            eventContendersId
+            categoryContendersId
+            movieContendersId
+            contenderPersonId
+            contenderSongId
+          }
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -1719,6 +1899,72 @@ export const getContender = /* GraphQL */ `
           id
           tmdbId
           studio
+          contenders {
+            items {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
+              visibility
+              accolade
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              movieContendersId
+              contenderPersonId
+              contenderSongId
+            }
+            nextToken
+          }
           createdAt
           updatedAt
         }
@@ -1783,6 +2029,9 @@ export const getContender = /* GraphQL */ `
               id
               tmdbId
               studio
+              contenders {
+                nextToken
+              }
               createdAt
               updatedAt
             }
@@ -1859,7 +2108,7 @@ export const getContender = /* GraphQL */ `
             updatedAt
             eventContendersId
             categoryContendersId
-            contenderMovieId
+            movieContendersId
             contenderPersonId
             contenderSongId
           }
@@ -1929,6 +2178,9 @@ export const getContender = /* GraphQL */ `
               id
               tmdbId
               studio
+              contenders {
+                nextToken
+              }
               createdAt
               updatedAt
             }
@@ -2005,7 +2257,7 @@ export const getContender = /* GraphQL */ `
             updatedAt
             eventContendersId
             categoryContendersId
-            contenderMovieId
+            movieContendersId
             contenderPersonId
             contenderSongId
           }
@@ -2064,6 +2316,9 @@ export const getContender = /* GraphQL */ `
               id
               tmdbId
               studio
+              contenders {
+                nextToken
+              }
               createdAt
               updatedAt
             }
@@ -2140,7 +2395,7 @@ export const getContender = /* GraphQL */ `
             updatedAt
             eventContendersId
             categoryContendersId
-            contenderMovieId
+            movieContendersId
             contenderPersonId
             contenderSongId
           }
@@ -2198,6 +2453,9 @@ export const getContender = /* GraphQL */ `
               id
               tmdbId
               studio
+              contenders {
+                nextToken
+              }
               createdAt
               updatedAt
             }
@@ -2274,7 +2532,7 @@ export const getContender = /* GraphQL */ `
             updatedAt
             eventContendersId
             categoryContendersId
-            contenderMovieId
+            movieContendersId
             contenderPersonId
             contenderSongId
           }
@@ -2292,7 +2550,7 @@ export const getContender = /* GraphQL */ `
       updatedAt
       eventContendersId
       categoryContendersId
-      contenderMovieId
+      movieContendersId
       contenderPersonId
       contenderSongId
     }
@@ -2343,7 +2601,7 @@ export const listContenders = /* GraphQL */ `
                 updatedAt
                 eventContendersId
                 categoryContendersId
-                contenderMovieId
+                movieContendersId
                 contenderPersonId
                 contenderSongId
               }
@@ -2415,7 +2673,7 @@ export const listContenders = /* GraphQL */ `
               updatedAt
               eventContendersId
               categoryContendersId
-              contenderMovieId
+              movieContendersId
               contenderPersonId
               contenderSongId
             }
@@ -2513,7 +2771,7 @@ export const listContenders = /* GraphQL */ `
               updatedAt
               eventContendersId
               categoryContendersId
-              contenderMovieId
+              movieContendersId
               contenderPersonId
               contenderSongId
             }
@@ -2529,6 +2787,72 @@ export const listContenders = /* GraphQL */ `
           id
           tmdbId
           studio
+          contenders {
+            items {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
+              visibility
+              accolade
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              movieContendersId
+              contenderPersonId
+              contenderSongId
+            }
+            nextToken
+          }
           createdAt
           updatedAt
         }
@@ -2546,6 +2870,21 @@ export const listContenders = /* GraphQL */ `
             id
             tmdbId
             studio
+            contenders {
+              items {
+                id
+                visibility
+                accolade
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                movieContendersId
+                contenderPersonId
+                contenderSongId
+              }
+              nextToken
+            }
             createdAt
             updatedAt
           }
@@ -2626,7 +2965,7 @@ export const listContenders = /* GraphQL */ `
               updatedAt
               eventContendersId
               categoryContendersId
-              contenderMovieId
+              movieContendersId
               contenderPersonId
               contenderSongId
             }
@@ -2712,7 +3051,7 @@ export const listContenders = /* GraphQL */ `
               updatedAt
               eventContendersId
               categoryContendersId
-              contenderMovieId
+              movieContendersId
               contenderPersonId
               contenderSongId
             }
@@ -2787,7 +3126,7 @@ export const listContenders = /* GraphQL */ `
               updatedAt
               eventContendersId
               categoryContendersId
-              contenderMovieId
+              movieContendersId
               contenderPersonId
               contenderSongId
             }
@@ -2861,7 +3200,7 @@ export const listContenders = /* GraphQL */ `
               updatedAt
               eventContendersId
               categoryContendersId
-              contenderMovieId
+              movieContendersId
               contenderPersonId
               contenderSongId
             }
@@ -2879,7 +3218,7 @@ export const listContenders = /* GraphQL */ `
         updatedAt
         eventContendersId
         categoryContendersId
-        contenderMovieId
+        movieContendersId
         contenderPersonId
         contenderSongId
       }
@@ -2893,144 +3232,10 @@ export const getMovie = /* GraphQL */ `
       id
       tmdbId
       studio
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const listMovies = /* GraphQL */ `
-  query ListMovies(
-    $id: ID
-    $filter: ModelMovieFilterInput
-    $limit: Int
-    $nextToken: String
-    $sortDirection: ModelSortDirection
-  ) {
-    listMovies(
-      id: $id
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      sortDirection: $sortDirection
-    ) {
-      items {
-        id
-        tmdbId
-        studio
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-  }
-`;
-export const getPerson = /* GraphQL */ `
-  query GetPerson($id: ID!) {
-    getPerson(id: $id) {
-      id
-      tmdbId
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const listPeople = /* GraphQL */ `
-  query ListPeople(
-    $id: ID
-    $filter: ModelPersonFilterInput
-    $limit: Int
-    $nextToken: String
-    $sortDirection: ModelSortDirection
-  ) {
-    listPeople(
-      id: $id
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      sortDirection: $sortDirection
-    ) {
-      items {
-        id
-        tmdbId
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-  }
-`;
-export const getSong = /* GraphQL */ `
-  query GetSong($id: ID!) {
-    getSong(id: $id) {
-      id
-      title
-      artist
-      movie {
-        id
-        tmdbId
-        studio
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-      songMovieId
-    }
-  }
-`;
-export const listSongs = /* GraphQL */ `
-  query ListSongs(
-    $id: ID
-    $filter: ModelSongFilterInput
-    $limit: Int
-    $nextToken: String
-    $sortDirection: ModelSortDirection
-  ) {
-    listSongs(
-      id: $id
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      sortDirection: $sortDirection
-    ) {
-      items {
-        id
-        title
-        artist
-        movie {
+      contenders {
+        items {
           id
-          tmdbId
-          studio
-          createdAt
-          updatedAt
-        }
-        createdAt
-        updatedAt
-        songMovieId
-      }
-      nextToken
-    }
-  }
-`;
-export const getPredictionSet = /* GraphQL */ `
-  query GetPredictionSet($id: ID!) {
-    getPredictionSet(id: $id) {
-      id
-      user {
-        id
-        email
-        username
-        name
-        bio
-        image
-        role
-        createdAt
-        updatedAt
-      }
-      event {
-        id
-        categories {
-          items {
+          category {
             id
             name
             type
@@ -3059,7 +3264,7 @@ export const getPredictionSet = /* GraphQL */ `
                 updatedAt
                 eventContendersId
                 categoryContendersId
-                contenderMovieId
+                movieContendersId
                 contenderPersonId
                 contenderSongId
               }
@@ -3069,10 +3274,240 @@ export const getPredictionSet = /* GraphQL */ `
             updatedAt
             eventCategoriesId
           }
-          nextToken
+          event {
+            id
+            categories {
+              items {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              nextToken
+            }
+            awardsBody
+            year
+            contenders {
+              items {
+                id
+                visibility
+                accolade
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                movieContendersId
+                contenderPersonId
+                contenderSongId
+              }
+              nextToken
+            }
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          movie {
+            id
+            tmdbId
+            studio
+            contenders {
+              items {
+                id
+                visibility
+                accolade
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                movieContendersId
+                contenderPersonId
+                contenderSongId
+              }
+              nextToken
+            }
+            createdAt
+            updatedAt
+          }
+          person {
+            id
+            tmdbId
+            createdAt
+            updatedAt
+          }
+          song {
+            id
+            title
+            artist
+            movie {
+              id
+              tmdbId
+              studio
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+            }
+            createdAt
+            updatedAt
+            songMovieId
+          }
+          predictions {
+            items {
+              id
+              user {
+                id
+                email
+                username
+                name
+                bio
+                image
+                role
+                createdAt
+                updatedAt
+              }
+              contender {
+                id
+                visibility
+                accolade
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                movieContendersId
+                contenderPersonId
+                contenderSongId
+              }
+              ranking
+              createdAt
+              updatedAt
+              contenderPredictionsId
+              predictionSetPredictionsId
+              predictionUserId
+            }
+            nextToken
+          }
+          historyPredictions {
+            items {
+              id
+              user {
+                id
+                email
+                username
+                name
+                bio
+                image
+                role
+                createdAt
+                updatedAt
+              }
+              contender {
+                id
+                visibility
+                accolade
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                movieContendersId
+                contenderPersonId
+                contenderSongId
+              }
+              ranking
+              createdAt
+              updatedAt
+              contenderHistoryPredictionsId
+              historyPredictionSetPredictionsId
+              historyPredictionUserId
+            }
+            nextToken
+          }
+          communityPredictions {
+            items {
+              id
+              contender {
+                id
+                visibility
+                accolade
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                movieContendersId
+                contenderPersonId
+                contenderSongId
+              }
+              indexedRankings
+              createdAt
+              updatedAt
+              contenderCommunityPredictionsId
+              communityPredictionSetPredictionsId
+            }
+            nextToken
+          }
+          communityHistoryPredictions {
+            items {
+              id
+              contender {
+                id
+                visibility
+                accolade
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                movieContendersId
+                contenderPersonId
+                contenderSongId
+              }
+              indexedRankings
+              createdAt
+              updatedAt
+              contenderCommunityHistoryPredictionsId
+              communityHistoryPredictionSetPredictionsId
+            }
+            nextToken
+          }
+          visibility
+          accolade
+          createdAt
+          updatedAt
+          eventContendersId
+          categoryContendersId
+          movieContendersId
+          contenderPersonId
+          contenderSongId
         }
-        awardsBody
-        year
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listMovies = /* GraphQL */ `
+  query ListMovies(
+    $id: ID
+    $filter: ModelMovieFilterInput
+    $limit: Int
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listMovies(
+      id: $id
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        id
+        tmdbId
+        studio
         contenders {
           items {
             id
@@ -3117,6 +3552,9 @@ export const getPredictionSet = /* GraphQL */ `
               id
               tmdbId
               studio
+              contenders {
+                nextToken
+              }
               createdAt
               updatedAt
             }
@@ -3193,7 +3631,487 @@ export const getPredictionSet = /* GraphQL */ `
             updatedAt
             eventContendersId
             categoryContendersId
-            contenderMovieId
+            movieContendersId
+            contenderPersonId
+            contenderSongId
+          }
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getPerson = /* GraphQL */ `
+  query GetPerson($id: ID!) {
+    getPerson(id: $id) {
+      id
+      tmdbId
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listPeople = /* GraphQL */ `
+  query ListPeople(
+    $id: ID
+    $filter: ModelPersonFilterInput
+    $limit: Int
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listPeople(
+      id: $id
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        id
+        tmdbId
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getSong = /* GraphQL */ `
+  query GetSong($id: ID!) {
+    getSong(id: $id) {
+      id
+      title
+      artist
+      movie {
+        id
+        tmdbId
+        studio
+        contenders {
+          items {
+            id
+            category {
+              id
+              name
+              type
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+              eventCategoriesId
+            }
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              contenders {
+                nextToken
+              }
+              nominationDateTime
+              winDateTime
+              status
+              createdAt
+              updatedAt
+            }
+            movie {
+              id
+              tmdbId
+              studio
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+            }
+            person {
+              id
+              tmdbId
+              createdAt
+              updatedAt
+            }
+            song {
+              id
+              title
+              artist
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              createdAt
+              updatedAt
+              songMovieId
+            }
+            predictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderPredictionsId
+                predictionSetPredictionsId
+                predictionUserId
+              }
+              nextToken
+            }
+            historyPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderHistoryPredictionsId
+                historyPredictionSetPredictionsId
+                historyPredictionUserId
+              }
+              nextToken
+            }
+            communityPredictions {
+              items {
+                id
+                indexedRankings
+                createdAt
+                updatedAt
+                contenderCommunityPredictionsId
+                communityPredictionSetPredictionsId
+              }
+              nextToken
+            }
+            communityHistoryPredictions {
+              items {
+                id
+                indexedRankings
+                createdAt
+                updatedAt
+                contenderCommunityHistoryPredictionsId
+                communityHistoryPredictionSetPredictionsId
+              }
+              nextToken
+            }
+            visibility
+            accolade
+            createdAt
+            updatedAt
+            eventContendersId
+            categoryContendersId
+            movieContendersId
+            contenderPersonId
+            contenderSongId
+          }
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+      songMovieId
+    }
+  }
+`;
+export const listSongs = /* GraphQL */ `
+  query ListSongs(
+    $id: ID
+    $filter: ModelSongFilterInput
+    $limit: Int
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listSongs(
+      id: $id
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        id
+        title
+        artist
+        movie {
+          id
+          tmdbId
+          studio
+          contenders {
+            items {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
+              visibility
+              accolade
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              movieContendersId
+              contenderPersonId
+              contenderSongId
+            }
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        createdAt
+        updatedAt
+        songMovieId
+      }
+      nextToken
+    }
+  }
+`;
+export const getPredictionSet = /* GraphQL */ `
+  query GetPredictionSet($id: ID!) {
+    getPredictionSet(id: $id) {
+      id
+      user {
+        id
+        email
+        username
+        name
+        bio
+        image
+        role
+        createdAt
+        updatedAt
+      }
+      event {
+        id
+        categories {
+          items {
+            id
+            name
+            type
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              contenders {
+                nextToken
+              }
+              nominationDateTime
+              winDateTime
+              status
+              createdAt
+              updatedAt
+            }
+            contenders {
+              items {
+                id
+                visibility
+                accolade
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                movieContendersId
+                contenderPersonId
+                contenderSongId
+              }
+              nextToken
+            }
+            createdAt
+            updatedAt
+            eventCategoriesId
+          }
+          nextToken
+        }
+        awardsBody
+        year
+        contenders {
+          items {
+            id
+            category {
+              id
+              name
+              type
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+              eventCategoriesId
+            }
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              contenders {
+                nextToken
+              }
+              nominationDateTime
+              winDateTime
+              status
+              createdAt
+              updatedAt
+            }
+            movie {
+              id
+              tmdbId
+              studio
+              contenders {
+                nextToken
+              }
+              createdAt
+              updatedAt
+            }
+            person {
+              id
+              tmdbId
+              createdAt
+              updatedAt
+            }
+            song {
+              id
+              title
+              artist
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              createdAt
+              updatedAt
+              songMovieId
+            }
+            predictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderPredictionsId
+                predictionSetPredictionsId
+                predictionUserId
+              }
+              nextToken
+            }
+            historyPredictions {
+              items {
+                id
+                ranking
+                createdAt
+                updatedAt
+                contenderHistoryPredictionsId
+                historyPredictionSetPredictionsId
+                historyPredictionUserId
+              }
+              nextToken
+            }
+            communityPredictions {
+              items {
+                id
+                indexedRankings
+                createdAt
+                updatedAt
+                contenderCommunityPredictionsId
+                communityPredictionSetPredictionsId
+              }
+              nextToken
+            }
+            communityHistoryPredictions {
+              items {
+                id
+                indexedRankings
+                createdAt
+                updatedAt
+                contenderCommunityHistoryPredictionsId
+                communityHistoryPredictionSetPredictionsId
+              }
+              nextToken
+            }
+            visibility
+            accolade
+            createdAt
+            updatedAt
+            eventContendersId
+            categoryContendersId
+            movieContendersId
             contenderPersonId
             contenderSongId
           }
@@ -3297,7 +4215,7 @@ export const getPredictionSet = /* GraphQL */ `
               updatedAt
               eventContendersId
               categoryContendersId
-              contenderMovieId
+              movieContendersId
               contenderPersonId
               contenderSongId
             }
@@ -3353,6 +4271,9 @@ export const getPredictionSet = /* GraphQL */ `
               id
               tmdbId
               studio
+              contenders {
+                nextToken
+              }
               createdAt
               updatedAt
             }
@@ -3429,7 +4350,7 @@ export const getPredictionSet = /* GraphQL */ `
             updatedAt
             eventContendersId
             categoryContendersId
-            contenderMovieId
+            movieContendersId
             contenderPersonId
             contenderSongId
           }
@@ -3496,6 +4417,9 @@ export const getPredictionSet = /* GraphQL */ `
               id
               tmdbId
               studio
+              contenders {
+                nextToken
+              }
               createdAt
               updatedAt
             }
@@ -3572,7 +4496,7 @@ export const getPredictionSet = /* GraphQL */ `
             updatedAt
             eventContendersId
             categoryContendersId
-            contenderMovieId
+            movieContendersId
             contenderPersonId
             contenderSongId
           }
@@ -3710,7 +4634,7 @@ export const listPredictionSets = /* GraphQL */ `
               updatedAt
               eventContendersId
               categoryContendersId
-              contenderMovieId
+              movieContendersId
               contenderPersonId
               contenderSongId
             }
@@ -3750,7 +4674,7 @@ export const listPredictionSets = /* GraphQL */ `
                 updatedAt
                 eventContendersId
                 categoryContendersId
-                contenderMovieId
+                movieContendersId
                 contenderPersonId
                 contenderSongId
               }
@@ -3822,7 +4746,7 @@ export const listPredictionSets = /* GraphQL */ `
               updatedAt
               eventContendersId
               categoryContendersId
-              contenderMovieId
+              movieContendersId
               contenderPersonId
               contenderSongId
             }
@@ -3905,7 +4829,7 @@ export const listPredictionSets = /* GraphQL */ `
               updatedAt
               eventContendersId
               categoryContendersId
-              contenderMovieId
+              movieContendersId
               contenderPersonId
               contenderSongId
             }
@@ -3974,7 +4898,7 @@ export const getPrediction = /* GraphQL */ `
                 updatedAt
                 eventContendersId
                 categoryContendersId
-                contenderMovieId
+                movieContendersId
                 contenderPersonId
                 contenderSongId
               }
@@ -4046,7 +4970,7 @@ export const getPrediction = /* GraphQL */ `
               updatedAt
               eventContendersId
               categoryContendersId
-              contenderMovieId
+              movieContendersId
               contenderPersonId
               contenderSongId
             }
@@ -4144,7 +5068,7 @@ export const getPrediction = /* GraphQL */ `
               updatedAt
               eventContendersId
               categoryContendersId
-              contenderMovieId
+              movieContendersId
               contenderPersonId
               contenderSongId
             }
@@ -4160,6 +5084,72 @@ export const getPrediction = /* GraphQL */ `
           id
           tmdbId
           studio
+          contenders {
+            items {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
+              visibility
+              accolade
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              movieContendersId
+              contenderPersonId
+              contenderSongId
+            }
+            nextToken
+          }
           createdAt
           updatedAt
         }
@@ -4177,6 +5167,21 @@ export const getPrediction = /* GraphQL */ `
             id
             tmdbId
             studio
+            contenders {
+              items {
+                id
+                visibility
+                accolade
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                movieContendersId
+                contenderPersonId
+                contenderSongId
+              }
+              nextToken
+            }
             createdAt
             updatedAt
           }
@@ -4257,7 +5262,7 @@ export const getPrediction = /* GraphQL */ `
               updatedAt
               eventContendersId
               categoryContendersId
-              contenderMovieId
+              movieContendersId
               contenderPersonId
               contenderSongId
             }
@@ -4343,7 +5348,7 @@ export const getPrediction = /* GraphQL */ `
               updatedAt
               eventContendersId
               categoryContendersId
-              contenderMovieId
+              movieContendersId
               contenderPersonId
               contenderSongId
             }
@@ -4418,7 +5423,7 @@ export const getPrediction = /* GraphQL */ `
               updatedAt
               eventContendersId
               categoryContendersId
-              contenderMovieId
+              movieContendersId
               contenderPersonId
               contenderSongId
             }
@@ -4492,7 +5497,7 @@ export const getPrediction = /* GraphQL */ `
               updatedAt
               eventContendersId
               categoryContendersId
-              contenderMovieId
+              movieContendersId
               contenderPersonId
               contenderSongId
             }
@@ -4510,7 +5515,7 @@ export const getPrediction = /* GraphQL */ `
         updatedAt
         eventContendersId
         categoryContendersId
-        contenderMovieId
+        movieContendersId
         contenderPersonId
         contenderSongId
       }
@@ -4582,7 +5587,7 @@ export const listPredictions = /* GraphQL */ `
                 updatedAt
                 eventContendersId
                 categoryContendersId
-                contenderMovieId
+                movieContendersId
                 contenderPersonId
                 contenderSongId
               }
@@ -4616,7 +5621,7 @@ export const listPredictions = /* GraphQL */ `
                 updatedAt
                 eventContendersId
                 categoryContendersId
-                contenderMovieId
+                movieContendersId
                 contenderPersonId
                 contenderSongId
               }
@@ -4632,6 +5637,21 @@ export const listPredictions = /* GraphQL */ `
             id
             tmdbId
             studio
+            contenders {
+              items {
+                id
+                visibility
+                accolade
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                movieContendersId
+                contenderPersonId
+                contenderSongId
+              }
+              nextToken
+            }
             createdAt
             updatedAt
           }
@@ -4649,6 +5669,9 @@ export const listPredictions = /* GraphQL */ `
               id
               tmdbId
               studio
+              contenders {
+                nextToken
+              }
               createdAt
               updatedAt
             }
@@ -4678,7 +5701,7 @@ export const listPredictions = /* GraphQL */ `
                 updatedAt
                 eventContendersId
                 categoryContendersId
-                contenderMovieId
+                movieContendersId
                 contenderPersonId
                 contenderSongId
               }
@@ -4713,7 +5736,7 @@ export const listPredictions = /* GraphQL */ `
                 updatedAt
                 eventContendersId
                 categoryContendersId
-                contenderMovieId
+                movieContendersId
                 contenderPersonId
                 contenderSongId
               }
@@ -4737,7 +5760,7 @@ export const listPredictions = /* GraphQL */ `
                 updatedAt
                 eventContendersId
                 categoryContendersId
-                contenderMovieId
+                movieContendersId
                 contenderPersonId
                 contenderSongId
               }
@@ -4760,7 +5783,7 @@ export const listPredictions = /* GraphQL */ `
                 updatedAt
                 eventContendersId
                 categoryContendersId
-                contenderMovieId
+                movieContendersId
                 contenderPersonId
                 contenderSongId
               }
@@ -4778,7 +5801,7 @@ export const listPredictions = /* GraphQL */ `
           updatedAt
           eventContendersId
           categoryContendersId
-          contenderMovieId
+          movieContendersId
           contenderPersonId
           contenderSongId
         }
@@ -4840,7 +5863,7 @@ export const getHistoryPredictionSet = /* GraphQL */ `
                 updatedAt
                 eventContendersId
                 categoryContendersId
-                contenderMovieId
+                movieContendersId
                 contenderPersonId
                 contenderSongId
               }
@@ -4898,6 +5921,9 @@ export const getHistoryPredictionSet = /* GraphQL */ `
               id
               tmdbId
               studio
+              contenders {
+                nextToken
+              }
               createdAt
               updatedAt
             }
@@ -4974,7 +6000,7 @@ export const getHistoryPredictionSet = /* GraphQL */ `
             updatedAt
             eventContendersId
             categoryContendersId
-            contenderMovieId
+            movieContendersId
             contenderPersonId
             contenderSongId
           }
@@ -5078,7 +6104,7 @@ export const getHistoryPredictionSet = /* GraphQL */ `
               updatedAt
               eventContendersId
               categoryContendersId
-              contenderMovieId
+              movieContendersId
               contenderPersonId
               contenderSongId
             }
@@ -5134,6 +6160,9 @@ export const getHistoryPredictionSet = /* GraphQL */ `
               id
               tmdbId
               studio
+              contenders {
+                nextToken
+              }
               createdAt
               updatedAt
             }
@@ -5210,7 +6239,7 @@ export const getHistoryPredictionSet = /* GraphQL */ `
             updatedAt
             eventContendersId
             categoryContendersId
-            contenderMovieId
+            movieContendersId
             contenderPersonId
             contenderSongId
           }
@@ -5277,6 +6306,9 @@ export const getHistoryPredictionSet = /* GraphQL */ `
               id
               tmdbId
               studio
+              contenders {
+                nextToken
+              }
               createdAt
               updatedAt
             }
@@ -5353,7 +6385,7 @@ export const getHistoryPredictionSet = /* GraphQL */ `
             updatedAt
             eventContendersId
             categoryContendersId
-            contenderMovieId
+            movieContendersId
             contenderPersonId
             contenderSongId
           }
@@ -5491,7 +6523,7 @@ export const listHistoryPredictionSets = /* GraphQL */ `
               updatedAt
               eventContendersId
               categoryContendersId
-              contenderMovieId
+              movieContendersId
               contenderPersonId
               contenderSongId
             }
@@ -5531,7 +6563,7 @@ export const listHistoryPredictionSets = /* GraphQL */ `
                 updatedAt
                 eventContendersId
                 categoryContendersId
-                contenderMovieId
+                movieContendersId
                 contenderPersonId
                 contenderSongId
               }
@@ -5603,7 +6635,7 @@ export const listHistoryPredictionSets = /* GraphQL */ `
               updatedAt
               eventContendersId
               categoryContendersId
-              contenderMovieId
+              movieContendersId
               contenderPersonId
               contenderSongId
             }
@@ -5686,7 +6718,7 @@ export const listHistoryPredictionSets = /* GraphQL */ `
               updatedAt
               eventContendersId
               categoryContendersId
-              contenderMovieId
+              movieContendersId
               contenderPersonId
               contenderSongId
             }
@@ -5755,7 +6787,7 @@ export const getHistoryPrediction = /* GraphQL */ `
                 updatedAt
                 eventContendersId
                 categoryContendersId
-                contenderMovieId
+                movieContendersId
                 contenderPersonId
                 contenderSongId
               }
@@ -5827,7 +6859,7 @@ export const getHistoryPrediction = /* GraphQL */ `
               updatedAt
               eventContendersId
               categoryContendersId
-              contenderMovieId
+              movieContendersId
               contenderPersonId
               contenderSongId
             }
@@ -5925,7 +6957,7 @@ export const getHistoryPrediction = /* GraphQL */ `
               updatedAt
               eventContendersId
               categoryContendersId
-              contenderMovieId
+              movieContendersId
               contenderPersonId
               contenderSongId
             }
@@ -5941,6 +6973,72 @@ export const getHistoryPrediction = /* GraphQL */ `
           id
           tmdbId
           studio
+          contenders {
+            items {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
+              visibility
+              accolade
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              movieContendersId
+              contenderPersonId
+              contenderSongId
+            }
+            nextToken
+          }
           createdAt
           updatedAt
         }
@@ -5958,6 +7056,21 @@ export const getHistoryPrediction = /* GraphQL */ `
             id
             tmdbId
             studio
+            contenders {
+              items {
+                id
+                visibility
+                accolade
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                movieContendersId
+                contenderPersonId
+                contenderSongId
+              }
+              nextToken
+            }
             createdAt
             updatedAt
           }
@@ -6038,7 +7151,7 @@ export const getHistoryPrediction = /* GraphQL */ `
               updatedAt
               eventContendersId
               categoryContendersId
-              contenderMovieId
+              movieContendersId
               contenderPersonId
               contenderSongId
             }
@@ -6124,7 +7237,7 @@ export const getHistoryPrediction = /* GraphQL */ `
               updatedAt
               eventContendersId
               categoryContendersId
-              contenderMovieId
+              movieContendersId
               contenderPersonId
               contenderSongId
             }
@@ -6199,7 +7312,7 @@ export const getHistoryPrediction = /* GraphQL */ `
               updatedAt
               eventContendersId
               categoryContendersId
-              contenderMovieId
+              movieContendersId
               contenderPersonId
               contenderSongId
             }
@@ -6273,7 +7386,7 @@ export const getHistoryPrediction = /* GraphQL */ `
               updatedAt
               eventContendersId
               categoryContendersId
-              contenderMovieId
+              movieContendersId
               contenderPersonId
               contenderSongId
             }
@@ -6291,7 +7404,7 @@ export const getHistoryPrediction = /* GraphQL */ `
         updatedAt
         eventContendersId
         categoryContendersId
-        contenderMovieId
+        movieContendersId
         contenderPersonId
         contenderSongId
       }
@@ -6363,7 +7476,7 @@ export const listHistoryPredictions = /* GraphQL */ `
                 updatedAt
                 eventContendersId
                 categoryContendersId
-                contenderMovieId
+                movieContendersId
                 contenderPersonId
                 contenderSongId
               }
@@ -6397,7 +7510,7 @@ export const listHistoryPredictions = /* GraphQL */ `
                 updatedAt
                 eventContendersId
                 categoryContendersId
-                contenderMovieId
+                movieContendersId
                 contenderPersonId
                 contenderSongId
               }
@@ -6413,6 +7526,21 @@ export const listHistoryPredictions = /* GraphQL */ `
             id
             tmdbId
             studio
+            contenders {
+              items {
+                id
+                visibility
+                accolade
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                movieContendersId
+                contenderPersonId
+                contenderSongId
+              }
+              nextToken
+            }
             createdAt
             updatedAt
           }
@@ -6430,6 +7558,9 @@ export const listHistoryPredictions = /* GraphQL */ `
               id
               tmdbId
               studio
+              contenders {
+                nextToken
+              }
               createdAt
               updatedAt
             }
@@ -6459,7 +7590,7 @@ export const listHistoryPredictions = /* GraphQL */ `
                 updatedAt
                 eventContendersId
                 categoryContendersId
-                contenderMovieId
+                movieContendersId
                 contenderPersonId
                 contenderSongId
               }
@@ -6494,7 +7625,7 @@ export const listHistoryPredictions = /* GraphQL */ `
                 updatedAt
                 eventContendersId
                 categoryContendersId
-                contenderMovieId
+                movieContendersId
                 contenderPersonId
                 contenderSongId
               }
@@ -6518,7 +7649,7 @@ export const listHistoryPredictions = /* GraphQL */ `
                 updatedAt
                 eventContendersId
                 categoryContendersId
-                contenderMovieId
+                movieContendersId
                 contenderPersonId
                 contenderSongId
               }
@@ -6541,7 +7672,7 @@ export const listHistoryPredictions = /* GraphQL */ `
                 updatedAt
                 eventContendersId
                 categoryContendersId
-                contenderMovieId
+                movieContendersId
                 contenderPersonId
                 contenderSongId
               }
@@ -6559,7 +7690,7 @@ export const listHistoryPredictions = /* GraphQL */ `
           updatedAt
           eventContendersId
           categoryContendersId
-          contenderMovieId
+          movieContendersId
           contenderPersonId
           contenderSongId
         }
@@ -6611,7 +7742,7 @@ export const getCommunityPredictionSet = /* GraphQL */ `
                 updatedAt
                 eventContendersId
                 categoryContendersId
-                contenderMovieId
+                movieContendersId
                 contenderPersonId
                 contenderSongId
               }
@@ -6669,6 +7800,9 @@ export const getCommunityPredictionSet = /* GraphQL */ `
               id
               tmdbId
               studio
+              contenders {
+                nextToken
+              }
               createdAt
               updatedAt
             }
@@ -6745,7 +7879,7 @@ export const getCommunityPredictionSet = /* GraphQL */ `
             updatedAt
             eventContendersId
             categoryContendersId
-            contenderMovieId
+            movieContendersId
             contenderPersonId
             contenderSongId
           }
@@ -6849,7 +7983,7 @@ export const getCommunityPredictionSet = /* GraphQL */ `
               updatedAt
               eventContendersId
               categoryContendersId
-              contenderMovieId
+              movieContendersId
               contenderPersonId
               contenderSongId
             }
@@ -6905,6 +8039,9 @@ export const getCommunityPredictionSet = /* GraphQL */ `
               id
               tmdbId
               studio
+              contenders {
+                nextToken
+              }
               createdAt
               updatedAt
             }
@@ -6981,7 +8118,7 @@ export const getCommunityPredictionSet = /* GraphQL */ `
             updatedAt
             eventContendersId
             categoryContendersId
-            contenderMovieId
+            movieContendersId
             contenderPersonId
             contenderSongId
           }
@@ -7037,6 +8174,9 @@ export const getCommunityPredictionSet = /* GraphQL */ `
               id
               tmdbId
               studio
+              contenders {
+                nextToken
+              }
               createdAt
               updatedAt
             }
@@ -7113,7 +8253,7 @@ export const getCommunityPredictionSet = /* GraphQL */ `
             updatedAt
             eventContendersId
             categoryContendersId
-            contenderMovieId
+            movieContendersId
             contenderPersonId
             contenderSongId
           }
@@ -7238,7 +8378,7 @@ export const listCommunityPredictionSets = /* GraphQL */ `
               updatedAt
               eventContendersId
               categoryContendersId
-              contenderMovieId
+              movieContendersId
               contenderPersonId
               contenderSongId
             }
@@ -7278,7 +8418,7 @@ export const listCommunityPredictionSets = /* GraphQL */ `
                 updatedAt
                 eventContendersId
                 categoryContendersId
-                contenderMovieId
+                movieContendersId
                 contenderPersonId
                 contenderSongId
               }
@@ -7350,7 +8490,7 @@ export const listCommunityPredictionSets = /* GraphQL */ `
               updatedAt
               eventContendersId
               categoryContendersId
-              contenderMovieId
+              movieContendersId
               contenderPersonId
               contenderSongId
             }
@@ -7422,7 +8562,7 @@ export const listCommunityPredictionSets = /* GraphQL */ `
               updatedAt
               eventContendersId
               categoryContendersId
-              contenderMovieId
+              movieContendersId
               contenderPersonId
               contenderSongId
             }
@@ -7477,7 +8617,7 @@ export const getCommunityPrediction = /* GraphQL */ `
                 updatedAt
                 eventContendersId
                 categoryContendersId
-                contenderMovieId
+                movieContendersId
                 contenderPersonId
                 contenderSongId
               }
@@ -7549,7 +8689,7 @@ export const getCommunityPrediction = /* GraphQL */ `
               updatedAt
               eventContendersId
               categoryContendersId
-              contenderMovieId
+              movieContendersId
               contenderPersonId
               contenderSongId
             }
@@ -7647,7 +8787,7 @@ export const getCommunityPrediction = /* GraphQL */ `
               updatedAt
               eventContendersId
               categoryContendersId
-              contenderMovieId
+              movieContendersId
               contenderPersonId
               contenderSongId
             }
@@ -7663,6 +8803,72 @@ export const getCommunityPrediction = /* GraphQL */ `
           id
           tmdbId
           studio
+          contenders {
+            items {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
+              visibility
+              accolade
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              movieContendersId
+              contenderPersonId
+              contenderSongId
+            }
+            nextToken
+          }
           createdAt
           updatedAt
         }
@@ -7680,6 +8886,21 @@ export const getCommunityPrediction = /* GraphQL */ `
             id
             tmdbId
             studio
+            contenders {
+              items {
+                id
+                visibility
+                accolade
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                movieContendersId
+                contenderPersonId
+                contenderSongId
+              }
+              nextToken
+            }
             createdAt
             updatedAt
           }
@@ -7760,7 +8981,7 @@ export const getCommunityPrediction = /* GraphQL */ `
               updatedAt
               eventContendersId
               categoryContendersId
-              contenderMovieId
+              movieContendersId
               contenderPersonId
               contenderSongId
             }
@@ -7846,7 +9067,7 @@ export const getCommunityPrediction = /* GraphQL */ `
               updatedAt
               eventContendersId
               categoryContendersId
-              contenderMovieId
+              movieContendersId
               contenderPersonId
               contenderSongId
             }
@@ -7921,7 +9142,7 @@ export const getCommunityPrediction = /* GraphQL */ `
               updatedAt
               eventContendersId
               categoryContendersId
-              contenderMovieId
+              movieContendersId
               contenderPersonId
               contenderSongId
             }
@@ -7995,7 +9216,7 @@ export const getCommunityPrediction = /* GraphQL */ `
               updatedAt
               eventContendersId
               categoryContendersId
-              contenderMovieId
+              movieContendersId
               contenderPersonId
               contenderSongId
             }
@@ -8013,7 +9234,7 @@ export const getCommunityPrediction = /* GraphQL */ `
         updatedAt
         eventContendersId
         categoryContendersId
-        contenderMovieId
+        movieContendersId
         contenderPersonId
         contenderSongId
       }
@@ -8073,7 +9294,7 @@ export const listCommunityPredictions = /* GraphQL */ `
                 updatedAt
                 eventContendersId
                 categoryContendersId
-                contenderMovieId
+                movieContendersId
                 contenderPersonId
                 contenderSongId
               }
@@ -8107,7 +9328,7 @@ export const listCommunityPredictions = /* GraphQL */ `
                 updatedAt
                 eventContendersId
                 categoryContendersId
-                contenderMovieId
+                movieContendersId
                 contenderPersonId
                 contenderSongId
               }
@@ -8123,6 +9344,21 @@ export const listCommunityPredictions = /* GraphQL */ `
             id
             tmdbId
             studio
+            contenders {
+              items {
+                id
+                visibility
+                accolade
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                movieContendersId
+                contenderPersonId
+                contenderSongId
+              }
+              nextToken
+            }
             createdAt
             updatedAt
           }
@@ -8140,6 +9376,9 @@ export const listCommunityPredictions = /* GraphQL */ `
               id
               tmdbId
               studio
+              contenders {
+                nextToken
+              }
               createdAt
               updatedAt
             }
@@ -8169,7 +9408,7 @@ export const listCommunityPredictions = /* GraphQL */ `
                 updatedAt
                 eventContendersId
                 categoryContendersId
-                contenderMovieId
+                movieContendersId
                 contenderPersonId
                 contenderSongId
               }
@@ -8204,7 +9443,7 @@ export const listCommunityPredictions = /* GraphQL */ `
                 updatedAt
                 eventContendersId
                 categoryContendersId
-                contenderMovieId
+                movieContendersId
                 contenderPersonId
                 contenderSongId
               }
@@ -8228,7 +9467,7 @@ export const listCommunityPredictions = /* GraphQL */ `
                 updatedAt
                 eventContendersId
                 categoryContendersId
-                contenderMovieId
+                movieContendersId
                 contenderPersonId
                 contenderSongId
               }
@@ -8251,7 +9490,7 @@ export const listCommunityPredictions = /* GraphQL */ `
                 updatedAt
                 eventContendersId
                 categoryContendersId
-                contenderMovieId
+                movieContendersId
                 contenderPersonId
                 contenderSongId
               }
@@ -8269,7 +9508,7 @@ export const listCommunityPredictions = /* GraphQL */ `
           updatedAt
           eventContendersId
           categoryContendersId
-          contenderMovieId
+          movieContendersId
           contenderPersonId
           contenderSongId
         }
@@ -8320,7 +9559,7 @@ export const getCommunityHistoryPredictionSet = /* GraphQL */ `
                 updatedAt
                 eventContendersId
                 categoryContendersId
-                contenderMovieId
+                movieContendersId
                 contenderPersonId
                 contenderSongId
               }
@@ -8378,6 +9617,9 @@ export const getCommunityHistoryPredictionSet = /* GraphQL */ `
               id
               tmdbId
               studio
+              contenders {
+                nextToken
+              }
               createdAt
               updatedAt
             }
@@ -8454,7 +9696,7 @@ export const getCommunityHistoryPredictionSet = /* GraphQL */ `
             updatedAt
             eventContendersId
             categoryContendersId
-            contenderMovieId
+            movieContendersId
             contenderPersonId
             contenderSongId
           }
@@ -8558,7 +9800,7 @@ export const getCommunityHistoryPredictionSet = /* GraphQL */ `
               updatedAt
               eventContendersId
               categoryContendersId
-              contenderMovieId
+              movieContendersId
               contenderPersonId
               contenderSongId
             }
@@ -8614,6 +9856,9 @@ export const getCommunityHistoryPredictionSet = /* GraphQL */ `
               id
               tmdbId
               studio
+              contenders {
+                nextToken
+              }
               createdAt
               updatedAt
             }
@@ -8690,7 +9935,7 @@ export const getCommunityHistoryPredictionSet = /* GraphQL */ `
             updatedAt
             eventContendersId
             categoryContendersId
-            contenderMovieId
+            movieContendersId
             contenderPersonId
             contenderSongId
           }
@@ -8746,6 +9991,9 @@ export const getCommunityHistoryPredictionSet = /* GraphQL */ `
               id
               tmdbId
               studio
+              contenders {
+                nextToken
+              }
               createdAt
               updatedAt
             }
@@ -8822,7 +10070,7 @@ export const getCommunityHistoryPredictionSet = /* GraphQL */ `
             updatedAt
             eventContendersId
             categoryContendersId
-            contenderMovieId
+            movieContendersId
             contenderPersonId
             contenderSongId
           }
@@ -8947,7 +10195,7 @@ export const listCommunityHistoryPredictionSets = /* GraphQL */ `
               updatedAt
               eventContendersId
               categoryContendersId
-              contenderMovieId
+              movieContendersId
               contenderPersonId
               contenderSongId
             }
@@ -8987,7 +10235,7 @@ export const listCommunityHistoryPredictionSets = /* GraphQL */ `
                 updatedAt
                 eventContendersId
                 categoryContendersId
-                contenderMovieId
+                movieContendersId
                 contenderPersonId
                 contenderSongId
               }
@@ -9059,7 +10307,7 @@ export const listCommunityHistoryPredictionSets = /* GraphQL */ `
               updatedAt
               eventContendersId
               categoryContendersId
-              contenderMovieId
+              movieContendersId
               contenderPersonId
               contenderSongId
             }
@@ -9131,7 +10379,7 @@ export const listCommunityHistoryPredictionSets = /* GraphQL */ `
               updatedAt
               eventContendersId
               categoryContendersId
-              contenderMovieId
+              movieContendersId
               contenderPersonId
               contenderSongId
             }
@@ -9186,7 +10434,7 @@ export const getCommunityHistoryPrediction = /* GraphQL */ `
                 updatedAt
                 eventContendersId
                 categoryContendersId
-                contenderMovieId
+                movieContendersId
                 contenderPersonId
                 contenderSongId
               }
@@ -9258,7 +10506,7 @@ export const getCommunityHistoryPrediction = /* GraphQL */ `
               updatedAt
               eventContendersId
               categoryContendersId
-              contenderMovieId
+              movieContendersId
               contenderPersonId
               contenderSongId
             }
@@ -9356,7 +10604,7 @@ export const getCommunityHistoryPrediction = /* GraphQL */ `
               updatedAt
               eventContendersId
               categoryContendersId
-              contenderMovieId
+              movieContendersId
               contenderPersonId
               contenderSongId
             }
@@ -9372,6 +10620,72 @@ export const getCommunityHistoryPrediction = /* GraphQL */ `
           id
           tmdbId
           studio
+          contenders {
+            items {
+              id
+              category {
+                id
+                name
+                type
+                createdAt
+                updatedAt
+                eventCategoriesId
+              }
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              song {
+                id
+                title
+                artist
+                createdAt
+                updatedAt
+                songMovieId
+              }
+              predictions {
+                nextToken
+              }
+              historyPredictions {
+                nextToken
+              }
+              communityPredictions {
+                nextToken
+              }
+              communityHistoryPredictions {
+                nextToken
+              }
+              visibility
+              accolade
+              createdAt
+              updatedAt
+              eventContendersId
+              categoryContendersId
+              movieContendersId
+              contenderPersonId
+              contenderSongId
+            }
+            nextToken
+          }
           createdAt
           updatedAt
         }
@@ -9389,6 +10703,21 @@ export const getCommunityHistoryPrediction = /* GraphQL */ `
             id
             tmdbId
             studio
+            contenders {
+              items {
+                id
+                visibility
+                accolade
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                movieContendersId
+                contenderPersonId
+                contenderSongId
+              }
+              nextToken
+            }
             createdAt
             updatedAt
           }
@@ -9469,7 +10798,7 @@ export const getCommunityHistoryPrediction = /* GraphQL */ `
               updatedAt
               eventContendersId
               categoryContendersId
-              contenderMovieId
+              movieContendersId
               contenderPersonId
               contenderSongId
             }
@@ -9555,7 +10884,7 @@ export const getCommunityHistoryPrediction = /* GraphQL */ `
               updatedAt
               eventContendersId
               categoryContendersId
-              contenderMovieId
+              movieContendersId
               contenderPersonId
               contenderSongId
             }
@@ -9630,7 +10959,7 @@ export const getCommunityHistoryPrediction = /* GraphQL */ `
               updatedAt
               eventContendersId
               categoryContendersId
-              contenderMovieId
+              movieContendersId
               contenderPersonId
               contenderSongId
             }
@@ -9704,7 +11033,7 @@ export const getCommunityHistoryPrediction = /* GraphQL */ `
               updatedAt
               eventContendersId
               categoryContendersId
-              contenderMovieId
+              movieContendersId
               contenderPersonId
               contenderSongId
             }
@@ -9722,7 +11051,7 @@ export const getCommunityHistoryPrediction = /* GraphQL */ `
         updatedAt
         eventContendersId
         categoryContendersId
-        contenderMovieId
+        movieContendersId
         contenderPersonId
         contenderSongId
       }
@@ -9782,7 +11111,7 @@ export const listCommunityHistoryPredictions = /* GraphQL */ `
                 updatedAt
                 eventContendersId
                 categoryContendersId
-                contenderMovieId
+                movieContendersId
                 contenderPersonId
                 contenderSongId
               }
@@ -9816,7 +11145,7 @@ export const listCommunityHistoryPredictions = /* GraphQL */ `
                 updatedAt
                 eventContendersId
                 categoryContendersId
-                contenderMovieId
+                movieContendersId
                 contenderPersonId
                 contenderSongId
               }
@@ -9832,6 +11161,21 @@ export const listCommunityHistoryPredictions = /* GraphQL */ `
             id
             tmdbId
             studio
+            contenders {
+              items {
+                id
+                visibility
+                accolade
+                createdAt
+                updatedAt
+                eventContendersId
+                categoryContendersId
+                movieContendersId
+                contenderPersonId
+                contenderSongId
+              }
+              nextToken
+            }
             createdAt
             updatedAt
           }
@@ -9849,6 +11193,9 @@ export const listCommunityHistoryPredictions = /* GraphQL */ `
               id
               tmdbId
               studio
+              contenders {
+                nextToken
+              }
               createdAt
               updatedAt
             }
@@ -9878,7 +11225,7 @@ export const listCommunityHistoryPredictions = /* GraphQL */ `
                 updatedAt
                 eventContendersId
                 categoryContendersId
-                contenderMovieId
+                movieContendersId
                 contenderPersonId
                 contenderSongId
               }
@@ -9913,7 +11260,7 @@ export const listCommunityHistoryPredictions = /* GraphQL */ `
                 updatedAt
                 eventContendersId
                 categoryContendersId
-                contenderMovieId
+                movieContendersId
                 contenderPersonId
                 contenderSongId
               }
@@ -9937,7 +11284,7 @@ export const listCommunityHistoryPredictions = /* GraphQL */ `
                 updatedAt
                 eventContendersId
                 categoryContendersId
-                contenderMovieId
+                movieContendersId
                 contenderPersonId
                 contenderSongId
               }
@@ -9960,7 +11307,7 @@ export const listCommunityHistoryPredictions = /* GraphQL */ `
                 updatedAt
                 eventContendersId
                 categoryContendersId
-                contenderMovieId
+                movieContendersId
                 contenderPersonId
                 contenderSongId
               }
@@ -9978,7 +11325,7 @@ export const listCommunityHistoryPredictions = /* GraphQL */ `
           updatedAt
           eventContendersId
           categoryContendersId
-          contenderMovieId
+          movieContendersId
           contenderPersonId
           contenderSongId
         }

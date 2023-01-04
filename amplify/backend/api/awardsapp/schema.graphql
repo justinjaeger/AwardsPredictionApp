@@ -135,8 +135,7 @@ type Contender @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
     category: Category! @belongsTo # belongsTo is for bi-directional relationships. Category also hasMany contenders
     event: Event! @belongsTo
-    movie: Movie! @hasOne
-    # movie: Movie! @belongsTo # TODO: TRY TO ADD THIS NEXT (see Movie table) and replace with above
+    movie: Movie! @belongsTo
     person: Person @hasOne # optional - only applies to acting categories
     song: Song @hasOne # optional - only applies to the song category
     predictions: [Prediction] @hasMany
@@ -151,7 +150,7 @@ type Movie @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
     tmdbId: Int! # unique value
     studio: String # distribution studio
-    # contenders: [Contender] @hasMany # TODO: TRY TO ADD THIS NEXT (might be useful in the future)
+    contenders: [Contender] @hasMany
 }
 
 type Person @model @auth(rules: [{ allow: public }]) {
