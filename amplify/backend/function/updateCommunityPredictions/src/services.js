@@ -258,10 +258,7 @@ const createCommunityPredictions = async (
 
     // create all predictions in parallel
     responses = await Promise.allSettled(createPredictionPromises);
-    console.log(
-      'createPredictionPromises response:',
-      responses.map((r) => r.status),
-    );
+    console.log('createPredictionPromises response:', responses.length);
 
     // create history predictions
     if (createHistoryRecord) {
@@ -295,10 +292,7 @@ const createCommunityPredictions = async (
 
       // create history predictions in parallel
       responses = await Promise.allSettled(createHistoryPredictionPromises);
-      console.log(
-        'createHistoryPredictionPromises response:',
-        responses.map((r) => r.status),
-      );
+      console.log('createHistoryPredictionPromises response:', responses.length);
     }
 
     return {
@@ -334,10 +328,7 @@ const deletePreviousCommunityPredictions = async (
       deletePredictionPromises.push(fetch(deleteCommunityPrediction(predictionId)));
     }
     response = await Promise.allSettled(deletePredictionPromises);
-    console.log(
-      'deletePredictionPromises response:',
-      response.map((r) => r.status),
-    );
+    console.log('deletePredictionPromises response:', response.length);
     const deletePredictionSetPromises = [];
     for (const predictionSetId of formerPredictionSetIds) {
       deletePredictionSetPromises.push(
@@ -345,10 +336,7 @@ const deletePreviousCommunityPredictions = async (
       );
     }
     response = await Promise.allSettled(deletePredictionSetPromises);
-    console.log(
-      'deletePredictionSetPromises response:',
-      response.map((r) => r.status),
-    );
+    console.log('deletePredictionSetPromises response:', response.length);
     return {
       status: 'success',
     };

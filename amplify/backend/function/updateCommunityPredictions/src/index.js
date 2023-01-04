@@ -9,11 +9,10 @@ const {
 /* Amplify Params - DO NOT EDIT
 	ENV
 	REGION
-Amplify Params - DO NOT EDIT */ /**
- * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
- */
+Amplify Params - DO NOT EDIT */
 
 /**
+   @type {import('@types/aws-lambda').APIGatewayProxyHandler}
    RECURRING INVOCATION: Every hour (modify with "amplify update function")
      *** MUST UPDATE OCCURANCE_INTERVAL IF CHANGE THE INVOCATION INTERVAL
    Once a day, it also creates a community HISTORY record
@@ -31,7 +30,7 @@ exports.handler = async () => {
   timeHistoryExpires.setHours(HOUR_OF_HISTORY_RECORD + occuranceInHours);
 
   // if current time is within range, create history record
-  let createHistoryRecord = true; // SHOULD BE FALSE BY DEFAULT
+  let createHistoryRecord = false; // SHOULD BE FALSE BY DEFAULT
   const now = new Date();
   if (now >= timeToRecordHistory && now < timeHistoryExpires) {
     createHistoryRecord = true;
