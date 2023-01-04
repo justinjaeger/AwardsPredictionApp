@@ -64,28 +64,28 @@ export const createPerson = async (
 
 /**
  * enforce tmdb being unique
- * check to see if movie is already stored (identified by tmdbId)
+ * check to see if person is already stored (identified by tmdbId)
  */
 export const getOrCreatePerson = async (
   tmdbId: number,
 ): Promise<iApiResponse<GetPersonQuery>> => {
   try {
-    // get movies with tmdbId
+    // get people by tmdbId
     const { data: maybePeople } = await getPeopleByTmdb(tmdbId);
     if (!maybePeople?.listPeople) {
       return { status: 'error' };
     }
     let personId = maybePeople.listPeople.items[0]?.id || undefined;
-    // if no movie exists with tmdbId, create one
+    // if no person exists with tmdbId, create one
     if (!personId) {
-      const { data: newMovie } = await createPerson(tmdbId);
-      const pId = newMovie?.createPerson?.id;
+      const { data: newPerson } = await createPerson(tmdbId);
+      const pId = newPerson?.createPerson?.id;
       if (!pId) {
         return { status: 'error' };
       }
       personId = pId;
     }
-    // finally, with existing or created movieId, get the movie
+    // finally, with existing or created movieId, get the person
     const { data } = await getPerson(personId);
     return { status: 'success', data };
   } catch (err) {
