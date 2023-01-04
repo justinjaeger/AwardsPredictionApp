@@ -16,6 +16,7 @@ import * as queries from '../../graphql/queries';
 import * as customQueries from '../../graphqlCustom/queries';
 import { GraphqlAPI, handleError, iApiResponse } from '../utils';
 import ApiServices from '.';
+import { iPrediction } from '../../types';
 
 type iContenderParams = {
   eventId: string;
@@ -93,32 +94,55 @@ const createContender = async (
   }
 };
 
+// We want to return iPrediction here so that the user's predictions can update immediately
 const createUniqueContender = async (
   params: iContenderParams,
-): Promise<iApiResponse<any>> => {
+): Promise<iApiResponse<iPrediction>> => {
   // get contenders with unique-defining params
   const { data: maybeContenders } = await getUniqueContenders(params);
   if (!maybeContenders?.listContenders) {
     return { status: 'error' };
   }
-  let contenderId = maybeContenders.listContenders.items[0]?.id || undefined;
+  let contender = maybeContenders.listContenders.items[0];
   // if no contender exists, create one
-  if (!contenderId) {
+  if (!contender) {
     const { data: newMovie } = await createContender(params);
-    const cId = newMovie?.createContender?.id;
-    if (!cId) {
+    const con = newMovie?.createContender;
+    if (!con) {
       return { status: 'error' };
     }
-    contenderId = cId;
+    contender = con;
   }
-  return { status: 'success' };
+  // format "data" in response to match iPrediction
+  return {
+    status: 'success',
+    data: {
+      ranking: 0, // just filler, might be a problem idk
+      visibility: contender.visibility || ContenderVisibility.VISIBLE,
+      contenderId: contender.id,
+      contenderMovie: contender.movie,
+      contenderPerson: contender.person
+        ? {
+            id: contender.person.id,
+            tmdbId: contender.person.tmdbId,
+          }
+        : undefined,
+      contenderSong: contender.song
+        ? {
+            id: contender.song.id,
+            title: contender.song.title,
+            artist: contender.song.artist,
+          }
+        : undefined,
+    },
+  };
 };
 
 export const createFilmContender = async (params: {
   eventId: string;
   categoryId: string;
   movieTmdbId: number;
-}): Promise<iApiResponse<any>> => {
+}): Promise<iApiResponse<iPrediction>> => {
   const { eventId, categoryId, movieTmdbId } = params;
   try {
     const { data: movieResponse } = await ApiServices.getOrCreateMovie(movieTmdbId);
@@ -142,7 +166,7 @@ export const createActingContender = async (params: {
   categoryId: string;
   movieTmdbId: number;
   personTmdbId: number;
-}): Promise<iApiResponse<any>> => {
+}): Promise<iApiResponse<iPrediction>> => {
   const { eventId, categoryId, movieTmdbId, personTmdbId } = params;
   try {
     const { data: movieResponse } = await ApiServices.getOrCreateMovie(movieTmdbId);
@@ -151,6 +175,7 @@ export const createActingContender = async (params: {
       return { status: 'error' };
     }
     const { data: personResponse } = await ApiServices.getOrCreatePerson(personTmdbId);
+    console.log('personResponse', personResponse);
     const personId = personResponse?.getPerson?.id;
     if (!personId) {
       return { status: 'error' };
@@ -173,7 +198,7 @@ export const createSongContender = async (params: {
   movieTmdbId: number;
   title: string;
   artist: string;
-}): Promise<iApiResponse<any>> => {
+}): Promise<iApiResponse<iPrediction>> => {
   const { eventId, categoryId, movieTmdbId, title, artist } = params;
   const { data: movieResponse } = await ApiServices.getOrCreateMovie(movieTmdbId);
   const movieId = movieResponse?.getMovie?.id;

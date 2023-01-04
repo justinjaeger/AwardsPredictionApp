@@ -17,7 +17,7 @@ import { FAB } from '../../../components/Buttons/FAB';
 import CreateContender from '../CreateContender';
 import { CATEGORY_TYPE_TO_STRING } from '../../../constants/categories';
 import Snackbar from '../../../components/Snackbar';
-import { CategoryType, ContenderVisibility } from '../../../API';
+import { CategoryType } from '../../../API';
 
 const AddPredictions = () => {
   const {
@@ -32,22 +32,33 @@ const AddPredictions = () => {
 
   // We use the SAME KEY as the previous screen, because it avoids a re-fetch of the data which was available previously
   const { data: communityData } = useQueryCommunityEvent({ event });
-  // contenders should not be hidden if they're currently in your predictions, so we'll add those back in
-  const hiddenPredictions = initialPredictions.filter(
-    (p) => p.visibility === ContenderVisibility.HIDDEN,
-  );
-  const communityPredictions = communityData
-    ? [...(communityData[category.id]?.predictions || []), ...hiddenPredictions]
-    : [];
+  const communityDataPredictions = communityData?.[category.id]?.predictions || [];
 
   const [selectedPredictions, setSelectedPredictions] = useState<iPrediction[]>(
     initialPredictions,
   );
+  const [hiddenPredictions, setHiddenPredictions] = useState<iPrediction[]>([]); // for predictions that communityPredictions isn't aware of
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [isSearching, setIsSearching] = useState<boolean>(false);
 
   const selectedContenderIds = selectedPredictions.map((sp) => sp.contenderId);
   const initiallySelectedContenderIds = initialPredictions.map((p) => p.contenderId);
+  const communityPredictions = communityData
+    ? [...communityDataPredictions, ...hiddenPredictions]
+    : [];
+
+  useEffect(() => {
+    // get all selectedPredictions that communityData doesn't include so we can include them in list
+    // want to only add new ones to hiddenPredictions if we unselect, we don't want it to go away
+    const communityDataContenderIds = communityDataPredictions.map((p) => p.contenderId);
+    const hiddenPredictionContenderIds = hiddenPredictions.map((p) => p.contenderId);
+    const newHiddenPredictions = selectedPredictions.filter(
+      (p) =>
+        !communityDataContenderIds.includes(p.contenderId) &&
+        !hiddenPredictionContenderIds.includes(p.contenderId),
+    );
+    setHiddenPredictions([...hiddenPredictions, ...newHiddenPredictions]);
+  }, [selectedPredictions.length]);
 
   // keeps track of whether we've edited the predictions from their initial state
   useEffect(() => {

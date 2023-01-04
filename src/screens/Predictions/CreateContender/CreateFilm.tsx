@@ -28,7 +28,7 @@ const CreateFilm = (props: iCreateContenderProps) => {
   const event = _event as iEvent;
 
   // when adding a contender to the list of overall contenders
-  const { mutate, isComplete } = useMutationCreateContender();
+  const { mutate, isComplete, response } = useMutationCreateContender();
 
   const { data: communityData } = useQueryCommunityEvent({ event, includeHidden: true }); // because we use this to see if contender exists, we want to includes hidden contenders
   const communityPredictions = communityData?.[category.id]?.predictions || [];
@@ -51,15 +51,13 @@ const CreateFilm = (props: iCreateContenderProps) => {
     return communityPredictions.find((p) => p.contenderMovie?.tmdbId === tmdbId);
   };
 
+  // block runs after createContender mutation succeeds
   useEffect(() => {
-    if (isComplete && selectedTmdbId) {
-      const newPrediction = getPredictionFromTmdbId(selectedTmdbId);
-      if (newPrediction) {
-        onSelectPrediction(newPrediction);
-        resetSearch();
-      }
+    if (response) {
+      onSelectPrediction(response);
+      resetSearch();
     }
-  }, [isComplete]);
+  }, [response]);
 
   const handleSearch = (s: string) => {
     if (s === '') {
