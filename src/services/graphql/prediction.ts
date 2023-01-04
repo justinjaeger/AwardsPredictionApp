@@ -87,9 +87,9 @@ const createPredictionSet = async (
       CreatePredictionSetMutationVariables
     >(mutations.createPredictionSet, {
       input: {
-        predictionSetUserId: userId,
-        predictionSetCategoryId: categoryId,
-        predictionSetEventId: eventId,
+        userId,
+        categoryId,
+        eventId,
       },
     });
     if (!data?.createPredictionSet) {
@@ -111,9 +111,9 @@ const createPrediction = async (
       CreatePredictionMutationVariables
     >(mutations.createPrediction, {
       input: {
-        predictionUserId: userId,
+        userId,
         predictionSetPredictionsId: predictionSetId,
-        contenderPredictionsId: contenderId,
+        contenderId,
         ranking,
       },
     });
@@ -154,8 +154,8 @@ export const getPredictionSets = async (
       ListPredictionSetsQueryVariables
     >(customQueries.listPredictionSets, {
       filter: {
-        predictionSetUserId: { eq: userId },
-        predictionSetCategoryId: { eq: categoryId },
+        userId: { eq: userId },
+        categoryId: { eq: categoryId },
       },
     });
     if (!data?.listPredictionSets) {
@@ -177,8 +177,8 @@ export const getPersonalPredictionsByEvent = async (
       ListPredictionSetsQueryVariables
     >(customQueries.listPredictionSets, {
       filter: {
-        predictionSetEventId: { eq: eventId },
-        predictionSetUserId: { eq: userId },
+        eventId: { eq: eventId },
+        userId: { eq: userId },
       },
     });
     if (!maybePreSets?.listPredictionSets) {

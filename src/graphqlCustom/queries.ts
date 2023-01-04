@@ -35,22 +35,13 @@ export const listContenders = /* GraphQL */ `
           createdAt
           updatedAt
         }
-        predictions {
-          items {
-            ranking #
-            createdAt
-            updatedAt #
-            predictionSetPredictionsId
-            predictionUserId
-          }
-        }
         createdAt
         updatedAt
-        eventContendersId
-        categoryContendersId #
-        contenderMovieId
-        contenderPersonId
-        contenderSongId
+        eventId
+        categoryId
+        movieId
+        personId
+        songId
         visibility
       }
     }
@@ -83,37 +74,30 @@ export const listPredictionSets = /* GraphQL */ `
                 id
                 tmdbId
                 studio
-                createdAt
-                updatedAt
               }
               person {
                 id
                 tmdbId
-                createdAt
-                updatedAt
               }
               song {
                 id
                 title
                 artist
-                createdAt
-                updatedAt
               }
+              categoryId
+              eventId
+              movieId
+              personId
+              songId
+              visibility
+              accolade
               createdAt
               updatedAt
-              eventContendersId
-              categoryContendersId
-              contenderMovieId
-              contenderPersonId
-              contenderSongId
-              visibility
             }
             ranking
             createdAt
             updatedAt
             predictionSetPredictionsId
-            contenderPredictionsId
-            predictionUserId
           }
         }
         createdAt
@@ -150,31 +134,23 @@ export const listCommunityPredictionSets = /* GraphQL */ `
                 id
                 tmdbId
                 studio
-                createdAt
-                updatedAt
               }
               person {
                 id
                 tmdbId
-                createdAt
-                updatedAt
               }
               song {
                 id
                 title
                 artist
-                createdAt
-                updatedAt
-                songMovieId
               }
               visibility
-              createdAt
-              updatedAt
+              accolade
             }
+            contenderId
             indexedRankings
             createdAt
             updatedAt
-            contenderCommunityPredictionsId
             communityPredictionSetPredictionsId
           }
           nextToken
@@ -182,7 +158,6 @@ export const listCommunityPredictionSets = /* GraphQL */ `
         type
         createdAt
         updatedAt
-        communityPredictionSetCategoryId
       }
       nextToken
     }
@@ -217,9 +192,9 @@ export const listEvents = /* GraphQL */ `
         }
         awardsBody
         year
-        status
         nominationDateTime
         winDateTime
+        status
         createdAt
         updatedAt
       }
@@ -247,13 +222,14 @@ export const listCategories = /* GraphQL */ `
         id
         name
         type
+        eventId
         event {
           id
           awardsBody
           year
-          status
           nominationDateTime
           winDateTime
+          status
           createdAt
           updatedAt
         }

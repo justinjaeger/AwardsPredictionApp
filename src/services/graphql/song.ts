@@ -45,7 +45,7 @@ export const getUniqueSongs = async (
         filter: {
           title: { eq: title },
           artist: { eq: artist },
-          songMovieId: { eq: movieId },
+          movieId: { eq: movieId },
         },
       },
     );
@@ -66,7 +66,7 @@ export const createSong = async (
     const { data, errors } = await GraphqlAPI<
       CreateSongMutation,
       CreateSongMutationVariables
-    >(mutations.createSong, { input: { title, artist, songMovieId: movieId } });
+    >(mutations.createSong, { input: { title, artist, movieId } });
     if (!data?.createSong) {
       throw new Error(JSON.stringify(errors));
     }

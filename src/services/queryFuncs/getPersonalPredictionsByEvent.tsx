@@ -13,11 +13,11 @@ const getPersonalPredictionsByEvent = async (eventId: string, userId: string) =>
   // Format the prediction sets
   const data: iIndexedPredictionsByCategory = {};
   pSets.forEach((ps) => {
-    const categoryId = ps?.predictionSetCategoryId || '';
+    const categoryId = ps?.categoryId || '';
     const predictions = (ps?.predictions?.items || []).map((p) => ({
       ranking: p?.ranking || 0,
       visibility: p?.contender.visibility || ContenderVisibility.VISIBLE,
-      contenderId: p?.contenderPredictionsId || '',
+      contenderId: p?.contenderId || '',
       contenderMovie: p?.contender.movie || undefined,
       contenderPerson: p?.contender.person || undefined,
       contenderSong: p?.contender.song || undefined,

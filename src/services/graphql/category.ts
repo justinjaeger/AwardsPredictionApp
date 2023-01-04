@@ -57,7 +57,7 @@ export const createCategory = async (
     >(
       mutations.createCategory,
       // NOTE: check if obeys @default setting in schema.graphql for isActive field, which is x by default
-      { input: { name, type, eventCategoriesId: eventId } },
+      { input: { name, type, eventId } },
     );
     if (!data?.createCategory) {
       throw new Error(JSON.stringify(errors));
