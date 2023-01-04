@@ -30,7 +30,7 @@ exports.handler = async () => {
   timeHistoryExpires.setHours(HOUR_OF_HISTORY_RECORD + occuranceInHours);
 
   // if current time is within range, create history record
-  let createHistoryRecord = true; // SHOULD BE FALSE BY DEFAULT
+  let createHistoryRecord = false; // SHOULD BE FALSE BY DEFAULT
   const now = new Date();
   if (now >= timeToRecordHistory && now < timeHistoryExpires) {
     createHistoryRecord = true;
