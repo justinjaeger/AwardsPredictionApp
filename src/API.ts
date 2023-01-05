@@ -250,7 +250,6 @@ export type Category = {
   type: CategoryType,
   createdAt: string,
   updatedAt: string,
-  eventCategoriesId?: string | null,
 };
 
 export enum CategoryName {
@@ -323,7 +322,6 @@ export type CreateCategoryInput = {
   eventId: string,
   name: CategoryName,
   type: CategoryType,
-  eventCategoriesId?: string | null,
 };
 
 export type ModelCategoryConditionInput = {
@@ -333,7 +331,6 @@ export type ModelCategoryConditionInput = {
   and?: Array< ModelCategoryConditionInput | null > | null,
   or?: Array< ModelCategoryConditionInput | null > | null,
   not?: ModelCategoryConditionInput | null,
-  eventCategoriesId?: ModelIDInput | null,
 };
 
 export type ModelCategoryNameInput = {
@@ -351,7 +348,6 @@ export type UpdateCategoryInput = {
   eventId?: string | null,
   name?: CategoryName | null,
   type?: CategoryType | null,
-  eventCategoriesId?: string | null,
 };
 
 export type DeleteCategoryInput = {
@@ -367,7 +363,6 @@ export type CreateContenderInput = {
   songId?: string | null,
   visibility?: ContenderVisibility | null,
   accolade?: ContenderAccolade | null,
-  movieContendersId?: string | null,
 };
 
 export enum ContenderVisibility {
@@ -394,7 +389,6 @@ export type ModelContenderConditionInput = {
   and?: Array< ModelContenderConditionInput | null > | null,
   or?: Array< ModelContenderConditionInput | null > | null,
   not?: ModelContenderConditionInput | null,
-  movieContendersId?: ModelIDInput | null,
 };
 
 export type ModelContenderVisibilityInput = {
@@ -424,7 +418,6 @@ export type Contender = {
   accolade?: ContenderAccolade | null,
   createdAt: string,
   updatedAt: string,
-  movieContendersId?: string | null,
 };
 
 export type Movie = {
@@ -471,7 +464,6 @@ export type UpdateContenderInput = {
   songId?: string | null,
   visibility?: ContenderVisibility | null,
   accolade?: ContenderAccolade | null,
-  movieContendersId?: string | null,
 };
 
 export type DeleteContenderInput = {
@@ -603,12 +595,12 @@ export type ModelPredictionConnection = {
 export type Prediction = {
   __typename: "Prediction",
   id: string,
+  predictionSetId: string,
   contenderId: string,
   contender: Contender,
   ranking: number,
   createdAt: string,
   updatedAt: string,
-  predictionSetPredictionsId?: string | null,
 };
 
 export type UpdatePredictionSetInput = {
@@ -625,25 +617,25 @@ export type DeletePredictionSetInput = {
 
 export type CreatePredictionInput = {
   id?: string | null,
+  predictionSetId: string,
   contenderId: string,
   ranking: number,
-  predictionSetPredictionsId?: string | null,
 };
 
 export type ModelPredictionConditionInput = {
+  predictionSetId?: ModelIDInput | null,
   contenderId?: ModelIDInput | null,
   ranking?: ModelIntInput | null,
   and?: Array< ModelPredictionConditionInput | null > | null,
   or?: Array< ModelPredictionConditionInput | null > | null,
   not?: ModelPredictionConditionInput | null,
-  predictionSetPredictionsId?: ModelIDInput | null,
 };
 
 export type UpdatePredictionInput = {
   id: string,
+  predictionSetId?: string | null,
   contenderId?: string | null,
   ranking?: number | null,
-  predictionSetPredictionsId?: string | null,
 };
 
 export type DeletePredictionInput = {
@@ -694,12 +686,12 @@ export type ModelHistoryPredictionConnection = {
 export type HistoryPrediction = {
   __typename: "HistoryPrediction",
   id: string,
+  historyPredictionSetId: string,
   contenderId: string,
   contender: Contender,
   ranking: number,
   createdAt: string,
   updatedAt: string,
-  historyPredictionSetPredictionsId?: string | null,
 };
 
 export type UpdateHistoryPredictionSetInput = {
@@ -717,25 +709,25 @@ export type DeleteHistoryPredictionSetInput = {
 
 export type CreateHistoryPredictionInput = {
   id?: string | null,
+  historyPredictionSetId: string,
   contenderId: string,
   ranking: number,
-  historyPredictionSetPredictionsId?: string | null,
 };
 
 export type ModelHistoryPredictionConditionInput = {
+  historyPredictionSetId?: ModelIDInput | null,
   contenderId?: ModelIDInput | null,
   ranking?: ModelIntInput | null,
   and?: Array< ModelHistoryPredictionConditionInput | null > | null,
   or?: Array< ModelHistoryPredictionConditionInput | null > | null,
   not?: ModelHistoryPredictionConditionInput | null,
-  historyPredictionSetPredictionsId?: ModelIDInput | null,
 };
 
 export type UpdateHistoryPredictionInput = {
   id: string,
+  historyPredictionSetId?: string | null,
   contenderId?: string | null,
   ranking?: number | null,
-  historyPredictionSetPredictionsId?: string | null,
 };
 
 export type DeleteHistoryPredictionInput = {
@@ -780,12 +772,12 @@ export type ModelCommunityPredictionConnection = {
 export type CommunityPrediction = {
   __typename: "CommunityPrediction",
   id: string,
+  communityPredictionSetId: string,
   contenderId: string,
   contender: Contender,
   indexedRankings?: string | null,
   createdAt: string,
   updatedAt: string,
-  communityPredictionSetPredictionsId?: string | null,
 };
 
 export type UpdateCommunityPredictionSetInput = {
@@ -801,25 +793,25 @@ export type DeleteCommunityPredictionSetInput = {
 
 export type CreateCommunityPredictionInput = {
   id?: string | null,
+  communityPredictionSetId: string,
   contenderId: string,
   indexedRankings?: string | null,
-  communityPredictionSetPredictionsId?: string | null,
 };
 
 export type ModelCommunityPredictionConditionInput = {
+  communityPredictionSetId?: ModelIDInput | null,
   contenderId?: ModelIDInput | null,
   indexedRankings?: ModelStringInput | null,
   and?: Array< ModelCommunityPredictionConditionInput | null > | null,
   or?: Array< ModelCommunityPredictionConditionInput | null > | null,
   not?: ModelCommunityPredictionConditionInput | null,
-  communityPredictionSetPredictionsId?: ModelIDInput | null,
 };
 
 export type UpdateCommunityPredictionInput = {
   id: string,
+  communityPredictionSetId?: string | null,
   contenderId?: string | null,
   indexedRankings?: string | null,
-  communityPredictionSetPredictionsId?: string | null,
 };
 
 export type DeleteCommunityPredictionInput = {
@@ -866,12 +858,12 @@ export type ModelCommunityHistoryPredictionConnection = {
 export type CommunityHistoryPrediction = {
   __typename: "CommunityHistoryPrediction",
   id: string,
+  communityHistoryPredictionSetId: string,
   contenderId: string,
   contender: Contender,
   indexedRankings?: string | null,
   createdAt: string,
   updatedAt: string,
-  communityHistoryPredictionSetPredictionsId?: string | null,
 };
 
 export type UpdateCommunityHistoryPredictionSetInput = {
@@ -888,25 +880,25 @@ export type DeleteCommunityHistoryPredictionSetInput = {
 
 export type CreateCommunityHistoryPredictionInput = {
   id?: string | null,
+  communityHistoryPredictionSetId: string,
   contenderId: string,
   indexedRankings?: string | null,
-  communityHistoryPredictionSetPredictionsId?: string | null,
 };
 
 export type ModelCommunityHistoryPredictionConditionInput = {
+  communityHistoryPredictionSetId?: ModelIDInput | null,
   contenderId?: ModelIDInput | null,
   indexedRankings?: ModelStringInput | null,
   and?: Array< ModelCommunityHistoryPredictionConditionInput | null > | null,
   or?: Array< ModelCommunityHistoryPredictionConditionInput | null > | null,
   not?: ModelCommunityHistoryPredictionConditionInput | null,
-  communityHistoryPredictionSetPredictionsId?: ModelIDInput | null,
 };
 
 export type UpdateCommunityHistoryPredictionInput = {
   id: string,
+  communityHistoryPredictionSetId?: string | null,
   contenderId?: string | null,
   indexedRankings?: string | null,
-  communityHistoryPredictionSetPredictionsId?: string | null,
 };
 
 export type DeleteCommunityHistoryPredictionInput = {
@@ -979,7 +971,6 @@ export type ModelCategoryFilterInput = {
   and?: Array< ModelCategoryFilterInput | null > | null,
   or?: Array< ModelCategoryFilterInput | null > | null,
   not?: ModelCategoryFilterInput | null,
-  eventCategoriesId?: ModelIDInput | null,
 };
 
 export type ModelContenderFilterInput = {
@@ -994,7 +985,6 @@ export type ModelContenderFilterInput = {
   and?: Array< ModelContenderFilterInput | null > | null,
   or?: Array< ModelContenderFilterInput | null > | null,
   not?: ModelContenderFilterInput | null,
-  movieContendersId?: ModelIDInput | null,
 };
 
 export type ModelMovieFilterInput = {
@@ -1061,12 +1051,12 @@ export type ModelPredictionSetConnection = {
 
 export type ModelPredictionFilterInput = {
   id?: ModelIDInput | null,
+  predictionSetId?: ModelIDInput | null,
   contenderId?: ModelIDInput | null,
   ranking?: ModelIntInput | null,
   and?: Array< ModelPredictionFilterInput | null > | null,
   or?: Array< ModelPredictionFilterInput | null > | null,
   not?: ModelPredictionFilterInput | null,
-  predictionSetPredictionsId?: ModelIDInput | null,
 };
 
 export type ModelHistoryPredictionSetFilterInput = {
@@ -1089,12 +1079,12 @@ export type ModelHistoryPredictionSetConnection = {
 
 export type ModelHistoryPredictionFilterInput = {
   id?: ModelIDInput | null,
+  historyPredictionSetId?: ModelIDInput | null,
   contenderId?: ModelIDInput | null,
   ranking?: ModelIntInput | null,
   and?: Array< ModelHistoryPredictionFilterInput | null > | null,
   or?: Array< ModelHistoryPredictionFilterInput | null > | null,
   not?: ModelHistoryPredictionFilterInput | null,
-  historyPredictionSetPredictionsId?: ModelIDInput | null,
 };
 
 export type ModelCommunityPredictionSetFilterInput = {
@@ -1115,12 +1105,12 @@ export type ModelCommunityPredictionSetConnection = {
 
 export type ModelCommunityPredictionFilterInput = {
   id?: ModelIDInput | null,
+  communityPredictionSetId?: ModelIDInput | null,
   contenderId?: ModelIDInput | null,
   indexedRankings?: ModelStringInput | null,
   and?: Array< ModelCommunityPredictionFilterInput | null > | null,
   or?: Array< ModelCommunityPredictionFilterInput | null > | null,
   not?: ModelCommunityPredictionFilterInput | null,
-  communityPredictionSetPredictionsId?: ModelIDInput | null,
 };
 
 export type ModelCommunityHistoryPredictionSetFilterInput = {
@@ -1142,12 +1132,12 @@ export type ModelCommunityHistoryPredictionSetConnection = {
 
 export type ModelCommunityHistoryPredictionFilterInput = {
   id?: ModelIDInput | null,
+  communityHistoryPredictionSetId?: ModelIDInput | null,
   contenderId?: ModelIDInput | null,
   indexedRankings?: ModelStringInput | null,
   and?: Array< ModelCommunityHistoryPredictionFilterInput | null > | null,
   or?: Array< ModelCommunityHistoryPredictionFilterInput | null > | null,
   not?: ModelCommunityHistoryPredictionFilterInput | null,
-  communityHistoryPredictionSetPredictionsId?: ModelIDInput | null,
 };
 
 export type UpdateCommunityPredictionsMutationVariables = {
@@ -1374,7 +1364,6 @@ export type CreateEventMutation = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -1390,7 +1379,6 @@ export type CreateEventMutation = {
         type: CategoryType,
         createdAt: string,
         updatedAt: string,
-        eventCategoriesId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -1432,7 +1420,6 @@ export type UpdateEventMutation = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -1448,7 +1435,6 @@ export type UpdateEventMutation = {
         type: CategoryType,
         createdAt: string,
         updatedAt: string,
-        eventCategoriesId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -1490,7 +1476,6 @@ export type DeleteEventMutation = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -1506,7 +1491,6 @@ export type DeleteEventMutation = {
         type: CategoryType,
         createdAt: string,
         updatedAt: string,
-        eventCategoriesId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -1558,7 +1542,6 @@ export type CreateCategoryMutation = {
           type: CategoryType,
           createdAt: string,
           updatedAt: string,
-          eventCategoriesId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -1574,7 +1557,6 @@ export type CreateCategoryMutation = {
     type: CategoryType,
     createdAt: string,
     updatedAt: string,
-    eventCategoriesId?: string | null,
   } | null,
 };
 
@@ -1616,7 +1598,6 @@ export type UpdateCategoryMutation = {
           type: CategoryType,
           createdAt: string,
           updatedAt: string,
-          eventCategoriesId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -1632,7 +1613,6 @@ export type UpdateCategoryMutation = {
     type: CategoryType,
     createdAt: string,
     updatedAt: string,
-    eventCategoriesId?: string | null,
   } | null,
 };
 
@@ -1674,7 +1654,6 @@ export type DeleteCategoryMutation = {
           type: CategoryType,
           createdAt: string,
           updatedAt: string,
-          eventCategoriesId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -1690,7 +1669,6 @@ export type DeleteCategoryMutation = {
     type: CategoryType,
     createdAt: string,
     updatedAt: string,
-    eventCategoriesId?: string | null,
   } | null,
 };
 
@@ -1732,7 +1710,6 @@ export type CreateContenderMutation = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -1748,7 +1725,6 @@ export type CreateContenderMutation = {
       type: CategoryType,
       createdAt: string,
       updatedAt: string,
-      eventCategoriesId?: string | null,
     },
     eventId: string,
     event:  {
@@ -1779,7 +1755,6 @@ export type CreateContenderMutation = {
           type: CategoryType,
           createdAt: string,
           updatedAt: string,
-          eventCategoriesId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -1820,7 +1795,6 @@ export type CreateContenderMutation = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           },
           eventId: string,
           event:  {
@@ -1881,7 +1855,6 @@ export type CreateContenderMutation = {
           accolade?: ContenderAccolade | null,
           createdAt: string,
           updatedAt: string,
-          movieContendersId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -1920,7 +1893,6 @@ export type CreateContenderMutation = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             },
             eventId: string,
             event:  {
@@ -1965,7 +1937,6 @@ export type CreateContenderMutation = {
             accolade?: ContenderAccolade | null,
             createdAt: string,
             updatedAt: string,
-            movieContendersId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -1983,7 +1954,6 @@ export type CreateContenderMutation = {
     accolade?: ContenderAccolade | null,
     createdAt: string,
     updatedAt: string,
-    movieContendersId?: string | null,
   } | null,
 };
 
@@ -2025,7 +1995,6 @@ export type UpdateContenderMutation = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -2041,7 +2010,6 @@ export type UpdateContenderMutation = {
       type: CategoryType,
       createdAt: string,
       updatedAt: string,
-      eventCategoriesId?: string | null,
     },
     eventId: string,
     event:  {
@@ -2072,7 +2040,6 @@ export type UpdateContenderMutation = {
           type: CategoryType,
           createdAt: string,
           updatedAt: string,
-          eventCategoriesId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -2113,7 +2080,6 @@ export type UpdateContenderMutation = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           },
           eventId: string,
           event:  {
@@ -2174,7 +2140,6 @@ export type UpdateContenderMutation = {
           accolade?: ContenderAccolade | null,
           createdAt: string,
           updatedAt: string,
-          movieContendersId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -2213,7 +2178,6 @@ export type UpdateContenderMutation = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             },
             eventId: string,
             event:  {
@@ -2258,7 +2222,6 @@ export type UpdateContenderMutation = {
             accolade?: ContenderAccolade | null,
             createdAt: string,
             updatedAt: string,
-            movieContendersId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -2276,7 +2239,6 @@ export type UpdateContenderMutation = {
     accolade?: ContenderAccolade | null,
     createdAt: string,
     updatedAt: string,
-    movieContendersId?: string | null,
   } | null,
 };
 
@@ -2318,7 +2280,6 @@ export type DeleteContenderMutation = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -2334,7 +2295,6 @@ export type DeleteContenderMutation = {
       type: CategoryType,
       createdAt: string,
       updatedAt: string,
-      eventCategoriesId?: string | null,
     },
     eventId: string,
     event:  {
@@ -2365,7 +2325,6 @@ export type DeleteContenderMutation = {
           type: CategoryType,
           createdAt: string,
           updatedAt: string,
-          eventCategoriesId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -2406,7 +2365,6 @@ export type DeleteContenderMutation = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           },
           eventId: string,
           event:  {
@@ -2467,7 +2425,6 @@ export type DeleteContenderMutation = {
           accolade?: ContenderAccolade | null,
           createdAt: string,
           updatedAt: string,
-          movieContendersId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -2506,7 +2463,6 @@ export type DeleteContenderMutation = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             },
             eventId: string,
             event:  {
@@ -2551,7 +2507,6 @@ export type DeleteContenderMutation = {
             accolade?: ContenderAccolade | null,
             createdAt: string,
             updatedAt: string,
-            movieContendersId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -2569,7 +2524,6 @@ export type DeleteContenderMutation = {
     accolade?: ContenderAccolade | null,
     createdAt: string,
     updatedAt: string,
-    movieContendersId?: string | null,
   } | null,
 };
 
@@ -2611,7 +2565,6 @@ export type CreateMovieMutation = {
           type: CategoryType,
           createdAt: string,
           updatedAt: string,
-          eventCategoriesId?: string | null,
         },
         eventId: string,
         event:  {
@@ -2627,7 +2580,6 @@ export type CreateMovieMutation = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -2657,7 +2609,6 @@ export type CreateMovieMutation = {
               accolade?: ContenderAccolade | null,
               createdAt: string,
               updatedAt: string,
-              movieContendersId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -2700,7 +2651,6 @@ export type CreateMovieMutation = {
         accolade?: ContenderAccolade | null,
         createdAt: string,
         updatedAt: string,
-        movieContendersId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -2749,7 +2699,6 @@ export type UpdateMovieMutation = {
           type: CategoryType,
           createdAt: string,
           updatedAt: string,
-          eventCategoriesId?: string | null,
         },
         eventId: string,
         event:  {
@@ -2765,7 +2714,6 @@ export type UpdateMovieMutation = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -2795,7 +2743,6 @@ export type UpdateMovieMutation = {
               accolade?: ContenderAccolade | null,
               createdAt: string,
               updatedAt: string,
-              movieContendersId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -2838,7 +2785,6 @@ export type UpdateMovieMutation = {
         accolade?: ContenderAccolade | null,
         createdAt: string,
         updatedAt: string,
-        movieContendersId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -2887,7 +2833,6 @@ export type DeleteMovieMutation = {
           type: CategoryType,
           createdAt: string,
           updatedAt: string,
-          eventCategoriesId?: string | null,
         },
         eventId: string,
         event:  {
@@ -2903,7 +2848,6 @@ export type DeleteMovieMutation = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -2933,7 +2877,6 @@ export type DeleteMovieMutation = {
               accolade?: ContenderAccolade | null,
               createdAt: string,
               updatedAt: string,
-              movieContendersId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -2976,7 +2919,6 @@ export type DeleteMovieMutation = {
         accolade?: ContenderAccolade | null,
         createdAt: string,
         updatedAt: string,
-        movieContendersId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -3070,7 +3012,6 @@ export type CreateSongMutation = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           },
           eventId: string,
           event:  {
@@ -3131,7 +3072,6 @@ export type CreateSongMutation = {
           accolade?: ContenderAccolade | null,
           createdAt: string,
           updatedAt: string,
-          movieContendersId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -3185,7 +3125,6 @@ export type UpdateSongMutation = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           },
           eventId: string,
           event:  {
@@ -3246,7 +3185,6 @@ export type UpdateSongMutation = {
           accolade?: ContenderAccolade | null,
           createdAt: string,
           updatedAt: string,
-          movieContendersId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -3300,7 +3238,6 @@ export type DeleteSongMutation = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           },
           eventId: string,
           event:  {
@@ -3361,7 +3298,6 @@ export type DeleteSongMutation = {
           accolade?: ContenderAccolade | null,
           createdAt: string,
           updatedAt: string,
-          movieContendersId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -3428,7 +3364,6 @@ export type CreatePredictionSetMutation = {
           type: CategoryType,
           createdAt: string,
           updatedAt: string,
-          eventCategoriesId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -3469,7 +3404,6 @@ export type CreatePredictionSetMutation = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -3485,13 +3419,13 @@ export type CreatePredictionSetMutation = {
       type: CategoryType,
       createdAt: string,
       updatedAt: string,
-      eventCategoriesId?: string | null,
     },
     predictions?:  {
       __typename: "ModelPredictionConnection",
       items:  Array< {
         __typename: "Prediction",
         id: string,
+        predictionSetId: string,
         contenderId: string,
         contender:  {
           __typename: "Contender",
@@ -3516,7 +3450,6 @@ export type CreatePredictionSetMutation = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           },
           eventId: string,
           event:  {
@@ -3577,12 +3510,10 @@ export type CreatePredictionSetMutation = {
           accolade?: ContenderAccolade | null,
           createdAt: string,
           updatedAt: string,
-          movieContendersId?: string | null,
         },
         ranking: number,
         createdAt: string,
         updatedAt: string,
-        predictionSetPredictionsId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -3643,7 +3574,6 @@ export type UpdatePredictionSetMutation = {
           type: CategoryType,
           createdAt: string,
           updatedAt: string,
-          eventCategoriesId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -3684,7 +3614,6 @@ export type UpdatePredictionSetMutation = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -3700,13 +3629,13 @@ export type UpdatePredictionSetMutation = {
       type: CategoryType,
       createdAt: string,
       updatedAt: string,
-      eventCategoriesId?: string | null,
     },
     predictions?:  {
       __typename: "ModelPredictionConnection",
       items:  Array< {
         __typename: "Prediction",
         id: string,
+        predictionSetId: string,
         contenderId: string,
         contender:  {
           __typename: "Contender",
@@ -3731,7 +3660,6 @@ export type UpdatePredictionSetMutation = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           },
           eventId: string,
           event:  {
@@ -3792,12 +3720,10 @@ export type UpdatePredictionSetMutation = {
           accolade?: ContenderAccolade | null,
           createdAt: string,
           updatedAt: string,
-          movieContendersId?: string | null,
         },
         ranking: number,
         createdAt: string,
         updatedAt: string,
-        predictionSetPredictionsId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -3858,7 +3784,6 @@ export type DeletePredictionSetMutation = {
           type: CategoryType,
           createdAt: string,
           updatedAt: string,
-          eventCategoriesId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -3899,7 +3824,6 @@ export type DeletePredictionSetMutation = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -3915,13 +3839,13 @@ export type DeletePredictionSetMutation = {
       type: CategoryType,
       createdAt: string,
       updatedAt: string,
-      eventCategoriesId?: string | null,
     },
     predictions?:  {
       __typename: "ModelPredictionConnection",
       items:  Array< {
         __typename: "Prediction",
         id: string,
+        predictionSetId: string,
         contenderId: string,
         contender:  {
           __typename: "Contender",
@@ -3946,7 +3870,6 @@ export type DeletePredictionSetMutation = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           },
           eventId: string,
           event:  {
@@ -4007,12 +3930,10 @@ export type DeletePredictionSetMutation = {
           accolade?: ContenderAccolade | null,
           createdAt: string,
           updatedAt: string,
-          movieContendersId?: string | null,
         },
         ranking: number,
         createdAt: string,
         updatedAt: string,
-        predictionSetPredictionsId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -4031,6 +3952,7 @@ export type CreatePredictionMutation = {
   createPrediction?:  {
     __typename: "Prediction",
     id: string,
+    predictionSetId: string,
     contenderId: string,
     contender:  {
       __typename: "Contender",
@@ -4053,7 +3975,6 @@ export type CreatePredictionMutation = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -4069,7 +3990,6 @@ export type CreatePredictionMutation = {
         type: CategoryType,
         createdAt: string,
         updatedAt: string,
-        eventCategoriesId?: string | null,
       },
       eventId: string,
       event:  {
@@ -4096,7 +4016,6 @@ export type CreatePredictionMutation = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -4126,7 +4045,6 @@ export type CreatePredictionMutation = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             },
             eventId: string,
             event:  {
@@ -4171,7 +4089,6 @@ export type CreatePredictionMutation = {
             accolade?: ContenderAccolade | null,
             createdAt: string,
             updatedAt: string,
-            movieContendersId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -4210,7 +4127,6 @@ export type CreatePredictionMutation = {
               accolade?: ContenderAccolade | null,
               createdAt: string,
               updatedAt: string,
-              movieContendersId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -4228,12 +4144,10 @@ export type CreatePredictionMutation = {
       accolade?: ContenderAccolade | null,
       createdAt: string,
       updatedAt: string,
-      movieContendersId?: string | null,
     },
     ranking: number,
     createdAt: string,
     updatedAt: string,
-    predictionSetPredictionsId?: string | null,
   } | null,
 };
 
@@ -4246,6 +4160,7 @@ export type UpdatePredictionMutation = {
   updatePrediction?:  {
     __typename: "Prediction",
     id: string,
+    predictionSetId: string,
     contenderId: string,
     contender:  {
       __typename: "Contender",
@@ -4268,7 +4183,6 @@ export type UpdatePredictionMutation = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -4284,7 +4198,6 @@ export type UpdatePredictionMutation = {
         type: CategoryType,
         createdAt: string,
         updatedAt: string,
-        eventCategoriesId?: string | null,
       },
       eventId: string,
       event:  {
@@ -4311,7 +4224,6 @@ export type UpdatePredictionMutation = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -4341,7 +4253,6 @@ export type UpdatePredictionMutation = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             },
             eventId: string,
             event:  {
@@ -4386,7 +4297,6 @@ export type UpdatePredictionMutation = {
             accolade?: ContenderAccolade | null,
             createdAt: string,
             updatedAt: string,
-            movieContendersId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -4425,7 +4335,6 @@ export type UpdatePredictionMutation = {
               accolade?: ContenderAccolade | null,
               createdAt: string,
               updatedAt: string,
-              movieContendersId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -4443,12 +4352,10 @@ export type UpdatePredictionMutation = {
       accolade?: ContenderAccolade | null,
       createdAt: string,
       updatedAt: string,
-      movieContendersId?: string | null,
     },
     ranking: number,
     createdAt: string,
     updatedAt: string,
-    predictionSetPredictionsId?: string | null,
   } | null,
 };
 
@@ -4461,6 +4368,7 @@ export type DeletePredictionMutation = {
   deletePrediction?:  {
     __typename: "Prediction",
     id: string,
+    predictionSetId: string,
     contenderId: string,
     contender:  {
       __typename: "Contender",
@@ -4483,7 +4391,6 @@ export type DeletePredictionMutation = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -4499,7 +4406,6 @@ export type DeletePredictionMutation = {
         type: CategoryType,
         createdAt: string,
         updatedAt: string,
-        eventCategoriesId?: string | null,
       },
       eventId: string,
       event:  {
@@ -4526,7 +4432,6 @@ export type DeletePredictionMutation = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -4556,7 +4461,6 @@ export type DeletePredictionMutation = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             },
             eventId: string,
             event:  {
@@ -4601,7 +4505,6 @@ export type DeletePredictionMutation = {
             accolade?: ContenderAccolade | null,
             createdAt: string,
             updatedAt: string,
-            movieContendersId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -4640,7 +4543,6 @@ export type DeletePredictionMutation = {
               accolade?: ContenderAccolade | null,
               createdAt: string,
               updatedAt: string,
-              movieContendersId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -4658,12 +4560,10 @@ export type DeletePredictionMutation = {
       accolade?: ContenderAccolade | null,
       createdAt: string,
       updatedAt: string,
-      movieContendersId?: string | null,
     },
     ranking: number,
     createdAt: string,
     updatedAt: string,
-    predictionSetPredictionsId?: string | null,
   } | null,
 };
 
@@ -4718,7 +4618,6 @@ export type CreateHistoryPredictionSetMutation = {
           type: CategoryType,
           createdAt: string,
           updatedAt: string,
-          eventCategoriesId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -4759,7 +4658,6 @@ export type CreateHistoryPredictionSetMutation = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -4775,13 +4673,13 @@ export type CreateHistoryPredictionSetMutation = {
       type: CategoryType,
       createdAt: string,
       updatedAt: string,
-      eventCategoriesId?: string | null,
     },
     predictions?:  {
       __typename: "ModelHistoryPredictionConnection",
       items:  Array< {
         __typename: "HistoryPrediction",
         id: string,
+        historyPredictionSetId: string,
         contenderId: string,
         contender:  {
           __typename: "Contender",
@@ -4806,7 +4704,6 @@ export type CreateHistoryPredictionSetMutation = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           },
           eventId: string,
           event:  {
@@ -4867,12 +4764,10 @@ export type CreateHistoryPredictionSetMutation = {
           accolade?: ContenderAccolade | null,
           createdAt: string,
           updatedAt: string,
-          movieContendersId?: string | null,
         },
         ranking: number,
         createdAt: string,
         updatedAt: string,
-        historyPredictionSetPredictionsId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -4933,7 +4828,6 @@ export type UpdateHistoryPredictionSetMutation = {
           type: CategoryType,
           createdAt: string,
           updatedAt: string,
-          eventCategoriesId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -4974,7 +4868,6 @@ export type UpdateHistoryPredictionSetMutation = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -4990,13 +4883,13 @@ export type UpdateHistoryPredictionSetMutation = {
       type: CategoryType,
       createdAt: string,
       updatedAt: string,
-      eventCategoriesId?: string | null,
     },
     predictions?:  {
       __typename: "ModelHistoryPredictionConnection",
       items:  Array< {
         __typename: "HistoryPrediction",
         id: string,
+        historyPredictionSetId: string,
         contenderId: string,
         contender:  {
           __typename: "Contender",
@@ -5021,7 +4914,6 @@ export type UpdateHistoryPredictionSetMutation = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           },
           eventId: string,
           event:  {
@@ -5082,12 +4974,10 @@ export type UpdateHistoryPredictionSetMutation = {
           accolade?: ContenderAccolade | null,
           createdAt: string,
           updatedAt: string,
-          movieContendersId?: string | null,
         },
         ranking: number,
         createdAt: string,
         updatedAt: string,
-        historyPredictionSetPredictionsId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -5148,7 +5038,6 @@ export type DeleteHistoryPredictionSetMutation = {
           type: CategoryType,
           createdAt: string,
           updatedAt: string,
-          eventCategoriesId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -5189,7 +5078,6 @@ export type DeleteHistoryPredictionSetMutation = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -5205,13 +5093,13 @@ export type DeleteHistoryPredictionSetMutation = {
       type: CategoryType,
       createdAt: string,
       updatedAt: string,
-      eventCategoriesId?: string | null,
     },
     predictions?:  {
       __typename: "ModelHistoryPredictionConnection",
       items:  Array< {
         __typename: "HistoryPrediction",
         id: string,
+        historyPredictionSetId: string,
         contenderId: string,
         contender:  {
           __typename: "Contender",
@@ -5236,7 +5124,6 @@ export type DeleteHistoryPredictionSetMutation = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           },
           eventId: string,
           event:  {
@@ -5297,12 +5184,10 @@ export type DeleteHistoryPredictionSetMutation = {
           accolade?: ContenderAccolade | null,
           createdAt: string,
           updatedAt: string,
-          movieContendersId?: string | null,
         },
         ranking: number,
         createdAt: string,
         updatedAt: string,
-        historyPredictionSetPredictionsId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -5321,6 +5206,7 @@ export type CreateHistoryPredictionMutation = {
   createHistoryPrediction?:  {
     __typename: "HistoryPrediction",
     id: string,
+    historyPredictionSetId: string,
     contenderId: string,
     contender:  {
       __typename: "Contender",
@@ -5343,7 +5229,6 @@ export type CreateHistoryPredictionMutation = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -5359,7 +5244,6 @@ export type CreateHistoryPredictionMutation = {
         type: CategoryType,
         createdAt: string,
         updatedAt: string,
-        eventCategoriesId?: string | null,
       },
       eventId: string,
       event:  {
@@ -5386,7 +5270,6 @@ export type CreateHistoryPredictionMutation = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -5416,7 +5299,6 @@ export type CreateHistoryPredictionMutation = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             },
             eventId: string,
             event:  {
@@ -5461,7 +5343,6 @@ export type CreateHistoryPredictionMutation = {
             accolade?: ContenderAccolade | null,
             createdAt: string,
             updatedAt: string,
-            movieContendersId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -5500,7 +5381,6 @@ export type CreateHistoryPredictionMutation = {
               accolade?: ContenderAccolade | null,
               createdAt: string,
               updatedAt: string,
-              movieContendersId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -5518,12 +5398,10 @@ export type CreateHistoryPredictionMutation = {
       accolade?: ContenderAccolade | null,
       createdAt: string,
       updatedAt: string,
-      movieContendersId?: string | null,
     },
     ranking: number,
     createdAt: string,
     updatedAt: string,
-    historyPredictionSetPredictionsId?: string | null,
   } | null,
 };
 
@@ -5536,6 +5414,7 @@ export type UpdateHistoryPredictionMutation = {
   updateHistoryPrediction?:  {
     __typename: "HistoryPrediction",
     id: string,
+    historyPredictionSetId: string,
     contenderId: string,
     contender:  {
       __typename: "Contender",
@@ -5558,7 +5437,6 @@ export type UpdateHistoryPredictionMutation = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -5574,7 +5452,6 @@ export type UpdateHistoryPredictionMutation = {
         type: CategoryType,
         createdAt: string,
         updatedAt: string,
-        eventCategoriesId?: string | null,
       },
       eventId: string,
       event:  {
@@ -5601,7 +5478,6 @@ export type UpdateHistoryPredictionMutation = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -5631,7 +5507,6 @@ export type UpdateHistoryPredictionMutation = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             },
             eventId: string,
             event:  {
@@ -5676,7 +5551,6 @@ export type UpdateHistoryPredictionMutation = {
             accolade?: ContenderAccolade | null,
             createdAt: string,
             updatedAt: string,
-            movieContendersId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -5715,7 +5589,6 @@ export type UpdateHistoryPredictionMutation = {
               accolade?: ContenderAccolade | null,
               createdAt: string,
               updatedAt: string,
-              movieContendersId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -5733,12 +5606,10 @@ export type UpdateHistoryPredictionMutation = {
       accolade?: ContenderAccolade | null,
       createdAt: string,
       updatedAt: string,
-      movieContendersId?: string | null,
     },
     ranking: number,
     createdAt: string,
     updatedAt: string,
-    historyPredictionSetPredictionsId?: string | null,
   } | null,
 };
 
@@ -5751,6 +5622,7 @@ export type DeleteHistoryPredictionMutation = {
   deleteHistoryPrediction?:  {
     __typename: "HistoryPrediction",
     id: string,
+    historyPredictionSetId: string,
     contenderId: string,
     contender:  {
       __typename: "Contender",
@@ -5773,7 +5645,6 @@ export type DeleteHistoryPredictionMutation = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -5789,7 +5660,6 @@ export type DeleteHistoryPredictionMutation = {
         type: CategoryType,
         createdAt: string,
         updatedAt: string,
-        eventCategoriesId?: string | null,
       },
       eventId: string,
       event:  {
@@ -5816,7 +5686,6 @@ export type DeleteHistoryPredictionMutation = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -5846,7 +5715,6 @@ export type DeleteHistoryPredictionMutation = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             },
             eventId: string,
             event:  {
@@ -5891,7 +5759,6 @@ export type DeleteHistoryPredictionMutation = {
             accolade?: ContenderAccolade | null,
             createdAt: string,
             updatedAt: string,
-            movieContendersId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -5930,7 +5797,6 @@ export type DeleteHistoryPredictionMutation = {
               accolade?: ContenderAccolade | null,
               createdAt: string,
               updatedAt: string,
-              movieContendersId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -5948,12 +5814,10 @@ export type DeleteHistoryPredictionMutation = {
       accolade?: ContenderAccolade | null,
       createdAt: string,
       updatedAt: string,
-      movieContendersId?: string | null,
     },
     ranking: number,
     createdAt: string,
     updatedAt: string,
-    historyPredictionSetPredictionsId?: string | null,
   } | null,
 };
 
@@ -5995,7 +5859,6 @@ export type CreateCommunityPredictionSetMutation = {
           type: CategoryType,
           createdAt: string,
           updatedAt: string,
-          eventCategoriesId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -6036,7 +5899,6 @@ export type CreateCommunityPredictionSetMutation = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -6052,13 +5914,13 @@ export type CreateCommunityPredictionSetMutation = {
       type: CategoryType,
       createdAt: string,
       updatedAt: string,
-      eventCategoriesId?: string | null,
     },
     predictions?:  {
       __typename: "ModelCommunityPredictionConnection",
       items:  Array< {
         __typename: "CommunityPrediction",
         id: string,
+        communityPredictionSetId: string,
         contenderId: string,
         contender:  {
           __typename: "Contender",
@@ -6083,7 +5945,6 @@ export type CreateCommunityPredictionSetMutation = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           },
           eventId: string,
           event:  {
@@ -6144,12 +6005,10 @@ export type CreateCommunityPredictionSetMutation = {
           accolade?: ContenderAccolade | null,
           createdAt: string,
           updatedAt: string,
-          movieContendersId?: string | null,
         },
         indexedRankings?: string | null,
         createdAt: string,
         updatedAt: string,
-        communityPredictionSetPredictionsId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -6197,7 +6056,6 @@ export type UpdateCommunityPredictionSetMutation = {
           type: CategoryType,
           createdAt: string,
           updatedAt: string,
-          eventCategoriesId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -6238,7 +6096,6 @@ export type UpdateCommunityPredictionSetMutation = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -6254,13 +6111,13 @@ export type UpdateCommunityPredictionSetMutation = {
       type: CategoryType,
       createdAt: string,
       updatedAt: string,
-      eventCategoriesId?: string | null,
     },
     predictions?:  {
       __typename: "ModelCommunityPredictionConnection",
       items:  Array< {
         __typename: "CommunityPrediction",
         id: string,
+        communityPredictionSetId: string,
         contenderId: string,
         contender:  {
           __typename: "Contender",
@@ -6285,7 +6142,6 @@ export type UpdateCommunityPredictionSetMutation = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           },
           eventId: string,
           event:  {
@@ -6346,12 +6202,10 @@ export type UpdateCommunityPredictionSetMutation = {
           accolade?: ContenderAccolade | null,
           createdAt: string,
           updatedAt: string,
-          movieContendersId?: string | null,
         },
         indexedRankings?: string | null,
         createdAt: string,
         updatedAt: string,
-        communityPredictionSetPredictionsId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -6399,7 +6253,6 @@ export type DeleteCommunityPredictionSetMutation = {
           type: CategoryType,
           createdAt: string,
           updatedAt: string,
-          eventCategoriesId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -6440,7 +6293,6 @@ export type DeleteCommunityPredictionSetMutation = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -6456,13 +6308,13 @@ export type DeleteCommunityPredictionSetMutation = {
       type: CategoryType,
       createdAt: string,
       updatedAt: string,
-      eventCategoriesId?: string | null,
     },
     predictions?:  {
       __typename: "ModelCommunityPredictionConnection",
       items:  Array< {
         __typename: "CommunityPrediction",
         id: string,
+        communityPredictionSetId: string,
         contenderId: string,
         contender:  {
           __typename: "Contender",
@@ -6487,7 +6339,6 @@ export type DeleteCommunityPredictionSetMutation = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           },
           eventId: string,
           event:  {
@@ -6548,12 +6399,10 @@ export type DeleteCommunityPredictionSetMutation = {
           accolade?: ContenderAccolade | null,
           createdAt: string,
           updatedAt: string,
-          movieContendersId?: string | null,
         },
         indexedRankings?: string | null,
         createdAt: string,
         updatedAt: string,
-        communityPredictionSetPredictionsId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -6572,6 +6421,7 @@ export type CreateCommunityPredictionMutation = {
   createCommunityPrediction?:  {
     __typename: "CommunityPrediction",
     id: string,
+    communityPredictionSetId: string,
     contenderId: string,
     contender:  {
       __typename: "Contender",
@@ -6594,7 +6444,6 @@ export type CreateCommunityPredictionMutation = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -6610,7 +6459,6 @@ export type CreateCommunityPredictionMutation = {
         type: CategoryType,
         createdAt: string,
         updatedAt: string,
-        eventCategoriesId?: string | null,
       },
       eventId: string,
       event:  {
@@ -6637,7 +6485,6 @@ export type CreateCommunityPredictionMutation = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -6667,7 +6514,6 @@ export type CreateCommunityPredictionMutation = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             },
             eventId: string,
             event:  {
@@ -6712,7 +6558,6 @@ export type CreateCommunityPredictionMutation = {
             accolade?: ContenderAccolade | null,
             createdAt: string,
             updatedAt: string,
-            movieContendersId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -6751,7 +6596,6 @@ export type CreateCommunityPredictionMutation = {
               accolade?: ContenderAccolade | null,
               createdAt: string,
               updatedAt: string,
-              movieContendersId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -6769,12 +6613,10 @@ export type CreateCommunityPredictionMutation = {
       accolade?: ContenderAccolade | null,
       createdAt: string,
       updatedAt: string,
-      movieContendersId?: string | null,
     },
     indexedRankings?: string | null,
     createdAt: string,
     updatedAt: string,
-    communityPredictionSetPredictionsId?: string | null,
   } | null,
 };
 
@@ -6787,6 +6629,7 @@ export type UpdateCommunityPredictionMutation = {
   updateCommunityPrediction?:  {
     __typename: "CommunityPrediction",
     id: string,
+    communityPredictionSetId: string,
     contenderId: string,
     contender:  {
       __typename: "Contender",
@@ -6809,7 +6652,6 @@ export type UpdateCommunityPredictionMutation = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -6825,7 +6667,6 @@ export type UpdateCommunityPredictionMutation = {
         type: CategoryType,
         createdAt: string,
         updatedAt: string,
-        eventCategoriesId?: string | null,
       },
       eventId: string,
       event:  {
@@ -6852,7 +6693,6 @@ export type UpdateCommunityPredictionMutation = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -6882,7 +6722,6 @@ export type UpdateCommunityPredictionMutation = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             },
             eventId: string,
             event:  {
@@ -6927,7 +6766,6 @@ export type UpdateCommunityPredictionMutation = {
             accolade?: ContenderAccolade | null,
             createdAt: string,
             updatedAt: string,
-            movieContendersId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -6966,7 +6804,6 @@ export type UpdateCommunityPredictionMutation = {
               accolade?: ContenderAccolade | null,
               createdAt: string,
               updatedAt: string,
-              movieContendersId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -6984,12 +6821,10 @@ export type UpdateCommunityPredictionMutation = {
       accolade?: ContenderAccolade | null,
       createdAt: string,
       updatedAt: string,
-      movieContendersId?: string | null,
     },
     indexedRankings?: string | null,
     createdAt: string,
     updatedAt: string,
-    communityPredictionSetPredictionsId?: string | null,
   } | null,
 };
 
@@ -7002,6 +6837,7 @@ export type DeleteCommunityPredictionMutation = {
   deleteCommunityPrediction?:  {
     __typename: "CommunityPrediction",
     id: string,
+    communityPredictionSetId: string,
     contenderId: string,
     contender:  {
       __typename: "Contender",
@@ -7024,7 +6860,6 @@ export type DeleteCommunityPredictionMutation = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -7040,7 +6875,6 @@ export type DeleteCommunityPredictionMutation = {
         type: CategoryType,
         createdAt: string,
         updatedAt: string,
-        eventCategoriesId?: string | null,
       },
       eventId: string,
       event:  {
@@ -7067,7 +6901,6 @@ export type DeleteCommunityPredictionMutation = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -7097,7 +6930,6 @@ export type DeleteCommunityPredictionMutation = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             },
             eventId: string,
             event:  {
@@ -7142,7 +6974,6 @@ export type DeleteCommunityPredictionMutation = {
             accolade?: ContenderAccolade | null,
             createdAt: string,
             updatedAt: string,
-            movieContendersId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -7181,7 +7012,6 @@ export type DeleteCommunityPredictionMutation = {
               accolade?: ContenderAccolade | null,
               createdAt: string,
               updatedAt: string,
-              movieContendersId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -7199,12 +7029,10 @@ export type DeleteCommunityPredictionMutation = {
       accolade?: ContenderAccolade | null,
       createdAt: string,
       updatedAt: string,
-      movieContendersId?: string | null,
     },
     indexedRankings?: string | null,
     createdAt: string,
     updatedAt: string,
-    communityPredictionSetPredictionsId?: string | null,
   } | null,
 };
 
@@ -7246,7 +7074,6 @@ export type CreateCommunityHistoryPredictionSetMutation = {
           type: CategoryType,
           createdAt: string,
           updatedAt: string,
-          eventCategoriesId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -7287,7 +7114,6 @@ export type CreateCommunityHistoryPredictionSetMutation = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -7303,13 +7129,13 @@ export type CreateCommunityHistoryPredictionSetMutation = {
       type: CategoryType,
       createdAt: string,
       updatedAt: string,
-      eventCategoriesId?: string | null,
     },
     predictions?:  {
       __typename: "ModelCommunityHistoryPredictionConnection",
       items:  Array< {
         __typename: "CommunityHistoryPrediction",
         id: string,
+        communityHistoryPredictionSetId: string,
         contenderId: string,
         contender:  {
           __typename: "Contender",
@@ -7334,7 +7160,6 @@ export type CreateCommunityHistoryPredictionSetMutation = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           },
           eventId: string,
           event:  {
@@ -7395,12 +7220,10 @@ export type CreateCommunityHistoryPredictionSetMutation = {
           accolade?: ContenderAccolade | null,
           createdAt: string,
           updatedAt: string,
-          movieContendersId?: string | null,
         },
         indexedRankings?: string | null,
         createdAt: string,
         updatedAt: string,
-        communityHistoryPredictionSetPredictionsId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -7448,7 +7271,6 @@ export type UpdateCommunityHistoryPredictionSetMutation = {
           type: CategoryType,
           createdAt: string,
           updatedAt: string,
-          eventCategoriesId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -7489,7 +7311,6 @@ export type UpdateCommunityHistoryPredictionSetMutation = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -7505,13 +7326,13 @@ export type UpdateCommunityHistoryPredictionSetMutation = {
       type: CategoryType,
       createdAt: string,
       updatedAt: string,
-      eventCategoriesId?: string | null,
     },
     predictions?:  {
       __typename: "ModelCommunityHistoryPredictionConnection",
       items:  Array< {
         __typename: "CommunityHistoryPrediction",
         id: string,
+        communityHistoryPredictionSetId: string,
         contenderId: string,
         contender:  {
           __typename: "Contender",
@@ -7536,7 +7357,6 @@ export type UpdateCommunityHistoryPredictionSetMutation = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           },
           eventId: string,
           event:  {
@@ -7597,12 +7417,10 @@ export type UpdateCommunityHistoryPredictionSetMutation = {
           accolade?: ContenderAccolade | null,
           createdAt: string,
           updatedAt: string,
-          movieContendersId?: string | null,
         },
         indexedRankings?: string | null,
         createdAt: string,
         updatedAt: string,
-        communityHistoryPredictionSetPredictionsId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -7650,7 +7468,6 @@ export type DeleteCommunityHistoryPredictionSetMutation = {
           type: CategoryType,
           createdAt: string,
           updatedAt: string,
-          eventCategoriesId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -7691,7 +7508,6 @@ export type DeleteCommunityHistoryPredictionSetMutation = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -7707,13 +7523,13 @@ export type DeleteCommunityHistoryPredictionSetMutation = {
       type: CategoryType,
       createdAt: string,
       updatedAt: string,
-      eventCategoriesId?: string | null,
     },
     predictions?:  {
       __typename: "ModelCommunityHistoryPredictionConnection",
       items:  Array< {
         __typename: "CommunityHistoryPrediction",
         id: string,
+        communityHistoryPredictionSetId: string,
         contenderId: string,
         contender:  {
           __typename: "Contender",
@@ -7738,7 +7554,6 @@ export type DeleteCommunityHistoryPredictionSetMutation = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           },
           eventId: string,
           event:  {
@@ -7799,12 +7614,10 @@ export type DeleteCommunityHistoryPredictionSetMutation = {
           accolade?: ContenderAccolade | null,
           createdAt: string,
           updatedAt: string,
-          movieContendersId?: string | null,
         },
         indexedRankings?: string | null,
         createdAt: string,
         updatedAt: string,
-        communityHistoryPredictionSetPredictionsId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -7823,6 +7636,7 @@ export type CreateCommunityHistoryPredictionMutation = {
   createCommunityHistoryPrediction?:  {
     __typename: "CommunityHistoryPrediction",
     id: string,
+    communityHistoryPredictionSetId: string,
     contenderId: string,
     contender:  {
       __typename: "Contender",
@@ -7845,7 +7659,6 @@ export type CreateCommunityHistoryPredictionMutation = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -7861,7 +7674,6 @@ export type CreateCommunityHistoryPredictionMutation = {
         type: CategoryType,
         createdAt: string,
         updatedAt: string,
-        eventCategoriesId?: string | null,
       },
       eventId: string,
       event:  {
@@ -7888,7 +7700,6 @@ export type CreateCommunityHistoryPredictionMutation = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -7918,7 +7729,6 @@ export type CreateCommunityHistoryPredictionMutation = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             },
             eventId: string,
             event:  {
@@ -7963,7 +7773,6 @@ export type CreateCommunityHistoryPredictionMutation = {
             accolade?: ContenderAccolade | null,
             createdAt: string,
             updatedAt: string,
-            movieContendersId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -8002,7 +7811,6 @@ export type CreateCommunityHistoryPredictionMutation = {
               accolade?: ContenderAccolade | null,
               createdAt: string,
               updatedAt: string,
-              movieContendersId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -8020,12 +7828,10 @@ export type CreateCommunityHistoryPredictionMutation = {
       accolade?: ContenderAccolade | null,
       createdAt: string,
       updatedAt: string,
-      movieContendersId?: string | null,
     },
     indexedRankings?: string | null,
     createdAt: string,
     updatedAt: string,
-    communityHistoryPredictionSetPredictionsId?: string | null,
   } | null,
 };
 
@@ -8038,6 +7844,7 @@ export type UpdateCommunityHistoryPredictionMutation = {
   updateCommunityHistoryPrediction?:  {
     __typename: "CommunityHistoryPrediction",
     id: string,
+    communityHistoryPredictionSetId: string,
     contenderId: string,
     contender:  {
       __typename: "Contender",
@@ -8060,7 +7867,6 @@ export type UpdateCommunityHistoryPredictionMutation = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -8076,7 +7882,6 @@ export type UpdateCommunityHistoryPredictionMutation = {
         type: CategoryType,
         createdAt: string,
         updatedAt: string,
-        eventCategoriesId?: string | null,
       },
       eventId: string,
       event:  {
@@ -8103,7 +7908,6 @@ export type UpdateCommunityHistoryPredictionMutation = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -8133,7 +7937,6 @@ export type UpdateCommunityHistoryPredictionMutation = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             },
             eventId: string,
             event:  {
@@ -8178,7 +7981,6 @@ export type UpdateCommunityHistoryPredictionMutation = {
             accolade?: ContenderAccolade | null,
             createdAt: string,
             updatedAt: string,
-            movieContendersId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -8217,7 +8019,6 @@ export type UpdateCommunityHistoryPredictionMutation = {
               accolade?: ContenderAccolade | null,
               createdAt: string,
               updatedAt: string,
-              movieContendersId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -8235,12 +8036,10 @@ export type UpdateCommunityHistoryPredictionMutation = {
       accolade?: ContenderAccolade | null,
       createdAt: string,
       updatedAt: string,
-      movieContendersId?: string | null,
     },
     indexedRankings?: string | null,
     createdAt: string,
     updatedAt: string,
-    communityHistoryPredictionSetPredictionsId?: string | null,
   } | null,
 };
 
@@ -8253,6 +8052,7 @@ export type DeleteCommunityHistoryPredictionMutation = {
   deleteCommunityHistoryPrediction?:  {
     __typename: "CommunityHistoryPrediction",
     id: string,
+    communityHistoryPredictionSetId: string,
     contenderId: string,
     contender:  {
       __typename: "Contender",
@@ -8275,7 +8075,6 @@ export type DeleteCommunityHistoryPredictionMutation = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -8291,7 +8090,6 @@ export type DeleteCommunityHistoryPredictionMutation = {
         type: CategoryType,
         createdAt: string,
         updatedAt: string,
-        eventCategoriesId?: string | null,
       },
       eventId: string,
       event:  {
@@ -8318,7 +8116,6 @@ export type DeleteCommunityHistoryPredictionMutation = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -8348,7 +8145,6 @@ export type DeleteCommunityHistoryPredictionMutation = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             },
             eventId: string,
             event:  {
@@ -8393,7 +8189,6 @@ export type DeleteCommunityHistoryPredictionMutation = {
             accolade?: ContenderAccolade | null,
             createdAt: string,
             updatedAt: string,
-            movieContendersId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -8432,7 +8227,6 @@ export type DeleteCommunityHistoryPredictionMutation = {
               accolade?: ContenderAccolade | null,
               createdAt: string,
               updatedAt: string,
-              movieContendersId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -8450,12 +8244,10 @@ export type DeleteCommunityHistoryPredictionMutation = {
       accolade?: ContenderAccolade | null,
       createdAt: string,
       updatedAt: string,
-      movieContendersId?: string | null,
     },
     indexedRankings?: string | null,
     createdAt: string,
     updatedAt: string,
-    communityHistoryPredictionSetPredictionsId?: string | null,
   } | null,
 };
 
@@ -8618,7 +8410,6 @@ export type GetEventQuery = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -8634,7 +8425,6 @@ export type GetEventQuery = {
         type: CategoryType,
         createdAt: string,
         updatedAt: string,
-        eventCategoriesId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -8687,7 +8477,6 @@ export type ListEventsQuery = {
           type: CategoryType,
           createdAt: string,
           updatedAt: string,
-          eventCategoriesId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -8740,7 +8529,6 @@ export type GetCategoryQuery = {
           type: CategoryType,
           createdAt: string,
           updatedAt: string,
-          eventCategoriesId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -8756,7 +8544,6 @@ export type GetCategoryQuery = {
     type: CategoryType,
     createdAt: string,
     updatedAt: string,
-    eventCategoriesId?: string | null,
   } | null,
 };
 
@@ -8799,7 +8586,6 @@ export type ListCategoriesQuery = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -8815,7 +8601,6 @@ export type ListCategoriesQuery = {
       type: CategoryType,
       createdAt: string,
       updatedAt: string,
-      eventCategoriesId?: string | null,
     } | null >,
     nextToken?: string | null,
   } | null,
@@ -8858,7 +8643,6 @@ export type GetContenderQuery = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -8874,7 +8658,6 @@ export type GetContenderQuery = {
       type: CategoryType,
       createdAt: string,
       updatedAt: string,
-      eventCategoriesId?: string | null,
     },
     eventId: string,
     event:  {
@@ -8905,7 +8688,6 @@ export type GetContenderQuery = {
           type: CategoryType,
           createdAt: string,
           updatedAt: string,
-          eventCategoriesId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -8946,7 +8728,6 @@ export type GetContenderQuery = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           },
           eventId: string,
           event:  {
@@ -9007,7 +8788,6 @@ export type GetContenderQuery = {
           accolade?: ContenderAccolade | null,
           createdAt: string,
           updatedAt: string,
-          movieContendersId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -9046,7 +8826,6 @@ export type GetContenderQuery = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             },
             eventId: string,
             event:  {
@@ -9091,7 +8870,6 @@ export type GetContenderQuery = {
             accolade?: ContenderAccolade | null,
             createdAt: string,
             updatedAt: string,
-            movieContendersId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -9109,7 +8887,6 @@ export type GetContenderQuery = {
     accolade?: ContenderAccolade | null,
     createdAt: string,
     updatedAt: string,
-    movieContendersId?: string | null,
   } | null,
 };
 
@@ -9145,7 +8922,6 @@ export type ListContendersQuery = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -9161,7 +8937,6 @@ export type ListContendersQuery = {
         type: CategoryType,
         createdAt: string,
         updatedAt: string,
-        eventCategoriesId?: string | null,
       },
       eventId: string,
       event:  {
@@ -9188,7 +8963,6 @@ export type ListContendersQuery = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -9218,7 +8992,6 @@ export type ListContendersQuery = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             },
             eventId: string,
             event:  {
@@ -9263,7 +9036,6 @@ export type ListContendersQuery = {
             accolade?: ContenderAccolade | null,
             createdAt: string,
             updatedAt: string,
-            movieContendersId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -9302,7 +9074,6 @@ export type ListContendersQuery = {
               accolade?: ContenderAccolade | null,
               createdAt: string,
               updatedAt: string,
-              movieContendersId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -9320,7 +9091,6 @@ export type ListContendersQuery = {
       accolade?: ContenderAccolade | null,
       createdAt: string,
       updatedAt: string,
-      movieContendersId?: string | null,
     } | null >,
     nextToken?: string | null,
   } | null,
@@ -9363,7 +9133,6 @@ export type GetMovieQuery = {
           type: CategoryType,
           createdAt: string,
           updatedAt: string,
-          eventCategoriesId?: string | null,
         },
         eventId: string,
         event:  {
@@ -9379,7 +9148,6 @@ export type GetMovieQuery = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -9409,7 +9177,6 @@ export type GetMovieQuery = {
               accolade?: ContenderAccolade | null,
               createdAt: string,
               updatedAt: string,
-              movieContendersId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -9452,7 +9219,6 @@ export type GetMovieQuery = {
         accolade?: ContenderAccolade | null,
         createdAt: string,
         updatedAt: string,
-        movieContendersId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -9502,7 +9268,6 @@ export type ListMoviesQuery = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           },
           eventId: string,
           event:  {
@@ -9563,7 +9328,6 @@ export type ListMoviesQuery = {
           accolade?: ContenderAccolade | null,
           createdAt: string,
           updatedAt: string,
-          movieContendersId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -9649,7 +9413,6 @@ export type GetSongQuery = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           },
           eventId: string,
           event:  {
@@ -9710,7 +9473,6 @@ export type GetSongQuery = {
           accolade?: ContenderAccolade | null,
           createdAt: string,
           updatedAt: string,
-          movieContendersId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -9758,7 +9520,6 @@ export type ListSongsQuery = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             },
             eventId: string,
             event:  {
@@ -9803,7 +9564,6 @@ export type ListSongsQuery = {
             accolade?: ContenderAccolade | null,
             createdAt: string,
             updatedAt: string,
-            movieContendersId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -9871,7 +9631,6 @@ export type GetPredictionSetQuery = {
           type: CategoryType,
           createdAt: string,
           updatedAt: string,
-          eventCategoriesId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -9912,7 +9671,6 @@ export type GetPredictionSetQuery = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -9928,13 +9686,13 @@ export type GetPredictionSetQuery = {
       type: CategoryType,
       createdAt: string,
       updatedAt: string,
-      eventCategoriesId?: string | null,
     },
     predictions?:  {
       __typename: "ModelPredictionConnection",
       items:  Array< {
         __typename: "Prediction",
         id: string,
+        predictionSetId: string,
         contenderId: string,
         contender:  {
           __typename: "Contender",
@@ -9959,7 +9717,6 @@ export type GetPredictionSetQuery = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           },
           eventId: string,
           event:  {
@@ -10020,12 +9777,10 @@ export type GetPredictionSetQuery = {
           accolade?: ContenderAccolade | null,
           createdAt: string,
           updatedAt: string,
-          movieContendersId?: string | null,
         },
         ranking: number,
         createdAt: string,
         updatedAt: string,
-        predictionSetPredictionsId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -10087,7 +9842,6 @@ export type ListPredictionSetsQuery = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -10117,7 +9871,6 @@ export type ListPredictionSetsQuery = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -10133,13 +9886,13 @@ export type ListPredictionSetsQuery = {
         type: CategoryType,
         createdAt: string,
         updatedAt: string,
-        eventCategoriesId?: string | null,
       },
       predictions?:  {
         __typename: "ModelPredictionConnection",
         items:  Array< {
           __typename: "Prediction",
           id: string,
+          predictionSetId: string,
           contenderId: string,
           contender:  {
             __typename: "Contender",
@@ -10153,7 +9906,6 @@ export type ListPredictionSetsQuery = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             },
             eventId: string,
             event:  {
@@ -10198,12 +9950,10 @@ export type ListPredictionSetsQuery = {
             accolade?: ContenderAccolade | null,
             createdAt: string,
             updatedAt: string,
-            movieContendersId?: string | null,
           },
           ranking: number,
           createdAt: string,
           updatedAt: string,
-          predictionSetPredictionsId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -10223,6 +9973,7 @@ export type GetPredictionQuery = {
   getPrediction?:  {
     __typename: "Prediction",
     id: string,
+    predictionSetId: string,
     contenderId: string,
     contender:  {
       __typename: "Contender",
@@ -10245,7 +9996,6 @@ export type GetPredictionQuery = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -10261,7 +10011,6 @@ export type GetPredictionQuery = {
         type: CategoryType,
         createdAt: string,
         updatedAt: string,
-        eventCategoriesId?: string | null,
       },
       eventId: string,
       event:  {
@@ -10288,7 +10037,6 @@ export type GetPredictionQuery = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -10318,7 +10066,6 @@ export type GetPredictionQuery = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             },
             eventId: string,
             event:  {
@@ -10363,7 +10110,6 @@ export type GetPredictionQuery = {
             accolade?: ContenderAccolade | null,
             createdAt: string,
             updatedAt: string,
-            movieContendersId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -10402,7 +10148,6 @@ export type GetPredictionQuery = {
               accolade?: ContenderAccolade | null,
               createdAt: string,
               updatedAt: string,
-              movieContendersId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -10420,12 +10165,10 @@ export type GetPredictionQuery = {
       accolade?: ContenderAccolade | null,
       createdAt: string,
       updatedAt: string,
-      movieContendersId?: string | null,
     },
     ranking: number,
     createdAt: string,
     updatedAt: string,
-    predictionSetPredictionsId?: string | null,
   } | null,
 };
 
@@ -10443,6 +10186,7 @@ export type ListPredictionsQuery = {
     items:  Array< {
       __typename: "Prediction",
       id: string,
+      predictionSetId: string,
       contenderId: string,
       contender:  {
         __typename: "Contender",
@@ -10471,7 +10215,6 @@ export type ListPredictionsQuery = {
           type: CategoryType,
           createdAt: string,
           updatedAt: string,
-          eventCategoriesId?: string | null,
         },
         eventId: string,
         event:  {
@@ -10487,7 +10230,6 @@ export type ListPredictionsQuery = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -10517,7 +10259,6 @@ export type ListPredictionsQuery = {
               accolade?: ContenderAccolade | null,
               createdAt: string,
               updatedAt: string,
-              movieContendersId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -10560,12 +10301,10 @@ export type ListPredictionsQuery = {
         accolade?: ContenderAccolade | null,
         createdAt: string,
         updatedAt: string,
-        movieContendersId?: string | null,
       },
       ranking: number,
       createdAt: string,
       updatedAt: string,
-      predictionSetPredictionsId?: string | null,
     } | null >,
     nextToken?: string | null,
   } | null,
@@ -10621,7 +10360,6 @@ export type GetHistoryPredictionSetQuery = {
           type: CategoryType,
           createdAt: string,
           updatedAt: string,
-          eventCategoriesId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -10662,7 +10400,6 @@ export type GetHistoryPredictionSetQuery = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -10678,13 +10415,13 @@ export type GetHistoryPredictionSetQuery = {
       type: CategoryType,
       createdAt: string,
       updatedAt: string,
-      eventCategoriesId?: string | null,
     },
     predictions?:  {
       __typename: "ModelHistoryPredictionConnection",
       items:  Array< {
         __typename: "HistoryPrediction",
         id: string,
+        historyPredictionSetId: string,
         contenderId: string,
         contender:  {
           __typename: "Contender",
@@ -10709,7 +10446,6 @@ export type GetHistoryPredictionSetQuery = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           },
           eventId: string,
           event:  {
@@ -10770,12 +10506,10 @@ export type GetHistoryPredictionSetQuery = {
           accolade?: ContenderAccolade | null,
           createdAt: string,
           updatedAt: string,
-          movieContendersId?: string | null,
         },
         ranking: number,
         createdAt: string,
         updatedAt: string,
-        historyPredictionSetPredictionsId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -10837,7 +10571,6 @@ export type ListHistoryPredictionSetsQuery = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -10867,7 +10600,6 @@ export type ListHistoryPredictionSetsQuery = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -10883,13 +10615,13 @@ export type ListHistoryPredictionSetsQuery = {
         type: CategoryType,
         createdAt: string,
         updatedAt: string,
-        eventCategoriesId?: string | null,
       },
       predictions?:  {
         __typename: "ModelHistoryPredictionConnection",
         items:  Array< {
           __typename: "HistoryPrediction",
           id: string,
+          historyPredictionSetId: string,
           contenderId: string,
           contender:  {
             __typename: "Contender",
@@ -10903,7 +10635,6 @@ export type ListHistoryPredictionSetsQuery = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             },
             eventId: string,
             event:  {
@@ -10948,12 +10679,10 @@ export type ListHistoryPredictionSetsQuery = {
             accolade?: ContenderAccolade | null,
             createdAt: string,
             updatedAt: string,
-            movieContendersId?: string | null,
           },
           ranking: number,
           createdAt: string,
           updatedAt: string,
-          historyPredictionSetPredictionsId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -10973,6 +10702,7 @@ export type GetHistoryPredictionQuery = {
   getHistoryPrediction?:  {
     __typename: "HistoryPrediction",
     id: string,
+    historyPredictionSetId: string,
     contenderId: string,
     contender:  {
       __typename: "Contender",
@@ -10995,7 +10725,6 @@ export type GetHistoryPredictionQuery = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -11011,7 +10740,6 @@ export type GetHistoryPredictionQuery = {
         type: CategoryType,
         createdAt: string,
         updatedAt: string,
-        eventCategoriesId?: string | null,
       },
       eventId: string,
       event:  {
@@ -11038,7 +10766,6 @@ export type GetHistoryPredictionQuery = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -11068,7 +10795,6 @@ export type GetHistoryPredictionQuery = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             },
             eventId: string,
             event:  {
@@ -11113,7 +10839,6 @@ export type GetHistoryPredictionQuery = {
             accolade?: ContenderAccolade | null,
             createdAt: string,
             updatedAt: string,
-            movieContendersId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -11152,7 +10877,6 @@ export type GetHistoryPredictionQuery = {
               accolade?: ContenderAccolade | null,
               createdAt: string,
               updatedAt: string,
-              movieContendersId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -11170,12 +10894,10 @@ export type GetHistoryPredictionQuery = {
       accolade?: ContenderAccolade | null,
       createdAt: string,
       updatedAt: string,
-      movieContendersId?: string | null,
     },
     ranking: number,
     createdAt: string,
     updatedAt: string,
-    historyPredictionSetPredictionsId?: string | null,
   } | null,
 };
 
@@ -11193,6 +10915,7 @@ export type ListHistoryPredictionsQuery = {
     items:  Array< {
       __typename: "HistoryPrediction",
       id: string,
+      historyPredictionSetId: string,
       contenderId: string,
       contender:  {
         __typename: "Contender",
@@ -11221,7 +10944,6 @@ export type ListHistoryPredictionsQuery = {
           type: CategoryType,
           createdAt: string,
           updatedAt: string,
-          eventCategoriesId?: string | null,
         },
         eventId: string,
         event:  {
@@ -11237,7 +10959,6 @@ export type ListHistoryPredictionsQuery = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -11267,7 +10988,6 @@ export type ListHistoryPredictionsQuery = {
               accolade?: ContenderAccolade | null,
               createdAt: string,
               updatedAt: string,
-              movieContendersId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -11310,12 +11030,10 @@ export type ListHistoryPredictionsQuery = {
         accolade?: ContenderAccolade | null,
         createdAt: string,
         updatedAt: string,
-        movieContendersId?: string | null,
       },
       ranking: number,
       createdAt: string,
       updatedAt: string,
-      historyPredictionSetPredictionsId?: string | null,
     } | null >,
     nextToken?: string | null,
   } | null,
@@ -11358,7 +11076,6 @@ export type GetCommunityPredictionSetQuery = {
           type: CategoryType,
           createdAt: string,
           updatedAt: string,
-          eventCategoriesId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -11399,7 +11116,6 @@ export type GetCommunityPredictionSetQuery = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -11415,13 +11131,13 @@ export type GetCommunityPredictionSetQuery = {
       type: CategoryType,
       createdAt: string,
       updatedAt: string,
-      eventCategoriesId?: string | null,
     },
     predictions?:  {
       __typename: "ModelCommunityPredictionConnection",
       items:  Array< {
         __typename: "CommunityPrediction",
         id: string,
+        communityPredictionSetId: string,
         contenderId: string,
         contender:  {
           __typename: "Contender",
@@ -11446,7 +11162,6 @@ export type GetCommunityPredictionSetQuery = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           },
           eventId: string,
           event:  {
@@ -11507,12 +11222,10 @@ export type GetCommunityPredictionSetQuery = {
           accolade?: ContenderAccolade | null,
           createdAt: string,
           updatedAt: string,
-          movieContendersId?: string | null,
         },
         indexedRankings?: string | null,
         createdAt: string,
         updatedAt: string,
-        communityPredictionSetPredictionsId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -11561,7 +11274,6 @@ export type ListCommunityPredictionSetsQuery = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -11591,7 +11303,6 @@ export type ListCommunityPredictionSetsQuery = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -11607,13 +11318,13 @@ export type ListCommunityPredictionSetsQuery = {
         type: CategoryType,
         createdAt: string,
         updatedAt: string,
-        eventCategoriesId?: string | null,
       },
       predictions?:  {
         __typename: "ModelCommunityPredictionConnection",
         items:  Array< {
           __typename: "CommunityPrediction",
           id: string,
+          communityPredictionSetId: string,
           contenderId: string,
           contender:  {
             __typename: "Contender",
@@ -11627,7 +11338,6 @@ export type ListCommunityPredictionSetsQuery = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             },
             eventId: string,
             event:  {
@@ -11672,12 +11382,10 @@ export type ListCommunityPredictionSetsQuery = {
             accolade?: ContenderAccolade | null,
             createdAt: string,
             updatedAt: string,
-            movieContendersId?: string | null,
           },
           indexedRankings?: string | null,
           createdAt: string,
           updatedAt: string,
-          communityPredictionSetPredictionsId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -11697,6 +11405,7 @@ export type GetCommunityPredictionQuery = {
   getCommunityPrediction?:  {
     __typename: "CommunityPrediction",
     id: string,
+    communityPredictionSetId: string,
     contenderId: string,
     contender:  {
       __typename: "Contender",
@@ -11719,7 +11428,6 @@ export type GetCommunityPredictionQuery = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -11735,7 +11443,6 @@ export type GetCommunityPredictionQuery = {
         type: CategoryType,
         createdAt: string,
         updatedAt: string,
-        eventCategoriesId?: string | null,
       },
       eventId: string,
       event:  {
@@ -11762,7 +11469,6 @@ export type GetCommunityPredictionQuery = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -11792,7 +11498,6 @@ export type GetCommunityPredictionQuery = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             },
             eventId: string,
             event:  {
@@ -11837,7 +11542,6 @@ export type GetCommunityPredictionQuery = {
             accolade?: ContenderAccolade | null,
             createdAt: string,
             updatedAt: string,
-            movieContendersId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -11876,7 +11580,6 @@ export type GetCommunityPredictionQuery = {
               accolade?: ContenderAccolade | null,
               createdAt: string,
               updatedAt: string,
-              movieContendersId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -11894,12 +11597,10 @@ export type GetCommunityPredictionQuery = {
       accolade?: ContenderAccolade | null,
       createdAt: string,
       updatedAt: string,
-      movieContendersId?: string | null,
     },
     indexedRankings?: string | null,
     createdAt: string,
     updatedAt: string,
-    communityPredictionSetPredictionsId?: string | null,
   } | null,
 };
 
@@ -11917,6 +11618,7 @@ export type ListCommunityPredictionsQuery = {
     items:  Array< {
       __typename: "CommunityPrediction",
       id: string,
+      communityPredictionSetId: string,
       contenderId: string,
       contender:  {
         __typename: "Contender",
@@ -11945,7 +11647,6 @@ export type ListCommunityPredictionsQuery = {
           type: CategoryType,
           createdAt: string,
           updatedAt: string,
-          eventCategoriesId?: string | null,
         },
         eventId: string,
         event:  {
@@ -11961,7 +11662,6 @@ export type ListCommunityPredictionsQuery = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -11991,7 +11691,6 @@ export type ListCommunityPredictionsQuery = {
               accolade?: ContenderAccolade | null,
               createdAt: string,
               updatedAt: string,
-              movieContendersId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -12034,12 +11733,10 @@ export type ListCommunityPredictionsQuery = {
         accolade?: ContenderAccolade | null,
         createdAt: string,
         updatedAt: string,
-        movieContendersId?: string | null,
       },
       indexedRankings?: string | null,
       createdAt: string,
       updatedAt: string,
-      communityPredictionSetPredictionsId?: string | null,
     } | null >,
     nextToken?: string | null,
   } | null,
@@ -12082,7 +11779,6 @@ export type GetCommunityHistoryPredictionSetQuery = {
           type: CategoryType,
           createdAt: string,
           updatedAt: string,
-          eventCategoriesId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -12123,7 +11819,6 @@ export type GetCommunityHistoryPredictionSetQuery = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -12139,13 +11834,13 @@ export type GetCommunityHistoryPredictionSetQuery = {
       type: CategoryType,
       createdAt: string,
       updatedAt: string,
-      eventCategoriesId?: string | null,
     },
     predictions?:  {
       __typename: "ModelCommunityHistoryPredictionConnection",
       items:  Array< {
         __typename: "CommunityHistoryPrediction",
         id: string,
+        communityHistoryPredictionSetId: string,
         contenderId: string,
         contender:  {
           __typename: "Contender",
@@ -12170,7 +11865,6 @@ export type GetCommunityHistoryPredictionSetQuery = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           },
           eventId: string,
           event:  {
@@ -12231,12 +11925,10 @@ export type GetCommunityHistoryPredictionSetQuery = {
           accolade?: ContenderAccolade | null,
           createdAt: string,
           updatedAt: string,
-          movieContendersId?: string | null,
         },
         indexedRankings?: string | null,
         createdAt: string,
         updatedAt: string,
-        communityHistoryPredictionSetPredictionsId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -12285,7 +11977,6 @@ export type ListCommunityHistoryPredictionSetsQuery = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -12315,7 +12006,6 @@ export type ListCommunityHistoryPredictionSetsQuery = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -12331,13 +12021,13 @@ export type ListCommunityHistoryPredictionSetsQuery = {
         type: CategoryType,
         createdAt: string,
         updatedAt: string,
-        eventCategoriesId?: string | null,
       },
       predictions?:  {
         __typename: "ModelCommunityHistoryPredictionConnection",
         items:  Array< {
           __typename: "CommunityHistoryPrediction",
           id: string,
+          communityHistoryPredictionSetId: string,
           contenderId: string,
           contender:  {
             __typename: "Contender",
@@ -12351,7 +12041,6 @@ export type ListCommunityHistoryPredictionSetsQuery = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             },
             eventId: string,
             event:  {
@@ -12396,12 +12085,10 @@ export type ListCommunityHistoryPredictionSetsQuery = {
             accolade?: ContenderAccolade | null,
             createdAt: string,
             updatedAt: string,
-            movieContendersId?: string | null,
           },
           indexedRankings?: string | null,
           createdAt: string,
           updatedAt: string,
-          communityHistoryPredictionSetPredictionsId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -12421,6 +12108,7 @@ export type GetCommunityHistoryPredictionQuery = {
   getCommunityHistoryPrediction?:  {
     __typename: "CommunityHistoryPrediction",
     id: string,
+    communityHistoryPredictionSetId: string,
     contenderId: string,
     contender:  {
       __typename: "Contender",
@@ -12443,7 +12131,6 @@ export type GetCommunityHistoryPredictionQuery = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -12459,7 +12146,6 @@ export type GetCommunityHistoryPredictionQuery = {
         type: CategoryType,
         createdAt: string,
         updatedAt: string,
-        eventCategoriesId?: string | null,
       },
       eventId: string,
       event:  {
@@ -12486,7 +12172,6 @@ export type GetCommunityHistoryPredictionQuery = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -12516,7 +12201,6 @@ export type GetCommunityHistoryPredictionQuery = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             },
             eventId: string,
             event:  {
@@ -12561,7 +12245,6 @@ export type GetCommunityHistoryPredictionQuery = {
             accolade?: ContenderAccolade | null,
             createdAt: string,
             updatedAt: string,
-            movieContendersId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -12600,7 +12283,6 @@ export type GetCommunityHistoryPredictionQuery = {
               accolade?: ContenderAccolade | null,
               createdAt: string,
               updatedAt: string,
-              movieContendersId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -12618,12 +12300,10 @@ export type GetCommunityHistoryPredictionQuery = {
       accolade?: ContenderAccolade | null,
       createdAt: string,
       updatedAt: string,
-      movieContendersId?: string | null,
     },
     indexedRankings?: string | null,
     createdAt: string,
     updatedAt: string,
-    communityHistoryPredictionSetPredictionsId?: string | null,
   } | null,
 };
 
@@ -12641,6 +12321,7 @@ export type ListCommunityHistoryPredictionsQuery = {
     items:  Array< {
       __typename: "CommunityHistoryPrediction",
       id: string,
+      communityHistoryPredictionSetId: string,
       contenderId: string,
       contender:  {
         __typename: "Contender",
@@ -12669,7 +12350,6 @@ export type ListCommunityHistoryPredictionsQuery = {
           type: CategoryType,
           createdAt: string,
           updatedAt: string,
-          eventCategoriesId?: string | null,
         },
         eventId: string,
         event:  {
@@ -12685,7 +12365,6 @@ export type ListCommunityHistoryPredictionsQuery = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -12715,7 +12394,6 @@ export type ListCommunityHistoryPredictionsQuery = {
               accolade?: ContenderAccolade | null,
               createdAt: string,
               updatedAt: string,
-              movieContendersId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -12758,12 +12436,10 @@ export type ListCommunityHistoryPredictionsQuery = {
         accolade?: ContenderAccolade | null,
         createdAt: string,
         updatedAt: string,
-        movieContendersId?: string | null,
       },
       indexedRankings?: string | null,
       createdAt: string,
       updatedAt: string,
-      communityHistoryPredictionSetPredictionsId?: string | null,
     } | null >,
     nextToken?: string | null,
   } | null,
@@ -12942,7 +12618,6 @@ export type OnCreateEventSubscription = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -12958,7 +12633,6 @@ export type OnCreateEventSubscription = {
         type: CategoryType,
         createdAt: string,
         updatedAt: string,
-        eventCategoriesId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -12995,7 +12669,6 @@ export type OnUpdateEventSubscription = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -13011,7 +12684,6 @@ export type OnUpdateEventSubscription = {
         type: CategoryType,
         createdAt: string,
         updatedAt: string,
-        eventCategoriesId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -13048,7 +12720,6 @@ export type OnDeleteEventSubscription = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -13064,7 +12735,6 @@ export type OnDeleteEventSubscription = {
         type: CategoryType,
         createdAt: string,
         updatedAt: string,
-        eventCategoriesId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -13111,7 +12781,6 @@ export type OnCreateCategorySubscription = {
           type: CategoryType,
           createdAt: string,
           updatedAt: string,
-          eventCategoriesId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -13127,7 +12796,6 @@ export type OnCreateCategorySubscription = {
     type: CategoryType,
     createdAt: string,
     updatedAt: string,
-    eventCategoriesId?: string | null,
   } | null,
 };
 
@@ -13164,7 +12832,6 @@ export type OnUpdateCategorySubscription = {
           type: CategoryType,
           createdAt: string,
           updatedAt: string,
-          eventCategoriesId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -13180,7 +12847,6 @@ export type OnUpdateCategorySubscription = {
     type: CategoryType,
     createdAt: string,
     updatedAt: string,
-    eventCategoriesId?: string | null,
   } | null,
 };
 
@@ -13217,7 +12883,6 @@ export type OnDeleteCategorySubscription = {
           type: CategoryType,
           createdAt: string,
           updatedAt: string,
-          eventCategoriesId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -13233,7 +12898,6 @@ export type OnDeleteCategorySubscription = {
     type: CategoryType,
     createdAt: string,
     updatedAt: string,
-    eventCategoriesId?: string | null,
   } | null,
 };
 
@@ -13270,7 +12934,6 @@ export type OnCreateContenderSubscription = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -13286,7 +12949,6 @@ export type OnCreateContenderSubscription = {
       type: CategoryType,
       createdAt: string,
       updatedAt: string,
-      eventCategoriesId?: string | null,
     },
     eventId: string,
     event:  {
@@ -13317,7 +12979,6 @@ export type OnCreateContenderSubscription = {
           type: CategoryType,
           createdAt: string,
           updatedAt: string,
-          eventCategoriesId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -13358,7 +13019,6 @@ export type OnCreateContenderSubscription = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           },
           eventId: string,
           event:  {
@@ -13419,7 +13079,6 @@ export type OnCreateContenderSubscription = {
           accolade?: ContenderAccolade | null,
           createdAt: string,
           updatedAt: string,
-          movieContendersId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -13458,7 +13117,6 @@ export type OnCreateContenderSubscription = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             },
             eventId: string,
             event:  {
@@ -13503,7 +13161,6 @@ export type OnCreateContenderSubscription = {
             accolade?: ContenderAccolade | null,
             createdAt: string,
             updatedAt: string,
-            movieContendersId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -13521,7 +13178,6 @@ export type OnCreateContenderSubscription = {
     accolade?: ContenderAccolade | null,
     createdAt: string,
     updatedAt: string,
-    movieContendersId?: string | null,
   } | null,
 };
 
@@ -13558,7 +13214,6 @@ export type OnUpdateContenderSubscription = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -13574,7 +13229,6 @@ export type OnUpdateContenderSubscription = {
       type: CategoryType,
       createdAt: string,
       updatedAt: string,
-      eventCategoriesId?: string | null,
     },
     eventId: string,
     event:  {
@@ -13605,7 +13259,6 @@ export type OnUpdateContenderSubscription = {
           type: CategoryType,
           createdAt: string,
           updatedAt: string,
-          eventCategoriesId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -13646,7 +13299,6 @@ export type OnUpdateContenderSubscription = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           },
           eventId: string,
           event:  {
@@ -13707,7 +13359,6 @@ export type OnUpdateContenderSubscription = {
           accolade?: ContenderAccolade | null,
           createdAt: string,
           updatedAt: string,
-          movieContendersId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -13746,7 +13397,6 @@ export type OnUpdateContenderSubscription = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             },
             eventId: string,
             event:  {
@@ -13791,7 +13441,6 @@ export type OnUpdateContenderSubscription = {
             accolade?: ContenderAccolade | null,
             createdAt: string,
             updatedAt: string,
-            movieContendersId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -13809,7 +13458,6 @@ export type OnUpdateContenderSubscription = {
     accolade?: ContenderAccolade | null,
     createdAt: string,
     updatedAt: string,
-    movieContendersId?: string | null,
   } | null,
 };
 
@@ -13846,7 +13494,6 @@ export type OnDeleteContenderSubscription = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -13862,7 +13509,6 @@ export type OnDeleteContenderSubscription = {
       type: CategoryType,
       createdAt: string,
       updatedAt: string,
-      eventCategoriesId?: string | null,
     },
     eventId: string,
     event:  {
@@ -13893,7 +13539,6 @@ export type OnDeleteContenderSubscription = {
           type: CategoryType,
           createdAt: string,
           updatedAt: string,
-          eventCategoriesId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -13934,7 +13579,6 @@ export type OnDeleteContenderSubscription = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           },
           eventId: string,
           event:  {
@@ -13995,7 +13639,6 @@ export type OnDeleteContenderSubscription = {
           accolade?: ContenderAccolade | null,
           createdAt: string,
           updatedAt: string,
-          movieContendersId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -14034,7 +13677,6 @@ export type OnDeleteContenderSubscription = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             },
             eventId: string,
             event:  {
@@ -14079,7 +13721,6 @@ export type OnDeleteContenderSubscription = {
             accolade?: ContenderAccolade | null,
             createdAt: string,
             updatedAt: string,
-            movieContendersId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -14097,7 +13738,6 @@ export type OnDeleteContenderSubscription = {
     accolade?: ContenderAccolade | null,
     createdAt: string,
     updatedAt: string,
-    movieContendersId?: string | null,
   } | null,
 };
 
@@ -14134,7 +13774,6 @@ export type OnCreateMovieSubscription = {
           type: CategoryType,
           createdAt: string,
           updatedAt: string,
-          eventCategoriesId?: string | null,
         },
         eventId: string,
         event:  {
@@ -14150,7 +13789,6 @@ export type OnCreateMovieSubscription = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -14180,7 +13818,6 @@ export type OnCreateMovieSubscription = {
               accolade?: ContenderAccolade | null,
               createdAt: string,
               updatedAt: string,
-              movieContendersId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -14223,7 +13860,6 @@ export type OnCreateMovieSubscription = {
         accolade?: ContenderAccolade | null,
         createdAt: string,
         updatedAt: string,
-        movieContendersId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -14267,7 +13903,6 @@ export type OnUpdateMovieSubscription = {
           type: CategoryType,
           createdAt: string,
           updatedAt: string,
-          eventCategoriesId?: string | null,
         },
         eventId: string,
         event:  {
@@ -14283,7 +13918,6 @@ export type OnUpdateMovieSubscription = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -14313,7 +13947,6 @@ export type OnUpdateMovieSubscription = {
               accolade?: ContenderAccolade | null,
               createdAt: string,
               updatedAt: string,
-              movieContendersId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -14356,7 +13989,6 @@ export type OnUpdateMovieSubscription = {
         accolade?: ContenderAccolade | null,
         createdAt: string,
         updatedAt: string,
-        movieContendersId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -14400,7 +14032,6 @@ export type OnDeleteMovieSubscription = {
           type: CategoryType,
           createdAt: string,
           updatedAt: string,
-          eventCategoriesId?: string | null,
         },
         eventId: string,
         event:  {
@@ -14416,7 +14047,6 @@ export type OnDeleteMovieSubscription = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -14446,7 +14076,6 @@ export type OnDeleteMovieSubscription = {
               accolade?: ContenderAccolade | null,
               createdAt: string,
               updatedAt: string,
-              movieContendersId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -14489,7 +14118,6 @@ export type OnDeleteMovieSubscription = {
         accolade?: ContenderAccolade | null,
         createdAt: string,
         updatedAt: string,
-        movieContendersId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -14563,7 +14191,6 @@ export type OnCreateSongSubscription = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           },
           eventId: string,
           event:  {
@@ -14624,7 +14251,6 @@ export type OnCreateSongSubscription = {
           accolade?: ContenderAccolade | null,
           createdAt: string,
           updatedAt: string,
-          movieContendersId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -14673,7 +14299,6 @@ export type OnUpdateSongSubscription = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           },
           eventId: string,
           event:  {
@@ -14734,7 +14359,6 @@ export type OnUpdateSongSubscription = {
           accolade?: ContenderAccolade | null,
           createdAt: string,
           updatedAt: string,
-          movieContendersId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -14783,7 +14407,6 @@ export type OnDeleteSongSubscription = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           },
           eventId: string,
           event:  {
@@ -14844,7 +14467,6 @@ export type OnDeleteSongSubscription = {
           accolade?: ContenderAccolade | null,
           createdAt: string,
           updatedAt: string,
-          movieContendersId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -14906,7 +14528,6 @@ export type OnCreatePredictionSetSubscription = {
           type: CategoryType,
           createdAt: string,
           updatedAt: string,
-          eventCategoriesId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -14947,7 +14568,6 @@ export type OnCreatePredictionSetSubscription = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -14963,13 +14583,13 @@ export type OnCreatePredictionSetSubscription = {
       type: CategoryType,
       createdAt: string,
       updatedAt: string,
-      eventCategoriesId?: string | null,
     },
     predictions?:  {
       __typename: "ModelPredictionConnection",
       items:  Array< {
         __typename: "Prediction",
         id: string,
+        predictionSetId: string,
         contenderId: string,
         contender:  {
           __typename: "Contender",
@@ -14994,7 +14614,6 @@ export type OnCreatePredictionSetSubscription = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           },
           eventId: string,
           event:  {
@@ -15055,12 +14674,10 @@ export type OnCreatePredictionSetSubscription = {
           accolade?: ContenderAccolade | null,
           createdAt: string,
           updatedAt: string,
-          movieContendersId?: string | null,
         },
         ranking: number,
         createdAt: string,
         updatedAt: string,
-        predictionSetPredictionsId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -15116,7 +14733,6 @@ export type OnUpdatePredictionSetSubscription = {
           type: CategoryType,
           createdAt: string,
           updatedAt: string,
-          eventCategoriesId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -15157,7 +14773,6 @@ export type OnUpdatePredictionSetSubscription = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -15173,13 +14788,13 @@ export type OnUpdatePredictionSetSubscription = {
       type: CategoryType,
       createdAt: string,
       updatedAt: string,
-      eventCategoriesId?: string | null,
     },
     predictions?:  {
       __typename: "ModelPredictionConnection",
       items:  Array< {
         __typename: "Prediction",
         id: string,
+        predictionSetId: string,
         contenderId: string,
         contender:  {
           __typename: "Contender",
@@ -15204,7 +14819,6 @@ export type OnUpdatePredictionSetSubscription = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           },
           eventId: string,
           event:  {
@@ -15265,12 +14879,10 @@ export type OnUpdatePredictionSetSubscription = {
           accolade?: ContenderAccolade | null,
           createdAt: string,
           updatedAt: string,
-          movieContendersId?: string | null,
         },
         ranking: number,
         createdAt: string,
         updatedAt: string,
-        predictionSetPredictionsId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -15326,7 +14938,6 @@ export type OnDeletePredictionSetSubscription = {
           type: CategoryType,
           createdAt: string,
           updatedAt: string,
-          eventCategoriesId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -15367,7 +14978,6 @@ export type OnDeletePredictionSetSubscription = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -15383,13 +14993,13 @@ export type OnDeletePredictionSetSubscription = {
       type: CategoryType,
       createdAt: string,
       updatedAt: string,
-      eventCategoriesId?: string | null,
     },
     predictions?:  {
       __typename: "ModelPredictionConnection",
       items:  Array< {
         __typename: "Prediction",
         id: string,
+        predictionSetId: string,
         contenderId: string,
         contender:  {
           __typename: "Contender",
@@ -15414,7 +15024,6 @@ export type OnDeletePredictionSetSubscription = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           },
           eventId: string,
           event:  {
@@ -15475,12 +15084,10 @@ export type OnDeletePredictionSetSubscription = {
           accolade?: ContenderAccolade | null,
           createdAt: string,
           updatedAt: string,
-          movieContendersId?: string | null,
         },
         ranking: number,
         createdAt: string,
         updatedAt: string,
-        predictionSetPredictionsId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -15494,6 +15101,7 @@ export type OnCreatePredictionSubscription = {
   onCreatePrediction?:  {
     __typename: "Prediction",
     id: string,
+    predictionSetId: string,
     contenderId: string,
     contender:  {
       __typename: "Contender",
@@ -15516,7 +15124,6 @@ export type OnCreatePredictionSubscription = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -15532,7 +15139,6 @@ export type OnCreatePredictionSubscription = {
         type: CategoryType,
         createdAt: string,
         updatedAt: string,
-        eventCategoriesId?: string | null,
       },
       eventId: string,
       event:  {
@@ -15559,7 +15165,6 @@ export type OnCreatePredictionSubscription = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -15589,7 +15194,6 @@ export type OnCreatePredictionSubscription = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             },
             eventId: string,
             event:  {
@@ -15634,7 +15238,6 @@ export type OnCreatePredictionSubscription = {
             accolade?: ContenderAccolade | null,
             createdAt: string,
             updatedAt: string,
-            movieContendersId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -15673,7 +15276,6 @@ export type OnCreatePredictionSubscription = {
               accolade?: ContenderAccolade | null,
               createdAt: string,
               updatedAt: string,
-              movieContendersId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -15691,12 +15293,10 @@ export type OnCreatePredictionSubscription = {
       accolade?: ContenderAccolade | null,
       createdAt: string,
       updatedAt: string,
-      movieContendersId?: string | null,
     },
     ranking: number,
     createdAt: string,
     updatedAt: string,
-    predictionSetPredictionsId?: string | null,
   } | null,
 };
 
@@ -15704,6 +15304,7 @@ export type OnUpdatePredictionSubscription = {
   onUpdatePrediction?:  {
     __typename: "Prediction",
     id: string,
+    predictionSetId: string,
     contenderId: string,
     contender:  {
       __typename: "Contender",
@@ -15726,7 +15327,6 @@ export type OnUpdatePredictionSubscription = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -15742,7 +15342,6 @@ export type OnUpdatePredictionSubscription = {
         type: CategoryType,
         createdAt: string,
         updatedAt: string,
-        eventCategoriesId?: string | null,
       },
       eventId: string,
       event:  {
@@ -15769,7 +15368,6 @@ export type OnUpdatePredictionSubscription = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -15799,7 +15397,6 @@ export type OnUpdatePredictionSubscription = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             },
             eventId: string,
             event:  {
@@ -15844,7 +15441,6 @@ export type OnUpdatePredictionSubscription = {
             accolade?: ContenderAccolade | null,
             createdAt: string,
             updatedAt: string,
-            movieContendersId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -15883,7 +15479,6 @@ export type OnUpdatePredictionSubscription = {
               accolade?: ContenderAccolade | null,
               createdAt: string,
               updatedAt: string,
-              movieContendersId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -15901,12 +15496,10 @@ export type OnUpdatePredictionSubscription = {
       accolade?: ContenderAccolade | null,
       createdAt: string,
       updatedAt: string,
-      movieContendersId?: string | null,
     },
     ranking: number,
     createdAt: string,
     updatedAt: string,
-    predictionSetPredictionsId?: string | null,
   } | null,
 };
 
@@ -15914,6 +15507,7 @@ export type OnDeletePredictionSubscription = {
   onDeletePrediction?:  {
     __typename: "Prediction",
     id: string,
+    predictionSetId: string,
     contenderId: string,
     contender:  {
       __typename: "Contender",
@@ -15936,7 +15530,6 @@ export type OnDeletePredictionSubscription = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -15952,7 +15545,6 @@ export type OnDeletePredictionSubscription = {
         type: CategoryType,
         createdAt: string,
         updatedAt: string,
-        eventCategoriesId?: string | null,
       },
       eventId: string,
       event:  {
@@ -15979,7 +15571,6 @@ export type OnDeletePredictionSubscription = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -16009,7 +15600,6 @@ export type OnDeletePredictionSubscription = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             },
             eventId: string,
             event:  {
@@ -16054,7 +15644,6 @@ export type OnDeletePredictionSubscription = {
             accolade?: ContenderAccolade | null,
             createdAt: string,
             updatedAt: string,
-            movieContendersId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -16093,7 +15682,6 @@ export type OnDeletePredictionSubscription = {
               accolade?: ContenderAccolade | null,
               createdAt: string,
               updatedAt: string,
-              movieContendersId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -16111,12 +15699,10 @@ export type OnDeletePredictionSubscription = {
       accolade?: ContenderAccolade | null,
       createdAt: string,
       updatedAt: string,
-      movieContendersId?: string | null,
     },
     ranking: number,
     createdAt: string,
     updatedAt: string,
-    predictionSetPredictionsId?: string | null,
   } | null,
 };
 
@@ -16166,7 +15752,6 @@ export type OnCreateHistoryPredictionSetSubscription = {
           type: CategoryType,
           createdAt: string,
           updatedAt: string,
-          eventCategoriesId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -16207,7 +15792,6 @@ export type OnCreateHistoryPredictionSetSubscription = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -16223,13 +15807,13 @@ export type OnCreateHistoryPredictionSetSubscription = {
       type: CategoryType,
       createdAt: string,
       updatedAt: string,
-      eventCategoriesId?: string | null,
     },
     predictions?:  {
       __typename: "ModelHistoryPredictionConnection",
       items:  Array< {
         __typename: "HistoryPrediction",
         id: string,
+        historyPredictionSetId: string,
         contenderId: string,
         contender:  {
           __typename: "Contender",
@@ -16254,7 +15838,6 @@ export type OnCreateHistoryPredictionSetSubscription = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           },
           eventId: string,
           event:  {
@@ -16315,12 +15898,10 @@ export type OnCreateHistoryPredictionSetSubscription = {
           accolade?: ContenderAccolade | null,
           createdAt: string,
           updatedAt: string,
-          movieContendersId?: string | null,
         },
         ranking: number,
         createdAt: string,
         updatedAt: string,
-        historyPredictionSetPredictionsId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -16376,7 +15957,6 @@ export type OnUpdateHistoryPredictionSetSubscription = {
           type: CategoryType,
           createdAt: string,
           updatedAt: string,
-          eventCategoriesId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -16417,7 +15997,6 @@ export type OnUpdateHistoryPredictionSetSubscription = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -16433,13 +16012,13 @@ export type OnUpdateHistoryPredictionSetSubscription = {
       type: CategoryType,
       createdAt: string,
       updatedAt: string,
-      eventCategoriesId?: string | null,
     },
     predictions?:  {
       __typename: "ModelHistoryPredictionConnection",
       items:  Array< {
         __typename: "HistoryPrediction",
         id: string,
+        historyPredictionSetId: string,
         contenderId: string,
         contender:  {
           __typename: "Contender",
@@ -16464,7 +16043,6 @@ export type OnUpdateHistoryPredictionSetSubscription = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           },
           eventId: string,
           event:  {
@@ -16525,12 +16103,10 @@ export type OnUpdateHistoryPredictionSetSubscription = {
           accolade?: ContenderAccolade | null,
           createdAt: string,
           updatedAt: string,
-          movieContendersId?: string | null,
         },
         ranking: number,
         createdAt: string,
         updatedAt: string,
-        historyPredictionSetPredictionsId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -16586,7 +16162,6 @@ export type OnDeleteHistoryPredictionSetSubscription = {
           type: CategoryType,
           createdAt: string,
           updatedAt: string,
-          eventCategoriesId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -16627,7 +16202,6 @@ export type OnDeleteHistoryPredictionSetSubscription = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -16643,13 +16217,13 @@ export type OnDeleteHistoryPredictionSetSubscription = {
       type: CategoryType,
       createdAt: string,
       updatedAt: string,
-      eventCategoriesId?: string | null,
     },
     predictions?:  {
       __typename: "ModelHistoryPredictionConnection",
       items:  Array< {
         __typename: "HistoryPrediction",
         id: string,
+        historyPredictionSetId: string,
         contenderId: string,
         contender:  {
           __typename: "Contender",
@@ -16674,7 +16248,6 @@ export type OnDeleteHistoryPredictionSetSubscription = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           },
           eventId: string,
           event:  {
@@ -16735,12 +16308,10 @@ export type OnDeleteHistoryPredictionSetSubscription = {
           accolade?: ContenderAccolade | null,
           createdAt: string,
           updatedAt: string,
-          movieContendersId?: string | null,
         },
         ranking: number,
         createdAt: string,
         updatedAt: string,
-        historyPredictionSetPredictionsId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -16754,6 +16325,7 @@ export type OnCreateHistoryPredictionSubscription = {
   onCreateHistoryPrediction?:  {
     __typename: "HistoryPrediction",
     id: string,
+    historyPredictionSetId: string,
     contenderId: string,
     contender:  {
       __typename: "Contender",
@@ -16776,7 +16348,6 @@ export type OnCreateHistoryPredictionSubscription = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -16792,7 +16363,6 @@ export type OnCreateHistoryPredictionSubscription = {
         type: CategoryType,
         createdAt: string,
         updatedAt: string,
-        eventCategoriesId?: string | null,
       },
       eventId: string,
       event:  {
@@ -16819,7 +16389,6 @@ export type OnCreateHistoryPredictionSubscription = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -16849,7 +16418,6 @@ export type OnCreateHistoryPredictionSubscription = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             },
             eventId: string,
             event:  {
@@ -16894,7 +16462,6 @@ export type OnCreateHistoryPredictionSubscription = {
             accolade?: ContenderAccolade | null,
             createdAt: string,
             updatedAt: string,
-            movieContendersId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -16933,7 +16500,6 @@ export type OnCreateHistoryPredictionSubscription = {
               accolade?: ContenderAccolade | null,
               createdAt: string,
               updatedAt: string,
-              movieContendersId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -16951,12 +16517,10 @@ export type OnCreateHistoryPredictionSubscription = {
       accolade?: ContenderAccolade | null,
       createdAt: string,
       updatedAt: string,
-      movieContendersId?: string | null,
     },
     ranking: number,
     createdAt: string,
     updatedAt: string,
-    historyPredictionSetPredictionsId?: string | null,
   } | null,
 };
 
@@ -16964,6 +16528,7 @@ export type OnUpdateHistoryPredictionSubscription = {
   onUpdateHistoryPrediction?:  {
     __typename: "HistoryPrediction",
     id: string,
+    historyPredictionSetId: string,
     contenderId: string,
     contender:  {
       __typename: "Contender",
@@ -16986,7 +16551,6 @@ export type OnUpdateHistoryPredictionSubscription = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -17002,7 +16566,6 @@ export type OnUpdateHistoryPredictionSubscription = {
         type: CategoryType,
         createdAt: string,
         updatedAt: string,
-        eventCategoriesId?: string | null,
       },
       eventId: string,
       event:  {
@@ -17029,7 +16592,6 @@ export type OnUpdateHistoryPredictionSubscription = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -17059,7 +16621,6 @@ export type OnUpdateHistoryPredictionSubscription = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             },
             eventId: string,
             event:  {
@@ -17104,7 +16665,6 @@ export type OnUpdateHistoryPredictionSubscription = {
             accolade?: ContenderAccolade | null,
             createdAt: string,
             updatedAt: string,
-            movieContendersId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -17143,7 +16703,6 @@ export type OnUpdateHistoryPredictionSubscription = {
               accolade?: ContenderAccolade | null,
               createdAt: string,
               updatedAt: string,
-              movieContendersId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -17161,12 +16720,10 @@ export type OnUpdateHistoryPredictionSubscription = {
       accolade?: ContenderAccolade | null,
       createdAt: string,
       updatedAt: string,
-      movieContendersId?: string | null,
     },
     ranking: number,
     createdAt: string,
     updatedAt: string,
-    historyPredictionSetPredictionsId?: string | null,
   } | null,
 };
 
@@ -17174,6 +16731,7 @@ export type OnDeleteHistoryPredictionSubscription = {
   onDeleteHistoryPrediction?:  {
     __typename: "HistoryPrediction",
     id: string,
+    historyPredictionSetId: string,
     contenderId: string,
     contender:  {
       __typename: "Contender",
@@ -17196,7 +16754,6 @@ export type OnDeleteHistoryPredictionSubscription = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -17212,7 +16769,6 @@ export type OnDeleteHistoryPredictionSubscription = {
         type: CategoryType,
         createdAt: string,
         updatedAt: string,
-        eventCategoriesId?: string | null,
       },
       eventId: string,
       event:  {
@@ -17239,7 +16795,6 @@ export type OnDeleteHistoryPredictionSubscription = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -17269,7 +16824,6 @@ export type OnDeleteHistoryPredictionSubscription = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             },
             eventId: string,
             event:  {
@@ -17314,7 +16868,6 @@ export type OnDeleteHistoryPredictionSubscription = {
             accolade?: ContenderAccolade | null,
             createdAt: string,
             updatedAt: string,
-            movieContendersId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -17353,7 +16906,6 @@ export type OnDeleteHistoryPredictionSubscription = {
               accolade?: ContenderAccolade | null,
               createdAt: string,
               updatedAt: string,
-              movieContendersId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -17371,12 +16923,10 @@ export type OnDeleteHistoryPredictionSubscription = {
       accolade?: ContenderAccolade | null,
       createdAt: string,
       updatedAt: string,
-      movieContendersId?: string | null,
     },
     ranking: number,
     createdAt: string,
     updatedAt: string,
-    historyPredictionSetPredictionsId?: string | null,
   } | null,
 };
 
@@ -17413,7 +16963,6 @@ export type OnCreateCommunityPredictionSetSubscription = {
           type: CategoryType,
           createdAt: string,
           updatedAt: string,
-          eventCategoriesId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -17454,7 +17003,6 @@ export type OnCreateCommunityPredictionSetSubscription = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -17470,13 +17018,13 @@ export type OnCreateCommunityPredictionSetSubscription = {
       type: CategoryType,
       createdAt: string,
       updatedAt: string,
-      eventCategoriesId?: string | null,
     },
     predictions?:  {
       __typename: "ModelCommunityPredictionConnection",
       items:  Array< {
         __typename: "CommunityPrediction",
         id: string,
+        communityPredictionSetId: string,
         contenderId: string,
         contender:  {
           __typename: "Contender",
@@ -17501,7 +17049,6 @@ export type OnCreateCommunityPredictionSetSubscription = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           },
           eventId: string,
           event:  {
@@ -17562,12 +17109,10 @@ export type OnCreateCommunityPredictionSetSubscription = {
           accolade?: ContenderAccolade | null,
           createdAt: string,
           updatedAt: string,
-          movieContendersId?: string | null,
         },
         indexedRankings?: string | null,
         createdAt: string,
         updatedAt: string,
-        communityPredictionSetPredictionsId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -17610,7 +17155,6 @@ export type OnUpdateCommunityPredictionSetSubscription = {
           type: CategoryType,
           createdAt: string,
           updatedAt: string,
-          eventCategoriesId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -17651,7 +17195,6 @@ export type OnUpdateCommunityPredictionSetSubscription = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -17667,13 +17210,13 @@ export type OnUpdateCommunityPredictionSetSubscription = {
       type: CategoryType,
       createdAt: string,
       updatedAt: string,
-      eventCategoriesId?: string | null,
     },
     predictions?:  {
       __typename: "ModelCommunityPredictionConnection",
       items:  Array< {
         __typename: "CommunityPrediction",
         id: string,
+        communityPredictionSetId: string,
         contenderId: string,
         contender:  {
           __typename: "Contender",
@@ -17698,7 +17241,6 @@ export type OnUpdateCommunityPredictionSetSubscription = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           },
           eventId: string,
           event:  {
@@ -17759,12 +17301,10 @@ export type OnUpdateCommunityPredictionSetSubscription = {
           accolade?: ContenderAccolade | null,
           createdAt: string,
           updatedAt: string,
-          movieContendersId?: string | null,
         },
         indexedRankings?: string | null,
         createdAt: string,
         updatedAt: string,
-        communityPredictionSetPredictionsId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -17807,7 +17347,6 @@ export type OnDeleteCommunityPredictionSetSubscription = {
           type: CategoryType,
           createdAt: string,
           updatedAt: string,
-          eventCategoriesId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -17848,7 +17387,6 @@ export type OnDeleteCommunityPredictionSetSubscription = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -17864,13 +17402,13 @@ export type OnDeleteCommunityPredictionSetSubscription = {
       type: CategoryType,
       createdAt: string,
       updatedAt: string,
-      eventCategoriesId?: string | null,
     },
     predictions?:  {
       __typename: "ModelCommunityPredictionConnection",
       items:  Array< {
         __typename: "CommunityPrediction",
         id: string,
+        communityPredictionSetId: string,
         contenderId: string,
         contender:  {
           __typename: "Contender",
@@ -17895,7 +17433,6 @@ export type OnDeleteCommunityPredictionSetSubscription = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           },
           eventId: string,
           event:  {
@@ -17956,12 +17493,10 @@ export type OnDeleteCommunityPredictionSetSubscription = {
           accolade?: ContenderAccolade | null,
           createdAt: string,
           updatedAt: string,
-          movieContendersId?: string | null,
         },
         indexedRankings?: string | null,
         createdAt: string,
         updatedAt: string,
-        communityPredictionSetPredictionsId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -17975,6 +17510,7 @@ export type OnCreateCommunityPredictionSubscription = {
   onCreateCommunityPrediction?:  {
     __typename: "CommunityPrediction",
     id: string,
+    communityPredictionSetId: string,
     contenderId: string,
     contender:  {
       __typename: "Contender",
@@ -17997,7 +17533,6 @@ export type OnCreateCommunityPredictionSubscription = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -18013,7 +17548,6 @@ export type OnCreateCommunityPredictionSubscription = {
         type: CategoryType,
         createdAt: string,
         updatedAt: string,
-        eventCategoriesId?: string | null,
       },
       eventId: string,
       event:  {
@@ -18040,7 +17574,6 @@ export type OnCreateCommunityPredictionSubscription = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -18070,7 +17603,6 @@ export type OnCreateCommunityPredictionSubscription = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             },
             eventId: string,
             event:  {
@@ -18115,7 +17647,6 @@ export type OnCreateCommunityPredictionSubscription = {
             accolade?: ContenderAccolade | null,
             createdAt: string,
             updatedAt: string,
-            movieContendersId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -18154,7 +17685,6 @@ export type OnCreateCommunityPredictionSubscription = {
               accolade?: ContenderAccolade | null,
               createdAt: string,
               updatedAt: string,
-              movieContendersId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -18172,12 +17702,10 @@ export type OnCreateCommunityPredictionSubscription = {
       accolade?: ContenderAccolade | null,
       createdAt: string,
       updatedAt: string,
-      movieContendersId?: string | null,
     },
     indexedRankings?: string | null,
     createdAt: string,
     updatedAt: string,
-    communityPredictionSetPredictionsId?: string | null,
   } | null,
 };
 
@@ -18185,6 +17713,7 @@ export type OnUpdateCommunityPredictionSubscription = {
   onUpdateCommunityPrediction?:  {
     __typename: "CommunityPrediction",
     id: string,
+    communityPredictionSetId: string,
     contenderId: string,
     contender:  {
       __typename: "Contender",
@@ -18207,7 +17736,6 @@ export type OnUpdateCommunityPredictionSubscription = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -18223,7 +17751,6 @@ export type OnUpdateCommunityPredictionSubscription = {
         type: CategoryType,
         createdAt: string,
         updatedAt: string,
-        eventCategoriesId?: string | null,
       },
       eventId: string,
       event:  {
@@ -18250,7 +17777,6 @@ export type OnUpdateCommunityPredictionSubscription = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -18280,7 +17806,6 @@ export type OnUpdateCommunityPredictionSubscription = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             },
             eventId: string,
             event:  {
@@ -18325,7 +17850,6 @@ export type OnUpdateCommunityPredictionSubscription = {
             accolade?: ContenderAccolade | null,
             createdAt: string,
             updatedAt: string,
-            movieContendersId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -18364,7 +17888,6 @@ export type OnUpdateCommunityPredictionSubscription = {
               accolade?: ContenderAccolade | null,
               createdAt: string,
               updatedAt: string,
-              movieContendersId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -18382,12 +17905,10 @@ export type OnUpdateCommunityPredictionSubscription = {
       accolade?: ContenderAccolade | null,
       createdAt: string,
       updatedAt: string,
-      movieContendersId?: string | null,
     },
     indexedRankings?: string | null,
     createdAt: string,
     updatedAt: string,
-    communityPredictionSetPredictionsId?: string | null,
   } | null,
 };
 
@@ -18395,6 +17916,7 @@ export type OnDeleteCommunityPredictionSubscription = {
   onDeleteCommunityPrediction?:  {
     __typename: "CommunityPrediction",
     id: string,
+    communityPredictionSetId: string,
     contenderId: string,
     contender:  {
       __typename: "Contender",
@@ -18417,7 +17939,6 @@ export type OnDeleteCommunityPredictionSubscription = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -18433,7 +17954,6 @@ export type OnDeleteCommunityPredictionSubscription = {
         type: CategoryType,
         createdAt: string,
         updatedAt: string,
-        eventCategoriesId?: string | null,
       },
       eventId: string,
       event:  {
@@ -18460,7 +17980,6 @@ export type OnDeleteCommunityPredictionSubscription = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -18490,7 +18009,6 @@ export type OnDeleteCommunityPredictionSubscription = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             },
             eventId: string,
             event:  {
@@ -18535,7 +18053,6 @@ export type OnDeleteCommunityPredictionSubscription = {
             accolade?: ContenderAccolade | null,
             createdAt: string,
             updatedAt: string,
-            movieContendersId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -18574,7 +18091,6 @@ export type OnDeleteCommunityPredictionSubscription = {
               accolade?: ContenderAccolade | null,
               createdAt: string,
               updatedAt: string,
-              movieContendersId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -18592,12 +18108,10 @@ export type OnDeleteCommunityPredictionSubscription = {
       accolade?: ContenderAccolade | null,
       createdAt: string,
       updatedAt: string,
-      movieContendersId?: string | null,
     },
     indexedRankings?: string | null,
     createdAt: string,
     updatedAt: string,
-    communityPredictionSetPredictionsId?: string | null,
   } | null,
 };
 
@@ -18634,7 +18148,6 @@ export type OnCreateCommunityHistoryPredictionSetSubscription = {
           type: CategoryType,
           createdAt: string,
           updatedAt: string,
-          eventCategoriesId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -18675,7 +18188,6 @@ export type OnCreateCommunityHistoryPredictionSetSubscription = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -18691,13 +18203,13 @@ export type OnCreateCommunityHistoryPredictionSetSubscription = {
       type: CategoryType,
       createdAt: string,
       updatedAt: string,
-      eventCategoriesId?: string | null,
     },
     predictions?:  {
       __typename: "ModelCommunityHistoryPredictionConnection",
       items:  Array< {
         __typename: "CommunityHistoryPrediction",
         id: string,
+        communityHistoryPredictionSetId: string,
         contenderId: string,
         contender:  {
           __typename: "Contender",
@@ -18722,7 +18234,6 @@ export type OnCreateCommunityHistoryPredictionSetSubscription = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           },
           eventId: string,
           event:  {
@@ -18783,12 +18294,10 @@ export type OnCreateCommunityHistoryPredictionSetSubscription = {
           accolade?: ContenderAccolade | null,
           createdAt: string,
           updatedAt: string,
-          movieContendersId?: string | null,
         },
         indexedRankings?: string | null,
         createdAt: string,
         updatedAt: string,
-        communityHistoryPredictionSetPredictionsId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -18831,7 +18340,6 @@ export type OnUpdateCommunityHistoryPredictionSetSubscription = {
           type: CategoryType,
           createdAt: string,
           updatedAt: string,
-          eventCategoriesId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -18872,7 +18380,6 @@ export type OnUpdateCommunityHistoryPredictionSetSubscription = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -18888,13 +18395,13 @@ export type OnUpdateCommunityHistoryPredictionSetSubscription = {
       type: CategoryType,
       createdAt: string,
       updatedAt: string,
-      eventCategoriesId?: string | null,
     },
     predictions?:  {
       __typename: "ModelCommunityHistoryPredictionConnection",
       items:  Array< {
         __typename: "CommunityHistoryPrediction",
         id: string,
+        communityHistoryPredictionSetId: string,
         contenderId: string,
         contender:  {
           __typename: "Contender",
@@ -18919,7 +18426,6 @@ export type OnUpdateCommunityHistoryPredictionSetSubscription = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           },
           eventId: string,
           event:  {
@@ -18980,12 +18486,10 @@ export type OnUpdateCommunityHistoryPredictionSetSubscription = {
           accolade?: ContenderAccolade | null,
           createdAt: string,
           updatedAt: string,
-          movieContendersId?: string | null,
         },
         indexedRankings?: string | null,
         createdAt: string,
         updatedAt: string,
-        communityHistoryPredictionSetPredictionsId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -19028,7 +18532,6 @@ export type OnDeleteCommunityHistoryPredictionSetSubscription = {
           type: CategoryType,
           createdAt: string,
           updatedAt: string,
-          eventCategoriesId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -19069,7 +18572,6 @@ export type OnDeleteCommunityHistoryPredictionSetSubscription = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -19085,13 +18587,13 @@ export type OnDeleteCommunityHistoryPredictionSetSubscription = {
       type: CategoryType,
       createdAt: string,
       updatedAt: string,
-      eventCategoriesId?: string | null,
     },
     predictions?:  {
       __typename: "ModelCommunityHistoryPredictionConnection",
       items:  Array< {
         __typename: "CommunityHistoryPrediction",
         id: string,
+        communityHistoryPredictionSetId: string,
         contenderId: string,
         contender:  {
           __typename: "Contender",
@@ -19116,7 +18618,6 @@ export type OnDeleteCommunityHistoryPredictionSetSubscription = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           },
           eventId: string,
           event:  {
@@ -19177,12 +18678,10 @@ export type OnDeleteCommunityHistoryPredictionSetSubscription = {
           accolade?: ContenderAccolade | null,
           createdAt: string,
           updatedAt: string,
-          movieContendersId?: string | null,
         },
         indexedRankings?: string | null,
         createdAt: string,
         updatedAt: string,
-        communityHistoryPredictionSetPredictionsId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -19196,6 +18695,7 @@ export type OnCreateCommunityHistoryPredictionSubscription = {
   onCreateCommunityHistoryPrediction?:  {
     __typename: "CommunityHistoryPrediction",
     id: string,
+    communityHistoryPredictionSetId: string,
     contenderId: string,
     contender:  {
       __typename: "Contender",
@@ -19218,7 +18718,6 @@ export type OnCreateCommunityHistoryPredictionSubscription = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -19234,7 +18733,6 @@ export type OnCreateCommunityHistoryPredictionSubscription = {
         type: CategoryType,
         createdAt: string,
         updatedAt: string,
-        eventCategoriesId?: string | null,
       },
       eventId: string,
       event:  {
@@ -19261,7 +18759,6 @@ export type OnCreateCommunityHistoryPredictionSubscription = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -19291,7 +18788,6 @@ export type OnCreateCommunityHistoryPredictionSubscription = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             },
             eventId: string,
             event:  {
@@ -19336,7 +18832,6 @@ export type OnCreateCommunityHistoryPredictionSubscription = {
             accolade?: ContenderAccolade | null,
             createdAt: string,
             updatedAt: string,
-            movieContendersId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -19375,7 +18870,6 @@ export type OnCreateCommunityHistoryPredictionSubscription = {
               accolade?: ContenderAccolade | null,
               createdAt: string,
               updatedAt: string,
-              movieContendersId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -19393,12 +18887,10 @@ export type OnCreateCommunityHistoryPredictionSubscription = {
       accolade?: ContenderAccolade | null,
       createdAt: string,
       updatedAt: string,
-      movieContendersId?: string | null,
     },
     indexedRankings?: string | null,
     createdAt: string,
     updatedAt: string,
-    communityHistoryPredictionSetPredictionsId?: string | null,
   } | null,
 };
 
@@ -19406,6 +18898,7 @@ export type OnUpdateCommunityHistoryPredictionSubscription = {
   onUpdateCommunityHistoryPrediction?:  {
     __typename: "CommunityHistoryPrediction",
     id: string,
+    communityHistoryPredictionSetId: string,
     contenderId: string,
     contender:  {
       __typename: "Contender",
@@ -19428,7 +18921,6 @@ export type OnUpdateCommunityHistoryPredictionSubscription = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -19444,7 +18936,6 @@ export type OnUpdateCommunityHistoryPredictionSubscription = {
         type: CategoryType,
         createdAt: string,
         updatedAt: string,
-        eventCategoriesId?: string | null,
       },
       eventId: string,
       event:  {
@@ -19471,7 +18962,6 @@ export type OnUpdateCommunityHistoryPredictionSubscription = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -19501,7 +18991,6 @@ export type OnUpdateCommunityHistoryPredictionSubscription = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             },
             eventId: string,
             event:  {
@@ -19546,7 +19035,6 @@ export type OnUpdateCommunityHistoryPredictionSubscription = {
             accolade?: ContenderAccolade | null,
             createdAt: string,
             updatedAt: string,
-            movieContendersId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -19585,7 +19073,6 @@ export type OnUpdateCommunityHistoryPredictionSubscription = {
               accolade?: ContenderAccolade | null,
               createdAt: string,
               updatedAt: string,
-              movieContendersId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -19603,12 +19090,10 @@ export type OnUpdateCommunityHistoryPredictionSubscription = {
       accolade?: ContenderAccolade | null,
       createdAt: string,
       updatedAt: string,
-      movieContendersId?: string | null,
     },
     indexedRankings?: string | null,
     createdAt: string,
     updatedAt: string,
-    communityHistoryPredictionSetPredictionsId?: string | null,
   } | null,
 };
 
@@ -19616,6 +19101,7 @@ export type OnDeleteCommunityHistoryPredictionSubscription = {
   onDeleteCommunityHistoryPrediction?:  {
     __typename: "CommunityHistoryPrediction",
     id: string,
+    communityHistoryPredictionSetId: string,
     contenderId: string,
     contender:  {
       __typename: "Contender",
@@ -19638,7 +19124,6 @@ export type OnDeleteCommunityHistoryPredictionSubscription = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -19654,7 +19139,6 @@ export type OnDeleteCommunityHistoryPredictionSubscription = {
         type: CategoryType,
         createdAt: string,
         updatedAt: string,
-        eventCategoriesId?: string | null,
       },
       eventId: string,
       event:  {
@@ -19681,7 +19165,6 @@ export type OnDeleteCommunityHistoryPredictionSubscription = {
             type: CategoryType,
             createdAt: string,
             updatedAt: string,
-            eventCategoriesId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -19711,7 +19194,6 @@ export type OnDeleteCommunityHistoryPredictionSubscription = {
               type: CategoryType,
               createdAt: string,
               updatedAt: string,
-              eventCategoriesId?: string | null,
             },
             eventId: string,
             event:  {
@@ -19756,7 +19238,6 @@ export type OnDeleteCommunityHistoryPredictionSubscription = {
             accolade?: ContenderAccolade | null,
             createdAt: string,
             updatedAt: string,
-            movieContendersId?: string | null,
           } | null >,
           nextToken?: string | null,
         } | null,
@@ -19795,7 +19276,6 @@ export type OnDeleteCommunityHistoryPredictionSubscription = {
               accolade?: ContenderAccolade | null,
               createdAt: string,
               updatedAt: string,
-              movieContendersId?: string | null,
             } | null >,
             nextToken?: string | null,
           } | null,
@@ -19813,11 +19293,9 @@ export type OnDeleteCommunityHistoryPredictionSubscription = {
       accolade?: ContenderAccolade | null,
       createdAt: string,
       updatedAt: string,
-      movieContendersId?: string | null,
     },
     indexedRankings?: string | null,
     createdAt: string,
     updatedAt: string,
-    communityHistoryPredictionSetPredictionsId?: string | null,
   } | null,
 };

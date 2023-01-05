@@ -2,11 +2,9 @@ import ApiServices from '.';
 import {
   ListEventsQuery,
   CreateEventMutation,
-  DeleteEventMutation,
   AwardsBody,
   ListEventsQueryVariables,
   CreateEventMutationVariables,
-  DeleteEventMutationVariables,
   UpdateEventMutation,
   UpdateEventMutationVariables,
   EventStatus,
@@ -15,18 +13,19 @@ import {
 } from '../../API';
 import { getAwardsBodyCategories, iCategoryData } from '../../constants/categories';
 import * as mutations from '../../graphql/mutations';
+import * as queries from '../../graphql/queries';
 import * as customQueries from '../../graphqlCustom/queries';
 import { GraphqlAPI, handleError, iApiResponse } from '../utils';
-import { deleteCategory, getCategoriesByEvent } from './category';
 
 export const getAllEvents = async (): Promise<iApiResponse<ListEventsQuery>> => {
   try {
     const { data, errors } = await GraphqlAPI<ListEventsQuery, ListEventsQueryVariables>(
-      customQueries.listEvents,
+      queries.listEvents,
     );
     if (!data?.listEvents) {
       throw new Error(JSON.stringify(errors));
     }
+    console.log('data', JSON.stringify(data));
     return { status: 'success', data };
   } catch (err) {
     return handleError('error getting all events', err);
@@ -74,17 +73,12 @@ export const createEvent = async (
     const { data, errors } = await GraphqlAPI<
       CreateEventMutation,
       CreateEventMutationVariables
-    >(
-      mutations.createEvent,
-      // NOTE: check if obeys @default setting in schema.graphql for isActive field, which is x by default
-      {
-        input: {
-          awardsBody,
-          year,
-          status: EventStatus.NOMS_STAGING, // important that this is the default
-        },
+    >(mutations.createEvent, {
+      input: {
+        awardsBody,
+        year,
       },
-    );
+    });
     if (!data?.createEvent) {
       throw new Error(JSON.stringify(errors));
     }
@@ -103,38 +97,6 @@ export const createEvent = async (
     return { status: 'success', data };
   } catch (err) {
     return handleError('error creating event', err);
-  }
-};
-
-// NOTE: We never want to actually delete an event -- this is just for mock purposes
-// ALSO: should be atomic
-export const deleteEvent = async (
-  id: string,
-): Promise<iApiResponse<DeleteEventMutation>> => {
-  try {
-    const { data: categories } = await getCategoriesByEvent(id);
-    const cats = categories?.listCategories?.items;
-    if (!cats) {
-      throw new Error('no categories found on this event, aborting deletion');
-    }
-    // Delete all categories associated with event
-    await Promise.all(
-      cats.map((c) => {
-        if (!c) return null;
-        return deleteCategory(c.id);
-      }),
-    );
-    // Then delete the event
-    const { data, errors } = await GraphqlAPI<
-      DeleteEventMutation,
-      DeleteEventMutationVariables
-    >(mutations.deleteEvent, { input: { id } });
-    if (!data?.deleteEvent) {
-      throw new Error(JSON.stringify(errors));
-    }
-    return { status: 'success', data };
-  } catch (err) {
-    return handleError('error deleting event', err);
   }
 };
 

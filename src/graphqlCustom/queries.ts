@@ -15,34 +15,25 @@ export const listContenders = /* GraphQL */ `
     ) {
       items {
         id
+        movieId
         movie {
           id
           tmdbId
           studio
-          createdAt
-          updatedAt
         }
+        personId
         person {
           id
           tmdbId
-          createdAt
-          updatedAt
         }
+        songId
         song {
           id
           title
           artist
-          createdAt
-          updatedAt
         }
-        createdAt
-        updatedAt
-        eventId
-        categoryId
-        movieId
-        personId
-        songId
         visibility
+        accolade
       }
     }
   }
@@ -65,30 +56,31 @@ export const listPredictionSets = /* GraphQL */ `
     ) {
       items {
         id
+        categoryId
         predictions {
           items {
             id
+            predictionSetId
+            contenderId
             contender {
               id
+              movieId
               movie {
                 id
                 tmdbId
                 studio
               }
+              personId
               person {
                 id
                 tmdbId
               }
+              songId
               song {
                 id
                 title
                 artist
               }
-              categoryId
-              eventId
-              movieId
-              personId
-              songId
               visibility
               accolade
               createdAt
@@ -97,12 +89,11 @@ export const listPredictionSets = /* GraphQL */ `
             ranking
             createdAt
             updatedAt
-            predictionSetPredictionsId
           }
         }
+        type
         createdAt
         updatedAt
-        predictionSetCategoryId #
       }
     }
   }
@@ -128,6 +119,7 @@ export const listCommunityPredictionSets = /* GraphQL */ `
         predictions {
           items {
             id
+            contenderId
             contender {
               id
               movie {
@@ -135,10 +127,12 @@ export const listCommunityPredictionSets = /* GraphQL */ `
                 tmdbId
                 studio
               }
+              personId
               person {
                 id
                 tmdbId
               }
+              songId
               song {
                 id
                 title
@@ -147,19 +141,15 @@ export const listCommunityPredictionSets = /* GraphQL */ `
               visibility
               accolade
             }
-            contenderId
             indexedRankings
             createdAt
             updatedAt
-            communityPredictionSetPredictionsId
           }
-          nextToken
         }
         type
         createdAt
         updatedAt
       }
-      nextToken
     }
   }
 `;
@@ -198,45 +188,6 @@ export const listEvents = /* GraphQL */ `
         createdAt
         updatedAt
       }
-      nextToken
-    }
-  }
-`;
-
-export const listCategories = /* GraphQL */ `
-  query ListCategories(
-    $id: ID
-    $filter: ModelCategoryFilterInput
-    $limit: Int
-    $nextToken: String
-    $sortDirection: ModelSortDirection
-  ) {
-    listCategories(
-      id: $id
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      sortDirection: $sortDirection
-    ) {
-      items {
-        id
-        name
-        type
-        eventId
-        event {
-          id
-          awardsBody
-          year
-          nominationDateTime
-          winDateTime
-          status
-          createdAt
-          updatedAt
-        }
-        createdAt
-        updatedAt
-      }
-      nextToken
     }
   }
 `;

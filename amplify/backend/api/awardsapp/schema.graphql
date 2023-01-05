@@ -120,7 +120,7 @@ type Relationship @model @auth(rules: [{ allow: public }]) {
 
 type Event @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
-    categories: [Category] @hasMany
+    categories: [Category] @hasMany(indexName: "byEvent", fields: ["id"])
     awardsBody: AwardsBody!
     year: Int!
     nominationDateTime: AWSDateTime # nullable. admin sets this
@@ -130,7 +130,7 @@ type Event @model @auth(rules: [{ allow: public }]) {
 
 type Category @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
-    eventId: ID!
+    eventId: ID! @index(name: "byEvent")
     event: Event! @belongsTo(fields: ["eventId"])
     name: CategoryName!
     type: CategoryType! @default(value: "FILM")
@@ -143,7 +143,7 @@ type Contender @model @auth(rules: [{ allow: public }]) {
     category: Category! @hasOne(fields: ["categoryId"])
     eventId: ID!
     event: Event! @hasOne(fields: ["eventId"])
-    movieId: ID!
+    movieId: ID! @index(name: "byMovie")
     movie: Movie! @belongsTo(fields: ["movieId"]) # lets it be bi-directional so we can see Contenders from Movie
     personId: ID
     person: Person @hasOne(fields: ["personId"]) # optional - only applies to acting categories
@@ -155,7 +155,7 @@ type Contender @model @auth(rules: [{ allow: public }]) {
 
 type Movie @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
-    contenders: [Contender] @hasMany
+    contenders: [Contender] @hasMany(indexName: "byMovie", fields: ["id"])
     tmdbId: Int! # unique value
     studio: String # distribution studio
 }
@@ -184,11 +184,12 @@ type PredictionSet @model @auth(rules: [{ allow: public }]) {
     event: Event! @hasOne(fields: ["eventId"])
     categoryId: ID!
     category: Category! @hasOne(fields: ["categoryId"])
-    predictions: [Prediction] @hasMany
+    predictions: [Prediction] @hasMany(indexName: "byPredictionSet", fields: ["id"])
     type: PredictionType @default(value: "NOMINATION")
 }
 type Prediction @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
+    predictionSetId: ID! @index(name: "byPredictionSet")
     contenderId: ID!
     contender: Contender! @hasOne(fields: ["contenderId"])
     ranking: Int!
@@ -203,12 +204,13 @@ type HistoryPredictionSet @model @auth(rules: [{ allow: public }]) {
     event: Event! @hasOne(fields: ["eventId"])
     categoryId: ID!
     category: Category! @hasOne(fields: ["categoryId"])
-    predictions: [HistoryPrediction] @hasMany
+    predictions: [HistoryPrediction] @hasMany(indexName: "byHistoryPredictionSet", fields: ["id"])
     type: PredictionType @default(value: "NOMINATION")
     createdAt: AWSDateTime!
 }
 type HistoryPrediction @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
+    historyPredictionSetId: ID! @index(name: "byHistoryPredictionSet")
     contenderId: ID!
     contender: Contender! @hasOne(fields: ["contenderId"])
     ranking: Int!
@@ -221,11 +223,12 @@ type CommunityPredictionSet @model @auth(rules: [{ allow: public }]) {
     event: Event! @hasOne(fields: ["eventId"])
     categoryId: ID!
     category: Category! @hasOne(fields: ["categoryId"])
-    predictions: [CommunityPrediction] @hasMany
+    predictions: [CommunityPrediction] @hasMany(indexName: "byCommunityPredictionSet", fields: ["id"])
     type: PredictionType @default(value: "NOMINATION")
 }
 type CommunityPrediction @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
+    communityPredictionSetId: ID! @index(name: "byCommunityPredictionSet")
     contenderId: ID!
     contender: Contender! @hasOne(fields: ["contenderId"])
     indexedRankings: String # JSON stringified array of rankings (ts: { [place: number]: [numUsersPredicting: number]})
@@ -238,12 +241,13 @@ type CommunityHistoryPredictionSet @model @auth(rules: [{ allow: public }]) {
     event: Event! @hasOne(fields: ["eventId"])
     categoryId: ID!
     category: Category! @hasOne(fields: ["categoryId"])
-    predictions: [CommunityHistoryPrediction] @hasMany
+    predictions: [CommunityHistoryPrediction] @hasMany(indexName: "byCommunityHistoryPredictionSet", fields: ["id"])
     type: PredictionType @default(value: "NOMINATION")
     createdAt: AWSDateTime!
 }
 type CommunityHistoryPrediction @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
+    communityHistoryPredictionSetId: ID! @index(name: "byCommunityHistoryPredictionSet")
     contenderId: ID!
     contender: Contender! @hasOne(fields: ["contenderId"])
     indexedRankings: String # JSON stringified array of rankings (ts: { [place: number]: [numUsersPredicting: number]})

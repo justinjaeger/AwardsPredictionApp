@@ -164,7 +164,6 @@ export const onCreateEvent = /* GraphQL */ `
                 type
                 createdAt
                 updatedAt
-                eventCategoriesId
               }
               nextToken
             }
@@ -180,7 +179,6 @@ export const onCreateEvent = /* GraphQL */ `
           type
           createdAt
           updatedAt
-          eventCategoriesId
         }
         nextToken
       }
@@ -212,7 +210,6 @@ export const onUpdateEvent = /* GraphQL */ `
                 type
                 createdAt
                 updatedAt
-                eventCategoriesId
               }
               nextToken
             }
@@ -228,7 +225,6 @@ export const onUpdateEvent = /* GraphQL */ `
           type
           createdAt
           updatedAt
-          eventCategoriesId
         }
         nextToken
       }
@@ -260,7 +256,6 @@ export const onDeleteEvent = /* GraphQL */ `
                 type
                 createdAt
                 updatedAt
-                eventCategoriesId
               }
               nextToken
             }
@@ -276,7 +271,6 @@ export const onDeleteEvent = /* GraphQL */ `
           type
           createdAt
           updatedAt
-          eventCategoriesId
         }
         nextToken
       }
@@ -318,7 +312,6 @@ export const onCreateCategory = /* GraphQL */ `
             type
             createdAt
             updatedAt
-            eventCategoriesId
           }
           nextToken
         }
@@ -334,7 +327,6 @@ export const onCreateCategory = /* GraphQL */ `
       type
       createdAt
       updatedAt
-      eventCategoriesId
     }
   }
 `;
@@ -366,7 +358,6 @@ export const onUpdateCategory = /* GraphQL */ `
             type
             createdAt
             updatedAt
-            eventCategoriesId
           }
           nextToken
         }
@@ -382,7 +373,6 @@ export const onUpdateCategory = /* GraphQL */ `
       type
       createdAt
       updatedAt
-      eventCategoriesId
     }
   }
 `;
@@ -414,7 +404,6 @@ export const onDeleteCategory = /* GraphQL */ `
             type
             createdAt
             updatedAt
-            eventCategoriesId
           }
           nextToken
         }
@@ -430,7 +419,6 @@ export const onDeleteCategory = /* GraphQL */ `
       type
       createdAt
       updatedAt
-      eventCategoriesId
     }
   }
 `;
@@ -462,7 +450,6 @@ export const onCreateContender = /* GraphQL */ `
               type
               createdAt
               updatedAt
-              eventCategoriesId
             }
             nextToken
           }
@@ -478,7 +465,6 @@ export const onCreateContender = /* GraphQL */ `
         type
         createdAt
         updatedAt
-        eventCategoriesId
       }
       eventId
       event {
@@ -504,7 +490,6 @@ export const onCreateContender = /* GraphQL */ `
             type
             createdAt
             updatedAt
-            eventCategoriesId
           }
           nextToken
         }
@@ -540,7 +525,6 @@ export const onCreateContender = /* GraphQL */ `
               type
               createdAt
               updatedAt
-              eventCategoriesId
             }
             eventId
             event {
@@ -594,7 +578,6 @@ export const onCreateContender = /* GraphQL */ `
             accolade
             createdAt
             updatedAt
-            movieContendersId
           }
           nextToken
         }
@@ -627,7 +610,6 @@ export const onCreateContender = /* GraphQL */ `
                 type
                 createdAt
                 updatedAt
-                eventCategoriesId
               }
               eventId
               event {
@@ -668,7 +650,6 @@ export const onCreateContender = /* GraphQL */ `
               accolade
               createdAt
               updatedAt
-              movieContendersId
             }
             nextToken
           }
@@ -686,7 +667,6 @@ export const onCreateContender = /* GraphQL */ `
       accolade
       createdAt
       updatedAt
-      movieContendersId
     }
   }
 `;
@@ -718,7 +698,6 @@ export const onUpdateContender = /* GraphQL */ `
               type
               createdAt
               updatedAt
-              eventCategoriesId
             }
             nextToken
           }
@@ -734,7 +713,6 @@ export const onUpdateContender = /* GraphQL */ `
         type
         createdAt
         updatedAt
-        eventCategoriesId
       }
       eventId
       event {
@@ -760,7 +738,6 @@ export const onUpdateContender = /* GraphQL */ `
             type
             createdAt
             updatedAt
-            eventCategoriesId
           }
           nextToken
         }
@@ -796,7 +773,6 @@ export const onUpdateContender = /* GraphQL */ `
               type
               createdAt
               updatedAt
-              eventCategoriesId
             }
             eventId
             event {
@@ -850,7 +826,6 @@ export const onUpdateContender = /* GraphQL */ `
             accolade
             createdAt
             updatedAt
-            movieContendersId
           }
           nextToken
         }
@@ -883,7 +858,6 @@ export const onUpdateContender = /* GraphQL */ `
                 type
                 createdAt
                 updatedAt
-                eventCategoriesId
               }
               eventId
               event {
@@ -924,7 +898,6 @@ export const onUpdateContender = /* GraphQL */ `
               accolade
               createdAt
               updatedAt
-              movieContendersId
             }
             nextToken
           }
@@ -942,7 +915,6 @@ export const onUpdateContender = /* GraphQL */ `
       accolade
       createdAt
       updatedAt
-      movieContendersId
     }
   }
 `;
@@ -974,7 +946,6 @@ export const onDeleteContender = /* GraphQL */ `
               type
               createdAt
               updatedAt
-              eventCategoriesId
             }
             nextToken
           }
@@ -990,7 +961,6 @@ export const onDeleteContender = /* GraphQL */ `
         type
         createdAt
         updatedAt
-        eventCategoriesId
       }
       eventId
       event {
@@ -1016,7 +986,6 @@ export const onDeleteContender = /* GraphQL */ `
             type
             createdAt
             updatedAt
-            eventCategoriesId
           }
           nextToken
         }
@@ -1052,7 +1021,6 @@ export const onDeleteContender = /* GraphQL */ `
               type
               createdAt
               updatedAt
-              eventCategoriesId
             }
             eventId
             event {
@@ -1106,7 +1074,6 @@ export const onDeleteContender = /* GraphQL */ `
             accolade
             createdAt
             updatedAt
-            movieContendersId
           }
           nextToken
         }
@@ -1139,7 +1106,6 @@ export const onDeleteContender = /* GraphQL */ `
                 type
                 createdAt
                 updatedAt
-                eventCategoriesId
               }
               eventId
               event {
@@ -1180,7 +1146,6 @@ export const onDeleteContender = /* GraphQL */ `
               accolade
               createdAt
               updatedAt
-              movieContendersId
             }
             nextToken
           }
@@ -1198,7 +1163,6 @@ export const onDeleteContender = /* GraphQL */ `
       accolade
       createdAt
       updatedAt
-      movieContendersId
     }
   }
 `;
@@ -1230,7 +1194,6 @@ export const onCreateMovie = /* GraphQL */ `
             type
             createdAt
             updatedAt
-            eventCategoriesId
           }
           eventId
           event {
@@ -1243,7 +1206,6 @@ export const onCreateMovie = /* GraphQL */ `
                 type
                 createdAt
                 updatedAt
-                eventCategoriesId
               }
               nextToken
             }
@@ -1270,7 +1232,6 @@ export const onCreateMovie = /* GraphQL */ `
                 accolade
                 createdAt
                 updatedAt
-                movieContendersId
               }
               nextToken
             }
@@ -1309,7 +1270,6 @@ export const onCreateMovie = /* GraphQL */ `
           accolade
           createdAt
           updatedAt
-          movieContendersId
         }
         nextToken
       }
@@ -1348,7 +1308,6 @@ export const onUpdateMovie = /* GraphQL */ `
             type
             createdAt
             updatedAt
-            eventCategoriesId
           }
           eventId
           event {
@@ -1361,7 +1320,6 @@ export const onUpdateMovie = /* GraphQL */ `
                 type
                 createdAt
                 updatedAt
-                eventCategoriesId
               }
               nextToken
             }
@@ -1388,7 +1346,6 @@ export const onUpdateMovie = /* GraphQL */ `
                 accolade
                 createdAt
                 updatedAt
-                movieContendersId
               }
               nextToken
             }
@@ -1427,7 +1384,6 @@ export const onUpdateMovie = /* GraphQL */ `
           accolade
           createdAt
           updatedAt
-          movieContendersId
         }
         nextToken
       }
@@ -1466,7 +1422,6 @@ export const onDeleteMovie = /* GraphQL */ `
             type
             createdAt
             updatedAt
-            eventCategoriesId
           }
           eventId
           event {
@@ -1479,7 +1434,6 @@ export const onDeleteMovie = /* GraphQL */ `
                 type
                 createdAt
                 updatedAt
-                eventCategoriesId
               }
               nextToken
             }
@@ -1506,7 +1460,6 @@ export const onDeleteMovie = /* GraphQL */ `
                 accolade
                 createdAt
                 updatedAt
-                movieContendersId
               }
               nextToken
             }
@@ -1545,7 +1498,6 @@ export const onDeleteMovie = /* GraphQL */ `
           accolade
           createdAt
           updatedAt
-          movieContendersId
         }
         nextToken
       }
@@ -1614,7 +1566,6 @@ export const onCreateSong = /* GraphQL */ `
               type
               createdAt
               updatedAt
-              eventCategoriesId
             }
             eventId
             event {
@@ -1668,7 +1619,6 @@ export const onCreateSong = /* GraphQL */ `
             accolade
             createdAt
             updatedAt
-            movieContendersId
           }
           nextToken
         }
@@ -1712,7 +1662,6 @@ export const onUpdateSong = /* GraphQL */ `
               type
               createdAt
               updatedAt
-              eventCategoriesId
             }
             eventId
             event {
@@ -1766,7 +1715,6 @@ export const onUpdateSong = /* GraphQL */ `
             accolade
             createdAt
             updatedAt
-            movieContendersId
           }
           nextToken
         }
@@ -1810,7 +1758,6 @@ export const onDeleteSong = /* GraphQL */ `
               type
               createdAt
               updatedAt
-              eventCategoriesId
             }
             eventId
             event {
@@ -1864,7 +1811,6 @@ export const onDeleteSong = /* GraphQL */ `
             accolade
             createdAt
             updatedAt
-            movieContendersId
           }
           nextToken
         }
@@ -1920,7 +1866,6 @@ export const onCreatePredictionSet = /* GraphQL */ `
             type
             createdAt
             updatedAt
-            eventCategoriesId
           }
           nextToken
         }
@@ -1956,7 +1901,6 @@ export const onCreatePredictionSet = /* GraphQL */ `
               type
               createdAt
               updatedAt
-              eventCategoriesId
             }
             nextToken
           }
@@ -1972,11 +1916,11 @@ export const onCreatePredictionSet = /* GraphQL */ `
         type
         createdAt
         updatedAt
-        eventCategoriesId
       }
       predictions {
         items {
           id
+          predictionSetId
           contenderId
           contender {
             id
@@ -1998,7 +1942,6 @@ export const onCreatePredictionSet = /* GraphQL */ `
               type
               createdAt
               updatedAt
-              eventCategoriesId
             }
             eventId
             event {
@@ -2052,12 +1995,10 @@ export const onCreatePredictionSet = /* GraphQL */ `
             accolade
             createdAt
             updatedAt
-            movieContendersId
           }
           ranking
           createdAt
           updatedAt
-          predictionSetPredictionsId
         }
         nextToken
       }
@@ -2107,7 +2048,6 @@ export const onUpdatePredictionSet = /* GraphQL */ `
             type
             createdAt
             updatedAt
-            eventCategoriesId
           }
           nextToken
         }
@@ -2143,7 +2083,6 @@ export const onUpdatePredictionSet = /* GraphQL */ `
               type
               createdAt
               updatedAt
-              eventCategoriesId
             }
             nextToken
           }
@@ -2159,11 +2098,11 @@ export const onUpdatePredictionSet = /* GraphQL */ `
         type
         createdAt
         updatedAt
-        eventCategoriesId
       }
       predictions {
         items {
           id
+          predictionSetId
           contenderId
           contender {
             id
@@ -2185,7 +2124,6 @@ export const onUpdatePredictionSet = /* GraphQL */ `
               type
               createdAt
               updatedAt
-              eventCategoriesId
             }
             eventId
             event {
@@ -2239,12 +2177,10 @@ export const onUpdatePredictionSet = /* GraphQL */ `
             accolade
             createdAt
             updatedAt
-            movieContendersId
           }
           ranking
           createdAt
           updatedAt
-          predictionSetPredictionsId
         }
         nextToken
       }
@@ -2294,7 +2230,6 @@ export const onDeletePredictionSet = /* GraphQL */ `
             type
             createdAt
             updatedAt
-            eventCategoriesId
           }
           nextToken
         }
@@ -2330,7 +2265,6 @@ export const onDeletePredictionSet = /* GraphQL */ `
               type
               createdAt
               updatedAt
-              eventCategoriesId
             }
             nextToken
           }
@@ -2346,11 +2280,11 @@ export const onDeletePredictionSet = /* GraphQL */ `
         type
         createdAt
         updatedAt
-        eventCategoriesId
       }
       predictions {
         items {
           id
+          predictionSetId
           contenderId
           contender {
             id
@@ -2372,7 +2306,6 @@ export const onDeletePredictionSet = /* GraphQL */ `
               type
               createdAt
               updatedAt
-              eventCategoriesId
             }
             eventId
             event {
@@ -2426,12 +2359,10 @@ export const onDeletePredictionSet = /* GraphQL */ `
             accolade
             createdAt
             updatedAt
-            movieContendersId
           }
           ranking
           createdAt
           updatedAt
-          predictionSetPredictionsId
         }
         nextToken
       }
@@ -2445,6 +2376,7 @@ export const onCreatePrediction = /* GraphQL */ `
   subscription OnCreatePrediction {
     onCreatePrediction {
       id
+      predictionSetId
       contenderId
       contender {
         id
@@ -2462,7 +2394,6 @@ export const onCreatePrediction = /* GraphQL */ `
                 type
                 createdAt
                 updatedAt
-                eventCategoriesId
               }
               nextToken
             }
@@ -2478,7 +2409,6 @@ export const onCreatePrediction = /* GraphQL */ `
           type
           createdAt
           updatedAt
-          eventCategoriesId
         }
         eventId
         event {
@@ -2501,7 +2431,6 @@ export const onCreatePrediction = /* GraphQL */ `
               type
               createdAt
               updatedAt
-              eventCategoriesId
             }
             nextToken
           }
@@ -2527,7 +2456,6 @@ export const onCreatePrediction = /* GraphQL */ `
                 type
                 createdAt
                 updatedAt
-                eventCategoriesId
               }
               eventId
               event {
@@ -2568,7 +2496,6 @@ export const onCreatePrediction = /* GraphQL */ `
               accolade
               createdAt
               updatedAt
-              movieContendersId
             }
             nextToken
           }
@@ -2602,7 +2529,6 @@ export const onCreatePrediction = /* GraphQL */ `
                 accolade
                 createdAt
                 updatedAt
-                movieContendersId
               }
               nextToken
             }
@@ -2620,12 +2546,10 @@ export const onCreatePrediction = /* GraphQL */ `
         accolade
         createdAt
         updatedAt
-        movieContendersId
       }
       ranking
       createdAt
       updatedAt
-      predictionSetPredictionsId
     }
   }
 `;
@@ -2633,6 +2557,7 @@ export const onUpdatePrediction = /* GraphQL */ `
   subscription OnUpdatePrediction {
     onUpdatePrediction {
       id
+      predictionSetId
       contenderId
       contender {
         id
@@ -2650,7 +2575,6 @@ export const onUpdatePrediction = /* GraphQL */ `
                 type
                 createdAt
                 updatedAt
-                eventCategoriesId
               }
               nextToken
             }
@@ -2666,7 +2590,6 @@ export const onUpdatePrediction = /* GraphQL */ `
           type
           createdAt
           updatedAt
-          eventCategoriesId
         }
         eventId
         event {
@@ -2689,7 +2612,6 @@ export const onUpdatePrediction = /* GraphQL */ `
               type
               createdAt
               updatedAt
-              eventCategoriesId
             }
             nextToken
           }
@@ -2715,7 +2637,6 @@ export const onUpdatePrediction = /* GraphQL */ `
                 type
                 createdAt
                 updatedAt
-                eventCategoriesId
               }
               eventId
               event {
@@ -2756,7 +2677,6 @@ export const onUpdatePrediction = /* GraphQL */ `
               accolade
               createdAt
               updatedAt
-              movieContendersId
             }
             nextToken
           }
@@ -2790,7 +2710,6 @@ export const onUpdatePrediction = /* GraphQL */ `
                 accolade
                 createdAt
                 updatedAt
-                movieContendersId
               }
               nextToken
             }
@@ -2808,12 +2727,10 @@ export const onUpdatePrediction = /* GraphQL */ `
         accolade
         createdAt
         updatedAt
-        movieContendersId
       }
       ranking
       createdAt
       updatedAt
-      predictionSetPredictionsId
     }
   }
 `;
@@ -2821,6 +2738,7 @@ export const onDeletePrediction = /* GraphQL */ `
   subscription OnDeletePrediction {
     onDeletePrediction {
       id
+      predictionSetId
       contenderId
       contender {
         id
@@ -2838,7 +2756,6 @@ export const onDeletePrediction = /* GraphQL */ `
                 type
                 createdAt
                 updatedAt
-                eventCategoriesId
               }
               nextToken
             }
@@ -2854,7 +2771,6 @@ export const onDeletePrediction = /* GraphQL */ `
           type
           createdAt
           updatedAt
-          eventCategoriesId
         }
         eventId
         event {
@@ -2877,7 +2793,6 @@ export const onDeletePrediction = /* GraphQL */ `
               type
               createdAt
               updatedAt
-              eventCategoriesId
             }
             nextToken
           }
@@ -2903,7 +2818,6 @@ export const onDeletePrediction = /* GraphQL */ `
                 type
                 createdAt
                 updatedAt
-                eventCategoriesId
               }
               eventId
               event {
@@ -2944,7 +2858,6 @@ export const onDeletePrediction = /* GraphQL */ `
               accolade
               createdAt
               updatedAt
-              movieContendersId
             }
             nextToken
           }
@@ -2978,7 +2891,6 @@ export const onDeletePrediction = /* GraphQL */ `
                 accolade
                 createdAt
                 updatedAt
-                movieContendersId
               }
               nextToken
             }
@@ -2996,12 +2908,10 @@ export const onDeletePrediction = /* GraphQL */ `
         accolade
         createdAt
         updatedAt
-        movieContendersId
       }
       ranking
       createdAt
       updatedAt
-      predictionSetPredictionsId
     }
   }
 `;
@@ -3045,7 +2955,6 @@ export const onCreateHistoryPredictionSet = /* GraphQL */ `
             type
             createdAt
             updatedAt
-            eventCategoriesId
           }
           nextToken
         }
@@ -3081,7 +2990,6 @@ export const onCreateHistoryPredictionSet = /* GraphQL */ `
               type
               createdAt
               updatedAt
-              eventCategoriesId
             }
             nextToken
           }
@@ -3097,11 +3005,11 @@ export const onCreateHistoryPredictionSet = /* GraphQL */ `
         type
         createdAt
         updatedAt
-        eventCategoriesId
       }
       predictions {
         items {
           id
+          historyPredictionSetId
           contenderId
           contender {
             id
@@ -3123,7 +3031,6 @@ export const onCreateHistoryPredictionSet = /* GraphQL */ `
               type
               createdAt
               updatedAt
-              eventCategoriesId
             }
             eventId
             event {
@@ -3177,12 +3084,10 @@ export const onCreateHistoryPredictionSet = /* GraphQL */ `
             accolade
             createdAt
             updatedAt
-            movieContendersId
           }
           ranking
           createdAt
           updatedAt
-          historyPredictionSetPredictionsId
         }
         nextToken
       }
@@ -3232,7 +3137,6 @@ export const onUpdateHistoryPredictionSet = /* GraphQL */ `
             type
             createdAt
             updatedAt
-            eventCategoriesId
           }
           nextToken
         }
@@ -3268,7 +3172,6 @@ export const onUpdateHistoryPredictionSet = /* GraphQL */ `
               type
               createdAt
               updatedAt
-              eventCategoriesId
             }
             nextToken
           }
@@ -3284,11 +3187,11 @@ export const onUpdateHistoryPredictionSet = /* GraphQL */ `
         type
         createdAt
         updatedAt
-        eventCategoriesId
       }
       predictions {
         items {
           id
+          historyPredictionSetId
           contenderId
           contender {
             id
@@ -3310,7 +3213,6 @@ export const onUpdateHistoryPredictionSet = /* GraphQL */ `
               type
               createdAt
               updatedAt
-              eventCategoriesId
             }
             eventId
             event {
@@ -3364,12 +3266,10 @@ export const onUpdateHistoryPredictionSet = /* GraphQL */ `
             accolade
             createdAt
             updatedAt
-            movieContendersId
           }
           ranking
           createdAt
           updatedAt
-          historyPredictionSetPredictionsId
         }
         nextToken
       }
@@ -3419,7 +3319,6 @@ export const onDeleteHistoryPredictionSet = /* GraphQL */ `
             type
             createdAt
             updatedAt
-            eventCategoriesId
           }
           nextToken
         }
@@ -3455,7 +3354,6 @@ export const onDeleteHistoryPredictionSet = /* GraphQL */ `
               type
               createdAt
               updatedAt
-              eventCategoriesId
             }
             nextToken
           }
@@ -3471,11 +3369,11 @@ export const onDeleteHistoryPredictionSet = /* GraphQL */ `
         type
         createdAt
         updatedAt
-        eventCategoriesId
       }
       predictions {
         items {
           id
+          historyPredictionSetId
           contenderId
           contender {
             id
@@ -3497,7 +3395,6 @@ export const onDeleteHistoryPredictionSet = /* GraphQL */ `
               type
               createdAt
               updatedAt
-              eventCategoriesId
             }
             eventId
             event {
@@ -3551,12 +3448,10 @@ export const onDeleteHistoryPredictionSet = /* GraphQL */ `
             accolade
             createdAt
             updatedAt
-            movieContendersId
           }
           ranking
           createdAt
           updatedAt
-          historyPredictionSetPredictionsId
         }
         nextToken
       }
@@ -3570,6 +3465,7 @@ export const onCreateHistoryPrediction = /* GraphQL */ `
   subscription OnCreateHistoryPrediction {
     onCreateHistoryPrediction {
       id
+      historyPredictionSetId
       contenderId
       contender {
         id
@@ -3587,7 +3483,6 @@ export const onCreateHistoryPrediction = /* GraphQL */ `
                 type
                 createdAt
                 updatedAt
-                eventCategoriesId
               }
               nextToken
             }
@@ -3603,7 +3498,6 @@ export const onCreateHistoryPrediction = /* GraphQL */ `
           type
           createdAt
           updatedAt
-          eventCategoriesId
         }
         eventId
         event {
@@ -3626,7 +3520,6 @@ export const onCreateHistoryPrediction = /* GraphQL */ `
               type
               createdAt
               updatedAt
-              eventCategoriesId
             }
             nextToken
           }
@@ -3652,7 +3545,6 @@ export const onCreateHistoryPrediction = /* GraphQL */ `
                 type
                 createdAt
                 updatedAt
-                eventCategoriesId
               }
               eventId
               event {
@@ -3693,7 +3585,6 @@ export const onCreateHistoryPrediction = /* GraphQL */ `
               accolade
               createdAt
               updatedAt
-              movieContendersId
             }
             nextToken
           }
@@ -3727,7 +3618,6 @@ export const onCreateHistoryPrediction = /* GraphQL */ `
                 accolade
                 createdAt
                 updatedAt
-                movieContendersId
               }
               nextToken
             }
@@ -3745,12 +3635,10 @@ export const onCreateHistoryPrediction = /* GraphQL */ `
         accolade
         createdAt
         updatedAt
-        movieContendersId
       }
       ranking
       createdAt
       updatedAt
-      historyPredictionSetPredictionsId
     }
   }
 `;
@@ -3758,6 +3646,7 @@ export const onUpdateHistoryPrediction = /* GraphQL */ `
   subscription OnUpdateHistoryPrediction {
     onUpdateHistoryPrediction {
       id
+      historyPredictionSetId
       contenderId
       contender {
         id
@@ -3775,7 +3664,6 @@ export const onUpdateHistoryPrediction = /* GraphQL */ `
                 type
                 createdAt
                 updatedAt
-                eventCategoriesId
               }
               nextToken
             }
@@ -3791,7 +3679,6 @@ export const onUpdateHistoryPrediction = /* GraphQL */ `
           type
           createdAt
           updatedAt
-          eventCategoriesId
         }
         eventId
         event {
@@ -3814,7 +3701,6 @@ export const onUpdateHistoryPrediction = /* GraphQL */ `
               type
               createdAt
               updatedAt
-              eventCategoriesId
             }
             nextToken
           }
@@ -3840,7 +3726,6 @@ export const onUpdateHistoryPrediction = /* GraphQL */ `
                 type
                 createdAt
                 updatedAt
-                eventCategoriesId
               }
               eventId
               event {
@@ -3881,7 +3766,6 @@ export const onUpdateHistoryPrediction = /* GraphQL */ `
               accolade
               createdAt
               updatedAt
-              movieContendersId
             }
             nextToken
           }
@@ -3915,7 +3799,6 @@ export const onUpdateHistoryPrediction = /* GraphQL */ `
                 accolade
                 createdAt
                 updatedAt
-                movieContendersId
               }
               nextToken
             }
@@ -3933,12 +3816,10 @@ export const onUpdateHistoryPrediction = /* GraphQL */ `
         accolade
         createdAt
         updatedAt
-        movieContendersId
       }
       ranking
       createdAt
       updatedAt
-      historyPredictionSetPredictionsId
     }
   }
 `;
@@ -3946,6 +3827,7 @@ export const onDeleteHistoryPrediction = /* GraphQL */ `
   subscription OnDeleteHistoryPrediction {
     onDeleteHistoryPrediction {
       id
+      historyPredictionSetId
       contenderId
       contender {
         id
@@ -3963,7 +3845,6 @@ export const onDeleteHistoryPrediction = /* GraphQL */ `
                 type
                 createdAt
                 updatedAt
-                eventCategoriesId
               }
               nextToken
             }
@@ -3979,7 +3860,6 @@ export const onDeleteHistoryPrediction = /* GraphQL */ `
           type
           createdAt
           updatedAt
-          eventCategoriesId
         }
         eventId
         event {
@@ -4002,7 +3882,6 @@ export const onDeleteHistoryPrediction = /* GraphQL */ `
               type
               createdAt
               updatedAt
-              eventCategoriesId
             }
             nextToken
           }
@@ -4028,7 +3907,6 @@ export const onDeleteHistoryPrediction = /* GraphQL */ `
                 type
                 createdAt
                 updatedAt
-                eventCategoriesId
               }
               eventId
               event {
@@ -4069,7 +3947,6 @@ export const onDeleteHistoryPrediction = /* GraphQL */ `
               accolade
               createdAt
               updatedAt
-              movieContendersId
             }
             nextToken
           }
@@ -4103,7 +3980,6 @@ export const onDeleteHistoryPrediction = /* GraphQL */ `
                 accolade
                 createdAt
                 updatedAt
-                movieContendersId
               }
               nextToken
             }
@@ -4121,12 +3997,10 @@ export const onDeleteHistoryPrediction = /* GraphQL */ `
         accolade
         createdAt
         updatedAt
-        movieContendersId
       }
       ranking
       createdAt
       updatedAt
-      historyPredictionSetPredictionsId
     }
   }
 `;
@@ -4158,7 +4032,6 @@ export const onCreateCommunityPredictionSet = /* GraphQL */ `
             type
             createdAt
             updatedAt
-            eventCategoriesId
           }
           nextToken
         }
@@ -4194,7 +4067,6 @@ export const onCreateCommunityPredictionSet = /* GraphQL */ `
               type
               createdAt
               updatedAt
-              eventCategoriesId
             }
             nextToken
           }
@@ -4210,11 +4082,11 @@ export const onCreateCommunityPredictionSet = /* GraphQL */ `
         type
         createdAt
         updatedAt
-        eventCategoriesId
       }
       predictions {
         items {
           id
+          communityPredictionSetId
           contenderId
           contender {
             id
@@ -4236,7 +4108,6 @@ export const onCreateCommunityPredictionSet = /* GraphQL */ `
               type
               createdAt
               updatedAt
-              eventCategoriesId
             }
             eventId
             event {
@@ -4290,12 +4161,10 @@ export const onCreateCommunityPredictionSet = /* GraphQL */ `
             accolade
             createdAt
             updatedAt
-            movieContendersId
           }
           indexedRankings
           createdAt
           updatedAt
-          communityPredictionSetPredictionsId
         }
         nextToken
       }
@@ -4333,7 +4202,6 @@ export const onUpdateCommunityPredictionSet = /* GraphQL */ `
             type
             createdAt
             updatedAt
-            eventCategoriesId
           }
           nextToken
         }
@@ -4369,7 +4237,6 @@ export const onUpdateCommunityPredictionSet = /* GraphQL */ `
               type
               createdAt
               updatedAt
-              eventCategoriesId
             }
             nextToken
           }
@@ -4385,11 +4252,11 @@ export const onUpdateCommunityPredictionSet = /* GraphQL */ `
         type
         createdAt
         updatedAt
-        eventCategoriesId
       }
       predictions {
         items {
           id
+          communityPredictionSetId
           contenderId
           contender {
             id
@@ -4411,7 +4278,6 @@ export const onUpdateCommunityPredictionSet = /* GraphQL */ `
               type
               createdAt
               updatedAt
-              eventCategoriesId
             }
             eventId
             event {
@@ -4465,12 +4331,10 @@ export const onUpdateCommunityPredictionSet = /* GraphQL */ `
             accolade
             createdAt
             updatedAt
-            movieContendersId
           }
           indexedRankings
           createdAt
           updatedAt
-          communityPredictionSetPredictionsId
         }
         nextToken
       }
@@ -4508,7 +4372,6 @@ export const onDeleteCommunityPredictionSet = /* GraphQL */ `
             type
             createdAt
             updatedAt
-            eventCategoriesId
           }
           nextToken
         }
@@ -4544,7 +4407,6 @@ export const onDeleteCommunityPredictionSet = /* GraphQL */ `
               type
               createdAt
               updatedAt
-              eventCategoriesId
             }
             nextToken
           }
@@ -4560,11 +4422,11 @@ export const onDeleteCommunityPredictionSet = /* GraphQL */ `
         type
         createdAt
         updatedAt
-        eventCategoriesId
       }
       predictions {
         items {
           id
+          communityPredictionSetId
           contenderId
           contender {
             id
@@ -4586,7 +4448,6 @@ export const onDeleteCommunityPredictionSet = /* GraphQL */ `
               type
               createdAt
               updatedAt
-              eventCategoriesId
             }
             eventId
             event {
@@ -4640,12 +4501,10 @@ export const onDeleteCommunityPredictionSet = /* GraphQL */ `
             accolade
             createdAt
             updatedAt
-            movieContendersId
           }
           indexedRankings
           createdAt
           updatedAt
-          communityPredictionSetPredictionsId
         }
         nextToken
       }
@@ -4659,6 +4518,7 @@ export const onCreateCommunityPrediction = /* GraphQL */ `
   subscription OnCreateCommunityPrediction {
     onCreateCommunityPrediction {
       id
+      communityPredictionSetId
       contenderId
       contender {
         id
@@ -4676,7 +4536,6 @@ export const onCreateCommunityPrediction = /* GraphQL */ `
                 type
                 createdAt
                 updatedAt
-                eventCategoriesId
               }
               nextToken
             }
@@ -4692,7 +4551,6 @@ export const onCreateCommunityPrediction = /* GraphQL */ `
           type
           createdAt
           updatedAt
-          eventCategoriesId
         }
         eventId
         event {
@@ -4715,7 +4573,6 @@ export const onCreateCommunityPrediction = /* GraphQL */ `
               type
               createdAt
               updatedAt
-              eventCategoriesId
             }
             nextToken
           }
@@ -4741,7 +4598,6 @@ export const onCreateCommunityPrediction = /* GraphQL */ `
                 type
                 createdAt
                 updatedAt
-                eventCategoriesId
               }
               eventId
               event {
@@ -4782,7 +4638,6 @@ export const onCreateCommunityPrediction = /* GraphQL */ `
               accolade
               createdAt
               updatedAt
-              movieContendersId
             }
             nextToken
           }
@@ -4816,7 +4671,6 @@ export const onCreateCommunityPrediction = /* GraphQL */ `
                 accolade
                 createdAt
                 updatedAt
-                movieContendersId
               }
               nextToken
             }
@@ -4834,12 +4688,10 @@ export const onCreateCommunityPrediction = /* GraphQL */ `
         accolade
         createdAt
         updatedAt
-        movieContendersId
       }
       indexedRankings
       createdAt
       updatedAt
-      communityPredictionSetPredictionsId
     }
   }
 `;
@@ -4847,6 +4699,7 @@ export const onUpdateCommunityPrediction = /* GraphQL */ `
   subscription OnUpdateCommunityPrediction {
     onUpdateCommunityPrediction {
       id
+      communityPredictionSetId
       contenderId
       contender {
         id
@@ -4864,7 +4717,6 @@ export const onUpdateCommunityPrediction = /* GraphQL */ `
                 type
                 createdAt
                 updatedAt
-                eventCategoriesId
               }
               nextToken
             }
@@ -4880,7 +4732,6 @@ export const onUpdateCommunityPrediction = /* GraphQL */ `
           type
           createdAt
           updatedAt
-          eventCategoriesId
         }
         eventId
         event {
@@ -4903,7 +4754,6 @@ export const onUpdateCommunityPrediction = /* GraphQL */ `
               type
               createdAt
               updatedAt
-              eventCategoriesId
             }
             nextToken
           }
@@ -4929,7 +4779,6 @@ export const onUpdateCommunityPrediction = /* GraphQL */ `
                 type
                 createdAt
                 updatedAt
-                eventCategoriesId
               }
               eventId
               event {
@@ -4970,7 +4819,6 @@ export const onUpdateCommunityPrediction = /* GraphQL */ `
               accolade
               createdAt
               updatedAt
-              movieContendersId
             }
             nextToken
           }
@@ -5004,7 +4852,6 @@ export const onUpdateCommunityPrediction = /* GraphQL */ `
                 accolade
                 createdAt
                 updatedAt
-                movieContendersId
               }
               nextToken
             }
@@ -5022,12 +4869,10 @@ export const onUpdateCommunityPrediction = /* GraphQL */ `
         accolade
         createdAt
         updatedAt
-        movieContendersId
       }
       indexedRankings
       createdAt
       updatedAt
-      communityPredictionSetPredictionsId
     }
   }
 `;
@@ -5035,6 +4880,7 @@ export const onDeleteCommunityPrediction = /* GraphQL */ `
   subscription OnDeleteCommunityPrediction {
     onDeleteCommunityPrediction {
       id
+      communityPredictionSetId
       contenderId
       contender {
         id
@@ -5052,7 +4898,6 @@ export const onDeleteCommunityPrediction = /* GraphQL */ `
                 type
                 createdAt
                 updatedAt
-                eventCategoriesId
               }
               nextToken
             }
@@ -5068,7 +4913,6 @@ export const onDeleteCommunityPrediction = /* GraphQL */ `
           type
           createdAt
           updatedAt
-          eventCategoriesId
         }
         eventId
         event {
@@ -5091,7 +4935,6 @@ export const onDeleteCommunityPrediction = /* GraphQL */ `
               type
               createdAt
               updatedAt
-              eventCategoriesId
             }
             nextToken
           }
@@ -5117,7 +4960,6 @@ export const onDeleteCommunityPrediction = /* GraphQL */ `
                 type
                 createdAt
                 updatedAt
-                eventCategoriesId
               }
               eventId
               event {
@@ -5158,7 +5000,6 @@ export const onDeleteCommunityPrediction = /* GraphQL */ `
               accolade
               createdAt
               updatedAt
-              movieContendersId
             }
             nextToken
           }
@@ -5192,7 +5033,6 @@ export const onDeleteCommunityPrediction = /* GraphQL */ `
                 accolade
                 createdAt
                 updatedAt
-                movieContendersId
               }
               nextToken
             }
@@ -5210,12 +5050,10 @@ export const onDeleteCommunityPrediction = /* GraphQL */ `
         accolade
         createdAt
         updatedAt
-        movieContendersId
       }
       indexedRankings
       createdAt
       updatedAt
-      communityPredictionSetPredictionsId
     }
   }
 `;
@@ -5247,7 +5085,6 @@ export const onCreateCommunityHistoryPredictionSet = /* GraphQL */ `
             type
             createdAt
             updatedAt
-            eventCategoriesId
           }
           nextToken
         }
@@ -5283,7 +5120,6 @@ export const onCreateCommunityHistoryPredictionSet = /* GraphQL */ `
               type
               createdAt
               updatedAt
-              eventCategoriesId
             }
             nextToken
           }
@@ -5299,11 +5135,11 @@ export const onCreateCommunityHistoryPredictionSet = /* GraphQL */ `
         type
         createdAt
         updatedAt
-        eventCategoriesId
       }
       predictions {
         items {
           id
+          communityHistoryPredictionSetId
           contenderId
           contender {
             id
@@ -5325,7 +5161,6 @@ export const onCreateCommunityHistoryPredictionSet = /* GraphQL */ `
               type
               createdAt
               updatedAt
-              eventCategoriesId
             }
             eventId
             event {
@@ -5379,12 +5214,10 @@ export const onCreateCommunityHistoryPredictionSet = /* GraphQL */ `
             accolade
             createdAt
             updatedAt
-            movieContendersId
           }
           indexedRankings
           createdAt
           updatedAt
-          communityHistoryPredictionSetPredictionsId
         }
         nextToken
       }
@@ -5422,7 +5255,6 @@ export const onUpdateCommunityHistoryPredictionSet = /* GraphQL */ `
             type
             createdAt
             updatedAt
-            eventCategoriesId
           }
           nextToken
         }
@@ -5458,7 +5290,6 @@ export const onUpdateCommunityHistoryPredictionSet = /* GraphQL */ `
               type
               createdAt
               updatedAt
-              eventCategoriesId
             }
             nextToken
           }
@@ -5474,11 +5305,11 @@ export const onUpdateCommunityHistoryPredictionSet = /* GraphQL */ `
         type
         createdAt
         updatedAt
-        eventCategoriesId
       }
       predictions {
         items {
           id
+          communityHistoryPredictionSetId
           contenderId
           contender {
             id
@@ -5500,7 +5331,6 @@ export const onUpdateCommunityHistoryPredictionSet = /* GraphQL */ `
               type
               createdAt
               updatedAt
-              eventCategoriesId
             }
             eventId
             event {
@@ -5554,12 +5384,10 @@ export const onUpdateCommunityHistoryPredictionSet = /* GraphQL */ `
             accolade
             createdAt
             updatedAt
-            movieContendersId
           }
           indexedRankings
           createdAt
           updatedAt
-          communityHistoryPredictionSetPredictionsId
         }
         nextToken
       }
@@ -5597,7 +5425,6 @@ export const onDeleteCommunityHistoryPredictionSet = /* GraphQL */ `
             type
             createdAt
             updatedAt
-            eventCategoriesId
           }
           nextToken
         }
@@ -5633,7 +5460,6 @@ export const onDeleteCommunityHistoryPredictionSet = /* GraphQL */ `
               type
               createdAt
               updatedAt
-              eventCategoriesId
             }
             nextToken
           }
@@ -5649,11 +5475,11 @@ export const onDeleteCommunityHistoryPredictionSet = /* GraphQL */ `
         type
         createdAt
         updatedAt
-        eventCategoriesId
       }
       predictions {
         items {
           id
+          communityHistoryPredictionSetId
           contenderId
           contender {
             id
@@ -5675,7 +5501,6 @@ export const onDeleteCommunityHistoryPredictionSet = /* GraphQL */ `
               type
               createdAt
               updatedAt
-              eventCategoriesId
             }
             eventId
             event {
@@ -5729,12 +5554,10 @@ export const onDeleteCommunityHistoryPredictionSet = /* GraphQL */ `
             accolade
             createdAt
             updatedAt
-            movieContendersId
           }
           indexedRankings
           createdAt
           updatedAt
-          communityHistoryPredictionSetPredictionsId
         }
         nextToken
       }
@@ -5748,6 +5571,7 @@ export const onCreateCommunityHistoryPrediction = /* GraphQL */ `
   subscription OnCreateCommunityHistoryPrediction {
     onCreateCommunityHistoryPrediction {
       id
+      communityHistoryPredictionSetId
       contenderId
       contender {
         id
@@ -5765,7 +5589,6 @@ export const onCreateCommunityHistoryPrediction = /* GraphQL */ `
                 type
                 createdAt
                 updatedAt
-                eventCategoriesId
               }
               nextToken
             }
@@ -5781,7 +5604,6 @@ export const onCreateCommunityHistoryPrediction = /* GraphQL */ `
           type
           createdAt
           updatedAt
-          eventCategoriesId
         }
         eventId
         event {
@@ -5804,7 +5626,6 @@ export const onCreateCommunityHistoryPrediction = /* GraphQL */ `
               type
               createdAt
               updatedAt
-              eventCategoriesId
             }
             nextToken
           }
@@ -5830,7 +5651,6 @@ export const onCreateCommunityHistoryPrediction = /* GraphQL */ `
                 type
                 createdAt
                 updatedAt
-                eventCategoriesId
               }
               eventId
               event {
@@ -5871,7 +5691,6 @@ export const onCreateCommunityHistoryPrediction = /* GraphQL */ `
               accolade
               createdAt
               updatedAt
-              movieContendersId
             }
             nextToken
           }
@@ -5905,7 +5724,6 @@ export const onCreateCommunityHistoryPrediction = /* GraphQL */ `
                 accolade
                 createdAt
                 updatedAt
-                movieContendersId
               }
               nextToken
             }
@@ -5923,12 +5741,10 @@ export const onCreateCommunityHistoryPrediction = /* GraphQL */ `
         accolade
         createdAt
         updatedAt
-        movieContendersId
       }
       indexedRankings
       createdAt
       updatedAt
-      communityHistoryPredictionSetPredictionsId
     }
   }
 `;
@@ -5936,6 +5752,7 @@ export const onUpdateCommunityHistoryPrediction = /* GraphQL */ `
   subscription OnUpdateCommunityHistoryPrediction {
     onUpdateCommunityHistoryPrediction {
       id
+      communityHistoryPredictionSetId
       contenderId
       contender {
         id
@@ -5953,7 +5770,6 @@ export const onUpdateCommunityHistoryPrediction = /* GraphQL */ `
                 type
                 createdAt
                 updatedAt
-                eventCategoriesId
               }
               nextToken
             }
@@ -5969,7 +5785,6 @@ export const onUpdateCommunityHistoryPrediction = /* GraphQL */ `
           type
           createdAt
           updatedAt
-          eventCategoriesId
         }
         eventId
         event {
@@ -5992,7 +5807,6 @@ export const onUpdateCommunityHistoryPrediction = /* GraphQL */ `
               type
               createdAt
               updatedAt
-              eventCategoriesId
             }
             nextToken
           }
@@ -6018,7 +5832,6 @@ export const onUpdateCommunityHistoryPrediction = /* GraphQL */ `
                 type
                 createdAt
                 updatedAt
-                eventCategoriesId
               }
               eventId
               event {
@@ -6059,7 +5872,6 @@ export const onUpdateCommunityHistoryPrediction = /* GraphQL */ `
               accolade
               createdAt
               updatedAt
-              movieContendersId
             }
             nextToken
           }
@@ -6093,7 +5905,6 @@ export const onUpdateCommunityHistoryPrediction = /* GraphQL */ `
                 accolade
                 createdAt
                 updatedAt
-                movieContendersId
               }
               nextToken
             }
@@ -6111,12 +5922,10 @@ export const onUpdateCommunityHistoryPrediction = /* GraphQL */ `
         accolade
         createdAt
         updatedAt
-        movieContendersId
       }
       indexedRankings
       createdAt
       updatedAt
-      communityHistoryPredictionSetPredictionsId
     }
   }
 `;
@@ -6124,6 +5933,7 @@ export const onDeleteCommunityHistoryPrediction = /* GraphQL */ `
   subscription OnDeleteCommunityHistoryPrediction {
     onDeleteCommunityHistoryPrediction {
       id
+      communityHistoryPredictionSetId
       contenderId
       contender {
         id
@@ -6141,7 +5951,6 @@ export const onDeleteCommunityHistoryPrediction = /* GraphQL */ `
                 type
                 createdAt
                 updatedAt
-                eventCategoriesId
               }
               nextToken
             }
@@ -6157,7 +5966,6 @@ export const onDeleteCommunityHistoryPrediction = /* GraphQL */ `
           type
           createdAt
           updatedAt
-          eventCategoriesId
         }
         eventId
         event {
@@ -6180,7 +5988,6 @@ export const onDeleteCommunityHistoryPrediction = /* GraphQL */ `
               type
               createdAt
               updatedAt
-              eventCategoriesId
             }
             nextToken
           }
@@ -6206,7 +6013,6 @@ export const onDeleteCommunityHistoryPrediction = /* GraphQL */ `
                 type
                 createdAt
                 updatedAt
-                eventCategoriesId
               }
               eventId
               event {
@@ -6247,7 +6053,6 @@ export const onDeleteCommunityHistoryPrediction = /* GraphQL */ `
               accolade
               createdAt
               updatedAt
-              movieContendersId
             }
             nextToken
           }
@@ -6281,7 +6086,6 @@ export const onDeleteCommunityHistoryPrediction = /* GraphQL */ `
                 accolade
                 createdAt
                 updatedAt
-                movieContendersId
               }
               nextToken
             }
@@ -6299,12 +6103,10 @@ export const onDeleteCommunityHistoryPrediction = /* GraphQL */ `
         accolade
         createdAt
         updatedAt
-        movieContendersId
       }
       indexedRankings
       createdAt
       updatedAt
-      communityHistoryPredictionSetPredictionsId
     }
   }
 `;

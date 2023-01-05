@@ -111,7 +111,7 @@ const createPrediction = async (
       CreatePredictionMutationVariables
     >(mutations.createPrediction, {
       input: {
-        predictionSetPredictionsId: predictionSetId,
+        predictionSetId,
         contenderId,
         ranking,
       },

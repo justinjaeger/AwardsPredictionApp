@@ -269,7 +269,7 @@ export const getContenderById = async (
 
 export const updateContenderVisibilty = async (
   contenderId: string,
-  movieContendersId: string,
+  movieId: string,
   visibility: ContenderVisibility,
 ): Promise<iApiResponse<UpdateContenderMutation>> => {
   try {
@@ -277,7 +277,7 @@ export const updateContenderVisibilty = async (
       UpdateContenderMutation,
       UpdateContenderMutationVariables
     >(mutations.updateContender, {
-      input: { id: contenderId, movieContendersId, visibility },
+      input: { id: contenderId, movieId, visibility },
     });
     if (!data?.updateContender) {
       throw new Error(JSON.stringify(errors));
