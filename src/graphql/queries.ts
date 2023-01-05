@@ -47,6 +47,87 @@ export const listUsers = /* GraphQL */ `
     }
   }
 `;
+export const getRelationship = /* GraphQL */ `
+  query GetRelationship($id: ID!) {
+    getRelationship(id: $id) {
+      id
+      followedUserId
+      followedUser {
+        id
+        email
+        username
+        name
+        bio
+        image
+        role
+        createdAt
+        updatedAt
+      }
+      followingUserId
+      followingUser {
+        id
+        email
+        username
+        name
+        bio
+        image
+        role
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listRelationships = /* GraphQL */ `
+  query ListRelationships(
+    $id: ID
+    $filter: ModelRelationshipFilterInput
+    $limit: Int
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listRelationships(
+      id: $id
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        id
+        followedUserId
+        followedUser {
+          id
+          email
+          username
+          name
+          bio
+          image
+          role
+          createdAt
+          updatedAt
+        }
+        followingUserId
+        followingUser {
+          id
+          email
+          username
+          name
+          bio
+          image
+          role
+          createdAt
+          updatedAt
+        }
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
 export const getEvent = /* GraphQL */ `
   query GetEvent($id: ID!) {
     getEvent(id: $id) {
@@ -54,17 +135,15 @@ export const getEvent = /* GraphQL */ `
       categories {
         items {
           id
-          name
-          type
           eventId
           event {
             id
             categories {
               items {
                 id
+                eventId
                 name
                 type
-                eventId
                 createdAt
                 updatedAt
                 eventCategoriesId
@@ -79,6 +158,8 @@ export const getEvent = /* GraphQL */ `
             createdAt
             updatedAt
           }
+          name
+          type
           createdAt
           updatedAt
           eventCategoriesId
@@ -115,8 +196,6 @@ export const listEvents = /* GraphQL */ `
         categories {
           items {
             id
-            name
-            type
             eventId
             event {
               id
@@ -131,6 +210,8 @@ export const listEvents = /* GraphQL */ `
               createdAt
               updatedAt
             }
+            name
+            type
             createdAt
             updatedAt
             eventCategoriesId
@@ -153,16 +234,12 @@ export const getCategory = /* GraphQL */ `
   query GetCategory($id: ID!) {
     getCategory(id: $id) {
       id
-      name
-      type
       eventId
       event {
         id
         categories {
           items {
             id
-            name
-            type
             eventId
             event {
               id
@@ -177,6 +254,8 @@ export const getCategory = /* GraphQL */ `
               createdAt
               updatedAt
             }
+            name
+            type
             createdAt
             updatedAt
             eventCategoriesId
@@ -191,6 +270,8 @@ export const getCategory = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      name
+      type
       createdAt
       updatedAt
       eventCategoriesId
@@ -214,16 +295,12 @@ export const listCategories = /* GraphQL */ `
     ) {
       items {
         id
-        name
-        type
         eventId
         event {
           id
           categories {
             items {
               id
-              name
-              type
               eventId
               event {
                 id
@@ -235,6 +312,8 @@ export const listCategories = /* GraphQL */ `
                 createdAt
                 updatedAt
               }
+              name
+              type
               createdAt
               updatedAt
               eventCategoriesId
@@ -249,6 +328,8 @@ export const listCategories = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        name
+        type
         createdAt
         updatedAt
         eventCategoriesId
@@ -264,16 +345,12 @@ export const getContender = /* GraphQL */ `
       categoryId
       category {
         id
-        name
-        type
         eventId
         event {
           id
           categories {
             items {
               id
-              name
-              type
               eventId
               event {
                 id
@@ -285,6 +362,8 @@ export const getContender = /* GraphQL */ `
                 createdAt
                 updatedAt
               }
+              name
+              type
               createdAt
               updatedAt
               eventCategoriesId
@@ -299,6 +378,8 @@ export const getContender = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        name
+        type
         createdAt
         updatedAt
         eventCategoriesId
@@ -309,8 +390,6 @@ export const getContender = /* GraphQL */ `
         categories {
           items {
             id
-            name
-            type
             eventId
             event {
               id
@@ -325,6 +404,8 @@ export const getContender = /* GraphQL */ `
               createdAt
               updatedAt
             }
+            name
+            type
             createdAt
             updatedAt
             eventCategoriesId
@@ -342,16 +423,12 @@ export const getContender = /* GraphQL */ `
       movieId
       movie {
         id
-        tmdbId
-        studio
         contenders {
           items {
             id
             categoryId
             category {
               id
-              name
-              type
               eventId
               event {
                 id
@@ -363,6 +440,8 @@ export const getContender = /* GraphQL */ `
                 createdAt
                 updatedAt
               }
+              name
+              type
               createdAt
               updatedAt
               eventCategoriesId
@@ -384,11 +463,11 @@ export const getContender = /* GraphQL */ `
             movieId
             movie {
               id
-              tmdbId
-              studio
               contenders {
                 nextToken
               }
+              tmdbId
+              studio
               createdAt
               updatedAt
             }
@@ -402,8 +481,6 @@ export const getContender = /* GraphQL */ `
             songId
             song {
               id
-              title
-              artist
               movieId
               movie {
                 id
@@ -412,6 +489,8 @@ export const getContender = /* GraphQL */ `
                 createdAt
                 updatedAt
               }
+              title
+              artist
               createdAt
               updatedAt
             }
@@ -423,6 +502,8 @@ export const getContender = /* GraphQL */ `
           }
           nextToken
         }
+        tmdbId
+        studio
         createdAt
         updatedAt
       }
@@ -436,22 +517,18 @@ export const getContender = /* GraphQL */ `
       songId
       song {
         id
-        title
-        artist
         movieId
         movie {
           id
-          tmdbId
-          studio
           contenders {
             items {
               id
               categoryId
               category {
                 id
+                eventId
                 name
                 type
-                eventId
                 createdAt
                 updatedAt
                 eventCategoriesId
@@ -485,9 +562,9 @@ export const getContender = /* GraphQL */ `
               songId
               song {
                 id
+                movieId
                 title
                 artist
-                movieId
                 createdAt
                 updatedAt
               }
@@ -499,9 +576,13 @@ export const getContender = /* GraphQL */ `
             }
             nextToken
           }
+          tmdbId
+          studio
           createdAt
           updatedAt
         }
+        title
+        artist
         createdAt
         updatedAt
       }
@@ -533,17 +614,15 @@ export const listContenders = /* GraphQL */ `
         categoryId
         category {
           id
-          name
-          type
           eventId
           event {
             id
             categories {
               items {
                 id
+                eventId
                 name
                 type
-                eventId
                 createdAt
                 updatedAt
                 eventCategoriesId
@@ -558,6 +637,8 @@ export const listContenders = /* GraphQL */ `
             createdAt
             updatedAt
           }
+          name
+          type
           createdAt
           updatedAt
           eventCategoriesId
@@ -568,8 +649,6 @@ export const listContenders = /* GraphQL */ `
           categories {
             items {
               id
-              name
-              type
               eventId
               event {
                 id
@@ -581,6 +660,8 @@ export const listContenders = /* GraphQL */ `
                 createdAt
                 updatedAt
               }
+              name
+              type
               createdAt
               updatedAt
               eventCategoriesId
@@ -598,17 +679,15 @@ export const listContenders = /* GraphQL */ `
         movieId
         movie {
           id
-          tmdbId
-          studio
           contenders {
             items {
               id
               categoryId
               category {
                 id
+                eventId
                 name
                 type
-                eventId
                 createdAt
                 updatedAt
                 eventCategoriesId
@@ -642,9 +721,9 @@ export const listContenders = /* GraphQL */ `
               songId
               song {
                 id
+                movieId
                 title
                 artist
-                movieId
                 createdAt
                 updatedAt
               }
@@ -656,6 +735,8 @@ export const listContenders = /* GraphQL */ `
             }
             nextToken
           }
+          tmdbId
+          studio
           createdAt
           updatedAt
         }
@@ -669,13 +750,9 @@ export const listContenders = /* GraphQL */ `
         songId
         song {
           id
-          title
-          artist
           movieId
           movie {
             id
-            tmdbId
-            studio
             contenders {
               items {
                 id
@@ -692,9 +769,13 @@ export const listContenders = /* GraphQL */ `
               }
               nextToken
             }
+            tmdbId
+            studio
             createdAt
             updatedAt
           }
+          title
+          artist
           createdAt
           updatedAt
         }
@@ -712,16 +793,12 @@ export const getMovie = /* GraphQL */ `
   query GetMovie($id: ID!) {
     getMovie(id: $id) {
       id
-      tmdbId
-      studio
       contenders {
         items {
           id
           categoryId
           category {
             id
-            name
-            type
             eventId
             event {
               id
@@ -736,6 +813,8 @@ export const getMovie = /* GraphQL */ `
               createdAt
               updatedAt
             }
+            name
+            type
             createdAt
             updatedAt
             eventCategoriesId
@@ -746,9 +825,9 @@ export const getMovie = /* GraphQL */ `
             categories {
               items {
                 id
+                eventId
                 name
                 type
-                eventId
                 createdAt
                 updatedAt
                 eventCategoriesId
@@ -766,8 +845,6 @@ export const getMovie = /* GraphQL */ `
           movieId
           movie {
             id
-            tmdbId
-            studio
             contenders {
               items {
                 id
@@ -784,6 +861,8 @@ export const getMovie = /* GraphQL */ `
               }
               nextToken
             }
+            tmdbId
+            studio
             createdAt
             updatedAt
           }
@@ -797,19 +876,19 @@ export const getMovie = /* GraphQL */ `
           songId
           song {
             id
-            title
-            artist
             movieId
             movie {
               id
-              tmdbId
-              studio
               contenders {
                 nextToken
               }
+              tmdbId
+              studio
               createdAt
               updatedAt
             }
+            title
+            artist
             createdAt
             updatedAt
           }
@@ -821,6 +900,8 @@ export const getMovie = /* GraphQL */ `
         }
         nextToken
       }
+      tmdbId
+      studio
       createdAt
       updatedAt
     }
@@ -843,16 +924,12 @@ export const listMovies = /* GraphQL */ `
     ) {
       items {
         id
-        tmdbId
-        studio
         contenders {
           items {
             id
             categoryId
             category {
               id
-              name
-              type
               eventId
               event {
                 id
@@ -864,6 +941,8 @@ export const listMovies = /* GraphQL */ `
                 createdAt
                 updatedAt
               }
+              name
+              type
               createdAt
               updatedAt
               eventCategoriesId
@@ -885,11 +964,11 @@ export const listMovies = /* GraphQL */ `
             movieId
             movie {
               id
-              tmdbId
-              studio
               contenders {
                 nextToken
               }
+              tmdbId
+              studio
               createdAt
               updatedAt
             }
@@ -903,8 +982,6 @@ export const listMovies = /* GraphQL */ `
             songId
             song {
               id
-              title
-              artist
               movieId
               movie {
                 id
@@ -913,6 +990,8 @@ export const listMovies = /* GraphQL */ `
                 createdAt
                 updatedAt
               }
+              title
+              artist
               createdAt
               updatedAt
             }
@@ -924,6 +1003,8 @@ export const listMovies = /* GraphQL */ `
           }
           nextToken
         }
+        tmdbId
+        studio
         createdAt
         updatedAt
       }
@@ -970,21 +1051,15 @@ export const getSong = /* GraphQL */ `
   query GetSong($id: ID!) {
     getSong(id: $id) {
       id
-      title
-      artist
       movieId
       movie {
         id
-        tmdbId
-        studio
         contenders {
           items {
             id
             categoryId
             category {
               id
-              name
-              type
               eventId
               event {
                 id
@@ -996,6 +1071,8 @@ export const getSong = /* GraphQL */ `
                 createdAt
                 updatedAt
               }
+              name
+              type
               createdAt
               updatedAt
               eventCategoriesId
@@ -1017,11 +1094,11 @@ export const getSong = /* GraphQL */ `
             movieId
             movie {
               id
-              tmdbId
-              studio
               contenders {
                 nextToken
               }
+              tmdbId
+              studio
               createdAt
               updatedAt
             }
@@ -1035,8 +1112,6 @@ export const getSong = /* GraphQL */ `
             songId
             song {
               id
-              title
-              artist
               movieId
               movie {
                 id
@@ -1045,6 +1120,8 @@ export const getSong = /* GraphQL */ `
                 createdAt
                 updatedAt
               }
+              title
+              artist
               createdAt
               updatedAt
             }
@@ -1056,9 +1133,13 @@ export const getSong = /* GraphQL */ `
           }
           nextToken
         }
+        tmdbId
+        studio
         createdAt
         updatedAt
       }
+      title
+      artist
       createdAt
       updatedAt
     }
@@ -1081,22 +1162,18 @@ export const listSongs = /* GraphQL */ `
     ) {
       items {
         id
-        title
-        artist
         movieId
         movie {
           id
-          tmdbId
-          studio
           contenders {
             items {
               id
               categoryId
               category {
                 id
+                eventId
                 name
                 type
-                eventId
                 createdAt
                 updatedAt
                 eventCategoriesId
@@ -1130,9 +1207,9 @@ export const listSongs = /* GraphQL */ `
               songId
               song {
                 id
+                movieId
                 title
                 artist
-                movieId
                 createdAt
                 updatedAt
               }
@@ -1144,9 +1221,13 @@ export const listSongs = /* GraphQL */ `
             }
             nextToken
           }
+          tmdbId
+          studio
           createdAt
           updatedAt
         }
+        title
+        artist
         createdAt
         updatedAt
       }
@@ -1176,8 +1257,6 @@ export const getPredictionSet = /* GraphQL */ `
         categories {
           items {
             id
-            name
-            type
             eventId
             event {
               id
@@ -1192,6 +1271,8 @@ export const getPredictionSet = /* GraphQL */ `
               createdAt
               updatedAt
             }
+            name
+            type
             createdAt
             updatedAt
             eventCategoriesId
@@ -1209,16 +1290,12 @@ export const getPredictionSet = /* GraphQL */ `
       categoryId
       category {
         id
-        name
-        type
         eventId
         event {
           id
           categories {
             items {
               id
-              name
-              type
               eventId
               event {
                 id
@@ -1230,6 +1307,8 @@ export const getPredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
               }
+              name
+              type
               createdAt
               updatedAt
               eventCategoriesId
@@ -1244,6 +1323,8 @@ export const getPredictionSet = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        name
+        type
         createdAt
         updatedAt
         eventCategoriesId
@@ -1257,8 +1338,6 @@ export const getPredictionSet = /* GraphQL */ `
             categoryId
             category {
               id
-              name
-              type
               eventId
               event {
                 id
@@ -1270,6 +1349,8 @@ export const getPredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
               }
+              name
+              type
               createdAt
               updatedAt
               eventCategoriesId
@@ -1291,11 +1372,11 @@ export const getPredictionSet = /* GraphQL */ `
             movieId
             movie {
               id
-              tmdbId
-              studio
               contenders {
                 nextToken
               }
+              tmdbId
+              studio
               createdAt
               updatedAt
             }
@@ -1309,8 +1390,6 @@ export const getPredictionSet = /* GraphQL */ `
             songId
             song {
               id
-              title
-              artist
               movieId
               movie {
                 id
@@ -1319,6 +1398,8 @@ export const getPredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
               }
+              title
+              artist
               createdAt
               updatedAt
             }
@@ -1376,8 +1457,6 @@ export const listPredictionSets = /* GraphQL */ `
           categories {
             items {
               id
-              name
-              type
               eventId
               event {
                 id
@@ -1389,6 +1468,8 @@ export const listPredictionSets = /* GraphQL */ `
                 createdAt
                 updatedAt
               }
+              name
+              type
               createdAt
               updatedAt
               eventCategoriesId
@@ -1406,17 +1487,15 @@ export const listPredictionSets = /* GraphQL */ `
         categoryId
         category {
           id
-          name
-          type
           eventId
           event {
             id
             categories {
               items {
                 id
+                eventId
                 name
                 type
-                eventId
                 createdAt
                 updatedAt
                 eventCategoriesId
@@ -1431,6 +1510,8 @@ export const listPredictionSets = /* GraphQL */ `
             createdAt
             updatedAt
           }
+          name
+          type
           createdAt
           updatedAt
           eventCategoriesId
@@ -1444,9 +1525,9 @@ export const listPredictionSets = /* GraphQL */ `
               categoryId
               category {
                 id
+                eventId
                 name
                 type
-                eventId
                 createdAt
                 updatedAt
                 eventCategoriesId
@@ -1480,9 +1561,9 @@ export const listPredictionSets = /* GraphQL */ `
               songId
               song {
                 id
+                movieId
                 title
                 artist
-                movieId
                 createdAt
                 updatedAt
               }
@@ -1517,17 +1598,15 @@ export const getPrediction = /* GraphQL */ `
         categoryId
         category {
           id
-          name
-          type
           eventId
           event {
             id
             categories {
               items {
                 id
+                eventId
                 name
                 type
-                eventId
                 createdAt
                 updatedAt
                 eventCategoriesId
@@ -1542,6 +1621,8 @@ export const getPrediction = /* GraphQL */ `
             createdAt
             updatedAt
           }
+          name
+          type
           createdAt
           updatedAt
           eventCategoriesId
@@ -1552,8 +1633,6 @@ export const getPrediction = /* GraphQL */ `
           categories {
             items {
               id
-              name
-              type
               eventId
               event {
                 id
@@ -1565,6 +1644,8 @@ export const getPrediction = /* GraphQL */ `
                 createdAt
                 updatedAt
               }
+              name
+              type
               createdAt
               updatedAt
               eventCategoriesId
@@ -1582,17 +1663,15 @@ export const getPrediction = /* GraphQL */ `
         movieId
         movie {
           id
-          tmdbId
-          studio
           contenders {
             items {
               id
               categoryId
               category {
                 id
+                eventId
                 name
                 type
-                eventId
                 createdAt
                 updatedAt
                 eventCategoriesId
@@ -1626,9 +1705,9 @@ export const getPrediction = /* GraphQL */ `
               songId
               song {
                 id
+                movieId
                 title
                 artist
-                movieId
                 createdAt
                 updatedAt
               }
@@ -1640,6 +1719,8 @@ export const getPrediction = /* GraphQL */ `
             }
             nextToken
           }
+          tmdbId
+          studio
           createdAt
           updatedAt
         }
@@ -1653,13 +1734,9 @@ export const getPrediction = /* GraphQL */ `
         songId
         song {
           id
-          title
-          artist
           movieId
           movie {
             id
-            tmdbId
-            studio
             contenders {
               items {
                 id
@@ -1676,9 +1753,13 @@ export const getPrediction = /* GraphQL */ `
               }
               nextToken
             }
+            tmdbId
+            studio
             createdAt
             updatedAt
           }
+          title
+          artist
           createdAt
           updatedAt
         }
@@ -1718,8 +1799,6 @@ export const listPredictions = /* GraphQL */ `
           categoryId
           category {
             id
-            name
-            type
             eventId
             event {
               id
@@ -1734,6 +1813,8 @@ export const listPredictions = /* GraphQL */ `
               createdAt
               updatedAt
             }
+            name
+            type
             createdAt
             updatedAt
             eventCategoriesId
@@ -1744,9 +1825,9 @@ export const listPredictions = /* GraphQL */ `
             categories {
               items {
                 id
+                eventId
                 name
                 type
-                eventId
                 createdAt
                 updatedAt
                 eventCategoriesId
@@ -1764,8 +1845,6 @@ export const listPredictions = /* GraphQL */ `
           movieId
           movie {
             id
-            tmdbId
-            studio
             contenders {
               items {
                 id
@@ -1782,6 +1861,8 @@ export const listPredictions = /* GraphQL */ `
               }
               nextToken
             }
+            tmdbId
+            studio
             createdAt
             updatedAt
           }
@@ -1795,19 +1876,19 @@ export const listPredictions = /* GraphQL */ `
           songId
           song {
             id
-            title
-            artist
             movieId
             movie {
               id
-              tmdbId
-              studio
               contenders {
                 nextToken
               }
+              tmdbId
+              studio
               createdAt
               updatedAt
             }
+            title
+            artist
             createdAt
             updatedAt
           }
@@ -1848,8 +1929,6 @@ export const getHistoryPredictionSet = /* GraphQL */ `
         categories {
           items {
             id
-            name
-            type
             eventId
             event {
               id
@@ -1864,6 +1943,8 @@ export const getHistoryPredictionSet = /* GraphQL */ `
               createdAt
               updatedAt
             }
+            name
+            type
             createdAt
             updatedAt
             eventCategoriesId
@@ -1881,16 +1962,12 @@ export const getHistoryPredictionSet = /* GraphQL */ `
       categoryId
       category {
         id
-        name
-        type
         eventId
         event {
           id
           categories {
             items {
               id
-              name
-              type
               eventId
               event {
                 id
@@ -1902,6 +1979,8 @@ export const getHistoryPredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
               }
+              name
+              type
               createdAt
               updatedAt
               eventCategoriesId
@@ -1916,6 +1995,8 @@ export const getHistoryPredictionSet = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        name
+        type
         createdAt
         updatedAt
         eventCategoriesId
@@ -1929,8 +2010,6 @@ export const getHistoryPredictionSet = /* GraphQL */ `
             categoryId
             category {
               id
-              name
-              type
               eventId
               event {
                 id
@@ -1942,6 +2021,8 @@ export const getHistoryPredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
               }
+              name
+              type
               createdAt
               updatedAt
               eventCategoriesId
@@ -1963,11 +2044,11 @@ export const getHistoryPredictionSet = /* GraphQL */ `
             movieId
             movie {
               id
-              tmdbId
-              studio
               contenders {
                 nextToken
               }
+              tmdbId
+              studio
               createdAt
               updatedAt
             }
@@ -1981,8 +2062,6 @@ export const getHistoryPredictionSet = /* GraphQL */ `
             songId
             song {
               id
-              title
-              artist
               movieId
               movie {
                 id
@@ -1991,6 +2070,8 @@ export const getHistoryPredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
               }
+              title
+              artist
               createdAt
               updatedAt
             }
@@ -2048,8 +2129,6 @@ export const listHistoryPredictionSets = /* GraphQL */ `
           categories {
             items {
               id
-              name
-              type
               eventId
               event {
                 id
@@ -2061,6 +2140,8 @@ export const listHistoryPredictionSets = /* GraphQL */ `
                 createdAt
                 updatedAt
               }
+              name
+              type
               createdAt
               updatedAt
               eventCategoriesId
@@ -2078,17 +2159,15 @@ export const listHistoryPredictionSets = /* GraphQL */ `
         categoryId
         category {
           id
-          name
-          type
           eventId
           event {
             id
             categories {
               items {
                 id
+                eventId
                 name
                 type
-                eventId
                 createdAt
                 updatedAt
                 eventCategoriesId
@@ -2103,6 +2182,8 @@ export const listHistoryPredictionSets = /* GraphQL */ `
             createdAt
             updatedAt
           }
+          name
+          type
           createdAt
           updatedAt
           eventCategoriesId
@@ -2116,9 +2197,9 @@ export const listHistoryPredictionSets = /* GraphQL */ `
               categoryId
               category {
                 id
+                eventId
                 name
                 type
-                eventId
                 createdAt
                 updatedAt
                 eventCategoriesId
@@ -2152,9 +2233,9 @@ export const listHistoryPredictionSets = /* GraphQL */ `
               songId
               song {
                 id
+                movieId
                 title
                 artist
-                movieId
                 createdAt
                 updatedAt
               }
@@ -2189,17 +2270,15 @@ export const getHistoryPrediction = /* GraphQL */ `
         categoryId
         category {
           id
-          name
-          type
           eventId
           event {
             id
             categories {
               items {
                 id
+                eventId
                 name
                 type
-                eventId
                 createdAt
                 updatedAt
                 eventCategoriesId
@@ -2214,6 +2293,8 @@ export const getHistoryPrediction = /* GraphQL */ `
             createdAt
             updatedAt
           }
+          name
+          type
           createdAt
           updatedAt
           eventCategoriesId
@@ -2224,8 +2305,6 @@ export const getHistoryPrediction = /* GraphQL */ `
           categories {
             items {
               id
-              name
-              type
               eventId
               event {
                 id
@@ -2237,6 +2316,8 @@ export const getHistoryPrediction = /* GraphQL */ `
                 createdAt
                 updatedAt
               }
+              name
+              type
               createdAt
               updatedAt
               eventCategoriesId
@@ -2254,17 +2335,15 @@ export const getHistoryPrediction = /* GraphQL */ `
         movieId
         movie {
           id
-          tmdbId
-          studio
           contenders {
             items {
               id
               categoryId
               category {
                 id
+                eventId
                 name
                 type
-                eventId
                 createdAt
                 updatedAt
                 eventCategoriesId
@@ -2298,9 +2377,9 @@ export const getHistoryPrediction = /* GraphQL */ `
               songId
               song {
                 id
+                movieId
                 title
                 artist
-                movieId
                 createdAt
                 updatedAt
               }
@@ -2312,6 +2391,8 @@ export const getHistoryPrediction = /* GraphQL */ `
             }
             nextToken
           }
+          tmdbId
+          studio
           createdAt
           updatedAt
         }
@@ -2325,13 +2406,9 @@ export const getHistoryPrediction = /* GraphQL */ `
         songId
         song {
           id
-          title
-          artist
           movieId
           movie {
             id
-            tmdbId
-            studio
             contenders {
               items {
                 id
@@ -2348,9 +2425,13 @@ export const getHistoryPrediction = /* GraphQL */ `
               }
               nextToken
             }
+            tmdbId
+            studio
             createdAt
             updatedAt
           }
+          title
+          artist
           createdAt
           updatedAt
         }
@@ -2390,8 +2471,6 @@ export const listHistoryPredictions = /* GraphQL */ `
           categoryId
           category {
             id
-            name
-            type
             eventId
             event {
               id
@@ -2406,6 +2485,8 @@ export const listHistoryPredictions = /* GraphQL */ `
               createdAt
               updatedAt
             }
+            name
+            type
             createdAt
             updatedAt
             eventCategoriesId
@@ -2416,9 +2497,9 @@ export const listHistoryPredictions = /* GraphQL */ `
             categories {
               items {
                 id
+                eventId
                 name
                 type
-                eventId
                 createdAt
                 updatedAt
                 eventCategoriesId
@@ -2436,8 +2517,6 @@ export const listHistoryPredictions = /* GraphQL */ `
           movieId
           movie {
             id
-            tmdbId
-            studio
             contenders {
               items {
                 id
@@ -2454,6 +2533,8 @@ export const listHistoryPredictions = /* GraphQL */ `
               }
               nextToken
             }
+            tmdbId
+            studio
             createdAt
             updatedAt
           }
@@ -2467,19 +2548,19 @@ export const listHistoryPredictions = /* GraphQL */ `
           songId
           song {
             id
-            title
-            artist
             movieId
             movie {
               id
-              tmdbId
-              studio
               contenders {
                 nextToken
               }
+              tmdbId
+              studio
               createdAt
               updatedAt
             }
+            title
+            artist
             createdAt
             updatedAt
           }
@@ -2508,8 +2589,6 @@ export const getCommunityPredictionSet = /* GraphQL */ `
         categories {
           items {
             id
-            name
-            type
             eventId
             event {
               id
@@ -2524,6 +2603,8 @@ export const getCommunityPredictionSet = /* GraphQL */ `
               createdAt
               updatedAt
             }
+            name
+            type
             createdAt
             updatedAt
             eventCategoriesId
@@ -2541,16 +2622,12 @@ export const getCommunityPredictionSet = /* GraphQL */ `
       categoryId
       category {
         id
-        name
-        type
         eventId
         event {
           id
           categories {
             items {
               id
-              name
-              type
               eventId
               event {
                 id
@@ -2562,6 +2639,8 @@ export const getCommunityPredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
               }
+              name
+              type
               createdAt
               updatedAt
               eventCategoriesId
@@ -2576,6 +2655,8 @@ export const getCommunityPredictionSet = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        name
+        type
         createdAt
         updatedAt
         eventCategoriesId
@@ -2589,8 +2670,6 @@ export const getCommunityPredictionSet = /* GraphQL */ `
             categoryId
             category {
               id
-              name
-              type
               eventId
               event {
                 id
@@ -2602,6 +2681,8 @@ export const getCommunityPredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
               }
+              name
+              type
               createdAt
               updatedAt
               eventCategoriesId
@@ -2623,11 +2704,11 @@ export const getCommunityPredictionSet = /* GraphQL */ `
             movieId
             movie {
               id
-              tmdbId
-              studio
               contenders {
                 nextToken
               }
+              tmdbId
+              studio
               createdAt
               updatedAt
             }
@@ -2641,8 +2722,6 @@ export const getCommunityPredictionSet = /* GraphQL */ `
             songId
             song {
               id
-              title
-              artist
               movieId
               movie {
                 id
@@ -2651,6 +2730,8 @@ export const getCommunityPredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
               }
+              title
+              artist
               createdAt
               updatedAt
             }
@@ -2696,8 +2777,6 @@ export const listCommunityPredictionSets = /* GraphQL */ `
           categories {
             items {
               id
-              name
-              type
               eventId
               event {
                 id
@@ -2709,6 +2788,8 @@ export const listCommunityPredictionSets = /* GraphQL */ `
                 createdAt
                 updatedAt
               }
+              name
+              type
               createdAt
               updatedAt
               eventCategoriesId
@@ -2726,17 +2807,15 @@ export const listCommunityPredictionSets = /* GraphQL */ `
         categoryId
         category {
           id
-          name
-          type
           eventId
           event {
             id
             categories {
               items {
                 id
+                eventId
                 name
                 type
-                eventId
                 createdAt
                 updatedAt
                 eventCategoriesId
@@ -2751,6 +2830,8 @@ export const listCommunityPredictionSets = /* GraphQL */ `
             createdAt
             updatedAt
           }
+          name
+          type
           createdAt
           updatedAt
           eventCategoriesId
@@ -2764,9 +2845,9 @@ export const listCommunityPredictionSets = /* GraphQL */ `
               categoryId
               category {
                 id
+                eventId
                 name
                 type
-                eventId
                 createdAt
                 updatedAt
                 eventCategoriesId
@@ -2800,9 +2881,9 @@ export const listCommunityPredictionSets = /* GraphQL */ `
               songId
               song {
                 id
+                movieId
                 title
                 artist
-                movieId
                 createdAt
                 updatedAt
               }
@@ -2837,17 +2918,15 @@ export const getCommunityPrediction = /* GraphQL */ `
         categoryId
         category {
           id
-          name
-          type
           eventId
           event {
             id
             categories {
               items {
                 id
+                eventId
                 name
                 type
-                eventId
                 createdAt
                 updatedAt
                 eventCategoriesId
@@ -2862,6 +2941,8 @@ export const getCommunityPrediction = /* GraphQL */ `
             createdAt
             updatedAt
           }
+          name
+          type
           createdAt
           updatedAt
           eventCategoriesId
@@ -2872,8 +2953,6 @@ export const getCommunityPrediction = /* GraphQL */ `
           categories {
             items {
               id
-              name
-              type
               eventId
               event {
                 id
@@ -2885,6 +2964,8 @@ export const getCommunityPrediction = /* GraphQL */ `
                 createdAt
                 updatedAt
               }
+              name
+              type
               createdAt
               updatedAt
               eventCategoriesId
@@ -2902,17 +2983,15 @@ export const getCommunityPrediction = /* GraphQL */ `
         movieId
         movie {
           id
-          tmdbId
-          studio
           contenders {
             items {
               id
               categoryId
               category {
                 id
+                eventId
                 name
                 type
-                eventId
                 createdAt
                 updatedAt
                 eventCategoriesId
@@ -2946,9 +3025,9 @@ export const getCommunityPrediction = /* GraphQL */ `
               songId
               song {
                 id
+                movieId
                 title
                 artist
-                movieId
                 createdAt
                 updatedAt
               }
@@ -2960,6 +3039,8 @@ export const getCommunityPrediction = /* GraphQL */ `
             }
             nextToken
           }
+          tmdbId
+          studio
           createdAt
           updatedAt
         }
@@ -2973,13 +3054,9 @@ export const getCommunityPrediction = /* GraphQL */ `
         songId
         song {
           id
-          title
-          artist
           movieId
           movie {
             id
-            tmdbId
-            studio
             contenders {
               items {
                 id
@@ -2996,9 +3073,13 @@ export const getCommunityPrediction = /* GraphQL */ `
               }
               nextToken
             }
+            tmdbId
+            studio
             createdAt
             updatedAt
           }
+          title
+          artist
           createdAt
           updatedAt
         }
@@ -3038,8 +3119,6 @@ export const listCommunityPredictions = /* GraphQL */ `
           categoryId
           category {
             id
-            name
-            type
             eventId
             event {
               id
@@ -3054,6 +3133,8 @@ export const listCommunityPredictions = /* GraphQL */ `
               createdAt
               updatedAt
             }
+            name
+            type
             createdAt
             updatedAt
             eventCategoriesId
@@ -3064,9 +3145,9 @@ export const listCommunityPredictions = /* GraphQL */ `
             categories {
               items {
                 id
+                eventId
                 name
                 type
-                eventId
                 createdAt
                 updatedAt
                 eventCategoriesId
@@ -3084,8 +3165,6 @@ export const listCommunityPredictions = /* GraphQL */ `
           movieId
           movie {
             id
-            tmdbId
-            studio
             contenders {
               items {
                 id
@@ -3102,6 +3181,8 @@ export const listCommunityPredictions = /* GraphQL */ `
               }
               nextToken
             }
+            tmdbId
+            studio
             createdAt
             updatedAt
           }
@@ -3115,19 +3196,19 @@ export const listCommunityPredictions = /* GraphQL */ `
           songId
           song {
             id
-            title
-            artist
             movieId
             movie {
               id
-              tmdbId
-              studio
               contenders {
                 nextToken
               }
+              tmdbId
+              studio
               createdAt
               updatedAt
             }
+            title
+            artist
             createdAt
             updatedAt
           }
@@ -3156,8 +3237,6 @@ export const getCommunityHistoryPredictionSet = /* GraphQL */ `
         categories {
           items {
             id
-            name
-            type
             eventId
             event {
               id
@@ -3172,6 +3251,8 @@ export const getCommunityHistoryPredictionSet = /* GraphQL */ `
               createdAt
               updatedAt
             }
+            name
+            type
             createdAt
             updatedAt
             eventCategoriesId
@@ -3189,16 +3270,12 @@ export const getCommunityHistoryPredictionSet = /* GraphQL */ `
       categoryId
       category {
         id
-        name
-        type
         eventId
         event {
           id
           categories {
             items {
               id
-              name
-              type
               eventId
               event {
                 id
@@ -3210,6 +3287,8 @@ export const getCommunityHistoryPredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
               }
+              name
+              type
               createdAt
               updatedAt
               eventCategoriesId
@@ -3224,6 +3303,8 @@ export const getCommunityHistoryPredictionSet = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        name
+        type
         createdAt
         updatedAt
         eventCategoriesId
@@ -3237,8 +3318,6 @@ export const getCommunityHistoryPredictionSet = /* GraphQL */ `
             categoryId
             category {
               id
-              name
-              type
               eventId
               event {
                 id
@@ -3250,6 +3329,8 @@ export const getCommunityHistoryPredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
               }
+              name
+              type
               createdAt
               updatedAt
               eventCategoriesId
@@ -3271,11 +3352,11 @@ export const getCommunityHistoryPredictionSet = /* GraphQL */ `
             movieId
             movie {
               id
-              tmdbId
-              studio
               contenders {
                 nextToken
               }
+              tmdbId
+              studio
               createdAt
               updatedAt
             }
@@ -3289,8 +3370,6 @@ export const getCommunityHistoryPredictionSet = /* GraphQL */ `
             songId
             song {
               id
-              title
-              artist
               movieId
               movie {
                 id
@@ -3299,6 +3378,8 @@ export const getCommunityHistoryPredictionSet = /* GraphQL */ `
                 createdAt
                 updatedAt
               }
+              title
+              artist
               createdAt
               updatedAt
             }
@@ -3344,8 +3425,6 @@ export const listCommunityHistoryPredictionSets = /* GraphQL */ `
           categories {
             items {
               id
-              name
-              type
               eventId
               event {
                 id
@@ -3357,6 +3436,8 @@ export const listCommunityHistoryPredictionSets = /* GraphQL */ `
                 createdAt
                 updatedAt
               }
+              name
+              type
               createdAt
               updatedAt
               eventCategoriesId
@@ -3374,17 +3455,15 @@ export const listCommunityHistoryPredictionSets = /* GraphQL */ `
         categoryId
         category {
           id
-          name
-          type
           eventId
           event {
             id
             categories {
               items {
                 id
+                eventId
                 name
                 type
-                eventId
                 createdAt
                 updatedAt
                 eventCategoriesId
@@ -3399,6 +3478,8 @@ export const listCommunityHistoryPredictionSets = /* GraphQL */ `
             createdAt
             updatedAt
           }
+          name
+          type
           createdAt
           updatedAt
           eventCategoriesId
@@ -3412,9 +3493,9 @@ export const listCommunityHistoryPredictionSets = /* GraphQL */ `
               categoryId
               category {
                 id
+                eventId
                 name
                 type
-                eventId
                 createdAt
                 updatedAt
                 eventCategoriesId
@@ -3448,9 +3529,9 @@ export const listCommunityHistoryPredictionSets = /* GraphQL */ `
               songId
               song {
                 id
+                movieId
                 title
                 artist
-                movieId
                 createdAt
                 updatedAt
               }
@@ -3485,17 +3566,15 @@ export const getCommunityHistoryPrediction = /* GraphQL */ `
         categoryId
         category {
           id
-          name
-          type
           eventId
           event {
             id
             categories {
               items {
                 id
+                eventId
                 name
                 type
-                eventId
                 createdAt
                 updatedAt
                 eventCategoriesId
@@ -3510,6 +3589,8 @@ export const getCommunityHistoryPrediction = /* GraphQL */ `
             createdAt
             updatedAt
           }
+          name
+          type
           createdAt
           updatedAt
           eventCategoriesId
@@ -3520,8 +3601,6 @@ export const getCommunityHistoryPrediction = /* GraphQL */ `
           categories {
             items {
               id
-              name
-              type
               eventId
               event {
                 id
@@ -3533,6 +3612,8 @@ export const getCommunityHistoryPrediction = /* GraphQL */ `
                 createdAt
                 updatedAt
               }
+              name
+              type
               createdAt
               updatedAt
               eventCategoriesId
@@ -3550,17 +3631,15 @@ export const getCommunityHistoryPrediction = /* GraphQL */ `
         movieId
         movie {
           id
-          tmdbId
-          studio
           contenders {
             items {
               id
               categoryId
               category {
                 id
+                eventId
                 name
                 type
-                eventId
                 createdAt
                 updatedAt
                 eventCategoriesId
@@ -3594,9 +3673,9 @@ export const getCommunityHistoryPrediction = /* GraphQL */ `
               songId
               song {
                 id
+                movieId
                 title
                 artist
-                movieId
                 createdAt
                 updatedAt
               }
@@ -3608,6 +3687,8 @@ export const getCommunityHistoryPrediction = /* GraphQL */ `
             }
             nextToken
           }
+          tmdbId
+          studio
           createdAt
           updatedAt
         }
@@ -3621,13 +3702,9 @@ export const getCommunityHistoryPrediction = /* GraphQL */ `
         songId
         song {
           id
-          title
-          artist
           movieId
           movie {
             id
-            tmdbId
-            studio
             contenders {
               items {
                 id
@@ -3644,9 +3721,13 @@ export const getCommunityHistoryPrediction = /* GraphQL */ `
               }
               nextToken
             }
+            tmdbId
+            studio
             createdAt
             updatedAt
           }
+          title
+          artist
           createdAt
           updatedAt
         }
@@ -3686,8 +3767,6 @@ export const listCommunityHistoryPredictions = /* GraphQL */ `
           categoryId
           category {
             id
-            name
-            type
             eventId
             event {
               id
@@ -3702,6 +3781,8 @@ export const listCommunityHistoryPredictions = /* GraphQL */ `
               createdAt
               updatedAt
             }
+            name
+            type
             createdAt
             updatedAt
             eventCategoriesId
@@ -3712,9 +3793,9 @@ export const listCommunityHistoryPredictions = /* GraphQL */ `
             categories {
               items {
                 id
+                eventId
                 name
                 type
-                eventId
                 createdAt
                 updatedAt
                 eventCategoriesId
@@ -3732,8 +3813,6 @@ export const listCommunityHistoryPredictions = /* GraphQL */ `
           movieId
           movie {
             id
-            tmdbId
-            studio
             contenders {
               items {
                 id
@@ -3750,6 +3829,8 @@ export const listCommunityHistoryPredictions = /* GraphQL */ `
               }
               nextToken
             }
+            tmdbId
+            studio
             createdAt
             updatedAt
           }
@@ -3763,19 +3844,19 @@ export const listCommunityHistoryPredictions = /* GraphQL */ `
           songId
           song {
             id
-            title
-            artist
             movieId
             movie {
               id
-              tmdbId
-              studio
               contenders {
                 nextToken
               }
+              tmdbId
+              studio
               createdAt
               updatedAt
             }
+            title
+            artist
             createdAt
             updatedAt
           }

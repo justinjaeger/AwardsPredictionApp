@@ -110,6 +110,14 @@ type User @model @auth(rules: [{allow: public}]) {
     role: UserRole! @default(value: "USER")
 }
 
+type Relationship @model @auth(rules: [{ allow: public }]) {
+    id: ID! @primaryKey
+    followedUserId: ID! @index # relationshipByFollowedUserId
+    followedUser: User! @hasOne(fields: ["followedUserId"])
+    followingUserId: ID! @index # relationshipByFollowingUserId
+    followingUser: User! @hasOne(fields: ["followingUserId"])
+}
+
 type Event @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
     categories: [Category] @hasMany
@@ -122,10 +130,10 @@ type Event @model @auth(rules: [{ allow: public }]) {
 
 type Category @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
+    eventId: ID!
+    event: Event! @belongsTo(fields: ["eventId"])
     name: CategoryName!
     type: CategoryType! @default(value: "FILM")
-    eventId: ID!
-    event: Event! @belongsTo(fields: ["eventId"]) # Lets you retrieve info about the event from a Category record
 }
 
 # Belongs to a particular category
@@ -147,9 +155,9 @@ type Contender @model @auth(rules: [{ allow: public }]) {
 
 type Movie @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
+    contenders: [Contender] @hasMany
     tmdbId: Int! # unique value
     studio: String # distribution studio
-    contenders: [Contender] @hasMany
 }
 
 type Person @model @auth(rules: [{ allow: public }]) {
@@ -159,10 +167,10 @@ type Person @model @auth(rules: [{ allow: public }]) {
   
 type Song @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
-    title: String!
-    artist: String!
     movieId: ID!
     movie: Movie! @hasOne(fields: ["movieId"])
+    title: String!
+    artist: String!
 }
 
 # PREDICTIONS:

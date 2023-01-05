@@ -102,6 +102,57 @@ export type DeleteUserInput = {
   id: string,
 };
 
+export type CreateRelationshipInput = {
+  id?: string | null,
+  followedUserId: string,
+  followingUserId: string,
+};
+
+export type ModelRelationshipConditionInput = {
+  followedUserId?: ModelIDInput | null,
+  followingUserId?: ModelIDInput | null,
+  and?: Array< ModelRelationshipConditionInput | null > | null,
+  or?: Array< ModelRelationshipConditionInput | null > | null,
+  not?: ModelRelationshipConditionInput | null,
+};
+
+export type ModelIDInput = {
+  ne?: string | null,
+  eq?: string | null,
+  le?: string | null,
+  lt?: string | null,
+  ge?: string | null,
+  gt?: string | null,
+  contains?: string | null,
+  notContains?: string | null,
+  between?: Array< string | null > | null,
+  beginsWith?: string | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
+  size?: ModelSizeInput | null,
+};
+
+export type Relationship = {
+  __typename: "Relationship",
+  id: string,
+  followedUserId: string,
+  followedUser: User,
+  followingUserId: string,
+  followingUser: User,
+  createdAt: string,
+  updatedAt: string,
+};
+
+export type UpdateRelationshipInput = {
+  id: string,
+  followedUserId?: string | null,
+  followingUserId?: string | null,
+};
+
+export type DeleteRelationshipInput = {
+  id: string,
+};
+
 export type CreateEventInput = {
   id?: string | null,
   awardsBody: AwardsBody,
@@ -193,10 +244,10 @@ export type ModelCategoryConnection = {
 export type Category = {
   __typename: "Category",
   id: string,
-  name: CategoryName,
-  type: CategoryType,
   eventId: string,
   event: Event,
+  name: CategoryName,
+  type: CategoryType,
   createdAt: string,
   updatedAt: string,
   eventCategoriesId?: string | null,
@@ -269,16 +320,16 @@ export type DeleteEventInput = {
 
 export type CreateCategoryInput = {
   id?: string | null,
+  eventId: string,
   name: CategoryName,
   type: CategoryType,
-  eventId: string,
   eventCategoriesId?: string | null,
 };
 
 export type ModelCategoryConditionInput = {
+  eventId?: ModelIDInput | null,
   name?: ModelCategoryNameInput | null,
   type?: ModelCategoryTypeInput | null,
-  eventId?: ModelIDInput | null,
   and?: Array< ModelCategoryConditionInput | null > | null,
   or?: Array< ModelCategoryConditionInput | null > | null,
   not?: ModelCategoryConditionInput | null,
@@ -295,27 +346,11 @@ export type ModelCategoryTypeInput = {
   ne?: CategoryType | null,
 };
 
-export type ModelIDInput = {
-  ne?: string | null,
-  eq?: string | null,
-  le?: string | null,
-  lt?: string | null,
-  ge?: string | null,
-  gt?: string | null,
-  contains?: string | null,
-  notContains?: string | null,
-  between?: Array< string | null > | null,
-  beginsWith?: string | null,
-  attributeExists?: boolean | null,
-  attributeType?: ModelAttributeTypes | null,
-  size?: ModelSizeInput | null,
-};
-
 export type UpdateCategoryInput = {
   id: string,
+  eventId?: string | null,
   name?: CategoryName | null,
   type?: CategoryType | null,
-  eventId?: string | null,
   eventCategoriesId?: string | null,
 };
 
@@ -395,9 +430,9 @@ export type Contender = {
 export type Movie = {
   __typename: "Movie",
   id: string,
+  contenders?: ModelContenderConnection | null,
   tmdbId: number,
   studio?: string | null,
-  contenders?: ModelContenderConnection | null,
   createdAt: string,
   updatedAt: string,
 };
@@ -419,10 +454,10 @@ export type Person = {
 export type Song = {
   __typename: "Song",
   id: string,
-  title: string,
-  artist: string,
   movieId: string,
   movie: Movie,
+  title: string,
+  artist: string,
   createdAt: string,
   updatedAt: string,
 };
@@ -490,15 +525,15 @@ export type DeletePersonInput = {
 
 export type CreateSongInput = {
   id?: string | null,
+  movieId: string,
   title: string,
   artist: string,
-  movieId: string,
 };
 
 export type ModelSongConditionInput = {
+  movieId?: ModelIDInput | null,
   title?: ModelStringInput | null,
   artist?: ModelStringInput | null,
-  movieId?: ModelIDInput | null,
   and?: Array< ModelSongConditionInput | null > | null,
   or?: Array< ModelSongConditionInput | null > | null,
   not?: ModelSongConditionInput | null,
@@ -506,9 +541,9 @@ export type ModelSongConditionInput = {
 
 export type UpdateSongInput = {
   id: string,
+  movieId?: string | null,
   title?: string | null,
   artist?: string | null,
-  movieId?: string | null,
 };
 
 export type DeleteSongInput = {
@@ -903,6 +938,21 @@ export type ModelUserConnection = {
   nextToken?: string | null,
 };
 
+export type ModelRelationshipFilterInput = {
+  id?: ModelIDInput | null,
+  followedUserId?: ModelIDInput | null,
+  followingUserId?: ModelIDInput | null,
+  and?: Array< ModelRelationshipFilterInput | null > | null,
+  or?: Array< ModelRelationshipFilterInput | null > | null,
+  not?: ModelRelationshipFilterInput | null,
+};
+
+export type ModelRelationshipConnection = {
+  __typename: "ModelRelationshipConnection",
+  items:  Array<Relationship | null >,
+  nextToken?: string | null,
+};
+
 export type ModelEventFilterInput = {
   id?: ModelIDInput | null,
   awardsBody?: ModelAwardsBodyInput | null,
@@ -923,9 +973,9 @@ export type ModelEventConnection = {
 
 export type ModelCategoryFilterInput = {
   id?: ModelIDInput | null,
+  eventId?: ModelIDInput | null,
   name?: ModelCategoryNameInput | null,
   type?: ModelCategoryTypeInput | null,
-  eventId?: ModelIDInput | null,
   and?: Array< ModelCategoryFilterInput | null > | null,
   or?: Array< ModelCategoryFilterInput | null > | null,
   not?: ModelCategoryFilterInput | null,
@@ -978,9 +1028,9 @@ export type ModelPersonConnection = {
 
 export type ModelSongFilterInput = {
   id?: ModelIDInput | null,
+  movieId?: ModelIDInput | null,
   title?: ModelStringInput | null,
   artist?: ModelStringInput | null,
-  movieId?: ModelIDInput | null,
   and?: Array< ModelSongFilterInput | null > | null,
   or?: Array< ModelSongFilterInput | null > | null,
   not?: ModelSongFilterInput | null,
@@ -1176,6 +1226,126 @@ export type DeleteUserMutation = {
   } | null,
 };
 
+export type CreateRelationshipMutationVariables = {
+  input: CreateRelationshipInput,
+  condition?: ModelRelationshipConditionInput | null,
+};
+
+export type CreateRelationshipMutation = {
+  createRelationship?:  {
+    __typename: "Relationship",
+    id: string,
+    followedUserId: string,
+    followedUser:  {
+      __typename: "User",
+      id: string,
+      email: string,
+      username?: string | null,
+      name?: string | null,
+      bio?: string | null,
+      image?: string | null,
+      role: UserRole,
+      createdAt: string,
+      updatedAt: string,
+    },
+    followingUserId: string,
+    followingUser:  {
+      __typename: "User",
+      id: string,
+      email: string,
+      username?: string | null,
+      name?: string | null,
+      bio?: string | null,
+      image?: string | null,
+      role: UserRole,
+      createdAt: string,
+      updatedAt: string,
+    },
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdateRelationshipMutationVariables = {
+  input: UpdateRelationshipInput,
+  condition?: ModelRelationshipConditionInput | null,
+};
+
+export type UpdateRelationshipMutation = {
+  updateRelationship?:  {
+    __typename: "Relationship",
+    id: string,
+    followedUserId: string,
+    followedUser:  {
+      __typename: "User",
+      id: string,
+      email: string,
+      username?: string | null,
+      name?: string | null,
+      bio?: string | null,
+      image?: string | null,
+      role: UserRole,
+      createdAt: string,
+      updatedAt: string,
+    },
+    followingUserId: string,
+    followingUser:  {
+      __typename: "User",
+      id: string,
+      email: string,
+      username?: string | null,
+      name?: string | null,
+      bio?: string | null,
+      image?: string | null,
+      role: UserRole,
+      createdAt: string,
+      updatedAt: string,
+    },
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeleteRelationshipMutationVariables = {
+  input: DeleteRelationshipInput,
+  condition?: ModelRelationshipConditionInput | null,
+};
+
+export type DeleteRelationshipMutation = {
+  deleteRelationship?:  {
+    __typename: "Relationship",
+    id: string,
+    followedUserId: string,
+    followedUser:  {
+      __typename: "User",
+      id: string,
+      email: string,
+      username?: string | null,
+      name?: string | null,
+      bio?: string | null,
+      image?: string | null,
+      role: UserRole,
+      createdAt: string,
+      updatedAt: string,
+    },
+    followingUserId: string,
+    followingUser:  {
+      __typename: "User",
+      id: string,
+      email: string,
+      username?: string | null,
+      name?: string | null,
+      bio?: string | null,
+      image?: string | null,
+      role: UserRole,
+      createdAt: string,
+      updatedAt: string,
+    },
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
 export type CreateEventMutationVariables = {
   input: CreateEventInput,
   condition?: ModelEventConditionInput | null,
@@ -1190,8 +1360,6 @@ export type CreateEventMutation = {
       items:  Array< {
         __typename: "Category",
         id: string,
-        name: CategoryName,
-        type: CategoryType,
         eventId: string,
         event:  {
           __typename: "Event",
@@ -1201,9 +1369,9 @@ export type CreateEventMutation = {
             items:  Array< {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -1218,6 +1386,8 @@ export type CreateEventMutation = {
           createdAt: string,
           updatedAt: string,
         },
+        name: CategoryName,
+        type: CategoryType,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -1248,8 +1418,6 @@ export type UpdateEventMutation = {
       items:  Array< {
         __typename: "Category",
         id: string,
-        name: CategoryName,
-        type: CategoryType,
         eventId: string,
         event:  {
           __typename: "Event",
@@ -1259,9 +1427,9 @@ export type UpdateEventMutation = {
             items:  Array< {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -1276,6 +1444,8 @@ export type UpdateEventMutation = {
           createdAt: string,
           updatedAt: string,
         },
+        name: CategoryName,
+        type: CategoryType,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -1306,8 +1476,6 @@ export type DeleteEventMutation = {
       items:  Array< {
         __typename: "Category",
         id: string,
-        name: CategoryName,
-        type: CategoryType,
         eventId: string,
         event:  {
           __typename: "Event",
@@ -1317,9 +1485,9 @@ export type DeleteEventMutation = {
             items:  Array< {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -1334,6 +1502,8 @@ export type DeleteEventMutation = {
           createdAt: string,
           updatedAt: string,
         },
+        name: CategoryName,
+        type: CategoryType,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -1359,8 +1529,6 @@ export type CreateCategoryMutation = {
   createCategory?:  {
     __typename: "Category",
     id: string,
-    name: CategoryName,
-    type: CategoryType,
     eventId: string,
     event:  {
       __typename: "Event",
@@ -1370,8 +1538,6 @@ export type CreateCategoryMutation = {
         items:  Array< {
           __typename: "Category",
           id: string,
-          name: CategoryName,
-          type: CategoryType,
           eventId: string,
           event:  {
             __typename: "Event",
@@ -1388,6 +1554,8 @@ export type CreateCategoryMutation = {
             createdAt: string,
             updatedAt: string,
           },
+          name: CategoryName,
+          type: CategoryType,
           createdAt: string,
           updatedAt: string,
           eventCategoriesId?: string | null,
@@ -1402,6 +1570,8 @@ export type CreateCategoryMutation = {
       createdAt: string,
       updatedAt: string,
     },
+    name: CategoryName,
+    type: CategoryType,
     createdAt: string,
     updatedAt: string,
     eventCategoriesId?: string | null,
@@ -1417,8 +1587,6 @@ export type UpdateCategoryMutation = {
   updateCategory?:  {
     __typename: "Category",
     id: string,
-    name: CategoryName,
-    type: CategoryType,
     eventId: string,
     event:  {
       __typename: "Event",
@@ -1428,8 +1596,6 @@ export type UpdateCategoryMutation = {
         items:  Array< {
           __typename: "Category",
           id: string,
-          name: CategoryName,
-          type: CategoryType,
           eventId: string,
           event:  {
             __typename: "Event",
@@ -1446,6 +1612,8 @@ export type UpdateCategoryMutation = {
             createdAt: string,
             updatedAt: string,
           },
+          name: CategoryName,
+          type: CategoryType,
           createdAt: string,
           updatedAt: string,
           eventCategoriesId?: string | null,
@@ -1460,6 +1628,8 @@ export type UpdateCategoryMutation = {
       createdAt: string,
       updatedAt: string,
     },
+    name: CategoryName,
+    type: CategoryType,
     createdAt: string,
     updatedAt: string,
     eventCategoriesId?: string | null,
@@ -1475,8 +1645,6 @@ export type DeleteCategoryMutation = {
   deleteCategory?:  {
     __typename: "Category",
     id: string,
-    name: CategoryName,
-    type: CategoryType,
     eventId: string,
     event:  {
       __typename: "Event",
@@ -1486,8 +1654,6 @@ export type DeleteCategoryMutation = {
         items:  Array< {
           __typename: "Category",
           id: string,
-          name: CategoryName,
-          type: CategoryType,
           eventId: string,
           event:  {
             __typename: "Event",
@@ -1504,6 +1670,8 @@ export type DeleteCategoryMutation = {
             createdAt: string,
             updatedAt: string,
           },
+          name: CategoryName,
+          type: CategoryType,
           createdAt: string,
           updatedAt: string,
           eventCategoriesId?: string | null,
@@ -1518,6 +1686,8 @@ export type DeleteCategoryMutation = {
       createdAt: string,
       updatedAt: string,
     },
+    name: CategoryName,
+    type: CategoryType,
     createdAt: string,
     updatedAt: string,
     eventCategoriesId?: string | null,
@@ -1537,8 +1707,6 @@ export type CreateContenderMutation = {
     category:  {
       __typename: "Category",
       id: string,
-      name: CategoryName,
-      type: CategoryType,
       eventId: string,
       event:  {
         __typename: "Event",
@@ -1548,8 +1716,6 @@ export type CreateContenderMutation = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -1562,6 +1728,8 @@ export type CreateContenderMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -1576,6 +1744,8 @@ export type CreateContenderMutation = {
         createdAt: string,
         updatedAt: string,
       },
+      name: CategoryName,
+      type: CategoryType,
       createdAt: string,
       updatedAt: string,
       eventCategoriesId?: string | null,
@@ -1589,8 +1759,6 @@ export type CreateContenderMutation = {
         items:  Array< {
           __typename: "Category",
           id: string,
-          name: CategoryName,
-          type: CategoryType,
           eventId: string,
           event:  {
             __typename: "Event",
@@ -1607,6 +1775,8 @@ export type CreateContenderMutation = {
             createdAt: string,
             updatedAt: string,
           },
+          name: CategoryName,
+          type: CategoryType,
           createdAt: string,
           updatedAt: string,
           eventCategoriesId?: string | null,
@@ -1625,8 +1795,6 @@ export type CreateContenderMutation = {
     movie:  {
       __typename: "Movie",
       id: string,
-      tmdbId: number,
-      studio?: string | null,
       contenders?:  {
         __typename: "ModelContenderConnection",
         items:  Array< {
@@ -1636,8 +1804,6 @@ export type CreateContenderMutation = {
           category:  {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -1650,6 +1816,8 @@ export type CreateContenderMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -1674,12 +1842,12 @@ export type CreateContenderMutation = {
           movie:  {
             __typename: "Movie",
             id: string,
-            tmdbId: number,
-            studio?: string | null,
             contenders?:  {
               __typename: "ModelContenderConnection",
               nextToken?: string | null,
             } | null,
+            tmdbId: number,
+            studio?: string | null,
             createdAt: string,
             updatedAt: string,
           },
@@ -1695,8 +1863,6 @@ export type CreateContenderMutation = {
           song?:  {
             __typename: "Song",
             id: string,
-            title: string,
-            artist: string,
             movieId: string,
             movie:  {
               __typename: "Movie",
@@ -1706,6 +1872,8 @@ export type CreateContenderMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            title: string,
+            artist: string,
             createdAt: string,
             updatedAt: string,
           } | null,
@@ -1717,6 +1885,8 @@ export type CreateContenderMutation = {
         } | null >,
         nextToken?: string | null,
       } | null,
+      tmdbId: number,
+      studio?: string | null,
       createdAt: string,
       updatedAt: string,
     },
@@ -1732,14 +1902,10 @@ export type CreateContenderMutation = {
     song?:  {
       __typename: "Song",
       id: string,
-      title: string,
-      artist: string,
       movieId: string,
       movie:  {
         __typename: "Movie",
         id: string,
-        tmdbId: number,
-        studio?: string | null,
         contenders?:  {
           __typename: "ModelContenderConnection",
           items:  Array< {
@@ -1749,9 +1915,9 @@ export type CreateContenderMutation = {
             category:  {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -1789,9 +1955,9 @@ export type CreateContenderMutation = {
             song?:  {
               __typename: "Song",
               id: string,
+              movieId: string,
               title: string,
               artist: string,
-              movieId: string,
               createdAt: string,
               updatedAt: string,
             } | null,
@@ -1803,9 +1969,13 @@ export type CreateContenderMutation = {
           } | null >,
           nextToken?: string | null,
         } | null,
+        tmdbId: number,
+        studio?: string | null,
         createdAt: string,
         updatedAt: string,
       },
+      title: string,
+      artist: string,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -1830,8 +2000,6 @@ export type UpdateContenderMutation = {
     category:  {
       __typename: "Category",
       id: string,
-      name: CategoryName,
-      type: CategoryType,
       eventId: string,
       event:  {
         __typename: "Event",
@@ -1841,8 +2009,6 @@ export type UpdateContenderMutation = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -1855,6 +2021,8 @@ export type UpdateContenderMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -1869,6 +2037,8 @@ export type UpdateContenderMutation = {
         createdAt: string,
         updatedAt: string,
       },
+      name: CategoryName,
+      type: CategoryType,
       createdAt: string,
       updatedAt: string,
       eventCategoriesId?: string | null,
@@ -1882,8 +2052,6 @@ export type UpdateContenderMutation = {
         items:  Array< {
           __typename: "Category",
           id: string,
-          name: CategoryName,
-          type: CategoryType,
           eventId: string,
           event:  {
             __typename: "Event",
@@ -1900,6 +2068,8 @@ export type UpdateContenderMutation = {
             createdAt: string,
             updatedAt: string,
           },
+          name: CategoryName,
+          type: CategoryType,
           createdAt: string,
           updatedAt: string,
           eventCategoriesId?: string | null,
@@ -1918,8 +2088,6 @@ export type UpdateContenderMutation = {
     movie:  {
       __typename: "Movie",
       id: string,
-      tmdbId: number,
-      studio?: string | null,
       contenders?:  {
         __typename: "ModelContenderConnection",
         items:  Array< {
@@ -1929,8 +2097,6 @@ export type UpdateContenderMutation = {
           category:  {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -1943,6 +2109,8 @@ export type UpdateContenderMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -1967,12 +2135,12 @@ export type UpdateContenderMutation = {
           movie:  {
             __typename: "Movie",
             id: string,
-            tmdbId: number,
-            studio?: string | null,
             contenders?:  {
               __typename: "ModelContenderConnection",
               nextToken?: string | null,
             } | null,
+            tmdbId: number,
+            studio?: string | null,
             createdAt: string,
             updatedAt: string,
           },
@@ -1988,8 +2156,6 @@ export type UpdateContenderMutation = {
           song?:  {
             __typename: "Song",
             id: string,
-            title: string,
-            artist: string,
             movieId: string,
             movie:  {
               __typename: "Movie",
@@ -1999,6 +2165,8 @@ export type UpdateContenderMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            title: string,
+            artist: string,
             createdAt: string,
             updatedAt: string,
           } | null,
@@ -2010,6 +2178,8 @@ export type UpdateContenderMutation = {
         } | null >,
         nextToken?: string | null,
       } | null,
+      tmdbId: number,
+      studio?: string | null,
       createdAt: string,
       updatedAt: string,
     },
@@ -2025,14 +2195,10 @@ export type UpdateContenderMutation = {
     song?:  {
       __typename: "Song",
       id: string,
-      title: string,
-      artist: string,
       movieId: string,
       movie:  {
         __typename: "Movie",
         id: string,
-        tmdbId: number,
-        studio?: string | null,
         contenders?:  {
           __typename: "ModelContenderConnection",
           items:  Array< {
@@ -2042,9 +2208,9 @@ export type UpdateContenderMutation = {
             category:  {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -2082,9 +2248,9 @@ export type UpdateContenderMutation = {
             song?:  {
               __typename: "Song",
               id: string,
+              movieId: string,
               title: string,
               artist: string,
-              movieId: string,
               createdAt: string,
               updatedAt: string,
             } | null,
@@ -2096,9 +2262,13 @@ export type UpdateContenderMutation = {
           } | null >,
           nextToken?: string | null,
         } | null,
+        tmdbId: number,
+        studio?: string | null,
         createdAt: string,
         updatedAt: string,
       },
+      title: string,
+      artist: string,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -2123,8 +2293,6 @@ export type DeleteContenderMutation = {
     category:  {
       __typename: "Category",
       id: string,
-      name: CategoryName,
-      type: CategoryType,
       eventId: string,
       event:  {
         __typename: "Event",
@@ -2134,8 +2302,6 @@ export type DeleteContenderMutation = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -2148,6 +2314,8 @@ export type DeleteContenderMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -2162,6 +2330,8 @@ export type DeleteContenderMutation = {
         createdAt: string,
         updatedAt: string,
       },
+      name: CategoryName,
+      type: CategoryType,
       createdAt: string,
       updatedAt: string,
       eventCategoriesId?: string | null,
@@ -2175,8 +2345,6 @@ export type DeleteContenderMutation = {
         items:  Array< {
           __typename: "Category",
           id: string,
-          name: CategoryName,
-          type: CategoryType,
           eventId: string,
           event:  {
             __typename: "Event",
@@ -2193,6 +2361,8 @@ export type DeleteContenderMutation = {
             createdAt: string,
             updatedAt: string,
           },
+          name: CategoryName,
+          type: CategoryType,
           createdAt: string,
           updatedAt: string,
           eventCategoriesId?: string | null,
@@ -2211,8 +2381,6 @@ export type DeleteContenderMutation = {
     movie:  {
       __typename: "Movie",
       id: string,
-      tmdbId: number,
-      studio?: string | null,
       contenders?:  {
         __typename: "ModelContenderConnection",
         items:  Array< {
@@ -2222,8 +2390,6 @@ export type DeleteContenderMutation = {
           category:  {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -2236,6 +2402,8 @@ export type DeleteContenderMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -2260,12 +2428,12 @@ export type DeleteContenderMutation = {
           movie:  {
             __typename: "Movie",
             id: string,
-            tmdbId: number,
-            studio?: string | null,
             contenders?:  {
               __typename: "ModelContenderConnection",
               nextToken?: string | null,
             } | null,
+            tmdbId: number,
+            studio?: string | null,
             createdAt: string,
             updatedAt: string,
           },
@@ -2281,8 +2449,6 @@ export type DeleteContenderMutation = {
           song?:  {
             __typename: "Song",
             id: string,
-            title: string,
-            artist: string,
             movieId: string,
             movie:  {
               __typename: "Movie",
@@ -2292,6 +2458,8 @@ export type DeleteContenderMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            title: string,
+            artist: string,
             createdAt: string,
             updatedAt: string,
           } | null,
@@ -2303,6 +2471,8 @@ export type DeleteContenderMutation = {
         } | null >,
         nextToken?: string | null,
       } | null,
+      tmdbId: number,
+      studio?: string | null,
       createdAt: string,
       updatedAt: string,
     },
@@ -2318,14 +2488,10 @@ export type DeleteContenderMutation = {
     song?:  {
       __typename: "Song",
       id: string,
-      title: string,
-      artist: string,
       movieId: string,
       movie:  {
         __typename: "Movie",
         id: string,
-        tmdbId: number,
-        studio?: string | null,
         contenders?:  {
           __typename: "ModelContenderConnection",
           items:  Array< {
@@ -2335,9 +2501,9 @@ export type DeleteContenderMutation = {
             category:  {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -2375,9 +2541,9 @@ export type DeleteContenderMutation = {
             song?:  {
               __typename: "Song",
               id: string,
+              movieId: string,
               title: string,
               artist: string,
-              movieId: string,
               createdAt: string,
               updatedAt: string,
             } | null,
@@ -2389,9 +2555,13 @@ export type DeleteContenderMutation = {
           } | null >,
           nextToken?: string | null,
         } | null,
+        tmdbId: number,
+        studio?: string | null,
         createdAt: string,
         updatedAt: string,
       },
+      title: string,
+      artist: string,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -2412,8 +2582,6 @@ export type CreateMovieMutation = {
   createMovie?:  {
     __typename: "Movie",
     id: string,
-    tmdbId: number,
-    studio?: string | null,
     contenders?:  {
       __typename: "ModelContenderConnection",
       items:  Array< {
@@ -2423,8 +2591,6 @@ export type CreateMovieMutation = {
         category:  {
           __typename: "Category",
           id: string,
-          name: CategoryName,
-          type: CategoryType,
           eventId: string,
           event:  {
             __typename: "Event",
@@ -2441,6 +2607,8 @@ export type CreateMovieMutation = {
             createdAt: string,
             updatedAt: string,
           },
+          name: CategoryName,
+          type: CategoryType,
           createdAt: string,
           updatedAt: string,
           eventCategoriesId?: string | null,
@@ -2454,9 +2622,9 @@ export type CreateMovieMutation = {
             items:  Array< {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -2475,8 +2643,6 @@ export type CreateMovieMutation = {
         movie:  {
           __typename: "Movie",
           id: string,
-          tmdbId: number,
-          studio?: string | null,
           contenders?:  {
             __typename: "ModelContenderConnection",
             items:  Array< {
@@ -2495,6 +2661,8 @@ export type CreateMovieMutation = {
             } | null >,
             nextToken?: string | null,
           } | null,
+          tmdbId: number,
+          studio?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -2510,21 +2678,21 @@ export type CreateMovieMutation = {
         song?:  {
           __typename: "Song",
           id: string,
-          title: string,
-          artist: string,
           movieId: string,
           movie:  {
             __typename: "Movie",
             id: string,
-            tmdbId: number,
-            studio?: string | null,
             contenders?:  {
               __typename: "ModelContenderConnection",
               nextToken?: string | null,
             } | null,
+            tmdbId: number,
+            studio?: string | null,
             createdAt: string,
             updatedAt: string,
           },
+          title: string,
+          artist: string,
           createdAt: string,
           updatedAt: string,
         } | null,
@@ -2536,6 +2704,8 @@ export type CreateMovieMutation = {
       } | null >,
       nextToken?: string | null,
     } | null,
+    tmdbId: number,
+    studio?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2550,8 +2720,6 @@ export type UpdateMovieMutation = {
   updateMovie?:  {
     __typename: "Movie",
     id: string,
-    tmdbId: number,
-    studio?: string | null,
     contenders?:  {
       __typename: "ModelContenderConnection",
       items:  Array< {
@@ -2561,8 +2729,6 @@ export type UpdateMovieMutation = {
         category:  {
           __typename: "Category",
           id: string,
-          name: CategoryName,
-          type: CategoryType,
           eventId: string,
           event:  {
             __typename: "Event",
@@ -2579,6 +2745,8 @@ export type UpdateMovieMutation = {
             createdAt: string,
             updatedAt: string,
           },
+          name: CategoryName,
+          type: CategoryType,
           createdAt: string,
           updatedAt: string,
           eventCategoriesId?: string | null,
@@ -2592,9 +2760,9 @@ export type UpdateMovieMutation = {
             items:  Array< {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -2613,8 +2781,6 @@ export type UpdateMovieMutation = {
         movie:  {
           __typename: "Movie",
           id: string,
-          tmdbId: number,
-          studio?: string | null,
           contenders?:  {
             __typename: "ModelContenderConnection",
             items:  Array< {
@@ -2633,6 +2799,8 @@ export type UpdateMovieMutation = {
             } | null >,
             nextToken?: string | null,
           } | null,
+          tmdbId: number,
+          studio?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -2648,21 +2816,21 @@ export type UpdateMovieMutation = {
         song?:  {
           __typename: "Song",
           id: string,
-          title: string,
-          artist: string,
           movieId: string,
           movie:  {
             __typename: "Movie",
             id: string,
-            tmdbId: number,
-            studio?: string | null,
             contenders?:  {
               __typename: "ModelContenderConnection",
               nextToken?: string | null,
             } | null,
+            tmdbId: number,
+            studio?: string | null,
             createdAt: string,
             updatedAt: string,
           },
+          title: string,
+          artist: string,
           createdAt: string,
           updatedAt: string,
         } | null,
@@ -2674,6 +2842,8 @@ export type UpdateMovieMutation = {
       } | null >,
       nextToken?: string | null,
     } | null,
+    tmdbId: number,
+    studio?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2688,8 +2858,6 @@ export type DeleteMovieMutation = {
   deleteMovie?:  {
     __typename: "Movie",
     id: string,
-    tmdbId: number,
-    studio?: string | null,
     contenders?:  {
       __typename: "ModelContenderConnection",
       items:  Array< {
@@ -2699,8 +2867,6 @@ export type DeleteMovieMutation = {
         category:  {
           __typename: "Category",
           id: string,
-          name: CategoryName,
-          type: CategoryType,
           eventId: string,
           event:  {
             __typename: "Event",
@@ -2717,6 +2883,8 @@ export type DeleteMovieMutation = {
             createdAt: string,
             updatedAt: string,
           },
+          name: CategoryName,
+          type: CategoryType,
           createdAt: string,
           updatedAt: string,
           eventCategoriesId?: string | null,
@@ -2730,9 +2898,9 @@ export type DeleteMovieMutation = {
             items:  Array< {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -2751,8 +2919,6 @@ export type DeleteMovieMutation = {
         movie:  {
           __typename: "Movie",
           id: string,
-          tmdbId: number,
-          studio?: string | null,
           contenders?:  {
             __typename: "ModelContenderConnection",
             items:  Array< {
@@ -2771,6 +2937,8 @@ export type DeleteMovieMutation = {
             } | null >,
             nextToken?: string | null,
           } | null,
+          tmdbId: number,
+          studio?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -2786,21 +2954,21 @@ export type DeleteMovieMutation = {
         song?:  {
           __typename: "Song",
           id: string,
-          title: string,
-          artist: string,
           movieId: string,
           movie:  {
             __typename: "Movie",
             id: string,
-            tmdbId: number,
-            studio?: string | null,
             contenders?:  {
               __typename: "ModelContenderConnection",
               nextToken?: string | null,
             } | null,
+            tmdbId: number,
+            studio?: string | null,
             createdAt: string,
             updatedAt: string,
           },
+          title: string,
+          artist: string,
           createdAt: string,
           updatedAt: string,
         } | null,
@@ -2812,6 +2980,8 @@ export type DeleteMovieMutation = {
       } | null >,
       nextToken?: string | null,
     } | null,
+    tmdbId: number,
+    studio?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2871,14 +3041,10 @@ export type CreateSongMutation = {
   createSong?:  {
     __typename: "Song",
     id: string,
-    title: string,
-    artist: string,
     movieId: string,
     movie:  {
       __typename: "Movie",
       id: string,
-      tmdbId: number,
-      studio?: string | null,
       contenders?:  {
         __typename: "ModelContenderConnection",
         items:  Array< {
@@ -2888,8 +3054,6 @@ export type CreateSongMutation = {
           category:  {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -2902,6 +3066,8 @@ export type CreateSongMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -2926,12 +3092,12 @@ export type CreateSongMutation = {
           movie:  {
             __typename: "Movie",
             id: string,
-            tmdbId: number,
-            studio?: string | null,
             contenders?:  {
               __typename: "ModelContenderConnection",
               nextToken?: string | null,
             } | null,
+            tmdbId: number,
+            studio?: string | null,
             createdAt: string,
             updatedAt: string,
           },
@@ -2947,8 +3113,6 @@ export type CreateSongMutation = {
           song?:  {
             __typename: "Song",
             id: string,
-            title: string,
-            artist: string,
             movieId: string,
             movie:  {
               __typename: "Movie",
@@ -2958,6 +3122,8 @@ export type CreateSongMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            title: string,
+            artist: string,
             createdAt: string,
             updatedAt: string,
           } | null,
@@ -2969,9 +3135,13 @@ export type CreateSongMutation = {
         } | null >,
         nextToken?: string | null,
       } | null,
+      tmdbId: number,
+      studio?: string | null,
       createdAt: string,
       updatedAt: string,
     },
+    title: string,
+    artist: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2986,14 +3156,10 @@ export type UpdateSongMutation = {
   updateSong?:  {
     __typename: "Song",
     id: string,
-    title: string,
-    artist: string,
     movieId: string,
     movie:  {
       __typename: "Movie",
       id: string,
-      tmdbId: number,
-      studio?: string | null,
       contenders?:  {
         __typename: "ModelContenderConnection",
         items:  Array< {
@@ -3003,8 +3169,6 @@ export type UpdateSongMutation = {
           category:  {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -3017,6 +3181,8 @@ export type UpdateSongMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -3041,12 +3207,12 @@ export type UpdateSongMutation = {
           movie:  {
             __typename: "Movie",
             id: string,
-            tmdbId: number,
-            studio?: string | null,
             contenders?:  {
               __typename: "ModelContenderConnection",
               nextToken?: string | null,
             } | null,
+            tmdbId: number,
+            studio?: string | null,
             createdAt: string,
             updatedAt: string,
           },
@@ -3062,8 +3228,6 @@ export type UpdateSongMutation = {
           song?:  {
             __typename: "Song",
             id: string,
-            title: string,
-            artist: string,
             movieId: string,
             movie:  {
               __typename: "Movie",
@@ -3073,6 +3237,8 @@ export type UpdateSongMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            title: string,
+            artist: string,
             createdAt: string,
             updatedAt: string,
           } | null,
@@ -3084,9 +3250,13 @@ export type UpdateSongMutation = {
         } | null >,
         nextToken?: string | null,
       } | null,
+      tmdbId: number,
+      studio?: string | null,
       createdAt: string,
       updatedAt: string,
     },
+    title: string,
+    artist: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -3101,14 +3271,10 @@ export type DeleteSongMutation = {
   deleteSong?:  {
     __typename: "Song",
     id: string,
-    title: string,
-    artist: string,
     movieId: string,
     movie:  {
       __typename: "Movie",
       id: string,
-      tmdbId: number,
-      studio?: string | null,
       contenders?:  {
         __typename: "ModelContenderConnection",
         items:  Array< {
@@ -3118,8 +3284,6 @@ export type DeleteSongMutation = {
           category:  {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -3132,6 +3296,8 @@ export type DeleteSongMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -3156,12 +3322,12 @@ export type DeleteSongMutation = {
           movie:  {
             __typename: "Movie",
             id: string,
-            tmdbId: number,
-            studio?: string | null,
             contenders?:  {
               __typename: "ModelContenderConnection",
               nextToken?: string | null,
             } | null,
+            tmdbId: number,
+            studio?: string | null,
             createdAt: string,
             updatedAt: string,
           },
@@ -3177,8 +3343,6 @@ export type DeleteSongMutation = {
           song?:  {
             __typename: "Song",
             id: string,
-            title: string,
-            artist: string,
             movieId: string,
             movie:  {
               __typename: "Movie",
@@ -3188,6 +3352,8 @@ export type DeleteSongMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            title: string,
+            artist: string,
             createdAt: string,
             updatedAt: string,
           } | null,
@@ -3199,9 +3365,13 @@ export type DeleteSongMutation = {
         } | null >,
         nextToken?: string | null,
       } | null,
+      tmdbId: number,
+      studio?: string | null,
       createdAt: string,
       updatedAt: string,
     },
+    title: string,
+    artist: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -3238,8 +3408,6 @@ export type CreatePredictionSetMutation = {
         items:  Array< {
           __typename: "Category",
           id: string,
-          name: CategoryName,
-          type: CategoryType,
           eventId: string,
           event:  {
             __typename: "Event",
@@ -3256,6 +3424,8 @@ export type CreatePredictionSetMutation = {
             createdAt: string,
             updatedAt: string,
           },
+          name: CategoryName,
+          type: CategoryType,
           createdAt: string,
           updatedAt: string,
           eventCategoriesId?: string | null,
@@ -3274,8 +3444,6 @@ export type CreatePredictionSetMutation = {
     category:  {
       __typename: "Category",
       id: string,
-      name: CategoryName,
-      type: CategoryType,
       eventId: string,
       event:  {
         __typename: "Event",
@@ -3285,8 +3453,6 @@ export type CreatePredictionSetMutation = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -3299,6 +3465,8 @@ export type CreatePredictionSetMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -3313,6 +3481,8 @@ export type CreatePredictionSetMutation = {
         createdAt: string,
         updatedAt: string,
       },
+      name: CategoryName,
+      type: CategoryType,
       createdAt: string,
       updatedAt: string,
       eventCategoriesId?: string | null,
@@ -3330,8 +3500,6 @@ export type CreatePredictionSetMutation = {
           category:  {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -3344,6 +3512,8 @@ export type CreatePredictionSetMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -3368,12 +3538,12 @@ export type CreatePredictionSetMutation = {
           movie:  {
             __typename: "Movie",
             id: string,
-            tmdbId: number,
-            studio?: string | null,
             contenders?:  {
               __typename: "ModelContenderConnection",
               nextToken?: string | null,
             } | null,
+            tmdbId: number,
+            studio?: string | null,
             createdAt: string,
             updatedAt: string,
           },
@@ -3389,8 +3559,6 @@ export type CreatePredictionSetMutation = {
           song?:  {
             __typename: "Song",
             id: string,
-            title: string,
-            artist: string,
             movieId: string,
             movie:  {
               __typename: "Movie",
@@ -3400,6 +3568,8 @@ export type CreatePredictionSetMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            title: string,
+            artist: string,
             createdAt: string,
             updatedAt: string,
           } | null,
@@ -3453,8 +3623,6 @@ export type UpdatePredictionSetMutation = {
         items:  Array< {
           __typename: "Category",
           id: string,
-          name: CategoryName,
-          type: CategoryType,
           eventId: string,
           event:  {
             __typename: "Event",
@@ -3471,6 +3639,8 @@ export type UpdatePredictionSetMutation = {
             createdAt: string,
             updatedAt: string,
           },
+          name: CategoryName,
+          type: CategoryType,
           createdAt: string,
           updatedAt: string,
           eventCategoriesId?: string | null,
@@ -3489,8 +3659,6 @@ export type UpdatePredictionSetMutation = {
     category:  {
       __typename: "Category",
       id: string,
-      name: CategoryName,
-      type: CategoryType,
       eventId: string,
       event:  {
         __typename: "Event",
@@ -3500,8 +3668,6 @@ export type UpdatePredictionSetMutation = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -3514,6 +3680,8 @@ export type UpdatePredictionSetMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -3528,6 +3696,8 @@ export type UpdatePredictionSetMutation = {
         createdAt: string,
         updatedAt: string,
       },
+      name: CategoryName,
+      type: CategoryType,
       createdAt: string,
       updatedAt: string,
       eventCategoriesId?: string | null,
@@ -3545,8 +3715,6 @@ export type UpdatePredictionSetMutation = {
           category:  {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -3559,6 +3727,8 @@ export type UpdatePredictionSetMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -3583,12 +3753,12 @@ export type UpdatePredictionSetMutation = {
           movie:  {
             __typename: "Movie",
             id: string,
-            tmdbId: number,
-            studio?: string | null,
             contenders?:  {
               __typename: "ModelContenderConnection",
               nextToken?: string | null,
             } | null,
+            tmdbId: number,
+            studio?: string | null,
             createdAt: string,
             updatedAt: string,
           },
@@ -3604,8 +3774,6 @@ export type UpdatePredictionSetMutation = {
           song?:  {
             __typename: "Song",
             id: string,
-            title: string,
-            artist: string,
             movieId: string,
             movie:  {
               __typename: "Movie",
@@ -3615,6 +3783,8 @@ export type UpdatePredictionSetMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            title: string,
+            artist: string,
             createdAt: string,
             updatedAt: string,
           } | null,
@@ -3668,8 +3838,6 @@ export type DeletePredictionSetMutation = {
         items:  Array< {
           __typename: "Category",
           id: string,
-          name: CategoryName,
-          type: CategoryType,
           eventId: string,
           event:  {
             __typename: "Event",
@@ -3686,6 +3854,8 @@ export type DeletePredictionSetMutation = {
             createdAt: string,
             updatedAt: string,
           },
+          name: CategoryName,
+          type: CategoryType,
           createdAt: string,
           updatedAt: string,
           eventCategoriesId?: string | null,
@@ -3704,8 +3874,6 @@ export type DeletePredictionSetMutation = {
     category:  {
       __typename: "Category",
       id: string,
-      name: CategoryName,
-      type: CategoryType,
       eventId: string,
       event:  {
         __typename: "Event",
@@ -3715,8 +3883,6 @@ export type DeletePredictionSetMutation = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -3729,6 +3895,8 @@ export type DeletePredictionSetMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -3743,6 +3911,8 @@ export type DeletePredictionSetMutation = {
         createdAt: string,
         updatedAt: string,
       },
+      name: CategoryName,
+      type: CategoryType,
       createdAt: string,
       updatedAt: string,
       eventCategoriesId?: string | null,
@@ -3760,8 +3930,6 @@ export type DeletePredictionSetMutation = {
           category:  {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -3774,6 +3942,8 @@ export type DeletePredictionSetMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -3798,12 +3968,12 @@ export type DeletePredictionSetMutation = {
           movie:  {
             __typename: "Movie",
             id: string,
-            tmdbId: number,
-            studio?: string | null,
             contenders?:  {
               __typename: "ModelContenderConnection",
               nextToken?: string | null,
             } | null,
+            tmdbId: number,
+            studio?: string | null,
             createdAt: string,
             updatedAt: string,
           },
@@ -3819,8 +3989,6 @@ export type DeletePredictionSetMutation = {
           song?:  {
             __typename: "Song",
             id: string,
-            title: string,
-            artist: string,
             movieId: string,
             movie:  {
               __typename: "Movie",
@@ -3830,6 +3998,8 @@ export type DeletePredictionSetMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            title: string,
+            artist: string,
             createdAt: string,
             updatedAt: string,
           } | null,
@@ -3869,8 +4039,6 @@ export type CreatePredictionMutation = {
       category:  {
         __typename: "Category",
         id: string,
-        name: CategoryName,
-        type: CategoryType,
         eventId: string,
         event:  {
           __typename: "Event",
@@ -3880,9 +4048,9 @@ export type CreatePredictionMutation = {
             items:  Array< {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -3897,6 +4065,8 @@ export type CreatePredictionMutation = {
           createdAt: string,
           updatedAt: string,
         },
+        name: CategoryName,
+        type: CategoryType,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -3910,8 +4080,6 @@ export type CreatePredictionMutation = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -3924,6 +4092,8 @@ export type CreatePredictionMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -3942,8 +4112,6 @@ export type CreatePredictionMutation = {
       movie:  {
         __typename: "Movie",
         id: string,
-        tmdbId: number,
-        studio?: string | null,
         contenders?:  {
           __typename: "ModelContenderConnection",
           items:  Array< {
@@ -3953,9 +4121,9 @@ export type CreatePredictionMutation = {
             category:  {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -3993,9 +4161,9 @@ export type CreatePredictionMutation = {
             song?:  {
               __typename: "Song",
               id: string,
+              movieId: string,
               title: string,
               artist: string,
-              movieId: string,
               createdAt: string,
               updatedAt: string,
             } | null,
@@ -4007,6 +4175,8 @@ export type CreatePredictionMutation = {
           } | null >,
           nextToken?: string | null,
         } | null,
+        tmdbId: number,
+        studio?: string | null,
         createdAt: string,
         updatedAt: string,
       },
@@ -4022,14 +4192,10 @@ export type CreatePredictionMutation = {
       song?:  {
         __typename: "Song",
         id: string,
-        title: string,
-        artist: string,
         movieId: string,
         movie:  {
           __typename: "Movie",
           id: string,
-          tmdbId: number,
-          studio?: string | null,
           contenders?:  {
             __typename: "ModelContenderConnection",
             items:  Array< {
@@ -4048,9 +4214,13 @@ export type CreatePredictionMutation = {
             } | null >,
             nextToken?: string | null,
           } | null,
+          tmdbId: number,
+          studio?: string | null,
           createdAt: string,
           updatedAt: string,
         },
+        title: string,
+        artist: string,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -4084,8 +4254,6 @@ export type UpdatePredictionMutation = {
       category:  {
         __typename: "Category",
         id: string,
-        name: CategoryName,
-        type: CategoryType,
         eventId: string,
         event:  {
           __typename: "Event",
@@ -4095,9 +4263,9 @@ export type UpdatePredictionMutation = {
             items:  Array< {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -4112,6 +4280,8 @@ export type UpdatePredictionMutation = {
           createdAt: string,
           updatedAt: string,
         },
+        name: CategoryName,
+        type: CategoryType,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -4125,8 +4295,6 @@ export type UpdatePredictionMutation = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -4139,6 +4307,8 @@ export type UpdatePredictionMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -4157,8 +4327,6 @@ export type UpdatePredictionMutation = {
       movie:  {
         __typename: "Movie",
         id: string,
-        tmdbId: number,
-        studio?: string | null,
         contenders?:  {
           __typename: "ModelContenderConnection",
           items:  Array< {
@@ -4168,9 +4336,9 @@ export type UpdatePredictionMutation = {
             category:  {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -4208,9 +4376,9 @@ export type UpdatePredictionMutation = {
             song?:  {
               __typename: "Song",
               id: string,
+              movieId: string,
               title: string,
               artist: string,
-              movieId: string,
               createdAt: string,
               updatedAt: string,
             } | null,
@@ -4222,6 +4390,8 @@ export type UpdatePredictionMutation = {
           } | null >,
           nextToken?: string | null,
         } | null,
+        tmdbId: number,
+        studio?: string | null,
         createdAt: string,
         updatedAt: string,
       },
@@ -4237,14 +4407,10 @@ export type UpdatePredictionMutation = {
       song?:  {
         __typename: "Song",
         id: string,
-        title: string,
-        artist: string,
         movieId: string,
         movie:  {
           __typename: "Movie",
           id: string,
-          tmdbId: number,
-          studio?: string | null,
           contenders?:  {
             __typename: "ModelContenderConnection",
             items:  Array< {
@@ -4263,9 +4429,13 @@ export type UpdatePredictionMutation = {
             } | null >,
             nextToken?: string | null,
           } | null,
+          tmdbId: number,
+          studio?: string | null,
           createdAt: string,
           updatedAt: string,
         },
+        title: string,
+        artist: string,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -4299,8 +4469,6 @@ export type DeletePredictionMutation = {
       category:  {
         __typename: "Category",
         id: string,
-        name: CategoryName,
-        type: CategoryType,
         eventId: string,
         event:  {
           __typename: "Event",
@@ -4310,9 +4478,9 @@ export type DeletePredictionMutation = {
             items:  Array< {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -4327,6 +4495,8 @@ export type DeletePredictionMutation = {
           createdAt: string,
           updatedAt: string,
         },
+        name: CategoryName,
+        type: CategoryType,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -4340,8 +4510,6 @@ export type DeletePredictionMutation = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -4354,6 +4522,8 @@ export type DeletePredictionMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -4372,8 +4542,6 @@ export type DeletePredictionMutation = {
       movie:  {
         __typename: "Movie",
         id: string,
-        tmdbId: number,
-        studio?: string | null,
         contenders?:  {
           __typename: "ModelContenderConnection",
           items:  Array< {
@@ -4383,9 +4551,9 @@ export type DeletePredictionMutation = {
             category:  {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -4423,9 +4591,9 @@ export type DeletePredictionMutation = {
             song?:  {
               __typename: "Song",
               id: string,
+              movieId: string,
               title: string,
               artist: string,
-              movieId: string,
               createdAt: string,
               updatedAt: string,
             } | null,
@@ -4437,6 +4605,8 @@ export type DeletePredictionMutation = {
           } | null >,
           nextToken?: string | null,
         } | null,
+        tmdbId: number,
+        studio?: string | null,
         createdAt: string,
         updatedAt: string,
       },
@@ -4452,14 +4622,10 @@ export type DeletePredictionMutation = {
       song?:  {
         __typename: "Song",
         id: string,
-        title: string,
-        artist: string,
         movieId: string,
         movie:  {
           __typename: "Movie",
           id: string,
-          tmdbId: number,
-          studio?: string | null,
           contenders?:  {
             __typename: "ModelContenderConnection",
             items:  Array< {
@@ -4478,9 +4644,13 @@ export type DeletePredictionMutation = {
             } | null >,
             nextToken?: string | null,
           } | null,
+          tmdbId: number,
+          studio?: string | null,
           createdAt: string,
           updatedAt: string,
         },
+        title: string,
+        artist: string,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -4528,8 +4698,6 @@ export type CreateHistoryPredictionSetMutation = {
         items:  Array< {
           __typename: "Category",
           id: string,
-          name: CategoryName,
-          type: CategoryType,
           eventId: string,
           event:  {
             __typename: "Event",
@@ -4546,6 +4714,8 @@ export type CreateHistoryPredictionSetMutation = {
             createdAt: string,
             updatedAt: string,
           },
+          name: CategoryName,
+          type: CategoryType,
           createdAt: string,
           updatedAt: string,
           eventCategoriesId?: string | null,
@@ -4564,8 +4734,6 @@ export type CreateHistoryPredictionSetMutation = {
     category:  {
       __typename: "Category",
       id: string,
-      name: CategoryName,
-      type: CategoryType,
       eventId: string,
       event:  {
         __typename: "Event",
@@ -4575,8 +4743,6 @@ export type CreateHistoryPredictionSetMutation = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -4589,6 +4755,8 @@ export type CreateHistoryPredictionSetMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -4603,6 +4771,8 @@ export type CreateHistoryPredictionSetMutation = {
         createdAt: string,
         updatedAt: string,
       },
+      name: CategoryName,
+      type: CategoryType,
       createdAt: string,
       updatedAt: string,
       eventCategoriesId?: string | null,
@@ -4620,8 +4790,6 @@ export type CreateHistoryPredictionSetMutation = {
           category:  {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -4634,6 +4802,8 @@ export type CreateHistoryPredictionSetMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -4658,12 +4828,12 @@ export type CreateHistoryPredictionSetMutation = {
           movie:  {
             __typename: "Movie",
             id: string,
-            tmdbId: number,
-            studio?: string | null,
             contenders?:  {
               __typename: "ModelContenderConnection",
               nextToken?: string | null,
             } | null,
+            tmdbId: number,
+            studio?: string | null,
             createdAt: string,
             updatedAt: string,
           },
@@ -4679,8 +4849,6 @@ export type CreateHistoryPredictionSetMutation = {
           song?:  {
             __typename: "Song",
             id: string,
-            title: string,
-            artist: string,
             movieId: string,
             movie:  {
               __typename: "Movie",
@@ -4690,6 +4858,8 @@ export type CreateHistoryPredictionSetMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            title: string,
+            artist: string,
             createdAt: string,
             updatedAt: string,
           } | null,
@@ -4743,8 +4913,6 @@ export type UpdateHistoryPredictionSetMutation = {
         items:  Array< {
           __typename: "Category",
           id: string,
-          name: CategoryName,
-          type: CategoryType,
           eventId: string,
           event:  {
             __typename: "Event",
@@ -4761,6 +4929,8 @@ export type UpdateHistoryPredictionSetMutation = {
             createdAt: string,
             updatedAt: string,
           },
+          name: CategoryName,
+          type: CategoryType,
           createdAt: string,
           updatedAt: string,
           eventCategoriesId?: string | null,
@@ -4779,8 +4949,6 @@ export type UpdateHistoryPredictionSetMutation = {
     category:  {
       __typename: "Category",
       id: string,
-      name: CategoryName,
-      type: CategoryType,
       eventId: string,
       event:  {
         __typename: "Event",
@@ -4790,8 +4958,6 @@ export type UpdateHistoryPredictionSetMutation = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -4804,6 +4970,8 @@ export type UpdateHistoryPredictionSetMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -4818,6 +4986,8 @@ export type UpdateHistoryPredictionSetMutation = {
         createdAt: string,
         updatedAt: string,
       },
+      name: CategoryName,
+      type: CategoryType,
       createdAt: string,
       updatedAt: string,
       eventCategoriesId?: string | null,
@@ -4835,8 +5005,6 @@ export type UpdateHistoryPredictionSetMutation = {
           category:  {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -4849,6 +5017,8 @@ export type UpdateHistoryPredictionSetMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -4873,12 +5043,12 @@ export type UpdateHistoryPredictionSetMutation = {
           movie:  {
             __typename: "Movie",
             id: string,
-            tmdbId: number,
-            studio?: string | null,
             contenders?:  {
               __typename: "ModelContenderConnection",
               nextToken?: string | null,
             } | null,
+            tmdbId: number,
+            studio?: string | null,
             createdAt: string,
             updatedAt: string,
           },
@@ -4894,8 +5064,6 @@ export type UpdateHistoryPredictionSetMutation = {
           song?:  {
             __typename: "Song",
             id: string,
-            title: string,
-            artist: string,
             movieId: string,
             movie:  {
               __typename: "Movie",
@@ -4905,6 +5073,8 @@ export type UpdateHistoryPredictionSetMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            title: string,
+            artist: string,
             createdAt: string,
             updatedAt: string,
           } | null,
@@ -4958,8 +5128,6 @@ export type DeleteHistoryPredictionSetMutation = {
         items:  Array< {
           __typename: "Category",
           id: string,
-          name: CategoryName,
-          type: CategoryType,
           eventId: string,
           event:  {
             __typename: "Event",
@@ -4976,6 +5144,8 @@ export type DeleteHistoryPredictionSetMutation = {
             createdAt: string,
             updatedAt: string,
           },
+          name: CategoryName,
+          type: CategoryType,
           createdAt: string,
           updatedAt: string,
           eventCategoriesId?: string | null,
@@ -4994,8 +5164,6 @@ export type DeleteHistoryPredictionSetMutation = {
     category:  {
       __typename: "Category",
       id: string,
-      name: CategoryName,
-      type: CategoryType,
       eventId: string,
       event:  {
         __typename: "Event",
@@ -5005,8 +5173,6 @@ export type DeleteHistoryPredictionSetMutation = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -5019,6 +5185,8 @@ export type DeleteHistoryPredictionSetMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -5033,6 +5201,8 @@ export type DeleteHistoryPredictionSetMutation = {
         createdAt: string,
         updatedAt: string,
       },
+      name: CategoryName,
+      type: CategoryType,
       createdAt: string,
       updatedAt: string,
       eventCategoriesId?: string | null,
@@ -5050,8 +5220,6 @@ export type DeleteHistoryPredictionSetMutation = {
           category:  {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -5064,6 +5232,8 @@ export type DeleteHistoryPredictionSetMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -5088,12 +5258,12 @@ export type DeleteHistoryPredictionSetMutation = {
           movie:  {
             __typename: "Movie",
             id: string,
-            tmdbId: number,
-            studio?: string | null,
             contenders?:  {
               __typename: "ModelContenderConnection",
               nextToken?: string | null,
             } | null,
+            tmdbId: number,
+            studio?: string | null,
             createdAt: string,
             updatedAt: string,
           },
@@ -5109,8 +5279,6 @@ export type DeleteHistoryPredictionSetMutation = {
           song?:  {
             __typename: "Song",
             id: string,
-            title: string,
-            artist: string,
             movieId: string,
             movie:  {
               __typename: "Movie",
@@ -5120,6 +5288,8 @@ export type DeleteHistoryPredictionSetMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            title: string,
+            artist: string,
             createdAt: string,
             updatedAt: string,
           } | null,
@@ -5159,8 +5329,6 @@ export type CreateHistoryPredictionMutation = {
       category:  {
         __typename: "Category",
         id: string,
-        name: CategoryName,
-        type: CategoryType,
         eventId: string,
         event:  {
           __typename: "Event",
@@ -5170,9 +5338,9 @@ export type CreateHistoryPredictionMutation = {
             items:  Array< {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -5187,6 +5355,8 @@ export type CreateHistoryPredictionMutation = {
           createdAt: string,
           updatedAt: string,
         },
+        name: CategoryName,
+        type: CategoryType,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -5200,8 +5370,6 @@ export type CreateHistoryPredictionMutation = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -5214,6 +5382,8 @@ export type CreateHistoryPredictionMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -5232,8 +5402,6 @@ export type CreateHistoryPredictionMutation = {
       movie:  {
         __typename: "Movie",
         id: string,
-        tmdbId: number,
-        studio?: string | null,
         contenders?:  {
           __typename: "ModelContenderConnection",
           items:  Array< {
@@ -5243,9 +5411,9 @@ export type CreateHistoryPredictionMutation = {
             category:  {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -5283,9 +5451,9 @@ export type CreateHistoryPredictionMutation = {
             song?:  {
               __typename: "Song",
               id: string,
+              movieId: string,
               title: string,
               artist: string,
-              movieId: string,
               createdAt: string,
               updatedAt: string,
             } | null,
@@ -5297,6 +5465,8 @@ export type CreateHistoryPredictionMutation = {
           } | null >,
           nextToken?: string | null,
         } | null,
+        tmdbId: number,
+        studio?: string | null,
         createdAt: string,
         updatedAt: string,
       },
@@ -5312,14 +5482,10 @@ export type CreateHistoryPredictionMutation = {
       song?:  {
         __typename: "Song",
         id: string,
-        title: string,
-        artist: string,
         movieId: string,
         movie:  {
           __typename: "Movie",
           id: string,
-          tmdbId: number,
-          studio?: string | null,
           contenders?:  {
             __typename: "ModelContenderConnection",
             items:  Array< {
@@ -5338,9 +5504,13 @@ export type CreateHistoryPredictionMutation = {
             } | null >,
             nextToken?: string | null,
           } | null,
+          tmdbId: number,
+          studio?: string | null,
           createdAt: string,
           updatedAt: string,
         },
+        title: string,
+        artist: string,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -5374,8 +5544,6 @@ export type UpdateHistoryPredictionMutation = {
       category:  {
         __typename: "Category",
         id: string,
-        name: CategoryName,
-        type: CategoryType,
         eventId: string,
         event:  {
           __typename: "Event",
@@ -5385,9 +5553,9 @@ export type UpdateHistoryPredictionMutation = {
             items:  Array< {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -5402,6 +5570,8 @@ export type UpdateHistoryPredictionMutation = {
           createdAt: string,
           updatedAt: string,
         },
+        name: CategoryName,
+        type: CategoryType,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -5415,8 +5585,6 @@ export type UpdateHistoryPredictionMutation = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -5429,6 +5597,8 @@ export type UpdateHistoryPredictionMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -5447,8 +5617,6 @@ export type UpdateHistoryPredictionMutation = {
       movie:  {
         __typename: "Movie",
         id: string,
-        tmdbId: number,
-        studio?: string | null,
         contenders?:  {
           __typename: "ModelContenderConnection",
           items:  Array< {
@@ -5458,9 +5626,9 @@ export type UpdateHistoryPredictionMutation = {
             category:  {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -5498,9 +5666,9 @@ export type UpdateHistoryPredictionMutation = {
             song?:  {
               __typename: "Song",
               id: string,
+              movieId: string,
               title: string,
               artist: string,
-              movieId: string,
               createdAt: string,
               updatedAt: string,
             } | null,
@@ -5512,6 +5680,8 @@ export type UpdateHistoryPredictionMutation = {
           } | null >,
           nextToken?: string | null,
         } | null,
+        tmdbId: number,
+        studio?: string | null,
         createdAt: string,
         updatedAt: string,
       },
@@ -5527,14 +5697,10 @@ export type UpdateHistoryPredictionMutation = {
       song?:  {
         __typename: "Song",
         id: string,
-        title: string,
-        artist: string,
         movieId: string,
         movie:  {
           __typename: "Movie",
           id: string,
-          tmdbId: number,
-          studio?: string | null,
           contenders?:  {
             __typename: "ModelContenderConnection",
             items:  Array< {
@@ -5553,9 +5719,13 @@ export type UpdateHistoryPredictionMutation = {
             } | null >,
             nextToken?: string | null,
           } | null,
+          tmdbId: number,
+          studio?: string | null,
           createdAt: string,
           updatedAt: string,
         },
+        title: string,
+        artist: string,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -5589,8 +5759,6 @@ export type DeleteHistoryPredictionMutation = {
       category:  {
         __typename: "Category",
         id: string,
-        name: CategoryName,
-        type: CategoryType,
         eventId: string,
         event:  {
           __typename: "Event",
@@ -5600,9 +5768,9 @@ export type DeleteHistoryPredictionMutation = {
             items:  Array< {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -5617,6 +5785,8 @@ export type DeleteHistoryPredictionMutation = {
           createdAt: string,
           updatedAt: string,
         },
+        name: CategoryName,
+        type: CategoryType,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -5630,8 +5800,6 @@ export type DeleteHistoryPredictionMutation = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -5644,6 +5812,8 @@ export type DeleteHistoryPredictionMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -5662,8 +5832,6 @@ export type DeleteHistoryPredictionMutation = {
       movie:  {
         __typename: "Movie",
         id: string,
-        tmdbId: number,
-        studio?: string | null,
         contenders?:  {
           __typename: "ModelContenderConnection",
           items:  Array< {
@@ -5673,9 +5841,9 @@ export type DeleteHistoryPredictionMutation = {
             category:  {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -5713,9 +5881,9 @@ export type DeleteHistoryPredictionMutation = {
             song?:  {
               __typename: "Song",
               id: string,
+              movieId: string,
               title: string,
               artist: string,
-              movieId: string,
               createdAt: string,
               updatedAt: string,
             } | null,
@@ -5727,6 +5895,8 @@ export type DeleteHistoryPredictionMutation = {
           } | null >,
           nextToken?: string | null,
         } | null,
+        tmdbId: number,
+        studio?: string | null,
         createdAt: string,
         updatedAt: string,
       },
@@ -5742,14 +5912,10 @@ export type DeleteHistoryPredictionMutation = {
       song?:  {
         __typename: "Song",
         id: string,
-        title: string,
-        artist: string,
         movieId: string,
         movie:  {
           __typename: "Movie",
           id: string,
-          tmdbId: number,
-          studio?: string | null,
           contenders?:  {
             __typename: "ModelContenderConnection",
             items:  Array< {
@@ -5768,9 +5934,13 @@ export type DeleteHistoryPredictionMutation = {
             } | null >,
             nextToken?: string | null,
           } | null,
+          tmdbId: number,
+          studio?: string | null,
           createdAt: string,
           updatedAt: string,
         },
+        title: string,
+        artist: string,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -5805,8 +5975,6 @@ export type CreateCommunityPredictionSetMutation = {
         items:  Array< {
           __typename: "Category",
           id: string,
-          name: CategoryName,
-          type: CategoryType,
           eventId: string,
           event:  {
             __typename: "Event",
@@ -5823,6 +5991,8 @@ export type CreateCommunityPredictionSetMutation = {
             createdAt: string,
             updatedAt: string,
           },
+          name: CategoryName,
+          type: CategoryType,
           createdAt: string,
           updatedAt: string,
           eventCategoriesId?: string | null,
@@ -5841,8 +6011,6 @@ export type CreateCommunityPredictionSetMutation = {
     category:  {
       __typename: "Category",
       id: string,
-      name: CategoryName,
-      type: CategoryType,
       eventId: string,
       event:  {
         __typename: "Event",
@@ -5852,8 +6020,6 @@ export type CreateCommunityPredictionSetMutation = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -5866,6 +6032,8 @@ export type CreateCommunityPredictionSetMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -5880,6 +6048,8 @@ export type CreateCommunityPredictionSetMutation = {
         createdAt: string,
         updatedAt: string,
       },
+      name: CategoryName,
+      type: CategoryType,
       createdAt: string,
       updatedAt: string,
       eventCategoriesId?: string | null,
@@ -5897,8 +6067,6 @@ export type CreateCommunityPredictionSetMutation = {
           category:  {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -5911,6 +6079,8 @@ export type CreateCommunityPredictionSetMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -5935,12 +6105,12 @@ export type CreateCommunityPredictionSetMutation = {
           movie:  {
             __typename: "Movie",
             id: string,
-            tmdbId: number,
-            studio?: string | null,
             contenders?:  {
               __typename: "ModelContenderConnection",
               nextToken?: string | null,
             } | null,
+            tmdbId: number,
+            studio?: string | null,
             createdAt: string,
             updatedAt: string,
           },
@@ -5956,8 +6126,6 @@ export type CreateCommunityPredictionSetMutation = {
           song?:  {
             __typename: "Song",
             id: string,
-            title: string,
-            artist: string,
             movieId: string,
             movie:  {
               __typename: "Movie",
@@ -5967,6 +6135,8 @@ export type CreateCommunityPredictionSetMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            title: string,
+            artist: string,
             createdAt: string,
             updatedAt: string,
           } | null,
@@ -6007,8 +6177,6 @@ export type UpdateCommunityPredictionSetMutation = {
         items:  Array< {
           __typename: "Category",
           id: string,
-          name: CategoryName,
-          type: CategoryType,
           eventId: string,
           event:  {
             __typename: "Event",
@@ -6025,6 +6193,8 @@ export type UpdateCommunityPredictionSetMutation = {
             createdAt: string,
             updatedAt: string,
           },
+          name: CategoryName,
+          type: CategoryType,
           createdAt: string,
           updatedAt: string,
           eventCategoriesId?: string | null,
@@ -6043,8 +6213,6 @@ export type UpdateCommunityPredictionSetMutation = {
     category:  {
       __typename: "Category",
       id: string,
-      name: CategoryName,
-      type: CategoryType,
       eventId: string,
       event:  {
         __typename: "Event",
@@ -6054,8 +6222,6 @@ export type UpdateCommunityPredictionSetMutation = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -6068,6 +6234,8 @@ export type UpdateCommunityPredictionSetMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -6082,6 +6250,8 @@ export type UpdateCommunityPredictionSetMutation = {
         createdAt: string,
         updatedAt: string,
       },
+      name: CategoryName,
+      type: CategoryType,
       createdAt: string,
       updatedAt: string,
       eventCategoriesId?: string | null,
@@ -6099,8 +6269,6 @@ export type UpdateCommunityPredictionSetMutation = {
           category:  {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -6113,6 +6281,8 @@ export type UpdateCommunityPredictionSetMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -6137,12 +6307,12 @@ export type UpdateCommunityPredictionSetMutation = {
           movie:  {
             __typename: "Movie",
             id: string,
-            tmdbId: number,
-            studio?: string | null,
             contenders?:  {
               __typename: "ModelContenderConnection",
               nextToken?: string | null,
             } | null,
+            tmdbId: number,
+            studio?: string | null,
             createdAt: string,
             updatedAt: string,
           },
@@ -6158,8 +6328,6 @@ export type UpdateCommunityPredictionSetMutation = {
           song?:  {
             __typename: "Song",
             id: string,
-            title: string,
-            artist: string,
             movieId: string,
             movie:  {
               __typename: "Movie",
@@ -6169,6 +6337,8 @@ export type UpdateCommunityPredictionSetMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            title: string,
+            artist: string,
             createdAt: string,
             updatedAt: string,
           } | null,
@@ -6209,8 +6379,6 @@ export type DeleteCommunityPredictionSetMutation = {
         items:  Array< {
           __typename: "Category",
           id: string,
-          name: CategoryName,
-          type: CategoryType,
           eventId: string,
           event:  {
             __typename: "Event",
@@ -6227,6 +6395,8 @@ export type DeleteCommunityPredictionSetMutation = {
             createdAt: string,
             updatedAt: string,
           },
+          name: CategoryName,
+          type: CategoryType,
           createdAt: string,
           updatedAt: string,
           eventCategoriesId?: string | null,
@@ -6245,8 +6415,6 @@ export type DeleteCommunityPredictionSetMutation = {
     category:  {
       __typename: "Category",
       id: string,
-      name: CategoryName,
-      type: CategoryType,
       eventId: string,
       event:  {
         __typename: "Event",
@@ -6256,8 +6424,6 @@ export type DeleteCommunityPredictionSetMutation = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -6270,6 +6436,8 @@ export type DeleteCommunityPredictionSetMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -6284,6 +6452,8 @@ export type DeleteCommunityPredictionSetMutation = {
         createdAt: string,
         updatedAt: string,
       },
+      name: CategoryName,
+      type: CategoryType,
       createdAt: string,
       updatedAt: string,
       eventCategoriesId?: string | null,
@@ -6301,8 +6471,6 @@ export type DeleteCommunityPredictionSetMutation = {
           category:  {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -6315,6 +6483,8 @@ export type DeleteCommunityPredictionSetMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -6339,12 +6509,12 @@ export type DeleteCommunityPredictionSetMutation = {
           movie:  {
             __typename: "Movie",
             id: string,
-            tmdbId: number,
-            studio?: string | null,
             contenders?:  {
               __typename: "ModelContenderConnection",
               nextToken?: string | null,
             } | null,
+            tmdbId: number,
+            studio?: string | null,
             createdAt: string,
             updatedAt: string,
           },
@@ -6360,8 +6530,6 @@ export type DeleteCommunityPredictionSetMutation = {
           song?:  {
             __typename: "Song",
             id: string,
-            title: string,
-            artist: string,
             movieId: string,
             movie:  {
               __typename: "Movie",
@@ -6371,6 +6539,8 @@ export type DeleteCommunityPredictionSetMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            title: string,
+            artist: string,
             createdAt: string,
             updatedAt: string,
           } | null,
@@ -6410,8 +6580,6 @@ export type CreateCommunityPredictionMutation = {
       category:  {
         __typename: "Category",
         id: string,
-        name: CategoryName,
-        type: CategoryType,
         eventId: string,
         event:  {
           __typename: "Event",
@@ -6421,9 +6589,9 @@ export type CreateCommunityPredictionMutation = {
             items:  Array< {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -6438,6 +6606,8 @@ export type CreateCommunityPredictionMutation = {
           createdAt: string,
           updatedAt: string,
         },
+        name: CategoryName,
+        type: CategoryType,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -6451,8 +6621,6 @@ export type CreateCommunityPredictionMutation = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -6465,6 +6633,8 @@ export type CreateCommunityPredictionMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -6483,8 +6653,6 @@ export type CreateCommunityPredictionMutation = {
       movie:  {
         __typename: "Movie",
         id: string,
-        tmdbId: number,
-        studio?: string | null,
         contenders?:  {
           __typename: "ModelContenderConnection",
           items:  Array< {
@@ -6494,9 +6662,9 @@ export type CreateCommunityPredictionMutation = {
             category:  {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -6534,9 +6702,9 @@ export type CreateCommunityPredictionMutation = {
             song?:  {
               __typename: "Song",
               id: string,
+              movieId: string,
               title: string,
               artist: string,
-              movieId: string,
               createdAt: string,
               updatedAt: string,
             } | null,
@@ -6548,6 +6716,8 @@ export type CreateCommunityPredictionMutation = {
           } | null >,
           nextToken?: string | null,
         } | null,
+        tmdbId: number,
+        studio?: string | null,
         createdAt: string,
         updatedAt: string,
       },
@@ -6563,14 +6733,10 @@ export type CreateCommunityPredictionMutation = {
       song?:  {
         __typename: "Song",
         id: string,
-        title: string,
-        artist: string,
         movieId: string,
         movie:  {
           __typename: "Movie",
           id: string,
-          tmdbId: number,
-          studio?: string | null,
           contenders?:  {
             __typename: "ModelContenderConnection",
             items:  Array< {
@@ -6589,9 +6755,13 @@ export type CreateCommunityPredictionMutation = {
             } | null >,
             nextToken?: string | null,
           } | null,
+          tmdbId: number,
+          studio?: string | null,
           createdAt: string,
           updatedAt: string,
         },
+        title: string,
+        artist: string,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -6625,8 +6795,6 @@ export type UpdateCommunityPredictionMutation = {
       category:  {
         __typename: "Category",
         id: string,
-        name: CategoryName,
-        type: CategoryType,
         eventId: string,
         event:  {
           __typename: "Event",
@@ -6636,9 +6804,9 @@ export type UpdateCommunityPredictionMutation = {
             items:  Array< {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -6653,6 +6821,8 @@ export type UpdateCommunityPredictionMutation = {
           createdAt: string,
           updatedAt: string,
         },
+        name: CategoryName,
+        type: CategoryType,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -6666,8 +6836,6 @@ export type UpdateCommunityPredictionMutation = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -6680,6 +6848,8 @@ export type UpdateCommunityPredictionMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -6698,8 +6868,6 @@ export type UpdateCommunityPredictionMutation = {
       movie:  {
         __typename: "Movie",
         id: string,
-        tmdbId: number,
-        studio?: string | null,
         contenders?:  {
           __typename: "ModelContenderConnection",
           items:  Array< {
@@ -6709,9 +6877,9 @@ export type UpdateCommunityPredictionMutation = {
             category:  {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -6749,9 +6917,9 @@ export type UpdateCommunityPredictionMutation = {
             song?:  {
               __typename: "Song",
               id: string,
+              movieId: string,
               title: string,
               artist: string,
-              movieId: string,
               createdAt: string,
               updatedAt: string,
             } | null,
@@ -6763,6 +6931,8 @@ export type UpdateCommunityPredictionMutation = {
           } | null >,
           nextToken?: string | null,
         } | null,
+        tmdbId: number,
+        studio?: string | null,
         createdAt: string,
         updatedAt: string,
       },
@@ -6778,14 +6948,10 @@ export type UpdateCommunityPredictionMutation = {
       song?:  {
         __typename: "Song",
         id: string,
-        title: string,
-        artist: string,
         movieId: string,
         movie:  {
           __typename: "Movie",
           id: string,
-          tmdbId: number,
-          studio?: string | null,
           contenders?:  {
             __typename: "ModelContenderConnection",
             items:  Array< {
@@ -6804,9 +6970,13 @@ export type UpdateCommunityPredictionMutation = {
             } | null >,
             nextToken?: string | null,
           } | null,
+          tmdbId: number,
+          studio?: string | null,
           createdAt: string,
           updatedAt: string,
         },
+        title: string,
+        artist: string,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -6840,8 +7010,6 @@ export type DeleteCommunityPredictionMutation = {
       category:  {
         __typename: "Category",
         id: string,
-        name: CategoryName,
-        type: CategoryType,
         eventId: string,
         event:  {
           __typename: "Event",
@@ -6851,9 +7019,9 @@ export type DeleteCommunityPredictionMutation = {
             items:  Array< {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -6868,6 +7036,8 @@ export type DeleteCommunityPredictionMutation = {
           createdAt: string,
           updatedAt: string,
         },
+        name: CategoryName,
+        type: CategoryType,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -6881,8 +7051,6 @@ export type DeleteCommunityPredictionMutation = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -6895,6 +7063,8 @@ export type DeleteCommunityPredictionMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -6913,8 +7083,6 @@ export type DeleteCommunityPredictionMutation = {
       movie:  {
         __typename: "Movie",
         id: string,
-        tmdbId: number,
-        studio?: string | null,
         contenders?:  {
           __typename: "ModelContenderConnection",
           items:  Array< {
@@ -6924,9 +7092,9 @@ export type DeleteCommunityPredictionMutation = {
             category:  {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -6964,9 +7132,9 @@ export type DeleteCommunityPredictionMutation = {
             song?:  {
               __typename: "Song",
               id: string,
+              movieId: string,
               title: string,
               artist: string,
-              movieId: string,
               createdAt: string,
               updatedAt: string,
             } | null,
@@ -6978,6 +7146,8 @@ export type DeleteCommunityPredictionMutation = {
           } | null >,
           nextToken?: string | null,
         } | null,
+        tmdbId: number,
+        studio?: string | null,
         createdAt: string,
         updatedAt: string,
       },
@@ -6993,14 +7163,10 @@ export type DeleteCommunityPredictionMutation = {
       song?:  {
         __typename: "Song",
         id: string,
-        title: string,
-        artist: string,
         movieId: string,
         movie:  {
           __typename: "Movie",
           id: string,
-          tmdbId: number,
-          studio?: string | null,
           contenders?:  {
             __typename: "ModelContenderConnection",
             items:  Array< {
@@ -7019,9 +7185,13 @@ export type DeleteCommunityPredictionMutation = {
             } | null >,
             nextToken?: string | null,
           } | null,
+          tmdbId: number,
+          studio?: string | null,
           createdAt: string,
           updatedAt: string,
         },
+        title: string,
+        artist: string,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -7056,8 +7226,6 @@ export type CreateCommunityHistoryPredictionSetMutation = {
         items:  Array< {
           __typename: "Category",
           id: string,
-          name: CategoryName,
-          type: CategoryType,
           eventId: string,
           event:  {
             __typename: "Event",
@@ -7074,6 +7242,8 @@ export type CreateCommunityHistoryPredictionSetMutation = {
             createdAt: string,
             updatedAt: string,
           },
+          name: CategoryName,
+          type: CategoryType,
           createdAt: string,
           updatedAt: string,
           eventCategoriesId?: string | null,
@@ -7092,8 +7262,6 @@ export type CreateCommunityHistoryPredictionSetMutation = {
     category:  {
       __typename: "Category",
       id: string,
-      name: CategoryName,
-      type: CategoryType,
       eventId: string,
       event:  {
         __typename: "Event",
@@ -7103,8 +7271,6 @@ export type CreateCommunityHistoryPredictionSetMutation = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -7117,6 +7283,8 @@ export type CreateCommunityHistoryPredictionSetMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -7131,6 +7299,8 @@ export type CreateCommunityHistoryPredictionSetMutation = {
         createdAt: string,
         updatedAt: string,
       },
+      name: CategoryName,
+      type: CategoryType,
       createdAt: string,
       updatedAt: string,
       eventCategoriesId?: string | null,
@@ -7148,8 +7318,6 @@ export type CreateCommunityHistoryPredictionSetMutation = {
           category:  {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -7162,6 +7330,8 @@ export type CreateCommunityHistoryPredictionSetMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -7186,12 +7356,12 @@ export type CreateCommunityHistoryPredictionSetMutation = {
           movie:  {
             __typename: "Movie",
             id: string,
-            tmdbId: number,
-            studio?: string | null,
             contenders?:  {
               __typename: "ModelContenderConnection",
               nextToken?: string | null,
             } | null,
+            tmdbId: number,
+            studio?: string | null,
             createdAt: string,
             updatedAt: string,
           },
@@ -7207,8 +7377,6 @@ export type CreateCommunityHistoryPredictionSetMutation = {
           song?:  {
             __typename: "Song",
             id: string,
-            title: string,
-            artist: string,
             movieId: string,
             movie:  {
               __typename: "Movie",
@@ -7218,6 +7386,8 @@ export type CreateCommunityHistoryPredictionSetMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            title: string,
+            artist: string,
             createdAt: string,
             updatedAt: string,
           } | null,
@@ -7258,8 +7428,6 @@ export type UpdateCommunityHistoryPredictionSetMutation = {
         items:  Array< {
           __typename: "Category",
           id: string,
-          name: CategoryName,
-          type: CategoryType,
           eventId: string,
           event:  {
             __typename: "Event",
@@ -7276,6 +7444,8 @@ export type UpdateCommunityHistoryPredictionSetMutation = {
             createdAt: string,
             updatedAt: string,
           },
+          name: CategoryName,
+          type: CategoryType,
           createdAt: string,
           updatedAt: string,
           eventCategoriesId?: string | null,
@@ -7294,8 +7464,6 @@ export type UpdateCommunityHistoryPredictionSetMutation = {
     category:  {
       __typename: "Category",
       id: string,
-      name: CategoryName,
-      type: CategoryType,
       eventId: string,
       event:  {
         __typename: "Event",
@@ -7305,8 +7473,6 @@ export type UpdateCommunityHistoryPredictionSetMutation = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -7319,6 +7485,8 @@ export type UpdateCommunityHistoryPredictionSetMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -7333,6 +7501,8 @@ export type UpdateCommunityHistoryPredictionSetMutation = {
         createdAt: string,
         updatedAt: string,
       },
+      name: CategoryName,
+      type: CategoryType,
       createdAt: string,
       updatedAt: string,
       eventCategoriesId?: string | null,
@@ -7350,8 +7520,6 @@ export type UpdateCommunityHistoryPredictionSetMutation = {
           category:  {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -7364,6 +7532,8 @@ export type UpdateCommunityHistoryPredictionSetMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -7388,12 +7558,12 @@ export type UpdateCommunityHistoryPredictionSetMutation = {
           movie:  {
             __typename: "Movie",
             id: string,
-            tmdbId: number,
-            studio?: string | null,
             contenders?:  {
               __typename: "ModelContenderConnection",
               nextToken?: string | null,
             } | null,
+            tmdbId: number,
+            studio?: string | null,
             createdAt: string,
             updatedAt: string,
           },
@@ -7409,8 +7579,6 @@ export type UpdateCommunityHistoryPredictionSetMutation = {
           song?:  {
             __typename: "Song",
             id: string,
-            title: string,
-            artist: string,
             movieId: string,
             movie:  {
               __typename: "Movie",
@@ -7420,6 +7588,8 @@ export type UpdateCommunityHistoryPredictionSetMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            title: string,
+            artist: string,
             createdAt: string,
             updatedAt: string,
           } | null,
@@ -7460,8 +7630,6 @@ export type DeleteCommunityHistoryPredictionSetMutation = {
         items:  Array< {
           __typename: "Category",
           id: string,
-          name: CategoryName,
-          type: CategoryType,
           eventId: string,
           event:  {
             __typename: "Event",
@@ -7478,6 +7646,8 @@ export type DeleteCommunityHistoryPredictionSetMutation = {
             createdAt: string,
             updatedAt: string,
           },
+          name: CategoryName,
+          type: CategoryType,
           createdAt: string,
           updatedAt: string,
           eventCategoriesId?: string | null,
@@ -7496,8 +7666,6 @@ export type DeleteCommunityHistoryPredictionSetMutation = {
     category:  {
       __typename: "Category",
       id: string,
-      name: CategoryName,
-      type: CategoryType,
       eventId: string,
       event:  {
         __typename: "Event",
@@ -7507,8 +7675,6 @@ export type DeleteCommunityHistoryPredictionSetMutation = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -7521,6 +7687,8 @@ export type DeleteCommunityHistoryPredictionSetMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -7535,6 +7703,8 @@ export type DeleteCommunityHistoryPredictionSetMutation = {
         createdAt: string,
         updatedAt: string,
       },
+      name: CategoryName,
+      type: CategoryType,
       createdAt: string,
       updatedAt: string,
       eventCategoriesId?: string | null,
@@ -7552,8 +7722,6 @@ export type DeleteCommunityHistoryPredictionSetMutation = {
           category:  {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -7566,6 +7734,8 @@ export type DeleteCommunityHistoryPredictionSetMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -7590,12 +7760,12 @@ export type DeleteCommunityHistoryPredictionSetMutation = {
           movie:  {
             __typename: "Movie",
             id: string,
-            tmdbId: number,
-            studio?: string | null,
             contenders?:  {
               __typename: "ModelContenderConnection",
               nextToken?: string | null,
             } | null,
+            tmdbId: number,
+            studio?: string | null,
             createdAt: string,
             updatedAt: string,
           },
@@ -7611,8 +7781,6 @@ export type DeleteCommunityHistoryPredictionSetMutation = {
           song?:  {
             __typename: "Song",
             id: string,
-            title: string,
-            artist: string,
             movieId: string,
             movie:  {
               __typename: "Movie",
@@ -7622,6 +7790,8 @@ export type DeleteCommunityHistoryPredictionSetMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            title: string,
+            artist: string,
             createdAt: string,
             updatedAt: string,
           } | null,
@@ -7661,8 +7831,6 @@ export type CreateCommunityHistoryPredictionMutation = {
       category:  {
         __typename: "Category",
         id: string,
-        name: CategoryName,
-        type: CategoryType,
         eventId: string,
         event:  {
           __typename: "Event",
@@ -7672,9 +7840,9 @@ export type CreateCommunityHistoryPredictionMutation = {
             items:  Array< {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -7689,6 +7857,8 @@ export type CreateCommunityHistoryPredictionMutation = {
           createdAt: string,
           updatedAt: string,
         },
+        name: CategoryName,
+        type: CategoryType,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -7702,8 +7872,6 @@ export type CreateCommunityHistoryPredictionMutation = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -7716,6 +7884,8 @@ export type CreateCommunityHistoryPredictionMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -7734,8 +7904,6 @@ export type CreateCommunityHistoryPredictionMutation = {
       movie:  {
         __typename: "Movie",
         id: string,
-        tmdbId: number,
-        studio?: string | null,
         contenders?:  {
           __typename: "ModelContenderConnection",
           items:  Array< {
@@ -7745,9 +7913,9 @@ export type CreateCommunityHistoryPredictionMutation = {
             category:  {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -7785,9 +7953,9 @@ export type CreateCommunityHistoryPredictionMutation = {
             song?:  {
               __typename: "Song",
               id: string,
+              movieId: string,
               title: string,
               artist: string,
-              movieId: string,
               createdAt: string,
               updatedAt: string,
             } | null,
@@ -7799,6 +7967,8 @@ export type CreateCommunityHistoryPredictionMutation = {
           } | null >,
           nextToken?: string | null,
         } | null,
+        tmdbId: number,
+        studio?: string | null,
         createdAt: string,
         updatedAt: string,
       },
@@ -7814,14 +7984,10 @@ export type CreateCommunityHistoryPredictionMutation = {
       song?:  {
         __typename: "Song",
         id: string,
-        title: string,
-        artist: string,
         movieId: string,
         movie:  {
           __typename: "Movie",
           id: string,
-          tmdbId: number,
-          studio?: string | null,
           contenders?:  {
             __typename: "ModelContenderConnection",
             items:  Array< {
@@ -7840,9 +8006,13 @@ export type CreateCommunityHistoryPredictionMutation = {
             } | null >,
             nextToken?: string | null,
           } | null,
+          tmdbId: number,
+          studio?: string | null,
           createdAt: string,
           updatedAt: string,
         },
+        title: string,
+        artist: string,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -7876,8 +8046,6 @@ export type UpdateCommunityHistoryPredictionMutation = {
       category:  {
         __typename: "Category",
         id: string,
-        name: CategoryName,
-        type: CategoryType,
         eventId: string,
         event:  {
           __typename: "Event",
@@ -7887,9 +8055,9 @@ export type UpdateCommunityHistoryPredictionMutation = {
             items:  Array< {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -7904,6 +8072,8 @@ export type UpdateCommunityHistoryPredictionMutation = {
           createdAt: string,
           updatedAt: string,
         },
+        name: CategoryName,
+        type: CategoryType,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -7917,8 +8087,6 @@ export type UpdateCommunityHistoryPredictionMutation = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -7931,6 +8099,8 @@ export type UpdateCommunityHistoryPredictionMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -7949,8 +8119,6 @@ export type UpdateCommunityHistoryPredictionMutation = {
       movie:  {
         __typename: "Movie",
         id: string,
-        tmdbId: number,
-        studio?: string | null,
         contenders?:  {
           __typename: "ModelContenderConnection",
           items:  Array< {
@@ -7960,9 +8128,9 @@ export type UpdateCommunityHistoryPredictionMutation = {
             category:  {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -8000,9 +8168,9 @@ export type UpdateCommunityHistoryPredictionMutation = {
             song?:  {
               __typename: "Song",
               id: string,
+              movieId: string,
               title: string,
               artist: string,
-              movieId: string,
               createdAt: string,
               updatedAt: string,
             } | null,
@@ -8014,6 +8182,8 @@ export type UpdateCommunityHistoryPredictionMutation = {
           } | null >,
           nextToken?: string | null,
         } | null,
+        tmdbId: number,
+        studio?: string | null,
         createdAt: string,
         updatedAt: string,
       },
@@ -8029,14 +8199,10 @@ export type UpdateCommunityHistoryPredictionMutation = {
       song?:  {
         __typename: "Song",
         id: string,
-        title: string,
-        artist: string,
         movieId: string,
         movie:  {
           __typename: "Movie",
           id: string,
-          tmdbId: number,
-          studio?: string | null,
           contenders?:  {
             __typename: "ModelContenderConnection",
             items:  Array< {
@@ -8055,9 +8221,13 @@ export type UpdateCommunityHistoryPredictionMutation = {
             } | null >,
             nextToken?: string | null,
           } | null,
+          tmdbId: number,
+          studio?: string | null,
           createdAt: string,
           updatedAt: string,
         },
+        title: string,
+        artist: string,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -8091,8 +8261,6 @@ export type DeleteCommunityHistoryPredictionMutation = {
       category:  {
         __typename: "Category",
         id: string,
-        name: CategoryName,
-        type: CategoryType,
         eventId: string,
         event:  {
           __typename: "Event",
@@ -8102,9 +8270,9 @@ export type DeleteCommunityHistoryPredictionMutation = {
             items:  Array< {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -8119,6 +8287,8 @@ export type DeleteCommunityHistoryPredictionMutation = {
           createdAt: string,
           updatedAt: string,
         },
+        name: CategoryName,
+        type: CategoryType,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -8132,8 +8302,6 @@ export type DeleteCommunityHistoryPredictionMutation = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -8146,6 +8314,8 @@ export type DeleteCommunityHistoryPredictionMutation = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -8164,8 +8334,6 @@ export type DeleteCommunityHistoryPredictionMutation = {
       movie:  {
         __typename: "Movie",
         id: string,
-        tmdbId: number,
-        studio?: string | null,
         contenders?:  {
           __typename: "ModelContenderConnection",
           items:  Array< {
@@ -8175,9 +8343,9 @@ export type DeleteCommunityHistoryPredictionMutation = {
             category:  {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -8215,9 +8383,9 @@ export type DeleteCommunityHistoryPredictionMutation = {
             song?:  {
               __typename: "Song",
               id: string,
+              movieId: string,
               title: string,
               artist: string,
-              movieId: string,
               createdAt: string,
               updatedAt: string,
             } | null,
@@ -8229,6 +8397,8 @@ export type DeleteCommunityHistoryPredictionMutation = {
           } | null >,
           nextToken?: string | null,
         } | null,
+        tmdbId: number,
+        studio?: string | null,
         createdAt: string,
         updatedAt: string,
       },
@@ -8244,14 +8414,10 @@ export type DeleteCommunityHistoryPredictionMutation = {
       song?:  {
         __typename: "Song",
         id: string,
-        title: string,
-        artist: string,
         movieId: string,
         movie:  {
           __typename: "Movie",
           id: string,
-          tmdbId: number,
-          studio?: string | null,
           contenders?:  {
             __typename: "ModelContenderConnection",
             items:  Array< {
@@ -8270,9 +8436,13 @@ export type DeleteCommunityHistoryPredictionMutation = {
             } | null >,
             nextToken?: string | null,
           } | null,
+          tmdbId: number,
+          studio?: string | null,
           createdAt: string,
           updatedAt: string,
         },
+        title: string,
+        artist: string,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -8335,6 +8505,92 @@ export type ListUsersQuery = {
   } | null,
 };
 
+export type GetRelationshipQueryVariables = {
+  id: string,
+};
+
+export type GetRelationshipQuery = {
+  getRelationship?:  {
+    __typename: "Relationship",
+    id: string,
+    followedUserId: string,
+    followedUser:  {
+      __typename: "User",
+      id: string,
+      email: string,
+      username?: string | null,
+      name?: string | null,
+      bio?: string | null,
+      image?: string | null,
+      role: UserRole,
+      createdAt: string,
+      updatedAt: string,
+    },
+    followingUserId: string,
+    followingUser:  {
+      __typename: "User",
+      id: string,
+      email: string,
+      username?: string | null,
+      name?: string | null,
+      bio?: string | null,
+      image?: string | null,
+      role: UserRole,
+      createdAt: string,
+      updatedAt: string,
+    },
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type ListRelationshipsQueryVariables = {
+  id?: string | null,
+  filter?: ModelRelationshipFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  sortDirection?: ModelSortDirection | null,
+};
+
+export type ListRelationshipsQuery = {
+  listRelationships?:  {
+    __typename: "ModelRelationshipConnection",
+    items:  Array< {
+      __typename: "Relationship",
+      id: string,
+      followedUserId: string,
+      followedUser:  {
+        __typename: "User",
+        id: string,
+        email: string,
+        username?: string | null,
+        name?: string | null,
+        bio?: string | null,
+        image?: string | null,
+        role: UserRole,
+        createdAt: string,
+        updatedAt: string,
+      },
+      followingUserId: string,
+      followingUser:  {
+        __typename: "User",
+        id: string,
+        email: string,
+        username?: string | null,
+        name?: string | null,
+        bio?: string | null,
+        image?: string | null,
+        role: UserRole,
+        createdAt: string,
+        updatedAt: string,
+      },
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
 export type GetEventQueryVariables = {
   id: string,
 };
@@ -8348,8 +8604,6 @@ export type GetEventQuery = {
       items:  Array< {
         __typename: "Category",
         id: string,
-        name: CategoryName,
-        type: CategoryType,
         eventId: string,
         event:  {
           __typename: "Event",
@@ -8359,9 +8613,9 @@ export type GetEventQuery = {
             items:  Array< {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -8376,6 +8630,8 @@ export type GetEventQuery = {
           createdAt: string,
           updatedAt: string,
         },
+        name: CategoryName,
+        type: CategoryType,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -8411,8 +8667,6 @@ export type ListEventsQuery = {
         items:  Array< {
           __typename: "Category",
           id: string,
-          name: CategoryName,
-          type: CategoryType,
           eventId: string,
           event:  {
             __typename: "Event",
@@ -8429,6 +8683,8 @@ export type ListEventsQuery = {
             createdAt: string,
             updatedAt: string,
           },
+          name: CategoryName,
+          type: CategoryType,
           createdAt: string,
           updatedAt: string,
           eventCategoriesId?: string | null,
@@ -8455,8 +8711,6 @@ export type GetCategoryQuery = {
   getCategory?:  {
     __typename: "Category",
     id: string,
-    name: CategoryName,
-    type: CategoryType,
     eventId: string,
     event:  {
       __typename: "Event",
@@ -8466,8 +8720,6 @@ export type GetCategoryQuery = {
         items:  Array< {
           __typename: "Category",
           id: string,
-          name: CategoryName,
-          type: CategoryType,
           eventId: string,
           event:  {
             __typename: "Event",
@@ -8484,6 +8736,8 @@ export type GetCategoryQuery = {
             createdAt: string,
             updatedAt: string,
           },
+          name: CategoryName,
+          type: CategoryType,
           createdAt: string,
           updatedAt: string,
           eventCategoriesId?: string | null,
@@ -8498,6 +8752,8 @@ export type GetCategoryQuery = {
       createdAt: string,
       updatedAt: string,
     },
+    name: CategoryName,
+    type: CategoryType,
     createdAt: string,
     updatedAt: string,
     eventCategoriesId?: string | null,
@@ -8518,8 +8774,6 @@ export type ListCategoriesQuery = {
     items:  Array< {
       __typename: "Category",
       id: string,
-      name: CategoryName,
-      type: CategoryType,
       eventId: string,
       event:  {
         __typename: "Event",
@@ -8529,8 +8783,6 @@ export type ListCategoriesQuery = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -8543,6 +8795,8 @@ export type ListCategoriesQuery = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -8557,6 +8811,8 @@ export type ListCategoriesQuery = {
         createdAt: string,
         updatedAt: string,
       },
+      name: CategoryName,
+      type: CategoryType,
       createdAt: string,
       updatedAt: string,
       eventCategoriesId?: string | null,
@@ -8577,8 +8833,6 @@ export type GetContenderQuery = {
     category:  {
       __typename: "Category",
       id: string,
-      name: CategoryName,
-      type: CategoryType,
       eventId: string,
       event:  {
         __typename: "Event",
@@ -8588,8 +8842,6 @@ export type GetContenderQuery = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -8602,6 +8854,8 @@ export type GetContenderQuery = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -8616,6 +8870,8 @@ export type GetContenderQuery = {
         createdAt: string,
         updatedAt: string,
       },
+      name: CategoryName,
+      type: CategoryType,
       createdAt: string,
       updatedAt: string,
       eventCategoriesId?: string | null,
@@ -8629,8 +8885,6 @@ export type GetContenderQuery = {
         items:  Array< {
           __typename: "Category",
           id: string,
-          name: CategoryName,
-          type: CategoryType,
           eventId: string,
           event:  {
             __typename: "Event",
@@ -8647,6 +8901,8 @@ export type GetContenderQuery = {
             createdAt: string,
             updatedAt: string,
           },
+          name: CategoryName,
+          type: CategoryType,
           createdAt: string,
           updatedAt: string,
           eventCategoriesId?: string | null,
@@ -8665,8 +8921,6 @@ export type GetContenderQuery = {
     movie:  {
       __typename: "Movie",
       id: string,
-      tmdbId: number,
-      studio?: string | null,
       contenders?:  {
         __typename: "ModelContenderConnection",
         items:  Array< {
@@ -8676,8 +8930,6 @@ export type GetContenderQuery = {
           category:  {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -8690,6 +8942,8 @@ export type GetContenderQuery = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -8714,12 +8968,12 @@ export type GetContenderQuery = {
           movie:  {
             __typename: "Movie",
             id: string,
-            tmdbId: number,
-            studio?: string | null,
             contenders?:  {
               __typename: "ModelContenderConnection",
               nextToken?: string | null,
             } | null,
+            tmdbId: number,
+            studio?: string | null,
             createdAt: string,
             updatedAt: string,
           },
@@ -8735,8 +8989,6 @@ export type GetContenderQuery = {
           song?:  {
             __typename: "Song",
             id: string,
-            title: string,
-            artist: string,
             movieId: string,
             movie:  {
               __typename: "Movie",
@@ -8746,6 +8998,8 @@ export type GetContenderQuery = {
               createdAt: string,
               updatedAt: string,
             },
+            title: string,
+            artist: string,
             createdAt: string,
             updatedAt: string,
           } | null,
@@ -8757,6 +9011,8 @@ export type GetContenderQuery = {
         } | null >,
         nextToken?: string | null,
       } | null,
+      tmdbId: number,
+      studio?: string | null,
       createdAt: string,
       updatedAt: string,
     },
@@ -8772,14 +9028,10 @@ export type GetContenderQuery = {
     song?:  {
       __typename: "Song",
       id: string,
-      title: string,
-      artist: string,
       movieId: string,
       movie:  {
         __typename: "Movie",
         id: string,
-        tmdbId: number,
-        studio?: string | null,
         contenders?:  {
           __typename: "ModelContenderConnection",
           items:  Array< {
@@ -8789,9 +9041,9 @@ export type GetContenderQuery = {
             category:  {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -8829,9 +9081,9 @@ export type GetContenderQuery = {
             song?:  {
               __typename: "Song",
               id: string,
+              movieId: string,
               title: string,
               artist: string,
-              movieId: string,
               createdAt: string,
               updatedAt: string,
             } | null,
@@ -8843,9 +9095,13 @@ export type GetContenderQuery = {
           } | null >,
           nextToken?: string | null,
         } | null,
+        tmdbId: number,
+        studio?: string | null,
         createdAt: string,
         updatedAt: string,
       },
+      title: string,
+      artist: string,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -8875,8 +9131,6 @@ export type ListContendersQuery = {
       category:  {
         __typename: "Category",
         id: string,
-        name: CategoryName,
-        type: CategoryType,
         eventId: string,
         event:  {
           __typename: "Event",
@@ -8886,9 +9140,9 @@ export type ListContendersQuery = {
             items:  Array< {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -8903,6 +9157,8 @@ export type ListContendersQuery = {
           createdAt: string,
           updatedAt: string,
         },
+        name: CategoryName,
+        type: CategoryType,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -8916,8 +9172,6 @@ export type ListContendersQuery = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -8930,6 +9184,8 @@ export type ListContendersQuery = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -8948,8 +9204,6 @@ export type ListContendersQuery = {
       movie:  {
         __typename: "Movie",
         id: string,
-        tmdbId: number,
-        studio?: string | null,
         contenders?:  {
           __typename: "ModelContenderConnection",
           items:  Array< {
@@ -8959,9 +9213,9 @@ export type ListContendersQuery = {
             category:  {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -8999,9 +9253,9 @@ export type ListContendersQuery = {
             song?:  {
               __typename: "Song",
               id: string,
+              movieId: string,
               title: string,
               artist: string,
-              movieId: string,
               createdAt: string,
               updatedAt: string,
             } | null,
@@ -9013,6 +9267,8 @@ export type ListContendersQuery = {
           } | null >,
           nextToken?: string | null,
         } | null,
+        tmdbId: number,
+        studio?: string | null,
         createdAt: string,
         updatedAt: string,
       },
@@ -9028,14 +9284,10 @@ export type ListContendersQuery = {
       song?:  {
         __typename: "Song",
         id: string,
-        title: string,
-        artist: string,
         movieId: string,
         movie:  {
           __typename: "Movie",
           id: string,
-          tmdbId: number,
-          studio?: string | null,
           contenders?:  {
             __typename: "ModelContenderConnection",
             items:  Array< {
@@ -9054,9 +9306,13 @@ export type ListContendersQuery = {
             } | null >,
             nextToken?: string | null,
           } | null,
+          tmdbId: number,
+          studio?: string | null,
           createdAt: string,
           updatedAt: string,
         },
+        title: string,
+        artist: string,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -9078,8 +9334,6 @@ export type GetMovieQuery = {
   getMovie?:  {
     __typename: "Movie",
     id: string,
-    tmdbId: number,
-    studio?: string | null,
     contenders?:  {
       __typename: "ModelContenderConnection",
       items:  Array< {
@@ -9089,8 +9343,6 @@ export type GetMovieQuery = {
         category:  {
           __typename: "Category",
           id: string,
-          name: CategoryName,
-          type: CategoryType,
           eventId: string,
           event:  {
             __typename: "Event",
@@ -9107,6 +9359,8 @@ export type GetMovieQuery = {
             createdAt: string,
             updatedAt: string,
           },
+          name: CategoryName,
+          type: CategoryType,
           createdAt: string,
           updatedAt: string,
           eventCategoriesId?: string | null,
@@ -9120,9 +9374,9 @@ export type GetMovieQuery = {
             items:  Array< {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -9141,8 +9395,6 @@ export type GetMovieQuery = {
         movie:  {
           __typename: "Movie",
           id: string,
-          tmdbId: number,
-          studio?: string | null,
           contenders?:  {
             __typename: "ModelContenderConnection",
             items:  Array< {
@@ -9161,6 +9413,8 @@ export type GetMovieQuery = {
             } | null >,
             nextToken?: string | null,
           } | null,
+          tmdbId: number,
+          studio?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -9176,21 +9430,21 @@ export type GetMovieQuery = {
         song?:  {
           __typename: "Song",
           id: string,
-          title: string,
-          artist: string,
           movieId: string,
           movie:  {
             __typename: "Movie",
             id: string,
-            tmdbId: number,
-            studio?: string | null,
             contenders?:  {
               __typename: "ModelContenderConnection",
               nextToken?: string | null,
             } | null,
+            tmdbId: number,
+            studio?: string | null,
             createdAt: string,
             updatedAt: string,
           },
+          title: string,
+          artist: string,
           createdAt: string,
           updatedAt: string,
         } | null,
@@ -9202,6 +9456,8 @@ export type GetMovieQuery = {
       } | null >,
       nextToken?: string | null,
     } | null,
+    tmdbId: number,
+    studio?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -9221,8 +9477,6 @@ export type ListMoviesQuery = {
     items:  Array< {
       __typename: "Movie",
       id: string,
-      tmdbId: number,
-      studio?: string | null,
       contenders?:  {
         __typename: "ModelContenderConnection",
         items:  Array< {
@@ -9232,8 +9486,6 @@ export type ListMoviesQuery = {
           category:  {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -9246,6 +9498,8 @@ export type ListMoviesQuery = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -9270,12 +9524,12 @@ export type ListMoviesQuery = {
           movie:  {
             __typename: "Movie",
             id: string,
-            tmdbId: number,
-            studio?: string | null,
             contenders?:  {
               __typename: "ModelContenderConnection",
               nextToken?: string | null,
             } | null,
+            tmdbId: number,
+            studio?: string | null,
             createdAt: string,
             updatedAt: string,
           },
@@ -9291,8 +9545,6 @@ export type ListMoviesQuery = {
           song?:  {
             __typename: "Song",
             id: string,
-            title: string,
-            artist: string,
             movieId: string,
             movie:  {
               __typename: "Movie",
@@ -9302,6 +9554,8 @@ export type ListMoviesQuery = {
               createdAt: string,
               updatedAt: string,
             },
+            title: string,
+            artist: string,
             createdAt: string,
             updatedAt: string,
           } | null,
@@ -9313,6 +9567,8 @@ export type ListMoviesQuery = {
         } | null >,
         nextToken?: string | null,
       } | null,
+      tmdbId: number,
+      studio?: string | null,
       createdAt: string,
       updatedAt: string,
     } | null >,
@@ -9364,14 +9620,10 @@ export type GetSongQuery = {
   getSong?:  {
     __typename: "Song",
     id: string,
-    title: string,
-    artist: string,
     movieId: string,
     movie:  {
       __typename: "Movie",
       id: string,
-      tmdbId: number,
-      studio?: string | null,
       contenders?:  {
         __typename: "ModelContenderConnection",
         items:  Array< {
@@ -9381,8 +9633,6 @@ export type GetSongQuery = {
           category:  {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -9395,6 +9645,8 @@ export type GetSongQuery = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -9419,12 +9671,12 @@ export type GetSongQuery = {
           movie:  {
             __typename: "Movie",
             id: string,
-            tmdbId: number,
-            studio?: string | null,
             contenders?:  {
               __typename: "ModelContenderConnection",
               nextToken?: string | null,
             } | null,
+            tmdbId: number,
+            studio?: string | null,
             createdAt: string,
             updatedAt: string,
           },
@@ -9440,8 +9692,6 @@ export type GetSongQuery = {
           song?:  {
             __typename: "Song",
             id: string,
-            title: string,
-            artist: string,
             movieId: string,
             movie:  {
               __typename: "Movie",
@@ -9451,6 +9701,8 @@ export type GetSongQuery = {
               createdAt: string,
               updatedAt: string,
             },
+            title: string,
+            artist: string,
             createdAt: string,
             updatedAt: string,
           } | null,
@@ -9462,9 +9714,13 @@ export type GetSongQuery = {
         } | null >,
         nextToken?: string | null,
       } | null,
+      tmdbId: number,
+      studio?: string | null,
       createdAt: string,
       updatedAt: string,
     },
+    title: string,
+    artist: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -9484,14 +9740,10 @@ export type ListSongsQuery = {
     items:  Array< {
       __typename: "Song",
       id: string,
-      title: string,
-      artist: string,
       movieId: string,
       movie:  {
         __typename: "Movie",
         id: string,
-        tmdbId: number,
-        studio?: string | null,
         contenders?:  {
           __typename: "ModelContenderConnection",
           items:  Array< {
@@ -9501,9 +9753,9 @@ export type ListSongsQuery = {
             category:  {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -9541,9 +9793,9 @@ export type ListSongsQuery = {
             song?:  {
               __typename: "Song",
               id: string,
+              movieId: string,
               title: string,
               artist: string,
-              movieId: string,
               createdAt: string,
               updatedAt: string,
             } | null,
@@ -9555,9 +9807,13 @@ export type ListSongsQuery = {
           } | null >,
           nextToken?: string | null,
         } | null,
+        tmdbId: number,
+        studio?: string | null,
         createdAt: string,
         updatedAt: string,
       },
+      title: string,
+      artist: string,
       createdAt: string,
       updatedAt: string,
     } | null >,
@@ -9595,8 +9851,6 @@ export type GetPredictionSetQuery = {
         items:  Array< {
           __typename: "Category",
           id: string,
-          name: CategoryName,
-          type: CategoryType,
           eventId: string,
           event:  {
             __typename: "Event",
@@ -9613,6 +9867,8 @@ export type GetPredictionSetQuery = {
             createdAt: string,
             updatedAt: string,
           },
+          name: CategoryName,
+          type: CategoryType,
           createdAt: string,
           updatedAt: string,
           eventCategoriesId?: string | null,
@@ -9631,8 +9887,6 @@ export type GetPredictionSetQuery = {
     category:  {
       __typename: "Category",
       id: string,
-      name: CategoryName,
-      type: CategoryType,
       eventId: string,
       event:  {
         __typename: "Event",
@@ -9642,8 +9896,6 @@ export type GetPredictionSetQuery = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -9656,6 +9908,8 @@ export type GetPredictionSetQuery = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -9670,6 +9924,8 @@ export type GetPredictionSetQuery = {
         createdAt: string,
         updatedAt: string,
       },
+      name: CategoryName,
+      type: CategoryType,
       createdAt: string,
       updatedAt: string,
       eventCategoriesId?: string | null,
@@ -9687,8 +9943,6 @@ export type GetPredictionSetQuery = {
           category:  {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -9701,6 +9955,8 @@ export type GetPredictionSetQuery = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -9725,12 +9981,12 @@ export type GetPredictionSetQuery = {
           movie:  {
             __typename: "Movie",
             id: string,
-            tmdbId: number,
-            studio?: string | null,
             contenders?:  {
               __typename: "ModelContenderConnection",
               nextToken?: string | null,
             } | null,
+            tmdbId: number,
+            studio?: string | null,
             createdAt: string,
             updatedAt: string,
           },
@@ -9746,8 +10002,6 @@ export type GetPredictionSetQuery = {
           song?:  {
             __typename: "Song",
             id: string,
-            title: string,
-            artist: string,
             movieId: string,
             movie:  {
               __typename: "Movie",
@@ -9757,6 +10011,8 @@ export type GetPredictionSetQuery = {
               createdAt: string,
               updatedAt: string,
             },
+            title: string,
+            artist: string,
             createdAt: string,
             updatedAt: string,
           } | null,
@@ -9815,8 +10071,6 @@ export type ListPredictionSetsQuery = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -9829,6 +10083,8 @@ export type ListPredictionSetsQuery = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -9847,8 +10103,6 @@ export type ListPredictionSetsQuery = {
       category:  {
         __typename: "Category",
         id: string,
-        name: CategoryName,
-        type: CategoryType,
         eventId: string,
         event:  {
           __typename: "Event",
@@ -9858,9 +10112,9 @@ export type ListPredictionSetsQuery = {
             items:  Array< {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -9875,6 +10129,8 @@ export type ListPredictionSetsQuery = {
           createdAt: string,
           updatedAt: string,
         },
+        name: CategoryName,
+        type: CategoryType,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -9892,9 +10148,9 @@ export type ListPredictionSetsQuery = {
             category:  {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -9932,9 +10188,9 @@ export type ListPredictionSetsQuery = {
             song?:  {
               __typename: "Song",
               id: string,
+              movieId: string,
               title: string,
               artist: string,
-              movieId: string,
               createdAt: string,
               updatedAt: string,
             } | null,
@@ -9975,8 +10231,6 @@ export type GetPredictionQuery = {
       category:  {
         __typename: "Category",
         id: string,
-        name: CategoryName,
-        type: CategoryType,
         eventId: string,
         event:  {
           __typename: "Event",
@@ -9986,9 +10240,9 @@ export type GetPredictionQuery = {
             items:  Array< {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -10003,6 +10257,8 @@ export type GetPredictionQuery = {
           createdAt: string,
           updatedAt: string,
         },
+        name: CategoryName,
+        type: CategoryType,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -10016,8 +10272,6 @@ export type GetPredictionQuery = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -10030,6 +10284,8 @@ export type GetPredictionQuery = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -10048,8 +10304,6 @@ export type GetPredictionQuery = {
       movie:  {
         __typename: "Movie",
         id: string,
-        tmdbId: number,
-        studio?: string | null,
         contenders?:  {
           __typename: "ModelContenderConnection",
           items:  Array< {
@@ -10059,9 +10313,9 @@ export type GetPredictionQuery = {
             category:  {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -10099,9 +10353,9 @@ export type GetPredictionQuery = {
             song?:  {
               __typename: "Song",
               id: string,
+              movieId: string,
               title: string,
               artist: string,
-              movieId: string,
               createdAt: string,
               updatedAt: string,
             } | null,
@@ -10113,6 +10367,8 @@ export type GetPredictionQuery = {
           } | null >,
           nextToken?: string | null,
         } | null,
+        tmdbId: number,
+        studio?: string | null,
         createdAt: string,
         updatedAt: string,
       },
@@ -10128,14 +10384,10 @@ export type GetPredictionQuery = {
       song?:  {
         __typename: "Song",
         id: string,
-        title: string,
-        artist: string,
         movieId: string,
         movie:  {
           __typename: "Movie",
           id: string,
-          tmdbId: number,
-          studio?: string | null,
           contenders?:  {
             __typename: "ModelContenderConnection",
             items:  Array< {
@@ -10154,9 +10406,13 @@ export type GetPredictionQuery = {
             } | null >,
             nextToken?: string | null,
           } | null,
+          tmdbId: number,
+          studio?: string | null,
           createdAt: string,
           updatedAt: string,
         },
+        title: string,
+        artist: string,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -10195,8 +10451,6 @@ export type ListPredictionsQuery = {
         category:  {
           __typename: "Category",
           id: string,
-          name: CategoryName,
-          type: CategoryType,
           eventId: string,
           event:  {
             __typename: "Event",
@@ -10213,6 +10467,8 @@ export type ListPredictionsQuery = {
             createdAt: string,
             updatedAt: string,
           },
+          name: CategoryName,
+          type: CategoryType,
           createdAt: string,
           updatedAt: string,
           eventCategoriesId?: string | null,
@@ -10226,9 +10482,9 @@ export type ListPredictionsQuery = {
             items:  Array< {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -10247,8 +10503,6 @@ export type ListPredictionsQuery = {
         movie:  {
           __typename: "Movie",
           id: string,
-          tmdbId: number,
-          studio?: string | null,
           contenders?:  {
             __typename: "ModelContenderConnection",
             items:  Array< {
@@ -10267,6 +10521,8 @@ export type ListPredictionsQuery = {
             } | null >,
             nextToken?: string | null,
           } | null,
+          tmdbId: number,
+          studio?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -10282,21 +10538,21 @@ export type ListPredictionsQuery = {
         song?:  {
           __typename: "Song",
           id: string,
-          title: string,
-          artist: string,
           movieId: string,
           movie:  {
             __typename: "Movie",
             id: string,
-            tmdbId: number,
-            studio?: string | null,
             contenders?:  {
               __typename: "ModelContenderConnection",
               nextToken?: string | null,
             } | null,
+            tmdbId: number,
+            studio?: string | null,
             createdAt: string,
             updatedAt: string,
           },
+          title: string,
+          artist: string,
           createdAt: string,
           updatedAt: string,
         } | null,
@@ -10345,8 +10601,6 @@ export type GetHistoryPredictionSetQuery = {
         items:  Array< {
           __typename: "Category",
           id: string,
-          name: CategoryName,
-          type: CategoryType,
           eventId: string,
           event:  {
             __typename: "Event",
@@ -10363,6 +10617,8 @@ export type GetHistoryPredictionSetQuery = {
             createdAt: string,
             updatedAt: string,
           },
+          name: CategoryName,
+          type: CategoryType,
           createdAt: string,
           updatedAt: string,
           eventCategoriesId?: string | null,
@@ -10381,8 +10637,6 @@ export type GetHistoryPredictionSetQuery = {
     category:  {
       __typename: "Category",
       id: string,
-      name: CategoryName,
-      type: CategoryType,
       eventId: string,
       event:  {
         __typename: "Event",
@@ -10392,8 +10646,6 @@ export type GetHistoryPredictionSetQuery = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -10406,6 +10658,8 @@ export type GetHistoryPredictionSetQuery = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -10420,6 +10674,8 @@ export type GetHistoryPredictionSetQuery = {
         createdAt: string,
         updatedAt: string,
       },
+      name: CategoryName,
+      type: CategoryType,
       createdAt: string,
       updatedAt: string,
       eventCategoriesId?: string | null,
@@ -10437,8 +10693,6 @@ export type GetHistoryPredictionSetQuery = {
           category:  {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -10451,6 +10705,8 @@ export type GetHistoryPredictionSetQuery = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -10475,12 +10731,12 @@ export type GetHistoryPredictionSetQuery = {
           movie:  {
             __typename: "Movie",
             id: string,
-            tmdbId: number,
-            studio?: string | null,
             contenders?:  {
               __typename: "ModelContenderConnection",
               nextToken?: string | null,
             } | null,
+            tmdbId: number,
+            studio?: string | null,
             createdAt: string,
             updatedAt: string,
           },
@@ -10496,8 +10752,6 @@ export type GetHistoryPredictionSetQuery = {
           song?:  {
             __typename: "Song",
             id: string,
-            title: string,
-            artist: string,
             movieId: string,
             movie:  {
               __typename: "Movie",
@@ -10507,6 +10761,8 @@ export type GetHistoryPredictionSetQuery = {
               createdAt: string,
               updatedAt: string,
             },
+            title: string,
+            artist: string,
             createdAt: string,
             updatedAt: string,
           } | null,
@@ -10565,8 +10821,6 @@ export type ListHistoryPredictionSetsQuery = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -10579,6 +10833,8 @@ export type ListHistoryPredictionSetsQuery = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -10597,8 +10853,6 @@ export type ListHistoryPredictionSetsQuery = {
       category:  {
         __typename: "Category",
         id: string,
-        name: CategoryName,
-        type: CategoryType,
         eventId: string,
         event:  {
           __typename: "Event",
@@ -10608,9 +10862,9 @@ export type ListHistoryPredictionSetsQuery = {
             items:  Array< {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -10625,6 +10879,8 @@ export type ListHistoryPredictionSetsQuery = {
           createdAt: string,
           updatedAt: string,
         },
+        name: CategoryName,
+        type: CategoryType,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -10642,9 +10898,9 @@ export type ListHistoryPredictionSetsQuery = {
             category:  {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -10682,9 +10938,9 @@ export type ListHistoryPredictionSetsQuery = {
             song?:  {
               __typename: "Song",
               id: string,
+              movieId: string,
               title: string,
               artist: string,
-              movieId: string,
               createdAt: string,
               updatedAt: string,
             } | null,
@@ -10725,8 +10981,6 @@ export type GetHistoryPredictionQuery = {
       category:  {
         __typename: "Category",
         id: string,
-        name: CategoryName,
-        type: CategoryType,
         eventId: string,
         event:  {
           __typename: "Event",
@@ -10736,9 +10990,9 @@ export type GetHistoryPredictionQuery = {
             items:  Array< {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -10753,6 +11007,8 @@ export type GetHistoryPredictionQuery = {
           createdAt: string,
           updatedAt: string,
         },
+        name: CategoryName,
+        type: CategoryType,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -10766,8 +11022,6 @@ export type GetHistoryPredictionQuery = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -10780,6 +11034,8 @@ export type GetHistoryPredictionQuery = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -10798,8 +11054,6 @@ export type GetHistoryPredictionQuery = {
       movie:  {
         __typename: "Movie",
         id: string,
-        tmdbId: number,
-        studio?: string | null,
         contenders?:  {
           __typename: "ModelContenderConnection",
           items:  Array< {
@@ -10809,9 +11063,9 @@ export type GetHistoryPredictionQuery = {
             category:  {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -10849,9 +11103,9 @@ export type GetHistoryPredictionQuery = {
             song?:  {
               __typename: "Song",
               id: string,
+              movieId: string,
               title: string,
               artist: string,
-              movieId: string,
               createdAt: string,
               updatedAt: string,
             } | null,
@@ -10863,6 +11117,8 @@ export type GetHistoryPredictionQuery = {
           } | null >,
           nextToken?: string | null,
         } | null,
+        tmdbId: number,
+        studio?: string | null,
         createdAt: string,
         updatedAt: string,
       },
@@ -10878,14 +11134,10 @@ export type GetHistoryPredictionQuery = {
       song?:  {
         __typename: "Song",
         id: string,
-        title: string,
-        artist: string,
         movieId: string,
         movie:  {
           __typename: "Movie",
           id: string,
-          tmdbId: number,
-          studio?: string | null,
           contenders?:  {
             __typename: "ModelContenderConnection",
             items:  Array< {
@@ -10904,9 +11156,13 @@ export type GetHistoryPredictionQuery = {
             } | null >,
             nextToken?: string | null,
           } | null,
+          tmdbId: number,
+          studio?: string | null,
           createdAt: string,
           updatedAt: string,
         },
+        title: string,
+        artist: string,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -10945,8 +11201,6 @@ export type ListHistoryPredictionsQuery = {
         category:  {
           __typename: "Category",
           id: string,
-          name: CategoryName,
-          type: CategoryType,
           eventId: string,
           event:  {
             __typename: "Event",
@@ -10963,6 +11217,8 @@ export type ListHistoryPredictionsQuery = {
             createdAt: string,
             updatedAt: string,
           },
+          name: CategoryName,
+          type: CategoryType,
           createdAt: string,
           updatedAt: string,
           eventCategoriesId?: string | null,
@@ -10976,9 +11232,9 @@ export type ListHistoryPredictionsQuery = {
             items:  Array< {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -10997,8 +11253,6 @@ export type ListHistoryPredictionsQuery = {
         movie:  {
           __typename: "Movie",
           id: string,
-          tmdbId: number,
-          studio?: string | null,
           contenders?:  {
             __typename: "ModelContenderConnection",
             items:  Array< {
@@ -11017,6 +11271,8 @@ export type ListHistoryPredictionsQuery = {
             } | null >,
             nextToken?: string | null,
           } | null,
+          tmdbId: number,
+          studio?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -11032,21 +11288,21 @@ export type ListHistoryPredictionsQuery = {
         song?:  {
           __typename: "Song",
           id: string,
-          title: string,
-          artist: string,
           movieId: string,
           movie:  {
             __typename: "Movie",
             id: string,
-            tmdbId: number,
-            studio?: string | null,
             contenders?:  {
               __typename: "ModelContenderConnection",
               nextToken?: string | null,
             } | null,
+            tmdbId: number,
+            studio?: string | null,
             createdAt: string,
             updatedAt: string,
           },
+          title: string,
+          artist: string,
           createdAt: string,
           updatedAt: string,
         } | null,
@@ -11082,8 +11338,6 @@ export type GetCommunityPredictionSetQuery = {
         items:  Array< {
           __typename: "Category",
           id: string,
-          name: CategoryName,
-          type: CategoryType,
           eventId: string,
           event:  {
             __typename: "Event",
@@ -11100,6 +11354,8 @@ export type GetCommunityPredictionSetQuery = {
             createdAt: string,
             updatedAt: string,
           },
+          name: CategoryName,
+          type: CategoryType,
           createdAt: string,
           updatedAt: string,
           eventCategoriesId?: string | null,
@@ -11118,8 +11374,6 @@ export type GetCommunityPredictionSetQuery = {
     category:  {
       __typename: "Category",
       id: string,
-      name: CategoryName,
-      type: CategoryType,
       eventId: string,
       event:  {
         __typename: "Event",
@@ -11129,8 +11383,6 @@ export type GetCommunityPredictionSetQuery = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -11143,6 +11395,8 @@ export type GetCommunityPredictionSetQuery = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -11157,6 +11411,8 @@ export type GetCommunityPredictionSetQuery = {
         createdAt: string,
         updatedAt: string,
       },
+      name: CategoryName,
+      type: CategoryType,
       createdAt: string,
       updatedAt: string,
       eventCategoriesId?: string | null,
@@ -11174,8 +11430,6 @@ export type GetCommunityPredictionSetQuery = {
           category:  {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -11188,6 +11442,8 @@ export type GetCommunityPredictionSetQuery = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -11212,12 +11468,12 @@ export type GetCommunityPredictionSetQuery = {
           movie:  {
             __typename: "Movie",
             id: string,
-            tmdbId: number,
-            studio?: string | null,
             contenders?:  {
               __typename: "ModelContenderConnection",
               nextToken?: string | null,
             } | null,
+            tmdbId: number,
+            studio?: string | null,
             createdAt: string,
             updatedAt: string,
           },
@@ -11233,8 +11489,6 @@ export type GetCommunityPredictionSetQuery = {
           song?:  {
             __typename: "Song",
             id: string,
-            title: string,
-            artist: string,
             movieId: string,
             movie:  {
               __typename: "Movie",
@@ -11244,6 +11498,8 @@ export type GetCommunityPredictionSetQuery = {
               createdAt: string,
               updatedAt: string,
             },
+            title: string,
+            artist: string,
             createdAt: string,
             updatedAt: string,
           } | null,
@@ -11289,8 +11545,6 @@ export type ListCommunityPredictionSetsQuery = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -11303,6 +11557,8 @@ export type ListCommunityPredictionSetsQuery = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -11321,8 +11577,6 @@ export type ListCommunityPredictionSetsQuery = {
       category:  {
         __typename: "Category",
         id: string,
-        name: CategoryName,
-        type: CategoryType,
         eventId: string,
         event:  {
           __typename: "Event",
@@ -11332,9 +11586,9 @@ export type ListCommunityPredictionSetsQuery = {
             items:  Array< {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -11349,6 +11603,8 @@ export type ListCommunityPredictionSetsQuery = {
           createdAt: string,
           updatedAt: string,
         },
+        name: CategoryName,
+        type: CategoryType,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -11366,9 +11622,9 @@ export type ListCommunityPredictionSetsQuery = {
             category:  {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -11406,9 +11662,9 @@ export type ListCommunityPredictionSetsQuery = {
             song?:  {
               __typename: "Song",
               id: string,
+              movieId: string,
               title: string,
               artist: string,
-              movieId: string,
               createdAt: string,
               updatedAt: string,
             } | null,
@@ -11449,8 +11705,6 @@ export type GetCommunityPredictionQuery = {
       category:  {
         __typename: "Category",
         id: string,
-        name: CategoryName,
-        type: CategoryType,
         eventId: string,
         event:  {
           __typename: "Event",
@@ -11460,9 +11714,9 @@ export type GetCommunityPredictionQuery = {
             items:  Array< {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -11477,6 +11731,8 @@ export type GetCommunityPredictionQuery = {
           createdAt: string,
           updatedAt: string,
         },
+        name: CategoryName,
+        type: CategoryType,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -11490,8 +11746,6 @@ export type GetCommunityPredictionQuery = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -11504,6 +11758,8 @@ export type GetCommunityPredictionQuery = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -11522,8 +11778,6 @@ export type GetCommunityPredictionQuery = {
       movie:  {
         __typename: "Movie",
         id: string,
-        tmdbId: number,
-        studio?: string | null,
         contenders?:  {
           __typename: "ModelContenderConnection",
           items:  Array< {
@@ -11533,9 +11787,9 @@ export type GetCommunityPredictionQuery = {
             category:  {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -11573,9 +11827,9 @@ export type GetCommunityPredictionQuery = {
             song?:  {
               __typename: "Song",
               id: string,
+              movieId: string,
               title: string,
               artist: string,
-              movieId: string,
               createdAt: string,
               updatedAt: string,
             } | null,
@@ -11587,6 +11841,8 @@ export type GetCommunityPredictionQuery = {
           } | null >,
           nextToken?: string | null,
         } | null,
+        tmdbId: number,
+        studio?: string | null,
         createdAt: string,
         updatedAt: string,
       },
@@ -11602,14 +11858,10 @@ export type GetCommunityPredictionQuery = {
       song?:  {
         __typename: "Song",
         id: string,
-        title: string,
-        artist: string,
         movieId: string,
         movie:  {
           __typename: "Movie",
           id: string,
-          tmdbId: number,
-          studio?: string | null,
           contenders?:  {
             __typename: "ModelContenderConnection",
             items:  Array< {
@@ -11628,9 +11880,13 @@ export type GetCommunityPredictionQuery = {
             } | null >,
             nextToken?: string | null,
           } | null,
+          tmdbId: number,
+          studio?: string | null,
           createdAt: string,
           updatedAt: string,
         },
+        title: string,
+        artist: string,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -11669,8 +11925,6 @@ export type ListCommunityPredictionsQuery = {
         category:  {
           __typename: "Category",
           id: string,
-          name: CategoryName,
-          type: CategoryType,
           eventId: string,
           event:  {
             __typename: "Event",
@@ -11687,6 +11941,8 @@ export type ListCommunityPredictionsQuery = {
             createdAt: string,
             updatedAt: string,
           },
+          name: CategoryName,
+          type: CategoryType,
           createdAt: string,
           updatedAt: string,
           eventCategoriesId?: string | null,
@@ -11700,9 +11956,9 @@ export type ListCommunityPredictionsQuery = {
             items:  Array< {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -11721,8 +11977,6 @@ export type ListCommunityPredictionsQuery = {
         movie:  {
           __typename: "Movie",
           id: string,
-          tmdbId: number,
-          studio?: string | null,
           contenders?:  {
             __typename: "ModelContenderConnection",
             items:  Array< {
@@ -11741,6 +11995,8 @@ export type ListCommunityPredictionsQuery = {
             } | null >,
             nextToken?: string | null,
           } | null,
+          tmdbId: number,
+          studio?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -11756,21 +12012,21 @@ export type ListCommunityPredictionsQuery = {
         song?:  {
           __typename: "Song",
           id: string,
-          title: string,
-          artist: string,
           movieId: string,
           movie:  {
             __typename: "Movie",
             id: string,
-            tmdbId: number,
-            studio?: string | null,
             contenders?:  {
               __typename: "ModelContenderConnection",
               nextToken?: string | null,
             } | null,
+            tmdbId: number,
+            studio?: string | null,
             createdAt: string,
             updatedAt: string,
           },
+          title: string,
+          artist: string,
           createdAt: string,
           updatedAt: string,
         } | null,
@@ -11806,8 +12062,6 @@ export type GetCommunityHistoryPredictionSetQuery = {
         items:  Array< {
           __typename: "Category",
           id: string,
-          name: CategoryName,
-          type: CategoryType,
           eventId: string,
           event:  {
             __typename: "Event",
@@ -11824,6 +12078,8 @@ export type GetCommunityHistoryPredictionSetQuery = {
             createdAt: string,
             updatedAt: string,
           },
+          name: CategoryName,
+          type: CategoryType,
           createdAt: string,
           updatedAt: string,
           eventCategoriesId?: string | null,
@@ -11842,8 +12098,6 @@ export type GetCommunityHistoryPredictionSetQuery = {
     category:  {
       __typename: "Category",
       id: string,
-      name: CategoryName,
-      type: CategoryType,
       eventId: string,
       event:  {
         __typename: "Event",
@@ -11853,8 +12107,6 @@ export type GetCommunityHistoryPredictionSetQuery = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -11867,6 +12119,8 @@ export type GetCommunityHistoryPredictionSetQuery = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -11881,6 +12135,8 @@ export type GetCommunityHistoryPredictionSetQuery = {
         createdAt: string,
         updatedAt: string,
       },
+      name: CategoryName,
+      type: CategoryType,
       createdAt: string,
       updatedAt: string,
       eventCategoriesId?: string | null,
@@ -11898,8 +12154,6 @@ export type GetCommunityHistoryPredictionSetQuery = {
           category:  {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -11912,6 +12166,8 @@ export type GetCommunityHistoryPredictionSetQuery = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -11936,12 +12192,12 @@ export type GetCommunityHistoryPredictionSetQuery = {
           movie:  {
             __typename: "Movie",
             id: string,
-            tmdbId: number,
-            studio?: string | null,
             contenders?:  {
               __typename: "ModelContenderConnection",
               nextToken?: string | null,
             } | null,
+            tmdbId: number,
+            studio?: string | null,
             createdAt: string,
             updatedAt: string,
           },
@@ -11957,8 +12213,6 @@ export type GetCommunityHistoryPredictionSetQuery = {
           song?:  {
             __typename: "Song",
             id: string,
-            title: string,
-            artist: string,
             movieId: string,
             movie:  {
               __typename: "Movie",
@@ -11968,6 +12222,8 @@ export type GetCommunityHistoryPredictionSetQuery = {
               createdAt: string,
               updatedAt: string,
             },
+            title: string,
+            artist: string,
             createdAt: string,
             updatedAt: string,
           } | null,
@@ -12013,8 +12269,6 @@ export type ListCommunityHistoryPredictionSetsQuery = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -12027,6 +12281,8 @@ export type ListCommunityHistoryPredictionSetsQuery = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -12045,8 +12301,6 @@ export type ListCommunityHistoryPredictionSetsQuery = {
       category:  {
         __typename: "Category",
         id: string,
-        name: CategoryName,
-        type: CategoryType,
         eventId: string,
         event:  {
           __typename: "Event",
@@ -12056,9 +12310,9 @@ export type ListCommunityHistoryPredictionSetsQuery = {
             items:  Array< {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -12073,6 +12327,8 @@ export type ListCommunityHistoryPredictionSetsQuery = {
           createdAt: string,
           updatedAt: string,
         },
+        name: CategoryName,
+        type: CategoryType,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -12090,9 +12346,9 @@ export type ListCommunityHistoryPredictionSetsQuery = {
             category:  {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -12130,9 +12386,9 @@ export type ListCommunityHistoryPredictionSetsQuery = {
             song?:  {
               __typename: "Song",
               id: string,
+              movieId: string,
               title: string,
               artist: string,
-              movieId: string,
               createdAt: string,
               updatedAt: string,
             } | null,
@@ -12173,8 +12429,6 @@ export type GetCommunityHistoryPredictionQuery = {
       category:  {
         __typename: "Category",
         id: string,
-        name: CategoryName,
-        type: CategoryType,
         eventId: string,
         event:  {
           __typename: "Event",
@@ -12184,9 +12438,9 @@ export type GetCommunityHistoryPredictionQuery = {
             items:  Array< {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -12201,6 +12455,8 @@ export type GetCommunityHistoryPredictionQuery = {
           createdAt: string,
           updatedAt: string,
         },
+        name: CategoryName,
+        type: CategoryType,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -12214,8 +12470,6 @@ export type GetCommunityHistoryPredictionQuery = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -12228,6 +12482,8 @@ export type GetCommunityHistoryPredictionQuery = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -12246,8 +12502,6 @@ export type GetCommunityHistoryPredictionQuery = {
       movie:  {
         __typename: "Movie",
         id: string,
-        tmdbId: number,
-        studio?: string | null,
         contenders?:  {
           __typename: "ModelContenderConnection",
           items:  Array< {
@@ -12257,9 +12511,9 @@ export type GetCommunityHistoryPredictionQuery = {
             category:  {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -12297,9 +12551,9 @@ export type GetCommunityHistoryPredictionQuery = {
             song?:  {
               __typename: "Song",
               id: string,
+              movieId: string,
               title: string,
               artist: string,
-              movieId: string,
               createdAt: string,
               updatedAt: string,
             } | null,
@@ -12311,6 +12565,8 @@ export type GetCommunityHistoryPredictionQuery = {
           } | null >,
           nextToken?: string | null,
         } | null,
+        tmdbId: number,
+        studio?: string | null,
         createdAt: string,
         updatedAt: string,
       },
@@ -12326,14 +12582,10 @@ export type GetCommunityHistoryPredictionQuery = {
       song?:  {
         __typename: "Song",
         id: string,
-        title: string,
-        artist: string,
         movieId: string,
         movie:  {
           __typename: "Movie",
           id: string,
-          tmdbId: number,
-          studio?: string | null,
           contenders?:  {
             __typename: "ModelContenderConnection",
             items:  Array< {
@@ -12352,9 +12604,13 @@ export type GetCommunityHistoryPredictionQuery = {
             } | null >,
             nextToken?: string | null,
           } | null,
+          tmdbId: number,
+          studio?: string | null,
           createdAt: string,
           updatedAt: string,
         },
+        title: string,
+        artist: string,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -12393,8 +12649,6 @@ export type ListCommunityHistoryPredictionsQuery = {
         category:  {
           __typename: "Category",
           id: string,
-          name: CategoryName,
-          type: CategoryType,
           eventId: string,
           event:  {
             __typename: "Event",
@@ -12411,6 +12665,8 @@ export type ListCommunityHistoryPredictionsQuery = {
             createdAt: string,
             updatedAt: string,
           },
+          name: CategoryName,
+          type: CategoryType,
           createdAt: string,
           updatedAt: string,
           eventCategoriesId?: string | null,
@@ -12424,9 +12680,9 @@ export type ListCommunityHistoryPredictionsQuery = {
             items:  Array< {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -12445,8 +12701,6 @@ export type ListCommunityHistoryPredictionsQuery = {
         movie:  {
           __typename: "Movie",
           id: string,
-          tmdbId: number,
-          studio?: string | null,
           contenders?:  {
             __typename: "ModelContenderConnection",
             items:  Array< {
@@ -12465,6 +12719,8 @@ export type ListCommunityHistoryPredictionsQuery = {
             } | null >,
             nextToken?: string | null,
           } | null,
+          tmdbId: number,
+          studio?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -12480,21 +12736,21 @@ export type ListCommunityHistoryPredictionsQuery = {
         song?:  {
           __typename: "Song",
           id: string,
-          title: string,
-          artist: string,
           movieId: string,
           movie:  {
             __typename: "Movie",
             id: string,
-            tmdbId: number,
-            studio?: string | null,
             contenders?:  {
               __typename: "ModelContenderConnection",
               nextToken?: string | null,
             } | null,
+            tmdbId: number,
+            studio?: string | null,
             createdAt: string,
             updatedAt: string,
           },
+          title: string,
+          artist: string,
           createdAt: string,
           updatedAt: string,
         } | null,
@@ -12558,6 +12814,111 @@ export type OnDeleteUserSubscription = {
   } | null,
 };
 
+export type OnCreateRelationshipSubscription = {
+  onCreateRelationship?:  {
+    __typename: "Relationship",
+    id: string,
+    followedUserId: string,
+    followedUser:  {
+      __typename: "User",
+      id: string,
+      email: string,
+      username?: string | null,
+      name?: string | null,
+      bio?: string | null,
+      image?: string | null,
+      role: UserRole,
+      createdAt: string,
+      updatedAt: string,
+    },
+    followingUserId: string,
+    followingUser:  {
+      __typename: "User",
+      id: string,
+      email: string,
+      username?: string | null,
+      name?: string | null,
+      bio?: string | null,
+      image?: string | null,
+      role: UserRole,
+      createdAt: string,
+      updatedAt: string,
+    },
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnUpdateRelationshipSubscription = {
+  onUpdateRelationship?:  {
+    __typename: "Relationship",
+    id: string,
+    followedUserId: string,
+    followedUser:  {
+      __typename: "User",
+      id: string,
+      email: string,
+      username?: string | null,
+      name?: string | null,
+      bio?: string | null,
+      image?: string | null,
+      role: UserRole,
+      createdAt: string,
+      updatedAt: string,
+    },
+    followingUserId: string,
+    followingUser:  {
+      __typename: "User",
+      id: string,
+      email: string,
+      username?: string | null,
+      name?: string | null,
+      bio?: string | null,
+      image?: string | null,
+      role: UserRole,
+      createdAt: string,
+      updatedAt: string,
+    },
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnDeleteRelationshipSubscription = {
+  onDeleteRelationship?:  {
+    __typename: "Relationship",
+    id: string,
+    followedUserId: string,
+    followedUser:  {
+      __typename: "User",
+      id: string,
+      email: string,
+      username?: string | null,
+      name?: string | null,
+      bio?: string | null,
+      image?: string | null,
+      role: UserRole,
+      createdAt: string,
+      updatedAt: string,
+    },
+    followingUserId: string,
+    followingUser:  {
+      __typename: "User",
+      id: string,
+      email: string,
+      username?: string | null,
+      name?: string | null,
+      bio?: string | null,
+      image?: string | null,
+      role: UserRole,
+      createdAt: string,
+      updatedAt: string,
+    },
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
 export type OnCreateEventSubscription = {
   onCreateEvent?:  {
     __typename: "Event",
@@ -12567,8 +12928,6 @@ export type OnCreateEventSubscription = {
       items:  Array< {
         __typename: "Category",
         id: string,
-        name: CategoryName,
-        type: CategoryType,
         eventId: string,
         event:  {
           __typename: "Event",
@@ -12578,9 +12937,9 @@ export type OnCreateEventSubscription = {
             items:  Array< {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -12595,6 +12954,8 @@ export type OnCreateEventSubscription = {
           createdAt: string,
           updatedAt: string,
         },
+        name: CategoryName,
+        type: CategoryType,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -12620,8 +12981,6 @@ export type OnUpdateEventSubscription = {
       items:  Array< {
         __typename: "Category",
         id: string,
-        name: CategoryName,
-        type: CategoryType,
         eventId: string,
         event:  {
           __typename: "Event",
@@ -12631,9 +12990,9 @@ export type OnUpdateEventSubscription = {
             items:  Array< {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -12648,6 +13007,8 @@ export type OnUpdateEventSubscription = {
           createdAt: string,
           updatedAt: string,
         },
+        name: CategoryName,
+        type: CategoryType,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -12673,8 +13034,6 @@ export type OnDeleteEventSubscription = {
       items:  Array< {
         __typename: "Category",
         id: string,
-        name: CategoryName,
-        type: CategoryType,
         eventId: string,
         event:  {
           __typename: "Event",
@@ -12684,9 +13043,9 @@ export type OnDeleteEventSubscription = {
             items:  Array< {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -12701,6 +13060,8 @@ export type OnDeleteEventSubscription = {
           createdAt: string,
           updatedAt: string,
         },
+        name: CategoryName,
+        type: CategoryType,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -12721,8 +13082,6 @@ export type OnCreateCategorySubscription = {
   onCreateCategory?:  {
     __typename: "Category",
     id: string,
-    name: CategoryName,
-    type: CategoryType,
     eventId: string,
     event:  {
       __typename: "Event",
@@ -12732,8 +13091,6 @@ export type OnCreateCategorySubscription = {
         items:  Array< {
           __typename: "Category",
           id: string,
-          name: CategoryName,
-          type: CategoryType,
           eventId: string,
           event:  {
             __typename: "Event",
@@ -12750,6 +13107,8 @@ export type OnCreateCategorySubscription = {
             createdAt: string,
             updatedAt: string,
           },
+          name: CategoryName,
+          type: CategoryType,
           createdAt: string,
           updatedAt: string,
           eventCategoriesId?: string | null,
@@ -12764,6 +13123,8 @@ export type OnCreateCategorySubscription = {
       createdAt: string,
       updatedAt: string,
     },
+    name: CategoryName,
+    type: CategoryType,
     createdAt: string,
     updatedAt: string,
     eventCategoriesId?: string | null,
@@ -12774,8 +13135,6 @@ export type OnUpdateCategorySubscription = {
   onUpdateCategory?:  {
     __typename: "Category",
     id: string,
-    name: CategoryName,
-    type: CategoryType,
     eventId: string,
     event:  {
       __typename: "Event",
@@ -12785,8 +13144,6 @@ export type OnUpdateCategorySubscription = {
         items:  Array< {
           __typename: "Category",
           id: string,
-          name: CategoryName,
-          type: CategoryType,
           eventId: string,
           event:  {
             __typename: "Event",
@@ -12803,6 +13160,8 @@ export type OnUpdateCategorySubscription = {
             createdAt: string,
             updatedAt: string,
           },
+          name: CategoryName,
+          type: CategoryType,
           createdAt: string,
           updatedAt: string,
           eventCategoriesId?: string | null,
@@ -12817,6 +13176,8 @@ export type OnUpdateCategorySubscription = {
       createdAt: string,
       updatedAt: string,
     },
+    name: CategoryName,
+    type: CategoryType,
     createdAt: string,
     updatedAt: string,
     eventCategoriesId?: string | null,
@@ -12827,8 +13188,6 @@ export type OnDeleteCategorySubscription = {
   onDeleteCategory?:  {
     __typename: "Category",
     id: string,
-    name: CategoryName,
-    type: CategoryType,
     eventId: string,
     event:  {
       __typename: "Event",
@@ -12838,8 +13197,6 @@ export type OnDeleteCategorySubscription = {
         items:  Array< {
           __typename: "Category",
           id: string,
-          name: CategoryName,
-          type: CategoryType,
           eventId: string,
           event:  {
             __typename: "Event",
@@ -12856,6 +13213,8 @@ export type OnDeleteCategorySubscription = {
             createdAt: string,
             updatedAt: string,
           },
+          name: CategoryName,
+          type: CategoryType,
           createdAt: string,
           updatedAt: string,
           eventCategoriesId?: string | null,
@@ -12870,6 +13229,8 @@ export type OnDeleteCategorySubscription = {
       createdAt: string,
       updatedAt: string,
     },
+    name: CategoryName,
+    type: CategoryType,
     createdAt: string,
     updatedAt: string,
     eventCategoriesId?: string | null,
@@ -12884,8 +13245,6 @@ export type OnCreateContenderSubscription = {
     category:  {
       __typename: "Category",
       id: string,
-      name: CategoryName,
-      type: CategoryType,
       eventId: string,
       event:  {
         __typename: "Event",
@@ -12895,8 +13254,6 @@ export type OnCreateContenderSubscription = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -12909,6 +13266,8 @@ export type OnCreateContenderSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -12923,6 +13282,8 @@ export type OnCreateContenderSubscription = {
         createdAt: string,
         updatedAt: string,
       },
+      name: CategoryName,
+      type: CategoryType,
       createdAt: string,
       updatedAt: string,
       eventCategoriesId?: string | null,
@@ -12936,8 +13297,6 @@ export type OnCreateContenderSubscription = {
         items:  Array< {
           __typename: "Category",
           id: string,
-          name: CategoryName,
-          type: CategoryType,
           eventId: string,
           event:  {
             __typename: "Event",
@@ -12954,6 +13313,8 @@ export type OnCreateContenderSubscription = {
             createdAt: string,
             updatedAt: string,
           },
+          name: CategoryName,
+          type: CategoryType,
           createdAt: string,
           updatedAt: string,
           eventCategoriesId?: string | null,
@@ -12972,8 +13333,6 @@ export type OnCreateContenderSubscription = {
     movie:  {
       __typename: "Movie",
       id: string,
-      tmdbId: number,
-      studio?: string | null,
       contenders?:  {
         __typename: "ModelContenderConnection",
         items:  Array< {
@@ -12983,8 +13342,6 @@ export type OnCreateContenderSubscription = {
           category:  {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -12997,6 +13354,8 @@ export type OnCreateContenderSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -13021,12 +13380,12 @@ export type OnCreateContenderSubscription = {
           movie:  {
             __typename: "Movie",
             id: string,
-            tmdbId: number,
-            studio?: string | null,
             contenders?:  {
               __typename: "ModelContenderConnection",
               nextToken?: string | null,
             } | null,
+            tmdbId: number,
+            studio?: string | null,
             createdAt: string,
             updatedAt: string,
           },
@@ -13042,8 +13401,6 @@ export type OnCreateContenderSubscription = {
           song?:  {
             __typename: "Song",
             id: string,
-            title: string,
-            artist: string,
             movieId: string,
             movie:  {
               __typename: "Movie",
@@ -13053,6 +13410,8 @@ export type OnCreateContenderSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            title: string,
+            artist: string,
             createdAt: string,
             updatedAt: string,
           } | null,
@@ -13064,6 +13423,8 @@ export type OnCreateContenderSubscription = {
         } | null >,
         nextToken?: string | null,
       } | null,
+      tmdbId: number,
+      studio?: string | null,
       createdAt: string,
       updatedAt: string,
     },
@@ -13079,14 +13440,10 @@ export type OnCreateContenderSubscription = {
     song?:  {
       __typename: "Song",
       id: string,
-      title: string,
-      artist: string,
       movieId: string,
       movie:  {
         __typename: "Movie",
         id: string,
-        tmdbId: number,
-        studio?: string | null,
         contenders?:  {
           __typename: "ModelContenderConnection",
           items:  Array< {
@@ -13096,9 +13453,9 @@ export type OnCreateContenderSubscription = {
             category:  {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -13136,9 +13493,9 @@ export type OnCreateContenderSubscription = {
             song?:  {
               __typename: "Song",
               id: string,
+              movieId: string,
               title: string,
               artist: string,
-              movieId: string,
               createdAt: string,
               updatedAt: string,
             } | null,
@@ -13150,9 +13507,13 @@ export type OnCreateContenderSubscription = {
           } | null >,
           nextToken?: string | null,
         } | null,
+        tmdbId: number,
+        studio?: string | null,
         createdAt: string,
         updatedAt: string,
       },
+      title: string,
+      artist: string,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -13172,8 +13533,6 @@ export type OnUpdateContenderSubscription = {
     category:  {
       __typename: "Category",
       id: string,
-      name: CategoryName,
-      type: CategoryType,
       eventId: string,
       event:  {
         __typename: "Event",
@@ -13183,8 +13542,6 @@ export type OnUpdateContenderSubscription = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -13197,6 +13554,8 @@ export type OnUpdateContenderSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -13211,6 +13570,8 @@ export type OnUpdateContenderSubscription = {
         createdAt: string,
         updatedAt: string,
       },
+      name: CategoryName,
+      type: CategoryType,
       createdAt: string,
       updatedAt: string,
       eventCategoriesId?: string | null,
@@ -13224,8 +13585,6 @@ export type OnUpdateContenderSubscription = {
         items:  Array< {
           __typename: "Category",
           id: string,
-          name: CategoryName,
-          type: CategoryType,
           eventId: string,
           event:  {
             __typename: "Event",
@@ -13242,6 +13601,8 @@ export type OnUpdateContenderSubscription = {
             createdAt: string,
             updatedAt: string,
           },
+          name: CategoryName,
+          type: CategoryType,
           createdAt: string,
           updatedAt: string,
           eventCategoriesId?: string | null,
@@ -13260,8 +13621,6 @@ export type OnUpdateContenderSubscription = {
     movie:  {
       __typename: "Movie",
       id: string,
-      tmdbId: number,
-      studio?: string | null,
       contenders?:  {
         __typename: "ModelContenderConnection",
         items:  Array< {
@@ -13271,8 +13630,6 @@ export type OnUpdateContenderSubscription = {
           category:  {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -13285,6 +13642,8 @@ export type OnUpdateContenderSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -13309,12 +13668,12 @@ export type OnUpdateContenderSubscription = {
           movie:  {
             __typename: "Movie",
             id: string,
-            tmdbId: number,
-            studio?: string | null,
             contenders?:  {
               __typename: "ModelContenderConnection",
               nextToken?: string | null,
             } | null,
+            tmdbId: number,
+            studio?: string | null,
             createdAt: string,
             updatedAt: string,
           },
@@ -13330,8 +13689,6 @@ export type OnUpdateContenderSubscription = {
           song?:  {
             __typename: "Song",
             id: string,
-            title: string,
-            artist: string,
             movieId: string,
             movie:  {
               __typename: "Movie",
@@ -13341,6 +13698,8 @@ export type OnUpdateContenderSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            title: string,
+            artist: string,
             createdAt: string,
             updatedAt: string,
           } | null,
@@ -13352,6 +13711,8 @@ export type OnUpdateContenderSubscription = {
         } | null >,
         nextToken?: string | null,
       } | null,
+      tmdbId: number,
+      studio?: string | null,
       createdAt: string,
       updatedAt: string,
     },
@@ -13367,14 +13728,10 @@ export type OnUpdateContenderSubscription = {
     song?:  {
       __typename: "Song",
       id: string,
-      title: string,
-      artist: string,
       movieId: string,
       movie:  {
         __typename: "Movie",
         id: string,
-        tmdbId: number,
-        studio?: string | null,
         contenders?:  {
           __typename: "ModelContenderConnection",
           items:  Array< {
@@ -13384,9 +13741,9 @@ export type OnUpdateContenderSubscription = {
             category:  {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -13424,9 +13781,9 @@ export type OnUpdateContenderSubscription = {
             song?:  {
               __typename: "Song",
               id: string,
+              movieId: string,
               title: string,
               artist: string,
-              movieId: string,
               createdAt: string,
               updatedAt: string,
             } | null,
@@ -13438,9 +13795,13 @@ export type OnUpdateContenderSubscription = {
           } | null >,
           nextToken?: string | null,
         } | null,
+        tmdbId: number,
+        studio?: string | null,
         createdAt: string,
         updatedAt: string,
       },
+      title: string,
+      artist: string,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -13460,8 +13821,6 @@ export type OnDeleteContenderSubscription = {
     category:  {
       __typename: "Category",
       id: string,
-      name: CategoryName,
-      type: CategoryType,
       eventId: string,
       event:  {
         __typename: "Event",
@@ -13471,8 +13830,6 @@ export type OnDeleteContenderSubscription = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -13485,6 +13842,8 @@ export type OnDeleteContenderSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -13499,6 +13858,8 @@ export type OnDeleteContenderSubscription = {
         createdAt: string,
         updatedAt: string,
       },
+      name: CategoryName,
+      type: CategoryType,
       createdAt: string,
       updatedAt: string,
       eventCategoriesId?: string | null,
@@ -13512,8 +13873,6 @@ export type OnDeleteContenderSubscription = {
         items:  Array< {
           __typename: "Category",
           id: string,
-          name: CategoryName,
-          type: CategoryType,
           eventId: string,
           event:  {
             __typename: "Event",
@@ -13530,6 +13889,8 @@ export type OnDeleteContenderSubscription = {
             createdAt: string,
             updatedAt: string,
           },
+          name: CategoryName,
+          type: CategoryType,
           createdAt: string,
           updatedAt: string,
           eventCategoriesId?: string | null,
@@ -13548,8 +13909,6 @@ export type OnDeleteContenderSubscription = {
     movie:  {
       __typename: "Movie",
       id: string,
-      tmdbId: number,
-      studio?: string | null,
       contenders?:  {
         __typename: "ModelContenderConnection",
         items:  Array< {
@@ -13559,8 +13918,6 @@ export type OnDeleteContenderSubscription = {
           category:  {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -13573,6 +13930,8 @@ export type OnDeleteContenderSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -13597,12 +13956,12 @@ export type OnDeleteContenderSubscription = {
           movie:  {
             __typename: "Movie",
             id: string,
-            tmdbId: number,
-            studio?: string | null,
             contenders?:  {
               __typename: "ModelContenderConnection",
               nextToken?: string | null,
             } | null,
+            tmdbId: number,
+            studio?: string | null,
             createdAt: string,
             updatedAt: string,
           },
@@ -13618,8 +13977,6 @@ export type OnDeleteContenderSubscription = {
           song?:  {
             __typename: "Song",
             id: string,
-            title: string,
-            artist: string,
             movieId: string,
             movie:  {
               __typename: "Movie",
@@ -13629,6 +13986,8 @@ export type OnDeleteContenderSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            title: string,
+            artist: string,
             createdAt: string,
             updatedAt: string,
           } | null,
@@ -13640,6 +13999,8 @@ export type OnDeleteContenderSubscription = {
         } | null >,
         nextToken?: string | null,
       } | null,
+      tmdbId: number,
+      studio?: string | null,
       createdAt: string,
       updatedAt: string,
     },
@@ -13655,14 +14016,10 @@ export type OnDeleteContenderSubscription = {
     song?:  {
       __typename: "Song",
       id: string,
-      title: string,
-      artist: string,
       movieId: string,
       movie:  {
         __typename: "Movie",
         id: string,
-        tmdbId: number,
-        studio?: string | null,
         contenders?:  {
           __typename: "ModelContenderConnection",
           items:  Array< {
@@ -13672,9 +14029,9 @@ export type OnDeleteContenderSubscription = {
             category:  {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -13712,9 +14069,9 @@ export type OnDeleteContenderSubscription = {
             song?:  {
               __typename: "Song",
               id: string,
+              movieId: string,
               title: string,
               artist: string,
-              movieId: string,
               createdAt: string,
               updatedAt: string,
             } | null,
@@ -13726,9 +14083,13 @@ export type OnDeleteContenderSubscription = {
           } | null >,
           nextToken?: string | null,
         } | null,
+        tmdbId: number,
+        studio?: string | null,
         createdAt: string,
         updatedAt: string,
       },
+      title: string,
+      artist: string,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -13744,8 +14105,6 @@ export type OnCreateMovieSubscription = {
   onCreateMovie?:  {
     __typename: "Movie",
     id: string,
-    tmdbId: number,
-    studio?: string | null,
     contenders?:  {
       __typename: "ModelContenderConnection",
       items:  Array< {
@@ -13755,8 +14114,6 @@ export type OnCreateMovieSubscription = {
         category:  {
           __typename: "Category",
           id: string,
-          name: CategoryName,
-          type: CategoryType,
           eventId: string,
           event:  {
             __typename: "Event",
@@ -13773,6 +14130,8 @@ export type OnCreateMovieSubscription = {
             createdAt: string,
             updatedAt: string,
           },
+          name: CategoryName,
+          type: CategoryType,
           createdAt: string,
           updatedAt: string,
           eventCategoriesId?: string | null,
@@ -13786,9 +14145,9 @@ export type OnCreateMovieSubscription = {
             items:  Array< {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -13807,8 +14166,6 @@ export type OnCreateMovieSubscription = {
         movie:  {
           __typename: "Movie",
           id: string,
-          tmdbId: number,
-          studio?: string | null,
           contenders?:  {
             __typename: "ModelContenderConnection",
             items:  Array< {
@@ -13827,6 +14184,8 @@ export type OnCreateMovieSubscription = {
             } | null >,
             nextToken?: string | null,
           } | null,
+          tmdbId: number,
+          studio?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -13842,21 +14201,21 @@ export type OnCreateMovieSubscription = {
         song?:  {
           __typename: "Song",
           id: string,
-          title: string,
-          artist: string,
           movieId: string,
           movie:  {
             __typename: "Movie",
             id: string,
-            tmdbId: number,
-            studio?: string | null,
             contenders?:  {
               __typename: "ModelContenderConnection",
               nextToken?: string | null,
             } | null,
+            tmdbId: number,
+            studio?: string | null,
             createdAt: string,
             updatedAt: string,
           },
+          title: string,
+          artist: string,
           createdAt: string,
           updatedAt: string,
         } | null,
@@ -13868,6 +14227,8 @@ export type OnCreateMovieSubscription = {
       } | null >,
       nextToken?: string | null,
     } | null,
+    tmdbId: number,
+    studio?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -13877,8 +14238,6 @@ export type OnUpdateMovieSubscription = {
   onUpdateMovie?:  {
     __typename: "Movie",
     id: string,
-    tmdbId: number,
-    studio?: string | null,
     contenders?:  {
       __typename: "ModelContenderConnection",
       items:  Array< {
@@ -13888,8 +14247,6 @@ export type OnUpdateMovieSubscription = {
         category:  {
           __typename: "Category",
           id: string,
-          name: CategoryName,
-          type: CategoryType,
           eventId: string,
           event:  {
             __typename: "Event",
@@ -13906,6 +14263,8 @@ export type OnUpdateMovieSubscription = {
             createdAt: string,
             updatedAt: string,
           },
+          name: CategoryName,
+          type: CategoryType,
           createdAt: string,
           updatedAt: string,
           eventCategoriesId?: string | null,
@@ -13919,9 +14278,9 @@ export type OnUpdateMovieSubscription = {
             items:  Array< {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -13940,8 +14299,6 @@ export type OnUpdateMovieSubscription = {
         movie:  {
           __typename: "Movie",
           id: string,
-          tmdbId: number,
-          studio?: string | null,
           contenders?:  {
             __typename: "ModelContenderConnection",
             items:  Array< {
@@ -13960,6 +14317,8 @@ export type OnUpdateMovieSubscription = {
             } | null >,
             nextToken?: string | null,
           } | null,
+          tmdbId: number,
+          studio?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -13975,21 +14334,21 @@ export type OnUpdateMovieSubscription = {
         song?:  {
           __typename: "Song",
           id: string,
-          title: string,
-          artist: string,
           movieId: string,
           movie:  {
             __typename: "Movie",
             id: string,
-            tmdbId: number,
-            studio?: string | null,
             contenders?:  {
               __typename: "ModelContenderConnection",
               nextToken?: string | null,
             } | null,
+            tmdbId: number,
+            studio?: string | null,
             createdAt: string,
             updatedAt: string,
           },
+          title: string,
+          artist: string,
           createdAt: string,
           updatedAt: string,
         } | null,
@@ -14001,6 +14360,8 @@ export type OnUpdateMovieSubscription = {
       } | null >,
       nextToken?: string | null,
     } | null,
+    tmdbId: number,
+    studio?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -14010,8 +14371,6 @@ export type OnDeleteMovieSubscription = {
   onDeleteMovie?:  {
     __typename: "Movie",
     id: string,
-    tmdbId: number,
-    studio?: string | null,
     contenders?:  {
       __typename: "ModelContenderConnection",
       items:  Array< {
@@ -14021,8 +14380,6 @@ export type OnDeleteMovieSubscription = {
         category:  {
           __typename: "Category",
           id: string,
-          name: CategoryName,
-          type: CategoryType,
           eventId: string,
           event:  {
             __typename: "Event",
@@ -14039,6 +14396,8 @@ export type OnDeleteMovieSubscription = {
             createdAt: string,
             updatedAt: string,
           },
+          name: CategoryName,
+          type: CategoryType,
           createdAt: string,
           updatedAt: string,
           eventCategoriesId?: string | null,
@@ -14052,9 +14411,9 @@ export type OnDeleteMovieSubscription = {
             items:  Array< {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -14073,8 +14432,6 @@ export type OnDeleteMovieSubscription = {
         movie:  {
           __typename: "Movie",
           id: string,
-          tmdbId: number,
-          studio?: string | null,
           contenders?:  {
             __typename: "ModelContenderConnection",
             items:  Array< {
@@ -14093,6 +14450,8 @@ export type OnDeleteMovieSubscription = {
             } | null >,
             nextToken?: string | null,
           } | null,
+          tmdbId: number,
+          studio?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -14108,21 +14467,21 @@ export type OnDeleteMovieSubscription = {
         song?:  {
           __typename: "Song",
           id: string,
-          title: string,
-          artist: string,
           movieId: string,
           movie:  {
             __typename: "Movie",
             id: string,
-            tmdbId: number,
-            studio?: string | null,
             contenders?:  {
               __typename: "ModelContenderConnection",
               nextToken?: string | null,
             } | null,
+            tmdbId: number,
+            studio?: string | null,
             createdAt: string,
             updatedAt: string,
           },
+          title: string,
+          artist: string,
           createdAt: string,
           updatedAt: string,
         } | null,
@@ -14134,6 +14493,8 @@ export type OnDeleteMovieSubscription = {
       } | null >,
       nextToken?: string | null,
     } | null,
+    tmdbId: number,
+    studio?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -14173,14 +14534,10 @@ export type OnCreateSongSubscription = {
   onCreateSong?:  {
     __typename: "Song",
     id: string,
-    title: string,
-    artist: string,
     movieId: string,
     movie:  {
       __typename: "Movie",
       id: string,
-      tmdbId: number,
-      studio?: string | null,
       contenders?:  {
         __typename: "ModelContenderConnection",
         items:  Array< {
@@ -14190,8 +14547,6 @@ export type OnCreateSongSubscription = {
           category:  {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -14204,6 +14559,8 @@ export type OnCreateSongSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -14228,12 +14585,12 @@ export type OnCreateSongSubscription = {
           movie:  {
             __typename: "Movie",
             id: string,
-            tmdbId: number,
-            studio?: string | null,
             contenders?:  {
               __typename: "ModelContenderConnection",
               nextToken?: string | null,
             } | null,
+            tmdbId: number,
+            studio?: string | null,
             createdAt: string,
             updatedAt: string,
           },
@@ -14249,8 +14606,6 @@ export type OnCreateSongSubscription = {
           song?:  {
             __typename: "Song",
             id: string,
-            title: string,
-            artist: string,
             movieId: string,
             movie:  {
               __typename: "Movie",
@@ -14260,6 +14615,8 @@ export type OnCreateSongSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            title: string,
+            artist: string,
             createdAt: string,
             updatedAt: string,
           } | null,
@@ -14271,9 +14628,13 @@ export type OnCreateSongSubscription = {
         } | null >,
         nextToken?: string | null,
       } | null,
+      tmdbId: number,
+      studio?: string | null,
       createdAt: string,
       updatedAt: string,
     },
+    title: string,
+    artist: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -14283,14 +14644,10 @@ export type OnUpdateSongSubscription = {
   onUpdateSong?:  {
     __typename: "Song",
     id: string,
-    title: string,
-    artist: string,
     movieId: string,
     movie:  {
       __typename: "Movie",
       id: string,
-      tmdbId: number,
-      studio?: string | null,
       contenders?:  {
         __typename: "ModelContenderConnection",
         items:  Array< {
@@ -14300,8 +14657,6 @@ export type OnUpdateSongSubscription = {
           category:  {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -14314,6 +14669,8 @@ export type OnUpdateSongSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -14338,12 +14695,12 @@ export type OnUpdateSongSubscription = {
           movie:  {
             __typename: "Movie",
             id: string,
-            tmdbId: number,
-            studio?: string | null,
             contenders?:  {
               __typename: "ModelContenderConnection",
               nextToken?: string | null,
             } | null,
+            tmdbId: number,
+            studio?: string | null,
             createdAt: string,
             updatedAt: string,
           },
@@ -14359,8 +14716,6 @@ export type OnUpdateSongSubscription = {
           song?:  {
             __typename: "Song",
             id: string,
-            title: string,
-            artist: string,
             movieId: string,
             movie:  {
               __typename: "Movie",
@@ -14370,6 +14725,8 @@ export type OnUpdateSongSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            title: string,
+            artist: string,
             createdAt: string,
             updatedAt: string,
           } | null,
@@ -14381,9 +14738,13 @@ export type OnUpdateSongSubscription = {
         } | null >,
         nextToken?: string | null,
       } | null,
+      tmdbId: number,
+      studio?: string | null,
       createdAt: string,
       updatedAt: string,
     },
+    title: string,
+    artist: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -14393,14 +14754,10 @@ export type OnDeleteSongSubscription = {
   onDeleteSong?:  {
     __typename: "Song",
     id: string,
-    title: string,
-    artist: string,
     movieId: string,
     movie:  {
       __typename: "Movie",
       id: string,
-      tmdbId: number,
-      studio?: string | null,
       contenders?:  {
         __typename: "ModelContenderConnection",
         items:  Array< {
@@ -14410,8 +14767,6 @@ export type OnDeleteSongSubscription = {
           category:  {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -14424,6 +14779,8 @@ export type OnDeleteSongSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -14448,12 +14805,12 @@ export type OnDeleteSongSubscription = {
           movie:  {
             __typename: "Movie",
             id: string,
-            tmdbId: number,
-            studio?: string | null,
             contenders?:  {
               __typename: "ModelContenderConnection",
               nextToken?: string | null,
             } | null,
+            tmdbId: number,
+            studio?: string | null,
             createdAt: string,
             updatedAt: string,
           },
@@ -14469,8 +14826,6 @@ export type OnDeleteSongSubscription = {
           song?:  {
             __typename: "Song",
             id: string,
-            title: string,
-            artist: string,
             movieId: string,
             movie:  {
               __typename: "Movie",
@@ -14480,6 +14835,8 @@ export type OnDeleteSongSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            title: string,
+            artist: string,
             createdAt: string,
             updatedAt: string,
           } | null,
@@ -14491,9 +14848,13 @@ export type OnDeleteSongSubscription = {
         } | null >,
         nextToken?: string | null,
       } | null,
+      tmdbId: number,
+      studio?: string | null,
       createdAt: string,
       updatedAt: string,
     },
+    title: string,
+    artist: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -14525,8 +14886,6 @@ export type OnCreatePredictionSetSubscription = {
         items:  Array< {
           __typename: "Category",
           id: string,
-          name: CategoryName,
-          type: CategoryType,
           eventId: string,
           event:  {
             __typename: "Event",
@@ -14543,6 +14902,8 @@ export type OnCreatePredictionSetSubscription = {
             createdAt: string,
             updatedAt: string,
           },
+          name: CategoryName,
+          type: CategoryType,
           createdAt: string,
           updatedAt: string,
           eventCategoriesId?: string | null,
@@ -14561,8 +14922,6 @@ export type OnCreatePredictionSetSubscription = {
     category:  {
       __typename: "Category",
       id: string,
-      name: CategoryName,
-      type: CategoryType,
       eventId: string,
       event:  {
         __typename: "Event",
@@ -14572,8 +14931,6 @@ export type OnCreatePredictionSetSubscription = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -14586,6 +14943,8 @@ export type OnCreatePredictionSetSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -14600,6 +14959,8 @@ export type OnCreatePredictionSetSubscription = {
         createdAt: string,
         updatedAt: string,
       },
+      name: CategoryName,
+      type: CategoryType,
       createdAt: string,
       updatedAt: string,
       eventCategoriesId?: string | null,
@@ -14617,8 +14978,6 @@ export type OnCreatePredictionSetSubscription = {
           category:  {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -14631,6 +14990,8 @@ export type OnCreatePredictionSetSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -14655,12 +15016,12 @@ export type OnCreatePredictionSetSubscription = {
           movie:  {
             __typename: "Movie",
             id: string,
-            tmdbId: number,
-            studio?: string | null,
             contenders?:  {
               __typename: "ModelContenderConnection",
               nextToken?: string | null,
             } | null,
+            tmdbId: number,
+            studio?: string | null,
             createdAt: string,
             updatedAt: string,
           },
@@ -14676,8 +15037,6 @@ export type OnCreatePredictionSetSubscription = {
           song?:  {
             __typename: "Song",
             id: string,
-            title: string,
-            artist: string,
             movieId: string,
             movie:  {
               __typename: "Movie",
@@ -14687,6 +15046,8 @@ export type OnCreatePredictionSetSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            title: string,
+            artist: string,
             createdAt: string,
             updatedAt: string,
           } | null,
@@ -14735,8 +15096,6 @@ export type OnUpdatePredictionSetSubscription = {
         items:  Array< {
           __typename: "Category",
           id: string,
-          name: CategoryName,
-          type: CategoryType,
           eventId: string,
           event:  {
             __typename: "Event",
@@ -14753,6 +15112,8 @@ export type OnUpdatePredictionSetSubscription = {
             createdAt: string,
             updatedAt: string,
           },
+          name: CategoryName,
+          type: CategoryType,
           createdAt: string,
           updatedAt: string,
           eventCategoriesId?: string | null,
@@ -14771,8 +15132,6 @@ export type OnUpdatePredictionSetSubscription = {
     category:  {
       __typename: "Category",
       id: string,
-      name: CategoryName,
-      type: CategoryType,
       eventId: string,
       event:  {
         __typename: "Event",
@@ -14782,8 +15141,6 @@ export type OnUpdatePredictionSetSubscription = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -14796,6 +15153,8 @@ export type OnUpdatePredictionSetSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -14810,6 +15169,8 @@ export type OnUpdatePredictionSetSubscription = {
         createdAt: string,
         updatedAt: string,
       },
+      name: CategoryName,
+      type: CategoryType,
       createdAt: string,
       updatedAt: string,
       eventCategoriesId?: string | null,
@@ -14827,8 +15188,6 @@ export type OnUpdatePredictionSetSubscription = {
           category:  {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -14841,6 +15200,8 @@ export type OnUpdatePredictionSetSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -14865,12 +15226,12 @@ export type OnUpdatePredictionSetSubscription = {
           movie:  {
             __typename: "Movie",
             id: string,
-            tmdbId: number,
-            studio?: string | null,
             contenders?:  {
               __typename: "ModelContenderConnection",
               nextToken?: string | null,
             } | null,
+            tmdbId: number,
+            studio?: string | null,
             createdAt: string,
             updatedAt: string,
           },
@@ -14886,8 +15247,6 @@ export type OnUpdatePredictionSetSubscription = {
           song?:  {
             __typename: "Song",
             id: string,
-            title: string,
-            artist: string,
             movieId: string,
             movie:  {
               __typename: "Movie",
@@ -14897,6 +15256,8 @@ export type OnUpdatePredictionSetSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            title: string,
+            artist: string,
             createdAt: string,
             updatedAt: string,
           } | null,
@@ -14945,8 +15306,6 @@ export type OnDeletePredictionSetSubscription = {
         items:  Array< {
           __typename: "Category",
           id: string,
-          name: CategoryName,
-          type: CategoryType,
           eventId: string,
           event:  {
             __typename: "Event",
@@ -14963,6 +15322,8 @@ export type OnDeletePredictionSetSubscription = {
             createdAt: string,
             updatedAt: string,
           },
+          name: CategoryName,
+          type: CategoryType,
           createdAt: string,
           updatedAt: string,
           eventCategoriesId?: string | null,
@@ -14981,8 +15342,6 @@ export type OnDeletePredictionSetSubscription = {
     category:  {
       __typename: "Category",
       id: string,
-      name: CategoryName,
-      type: CategoryType,
       eventId: string,
       event:  {
         __typename: "Event",
@@ -14992,8 +15351,6 @@ export type OnDeletePredictionSetSubscription = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -15006,6 +15363,8 @@ export type OnDeletePredictionSetSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -15020,6 +15379,8 @@ export type OnDeletePredictionSetSubscription = {
         createdAt: string,
         updatedAt: string,
       },
+      name: CategoryName,
+      type: CategoryType,
       createdAt: string,
       updatedAt: string,
       eventCategoriesId?: string | null,
@@ -15037,8 +15398,6 @@ export type OnDeletePredictionSetSubscription = {
           category:  {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -15051,6 +15410,8 @@ export type OnDeletePredictionSetSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -15075,12 +15436,12 @@ export type OnDeletePredictionSetSubscription = {
           movie:  {
             __typename: "Movie",
             id: string,
-            tmdbId: number,
-            studio?: string | null,
             contenders?:  {
               __typename: "ModelContenderConnection",
               nextToken?: string | null,
             } | null,
+            tmdbId: number,
+            studio?: string | null,
             createdAt: string,
             updatedAt: string,
           },
@@ -15096,8 +15457,6 @@ export type OnDeletePredictionSetSubscription = {
           song?:  {
             __typename: "Song",
             id: string,
-            title: string,
-            artist: string,
             movieId: string,
             movie:  {
               __typename: "Movie",
@@ -15107,6 +15466,8 @@ export type OnDeletePredictionSetSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            title: string,
+            artist: string,
             createdAt: string,
             updatedAt: string,
           } | null,
@@ -15141,8 +15502,6 @@ export type OnCreatePredictionSubscription = {
       category:  {
         __typename: "Category",
         id: string,
-        name: CategoryName,
-        type: CategoryType,
         eventId: string,
         event:  {
           __typename: "Event",
@@ -15152,9 +15511,9 @@ export type OnCreatePredictionSubscription = {
             items:  Array< {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -15169,6 +15528,8 @@ export type OnCreatePredictionSubscription = {
           createdAt: string,
           updatedAt: string,
         },
+        name: CategoryName,
+        type: CategoryType,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -15182,8 +15543,6 @@ export type OnCreatePredictionSubscription = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -15196,6 +15555,8 @@ export type OnCreatePredictionSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -15214,8 +15575,6 @@ export type OnCreatePredictionSubscription = {
       movie:  {
         __typename: "Movie",
         id: string,
-        tmdbId: number,
-        studio?: string | null,
         contenders?:  {
           __typename: "ModelContenderConnection",
           items:  Array< {
@@ -15225,9 +15584,9 @@ export type OnCreatePredictionSubscription = {
             category:  {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -15265,9 +15624,9 @@ export type OnCreatePredictionSubscription = {
             song?:  {
               __typename: "Song",
               id: string,
+              movieId: string,
               title: string,
               artist: string,
-              movieId: string,
               createdAt: string,
               updatedAt: string,
             } | null,
@@ -15279,6 +15638,8 @@ export type OnCreatePredictionSubscription = {
           } | null >,
           nextToken?: string | null,
         } | null,
+        tmdbId: number,
+        studio?: string | null,
         createdAt: string,
         updatedAt: string,
       },
@@ -15294,14 +15655,10 @@ export type OnCreatePredictionSubscription = {
       song?:  {
         __typename: "Song",
         id: string,
-        title: string,
-        artist: string,
         movieId: string,
         movie:  {
           __typename: "Movie",
           id: string,
-          tmdbId: number,
-          studio?: string | null,
           contenders?:  {
             __typename: "ModelContenderConnection",
             items:  Array< {
@@ -15320,9 +15677,13 @@ export type OnCreatePredictionSubscription = {
             } | null >,
             nextToken?: string | null,
           } | null,
+          tmdbId: number,
+          studio?: string | null,
           createdAt: string,
           updatedAt: string,
         },
+        title: string,
+        artist: string,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -15351,8 +15712,6 @@ export type OnUpdatePredictionSubscription = {
       category:  {
         __typename: "Category",
         id: string,
-        name: CategoryName,
-        type: CategoryType,
         eventId: string,
         event:  {
           __typename: "Event",
@@ -15362,9 +15721,9 @@ export type OnUpdatePredictionSubscription = {
             items:  Array< {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -15379,6 +15738,8 @@ export type OnUpdatePredictionSubscription = {
           createdAt: string,
           updatedAt: string,
         },
+        name: CategoryName,
+        type: CategoryType,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -15392,8 +15753,6 @@ export type OnUpdatePredictionSubscription = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -15406,6 +15765,8 @@ export type OnUpdatePredictionSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -15424,8 +15785,6 @@ export type OnUpdatePredictionSubscription = {
       movie:  {
         __typename: "Movie",
         id: string,
-        tmdbId: number,
-        studio?: string | null,
         contenders?:  {
           __typename: "ModelContenderConnection",
           items:  Array< {
@@ -15435,9 +15794,9 @@ export type OnUpdatePredictionSubscription = {
             category:  {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -15475,9 +15834,9 @@ export type OnUpdatePredictionSubscription = {
             song?:  {
               __typename: "Song",
               id: string,
+              movieId: string,
               title: string,
               artist: string,
-              movieId: string,
               createdAt: string,
               updatedAt: string,
             } | null,
@@ -15489,6 +15848,8 @@ export type OnUpdatePredictionSubscription = {
           } | null >,
           nextToken?: string | null,
         } | null,
+        tmdbId: number,
+        studio?: string | null,
         createdAt: string,
         updatedAt: string,
       },
@@ -15504,14 +15865,10 @@ export type OnUpdatePredictionSubscription = {
       song?:  {
         __typename: "Song",
         id: string,
-        title: string,
-        artist: string,
         movieId: string,
         movie:  {
           __typename: "Movie",
           id: string,
-          tmdbId: number,
-          studio?: string | null,
           contenders?:  {
             __typename: "ModelContenderConnection",
             items:  Array< {
@@ -15530,9 +15887,13 @@ export type OnUpdatePredictionSubscription = {
             } | null >,
             nextToken?: string | null,
           } | null,
+          tmdbId: number,
+          studio?: string | null,
           createdAt: string,
           updatedAt: string,
         },
+        title: string,
+        artist: string,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -15561,8 +15922,6 @@ export type OnDeletePredictionSubscription = {
       category:  {
         __typename: "Category",
         id: string,
-        name: CategoryName,
-        type: CategoryType,
         eventId: string,
         event:  {
           __typename: "Event",
@@ -15572,9 +15931,9 @@ export type OnDeletePredictionSubscription = {
             items:  Array< {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -15589,6 +15948,8 @@ export type OnDeletePredictionSubscription = {
           createdAt: string,
           updatedAt: string,
         },
+        name: CategoryName,
+        type: CategoryType,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -15602,8 +15963,6 @@ export type OnDeletePredictionSubscription = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -15616,6 +15975,8 @@ export type OnDeletePredictionSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -15634,8 +15995,6 @@ export type OnDeletePredictionSubscription = {
       movie:  {
         __typename: "Movie",
         id: string,
-        tmdbId: number,
-        studio?: string | null,
         contenders?:  {
           __typename: "ModelContenderConnection",
           items:  Array< {
@@ -15645,9 +16004,9 @@ export type OnDeletePredictionSubscription = {
             category:  {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -15685,9 +16044,9 @@ export type OnDeletePredictionSubscription = {
             song?:  {
               __typename: "Song",
               id: string,
+              movieId: string,
               title: string,
               artist: string,
-              movieId: string,
               createdAt: string,
               updatedAt: string,
             } | null,
@@ -15699,6 +16058,8 @@ export type OnDeletePredictionSubscription = {
           } | null >,
           nextToken?: string | null,
         } | null,
+        tmdbId: number,
+        studio?: string | null,
         createdAt: string,
         updatedAt: string,
       },
@@ -15714,14 +16075,10 @@ export type OnDeletePredictionSubscription = {
       song?:  {
         __typename: "Song",
         id: string,
-        title: string,
-        artist: string,
         movieId: string,
         movie:  {
           __typename: "Movie",
           id: string,
-          tmdbId: number,
-          studio?: string | null,
           contenders?:  {
             __typename: "ModelContenderConnection",
             items:  Array< {
@@ -15740,9 +16097,13 @@ export type OnDeletePredictionSubscription = {
             } | null >,
             nextToken?: string | null,
           } | null,
+          tmdbId: number,
+          studio?: string | null,
           createdAt: string,
           updatedAt: string,
         },
+        title: string,
+        artist: string,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -15785,8 +16146,6 @@ export type OnCreateHistoryPredictionSetSubscription = {
         items:  Array< {
           __typename: "Category",
           id: string,
-          name: CategoryName,
-          type: CategoryType,
           eventId: string,
           event:  {
             __typename: "Event",
@@ -15803,6 +16162,8 @@ export type OnCreateHistoryPredictionSetSubscription = {
             createdAt: string,
             updatedAt: string,
           },
+          name: CategoryName,
+          type: CategoryType,
           createdAt: string,
           updatedAt: string,
           eventCategoriesId?: string | null,
@@ -15821,8 +16182,6 @@ export type OnCreateHistoryPredictionSetSubscription = {
     category:  {
       __typename: "Category",
       id: string,
-      name: CategoryName,
-      type: CategoryType,
       eventId: string,
       event:  {
         __typename: "Event",
@@ -15832,8 +16191,6 @@ export type OnCreateHistoryPredictionSetSubscription = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -15846,6 +16203,8 @@ export type OnCreateHistoryPredictionSetSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -15860,6 +16219,8 @@ export type OnCreateHistoryPredictionSetSubscription = {
         createdAt: string,
         updatedAt: string,
       },
+      name: CategoryName,
+      type: CategoryType,
       createdAt: string,
       updatedAt: string,
       eventCategoriesId?: string | null,
@@ -15877,8 +16238,6 @@ export type OnCreateHistoryPredictionSetSubscription = {
           category:  {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -15891,6 +16250,8 @@ export type OnCreateHistoryPredictionSetSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -15915,12 +16276,12 @@ export type OnCreateHistoryPredictionSetSubscription = {
           movie:  {
             __typename: "Movie",
             id: string,
-            tmdbId: number,
-            studio?: string | null,
             contenders?:  {
               __typename: "ModelContenderConnection",
               nextToken?: string | null,
             } | null,
+            tmdbId: number,
+            studio?: string | null,
             createdAt: string,
             updatedAt: string,
           },
@@ -15936,8 +16297,6 @@ export type OnCreateHistoryPredictionSetSubscription = {
           song?:  {
             __typename: "Song",
             id: string,
-            title: string,
-            artist: string,
             movieId: string,
             movie:  {
               __typename: "Movie",
@@ -15947,6 +16306,8 @@ export type OnCreateHistoryPredictionSetSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            title: string,
+            artist: string,
             createdAt: string,
             updatedAt: string,
           } | null,
@@ -15995,8 +16356,6 @@ export type OnUpdateHistoryPredictionSetSubscription = {
         items:  Array< {
           __typename: "Category",
           id: string,
-          name: CategoryName,
-          type: CategoryType,
           eventId: string,
           event:  {
             __typename: "Event",
@@ -16013,6 +16372,8 @@ export type OnUpdateHistoryPredictionSetSubscription = {
             createdAt: string,
             updatedAt: string,
           },
+          name: CategoryName,
+          type: CategoryType,
           createdAt: string,
           updatedAt: string,
           eventCategoriesId?: string | null,
@@ -16031,8 +16392,6 @@ export type OnUpdateHistoryPredictionSetSubscription = {
     category:  {
       __typename: "Category",
       id: string,
-      name: CategoryName,
-      type: CategoryType,
       eventId: string,
       event:  {
         __typename: "Event",
@@ -16042,8 +16401,6 @@ export type OnUpdateHistoryPredictionSetSubscription = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -16056,6 +16413,8 @@ export type OnUpdateHistoryPredictionSetSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -16070,6 +16429,8 @@ export type OnUpdateHistoryPredictionSetSubscription = {
         createdAt: string,
         updatedAt: string,
       },
+      name: CategoryName,
+      type: CategoryType,
       createdAt: string,
       updatedAt: string,
       eventCategoriesId?: string | null,
@@ -16087,8 +16448,6 @@ export type OnUpdateHistoryPredictionSetSubscription = {
           category:  {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -16101,6 +16460,8 @@ export type OnUpdateHistoryPredictionSetSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -16125,12 +16486,12 @@ export type OnUpdateHistoryPredictionSetSubscription = {
           movie:  {
             __typename: "Movie",
             id: string,
-            tmdbId: number,
-            studio?: string | null,
             contenders?:  {
               __typename: "ModelContenderConnection",
               nextToken?: string | null,
             } | null,
+            tmdbId: number,
+            studio?: string | null,
             createdAt: string,
             updatedAt: string,
           },
@@ -16146,8 +16507,6 @@ export type OnUpdateHistoryPredictionSetSubscription = {
           song?:  {
             __typename: "Song",
             id: string,
-            title: string,
-            artist: string,
             movieId: string,
             movie:  {
               __typename: "Movie",
@@ -16157,6 +16516,8 @@ export type OnUpdateHistoryPredictionSetSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            title: string,
+            artist: string,
             createdAt: string,
             updatedAt: string,
           } | null,
@@ -16205,8 +16566,6 @@ export type OnDeleteHistoryPredictionSetSubscription = {
         items:  Array< {
           __typename: "Category",
           id: string,
-          name: CategoryName,
-          type: CategoryType,
           eventId: string,
           event:  {
             __typename: "Event",
@@ -16223,6 +16582,8 @@ export type OnDeleteHistoryPredictionSetSubscription = {
             createdAt: string,
             updatedAt: string,
           },
+          name: CategoryName,
+          type: CategoryType,
           createdAt: string,
           updatedAt: string,
           eventCategoriesId?: string | null,
@@ -16241,8 +16602,6 @@ export type OnDeleteHistoryPredictionSetSubscription = {
     category:  {
       __typename: "Category",
       id: string,
-      name: CategoryName,
-      type: CategoryType,
       eventId: string,
       event:  {
         __typename: "Event",
@@ -16252,8 +16611,6 @@ export type OnDeleteHistoryPredictionSetSubscription = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -16266,6 +16623,8 @@ export type OnDeleteHistoryPredictionSetSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -16280,6 +16639,8 @@ export type OnDeleteHistoryPredictionSetSubscription = {
         createdAt: string,
         updatedAt: string,
       },
+      name: CategoryName,
+      type: CategoryType,
       createdAt: string,
       updatedAt: string,
       eventCategoriesId?: string | null,
@@ -16297,8 +16658,6 @@ export type OnDeleteHistoryPredictionSetSubscription = {
           category:  {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -16311,6 +16670,8 @@ export type OnDeleteHistoryPredictionSetSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -16335,12 +16696,12 @@ export type OnDeleteHistoryPredictionSetSubscription = {
           movie:  {
             __typename: "Movie",
             id: string,
-            tmdbId: number,
-            studio?: string | null,
             contenders?:  {
               __typename: "ModelContenderConnection",
               nextToken?: string | null,
             } | null,
+            tmdbId: number,
+            studio?: string | null,
             createdAt: string,
             updatedAt: string,
           },
@@ -16356,8 +16717,6 @@ export type OnDeleteHistoryPredictionSetSubscription = {
           song?:  {
             __typename: "Song",
             id: string,
-            title: string,
-            artist: string,
             movieId: string,
             movie:  {
               __typename: "Movie",
@@ -16367,6 +16726,8 @@ export type OnDeleteHistoryPredictionSetSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            title: string,
+            artist: string,
             createdAt: string,
             updatedAt: string,
           } | null,
@@ -16401,8 +16762,6 @@ export type OnCreateHistoryPredictionSubscription = {
       category:  {
         __typename: "Category",
         id: string,
-        name: CategoryName,
-        type: CategoryType,
         eventId: string,
         event:  {
           __typename: "Event",
@@ -16412,9 +16771,9 @@ export type OnCreateHistoryPredictionSubscription = {
             items:  Array< {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -16429,6 +16788,8 @@ export type OnCreateHistoryPredictionSubscription = {
           createdAt: string,
           updatedAt: string,
         },
+        name: CategoryName,
+        type: CategoryType,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -16442,8 +16803,6 @@ export type OnCreateHistoryPredictionSubscription = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -16456,6 +16815,8 @@ export type OnCreateHistoryPredictionSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -16474,8 +16835,6 @@ export type OnCreateHistoryPredictionSubscription = {
       movie:  {
         __typename: "Movie",
         id: string,
-        tmdbId: number,
-        studio?: string | null,
         contenders?:  {
           __typename: "ModelContenderConnection",
           items:  Array< {
@@ -16485,9 +16844,9 @@ export type OnCreateHistoryPredictionSubscription = {
             category:  {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -16525,9 +16884,9 @@ export type OnCreateHistoryPredictionSubscription = {
             song?:  {
               __typename: "Song",
               id: string,
+              movieId: string,
               title: string,
               artist: string,
-              movieId: string,
               createdAt: string,
               updatedAt: string,
             } | null,
@@ -16539,6 +16898,8 @@ export type OnCreateHistoryPredictionSubscription = {
           } | null >,
           nextToken?: string | null,
         } | null,
+        tmdbId: number,
+        studio?: string | null,
         createdAt: string,
         updatedAt: string,
       },
@@ -16554,14 +16915,10 @@ export type OnCreateHistoryPredictionSubscription = {
       song?:  {
         __typename: "Song",
         id: string,
-        title: string,
-        artist: string,
         movieId: string,
         movie:  {
           __typename: "Movie",
           id: string,
-          tmdbId: number,
-          studio?: string | null,
           contenders?:  {
             __typename: "ModelContenderConnection",
             items:  Array< {
@@ -16580,9 +16937,13 @@ export type OnCreateHistoryPredictionSubscription = {
             } | null >,
             nextToken?: string | null,
           } | null,
+          tmdbId: number,
+          studio?: string | null,
           createdAt: string,
           updatedAt: string,
         },
+        title: string,
+        artist: string,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -16611,8 +16972,6 @@ export type OnUpdateHistoryPredictionSubscription = {
       category:  {
         __typename: "Category",
         id: string,
-        name: CategoryName,
-        type: CategoryType,
         eventId: string,
         event:  {
           __typename: "Event",
@@ -16622,9 +16981,9 @@ export type OnUpdateHistoryPredictionSubscription = {
             items:  Array< {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -16639,6 +16998,8 @@ export type OnUpdateHistoryPredictionSubscription = {
           createdAt: string,
           updatedAt: string,
         },
+        name: CategoryName,
+        type: CategoryType,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -16652,8 +17013,6 @@ export type OnUpdateHistoryPredictionSubscription = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -16666,6 +17025,8 @@ export type OnUpdateHistoryPredictionSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -16684,8 +17045,6 @@ export type OnUpdateHistoryPredictionSubscription = {
       movie:  {
         __typename: "Movie",
         id: string,
-        tmdbId: number,
-        studio?: string | null,
         contenders?:  {
           __typename: "ModelContenderConnection",
           items:  Array< {
@@ -16695,9 +17054,9 @@ export type OnUpdateHistoryPredictionSubscription = {
             category:  {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -16735,9 +17094,9 @@ export type OnUpdateHistoryPredictionSubscription = {
             song?:  {
               __typename: "Song",
               id: string,
+              movieId: string,
               title: string,
               artist: string,
-              movieId: string,
               createdAt: string,
               updatedAt: string,
             } | null,
@@ -16749,6 +17108,8 @@ export type OnUpdateHistoryPredictionSubscription = {
           } | null >,
           nextToken?: string | null,
         } | null,
+        tmdbId: number,
+        studio?: string | null,
         createdAt: string,
         updatedAt: string,
       },
@@ -16764,14 +17125,10 @@ export type OnUpdateHistoryPredictionSubscription = {
       song?:  {
         __typename: "Song",
         id: string,
-        title: string,
-        artist: string,
         movieId: string,
         movie:  {
           __typename: "Movie",
           id: string,
-          tmdbId: number,
-          studio?: string | null,
           contenders?:  {
             __typename: "ModelContenderConnection",
             items:  Array< {
@@ -16790,9 +17147,13 @@ export type OnUpdateHistoryPredictionSubscription = {
             } | null >,
             nextToken?: string | null,
           } | null,
+          tmdbId: number,
+          studio?: string | null,
           createdAt: string,
           updatedAt: string,
         },
+        title: string,
+        artist: string,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -16821,8 +17182,6 @@ export type OnDeleteHistoryPredictionSubscription = {
       category:  {
         __typename: "Category",
         id: string,
-        name: CategoryName,
-        type: CategoryType,
         eventId: string,
         event:  {
           __typename: "Event",
@@ -16832,9 +17191,9 @@ export type OnDeleteHistoryPredictionSubscription = {
             items:  Array< {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -16849,6 +17208,8 @@ export type OnDeleteHistoryPredictionSubscription = {
           createdAt: string,
           updatedAt: string,
         },
+        name: CategoryName,
+        type: CategoryType,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -16862,8 +17223,6 @@ export type OnDeleteHistoryPredictionSubscription = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -16876,6 +17235,8 @@ export type OnDeleteHistoryPredictionSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -16894,8 +17255,6 @@ export type OnDeleteHistoryPredictionSubscription = {
       movie:  {
         __typename: "Movie",
         id: string,
-        tmdbId: number,
-        studio?: string | null,
         contenders?:  {
           __typename: "ModelContenderConnection",
           items:  Array< {
@@ -16905,9 +17264,9 @@ export type OnDeleteHistoryPredictionSubscription = {
             category:  {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -16945,9 +17304,9 @@ export type OnDeleteHistoryPredictionSubscription = {
             song?:  {
               __typename: "Song",
               id: string,
+              movieId: string,
               title: string,
               artist: string,
-              movieId: string,
               createdAt: string,
               updatedAt: string,
             } | null,
@@ -16959,6 +17318,8 @@ export type OnDeleteHistoryPredictionSubscription = {
           } | null >,
           nextToken?: string | null,
         } | null,
+        tmdbId: number,
+        studio?: string | null,
         createdAt: string,
         updatedAt: string,
       },
@@ -16974,14 +17335,10 @@ export type OnDeleteHistoryPredictionSubscription = {
       song?:  {
         __typename: "Song",
         id: string,
-        title: string,
-        artist: string,
         movieId: string,
         movie:  {
           __typename: "Movie",
           id: string,
-          tmdbId: number,
-          studio?: string | null,
           contenders?:  {
             __typename: "ModelContenderConnection",
             items:  Array< {
@@ -17000,9 +17357,13 @@ export type OnDeleteHistoryPredictionSubscription = {
             } | null >,
             nextToken?: string | null,
           } | null,
+          tmdbId: number,
+          studio?: string | null,
           createdAt: string,
           updatedAt: string,
         },
+        title: string,
+        artist: string,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -17032,8 +17393,6 @@ export type OnCreateCommunityPredictionSetSubscription = {
         items:  Array< {
           __typename: "Category",
           id: string,
-          name: CategoryName,
-          type: CategoryType,
           eventId: string,
           event:  {
             __typename: "Event",
@@ -17050,6 +17409,8 @@ export type OnCreateCommunityPredictionSetSubscription = {
             createdAt: string,
             updatedAt: string,
           },
+          name: CategoryName,
+          type: CategoryType,
           createdAt: string,
           updatedAt: string,
           eventCategoriesId?: string | null,
@@ -17068,8 +17429,6 @@ export type OnCreateCommunityPredictionSetSubscription = {
     category:  {
       __typename: "Category",
       id: string,
-      name: CategoryName,
-      type: CategoryType,
       eventId: string,
       event:  {
         __typename: "Event",
@@ -17079,8 +17438,6 @@ export type OnCreateCommunityPredictionSetSubscription = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -17093,6 +17450,8 @@ export type OnCreateCommunityPredictionSetSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -17107,6 +17466,8 @@ export type OnCreateCommunityPredictionSetSubscription = {
         createdAt: string,
         updatedAt: string,
       },
+      name: CategoryName,
+      type: CategoryType,
       createdAt: string,
       updatedAt: string,
       eventCategoriesId?: string | null,
@@ -17124,8 +17485,6 @@ export type OnCreateCommunityPredictionSetSubscription = {
           category:  {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -17138,6 +17497,8 @@ export type OnCreateCommunityPredictionSetSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -17162,12 +17523,12 @@ export type OnCreateCommunityPredictionSetSubscription = {
           movie:  {
             __typename: "Movie",
             id: string,
-            tmdbId: number,
-            studio?: string | null,
             contenders?:  {
               __typename: "ModelContenderConnection",
               nextToken?: string | null,
             } | null,
+            tmdbId: number,
+            studio?: string | null,
             createdAt: string,
             updatedAt: string,
           },
@@ -17183,8 +17544,6 @@ export type OnCreateCommunityPredictionSetSubscription = {
           song?:  {
             __typename: "Song",
             id: string,
-            title: string,
-            artist: string,
             movieId: string,
             movie:  {
               __typename: "Movie",
@@ -17194,6 +17553,8 @@ export type OnCreateCommunityPredictionSetSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            title: string,
+            artist: string,
             createdAt: string,
             updatedAt: string,
           } | null,
@@ -17229,8 +17590,6 @@ export type OnUpdateCommunityPredictionSetSubscription = {
         items:  Array< {
           __typename: "Category",
           id: string,
-          name: CategoryName,
-          type: CategoryType,
           eventId: string,
           event:  {
             __typename: "Event",
@@ -17247,6 +17606,8 @@ export type OnUpdateCommunityPredictionSetSubscription = {
             createdAt: string,
             updatedAt: string,
           },
+          name: CategoryName,
+          type: CategoryType,
           createdAt: string,
           updatedAt: string,
           eventCategoriesId?: string | null,
@@ -17265,8 +17626,6 @@ export type OnUpdateCommunityPredictionSetSubscription = {
     category:  {
       __typename: "Category",
       id: string,
-      name: CategoryName,
-      type: CategoryType,
       eventId: string,
       event:  {
         __typename: "Event",
@@ -17276,8 +17635,6 @@ export type OnUpdateCommunityPredictionSetSubscription = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -17290,6 +17647,8 @@ export type OnUpdateCommunityPredictionSetSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -17304,6 +17663,8 @@ export type OnUpdateCommunityPredictionSetSubscription = {
         createdAt: string,
         updatedAt: string,
       },
+      name: CategoryName,
+      type: CategoryType,
       createdAt: string,
       updatedAt: string,
       eventCategoriesId?: string | null,
@@ -17321,8 +17682,6 @@ export type OnUpdateCommunityPredictionSetSubscription = {
           category:  {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -17335,6 +17694,8 @@ export type OnUpdateCommunityPredictionSetSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -17359,12 +17720,12 @@ export type OnUpdateCommunityPredictionSetSubscription = {
           movie:  {
             __typename: "Movie",
             id: string,
-            tmdbId: number,
-            studio?: string | null,
             contenders?:  {
               __typename: "ModelContenderConnection",
               nextToken?: string | null,
             } | null,
+            tmdbId: number,
+            studio?: string | null,
             createdAt: string,
             updatedAt: string,
           },
@@ -17380,8 +17741,6 @@ export type OnUpdateCommunityPredictionSetSubscription = {
           song?:  {
             __typename: "Song",
             id: string,
-            title: string,
-            artist: string,
             movieId: string,
             movie:  {
               __typename: "Movie",
@@ -17391,6 +17750,8 @@ export type OnUpdateCommunityPredictionSetSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            title: string,
+            artist: string,
             createdAt: string,
             updatedAt: string,
           } | null,
@@ -17426,8 +17787,6 @@ export type OnDeleteCommunityPredictionSetSubscription = {
         items:  Array< {
           __typename: "Category",
           id: string,
-          name: CategoryName,
-          type: CategoryType,
           eventId: string,
           event:  {
             __typename: "Event",
@@ -17444,6 +17803,8 @@ export type OnDeleteCommunityPredictionSetSubscription = {
             createdAt: string,
             updatedAt: string,
           },
+          name: CategoryName,
+          type: CategoryType,
           createdAt: string,
           updatedAt: string,
           eventCategoriesId?: string | null,
@@ -17462,8 +17823,6 @@ export type OnDeleteCommunityPredictionSetSubscription = {
     category:  {
       __typename: "Category",
       id: string,
-      name: CategoryName,
-      type: CategoryType,
       eventId: string,
       event:  {
         __typename: "Event",
@@ -17473,8 +17832,6 @@ export type OnDeleteCommunityPredictionSetSubscription = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -17487,6 +17844,8 @@ export type OnDeleteCommunityPredictionSetSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -17501,6 +17860,8 @@ export type OnDeleteCommunityPredictionSetSubscription = {
         createdAt: string,
         updatedAt: string,
       },
+      name: CategoryName,
+      type: CategoryType,
       createdAt: string,
       updatedAt: string,
       eventCategoriesId?: string | null,
@@ -17518,8 +17879,6 @@ export type OnDeleteCommunityPredictionSetSubscription = {
           category:  {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -17532,6 +17891,8 @@ export type OnDeleteCommunityPredictionSetSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -17556,12 +17917,12 @@ export type OnDeleteCommunityPredictionSetSubscription = {
           movie:  {
             __typename: "Movie",
             id: string,
-            tmdbId: number,
-            studio?: string | null,
             contenders?:  {
               __typename: "ModelContenderConnection",
               nextToken?: string | null,
             } | null,
+            tmdbId: number,
+            studio?: string | null,
             createdAt: string,
             updatedAt: string,
           },
@@ -17577,8 +17938,6 @@ export type OnDeleteCommunityPredictionSetSubscription = {
           song?:  {
             __typename: "Song",
             id: string,
-            title: string,
-            artist: string,
             movieId: string,
             movie:  {
               __typename: "Movie",
@@ -17588,6 +17947,8 @@ export type OnDeleteCommunityPredictionSetSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            title: string,
+            artist: string,
             createdAt: string,
             updatedAt: string,
           } | null,
@@ -17622,8 +17983,6 @@ export type OnCreateCommunityPredictionSubscription = {
       category:  {
         __typename: "Category",
         id: string,
-        name: CategoryName,
-        type: CategoryType,
         eventId: string,
         event:  {
           __typename: "Event",
@@ -17633,9 +17992,9 @@ export type OnCreateCommunityPredictionSubscription = {
             items:  Array< {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -17650,6 +18009,8 @@ export type OnCreateCommunityPredictionSubscription = {
           createdAt: string,
           updatedAt: string,
         },
+        name: CategoryName,
+        type: CategoryType,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -17663,8 +18024,6 @@ export type OnCreateCommunityPredictionSubscription = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -17677,6 +18036,8 @@ export type OnCreateCommunityPredictionSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -17695,8 +18056,6 @@ export type OnCreateCommunityPredictionSubscription = {
       movie:  {
         __typename: "Movie",
         id: string,
-        tmdbId: number,
-        studio?: string | null,
         contenders?:  {
           __typename: "ModelContenderConnection",
           items:  Array< {
@@ -17706,9 +18065,9 @@ export type OnCreateCommunityPredictionSubscription = {
             category:  {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -17746,9 +18105,9 @@ export type OnCreateCommunityPredictionSubscription = {
             song?:  {
               __typename: "Song",
               id: string,
+              movieId: string,
               title: string,
               artist: string,
-              movieId: string,
               createdAt: string,
               updatedAt: string,
             } | null,
@@ -17760,6 +18119,8 @@ export type OnCreateCommunityPredictionSubscription = {
           } | null >,
           nextToken?: string | null,
         } | null,
+        tmdbId: number,
+        studio?: string | null,
         createdAt: string,
         updatedAt: string,
       },
@@ -17775,14 +18136,10 @@ export type OnCreateCommunityPredictionSubscription = {
       song?:  {
         __typename: "Song",
         id: string,
-        title: string,
-        artist: string,
         movieId: string,
         movie:  {
           __typename: "Movie",
           id: string,
-          tmdbId: number,
-          studio?: string | null,
           contenders?:  {
             __typename: "ModelContenderConnection",
             items:  Array< {
@@ -17801,9 +18158,13 @@ export type OnCreateCommunityPredictionSubscription = {
             } | null >,
             nextToken?: string | null,
           } | null,
+          tmdbId: number,
+          studio?: string | null,
           createdAt: string,
           updatedAt: string,
         },
+        title: string,
+        artist: string,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -17832,8 +18193,6 @@ export type OnUpdateCommunityPredictionSubscription = {
       category:  {
         __typename: "Category",
         id: string,
-        name: CategoryName,
-        type: CategoryType,
         eventId: string,
         event:  {
           __typename: "Event",
@@ -17843,9 +18202,9 @@ export type OnUpdateCommunityPredictionSubscription = {
             items:  Array< {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -17860,6 +18219,8 @@ export type OnUpdateCommunityPredictionSubscription = {
           createdAt: string,
           updatedAt: string,
         },
+        name: CategoryName,
+        type: CategoryType,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -17873,8 +18234,6 @@ export type OnUpdateCommunityPredictionSubscription = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -17887,6 +18246,8 @@ export type OnUpdateCommunityPredictionSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -17905,8 +18266,6 @@ export type OnUpdateCommunityPredictionSubscription = {
       movie:  {
         __typename: "Movie",
         id: string,
-        tmdbId: number,
-        studio?: string | null,
         contenders?:  {
           __typename: "ModelContenderConnection",
           items:  Array< {
@@ -17916,9 +18275,9 @@ export type OnUpdateCommunityPredictionSubscription = {
             category:  {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -17956,9 +18315,9 @@ export type OnUpdateCommunityPredictionSubscription = {
             song?:  {
               __typename: "Song",
               id: string,
+              movieId: string,
               title: string,
               artist: string,
-              movieId: string,
               createdAt: string,
               updatedAt: string,
             } | null,
@@ -17970,6 +18329,8 @@ export type OnUpdateCommunityPredictionSubscription = {
           } | null >,
           nextToken?: string | null,
         } | null,
+        tmdbId: number,
+        studio?: string | null,
         createdAt: string,
         updatedAt: string,
       },
@@ -17985,14 +18346,10 @@ export type OnUpdateCommunityPredictionSubscription = {
       song?:  {
         __typename: "Song",
         id: string,
-        title: string,
-        artist: string,
         movieId: string,
         movie:  {
           __typename: "Movie",
           id: string,
-          tmdbId: number,
-          studio?: string | null,
           contenders?:  {
             __typename: "ModelContenderConnection",
             items:  Array< {
@@ -18011,9 +18368,13 @@ export type OnUpdateCommunityPredictionSubscription = {
             } | null >,
             nextToken?: string | null,
           } | null,
+          tmdbId: number,
+          studio?: string | null,
           createdAt: string,
           updatedAt: string,
         },
+        title: string,
+        artist: string,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -18042,8 +18403,6 @@ export type OnDeleteCommunityPredictionSubscription = {
       category:  {
         __typename: "Category",
         id: string,
-        name: CategoryName,
-        type: CategoryType,
         eventId: string,
         event:  {
           __typename: "Event",
@@ -18053,9 +18412,9 @@ export type OnDeleteCommunityPredictionSubscription = {
             items:  Array< {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -18070,6 +18429,8 @@ export type OnDeleteCommunityPredictionSubscription = {
           createdAt: string,
           updatedAt: string,
         },
+        name: CategoryName,
+        type: CategoryType,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -18083,8 +18444,6 @@ export type OnDeleteCommunityPredictionSubscription = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -18097,6 +18456,8 @@ export type OnDeleteCommunityPredictionSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -18115,8 +18476,6 @@ export type OnDeleteCommunityPredictionSubscription = {
       movie:  {
         __typename: "Movie",
         id: string,
-        tmdbId: number,
-        studio?: string | null,
         contenders?:  {
           __typename: "ModelContenderConnection",
           items:  Array< {
@@ -18126,9 +18485,9 @@ export type OnDeleteCommunityPredictionSubscription = {
             category:  {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -18166,9 +18525,9 @@ export type OnDeleteCommunityPredictionSubscription = {
             song?:  {
               __typename: "Song",
               id: string,
+              movieId: string,
               title: string,
               artist: string,
-              movieId: string,
               createdAt: string,
               updatedAt: string,
             } | null,
@@ -18180,6 +18539,8 @@ export type OnDeleteCommunityPredictionSubscription = {
           } | null >,
           nextToken?: string | null,
         } | null,
+        tmdbId: number,
+        studio?: string | null,
         createdAt: string,
         updatedAt: string,
       },
@@ -18195,14 +18556,10 @@ export type OnDeleteCommunityPredictionSubscription = {
       song?:  {
         __typename: "Song",
         id: string,
-        title: string,
-        artist: string,
         movieId: string,
         movie:  {
           __typename: "Movie",
           id: string,
-          tmdbId: number,
-          studio?: string | null,
           contenders?:  {
             __typename: "ModelContenderConnection",
             items:  Array< {
@@ -18221,9 +18578,13 @@ export type OnDeleteCommunityPredictionSubscription = {
             } | null >,
             nextToken?: string | null,
           } | null,
+          tmdbId: number,
+          studio?: string | null,
           createdAt: string,
           updatedAt: string,
         },
+        title: string,
+        artist: string,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -18253,8 +18614,6 @@ export type OnCreateCommunityHistoryPredictionSetSubscription = {
         items:  Array< {
           __typename: "Category",
           id: string,
-          name: CategoryName,
-          type: CategoryType,
           eventId: string,
           event:  {
             __typename: "Event",
@@ -18271,6 +18630,8 @@ export type OnCreateCommunityHistoryPredictionSetSubscription = {
             createdAt: string,
             updatedAt: string,
           },
+          name: CategoryName,
+          type: CategoryType,
           createdAt: string,
           updatedAt: string,
           eventCategoriesId?: string | null,
@@ -18289,8 +18650,6 @@ export type OnCreateCommunityHistoryPredictionSetSubscription = {
     category:  {
       __typename: "Category",
       id: string,
-      name: CategoryName,
-      type: CategoryType,
       eventId: string,
       event:  {
         __typename: "Event",
@@ -18300,8 +18659,6 @@ export type OnCreateCommunityHistoryPredictionSetSubscription = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -18314,6 +18671,8 @@ export type OnCreateCommunityHistoryPredictionSetSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -18328,6 +18687,8 @@ export type OnCreateCommunityHistoryPredictionSetSubscription = {
         createdAt: string,
         updatedAt: string,
       },
+      name: CategoryName,
+      type: CategoryType,
       createdAt: string,
       updatedAt: string,
       eventCategoriesId?: string | null,
@@ -18345,8 +18706,6 @@ export type OnCreateCommunityHistoryPredictionSetSubscription = {
           category:  {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -18359,6 +18718,8 @@ export type OnCreateCommunityHistoryPredictionSetSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -18383,12 +18744,12 @@ export type OnCreateCommunityHistoryPredictionSetSubscription = {
           movie:  {
             __typename: "Movie",
             id: string,
-            tmdbId: number,
-            studio?: string | null,
             contenders?:  {
               __typename: "ModelContenderConnection",
               nextToken?: string | null,
             } | null,
+            tmdbId: number,
+            studio?: string | null,
             createdAt: string,
             updatedAt: string,
           },
@@ -18404,8 +18765,6 @@ export type OnCreateCommunityHistoryPredictionSetSubscription = {
           song?:  {
             __typename: "Song",
             id: string,
-            title: string,
-            artist: string,
             movieId: string,
             movie:  {
               __typename: "Movie",
@@ -18415,6 +18774,8 @@ export type OnCreateCommunityHistoryPredictionSetSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            title: string,
+            artist: string,
             createdAt: string,
             updatedAt: string,
           } | null,
@@ -18450,8 +18811,6 @@ export type OnUpdateCommunityHistoryPredictionSetSubscription = {
         items:  Array< {
           __typename: "Category",
           id: string,
-          name: CategoryName,
-          type: CategoryType,
           eventId: string,
           event:  {
             __typename: "Event",
@@ -18468,6 +18827,8 @@ export type OnUpdateCommunityHistoryPredictionSetSubscription = {
             createdAt: string,
             updatedAt: string,
           },
+          name: CategoryName,
+          type: CategoryType,
           createdAt: string,
           updatedAt: string,
           eventCategoriesId?: string | null,
@@ -18486,8 +18847,6 @@ export type OnUpdateCommunityHistoryPredictionSetSubscription = {
     category:  {
       __typename: "Category",
       id: string,
-      name: CategoryName,
-      type: CategoryType,
       eventId: string,
       event:  {
         __typename: "Event",
@@ -18497,8 +18856,6 @@ export type OnUpdateCommunityHistoryPredictionSetSubscription = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -18511,6 +18868,8 @@ export type OnUpdateCommunityHistoryPredictionSetSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -18525,6 +18884,8 @@ export type OnUpdateCommunityHistoryPredictionSetSubscription = {
         createdAt: string,
         updatedAt: string,
       },
+      name: CategoryName,
+      type: CategoryType,
       createdAt: string,
       updatedAt: string,
       eventCategoriesId?: string | null,
@@ -18542,8 +18903,6 @@ export type OnUpdateCommunityHistoryPredictionSetSubscription = {
           category:  {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -18556,6 +18915,8 @@ export type OnUpdateCommunityHistoryPredictionSetSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -18580,12 +18941,12 @@ export type OnUpdateCommunityHistoryPredictionSetSubscription = {
           movie:  {
             __typename: "Movie",
             id: string,
-            tmdbId: number,
-            studio?: string | null,
             contenders?:  {
               __typename: "ModelContenderConnection",
               nextToken?: string | null,
             } | null,
+            tmdbId: number,
+            studio?: string | null,
             createdAt: string,
             updatedAt: string,
           },
@@ -18601,8 +18962,6 @@ export type OnUpdateCommunityHistoryPredictionSetSubscription = {
           song?:  {
             __typename: "Song",
             id: string,
-            title: string,
-            artist: string,
             movieId: string,
             movie:  {
               __typename: "Movie",
@@ -18612,6 +18971,8 @@ export type OnUpdateCommunityHistoryPredictionSetSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            title: string,
+            artist: string,
             createdAt: string,
             updatedAt: string,
           } | null,
@@ -18647,8 +19008,6 @@ export type OnDeleteCommunityHistoryPredictionSetSubscription = {
         items:  Array< {
           __typename: "Category",
           id: string,
-          name: CategoryName,
-          type: CategoryType,
           eventId: string,
           event:  {
             __typename: "Event",
@@ -18665,6 +19024,8 @@ export type OnDeleteCommunityHistoryPredictionSetSubscription = {
             createdAt: string,
             updatedAt: string,
           },
+          name: CategoryName,
+          type: CategoryType,
           createdAt: string,
           updatedAt: string,
           eventCategoriesId?: string | null,
@@ -18683,8 +19044,6 @@ export type OnDeleteCommunityHistoryPredictionSetSubscription = {
     category:  {
       __typename: "Category",
       id: string,
-      name: CategoryName,
-      type: CategoryType,
       eventId: string,
       event:  {
         __typename: "Event",
@@ -18694,8 +19053,6 @@ export type OnDeleteCommunityHistoryPredictionSetSubscription = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -18708,6 +19065,8 @@ export type OnDeleteCommunityHistoryPredictionSetSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -18722,6 +19081,8 @@ export type OnDeleteCommunityHistoryPredictionSetSubscription = {
         createdAt: string,
         updatedAt: string,
       },
+      name: CategoryName,
+      type: CategoryType,
       createdAt: string,
       updatedAt: string,
       eventCategoriesId?: string | null,
@@ -18739,8 +19100,6 @@ export type OnDeleteCommunityHistoryPredictionSetSubscription = {
           category:  {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -18753,6 +19112,8 @@ export type OnDeleteCommunityHistoryPredictionSetSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -18777,12 +19138,12 @@ export type OnDeleteCommunityHistoryPredictionSetSubscription = {
           movie:  {
             __typename: "Movie",
             id: string,
-            tmdbId: number,
-            studio?: string | null,
             contenders?:  {
               __typename: "ModelContenderConnection",
               nextToken?: string | null,
             } | null,
+            tmdbId: number,
+            studio?: string | null,
             createdAt: string,
             updatedAt: string,
           },
@@ -18798,8 +19159,6 @@ export type OnDeleteCommunityHistoryPredictionSetSubscription = {
           song?:  {
             __typename: "Song",
             id: string,
-            title: string,
-            artist: string,
             movieId: string,
             movie:  {
               __typename: "Movie",
@@ -18809,6 +19168,8 @@ export type OnDeleteCommunityHistoryPredictionSetSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            title: string,
+            artist: string,
             createdAt: string,
             updatedAt: string,
           } | null,
@@ -18843,8 +19204,6 @@ export type OnCreateCommunityHistoryPredictionSubscription = {
       category:  {
         __typename: "Category",
         id: string,
-        name: CategoryName,
-        type: CategoryType,
         eventId: string,
         event:  {
           __typename: "Event",
@@ -18854,9 +19213,9 @@ export type OnCreateCommunityHistoryPredictionSubscription = {
             items:  Array< {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -18871,6 +19230,8 @@ export type OnCreateCommunityHistoryPredictionSubscription = {
           createdAt: string,
           updatedAt: string,
         },
+        name: CategoryName,
+        type: CategoryType,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -18884,8 +19245,6 @@ export type OnCreateCommunityHistoryPredictionSubscription = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -18898,6 +19257,8 @@ export type OnCreateCommunityHistoryPredictionSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -18916,8 +19277,6 @@ export type OnCreateCommunityHistoryPredictionSubscription = {
       movie:  {
         __typename: "Movie",
         id: string,
-        tmdbId: number,
-        studio?: string | null,
         contenders?:  {
           __typename: "ModelContenderConnection",
           items:  Array< {
@@ -18927,9 +19286,9 @@ export type OnCreateCommunityHistoryPredictionSubscription = {
             category:  {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -18967,9 +19326,9 @@ export type OnCreateCommunityHistoryPredictionSubscription = {
             song?:  {
               __typename: "Song",
               id: string,
+              movieId: string,
               title: string,
               artist: string,
-              movieId: string,
               createdAt: string,
               updatedAt: string,
             } | null,
@@ -18981,6 +19340,8 @@ export type OnCreateCommunityHistoryPredictionSubscription = {
           } | null >,
           nextToken?: string | null,
         } | null,
+        tmdbId: number,
+        studio?: string | null,
         createdAt: string,
         updatedAt: string,
       },
@@ -18996,14 +19357,10 @@ export type OnCreateCommunityHistoryPredictionSubscription = {
       song?:  {
         __typename: "Song",
         id: string,
-        title: string,
-        artist: string,
         movieId: string,
         movie:  {
           __typename: "Movie",
           id: string,
-          tmdbId: number,
-          studio?: string | null,
           contenders?:  {
             __typename: "ModelContenderConnection",
             items:  Array< {
@@ -19022,9 +19379,13 @@ export type OnCreateCommunityHistoryPredictionSubscription = {
             } | null >,
             nextToken?: string | null,
           } | null,
+          tmdbId: number,
+          studio?: string | null,
           createdAt: string,
           updatedAt: string,
         },
+        title: string,
+        artist: string,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -19053,8 +19414,6 @@ export type OnUpdateCommunityHistoryPredictionSubscription = {
       category:  {
         __typename: "Category",
         id: string,
-        name: CategoryName,
-        type: CategoryType,
         eventId: string,
         event:  {
           __typename: "Event",
@@ -19064,9 +19423,9 @@ export type OnUpdateCommunityHistoryPredictionSubscription = {
             items:  Array< {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -19081,6 +19440,8 @@ export type OnUpdateCommunityHistoryPredictionSubscription = {
           createdAt: string,
           updatedAt: string,
         },
+        name: CategoryName,
+        type: CategoryType,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -19094,8 +19455,6 @@ export type OnUpdateCommunityHistoryPredictionSubscription = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -19108,6 +19467,8 @@ export type OnUpdateCommunityHistoryPredictionSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -19126,8 +19487,6 @@ export type OnUpdateCommunityHistoryPredictionSubscription = {
       movie:  {
         __typename: "Movie",
         id: string,
-        tmdbId: number,
-        studio?: string | null,
         contenders?:  {
           __typename: "ModelContenderConnection",
           items:  Array< {
@@ -19137,9 +19496,9 @@ export type OnUpdateCommunityHistoryPredictionSubscription = {
             category:  {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -19177,9 +19536,9 @@ export type OnUpdateCommunityHistoryPredictionSubscription = {
             song?:  {
               __typename: "Song",
               id: string,
+              movieId: string,
               title: string,
               artist: string,
-              movieId: string,
               createdAt: string,
               updatedAt: string,
             } | null,
@@ -19191,6 +19550,8 @@ export type OnUpdateCommunityHistoryPredictionSubscription = {
           } | null >,
           nextToken?: string | null,
         } | null,
+        tmdbId: number,
+        studio?: string | null,
         createdAt: string,
         updatedAt: string,
       },
@@ -19206,14 +19567,10 @@ export type OnUpdateCommunityHistoryPredictionSubscription = {
       song?:  {
         __typename: "Song",
         id: string,
-        title: string,
-        artist: string,
         movieId: string,
         movie:  {
           __typename: "Movie",
           id: string,
-          tmdbId: number,
-          studio?: string | null,
           contenders?:  {
             __typename: "ModelContenderConnection",
             items:  Array< {
@@ -19232,9 +19589,13 @@ export type OnUpdateCommunityHistoryPredictionSubscription = {
             } | null >,
             nextToken?: string | null,
           } | null,
+          tmdbId: number,
+          studio?: string | null,
           createdAt: string,
           updatedAt: string,
         },
+        title: string,
+        artist: string,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -19263,8 +19624,6 @@ export type OnDeleteCommunityHistoryPredictionSubscription = {
       category:  {
         __typename: "Category",
         id: string,
-        name: CategoryName,
-        type: CategoryType,
         eventId: string,
         event:  {
           __typename: "Event",
@@ -19274,9 +19633,9 @@ export type OnDeleteCommunityHistoryPredictionSubscription = {
             items:  Array< {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -19291,6 +19650,8 @@ export type OnDeleteCommunityHistoryPredictionSubscription = {
           createdAt: string,
           updatedAt: string,
         },
+        name: CategoryName,
+        type: CategoryType,
         createdAt: string,
         updatedAt: string,
         eventCategoriesId?: string | null,
@@ -19304,8 +19665,6 @@ export type OnDeleteCommunityHistoryPredictionSubscription = {
           items:  Array< {
             __typename: "Category",
             id: string,
-            name: CategoryName,
-            type: CategoryType,
             eventId: string,
             event:  {
               __typename: "Event",
@@ -19318,6 +19677,8 @@ export type OnDeleteCommunityHistoryPredictionSubscription = {
               createdAt: string,
               updatedAt: string,
             },
+            name: CategoryName,
+            type: CategoryType,
             createdAt: string,
             updatedAt: string,
             eventCategoriesId?: string | null,
@@ -19336,8 +19697,6 @@ export type OnDeleteCommunityHistoryPredictionSubscription = {
       movie:  {
         __typename: "Movie",
         id: string,
-        tmdbId: number,
-        studio?: string | null,
         contenders?:  {
           __typename: "ModelContenderConnection",
           items:  Array< {
@@ -19347,9 +19706,9 @@ export type OnDeleteCommunityHistoryPredictionSubscription = {
             category:  {
               __typename: "Category",
               id: string,
+              eventId: string,
               name: CategoryName,
               type: CategoryType,
-              eventId: string,
               createdAt: string,
               updatedAt: string,
               eventCategoriesId?: string | null,
@@ -19387,9 +19746,9 @@ export type OnDeleteCommunityHistoryPredictionSubscription = {
             song?:  {
               __typename: "Song",
               id: string,
+              movieId: string,
               title: string,
               artist: string,
-              movieId: string,
               createdAt: string,
               updatedAt: string,
             } | null,
@@ -19401,6 +19760,8 @@ export type OnDeleteCommunityHistoryPredictionSubscription = {
           } | null >,
           nextToken?: string | null,
         } | null,
+        tmdbId: number,
+        studio?: string | null,
         createdAt: string,
         updatedAt: string,
       },
@@ -19416,14 +19777,10 @@ export type OnDeleteCommunityHistoryPredictionSubscription = {
       song?:  {
         __typename: "Song",
         id: string,
-        title: string,
-        artist: string,
         movieId: string,
         movie:  {
           __typename: "Movie",
           id: string,
-          tmdbId: number,
-          studio?: string | null,
           contenders?:  {
             __typename: "ModelContenderConnection",
             items:  Array< {
@@ -19442,9 +19799,13 @@ export type OnDeleteCommunityHistoryPredictionSubscription = {
             } | null >,
             nextToken?: string | null,
           } | null,
+          tmdbId: number,
+          studio?: string | null,
           createdAt: string,
           updatedAt: string,
         },
+        title: string,
+        artist: string,
         createdAt: string,
         updatedAt: string,
       } | null,
