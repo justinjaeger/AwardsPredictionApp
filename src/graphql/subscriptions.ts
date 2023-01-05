@@ -1878,18 +1878,6 @@ export const onCreatePredictionSet = /* GraphQL */ `
       predictions {
         items {
           id
-          userId
-          user {
-            id
-            email
-            username
-            name
-            bio
-            image
-            role
-            createdAt
-            updatedAt
-          }
           contenderId
           contender {
             id
@@ -2077,18 +2065,6 @@ export const onUpdatePredictionSet = /* GraphQL */ `
       predictions {
         items {
           id
-          userId
-          user {
-            id
-            email
-            username
-            name
-            bio
-            image
-            role
-            createdAt
-            updatedAt
-          }
           contenderId
           contender {
             id
@@ -2276,18 +2252,6 @@ export const onDeletePredictionSet = /* GraphQL */ `
       predictions {
         items {
           id
-          userId
-          user {
-            id
-            email
-            username
-            name
-            bio
-            image
-            role
-            createdAt
-            updatedAt
-          }
           contenderId
           contender {
             id
@@ -2382,18 +2346,6 @@ export const onCreatePrediction = /* GraphQL */ `
   subscription OnCreatePrediction {
     onCreatePrediction {
       id
-      userId
-      user {
-        id
-        email
-        username
-        name
-        bio
-        image
-        role
-        createdAt
-        updatedAt
-      }
       contenderId
       contender {
         id
@@ -2582,18 +2534,6 @@ export const onUpdatePrediction = /* GraphQL */ `
   subscription OnUpdatePrediction {
     onUpdatePrediction {
       id
-      userId
-      user {
-        id
-        email
-        username
-        name
-        bio
-        image
-        role
-        createdAt
-        updatedAt
-      }
       contenderId
       contender {
         id
@@ -2782,18 +2722,6 @@ export const onDeletePrediction = /* GraphQL */ `
   subscription OnDeletePrediction {
     onDeletePrediction {
       id
-      userId
-      user {
-        id
-        email
-        username
-        name
-        bio
-        image
-        role
-        createdAt
-        updatedAt
-      }
       contenderId
       contender {
         id
@@ -3075,18 +3003,6 @@ export const onCreateHistoryPredictionSet = /* GraphQL */ `
       predictions {
         items {
           id
-          userId
-          user {
-            id
-            email
-            username
-            name
-            bio
-            image
-            role
-            createdAt
-            updatedAt
-          }
           contenderId
           contender {
             id
@@ -3274,18 +3190,6 @@ export const onUpdateHistoryPredictionSet = /* GraphQL */ `
       predictions {
         items {
           id
-          userId
-          user {
-            id
-            email
-            username
-            name
-            bio
-            image
-            role
-            createdAt
-            updatedAt
-          }
           contenderId
           contender {
             id
@@ -3473,18 +3377,6 @@ export const onDeleteHistoryPredictionSet = /* GraphQL */ `
       predictions {
         items {
           id
-          userId
-          user {
-            id
-            email
-            username
-            name
-            bio
-            image
-            role
-            createdAt
-            updatedAt
-          }
           contenderId
           contender {
             id
@@ -3579,18 +3471,6 @@ export const onCreateHistoryPrediction = /* GraphQL */ `
   subscription OnCreateHistoryPrediction {
     onCreateHistoryPrediction {
       id
-      userId
-      user {
-        id
-        email
-        username
-        name
-        bio
-        image
-        role
-        createdAt
-        updatedAt
-      }
       contenderId
       contender {
         id
@@ -3779,18 +3659,6 @@ export const onUpdateHistoryPrediction = /* GraphQL */ `
   subscription OnUpdateHistoryPrediction {
     onUpdateHistoryPrediction {
       id
-      userId
-      user {
-        id
-        email
-        username
-        name
-        bio
-        image
-        role
-        createdAt
-        updatedAt
-      }
       contenderId
       contender {
         id
@@ -3979,18 +3847,6 @@ export const onDeleteHistoryPrediction = /* GraphQL */ `
   subscription OnDeleteHistoryPrediction {
     onDeleteHistoryPrediction {
       id
-      userId
-      user {
-        id
-        email
-        username
-        name
-        bio
-        image
-        role
-        createdAt
-        updatedAt
-      }
       contenderId
       contender {
         id

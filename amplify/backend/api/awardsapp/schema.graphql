@@ -84,7 +84,6 @@ enum CategoryName {
     COMEDY_ACTOR
     COMEDY_ACTRESS
     ACTION_PICTURE
-    SCIFI_HORROR_PICTURE
     YOUNG_ACTOR
     RISING_STAR
     DEBUT
@@ -171,7 +170,7 @@ type Song @model @auth(rules: [{ allow: public }]) {
 # CURRENT PERSONAL
 type PredictionSet @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
-    userId: ID!
+    userId: ID! @index(sortKeyFields: ["eventId"]) # predictionSetByUserIdAndEventId
     user: User! @hasOne(fields: ["userId"])
     eventId: ID!
     event: Event! @hasOne(fields: ["eventId"])
@@ -182,8 +181,6 @@ type PredictionSet @model @auth(rules: [{ allow: public }]) {
 }
 type Prediction @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
-    userId: ID!
-    user: User! @hasOne(fields: ["userId"])
     contenderId: ID!
     contender: Contender! @hasOne(fields: ["contenderId"])
     ranking: Int!
@@ -192,7 +189,7 @@ type Prediction @model @auth(rules: [{ allow: public }]) {
 # HISTORY PERSONAL
 type HistoryPredictionSet @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
-    userId: ID!
+    userId: ID! @index(sortKeyFields: ["eventId", "createdAt"]) # historyPredictionSetsByUserIdAndEventIdAndCreatedAt
     user: User! @hasOne(fields: ["userId"])
     eventId: ID!
     event: Event! @hasOne(fields: ["eventId"])
@@ -200,11 +197,10 @@ type HistoryPredictionSet @model @auth(rules: [{ allow: public }]) {
     category: Category! @hasOne(fields: ["categoryId"])
     predictions: [HistoryPrediction] @hasMany
     type: PredictionType @default(value: "NOMINATION")
+    createdAt: AWSDateTime!
 }
 type HistoryPrediction @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
-    userId: ID!
-    user: User! @hasOne(fields: ["userId"])
     contenderId: ID!
     contender: Contender! @hasOne(fields: ["contenderId"])
     ranking: Int!
@@ -213,7 +209,7 @@ type HistoryPrediction @model @auth(rules: [{ allow: public }]) {
 # CURRENT COMMUINTY
 type CommunityPredictionSet @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
-    eventId: ID! @index
+    eventId: ID! @index # communityPredictionSetsByEventId
     event: Event! @hasOne(fields: ["eventId"])
     categoryId: ID!
     category: Category! @hasOne(fields: ["categoryId"])
@@ -230,12 +226,13 @@ type CommunityPrediction @model @auth(rules: [{ allow: public }]) {
 # HISTORY COMMUINTY
 type CommunityHistoryPredictionSet @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
-    eventId: ID! @index
+    eventId: ID! @index(sortKeyFields: ["createdAt"]) # communityHistoryPredictionSetsByEventIdAndCreatedAt
     event: Event! @hasOne(fields: ["eventId"])
     categoryId: ID!
     category: Category! @hasOne(fields: ["categoryId"])
     predictions: [CommunityHistoryPrediction] @hasMany
     type: PredictionType @default(value: "NOMINATION")
+    createdAt: AWSDateTime!
 }
 type CommunityHistoryPrediction @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey

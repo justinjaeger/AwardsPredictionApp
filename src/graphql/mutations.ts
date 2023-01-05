@@ -1954,18 +1954,6 @@ export const createPredictionSet = /* GraphQL */ `
       predictions {
         items {
           id
-          userId
-          user {
-            id
-            email
-            username
-            name
-            bio
-            image
-            role
-            createdAt
-            updatedAt
-          }
           contenderId
           contender {
             id
@@ -2156,18 +2144,6 @@ export const updatePredictionSet = /* GraphQL */ `
       predictions {
         items {
           id
-          userId
-          user {
-            id
-            email
-            username
-            name
-            bio
-            image
-            role
-            createdAt
-            updatedAt
-          }
           contenderId
           contender {
             id
@@ -2358,18 +2334,6 @@ export const deletePredictionSet = /* GraphQL */ `
       predictions {
         items {
           id
-          userId
-          user {
-            id
-            email
-            username
-            name
-            bio
-            image
-            role
-            createdAt
-            updatedAt
-          }
           contenderId
           contender {
             id
@@ -2467,18 +2431,6 @@ export const createPrediction = /* GraphQL */ `
   ) {
     createPrediction(input: $input, condition: $condition) {
       id
-      userId
-      user {
-        id
-        email
-        username
-        name
-        bio
-        image
-        role
-        createdAt
-        updatedAt
-      }
       contenderId
       contender {
         id
@@ -2670,18 +2622,6 @@ export const updatePrediction = /* GraphQL */ `
   ) {
     updatePrediction(input: $input, condition: $condition) {
       id
-      userId
-      user {
-        id
-        email
-        username
-        name
-        bio
-        image
-        role
-        createdAt
-        updatedAt
-      }
       contenderId
       contender {
         id
@@ -2873,18 +2813,6 @@ export const deletePrediction = /* GraphQL */ `
   ) {
     deletePrediction(input: $input, condition: $condition) {
       id
-      userId
-      user {
-        id
-        email
-        username
-        name
-        bio
-        image
-        role
-        createdAt
-        updatedAt
-      }
       contenderId
       contender {
         id
@@ -3169,18 +3097,6 @@ export const createHistoryPredictionSet = /* GraphQL */ `
       predictions {
         items {
           id
-          userId
-          user {
-            id
-            email
-            username
-            name
-            bio
-            image
-            role
-            createdAt
-            updatedAt
-          }
           contenderId
           contender {
             id
@@ -3371,18 +3287,6 @@ export const updateHistoryPredictionSet = /* GraphQL */ `
       predictions {
         items {
           id
-          userId
-          user {
-            id
-            email
-            username
-            name
-            bio
-            image
-            role
-            createdAt
-            updatedAt
-          }
           contenderId
           contender {
             id
@@ -3573,18 +3477,6 @@ export const deleteHistoryPredictionSet = /* GraphQL */ `
       predictions {
         items {
           id
-          userId
-          user {
-            id
-            email
-            username
-            name
-            bio
-            image
-            role
-            createdAt
-            updatedAt
-          }
           contenderId
           contender {
             id
@@ -3682,18 +3574,6 @@ export const createHistoryPrediction = /* GraphQL */ `
   ) {
     createHistoryPrediction(input: $input, condition: $condition) {
       id
-      userId
-      user {
-        id
-        email
-        username
-        name
-        bio
-        image
-        role
-        createdAt
-        updatedAt
-      }
       contenderId
       contender {
         id
@@ -3885,18 +3765,6 @@ export const updateHistoryPrediction = /* GraphQL */ `
   ) {
     updateHistoryPrediction(input: $input, condition: $condition) {
       id
-      userId
-      user {
-        id
-        email
-        username
-        name
-        bio
-        image
-        role
-        createdAt
-        updatedAt
-      }
       contenderId
       contender {
         id
@@ -4088,18 +3956,6 @@ export const deleteHistoryPrediction = /* GraphQL */ `
   ) {
     deleteHistoryPrediction(input: $input, condition: $condition) {
       id
-      userId
-      user {
-        id
-        email
-        username
-        name
-        bio
-        image
-        role
-        createdAt
-        updatedAt
-      }
       contenderId
       contender {
         id

@@ -80,7 +80,6 @@ export const ALL_CATEGORIES: { [key in CategoryName]: undefined } = {
   [CategoryName.INDIE_PICTURE]: undefined,
   [CategoryName.MALE_DIRECTOR]: undefined,
   [CategoryName.RISING_STAR]: undefined,
-  [CategoryName.SCIFI_HORROR_PICTURE]: undefined,
   [CategoryName.SCREENPLAY]: undefined,
   [CategoryName.YOUNG_ACTOR]: undefined,
 };
@@ -139,7 +138,6 @@ const ACADEMY_AWARDS_CATEGORIES_V1: iCategoryObject = {
   COMEDY_ACTOR: undefined,
   COMEDY_ACTRESS: undefined,
   ACTION_PICTURE: undefined,
-  SCIFI_HORROR_PICTURE: undefined,
   YOUNG_ACTOR: undefined,
   RISING_STAR: undefined,
   DEBUT: undefined,
@@ -202,7 +200,6 @@ const GOLDEN_GLOBE_CATEGORIES_V1: iCategoryObject = {
   SHORT_LIVE_ACTION: undefined,
   ENSEMBLE: undefined,
   ACTION_PICTURE: undefined,
-  SCIFI_HORROR_PICTURE: undefined,
   YOUNG_ACTOR: undefined,
   RISING_STAR: undefined,
   DEBUT: undefined,

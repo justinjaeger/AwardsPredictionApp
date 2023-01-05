@@ -1251,18 +1251,6 @@ export const getPredictionSet = /* GraphQL */ `
       predictions {
         items {
           id
-          userId
-          user {
-            id
-            email
-            username
-            name
-            bio
-            image
-            role
-            createdAt
-            updatedAt
-          }
           contenderId
           contender {
             id
@@ -1450,18 +1438,6 @@ export const listPredictionSets = /* GraphQL */ `
         predictions {
           items {
             id
-            userId
-            user {
-              id
-              email
-              username
-              name
-              bio
-              image
-              role
-              createdAt
-              updatedAt
-            }
             contenderId
             contender {
               id
@@ -1535,18 +1511,6 @@ export const getPrediction = /* GraphQL */ `
   query GetPrediction($id: ID!) {
     getPrediction(id: $id) {
       id
-      userId
-      user {
-        id
-        email
-        username
-        name
-        bio
-        image
-        role
-        createdAt
-        updatedAt
-      }
       contenderId
       contender {
         id
@@ -1748,18 +1712,6 @@ export const listPredictions = /* GraphQL */ `
     ) {
       items {
         id
-        userId
-        user {
-          id
-          email
-          username
-          name
-          bio
-          image
-          role
-          createdAt
-          updatedAt
-        }
         contenderId
         contender {
           id
@@ -1971,18 +1923,6 @@ export const getHistoryPredictionSet = /* GraphQL */ `
       predictions {
         items {
           id
-          userId
-          user {
-            id
-            email
-            username
-            name
-            bio
-            image
-            role
-            createdAt
-            updatedAt
-          }
           contenderId
           contender {
             id
@@ -2170,18 +2110,6 @@ export const listHistoryPredictionSets = /* GraphQL */ `
         predictions {
           items {
             id
-            userId
-            user {
-              id
-              email
-              username
-              name
-              bio
-              image
-              role
-              createdAt
-              updatedAt
-            }
             contenderId
             contender {
               id
@@ -2255,18 +2183,6 @@ export const getHistoryPrediction = /* GraphQL */ `
   query GetHistoryPrediction($id: ID!) {
     getHistoryPrediction(id: $id) {
       id
-      userId
-      user {
-        id
-        email
-        username
-        name
-        bio
-        image
-        role
-        createdAt
-        updatedAt
-      }
       contenderId
       contender {
         id
@@ -2468,18 +2384,6 @@ export const listHistoryPredictions = /* GraphQL */ `
     ) {
       items {
         id
-        userId
-        user {
-          id
-          email
-          username
-          name
-          bio
-          image
-          role
-          createdAt
-          updatedAt
-        }
         contenderId
         contender {
           id

@@ -104,14 +104,13 @@ const createPredictionSet = async (
 const createPrediction = async (
   params: iPredictionParams,
 ): Promise<iApiResponse<CreatePredictionMutation>> => {
-  const { userId, contenderId, predictionSetId, ranking } = params;
+  const { contenderId, predictionSetId, ranking } = params;
   try {
     const { data, errors } = await GraphqlAPI<
       CreatePredictionMutation,
       CreatePredictionMutationVariables
     >(mutations.createPrediction, {
       input: {
-        userId,
         predictionSetPredictionsId: predictionSetId,
         contenderId,
         ranking,

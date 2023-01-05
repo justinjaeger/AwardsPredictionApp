@@ -232,7 +232,6 @@ export enum CategoryName {
   COMEDY_ACTOR = "COMEDY_ACTOR",
   COMEDY_ACTRESS = "COMEDY_ACTRESS",
   ACTION_PICTURE = "ACTION_PICTURE",
-  SCIFI_HORROR_PICTURE = "SCIFI_HORROR_PICTURE",
   YOUNG_ACTOR = "YOUNG_ACTOR",
   RISING_STAR = "RISING_STAR",
   DEBUT = "DEBUT",
@@ -569,8 +568,6 @@ export type ModelPredictionConnection = {
 export type Prediction = {
   __typename: "Prediction",
   id: string,
-  userId: string,
-  user: User,
   contenderId: string,
   contender: Contender,
   ranking: number,
@@ -593,14 +590,12 @@ export type DeletePredictionSetInput = {
 
 export type CreatePredictionInput = {
   id?: string | null,
-  userId: string,
   contenderId: string,
   ranking: number,
   predictionSetPredictionsId?: string | null,
 };
 
 export type ModelPredictionConditionInput = {
-  userId?: ModelIDInput | null,
   contenderId?: ModelIDInput | null,
   ranking?: ModelIntInput | null,
   and?: Array< ModelPredictionConditionInput | null > | null,
@@ -611,7 +606,6 @@ export type ModelPredictionConditionInput = {
 
 export type UpdatePredictionInput = {
   id: string,
-  userId?: string | null,
   contenderId?: string | null,
   ranking?: number | null,
   predictionSetPredictionsId?: string | null,
@@ -627,6 +621,7 @@ export type CreateHistoryPredictionSetInput = {
   eventId: string,
   categoryId: string,
   type?: PredictionType | null,
+  createdAt?: string | null,
 };
 
 export type ModelHistoryPredictionSetConditionInput = {
@@ -634,6 +629,7 @@ export type ModelHistoryPredictionSetConditionInput = {
   eventId?: ModelIDInput | null,
   categoryId?: ModelIDInput | null,
   type?: ModelPredictionTypeInput | null,
+  createdAt?: ModelStringInput | null,
   and?: Array< ModelHistoryPredictionSetConditionInput | null > | null,
   or?: Array< ModelHistoryPredictionSetConditionInput | null > | null,
   not?: ModelHistoryPredictionSetConditionInput | null,
@@ -663,8 +659,6 @@ export type ModelHistoryPredictionConnection = {
 export type HistoryPrediction = {
   __typename: "HistoryPrediction",
   id: string,
-  userId: string,
-  user: User,
   contenderId: string,
   contender: Contender,
   ranking: number,
@@ -679,6 +673,7 @@ export type UpdateHistoryPredictionSetInput = {
   eventId?: string | null,
   categoryId?: string | null,
   type?: PredictionType | null,
+  createdAt?: string | null,
 };
 
 export type DeleteHistoryPredictionSetInput = {
@@ -687,14 +682,12 @@ export type DeleteHistoryPredictionSetInput = {
 
 export type CreateHistoryPredictionInput = {
   id?: string | null,
-  userId: string,
   contenderId: string,
   ranking: number,
   historyPredictionSetPredictionsId?: string | null,
 };
 
 export type ModelHistoryPredictionConditionInput = {
-  userId?: ModelIDInput | null,
   contenderId?: ModelIDInput | null,
   ranking?: ModelIntInput | null,
   and?: Array< ModelHistoryPredictionConditionInput | null > | null,
@@ -705,7 +698,6 @@ export type ModelHistoryPredictionConditionInput = {
 
 export type UpdateHistoryPredictionInput = {
   id: string,
-  userId?: string | null,
   contenderId?: string | null,
   ranking?: number | null,
   historyPredictionSetPredictionsId?: string | null,
@@ -804,12 +796,14 @@ export type CreateCommunityHistoryPredictionSetInput = {
   eventId: string,
   categoryId: string,
   type?: PredictionType | null,
+  createdAt?: string | null,
 };
 
 export type ModelCommunityHistoryPredictionSetConditionInput = {
   eventId?: ModelIDInput | null,
   categoryId?: ModelIDInput | null,
   type?: ModelPredictionTypeInput | null,
+  createdAt?: ModelStringInput | null,
   and?: Array< ModelCommunityHistoryPredictionSetConditionInput | null > | null,
   or?: Array< ModelCommunityHistoryPredictionSetConditionInput | null > | null,
   not?: ModelCommunityHistoryPredictionSetConditionInput | null,
@@ -850,6 +844,7 @@ export type UpdateCommunityHistoryPredictionSetInput = {
   eventId?: string | null,
   categoryId?: string | null,
   type?: PredictionType | null,
+  createdAt?: string | null,
 };
 
 export type DeleteCommunityHistoryPredictionSetInput = {
@@ -1016,7 +1011,6 @@ export type ModelPredictionSetConnection = {
 
 export type ModelPredictionFilterInput = {
   id?: ModelIDInput | null,
-  userId?: ModelIDInput | null,
   contenderId?: ModelIDInput | null,
   ranking?: ModelIntInput | null,
   and?: Array< ModelPredictionFilterInput | null > | null,
@@ -1031,6 +1025,7 @@ export type ModelHistoryPredictionSetFilterInput = {
   eventId?: ModelIDInput | null,
   categoryId?: ModelIDInput | null,
   type?: ModelPredictionTypeInput | null,
+  createdAt?: ModelStringInput | null,
   and?: Array< ModelHistoryPredictionSetFilterInput | null > | null,
   or?: Array< ModelHistoryPredictionSetFilterInput | null > | null,
   not?: ModelHistoryPredictionSetFilterInput | null,
@@ -1044,7 +1039,6 @@ export type ModelHistoryPredictionSetConnection = {
 
 export type ModelHistoryPredictionFilterInput = {
   id?: ModelIDInput | null,
-  userId?: ModelIDInput | null,
   contenderId?: ModelIDInput | null,
   ranking?: ModelIntInput | null,
   and?: Array< ModelHistoryPredictionFilterInput | null > | null,
@@ -1084,6 +1078,7 @@ export type ModelCommunityHistoryPredictionSetFilterInput = {
   eventId?: ModelIDInput | null,
   categoryId?: ModelIDInput | null,
   type?: ModelPredictionTypeInput | null,
+  createdAt?: ModelStringInput | null,
   and?: Array< ModelCommunityHistoryPredictionSetFilterInput | null > | null,
   or?: Array< ModelCommunityHistoryPredictionSetFilterInput | null > | null,
   not?: ModelCommunityHistoryPredictionSetFilterInput | null,
@@ -3327,19 +3322,6 @@ export type CreatePredictionSetMutation = {
       items:  Array< {
         __typename: "Prediction",
         id: string,
-        userId: string,
-        user:  {
-          __typename: "User",
-          id: string,
-          email: string,
-          username?: string | null,
-          name?: string | null,
-          bio?: string | null,
-          image?: string | null,
-          role: UserRole,
-          createdAt: string,
-          updatedAt: string,
-        },
         contenderId: string,
         contender:  {
           __typename: "Contender",
@@ -3555,19 +3537,6 @@ export type UpdatePredictionSetMutation = {
       items:  Array< {
         __typename: "Prediction",
         id: string,
-        userId: string,
-        user:  {
-          __typename: "User",
-          id: string,
-          email: string,
-          username?: string | null,
-          name?: string | null,
-          bio?: string | null,
-          image?: string | null,
-          role: UserRole,
-          createdAt: string,
-          updatedAt: string,
-        },
         contenderId: string,
         contender:  {
           __typename: "Contender",
@@ -3783,19 +3752,6 @@ export type DeletePredictionSetMutation = {
       items:  Array< {
         __typename: "Prediction",
         id: string,
-        userId: string,
-        user:  {
-          __typename: "User",
-          id: string,
-          email: string,
-          username?: string | null,
-          name?: string | null,
-          bio?: string | null,
-          image?: string | null,
-          role: UserRole,
-          createdAt: string,
-          updatedAt: string,
-        },
         contenderId: string,
         contender:  {
           __typename: "Contender",
@@ -3905,19 +3861,6 @@ export type CreatePredictionMutation = {
   createPrediction?:  {
     __typename: "Prediction",
     id: string,
-    userId: string,
-    user:  {
-      __typename: "User",
-      id: string,
-      email: string,
-      username?: string | null,
-      name?: string | null,
-      bio?: string | null,
-      image?: string | null,
-      role: UserRole,
-      createdAt: string,
-      updatedAt: string,
-    },
     contenderId: string,
     contender:  {
       __typename: "Contender",
@@ -4133,19 +4076,6 @@ export type UpdatePredictionMutation = {
   updatePrediction?:  {
     __typename: "Prediction",
     id: string,
-    userId: string,
-    user:  {
-      __typename: "User",
-      id: string,
-      email: string,
-      username?: string | null,
-      name?: string | null,
-      bio?: string | null,
-      image?: string | null,
-      role: UserRole,
-      createdAt: string,
-      updatedAt: string,
-    },
     contenderId: string,
     contender:  {
       __typename: "Contender",
@@ -4361,19 +4291,6 @@ export type DeletePredictionMutation = {
   deletePrediction?:  {
     __typename: "Prediction",
     id: string,
-    userId: string,
-    user:  {
-      __typename: "User",
-      id: string,
-      email: string,
-      username?: string | null,
-      name?: string | null,
-      bio?: string | null,
-      image?: string | null,
-      role: UserRole,
-      createdAt: string,
-      updatedAt: string,
-    },
     contenderId: string,
     contender:  {
       __typename: "Contender",
@@ -4695,19 +4612,6 @@ export type CreateHistoryPredictionSetMutation = {
       items:  Array< {
         __typename: "HistoryPrediction",
         id: string,
-        userId: string,
-        user:  {
-          __typename: "User",
-          id: string,
-          email: string,
-          username?: string | null,
-          name?: string | null,
-          bio?: string | null,
-          image?: string | null,
-          role: UserRole,
-          createdAt: string,
-          updatedAt: string,
-        },
         contenderId: string,
         contender:  {
           __typename: "Contender",
@@ -4923,19 +4827,6 @@ export type UpdateHistoryPredictionSetMutation = {
       items:  Array< {
         __typename: "HistoryPrediction",
         id: string,
-        userId: string,
-        user:  {
-          __typename: "User",
-          id: string,
-          email: string,
-          username?: string | null,
-          name?: string | null,
-          bio?: string | null,
-          image?: string | null,
-          role: UserRole,
-          createdAt: string,
-          updatedAt: string,
-        },
         contenderId: string,
         contender:  {
           __typename: "Contender",
@@ -5151,19 +5042,6 @@ export type DeleteHistoryPredictionSetMutation = {
       items:  Array< {
         __typename: "HistoryPrediction",
         id: string,
-        userId: string,
-        user:  {
-          __typename: "User",
-          id: string,
-          email: string,
-          username?: string | null,
-          name?: string | null,
-          bio?: string | null,
-          image?: string | null,
-          role: UserRole,
-          createdAt: string,
-          updatedAt: string,
-        },
         contenderId: string,
         contender:  {
           __typename: "Contender",
@@ -5273,19 +5151,6 @@ export type CreateHistoryPredictionMutation = {
   createHistoryPrediction?:  {
     __typename: "HistoryPrediction",
     id: string,
-    userId: string,
-    user:  {
-      __typename: "User",
-      id: string,
-      email: string,
-      username?: string | null,
-      name?: string | null,
-      bio?: string | null,
-      image?: string | null,
-      role: UserRole,
-      createdAt: string,
-      updatedAt: string,
-    },
     contenderId: string,
     contender:  {
       __typename: "Contender",
@@ -5501,19 +5366,6 @@ export type UpdateHistoryPredictionMutation = {
   updateHistoryPrediction?:  {
     __typename: "HistoryPrediction",
     id: string,
-    userId: string,
-    user:  {
-      __typename: "User",
-      id: string,
-      email: string,
-      username?: string | null,
-      name?: string | null,
-      bio?: string | null,
-      image?: string | null,
-      role: UserRole,
-      createdAt: string,
-      updatedAt: string,
-    },
     contenderId: string,
     contender:  {
       __typename: "Contender",
@@ -5729,19 +5581,6 @@ export type DeleteHistoryPredictionMutation = {
   deleteHistoryPrediction?:  {
     __typename: "HistoryPrediction",
     id: string,
-    userId: string,
-    user:  {
-      __typename: "User",
-      id: string,
-      email: string,
-      username?: string | null,
-      name?: string | null,
-      bio?: string | null,
-      image?: string | null,
-      role: UserRole,
-      createdAt: string,
-      updatedAt: string,
-    },
     contenderId: string,
     contender:  {
       __typename: "Contender",
@@ -9840,19 +9679,6 @@ export type GetPredictionSetQuery = {
       items:  Array< {
         __typename: "Prediction",
         id: string,
-        userId: string,
-        user:  {
-          __typename: "User",
-          id: string,
-          email: string,
-          username?: string | null,
-          name?: string | null,
-          bio?: string | null,
-          image?: string | null,
-          role: UserRole,
-          createdAt: string,
-          updatedAt: string,
-        },
         contenderId: string,
         contender:  {
           __typename: "Contender",
@@ -10058,19 +9884,6 @@ export type ListPredictionSetsQuery = {
         items:  Array< {
           __typename: "Prediction",
           id: string,
-          userId: string,
-          user:  {
-            __typename: "User",
-            id: string,
-            email: string,
-            username?: string | null,
-            name?: string | null,
-            bio?: string | null,
-            image?: string | null,
-            role: UserRole,
-            createdAt: string,
-            updatedAt: string,
-          },
           contenderId: string,
           contender:  {
             __typename: "Contender",
@@ -10154,19 +9967,6 @@ export type GetPredictionQuery = {
   getPrediction?:  {
     __typename: "Prediction",
     id: string,
-    userId: string,
-    user:  {
-      __typename: "User",
-      id: string,
-      email: string,
-      username?: string | null,
-      name?: string | null,
-      bio?: string | null,
-      image?: string | null,
-      role: UserRole,
-      createdAt: string,
-      updatedAt: string,
-    },
     contenderId: string,
     contender:  {
       __typename: "Contender",
@@ -10387,19 +10187,6 @@ export type ListPredictionsQuery = {
     items:  Array< {
       __typename: "Prediction",
       id: string,
-      userId: string,
-      user:  {
-        __typename: "User",
-        id: string,
-        email: string,
-        username?: string | null,
-        name?: string | null,
-        bio?: string | null,
-        image?: string | null,
-        role: UserRole,
-        createdAt: string,
-        updatedAt: string,
-      },
       contenderId: string,
       contender:  {
         __typename: "Contender",
@@ -10642,19 +10429,6 @@ export type GetHistoryPredictionSetQuery = {
       items:  Array< {
         __typename: "HistoryPrediction",
         id: string,
-        userId: string,
-        user:  {
-          __typename: "User",
-          id: string,
-          email: string,
-          username?: string | null,
-          name?: string | null,
-          bio?: string | null,
-          image?: string | null,
-          role: UserRole,
-          createdAt: string,
-          updatedAt: string,
-        },
         contenderId: string,
         contender:  {
           __typename: "Contender",
@@ -10860,19 +10634,6 @@ export type ListHistoryPredictionSetsQuery = {
         items:  Array< {
           __typename: "HistoryPrediction",
           id: string,
-          userId: string,
-          user:  {
-            __typename: "User",
-            id: string,
-            email: string,
-            username?: string | null,
-            name?: string | null,
-            bio?: string | null,
-            image?: string | null,
-            role: UserRole,
-            createdAt: string,
-            updatedAt: string,
-          },
           contenderId: string,
           contender:  {
             __typename: "Contender",
@@ -10956,19 +10717,6 @@ export type GetHistoryPredictionQuery = {
   getHistoryPrediction?:  {
     __typename: "HistoryPrediction",
     id: string,
-    userId: string,
-    user:  {
-      __typename: "User",
-      id: string,
-      email: string,
-      username?: string | null,
-      name?: string | null,
-      bio?: string | null,
-      image?: string | null,
-      role: UserRole,
-      createdAt: string,
-      updatedAt: string,
-    },
     contenderId: string,
     contender:  {
       __typename: "Contender",
@@ -11189,19 +10937,6 @@ export type ListHistoryPredictionsQuery = {
     items:  Array< {
       __typename: "HistoryPrediction",
       id: string,
-      userId: string,
-      user:  {
-        __typename: "User",
-        id: string,
-        email: string,
-        username?: string | null,
-        name?: string | null,
-        bio?: string | null,
-        image?: string | null,
-        role: UserRole,
-        createdAt: string,
-        updatedAt: string,
-      },
       contenderId: string,
       contender:  {
         __typename: "Contender",
@@ -14874,19 +14609,6 @@ export type OnCreatePredictionSetSubscription = {
       items:  Array< {
         __typename: "Prediction",
         id: string,
-        userId: string,
-        user:  {
-          __typename: "User",
-          id: string,
-          email: string,
-          username?: string | null,
-          name?: string | null,
-          bio?: string | null,
-          image?: string | null,
-          role: UserRole,
-          createdAt: string,
-          updatedAt: string,
-        },
         contenderId: string,
         contender:  {
           __typename: "Contender",
@@ -15097,19 +14819,6 @@ export type OnUpdatePredictionSetSubscription = {
       items:  Array< {
         __typename: "Prediction",
         id: string,
-        userId: string,
-        user:  {
-          __typename: "User",
-          id: string,
-          email: string,
-          username?: string | null,
-          name?: string | null,
-          bio?: string | null,
-          image?: string | null,
-          role: UserRole,
-          createdAt: string,
-          updatedAt: string,
-        },
         contenderId: string,
         contender:  {
           __typename: "Contender",
@@ -15320,19 +15029,6 @@ export type OnDeletePredictionSetSubscription = {
       items:  Array< {
         __typename: "Prediction",
         id: string,
-        userId: string,
-        user:  {
-          __typename: "User",
-          id: string,
-          email: string,
-          username?: string | null,
-          name?: string | null,
-          bio?: string | null,
-          image?: string | null,
-          role: UserRole,
-          createdAt: string,
-          updatedAt: string,
-        },
         contenderId: string,
         contender:  {
           __typename: "Contender",
@@ -15437,19 +15133,6 @@ export type OnCreatePredictionSubscription = {
   onCreatePrediction?:  {
     __typename: "Prediction",
     id: string,
-    userId: string,
-    user:  {
-      __typename: "User",
-      id: string,
-      email: string,
-      username?: string | null,
-      name?: string | null,
-      bio?: string | null,
-      image?: string | null,
-      role: UserRole,
-      createdAt: string,
-      updatedAt: string,
-    },
     contenderId: string,
     contender:  {
       __typename: "Contender",
@@ -15660,19 +15343,6 @@ export type OnUpdatePredictionSubscription = {
   onUpdatePrediction?:  {
     __typename: "Prediction",
     id: string,
-    userId: string,
-    user:  {
-      __typename: "User",
-      id: string,
-      email: string,
-      username?: string | null,
-      name?: string | null,
-      bio?: string | null,
-      image?: string | null,
-      role: UserRole,
-      createdAt: string,
-      updatedAt: string,
-    },
     contenderId: string,
     contender:  {
       __typename: "Contender",
@@ -15883,19 +15553,6 @@ export type OnDeletePredictionSubscription = {
   onDeletePrediction?:  {
     __typename: "Prediction",
     id: string,
-    userId: string,
-    user:  {
-      __typename: "User",
-      id: string,
-      email: string,
-      username?: string | null,
-      name?: string | null,
-      bio?: string | null,
-      image?: string | null,
-      role: UserRole,
-      createdAt: string,
-      updatedAt: string,
-    },
     contenderId: string,
     contender:  {
       __typename: "Contender",
@@ -16212,19 +15869,6 @@ export type OnCreateHistoryPredictionSetSubscription = {
       items:  Array< {
         __typename: "HistoryPrediction",
         id: string,
-        userId: string,
-        user:  {
-          __typename: "User",
-          id: string,
-          email: string,
-          username?: string | null,
-          name?: string | null,
-          bio?: string | null,
-          image?: string | null,
-          role: UserRole,
-          createdAt: string,
-          updatedAt: string,
-        },
         contenderId: string,
         contender:  {
           __typename: "Contender",
@@ -16435,19 +16079,6 @@ export type OnUpdateHistoryPredictionSetSubscription = {
       items:  Array< {
         __typename: "HistoryPrediction",
         id: string,
-        userId: string,
-        user:  {
-          __typename: "User",
-          id: string,
-          email: string,
-          username?: string | null,
-          name?: string | null,
-          bio?: string | null,
-          image?: string | null,
-          role: UserRole,
-          createdAt: string,
-          updatedAt: string,
-        },
         contenderId: string,
         contender:  {
           __typename: "Contender",
@@ -16658,19 +16289,6 @@ export type OnDeleteHistoryPredictionSetSubscription = {
       items:  Array< {
         __typename: "HistoryPrediction",
         id: string,
-        userId: string,
-        user:  {
-          __typename: "User",
-          id: string,
-          email: string,
-          username?: string | null,
-          name?: string | null,
-          bio?: string | null,
-          image?: string | null,
-          role: UserRole,
-          createdAt: string,
-          updatedAt: string,
-        },
         contenderId: string,
         contender:  {
           __typename: "Contender",
@@ -16775,19 +16393,6 @@ export type OnCreateHistoryPredictionSubscription = {
   onCreateHistoryPrediction?:  {
     __typename: "HistoryPrediction",
     id: string,
-    userId: string,
-    user:  {
-      __typename: "User",
-      id: string,
-      email: string,
-      username?: string | null,
-      name?: string | null,
-      bio?: string | null,
-      image?: string | null,
-      role: UserRole,
-      createdAt: string,
-      updatedAt: string,
-    },
     contenderId: string,
     contender:  {
       __typename: "Contender",
@@ -16998,19 +16603,6 @@ export type OnUpdateHistoryPredictionSubscription = {
   onUpdateHistoryPrediction?:  {
     __typename: "HistoryPrediction",
     id: string,
-    userId: string,
-    user:  {
-      __typename: "User",
-      id: string,
-      email: string,
-      username?: string | null,
-      name?: string | null,
-      bio?: string | null,
-      image?: string | null,
-      role: UserRole,
-      createdAt: string,
-      updatedAt: string,
-    },
     contenderId: string,
     contender:  {
       __typename: "Contender",
@@ -17221,19 +16813,6 @@ export type OnDeleteHistoryPredictionSubscription = {
   onDeleteHistoryPrediction?:  {
     __typename: "HistoryPrediction",
     id: string,
-    userId: string,
-    user:  {
-      __typename: "User",
-      id: string,
-      email: string,
-      username?: string | null,
-      name?: string | null,
-      bio?: string | null,
-      image?: string | null,
-      role: UserRole,
-      createdAt: string,
-      updatedAt: string,
-    },
     contenderId: string,
     contender:  {
       __typename: "Contender",
