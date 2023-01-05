@@ -112,9 +112,9 @@ type User @model @auth(rules: [{allow: public}]) {
 
 type Relationship @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
-    followedUserId: ID! @index # relationshipByFollowedUserId
+    followedUserId: ID! @index(queryField: "relationshipByFollowedUserId")
     followedUser: User! @hasOne(fields: ["followedUserId"])
-    followingUserId: ID! @index # relationshipByFollowingUserId
+    followingUserId: ID! @index(queryField: "relationshipByFollowingUserId")
     followingUser: User! @hasOne(fields: ["followingUserId"])
 }
 
@@ -130,7 +130,7 @@ type Event @model @auth(rules: [{ allow: public }]) {
 
 type Category @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
-    eventId: ID! @index(name: "byEvent")
+    eventId: ID! @index(name: "byEvent", queryField: "categoryByEvent")
     event: Event! @belongsTo(fields: ["eventId"])
     name: CategoryName!
     type: CategoryType! @default(value: "FILM")
@@ -143,7 +143,7 @@ type Contender @model @auth(rules: [{ allow: public }]) {
     category: Category! @hasOne(fields: ["categoryId"])
     eventId: ID!
     event: Event! @hasOne(fields: ["eventId"])
-    movieId: ID! @index(name: "byMovie")
+    movieId: ID! @index(name: "byMovie", queryField: "contenderByMovie")
     movie: Movie! @belongsTo(fields: ["movieId"]) # lets it be bi-directional so we can see Contenders from Movie
     personId: ID
     person: Person @hasOne(fields: ["personId"]) # optional - only applies to acting categories
@@ -178,7 +178,7 @@ type Song @model @auth(rules: [{ allow: public }]) {
 # CURRENT PERSONAL
 type PredictionSet @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
-    userId: ID! @index(sortKeyFields: ["eventId"]) # predictionSetByUserIdAndEventId
+    userId: ID! @index(sortKeyFields: ["eventId"], queryField: "predictionSetByUserIdAndEventId")
     user: User! @hasOne(fields: ["userId"])
     eventId: ID!
     event: Event! @hasOne(fields: ["eventId"])
@@ -189,7 +189,7 @@ type PredictionSet @model @auth(rules: [{ allow: public }]) {
 }
 type Prediction @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
-    predictionSetId: ID! @index(name: "byPredictionSet")
+    predictionSetId: ID! @index(name: "byPredictionSet", queryField: "predictionByPredictionSetId")
     contenderId: ID!
     contender: Contender! @hasOne(fields: ["contenderId"])
     ranking: Int!
@@ -198,7 +198,7 @@ type Prediction @model @auth(rules: [{ allow: public }]) {
 # HISTORY PERSONAL
 type HistoryPredictionSet @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
-    userId: ID! @index(sortKeyFields: ["eventId", "createdAt"]) # historyPredictionSetsByUserIdAndEventIdAndCreatedAt
+    userId: ID! @index(sortKeyFields: ["eventId", "createdAt"], queryField: "historyPredictionSetByUserIdAndEventIdAndCreatedAt")
     user: User! @hasOne(fields: ["userId"])
     eventId: ID!
     event: Event! @hasOne(fields: ["eventId"])
@@ -210,7 +210,7 @@ type HistoryPredictionSet @model @auth(rules: [{ allow: public }]) {
 }
 type HistoryPrediction @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
-    historyPredictionSetId: ID! @index(name: "byHistoryPredictionSet")
+    historyPredictionSetId: ID! @index(name: "byHistoryPredictionSet", queryField: "historyPredictionByHistoryPredictionSetId")
     contenderId: ID!
     contender: Contender! @hasOne(fields: ["contenderId"])
     ranking: Int!
@@ -219,7 +219,7 @@ type HistoryPrediction @model @auth(rules: [{ allow: public }]) {
 # CURRENT COMMUINTY
 type CommunityPredictionSet @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
-    eventId: ID! @index # communityPredictionSetsByEventId
+    eventId: ID! @index(queryField: "communityPredictionSetByEventId")
     event: Event! @hasOne(fields: ["eventId"])
     categoryId: ID!
     category: Category! @hasOne(fields: ["categoryId"])
@@ -228,7 +228,7 @@ type CommunityPredictionSet @model @auth(rules: [{ allow: public }]) {
 }
 type CommunityPrediction @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
-    communityPredictionSetId: ID! @index(name: "byCommunityPredictionSet")
+    communityPredictionSetId: ID! @index(name: "byCommunityPredictionSet", queryField: "communityPredictionByCommunityPredictionSetId")
     contenderId: ID!
     contender: Contender! @hasOne(fields: ["contenderId"])
     indexedRankings: String # JSON stringified array of rankings (ts: { [place: number]: [numUsersPredicting: number]})
@@ -237,7 +237,7 @@ type CommunityPrediction @model @auth(rules: [{ allow: public }]) {
 # HISTORY COMMUINTY
 type CommunityHistoryPredictionSet @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
-    eventId: ID! @index(sortKeyFields: ["createdAt"]) # communityHistoryPredictionSetsByEventIdAndCreatedAt
+    eventId: ID! @index(sortKeyFields: ["createdAt"], queryField: "communityHistoryPredictionSetsByEventIdAndCreatedAt")
     event: Event! @hasOne(fields: ["eventId"])
     categoryId: ID!
     category: Category! @hasOne(fields: ["categoryId"])
@@ -247,7 +247,7 @@ type CommunityHistoryPredictionSet @model @auth(rules: [{ allow: public }]) {
 }
 type CommunityHistoryPrediction @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
-    communityHistoryPredictionSetId: ID! @index(name: "byCommunityHistoryPredictionSet")
+    communityHistoryPredictionSetId: ID! @index(name: "byCommunityHistoryPredictionSet", queryField: "communityHistoryPredictionByCommunityHistoryPredictionSetId")
     contenderId: ID!
     contender: Contender! @hasOne(fields: ["contenderId"])
     indexedRankings: String # JSON stringified array of rankings (ts: { [place: number]: [numUsersPredicting: number]})
