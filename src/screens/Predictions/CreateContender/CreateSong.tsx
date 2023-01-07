@@ -92,13 +92,11 @@ const CreateSong = (props: iCreateContenderProps) => {
 
   const onSelectMovie = async () => {
     if (!selectedMovieTmdbId) return;
-    // get songs associated with movie
-    // if songs associated, show modal to select song
-    // if no songs associated, show modal to create song
-    const songs = communityPredictions.filter(
+    // get songs associated with movie. if songs associated, show modal to select song. if no songs associated, show modal to create song
+    const movies = communityPredictions.filter(
       (p) => p.contenderMovie?.tmdbId === selectedMovieTmdbId,
     );
-    setModalState(songs.length === 0 ? 'create' : 'select');
+    setModalState(movies.length === 0 ? 'create' : 'select');
     setShowSongModal(true);
   };
 

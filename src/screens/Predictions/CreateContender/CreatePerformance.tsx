@@ -18,6 +18,8 @@ import { CategoryHeader } from '../styles';
 import HeaderButton from '../../../components/HeaderButton';
 import { iCreateContenderProps } from '.';
 import { CategoryType, ContenderVisibility } from '../../../API';
+import { SubmitButton } from '../../../components/Buttons';
+import PerformanceListSelectable from '../../../components/MovieList/PerformanceListSelectable';
 
 // TODO: should only be able to do this if logged in
 const CreatePerformance = (props: iCreateContenderProps) => {
@@ -42,6 +44,7 @@ const CreatePerformance = (props: iCreateContenderProps) => {
   const [selectedPersonTmdbId, setSelectedPersonTmdbId] = useState<number | undefined>();
   const [resetSearchHack, setResetSearchHack] = useState<boolean>(false);
   const [showMovieSelectModal, setShowMovieSelectModal] = useState<boolean>(false);
+  const [modalState, setModalState] = useState<'select' | 'create'>('select');
 
   const minReleaseYear = event.year - 1;
 
@@ -54,11 +57,11 @@ const CreatePerformance = (props: iCreateContenderProps) => {
     setResetSearchHack(!resetSearchHack); // resets searchbar
   };
 
-  const getPerformancePrediction = () => {
+  const getPerformancePrediction = (personTmdbId: number, movieTmdbId: number) => {
     return communityPredictions.find(
       (p) =>
-        p.contenderPerson?.tmdbId === selectedPersonTmdbId &&
-        p.contenderMovie?.tmdbId === selectedMovieTmdbId,
+        p.contenderPerson?.tmdbId === personTmdbId &&
+        p.contenderMovie?.tmdbId === movieTmdbId,
     );
   };
 
@@ -104,13 +107,21 @@ const CreatePerformance = (props: iCreateContenderProps) => {
   const onSelectPerson = async () => {
     console.log('selectedPersonTmdbId', selectedPersonTmdbId);
     if (!selectedPersonTmdbId) return;
+    // get performances associated with movie. if songs associated, show modal to select song. if no songs associated, show modal to create song
+    const movies = communityPredictions.filter(
+      (p) => p.contenderMovie?.tmdbId === selectedMovieTmdbId,
+    );
+    setModalState(movies.length === 0 ? 'create' : 'select');
     getPersonRecentMovies(selectedPersonTmdbId);
   };
 
   const onConfirmContender = async () => {
     if (!selectedMovieTmdbId || !selectedPersonTmdbId) return;
     // can check that selectedTmdbId is not already associated with a contender in our category list
-    const maybeAlreadyExistingPrediction = getPerformancePrediction();
+    const maybeAlreadyExistingPrediction = getPerformancePrediction(
+      selectedPersonTmdbId,
+      selectedMovieTmdbId,
+    );
     if (maybeAlreadyExistingPrediction) {
       // this performance has already been added
       onSelectPrediction(maybeAlreadyExistingPrediction);
@@ -167,33 +178,46 @@ const CreatePerformance = (props: iCreateContenderProps) => {
         }}
         width={'100%'}
         height={'50%'}
-        header={{ title: 'For Which Movie?' }}
+        header={{
+          title: modalState === 'create' ? 'For Which Movie?' : 'Select Performance',
+        }}
       >
-        <>
-          {movieSearchResults.length > 0 ? (
-            <MovieListSearch
-              predictions={movieData}
-              onSelect={(tmdbId) => {
-                if (selectedMovieTmdbId === tmdbId) {
-                  setSelectedMovieTmdbId(undefined);
-                } else {
-                  setSelectedMovieTmdbId(tmdbId);
-                }
+        {modalState === 'create' ? (
+          <>
+            {movieSearchResults.length > 0 ? (
+              <MovieListSearch
+                predictions={movieData}
+                onSelect={(tmdbId) => {
+                  if (selectedMovieTmdbId === tmdbId) {
+                    setSelectedMovieTmdbId(undefined);
+                  } else {
+                    setSelectedMovieTmdbId(tmdbId);
+                  }
+                }}
+                categoryType={CategoryType.FILM}
+              />
+            ) : null}
+            <FAB
+              iconName="plus"
+              text="Select"
+              onPress={() => {
+                setShowMovieSelectModal(false);
+                onConfirmContender();
               }}
-              categoryType={CategoryType.FILM}
+              visible={selectedMovieTmdbId !== undefined}
+              bottomPercentage={'15%'}
             />
-          ) : null}
-          <FAB
-            iconName="plus"
-            text="Select"
-            onPress={() => {
-              setShowMovieSelectModal(false);
-              onConfirmContender();
-            }}
-            visible={selectedMovieTmdbId !== undefined}
-            bottomPercentage={'15%'}
+          </>
+        ) : (
+          <SelectExistingPerformance
+            data={communityPredictions.filter(
+              (p) => p.contenderMovie?.tmdbId === selectedMovieTmdbId,
+            )}
+            getPerformancePrediction={getPerformancePrediction}
+            onCreateNew={() => setModalState('create')}
+            onSelectPrediction={onSelectPrediction}
           />
-        </>
+        )}
       </BasicModal>
       <View
         style={{
@@ -240,6 +264,64 @@ const CreatePerformance = (props: iCreateContenderProps) => {
           visible={selectedPersonTmdbId !== undefined}
         />
       </View>
+    </>
+  );
+};
+
+const SelectExistingPerformance = (props: {
+  data: iPrediction[];
+  getPerformancePrediction: (
+    personTmdbId: number,
+    movieTmdbId: number,
+  ) => iPrediction | undefined;
+  onCreateNew: () => void;
+  onSelectPrediction: (p: iPrediction) => void;
+}) => {
+  const { data, getPerformancePrediction, onCreateNew, onSelectPrediction } = props;
+
+  const [selectedPerformance, setSelectedPerformance] = useState<
+    { personTmdbId: number; movieTmdbId: number } | undefined
+  >(undefined);
+
+  return (
+    <>
+      <View style={{ height: '84%' }}>
+        <PerformanceListSelectable
+          predictions={data}
+          onSelect={(personTmdbId: number, movieTmdbId: number) => {
+            if (!personTmdbId) return;
+            const songPrediction = getPerformancePrediction(personTmdbId, movieTmdbId);
+            if (selectedPerformance?.personTmdbId === personTmdbId) {
+              setSelectedPerformance(undefined);
+            } else if (songPrediction) {
+              setSelectedPerformance({ personTmdbId, movieTmdbId });
+            }
+          }}
+          disablePaddingBottom
+        />
+      </View>
+      <View style={{ height: '10%' }}>
+        {selectedPerformance === undefined ? (
+          <SubmitButton text={'Create New Song'} onPress={onCreateNew} />
+        ) : null}
+      </View>
+      <FAB
+        iconName="plus"
+        text="Add"
+        onPress={() => {
+          if (selectedPerformance) {
+            const prediction = getPerformancePrediction(
+              selectedPerformance.personTmdbId,
+              selectedPerformance.movieTmdbId,
+            );
+            if (prediction) {
+              onSelectPrediction(prediction);
+            }
+          }
+        }}
+        visible={selectedPerformance !== undefined}
+        bottomPercentage={'5%'}
+      />
     </>
   );
 };
