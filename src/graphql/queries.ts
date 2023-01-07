@@ -2663,6 +2663,7 @@ export const getCommunityPredictionSet = /* GraphQL */ `
             createdAt
             updatedAt
           }
+          ranking
           indexedRankings
           createdAt
           updatedAt
@@ -2810,6 +2811,7 @@ export const listCommunityPredictionSets = /* GraphQL */ `
               createdAt
               updatedAt
             }
+            ranking
             indexedRankings
             createdAt
             updatedAt
@@ -2999,6 +3001,7 @@ export const getCommunityPrediction = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      ranking
       indexedRankings
       createdAt
       updatedAt
@@ -3124,6 +3127,7 @@ export const listCommunityPredictions = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        ranking
         indexedRankings
         createdAt
         updatedAt
@@ -3290,6 +3294,29 @@ export const getCommunityHistoryPredictionSet = /* GraphQL */ `
             createdAt
             updatedAt
           }
+          categoryId
+          category {
+            id
+            eventId
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              nominationDateTime
+              winDateTime
+              status
+              createdAt
+              updatedAt
+            }
+            name
+            type
+            createdAt
+            updatedAt
+          }
+          ranking
           indexedRankings
           createdAt
           updatedAt
@@ -3437,6 +3464,26 @@ export const listCommunityHistoryPredictionSets = /* GraphQL */ `
               createdAt
               updatedAt
             }
+            categoryId
+            category {
+              id
+              eventId
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              name
+              type
+              createdAt
+              updatedAt
+            }
+            ranking
             indexedRankings
             createdAt
             updatedAt
@@ -3626,6 +3673,47 @@ export const getCommunityHistoryPrediction = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      categoryId
+      category {
+        id
+        eventId
+        event {
+          id
+          categories {
+            items {
+              id
+              eventId
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              name
+              type
+              createdAt
+              updatedAt
+            }
+            nextToken
+          }
+          awardsBody
+          year
+          nominationDateTime
+          winDateTime
+          status
+          createdAt
+          updatedAt
+        }
+        name
+        type
+        createdAt
+        updatedAt
+      }
+      ranking
       indexedRankings
       createdAt
       updatedAt
@@ -3751,6 +3839,37 @@ export const listCommunityHistoryPredictions = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        categoryId
+        category {
+          id
+          eventId
+          event {
+            id
+            categories {
+              items {
+                id
+                eventId
+                name
+                type
+                createdAt
+                updatedAt
+              }
+              nextToken
+            }
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          name
+          type
+          createdAt
+          updatedAt
+        }
+        ranking
         indexedRankings
         createdAt
         updatedAt
@@ -4816,6 +4935,7 @@ export const communityPredictionSetByEventId = /* GraphQL */ `
               createdAt
               updatedAt
             }
+            ranking
             indexedRankings
             createdAt
             updatedAt
@@ -4949,6 +5069,7 @@ export const communityPredictionByCommunityPredictionSetId = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        ranking
         indexedRankings
         createdAt
         updatedAt
@@ -5094,6 +5215,26 @@ export const communityHistoryPredictionSetsByEventIdAndCreatedAt = /* GraphQL */
               createdAt
               updatedAt
             }
+            categoryId
+            category {
+              id
+              eventId
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              name
+              type
+              createdAt
+              updatedAt
+            }
+            ranking
             indexedRankings
             createdAt
             updatedAt
@@ -5227,6 +5368,195 @@ export const communityHistoryPredictionByCommunityHistoryPredictionSetId = /* Gr
           createdAt
           updatedAt
         }
+        categoryId
+        category {
+          id
+          eventId
+          event {
+            id
+            categories {
+              items {
+                id
+                eventId
+                name
+                type
+                createdAt
+                updatedAt
+              }
+              nextToken
+            }
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          name
+          type
+          createdAt
+          updatedAt
+        }
+        ranking
+        indexedRankings
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const communityHistoryPredictionByCategoryId = /* GraphQL */ `
+  query CommunityHistoryPredictionByCategoryId(
+    $categoryId: ID!
+    $sortDirection: ModelSortDirection
+    $filter: ModelCommunityHistoryPredictionFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    communityHistoryPredictionByCategoryId(
+      categoryId: $categoryId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        communityHistoryPredictionSetId
+        contenderId
+        contender {
+          id
+          categoryId
+          category {
+            id
+            eventId
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              nominationDateTime
+              winDateTime
+              status
+              createdAt
+              updatedAt
+            }
+            name
+            type
+            createdAt
+            updatedAt
+          }
+          eventId
+          event {
+            id
+            categories {
+              items {
+                id
+                eventId
+                name
+                type
+                createdAt
+                updatedAt
+              }
+              nextToken
+            }
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          movieId
+          movie {
+            id
+            contenders {
+              items {
+                id
+                categoryId
+                eventId
+                movieId
+                personId
+                songId
+                visibility
+                accolade
+                createdAt
+                updatedAt
+              }
+              nextToken
+            }
+            tmdbId
+            studio
+            createdAt
+            updatedAt
+          }
+          personId
+          person {
+            id
+            tmdbId
+            createdAt
+            updatedAt
+          }
+          songId
+          song {
+            id
+            movieId
+            movie {
+              id
+              contenders {
+                nextToken
+              }
+              tmdbId
+              studio
+              createdAt
+              updatedAt
+            }
+            title
+            artist
+            createdAt
+            updatedAt
+          }
+          visibility
+          accolade
+          createdAt
+          updatedAt
+        }
+        categoryId
+        category {
+          id
+          eventId
+          event {
+            id
+            categories {
+              items {
+                id
+                eventId
+                name
+                type
+                createdAt
+                updatedAt
+              }
+              nextToken
+            }
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          name
+          type
+          createdAt
+          updatedAt
+        }
+        ranking
         indexedRankings
         createdAt
         updatedAt

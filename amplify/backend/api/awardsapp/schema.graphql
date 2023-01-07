@@ -231,6 +231,7 @@ type CommunityPrediction @model @auth(rules: [{ allow: public }]) {
     communityPredictionSetId: ID! @index(name: "byCommunityPredictionSet", queryField: "communityPredictionByCommunityPredictionSetId")
     contenderId: ID!
     contender: Contender! @hasOne(fields: ["contenderId"])
+    ranking: Int!
     indexedRankings: String # JSON stringified array of rankings (ts: { [place: number]: [numUsersPredicting: number]})
 }
 
@@ -250,6 +251,9 @@ type CommunityHistoryPrediction @model @auth(rules: [{ allow: public }]) {
     communityHistoryPredictionSetId: ID! @index(name: "byCommunityHistoryPredictionSet", queryField: "communityHistoryPredictionByCommunityHistoryPredictionSetId")
     contenderId: ID!
     contender: Contender! @hasOne(fields: ["contenderId"])
+    categoryId: ID! @index(queryField: "communityHistoryPredictionByCategoryId") # for getting the category history chart
+    category: Category! @hasOne(fields: ["categoryId"])
+    ranking: Int!
     indexedRankings: String # JSON stringified array of rankings (ts: { [place: number]: [numUsersPredicting: number]})
 }
 

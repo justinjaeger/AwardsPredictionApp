@@ -4162,6 +4162,7 @@ export const onCreateCommunityPredictionSet = /* GraphQL */ `
             createdAt
             updatedAt
           }
+          ranking
           indexedRankings
           createdAt
           updatedAt
@@ -4332,6 +4333,7 @@ export const onUpdateCommunityPredictionSet = /* GraphQL */ `
             createdAt
             updatedAt
           }
+          ranking
           indexedRankings
           createdAt
           updatedAt
@@ -4502,6 +4504,7 @@ export const onDeleteCommunityPredictionSet = /* GraphQL */ `
             createdAt
             updatedAt
           }
+          ranking
           indexedRankings
           createdAt
           updatedAt
@@ -4689,6 +4692,7 @@ export const onCreateCommunityPrediction = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      ranking
       indexedRankings
       createdAt
       updatedAt
@@ -4870,6 +4874,7 @@ export const onUpdateCommunityPrediction = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      ranking
       indexedRankings
       createdAt
       updatedAt
@@ -5051,6 +5056,7 @@ export const onDeleteCommunityPrediction = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      ranking
       indexedRankings
       createdAt
       updatedAt
@@ -5215,6 +5221,29 @@ export const onCreateCommunityHistoryPredictionSet = /* GraphQL */ `
             createdAt
             updatedAt
           }
+          categoryId
+          category {
+            id
+            eventId
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              nominationDateTime
+              winDateTime
+              status
+              createdAt
+              updatedAt
+            }
+            name
+            type
+            createdAt
+            updatedAt
+          }
+          ranking
           indexedRankings
           createdAt
           updatedAt
@@ -5385,6 +5414,29 @@ export const onUpdateCommunityHistoryPredictionSet = /* GraphQL */ `
             createdAt
             updatedAt
           }
+          categoryId
+          category {
+            id
+            eventId
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              nominationDateTime
+              winDateTime
+              status
+              createdAt
+              updatedAt
+            }
+            name
+            type
+            createdAt
+            updatedAt
+          }
+          ranking
           indexedRankings
           createdAt
           updatedAt
@@ -5555,6 +5607,29 @@ export const onDeleteCommunityHistoryPredictionSet = /* GraphQL */ `
             createdAt
             updatedAt
           }
+          categoryId
+          category {
+            id
+            eventId
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              nominationDateTime
+              winDateTime
+              status
+              createdAt
+              updatedAt
+            }
+            name
+            type
+            createdAt
+            updatedAt
+          }
+          ranking
           indexedRankings
           createdAt
           updatedAt
@@ -5742,6 +5817,47 @@ export const onCreateCommunityHistoryPrediction = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      categoryId
+      category {
+        id
+        eventId
+        event {
+          id
+          categories {
+            items {
+              id
+              eventId
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              name
+              type
+              createdAt
+              updatedAt
+            }
+            nextToken
+          }
+          awardsBody
+          year
+          nominationDateTime
+          winDateTime
+          status
+          createdAt
+          updatedAt
+        }
+        name
+        type
+        createdAt
+        updatedAt
+      }
+      ranking
       indexedRankings
       createdAt
       updatedAt
@@ -5923,6 +6039,47 @@ export const onUpdateCommunityHistoryPrediction = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      categoryId
+      category {
+        id
+        eventId
+        event {
+          id
+          categories {
+            items {
+              id
+              eventId
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              name
+              type
+              createdAt
+              updatedAt
+            }
+            nextToken
+          }
+          awardsBody
+          year
+          nominationDateTime
+          winDateTime
+          status
+          createdAt
+          updatedAt
+        }
+        name
+        type
+        createdAt
+        updatedAt
+      }
+      ranking
       indexedRankings
       createdAt
       updatedAt
@@ -6104,6 +6261,47 @@ export const onDeleteCommunityHistoryPrediction = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      categoryId
+      category {
+        id
+        eventId
+        event {
+          id
+          categories {
+            items {
+              id
+              eventId
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              name
+              type
+              createdAt
+              updatedAt
+            }
+            nextToken
+          }
+          awardsBody
+          year
+          nominationDateTime
+          winDateTime
+          status
+          createdAt
+          updatedAt
+        }
+        name
+        type
+        createdAt
+        updatedAt
+      }
+      ranking
       indexedRankings
       createdAt
       updatedAt
