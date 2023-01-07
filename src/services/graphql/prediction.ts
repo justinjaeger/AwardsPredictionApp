@@ -9,6 +9,8 @@ import {
   DeletePredictionSetMutationVariables,
   ListPredictionSetsQuery,
   ListPredictionSetsQueryVariables,
+  PredictionSetByUserIdAndEventIdQuery,
+  PredictionSetByUserIdAndEventIdQueryVariables,
 } from '../../API';
 import * as mutations from '../../graphql/mutations';
 import * as customQueries from '../../graphqlCustom/queries';
@@ -169,18 +171,16 @@ export const getPredictionSets = async (
 export const getPersonalPredictionsByEvent = async (
   eventId: string,
   userId: string,
-): Promise<iApiResponse<ListPredictionSetsQuery>> => {
+): Promise<iApiResponse<PredictionSetByUserIdAndEventIdQuery>> => {
   try {
     const { data: maybePreSets, errors } = await GraphqlAPI<
-      ListPredictionSetsQuery,
-      ListPredictionSetsQueryVariables
-    >(customQueries.listPredictionSets, {
-      filter: {
-        eventId: { eq: eventId },
-        userId: { eq: userId },
-      },
+      PredictionSetByUserIdAndEventIdQuery,
+      PredictionSetByUserIdAndEventIdQueryVariables
+    >(customQueries.predictionSetByUserIdAndEventId, {
+      userId,
+      eventId: { eq: eventId },
     });
-    if (!maybePreSets?.listPredictionSets) {
+    if (!maybePreSets?.predictionSetByUserIdAndEventId) {
       throw new Error(JSON.stringify(errors));
     }
     return { status: 'success', data: maybePreSets };

@@ -1,23 +1,21 @@
 import {
-  ListCommunityPredictionSetsQuery,
-  ListCommunityPredictionSetsQueryVariables,
+  CommunityPredictionSetByEventIdQueryVariables,
+  CommunityPredictionSetByEventIdQuery,
 } from '../../API';
 import { GraphqlAPI, handleError, iApiResponse } from '../utils';
 import * as customQueries from '../../graphqlCustom/queries';
 
 export const getCommunityPredictionsByEvent = async (
   eventId: string,
-): Promise<iApiResponse<ListCommunityPredictionSetsQuery>> => {
+): Promise<iApiResponse<CommunityPredictionSetByEventIdQuery>> => {
   try {
     const { data: maybePreSets, errors } = await GraphqlAPI<
-      ListCommunityPredictionSetsQuery,
-      ListCommunityPredictionSetsQueryVariables
-    >(customQueries.listCommunityPredictionSets, {
-      filter: {
-        eventId: { eq: eventId },
-      },
+      CommunityPredictionSetByEventIdQuery,
+      CommunityPredictionSetByEventIdQueryVariables
+    >(customQueries.communityPredictionSetByEventId, {
+      eventId,
     });
-    if (!maybePreSets?.listCommunityPredictionSets) {
+    if (!maybePreSets?.communityPredictionSetByEventId) {
       throw new Error(JSON.stringify(errors));
     }
     return { status: 'success', data: maybePreSets };

@@ -8,7 +8,7 @@ const getPersonalPredictionsByEvent = async (eventId: string, userId: string) =>
     eventId,
     userId,
   );
-  const pSets = predictionSets?.listPredictionSets?.items;
+  const pSets = predictionSets?.predictionSetByUserIdAndEventId?.items;
   if (!pSets) return; // handle in some other way?
   // Format the prediction sets
   const data: iIndexedPredictionsByCategory = {};

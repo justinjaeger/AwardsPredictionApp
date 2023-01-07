@@ -99,61 +99,6 @@ export const listPredictionSets = /* GraphQL */ `
   }
 `;
 
-export const listCommunityPredictionSets = /* GraphQL */ `
-  query ListCommunityPredictionSets(
-    $id: ID
-    $filter: ModelCommunityPredictionSetFilterInput
-    $limit: Int
-    $nextToken: String
-    $sortDirection: ModelSortDirection
-  ) {
-    listCommunityPredictionSets(
-      id: $id
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      sortDirection: $sortDirection
-    ) {
-      items {
-        id
-        predictions {
-          items {
-            id
-            contenderId
-            contender {
-              id
-              movie {
-                id
-                tmdbId
-                studio
-              }
-              personId
-              person {
-                id
-                tmdbId
-              }
-              songId
-              song {
-                id
-                title
-                artist
-              }
-              visibility
-              accolade
-            }
-            indexedRankings
-            createdAt
-            updatedAt
-          }
-        }
-        type
-        createdAt
-        updatedAt
-      }
-    }
-  }
-`;
-
 export const listEvents = /* GraphQL */ `
   query ListEvents(
     $id: ID
@@ -185,6 +130,150 @@ export const listEvents = /* GraphQL */ `
         nominationDateTime
         winDateTime
         status
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
+
+export const communityPredictionSetByEventId = /* GraphQL */ `
+  query CommunityPredictionSetByEventId(
+    $eventId: ID!
+    $sortDirection: ModelSortDirection
+    $filter: ModelCommunityPredictionSetFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    communityPredictionSetByEventId(
+      eventId: $eventId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        categoryId
+        category {
+          id
+          name
+          type
+          createdAt
+          updatedAt
+        }
+        predictions {
+          items {
+            id
+            communityPredictionSetId
+            contenderId
+            contender {
+              id
+              movieId
+              movie {
+                id
+                tmdbId
+                studio
+              }
+              personId
+              person {
+                id
+                tmdbId
+              }
+              songId
+              song {
+                id
+                movieId
+                title
+                artist
+              }
+              visibility
+              accolade
+            }
+            ranking
+            indexedRankings
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        type
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+
+export const predictionSetByUserIdAndEventId = /* GraphQL */ `
+  query PredictionSetByUserIdAndEventId(
+    $userId: ID!
+    $eventId: ModelIDKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelPredictionSetFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    predictionSetByUserIdAndEventId(
+      userId: $userId
+      eventId: $eventId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        categoryId
+        category {
+          id
+          name
+          type
+          createdAt
+          updatedAt
+        }
+        predictions {
+          items {
+            id
+            predictionSetId
+            contenderId
+            contender {
+              id
+              categoryId
+              category {
+                id
+                eventId
+                name
+                type
+              }
+              movieId
+              movie {
+                id
+                tmdbId
+                studio
+              }
+              personId
+              person {
+                id
+                tmdbId
+              }
+              songId
+              song {
+                id
+                movieId
+                title
+                artist
+              }
+              visibility
+              accolade
+            }
+            ranking
+            createdAt
+            updatedAt
+          }
+        }
+        type
         createdAt
         updatedAt
       }
