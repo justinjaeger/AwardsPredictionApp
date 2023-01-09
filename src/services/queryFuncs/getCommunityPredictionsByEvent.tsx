@@ -10,12 +10,12 @@ const getCommunityPredictionsByEvent = async (event: iEvent, includeHidden = fal
   const { data: predictionSets } = await ApiServices.getCommunityPredictionsByEvent(
     eventId,
   );
-  const pSets = predictionSets?.listCommunityPredictionSets?.items;
+  const pSets = predictionSets?.communityPredictionSetByEventId?.items;
   if (!pSets) return; // handle in some other way?
   // Format the prediction sets
   const data: iIndexedPredictionsByCategory = {};
   pSets.forEach((ps) => {
-    const categoryId = ps?.communityPredictionSetCategoryId || '';
+    const categoryId = ps?.categoryId || '';
     const predictions: iPrediction[] = [];
     // populate predictions array
     (ps?.predictions?.items || []).forEach((p) => {

@@ -1,9 +1,6 @@
 /**
  * need to pass:
- * type: PredictionType
-   historyPredictionSetUserId: ID!
-   historyPredictionSetEventId: ID!
-   historyPredictionSetCategoryId: ID!
+ * type, userId, eventId, categoryId
  */
 const createHistoryPredictionSetMutation = /* GraphQL */ `
   mutation CreateHistoryPredictionSet($input: CreateHistoryPredictionSetInput!) {
@@ -15,10 +12,7 @@ const createHistoryPredictionSetMutation = /* GraphQL */ `
 
 /**
  * need to pass:
- * ranking: Int!
-   contenderHistoryPredictionsId: ID
-   historyPredictionSetPredictionsId: ID
-   historyPredictionUserId: ID!
+ * ranking, contenderId, predictionSetId
  */
 const createHistoryPredictionMutation = /* GraphQL */ `
   mutation CreateHistoryPrediction($input: CreateHistoryPredictionInput!) {

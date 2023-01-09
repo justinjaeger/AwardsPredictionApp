@@ -5,7 +5,7 @@ const createCommunityPredictionSetMutation = /* GraphQL */ `
     createCommunityPredictionSet(input: $input) {
       id # communityPredictionSetId
       eventId
-      communityPredictionSetCategoryId
+      categoryId
     }
   }
 `;
@@ -14,26 +14,6 @@ const createCommunityPredictionMutation = /* GraphQL */ `
   mutation CreateCommunityPrediction($input: CreateCommunityPredictionInput!) {
     createCommunityPrediction(input: $input) {
       id # communityPredictionId
-    }
-  }
-`;
-
-const createCommunityHistoryPredictionSetMutation = /* GraphQL */ `
-  mutation CreateCommunityPredictionSet(
-    $input: CreateCommunityHistoryPredictionSetInput!
-  ) {
-    createCommunityHistoryPredictionSet(input: $input) {
-      id # communityHistoryPredictionSetId
-      eventId
-      communityHistoryPredictionSetCategoryId
-    }
-  }
-`;
-
-const createCommunityHistoryPredictionMutation = /* GraphQL */ `
-  mutation CreateCommunityPrediction($input: CreateCommunityHistoryPredictionInput!) {
-    createCommunityHistoryPrediction(input: $input) {
-      id # communityHistoryPredictionId
     }
   }
 `;
@@ -57,8 +37,6 @@ const deleteCommunityPredictionMutation = /* GraphQL */ `
 module.exports = {
   createCommunityPredictionSetMutation,
   createCommunityPredictionMutation,
-  createCommunityHistoryPredictionSetMutation,
-  createCommunityHistoryPredictionMutation,
   deleteCommunityPredictionSetMutation,
   deleteCommunityPredictionMutation,
 };

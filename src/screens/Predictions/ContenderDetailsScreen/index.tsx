@@ -36,7 +36,7 @@ const ContenderDetailsScreen = () => {
         movieTmdbId={c.movie.tmdbId}
         movieStudio={c.movie.studio || undefined}
         personTmdbId={personTmdb}
-        songId={c.contenderSongId || undefined}
+        songId={c.songId || undefined}
         categoryType={categoryType}
       />
     </ScrollView>

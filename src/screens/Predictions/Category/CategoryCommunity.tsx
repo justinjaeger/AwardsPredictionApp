@@ -98,7 +98,7 @@ const CategoryCommunity = () => {
               justifyContent: 'center',
             }}
           >
-            <BodyBold>No films in this category</BodyBold>
+            <BodyBold>Community predictions not yet tallied</BodyBold>
           </View>
         ) : null}
         <Animated.ScrollView

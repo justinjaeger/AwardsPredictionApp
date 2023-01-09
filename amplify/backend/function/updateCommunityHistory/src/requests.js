@@ -1,10 +1,8 @@
 const { Request } = require('node-fetch');
-const { getEventsQuery, predictionSetByEventId } = require('./queries');
+const { getEventsQuery, communityPredictionSetByEventIdQuery } = require('./queries');
 const {
-  createCommunityPredictionSetMutation,
-  createCommunityPredictionMutation,
-  deleteCommunityPredictionSetMutation,
-  deleteCommunityPredictionMutation,
+  createCommunityHistoryPredictionSetMutation,
+  createCommunityHistoryPredictionMutation,
 } = require('./mutations');
 
 const GRAPHQL_ENDPOINT = process.env.API_AWARDSAPP_GRAPHQLAPIENDPOINTOUTPUT;
@@ -32,28 +30,28 @@ const getOpenEventsRequest = new Request(GRAPHQL_ENDPOINT, {
   }),
 });
 
-// ts: ListCommunityPredictionSetsQueryVariables
-const predictionSetByEventIdRequest = (eventId) =>
+// ts: CommunityPredictionSetByEventIdQueryVariables
+const communityPredictionSetByEventId = (eventId) =>
   new Request(GRAPHQL_ENDPOINT, {
     method: 'POST',
     headers: {
       'x-api-key': GRAPHQL_API_KEY,
     },
     body: JSON.stringify({
-      query: predictionSetByEventId,
+      query: communityPredictionSetByEventIdQuery,
       variables: { eventId },
     }),
   });
 
 // ts: CreateCommunityPredictionSetMutationVariables
-const createCommunityPredictionSet = (eventId, categoryId, type = 'NOMINATION') =>
+const createCommunityHistoryPredictionSet = (eventId, categoryId, type = 'NOMINATION') =>
   new Request(GRAPHQL_ENDPOINT, {
     method: 'POST',
     headers: {
       'x-api-key': GRAPHQL_API_KEY,
     },
     body: JSON.stringify({
-      query: createCommunityPredictionSetMutation,
+      query: createCommunityHistoryPredictionSetMutation,
       variables: {
         input: {
           eventId,
@@ -66,11 +64,12 @@ const createCommunityPredictionSet = (eventId, categoryId, type = 'NOMINATION') 
 
 // ts: CreateCommunityPredictionMutationVariables
 // indexedRankings = { [place: number]: number }
-const createCommunityPrediction = (
-  predictionSetId,
+const createCommunityHistoryPrediction = (
+  communityHistoryPredictionSetId,
   contenderId,
+  categoryId,
   indexedRankings,
-  relativeRanking,
+  ranking,
 ) =>
   new Request(GRAPHQL_ENDPOINT, {
     method: 'POST',
@@ -78,53 +77,22 @@ const createCommunityPrediction = (
       'x-api-key': GRAPHQL_API_KEY,
     },
     body: JSON.stringify({
-      query: createCommunityPredictionMutation,
+      query: createCommunityHistoryPredictionMutation,
       variables: {
         input: {
-          communityPredictionSetId: predictionSetId,
+          communityHistoryPredictionSetId,
           contenderId,
-          indexedRankings: JSON.stringify(indexedRankings), // IMPORTANT: stringify indexedRankings
-          ranking: relativeRanking,
+          categoryId,
+          indexedRankings, // indexedRankings are already stringified
+          ranking,
         },
-      },
-    }),
-  });
-
-// DeleteCommunityPredictionSetMutationVariables
-const deleteCommunityPredictionSet = (predictionSetId) =>
-  new Request(GRAPHQL_ENDPOINT, {
-    method: 'POST',
-    headers: {
-      'x-api-key': GRAPHQL_API_KEY,
-    },
-    body: JSON.stringify({
-      query: deleteCommunityPredictionSetMutation,
-      variables: {
-        input: { id: predictionSetId },
-      },
-    }),
-  });
-
-// DeleteCommunityPredictionMutationVariables
-const deleteCommunityPrediction = (predictionId) =>
-  new Request(GRAPHQL_ENDPOINT, {
-    method: 'POST',
-    headers: {
-      'x-api-key': GRAPHQL_API_KEY,
-    },
-    body: JSON.stringify({
-      query: deleteCommunityPredictionMutation,
-      variables: {
-        input: { id: predictionId },
       },
     }),
   });
 
 module.exports = {
   getOpenEventsRequest,
-  predictionSetByEventIdRequest,
-  createCommunityPredictionSet,
-  createCommunityPrediction,
-  deleteCommunityPredictionSet,
-  deleteCommunityPrediction,
+  communityPredictionSetByEventId,
+  createCommunityHistoryPredictionSet,
+  createCommunityHistoryPrediction,
 };

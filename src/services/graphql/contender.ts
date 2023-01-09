@@ -33,14 +33,14 @@ const getUniqueContenders = async (
   const { categoryId, movieId, personId, songId } = params;
   // Create filter based on params passed
   const filter: ModelContenderFilterInput = {
-    categoryContendersId: { eq: categoryId },
-    contenderMovieId: { eq: movieId },
+    categoryId: { eq: categoryId },
+    movieId: { eq: movieId },
   };
   if (personId) {
-    filter.contenderPersonId = { eq: personId };
+    filter.personId = { eq: personId };
   }
   if (songId) {
-    filter.contenderSongId = { eq: songId };
+    filter.songId = { eq: songId };
   }
   // perform the query
   try {
@@ -66,16 +66,16 @@ const createContender = async (
   const { eventId, categoryId, movieId, personId, songId } = params;
   // Create input according to params passed
   const input: CreateContenderInput = {
-    categoryContendersId: categoryId,
-    contenderMovieId: movieId,
-    eventContendersId: eventId,
+    categoryId,
+    movieId,
+    eventId,
     visibility: ContenderVisibility.VISIBLE,
   };
   if (personId) {
-    input.contenderPersonId = personId;
+    input.personId = personId;
   }
   if (songId) {
-    input.contenderSongId = songId;
+    input.songId = songId;
   }
   // perform mutation
   try {
@@ -236,7 +236,7 @@ export const getContendersByEvent = async (
       ListContendersQueryVariables
     >(customQueries.listContenders, {
       filter: {
-        eventContendersId: { eq: eventId },
+        eventId: { eq: eventId },
       },
     });
     if (!data?.listContenders) {
@@ -269,7 +269,7 @@ export const getContenderById = async (
 
 export const updateContenderVisibilty = async (
   contenderId: string,
-  contenderMovieId: string,
+  movieId: string,
   visibility: ContenderVisibility,
 ): Promise<iApiResponse<UpdateContenderMutation>> => {
   try {
@@ -277,7 +277,7 @@ export const updateContenderVisibilty = async (
       UpdateContenderMutation,
       UpdateContenderMutationVariables
     >(mutations.updateContender, {
-      input: { id: contenderId, contenderMovieId, visibility },
+      input: { id: contenderId, movieId, visibility },
     });
     if (!data?.updateContender) {
       throw new Error(JSON.stringify(errors));
