@@ -1,13 +1,10 @@
 const fetch = require('node-fetch').default;
-const { isWithinLastMonth, getPredictionType } = require('./utils');
+const { isWithinLastMonth, getContenderRank } = require('./utils');
 const {
   getOpenEventsRequest,
-  getAllEventContendersRequest,
-  getCommunityPredictionSetsRequest,
+  predictionSetByEventIdRequest,
   createCommunityPredictionSet,
   createCommunityPrediction,
-  createCommunityHistoryPredictionSet,
-  createCommunityHistoryPrediction,
   deleteCommunityPredictionSet,
   deleteCommunityPrediction,
 } = require('./requests');
@@ -20,24 +17,15 @@ const getOpenEventIds = async () => {
   try {
     response = await fetch(getOpenEventsRequest);
     body = await response.json();
-    if (body.errors) throw new Error();
-    const openEvents = body.data.listEvents.items.reduce((acc, event) => {
-      // if predictionType is null, it indicates we don't want to create community predictions, so leave it out
-      const predictionType = getPredictionType(event.status);
-      if (predictionType) {
-        acc.push({
-          id: event.id,
-          type: predictionType,
-        });
-      }
-      return acc;
-    }, []);
+    if (body.errors) throw new Error(JSON.stringify(body.errors));
+    const openEvents = body.data.listEvents.items;
     console.log('openEvents', openEvents);
     return {
       status: 'success',
       data: { openEvents },
     };
   } catch (error) {
+    console.log('error', error);
     return {
       status: 'error',
       data: {
@@ -53,11 +41,14 @@ const getOpenEventIds = async () => {
   }
 };
 
-const getContendersByEventIds = async (eventIds) => {
-  console.log('getContendersByEventIds');
+const getPredictions = async (eventIds) => {
+  console.log('getPredictions');
 
   let response;
   let body;
+  const formerPredictionSetIds = [];
+  const formerPredictionIds = [];
+
   /**
    * ts: {
    *    [eventId: string]: {
@@ -70,111 +61,97 @@ const getContendersByEventIds = async (eventIds) => {
    * }
    */
   const indexedRankings = {};
+
   // request for all contenders
   try {
     for (const eventId of eventIds) {
-      // Request all contenders per event
-      //   const req = getAllEventContendersRequest(eventId);
-      //   console.log('req', req);
-      response = await fetch(getAllEventContendersRequest(eventId));
+      // Create space for entry if it doesn't exist
+      if (!indexedRankings[eventId]) {
+        indexedRankings[eventId] = {};
+      }
+      response = await fetch(predictionSetByEventIdRequest(eventId));
       body = await response.json();
-      if (body.errors) throw new Error();
-      // index rankings by eventId, categoryId, and ranking. Tracks of how many people are predicting at each ranking
-      // Loop through all contenders
-      const contenders = body.data.listContenders.items;
-      contenders.forEach((contender) => {
-        const eventId = contender.eventContendersId;
-        const categoryId = contender.categoryContendersId;
-        const contenderId = contender.id;
-        // if hidden, don't include
-        if (contender.visibility === 'HIDDEN') return;
+      if (body.errors) throw new Error(JSON.stringify(body.errors));
+      const predictionSets = body.data.predictionSetByEventId.items;
+      // add to formerPredictionSetIds
+      predictionSets.forEach((predictionSet) => {
+        const categoryId = predictionSet.categoryId;
         // Create space entry if it doesn't exist
-        if (!indexedRankings[eventId]) {
-          indexedRankings[eventId] = {};
-        }
         if (!indexedRankings[eventId][categoryId]) {
           indexedRankings[eventId][categoryId] = {};
         }
-        if (!indexedRankings[eventId][categoryId][contenderId]) {
-          indexedRankings[eventId][categoryId][contenderId] = {};
-        }
-        // Loop through all predictions and tally rankings
-        const predictions = contender.predictions.items;
+        // extract prediction set ids
+        formerPredictionSetIds.push(predictionSet.id);
+        const predictions = predictionSet.predictions.items;
         predictions.forEach((prediction) => {
-          // Only include if prediction was created in the last month
-          const lastUpdated = prediction?.createdAt || '';
-          const isRecentPrediction = isWithinLastMonth(lastUpdated);
-          if (isRecentPrediction) {
-            // Tally prediction ranking to "rankings" total
-            // indexedRankings[eventId][categoryId][ranking] = tally
-            const someUsersRanking = prediction?.ranking || 0;
-            // don't include rankings higher than 20
-            if (someUsersRanking > 20) return;
-            // if ranking doesn't exist, initialize it to zero
-            if (!indexedRankings[eventId][categoryId][contenderId][someUsersRanking]) {
-              indexedRankings[eventId][categoryId][contenderId][someUsersRanking] = 0;
-            }
-            // tally ranking
-            indexedRankings[eventId][categoryId][contenderId][someUsersRanking] += 1;
+          // extract prediction ids
+          formerPredictionIds.push(prediction.id);
+          // add to indexed rankings
+          const { contenderId, contender, ranking: _ranking, createdAt } = prediction;
+          const ranking = _ranking || 0; // make sure ranking is a number
+          // don't include hidden contenders in tally
+          // don't include rankings higher than 20
+          // don't include if prediction is more than a month old
+          const isHidden = contender.visibility === 'HIDDEN';
+          const isLowOnList = ranking > 20;
+          const isRecentPrediction = isWithinLastMonth(createdAt);
+          if (isHidden || isLowOnList || !isRecentPrediction) {
+            return;
           }
+          // Create space for contender entry if it doesn't exist
+          if (!indexedRankings[eventId][categoryId][contenderId]) {
+            indexedRankings[eventId][categoryId][contenderId] = {};
+          }
+          // if ranking doesn't exist, initialize to zero
+          if (!indexedRankings[eventId][categoryId][contenderId][ranking]) {
+            indexedRankings[eventId][categoryId][contenderId][ranking] = 0;
+          }
+          // tally user's ranking
+          indexedRankings[eventId][categoryId][contenderId][ranking] += 1;
         });
       });
     }
-    return {
-      status: 'success',
-      data: { indexedRankings },
-    };
-  } catch (error) {
-    return {
-      status: 'error',
-      data: {
-        errors: [
-          {
-            status: response.status,
-            message: error.message,
-            stack: error.stack,
-          },
-        ],
-      },
-    };
-  }
-};
 
-const getPredictionSetIds = async (eventIds) => {
-  console.log('getPredictionSetIds');
-
-  let response;
-  let body;
-  const formerPredictionSetIds = [];
-  const formerPredictionIds = [];
-
-  // request for all contenders
-  try {
-    for (const eventId of eventIds) {
-      response = await fetch(getCommunityPredictionSetsRequest(eventId));
-      body = await response.json();
-      if (body.errors) throw new Error();
-      const predictionSets = body.data.listCommunityPredictionSets.items;
-      // add to formerPredictionSetIds
-      predictionSets.forEach((predictionSet) => {
-        formerPredictionSetIds.push(predictionSet.id);
-      });
-      // loop through predictionSets and extract predictionIds
-      predictionSets.forEach((predictionSet) => {
-        const predictions = predictionSet.predictions.items;
-        predictions.forEach((prediction) => {
-          formerPredictionIds.push(prediction.id);
-        });
-      });
+    /**
+     * ts: {
+     *   [categoryId: string]: {
+     *     [contenderId: string]: points
+     *   }
+     * }
+     */
+    const contenderPoints = {};
+    // calculate relative ranking
+    // loop through all contenders in category
+    // calculate point values for each contender and assign them
+    for (const [, indexedCategories] of Object.entries(indexedRankings)) {
+      for (const [categoryId, indexedContenders] of Object.entries(indexedCategories)) {
+        // create space for category if doesn't exist
+        if (!contenderPoints[categoryId]) {
+          contenderPoints[categoryId] = {};
+        }
+        for (const [contenderId, rankings] of Object.entries(indexedContenders)) {
+          // add point value to relativeRankings
+          const points = getContenderRank(rankings);
+          contenderPoints[categoryId][contenderId] = points;
+        }
+      }
     }
     console.log('formerPredictionSetIds', formerPredictionSetIds.length);
     console.log('formerPredictionIds', formerPredictionIds.length);
+    console.log('indexedRankings', indexedRankings);
+    console.log('contenderPoints', contenderPoints);
 
     return {
       status: 'success',
-      data: { formerPredictionSetIds, formerPredictionIds },
+      data: {
+        formerPredictionSetIds,
+        formerPredictionIds,
+        indexedRankings,
+        contenderPoints,
+      },
     };
   } catch (error) {
+    console.log('error', error);
     return {
       status: 'error',
       data: {
@@ -192,7 +169,6 @@ const getPredictionSetIds = async (eventIds) => {
 
 /**
  * creates new communityPredictionSet and corresponding predictions
- * also creates historyPredictionSet if createHistoryRecord = true
  * indexedRankings: {
  *    [eventId: string]: {
  *        [categoryId: string]: {
@@ -202,12 +178,18 @@ const getPredictionSetIds = async (eventIds) => {
  *        }
  *    }
  * }
+ * contenderPoints: {
+ *   [categoryId: string]: {
+ *     [contenderId: string]: points
+ *   }
+ * }
  * openEvents = { id: string, type: 'NOMINATION' | 'WIN' }[]
  */
 const createCommunityPredictions = async (
   indexedRankings = {},
+  contenderPoints = {},
   openEvents = [],
-  createHistoryRecord = false,
+  //   createHistoryRecord = false,
 ) => {
   console.log('createCommunityPredictions');
 
@@ -215,9 +197,9 @@ const createCommunityPredictions = async (
   let body;
 
   try {
-    // prepare createPredictionSet requests
+    // prepare createPredictionSet mutations
     const createPredictionSetPromises = [];
-    const createHistoryPredictionSetPromises = [];
+    // const createHistoryPredictionSetPromises = [];
     for (const [eventId, indexedCategories] of Object.entries(indexedRankings)) {
       // get the event type (NOMINATION or WIN)
       const event = openEvents.find((event) => event.id === eventId);
@@ -225,18 +207,11 @@ const createCommunityPredictions = async (
       for (const [categoryId] of Object.entries(indexedCategories)) {
         const req = fetch(createCommunityPredictionSet(eventId, categoryId, eventType));
         createPredictionSetPromises.push(req);
-        if (createHistoryRecord) {
-          const req = fetch(
-            createCommunityHistoryPredictionSet(eventId, categoryId, eventType),
-          );
-          createHistoryPredictionSetPromises.push(req);
-        }
       }
     }
 
     // create all predictionSets in parallel
     responses = await Promise.all(createPredictionSetPromises);
-    console.log('createPredictionSetPromises responses:', responses.length);
 
     // prepare createPrediction requests
     const createPredictionPromises = [];
@@ -244,14 +219,20 @@ const createCommunityPredictions = async (
       body = await response.json();
       // get params from body
       const predictionSet = body.data.createCommunityPredictionSet;
-      const predictionSetId = predictionSet.id;
-      const eventId = predictionSet.eventId;
-      const categoryId = predictionSet.communityPredictionSetCategoryId;
+      const { id, eventId, categoryId } = predictionSet;
       // push createPrediction requests to array
       const indexedContenders = indexedRankings[eventId][categoryId];
+      // get contender points in descending order so we can assess contender's ranking relative to other contenders
+      const sortedPoints = Object.values(contenderPoints[categoryId]).sort(
+        (a, b) => b - a,
+      );
       for (const [contenderId, indexedRankings] of Object.entries(indexedContenders)) {
+        const points = contenderPoints[contenderId];
+        const relativeRanking = sortedPoints.indexOf(points) + 1;
         createPredictionPromises.push(
-          fetch(createCommunityPrediction(predictionSetId, contenderId, indexedRankings)),
+          fetch(
+            createCommunityPrediction(id, contenderId, indexedRankings, relativeRanking),
+          ),
         );
       }
     }
@@ -260,45 +241,11 @@ const createCommunityPredictions = async (
     responses = await Promise.allSettled(createPredictionPromises);
     console.log('createPredictionPromises response:', responses.length);
 
-    // create history predictions
-    if (createHistoryRecord) {
-      // create history prediction sets
-      responses = await Promise.all(createHistoryPredictionSetPromises);
-      console.log('createHistoryPredictionSetPromises responses:', responses.length);
-
-      // prepare createHistoryPrediction requests
-      const createHistoryPredictionPromises = [];
-      for (const response of responses) {
-        body = await response.json();
-        // get params from body
-        const predictionSet = body.data.createCommunityHistoryPredictionSet;
-        const predictionSetId = predictionSet.id;
-        const eventId = predictionSet.eventId;
-        const categoryId = predictionSet.communityHistoryPredictionSetCategoryId;
-        // push createPrediction requests to array
-        const indexedContenders = indexedRankings[eventId][categoryId];
-        for (const [contenderId, indexedRankings] of Object.entries(indexedContenders)) {
-          createHistoryPredictionPromises.push(
-            fetch(
-              createCommunityHistoryPrediction(
-                predictionSetId,
-                contenderId,
-                indexedRankings,
-              ),
-            ),
-          );
-        }
-      }
-
-      // create history predictions in parallel
-      responses = await Promise.allSettled(createHistoryPredictionPromises);
-      console.log('createHistoryPredictionPromises response:', responses.length);
-    }
-
     return {
       status: 'success',
     };
   } catch (error) {
+    console.log('error', error);
     return {
       status: 'error',
       data: {
@@ -341,6 +288,7 @@ const deletePreviousCommunityPredictions = async (
       status: 'success',
     };
   } catch (error) {
+    console.log('error', error);
     return {
       status: 'error',
       data: {
@@ -358,8 +306,7 @@ const deletePreviousCommunityPredictions = async (
 
 module.exports = {
   getOpenEventIds,
-  getContendersByEventIds,
-  getPredictionSetIds,
+  getPredictions,
   createCommunityPredictions,
   deletePreviousCommunityPredictions,
 };

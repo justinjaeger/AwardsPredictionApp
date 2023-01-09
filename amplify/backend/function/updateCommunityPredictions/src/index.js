@@ -1,7 +1,6 @@
 const {
   getOpenEventIds,
-  getContendersByEventIds,
-  getPredictionSetIds,
+  getPredictions,
   createCommunityPredictions,
   deletePreviousCommunityPredictions,
 } = require('./services');
@@ -14,28 +13,8 @@ Amplify Params - DO NOT EDIT */
 /**
    @type {import('@types/aws-lambda').APIGatewayProxyHandler}
    RECURRING INVOCATION: Every hour (modify with "amplify update function")
-     *** MUST UPDATE OCCURANCE_INTERVAL IF CHANGE THE INVOCATION INTERVAL
-   Once a day, it also creates a community HISTORY record
-   - difference between community prediction and history record is history record is never deleted (and less frequently updated)
  */
 exports.handler = async () => {
-  const OCCURANCE_INTERVAL = 60; // in minutes
-  const HOUR_OF_HISTORY_RECORD = 12; // in hours out of 24 (13 is 1pm)
-
-  // get range in which we want to create history record
-  const occuranceInHours = OCCURANCE_INTERVAL / 60;
-  const timeToRecordHistory = new Date();
-  timeToRecordHistory.setHours(HOUR_OF_HISTORY_RECORD);
-  const timeHistoryExpires = new Date();
-  timeHistoryExpires.setHours(HOUR_OF_HISTORY_RECORD + occuranceInHours);
-
-  // if current time is within range, create history record
-  let createHistoryRecord = false; // SHOULD BE FALSE BY DEFAULT
-  const now = new Date();
-  if (now >= timeToRecordHistory && now < timeHistoryExpires) {
-    createHistoryRecord = true;
-  }
-
   let statusCode = 200;
   let error;
   let response;
@@ -48,22 +27,22 @@ exports.handler = async () => {
     const { openEvents } = response.data;
     const openEventIds = openEvents.map((event) => event.id);
 
-    response = await getContendersByEventIds(openEventIds);
+    // Get all predictions sets with openEventIds & create IndexedRankings
+    response = await getPredictions(openEventIds);
     if (response.status === 'error') {
       throw new Error(response.data.errors);
     }
-    const { indexedRankings } = response.data;
-
-    response = await getPredictionSetIds(openEventIds);
-    if (response.status === 'error') {
-      throw new Error(response.data.errors);
-    }
-    const { formerPredictionSetIds, formerPredictionIds } = response.data;
+    const {
+      formerPredictionSetIds,
+      formerPredictionIds,
+      indexedRankings,
+      contenderPoints,
+    } = response.data;
 
     response = await createCommunityPredictions(
       indexedRankings,
+      contenderPoints,
       openEvents,
-      createHistoryRecord,
     );
     if (response.status === 'error') {
       throw new Error(response.data.errors);

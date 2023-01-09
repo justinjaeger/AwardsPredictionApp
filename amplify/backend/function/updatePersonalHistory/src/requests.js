@@ -1,5 +1,5 @@
 const { Request } = require('node-fetch');
-const { getEventsQuery, listPredictionSetsQuery } = require('./queries');
+const { getEventsQuery, predictionSetByEventId } = require('./queries');
 const {
   createHistoryPredictionSetMutation,
   createHistoryPredictionMutation,
@@ -20,28 +20,22 @@ const getOpenEventsRequest = new Request(GRAPHQL_ENDPOINT, {
     query: getEventsQuery,
     variables: {
       filter: {
-        and: [
-          { status: { ne: 'NOMS_STAGING' } },
-          { status: { ne: 'WINS_STAGING' } },
-          { status: { ne: 'ARCHIVED' } },
-        ],
+        and: [{ status: { ne: 'WINS_STAGING' } }, { status: { ne: 'ARCHIVED' } }],
       },
     },
   }),
 });
 
-// ts: ListPredictionSetsQueryVariables
-const listPredictionSetsRequest = (eventId) =>
+// ts: ListCommunityPredictionSetsQueryVariables
+const predictionSetByEventIdRequest = (eventId) =>
   new Request(GRAPHQL_ENDPOINT, {
     method: 'POST',
     headers: {
       'x-api-key': GRAPHQL_API_KEY,
     },
     body: JSON.stringify({
-      query: listPredictionSetsQuery,
-      variables: {
-        filter: { predictionSetEventId: { eq: eventId } },
-      },
+      query: predictionSetByEventId,
+      variables: { eventId },
     }),
   });
 
@@ -62,21 +56,16 @@ const createHistoryPredictionSetRequest = (
       variables: {
         input: {
           type,
-          historyPredictionSetUserId: userId,
-          historyPredictionSetEventId: eventId,
-          historyPredictionSetCategoryId: categoryId,
+          userId,
+          eventId,
+          categoryId,
         },
       },
     }),
   });
 
 // ts: CreateHistoryPredictionMutationVariables
-const createHistoryPredictionRequest = (
-  ranking,
-  contenderId,
-  historyPredictionSetId,
-  userId,
-) =>
+const createHistoryPredictionRequest = (ranking, contenderId, historyPredictionSetId) =>
   new Request(GRAPHQL_ENDPOINT, {
     method: 'POST',
     headers: {
@@ -87,9 +76,8 @@ const createHistoryPredictionRequest = (
       variables: {
         input: {
           ranking,
-          contenderHistoryPredictionsId: contenderId,
-          historyPredictionSetPredictionsId: historyPredictionSetId,
-          historyPredictionUserId: userId,
+          contenderId,
+          historyPredictionSetId,
         },
       },
     }),
@@ -97,7 +85,7 @@ const createHistoryPredictionRequest = (
 
 module.exports = {
   getOpenEventsRequest,
-  listPredictionSetsRequest,
+  predictionSetByEventIdRequest,
   createHistoryPredictionSetRequest,
   createHistoryPredictionRequest,
 };

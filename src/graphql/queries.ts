@@ -4383,6 +4383,167 @@ export const predictionSetByUserIdAndEventId = /* GraphQL */ `
     }
   }
 `;
+export const predictionSetByEventId = /* GraphQL */ `
+  query PredictionSetByEventId(
+    $eventId: ID!
+    $sortDirection: ModelSortDirection
+    $filter: ModelPredictionSetFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    predictionSetByEventId(
+      eventId: $eventId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        userId
+        user {
+          id
+          email
+          username
+          name
+          bio
+          image
+          role
+          createdAt
+          updatedAt
+        }
+        eventId
+        event {
+          id
+          categories {
+            items {
+              id
+              eventId
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              name
+              type
+              createdAt
+              updatedAt
+            }
+            nextToken
+          }
+          awardsBody
+          year
+          nominationDateTime
+          winDateTime
+          status
+          createdAt
+          updatedAt
+        }
+        categoryId
+        category {
+          id
+          eventId
+          event {
+            id
+            categories {
+              items {
+                id
+                eventId
+                name
+                type
+                createdAt
+                updatedAt
+              }
+              nextToken
+            }
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          name
+          type
+          createdAt
+          updatedAt
+        }
+        predictions {
+          items {
+            id
+            predictionSetId
+            contenderId
+            contender {
+              id
+              categoryId
+              category {
+                id
+                eventId
+                name
+                type
+                createdAt
+                updatedAt
+              }
+              eventId
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              movieId
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              personId
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              songId
+              song {
+                id
+                movieId
+                title
+                artist
+                createdAt
+                updatedAt
+              }
+              visibility
+              accolade
+              createdAt
+              updatedAt
+            }
+            ranking
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        type
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
 export const predictionByPredictionSetId = /* GraphQL */ `
   query PredictionByPredictionSetId(
     $predictionSetId: ID!

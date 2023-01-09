@@ -9,25 +9,31 @@ const getEventsQuery = /* GraphQL */ `
   }
 `;
 
-const listPredictionSetsQuery = /* GraphQL */ `
-  query ListPredictionSets($filter: ModelPredictionSetFilterInput) {
-    listPredictionSets(filter: $filter) {
+// TODO: use new predictionSetByEventId query
+const predictionSetByEventId = /* GraphQL */ `
+  query PredictionSetByEventId($eventId: ID!) {
+    predictionSetByEventId(eventId: $eventId) {
       items {
-        id # predictionSetId
+        id # predictionSetid
+        userId
+        categoryId
         predictions {
           items {
             id # predictionId
-            contenderPredictionsId # contenderId
             ranking
+            contenderId
+            contender {
+              visibility
+              accolade
+            }
+            createdAt
           }
         }
         type
-        predictionSetUserId
-        predictionSetEventId
-        predictionSetCategoryId
+        createdAt
       }
     }
   }
 `;
 
-module.exports = { getEventsQuery, listPredictionSetsQuery };
+module.exports = { getEventsQuery, predictionSetByEventId };

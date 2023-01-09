@@ -12,12 +12,11 @@ const getEventsQuery = /* GraphQL */ `
 `;
 
 // TODO: use new predictionSetByEventId query
-const predictionSetByEventId = /* GraphQL */ `
-  query PredictionSetByEventId($eventId: ID!) {
-    predictionSetByEventId(eventId: $eventId) {
+const communityPredictionSetByEventIdQuery = /* GraphQL */ `
+  query CommunityPredictionSetByEventId($eventId: ID!) {
+    communityPredictionSetByEventId(eventId: $eventId) {
       items {
         id # predictionSetid
-        categoryId
         predictions {
           items {
             id # predictionId
@@ -25,11 +24,11 @@ const predictionSetByEventId = /* GraphQL */ `
             contenderId
             contender {
               visibility
-              accolade
             }
             createdAt
           }
         }
+        categoryId
         type
         createdAt
       }
@@ -39,5 +38,5 @@ const predictionSetByEventId = /* GraphQL */ `
 
 module.exports = {
   getEventsQuery,
-  predictionSetByEventId,
+  communityPredictionSetByEventIdQuery,
 };

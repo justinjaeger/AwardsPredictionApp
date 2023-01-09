@@ -2,6 +2,8 @@ import { iIndexedRankings } from '../types';
 
 /**
  * assigns a point value based on where users are ranking the film in their lists
+ * NOTE: This also exists in amplify/backend/function/updateCommunityPredictions/src/utils.js
+ * so if any changes here, also sync there
  */
 export const getContenderRank = (numPredicting: iIndexedRankings): number => {
   /**

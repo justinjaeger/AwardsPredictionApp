@@ -178,9 +178,9 @@ type Song @model @auth(rules: [{ allow: public }]) {
 # CURRENT PERSONAL
 type PredictionSet @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
-    userId: ID! @index(sortKeyFields: ["eventId"], queryField: "predictionSetByUserIdAndEventId")
+    userId: ID! @index(sortKeyFields: ["eventId"], queryField: "predictionSetByUserIdAndEventId") # used forgetting a user's predictions for a particular event
     user: User! @hasOne(fields: ["userId"])
-    eventId: ID!
+    eventId: ID! @index(queryField: "predictionSetByEventId") # used for compiling community predictions
     event: Event! @hasOne(fields: ["eventId"])
     categoryId: ID!
     category: Category! @hasOne(fields: ["categoryId"])

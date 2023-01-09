@@ -1,9 +1,8 @@
 const fetch = require('node-fetch').default;
+const { getOpenEventsRequest, communityPredictionSetByEventId } = require('./requests');
 const {
-  getOpenEventsRequest,
-  predictionSetByEventIdRequest,
-  createHistoryPredictionSetRequest,
-  createHistoryPredictionRequest,
+  createCommunityHistoryPredictionSet,
+  createCommunityHistoryPrediction,
 } = require('./requests');
 
 const getOpenEventIds = async () => {
@@ -38,31 +37,30 @@ const getOpenEventIds = async () => {
   }
 };
 
-const getPredictionsByEventIds = async (eventIds) => {
-  console.log('getPredictionsByEventIds');
+const getCommunityPredictionsByEventIds = async (eventIds) => {
+  console.log('getCommunityPredictionsByEventIds');
 
   let response;
   let body;
-  const predictionSetsFormatted = []; // ts: { id, eventId, categoryId, userId, type = 'NOMINATION' }[]
-  const predictionsFormatted = []; // ts: { ranking, contenderId, predictionSetId }[]
+  const predictionSetsFormatted = []; // ts: { id, eventId, categoryId, type }[]
+  const predictionsFormatted = []; // ts: { ranking, contenderId, categoryId, indexedRankings, communityPredictionsId, }[]
 
   // request for all contenders
   try {
     for (const eventId of eventIds) {
-      response = await fetch(predictionSetByEventIdRequest(eventId));
+      response = await fetch(communityPredictionSetByEventId(eventId));
       body = await response.json();
       if (body.errors) throw new Error(body.errors);
-      const predictionSets = body.data.predictionSetByEventId.items;
+      const predictionSets = body.data.communityPredictionSetByEventId.items;
       // add to predictionSetsFormatted
       predictionSets.forEach((predictionSet) => {
-        const predictionSetId = predictionSet.id;
-        const { userId, categoryId, type } = predictionSet;
+        const communityPredictionsId = predictionSet.id;
+        const { categoryId, type } = predictionSet;
         const predictions = predictionSet.predictions.items;
         predictionSetsFormatted.push({
-          id: predictionSetId,
+          id: communityPredictionsId,
           eventId,
           categoryId,
-          userId,
           type,
         });
         // add to predictionsFormatted
@@ -71,7 +69,8 @@ const getPredictionsByEventIds = async (eventIds) => {
           predictionsFormatted.push({
             ranking,
             contenderId,
-            predictionSetId,
+            categoryId,
+            communityPredictionsId,
           });
         });
       });
@@ -103,45 +102,66 @@ const getPredictionsByEventIds = async (eventIds) => {
   }
 };
 
-const createHistoryPredictions = async (
-  predictionSets, // ts: { id, eventId, categoryId, userId, type = 'NOMINATION' }[]
-  predictions, // ts: { ranking, contenderId, predictionSetId }[]
+const createCommunityHistory = async (
+  predictionSets, // ts: { id, eventId, categoryId, type }[]
+  predictions, // ts: { ranking, contenderId, categoryId, indexedRankings, communityPredictionsId, }[]
 ) => {
   console.log('createHistoryPredictions');
 
+  let body;
+  let response;
+
   try {
     // Create history prediction sets
-    const createPredictionSetPromises = [];
-    for (const { eventId, categoryId, userId, type } of predictionSets) {
-      createPredictionSetPromises.push(
-        fetch(createHistoryPredictionSetRequest(eventId, categoryId, userId, type)),
+    const createHistoryPredictionSetPromises = [];
+    for (const { eventId, categoryId, type } of predictionSets) {
+      createHistoryPredictionSetPromises.push(
+        fetch(createCommunityHistoryPredictionSet(eventId, categoryId, type)),
       );
     }
-    const responses = await Promise.all(createPredictionSetPromises);
-    console.log('createPredictionPromises response', responses.length);
+    const responses = await Promise.all(createHistoryPredictionSetPromises);
+    console.log('createHistoryPredictionSetPromises response', responses.length);
 
     // For efficiency, we want to create the predictions in a Promise.all. To do this, we need to map the historyPredictionSetId to the predictionSetId
     // important: with Promise.all, the order of repsonses is maintained, so we know that response[1] is the response for predictionSets[1]
     const idsToHistoryIds = {}; // ts: { [id: string]: historyId }
     for (const i in responses) {
-      const response = responses[i];
-      const body = await response.json();
-      const historyPredictionSetId = body.data.createHistoryPredictionSet.id;
+      response = responses[i];
+      body = await response.json();
+      const communityHistoryPredictionSetId =
+        body.data.createCommunityHistoryPredictionSet.id;
       const predictionSetId = predictionSets[i].id;
-      idsToHistoryIds[predictionSetId] = historyPredictionSetId;
+      idsToHistoryIds[predictionSetId] = communityHistoryPredictionSetId;
     }
 
-    const createPredictionPromises = [];
-    for (const { ranking, contenderId, predictionSetId } of predictions) {
-      const historyPredictionSetId = idsToHistoryIds[predictionSetId]; // get the historyPredictionSetId from the mapping
-      createPredictionPromises.push(
+    const createHistoryPredictionPromises = [];
+    for (const {
+      ranking,
+      contenderId,
+      categoryId,
+      indexedRankings,
+      communityPredictionsId,
+    } of predictions) {
+      const communityHistoryPredictionSetId = idsToHistoryIds[communityPredictionsId]; // get the historyPredictionSetId from the mapping
+      createHistoryPredictionPromises.push(
         fetch(
-          createHistoryPredictionRequest(ranking, contenderId, historyPredictionSetId),
+          createCommunityHistoryPrediction(
+            communityHistoryPredictionSetId,
+            contenderId,
+            categoryId,
+            indexedRankings,
+            ranking,
+          ),
         ),
       );
     }
-    const createPredictionResponses = await Promise.allSettled(createPredictionPromises);
-    console.log('createPredictionPromises response:', createPredictionResponses.length);
+    const createHistoryPredictionResponses = await Promise.allSettled(
+      createHistoryPredictionPromises,
+    );
+    console.log(
+      'createHistoryPredictionResponses response:',
+      createHistoryPredictionResponses.length,
+    );
 
     return {
       status: 'success',
@@ -165,6 +185,6 @@ const createHistoryPredictions = async (
 
 module.exports = {
   getOpenEventIds,
-  getPredictionsByEventIds,
-  createHistoryPredictions,
+  getCommunityPredictionsByEventIds,
+  createCommunityHistory,
 };

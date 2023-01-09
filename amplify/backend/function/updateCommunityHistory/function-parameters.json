@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "api": {
+      "awardsapp": [
+        "Query",
+        "Mutation"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}
