@@ -25,7 +25,6 @@ export const getAllEvents = async (): Promise<iApiResponse<ListEventsQuery>> => 
     if (!data?.listEvents) {
       throw new Error(JSON.stringify(errors));
     }
-    console.log('data', JSON.stringify(data));
     return { status: 'success', data };
   } catch (err) {
     return handleError('error getting all events', err);

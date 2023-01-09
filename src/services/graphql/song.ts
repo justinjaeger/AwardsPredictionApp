@@ -37,14 +37,13 @@ export const getSong = async (id: string): Promise<iApiResponse<GetSongQuery>> =
 export const getUniqueSongs = async (
   params: iSongParams,
 ): Promise<iApiResponse<ListSongsQuery>> => {
-  const { title, artist, movieId } = params;
+  const { title, movieId } = params;
   try {
     const { data, errors } = await GraphqlAPI<ListSongsQuery, ListSongsQueryVariables>(
       queries.listSongs,
       {
         filter: {
           title: { eq: title },
-          artist: { eq: artist },
           movieId: { eq: movieId },
         },
       },
