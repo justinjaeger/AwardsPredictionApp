@@ -35,6 +35,9 @@ const MovieListAdmin = (props: iMovieListAdminProps) => {
       contentContainerStyle={{ paddingBottom: 100 }}
       renderItem={({ item: prediction, index }) => {
         const ranking = index + 1;
+        const visibility =
+          prediction.visibility === ContenderVisibility.HIDDEN ? 'hidden' : 'visible';
+        const accolade = prediction.accolade || 'none';
         return (
           <>
             {index === slots ? (
@@ -58,11 +61,7 @@ const MovieListAdmin = (props: iMovieListAdminProps) => {
                   setSelectedContenderId(id);
                 }
               }}
-              subtitle={
-                prediction.visibility === ContenderVisibility.HIDDEN
-                  ? 'hidden'
-                  : 'visible'
-              }
+              subtitle={`${visibility} • ${accolade}`}
               selected={selectedContenderId === prediction.contenderId}
               variant={'community'}
               categoryType={category.type}

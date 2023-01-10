@@ -1,4 +1,4 @@
-import { EventStatus } from '../API';
+import { ContenderAccolade, EventStatus } from '../API';
 import { iEvent } from '../types';
 import { formatDateTime } from '../util/formatDateTime';
 
@@ -10,6 +10,14 @@ export const EVENT_STATUS_TO_STRING: {
   [EventStatus.WINS_STAGING]: 'Nominations Closed', // start preparing winners
   [EventStatus.WINS_LIVE]: 'Predict Winners', // let users predict winners
   [EventStatus.ARCHIVED]: 'Archived', // view history only
+};
+
+export const ACCOLADE_TO_STRING: {
+  [key in ContenderAccolade]: string;
+} = {
+  [ContenderAccolade.SHORTLISTED]: 'Shortlisted',
+  [ContenderAccolade.NOMINEE]: 'Nominated',
+  [ContenderAccolade.WINNER]: 'Winner',
 };
 
 export const eventIsForNominations = (eventStatus: EventStatus) =>

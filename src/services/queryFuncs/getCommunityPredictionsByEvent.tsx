@@ -37,6 +37,7 @@ const getCommunityPredictionsByEvent = async (event: iEvent, includeHidden = fal
 
       predictions.push({
         ranking: 0, // for community, we only care about / set indexedRankings
+        accolade: contender.accolade || undefined,
         indexedRankings: indexedRankings,
         visibility: contender.visibility || ContenderVisibility.VISIBLE,
         contenderId: contender.id || '',

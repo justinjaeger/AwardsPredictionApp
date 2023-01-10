@@ -138,6 +138,7 @@ const CreatePerformance = (props: iCreateContenderProps) => {
   // these are sort of "fake" values
   const movieData: iPrediction[] = movieSearchResults.map((m) => ({
     ranking: 0,
+    accolade: undefined,
     visibility: ContenderVisibility.VISIBLE,
     contenderId: m.tmdbId.toString(),
     contenderMovie: {
@@ -149,6 +150,7 @@ const CreatePerformance = (props: iCreateContenderProps) => {
   // these are sort of "fake" values
   const personData: iPrediction[] = personSearchResults.map((p) => ({
     ranking: 0,
+    accolade: undefined,
     visibility: ContenderVisibility.VISIBLE,
     contenderId: p.tmdbId.toString(),
     contenderPerson: {

@@ -128,6 +128,7 @@ const CreateSong = (props: iCreateContenderProps) => {
   // these are sort of "fake" values
   const movieData: iPrediction[] = movieSearchResults.map((m) => ({
     ranking: 0,
+    accolade: undefined,
     visibility: ContenderVisibility.VISIBLE,
     contenderId: m.tmdbId.toString(),
     contenderMovie: {

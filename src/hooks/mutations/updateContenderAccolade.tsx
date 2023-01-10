@@ -1,25 +1,23 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
-import { ContenderVisibility } from '../../API';
+import { ContenderAccolade } from '../../API';
 import ApiServices from '../../services/graphql';
 import { QueryKeys } from '../../types';
 
-const useMutationUpdateContenderVisibility = (onComplete?: () => void) => {
+const useMutationUpdateContenderAccolade = (onComplete?: () => void) => {
   const queryClient = useQueryClient();
 
   const [isComplete, setIsComplete] = useState<boolean>(true);
 
-  const { mutate: updateContenderVisibility, isLoading } = useMutation({
+  const { mutate: updateContenderAccolade, isLoading } = useMutation({
     mutationFn: async (params: {
       contenderId: string;
-      contenderMovieId: string;
-      visibility: ContenderVisibility;
+      accolade: ContenderAccolade | undefined;
     }) => {
       setIsComplete(false);
-      return ApiServices.updateContenderVisibilty(
+      return ApiServices.updateContenderAccolade(
         params.contenderId,
-        params.contenderMovieId,
-        params.visibility,
+        params.accolade || null,
       );
     },
     onSuccess: async () => {
@@ -29,7 +27,7 @@ const useMutationUpdateContenderVisibility = (onComplete?: () => void) => {
     },
   });
 
-  return { updateContenderVisibility, isLoading, isComplete };
+  return { updateContenderAccolade, isLoading, isComplete };
 };
 
-export default useMutationUpdateContenderVisibility;
+export default useMutationUpdateContenderAccolade;

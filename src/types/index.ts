@@ -2,6 +2,7 @@ import {
   AwardsBody,
   CategoryName,
   CategoryType,
+  ContenderAccolade,
   ContenderVisibility,
   EventStatus,
   UserRole,
@@ -23,6 +24,7 @@ export type iIndexedRankings = {
 export type iPrediction = {
   ranking: number; // PERSONAL ONLY
   visibility: ContenderVisibility;
+  accolade: ContenderAccolade | undefined;
   indexedRankings?: iIndexedRankings; // COMMUNITY ONLY
   contenderId: string;
   contenderMovie?:
