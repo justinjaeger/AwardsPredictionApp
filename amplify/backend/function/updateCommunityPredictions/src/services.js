@@ -3,6 +3,7 @@ const { isWithinLastMonth, getContenderRank } = require('./utils');
 const {
   getOpenEventsRequest,
   predictionSetByEventIdRequest,
+  communityPredictionSetByEventIdRequest,
   createCommunityPredictionSet,
   createCommunityPrediction,
   deleteCommunityPredictionSet,
@@ -41,13 +42,56 @@ const getOpenEventIds = async () => {
   }
 };
 
-const getPredictions = async (eventIds) => {
-  console.log('getPredictions');
+const getFormerCommunityPredictions = async (eventIds) => {
+  console.log('getFormerCommunityPredictions');
 
   let response;
   let body;
   const formerPredictionSetIds = [];
   const formerPredictionIds = [];
+
+  try {
+    for (const eventId of eventIds) {
+      response = await fetch(communityPredictionSetByEventIdRequest(eventId));
+      body = await response.json();
+      if (body.errors) throw new Error(JSON.stringify(body.errors));
+      const predictionSets = body.data.communityPredictionSetByEventId.items;
+      // add to formerPredictionSetIds
+      predictionSets.forEach((predictionSet) => {
+        formerPredictionSetIds.push(predictionSet.id);
+        const predictions = predictionSet.predictions.items;
+        predictions.forEach((prediction) => {
+          // extract prediction ids
+          formerPredictionIds.push(prediction.id);
+        });
+      });
+    }
+    return {
+      status: 'success',
+      data: { formerPredictionSetIds, formerPredictionIds },
+    };
+  } catch (error) {
+    console.log('error', error);
+    return {
+      status: 'error',
+      data: {
+        errors: [
+          {
+            status: response.status,
+            message: error.message,
+            stack: error.stack,
+          },
+        ],
+      },
+    };
+  }
+};
+
+const getPredictions = async (eventIds) => {
+  console.log('getPredictions');
+
+  let response;
+  let body;
 
   /**
    * ts: {
@@ -62,7 +106,7 @@ const getPredictions = async (eventIds) => {
    */
   const indexedRankings = {};
 
-  // request for all contenders
+  // request for all prediction sets with openEventIds
   try {
     for (const eventId of eventIds) {
       // Create space for entry if it doesn't exist
@@ -80,12 +124,8 @@ const getPredictions = async (eventIds) => {
         if (!indexedRankings[eventId][categoryId]) {
           indexedRankings[eventId][categoryId] = {};
         }
-        // extract prediction set ids
-        formerPredictionSetIds.push(predictionSet.id);
         const predictions = predictionSet.predictions.items;
         predictions.forEach((prediction) => {
-          // extract prediction ids
-          formerPredictionIds.push(prediction.id);
           // add to indexed rankings
           const { contenderId, contender, ranking: _ranking, createdAt } = prediction;
           const ranking = _ranking || 0; // make sure ranking is a number
@@ -136,16 +176,12 @@ const getPredictions = async (eventIds) => {
         }
       }
     }
-    console.log('formerPredictionSetIds', formerPredictionSetIds.length);
-    console.log('formerPredictionIds', formerPredictionIds.length);
-    console.log('indexedRankings', indexedRankings);
-    console.log('contenderPoints', contenderPoints);
+    // console.log('indexedRankings', indexedRankings);
+    // console.log('contenderPoints', contenderPoints);
 
     return {
       status: 'success',
       data: {
-        formerPredictionSetIds,
-        formerPredictionIds,
         indexedRankings,
         contenderPoints,
       },
@@ -217,6 +253,7 @@ const createCommunityPredictions = async (
     const createPredictionPromises = [];
     for (const response of responses) {
       body = await response.json();
+      console.log('body', body);
       // get params from body
       const predictionSet = body.data.createCommunityPredictionSet;
       const { id, eventId, categoryId } = predictionSet;
@@ -274,7 +311,7 @@ const deletePreviousCommunityPredictions = async (
     for (const predictionId of formerPredictionIds) {
       deletePredictionPromises.push(fetch(deleteCommunityPrediction(predictionId)));
     }
-    response = await Promise.allSettled(deletePredictionPromises);
+    response = await Promise.all(deletePredictionPromises);
     console.log('deletePredictionPromises response:', response.length);
     const deletePredictionSetPromises = [];
     for (const predictionSetId of formerPredictionSetIds) {
@@ -282,7 +319,7 @@ const deletePreviousCommunityPredictions = async (
         fetch(deleteCommunityPredictionSet(predictionSetId)),
       );
     }
-    response = await Promise.allSettled(deletePredictionSetPromises);
+    response = await Promise.all(deletePredictionSetPromises);
     console.log('deletePredictionSetPromises response:', response.length);
     return {
       status: 'success',
@@ -309,4 +346,5 @@ module.exports = {
   getPredictions,
   createCommunityPredictions,
   deletePreviousCommunityPredictions,
+  getFormerCommunityPredictions,
 };

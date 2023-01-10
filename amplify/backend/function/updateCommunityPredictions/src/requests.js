@@ -1,5 +1,9 @@
 const { Request } = require('node-fetch');
-const { getEventsQuery, predictionSetByEventId } = require('./queries');
+const {
+  getEventsQuery,
+  predictionSetByEventId,
+  communityPredictionSetByEventId,
+} = require('./queries');
 const {
   createCommunityPredictionSetMutation,
   createCommunityPredictionMutation,
@@ -41,6 +45,19 @@ const predictionSetByEventIdRequest = (eventId) =>
     },
     body: JSON.stringify({
       query: predictionSetByEventId,
+      variables: { eventId },
+    }),
+  });
+
+// ts: ListCommunityPredictionSetsQueryVariables
+const communityPredictionSetByEventIdRequest = (eventId) =>
+  new Request(GRAPHQL_ENDPOINT, {
+    method: 'POST',
+    headers: {
+      'x-api-key': GRAPHQL_API_KEY,
+    },
+    body: JSON.stringify({
+      query: communityPredictionSetByEventId,
       variables: { eventId },
     }),
   });
@@ -123,6 +140,7 @@ const deleteCommunityPrediction = (predictionId) =>
 module.exports = {
   getOpenEventsRequest,
   predictionSetByEventIdRequest,
+  communityPredictionSetByEventIdRequest,
   createCommunityPredictionSet,
   createCommunityPrediction,
   deleteCommunityPredictionSet,
