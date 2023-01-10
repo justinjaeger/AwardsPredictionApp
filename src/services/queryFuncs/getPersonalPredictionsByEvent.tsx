@@ -16,6 +16,7 @@ const getPersonalPredictionsByEvent = async (eventId: string, userId: string) =>
     const categoryId = ps?.categoryId || '';
     const predictions = (ps?.predictions?.items || []).map((p) => ({
       ranking: p?.ranking || 0,
+      accolade: p?.contender.accolade || undefined,
       visibility: p?.contender.visibility || ContenderVisibility.VISIBLE,
       contenderId: p?.contenderId || '',
       contenderMovie: p?.contender.movie || undefined,

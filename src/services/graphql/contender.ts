@@ -10,6 +10,7 @@ import {
   ContenderVisibility,
   UpdateContenderMutation,
   UpdateContenderMutationVariables,
+  ContenderAccolade,
 } from '../../API';
 import * as mutations from '../../graphql/mutations';
 import * as queries from '../../graphql/queries';
@@ -118,6 +119,7 @@ const createUniqueContender = async (
     status: 'success',
     data: {
       ranking: 0, // just filler, might be a problem idk
+      accolade: contender.accolade || undefined,
       visibility: contender.visibility || ContenderVisibility.VISIBLE,
       contenderId: contender.id,
       contenderMovie: contender.movie,
@@ -278,6 +280,26 @@ export const updateContenderVisibilty = async (
       UpdateContenderMutationVariables
     >(mutations.updateContender, {
       input: { id: contenderId, movieId, visibility },
+    });
+    if (!data?.updateContender) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data };
+  } catch (err) {
+    return handleError('error updating contender hidden', err);
+  }
+};
+
+export const updateContenderAccolade = async (
+  contenderId: string,
+  accolade: ContenderAccolade | null,
+): Promise<iApiResponse<UpdateContenderMutation>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<
+      UpdateContenderMutation,
+      UpdateContenderMutationVariables
+    >(mutations.updateContender, {
+      input: { id: contenderId, accolade },
     });
     if (!data?.updateContender) {
       throw new Error(JSON.stringify(errors));
