@@ -3,6 +3,7 @@ const {
   getPredictions,
   createCommunityPredictions,
   deletePreviousCommunityPredictions,
+  getFormerCommunityPredictions,
 } = require('./services');
 
 /* Amplify Params - DO NOT EDIT
@@ -28,16 +29,18 @@ exports.handler = async () => {
     const openEventIds = openEvents.map((event) => event.id);
 
     // Get all predictions sets with openEventIds & create IndexedRankings
+    response = await getFormerCommunityPredictions(openEventIds);
+    if (response.status === 'error') {
+      throw new Error(response.data.errors);
+    }
+    const { formerPredictionSetIds, formerPredictionIds } = response.data;
+
+    // Get all predictions sets with openEventIds & create IndexedRankings
     response = await getPredictions(openEventIds);
     if (response.status === 'error') {
       throw new Error(response.data.errors);
     }
-    const {
-      formerPredictionSetIds,
-      formerPredictionIds,
-      indexedRankings,
-      contenderPoints,
-    } = response.data;
+    const { indexedRankings, contenderPoints } = response.data;
 
     response = await createCommunityPredictions(
       indexedRankings,
