@@ -16,6 +16,8 @@ type iCategoryContext = {
   setEvent: (event: iEvent) => Promise<void>;
   category: iCategory | undefined;
   setCategory: (category: iCategory) => Promise<void>;
+  date: Date | undefined;
+  setDate: (date: Date | undefined) => void;
   personalCommunityTab: iPersonalCommunityTab;
   setPersonalCommunityTab: (d: iPersonalCommunityTab) => void;
   displayContenderInfo: (contenderId: string, personTmdbId?: number) => void;
@@ -28,6 +30,8 @@ const CategoryContext = createContext<iCategoryContext>({
   setEvent: () => new Promise(() => {}),
   category: undefined,
   setCategory: () => new Promise(() => {}),
+  date: undefined,
+  setDate: () => {},
   personalCommunityTab: 'community',
   setPersonalCommunityTab: () => {},
   displayContenderInfo: () => {},
@@ -44,6 +48,7 @@ export const CategoryProvider = (props: { children: React.ReactNode }) => {
   const [personalCommunityTab, setPersonalCommunityTab] = useState<iPersonalCommunityTab>(
     'community',
   );
+  const [date, setDate] = useState<Date | undefined>(undefined);
 
   const setEventId = (eventId: string) => {
     _setEventId(eventId);
@@ -95,6 +100,8 @@ export const CategoryProvider = (props: { children: React.ReactNode }) => {
         setPersonalCommunityTab,
         eventId,
         setEventId,
+        date,
+        setDate,
         displayContenderInfo,
       }}
     >

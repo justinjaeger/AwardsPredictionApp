@@ -9,6 +9,7 @@ import { CategoryName } from '../../../API';
 import { useCategory } from '../../../context/CategoryContext';
 import { eventToString } from '../../../util/stringConversions';
 import { getHeaderTitleWithTrophy } from '../../../constants';
+import BackgroundWrapper from '../../../components/BackgroundWrapper';
 
 const Category = () => {
   const { category, event } = useCategory();
@@ -26,7 +27,11 @@ const Category = () => {
     });
   }, [navigation]);
 
-  return PredictionTabsNavigator(<CategoryCommunity />, <CategoryPersonal />);
+  return (
+    <BackgroundWrapper>
+      {PredictionTabsNavigator(<CategoryCommunity />, <CategoryPersonal />)}
+    </BackgroundWrapper>
+  );
 };
 
 export default Category;
