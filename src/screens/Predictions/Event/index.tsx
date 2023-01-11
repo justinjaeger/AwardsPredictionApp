@@ -9,7 +9,6 @@ import { useAuth } from '../../../context/UserContext';
 import { eventToString } from '../../../util/stringConversions';
 import LoadingStatue from '../../../components/LoadingStatue';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
-import useQueryCommunityOrPersonalEvent from '../../../hooks/queries/getCommunityOrPersonalEvent';
 import SignedOutState from '../../../components/SignedOutState';
 import { getHeaderTitleWithTrophy } from '../../../constants';
 import { CategoryHeader } from '../styles';
@@ -17,15 +16,17 @@ import HeaderButton from '../../../components/HeaderButton';
 import EventList from './EventList';
 import { useCollapsible } from '../../../hooks/animatedState/useCollapsible';
 import _ from 'lodash';
+import { formatLastUpdated } from '../../../util/formatDateTime';
 import { Body } from '../../../components/Text';
-import { formatDateTime } from '../../../util/formatDateTime';
+import HistoryHeader from '../../../components/HistoryHeader';
+import usePredictionData from '../../../hooks/queries/usePredictionData';
 
 const TIMING = 300;
 
 const Event = (props: { tab: 'personal' | 'community' }) => {
   const { tab } = props;
 
-  const { event: _event, setCategory } = useCategory();
+  const { event: _event, setCategory, date } = useCategory();
   const { userId: _userId } = useAuth();
   const navigation = useTypedNavigation<PredictionsParamList>();
 
@@ -42,6 +43,8 @@ const Event = (props: { tab: 'personal' | 'community' }) => {
     toggleCollapsed,
   } = useCollapsible();
 
+  const { predictionData, isLoading } = usePredictionData(tab);
+
   // define the header
   useLayoutEffect(() => {
     const headerTitle = eventToString(event.awardsBody, event.year);
@@ -50,27 +53,19 @@ const Event = (props: { tab: 'personal' | 'community' }) => {
     });
   }, [navigation]);
 
-  const { data: predictionData, isLoading } = useQueryCommunityOrPersonalEvent(
-    tab,
-    !!userId,
-    { event, userId },
-  );
-
   useEffect(() => {
-    if (!isLoading) {
-      Animated.timing(loadingOpacity, {
-        toValue: 0,
+    Animated.timing(loadingOpacity, {
+      toValue: isLoading ? 1 : 0,
+      duration: TIMING,
+      useNativeDriver: true,
+    }).start();
+    setTimeout(() => {
+      Animated.timing(bodyOpacity, {
+        toValue: isLoading ? 0 : 1,
         duration: TIMING,
         useNativeDriver: true,
       }).start();
-      setTimeout(() => {
-        Animated.timing(bodyOpacity, {
-          toValue: 1,
-          duration: TIMING,
-          useNativeDriver: true,
-        }).start();
-      }, 250);
-    }
+    }, 250);
   }, [isLoading]);
 
   if (!userId && tab === 'personal') {
@@ -97,7 +92,7 @@ const Event = (props: { tab: 'personal' | 'community' }) => {
           }
           return acc;
         }, '');
-  const lastUpdatedString = formatDateTime(new Date(lastUpdated || ''));
+  const lastUpdatedString = formatLastUpdated(new Date(lastUpdated || ''));
 
   return (
     <BackgroundWrapper>
@@ -121,11 +116,14 @@ const Event = (props: { tab: 'personal' | 'community' }) => {
               icon={isCollapsed ? 'expand' : 'collapse'}
             />
           </View>
-          {lastUpdated ? (
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Body>{`Updated: ${lastUpdatedString}`}</Body>
-            </View>
-          ) : null}
+          <View style={{ flexDirection: 'row' }}>
+            {date === undefined ? (
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Body>{`Updated: ${lastUpdatedString}`}</Body>
+              </View>
+            ) : null}
+            <HistoryHeader />
+          </View>
         </CategoryHeader>
         <Animated.ScrollView
           style={{ opacity: bodyOpacity, width: '100%' }}

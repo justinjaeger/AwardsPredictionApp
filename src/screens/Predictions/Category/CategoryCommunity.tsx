@@ -1,18 +1,17 @@
 import React from 'react';
 import { Animated, View } from 'react-native';
-import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import HeaderButton from '../../../components/HeaderButton';
+import HistoryHeader from '../../../components/HistoryHeader';
 import MovieGrid from '../../../components/MovieGrid';
 import MovieListCommunity from '../../../components/MovieList/MovieListCommunity';
-import { BodyBold } from '../../../components/Text';
+import { Body, BodyBold } from '../../../components/Text';
 import theme from '../../../constants/theme';
 import { useCategory } from '../../../context/CategoryContext';
-import { useAuth } from '../../../context/UserContext';
 import { useCollapsible } from '../../../hooks/animatedState/useCollapsible';
 import { useDisplay } from '../../../hooks/animatedState/useDisplay';
-import useQueryCommunityOrPersonalEvent from '../../../hooks/queries/getCommunityOrPersonalEvent';
-import { iCategory, iEvent } from '../../../types';
-import { formatDateTime } from '../../../util/formatDateTime';
+import usePredictionData from '../../../hooks/queries/usePredictionData';
+import { iCategory } from '../../../types';
+import { formatLastUpdated } from '../../../util/formatDateTime';
 import { CategoryHeader } from '../styles';
 
 const CategoryCommunity = () => {
@@ -30,118 +29,104 @@ const CategoryCommunity = () => {
     toggleCollapsed,
   } = useCollapsible();
 
-  const { category: _category, event: _event } = useCategory();
-  const { userId } = useAuth();
+  const { category: _category, date } = useCategory();
 
   const category = _category as iCategory;
-  const event = _event as iEvent;
 
   // We use the SAME KEY as the previous screen, because it avoids a re-fetch of the data which was available previously
-  const {
-    data: predictionData,
-    isLoading,
-  } = useQueryCommunityOrPersonalEvent('community', !!userId, { event });
+  const { predictionData } = usePredictionData('community');
   const predictions = predictionData?.[category.id]?.predictions || [];
 
   const lastUpdated = predictionData?.[category.id]?.updatedAt;
-  const lastUpdatedString = formatDateTime(new Date(lastUpdated || ''));
+  const lastUpdatedString = formatLastUpdated(new Date(lastUpdated || ''));
   console.log('lastUpdatedString', lastUpdatedString); // TODO: can do something with this later
 
-  if (isLoading || !predictions) {
+  if (!predictions) {
     return null;
   }
 
   return (
-    <BackgroundWrapper>
-      <>
-        <CategoryHeader>
-          <View style={{ flexDirection: 'row' }}>
+    <>
+      <CategoryHeader>
+        <View style={{ flexDirection: 'row' }}>
+          <HeaderButton
+            onPress={() => {
+              toggleDisplay();
+            }}
+            icon={display === 'grid' ? 'list' : 'grid'}
+          />
+          <Animated.View style={{ opacity: listOpacity }}>
             <HeaderButton
-              onPress={() => {
-                toggleDisplay();
-              }}
-              icon={display === 'grid' ? 'list' : 'grid'}
+              onPress={toggleCollapsed}
+              icon={isCollapsed ? 'collapse' : 'expand'}
             />
-            <Animated.View style={{ opacity: listOpacity }}>
-              <HeaderButton
-                onPress={toggleCollapsed}
-                icon={isCollapsed ? 'collapse' : 'expand'}
-              />
-            </Animated.View>
-          </View>
-          <Animated.View
-            style={{
-              flexDirection: 'row',
-              width: 120,
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              opacity: listOpacity,
-              display: delayedDisplay === 'list' ? 'flex' : 'none',
-            }}
-          >
-            <View>
-              <BodyBold style={{ textAlign: 'right' }}>Predict</BodyBold>
-              <BodyBold style={{ textAlign: 'right' }}>Nom</BodyBold>
-            </View>
-            <View>
-              <BodyBold style={{ textAlign: 'right' }}>Predict</BodyBold>
-              <BodyBold style={{ textAlign: 'right' }}>Win</BodyBold>
-            </View>
           </Animated.View>
-        </CategoryHeader>
-        {predictions && predictions.length === 0 ? (
-          <View
-            style={{
-              width: '100%',
-              marginTop: 20,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <BodyBold>Community predictions not yet tallied</BodyBold>
-          </View>
-        ) : null}
-        <Animated.ScrollView
+        </View>
+        <View style={{ flexDirection: 'row' }}>
+          {date === undefined ? (
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Body>{`Updated: ${lastUpdatedString}`}</Body>
+            </View>
+          ) : null}
+          <HistoryHeader />
+        </View>
+      </CategoryHeader>
+      {predictions && predictions.length === 0 ? (
+        <View
           style={{
-            display: delayedDisplay === 'grid' ? 'flex' : 'none',
-            opacity: gridOpacity,
             width: '100%',
-          }}
-          contentContainerStyle={{
-            paddingBottom: 100,
-            marginTop: theme.windowMargin,
+            marginTop: 20,
+            alignItems: 'center',
+            justifyContent: 'center',
           }}
         >
-          <Animated.View style={{ opacity: gridOpacity }}>
-            <MovieGrid predictions={predictions} />
-          </Animated.View>
-        </Animated.ScrollView>
+          <BodyBold>
+            {date === undefined
+              ? 'Community predictions not yet tallied'
+              : 'No predictions for this date'}
+          </BodyBold>
+        </View>
+      ) : null}
+      <Animated.ScrollView
+        style={{
+          display: delayedDisplay === 'grid' ? 'flex' : 'none',
+          opacity: gridOpacity,
+          width: '100%',
+        }}
+        contentContainerStyle={{
+          paddingBottom: 100,
+          marginTop: theme.windowMargin,
+        }}
+      >
+        <Animated.View style={{ opacity: gridOpacity }}>
+          <MovieGrid predictions={predictions} />
+        </Animated.View>
+      </Animated.ScrollView>
+      <Animated.View
+        style={{
+          opacity: listOpacity,
+          display: delayedDisplay === 'list' ? 'flex' : 'none',
+        }}
+      >
         <Animated.View
           style={{
-            opacity: listOpacity,
-            display: delayedDisplay === 'list' ? 'flex' : 'none',
+            display: !isCollapsed ? 'flex' : 'none',
+            opacity: expandedOpacity,
+            width: '100%',
           }}
         >
-          <Animated.View
-            style={{
-              display: !isCollapsed ? 'flex' : 'none',
-              opacity: expandedOpacity,
-              width: '100%',
-            }}
-          >
-            <MovieListCommunity predictions={predictions} />
-          </Animated.View>
-          <Animated.View
-            style={{
-              display: isCollapsed ? 'flex' : 'none',
-              opacity: collapsedOpacity,
-            }}
-          >
-            <MovieListCommunity predictions={predictions} isCollapsed />
-          </Animated.View>
+          <MovieListCommunity predictions={predictions} />
         </Animated.View>
-      </>
-    </BackgroundWrapper>
+        <Animated.View
+          style={{
+            display: isCollapsed ? 'flex' : 'none',
+            opacity: collapsedOpacity,
+          }}
+        >
+          <MovieListCommunity predictions={predictions} isCollapsed />
+        </Animated.View>
+      </Animated.View>
+    </>
   );
 };
 

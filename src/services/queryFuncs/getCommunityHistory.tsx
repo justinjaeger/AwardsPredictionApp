@@ -1,16 +1,17 @@
 import { ContenderVisibility } from '../../API';
 import { iEvent, iIndexedPredictionsByCategory, iPrediction } from '../../types';
-import { isWithinLastMonth } from '../../util/isWithinLastMonth';
 import { sortCommunityPredictionsByRanking } from '../../util/sortPredictions';
 import ApiServices from '../graphql';
 
-const getCommunityPredictionsByEvent = async (event: iEvent, includeHidden = false) => {
+const getCommunityHistory = async (event: iEvent, createdAt: Date) => {
   // TODO: move this logic to lambda function. Pull directly from CommunityPredictionSet
   const eventId = event.id;
-  const { data: predictionSets } = await ApiServices.getCommunityPredictionsByEvent(
+  const { data: predictionSets } = await ApiServices.getCommunityHistory(
     eventId,
+    createdAt,
   );
-  const pSets = predictionSets?.communityPredictionSetByEventId?.items;
+  const pSets =
+    predictionSets?.communityHistoryPredictionSetsByEventIdAndCreatedAt?.items;
   if (!pSets) return; // handle in some other way?
   // Format the prediction sets
   const data: iIndexedPredictionsByCategory = {};
@@ -21,20 +22,10 @@ const getCommunityPredictionsByEvent = async (event: iEvent, includeHidden = fal
     (ps?.predictions?.items || []).forEach((p) => {
       const contender = p?.contender;
       if (!contender) return;
-      const lastUpdated = p?.updatedAt || '';
-      const isRecentPrediction = isWithinLastMonth(lastUpdated);
-      const hidePrediction =
-        contender.visibility === ContenderVisibility.HIDDEN && includeHidden !== true;
-      // skip if contender is hidden and we don't want to include hidden
-      // OR if prediction is NOT recent
-      if (isRecentPrediction === false || hidePrediction) {
-        return;
-      }
       // TODO: after amplify push / codegen this should work
       const indexedRankings = (p?.indexedRankings
         ? JSON.parse(p?.indexedRankings)
         : {}) as { [key: number]: number };
-
       predictions.push({
         ranking: p?.ranking || 0,
         accolade: contender.accolade || undefined,
@@ -52,4 +43,4 @@ const getCommunityPredictionsByEvent = async (event: iEvent, includeHidden = fal
   return data;
 };
 
-export default getCommunityPredictionsByEvent;
+export default getCommunityHistory;

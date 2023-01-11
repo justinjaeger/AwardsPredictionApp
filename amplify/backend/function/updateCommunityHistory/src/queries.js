@@ -21,6 +21,7 @@ const communityPredictionSetByEventIdQuery = /* GraphQL */ `
           items {
             id # predictionId
             ranking
+            indexedRankings
             contenderId
             contender {
               visibility

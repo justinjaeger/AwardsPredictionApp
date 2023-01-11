@@ -280,3 +280,134 @@ export const predictionSetByUserIdAndEventId = /* GraphQL */ `
     }
   }
 `;
+
+export const historyPredictionSetByUserIdAndEventIdAndCreatedAt = /* GraphQL */ `
+  query HistoryPredictionSetByUserIdAndEventIdAndCreatedAt(
+    $userId: ID!
+    $eventIdCreatedAt: ModelHistoryPredictionSetHistoryPredictionSetsByUserIdAndEventIdAndCreatedAtCompositeKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelHistoryPredictionSetFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    historyPredictionSetByUserIdAndEventIdAndCreatedAt(
+      userId: $userId
+      eventIdCreatedAt: $eventIdCreatedAt
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        categoryId
+        category {
+          id
+          name
+          type
+        }
+        predictions {
+          items {
+            id
+            historyPredictionSetId
+            contenderId
+            contender {
+              id
+              movieId
+              movie {
+                id
+                tmdbId
+                studio
+              }
+              personId
+              person {
+                id
+                tmdbId
+              }
+              songId
+              song {
+                id
+                movieId
+                title
+                artist
+              }
+              visibility
+              accolade
+            }
+            ranking
+            createdAt
+            updatedAt
+          }
+        }
+        type
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
+
+export const communityHistoryPredictionSetsByEventIdAndCreatedAt = /* GraphQL */ `
+  query CommunityHistoryPredictionSetsByEventIdAndCreatedAt(
+    $eventId: ID!
+    $createdAt: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelCommunityHistoryPredictionSetFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    communityHistoryPredictionSetsByEventIdAndCreatedAt(
+      eventId: $eventId
+      createdAt: $createdAt
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        categoryId
+        category {
+          id
+          name
+          type
+        }
+        predictions {
+          items {
+            id
+            communityHistoryPredictionSetId
+            contenderId
+            contender {
+              id
+              movieId
+              movie {
+                id
+                tmdbId
+                studio
+              }
+              personId
+              person {
+                id
+                tmdbId
+              }
+              songId
+              song {
+                id
+                movieId
+                title
+                artist
+              }
+              visibility
+              accolade
+            }
+            ranking
+            indexedRankings
+          }
+        }
+        type
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;

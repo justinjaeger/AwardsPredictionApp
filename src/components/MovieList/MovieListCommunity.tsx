@@ -1,12 +1,14 @@
 import { Divider } from '@ui-kitten/components';
 import React, { useState } from 'react';
-import { FlatList } from 'react-native';
+import { Animated, FlatList, View } from 'react-native';
 import { getCategorySlots } from '../../constants/categories';
 import COLORS from '../../constants/colors';
 import { useCategory } from '../../context/CategoryContext';
+import { CategoryHeader } from '../../screens/Predictions/styles';
 import { iCategory, iEvent, iPrediction } from '../../types';
 import ContenderListItem from '../List/ContenderList/ContenderListItem';
 import ContenderListItemCondensed from '../List/ContenderList/ContenderListItemCondensed';
+import { BodyBold } from '../Text';
 
 type iMovieListProps = {
   predictions: iPrediction[];
@@ -39,6 +41,28 @@ const MovieListCommunity = (props: iMovieListProps) => {
       keyExtractor={(item) => item.contenderId}
       style={{ width: '100%' }}
       contentContainerStyle={{ paddingBottom: 100 }}
+      ListHeaderComponent={
+        <CategoryHeader style={{ height: 50 }}>
+          <View style={{ flexDirection: 'row' }} />
+          <Animated.View
+            style={{
+              flexDirection: 'row',
+              width: 120,
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
+            <View>
+              <BodyBold style={{ textAlign: 'right' }}>Predict</BodyBold>
+              <BodyBold style={{ textAlign: 'right' }}>Nom</BodyBold>
+            </View>
+            <View>
+              <BodyBold style={{ textAlign: 'right' }}>Predict</BodyBold>
+              <BodyBold style={{ textAlign: 'right' }}>Win</BodyBold>
+            </View>
+          </Animated.View>
+        </CategoryHeader>
+      }
       renderItem={({ item: prediction, index }) => {
         const ranking = index + 1;
         return (

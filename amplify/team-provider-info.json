@@ -18,7 +18,7 @@
       "function": {
         "updateCommunityPredictions": {
           "deploymentBucketName": "amplify-awardsapp-dev-115717-deployment",
-          "s3Key": "amplify-builds/updateCommunityPredictions-765a56456438356a6e37-build.zip"
+          "s3Key": "amplify-builds/updateCommunityPredictions-77514f31645541496561-build.zip"
         },
         "updatePersonalHistory": {
           "deploymentBucketName": "amplify-awardsapp-dev-115717-deployment",
@@ -26,7 +26,7 @@
         },
         "updateCommunityHistory": {
           "deploymentBucketName": "amplify-awardsapp-dev-115717-deployment",
-          "s3Key": "amplify-builds/updateCommunityHistory-374d77476d2b74304753-build.zip"
+          "s3Key": "amplify-builds/updateCommunityHistory-3776386f737648785338-build.zip"
         }
       }
     }

@@ -65,12 +65,13 @@ const getCommunityPredictionsByEventIds = async (eventIds) => {
         });
         // add to predictionsFormatted
         predictions.forEach((prediction) => {
-          const { ranking, contenderId } = prediction;
+          const { ranking, contenderId, indexedRankings } = prediction;
           predictionsFormatted.push({
             ranking,
             contenderId,
             categoryId,
             communityPredictionsId,
+            indexedRankings,
           });
         });
       });
