@@ -1,15 +1,17 @@
 {
-  "resourceName": "awardsappimages",
-  "policyUUID": "c9648b66",
-  "bucketName": "awardsappimages",
+  "resourceName": "awardsappstorage",
+  "policyUUID": "24ce6e38",
+  "bucketName": "awardsapp873e5f6cbb714623a1108c8be7ab2680",
   "storageAccess": "authAndGuest",
   "guestAccess": [
     "CREATE_AND_UPDATE",
-    "READ"
+    "READ",
+    "DELETE"
   ],
   "authAccess": [
     "CREATE_AND_UPDATE",
-    "READ"
+    "READ",
+    "DELETE"
   ],
   "triggerFunction": "NONE",
   "groupAccess": {}
