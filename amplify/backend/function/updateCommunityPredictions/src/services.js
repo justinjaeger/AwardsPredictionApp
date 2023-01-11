@@ -253,7 +253,6 @@ const createCommunityPredictions = async (
     const createPredictionPromises = [];
     for (const response of responses) {
       body = await response.json();
-      console.log('body', body);
       // get params from body
       const predictionSet = body.data.createCommunityPredictionSet;
       const { id, eventId, categoryId } = predictionSet;
@@ -264,7 +263,7 @@ const createCommunityPredictions = async (
         (a, b) => b - a,
       );
       for (const [contenderId, indexedRankings] of Object.entries(indexedContenders)) {
-        const points = contenderPoints[contenderId];
+        const points = contenderPoints[categoryId][contenderId];
         const relativeRanking = sortedPoints.indexOf(points) + 1;
         createPredictionPromises.push(
           fetch(

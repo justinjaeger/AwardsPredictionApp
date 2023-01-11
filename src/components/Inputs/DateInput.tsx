@@ -8,7 +8,7 @@ import DateTimePicker, {
 import { GestureResponderEvent, Platform, TouchableHighlight, View } from 'react-native';
 import theme from '../../constants/theme';
 
-const DateInput = (props: {
+export const DateTimeInput = (props: {
   date: Date | undefined;
   setDate: (d: Date) => void;
   label: string;
@@ -39,13 +39,15 @@ const DateInput = (props: {
     <View>
       {!isAndroid ? (
         <DateTimePicker
+          display={'spinner'}
           testID="dateTimePicker"
           value={date || new Date()}
           // @ts-ignore flagging because it will break if you use 'datetime' as mode for Android, but I'm not allowing Android
           mode={'datetime'}
-          is24Hour={true}
           onChange={onChange}
-          style={{ alignSelf: 'center', backgroundColor: COLORS.white }}
+          style={{ backgroundColor: 'transparent' }}
+          textColor={'white'}
+          accentColor={'white'}
         />
       ) : (
         <TouchableHighlight onPress={showTimepicker} style={{ width: '100%', ...style }}>
@@ -72,4 +74,46 @@ const DateInput = (props: {
   );
 };
 
-export default DateInput;
+export const DateInput = (props: {
+  date: Date | undefined;
+  setDate: (d: Date) => void;
+  minDate?: Date;
+  maxDate?: Date;
+  style?: any;
+}) => {
+  const { date, setDate, minDate, maxDate, style } = props;
+
+  const onChange = (event: DateTimePickerEvent, selectedDate?: Date | undefined) => {
+    selectedDate && setDate(selectedDate);
+  };
+
+  // TODO: Look up example for how this is done
+  return (
+    <View style={{ flexDirection: 'row' }}>
+      <View
+        style={{
+          backgroundColor: 'rgba(255,255,255,0.8)',
+          justifyContent: 'center',
+          borderRadius: theme.borderRadius,
+          alignItems: 'center',
+        }}
+      >
+        <DateTimePicker
+          display={'default'}
+          testID="dateTimePicker"
+          value={date || new Date()}
+          mode={'date'}
+          onChange={onChange}
+          style={{
+            backgroundColor: 'transparent',
+            alignSelf: 'center',
+            ...style,
+          }}
+          accentColor={COLORS.secondary}
+          minimumDate={minDate}
+          maximumDate={maxDate}
+        />
+      </View>
+    </View>
+  );
+};

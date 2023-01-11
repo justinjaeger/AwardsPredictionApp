@@ -71,6 +71,7 @@ export type iEvent = {
   status: EventStatus;
   nominationDateTime: string | undefined;
   winDateTime: string | undefined;
+  createdAt: string;
 };
 
 export type iIndexedEvents = {

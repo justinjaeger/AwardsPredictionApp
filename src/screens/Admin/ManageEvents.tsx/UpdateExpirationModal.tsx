@@ -3,7 +3,7 @@ import BasicModal from '../../../components/BasicModal';
 import ApiServices from '../../../services/graphql';
 import Snackbar from '../../../components/Snackbar';
 import { SubmitButton } from '../../../components/Buttons';
-import DateInput from '../../../components/Inputs/DateInput';
+import { DateTimeInput } from '../../../components/Inputs/DateInput';
 
 const UpdateExpirationModal = (props: {
   visible: boolean;
@@ -56,7 +56,7 @@ const UpdateExpirationModal = (props: {
       header={{ title: 'Edit Expiration' }}
     >
       <>
-        <DateInput
+        <DateTimeInput
           label={
             propertyToUpdate === 'nominationDateTime'
               ? 'Nomination Closing Time'

@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Animated, View } from 'react-native';
 import { PredictionsParamList } from '../../../navigation/types';
 import { useTypedNavigation } from '../../../util/hooks';
@@ -17,8 +17,10 @@ import HeaderButton from '../../../components/HeaderButton';
 import EventList from './EventList';
 import { useCollapsible } from '../../../hooks/animatedState/useCollapsible';
 import _ from 'lodash';
-import { Body } from '../../../components/Text';
 import { formatDateTime } from '../../../util/formatDateTime';
+import { DateInput } from '../../../components/Inputs/DateInput';
+import { Body } from '../../../components/Text';
+import useQueryCommunityOrPersonalHistory from '../../../hooks/queries/getCommunityOrPersonalHistory';
 
 const TIMING = 300;
 
@@ -42,6 +44,23 @@ const Event = (props: { tab: 'personal' | 'community' }) => {
     toggleCollapsed,
   } = useCollapsible();
 
+  const [date, setDate] = useState<Date | undefined>(undefined);
+  const [showHistory, setShowHistory] = useState<boolean>(false);
+
+  const { data: predictionData, isLoading } = useQueryCommunityOrPersonalEvent(
+    tab,
+    !!userId,
+    { event, userId },
+  );
+  const { historyData, isLoading: isLoadingHistory } = useQueryCommunityOrPersonalHistory(
+    tab,
+    {
+      event,
+      date,
+      userId,
+    },
+  );
+
   // define the header
   useLayoutEffect(() => {
     const headerTitle = eventToString(event.awardsBody, event.year);
@@ -50,28 +69,21 @@ const Event = (props: { tab: 'personal' | 'community' }) => {
     });
   }, [navigation]);
 
-  const { data: predictionData, isLoading } = useQueryCommunityOrPersonalEvent(
-    tab,
-    !!userId,
-    { event, userId },
-  );
-
   useEffect(() => {
-    if (!isLoading) {
-      Animated.timing(loadingOpacity, {
-        toValue: 0,
+    const loading = isLoading || isLoadingHistory;
+    Animated.timing(loadingOpacity, {
+      toValue: loading ? 1 : 0,
+      duration: TIMING,
+      useNativeDriver: true,
+    }).start();
+    setTimeout(() => {
+      Animated.timing(bodyOpacity, {
+        toValue: loading ? 0 : 1,
         duration: TIMING,
         useNativeDriver: true,
       }).start();
-      setTimeout(() => {
-        Animated.timing(bodyOpacity, {
-          toValue: 1,
-          duration: TIMING,
-          useNativeDriver: true,
-        }).start();
-      }, 250);
-    }
-  }, [isLoading]);
+    }, 250);
+  }, [isLoading, isLoadingHistory]);
 
   if (!userId && tab === 'personal') {
     return <SignedOutState />;
@@ -80,6 +92,14 @@ const Event = (props: { tab: 'personal' | 'community' }) => {
   const onSelectCategory = async (category: iCategory) => {
     setCategory(category);
     navigation.navigate('Category');
+  };
+
+  const onTouchClock = () => {
+    if (showHistory) {
+      // reset date
+      setDate(undefined);
+    }
+    setShowHistory(!showHistory);
   };
 
   const iterablePredictionData = _.values(predictionData || {});
@@ -98,6 +118,14 @@ const Event = (props: { tab: 'personal' | 'community' }) => {
           return acc;
         }, '');
   const lastUpdatedString = formatDateTime(new Date(lastUpdated || ''));
+
+  const dateOfClose = event.winDateTime ? new Date(event.winDateTime) : new Date();
+  const today = new Date();
+  const maxDate = dateOfClose > today ? today : dateOfClose; // if date of close is in the past, use today
+  const minDate = new Date(event.createdAt);
+  minDate.setDate(minDate.getDate() + 1); // add a day to when it was created for safety
+
+  const data = date ? historyData : predictionData;
 
   return (
     <BackgroundWrapper>
@@ -121,11 +149,23 @@ const Event = (props: { tab: 'personal' | 'community' }) => {
               icon={isCollapsed ? 'expand' : 'collapse'}
             />
           </View>
-          {lastUpdated ? (
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Body>{`Updated: ${lastUpdatedString}`}</Body>
+          <View style={{ flexDirection: 'row' }}>
+            <View style={{ marginRight: 10, alignSelf: 'center' }}>
+              {showHistory ? (
+                <DateInput
+                  date={date}
+                  setDate={setDate}
+                  minDate={minDate}
+                  maxDate={maxDate}
+                />
+              ) : (
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <Body>{`Updated: ${lastUpdatedString}`}</Body>
+                </View>
+              )}
             </View>
-          ) : null}
+            <HeaderButton onPress={onTouchClock} icon={'clock-outline'} />
+          </View>
         </CategoryHeader>
         <Animated.ScrollView
           style={{ opacity: bodyOpacity, width: '100%' }}
@@ -144,7 +184,7 @@ const Event = (props: { tab: 'personal' | 'community' }) => {
             <EventList
               isCollapsed={true}
               onSelectCategory={(category: iCategory) => onSelectCategory(category)}
-              predictionData={predictionData}
+              predictionData={data}
             />
           </Animated.View>
           <Animated.View
@@ -157,7 +197,7 @@ const Event = (props: { tab: 'personal' | 'community' }) => {
             <EventList
               isCollapsed={false}
               onSelectCategory={(category: iCategory) => onSelectCategory(category)}
-              predictionData={predictionData}
+              predictionData={data}
             />
           </Animated.View>
         </Animated.ScrollView>

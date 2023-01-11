@@ -30,6 +30,7 @@ const getAllEvents = async () => {
       status: e.status || EventStatus.NOMS_STAGING, // default to NOMS_STAGING
       winDateTime: e.winDateTime || undefined,
       nominationDateTime: e.nominationDateTime || undefined,
+      createdAt: e.createdAt,
     };
   });
   return indexedEvents;
