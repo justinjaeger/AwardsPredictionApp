@@ -39,5 +39,11 @@ export type AmplifyDependentResourcesAttributes = {
             "LambdaExecutionRole": "string",
             "CloudWatchEventRule": "string"
         }
+    },
+    "storage": {
+        "awardsappimages": {
+            "BucketName": "string",
+            "Region": "string"
+        }
     }
 }
