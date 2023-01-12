@@ -4,6 +4,7 @@ import {
   CategoryType,
   ContenderAccolade,
   ContenderVisibility,
+  CategoryIsShortlisted,
   EventStatus,
   UserRole,
 } from '../API';
@@ -57,6 +58,7 @@ export type iCategory = {
   id: string;
   name: CategoryName;
   type: CategoryType;
+  isShortlisted: CategoryIsShortlisted;
 };
 
 export type iIndexedCategories = {

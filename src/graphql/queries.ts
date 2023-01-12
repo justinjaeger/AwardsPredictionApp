@@ -144,6 +144,7 @@ export const getEvent = /* GraphQL */ `
                 eventId
                 name
                 type
+                isShortlisted
                 createdAt
                 updatedAt
               }
@@ -159,6 +160,7 @@ export const getEvent = /* GraphQL */ `
           }
           name
           type
+          isShortlisted
           createdAt
           updatedAt
         }
@@ -210,6 +212,7 @@ export const listEvents = /* GraphQL */ `
             }
             name
             type
+            isShortlisted
             createdAt
             updatedAt
           }
@@ -253,6 +256,7 @@ export const getCategory = /* GraphQL */ `
             }
             name
             type
+            isShortlisted
             createdAt
             updatedAt
           }
@@ -268,6 +272,7 @@ export const getCategory = /* GraphQL */ `
       }
       name
       type
+      isShortlisted
       createdAt
       updatedAt
     }
@@ -309,6 +314,7 @@ export const listCategories = /* GraphQL */ `
               }
               name
               type
+              isShortlisted
               createdAt
               updatedAt
             }
@@ -324,6 +330,7 @@ export const listCategories = /* GraphQL */ `
         }
         name
         type
+        isShortlisted
         createdAt
         updatedAt
       }
@@ -357,6 +364,7 @@ export const getContender = /* GraphQL */ `
               }
               name
               type
+              isShortlisted
               createdAt
               updatedAt
             }
@@ -372,6 +380,7 @@ export const getContender = /* GraphQL */ `
         }
         name
         type
+        isShortlisted
         createdAt
         updatedAt
       }
@@ -397,6 +406,7 @@ export const getContender = /* GraphQL */ `
             }
             name
             type
+            isShortlisted
             createdAt
             updatedAt
           }
@@ -432,6 +442,7 @@ export const getContender = /* GraphQL */ `
               }
               name
               type
+              isShortlisted
               createdAt
               updatedAt
             }
@@ -517,6 +528,7 @@ export const getContender = /* GraphQL */ `
                 eventId
                 name
                 type
+                isShortlisted
                 createdAt
                 updatedAt
               }
@@ -608,6 +620,7 @@ export const listContenders = /* GraphQL */ `
                 eventId
                 name
                 type
+                isShortlisted
                 createdAt
                 updatedAt
               }
@@ -623,6 +636,7 @@ export const listContenders = /* GraphQL */ `
           }
           name
           type
+          isShortlisted
           createdAt
           updatedAt
         }
@@ -645,6 +659,7 @@ export const listContenders = /* GraphQL */ `
               }
               name
               type
+              isShortlisted
               createdAt
               updatedAt
             }
@@ -670,6 +685,7 @@ export const listContenders = /* GraphQL */ `
                 eventId
                 name
                 type
+                isShortlisted
                 createdAt
                 updatedAt
               }
@@ -793,6 +809,7 @@ export const getMovie = /* GraphQL */ `
             }
             name
             type
+            isShortlisted
             createdAt
             updatedAt
           }
@@ -805,6 +822,7 @@ export const getMovie = /* GraphQL */ `
                 eventId
                 name
                 type
+                isShortlisted
                 createdAt
                 updatedAt
               }
@@ -917,6 +935,7 @@ export const listMovies = /* GraphQL */ `
               }
               name
               type
+              isShortlisted
               createdAt
               updatedAt
             }
@@ -1045,6 +1064,7 @@ export const getSong = /* GraphQL */ `
               }
               name
               type
+              isShortlisted
               createdAt
               updatedAt
             }
@@ -1144,6 +1164,7 @@ export const listSongs = /* GraphQL */ `
                 eventId
                 name
                 type
+                isShortlisted
                 createdAt
                 updatedAt
               }
@@ -1241,6 +1262,7 @@ export const getPredictionSet = /* GraphQL */ `
             }
             name
             type
+            isShortlisted
             createdAt
             updatedAt
           }
@@ -1276,6 +1298,7 @@ export const getPredictionSet = /* GraphQL */ `
               }
               name
               type
+              isShortlisted
               createdAt
               updatedAt
             }
@@ -1291,6 +1314,7 @@ export const getPredictionSet = /* GraphQL */ `
         }
         name
         type
+        isShortlisted
         createdAt
         updatedAt
       }
@@ -1317,6 +1341,7 @@ export const getPredictionSet = /* GraphQL */ `
               }
               name
               type
+              isShortlisted
               createdAt
               updatedAt
             }
@@ -1433,6 +1458,7 @@ export const listPredictionSets = /* GraphQL */ `
               }
               name
               type
+              isShortlisted
               createdAt
               updatedAt
             }
@@ -1458,6 +1484,7 @@ export const listPredictionSets = /* GraphQL */ `
                 eventId
                 name
                 type
+                isShortlisted
                 createdAt
                 updatedAt
               }
@@ -1473,6 +1500,7 @@ export const listPredictionSets = /* GraphQL */ `
           }
           name
           type
+          isShortlisted
           createdAt
           updatedAt
         }
@@ -1489,6 +1517,7 @@ export const listPredictionSets = /* GraphQL */ `
                 eventId
                 name
                 type
+                isShortlisted
                 createdAt
                 updatedAt
               }
@@ -1566,6 +1595,7 @@ export const getPrediction = /* GraphQL */ `
                 eventId
                 name
                 type
+                isShortlisted
                 createdAt
                 updatedAt
               }
@@ -1581,6 +1611,7 @@ export const getPrediction = /* GraphQL */ `
           }
           name
           type
+          isShortlisted
           createdAt
           updatedAt
         }
@@ -1603,6 +1634,7 @@ export const getPrediction = /* GraphQL */ `
               }
               name
               type
+              isShortlisted
               createdAt
               updatedAt
             }
@@ -1628,6 +1660,7 @@ export const getPrediction = /* GraphQL */ `
                 eventId
                 name
                 type
+                isShortlisted
                 createdAt
                 updatedAt
               }
@@ -1767,6 +1800,7 @@ export const listPredictions = /* GraphQL */ `
             }
             name
             type
+            isShortlisted
             createdAt
             updatedAt
           }
@@ -1779,6 +1813,7 @@ export const listPredictions = /* GraphQL */ `
                 eventId
                 name
                 type
+                isShortlisted
                 createdAt
                 updatedAt
               }
@@ -1892,6 +1927,7 @@ export const getHistoryPredictionSet = /* GraphQL */ `
             }
             name
             type
+            isShortlisted
             createdAt
             updatedAt
           }
@@ -1927,6 +1963,7 @@ export const getHistoryPredictionSet = /* GraphQL */ `
               }
               name
               type
+              isShortlisted
               createdAt
               updatedAt
             }
@@ -1942,6 +1979,7 @@ export const getHistoryPredictionSet = /* GraphQL */ `
         }
         name
         type
+        isShortlisted
         createdAt
         updatedAt
       }
@@ -1968,6 +2006,7 @@ export const getHistoryPredictionSet = /* GraphQL */ `
               }
               name
               type
+              isShortlisted
               createdAt
               updatedAt
             }
@@ -2084,6 +2123,7 @@ export const listHistoryPredictionSets = /* GraphQL */ `
               }
               name
               type
+              isShortlisted
               createdAt
               updatedAt
             }
@@ -2109,6 +2149,7 @@ export const listHistoryPredictionSets = /* GraphQL */ `
                 eventId
                 name
                 type
+                isShortlisted
                 createdAt
                 updatedAt
               }
@@ -2124,6 +2165,7 @@ export const listHistoryPredictionSets = /* GraphQL */ `
           }
           name
           type
+          isShortlisted
           createdAt
           updatedAt
         }
@@ -2140,6 +2182,7 @@ export const listHistoryPredictionSets = /* GraphQL */ `
                 eventId
                 name
                 type
+                isShortlisted
                 createdAt
                 updatedAt
               }
@@ -2217,6 +2260,7 @@ export const getHistoryPrediction = /* GraphQL */ `
                 eventId
                 name
                 type
+                isShortlisted
                 createdAt
                 updatedAt
               }
@@ -2232,6 +2276,7 @@ export const getHistoryPrediction = /* GraphQL */ `
           }
           name
           type
+          isShortlisted
           createdAt
           updatedAt
         }
@@ -2254,6 +2299,7 @@ export const getHistoryPrediction = /* GraphQL */ `
               }
               name
               type
+              isShortlisted
               createdAt
               updatedAt
             }
@@ -2279,6 +2325,7 @@ export const getHistoryPrediction = /* GraphQL */ `
                 eventId
                 name
                 type
+                isShortlisted
                 createdAt
                 updatedAt
               }
@@ -2418,6 +2465,7 @@ export const listHistoryPredictions = /* GraphQL */ `
             }
             name
             type
+            isShortlisted
             createdAt
             updatedAt
           }
@@ -2430,6 +2478,7 @@ export const listHistoryPredictions = /* GraphQL */ `
                 eventId
                 name
                 type
+                isShortlisted
                 createdAt
                 updatedAt
               }
@@ -2531,6 +2580,7 @@ export const getCommunityPredictionSet = /* GraphQL */ `
             }
             name
             type
+            isShortlisted
             createdAt
             updatedAt
           }
@@ -2566,6 +2616,7 @@ export const getCommunityPredictionSet = /* GraphQL */ `
               }
               name
               type
+              isShortlisted
               createdAt
               updatedAt
             }
@@ -2581,6 +2632,7 @@ export const getCommunityPredictionSet = /* GraphQL */ `
         }
         name
         type
+        isShortlisted
         createdAt
         updatedAt
       }
@@ -2607,6 +2659,7 @@ export const getCommunityPredictionSet = /* GraphQL */ `
               }
               name
               type
+              isShortlisted
               createdAt
               updatedAt
             }
@@ -2712,6 +2765,7 @@ export const listCommunityPredictionSets = /* GraphQL */ `
               }
               name
               type
+              isShortlisted
               createdAt
               updatedAt
             }
@@ -2737,6 +2791,7 @@ export const listCommunityPredictionSets = /* GraphQL */ `
                 eventId
                 name
                 type
+                isShortlisted
                 createdAt
                 updatedAt
               }
@@ -2752,6 +2807,7 @@ export const listCommunityPredictionSets = /* GraphQL */ `
           }
           name
           type
+          isShortlisted
           createdAt
           updatedAt
         }
@@ -2768,6 +2824,7 @@ export const listCommunityPredictionSets = /* GraphQL */ `
                 eventId
                 name
                 type
+                isShortlisted
                 createdAt
                 updatedAt
               }
@@ -2846,6 +2903,7 @@ export const getCommunityPrediction = /* GraphQL */ `
                 eventId
                 name
                 type
+                isShortlisted
                 createdAt
                 updatedAt
               }
@@ -2861,6 +2919,7 @@ export const getCommunityPrediction = /* GraphQL */ `
           }
           name
           type
+          isShortlisted
           createdAt
           updatedAt
         }
@@ -2883,6 +2942,7 @@ export const getCommunityPrediction = /* GraphQL */ `
               }
               name
               type
+              isShortlisted
               createdAt
               updatedAt
             }
@@ -2908,6 +2968,7 @@ export const getCommunityPrediction = /* GraphQL */ `
                 eventId
                 name
                 type
+                isShortlisted
                 createdAt
                 updatedAt
               }
@@ -3048,6 +3109,7 @@ export const listCommunityPredictions = /* GraphQL */ `
             }
             name
             type
+            isShortlisted
             createdAt
             updatedAt
           }
@@ -3060,6 +3122,7 @@ export const listCommunityPredictions = /* GraphQL */ `
                 eventId
                 name
                 type
+                isShortlisted
                 createdAt
                 updatedAt
               }
@@ -3162,6 +3225,7 @@ export const getCommunityHistoryPredictionSet = /* GraphQL */ `
             }
             name
             type
+            isShortlisted
             createdAt
             updatedAt
           }
@@ -3197,6 +3261,7 @@ export const getCommunityHistoryPredictionSet = /* GraphQL */ `
               }
               name
               type
+              isShortlisted
               createdAt
               updatedAt
             }
@@ -3212,6 +3277,7 @@ export const getCommunityHistoryPredictionSet = /* GraphQL */ `
         }
         name
         type
+        isShortlisted
         createdAt
         updatedAt
       }
@@ -3238,6 +3304,7 @@ export const getCommunityHistoryPredictionSet = /* GraphQL */ `
               }
               name
               type
+              isShortlisted
               createdAt
               updatedAt
             }
@@ -3313,6 +3380,7 @@ export const getCommunityHistoryPredictionSet = /* GraphQL */ `
             }
             name
             type
+            isShortlisted
             createdAt
             updatedAt
           }
@@ -3365,6 +3433,7 @@ export const listCommunityHistoryPredictionSets = /* GraphQL */ `
               }
               name
               type
+              isShortlisted
               createdAt
               updatedAt
             }
@@ -3390,6 +3459,7 @@ export const listCommunityHistoryPredictionSets = /* GraphQL */ `
                 eventId
                 name
                 type
+                isShortlisted
                 createdAt
                 updatedAt
               }
@@ -3405,6 +3475,7 @@ export const listCommunityHistoryPredictionSets = /* GraphQL */ `
           }
           name
           type
+          isShortlisted
           createdAt
           updatedAt
         }
@@ -3421,6 +3492,7 @@ export const listCommunityHistoryPredictionSets = /* GraphQL */ `
                 eventId
                 name
                 type
+                isShortlisted
                 createdAt
                 updatedAt
               }
@@ -3480,6 +3552,7 @@ export const listCommunityHistoryPredictionSets = /* GraphQL */ `
               }
               name
               type
+              isShortlisted
               createdAt
               updatedAt
             }
@@ -3518,6 +3591,7 @@ export const getCommunityHistoryPrediction = /* GraphQL */ `
                 eventId
                 name
                 type
+                isShortlisted
                 createdAt
                 updatedAt
               }
@@ -3533,6 +3607,7 @@ export const getCommunityHistoryPrediction = /* GraphQL */ `
           }
           name
           type
+          isShortlisted
           createdAt
           updatedAt
         }
@@ -3555,6 +3630,7 @@ export const getCommunityHistoryPrediction = /* GraphQL */ `
               }
               name
               type
+              isShortlisted
               createdAt
               updatedAt
             }
@@ -3580,6 +3656,7 @@ export const getCommunityHistoryPrediction = /* GraphQL */ `
                 eventId
                 name
                 type
+                isShortlisted
                 createdAt
                 updatedAt
               }
@@ -3695,6 +3772,7 @@ export const getCommunityHistoryPrediction = /* GraphQL */ `
               }
               name
               type
+              isShortlisted
               createdAt
               updatedAt
             }
@@ -3710,6 +3788,7 @@ export const getCommunityHistoryPrediction = /* GraphQL */ `
         }
         name
         type
+        isShortlisted
         createdAt
         updatedAt
       }
@@ -3760,6 +3839,7 @@ export const listCommunityHistoryPredictions = /* GraphQL */ `
             }
             name
             type
+            isShortlisted
             createdAt
             updatedAt
           }
@@ -3772,6 +3852,7 @@ export const listCommunityHistoryPredictions = /* GraphQL */ `
                 eventId
                 name
                 type
+                isShortlisted
                 createdAt
                 updatedAt
               }
@@ -3851,6 +3932,7 @@ export const listCommunityHistoryPredictions = /* GraphQL */ `
                 eventId
                 name
                 type
+                isShortlisted
                 createdAt
                 updatedAt
               }
@@ -3866,6 +3948,7 @@ export const listCommunityHistoryPredictions = /* GraphQL */ `
           }
           name
           type
+          isShortlisted
           createdAt
           updatedAt
         }
@@ -4010,6 +4093,7 @@ export const categoryByEvent = /* GraphQL */ `
               }
               name
               type
+              isShortlisted
               createdAt
               updatedAt
             }
@@ -4025,6 +4109,7 @@ export const categoryByEvent = /* GraphQL */ `
         }
         name
         type
+        isShortlisted
         createdAt
         updatedAt
       }
@@ -4061,6 +4146,7 @@ export const contenderByMovie = /* GraphQL */ `
                 eventId
                 name
                 type
+                isShortlisted
                 createdAt
                 updatedAt
               }
@@ -4076,6 +4162,7 @@ export const contenderByMovie = /* GraphQL */ `
           }
           name
           type
+          isShortlisted
           createdAt
           updatedAt
         }
@@ -4098,6 +4185,7 @@ export const contenderByMovie = /* GraphQL */ `
               }
               name
               type
+              isShortlisted
               createdAt
               updatedAt
             }
@@ -4123,6 +4211,7 @@ export const contenderByMovie = /* GraphQL */ `
                 eventId
                 name
                 type
+                isShortlisted
                 createdAt
                 updatedAt
               }
@@ -4270,6 +4359,7 @@ export const predictionSetByUserIdAndEventId = /* GraphQL */ `
               }
               name
               type
+              isShortlisted
               createdAt
               updatedAt
             }
@@ -4295,6 +4385,7 @@ export const predictionSetByUserIdAndEventId = /* GraphQL */ `
                 eventId
                 name
                 type
+                isShortlisted
                 createdAt
                 updatedAt
               }
@@ -4310,6 +4401,7 @@ export const predictionSetByUserIdAndEventId = /* GraphQL */ `
           }
           name
           type
+          isShortlisted
           createdAt
           updatedAt
         }
@@ -4326,6 +4418,7 @@ export const predictionSetByUserIdAndEventId = /* GraphQL */ `
                 eventId
                 name
                 type
+                isShortlisted
                 createdAt
                 updatedAt
               }
@@ -4431,6 +4524,7 @@ export const predictionSetByEventId = /* GraphQL */ `
               }
               name
               type
+              isShortlisted
               createdAt
               updatedAt
             }
@@ -4456,6 +4550,7 @@ export const predictionSetByEventId = /* GraphQL */ `
                 eventId
                 name
                 type
+                isShortlisted
                 createdAt
                 updatedAt
               }
@@ -4471,6 +4566,7 @@ export const predictionSetByEventId = /* GraphQL */ `
           }
           name
           type
+          isShortlisted
           createdAt
           updatedAt
         }
@@ -4487,6 +4583,7 @@ export const predictionSetByEventId = /* GraphQL */ `
                 eventId
                 name
                 type
+                isShortlisted
                 createdAt
                 updatedAt
               }
@@ -4584,6 +4681,7 @@ export const predictionByPredictionSetId = /* GraphQL */ `
             }
             name
             type
+            isShortlisted
             createdAt
             updatedAt
           }
@@ -4596,6 +4694,7 @@ export const predictionByPredictionSetId = /* GraphQL */ `
                 eventId
                 name
                 type
+                isShortlisted
                 createdAt
                 updatedAt
               }
@@ -4721,6 +4820,7 @@ export const historyPredictionSetByUserIdAndEventIdAndCreatedAt = /* GraphQL */ 
               }
               name
               type
+              isShortlisted
               createdAt
               updatedAt
             }
@@ -4746,6 +4846,7 @@ export const historyPredictionSetByUserIdAndEventIdAndCreatedAt = /* GraphQL */ 
                 eventId
                 name
                 type
+                isShortlisted
                 createdAt
                 updatedAt
               }
@@ -4761,6 +4862,7 @@ export const historyPredictionSetByUserIdAndEventIdAndCreatedAt = /* GraphQL */ 
           }
           name
           type
+          isShortlisted
           createdAt
           updatedAt
         }
@@ -4777,6 +4879,7 @@ export const historyPredictionSetByUserIdAndEventIdAndCreatedAt = /* GraphQL */ 
                 eventId
                 name
                 type
+                isShortlisted
                 createdAt
                 updatedAt
               }
@@ -4874,6 +4977,7 @@ export const historyPredictionByHistoryPredictionSetId = /* GraphQL */ `
             }
             name
             type
+            isShortlisted
             createdAt
             updatedAt
           }
@@ -4886,6 +4990,7 @@ export const historyPredictionByHistoryPredictionSetId = /* GraphQL */ `
                 eventId
                 name
                 type
+                isShortlisted
                 createdAt
                 updatedAt
               }
@@ -4997,6 +5102,7 @@ export const communityPredictionSetByEventId = /* GraphQL */ `
               }
               name
               type
+              isShortlisted
               createdAt
               updatedAt
             }
@@ -5022,6 +5128,7 @@ export const communityPredictionSetByEventId = /* GraphQL */ `
                 eventId
                 name
                 type
+                isShortlisted
                 createdAt
                 updatedAt
               }
@@ -5037,6 +5144,7 @@ export const communityPredictionSetByEventId = /* GraphQL */ `
           }
           name
           type
+          isShortlisted
           createdAt
           updatedAt
         }
@@ -5053,6 +5161,7 @@ export const communityPredictionSetByEventId = /* GraphQL */ `
                 eventId
                 name
                 type
+                isShortlisted
                 createdAt
                 updatedAt
               }
@@ -5151,6 +5260,7 @@ export const communityPredictionByCommunityPredictionSetId = /* GraphQL */ `
             }
             name
             type
+            isShortlisted
             createdAt
             updatedAt
           }
@@ -5163,6 +5273,7 @@ export const communityPredictionByCommunityPredictionSetId = /* GraphQL */ `
                 eventId
                 name
                 type
+                isShortlisted
                 createdAt
                 updatedAt
               }
@@ -5277,6 +5388,7 @@ export const communityHistoryPredictionSetsByEventIdAndCreatedAt = /* GraphQL */
               }
               name
               type
+              isShortlisted
               createdAt
               updatedAt
             }
@@ -5302,6 +5414,7 @@ export const communityHistoryPredictionSetsByEventIdAndCreatedAt = /* GraphQL */
                 eventId
                 name
                 type
+                isShortlisted
                 createdAt
                 updatedAt
               }
@@ -5317,6 +5430,7 @@ export const communityHistoryPredictionSetsByEventIdAndCreatedAt = /* GraphQL */
           }
           name
           type
+          isShortlisted
           createdAt
           updatedAt
         }
@@ -5333,6 +5447,7 @@ export const communityHistoryPredictionSetsByEventIdAndCreatedAt = /* GraphQL */
                 eventId
                 name
                 type
+                isShortlisted
                 createdAt
                 updatedAt
               }
@@ -5392,6 +5507,7 @@ export const communityHistoryPredictionSetsByEventIdAndCreatedAt = /* GraphQL */
               }
               name
               type
+              isShortlisted
               createdAt
               updatedAt
             }
@@ -5450,6 +5566,7 @@ export const communityHistoryPredictionByCommunityHistoryPredictionSetId = /* Gr
             }
             name
             type
+            isShortlisted
             createdAt
             updatedAt
           }
@@ -5462,6 +5579,7 @@ export const communityHistoryPredictionByCommunityHistoryPredictionSetId = /* Gr
                 eventId
                 name
                 type
+                isShortlisted
                 createdAt
                 updatedAt
               }
@@ -5541,6 +5659,7 @@ export const communityHistoryPredictionByCommunityHistoryPredictionSetId = /* Gr
                 eventId
                 name
                 type
+                isShortlisted
                 createdAt
                 updatedAt
               }
@@ -5556,6 +5675,7 @@ export const communityHistoryPredictionByCommunityHistoryPredictionSetId = /* Gr
           }
           name
           type
+          isShortlisted
           createdAt
           updatedAt
         }
@@ -5608,6 +5728,7 @@ export const communityHistoryPredictionByCategoryId = /* GraphQL */ `
             }
             name
             type
+            isShortlisted
             createdAt
             updatedAt
           }
@@ -5620,6 +5741,7 @@ export const communityHistoryPredictionByCategoryId = /* GraphQL */ `
                 eventId
                 name
                 type
+                isShortlisted
                 createdAt
                 updatedAt
               }
@@ -5699,6 +5821,7 @@ export const communityHistoryPredictionByCategoryId = /* GraphQL */ `
                 eventId
                 name
                 type
+                isShortlisted
                 createdAt
                 updatedAt
               }
@@ -5714,6 +5837,7 @@ export const communityHistoryPredictionByCategoryId = /* GraphQL */ `
           }
           name
           type
+          isShortlisted
           createdAt
           updatedAt
         }

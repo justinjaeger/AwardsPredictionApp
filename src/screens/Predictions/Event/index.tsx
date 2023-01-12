@@ -117,7 +117,7 @@ const Event = (props: { tab: 'personal' | 'community' }) => {
             />
           </View>
           <View style={{ flexDirection: 'row' }}>
-            {date === undefined ? (
+            {date === undefined && lastUpdatedString !== 'Invalid Date' ? (
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <Body>{`Updated: ${lastUpdatedString}`}</Body>
               </View>

@@ -1,4 +1,4 @@
-import { ContenderVisibility } from '../../API';
+import { CategoryIsShortlisted, ContenderVisibility } from '../../API';
 import { iEvent, iIndexedPredictionsByCategory, iPrediction } from '../../types';
 import { isWithinLastMonth } from '../../util/isWithinLastMonth';
 import { sortCommunityPredictionsByRanking } from '../../util/sortPredictions';
@@ -17,17 +17,25 @@ const getCommunityPredictionsByEvent = async (event: iEvent, includeHidden = fal
   pSets.forEach((ps) => {
     const categoryId = ps?.categoryId || '';
     const predictions: iPrediction[] = [];
+    const contenders = ps?.predictions?.items || [];
     // populate predictions array
-    (ps?.predictions?.items || []).forEach((p) => {
+    contenders.forEach((p) => {
+      // NOTE: Below is same as in updateCommuityPredictions/getPredictions. So it should all be unnecessary. But can keep as safety
       const contender = p?.contender;
       if (!contender) return;
+      const ranking = p?.ranking || 0;
       const lastUpdated = p?.updatedAt || '';
+      // don't include hidden contenders in tally
+      // don't include rankings higher than 20
+      // don't include if prediction is more than a month old
+      // don't include if category is shortlisted and contender doesn't have an accolade
       const isRecentPrediction = isWithinLastMonth(lastUpdated);
-      const hidePrediction =
+      const isHidden =
         contender.visibility === ContenderVisibility.HIDDEN && includeHidden !== true;
-      // skip if contender is hidden and we don't want to include hidden
-      // OR if prediction is NOT recent
-      if (isRecentPrediction === false || hidePrediction) {
+      const isLowOnList = ranking > 20;
+      const contenderIsUnqualified =
+        ps?.category.isShortlisted === CategoryIsShortlisted.TRUE && !contender.accolade;
+      if (!isRecentPrediction || isLowOnList || isHidden || contenderIsUnqualified) {
         return;
       }
       // TODO: after amplify push / codegen this should work

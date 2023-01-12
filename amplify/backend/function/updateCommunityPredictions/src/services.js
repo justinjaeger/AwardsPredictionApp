@@ -132,10 +132,13 @@ const getPredictions = async (eventIds) => {
           // don't include hidden contenders in tally
           // don't include rankings higher than 20
           // don't include if prediction is more than a month old
+          // don't include if category is shortlisted and contender doesn't have an accolade
           const isHidden = contender.visibility === 'HIDDEN';
           const isLowOnList = ranking > 20;
           const isRecentPrediction = isWithinLastMonth(createdAt);
-          if (isHidden || isLowOnList || !isRecentPrediction) {
+          const contenderIsUnqualified =
+            predictionSet?.category.isShortlisted === 'TRUE' && !contender.accolade;
+          if (isHidden || isLowOnList || !isRecentPrediction || contenderIsUnqualified) {
             return;
           }
           // Create space for contender entry if it doesn't exist

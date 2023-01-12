@@ -1,4 +1,4 @@
-import { AwardsBody, CategoryName, CategoryType } from '../API';
+import { AwardsBody, CategoryIsShortlisted, CategoryName, CategoryType } from '../API';
 
 export type iCategoryData = { name: string; type: CategoryType; slots?: number };
 
@@ -10,6 +10,13 @@ export const CATEGORY_TYPE_TO_STRING: { [key in CategoryType]: string } = {
   [CategoryType.FILM]: 'Film',
   [CategoryType.PERFORMANCE]: 'Performance',
   [CategoryType.SONG]: 'Song',
+};
+
+export const IS_SHORTLISTED_TO_STRING: {
+  [key in CategoryIsShortlisted]: string;
+} = {
+  [CategoryIsShortlisted.TRUE]: 'Is Shortlisted',
+  [CategoryIsShortlisted.FALSE]: 'NOT Shortlisted',
 };
 
 export const getCategorySlots = (

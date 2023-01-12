@@ -1,10 +1,11 @@
 import {
+  CategoryIsShortlisted,
   CategoryName,
   CategoryType,
   CreateCategoryMutation,
   CreateCategoryMutationVariables,
-  DeleteCategoryMutation,
-  DeleteCategoryMutationVariables,
+  UpdateCategoryMutation,
+  UpdateCategoryMutationVariables,
 } from '../../API';
 import * as mutations from '../../graphql/mutations';
 import { GraphqlAPI, handleError, iApiResponse } from '../utils';
@@ -28,21 +29,20 @@ export const createCategory = async (
   }
 };
 
-export const deleteCategory = async (
-  id: string,
-): Promise<iApiResponse<DeleteCategoryMutation>> => {
+export const updateCategoryIsShortlisted = async (
+  categoryId: string,
+  isShortlisted: CategoryIsShortlisted,
+): Promise<iApiResponse<UpdateCategoryMutation>> => {
   try {
     const { data, errors } = await GraphqlAPI<
-      DeleteCategoryMutation,
-      DeleteCategoryMutationVariables
-    >(mutations.deleteCategory, { input: { id } });
-    console.error('deleteCattt', data);
-    if (!data?.deleteCategory) {
+      UpdateCategoryMutation,
+      UpdateCategoryMutationVariables
+    >(mutations.updateCategory, { input: { id: categoryId, isShortlisted } });
+    if (!data?.updateCategory) {
       throw new Error(JSON.stringify(errors));
     }
-    console.error('deleteCat', data);
     return { status: 'success', data };
   } catch (err) {
-    return handleError('error deleting category', err);
+    return handleError('error updating category is shortlisted', err);
   }
 };

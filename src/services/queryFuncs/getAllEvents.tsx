@@ -1,4 +1,4 @@
-import { EventStatus } from '../../API';
+import { CategoryIsShortlisted, EventStatus } from '../../API';
 import { iIndexedCategories, iIndexedEvents } from '../../types';
 import ApiServices from '../graphql';
 
@@ -20,6 +20,7 @@ const getAllEvents = async () => {
         id: c.id,
         type: c.type,
         name: c.name,
+        isShortlisted: c.isShortlisted || CategoryIsShortlisted.FALSE,
       };
     });
     indexedEvents[e.id] = {

@@ -39,7 +39,6 @@ const CategoryCommunity = () => {
 
   const lastUpdated = predictionData?.[category.id]?.updatedAt;
   const lastUpdatedString = formatLastUpdated(new Date(lastUpdated || ''));
-  console.log('lastUpdatedString', lastUpdatedString); // TODO: can do something with this later
 
   if (!predictions) {
     return null;
@@ -63,7 +62,7 @@ const CategoryCommunity = () => {
           </Animated.View>
         </View>
         <View style={{ flexDirection: 'row' }}>
-          {date === undefined ? (
+          {date === undefined && lastUpdatedString !== 'Invalid Date' ? (
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Body>{`Updated: ${lastUpdatedString}`}</Body>
             </View>

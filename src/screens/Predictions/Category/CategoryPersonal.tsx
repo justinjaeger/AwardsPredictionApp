@@ -18,7 +18,11 @@ import { useDisplay } from '../../../hooks/animatedState/useDisplay';
 import useMutationUpdatePredictions from '../../../hooks/mutations/updatePredictions';
 import { PredictionsParamList } from '../../../navigation/types';
 import { iCategory, iEvent, iPrediction } from '../../../types';
-import { useAsyncReference, useTypedNavigation } from '../../../util/hooks';
+import {
+  useAsyncReference,
+  useDeepCompareEffect,
+  useTypedNavigation,
+} from '../../../util/hooks';
 import { CategoryHeader } from '../styles';
 import { formatLastUpdated } from '../../../util/formatDateTime';
 import usePredictionData from '../../../hooks/queries/usePredictionData';
@@ -64,11 +68,11 @@ const CategoryPersonal = () => {
   const initialPredictions = predictionData
     ? predictionData[category.id]?.predictions || []
     : [];
+  const initialPredictionIds = initialPredictions.map((p) => p.contenderId);
 
   // get last updated time
   const lastUpdated = predictionData?.[category.id]?.updatedAt;
   const lastUpdatedString = formatLastUpdated(new Date(lastUpdated || ''));
-  console.log('lastUpdatedString', lastUpdatedString); // TODO: can do something with this later
 
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [_predictions, setPredictions] = useState<iPrediction[]>(
@@ -77,25 +81,23 @@ const CategoryPersonal = () => {
 
   // _predictions is for editing, initialPredictions has the history
   const predictions = date ? initialPredictions : _predictions;
+  const predictionIds = predictions.map((p) => p.contenderId);
 
   // if we go to history, then switch back to current, this will let us see current
   useEffect(() => {
     if (date === undefined) {
       setPredictions(initialPredictions);
     }
-  }, [initialPredictions]);
+  }, [date]);
 
   // keeps track of whether we've edited the predictions from their initial state
-  useEffect(() => {
+  useDeepCompareEffect(() => {
     // only can edit if not viewing history
     if (date === undefined) {
-      const resultIsSame = _.isEqual(
-        predictions.map((p) => p.contenderId),
-        initialPredictions.map((p) => p.contenderId),
-      );
+      const resultIsSame = _.isEqual(predictionIds, initialPredictionIds);
       setIsEditing(!resultIsSame);
     }
-  }, [predictions]);
+  }, [predictionIds]);
 
   // set custom back arrow functionality
   useEffect(() => {
@@ -183,7 +185,7 @@ const CategoryPersonal = () => {
           </Animated.View>
         </View>
         <View style={{ flexDirection: 'row' }}>
-          {date === undefined ? (
+          {date === undefined && lastUpdatedString !== 'Invalid Date' ? (
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Body>{`Updated: ${lastUpdatedString}`}</Body>
             </View>

@@ -42,26 +42,28 @@ const MovieListCommunity = (props: iMovieListProps) => {
       style={{ width: '100%' }}
       contentContainerStyle={{ paddingBottom: 100 }}
       ListHeaderComponent={
-        <CategoryHeader style={{ height: 50 }}>
-          <View style={{ flexDirection: 'row' }} />
-          <Animated.View
-            style={{
-              flexDirection: 'row',
-              width: 120,
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
-          >
-            <View>
-              <BodyBold style={{ textAlign: 'right' }}>Predict</BodyBold>
-              <BodyBold style={{ textAlign: 'right' }}>Nom</BodyBold>
-            </View>
-            <View>
-              <BodyBold style={{ textAlign: 'right' }}>Predict</BodyBold>
-              <BodyBold style={{ textAlign: 'right' }}>Win</BodyBold>
-            </View>
-          </Animated.View>
-        </CategoryHeader>
+        predictions.length > 0 ? (
+          <CategoryHeader style={{ height: 50 }}>
+            <View style={{ flexDirection: 'row' }} />
+            <Animated.View
+              style={{
+                flexDirection: 'row',
+                width: 120,
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}
+            >
+              <View>
+                <BodyBold style={{ textAlign: 'right' }}>Predict</BodyBold>
+                <BodyBold style={{ textAlign: 'right' }}>Nom</BodyBold>
+              </View>
+              <View>
+                <BodyBold style={{ textAlign: 'right' }}>Predict</BodyBold>
+                <BodyBold style={{ textAlign: 'right' }}>Win</BodyBold>
+              </View>
+            </Animated.View>
+          </CategoryHeader>
+        ) : null
       }
       renderItem={({ item: prediction, index }) => {
         const ranking = index + 1;
