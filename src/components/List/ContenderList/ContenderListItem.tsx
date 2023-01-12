@@ -39,6 +39,7 @@ type iContenderListItemProps = {
     drag: () => void;
   };
   subtitle?: string;
+  disableDrag?: boolean;
   onPressItem: (prediction: iPrediction) => void;
   onPressThumbnail?: (prediction: iPrediction) => void;
 };
@@ -57,6 +58,7 @@ const ContenderListItem = (props: iContenderListItemProps) => {
     highlighted,
     categoryType,
     subtitle: _subtitle,
+    disableDrag,
     onPressThumbnail,
     onPressItem,
   } = props;
@@ -222,7 +224,7 @@ const ContenderListItem = (props: iContenderListItemProps) => {
         paddingLeft: theme.windowMargin,
       }}
       underlayColor={COLORS.secondaryDark}
-      onLongPress={drag}
+      onLongPress={disableDrag ? undefined : drag}
       disabled={isActive}
     >
       <>
@@ -308,7 +310,7 @@ const ContenderListItem = (props: iContenderListItemProps) => {
                 <Body style={{ textAlign: 'right' }}>{win.toString()}</Body>
               </View>
             ) : null}
-            {variant === 'personal' ? (
+            {variant === 'personal' && !disableDrag ? (
               <View
                 style={{
                   height: SMALL_POSTER,
