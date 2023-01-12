@@ -35,10 +35,10 @@ const MovieListCommunity = (props: iMovieListProps) => {
     }
   };
 
-  const slots = getCategorySlots(event, category.name);
-
+  let slots = getCategorySlots(event, category.name);
   const nominationsHaveHappened =
     eventStatusToPredictionType(event.status) === PredictionType.WIN;
+  if (nominationsHaveHappened) slots = 1; // want to have the number one slot be sectioned off
 
   return (
     <FlatList

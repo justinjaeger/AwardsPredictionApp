@@ -1,8 +1,10 @@
 import { Divider } from '@ui-kitten/components';
 import React, { useState } from 'react';
 import DraggableFlatList, { ScaleDecorator } from 'react-native-draggable-flatlist';
+import { PredictionType } from '../../API';
 import { getCategorySlots } from '../../constants/categories';
 import COLORS from '../../constants/colors';
+import { eventStatusToPredictionType } from '../../constants/events';
 import theme from '../../constants/theme';
 import { useCategory } from '../../context/CategoryContext';
 import { iCategory, iEvent, iPrediction } from '../../types';
@@ -33,7 +35,10 @@ const MovieListDraggable = (props: iMovieListProps) => {
     }
   };
 
-  const slots = getCategorySlots(event, category.name);
+  let slots = getCategorySlots(event, category.name);
+  const nominationsHaveHappened =
+    eventStatusToPredictionType(event.status) === PredictionType.WIN;
+  if (nominationsHaveHappened) slots = 1; // want to have the number one slot be sectioned off
 
   const onPressItem = (item: iPrediction) => {
     const id = item.contenderId;
