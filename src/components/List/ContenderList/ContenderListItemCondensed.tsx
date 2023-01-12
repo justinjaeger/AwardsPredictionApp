@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import { TouchableHighlight, useWindowDimensions, View } from 'react-native';
-import { CategoryType, PredictionType } from '../../../API';
+import {
+  CategoryIsShortlisted,
+  CategoryType,
+  ContenderAccolade,
+  PredictionType,
+} from '../../../API';
 import { getCategorySlots } from '../../../constants/categories';
 import COLORS from '../../../constants/colors';
 import { eventStatusToPredictionType } from '../../../constants/events';
@@ -102,13 +107,31 @@ const ContenderListItemCondensed = (props: iContenderListItemProps) => {
   const nominationsHaveHappened =
     eventStatusToPredictionType(event.status) === PredictionType.WIN;
 
+  const predictionIsNotNominated =
+    ['personal', 'selectable'].includes(variant) &&
+    nominationsHaveHappened &&
+    prediction.accolade !== ContenderAccolade.NOMINEE &&
+    prediction.accolade !== ContenderAccolade.WINNER;
+
+  const predictionIsNotShortlisted =
+    ['personal', 'selectable'].includes(variant) &&
+    category.isShortlisted === CategoryIsShortlisted.TRUE &&
+    !prediction.accolade;
+
+  const isUnqualified = predictionIsNotNominated || predictionIsNotShortlisted;
+
   return (
     <TouchableHighlight
       onPress={() => {
         onPressItem(prediction);
       }}
       style={{
-        backgroundColor: isActive || highlighted ? COLORS.secondaryDark : 'transparent',
+        backgroundColor:
+          isUnqualified && (variant !== 'selectable' || highlighted)
+            ? COLORS.error
+            : highlighted
+            ? COLORS.secondaryDark
+            : 'transparent',
         width: '100%',
         paddingTop: theme.windowMargin / 4,
         paddingBottom: theme.windowMargin / 4,
