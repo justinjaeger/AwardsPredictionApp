@@ -17,7 +17,7 @@ import { FAB } from '../../../components/Buttons/FAB';
 import CreateContender from '../CreateContender';
 import { CATEGORY_TYPE_TO_STRING } from '../../../constants/categories';
 import Snackbar from '../../../components/Snackbar';
-import { CategoryType } from '../../../API';
+import { CategoryIsShortlisted, CategoryType, EventStatus } from '../../../API';
 
 const AddPredictions = () => {
   const {
@@ -29,6 +29,10 @@ const AddPredictions = () => {
 
   const category = _category as iCategory;
   const event = _event as iEvent;
+
+  const letUserCreateContenders =
+    category.isShortlisted === CategoryIsShortlisted.FALSE &&
+    ![EventStatus.WINS_LIVE, EventStatus.ARCHIVED].includes(event.status);
 
   // We use the SAME KEY as the previous screen, because it avoids a re-fetch of the data which was available previously
   const { data: communityData } = useQueryCommunityEvent({ event });
@@ -168,8 +172,10 @@ const AddPredictions = () => {
                   />
                 ) : null}
               </View>
-              <View style={{ flexDirection: 'row' }}>
-                <HeaderButton onPress={() => setIsSearching(true)} icon={'search'} />
+              <View style={{ flexDirection: 'row', height: 40 }}>
+                {letUserCreateContenders ? (
+                  <HeaderButton onPress={() => setIsSearching(true)} icon={'search'} />
+                ) : null}
               </View>
             </CategoryHeader>
             {!communityPredictions || communityPredictions.length === 0 ? (

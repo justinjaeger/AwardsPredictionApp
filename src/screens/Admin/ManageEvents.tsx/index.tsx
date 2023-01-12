@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { Animated, TouchableHighlight, useWindowDimensions, View } from 'react-native';
-import { AwardsBody, EventStatus, UserRole } from '../../../API';
+import { AwardsBody, EventStatus, PredictionType, UserRole } from '../../../API';
 import { Body, SubHeader } from '../../../components/Text';
 import {
   AWARDS_BODY_TO_PLURAL_STRING,
@@ -16,7 +16,7 @@ import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import useQueryAllEvents from '../../../hooks/queries/getAllEvents';
 import AwardsBodyImage from '../../../components/AwardsBodyImage';
 import {
-  eventIsForNominations,
+  eventStatusToPredictionType,
   EVENT_STATUS_TO_STRING,
   getEventTime,
 } from '../../../constants/events';
@@ -212,12 +212,14 @@ const ManageEvents = () => {
             eventId={selectedEvent.id}
             onSaveSuccess={() => refetchEvents()}
             initialDateTime={
-              eventIsForNominations(selectedEvent.status)
+              eventStatusToPredictionType(selectedEvent.status) ===
+              PredictionType.NOMINATION
                 ? selectedEvent.nominationDateTime
                 : selectedEvent.winDateTime
             }
             propertyToUpdate={
-              eventIsForNominations(selectedEvent.status)
+              eventStatusToPredictionType(selectedEvent.status) ===
+              PredictionType.NOMINATION
                 ? 'nominationDateTime'
                 : 'winDateTime'
             }

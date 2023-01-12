@@ -36,7 +36,7 @@ exports.handler = async () => {
     const { formerPredictionSetIds, formerPredictionIds } = response.data;
 
     // Get all predictions sets with openEventIds & create IndexedRankings
-    response = await getPredictions(openEventIds);
+    response = await getPredictions(openEventIds, openEvents);
     if (response.status === 'error') {
       throw new Error(response.data.errors);
     }

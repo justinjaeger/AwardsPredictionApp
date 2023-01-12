@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { TouchableHighlight, useWindowDimensions, View } from 'react-native';
-import { CategoryType } from '../../../API';
+import { CategoryType, PredictionType } from '../../../API';
 import { getCategorySlots } from '../../../constants/categories';
 import COLORS from '../../../constants/colors';
+import { eventStatusToPredictionType } from '../../../constants/events';
 import theme from '../../../constants/theme';
 import { useCategory } from '../../../context/CategoryContext';
 import { iCachedTmdbMovie, iCachedTmdbPerson } from '../../../services/cache/types';
@@ -95,8 +96,11 @@ const ContenderListItemCondensed = (props: iContenderListItemProps) => {
 
   const { win, nom } = getNumPredicting(
     indexedRankings || {},
-    getCategorySlots(event.year, event.awardsBody, category.name),
+    getCategorySlots(event, category.name) || 0,
   );
+
+  const nominationsHaveHappened =
+    eventStatusToPredictionType(event.status) === PredictionType.WIN;
 
   return (
     <TouchableHighlight
@@ -135,13 +139,17 @@ const ContenderListItemCondensed = (props: iContenderListItemProps) => {
           </View>
           {indexedRankings ? (
             <View style={{ flexDirection: 'row', paddingRight: theme.windowMargin }}>
-              <View
-                style={{
-                  width: RIGHT_COL_WIDTH / 2,
-                }}
-              >
-                <Body style={{ textAlign: 'right' }}>{nom.toString()}</Body>
-              </View>
+              {nominationsHaveHappened ? (
+                <View />
+              ) : (
+                <View
+                  style={{
+                    width: RIGHT_COL_WIDTH / 2,
+                  }}
+                >
+                  <Body style={{ textAlign: 'right' }}>{nom.toString()}</Body>
+                </View>
+              )}
               <View
                 style={{
                   width: RIGHT_COL_WIDTH / 2,

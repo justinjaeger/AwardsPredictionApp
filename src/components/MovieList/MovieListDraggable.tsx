@@ -33,7 +33,7 @@ const MovieListDraggable = (props: iMovieListProps) => {
     }
   };
 
-  const slots = getCategorySlots(event.year, event?.awardsBody, category.name);
+  const slots = getCategorySlots(event, category.name);
 
   const onPressItem = (item: iPrediction) => {
     const id = item.contenderId;

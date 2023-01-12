@@ -1,4 +1,10 @@
-import { CategoryIsShortlisted, ContenderVisibility } from '../../API';
+import {
+  CategoryIsShortlisted,
+  ContenderAccolade,
+  ContenderVisibility,
+  PredictionType,
+} from '../../API';
+import { eventStatusToPredictionType } from '../../constants/events';
 import { iEvent, iIndexedPredictionsByCategory, iPrediction } from '../../types';
 import { isWithinLastMonth } from '../../util/isWithinLastMonth';
 import { sortCommunityPredictionsByRanking } from '../../util/sortPredictions';
@@ -29,16 +35,28 @@ const getCommunityPredictionsByEvent = async (event: iEvent, includeHidden = fal
       // don't include rankings higher than 20
       // don't include if prediction is more than a month old
       // don't include if category is shortlisted and contender doesn't have an accolade
+      // don't include if nominations have happened and contender is not a nominee
       const isRecentPrediction = isWithinLastMonth(lastUpdated);
-      const isHidden =
-        contender.visibility === ContenderVisibility.HIDDEN && includeHidden !== true;
+      const isHidden = contender.visibility === ContenderVisibility.HIDDEN;
       const isLowOnList = ranking > 20;
-      const contenderIsUnqualified =
+      const contenderIsNotShortlisted =
         ps?.category.isShortlisted === CategoryIsShortlisted.TRUE && !contender.accolade;
-      if (!isRecentPrediction || isLowOnList || isHidden || contenderIsUnqualified) {
+      const contenderIsNotNominated =
+        eventStatusToPredictionType(event.status) === PredictionType.WIN &&
+        contender.accolade !== ContenderAccolade.NOMINEE &&
+        contender.accolade !== ContenderAccolade.WINNER;
+      if (includeHidden) {
+        // skip
+      } else if (
+        !isRecentPrediction ||
+        isLowOnList ||
+        isHidden ||
+        contenderIsNotShortlisted ||
+        contenderIsNotNominated
+      ) {
         return;
       }
-      // TODO: after amplify push / codegen this should work
+      // Have to parse this because the field is a json stringified object
       const indexedRankings = (p?.indexedRankings
         ? JSON.parse(p?.indexedRankings)
         : {}) as { [key: number]: number };

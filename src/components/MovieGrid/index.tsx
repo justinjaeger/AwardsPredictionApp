@@ -13,10 +13,8 @@ const MovieGrid = (props: { predictions: iPrediction[]; noLine?: boolean }) => {
   const { width } = useWindowDimensions();
   const { event, category } = useCategory();
 
-  const slots =
-    category && event
-      ? getCategorySlots(event.year, event?.awardsBody, category.name)
-      : undefined;
+  // don't want to show divider after noms have happened
+  const slots = event && category ? getCategorySlots(event, category.name) : undefined;
 
   return (
     <View

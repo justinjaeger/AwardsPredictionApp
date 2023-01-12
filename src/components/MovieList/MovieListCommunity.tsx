@@ -1,8 +1,10 @@
 import { Divider } from '@ui-kitten/components';
 import React, { useState } from 'react';
 import { Animated, FlatList, View } from 'react-native';
+import { PredictionType } from '../../API';
 import { getCategorySlots } from '../../constants/categories';
 import COLORS from '../../constants/colors';
+import { eventStatusToPredictionType } from '../../constants/events';
 import { useCategory } from '../../context/CategoryContext';
 import { CategoryHeader } from '../../screens/Predictions/styles';
 import { iCategory, iEvent, iPrediction } from '../../types';
@@ -33,7 +35,10 @@ const MovieListCommunity = (props: iMovieListProps) => {
     }
   };
 
-  const slots = getCategorySlots(event.year, event?.awardsBody, category.name);
+  const slots = getCategorySlots(event, category.name);
+
+  const nominationsHaveHappened =
+    eventStatusToPredictionType(event.status) === PredictionType.WIN;
 
   return (
     <FlatList
@@ -53,10 +58,14 @@ const MovieListCommunity = (props: iMovieListProps) => {
                 alignItems: 'center',
               }}
             >
-              <View>
-                <BodyBold style={{ textAlign: 'right' }}>Predict</BodyBold>
-                <BodyBold style={{ textAlign: 'right' }}>Nom</BodyBold>
-              </View>
+              {nominationsHaveHappened ? (
+                <View />
+              ) : (
+                <View>
+                  <BodyBold style={{ textAlign: 'right' }}>Predict</BodyBold>
+                  <BodyBold style={{ textAlign: 'right' }}>Nom</BodyBold>
+                </View>
+              )}
               <View>
                 <BodyBold style={{ textAlign: 'right' }}>Predict</BodyBold>
                 <BodyBold style={{ textAlign: 'right' }}>Win</BodyBold>

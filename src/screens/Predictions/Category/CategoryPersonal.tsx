@@ -27,6 +27,7 @@ import { CategoryHeader } from '../styles';
 import { formatLastUpdated } from '../../../util/formatDateTime';
 import usePredictionData from '../../../hooks/queries/usePredictionData';
 import HistoryHeader from '../../../components/HistoryHeader';
+import { eventStatusToPredictionType } from '../../../constants/events';
 
 // NOTE: Has a lot in common with ContenderListDraggable
 const CategoryPersonal = () => {
@@ -130,7 +131,12 @@ const CategoryPersonal = () => {
       ranking: i + 1,
     }));
     mutate({
-      predictionSetParams: { userId, categoryId: category.id, eventId: event.id },
+      predictionSetParams: {
+        userId,
+        categoryId: category.id,
+        eventId: event.id,
+        type: eventStatusToPredictionType(event.status),
+      },
       predictionData: newPredictionData,
     });
   };

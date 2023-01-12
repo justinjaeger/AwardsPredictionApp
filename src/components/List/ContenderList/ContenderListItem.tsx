@@ -4,9 +4,10 @@ import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useRef, useState } from 'react';
 import { Animated, TouchableHighlight, useWindowDimensions, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { CategoryType } from '../../../API';
+import { CategoryType, PredictionType } from '../../../API';
 import { getCategorySlots } from '../../../constants/categories';
 import COLORS from '../../../constants/colors';
+import { eventStatusToPredictionType } from '../../../constants/events';
 import { getPosterDimensionsByWidth } from '../../../constants/posterDimensions';
 import theme from '../../../constants/theme';
 import { useCategory } from '../../../context/CategoryContext';
@@ -168,10 +169,13 @@ const ContenderListItem = (props: iContenderListItemProps) => {
 
   const { win, nom } = getNumPredicting(
     indexedRankings || {},
-    getCategorySlots(event.year, event.awardsBody, category.name),
+    getCategorySlots(event, category.name) || 0,
   );
 
   const showBotomButtons = selected && tmdbMovie;
+
+  const nominationsHaveHappened =
+    eventStatusToPredictionType(event.status) === PredictionType.WIN;
 
   return (
     <TouchableHighlight
@@ -265,7 +269,11 @@ const ContenderListItem = (props: iContenderListItemProps) => {
                   paddingRight: theme.windowMargin,
                 }}
               >
-                <Body style={{ textAlign: 'right' }}>{nom.toString()}</Body>
+                {nominationsHaveHappened ? (
+                  <View />
+                ) : (
+                  <Body style={{ textAlign: 'right' }}>{nom.toString()}</Body>
+                )}
                 <Body style={{ textAlign: 'right' }}>{win.toString()}</Body>
               </View>
             ) : null}

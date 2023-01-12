@@ -1,6 +1,6 @@
 import React from 'react';
 import { TouchableHighlight, View } from 'react-native';
-import { CategoryName } from '../../../API';
+import { CategoryName, ContenderAccolade } from '../../../API';
 import MovieGrid from '../../../components/MovieGrid';
 import { SubHeader } from '../../../components/Text';
 import { getAwardsBodyCategories, getCategorySlots } from '../../../constants/categories';
@@ -35,8 +35,20 @@ const EventList = (props: iEventListProps) => {
       {orderedCategories.map((category) => {
         const catPredictions = predictionData?.[category.id]?.predictions || [];
         const predictions = catPredictions || [];
-        const slots = getCategorySlots(event.year, event.awardsBody, category.name);
-        const truncatedPredictions = (predictions || [])?.slice(0, slots);
+        // once nominations happen, you want "slots" to be however many films are nominated. slots is undefined when noms have happened
+        const slots = getCategorySlots(event, category.name);
+        const slotsToUse =
+          slots ||
+          predictions.reduce((acc, pred) => {
+            if (
+              pred.accolade === ContenderAccolade.NOMINEE ||
+              pred.accolade === ContenderAccolade.WINNER
+            ) {
+              acc += 1;
+            }
+            return acc;
+          }, 0); // slots is undefined when
+        const truncatedPredictions = predictions.slice(0, slotsToUse);
         return (
           <TouchableHighlight
             key={category.id}

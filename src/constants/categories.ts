@@ -1,4 +1,12 @@
-import { AwardsBody, CategoryIsShortlisted, CategoryName, CategoryType } from '../API';
+import {
+  AwardsBody,
+  CategoryIsShortlisted,
+  CategoryName,
+  CategoryType,
+  PredictionType,
+} from '../API';
+import { iEvent } from '../types';
+import { eventStatusToPredictionType } from './events';
 
 export type iCategoryData = { name: string; type: CategoryType; slots?: number };
 
@@ -19,12 +27,11 @@ export const IS_SHORTLISTED_TO_STRING: {
   [CategoryIsShortlisted.FALSE]: 'NOT Shortlisted',
 };
 
-export const getCategorySlots = (
-  year: number,
-  awardsBody: AwardsBody,
-  categoryName: CategoryName,
-) => {
-  const awardsBodyCategory = getAwardsBodyCategories(awardsBody, year);
+export const getCategorySlots = (event: iEvent, categoryName: CategoryName) => {
+  const nominationsHaveHappened =
+    eventStatusToPredictionType(event.status) === PredictionType.WIN;
+  if (nominationsHaveHappened) return undefined;
+  const awardsBodyCategory = getAwardsBodyCategories(event.awardsBody, event.year);
   // Get number of slots in category (5 by default)
   return awardsBodyCategory[categoryName]?.slots || 5;
 };

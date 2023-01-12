@@ -87,7 +87,7 @@ const getFormerCommunityPredictions = async (eventIds) => {
   }
 };
 
-const getPredictions = async (eventIds) => {
+const getPredictions = async (eventIds, openEvents) => {
   console.log('getPredictions');
 
   let response;
@@ -109,6 +109,7 @@ const getPredictions = async (eventIds) => {
   // request for all prediction sets with openEventIds
   try {
     for (const eventId of eventIds) {
+      const event = openEvents.find((event) => event.id === eventId);
       // Create space for entry if it doesn't exist
       if (!indexedRankings[eventId]) {
         indexedRankings[eventId] = {};
@@ -133,12 +134,24 @@ const getPredictions = async (eventIds) => {
           // don't include rankings higher than 20
           // don't include if prediction is more than a month old
           // don't include if category is shortlisted and contender doesn't have an accolade
+          // don't include if nominations have happened and contender is not a nominee
           const isHidden = contender.visibility === 'HIDDEN';
           const isLowOnList = ranking > 20;
           const isRecentPrediction = isWithinLastMonth(createdAt);
-          const contenderIsUnqualified =
+          const contenderIsNotShortlisted =
             predictionSet?.category.isShortlisted === 'TRUE' && !contender.accolade;
-          if (isHidden || isLowOnList || !isRecentPrediction || contenderIsUnqualified) {
+          const nomsHaveHappened =
+            event.status !== 'NOMS_LIVE' && event.status !== 'NOMS_STAGING';
+          const contenderIsNominated =
+            contender.accolade === 'NOMINEE' || contender.accolade === 'WINNER';
+          const isNotNominated = nomsHaveHappened && !contenderIsNominated;
+          if (
+            isHidden ||
+            isLowOnList ||
+            !isRecentPrediction ||
+            contenderIsNotShortlisted ||
+            isNotNominated
+          ) {
             return;
           }
           // Create space for contender entry if it doesn't exist

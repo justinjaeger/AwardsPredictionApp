@@ -17,6 +17,9 @@ const predictionSetByEventId = /* GraphQL */ `
       items {
         id # predictionSetid
         categoryId
+        category {
+          isShortlisted
+        }
         predictions {
           items {
             id # predictionId
