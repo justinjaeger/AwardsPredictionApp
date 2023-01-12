@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useState } from 'react';
-import { Alert, ScrollView } from 'react-native';
+import { Alert, ScrollView, Image } from 'react-native';
 import { SubmitButton, TouchableText } from '../../components/Buttons';
 import AuthServices from '../../services/auth';
 import Snackbar from '../../components/Snackbar';
@@ -11,6 +11,8 @@ import { GetUserQuery } from '../../API';
 import { useAuth } from '../../context/UserContext';
 import BackgroundWrapper from '../../components/BackgroundWrapper';
 import { IconButton } from '../../components/Buttons/IconButton';
+import { launchImageLibrary } from 'react-native-image-picker';
+import AWSStorage from '../../services/storage';
 
 const Profile = () => {
   const { userId, userEmail, signOutUser } = useAuth(); // later import userId
@@ -18,6 +20,7 @@ const Profile = () => {
 
   const [user, setUser] = useState<GetUserQuery>();
   const [loading, setLoading] = useState<boolean>(false);
+  const [profileUri, setProfileUri] = useState<string | undefined>(undefined);
 
   // put the logout button in the top right corner
   useLayoutEffect(() => {
@@ -78,11 +81,32 @@ const Profile = () => {
     });
   };
 
+  // could save the local path so that we can reference it with an <Image /> component
+  const onUpload = async () => {
+    const result = await launchImageLibrary({
+      maxWidth: 200,
+      maxHeight: 200,
+      mediaType: 'photo',
+    });
+    if (result && result.assets) {
+      const { uri } = result.assets[0];
+      if (uri) {
+        setProfileUri(uri);
+        const storageResult = await AWSStorage.pathToImageFile(uri, userEmail || '');
+        console.log('storageResult', storageResult);
+      }
+    }
+  };
+
   return (
     <BackgroundWrapper>
       <ScrollView
         contentContainerStyle={{ alignItems: 'center', marginTop: 40, width: '100%' }}
       >
+        <SubmitButton text={'Upload Image'} onPress={onUpload} />
+        {profileUri ? (
+          <Image style={{ width: 200, height: 200 }} source={{ uri: profileUri }} />
+        ) : null}
         {!userId ? (
           <SubmitButton text={userEmail ? 'Log in' : 'Create Account'} onPress={logIn} />
         ) : (
