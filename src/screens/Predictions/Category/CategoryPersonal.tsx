@@ -28,6 +28,7 @@ import { formatLastUpdated } from '../../../util/formatDateTime';
 import usePredictionData from '../../../hooks/queries/usePredictionData';
 import HistoryHeader from '../../../components/HistoryHeader';
 import { eventStatusToPredictionType } from '../../../constants/events';
+import PlusMinus from '../../../assets/icons/plusMinus.svg';
 
 // NOTE: Has a lot in common with ContenderListDraggable
 const CategoryPersonal = () => {
@@ -213,7 +214,7 @@ const CategoryPersonal = () => {
                   },
                 });
               }}
-              icon={'edit-outline'}
+              customIcon={<PlusMinus width={24} height={24} />}
             />
           ) : null}
         </View>

@@ -9,7 +9,7 @@ const COLORS = {
   secondaryDark: theme['color-gold-900'],
   success: theme['color-success-700'],
   warning: theme['color-warning-400'],
-  error: theme['color-danger-800'],
+  error: '#BD4040',
   white: '#FFF',
   lightest: '#FFFEF9',
   gray: theme['grayscale-400'],
