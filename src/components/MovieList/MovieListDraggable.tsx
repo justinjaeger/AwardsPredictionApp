@@ -19,7 +19,7 @@ type iMovieListProps = {
 
 const MovieListDraggable = (props: iMovieListProps) => {
   const { predictions, setPredictions, isCollapsed } = props;
-  const { event: _event, category: _category, date } = useCategory();
+  const { event: _event, category: _category } = useCategory();
 
   const event = _event as iEvent;
   const category = _category as iCategory;
@@ -80,7 +80,6 @@ const MovieListDraggable = (props: iMovieListProps) => {
                   selected={selectedContenderId === prediction.contenderId}
                   onPressItem={onPressItem}
                   onPressThumbnail={onPressThumbnail}
-                  disableDrag={!!date}
                   draggable={{
                     drag,
                     isActive,
@@ -99,7 +98,6 @@ const MovieListDraggable = (props: iMovieListProps) => {
                     drag,
                     isActive,
                   }}
-                  disableDrag={!!date}
                   categoryType={category.type}
                 />
               )}

@@ -31,6 +31,7 @@ const CategoryCommunity = () => {
 
   const { category: _category, date } = useCategory();
 
+  const isHistory = !!date;
   const category = _category as iCategory;
 
   // We use the SAME KEY as the previous screen, because it avoids a re-fetch of the data which was available previously
@@ -62,7 +63,7 @@ const CategoryCommunity = () => {
           </Animated.View>
         </View>
         <View style={{ flexDirection: 'row' }}>
-          {date === undefined && lastUpdatedString !== 'Invalid Date' ? (
+          {!isHistory && lastUpdatedString !== 'Invalid Date' ? (
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Body>{`Updated: ${lastUpdatedString}`}</Body>
             </View>
@@ -80,7 +81,7 @@ const CategoryCommunity = () => {
           }}
         >
           <BodyBold>
-            {date === undefined
+            {!isHistory
               ? 'Community predictions not yet tallied'
               : 'No predictions for this date'}
           </BodyBold>

@@ -4,6 +4,7 @@ const COLORS = {
   primary: theme['grayscale-900'],
   primaryLightest: theme['grayscale-200'],
   primaryLight: theme['grayscale-800'],
+  secondaryLight: '#F1BE46',
   secondary: theme['color-gold-600'],
   secondaryMiddle: theme['color-gold-700'],
   secondaryDark: theme['color-gold-900'],

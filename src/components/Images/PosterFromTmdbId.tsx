@@ -9,11 +9,12 @@ type iPosterFromTmdbProps = {
   width?: number;
   ranking?: number;
   onPress?: () => void;
+  isWinner?: boolean;
   styles?: StyleProp<ImageStyle>;
 };
 
 const PosterFromMovieTmdbId = (props: iPosterFromTmdbProps & { movieTmdbId: number }) => {
-  const { movieTmdbId, width, onPress, ranking, styles } = props;
+  const { movieTmdbId, width, onPress, ranking, isWinner, styles } = props;
 
   const [movieDetails, setMovieDetails] = useState<iCachedTmdbMovie>();
 
@@ -32,6 +33,7 @@ const PosterFromMovieTmdbId = (props: iPosterFromTmdbProps & { movieTmdbId: numb
       ranking={ranking}
       onPress={onPress}
       styles={styles}
+      isWinner={isWinner}
     />
   );
 };
@@ -39,7 +41,7 @@ const PosterFromMovieTmdbId = (props: iPosterFromTmdbProps & { movieTmdbId: numb
 const PosterFromPersonTmdbId = (
   props: iPosterFromTmdbProps & { personTmdbId: number },
 ) => {
-  const { personTmdbId, onPress, width, ranking, styles } = props;
+  const { personTmdbId, onPress, width, ranking, isWinner, styles } = props;
 
   const [personDetails, setPersonDetails] = useState<iCachedTmdbPerson>();
 
@@ -59,12 +61,16 @@ const PosterFromPersonTmdbId = (
       ranking={ranking}
       onPress={onPress}
       styles={styles}
+      isWinner={isWinner}
     />
   );
 };
 
 const PosterFromTmdbId = (
-  props: iPosterFromTmdbProps & { movieTmdbId?: number; personTmdbId?: number },
+  props: iPosterFromTmdbProps & {
+    movieTmdbId?: number;
+    personTmdbId?: number;
+  },
 ) =>
   props.personTmdbId ? (
     <PosterFromPersonTmdbId {...props} personTmdbId={props.personTmdbId} />

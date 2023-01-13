@@ -33,6 +33,7 @@ const Event = (props: { tab: 'personal' | 'community' }) => {
   const loadingOpacity = useRef(new Animated.Value(1)).current;
   const bodyOpacity = useRef(new Animated.Value(0)).current;
 
+  const isHistory = !!date;
   const event = _event as iEvent;
   const userId = _userId as string;
 
@@ -117,7 +118,7 @@ const Event = (props: { tab: 'personal' | 'community' }) => {
             />
           </View>
           <View style={{ flexDirection: 'row' }}>
-            {date === undefined && lastUpdatedString !== 'Invalid Date' ? (
+            {!isHistory && lastUpdatedString !== 'Invalid Date' ? (
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <Body>{`Updated: ${lastUpdatedString}`}</Body>
               </View>

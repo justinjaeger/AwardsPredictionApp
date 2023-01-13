@@ -18,6 +18,7 @@ import { getNumPredicting } from '../../../util/getNumPredicting';
 import { useAsyncEffect } from '../../../util/hooks';
 import CustomIcon from '../../CustomIcon';
 import { Body, SubHeader } from '../../Text';
+import AccoladeTag from './AccoladeTag';
 
 type iContenderListItemProps = {
   variant: 'community' | 'personal' | 'selectable' | 'search';
@@ -32,7 +33,6 @@ type iContenderListItemProps = {
     isActive: boolean;
     drag: () => void;
   };
-  disableDrag?: boolean;
   onPressItem: (prediction: iPrediction) => void;
   onPressThumbnail?: (prediction: iPrediction) => void;
 };
@@ -45,7 +45,6 @@ const ContenderListItemCondensed = (props: iContenderListItemProps) => {
     draggable,
     highlighted,
     categoryType,
-    disableDrag,
     onPressItem,
   } = props;
   const { isActive, drag } = draggable || {};
@@ -53,7 +52,8 @@ const ContenderListItemCondensed = (props: iContenderListItemProps) => {
 
   const RIGHT_COL_WIDTH = windowWidth / 3;
 
-  const { category: _category, event: _event } = useCategory();
+  const { category: _category, event: _event, date } = useCategory();
+  const isHistory = !!date;
   const category = _category as iCategory;
   const event = _event as iEvent;
 
@@ -141,7 +141,7 @@ const ContenderListItemCondensed = (props: iContenderListItemProps) => {
         paddingLeft: theme.windowMargin,
       }}
       underlayColor={draggable ? COLORS.secondaryDark : 'transparent'}
-      onLongPress={disableDrag ? undefined : drag}
+      onLongPress={isHistory ? undefined : drag}
       disabled={isActive}
     >
       <>
@@ -158,9 +158,13 @@ const ContenderListItemCondensed = (props: iContenderListItemProps) => {
               flex: 1,
               overflow: 'hidden',
               height: itemHeight,
+              flexDirection: 'row',
             }}
           >
-            <SubHeader style={{ marginLeft: 10 }}>{title}</SubHeader>
+            <SubHeader style={{ marginLeft: 10, marginRight: 5 }}>{title}</SubHeader>
+            {isHistory && prediction.accolade ? (
+              <AccoladeTag accolade={prediction.accolade} eventStatus={event.status} />
+            ) : null}
           </View>
           {indexedRankings ? (
             <View style={{ flexDirection: 'row', paddingRight: theme.windowMargin }}>
@@ -184,7 +188,7 @@ const ContenderListItemCondensed = (props: iContenderListItemProps) => {
               </View>
             </View>
           ) : null}
-          {variant === 'personal' && !disableDrag ? (
+          {variant === 'personal' && !isHistory ? (
             <View
               style={{
                 height: itemHeight,

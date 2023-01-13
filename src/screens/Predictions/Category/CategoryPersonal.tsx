@@ -29,6 +29,7 @@ import usePredictionData from '../../../hooks/queries/usePredictionData';
 import HistoryHeader from '../../../components/HistoryHeader';
 import { eventStatusToPredictionType } from '../../../constants/events';
 import PlusMinus from '../../../assets/icons/plusMinus.svg';
+import { EventStatus } from '../../../API';
 
 // NOTE: Has a lot in common with ContenderListDraggable
 const CategoryPersonal = () => {
@@ -50,9 +51,11 @@ const CategoryPersonal = () => {
   const { userId: _userId } = useAuth();
   const navigation = useTypedNavigation<PredictionsParamList>();
 
+  const isHistory = !!date;
   const category = _category as iCategory;
   const event = _event as iEvent;
   const userId = _userId as string;
+  const eventIsArchived = event.status === EventStatus.ARCHIVED;
 
   const [goBackOnComplete, setGoBackOnComplete] = useAsyncReference<boolean>(false);
 
@@ -82,20 +85,20 @@ const CategoryPersonal = () => {
   );
 
   // _predictions is for editing, initialPredictions has the history
-  const predictions = date ? initialPredictions : _predictions;
+  const predictions = isHistory ? initialPredictions : _predictions;
   const predictionIds = predictions.map((p) => p.contenderId);
 
   // if we go to history, then switch back to current, this will let us see current
   useEffect(() => {
-    if (date === undefined) {
+    if (!isHistory) {
       setPredictions(initialPredictions);
     }
-  }, [date]);
+  }, [isHistory]);
 
   // keeps track of whether we've edited the predictions from their initial state
   useDeepCompareEffect(() => {
     // only can edit if not viewing history
-    if (date === undefined) {
+    if (!isHistory) {
       const resultIsSame = _.isEqual(predictionIds, initialPredictionIds);
       setIsEditing(!resultIsSame);
     }
@@ -192,7 +195,7 @@ const CategoryPersonal = () => {
           </Animated.View>
         </View>
         <View style={{ flexDirection: 'row' }}>
-          {date === undefined && lastUpdatedString !== 'Invalid Date' ? (
+          {!isHistory && lastUpdatedString !== 'Invalid Date' ? (
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Body>{`Updated: ${lastUpdatedString}`}</Body>
             </View>
@@ -201,7 +204,7 @@ const CategoryPersonal = () => {
             // don't allow user to see history while they're in the middle of editing
             <HistoryHeader />
           ) : null}
-          {date === undefined ? (
+          {!isHistory && !eventIsArchived ? (
             <HeaderButton
               onPress={() => {
                 if (display === 'grid') {
@@ -229,7 +232,9 @@ const CategoryPersonal = () => {
           }}
         >
           <BodyBold style={{ textAlign: 'center', lineHeight: 30 }}>
-            {date ? 'No predictions for this date' : 'No predictions yet.\nAdd some!'}
+            {isHistory
+              ? 'No predictions for this date'
+              : 'No predictions yet.\nAdd some!'}
           </BodyBold>
         </View>
       ) : null}
@@ -281,7 +286,7 @@ const CategoryPersonal = () => {
         iconName="save-outline"
         text="Save"
         onPress={onSaveContenders}
-        visible={isEditing && date === undefined}
+        visible={isEditing && !isHistory}
       />
     </>
   );
