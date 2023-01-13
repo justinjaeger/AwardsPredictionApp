@@ -5,7 +5,7 @@ import CategoryPersonal from './CategoryPersonal';
 import { useTypedNavigation } from '../../../util/hooks';
 import { PredictionsParamList } from '../../../navigation/types';
 import { getAwardsBodyCategories } from '../../../constants/categories';
-import { CategoryName } from '../../../API';
+import { CategoryName, EventStatus } from '../../../API';
 import { useCategory } from '../../../context/CategoryContext';
 import { eventToString } from '../../../util/stringConversions';
 import { getHeaderTitleWithTrophy } from '../../../constants';
@@ -14,6 +14,7 @@ import HistoryFAB from '../../../components/Buttons/HistoryFAB';
 import { iListDisplay, useDisplay } from '../../../hooks/animatedState/useDisplay';
 import { Animated } from 'react-native';
 import DisplayFAB from '../../../components/Buttons/DisplayFAB';
+import { iEvent } from '../../../types';
 
 export type iCategoryProps = {
   collapsedOpacity: Animated.Value;
@@ -25,7 +26,7 @@ export type iCategoryProps = {
 };
 
 const Category = () => {
-  const { category, event } = useCategory();
+  const { category, event: _event, date, personalCommunityTab } = useCategory();
   const navigation = useTypedNavigation<PredictionsParamList>();
   const {
     collapsedOpacity,
@@ -34,6 +35,10 @@ const Category = () => {
     setIsCollapsed,
   } = useCollapsible();
   const { delayedDisplay, setDisplay, gridOpacity, listOpacity } = useDisplay();
+
+  const event = _event as iEvent;
+  const isHistory = !!date;
+  const eventIsArchived = event.status === EventStatus.ARCHIVED;
 
   const props: iCategoryProps = {
     collapsedOpacity,
@@ -68,10 +73,15 @@ const Category = () => {
     if (toggleIndex === toggleState.length - 1) {
       setToggleIndex(0);
     } else {
+      // if we're editing, we don't want to toggle to grid
+      if (isEditing && toggleIndex === 1) {
+        setToggleIndex(0);
+      }
       setToggleIndex(toggleIndex + 1);
     }
   };
 
+  // TODO: see how this is weird? could refactor to combine useCollapsible and useDisplay
   useEffect(() => {
     if (toggleState[toggleIndex] === 'list') {
       setDisplay('list');
@@ -84,14 +94,18 @@ const Category = () => {
     }
   }, [toggleIndex]);
 
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+
   return (
     <>
       <DisplayFAB state={toggleState[toggleIndex]} toggleDisplay={toggle} />
-      <HistoryFAB />
+      {!isHistory && !eventIsArchived && personalCommunityTab === 'personal' ? (
+        <DisplayFAB state={toggleState[toggleIndex]} toggleDisplay={toggle} />
+      ) : null}
+      {!isEditing ? <HistoryFAB /> : null}
       {PredictionTabsNavigator(
         <CategoryCommunity {...props} />,
-        // <CategoryPersonal {...props} />,
-        null,
+        <CategoryPersonal {...props} isEditing={isEditing} setIsEditing={setIsEditing} />,
       )}
     </>
   );

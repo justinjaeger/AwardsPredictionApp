@@ -1,20 +1,17 @@
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
-import { Alert, Animated, View } from 'react-native';
+import { Animated, View } from 'react-native';
 import BackButton from '../../../components/Buttons/BackButton';
 import { FAB } from '../../../components/Buttons/FAB';
-import HeaderButton from '../../../components/HeaderButton';
 import LoadingStatueModal from '../../../components/LoadingStatueModal';
 import MovieGrid from '../../../components/MovieGrid';
 import MovieListDraggable from '../../../components/MovieList/MovieListDraggable';
 import SignedOutState from '../../../components/SignedOutState';
 import Snackbar from '../../../components/Snackbar';
-import { Body, BodyBold } from '../../../components/Text';
+import { BodyBold } from '../../../components/Text';
 import theme from '../../../constants/theme';
 import { useCategory } from '../../../context/CategoryContext';
 import { useAuth } from '../../../context/UserContext';
-import { useCollapsible } from '../../../hooks/animatedState/useCollapsible';
-import { useDisplay } from '../../../hooks/animatedState/useDisplay';
 import useMutationUpdatePredictions from '../../../hooks/mutations/updatePredictions';
 import { PredictionsParamList } from '../../../navigation/types';
 import { iCategory, iEvent, iPrediction } from '../../../types';
@@ -23,30 +20,24 @@ import {
   useDeepCompareEffect,
   useTypedNavigation,
 } from '../../../util/hooks';
-import { CategoryHeader } from '../styles';
 import { formatLastUpdated } from '../../../util/formatDateTime';
 import usePredictionData from '../../../hooks/queries/usePredictionData';
-import HistoryHeader from '../../../components/HistoryHeader';
 import { eventStatusToPredictionType } from '../../../constants/events';
-import PlusMinus from '../../../assets/icons/plusMinus.svg';
-import { EventStatus } from '../../../API';
+import { iCategoryProps } from '.';
+import AddPredictionsFAB from '../../../components/Buttons/AddPredictionsFAB';
+import LastUpdatedText from '../../../components/LastUpdatedText';
 
 // NOTE: Has a lot in common with ContenderListDraggable
-const CategoryPersonal = () => {
-  const {
-    display,
-    delayedDisplay,
-    toggleDisplay,
-    gridOpacity,
-    listOpacity,
-  } = useDisplay();
-  const {
-    collapsedOpacity,
-    expandedOpacity,
-    isCollapsed,
-    toggleCollapsed,
-  } = useCollapsible();
-
+const CategoryPersonal = ({
+  collapsedOpacity,
+  expandedOpacity,
+  isCollapsed,
+  delayedDisplay,
+  gridOpacity,
+  listOpacity,
+  isEditing,
+  setIsEditing,
+}: iCategoryProps & { isEditing: boolean; setIsEditing: (val: boolean) => void }) => {
   const { category: _category, event: _event, date } = useCategory();
   const { userId: _userId } = useAuth();
   const navigation = useTypedNavigation<PredictionsParamList>();
@@ -55,7 +46,7 @@ const CategoryPersonal = () => {
   const category = _category as iCategory;
   const event = _event as iEvent;
   const userId = _userId as string;
-  const eventIsArchived = event.status === EventStatus.ARCHIVED;
+  //   const eventIsArchived = event.status === EventStatus.ARCHIVED;
 
   const [goBackOnComplete, setGoBackOnComplete] = useAsyncReference<boolean>(false);
 
@@ -79,7 +70,6 @@ const CategoryPersonal = () => {
   const lastUpdated = predictionData?.[category.id]?.updatedAt;
   const lastUpdatedString = formatLastUpdated(new Date(lastUpdated || ''));
 
-  const [isEditing, setIsEditing] = useState<boolean>(false);
   const [_predictions, setPredictions] = useState<iPrediction[]>(
     initialPredictions || [],
   );
@@ -155,73 +145,16 @@ const CategoryPersonal = () => {
         visible={isLoading || !isComplete}
         text={isLoading ? 'Loading Predictions...' : 'Saving changes...'}
       />
-      <CategoryHeader>
-        <View style={{ flexDirection: 'row' }}>
-          {!isEditing ? (
-            <>
-              <HeaderButton
-                onPress={() => {
-                  toggleDisplay();
-                }}
-                icon={display === 'grid' ? 'list' : 'grid'}
-              />
-            </>
-          ) : (
-            <HeaderButton
-              onPress={() => {
-                Alert.alert('Undo recent changes?', '', [
-                  {
-                    text: 'Cancel',
-                    onPress: () => {},
-                    style: 'cancel',
-                  },
-                  {
-                    text: 'Undo',
-                    onPress: () => {
-                      setPredictions(initialPredictions);
-                      setIsEditing(false);
-                    },
-                  },
-                ]);
-              }}
-              icon={'undo'}
-            />
-          )}
-          <Animated.View style={{ opacity: listOpacity }}>
-            <HeaderButton
-              onPress={toggleCollapsed}
-              icon={isCollapsed ? 'collapse' : 'expand'}
-            />
-          </Animated.View>
-        </View>
-        <View style={{ flexDirection: 'row' }}>
-          {!isHistory && lastUpdatedString !== 'Invalid Date' ? (
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Body>{`Updated: ${lastUpdatedString}`}</Body>
-            </View>
-          ) : null}
-          {!isEditing ? (
-            // don't allow user to see history while they're in the middle of editing
-            <HistoryHeader />
-          ) : null}
-          {!isHistory && !eventIsArchived ? (
-            <HeaderButton
-              onPress={() => {
-                if (display === 'grid') {
-                  toggleDisplay();
-                }
-                navigation.navigate('AddPredictions', {
-                  initialPredictions: predictions,
-                  onFinish: (predictions: iPrediction[]) => {
-                    setPredictions(predictions);
-                  },
-                });
-              }}
-              customIcon={<PlusMinus width={24} height={24} />}
-            />
-          ) : null}
-        </View>
-      </CategoryHeader>
+      <AddPredictionsFAB
+        onPress={() => {
+          navigation.navigate('AddPredictions', {
+            initialPredictions: predictions,
+            onFinish: (predictions: iPrediction[]) => {
+              setPredictions(predictions);
+            },
+          });
+        }}
+      />
       {predictions && predictions.length === 0 ? (
         <View
           style={{
@@ -264,6 +197,7 @@ const CategoryPersonal = () => {
             opacity: expandedOpacity,
           }}
         >
+          <LastUpdatedText lastUpdated={lastUpdatedString} isDisabled={isHistory} />
           <MovieListDraggable
             predictions={predictions}
             setPredictions={(ps) => setPredictions(ps)}
@@ -275,6 +209,7 @@ const CategoryPersonal = () => {
             opacity: collapsedOpacity,
           }}
         >
+          <LastUpdatedText lastUpdated={lastUpdatedString} isDisabled={isHistory} />
           <MovieListDraggable
             predictions={predictions}
             setPredictions={(ps) => setPredictions(ps)}
