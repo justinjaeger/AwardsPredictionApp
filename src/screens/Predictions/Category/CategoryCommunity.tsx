@@ -1,34 +1,24 @@
 import React from 'react';
 import { Animated, View } from 'react-native';
-import HeaderButton from '../../../components/HeaderButton';
-import HistoryHeader from '../../../components/HistoryHeader';
+import { iCategoryProps } from '.';
+import LastUpdatedText from '../../../components/LastUpdatedText';
 import MovieGrid from '../../../components/MovieGrid';
 import MovieListCommunity from '../../../components/MovieList/MovieListCommunity';
-import { Body, BodyBold } from '../../../components/Text';
+import { BodyBold } from '../../../components/Text';
 import theme from '../../../constants/theme';
 import { useCategory } from '../../../context/CategoryContext';
-import { useCollapsible } from '../../../hooks/animatedState/useCollapsible';
-import { useDisplay } from '../../../hooks/animatedState/useDisplay';
 import usePredictionData from '../../../hooks/queries/usePredictionData';
 import { iCategory } from '../../../types';
 import { formatLastUpdated } from '../../../util/formatDateTime';
-import { CategoryHeader } from '../styles';
 
-const CategoryCommunity = () => {
-  const {
-    display,
-    delayedDisplay,
-    toggleDisplay,
-    gridOpacity,
-    listOpacity,
-  } = useDisplay();
-  const {
-    collapsedOpacity,
-    expandedOpacity,
-    isCollapsed,
-    toggleCollapsed,
-  } = useCollapsible();
-
+const CategoryCommunity = ({
+  collapsedOpacity,
+  expandedOpacity,
+  isCollapsed,
+  delayedDisplay,
+  gridOpacity,
+  listOpacity,
+}: iCategoryProps) => {
   const { category: _category, date } = useCategory();
 
   const isHistory = !!date;
@@ -47,30 +37,6 @@ const CategoryCommunity = () => {
 
   return (
     <>
-      <CategoryHeader>
-        <View style={{ flexDirection: 'row' }}>
-          <HeaderButton
-            onPress={() => {
-              toggleDisplay();
-            }}
-            icon={display === 'grid' ? 'list' : 'grid'}
-          />
-          <Animated.View style={{ opacity: listOpacity }}>
-            <HeaderButton
-              onPress={toggleCollapsed}
-              icon={isCollapsed ? 'collapse' : 'expand'}
-            />
-          </Animated.View>
-        </View>
-        <View style={{ flexDirection: 'row' }}>
-          {!isHistory && lastUpdatedString !== 'Invalid Date' ? (
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Body>{`Updated: ${lastUpdatedString}`}</Body>
-            </View>
-          ) : null}
-          <HistoryHeader />
-        </View>
-      </CategoryHeader>
       {predictions && predictions.length === 0 ? (
         <View
           style={{
@@ -115,6 +81,7 @@ const CategoryCommunity = () => {
             width: '100%',
           }}
         >
+          <LastUpdatedText lastUpdated={lastUpdatedString} isDisabled={isHistory} />
           <MovieListCommunity predictions={predictions} />
         </Animated.View>
         <Animated.View
@@ -123,6 +90,7 @@ const CategoryCommunity = () => {
             opacity: collapsedOpacity,
           }}
         >
+          <LastUpdatedText lastUpdated={lastUpdatedString} isDisabled={isHistory} />
           <MovieListCommunity predictions={predictions} isCollapsed />
         </Animated.View>
       </Animated.View>

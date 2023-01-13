@@ -1,5 +1,5 @@
 import React, { useEffect, useLayoutEffect, useRef } from 'react';
-import { Animated, View } from 'react-native';
+import { Animated } from 'react-native';
 import { PredictionsParamList } from '../../../navigation/types';
 import { useTypedNavigation } from '../../../util/hooks';
 import { useCategory } from '../../../context/CategoryContext';
@@ -14,11 +14,11 @@ import EventList from './EventList';
 import { useCollapsible } from '../../../hooks/animatedState/useCollapsible';
 import _ from 'lodash';
 import { formatLastUpdated } from '../../../util/formatDateTime';
-import { Body } from '../../../components/Text';
 import usePredictionData from '../../../hooks/queries/usePredictionData';
 import DisplayFAB from '../../../components/Buttons/DisplayFAB';
 import HistoryFAB from '../../../components/Buttons/HistoryFAB';
 import CustomRefreshControl from '../../../components/CustomRefreshControl';
+import LastUpdatedText from '../../../components/LastUpdatedText';
 
 const TIMING = 300;
 
@@ -92,24 +92,6 @@ const Event = (props: {
         }, '');
   const lastUpdatedString = formatLastUpdated(new Date(lastUpdated || ''));
 
-  const LastUpdated = () => (
-    <>
-      {!isHistory && lastUpdatedString !== 'Invalid Date' ? (
-        <View
-          style={{
-            position: 'absolute',
-            top: -20,
-            right: 10,
-            flexDirection: 'row',
-            alignItems: 'center',
-          }}
-        >
-          <Body>{`Last Updated: ${lastUpdatedString}`}</Body>
-        </View>
-      ) : null}
-    </>
-  );
-
   return (
     <>
       <Animated.View
@@ -139,7 +121,7 @@ const Event = (props: {
             display: isCollapsed ? 'flex' : 'none',
           }}
         >
-          <LastUpdated />
+          <LastUpdatedText lastUpdated={lastUpdatedString} isDisabled={isHistory} />
           <EventList
             isCollapsed={true}
             onSelectCategory={(category: iCategory) => onSelectCategory(category)}
@@ -153,7 +135,7 @@ const Event = (props: {
             display: isCollapsed ? 'none' : 'flex',
           }}
         >
-          <LastUpdated />
+          <LastUpdatedText lastUpdated={lastUpdatedString} isDisabled={isHistory} />
           <EventList
             isCollapsed={false}
             onSelectCategory={(category: iCategory) => onSelectCategory(category)}
@@ -170,7 +152,7 @@ const TabsWrapper = () => {
     collapsedOpacity,
     expandedOpacity,
     isCollapsed,
-    toggleCollapsed,
+    setIsCollapsed,
   } = useCollapsible();
 
   const props = {
@@ -179,9 +161,16 @@ const TabsWrapper = () => {
     isCollapsed,
   };
 
+  const toggle = () => {
+    setIsCollapsed(!isCollapsed);
+  };
+
   return (
     <>
-      <DisplayFAB isCollapsed={isCollapsed} toggleCollapsed={toggleCollapsed} />
+      <DisplayFAB
+        state={isCollapsed ? 'list-collapsed' : 'list'}
+        toggleDisplay={toggle}
+      />
       <HistoryFAB />
       {PredictionTabsNavigator(
         <Event tab={'community'} {...props} />,

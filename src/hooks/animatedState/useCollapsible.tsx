@@ -9,10 +9,6 @@ export const useCollapsible = () => {
 
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
 
-  const toggleCollapsed = () => {
-    setIsCollapsed(!isCollapsed);
-  };
-
   useEffect(() => {
     if (isCollapsed) {
       Animated.timing(expandedOpacity, {
@@ -39,5 +35,5 @@ export const useCollapsible = () => {
     }
   }, [isCollapsed]);
 
-  return { isCollapsed, toggleCollapsed, collapsedOpacity, expandedOpacity };
+  return { isCollapsed, setIsCollapsed, collapsedOpacity, expandedOpacity };
 };

@@ -11,14 +11,6 @@ export const useDisplay = () => {
   const [display, setDisplay] = useState<iListDisplay>('list');
   const [delayedDisplay, setDelayedDisplay] = useState<iListDisplay>('list');
 
-  const toggleDisplay = () => {
-    if (display === 'grid') {
-      setDisplay('list');
-    } else {
-      setDisplay('grid');
-    }
-  };
-
   useEffect(() => {
     if (display === 'grid') {
       Animated.timing(listOpacity, {
@@ -52,5 +44,5 @@ export const useDisplay = () => {
     }
   }, [display]);
 
-  return { display, delayedDisplay, toggleDisplay, listOpacity, gridOpacity };
+  return { display, delayedDisplay, setDisplay, listOpacity, gridOpacity };
 };
