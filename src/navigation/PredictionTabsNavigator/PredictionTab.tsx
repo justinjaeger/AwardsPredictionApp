@@ -19,7 +19,8 @@ const PredictionTab = (props: {
         height: '100%',
         width: '50%',
         borderRadius: 0,
-        backgroundColor: 'rgba(0,0,0,0.3)',
+        borderBottomColor: COLORS.primaryLight,
+        borderBottomWidth: 1,
       }}
       onPress={onPress}
       underlayColor={COLORS.secondary}

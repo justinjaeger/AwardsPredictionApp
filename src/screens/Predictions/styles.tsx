@@ -7,6 +7,5 @@ export const CategoryHeader = styled.View({
   flexDirection: 'row',
   justifyContent: 'space-between',
   padding: theme.windowMargin,
-  backgroundColor: 'transparent',
   width: '100%',
 });
