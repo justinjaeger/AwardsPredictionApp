@@ -17,6 +17,7 @@ type iPosterProps = {
   width?: number; // 1 is 27*40px, defualt is 5
   ranking?: number;
   onPress?: () => void;
+  isWinner?: boolean;
   styles?: StyleProp<ImageStyle>;
 };
 
@@ -25,7 +26,7 @@ type iPosterProps = {
  */
 
 const Poster = (props: iPosterProps) => {
-  const { path, title, width: _width, ranking, onPress, styles } = props;
+  const { path, title, width: _width, ranking, onPress, isWinner, styles } = props;
 
   const width = _width || PosterSize.MEDIUM;
 
@@ -38,8 +39,8 @@ const Poster = (props: iPosterProps) => {
   const style: StyleProp<ImageStyle> = {
     ...(styles as Record<string, unknown>),
     ...posterDimensions,
-    borderWidth: 1,
-    borderColor: COLORS.secondary,
+    borderWidth: isWinner ? 5 : 1,
+    borderColor: isWinner ? COLORS.secondaryLight : COLORS.secondary,
     borderRadius: 5,
     margin: theme.posterMargin,
     opacity: isPressed ? 0.8 : 1,

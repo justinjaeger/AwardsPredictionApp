@@ -64,3 +64,29 @@ export const IconButtonOutlined = (props: iIconButtonProps) => {
     </TouchableHighlight>
   );
 };
+
+export const IconButtonCustom = (props: {
+  onPress: () => void;
+  styles?: StyleProp<ViewStyle>;
+  customIcon: JSX.Element;
+}) => {
+  const { onPress, customIcon, styles } = props;
+  return (
+    <TouchableHighlight
+      style={{
+        borderRadius: theme.borderRadius,
+        backgroundColor: COLORS.primaryLight,
+        height: SIZE + 5,
+        width: SIZE + 5,
+        alignItems: 'center',
+        justifyContent: 'center',
+        // @ts-ignore
+        ...styles,
+      }}
+      underlayColor={COLORS.secondaryDark}
+      onPress={onPress}
+    >
+      {customIcon}
+    </TouchableHighlight>
+  );
+};

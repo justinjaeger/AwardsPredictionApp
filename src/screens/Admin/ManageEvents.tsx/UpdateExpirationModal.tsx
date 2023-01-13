@@ -3,7 +3,7 @@ import BasicModal from '../../../components/BasicModal';
 import ApiServices from '../../../services/graphql';
 import Snackbar from '../../../components/Snackbar';
 import { SubmitButton } from '../../../components/Buttons';
-import { DateTimeInput } from '../../../components/Inputs/DateInput';
+import { DateTimeInput } from '../../../components/Inputs/DateTimeInput';
 
 const UpdateExpirationModal = (props: {
   visible: boolean;

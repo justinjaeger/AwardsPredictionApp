@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { View } from 'react-native';
-import { BodyBold } from '../../../components/Text';
+import { Body, BodyBold } from '../../../components/Text';
 import useQueryCommunityEvent from '../../../hooks/queries/getCommunityEvent';
 import { useCategory } from '../../../context/CategoryContext';
 import { iCategory, iEvent, iPrediction } from '../../../types';
@@ -9,6 +9,10 @@ import ManageContendersModal from './ManageContendersModal';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import { getHeaderTitle } from '../../../constants';
 import { useNavigation } from '@react-navigation/native';
+import UpdateCategoryShortlistedModal from './UpdateCategoryShortlistedModal';
+import { SubmitButton } from '../../../components/Buttons';
+import { IS_SHORTLISTED_TO_STRING } from '../../../constants/categories';
+import { CategoryIsShortlisted } from '../../../API';
 
 const ManageContenders = () => {
   const { event: _event, category: _category } = useCategory();
@@ -22,6 +26,10 @@ const ManageContenders = () => {
   const [showManageContendersModal, setShowManageContendersModal] = useState<boolean>(
     false,
   );
+  const [
+    showUpdateCategoryShortlistedModal,
+    setShowUpdateCategoryShortlistedModal,
+  ] = useState<boolean>(false);
   const [selectedPrediction, setSelectedPrediction] = useState<iPrediction | undefined>(
     undefined,
   );
@@ -54,6 +62,19 @@ const ManageContenders = () => {
               <BodyBold>No contenders in this category</BodyBold>
             </View>
           ) : null}
+          <View style={{ width: '100%', alignItems: 'center' }}>
+            <Body>
+              {
+                IS_SHORTLISTED_TO_STRING[
+                  category.isShortlisted || CategoryIsShortlisted.FALSE
+                ]
+              }
+            </Body>
+          </View>
+          <SubmitButton
+            text={'Set Is Shortlisted'}
+            onPress={() => setShowUpdateCategoryShortlistedModal(true)}
+          />
           <MovieListAdmin
             predictions={contenders}
             onPressItem={(p) => {
@@ -62,6 +83,14 @@ const ManageContenders = () => {
           />
         </>
       </BackgroundWrapper>
+      <UpdateCategoryShortlistedModal
+        visible={showUpdateCategoryShortlistedModal}
+        onClose={() => setShowUpdateCategoryShortlistedModal(false)}
+        category={category}
+        onSaveSuccess={() => {
+          setShowUpdateCategoryShortlistedModal(false);
+        }}
+      />
       {selectedPrediction ? (
         <ManageContendersModal
           visible={showManageContendersModal}

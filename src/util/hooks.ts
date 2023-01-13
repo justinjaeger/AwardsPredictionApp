@@ -30,6 +30,18 @@ export const useAsyncEffect = (effect: () => Promise<void>, deps: any[]) => {
   }, deps);
 };
 
+const useDeepCompareMemoize = (value: any) => {
+  const ref = useRef();
+  if (!_.isEqual(ref.current, value)) {
+    ref.current = value;
+  }
+  return ref.current;
+};
+
+export const useDeepCompareEffect = (effect: VoidFunction, deps: any[]) => {
+  useEffect(effect, deps.map(useDeepCompareMemoize));
+};
+
 /**
  * useAsyncEffect that reloads every time the page is focused
  * useful for when we make a change, go back, and want to see that change updated

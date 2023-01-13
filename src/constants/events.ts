@@ -1,4 +1,4 @@
-import { ContenderAccolade, EventStatus } from '../API';
+import { ContenderAccolade, EventStatus, PredictionType } from '../API';
 import { iEvent } from '../types';
 import { formatDateTime } from '../util/formatDateTime';
 
@@ -20,8 +20,22 @@ export const ACCOLADE_TO_STRING: {
   [ContenderAccolade.WINNER]: 'Winner',
 };
 
-export const eventIsForNominations = (eventStatus: EventStatus) =>
-  [EventStatus.NOMS_LIVE, EventStatus.NOMS_STAGING].includes(eventStatus);
+export const ACCOLADE_TO_SHORTSTRING: {
+  [key in ContenderAccolade]: string;
+} = {
+  [ContenderAccolade.SHORTLISTED]: 'SHL',
+  [ContenderAccolade.NOMINEE]: 'NOM',
+  [ContenderAccolade.WINNER]: 'WIN',
+};
+
+/**
+ * PredictionType = NOMINATION if event is in NOMS_LIVE or NOMS_STAGING
+ * else, we're predicting for the win, so PredictionType = WIN
+ */
+export const eventStatusToPredictionType = (eventStatus: EventStatus): PredictionType =>
+  [EventStatus.NOMS_LIVE, EventStatus.NOMS_STAGING].includes(eventStatus)
+    ? PredictionType.NOMINATION
+    : PredictionType.WIN;
 
 export const getEventTime = (event: iEvent) => {
   const nomDateTime = new Date(event?.nominationDateTime || '');
@@ -29,7 +43,7 @@ export const getEventTime = (event: iEvent) => {
 
   return EventStatus.ARCHIVED === event.status
     ? ''
-    : eventIsForNominations(event.status)
+    : eventStatusToPredictionType(event.status) === PredictionType.NOMINATION
     ? event.nominationDateTime
       ? formatDateTime(nomDateTime)
       : ''

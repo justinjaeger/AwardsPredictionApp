@@ -1,4 +1,10 @@
-import { ContenderVisibility } from '../../API';
+import {
+  CategoryIsShortlisted,
+  ContenderAccolade,
+  ContenderVisibility,
+  PredictionType,
+} from '../../API';
+import { eventStatusToPredictionType } from '../../constants/events';
 import { iEvent, iIndexedPredictionsByCategory, iPrediction } from '../../types';
 import { isWithinLastMonth } from '../../util/isWithinLastMonth';
 import { sortCommunityPredictionsByRanking } from '../../util/sortPredictions';
@@ -17,20 +23,40 @@ const getCommunityPredictionsByEvent = async (event: iEvent, includeHidden = fal
   pSets.forEach((ps) => {
     const categoryId = ps?.categoryId || '';
     const predictions: iPrediction[] = [];
+    const contenders = ps?.predictions?.items || [];
     // populate predictions array
-    (ps?.predictions?.items || []).forEach((p) => {
+    contenders.forEach((p) => {
+      // NOTE: Below is same as in updateCommuityPredictions/getPredictions. So it should all be unnecessary. But can keep as safety
       const contender = p?.contender;
       if (!contender) return;
+      const ranking = p?.ranking || 0;
       const lastUpdated = p?.updatedAt || '';
+      // don't include hidden contenders in tally
+      // don't include rankings higher than 20
+      // don't include if prediction is more than a month old
+      // don't include if category is shortlisted and contender doesn't have an accolade
+      // don't include if nominations have happened and contender is not a nominee
       const isRecentPrediction = isWithinLastMonth(lastUpdated);
-      const hidePrediction =
-        contender.visibility === ContenderVisibility.HIDDEN && includeHidden !== true;
-      // skip if contender is hidden and we don't want to include hidden
-      // OR if prediction is NOT recent
-      if (isRecentPrediction === false || hidePrediction) {
+      const isHidden = contender.visibility === ContenderVisibility.HIDDEN;
+      const isLowOnList = ranking > 20;
+      const contenderIsNotShortlisted =
+        ps?.category.isShortlisted === CategoryIsShortlisted.TRUE && !contender.accolade;
+      const contenderIsNotNominated =
+        eventStatusToPredictionType(event.status) === PredictionType.WIN &&
+        contender.accolade !== ContenderAccolade.NOMINEE &&
+        contender.accolade !== ContenderAccolade.WINNER;
+      if (includeHidden) {
+        // skip
+      } else if (
+        !isRecentPrediction ||
+        isLowOnList ||
+        isHidden ||
+        contenderIsNotShortlisted ||
+        contenderIsNotNominated
+      ) {
         return;
       }
-      // TODO: after amplify push / codegen this should work
+      // Have to parse this because the field is a json stringified object
       const indexedRankings = (p?.indexedRankings
         ? JSON.parse(p?.indexedRankings)
         : {}) as { [key: number]: number };

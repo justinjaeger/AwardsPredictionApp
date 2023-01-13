@@ -20,6 +20,7 @@ const usePredictionData = (tab: 'community' | 'personal') => {
   const {
     data: contemporaryData,
     isLoading: isLoadingComtemporary,
+    refetch,
   } = useQueryCommunityOrPersonalEvent(tab, !!userId, { event, userId });
 
   // Past predictions
@@ -33,9 +34,10 @@ const usePredictionData = (tab: 'community' | 'personal') => {
   );
 
   const predictionData = showHistory ? historyData : contemporaryData;
+  const refreshData = showHistory ? async () => {} : refetch; // don't need to refresh on history
   const isLoading = isLoadingComtemporary || isLoadingHistory;
 
-  return { predictionData, isLoading };
+  return { predictionData, isLoading, refreshData };
 };
 
 export default usePredictionData;

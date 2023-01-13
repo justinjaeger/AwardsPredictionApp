@@ -11,6 +11,7 @@ import {
   ListPredictionSetsQueryVariables,
   PredictionSetByUserIdAndEventIdQuery,
   PredictionSetByUserIdAndEventIdQueryVariables,
+  PredictionType,
 } from '../../API';
 import * as mutations from '../../graphql/mutations';
 import * as customQueries from '../../graphqlCustom/queries';
@@ -21,6 +22,7 @@ export type iPredictionSetParams = {
   userId: string;
   categoryId: string;
   eventId: string;
+  type: PredictionType;
 };
 
 type iPredictionParams = {

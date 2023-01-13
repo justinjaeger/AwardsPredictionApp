@@ -159,6 +159,7 @@ export const communityPredictionSetByEventId = /* GraphQL */ `
           id
           name
           type
+          isShortlisted
           createdAt
           updatedAt
         }
@@ -230,6 +231,7 @@ export const predictionSetByUserIdAndEventId = /* GraphQL */ `
           id
           name
           type
+          isShortlisted
           createdAt
           updatedAt
         }
@@ -240,13 +242,6 @@ export const predictionSetByUserIdAndEventId = /* GraphQL */ `
             contenderId
             contender {
               id
-              categoryId
-              category {
-                id
-                eventId
-                name
-                type
-              }
               movieId
               movie {
                 id
@@ -305,6 +300,7 @@ export const historyPredictionSetByUserIdAndEventIdAndCreatedAt = /* GraphQL */ 
           id
           name
           type
+          isShortlisted
         }
         predictions {
           items {
@@ -371,6 +367,7 @@ export const communityHistoryPredictionSetsByEventIdAndCreatedAt = /* GraphQL */
           id
           name
           type
+          isShortlisted
         }
         predictions {
           items {

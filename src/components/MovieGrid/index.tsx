@@ -1,6 +1,7 @@
 import { Divider } from '@ui-kitten/components';
 import React from 'react';
 import { useWindowDimensions, View } from 'react-native';
+import { ContenderAccolade } from '../../API';
 import { getCategorySlots } from '../../constants/categories';
 import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
@@ -13,10 +14,8 @@ const MovieGrid = (props: { predictions: iPrediction[]; noLine?: boolean }) => {
   const { width } = useWindowDimensions();
   const { event, category } = useCategory();
 
-  const slots =
-    category && event
-      ? getCategorySlots(event.year, event?.awardsBody, category.name)
-      : undefined;
+  // don't want to show divider after noms have happened
+  const slots = event && category ? getCategorySlots(event, category.name) : undefined;
 
   return (
     <View
@@ -54,6 +53,7 @@ const MovieGrid = (props: { predictions: iPrediction[]; noLine?: boolean }) => {
                 personTmdbId={p.contenderPerson?.tmdbId}
                 width={(width - theme.windowMargin * 2 + theme.posterMargin) / 5}
                 ranking={i + 1}
+                isWinner={p.accolade === ContenderAccolade.WINNER}
               />
             </>
           ) : null}

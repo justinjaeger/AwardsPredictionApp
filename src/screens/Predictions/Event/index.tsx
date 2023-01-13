@@ -1,5 +1,5 @@
 import React, { useEffect, useLayoutEffect, useRef } from 'react';
-import { Animated, View } from 'react-native';
+import { Animated } from 'react-native';
 import { PredictionsParamList } from '../../../navigation/types';
 import { useTypedNavigation } from '../../../util/hooks';
 import { useCategory } from '../../../context/CategoryContext';
@@ -8,23 +8,27 @@ import PredictionTabsNavigator from '../../../navigation/PredictionTabsNavigator
 import { useAuth } from '../../../context/UserContext';
 import { eventToString } from '../../../util/stringConversions';
 import LoadingStatue from '../../../components/LoadingStatue';
-import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import SignedOutState from '../../../components/SignedOutState';
 import { getHeaderTitleWithTrophy } from '../../../constants';
-import { CategoryHeader } from '../styles';
-import HeaderButton from '../../../components/HeaderButton';
 import EventList from './EventList';
 import { useCollapsible } from '../../../hooks/animatedState/useCollapsible';
 import _ from 'lodash';
 import { formatLastUpdated } from '../../../util/formatDateTime';
-import { Body } from '../../../components/Text';
-import HistoryHeader from '../../../components/HistoryHeader';
 import usePredictionData from '../../../hooks/queries/usePredictionData';
+import DisplayFAB from '../../../components/Buttons/DisplayFAB';
+import HistoryFAB from '../../../components/Buttons/HistoryFAB';
+import CustomRefreshControl from '../../../components/CustomRefreshControl';
+import LastUpdatedText from '../../../components/LastUpdatedText';
 
 const TIMING = 300;
 
-const Event = (props: { tab: 'personal' | 'community' }) => {
-  const { tab } = props;
+const Event = (props: {
+  tab: 'personal' | 'community';
+  collapsedOpacity: Animated.Value;
+  expandedOpacity: Animated.Value;
+  isCollapsed: boolean;
+}) => {
+  const { tab, collapsedOpacity, expandedOpacity, isCollapsed } = props;
 
   const { event: _event, setCategory, date } = useCategory();
   const { userId: _userId } = useAuth();
@@ -33,17 +37,11 @@ const Event = (props: { tab: 'personal' | 'community' }) => {
   const loadingOpacity = useRef(new Animated.Value(1)).current;
   const bodyOpacity = useRef(new Animated.Value(0)).current;
 
+  const isHistory = !!date;
   const event = _event as iEvent;
   const userId = _userId as string;
 
-  const {
-    collapsedOpacity,
-    expandedOpacity,
-    isCollapsed,
-    toggleCollapsed,
-  } = useCollapsible();
-
-  const { predictionData, isLoading } = usePredictionData(tab);
+  const { predictionData, isLoading, refreshData } = usePredictionData(tab);
 
   // define the header
   useLayoutEffect(() => {
@@ -95,77 +93,91 @@ const Event = (props: { tab: 'personal' | 'community' }) => {
   const lastUpdatedString = formatLastUpdated(new Date(lastUpdated || ''));
 
   return (
-    <BackgroundWrapper>
-      <>
+    <>
+      <Animated.View
+        style={{
+          position: 'absolute',
+          width: '100%',
+          height: '80%',
+          alignItems: 'center',
+          justifyContent: 'center',
+          opacity: loadingOpacity,
+        }}
+      >
+        <LoadingStatue />
+      </Animated.View>
+      <Animated.ScrollView
+        style={{ opacity: bodyOpacity, width: '100%' }}
+        contentContainerStyle={{
+          alignItems: 'flex-start',
+          paddingBottom: 100,
+        }}
+        refreshControl={<CustomRefreshControl callback={refreshData} />}
+      >
         <Animated.View
           style={{
-            position: 'absolute',
+            opacity: collapsedOpacity,
             width: '100%',
-            height: '80%',
-            alignItems: 'center',
-            justifyContent: 'center',
-            opacity: loadingOpacity,
+            display: isCollapsed ? 'flex' : 'none',
           }}
         >
-          <LoadingStatue />
+          <LastUpdatedText lastUpdated={lastUpdatedString} isDisabled={isHistory} />
+          <EventList
+            isCollapsed={true}
+            onSelectCategory={(category: iCategory) => onSelectCategory(category)}
+            predictionData={predictionData}
+          />
         </Animated.View>
-        <CategoryHeader>
-          <View style={{ flexDirection: 'row' }}>
-            <HeaderButton
-              onPress={toggleCollapsed}
-              icon={isCollapsed ? 'expand' : 'collapse'}
-            />
-          </View>
-          <View style={{ flexDirection: 'row' }}>
-            {date === undefined ? (
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Body>{`Updated: ${lastUpdatedString}`}</Body>
-              </View>
-            ) : null}
-            <HistoryHeader />
-          </View>
-        </CategoryHeader>
-        <Animated.ScrollView
-          style={{ opacity: bodyOpacity, width: '100%' }}
-          contentContainerStyle={{
-            alignItems: 'flex-start',
-            paddingBottom: 100,
+        <Animated.View
+          style={{
+            opacity: expandedOpacity,
+            width: '100%',
+            display: isCollapsed ? 'none' : 'flex',
           }}
         >
-          <Animated.View
-            style={{
-              opacity: collapsedOpacity,
-              width: '100%',
-              display: isCollapsed ? 'flex' : 'none',
-            }}
-          >
-            <EventList
-              isCollapsed={true}
-              onSelectCategory={(category: iCategory) => onSelectCategory(category)}
-              predictionData={predictionData}
-            />
-          </Animated.View>
-          <Animated.View
-            style={{
-              opacity: expandedOpacity,
-              width: '100%',
-              display: isCollapsed ? 'none' : 'flex',
-            }}
-          >
-            <EventList
-              isCollapsed={false}
-              onSelectCategory={(category: iCategory) => onSelectCategory(category)}
-              predictionData={predictionData}
-            />
-          </Animated.View>
-        </Animated.ScrollView>
-      </>
-    </BackgroundWrapper>
+          <LastUpdatedText lastUpdated={lastUpdatedString} isDisabled={isHistory} />
+          <EventList
+            isCollapsed={false}
+            onSelectCategory={(category: iCategory) => onSelectCategory(category)}
+            predictionData={predictionData}
+          />
+        </Animated.View>
+      </Animated.ScrollView>
+    </>
   );
 };
 
 const TabsWrapper = () => {
-  return PredictionTabsNavigator(<Event tab={'community'} />, <Event tab={'personal'} />);
+  const {
+    collapsedOpacity,
+    expandedOpacity,
+    isCollapsed,
+    setIsCollapsed,
+  } = useCollapsible();
+
+  const props = {
+    collapsedOpacity,
+    expandedOpacity,
+    isCollapsed,
+  };
+
+  const toggle = () => {
+    setIsCollapsed(!isCollapsed);
+  };
+
+  return (
+    <>
+      <DisplayFAB
+        state={isCollapsed ? 'list-collapsed' : 'list'}
+        toggleDisplay={toggle}
+      />
+      <HistoryFAB />
+      {PredictionTabsNavigator(
+        <Event tab={'community'} {...props} />,
+        <Event tab={'personal'} {...props} />,
+      )}
+    </>
+  );
 };
 
 export default TabsWrapper;

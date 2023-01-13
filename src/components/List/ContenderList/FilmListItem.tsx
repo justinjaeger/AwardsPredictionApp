@@ -62,7 +62,7 @@ const FilmListItem = (props: iFilmListItemProps) => {
 
   const { win, nom } = getNumPredicting(
     indexedRankings || {},
-    getCategorySlots(event.year, event.awardsBody, category.name),
+    getCategorySlots(event, category.name) || 0,
   );
 
   return (

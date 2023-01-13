@@ -25,7 +25,7 @@ const MovieListAdmin = (props: iMovieListAdminProps) => {
 
   const [selectedContenderId, setSelectedContenderId] = useState<string | undefined>(); // this selection is whether the film is big or not
 
-  const slots = getCategorySlots(event.year, event?.awardsBody, category.name);
+  const slots = getCategorySlots(event, category.name);
 
   return (
     <FlatList

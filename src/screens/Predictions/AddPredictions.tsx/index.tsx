@@ -6,8 +6,6 @@ import { useCategory } from '../../../context/CategoryContext';
 import { iCategory, iEvent, iPrediction } from '../../../types';
 import { BodyBold } from '../../../components/Text';
 import useQueryCommunityEvent from '../../../hooks/queries/getCommunityEvent';
-import { CategoryHeader } from '../styles';
-import HeaderButton from '../../../components/HeaderButton';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import BackButton from '../../../components/Buttons/BackButton';
@@ -17,7 +15,8 @@ import { FAB } from '../../../components/Buttons/FAB';
 import CreateContender from '../CreateContender';
 import { CATEGORY_TYPE_TO_STRING } from '../../../constants/categories';
 import Snackbar from '../../../components/Snackbar';
-import { CategoryType } from '../../../API';
+import { CategoryIsShortlisted, CategoryType, EventStatus } from '../../../API';
+import FloatingButton from '../../../components/Buttons/FloatingButton';
 
 const AddPredictions = () => {
   const {
@@ -29,6 +28,10 @@ const AddPredictions = () => {
 
   const category = _category as iCategory;
   const event = _event as iEvent;
+
+  const letUserCreateContenders =
+    category.isShortlisted === CategoryIsShortlisted.FALSE &&
+    ![EventStatus.WINS_LIVE, EventStatus.ARCHIVED].includes(event.status);
 
   // We use the SAME KEY as the previous screen, because it avoids a re-fetch of the data which was available previously
   const { data: communityData } = useQueryCommunityEvent({ event });
@@ -145,33 +148,34 @@ const AddPredictions = () => {
           />
         ) : (
           <>
-            <CategoryHeader>
-              <View style={{ flexDirection: 'row' }}>
-                {isEditing ? (
-                  <HeaderButton
-                    onPress={() => {
-                      Alert.alert('Undo recent changes?', '', [
-                        {
-                          text: 'Cancel',
-                          onPress: () => {},
-                          style: 'cancel',
-                        },
-                        {
-                          text: 'Undo',
-                          onPress: () => {
-                            setSelectedPredictions(initialPredictions);
-                          },
-                        },
-                      ]);
-                    }}
-                    icon={'undo'}
-                  />
-                ) : null}
-              </View>
-              <View style={{ flexDirection: 'row' }}>
-                <HeaderButton onPress={() => setIsSearching(true)} icon={'search'} />
-              </View>
-            </CategoryHeader>
+            {letUserCreateContenders ? (
+              <FloatingButton
+                style={{ position: 'absolute', bottom: 80, right: 20, zIndex: 10 }}
+                onPress={() => setIsSearching(true)}
+                icon={'search'}
+              />
+            ) : null}
+            {isEditing ? (
+              <FloatingButton
+                style={{ position: 'absolute', bottom: 140, right: 20, zIndex: 10 }}
+                onPress={() => {
+                  Alert.alert('Undo recent changes?', '', [
+                    {
+                      text: 'Cancel',
+                      onPress: () => {},
+                      style: 'cancel',
+                    },
+                    {
+                      text: 'Undo',
+                      onPress: () => {
+                        setSelectedPredictions(initialPredictions);
+                      },
+                    },
+                  ]);
+                }}
+                icon={'undo'}
+              />
+            ) : null}
             {!communityPredictions || communityPredictions.length === 0 ? (
               <View
                 style={{

@@ -1,36 +1,27 @@
 import React from 'react';
 import { Animated, View } from 'react-native';
-import HeaderButton from '../../../components/HeaderButton';
-import HistoryHeader from '../../../components/HistoryHeader';
+import { iCategoryProps } from '.';
+import LastUpdatedText from '../../../components/LastUpdatedText';
 import MovieGrid from '../../../components/MovieGrid';
 import MovieListCommunity from '../../../components/MovieList/MovieListCommunity';
-import { Body, BodyBold } from '../../../components/Text';
+import { BodyBold } from '../../../components/Text';
 import theme from '../../../constants/theme';
 import { useCategory } from '../../../context/CategoryContext';
-import { useCollapsible } from '../../../hooks/animatedState/useCollapsible';
-import { useDisplay } from '../../../hooks/animatedState/useDisplay';
 import usePredictionData from '../../../hooks/queries/usePredictionData';
 import { iCategory } from '../../../types';
 import { formatLastUpdated } from '../../../util/formatDateTime';
-import { CategoryHeader } from '../styles';
 
-const CategoryCommunity = () => {
-  const {
-    display,
-    delayedDisplay,
-    toggleDisplay,
-    gridOpacity,
-    listOpacity,
-  } = useDisplay();
-  const {
-    collapsedOpacity,
-    expandedOpacity,
-    isCollapsed,
-    toggleCollapsed,
-  } = useCollapsible();
-
+const CategoryCommunity = ({
+  collapsedOpacity,
+  expandedOpacity,
+  isCollapsed,
+  delayedDisplay,
+  gridOpacity,
+  listOpacity,
+}: iCategoryProps) => {
   const { category: _category, date } = useCategory();
 
+  const isHistory = !!date;
   const category = _category as iCategory;
 
   // We use the SAME KEY as the previous screen, because it avoids a re-fetch of the data which was available previously
@@ -39,7 +30,6 @@ const CategoryCommunity = () => {
 
   const lastUpdated = predictionData?.[category.id]?.updatedAt;
   const lastUpdatedString = formatLastUpdated(new Date(lastUpdated || ''));
-  console.log('lastUpdatedString', lastUpdatedString); // TODO: can do something with this later
 
   if (!predictions) {
     return null;
@@ -47,30 +37,6 @@ const CategoryCommunity = () => {
 
   return (
     <>
-      <CategoryHeader>
-        <View style={{ flexDirection: 'row' }}>
-          <HeaderButton
-            onPress={() => {
-              toggleDisplay();
-            }}
-            icon={display === 'grid' ? 'list' : 'grid'}
-          />
-          <Animated.View style={{ opacity: listOpacity }}>
-            <HeaderButton
-              onPress={toggleCollapsed}
-              icon={isCollapsed ? 'collapse' : 'expand'}
-            />
-          </Animated.View>
-        </View>
-        <View style={{ flexDirection: 'row' }}>
-          {date === undefined ? (
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Body>{`Updated: ${lastUpdatedString}`}</Body>
-            </View>
-          ) : null}
-          <HistoryHeader />
-        </View>
-      </CategoryHeader>
       {predictions && predictions.length === 0 ? (
         <View
           style={{
@@ -81,7 +47,7 @@ const CategoryCommunity = () => {
           }}
         >
           <BodyBold>
-            {date === undefined
+            {!isHistory
               ? 'Community predictions not yet tallied'
               : 'No predictions for this date'}
           </BodyBold>
@@ -99,6 +65,11 @@ const CategoryCommunity = () => {
         }}
       >
         <Animated.View style={{ opacity: gridOpacity }}>
+          <LastUpdatedText
+            lastUpdated={lastUpdatedString}
+            isDisabled={isHistory}
+            style={{ top: -30 }}
+          />
           <MovieGrid predictions={predictions} />
         </Animated.View>
       </Animated.ScrollView>
@@ -115,7 +86,10 @@ const CategoryCommunity = () => {
             width: '100%',
           }}
         >
-          <MovieListCommunity predictions={predictions} />
+          <MovieListCommunity
+            predictions={predictions}
+            lastUpdatedString={lastUpdatedString}
+          />
         </Animated.View>
         <Animated.View
           style={{
@@ -123,7 +97,11 @@ const CategoryCommunity = () => {
             opacity: collapsedOpacity,
           }}
         >
-          <MovieListCommunity predictions={predictions} isCollapsed />
+          <MovieListCommunity
+            predictions={predictions}
+            lastUpdatedString={lastUpdatedString}
+            isCollapsed
+          />
         </Animated.View>
       </Animated.View>
     </>

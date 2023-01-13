@@ -4,9 +4,16 @@ import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useRef, useState } from 'react';
 import { Animated, TouchableHighlight, useWindowDimensions, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { CategoryType } from '../../../API';
+import {
+  CategoryIsShortlisted,
+  CategoryType,
+  ContenderAccolade,
+  EventStatus,
+  PredictionType,
+} from '../../../API';
 import { getCategorySlots } from '../../../constants/categories';
 import COLORS from '../../../constants/colors';
+import { eventStatusToPredictionType } from '../../../constants/events';
 import { getPosterDimensionsByWidth } from '../../../constants/posterDimensions';
 import theme from '../../../constants/theme';
 import { useCategory } from '../../../context/CategoryContext';
@@ -18,6 +25,7 @@ import { useAsyncEffect } from '../../../util/hooks';
 import CustomIcon from '../../CustomIcon';
 import AnimatedPoster from '../../Images/AnimatedPoster';
 import { Body, SubHeader } from '../../Text';
+import AccoladeTag from './AccoladeTag';
 
 type iContenderListItemProps = {
   variant: 'community' | 'personal' | 'selectable' | 'search';
@@ -68,7 +76,8 @@ const ContenderListItem = (props: iContenderListItemProps) => {
   const ITEM_WIDTH_SELECTED = RIGHT_COL_WIDTH + BODY_WIDTH_SELECTED;
   const ITEM_WIDTH_UNSELECTED = RIGHT_COL_WIDTH + BODY_WIDTH_UNSELECTED;
 
-  const { category: _category, event: _event } = useCategory();
+  const { category: _category, event: _event, date } = useCategory();
+  const isHistory = !!date;
   const category = _category as iCategory;
   const event = _event as iEvent;
 
@@ -87,6 +96,8 @@ const ContenderListItem = (props: iContenderListItemProps) => {
   const tmdbMovieId = prediction.contenderMovie?.tmdbId;
   const tmdbPersonId = prediction.contenderPerson?.tmdbId;
   const movieStudio = prediction.contenderMovie?.studio;
+
+  const eventIsArchived = event.status === EventStatus.ARCHIVED;
 
   useEffect(() => {
     Animated.timing(imageWidth, {
@@ -168,10 +179,39 @@ const ContenderListItem = (props: iContenderListItemProps) => {
 
   const { win, nom } = getNumPredicting(
     indexedRankings || {},
-    getCategorySlots(event.year, event.awardsBody, category.name),
+    getCategorySlots(event, category.name) || 0,
   );
 
   const showBotomButtons = selected && tmdbMovie;
+
+  const nominationsHaveHappened =
+    eventStatusToPredictionType(event.status) === PredictionType.WIN;
+
+  const predictionIsNotNominated =
+    ['personal', 'selectable'].includes(variant) &&
+    nominationsHaveHappened &&
+    prediction.accolade !== ContenderAccolade.NOMINEE &&
+    prediction.accolade !== ContenderAccolade.WINNER;
+
+  const predictionIsNotShortlisted =
+    ['personal', 'selectable'].includes(variant) &&
+    category.isShortlisted === CategoryIsShortlisted.TRUE &&
+    !prediction.accolade;
+
+  if (!eventIsArchived) {
+    if (predictionIsNotNominated) {
+      subtitle =
+        variant === 'selectable' ? 'Not nominated' : 'Not nominated. Tap +/- to remove';
+    } else if (predictionIsNotShortlisted) {
+      subtitle =
+        variant === 'selectable'
+          ? 'Not shortlisted'
+          : 'Not shortlisted. Tap +/- to remove';
+    }
+  }
+
+  const isUnqualified =
+    !eventIsArchived && (predictionIsNotNominated || predictionIsNotShortlisted);
 
   return (
     <TouchableHighlight
@@ -179,7 +219,12 @@ const ContenderListItem = (props: iContenderListItemProps) => {
         onPressItem(prediction);
       }}
       style={{
-        backgroundColor: isActive || highlighted ? COLORS.secondaryDark : 'transparent',
+        backgroundColor:
+          isUnqualified && (variant !== 'selectable' || highlighted) // if variant IS selectable (false), must be selected
+            ? COLORS.error
+            : isActive || highlighted
+            ? COLORS.secondaryDark
+            : 'transparent',
         width: '100%',
         paddingTop: theme.windowMargin / 4,
         paddingBottom: theme.windowMargin / 4,
@@ -187,7 +232,7 @@ const ContenderListItem = (props: iContenderListItemProps) => {
         paddingLeft: theme.windowMargin,
       }}
       underlayColor={COLORS.secondaryDark}
-      onLongPress={drag}
+      onLongPress={isHistory ? undefined : drag}
       disabled={isActive}
     >
       <>
@@ -245,7 +290,17 @@ const ContenderListItem = (props: iContenderListItemProps) => {
                   paddingBottom: showBotomButtons ? 70 : 0, // For not conflicting with the bottom buttons
                 }}
               >
-                <SubHeader style={{ marginLeft: 10 }}>{title}</SubHeader>
+                <View style={{ flexDirection: 'row' }}>
+                  <SubHeader style={{ marginLeft: 10, marginRight: 5 }}>
+                    {title}
+                  </SubHeader>
+                  {isHistory && prediction.accolade ? (
+                    <AccoladeTag
+                      accolade={prediction.accolade}
+                      eventStatus={event.status}
+                    />
+                  ) : null}
+                </View>
                 <Body
                   style={{
                     marginTop: 0,
@@ -265,11 +320,15 @@ const ContenderListItem = (props: iContenderListItemProps) => {
                   paddingRight: theme.windowMargin,
                 }}
               >
-                <Body style={{ textAlign: 'right' }}>{nom.toString()}</Body>
+                {nominationsHaveHappened ? (
+                  <View />
+                ) : (
+                  <Body style={{ textAlign: 'right' }}>{nom.toString()}</Body>
+                )}
                 <Body style={{ textAlign: 'right' }}>{win.toString()}</Body>
               </View>
             ) : null}
-            {variant === 'personal' ? (
+            {variant === 'personal' && !isHistory ? (
               <View
                 style={{
                   height: SMALL_POSTER,
@@ -296,10 +355,10 @@ const ContenderListItem = (props: iContenderListItemProps) => {
               }}
             >
               <ExternalLinkButton
-                text={'IMDb'}
+                text={'More Info'}
                 onPress={() => {
                   navigation.navigate('WebView', {
-                    uri: `https://www.imdb.com/title/${tmdbMovie.imdbId}/?mode=desktop`,
+                    uri: `https://www.themoviedb.org/movie/${tmdbMovieId}/`,
                     title: tmdbMovie?.title || '',
                   });
                 }}
@@ -308,16 +367,7 @@ const ContenderListItem = (props: iContenderListItemProps) => {
                 text={'Cast'}
                 onPress={() => {
                   navigation.navigate('WebView', {
-                    uri: `https://www.imdb.com/title/${tmdbMovie.imdbId}/fullcredits/cast/`,
-                    title: tmdbMovie?.title || '',
-                  });
-                }}
-              />
-              <ExternalLinkButton
-                text={'Crew'}
-                onPress={() => {
-                  navigation.navigate('WebView', {
-                    uri: `https://www.imdb.com/title/${tmdbMovie.imdbId}/fullcredits/`,
+                    uri: `https://www.themoviedb.org/movie/${tmdbMovieId}/cast/`,
                     title: tmdbMovie?.title || '',
                   });
                 }}

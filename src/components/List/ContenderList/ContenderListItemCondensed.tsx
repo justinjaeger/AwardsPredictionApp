@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
 import { TouchableHighlight, useWindowDimensions, View } from 'react-native';
-import { CategoryType } from '../../../API';
+import {
+  CategoryIsShortlisted,
+  CategoryType,
+  ContenderAccolade,
+  PredictionType,
+} from '../../../API';
 import { getCategorySlots } from '../../../constants/categories';
 import COLORS from '../../../constants/colors';
+import { eventStatusToPredictionType } from '../../../constants/events';
 import theme from '../../../constants/theme';
 import { useCategory } from '../../../context/CategoryContext';
 import { iCachedTmdbMovie, iCachedTmdbPerson } from '../../../services/cache/types';
@@ -12,6 +18,7 @@ import { getNumPredicting } from '../../../util/getNumPredicting';
 import { useAsyncEffect } from '../../../util/hooks';
 import CustomIcon from '../../CustomIcon';
 import { Body, SubHeader } from '../../Text';
+import AccoladeTag from './AccoladeTag';
 
 type iContenderListItemProps = {
   variant: 'community' | 'personal' | 'selectable' | 'search';
@@ -45,7 +52,8 @@ const ContenderListItemCondensed = (props: iContenderListItemProps) => {
 
   const RIGHT_COL_WIDTH = windowWidth / 3;
 
-  const { category: _category, event: _event } = useCategory();
+  const { category: _category, event: _event, date } = useCategory();
+  const isHistory = !!date;
   const category = _category as iCategory;
   const event = _event as iEvent;
 
@@ -95,8 +103,24 @@ const ContenderListItemCondensed = (props: iContenderListItemProps) => {
 
   const { win, nom } = getNumPredicting(
     indexedRankings || {},
-    getCategorySlots(event.year, event.awardsBody, category.name),
+    getCategorySlots(event, category.name) || 0,
   );
+
+  const nominationsHaveHappened =
+    eventStatusToPredictionType(event.status) === PredictionType.WIN;
+
+  const predictionIsNotNominated =
+    ['personal', 'selectable'].includes(variant) &&
+    nominationsHaveHappened &&
+    prediction.accolade !== ContenderAccolade.NOMINEE &&
+    prediction.accolade !== ContenderAccolade.WINNER;
+
+  const predictionIsNotShortlisted =
+    ['personal', 'selectable'].includes(variant) &&
+    category.isShortlisted === CategoryIsShortlisted.TRUE &&
+    !prediction.accolade;
+
+  const isUnqualified = predictionIsNotNominated || predictionIsNotShortlisted;
 
   return (
     <TouchableHighlight
@@ -104,7 +128,12 @@ const ContenderListItemCondensed = (props: iContenderListItemProps) => {
         onPressItem(prediction);
       }}
       style={{
-        backgroundColor: isActive || highlighted ? COLORS.secondaryDark : 'transparent',
+        backgroundColor:
+          isUnqualified && (variant !== 'selectable' || highlighted)
+            ? COLORS.error
+            : highlighted
+            ? COLORS.secondaryDark
+            : 'transparent',
         width: '100%',
         paddingTop: theme.windowMargin / 4,
         paddingBottom: theme.windowMargin / 4,
@@ -112,7 +141,7 @@ const ContenderListItemCondensed = (props: iContenderListItemProps) => {
         paddingLeft: theme.windowMargin,
       }}
       underlayColor={draggable ? COLORS.secondaryDark : 'transparent'}
-      onLongPress={drag}
+      onLongPress={isHistory ? undefined : drag}
       disabled={isActive}
     >
       <>
@@ -129,19 +158,27 @@ const ContenderListItemCondensed = (props: iContenderListItemProps) => {
               flex: 1,
               overflow: 'hidden',
               height: itemHeight,
+              flexDirection: 'row',
             }}
           >
-            <SubHeader style={{ marginLeft: 10 }}>{title}</SubHeader>
+            <SubHeader style={{ marginLeft: 10, marginRight: 5 }}>{title}</SubHeader>
+            {isHistory && prediction.accolade ? (
+              <AccoladeTag accolade={prediction.accolade} eventStatus={event.status} />
+            ) : null}
           </View>
           {indexedRankings ? (
             <View style={{ flexDirection: 'row', paddingRight: theme.windowMargin }}>
-              <View
-                style={{
-                  width: RIGHT_COL_WIDTH / 2,
-                }}
-              >
-                <Body style={{ textAlign: 'right' }}>{nom.toString()}</Body>
-              </View>
+              {nominationsHaveHappened ? (
+                <View />
+              ) : (
+                <View
+                  style={{
+                    width: RIGHT_COL_WIDTH / 2,
+                  }}
+                >
+                  <Body style={{ textAlign: 'right' }}>{nom.toString()}</Body>
+                </View>
+              )}
               <View
                 style={{
                   width: RIGHT_COL_WIDTH / 2,
@@ -151,7 +188,7 @@ const ContenderListItemCondensed = (props: iContenderListItemProps) => {
               </View>
             </View>
           ) : null}
-          {variant === 'personal' ? (
+          {variant === 'personal' && !isHistory ? (
             <View
               style={{
                 height: itemHeight,
