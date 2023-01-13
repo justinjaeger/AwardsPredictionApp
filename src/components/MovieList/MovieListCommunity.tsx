@@ -5,8 +5,8 @@ import { PredictionType } from '../../API';
 import { getCategorySlots } from '../../constants/categories';
 import COLORS from '../../constants/colors';
 import { eventStatusToPredictionType } from '../../constants/events';
+import theme from '../../constants/theme';
 import { useCategory } from '../../context/CategoryContext';
-import { CategoryHeader } from '../../screens/Predictions/styles';
 import { iCategory, iEvent, iPrediction } from '../../types';
 import ContenderListItem from '../List/ContenderList/ContenderListItem';
 import ContenderListItemCondensed from '../List/ContenderList/ContenderListItemCondensed';
@@ -48,7 +48,13 @@ const MovieListCommunity = (props: iMovieListProps) => {
       contentContainerStyle={{ paddingBottom: 100 }}
       ListHeaderComponent={
         predictions.length > 0 ? (
-          <CategoryHeader style={{ height: 50 }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              padding: theme.windowMargin,
+            }}
+          >
             <View style={{ flexDirection: 'row' }} />
             <Animated.View
               style={{
@@ -71,7 +77,7 @@ const MovieListCommunity = (props: iMovieListProps) => {
                 <BodyBold style={{ textAlign: 'right' }}>Win</BodyBold>
               </View>
             </Animated.View>
-          </CategoryHeader>
+          </View>
         ) : null
       }
       renderItem={({ item: prediction, index }) => {
