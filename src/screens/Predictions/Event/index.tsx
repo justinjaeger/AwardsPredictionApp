@@ -8,7 +8,6 @@ import PredictionTabsNavigator from '../../../navigation/PredictionTabsNavigator
 import { useAuth } from '../../../context/UserContext';
 import { eventToString } from '../../../util/stringConversions';
 import LoadingStatue from '../../../components/LoadingStatue';
-import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import SignedOutState from '../../../components/SignedOutState';
 import { getHeaderTitleWithTrophy } from '../../../constants';
 import { CategoryHeader } from '../styles';
@@ -96,72 +95,70 @@ const Event = (props: { tab: 'personal' | 'community' }) => {
   const lastUpdatedString = formatLastUpdated(new Date(lastUpdated || ''));
 
   return (
-    <BackgroundWrapper>
-      <>
+    <>
+      <Animated.View
+        style={{
+          position: 'absolute',
+          width: '100%',
+          height: '80%',
+          alignItems: 'center',
+          justifyContent: 'center',
+          opacity: loadingOpacity,
+        }}
+      >
+        <LoadingStatue />
+      </Animated.View>
+      <CategoryHeader>
+        <View style={{ flexDirection: 'row' }}>
+          <HeaderButton
+            onPress={toggleCollapsed}
+            icon={isCollapsed ? 'expand' : 'collapse'}
+          />
+        </View>
+        <View style={{ flexDirection: 'row' }}>
+          {!isHistory && lastUpdatedString !== 'Invalid Date' ? (
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Body>{`Updated: ${lastUpdatedString}`}</Body>
+            </View>
+          ) : null}
+          <HistoryHeader />
+        </View>
+      </CategoryHeader>
+      <Animated.ScrollView
+        style={{ opacity: bodyOpacity, width: '100%' }}
+        contentContainerStyle={{
+          alignItems: 'flex-start',
+          paddingBottom: 100,
+        }}
+      >
         <Animated.View
           style={{
-            position: 'absolute',
+            opacity: collapsedOpacity,
             width: '100%',
-            height: '80%',
-            alignItems: 'center',
-            justifyContent: 'center',
-            opacity: loadingOpacity,
+            display: isCollapsed ? 'flex' : 'none',
           }}
         >
-          <LoadingStatue />
+          <EventList
+            isCollapsed={true}
+            onSelectCategory={(category: iCategory) => onSelectCategory(category)}
+            predictionData={predictionData}
+          />
         </Animated.View>
-        <CategoryHeader>
-          <View style={{ flexDirection: 'row' }}>
-            <HeaderButton
-              onPress={toggleCollapsed}
-              icon={isCollapsed ? 'expand' : 'collapse'}
-            />
-          </View>
-          <View style={{ flexDirection: 'row' }}>
-            {!isHistory && lastUpdatedString !== 'Invalid Date' ? (
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Body>{`Updated: ${lastUpdatedString}`}</Body>
-              </View>
-            ) : null}
-            <HistoryHeader />
-          </View>
-        </CategoryHeader>
-        <Animated.ScrollView
-          style={{ opacity: bodyOpacity, width: '100%' }}
-          contentContainerStyle={{
-            alignItems: 'flex-start',
-            paddingBottom: 100,
+        <Animated.View
+          style={{
+            opacity: expandedOpacity,
+            width: '100%',
+            display: isCollapsed ? 'none' : 'flex',
           }}
         >
-          <Animated.View
-            style={{
-              opacity: collapsedOpacity,
-              width: '100%',
-              display: isCollapsed ? 'flex' : 'none',
-            }}
-          >
-            <EventList
-              isCollapsed={true}
-              onSelectCategory={(category: iCategory) => onSelectCategory(category)}
-              predictionData={predictionData}
-            />
-          </Animated.View>
-          <Animated.View
-            style={{
-              opacity: expandedOpacity,
-              width: '100%',
-              display: isCollapsed ? 'none' : 'flex',
-            }}
-          >
-            <EventList
-              isCollapsed={false}
-              onSelectCategory={(category: iCategory) => onSelectCategory(category)}
-              predictionData={predictionData}
-            />
-          </Animated.View>
-        </Animated.ScrollView>
-      </>
-    </BackgroundWrapper>
+          <EventList
+            isCollapsed={false}
+            onSelectCategory={(category: iCategory) => onSelectCategory(category)}
+            predictionData={predictionData}
+          />
+        </Animated.View>
+      </Animated.ScrollView>
+    </>
   );
 };
 

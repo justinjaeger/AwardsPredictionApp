@@ -11,6 +11,7 @@ import COLORS from './colors';
 
 export const TMDB_IMAGE_URL = 'https://image.tmdb.org/t/p/original';
 
+export const TOP_TAB_HEIGHT = 50;
 export const BOTTOM_TAB_HEIGHT = 50;
 export const HEADER_HEIGHT = 40;
 
