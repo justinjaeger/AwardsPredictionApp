@@ -8,18 +8,24 @@ import { eventStatusToPredictionType } from '../../constants/events';
 import theme from '../../constants/theme';
 import { useCategory } from '../../context/CategoryContext';
 import { iCategory, iEvent, iPrediction } from '../../types';
+import LastUpdatedText from '../LastUpdatedText';
 import ContenderListItem from '../List/ContenderList/ContenderListItem';
 import ContenderListItemCondensed from '../List/ContenderList/ContenderListItemCondensed';
 import { BodyBold } from '../Text';
 
 type iMovieListProps = {
   predictions: iPrediction[];
+  lastUpdatedString: string;
   isCollapsed?: boolean;
 };
 
-const MovieListCommunity = (props: iMovieListProps) => {
-  const { predictions, isCollapsed } = props;
-  const { event: _event, category: _category } = useCategory();
+const MovieListCommunity = ({
+  predictions,
+  isCollapsed,
+  lastUpdatedString,
+}: iMovieListProps) => {
+  const { event: _event, category: _category, date } = useCategory();
+  const isHistory = !!date;
 
   const event = _event as iEvent;
   const category = _category as iCategory;
@@ -47,38 +53,41 @@ const MovieListCommunity = (props: iMovieListProps) => {
       style={{ width: '100%' }}
       contentContainerStyle={{ paddingBottom: 100 }}
       ListHeaderComponent={
-        predictions.length > 0 ? (
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              padding: theme.windowMargin,
-            }}
-          >
-            <View style={{ flexDirection: 'row' }} />
-            <Animated.View
+        <>
+          <LastUpdatedText lastUpdated={lastUpdatedString} isDisabled={isHistory} />
+          {predictions.length > 0 ? (
+            <View
               style={{
                 flexDirection: 'row',
-                width: 120,
                 justifyContent: 'space-between',
-                alignItems: 'center',
+                padding: theme.windowMargin,
               }}
             >
-              {nominationsHaveHappened ? (
-                <View />
-              ) : (
+              <View style={{ flexDirection: 'row' }} />
+              <Animated.View
+                style={{
+                  flexDirection: 'row',
+                  width: 120,
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}
+              >
+                {nominationsHaveHappened ? (
+                  <View />
+                ) : (
+                  <View>
+                    <BodyBold style={{ textAlign: 'right' }}>Predict</BodyBold>
+                    <BodyBold style={{ textAlign: 'right' }}>Nom</BodyBold>
+                  </View>
+                )}
                 <View>
                   <BodyBold style={{ textAlign: 'right' }}>Predict</BodyBold>
-                  <BodyBold style={{ textAlign: 'right' }}>Nom</BodyBold>
+                  <BodyBold style={{ textAlign: 'right' }}>Win</BodyBold>
                 </View>
-              )}
-              <View>
-                <BodyBold style={{ textAlign: 'right' }}>Predict</BodyBold>
-                <BodyBold style={{ textAlign: 'right' }}>Win</BodyBold>
-              </View>
-            </Animated.View>
-          </View>
-        ) : null
+              </Animated.View>
+            </View>
+          ) : null}
+        </>
       }
       renderItem={({ item: prediction, index }) => {
         const ranking = index + 1;

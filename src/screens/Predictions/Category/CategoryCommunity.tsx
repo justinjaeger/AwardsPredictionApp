@@ -65,6 +65,11 @@ const CategoryCommunity = ({
         }}
       >
         <Animated.View style={{ opacity: gridOpacity }}>
+          <LastUpdatedText
+            lastUpdated={lastUpdatedString}
+            isDisabled={isHistory}
+            style={{ top: -30 }}
+          />
           <MovieGrid predictions={predictions} />
         </Animated.View>
       </Animated.ScrollView>
@@ -81,8 +86,10 @@ const CategoryCommunity = ({
             width: '100%',
           }}
         >
-          <LastUpdatedText lastUpdated={lastUpdatedString} isDisabled={isHistory} />
-          <MovieListCommunity predictions={predictions} />
+          <MovieListCommunity
+            predictions={predictions}
+            lastUpdatedString={lastUpdatedString}
+          />
         </Animated.View>
         <Animated.View
           style={{
@@ -90,8 +97,11 @@ const CategoryCommunity = ({
             opacity: collapsedOpacity,
           }}
         >
-          <LastUpdatedText lastUpdated={lastUpdatedString} isDisabled={isHistory} />
-          <MovieListCommunity predictions={predictions} isCollapsed />
+          <MovieListCommunity
+            predictions={predictions}
+            lastUpdatedString={lastUpdatedString}
+            isCollapsed
+          />
         </Animated.View>
       </Animated.View>
     </>

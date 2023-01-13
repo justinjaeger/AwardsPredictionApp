@@ -182,6 +182,11 @@ const CategoryPersonal = ({
         }}
       >
         <Animated.View style={{ opacity: gridOpacity }}>
+          <LastUpdatedText
+            lastUpdated={lastUpdatedString}
+            isDisabled={isHistory}
+            style={{ top: -30 }}
+          />
           <MovieGrid predictions={predictions} />
         </Animated.View>
       </Animated.ScrollView>
@@ -197,10 +202,10 @@ const CategoryPersonal = ({
             opacity: expandedOpacity,
           }}
         >
-          <LastUpdatedText lastUpdated={lastUpdatedString} isDisabled={isHistory} />
           <MovieListDraggable
             predictions={predictions}
             setPredictions={(ps) => setPredictions(ps)}
+            lastUpdatedString={lastUpdatedString}
           />
         </Animated.View>
         <Animated.View
@@ -209,10 +214,10 @@ const CategoryPersonal = ({
             opacity: collapsedOpacity,
           }}
         >
-          <LastUpdatedText lastUpdated={lastUpdatedString} isDisabled={isHistory} />
           <MovieListDraggable
             predictions={predictions}
             setPredictions={(ps) => setPredictions(ps)}
+            lastUpdatedString={lastUpdatedString}
             isCollapsed
           />
         </Animated.View>
