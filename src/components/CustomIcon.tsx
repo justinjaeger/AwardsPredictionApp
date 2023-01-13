@@ -20,8 +20,8 @@ const CustomIcon = (props: iCustomIconProps) => {
       {...props}
       name={name}
       style={{
-        width: size || 32,
-        height: size || 32,
+        width: size || 36,
+        height: size || 36,
         ...styles,
       }}
       fill={color || COLORS.white}

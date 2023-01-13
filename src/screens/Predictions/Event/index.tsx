@@ -10,20 +10,25 @@ import { eventToString } from '../../../util/stringConversions';
 import LoadingStatue from '../../../components/LoadingStatue';
 import SignedOutState from '../../../components/SignedOutState';
 import { getHeaderTitleWithTrophy } from '../../../constants';
-import { CategoryHeader } from '../styles';
-import HeaderButton from '../../../components/HeaderButton';
 import EventList from './EventList';
 import { useCollapsible } from '../../../hooks/animatedState/useCollapsible';
 import _ from 'lodash';
 import { formatLastUpdated } from '../../../util/formatDateTime';
 import { Body } from '../../../components/Text';
-import HistoryHeader from '../../../components/HistoryHeader';
 import usePredictionData from '../../../hooks/queries/usePredictionData';
+import DisplayFAB from '../../../components/Buttons/DisplayFAB';
+import HistoryFAB from '../../../components/Buttons/HistoryFAB';
+import CustomRefreshControl from '../../../components/CustomRefreshControl';
 
 const TIMING = 300;
 
-const Event = (props: { tab: 'personal' | 'community' }) => {
-  const { tab } = props;
+const Event = (props: {
+  tab: 'personal' | 'community';
+  collapsedOpacity: Animated.Value;
+  expandedOpacity: Animated.Value;
+  isCollapsed: boolean;
+}) => {
+  const { tab, collapsedOpacity, expandedOpacity, isCollapsed } = props;
 
   const { event: _event, setCategory, date } = useCategory();
   const { userId: _userId } = useAuth();
@@ -36,14 +41,7 @@ const Event = (props: { tab: 'personal' | 'community' }) => {
   const event = _event as iEvent;
   const userId = _userId as string;
 
-  const {
-    collapsedOpacity,
-    expandedOpacity,
-    isCollapsed,
-    toggleCollapsed,
-  } = useCollapsible();
-
-  const { predictionData, isLoading } = usePredictionData(tab);
+  const { predictionData, isLoading, refreshData } = usePredictionData(tab);
 
   // define the header
   useLayoutEffect(() => {
@@ -94,6 +92,24 @@ const Event = (props: { tab: 'personal' | 'community' }) => {
         }, '');
   const lastUpdatedString = formatLastUpdated(new Date(lastUpdated || ''));
 
+  const LastUpdated = () => (
+    <>
+      {!isHistory && lastUpdatedString !== 'Invalid Date' ? (
+        <View
+          style={{
+            position: 'absolute',
+            top: -20,
+            right: 10,
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}
+        >
+          <Body>{`Last Updated: ${lastUpdatedString}`}</Body>
+        </View>
+      ) : null}
+    </>
+  );
+
   return (
     <>
       <Animated.View
@@ -108,28 +124,13 @@ const Event = (props: { tab: 'personal' | 'community' }) => {
       >
         <LoadingStatue />
       </Animated.View>
-      <CategoryHeader>
-        <View style={{ flexDirection: 'row' }}>
-          <HeaderButton
-            onPress={toggleCollapsed}
-            icon={isCollapsed ? 'expand' : 'collapse'}
-          />
-        </View>
-        <View style={{ flexDirection: 'row' }}>
-          {!isHistory && lastUpdatedString !== 'Invalid Date' ? (
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Body>{`Updated: ${lastUpdatedString}`}</Body>
-            </View>
-          ) : null}
-          <HistoryHeader />
-        </View>
-      </CategoryHeader>
       <Animated.ScrollView
         style={{ opacity: bodyOpacity, width: '100%' }}
         contentContainerStyle={{
           alignItems: 'flex-start',
           paddingBottom: 100,
         }}
+        refreshControl={<CustomRefreshControl callback={refreshData} />}
       >
         <Animated.View
           style={{
@@ -138,6 +139,7 @@ const Event = (props: { tab: 'personal' | 'community' }) => {
             display: isCollapsed ? 'flex' : 'none',
           }}
         >
+          <LastUpdated />
           <EventList
             isCollapsed={true}
             onSelectCategory={(category: iCategory) => onSelectCategory(category)}
@@ -151,6 +153,7 @@ const Event = (props: { tab: 'personal' | 'community' }) => {
             display: isCollapsed ? 'none' : 'flex',
           }}
         >
+          <LastUpdated />
           <EventList
             isCollapsed={false}
             onSelectCategory={(category: iCategory) => onSelectCategory(category)}
@@ -163,7 +166,29 @@ const Event = (props: { tab: 'personal' | 'community' }) => {
 };
 
 const TabsWrapper = () => {
-  return PredictionTabsNavigator(<Event tab={'community'} />, <Event tab={'personal'} />);
+  const {
+    collapsedOpacity,
+    expandedOpacity,
+    isCollapsed,
+    toggleCollapsed,
+  } = useCollapsible();
+
+  const props = {
+    collapsedOpacity,
+    expandedOpacity,
+    isCollapsed,
+  };
+
+  return (
+    <>
+      <DisplayFAB isCollapsed={isCollapsed} toggleCollapsed={toggleCollapsed} />
+      <HistoryFAB />
+      {PredictionTabsNavigator(
+        <Event tab={'community'} {...props} />,
+        <Event tab={'personal'} {...props} />,
+      )}
+    </>
+  );
 };
 
 export default TabsWrapper;

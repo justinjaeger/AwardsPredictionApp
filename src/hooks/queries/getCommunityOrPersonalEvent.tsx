@@ -12,7 +12,7 @@ const useQueryCommunityOrPersonalEvent = (
   if (tab === 'personal' && userId === undefined) {
     console.warn('The user is signed out');
   }
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, refetch } = useQuery({
     queryKey: [
       tab === 'community' ? QueryKeys.COMMUNITY_EVENT : QueryKeys.PERSONAL_EVENT,
     ],
@@ -23,7 +23,7 @@ const useQueryCommunityOrPersonalEvent = (
     enabled: tab === 'personal' ? fetchPersonalEnabled : true,
   });
 
-  return { data, isLoading };
+  return { data, isLoading, refetch };
 };
 
 export default useQueryCommunityOrPersonalEvent;
