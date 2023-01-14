@@ -9,8 +9,12 @@ import { useCategory } from '../../context/CategoryContext';
 import { iPrediction } from '../../types';
 import PosterFromTmdbId from '../Images/PosterFromTmdbId';
 
-const MovieGrid = (props: { predictions: iPrediction[]; noLine?: boolean }) => {
-  const { predictions, noLine } = props;
+const MovieGrid = (props: {
+  predictions: iPrediction[];
+  isCollapsed?: boolean;
+  noLine?: boolean;
+}) => {
+  const { predictions, isCollapsed, noLine } = props;
   const { width } = useWindowDimensions();
   const { event, category } = useCategory();
 
@@ -24,7 +28,7 @@ const MovieGrid = (props: { predictions: iPrediction[]; noLine?: boolean }) => {
         flexWrap: 'wrap',
         marginLeft: theme.windowMargin - theme.posterMargin / 2,
         marginRight: theme.windowMargin - theme.posterMargin / 2,
-        marginBottom: theme.windowMargin,
+        marginBottom: isCollapsed ? 0 : theme.windowMargin,
         width: '100%',
       }}
     >
@@ -51,8 +55,11 @@ const MovieGrid = (props: { predictions: iPrediction[]; noLine?: boolean }) => {
               <PosterFromTmdbId
                 movieTmdbId={p.contenderMovie.tmdbId}
                 personTmdbId={p.contenderPerson?.tmdbId}
-                width={(width - theme.windowMargin * 2 + theme.posterMargin) / 5}
-                ranking={i + 1}
+                width={
+                  (width - theme.windowMargin * 2 + theme.posterMargin) /
+                  (isCollapsed ? 10 : 5)
+                }
+                ranking={isCollapsed ? undefined : i + 1}
                 isWinner={p.accolade === ContenderAccolade.WINNER}
               />
             </>

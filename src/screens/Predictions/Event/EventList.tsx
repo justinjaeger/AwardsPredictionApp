@@ -54,7 +54,7 @@ const EventList = (props: iEventListProps) => {
             key={category.id}
             style={{
               width: '100%',
-              alignItems: isCollapsed ? 'center' : 'flex-start',
+              alignItems: 'flex-start',
             }}
             underlayColor={COLORS.secondaryDark}
             onPress={() => onSelectCategory(category)}
@@ -64,15 +64,17 @@ const EventList = (props: iEventListProps) => {
                 style={{
                   color: COLORS.lightest,
                   marginLeft: theme.windowMargin,
-                  marginBottom: theme.windowMargin,
-                  marginTop: theme.windowMargin,
+                  marginBottom: isCollapsed ? 0 : theme.windowMargin,
+                  marginTop: isCollapsed ? 5 : theme.windowMargin,
                 }}
               >
                 {awardsBodyCategories[category.name]?.name || ''}
               </SubHeader>
-              {!isCollapsed ? (
-                <MovieGrid predictions={truncatedPredictions} noLine />
-              ) : null}
+              <MovieGrid
+                predictions={truncatedPredictions}
+                isCollapsed={isCollapsed}
+                noLine
+              />
             </View>
           </TouchableHighlight>
         );

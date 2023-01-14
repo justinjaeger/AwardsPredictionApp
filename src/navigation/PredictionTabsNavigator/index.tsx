@@ -2,8 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Animated, ScrollView, useWindowDimensions, View } from 'react-native';
 import BackgroundWrapper from '../../components/BackgroundWrapper';
 import { TOP_TAB_HEIGHT } from '../../constants';
+import COLORS from '../../constants/colors';
 import { useCategory } from '../../context/CategoryContext';
-import PredictionTab, { HIGHLIGHT_COLOR } from './PredictionTab';
+import PredictionTab from './PredictionTab';
 
 const PredictionTabsNavigator = (community: JSX.Element, personal: JSX.Element) => {
   const { width } = useWindowDimensions();
@@ -63,8 +64,8 @@ const PredictionTabsNavigator = (community: JSX.Element, personal: JSX.Element) 
                 bottom: 0,
                 transform: [{ translateX: scrollBarAnim }],
                 width: SCROLL_BAR_WIDTH,
-                backgroundColor: HIGHLIGHT_COLOR,
-                height: 2,
+                backgroundColor: COLORS.white,
+                height: 4,
                 borderRadius: 5,
                 zIndex: 2,
               }}

@@ -30,7 +30,7 @@ const PredictionTab = (props: {
           style={{
             fontWeight: '600',
             zIndex: 3,
-            color: selected ? HIGHLIGHT_COLOR : COLORS.white,
+            color: selected ? COLORS.white : 'rgba(255,255,255,0.6)',
             textAlign: 'center',
           }}
         >
