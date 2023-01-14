@@ -10,11 +10,11 @@ const DisplayFAB = ({
   toggleDisplay: () => void;
 }) => {
   return (
-    <View style={{ position: 'absolute', zIndex: 10, bottom: 40, right: 10 }}>
+    <View style={{ position: 'absolute', zIndex: 10, bottom: 20, right: 10 }}>
       <FloatingButton
         onPress={toggleDisplay}
         icon={
-          state === 'list-collapsed' ? 'expand' : state === 'list' ? 'collapse' : 'grid'
+          state === 'list-collapsed' ? 'grid' : state === 'list' ? 'collapse' : 'expand'
         }
       />
     </View>

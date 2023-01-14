@@ -29,7 +29,7 @@ const HistoryFAB = () => {
       style={{
         position: 'absolute',
         zIndex: 10,
-        bottom: 100,
+        bottom: 80,
         right: 10,
         flexDirection: 'row',
       }}

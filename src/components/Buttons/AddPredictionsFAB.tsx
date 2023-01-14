@@ -5,7 +5,7 @@ import PlusMinus from '../../assets/icons/plusMinus.svg';
 
 const AddPredictionsFAB = ({ onPress }: { onPress: () => void }) => {
   return (
-    <View style={{ position: 'absolute', zIndex: 10, bottom: 160, right: 10 }}>
+    <View style={{ position: 'absolute', zIndex: 10, bottom: 140, right: 10 }}>
       <FloatingButton
         onPress={onPress}
         customIcon={<PlusMinus width={24} height={24} />}

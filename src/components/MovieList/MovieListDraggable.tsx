@@ -66,7 +66,11 @@ const MovieListDraggable = ({
         paddingTop: theme.windowMargin,
       }}
       ListHeaderComponent={
-        <LastUpdatedText lastUpdated={lastUpdatedString} isDisabled={isHistory} />
+        <LastUpdatedText
+          lastUpdated={lastUpdatedString}
+          isDisabled={isHistory}
+          style={{ top: -30 }}
+        />
       }
       renderItem={({ item: prediction, index: _index, drag, isActive }) => {
         const index = _index || 0;
