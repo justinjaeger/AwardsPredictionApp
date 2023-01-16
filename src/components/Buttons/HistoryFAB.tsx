@@ -1,25 +1,14 @@
 import React from 'react';
 import { View } from 'react-native';
 import { useCategory } from '../../context/CategoryContext';
-import { iEvent } from '../../types';
-import { DateInput } from '../Inputs/DateInput';
 import FloatingButton from './FloatingButton';
 
 const HistoryFAB = () => {
-  const { event: _event, date, setDate } = useCategory();
-  const event = _event as iEvent;
-
-  const dateOfClose = event.winDateTime ? new Date(event.winDateTime) : new Date();
-  const today = new Date();
-  const maxDate = dateOfClose > today ? today : dateOfClose; // if date of close is in the past, use today
-  const minDate = new Date(event.createdAt);
-  minDate.setDate(minDate.getDate() + 1); // add a day to when it was created for safety
+  const { date, setDate } = useCategory();
+  const isHistory = !!date;
 
   const onTouchClock = () => {
-    if (date !== undefined) {
-      // reset date
-      setDate(undefined);
-    } else {
+    if (!isHistory) {
       setDate(new Date());
     }
   };
@@ -34,12 +23,11 @@ const HistoryFAB = () => {
         flexDirection: 'row',
       }}
     >
-      <View style={{ marginRight: 10, alignSelf: 'center' }}>
-        {date !== undefined ? (
-          <DateInput date={date} setDate={setDate} minDate={minDate} maxDate={maxDate} />
-        ) : null}
-      </View>
-      <FloatingButton onPress={onTouchClock} icon={'clock-outline'} />
+      <FloatingButton
+        onPress={isHistory ? () => {} : onTouchClock}
+        icon={'clock-outline'}
+        disabled={isHistory}
+      />
     </View>
   );
 };

@@ -17,7 +17,6 @@ import { formatLastUpdated } from '../../../util/formatDateTime';
 import usePredictionData from '../../../hooks/queries/usePredictionData';
 import DisplayFAB from '../../../components/Buttons/DisplayFAB';
 import HistoryFAB from '../../../components/Buttons/HistoryFAB';
-import CustomRefreshControl from '../../../components/CustomRefreshControl';
 import LastUpdatedText from '../../../components/LastUpdatedText';
 
 const TIMING = 300;
@@ -41,7 +40,7 @@ const Event = (props: {
   const event = _event as iEvent;
   const userId = _userId as string;
 
-  const { predictionData, isLoading, refreshData } = usePredictionData(tab);
+  const { predictionData, isLoading } = usePredictionData(tab);
 
   // define the header
   useLayoutEffect(() => {
@@ -112,7 +111,6 @@ const Event = (props: {
           alignItems: 'flex-start',
           paddingBottom: 100,
         }}
-        refreshControl={<CustomRefreshControl callback={refreshData} />}
       >
         <Animated.View
           style={{
@@ -173,8 +171,8 @@ const TabsWrapper = () => {
       />
       <HistoryFAB />
       {PredictionTabsNavigator(
-        <Event tab={'community'} {...props} />,
         <Event tab={'personal'} {...props} />,
+        <Event tab={'community'} {...props} />,
       )}
     </>
   );

@@ -4,6 +4,7 @@ import {
   CategoryIsShortlisted,
   CategoryType,
   ContenderAccolade,
+  EventStatus,
   PredictionType,
 } from '../../../API';
 import { getCategorySlots } from '../../../constants/categories';
@@ -65,6 +66,8 @@ const ContenderListItemCondensed = (props: iContenderListItemProps) => {
   const tmdbMovieId = prediction.contenderMovie?.tmdbId;
   const tmdbPersonId = prediction.contenderPerson?.tmdbId;
 
+  const eventIsArchived = event.status === EventStatus.ARCHIVED;
+
   useAsyncEffect(async () => {
     if (tmdbPersonId) {
       // get tmdb person info
@@ -120,7 +123,8 @@ const ContenderListItemCondensed = (props: iContenderListItemProps) => {
     category.isShortlisted === CategoryIsShortlisted.TRUE &&
     !prediction.accolade;
 
-  const isUnqualified = predictionIsNotNominated || predictionIsNotShortlisted;
+  const isUnqualified =
+    !eventIsArchived && (predictionIsNotNominated || predictionIsNotShortlisted);
 
   return (
     <TouchableHighlight

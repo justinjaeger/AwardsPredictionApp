@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
 import { Animated, TouchableHighlight, useWindowDimensions, View } from 'react-native';
 import { AwardsBody, EventStatus, UserRole } from '../../../API';
-import { Body, SubHeader } from '../../../components/Text';
+import { Body, HeaderLight, SubHeader } from '../../../components/Text';
 import {
   AWARDS_BODY_TO_PLURAL_STRING,
   AWARDS_BODY_TO_STRING,
@@ -21,8 +21,9 @@ import AwardsBodyImage from '../../../components/AwardsBodyImage';
 import { EVENT_STATUS_TO_STRING, getEventTime } from '../../../constants/events';
 import { useAuth } from '../../../context/UserContext';
 import useQueryGetUser from '../../../hooks/queries/getUser';
+import { Divider } from '@ui-kitten/components';
 
-const EVENT_ITEM_HEIGHT = 90;
+const EVENT_ITEM_HEIGHT = 110;
 
 const EventSelect = () => {
   const { width } = useWindowDimensions();
@@ -80,6 +81,8 @@ const EventSelect = () => {
 
   const userIsAdmin = user ? user.role === UserRole.ADMIN : false;
 
+  const trophyPercentage = 20;
+
   return (
     <BackgroundWrapper>
       <>
@@ -104,16 +107,26 @@ const EventSelect = () => {
             marginLeft: theme.windowMargin,
           }}
         >
-          {_.entries(groupedByYear)
+          {Object.entries(groupedByYear)
             // sort by year
             .sort(([yearA], [yearB]) =>
               parseInt(yearA, 10) > parseInt(yearB, 10) ? -1 : 1,
             )
-            .map(([year, events]) => (
+            .map(([year, events], i) => (
               <View key={year}>
-                <SubHeader style={{ marginBottom: theme.windowMargin }}>{`${
-                  parseInt(year, 10) - 1
-                }/${year.slice(2)}`}</SubHeader>
+                {i > 0 ? (
+                  <Divider
+                    style={{
+                      width: '100%',
+                      marginTop: 20,
+                      marginBottom: 30,
+                      backgroundColor: COLORS.white,
+                      opacity: 0.3,
+                    }}
+                  />
+                ) : (
+                  <View style={{ marginTop: 20 }} />
+                )}
                 <View style={{ flexWrap: 'wrap', flexDirection: 'row' }}>
                   {events.map((event) => {
                     const { awardsBody, status } = event;
@@ -143,7 +156,7 @@ const EventSelect = () => {
                         <>
                           <View
                             style={{
-                              width: '15%', // if changing this, also change component % below to match 100%
+                              width: `${trophyPercentage}%`,
                               height: '100%',
                               alignItems: 'center',
                               justifyContent: 'center',
@@ -159,20 +172,22 @@ const EventSelect = () => {
                             style={{
                               flexDirection: 'column',
                               justifyContent: 'space-around',
-                              width: '85%', // if changing this, also change component % below to match 100%
+                              width: `${100 - trophyPercentage}%`,
                               height: '100%',
                               padding: 10,
                               paddingLeft: 0,
                             }}
                           >
                             <SubHeader>
-                              {AWARDS_BODY_TO_PLURAL_STRING[awardsBody]}
+                              {year + ' ' + AWARDS_BODY_TO_PLURAL_STRING[awardsBody]}
                             </SubHeader>
-                            <Body
+                            <HeaderLight
                               style={{
                                 color: COLORS.white,
+                                marginTop: 5,
+                                marginBottom: 10,
                               }}
-                            >{`${EVENT_STATUS_TO_STRING[status]}`}</Body>
+                            >{`${EVENT_STATUS_TO_STRING[status]}`}</HeaderLight>
                             <View style={{ alignItems: 'flex-end' }}>
                               <Body
                                 style={{

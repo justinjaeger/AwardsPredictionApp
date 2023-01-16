@@ -32,7 +32,7 @@ const PredictionsNavigator = () => {
         name="EventSelect"
         component={EventSelect}
         options={{
-          headerTitle: getHeaderTitle('Events'),
+          headerTitle: getHeaderTitle('Select Event'),
           cardStyle: theme.cardStyle,
           ...headerSettings,
         }}

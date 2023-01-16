@@ -40,6 +40,22 @@ export const SubHeaderLight = (props: iTextProps) => {
   );
 };
 
+export const HeaderLight = (props: iTextProps) => {
+  return (
+    <Text
+      category={'h4'}
+      style={{
+        fontWeight: '300',
+        color: COLORS.lightest,
+        // @ts-ignore
+        ...props.style,
+      }}
+    >
+      {props.children}
+    </Text>
+  );
+};
+
 export const Body = (props: iTextProps) => {
   return (
     <Text

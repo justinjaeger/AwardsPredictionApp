@@ -5,7 +5,7 @@ import CategoryPersonal from './CategoryPersonal';
 import { useTypedNavigation } from '../../../util/hooks';
 import { PredictionsParamList } from '../../../navigation/types';
 import { getAwardsBodyCategories } from '../../../constants/categories';
-import { CategoryName, EventStatus } from '../../../API';
+import { CategoryName } from '../../../API';
 import { useCategory } from '../../../context/CategoryContext';
 import { eventToString } from '../../../util/stringConversions';
 import { getHeaderTitleWithTrophy } from '../../../constants';
@@ -26,7 +26,7 @@ export type iCategoryProps = {
 };
 
 const Category = () => {
-  const { category, event: _event, date, personalCommunityTab } = useCategory();
+  const { category, event: _event } = useCategory();
   const navigation = useTypedNavigation<PredictionsParamList>();
   const {
     collapsedOpacity,
@@ -37,8 +37,6 @@ const Category = () => {
   const { delayedDisplay, setDisplay, gridOpacity, listOpacity } = useDisplay();
 
   const event = _event as iEvent;
-  const isHistory = !!date;
-  const eventIsArchived = event.status === EventStatus.ARCHIVED;
 
   const props: iCategoryProps = {
     collapsedOpacity,
@@ -96,16 +94,14 @@ const Category = () => {
 
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
+  // TODO: History is always open in archived state
   return (
     <>
       <DisplayFAB state={toggleState[toggleIndex]} toggleDisplay={toggle} />
-      {!isHistory && !eventIsArchived && personalCommunityTab === 'personal' ? (
-        <DisplayFAB state={toggleState[toggleIndex]} toggleDisplay={toggle} />
-      ) : null}
       {!isEditing ? <HistoryFAB /> : null}
       {PredictionTabsNavigator(
-        <CategoryCommunity {...props} />,
         <CategoryPersonal {...props} isEditing={isEditing} setIsEditing={setIsEditing} />,
+        <CategoryCommunity {...props} />,
       )}
     </>
   );
