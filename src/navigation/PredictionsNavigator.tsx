@@ -11,6 +11,7 @@ import ProfileNavigator from './ProfileNavigator';
 import theme from '../constants/theme';
 import { getHeaderTitle, headerSettings } from '../constants';
 import AddPredictions from '../screens/Predictions/AddPredictions.tsx';
+import HistoryHeaderButton from '../components/Buttons/HistoryHeaderButton';
 
 const { Navigator, Screen } = createStackNavigator<PredictionsParamList>();
 
@@ -43,6 +44,7 @@ const PredictionsNavigator = () => {
         options={{
           headerTitle: getHeaderTitle('Event Predictions'),
           headerLeft: BackButton,
+          headerRight: HistoryHeaderButton,
           ...headerSettings,
         }}
       />
@@ -52,6 +54,7 @@ const PredictionsNavigator = () => {
         options={{
           headerTitle: getHeaderTitle('Category'),
           headerLeft: BackButton,
+          headerRight: HistoryHeaderButton,
           cardStyle: theme.cardStyle,
           ...headerSettings,
         }}

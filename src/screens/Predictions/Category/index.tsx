@@ -10,7 +10,6 @@ import { useCategory } from '../../../context/CategoryContext';
 import { eventToString } from '../../../util/stringConversions';
 import { getHeaderTitleWithTrophy } from '../../../constants';
 import { useCollapsible } from '../../../hooks/animatedState/useCollapsible';
-import HistoryFAB from '../../../components/Buttons/HistoryFAB';
 import { iListDisplay, useDisplay } from '../../../hooks/animatedState/useDisplay';
 import { Animated } from 'react-native';
 import DisplayFAB from '../../../components/Buttons/DisplayFAB';
@@ -72,7 +71,7 @@ const Category = () => {
       setToggleIndex(0);
     } else {
       // if we're editing, we don't want to toggle to grid
-      if (isEditing && toggleIndex === 1) {
+      if (toggleIndex === 1) {
         setToggleIndex(0);
       }
       setToggleIndex(toggleIndex + 1);
@@ -92,15 +91,12 @@ const Category = () => {
     }
   }, [toggleIndex]);
 
-  const [isEditing, setIsEditing] = useState<boolean>(false);
-
   // TODO: History is always open in archived state
   return (
     <>
       <DisplayFAB state={toggleState[toggleIndex]} toggleDisplay={toggle} />
-      {!isEditing ? <HistoryFAB /> : null}
       {PredictionTabsNavigator(
-        <CategoryPersonal {...props} isEditing={isEditing} setIsEditing={setIsEditing} />,
+        <CategoryPersonal {...props} />,
         <CategoryCommunity {...props} />,
       )}
     </>

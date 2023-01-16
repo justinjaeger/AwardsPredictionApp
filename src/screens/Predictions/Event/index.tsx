@@ -16,7 +16,6 @@ import _ from 'lodash';
 import { formatLastUpdated } from '../../../util/formatDateTime';
 import usePredictionData from '../../../hooks/queries/usePredictionData';
 import DisplayFAB from '../../../components/Buttons/DisplayFAB';
-import HistoryFAB from '../../../components/Buttons/HistoryFAB';
 import LastUpdatedText from '../../../components/LastUpdatedText';
 
 const TIMING = 300;
@@ -169,7 +168,6 @@ const TabsWrapper = () => {
         state={isCollapsed ? 'list-collapsed' : 'list'}
         toggleDisplay={toggle}
       />
-      <HistoryFAB />
       {PredictionTabsNavigator(
         <Event tab={'personal'} {...props} />,
         <Event tab={'community'} {...props} />,
