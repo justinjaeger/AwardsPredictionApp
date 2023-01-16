@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import SearchInput from '../../../components/Inputs/SearchInput';
 import TmdbServices from '../../../services/tmdb';
 import { iSearchData } from '../../../services/tmdb/search';
 import Snackbar from '../../../components/Snackbar';
 import { Body } from '../../../components/Text';
-import { useWindowDimensions, View } from 'react-native';
+import { View } from 'react-native';
 import { useCategory } from '../../../context/CategoryContext';
 import { iCategory, iEvent, iPrediction } from '../../../types';
 import COLORS from '../../../constants/colors';
@@ -14,17 +13,15 @@ import useQueryCommunityEvent from '../../../hooks/queries/getCommunityEvent';
 import { FAB } from '../../../components/Buttons/FAB';
 import useMutationCreateActingContender from '../../../hooks/mutations/createActingContender';
 import BasicModal from '../../../components/BasicModal';
-import { CategoryHeader } from '../styles';
-import HeaderButton from '../../../components/HeaderButton';
 import { iCreateContenderProps } from '.';
 import { CategoryType, ContenderVisibility } from '../../../API';
 import { SubmitButton } from '../../../components/Buttons';
 import PerformanceListSelectable from '../../../components/MovieList/PerformanceListSelectable';
+import { useContenderSearch } from '../../../context/ContenderSearchContext';
 
 // TODO: should only be able to do this if logged in
 const CreatePerformance = (props: iCreateContenderProps) => {
-  const { onSelectPrediction, onClose } = props;
-  const { width } = useWindowDimensions();
+  const { onSelectPrediction } = props;
 
   const { category: _category, event: _event } = useCategory();
 
@@ -34,6 +31,12 @@ const CreatePerformance = (props: iCreateContenderProps) => {
   // when adding a contender to the list of overall contenders
   const { mutate, isComplete, response } = useMutationCreateActingContender();
 
+  const {
+    searchInput,
+    debouncedSearch,
+    resetSearchHack,
+    setResetSearchHack,
+  } = useContenderSearch();
   const { data: communityData } = useQueryCommunityEvent({ event, includeHidden: true }); // because we use this to see if contender exists, we want to includes hidden contenders
   const communityPredictions = communityData?.[category.id]?.predictions || [];
 
@@ -42,7 +45,6 @@ const CreatePerformance = (props: iCreateContenderProps) => {
   const [searchMessage, setSearchMessage] = useState<string>('');
   const [selectedMovieTmdbId, setSelectedMovieTmdbId] = useState<number | undefined>();
   const [selectedPersonTmdbId, setSelectedPersonTmdbId] = useState<number | undefined>();
-  const [resetSearchHack, setResetSearchHack] = useState<boolean>(false);
   const [showMovieSelectModal, setShowMovieSelectModal] = useState<boolean>(false);
   const [modalState, setModalState] = useState<'select' | 'create'>('select');
 
@@ -64,6 +66,11 @@ const CreatePerformance = (props: iCreateContenderProps) => {
         p.contenderMovie?.tmdbId === movieTmdbId,
     );
   };
+
+  // handles the search
+  useEffect(() => {
+    handleSearch(searchInput);
+  }, [debouncedSearch]);
 
   // block runs after createContender mutation succeeds
   useEffect(() => {
@@ -162,17 +169,6 @@ const CreatePerformance = (props: iCreateContenderProps) => {
   return (
     <>
       <LoadingStatueModal visible={!isComplete} text={'Saving performance...'} />
-      <CategoryHeader>
-        <SearchInput
-          resetSearchHack={resetSearchHack}
-          placeholder={'Search Actors'}
-          handleSearch={(s: string) => handleSearch(s)}
-          style={{ width: width * 0.8 }}
-        />
-        <View style={{ flexDirection: 'row' }}>
-          <HeaderButton onPress={onClose} icon={'close'} />
-        </View>
-      </CategoryHeader>
       <BasicModal
         visible={showMovieSelectModal}
         onClose={() => {

@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import SearchInput from '../../../components/Inputs/SearchInput';
 import TmdbServices from '../../../services/tmdb';
 import { iSearchData } from '../../../services/tmdb/search';
 import { Body } from '../../../components/Text';
-import { useWindowDimensions, View } from 'react-native';
+import { View } from 'react-native';
 import { useCategory } from '../../../context/CategoryContext';
 import { iCategory, iEvent, iPrediction } from '../../../types';
 import COLORS from '../../../constants/colors';
@@ -13,14 +12,12 @@ import useMutationCreateContender from '../../../hooks/mutations/createContender
 import useQueryCommunityEvent from '../../../hooks/queries/getCommunityEvent';
 import { FAB } from '../../../components/Buttons/FAB';
 import { CategoryType, ContenderVisibility } from '../../../API';
-import { iCreateContenderProps } from '.';
-import { CategoryHeader } from '../styles';
-import HeaderButton from '../../../components/HeaderButton';
+import { useContenderSearch } from '../../../context/ContenderSearchContext';
+import { iCreateContenderProps } from '../AddPredictions.tsx';
 
 // TODO: should only be able to do this if logged in
 const CreateFilm = (props: iCreateContenderProps) => {
-  const { onSelectPrediction, onClose } = props;
-  const { width } = useWindowDimensions();
+  const { onSelectPrediction } = props;
 
   const { category: _category, event: _event } = useCategory();
 
@@ -30,13 +27,18 @@ const CreateFilm = (props: iCreateContenderProps) => {
   // when adding a contender to the list of overall contenders
   const { mutate, isComplete, response } = useMutationCreateContender();
 
+  const {
+    searchInput,
+    debouncedSearch,
+    resetSearchHack,
+    setResetSearchHack,
+  } = useContenderSearch();
   const { data: communityData } = useQueryCommunityEvent({ event, includeHidden: true }); // because we use this to see if contender exists, we want to includes hidden contenders
   const communityPredictions = communityData?.[category.id]?.predictions || [];
 
   const [searchResults, setSearchResults] = useState<iSearchData>([]);
   const [searchMessage, setSearchMessage] = useState<string>('');
   const [selectedTmdbId, setSelectedTmdbId] = useState<number | undefined>();
-  const [resetSearchHack, setResetSearchHack] = useState<boolean>(false);
 
   const minReleaseYear = event.year - 1;
 
@@ -50,6 +52,11 @@ const CreateFilm = (props: iCreateContenderProps) => {
   const getPredictionFromTmdbId = (tmdbId: number) => {
     return communityPredictions.find((p) => p.contenderMovie?.tmdbId === tmdbId);
   };
+
+  // handles the search
+  useEffect(() => {
+    handleSearch(searchInput);
+  }, [debouncedSearch]);
 
   // block runs after createContender mutation succeeds
   useEffect(() => {
@@ -106,17 +113,6 @@ const CreateFilm = (props: iCreateContenderProps) => {
   return (
     <>
       <LoadingStatueModal visible={!isComplete} text={'Saving film...'} />
-      <CategoryHeader>
-        <SearchInput
-          resetSearchHack={resetSearchHack}
-          placeholder={'Search Movies'}
-          handleSearch={(s: string) => handleSearch(s)}
-          style={{ width: width * 0.8 }}
-        />
-        <View style={{ flexDirection: 'row' }}>
-          <HeaderButton onPress={onClose} icon={'close'} />
-        </View>
-      </CategoryHeader>
       <View
         style={{
           height: '100%',

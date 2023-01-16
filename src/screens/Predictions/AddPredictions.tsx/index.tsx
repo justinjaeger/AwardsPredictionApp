@@ -1,27 +1,35 @@
-import React, { useState, useEffect } from 'react';
-import { Alert, View } from 'react-native';
-import { PredictionsParamList } from '../../../navigation/types';
-import { useTypedNavigation } from '../../../util/hooks';
+import React, { useEffect, useState } from 'react';
 import { useCategory } from '../../../context/CategoryContext';
 import { iCategory, iEvent, iPrediction } from '../../../types';
-import { BodyBold } from '../../../components/Text';
-import useQueryCommunityEvent from '../../../hooks/queries/getCommunityEvent';
-import BackgroundWrapper from '../../../components/BackgroundWrapper';
-import { RouteProp, useRoute } from '@react-navigation/native';
-import BackButton from '../../../components/Buttons/BackButton';
-import _ from 'lodash';
-import MovieListSelectable from '../../../components/MovieList/MovieListSelectable';
-import { FAB } from '../../../components/Buttons/FAB';
-import CreateContender from '../CreateContender';
 import { CATEGORY_TYPE_TO_STRING } from '../../../constants/categories';
 import Snackbar from '../../../components/Snackbar';
-import { CategoryIsShortlisted, CategoryType, EventStatus } from '../../../API';
-import FloatingButton from '../../../components/Buttons/FloatingButton';
+import { RouteProp, useRoute } from '@react-navigation/native';
+import { PredictionsParamList } from '../../../navigation/types';
+import useQueryCommunityEvent from '../../../hooks/queries/getCommunityEvent';
+import MovieListSelectable from '../../../components/MovieList/MovieListSelectable';
+import { useWindowDimensions } from 'react-native';
+import SearchInput from '../../../components/Inputs/SearchInput';
+import {
+  ContenderSearchProvider,
+  useContenderSearch,
+} from '../../../context/ContenderSearchContext';
+import CreateContender from '../CreateContender';
+import BackgroundWrapper from '../../../components/BackgroundWrapper';
+import theme from '../../../constants/theme';
+import BackButton from '../../../components/Buttons/BackButton';
+import { CategoryIsShortlisted, EventStatus } from '../../../API';
+import { useTypedNavigation } from '../../../util/hooks';
 
+export type iCreateContenderProps = {
+  onSelectPrediction: (p: iPrediction) => void;
+};
+
+// TODO: should only be able to do this if logged in
 const AddPredictions = () => {
   const {
     params: { initialPredictions, onFinish },
   } = useRoute<RouteProp<PredictionsParamList, 'AddPredictions'>>();
+  const { width } = useWindowDimensions();
 
   const navigation = useTypedNavigation<PredictionsParamList>();
   const { category: _category, event: _event } = useCategory();
@@ -41,8 +49,7 @@ const AddPredictions = () => {
     initialPredictions,
   );
   const [hiddenPredictions, setHiddenPredictions] = useState<iPrediction[]>([]); // for predictions that communityPredictions isn't aware of
-  const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [isSearching, setIsSearching] = useState<boolean>(false);
+  const { isSearching } = useContenderSearch();
 
   const selectedContenderIds = selectedPredictions.map((sp) => sp.contenderId);
   const initiallySelectedContenderIds = initialPredictions.map((p) => p.contenderId);
@@ -50,6 +57,7 @@ const AddPredictions = () => {
     ? [...communityDataPredictions, ...hiddenPredictions]
     : [];
 
+  // TODO: can move this into a hook
   useEffect(() => {
     // get all selectedPredictions that communityData doesn't include so we can include them in list
     // want to only add new ones to hiddenPredictions if we unselect, we don't want it to go away
@@ -63,33 +71,10 @@ const AddPredictions = () => {
     setHiddenPredictions([...hiddenPredictions, ...newHiddenPredictions]);
   }, [selectedPredictions.length]);
 
-  // keeps track of whether we've edited the predictions from their initial state
-  useEffect(() => {
-    // make sure to call .sort() because the order doesn't matter, it's disregarded in the onFinish func
-    const resultIsSame = _.isEqual(
-      selectedContenderIds.sort(),
-      initiallySelectedContenderIds.sort(),
-    );
-    setIsEditing(!resultIsSame);
-  }, [selectedPredictions]);
-
   // set custom back arrow functionality
   useEffect(() => {
     navigation.setOptions({
-      headerLeft: () => (
-        <BackButton
-          onPress={() => {
-            const onGoBack = () => {
-              navigation.goBack();
-            };
-            if (isEditing) {
-              onSave();
-            } else {
-              onGoBack();
-            }
-          }}
-        />
-      ),
+      headerLeft: () => <BackButton onPress={onSave} />,
     });
   }, [navigation]);
 
@@ -137,89 +122,33 @@ const AddPredictions = () => {
       setSelectedPredictions(newSelected);
     }
   };
-
   return (
-    <BackgroundWrapper>
-      <>
-        {isSearching ? (
-          <CreateContender
-            onSelectPrediction={onSelectPredictionFromSearch}
-            onClose={() => setIsSearching(false)}
-          />
-        ) : (
-          <>
-            {letUserCreateContenders ? (
-              <FloatingButton
-                style={{ position: 'absolute', bottom: 80, right: 20, zIndex: 10 }}
-                onPress={() => setIsSearching(true)}
-                icon={'search'}
-              />
-            ) : null}
-            {isEditing ? (
-              <FloatingButton
-                style={{ position: 'absolute', bottom: 140, right: 20, zIndex: 10 }}
-                onPress={() => {
-                  Alert.alert('Undo recent changes?', '', [
-                    {
-                      text: 'Cancel',
-                      onPress: () => {},
-                      style: 'cancel',
-                    },
-                    {
-                      text: 'Undo',
-                      onPress: () => {
-                        setSelectedPredictions(initialPredictions);
-                      },
-                    },
-                  ]);
-                }}
-                icon={'undo'}
-              />
-            ) : null}
-            {!communityPredictions || communityPredictions.length === 0 ? (
-              <View
-                style={{
-                  width: '100%',
-                  marginTop: 20,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <BodyBold style={{ textAlign: 'center', lineHeight: 30 }}>
-                  {`Search for ${
-                    category.type === CategoryType.FILM
-                      ? 'films'
-                      : category.type === CategoryType.PERFORMANCE
-                      ? 'performances'
-                      : 'songs'
-                  }`}
-                </BodyBold>
-              </View>
-            ) : selectedPredictions.length === 0 ? (
-              <View
-                style={{
-                  width: '100%',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginBottom: 20,
-                }}
-              >
-                <BodyBold style={{ textAlign: 'center', lineHeight: 30 }}>
-                  {'No predictions selected. Tap to add!'}
-                </BodyBold>
-              </View>
-            ) : null}
-            <MovieListSelectable
-              predictions={communityPredictions}
-              selectedPredictions={selectedPredictions}
-              setSelectedPredictions={(ps) => setSelectedPredictions(ps)}
-            />
-            <FAB iconName="checkmark" text="Done" onPress={onSave} visible={isEditing} />
-          </>
-        )}
-      </>
-    </BackgroundWrapper>
+    <>
+      {letUserCreateContenders ? (
+        <SearchInput
+          placeholder={'Search Movies'}
+          style={{ width, padding: theme.windowMargin }}
+        />
+      ) : null}
+      {isSearching ? (
+        <CreateContender onSelectPrediction={onSelectPredictionFromSearch} />
+      ) : (
+        <MovieListSelectable
+          predictions={communityPredictions}
+          selectedPredictions={selectedPredictions}
+          setSelectedPredictions={(ps) => setSelectedPredictions(ps)}
+        />
+      )}
+    </>
   );
 };
 
-export default AddPredictions;
+const AddPredictionsWithProvider = () => (
+  <ContenderSearchProvider>
+    <BackgroundWrapper>
+      <AddPredictions />
+    </BackgroundWrapper>
+  </ContenderSearchProvider>
+);
+
+export default AddPredictionsWithProvider;

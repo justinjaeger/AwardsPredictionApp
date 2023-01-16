@@ -8,12 +8,11 @@ import { iCategory, iPrediction } from '../../../types';
 
 export type iCreateContenderProps = {
   onSelectPrediction: (p: iPrediction) => void;
-  onClose: () => void;
 };
 
 // TODO: should only be able to do this if logged in
-const CreateContender = (props: iCreateContenderProps & { onClose: () => void }) => {
-  const { onSelectPrediction, onClose } = props;
+const CreateContender = (props: iCreateContenderProps) => {
+  const { onSelectPrediction } = props;
 
   const { category: _category } = useCategory();
 
@@ -22,13 +21,11 @@ const CreateContender = (props: iCreateContenderProps & { onClose: () => void })
   const CreateComponent = (() => {
     switch (category.type) {
       case CategoryType.FILM:
-        return <CreateFilm onSelectPrediction={onSelectPrediction} onClose={onClose} />;
+        return <CreateFilm onSelectPrediction={onSelectPrediction} />;
       case CategoryType.PERFORMANCE:
-        return (
-          <CreatePerformance onSelectPrediction={onSelectPrediction} onClose={onClose} />
-        );
+        return <CreatePerformance onSelectPrediction={onSelectPrediction} />;
       case CategoryType.SONG:
-        return <CreateSong onSelectPrediction={onSelectPrediction} onClose={onClose} />;
+        return <CreateSong onSelectPrediction={onSelectPrediction} />;
     }
   })();
 

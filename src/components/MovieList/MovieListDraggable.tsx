@@ -77,7 +77,7 @@ const MovieListDraggable = ({
         />
       }
       ListFooterComponent={
-        <View style={{ width: '100%', alignItems: 'center' }}>
+        <View style={{ width: '100%', alignItems: 'center', marginTop: 10 }}>
           <TouchableHighlight
             style={{
               width: '90%',
@@ -93,6 +93,7 @@ const MovieListDraggable = ({
               navigation.navigate('AddPredictions', {
                 initialPredictions: predictions,
                 onFinish: (predictions: iPrediction[]) => {
+                  console.log('predictions', predictions.length);
                   setPredictions(predictions);
                 },
               });
