@@ -2,7 +2,7 @@ import React from 'react';
 import { TouchableHighlight, View } from 'react-native';
 import { CategoryName, ContenderAccolade } from '../../../API';
 import MovieGrid from '../../../components/MovieGrid';
-import { SubHeader } from '../../../components/Text';
+import { HeaderLight, SubHeader } from '../../../components/Text';
 import { getAwardsBodyCategories, getCategorySlots } from '../../../constants/categories';
 import COLORS from '../../../constants/colors';
 import theme from '../../../constants/theme';
@@ -70,6 +70,11 @@ const EventList = (props: iEventListProps) => {
               >
                 {awardsBodyCategories[category.name]?.name || ''}
               </SubHeader>
+              {truncatedPredictions.length === 0 ? (
+                <HeaderLight style={{ marginLeft: theme.windowMargin }}>
+                  Add Predictions
+                </HeaderLight>
+              ) : null}
               <MovieGrid
                 predictions={truncatedPredictions}
                 isCollapsed={isCollapsed}

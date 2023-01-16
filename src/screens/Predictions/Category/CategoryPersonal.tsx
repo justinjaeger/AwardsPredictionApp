@@ -155,7 +155,7 @@ const CategoryPersonal = ({
           });
         }}
       />
-      {predictions && predictions.length === 0 ? (
+      {predictions && predictions.length === 0 && isHistory ? (
         <View
           style={{
             width: '100%',
@@ -165,9 +165,7 @@ const CategoryPersonal = ({
           }}
         >
           <BodyBold style={{ textAlign: 'center', lineHeight: 30 }}>
-            {isHistory
-              ? 'No predictions for this date'
-              : 'No predictions yet.\nAdd some!'}
+            {'No predictions for this date'}
           </BodyBold>
         </View>
       ) : null}
