@@ -14,7 +14,7 @@ const DisplayFAB = ({
       <FloatingButton
         onPress={toggleDisplay}
         icon={
-          state === 'list-collapsed' ? 'grid' : state === 'list' ? 'collapse' : 'expand'
+          state === 'list-collapsed' ? 'grid' : state === 'list' ? 'collapse' : 'list'
         }
       />
     </View>
