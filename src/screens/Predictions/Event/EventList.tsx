@@ -23,6 +23,10 @@ const EventList = (props: iEventListProps) => {
   const isHistory = !!date;
   const event = _event as iEvent;
 
+  // TODO:
+  // If isPersonal and isHistory, need to get list of all nominated films
+  // we could just do query for iIndexedPredictionsByCategory and get community predictions. let's just do that
+
   const awardsBodyCategories = getAwardsBodyCategories(event.awardsBody, event.year);
   const categoryList = Object.values(event.categories);
   const orderedCategories = sortByObjectOrder<CategoryName, iCategory>(
