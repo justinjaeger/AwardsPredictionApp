@@ -2,17 +2,19 @@ import React from 'react';
 import { View } from 'react-native';
 import { ContenderAccolade, PredictionType } from '../../../API';
 import COLORS from '../../../constants/colors';
-import { ACCOLADE_TO_SHORTSTRING } from '../../../constants/events';
+import { ACCOLADE_TO_LETTER, ACCOLADE_TO_SHORTSTRING } from '../../../constants/events';
 import theme from '../../../constants/theme';
 import { Body } from '../../Text';
 
 const AccoladeTag = ({
   accolade,
   type,
+  small,
   style,
 }: {
   accolade: ContenderAccolade;
   type: PredictionType;
+  small?: boolean;
   style?: any;
 }) => {
   // should only show accolade if it's a winner (when event is predicting winners), or nominee (when event is predicting nominees)
@@ -45,7 +47,7 @@ const AccoladeTag = ({
           paddingRight: 3,
         }}
       >
-        {ACCOLADE_TO_SHORTSTRING[accolade]}
+        {small ? ACCOLADE_TO_LETTER[accolade] : ACCOLADE_TO_SHORTSTRING[accolade]}
       </Body>
     </View>
   );

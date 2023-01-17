@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
-import { ImageStyle, StyleProp, TouchableHighlight, View } from 'react-native';
+import {
+  ImageStyle,
+  StyleProp,
+  TouchableHighlight,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import COLORS from '../../constants/colors';
 import {
@@ -40,6 +46,7 @@ const Poster = (props: iPosterProps) => {
     predictionType,
     styles,
   } = props;
+  const { width: windowWidth } = useWindowDimensions();
   const { date } = useCategory();
   const isHistory = !!date;
 
@@ -107,7 +114,11 @@ const Poster = (props: iPosterProps) => {
               zIndex: 1,
             }}
           >
-            <AccoladeTag accolade={accolade} type={predictionType} />
+            <AccoladeTag
+              accolade={accolade}
+              type={predictionType}
+              small={width < windowWidth / 10}
+            />
           </View>
         ) : null}
         {path ? (

@@ -28,6 +28,14 @@ export const ACCOLADE_TO_SHORTSTRING: {
   [ContenderAccolade.WINNER]: 'WIN',
 };
 
+export const ACCOLADE_TO_LETTER: {
+  [key in ContenderAccolade]: string;
+} = {
+  [ContenderAccolade.SHORTLISTED]: 'S',
+  [ContenderAccolade.NOMINEE]: 'N',
+  [ContenderAccolade.WINNER]: 'W',
+};
+
 /**
  * PredictionType = NOMINATION if event is in NOMS_LIVE or NOMS_STAGING
  * else, we're predicting for the win, so PredictionType = WIN
