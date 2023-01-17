@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { TouchableHighlight, View } from 'react-native';
 import { CategoryName, ContenderAccolade, PredictionType } from '../../../API';
 import MovieGrid from '../../../components/MovieGrid';
@@ -19,7 +19,7 @@ type iEventListProps = {
 const EventList = (props: iEventListProps) => {
   const { isCollapsed, onSelectCategory, predictionData } = props;
 
-  const { event: _event, date } = useCategory();
+  const { event: _event, date, reset } = useCategory();
   const isHistory = !!date;
   const event = _event as iEvent;
 
@@ -34,6 +34,11 @@ const EventList = (props: iEventListProps) => {
     categoryList,
     categoryList.map((cat) => CategoryName[cat.name]),
   );
+
+  // reset category context when changing events
+  useEffect(() => {
+    reset();
+  }, []);
 
   return (
     <>
