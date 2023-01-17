@@ -12,13 +12,14 @@ type iIconButtonProps = {
   onPress: () => void;
   iconProps: iCustomIconProps;
   color?: string;
+  enableOnPressIn?: boolean;
   styles?: any;
 };
 
 const SIZE = 30;
 
 export const IconButton = (props: iIconButtonProps) => {
-  const { onPress, iconProps, color, styles } = props;
+  const { onPress, iconProps, color, enableOnPressIn, styles } = props;
   return (
     <TouchableHighlight
       style={{
@@ -27,6 +28,7 @@ export const IconButton = (props: iIconButtonProps) => {
       }}
       underlayColor={COLORS.secondary}
       onPress={onPress}
+      onPressIn={enableOnPressIn ? onPress : undefined}
     >
       <CustomIcon
         {...iconProps}
