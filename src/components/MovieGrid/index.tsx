@@ -1,7 +1,7 @@
 import { Divider } from '@ui-kitten/components';
 import React from 'react';
 import { useWindowDimensions, View } from 'react-native';
-import { ContenderAccolade, PredictionType } from '../../API';
+import { PredictionType } from '../../API';
 import { getCategorySlots } from '../../constants/categories';
 import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
@@ -67,7 +67,8 @@ const MovieGrid = (props: {
                   (isCollapsed ? 10 : 5)
                 }
                 ranking={isCollapsed ? undefined : i + 1}
-                isWinner={p.accolade === ContenderAccolade.WINNER}
+                accolade={p.accolade}
+                predictionType={p.predictionType}
               />
             </>
           ) : null}

@@ -30,7 +30,7 @@ const AccoladeTag = ({
         borderRadius: 2,
         borderWidth: 1,
         borderColor: COLORS.secondaryLight,
-        backgroundColor: isWinner ? COLORS.secondaryLight : 'transparent',
+        backgroundColor: COLORS.secondaryLight,
         marginRight: theme.windowMargin,
         justifyContent: 'center',
         height: 20,
@@ -39,8 +39,8 @@ const AccoladeTag = ({
     >
       <Body
         style={{
-          color: isWinner ? 'black' : COLORS.secondaryLight,
-          fontWeight: isWinner ? '700' : undefined,
+          color: 'black',
+          fontWeight: '700',
           paddingLeft: 3,
           paddingRight: 3,
         }}

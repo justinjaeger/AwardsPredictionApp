@@ -10,6 +10,9 @@ import {
 import { TMDB_IMAGE_URL } from '../../constants';
 import { Body } from '../Text';
 import theme from '../../constants/theme';
+import { ContenderAccolade, PredictionType } from '../../API';
+import AccoladeTag from '../List/ContenderList/AccoladeTag';
+import { useCategory } from '../../context/CategoryContext';
 
 type iPosterProps = {
   title: string;
@@ -17,7 +20,8 @@ type iPosterProps = {
   width?: number; // 1 is 27*40px, defualt is 5
   ranking?: number;
   onPress?: () => void;
-  isWinner?: boolean;
+  accolade?: ContenderAccolade | undefined;
+  predictionType?: PredictionType;
   styles?: StyleProp<ImageStyle>;
 };
 
@@ -26,7 +30,18 @@ type iPosterProps = {
  */
 
 const Poster = (props: iPosterProps) => {
-  const { path, title, width: _width, ranking, onPress, isWinner, styles } = props;
+  const {
+    path,
+    title,
+    width: _width,
+    ranking,
+    onPress,
+    accolade,
+    predictionType,
+    styles,
+  } = props;
+  const { date } = useCategory();
+  const isHistory = !!date;
 
   const width = _width || PosterSize.MEDIUM;
 
@@ -39,8 +54,8 @@ const Poster = (props: iPosterProps) => {
   const style: StyleProp<ImageStyle> = {
     ...(styles as Record<string, unknown>),
     ...posterDimensions,
-    borderWidth: isWinner ? 5 : 1,
-    borderColor: isWinner ? COLORS.secondaryLight : COLORS.secondary,
+    borderWidth: 1,
+    borderColor: COLORS.secondary,
     borderRadius: 5,
     margin: theme.posterMargin,
     opacity: isPressed ? 0.8 : 1,
@@ -80,6 +95,19 @@ const Poster = (props: iPosterProps) => {
             >
               {ranking.toString()}
             </Body>
+          </View>
+        ) : null}
+        {isHistory && accolade && predictionType ? (
+          <View
+            style={{
+              position: 'absolute',
+              bottom: 0,
+              right: -10,
+              margin: theme.posterMargin,
+              zIndex: 1,
+            }}
+          >
+            <AccoladeTag accolade={accolade} type={predictionType} />
           </View>
         ) : null}
         {path ? (
