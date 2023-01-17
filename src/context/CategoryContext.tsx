@@ -32,7 +32,7 @@ const CategoryContext = createContext<iCategoryContext>({
   setCategory: () => new Promise(() => {}),
   date: undefined,
   setDate: () => {},
-  personalCommunityTab: 'community',
+  personalCommunityTab: 'personal',
   setPersonalCommunityTab: () => {},
   displayContenderInfo: () => {},
 });
@@ -46,7 +46,7 @@ export const CategoryProvider = (props: { children: React.ReactNode }) => {
   const [event, _setEvent] = useState<iEvent>();
   const [category, _setCategory] = useState<iCategory>();
   const [personalCommunityTab, setPersonalCommunityTab] = useState<iPersonalCommunityTab>(
-    'community',
+    'personal',
   );
   const [date, setDate] = useState<Date | undefined>(undefined);
 

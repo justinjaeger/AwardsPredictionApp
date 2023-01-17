@@ -24,8 +24,8 @@ import { formatLastUpdated } from '../../../util/formatDateTime';
 import usePredictionData from '../../../hooks/queries/usePredictionData';
 import { eventStatusToPredictionType } from '../../../constants/events';
 import { iCategoryProps } from '.';
-import AddPredictionsFAB from '../../../components/Buttons/AddPredictionsFAB';
 import LastUpdatedText from '../../../components/LastUpdatedText';
+import HistoryHeaderButton from '../../../components/Buttons/HistoryHeaderButton';
 
 // NOTE: Has a lot in common with ContenderListDraggable
 const CategoryPersonal = ({
@@ -35,9 +35,7 @@ const CategoryPersonal = ({
   delayedDisplay,
   gridOpacity,
   listOpacity,
-  isEditing,
-  setIsEditing,
-}: iCategoryProps & { isEditing: boolean; setIsEditing: (val: boolean) => void }) => {
+}: iCategoryProps) => {
   const { category: _category, event: _event, date } = useCategory();
   const { userId: _userId } = useAuth();
   const navigation = useTypedNavigation<PredictionsParamList>();
@@ -46,9 +44,15 @@ const CategoryPersonal = ({
   const category = _category as iCategory;
   const event = _event as iEvent;
   const userId = _userId as string;
-  //   const eventIsArchived = event.status === EventStatus.ARCHIVED;
 
   const [goBackOnComplete, setGoBackOnComplete] = useAsyncReference<boolean>(false);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => <HistoryHeaderButton isDisabled={!!isEditing} />,
+    });
+  }, [isEditing]);
 
   const onComplete = () => {
     setIsEditing(false);
@@ -59,7 +63,9 @@ const CategoryPersonal = ({
   };
 
   // We use the SAME KEY as the previous screen, because it avoids a re-fetch of the data which was available previously
-  const { mutate, isComplete } = useMutationUpdatePredictions(onComplete);
+  const { mutate: updatePredictions, isComplete } = useMutationUpdatePredictions(
+    onComplete,
+  );
   const { predictionData, isLoading } = usePredictionData('personal');
   const initialPredictions = predictionData
     ? predictionData[category.id]?.predictions || []
@@ -124,12 +130,13 @@ const CategoryPersonal = ({
       contenderId: p.contenderId,
       ranking: i + 1,
     }));
-    mutate({
+    const predictionType = eventStatusToPredictionType(event.status);
+    updatePredictions({
       predictionSetParams: {
         userId,
         categoryId: category.id,
         eventId: event.id,
-        type: eventStatusToPredictionType(event.status),
+        type: predictionType,
       },
       predictionData: newPredictionData,
     });
@@ -145,17 +152,7 @@ const CategoryPersonal = ({
         visible={isLoading || !isComplete}
         text={isLoading ? 'Loading Predictions...' : 'Saving changes...'}
       />
-      <AddPredictionsFAB
-        onPress={() => {
-          navigation.navigate('AddPredictions', {
-            initialPredictions: predictions,
-            onFinish: (predictions: iPrediction[]) => {
-              setPredictions(predictions);
-            },
-          });
-        }}
-      />
-      {predictions && predictions.length === 0 ? (
+      {predictions && predictions.length === 0 && isHistory ? (
         <View
           style={{
             width: '100%',
@@ -165,9 +162,7 @@ const CategoryPersonal = ({
           }}
         >
           <BodyBold style={{ textAlign: 'center', lineHeight: 30 }}>
-            {isHistory
-              ? 'No predictions for this date'
-              : 'No predictions yet.\nAdd some!'}
+            {'No predictions for this date'}
           </BodyBold>
         </View>
       ) : null}

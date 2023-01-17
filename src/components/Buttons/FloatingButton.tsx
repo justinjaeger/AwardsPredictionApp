@@ -14,8 +14,9 @@ const FloatingButton = (props: {
   onPress: () => void;
   style?: any;
   customIcon?: JSX.Element;
+  disabled?: boolean;
 }) => {
-  const { icon, onPress, customIcon, style } = props;
+  const { icon, onPress, customIcon, disabled, style } = props;
   const iconProps = icon
     ? {
         name: icon,
@@ -28,14 +29,14 @@ const FloatingButton = (props: {
         width: SIZE,
         height: SIZE,
         borderRadius: SIZE,
-        backgroundColor: COLORS.secondaryDark,
+        backgroundColor: disabled ? COLORS.disabled : COLORS.secondaryDark,
         borderWidth: 2,
         borderColor: COLORS.white,
         alignItems: 'center',
         justifyContent: 'center',
         ...style,
       }}
-      underlayColor={COLORS.secondary}
+      underlayColor={disabled ? COLORS.disabled : COLORS.secondary}
       onPress={onPress}
     >
       {customIcon ||

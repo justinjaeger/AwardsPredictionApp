@@ -1,30 +1,27 @@
 import React from 'react';
 import { View } from 'react-native';
-import { ContenderAccolade, EventStatus, PredictionType } from '../../../API';
+import { ContenderAccolade, PredictionType } from '../../../API';
 import COLORS from '../../../constants/colors';
-import {
-  ACCOLADE_TO_SHORTSTRING,
-  eventStatusToPredictionType,
-} from '../../../constants/events';
+import { ACCOLADE_TO_LETTER, ACCOLADE_TO_SHORTSTRING } from '../../../constants/events';
 import theme from '../../../constants/theme';
 import { Body } from '../../Text';
 
 const AccoladeTag = ({
   accolade,
-  eventStatus,
+  type,
+  small,
   style,
 }: {
   accolade: ContenderAccolade;
-  eventStatus: EventStatus;
+  type: PredictionType;
+  small?: boolean;
   style?: any;
 }) => {
   // should only show accolade if it's a winner (when event is predicting winners), or nominee (when event is predicting nominees)
   const isWinner = accolade === ContenderAccolade.WINNER;
   const isNominee = accolade === ContenderAccolade.NOMINEE;
-  const isPredictingWinners =
-    eventStatusToPredictionType(eventStatus) === PredictionType.WIN;
-  const showWinTag = isPredictingWinners && isWinner;
-  const showNominationTag = !isPredictingWinners && isNominee;
+  const showWinTag = type === PredictionType.WIN && isWinner;
+  const showNominationTag = type === PredictionType.NOMINATION && (isNominee || isWinner);
 
   if (!showWinTag && !showNominationTag) return null;
 
@@ -35,7 +32,7 @@ const AccoladeTag = ({
         borderRadius: 2,
         borderWidth: 1,
         borderColor: COLORS.secondaryLight,
-        backgroundColor: isWinner ? COLORS.secondaryLight : 'transparent',
+        backgroundColor: COLORS.secondaryLight,
         marginRight: theme.windowMargin,
         justifyContent: 'center',
         height: 20,
@@ -44,13 +41,13 @@ const AccoladeTag = ({
     >
       <Body
         style={{
-          color: isWinner ? 'black' : COLORS.secondaryLight,
-          fontWeight: isWinner ? '700' : undefined,
+          color: 'black',
+          fontWeight: '700',
           paddingLeft: 3,
           paddingRight: 3,
         }}
       >
-        {ACCOLADE_TO_SHORTSTRING[accolade]}
+        {small ? ACCOLADE_TO_LETTER[accolade] : ACCOLADE_TO_SHORTSTRING[accolade]}
       </Body>
     </View>
   );

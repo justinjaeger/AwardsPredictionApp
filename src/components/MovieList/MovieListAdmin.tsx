@@ -1,7 +1,7 @@
 import { Divider } from '@ui-kitten/components';
 import React, { useState } from 'react';
 import { FlatList } from 'react-native';
-import { ContenderVisibility } from '../../API';
+import { ContenderVisibility, PredictionType } from '../../API';
 import { getCategorySlots } from '../../constants/categories';
 import COLORS from '../../constants/colors';
 import { useCategory } from '../../context/CategoryContext';
@@ -25,7 +25,9 @@ const MovieListAdmin = (props: iMovieListAdminProps) => {
 
   const [selectedContenderId, setSelectedContenderId] = useState<string | undefined>(); // this selection is whether the film is big or not
 
-  const slots = getCategorySlots(event, category.name);
+  const predictionType = predictions[0]?.predictionType || PredictionType.NOMINATION;
+
+  const slots = getCategorySlots(event, category.name, predictionType);
 
   return (
     <FlatList
@@ -45,7 +47,7 @@ const MovieListAdmin = (props: iMovieListAdminProps) => {
                 style={{
                   margin: 10,
                   borderWidth: 0.5,
-                  borderColor: COLORS.secondaryDark,
+                  borderColor: COLORS.secondary,
                 }}
               />
             ) : null}

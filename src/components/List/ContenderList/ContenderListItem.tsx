@@ -13,7 +13,6 @@ import {
 } from '../../../API';
 import { getCategorySlots } from '../../../constants/categories';
 import COLORS from '../../../constants/colors';
-import { eventStatusToPredictionType } from '../../../constants/events';
 import { getPosterDimensionsByWidth } from '../../../constants/posterDimensions';
 import theme from '../../../constants/theme';
 import { useCategory } from '../../../context/CategoryContext';
@@ -27,7 +26,7 @@ import AnimatedPoster from '../../Images/AnimatedPoster';
 import { Body, SubHeader } from '../../Text';
 import AccoladeTag from './AccoladeTag';
 
-type iContenderListItemProps = {
+export type iContenderListItemProps = {
   variant: 'community' | 'personal' | 'selectable' | 'search';
   prediction: iPrediction;
   categoryType: CategoryType;
@@ -179,13 +178,12 @@ const ContenderListItem = (props: iContenderListItemProps) => {
 
   const { win, nom } = getNumPredicting(
     indexedRankings || {},
-    getCategorySlots(event, category.name) || 0,
+    getCategorySlots(event, category.name, prediction.predictionType),
   );
 
   const showBotomButtons = selected && tmdbMovie;
 
-  const nominationsHaveHappened =
-    eventStatusToPredictionType(event.status) === PredictionType.WIN;
+  const nominationsHaveHappened = prediction.predictionType === PredictionType.WIN;
 
   const predictionIsNotNominated =
     ['personal', 'selectable'].includes(variant) &&
@@ -297,7 +295,7 @@ const ContenderListItem = (props: iContenderListItemProps) => {
                   {isHistory && prediction.accolade ? (
                     <AccoladeTag
                       accolade={prediction.accolade}
-                      eventStatus={event.status}
+                      type={prediction.predictionType}
                     />
                   ) : null}
                 </View>

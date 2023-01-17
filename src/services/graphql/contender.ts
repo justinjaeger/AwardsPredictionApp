@@ -11,6 +11,7 @@ import {
   UpdateContenderMutation,
   UpdateContenderMutationVariables,
   ContenderAccolade,
+  PredictionType,
 } from '../../API';
 import * as mutations from '../../graphql/mutations';
 import * as queries from '../../graphql/queries';
@@ -121,6 +122,7 @@ const createUniqueContender = async (
       ranking: 0, // just filler, might be a problem idk
       accolade: contender.accolade || undefined,
       visibility: contender.visibility || ContenderVisibility.VISIBLE,
+      predictionType: PredictionType.NOMINATION, // they only add predictions for nominations
       contenderId: contender.id,
       contenderMovie: contender.movie,
       contenderPerson: contender.person

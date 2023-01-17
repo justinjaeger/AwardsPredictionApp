@@ -9,10 +9,7 @@ const BackButton = (props: { onPress?: () => void }) => {
 
   return (
     <IconButton
-      iconProps={{
-        name: 'arrow-ios-back-outline',
-        styles: { width: 20, height: 30 },
-      }}
+      iconProps={{ name: 'arrow-ios-back-outline' }}
       onPress={() => {
         if (onPress) {
           onPress();
@@ -20,7 +17,7 @@ const BackButton = (props: { onPress?: () => void }) => {
           navigation.goBack();
         }
       }}
-      styles={{ width: 30, height: 30, marginLeft: theme.windowMargin }}
+      styles={{ marginLeft: theme.windowMargin }}
     />
   );
 };

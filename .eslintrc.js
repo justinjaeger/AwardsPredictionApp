@@ -47,5 +47,6 @@ module.exports = {
     'sonarjs/cognitive-complexity': 0,
     'react-hooks/exhaustive-deps': 0,
     'import/no-named-as-default': 0,
+    'sonarjs/no-duplicate-string': 0,
   },
 };

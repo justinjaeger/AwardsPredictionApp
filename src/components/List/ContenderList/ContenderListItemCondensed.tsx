@@ -4,11 +4,11 @@ import {
   CategoryIsShortlisted,
   CategoryType,
   ContenderAccolade,
+  EventStatus,
   PredictionType,
 } from '../../../API';
 import { getCategorySlots } from '../../../constants/categories';
 import COLORS from '../../../constants/colors';
-import { eventStatusToPredictionType } from '../../../constants/events';
 import theme from '../../../constants/theme';
 import { useCategory } from '../../../context/CategoryContext';
 import { iCachedTmdbMovie, iCachedTmdbPerson } from '../../../services/cache/types';
@@ -65,6 +65,8 @@ const ContenderListItemCondensed = (props: iContenderListItemProps) => {
   const tmdbMovieId = prediction.contenderMovie?.tmdbId;
   const tmdbPersonId = prediction.contenderPerson?.tmdbId;
 
+  const eventIsArchived = event.status === EventStatus.ARCHIVED;
+
   useAsyncEffect(async () => {
     if (tmdbPersonId) {
       // get tmdb person info
@@ -103,11 +105,10 @@ const ContenderListItemCondensed = (props: iContenderListItemProps) => {
 
   const { win, nom } = getNumPredicting(
     indexedRankings || {},
-    getCategorySlots(event, category.name) || 0,
+    getCategorySlots(event, category.name, prediction.predictionType),
   );
 
-  const nominationsHaveHappened =
-    eventStatusToPredictionType(event.status) === PredictionType.WIN;
+  const nominationsHaveHappened = prediction.predictionType === PredictionType.WIN;
 
   const predictionIsNotNominated =
     ['personal', 'selectable'].includes(variant) &&
@@ -120,7 +121,8 @@ const ContenderListItemCondensed = (props: iContenderListItemProps) => {
     category.isShortlisted === CategoryIsShortlisted.TRUE &&
     !prediction.accolade;
 
-  const isUnqualified = predictionIsNotNominated || predictionIsNotShortlisted;
+  const isUnqualified =
+    !eventIsArchived && (predictionIsNotNominated || predictionIsNotShortlisted);
 
   return (
     <TouchableHighlight
@@ -163,7 +165,10 @@ const ContenderListItemCondensed = (props: iContenderListItemProps) => {
           >
             <SubHeader style={{ marginLeft: 10, marginRight: 5 }}>{title}</SubHeader>
             {isHistory && prediction.accolade ? (
-              <AccoladeTag accolade={prediction.accolade} eventStatus={event.status} />
+              <AccoladeTag
+                accolade={prediction.accolade}
+                type={prediction.predictionType}
+              />
             ) : null}
           </View>
           {indexedRankings ? (

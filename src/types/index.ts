@@ -7,6 +7,7 @@ import {
   CategoryIsShortlisted,
   EventStatus,
   UserRole,
+  PredictionType,
 } from '../API';
 
 export enum QueryKeys {
@@ -26,6 +27,7 @@ export type iPrediction = {
   ranking: number; // PERSONAL ONLY
   visibility: ContenderVisibility;
   accolade: ContenderAccolade | undefined;
+  predictionType: PredictionType;
   indexedRankings?: iIndexedRankings; // COMMUNITY ONLY
   contenderId: string;
   contenderMovie?:

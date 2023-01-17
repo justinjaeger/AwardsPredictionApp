@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Input, Spinner } from '@ui-kitten/components';
 import { EvaStatus } from '@ui-kitten/components/devsupport';
 import CustomIcon from '../CustomIcon';
 import COLORS from '../../constants/colors';
-import { useDebounce } from '../../util/hooks';
 import { View } from 'react-native';
 import { HEADER_HEIGHT } from '../../constants';
+import { useContenderSearch } from '../../context/ContenderSearchContext';
 
+// MUST WRAP IN ContenderSearchProvider
 const SearchInput = (props: {
-  handleSearch: (s: string) => void;
-  resetSearchHack?: boolean;
   label?: string;
   placeholder?: string;
   caption?: string;
@@ -17,36 +16,9 @@ const SearchInput = (props: {
   status?: EvaStatus;
   style?: any;
 }) => {
-  const {
-    handleSearch,
-    resetSearchHack,
-    label,
-    placeholder,
-    caption,
-    onBlur,
-    status,
-    style,
-  } = props;
+  const { label, placeholder, caption, onBlur, status, style } = props;
 
-  const [searchInput, setSearchInput] = useState<string>('');
-  const [searching, setSearching] = useState<boolean>(false);
-  const debouncedSearch = useDebounce(searchInput, 500, { trailing: true });
-
-  // Enables us to reset the search bar from the outer component
-  useEffect(() => {
-    setSearchInput('');
-    setSearching(false);
-  }, [resetSearchHack]);
-
-  useEffect(() => {
-    setSearching(true);
-    if (searchInput === '') setSearching(false);
-  }, [searchInput]);
-
-  useEffect(() => {
-    handleSearch(searchInput);
-    setSearching(false);
-  }, [debouncedSearch]);
+  const { searchInput, setSearchInput, isLoadingSearch } = useContenderSearch();
 
   return (
     <View>
@@ -86,7 +58,7 @@ const SearchInput = (props: {
         )}
         keyboardAppearance={'dark'}
       />
-      {searching ? (
+      {isLoadingSearch ? (
         <View
           style={{
             position: 'absolute',

@@ -35,7 +35,8 @@ const usePredictionData = (tab: 'community' | 'personal') => {
 
   const predictionData = showHistory ? historyData : contemporaryData;
   const refreshData = showHistory ? async () => {} : refetch; // don't need to refresh on history
-  const isLoading = isLoadingComtemporary || isLoadingHistory;
+  const isLoading =
+    isLoadingComtemporary || isLoadingHistory || predictionData === undefined;
 
   return { predictionData, isLoading, refreshData };
 };

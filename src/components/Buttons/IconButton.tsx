@@ -1,6 +1,5 @@
 import React from 'react';
 import { StyleProp, TouchableHighlight, ViewStyle } from 'react-native';
-import { Button } from '@ui-kitten/components';
 import CustomIcon, { iCustomIconProps } from '../CustomIcon';
 import theme from '../../constants/theme';
 import COLORS from '../../constants/colors';
@@ -13,7 +12,7 @@ type iIconButtonProps = {
   onPress: () => void;
   iconProps: iCustomIconProps;
   color?: string;
-  styles?: StyleProp<ViewStyle>;
+  styles?: any;
 };
 
 const SIZE = 30;
@@ -21,25 +20,20 @@ const SIZE = 30;
 export const IconButton = (props: iIconButtonProps) => {
   const { onPress, iconProps, color, styles } = props;
   return (
-    <Button
-      style={
-        styles || {
-          borderRadius: SIZE,
-          height: SIZE,
-          width: SIZE,
-        }
-      }
-      appearance="ghost"
-      status="danger"
-      accessoryLeft={() => (
-        <CustomIcon
-          {...iconProps}
-          color={color || COLORS.white}
-          styles={{ borderRadius: 100 }}
-        />
-      )}
+    <TouchableHighlight
+      style={{
+        borderRadius: theme.borderRadius,
+        ...styles,
+      }}
+      underlayColor={COLORS.secondary}
       onPress={onPress}
-    />
+    >
+      <CustomIcon
+        {...iconProps}
+        color={color || COLORS.white}
+        styles={{ borderRadius: 100 }}
+      />
+    </TouchableHighlight>
   );
 };
 

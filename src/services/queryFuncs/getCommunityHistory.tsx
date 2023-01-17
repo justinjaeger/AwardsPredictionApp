@@ -1,4 +1,4 @@
-import { ContenderVisibility } from '../../API';
+import { ContenderVisibility, PredictionType } from '../../API';
 import { iEvent, iIndexedPredictionsByCategory, iPrediction } from '../../types';
 import { sortCommunityPredictionsByRanking } from '../../util/sortPredictions';
 import ApiServices from '../graphql';
@@ -29,6 +29,7 @@ const getCommunityHistory = async (event: iEvent, createdAt: Date) => {
       predictions.push({
         ranking: p?.ranking || 0,
         accolade: contender.accolade || undefined,
+        predictionType: ps?.type || PredictionType.NOMINATION,
         indexedRankings: indexedRankings,
         visibility: contender.visibility || ContenderVisibility.VISIBLE,
         contenderId: contender.id || '',

@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import SearchInput from '../../../components/Inputs/SearchInput';
 import TmdbServices from '../../../services/tmdb';
 import { iSearchData } from '../../../services/tmdb/search';
 import { Body } from '../../../components/Text';
-import { useWindowDimensions, View } from 'react-native';
+import { View } from 'react-native';
 import { useCategory } from '../../../context/CategoryContext';
 import { iCategory, iEvent, iPrediction } from '../../../types';
 import COLORS from '../../../constants/colors';
@@ -11,21 +10,19 @@ import MovieListSearch from '../../../components/MovieList/MovieListSearch';
 import LoadingStatueModal from '../../../components/LoadingStatueModal';
 import useQueryCommunityEvent from '../../../hooks/queries/getCommunityEvent';
 import { FAB } from '../../../components/Buttons/FAB';
-import { CategoryType, ContenderVisibility } from '../../../API';
+import { CategoryType, ContenderVisibility, PredictionType } from '../../../API';
 import BasicModal from '../../../components/BasicModal';
 import useMutationCreateSongContender from '../../../hooks/mutations/createSongContender';
 import { compareSongKeys, getSongKey } from '../../../util/songKeys';
 import FormInput from '../../../components/Inputs/FormInput';
 import { iCreateContenderProps } from '.';
-import { CategoryHeader } from '../styles';
-import HeaderButton from '../../../components/HeaderButton';
 import { SubmitButton } from '../../../components/Buttons';
 import SongListSelectable from '../../../components/MovieList/SongListSelectable';
+import { useContenderSearch } from '../../../context/ContenderSearchContext';
 
 // TODO: should only be able to do this if logged in
 const CreateSong = (props: iCreateContenderProps) => {
-  const { onSelectPrediction, onClose } = props;
-  const { width } = useWindowDimensions();
+  const { onSelectPrediction } = props;
 
   const { category: _category, event: _event } = useCategory();
 
@@ -39,13 +36,18 @@ const CreateSong = (props: iCreateContenderProps) => {
     response,
   } = useMutationCreateSongContender();
 
+  const {
+    searchInput,
+    debouncedSearch,
+    resetSearchHack,
+    setResetSearchHack,
+  } = useContenderSearch();
   const { data: communityData } = useQueryCommunityEvent({ event, includeHidden: true }); // because we use this to see if contender exists, we want to includes hidden contenders
   const communityPredictions = communityData?.[category.id]?.predictions || [];
 
   const [movieSearchResults, setMovieSearchResults] = useState<iSearchData>([]);
   const [searchMessage, setSearchMessage] = useState<string>('');
   const [selectedMovieTmdbId, setSelectedMovieTmdbId] = useState<number | undefined>();
-  const [resetSearchHack, setResetSearchHack] = useState<boolean>(false);
   const [showSongModal, setShowSongModal] = useState<boolean>(false);
   const [modalState, setModalState] = useState<'select' | 'create'>('select');
   const [songTitle, setSongTitle] = useState<string>('');
@@ -70,6 +72,11 @@ const CreateSong = (props: iCreateContenderProps) => {
       return compareSongKeys(storedSongKey, newSongKey);
     });
   };
+
+  // handles the search
+  useEffect(() => {
+    handleSearch(searchInput);
+  }, [debouncedSearch]);
 
   // block runs after createContender mutation succeeds
   useEffect(() => {
@@ -130,6 +137,7 @@ const CreateSong = (props: iCreateContenderProps) => {
     ranking: 0,
     accolade: undefined,
     visibility: ContenderVisibility.VISIBLE,
+    predictionType: PredictionType.NOMINATION, // they only add predictions for nominations
     contenderId: m.tmdbId.toString(),
     contenderMovie: {
       id: m.tmdbId.toString(),
@@ -140,17 +148,6 @@ const CreateSong = (props: iCreateContenderProps) => {
   return (
     <>
       <LoadingStatueModal visible={!isComplete} text={'Saving song...'} />
-      <CategoryHeader>
-        <SearchInput
-          resetSearchHack={resetSearchHack}
-          placeholder={'Search By Movie Title'}
-          handleSearch={(s: string) => handleSearch(s)}
-          style={{ width: width * 0.8 }}
-        />
-        <View style={{ flexDirection: 'row' }}>
-          <HeaderButton onPress={onClose} icon={'close'} />
-        </View>
-      </CategoryHeader>
       <View
         style={{
           height: '100%',

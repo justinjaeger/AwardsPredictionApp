@@ -1,4 +1,4 @@
-import { ContenderVisibility } from '../../API';
+import { ContenderVisibility, PredictionType } from '../../API';
 import { iIndexedPredictionsByCategory } from '../../types';
 import { sortPersonalPredictions } from '../../util/sortPredictions';
 import ApiServices from '../graphql';
@@ -9,7 +9,7 @@ const getPersonalPredictionsByEvent = async (eventId: string, userId: string) =>
     userId,
   );
   const pSets = predictionSets?.predictionSetByUserIdAndEventId?.items;
-  if (!pSets) return; // handle in some other way?
+  if (!pSets) return {};
   // Format the prediction sets
   const data: iIndexedPredictionsByCategory = {};
   pSets.forEach((ps) => {
@@ -18,6 +18,7 @@ const getPersonalPredictionsByEvent = async (eventId: string, userId: string) =>
       ranking: p?.ranking || 0,
       accolade: p?.contender.accolade || undefined,
       visibility: p?.contender.visibility || ContenderVisibility.VISIBLE,
+      predictionType: ps?.type || PredictionType.NOMINATION,
       contenderId: p?.contenderId || '',
       contenderMovie: p?.contender.movie || undefined,
       contenderPerson: p?.contender.person || undefined,
