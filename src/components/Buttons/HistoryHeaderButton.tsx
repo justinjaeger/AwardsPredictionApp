@@ -1,14 +1,17 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
+import { EventStatus } from '../../API';
 import theme from '../../constants/theme';
 import { useCategory } from '../../context/CategoryContext';
+import { iEvent } from '../../types';
 import Snackbar from '../Snackbar';
 import { IconButton } from './IconButton';
 
 const HistoryHeaderButton = ({ isDisabled }: { isDisabled?: boolean }) => {
   const navigation = useNavigation();
-  const { date, setDate } = useCategory();
+  const { date, setDate, event: _event } = useCategory();
   const isHistory = !!date;
+  const event = _event as iEvent;
 
   const onPress = () => {
     if (isDisabled) {
@@ -21,6 +24,9 @@ const HistoryHeaderButton = ({ isDisabled }: { isDisabled?: boolean }) => {
       setDate(undefined);
     }
   };
+
+  // hide if is archived
+  if (isDisabled || event.status === EventStatus.ARCHIVED) return null;
 
   return (
     <IconButton

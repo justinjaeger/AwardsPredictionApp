@@ -9,7 +9,7 @@ export const EVENT_STATUS_TO_STRING: {
   [EventStatus.NOMS_LIVE]: 'Predict Nominations', // let users predict nominations
   [EventStatus.WINS_STAGING]: 'Nominations Closed', // start preparing winners
   [EventStatus.WINS_LIVE]: 'Predict Winners', // let users predict winners
-  [EventStatus.ARCHIVED]: 'Archived', // view history only
+  [EventStatus.ARCHIVED]: 'View Results', // view history only
 };
 
 export const ACCOLADE_TO_STRING: {

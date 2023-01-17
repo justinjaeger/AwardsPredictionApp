@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Animated } from 'react-native';
 import { EventStatus } from '../../API';
 import { useCategory } from '../../context/CategoryContext';
@@ -17,6 +17,8 @@ const HistoryTab = () => {
   const height = useRef(new Animated.Value(0)).current;
   const opacity = useRef(new Animated.Value(0)).current;
 
+  const [disableInput, setDisableInput] = useState<boolean>(false);
+
   const dateOfClose = event.winDateTime ? new Date(event.winDateTime) : new Date();
   const today = new Date();
   const maxDate = dateOfClose > today ? today : dateOfClose; // if date of close is in the past, use today
@@ -32,6 +34,7 @@ const HistoryTab = () => {
 
   useEffect(() => {
     if (isHistory) {
+      setDisableInput(false);
       Animated.timing(height, {
         toValue: TAB_HEIGHT,
         duration: 250,
@@ -44,6 +47,9 @@ const HistoryTab = () => {
         }).start();
       });
     } else {
+      setTimeout(() => {
+        setDisableInput(true);
+      }, 250);
       Animated.timing(opacity, {
         toValue: 0,
         duration: 250,
@@ -72,8 +78,8 @@ const HistoryTab = () => {
       }}
     >
       <SubHeader style={{ marginBottom: 5, marginTop: 5 }}>Time Machine ON: </SubHeader>
-      {isHistory ? (
-        // isHistory check is necessary bc date will handle clicks even when hidden
+      {!disableInput ? (
+        // disableInput check is necessary bc date will handle clicks even when hidden
         <DateInput date={date} setDate={setDate} minDate={minDate} maxDate={maxDate} />
       ) : null}
     </Animated.View>
