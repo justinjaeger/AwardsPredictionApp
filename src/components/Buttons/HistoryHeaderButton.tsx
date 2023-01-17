@@ -16,7 +16,7 @@ const HistoryHeaderButton = ({ isDisabled }: { isDisabled?: boolean }) => {
 
   const onPress = () => {
     if (isArchived) {
-      Snackbar.warning('Time Machine is always on when event is complete');
+      Snackbar.warning('Time Machine is always on when event has ended');
       return;
     }
     if (isDisabled) {
