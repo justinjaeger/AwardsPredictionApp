@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, Keyboard } from 'react-native';
 import { CategoryType } from '../../API';
 import { iPrediction } from '../../types';
 import ContenderListItem from '../List/ContenderList/ContenderListItem';
@@ -23,6 +23,7 @@ const PerformanceListSelectable = (props: iPerformanceListSelectableProps) => {
   }, [predictions.length]);
 
   const onPressItem = (prediction: iPrediction) => {
+    Keyboard.dismiss();
     const movieTmdbId = prediction.contenderMovie?.tmdbId;
     const personTmdbId = prediction.contenderPerson?.tmdbId;
     if (!movieTmdbId || !personTmdbId) return;
@@ -42,6 +43,9 @@ const PerformanceListSelectable = (props: iPerformanceListSelectableProps) => {
       data={predictions}
       keyExtractor={(item) => item.contenderId}
       style={{ width: '100%' }}
+      onScroll={() => {
+        Keyboard.dismiss();
+      }}
       contentContainerStyle={{ paddingBottom: disablePaddingBottom ? 0 : 200 }}
       renderItem={({ item: prediction, index: i }) => {
         const movieTmdbId = prediction.contenderMovie?.tmdbId;

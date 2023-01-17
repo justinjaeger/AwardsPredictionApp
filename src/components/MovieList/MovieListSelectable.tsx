@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, Keyboard } from 'react-native';
 import { useCategory } from '../../context/CategoryContext';
 import { iCategory, iPrediction } from '../../types';
 import { removePredictionFromList } from '../../util/removePredictionFromList';
@@ -19,6 +19,7 @@ const MovieListSelectable = (props: iMovieListProps) => {
   const [selectedContenderId, setSelectedContenderId] = useState<string | undefined>(); // this selection is whether the film is big or not
 
   const onPressItem = async (prediction: iPrediction) => {
+    Keyboard.dismiss();
     const selectedContenderIds = selectedPredictions.map((p) => p.contenderId);
     const contenderId = prediction.contenderId;
     const isAlreadySelected = selectedContenderIds.includes(contenderId);
@@ -42,6 +43,9 @@ const MovieListSelectable = (props: iMovieListProps) => {
       data={predictions}
       keyExtractor={(item) => item.contenderId}
       style={{ width: '100%' }}
+      onScroll={() => {
+        Keyboard.dismiss();
+      }}
       renderItem={({ item: prediction, index: i }) => {
         const highlighted = (selectedPredictions || [])
           .map((sp) => sp.contenderId)
