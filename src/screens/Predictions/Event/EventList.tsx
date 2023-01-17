@@ -19,7 +19,8 @@ type iEventListProps = {
 const EventList = (props: iEventListProps) => {
   const { isCollapsed, onSelectCategory, predictionData } = props;
 
-  const { event: _event } = useCategory();
+  const { event: _event, date } = useCategory();
+  const isHistory = !!date;
   const event = _event as iEvent;
 
   const awardsBodyCategories = getAwardsBodyCategories(event.awardsBody, event.year);
@@ -72,7 +73,7 @@ const EventList = (props: iEventListProps) => {
               </SubHeader>
               {truncatedPredictions.length === 0 ? (
                 <HeaderLight style={{ marginLeft: theme.windowMargin }}>
-                  Add Predictions
+                  {isHistory ? 'No Predictions' : 'Add Predictions'}
                 </HeaderLight>
               ) : null}
               <MovieGrid

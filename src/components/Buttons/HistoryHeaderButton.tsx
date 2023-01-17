@@ -12,10 +12,15 @@ const HistoryHeaderButton = ({ isDisabled }: { isDisabled?: boolean }) => {
   const { date, setDate, event: _event } = useCategory();
   const isHistory = !!date;
   const event = _event as iEvent;
+  const isArchived = event.status === EventStatus.ARCHIVED;
 
   const onPress = () => {
+    if (isArchived) {
+      Snackbar.warning('Time Machine is always on when event is complete');
+      return;
+    }
     if (isDisabled) {
-      Snackbar.warning('History disabled while editing predictions');
+      Snackbar.warning('Time Machine disabled while editing predictions');
       return;
     }
     if (!isHistory) {
@@ -26,7 +31,7 @@ const HistoryHeaderButton = ({ isDisabled }: { isDisabled?: boolean }) => {
   };
 
   // hide if is archived
-  if (isDisabled || event.status === EventStatus.ARCHIVED) return null;
+  if (isDisabled) return null;
 
   return (
     <IconButton

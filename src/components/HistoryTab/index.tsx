@@ -77,7 +77,7 @@ const HistoryTab = () => {
         borderBottomColor: 'rgba(255,255,255,0.3)',
       }}
     >
-      <SubHeader style={{ marginBottom: 5, marginTop: 5 }}>Time Machine ON: </SubHeader>
+      <SubHeader style={{ marginBottom: 5, marginTop: 5 }}>Time Machine: </SubHeader>
       {!disableInput ? (
         // disableInput check is necessary bc date will handle clicks even when hidden
         <DateInput date={date} setDate={setDate} minDate={minDate} maxDate={maxDate} />

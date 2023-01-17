@@ -77,35 +77,37 @@ const MovieListDraggable = ({
         />
       }
       ListFooterComponent={
-        <View style={{ width: '100%', alignItems: 'center', marginTop: 10 }}>
-          <TouchableHighlight
-            style={{
-              width: '90%',
-              height: 40,
-              borderRadius: theme.borderRadius,
-              borderWidth: 1,
-              borderColor: COLORS.white,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-            underlayColor={COLORS.secondaryDark}
-            onPress={() => {
-              navigation.navigate('AddPredictions', {
-                initialPredictions: predictions,
-                onFinish: (predictions: iPrediction[]) => {
-                  console.log('predictions', predictions.length);
-                  setPredictions(predictions);
-                },
-              });
-            }}
-          >
-            <SubHeader>
-              {predictions.length === 0
-                ? `+ Add ${CATEGORY_TYPE_TO_STRING[category.type]}s`
-                : `Add/Delete ${CATEGORY_TYPE_TO_STRING[category.type]}s`}
-            </SubHeader>
-          </TouchableHighlight>
-        </View>
+        !isHistory ? (
+          <View style={{ width: '100%', alignItems: 'center', marginTop: 10 }}>
+            <TouchableHighlight
+              style={{
+                width: '90%',
+                height: 40,
+                borderRadius: theme.borderRadius,
+                borderWidth: 1,
+                borderColor: COLORS.white,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+              underlayColor={COLORS.secondaryDark}
+              onPress={() => {
+                navigation.navigate('AddPredictions', {
+                  initialPredictions: predictions,
+                  onFinish: (predictions: iPrediction[]) => {
+                    console.log('predictions', predictions.length);
+                    setPredictions(predictions);
+                  },
+                });
+              }}
+            >
+              <SubHeader>
+                {predictions.length === 0
+                  ? `+ Add ${CATEGORY_TYPE_TO_STRING[category.type]}s`
+                  : `Add/Delete ${CATEGORY_TYPE_TO_STRING[category.type]}s`}
+              </SubHeader>
+            </TouchableHighlight>
+          </View>
+        ) : null
       }
       renderItem={({ item: prediction, index: _index, drag, isActive }) => {
         const index = _index || 0;
