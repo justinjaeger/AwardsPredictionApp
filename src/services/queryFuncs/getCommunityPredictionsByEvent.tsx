@@ -17,7 +17,7 @@ const getCommunityPredictionsByEvent = async (event: iEvent, includeHidden = fal
     eventId,
   );
   const pSets = predictionSets?.communityPredictionSetByEventId?.items;
-  if (!pSets) return; // handle in some other way?
+  if (!pSets) return {}; // handle in some other way?
   // Format the prediction sets
   const data: iIndexedPredictionsByCategory = {};
   pSets.forEach((ps) => {
