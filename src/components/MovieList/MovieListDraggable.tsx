@@ -10,7 +10,9 @@ import theme from '../../constants/theme';
 import { useCategory } from '../../context/CategoryContext';
 import { iCategory, iEvent, iPrediction } from '../../types';
 import LastUpdatedText from '../LastUpdatedText';
-import ContenderListItem from '../List/ContenderList/ContenderListItem';
+import ContenderListItem, {
+  iContenderListItemProps,
+} from '../List/ContenderList/ContenderListItem';
 import ContenderListItemCondensed from '../List/ContenderList/ContenderListItemCondensed';
 import { SubHeader } from '../Text';
 
@@ -110,6 +112,19 @@ const MovieListDraggable = ({
       renderItem={({ item: prediction, index: _index, drag, isActive }) => {
         const index = _index || 0;
         const ranking = index + 1;
+        const listItemProps: iContenderListItemProps = {
+          variant: 'personal',
+          prediction,
+          ranking,
+          selected: selectedContenderId === prediction.contenderId,
+          onPressItem,
+          onPressThumbnail,
+          draggable: {
+            drag,
+            isActive,
+          },
+          categoryType: category.type,
+        };
         return (
           <>
             {index === slots ? (
@@ -122,33 +137,9 @@ const MovieListDraggable = ({
             ) : null}
             <ScaleDecorator activeScale={0.9}>
               {!isCollapsed ? (
-                <ContenderListItem
-                  variant={'personal'}
-                  prediction={prediction}
-                  ranking={ranking}
-                  selected={selectedContenderId === prediction.contenderId}
-                  onPressItem={onPressItem}
-                  onPressThumbnail={onPressThumbnail}
-                  draggable={{
-                    drag,
-                    isActive,
-                  }}
-                  categoryType={category.type}
-                />
+                <ContenderListItem {...listItemProps} />
               ) : (
-                <ContenderListItemCondensed
-                  variant={'personal'}
-                  prediction={prediction}
-                  ranking={ranking}
-                  selected={selectedContenderId === prediction.contenderId}
-                  onPressItem={onPressItem}
-                  onPressThumbnail={onPressThumbnail}
-                  draggable={{
-                    drag,
-                    isActive,
-                  }}
-                  categoryType={category.type}
-                />
+                <ContenderListItemCondensed {...listItemProps} />
               )}
             </ScaleDecorator>
           </>

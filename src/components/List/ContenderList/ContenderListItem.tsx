@@ -26,7 +26,7 @@ import AnimatedPoster from '../../Images/AnimatedPoster';
 import { Body, SubHeader } from '../../Text';
 import AccoladeTag from './AccoladeTag';
 
-type iContenderListItemProps = {
+export type iContenderListItemProps = {
   variant: 'community' | 'personal' | 'selectable' | 'search';
   prediction: iPrediction;
   categoryType: CategoryType;
