@@ -72,7 +72,10 @@ const HistoryTab = () => {
       }}
     >
       <SubHeader style={{ marginBottom: 5, marginTop: 5 }}>Time Machine ON: </SubHeader>
-      <DateInput date={date} setDate={setDate} minDate={minDate} maxDate={maxDate} />
+      {isHistory ? (
+        // isHistory check is necessary bc date will handle clicks even when hidden
+        <DateInput date={date} setDate={setDate} minDate={minDate} maxDate={maxDate} />
+      ) : null}
     </Animated.View>
   );
 };
