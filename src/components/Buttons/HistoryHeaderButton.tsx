@@ -17,6 +17,8 @@ const HistoryHeaderButton = ({ isDisabled }: { isDisabled?: boolean }) => {
     }
     if (!isHistory) {
       setDate(new Date());
+    } else {
+      setDate(undefined);
     }
   };
 

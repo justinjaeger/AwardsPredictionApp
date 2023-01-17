@@ -1,18 +1,21 @@
-import React, { useEffect } from 'react';
-import { View } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import { Animated } from 'react-native';
 import { EventStatus } from '../../API';
-import theme from '../../constants/theme';
 import { useCategory } from '../../context/CategoryContext';
 import { iEvent } from '../../types';
-import HeaderButton from '../HeaderButton';
 import { DateInput } from '../Inputs/DateInput';
-import { Body, SubHeader } from '../Text';
+import { SubHeader } from '../Text';
+
+const TAB_HEIGHT = 60;
 
 const HistoryTab = () => {
   const { event: _event, date, setDate } = useCategory();
   const event = _event as iEvent;
   const isArchived = event.status === EventStatus.ARCHIVED;
   const isHistory = !!date || isArchived;
+
+  const height = useRef(new Animated.Value(0)).current;
+  const opacity = useRef(new Animated.Value(0)).current;
 
   const dateOfClose = event.winDateTime ? new Date(event.winDateTime) : new Date();
   const today = new Date();
@@ -27,62 +30,50 @@ const HistoryTab = () => {
     }
   }, [event]);
 
-  const onClose = () => {
-    // reset date
-    if (date !== undefined) {
-      setDate(undefined);
+  useEffect(() => {
+    if (isHistory) {
+      Animated.timing(height, {
+        toValue: TAB_HEIGHT,
+        duration: 250,
+        useNativeDriver: false,
+      }).start(() => {
+        Animated.timing(opacity, {
+          toValue: 1,
+          duration: 250,
+          useNativeDriver: false,
+        }).start();
+      });
+    } else {
+      Animated.timing(opacity, {
+        toValue: 0,
+        duration: 250,
+        useNativeDriver: false,
+      }).start(() => {
+        Animated.timing(height, {
+          toValue: 0,
+          duration: 250,
+          useNativeDriver: false,
+        }).start();
+      });
     }
-  };
+  }, [isHistory]);
 
-  // if event is archived, it's always history; don't let user turn it off
-
-  if (!isHistory) return null; // TODO: make animation for when it collapses
   return (
-    <View
+    <Animated.View
       style={{
-        height: 90,
+        height,
+        opacity,
         width: '100%',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
+        flexDirection: 'row',
+        justifyContent: 'center',
         alignItems: 'center',
         borderBottomWidth: 0.5,
         borderBottomColor: 'rgba(255,255,255,0.3)',
-        paddingTop: 10,
-        paddingBottom: 10,
       }}
     >
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          width: '100%',
-          alignItems: 'center',
-        }}
-      >
-        <View style={{ width: '15%' }} />
-        <SubHeader style={{ marginBottom: 5 }}>Time Machine: ON</SubHeader>
-        <HeaderButton
-          style={{ marginRight: theme.windowMargin }}
-          icon={'close-outline'}
-          onPress={() => onClose()}
-        />
-      </View>
-      <View
-        style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}
-      >
-        <View
-          style={{
-            alignSelf: 'center',
-            marginLeft: theme.windowMargin,
-            flexDirection: 'row',
-            alignItems: 'center',
-          }}
-        >
-          <Body>View Predictions for: </Body>
-          <DateInput date={date} setDate={setDate} minDate={minDate} maxDate={maxDate} />
-        </View>
-      </View>
-    </View>
+      <SubHeader style={{ marginBottom: 5, marginTop: 5 }}>Time Machine ON: </SubHeader>
+      <DateInput date={date} setDate={setDate} minDate={minDate} maxDate={maxDate} />
+    </Animated.View>
   );
 };
 
