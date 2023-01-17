@@ -6,7 +6,6 @@ import {
   PredictionType,
 } from '../API';
 import { iEvent } from '../types';
-import { eventStatusToPredictionType } from './events';
 
 export type iCategoryData = { name: string; type: CategoryType; slots?: number };
 
@@ -27,10 +26,13 @@ export const IS_SHORTLISTED_TO_STRING: {
   [CategoryIsShortlisted.FALSE]: 'NOT Shortlisted',
 };
 
-export const getCategorySlots = (event: iEvent, categoryName: CategoryName) => {
-  const nominationsHaveHappened =
-    eventStatusToPredictionType(event.status) === PredictionType.WIN;
-  if (nominationsHaveHappened) return undefined;
+export const getCategorySlots = (
+  event: iEvent,
+  categoryName: CategoryName,
+  predictionType: PredictionType,
+) => {
+  // this could be history, so we need to check the prediction type specific to PredictionSet to see if predicting noms or wins
+  if (predictionType === PredictionType.WIN) return 1;
   const awardsBodyCategory = getAwardsBodyCategories(event.awardsBody, event.year);
   // Get number of slots in category (5 by default)
   return awardsBodyCategory[categoryName]?.slots || 5;

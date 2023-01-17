@@ -4,7 +4,6 @@ import {
   ContenderVisibility,
   PredictionType,
 } from '../../API';
-import { eventStatusToPredictionType } from '../../constants/events';
 import { iEvent, iIndexedPredictionsByCategory, iPrediction } from '../../types';
 import { isWithinLastMonth } from '../../util/isWithinLastMonth';
 import { sortCommunityPredictionsByRanking } from '../../util/sortPredictions';
@@ -42,7 +41,7 @@ const getCommunityPredictionsByEvent = async (event: iEvent, includeHidden = fal
       const contenderIsNotShortlisted =
         ps?.category.isShortlisted === CategoryIsShortlisted.TRUE && !contender.accolade;
       const contenderIsNotNominated =
-        eventStatusToPredictionType(event.status) === PredictionType.WIN &&
+        ps?.type === PredictionType.WIN &&
         contender.accolade !== ContenderAccolade.NOMINEE &&
         contender.accolade !== ContenderAccolade.WINNER;
       if (includeHidden) {
@@ -65,6 +64,7 @@ const getCommunityPredictionsByEvent = async (event: iEvent, includeHidden = fal
         ranking: p?.ranking || 0,
         accolade: contender.accolade || undefined,
         indexedRankings: indexedRankings,
+        predictionType: ps?.type || PredictionType.NOMINATION,
         visibility: contender.visibility || ContenderVisibility.VISIBLE,
         contenderId: contender.id || '',
         contenderMovie: contender.movie || undefined,

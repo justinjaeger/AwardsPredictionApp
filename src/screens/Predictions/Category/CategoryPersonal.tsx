@@ -63,7 +63,9 @@ const CategoryPersonal = ({
   };
 
   // We use the SAME KEY as the previous screen, because it avoids a re-fetch of the data which was available previously
-  const { mutate, isComplete } = useMutationUpdatePredictions(onComplete);
+  const { mutate: updatePredictions, isComplete } = useMutationUpdatePredictions(
+    onComplete,
+  );
   const { predictionData, isLoading } = usePredictionData('personal');
   const initialPredictions = predictionData
     ? predictionData[category.id]?.predictions || []
@@ -128,12 +130,13 @@ const CategoryPersonal = ({
       contenderId: p.contenderId,
       ranking: i + 1,
     }));
-    mutate({
+    const predictionType = eventStatusToPredictionType(event.status);
+    updatePredictions({
       predictionSetParams: {
         userId,
         categoryId: category.id,
         eventId: event.id,
-        type: eventStatusToPredictionType(event.status),
+        type: predictionType,
       },
       predictionData: newPredictionData,
     });

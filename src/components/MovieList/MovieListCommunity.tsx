@@ -4,7 +4,6 @@ import { Animated, FlatList, View } from 'react-native';
 import { PredictionType } from '../../API';
 import { getCategorySlots } from '../../constants/categories';
 import COLORS from '../../constants/colors';
-import { eventStatusToPredictionType } from '../../constants/events';
 import theme from '../../constants/theme';
 import { useCategory } from '../../context/CategoryContext';
 import { iCategory, iEvent, iPrediction } from '../../types';
@@ -41,10 +40,8 @@ const MovieListCommunity = ({
     }
   };
 
-  let slots = getCategorySlots(event, category.name);
-  const nominationsHaveHappened =
-    eventStatusToPredictionType(event.status) === PredictionType.WIN;
-  if (nominationsHaveHappened) slots = 1; // want to have the number one slot be sectioned off
+  const predictionType = predictions[0]?.predictionType || PredictionType.NOMINATION;
+  const slots = getCategorySlots(event, category.name, predictionType);
 
   return (
     <FlatList
@@ -72,7 +69,7 @@ const MovieListCommunity = ({
                   alignItems: 'center',
                 }}
               >
-                {nominationsHaveHappened ? (
+                {predictionType === PredictionType.WIN ? (
                   <View />
                 ) : (
                   <View>

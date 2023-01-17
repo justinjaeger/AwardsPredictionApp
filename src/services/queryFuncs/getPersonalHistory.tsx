@@ -1,4 +1,4 @@
-import { ContenderVisibility } from '../../API';
+import { ContenderVisibility, PredictionType } from '../../API';
 import { iIndexedPredictionsByCategory } from '../../types';
 import { sortPersonalPredictions } from '../../util/sortPredictions';
 import ApiServices from '../graphql';
@@ -19,6 +19,7 @@ const getPersonalHistory = async (eventId: string, userId: string, createdAt: Da
       ranking: p?.ranking || 0,
       accolade: p?.contender.accolade || undefined,
       visibility: p?.contender.visibility || ContenderVisibility.VISIBLE,
+      predictionType: ps?.type || PredictionType.NOMINATION,
       contenderId: p?.contenderId || '',
       contenderMovie: p?.contender.movie || undefined,
       contenderPerson: p?.contender.person || undefined,

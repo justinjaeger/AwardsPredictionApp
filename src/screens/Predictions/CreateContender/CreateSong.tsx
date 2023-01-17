@@ -10,7 +10,7 @@ import MovieListSearch from '../../../components/MovieList/MovieListSearch';
 import LoadingStatueModal from '../../../components/LoadingStatueModal';
 import useQueryCommunityEvent from '../../../hooks/queries/getCommunityEvent';
 import { FAB } from '../../../components/Buttons/FAB';
-import { CategoryType, ContenderVisibility } from '../../../API';
+import { CategoryType, ContenderVisibility, PredictionType } from '../../../API';
 import BasicModal from '../../../components/BasicModal';
 import useMutationCreateSongContender from '../../../hooks/mutations/createSongContender';
 import { compareSongKeys, getSongKey } from '../../../util/songKeys';
@@ -137,6 +137,7 @@ const CreateSong = (props: iCreateContenderProps) => {
     ranking: 0,
     accolade: undefined,
     visibility: ContenderVisibility.VISIBLE,
+    predictionType: PredictionType.NOMINATION, // they only add predictions for nominations
     contenderId: m.tmdbId.toString(),
     contenderMovie: {
       id: m.tmdbId.toString(),

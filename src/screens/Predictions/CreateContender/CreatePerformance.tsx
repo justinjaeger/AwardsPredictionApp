@@ -14,7 +14,7 @@ import { FAB } from '../../../components/Buttons/FAB';
 import useMutationCreateActingContender from '../../../hooks/mutations/createActingContender';
 import BasicModal from '../../../components/BasicModal';
 import { iCreateContenderProps } from '.';
-import { CategoryType, ContenderVisibility } from '../../../API';
+import { CategoryType, ContenderVisibility, PredictionType } from '../../../API';
 import { SubmitButton } from '../../../components/Buttons';
 import PerformanceListSelectable from '../../../components/MovieList/PerformanceListSelectable';
 import { useContenderSearch } from '../../../context/ContenderSearchContext';
@@ -147,6 +147,7 @@ const CreatePerformance = (props: iCreateContenderProps) => {
     ranking: 0,
     accolade: undefined,
     visibility: ContenderVisibility.VISIBLE,
+    predictionType: PredictionType.NOMINATION, // they only add predictions for nominations
     contenderId: m.tmdbId.toString(),
     contenderMovie: {
       id: m.tmdbId.toString(),
@@ -159,6 +160,7 @@ const CreatePerformance = (props: iCreateContenderProps) => {
     ranking: 0,
     accolade: undefined,
     visibility: ContenderVisibility.VISIBLE,
+    predictionType: PredictionType.NOMINATION, // they only add predictions for nominations
     contenderId: p.tmdbId.toString(),
     contenderPerson: {
       id: p.tmdbId.toString(),

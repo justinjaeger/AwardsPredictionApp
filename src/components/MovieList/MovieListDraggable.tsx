@@ -6,7 +6,6 @@ import DraggableFlatList, { ScaleDecorator } from 'react-native-draggable-flatli
 import { PredictionType } from '../../API';
 import { CATEGORY_TYPE_TO_STRING, getCategorySlots } from '../../constants/categories';
 import COLORS from '../../constants/colors';
-import { eventStatusToPredictionType } from '../../constants/events';
 import theme from '../../constants/theme';
 import { useCategory } from '../../context/CategoryContext';
 import { iCategory, iEvent, iPrediction } from '../../types';
@@ -46,10 +45,9 @@ const MovieListDraggable = ({
     }
   };
 
-  let slots = getCategorySlots(event, category.name);
-  const nominationsHaveHappened =
-    eventStatusToPredictionType(event.status) === PredictionType.WIN;
-  if (nominationsHaveHappened) slots = 1; // want to have the number one slot be sectioned off
+  const predictionType = predictions[0]?.predictionType || PredictionType.NOMINATION;
+
+  const slots = getCategorySlots(event, category.name, predictionType);
 
   const onPressItem = (item: iPrediction) => {
     const id = item.contenderId;

@@ -1,5 +1,9 @@
 const fetch = require('node-fetch').default;
-const { isWithinLastMonth, getContenderRank } = require('./utils');
+const {
+  isWithinLastMonth,
+  getContenderRank,
+  eventStatusToPredictionType,
+} = require('./utils');
 const {
   getOpenEventsRequest,
   predictionSetByEventIdRequest,
@@ -255,7 +259,7 @@ const createCommunityPredictions = async (
     for (const [eventId, indexedCategories] of Object.entries(indexedRankings)) {
       // get the event type (NOMINATION or WIN)
       const event = openEvents.find((event) => event.id === eventId);
-      const eventType = event?.type || 'NOMINATION';
+      const eventType = eventStatusToPredictionType(event.status);
       for (const [categoryId] of Object.entries(indexedCategories)) {
         const req = fetch(createCommunityPredictionSet(eventId, categoryId, eventType));
         createPredictionSetPromises.push(req);

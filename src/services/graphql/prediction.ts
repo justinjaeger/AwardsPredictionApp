@@ -84,7 +84,7 @@ const deletePredictionSetById = async (
 const createPredictionSet = async (
   params: iPredictionSetParams,
 ): Promise<iApiResponse<CreatePredictionSetMutation>> => {
-  const { userId, categoryId, eventId } = params;
+  const { userId, categoryId, eventId, type } = params;
   try {
     const { data, errors } = await GraphqlAPI<
       CreatePredictionSetMutation,
@@ -94,6 +94,7 @@ const createPredictionSet = async (
         userId,
         categoryId,
         eventId,
+        type,
       },
     });
     if (!data?.createPredictionSet) {
@@ -196,8 +197,6 @@ export type iPredictionData = {
   ranking: number;
 }[];
 
-// NOTE: not sure what this will return yet...
-// NOTE: Should make this atomic
 // Deletes all predictions for PredictionSet associated with user+category, then creates a new prediction set and predictions
 export const createOrUpdatePredictions = async (
   params: iPredictionSetParams,

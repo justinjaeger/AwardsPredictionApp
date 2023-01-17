@@ -11,7 +11,7 @@ import LoadingStatueModal from '../../../components/LoadingStatueModal';
 import useMutationCreateContender from '../../../hooks/mutations/createContender';
 import useQueryCommunityEvent from '../../../hooks/queries/getCommunityEvent';
 import { FAB } from '../../../components/Buttons/FAB';
-import { CategoryType, ContenderVisibility } from '../../../API';
+import { CategoryType, ContenderVisibility, PredictionType } from '../../../API';
 import { useContenderSearch } from '../../../context/ContenderSearchContext';
 import { iCreateContenderProps } from '../AddPredictions.tsx';
 
@@ -102,6 +102,7 @@ const CreateFilm = (props: iCreateContenderProps) => {
     ranking: 0,
     accolade: undefined,
     visibility: ContenderVisibility.VISIBLE,
+    predictionType: PredictionType.NOMINATION, // they only add predictions for nominations
     contenderId: m.tmdbId.toString(),
     contenderMovie: {
       id: m.tmdbId.toString(),

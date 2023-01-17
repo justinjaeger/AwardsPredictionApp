@@ -25,4 +25,19 @@ const getContenderRank = (numPredicting) => {
   }, 0);
 };
 
-module.exports = { isWithinLastMonth, getContenderRank };
+/**
+   INPUT: EventStatus:
+   - NOMS_STAGING # before nominations go public
+   - NOMS_LIVE # when everyone can predict nominations
+   - WINS_STAGING # when nominations are being announced + prepared
+   - WINS_LIVE # when everyone can predict wins
+   - ARCHIVED # when winners have been announced and such
+
+    OUTPUT: PredictionType
+    - NOMINATION
+    - WIN
+ */
+const eventStatusToPredictionType = (eventStatus) =>
+  ['NOMS_LIVE', 'NOMS_STAGING'].includes(eventStatus) ? 'NOMINATION' : 'WIN';
+
+module.exports = { isWithinLastMonth, getContenderRank, eventStatusToPredictionType };

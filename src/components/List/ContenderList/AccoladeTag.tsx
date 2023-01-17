@@ -1,30 +1,25 @@
 import React from 'react';
 import { View } from 'react-native';
-import { ContenderAccolade, EventStatus, PredictionType } from '../../../API';
+import { ContenderAccolade, PredictionType } from '../../../API';
 import COLORS from '../../../constants/colors';
-import {
-  ACCOLADE_TO_SHORTSTRING,
-  eventStatusToPredictionType,
-} from '../../../constants/events';
+import { ACCOLADE_TO_SHORTSTRING } from '../../../constants/events';
 import theme from '../../../constants/theme';
 import { Body } from '../../Text';
 
 const AccoladeTag = ({
   accolade,
-  eventStatus,
+  type,
   style,
 }: {
   accolade: ContenderAccolade;
-  eventStatus: EventStatus;
+  type: PredictionType;
   style?: any;
 }) => {
   // should only show accolade if it's a winner (when event is predicting winners), or nominee (when event is predicting nominees)
   const isWinner = accolade === ContenderAccolade.WINNER;
   const isNominee = accolade === ContenderAccolade.NOMINEE;
-  const isPredictingWinners =
-    eventStatusToPredictionType(eventStatus) === PredictionType.WIN;
-  const showWinTag = isPredictingWinners && isWinner;
-  const showNominationTag = !isPredictingWinners && isNominee;
+  const showWinTag = type === PredictionType.WIN && isWinner;
+  const showNominationTag = type === PredictionType.NOMINATION && (isNominee || isWinner);
 
   if (!showWinTag && !showNominationTag) return null;
 
