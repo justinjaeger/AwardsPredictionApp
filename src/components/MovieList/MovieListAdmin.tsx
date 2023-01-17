@@ -47,7 +47,7 @@ const MovieListAdmin = (props: iMovieListAdminProps) => {
                 style={{
                   margin: 10,
                   borderWidth: 0.5,
-                  borderColor: COLORS.secondaryDark,
+                  borderColor: COLORS.secondary,
                 }}
               />
             ) : null}

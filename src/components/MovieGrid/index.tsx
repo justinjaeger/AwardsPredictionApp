@@ -14,7 +14,8 @@ const MovieGrid = (props: {
   isCollapsed?: boolean;
   noLine?: boolean;
 }) => {
-  const { predictions, isCollapsed, noLine } = props;
+  const { predictions, isCollapsed } = props;
+  let noLine = props.noLine;
   const { width } = useWindowDimensions();
   const { event, category } = useCategory();
 
@@ -22,9 +23,10 @@ const MovieGrid = (props: {
 
   // don't want to show divider after noms have happened
   const slots =
-    event && category
-      ? getCategorySlots(event, category.name, predictionType)
-      : undefined;
+    event && category ? getCategorySlots(event, category.name, predictionType) : 1;
+  if (slots === 1) {
+    noLine = true;
+  }
 
   return (
     <View
@@ -53,7 +55,7 @@ const MovieGrid = (props: {
           ) : null}
           {p.contenderMovie ? (
             <>
-              {!noLine && slots && i >= slots && i < slots + 5 ? (
+              {!noLine && i >= slots && i < slots + 5 ? (
                 // we want to give a margin on top if this is the row beneath the divider (since divider is absolute pos)
                 <View style={{ marginTop: 20 }} />
               ) : null}
