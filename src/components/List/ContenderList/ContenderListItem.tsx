@@ -224,8 +224,8 @@ const ContenderListItem = (props: iContenderListItemProps) => {
             ? COLORS.secondaryDark
             : 'transparent',
         width: '100%',
-        paddingTop: theme.windowMargin / 4,
-        paddingBottom: theme.windowMargin / 4,
+        paddingTop: theme.windowMargin / 8,
+        paddingBottom: theme.windowMargin / 8,
         flexDirection: 'row',
         paddingLeft: theme.windowMargin,
       }}
