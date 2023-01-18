@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, Keyboard } from 'react-native';
 import { CategoryType } from '../../API';
 import { iPrediction } from '../../types';
 import ContenderListItem from '../List/ContenderList/ContenderListItem';
@@ -23,6 +23,7 @@ const SongListSelectable = (props: iSongListSearchProps) => {
   }, [predictions.length]);
 
   const onPressItem = (prediction: iPrediction) => {
+    Keyboard.dismiss();
     const tmdbId = prediction.contenderMovie?.tmdbId;
     const songTitle = prediction.contenderSong?.title;
     if (!tmdbId || !songTitle) return;
@@ -40,6 +41,9 @@ const SongListSelectable = (props: iSongListSearchProps) => {
       data={predictions}
       keyExtractor={(item) => item.contenderId}
       style={{ width: '100%' }}
+      onScroll={() => {
+        Keyboard.dismiss();
+      }}
       contentContainerStyle={{ paddingBottom: disablePaddingBottom ? 0 : 200 }}
       renderItem={({ item: prediction, index: i }) => {
         const tmdbId = prediction.contenderMovie?.tmdbId;

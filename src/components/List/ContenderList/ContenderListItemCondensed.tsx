@@ -1,5 +1,7 @@
+import MaskedView from '@react-native-masked-view/masked-view';
 import React, { useState } from 'react';
 import { TouchableHighlight, useWindowDimensions, View } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 import {
   CategoryIsShortlisted,
   CategoryType,
@@ -86,20 +88,27 @@ const ContenderListItemCondensed = (props: iContenderListItemProps) => {
     }
   }, [tmdbMovieId]);
 
+  const categoryName = category.name;
+  const catInfo = tmdbMovie?.categoryInfo?.[categoryName];
+  const categoryInfo = catInfo ? catInfo?.join(', ') : undefined;
   const indexedRankings =
     variant === 'community' ? prediction.indexedRankings : undefined;
 
   let title = '';
+  let subtitle = '';
   switch (categoryType) {
     case CategoryType.FILM:
       title = tmdbMovie?.title || '';
+      subtitle = categoryInfo || '';
       break;
     case CategoryType.PERFORMANCE:
       if (!tmdbPerson) break;
       title = tmdbPerson?.name || '';
+      subtitle = tmdbMovie?.title || '';
       break;
     case CategoryType.SONG:
       title = prediction.contenderSong?.title || '';
+      subtitle = tmdbMovie?.title || '';
       break;
   }
 
@@ -161,9 +170,12 @@ const ContenderListItemCondensed = (props: iContenderListItemProps) => {
               overflow: 'hidden',
               height: itemHeight,
               flexDirection: 'row',
+              alignItems: 'center',
+              marginRight: 10,
             }}
           >
             <SubHeader style={{ marginLeft: 10, marginRight: 5 }}>{title}</SubHeader>
+            {subtitle && subtitle !== '' ? <Body>{'• ' + subtitle}</Body> : null}
             {isHistory && prediction.accolade ? (
               <AccoladeTag
                 accolade={prediction.accolade}
@@ -176,19 +188,11 @@ const ContenderListItemCondensed = (props: iContenderListItemProps) => {
               {nominationsHaveHappened ? (
                 <View />
               ) : (
-                <View
-                  style={{
-                    width: RIGHT_COL_WIDTH / 2,
-                  }}
-                >
+                <View style={{ width: RIGHT_COL_WIDTH / 2.8 }}>
                   <Body style={{ textAlign: 'right' }}>{nom.toString()}</Body>
                 </View>
               )}
-              <View
-                style={{
-                  width: RIGHT_COL_WIDTH / 2,
-                }}
-              >
+              <View style={{ width: RIGHT_COL_WIDTH / 2.2 }}>
                 <Body style={{ textAlign: 'right' }}>{win.toString()}</Body>
               </View>
             </View>

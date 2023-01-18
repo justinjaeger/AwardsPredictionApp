@@ -21,7 +21,7 @@ import TmdbServices from '../../../services/tmdb';
 import { iCategory, iEvent, iPrediction } from '../../../types';
 import { getNumPredicting } from '../../../util/getNumPredicting';
 import { useAsyncEffect } from '../../../util/hooks';
-import CustomIcon from '../../CustomIcon';
+import { IconButton } from '../../Buttons/IconButton';
 import AnimatedPoster from '../../Images/AnimatedPoster';
 import { Body, SubHeader } from '../../Text';
 import AccoladeTag from './AccoladeTag';
@@ -224,8 +224,8 @@ const ContenderListItem = (props: iContenderListItemProps) => {
             ? COLORS.secondaryDark
             : 'transparent',
         width: '100%',
-        paddingTop: theme.windowMargin / 4,
-        paddingBottom: theme.windowMargin / 4,
+        paddingTop: theme.windowMargin / 8,
+        paddingBottom: theme.windowMargin / 8,
         flexDirection: 'row',
         paddingLeft: theme.windowMargin,
       }}
@@ -258,6 +258,7 @@ const ContenderListItem = (props: iContenderListItemProps) => {
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
+              height: '100%',
             }}
           >
             <MaskedView
@@ -327,15 +328,20 @@ const ContenderListItem = (props: iContenderListItemProps) => {
               </View>
             ) : null}
             {variant === 'personal' && !isHistory ? (
-              <View
-                style={{
+              <IconButton
+                iconProps={{ name: 'menu', size: 24 }}
+                color={COLORS.white}
+                enableOnPressIn
+                onPress={drag || (() => {})}
+                styles={{
                   height: SMALL_POSTER,
+                  width: 40,
                   justifyContent: 'center',
                   marginRight: 13,
+                  alignSelf: 'center',
+                  alignItems: 'center',
                 }}
-              >
-                <CustomIcon name={'menu'} color={COLORS.white} size={24} />
-              </View>
+              />
             ) : null}
           </View>
           {/* TODO: Instead of linking to IMDB, display a bunch of info from TMDB */}

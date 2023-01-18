@@ -31,7 +31,7 @@ The ultimate collection of production-ready, flexible and accessible React Nativ
 
 ## 🚀 Getting started
 
-The best way to start with the template is to [click here](https://github.com/joeygoksu/LightReactNative/generate).
+The best way to start with the template is to [click here](https://github.com/joeygoksu/awardspredictionapp/generate).
 
 Run the `setup.sh` inside the project folder:
 

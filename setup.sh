@@ -1,6 +1,6 @@
 #!/bin/bash
 
-projectName="LightReactNative"
+projectName="awardspredictionapp"
 projectName2="lightreactnative"
 
 
@@ -46,7 +46,7 @@ initializeGit() {
 }
 
 
-echo "--------- @joeygoksu/LightReactNative --------"
+echo "--------- @joeygoksu/awardspredictionapp --------"
 echo
 
 echo "❓  What is the name of the new project? "

@@ -32,7 +32,6 @@ const SearchInput = (props: {
         onBlur={onBlur}
         status={status || 'basic'}
         style={{
-          marginBottom: 10,
           borderRadius: 100,
           borderWidth: 0,
           backgroundColor: COLORS.primaryLight,

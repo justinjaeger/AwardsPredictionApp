@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, Keyboard } from 'react-native';
 import { CategoryType } from '../../API';
 import { iPrediction } from '../../types';
 import ContenderListItem from '../List/ContenderList/ContenderListItem';
@@ -30,6 +30,7 @@ const MovieListSearch = (props: iMovieListProps) => {
   };
 
   const onPressItem = (prediction: iPrediction) => {
+    Keyboard.dismiss();
     const tmdbId = getTmdbId(prediction);
     if (tmdbId === selectedTmdbId) {
       setSelectedTmdbId(undefined);
@@ -44,6 +45,9 @@ const MovieListSearch = (props: iMovieListProps) => {
       data={predictions}
       keyExtractor={(item) => item.contenderId}
       style={{ width: '100%' }}
+      onScroll={() => {
+        Keyboard.dismiss();
+      }}
       contentContainerStyle={{ paddingBottom: disablePaddingBottom ? 0 : 200 }}
       renderItem={({ item: prediction, index: i }) => {
         const tmdbId = getTmdbId(prediction);

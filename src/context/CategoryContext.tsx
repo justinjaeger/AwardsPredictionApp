@@ -21,6 +21,7 @@ type iCategoryContext = {
   personalCommunityTab: iPersonalCommunityTab;
   setPersonalCommunityTab: (d: iPersonalCommunityTab) => void;
   displayContenderInfo: (contenderId: string, personTmdbId?: number) => void;
+  reset: () => void;
 };
 
 const CategoryContext = createContext<iCategoryContext>({
@@ -35,6 +36,7 @@ const CategoryContext = createContext<iCategoryContext>({
   personalCommunityTab: 'personal',
   setPersonalCommunityTab: () => {},
   displayContenderInfo: () => {},
+  reset: () => {},
 });
 
 // TODO: think we can delete eventId since not using it
@@ -89,6 +91,11 @@ export const CategoryProvider = (props: { children: React.ReactNode }) => {
     }
   };
 
+  const reset = () => {
+    setPersonalCommunityTab('personal');
+    setDate(undefined);
+  };
+
   return (
     <CategoryContext.Provider
       value={{
@@ -103,6 +110,7 @@ export const CategoryProvider = (props: { children: React.ReactNode }) => {
         date,
         setDate,
         displayContenderInfo,
+        reset,
       }}
     >
       {props.children}
