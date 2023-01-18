@@ -11,7 +11,6 @@ export type MainParamList = {
 };
 
 export type PredictionsParamList = {
-  Profile: undefined;
   EventSelect: undefined;
   Event: undefined;
   Category: {

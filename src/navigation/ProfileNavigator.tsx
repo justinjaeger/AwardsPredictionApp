@@ -20,7 +20,6 @@ const ProfileNavigator = () => (
       component={Profile}
       options={{
         headerTitle: getHeaderTitle('My Profile'),
-        headerLeft: BackButton,
         ...headerSettings,
       }}
     />

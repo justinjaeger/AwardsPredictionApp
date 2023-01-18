@@ -29,15 +29,9 @@ export const SubmitButton = (props: iButtonProps) => (
     }}
     underlayColor={COLORS.secondary}
   >
-    <View style={{ height: '100%', justifyContent: 'center' }}>
+    <View style={{ height: '100%', justifyContent: 'center', alignItems: 'center' }}>
       {props.loading ? (
-        () => (
-          <Spinner
-            size="medium"
-            status="control"
-            style={{ backgroundColor: COLORS.white }}
-          />
-        )
+        <Spinner size="medium" style={{ borderColor: COLORS.gray }} />
       ) : (
         <BodyBold
           style={{

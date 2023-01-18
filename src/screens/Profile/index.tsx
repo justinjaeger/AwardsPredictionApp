@@ -55,7 +55,7 @@ const Profile = () => {
         />
       ),
     });
-  }, []);
+  }, [userId]);
 
   useSubscriptionEffect(async () => {
     if (!userId) return;
@@ -103,14 +103,14 @@ const Profile = () => {
       <ScrollView
         contentContainerStyle={{ alignItems: 'center', marginTop: 40, width: '100%' }}
       >
-        <SubmitButton text={'Upload Image'} onPress={onUpload} />
-        {profileUri ? (
-          <Image style={{ width: 200, height: 200 }} source={{ uri: profileUri }} />
-        ) : null}
         {!userId ? (
           <SubmitButton text={userEmail ? 'Log in' : 'Create Account'} onPress={logIn} />
         ) : (
           <>
+            {profileUri ? (
+              <Image style={{ width: 200, height: 200 }} source={{ uri: profileUri }} />
+            ) : null}
+            <SubmitButton text={'Upload Image'} onPress={onUpload} />
             <TouchableText
               text={user?.getUser?.username ? 'Change Username' : 'Create Username'}
               onPress={() => {

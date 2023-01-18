@@ -7,7 +7,6 @@ import { PredictionsParamList } from './types';
 import Category from '../screens/Predictions/Category';
 import EventSelect from '../screens/Predictions/EventSelect';
 import Event from '../screens/Predictions/Event';
-import ProfileNavigator from './ProfileNavigator';
 import theme from '../constants/theme';
 import { getHeaderTitle, headerSettings } from '../constants';
 import AddPredictions from '../screens/Predictions/AddPredictions.tsx';
@@ -18,17 +17,6 @@ const { Navigator, Screen } = createStackNavigator<PredictionsParamList>();
 const PredictionsNavigator = () => {
   return (
     <Navigator initialRouteName="EventSelect" headerMode="screen">
-      <Screen
-        name="Profile"
-        component={ProfileNavigator}
-        options={{
-          headerShown: false,
-          headerTitle: 'Profile',
-          headerTitleStyle: {
-            color: 'white',
-          },
-        }}
-      />
       <Screen
         name="EventSelect"
         component={EventSelect}

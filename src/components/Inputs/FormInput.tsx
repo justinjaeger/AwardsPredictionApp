@@ -71,7 +71,7 @@ const FormInput = (props: {
       textStyle={{ color: COLORS.white }}
       style={{
         marginBottom: 10,
-        backgroundColor: COLORS.primary,
+        backgroundColor: 'transparent',
         borderColor: COLORS.white,
         ...style,
       }}

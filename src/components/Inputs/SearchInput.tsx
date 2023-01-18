@@ -66,11 +66,7 @@ const SearchInput = (props: {
             height: HEADER_HEIGHT,
           }}
         >
-          <Spinner
-            size="medium"
-            status="secondary"
-            style={{ borderColor: COLORS.gray }}
-          />
+          <Spinner size="medium" style={{ borderColor: COLORS.gray }} />
         </View>
       ) : null}
     </View>
