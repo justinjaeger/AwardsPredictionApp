@@ -1,5 +1,7 @@
+import MaskedView from '@react-native-masked-view/masked-view';
 import React, { useState } from 'react';
 import { TouchableHighlight, useWindowDimensions, View } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 import {
   CategoryIsShortlisted,
   CategoryType,
@@ -186,19 +188,11 @@ const ContenderListItemCondensed = (props: iContenderListItemProps) => {
               {nominationsHaveHappened ? (
                 <View />
               ) : (
-                <View
-                  style={{
-                    width: RIGHT_COL_WIDTH / 2,
-                  }}
-                >
+                <View style={{ width: RIGHT_COL_WIDTH / 2.8 }}>
                   <Body style={{ textAlign: 'right' }}>{nom.toString()}</Body>
                 </View>
               )}
-              <View
-                style={{
-                  width: RIGHT_COL_WIDTH / 2,
-                }}
-              >
+              <View style={{ width: RIGHT_COL_WIDTH / 2.2 }}>
                 <Body style={{ textAlign: 'right' }}>{win.toString()}</Body>
               </View>
             </View>
