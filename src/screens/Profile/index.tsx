@@ -1,26 +1,41 @@
-import React, { useLayoutEffect, useState } from 'react';
-import { Alert, ScrollView, Image } from 'react-native';
-import { SubmitButton, TouchableText } from '../../components/Buttons';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
+import {
+  Alert,
+  ScrollView,
+  Image,
+  View,
+  TouchableHighlight,
+  useWindowDimensions,
+} from 'react-native';
+import { SubmitButton } from '../../components/Buttons';
 import AuthServices from '../../services/auth';
 import Snackbar from '../../components/Snackbar';
-import { useNavigation } from '@react-navigation/native';
-import { Body } from '../../components/Text';
-import ApiServices from '../../services/graphql';
-import { useSubscriptionEffect } from '../../util/hooks';
-import { GetUserQuery } from '../../API';
+import { HeaderLight, SubHeader } from '../../components/Text';
 import { useAuth } from '../../context/UserContext';
 import BackgroundWrapper from '../../components/BackgroundWrapper';
 import { IconButton } from '../../components/Buttons/IconButton';
 import { launchImageLibrary } from 'react-native-image-picker';
 import AWSStorage from '../../services/storage';
+import { useNavigation } from '@react-navigation/native';
+import useQueryGetUser from '../../hooks/queries/getUser';
+import theme from '../../constants/theme';
 
 const Profile = () => {
   const { userId, userEmail, signOutUser } = useAuth(); // later import userId
   const navigation = useNavigation();
+  const { width } = useWindowDimensions();
 
-  const [user, setUser] = useState<GetUserQuery>();
+  const { data: user } = useQueryGetUser(userId);
   const [loading, setLoading] = useState<boolean>(false);
   const [profileUri, setProfileUri] = useState<string | undefined>(undefined);
+
+  const isDeviceProfile = user && userId && user?.id === userId;
+
+  useEffect(() => {
+    if (!userId) {
+      navigation.navigate('ChangeUsername');
+    }
+  }, [userId]);
 
   // put the logout button in the top right corner
   useLayoutEffect(() => {
@@ -57,14 +72,6 @@ const Profile = () => {
     });
   }, [userId]);
 
-  useSubscriptionEffect(async () => {
-    if (!userId) return;
-    const { data: u } = await ApiServices.getUser(userId);
-    if (u) {
-      setUser(u);
-    }
-  }, [userId]);
-
   const logIn = () => {
     navigation.navigate('Authenticator');
   };
@@ -98,27 +105,75 @@ const Profile = () => {
     }
   };
 
+  const proportion = 3 / 10;
+  const imageContainerWidth = width * proportion;
+  const usernameContainerWidth = width * (1 - proportion);
+
   return (
     <BackgroundWrapper>
       <ScrollView
-        contentContainerStyle={{ alignItems: 'center', marginTop: 40, width: '100%' }}
+        style={{ width: '100%' }}
+        contentContainerStyle={{ alignItems: 'center', marginTop: 20, width: '100%' }}
       >
         {!userId ? (
-          <SubmitButton text={userEmail ? 'Log in' : 'Create Account'} onPress={logIn} />
+          <SubmitButton
+            style={{ marginTop: 20 }}
+            text={userEmail ? 'Log in' : 'Create Account'}
+            onPress={logIn}
+          />
         ) : (
           <>
+            <View
+              style={{
+                width: width,
+                alignItems: 'center',
+                flexDirection: 'row',
+                height: 100,
+                padding: theme.windowMargin,
+              }}
+            >
+              <View style={{ width: imageContainerWidth }}>
+                <TouchableHighlight
+                  onPress={isDeviceProfile ? onUpload : undefined}
+                  style={{
+                    height: 100,
+                    width: 100,
+                    borderRadius: 100,
+                    paddingLeft: 10,
+                    backgroundColor: 'red',
+                  }}
+                >
+                  <View />
+                </TouchableHighlight>
+              </View>
+              <View style={{ flexDirection: 'column' }}>
+                <TouchableHighlight
+                  onPress={
+                    isDeviceProfile
+                      ? () => {
+                          navigation.navigate('ChangeUsername');
+                        }
+                      : undefined
+                  }
+                >
+                  <HeaderLight>
+                    {user?.username ? user.username : 'No Username'}
+                  </HeaderLight>
+                </TouchableHighlight>
+                <View style={{ width: usernameContainerWidth }}>
+                  {isDeviceProfile ? (
+                    <View style={{ height: 20 }} />
+                  ) : (
+                    <SubHeader style={{ paddingRight: 10 }}>
+                      {'Must create username for users to find you'}
+                    </SubHeader>
+                  )}
+                </View>
+              </View>
+            </View>
             {profileUri ? (
               <Image style={{ width: 200, height: 200 }} source={{ uri: profileUri }} />
             ) : null}
-            <SubmitButton text={'Upload Image'} onPress={onUpload} />
-            <TouchableText
-              text={user?.getUser?.username ? 'Change Username' : 'Create Username'}
-              onPress={() => {
-                navigation.navigate('ChangeUsername', { user });
-              }}
-              style={{ marginTop: 30 }}
-            />
-            <Body style={{ marginTop: 30 }}>{JSON.stringify(user)}</Body>
           </>
         )}
       </ScrollView>

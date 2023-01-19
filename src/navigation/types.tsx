@@ -35,4 +35,5 @@ export type AdminParamList = {
 
 export type ProfileParamList = {
   Profile: undefined;
+  ChangeUsername: undefined;
 };

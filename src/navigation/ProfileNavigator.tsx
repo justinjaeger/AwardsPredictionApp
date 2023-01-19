@@ -27,7 +27,7 @@ const ProfileNavigator = () => (
       name="ChangeUsername"
       component={ChangeUsername}
       options={{
-        headerTitle: getHeaderTitle('Create Username'),
+        headerTitle: getHeaderTitle('Enter Username'),
         headerLeft: BackButton,
         ...headerSettings,
       }}

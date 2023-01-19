@@ -6,7 +6,18 @@ import { titleCase } from 'title-case';
 import COLORS from '../../constants/colors';
 import { Body } from '../Text';
 
-const FormInput = (props: {
+const FormInput = ({
+  label,
+  value,
+  setValue,
+  textContentType,
+  isYear,
+  caption,
+  onBlur,
+  status,
+  style,
+  autoFocus,
+}: {
   label: string;
   value: string;
   setValue: (v: string) => void;
@@ -16,19 +27,8 @@ const FormInput = (props: {
   onBlur?: () => void;
   status?: EvaStatus;
   style?: any;
+  autoFocus?: boolean;
 }) => {
-  const {
-    label,
-    value,
-    setValue,
-    textContentType,
-    isYear,
-    caption,
-    onBlur,
-    status,
-    style,
-  } = props;
-
   const onChangeText = (v: string) => {
     if (isYear) {
       if (/^[0-9]*$/.test(v) === true && v.length <= 4) {
@@ -69,6 +69,7 @@ const FormInput = (props: {
       onBlur={onBlur}
       status={status || 'basic'}
       textStyle={{ color: COLORS.white }}
+      autoFocus={autoFocus}
       style={{
         marginBottom: 10,
         backgroundColor: 'transparent',
