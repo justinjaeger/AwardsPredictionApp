@@ -19,15 +19,15 @@
       "function": {
         "updateCommunityPredictions": {
           "deploymentBucketName": "amplify-awardsapp-dev-115717-deployment",
-          "s3Key": "amplify-builds/updateCommunityPredictions-5844344168436a624845-build.zip"
+          "s3Key": "amplify-builds/updateCommunityPredictions-3052447230497655546e-build.zip"
         },
         "updatePersonalHistory": {
           "deploymentBucketName": "amplify-awardsapp-dev-115717-deployment",
-          "s3Key": "amplify-builds/updatePersonalHistory-37505963517168716354-build.zip"
+          "s3Key": "amplify-builds/updatePersonalHistory-6e326d42714e6a6f4566-build.zip"
         },
         "updateCommunityHistory": {
           "deploymentBucketName": "amplify-awardsapp-dev-115717-deployment",
-          "s3Key": "amplify-builds/updateCommunityHistory-3776386f737648785338-build.zip"
+          "s3Key": "amplify-builds/updateCommunityHistory-68443274556978774d4b-build.zip"
         }
       }
     }
