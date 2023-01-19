@@ -132,21 +132,20 @@ const Profile = () => {
                 padding: theme.windowMargin,
               }}
             >
-              <View style={{ width: imageContainerWidth }}>
+              <View style={{ width: imageContainerWidth, paddingLeft: 10 }}>
                 <TouchableHighlight
                   onPress={isDeviceProfile ? onUpload : undefined}
                   style={{
                     height: 100,
                     width: 100,
                     borderRadius: 100,
-                    paddingLeft: 10,
                     backgroundColor: 'red',
                   }}
                 >
                   <View />
                 </TouchableHighlight>
               </View>
-              <View style={{ flexDirection: 'column' }}>
+              <View style={{ flexDirection: 'column', paddingLeft: 10 }}>
                 <TouchableHighlight
                   onPress={
                     isDeviceProfile
@@ -155,18 +154,21 @@ const Profile = () => {
                         }
                       : undefined
                   }
+                  underlayColor={'transaparent'}
                 >
                   <HeaderLight>
                     {user?.username ? user.username : 'No Username'}
                   </HeaderLight>
                 </TouchableHighlight>
                 <View style={{ width: usernameContainerWidth }}>
-                  {isDeviceProfile ? (
-                    <View style={{ height: 20 }} />
+                  {isDeviceProfile && !user?.username ? (
+                    <View onTouchEnd={() => navigation.navigate('ChangeUsername')}>
+                      <SubHeader style={{ paddingRight: 20 }}>
+                        {'Must create username for others to find you'}
+                      </SubHeader>
+                    </View>
                   ) : (
-                    <SubHeader style={{ paddingRight: 10 }}>
-                      {'Must create username for users to find you'}
-                    </SubHeader>
+                    <View style={{ height: 20 }} />
                   )}
                 </View>
               </View>
