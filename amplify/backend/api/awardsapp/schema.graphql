@@ -103,8 +103,6 @@ enum CategoryName {
     BREAKTHROUGH
 }
 
-# Eventually need to go through this and add secondary indexes where appropriate
-
 type User @model @auth(rules: [{allow: public}]) {
     id: ID! @primaryKey
     email: String!
@@ -113,6 +111,9 @@ type User @model @auth(rules: [{allow: public}]) {
     bio: String
     image: String
     role: UserRole! @default(value: "USER")
+    # ON FRONTEND: perform this query but don't include nested "predictions"
+    # Just return the predictionSets and sort by createdAt, then display the most recent ones
+    predictionSets: [PredictionSet] @hasMany(indexName: "byUser" fields: ["id"])
 }
 
 type Relationship @model @auth(rules: [{ allow: public }]) {
@@ -184,7 +185,7 @@ type Song @model @auth(rules: [{ allow: public }]) {
 # CURRENT PERSONAL
 type PredictionSet @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
-    userId: ID! @index(sortKeyFields: ["eventId"], queryField: "predictionSetByUserIdAndEventId") # used forgetting a user's predictions for a particular event
+    userId: ID! @index(name: "byUser", sortKeyFields: ["eventId"], queryField: "predictionSetByUserIdAndEventId")
     user: User! @hasOne(fields: ["userId"])
     eventId: ID! @index(queryField: "predictionSetByEventId") # used for compiling community predictions
     event: Event! @hasOne(fields: ["eventId"])
