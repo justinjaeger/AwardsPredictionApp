@@ -9,10 +9,14 @@ export const pathToImageFile = async (uri: string, email: string) => {
   //   console.log('key', key);
 
   try {
-    const user = await Auth.currentAuthenticatedUser();
-    console.log('userrrrrr', user);
-    const res = await Storage.list('');
-    console.log('res', res);
+    // const user = await Auth.currentAuthenticatedUser();
+    // console.log('userrrrrr', user);
+    // const res = await Storage.list('');
+    // upload a simple text file and attempt to retrieve it, or one that exists if put() fails
+    // const res: any = await Storage.put('test.txt', 'This is some sample text');
+    // console.log('res1', res);
+    const res = await Storage.get('text.txt');
+    console.log('res2', res);
     // const response = await fetch(uri);
     // console.log('response', response);
     // const blob = await response.blob();
