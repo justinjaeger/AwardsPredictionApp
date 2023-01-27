@@ -82,6 +82,24 @@ export type iIndexedEvents = {
   [eventId: string]: iEvent;
 };
 
+export type iPredictionSet = {
+  id: string;
+  event: {
+    id: string;
+    awardsBody: AwardsBody;
+    year: number;
+    status: EventStatus;
+  };
+  category: {
+    id: string;
+    name: CategoryName;
+    type: CategoryType;
+    isShortlisted: CategoryIsShortlisted;
+  };
+  predictions: iPrediction[];
+  createdAt: string;
+};
+
 export type iUser = {
   id: string;
   email: string;
@@ -90,4 +108,5 @@ export type iUser = {
   bio: string | undefined;
   image: string | undefined;
   role: UserRole;
+  predictionSets?: iPredictionSet[];
 };

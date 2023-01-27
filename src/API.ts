@@ -608,6 +608,7 @@ export type CreatePredictionSetInput = {
   eventId: string,
   categoryId: string,
   type?: PredictionType | null,
+  createdAt?: string | null,
 };
 
 export type ModelPredictionSetConditionInput = {
@@ -615,6 +616,7 @@ export type ModelPredictionSetConditionInput = {
   eventId?: ModelIDInput | null,
   categoryId?: ModelIDInput | null,
   type?: ModelPredictionTypeInput | null,
+  createdAt?: ModelStringInput | null,
   and?: Array< ModelPredictionSetConditionInput | null > | null,
   or?: Array< ModelPredictionSetConditionInput | null > | null,
   not?: ModelPredictionSetConditionInput | null,
@@ -631,6 +633,7 @@ export type UpdatePredictionSetInput = {
   eventId?: string | null,
   categoryId?: string | null,
   type?: PredictionType | null,
+  createdAt?: string | null,
 };
 
 export type DeletePredictionSetInput = {
@@ -1074,6 +1077,7 @@ export type ModelPredictionSetFilterInput = {
   eventId?: ModelIDInput | null,
   categoryId?: ModelIDInput | null,
   type?: ModelPredictionTypeInput | null,
+  createdAt?: ModelStringInput | null,
   and?: Array< ModelPredictionSetFilterInput | null > | null,
   or?: Array< ModelPredictionSetFilterInput | null > | null,
   not?: ModelPredictionSetFilterInput | null,
@@ -1183,6 +1187,16 @@ export type ModelIDKeyConditionInput = {
   beginsWith?: string | null,
 };
 
+export type ModelStringKeyConditionInput = {
+  eq?: string | null,
+  le?: string | null,
+  lt?: string | null,
+  ge?: string | null,
+  gt?: string | null,
+  between?: Array< string | null > | null,
+  beginsWith?: string | null,
+};
+
 export type ModelHistoryPredictionSetHistoryPredictionSetsByUserIdAndEventIdAndCreatedAtCompositeKeyConditionInput = {
   eq?: ModelHistoryPredictionSetHistoryPredictionSetsByUserIdAndEventIdAndCreatedAtCompositeKeyInput | null,
   le?: ModelHistoryPredictionSetHistoryPredictionSetsByUserIdAndEventIdAndCreatedAtCompositeKeyInput | null,
@@ -1196,16 +1210,6 @@ export type ModelHistoryPredictionSetHistoryPredictionSetsByUserIdAndEventIdAndC
 export type ModelHistoryPredictionSetHistoryPredictionSetsByUserIdAndEventIdAndCreatedAtCompositeKeyInput = {
   eventId?: string | null,
   createdAt?: string | null,
-};
-
-export type ModelStringKeyConditionInput = {
-  eq?: string | null,
-  le?: string | null,
-  lt?: string | null,
-  ge?: string | null,
-  gt?: string | null,
-  between?: Array< string | null > | null,
-  beginsWith?: string | null,
 };
 
 export type UpdateCommunityPredictionsMutationVariables = {
@@ -15683,6 +15687,237 @@ export type PredictionSetByUserIdAndEventIdQueryVariables = {
 
 export type PredictionSetByUserIdAndEventIdQuery = {
   predictionSetByUserIdAndEventId?:  {
+    __typename: "ModelPredictionSetConnection",
+    items:  Array< {
+      __typename: "PredictionSet",
+      id: string,
+      userId: string,
+      user:  {
+        __typename: "User",
+        id: string,
+        email: string,
+        username?: string | null,
+        name?: string | null,
+        bio?: string | null,
+        image?: string | null,
+        role: UserRole,
+        predictionSets?:  {
+          __typename: "ModelPredictionSetConnection",
+          items:  Array< {
+            __typename: "PredictionSet",
+            id: string,
+            userId: string,
+            user:  {
+              __typename: "User",
+              id: string,
+              email: string,
+              username?: string | null,
+              name?: string | null,
+              bio?: string | null,
+              image?: string | null,
+              role: UserRole,
+              createdAt: string,
+              updatedAt: string,
+            },
+            eventId: string,
+            event:  {
+              __typename: "Event",
+              id: string,
+              awardsBody: AwardsBody,
+              year: number,
+              nominationDateTime?: string | null,
+              winDateTime?: string | null,
+              status?: EventStatus | null,
+              createdAt: string,
+              updatedAt: string,
+            },
+            categoryId: string,
+            category:  {
+              __typename: "Category",
+              id: string,
+              eventId: string,
+              name: CategoryName,
+              type: CategoryType,
+              isShortlisted?: CategoryIsShortlisted | null,
+              createdAt: string,
+              updatedAt: string,
+            },
+            predictions?:  {
+              __typename: "ModelPredictionConnection",
+              nextToken?: string | null,
+            } | null,
+            type?: PredictionType | null,
+            createdAt: string,
+            updatedAt: string,
+          } | null >,
+          nextToken?: string | null,
+        } | null,
+        createdAt: string,
+        updatedAt: string,
+      },
+      eventId: string,
+      event:  {
+        __typename: "Event",
+        id: string,
+        categories?:  {
+          __typename: "ModelCategoryConnection",
+          items:  Array< {
+            __typename: "Category",
+            id: string,
+            eventId: string,
+            event:  {
+              __typename: "Event",
+              id: string,
+              awardsBody: AwardsBody,
+              year: number,
+              nominationDateTime?: string | null,
+              winDateTime?: string | null,
+              status?: EventStatus | null,
+              createdAt: string,
+              updatedAt: string,
+            },
+            name: CategoryName,
+            type: CategoryType,
+            isShortlisted?: CategoryIsShortlisted | null,
+            createdAt: string,
+            updatedAt: string,
+          } | null >,
+          nextToken?: string | null,
+        } | null,
+        awardsBody: AwardsBody,
+        year: number,
+        nominationDateTime?: string | null,
+        winDateTime?: string | null,
+        status?: EventStatus | null,
+        createdAt: string,
+        updatedAt: string,
+      },
+      categoryId: string,
+      category:  {
+        __typename: "Category",
+        id: string,
+        eventId: string,
+        event:  {
+          __typename: "Event",
+          id: string,
+          categories?:  {
+            __typename: "ModelCategoryConnection",
+            items:  Array< {
+              __typename: "Category",
+              id: string,
+              eventId: string,
+              name: CategoryName,
+              type: CategoryType,
+              isShortlisted?: CategoryIsShortlisted | null,
+              createdAt: string,
+              updatedAt: string,
+            } | null >,
+            nextToken?: string | null,
+          } | null,
+          awardsBody: AwardsBody,
+          year: number,
+          nominationDateTime?: string | null,
+          winDateTime?: string | null,
+          status?: EventStatus | null,
+          createdAt: string,
+          updatedAt: string,
+        },
+        name: CategoryName,
+        type: CategoryType,
+        isShortlisted?: CategoryIsShortlisted | null,
+        createdAt: string,
+        updatedAt: string,
+      },
+      predictions?:  {
+        __typename: "ModelPredictionConnection",
+        items:  Array< {
+          __typename: "Prediction",
+          id: string,
+          predictionSetId: string,
+          contenderId: string,
+          contender:  {
+            __typename: "Contender",
+            id: string,
+            categoryId: string,
+            category:  {
+              __typename: "Category",
+              id: string,
+              eventId: string,
+              name: CategoryName,
+              type: CategoryType,
+              isShortlisted?: CategoryIsShortlisted | null,
+              createdAt: string,
+              updatedAt: string,
+            },
+            eventId: string,
+            event:  {
+              __typename: "Event",
+              id: string,
+              awardsBody: AwardsBody,
+              year: number,
+              nominationDateTime?: string | null,
+              winDateTime?: string | null,
+              status?: EventStatus | null,
+              createdAt: string,
+              updatedAt: string,
+            },
+            movieId: string,
+            movie:  {
+              __typename: "Movie",
+              id: string,
+              tmdbId: number,
+              studio?: string | null,
+              createdAt: string,
+              updatedAt: string,
+            },
+            personId?: string | null,
+            person?:  {
+              __typename: "Person",
+              id: string,
+              tmdbId: number,
+              createdAt: string,
+              updatedAt: string,
+            } | null,
+            songId?: string | null,
+            song?:  {
+              __typename: "Song",
+              id: string,
+              movieId: string,
+              title: string,
+              artist: string,
+              createdAt: string,
+              updatedAt: string,
+            } | null,
+            visibility?: ContenderVisibility | null,
+            accolade?: ContenderAccolade | null,
+            createdAt: string,
+            updatedAt: string,
+          },
+          ranking: number,
+          createdAt: string,
+          updatedAt: string,
+        } | null >,
+        nextToken?: string | null,
+      } | null,
+      type?: PredictionType | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type PredictionSetByUserIdAndCreatedAtQueryVariables = {
+  userId: string,
+  createdAt?: ModelStringKeyConditionInput | null,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelPredictionSetFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type PredictionSetByUserIdAndCreatedAtQuery = {
+  predictionSetByUserIdAndCreatedAt?:  {
     __typename: "ModelPredictionSetConnection",
     items:  Array< {
       __typename: "PredictionSet",

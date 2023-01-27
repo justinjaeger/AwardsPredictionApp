@@ -19,6 +19,8 @@ import AWSStorage from '../../services/storage';
 import { useNavigation } from '@react-navigation/native';
 import useQueryGetUser from '../../hooks/queries/getUser';
 import theme from '../../constants/theme';
+import { Divider } from '@ui-kitten/components';
+import ProfilePredictionsList from './ProfilePredictionsList';
 
 const Profile = () => {
   const { userId, userEmail, signOutUser } = useAuth(); // later import userId
@@ -30,6 +32,8 @@ const Profile = () => {
   const [profileUri, setProfileUri] = useState<string | undefined>(undefined);
 
   const isDeviceProfile = user && userId && user?.id === userId;
+
+  const predictionSets = user?.predictionSets || [];
 
   useEffect(() => {
     if (!userId) {
@@ -109,11 +113,26 @@ const Profile = () => {
   const imageContainerWidth = width * proportion;
   const usernameContainerWidth = width * (1 - proportion);
 
+  const ProfileDivider = ({ style }: { style?: any }) => (
+    <Divider
+      style={{
+        width: '95%',
+        opacity: 0.5,
+        ...style,
+      }}
+    />
+  );
+
   return (
     <BackgroundWrapper>
       <ScrollView
         style={{ width: '100%' }}
-        contentContainerStyle={{ alignItems: 'center', marginTop: 20, width: '100%' }}
+        contentContainerStyle={{
+          alignItems: 'center',
+          marginTop: 20,
+          width: '100%',
+          paddingBottom: 100,
+        }}
       >
         {!userId ? (
           <SubmitButton
@@ -130,6 +149,7 @@ const Profile = () => {
                 flexDirection: 'row',
                 height: 100,
                 padding: theme.windowMargin,
+                marginBottom: 20,
               }}
             >
               <View style={{ width: imageContainerWidth, paddingLeft: 10 }}>
@@ -174,8 +194,22 @@ const Profile = () => {
               </View>
             </View>
             {profileUri ? (
+              // JUST FOR TEST: REMOVE LATER
               <Image style={{ width: 200, height: 200 }} source={{ uri: profileUri }} />
             ) : null}
+            <ProfileDivider />
+            <HeaderLight
+              style={{
+                alignSelf: 'flex-start',
+                marginBottom: 10,
+                marginTop: 10,
+                marginLeft: theme.windowMargin,
+              }}
+            >
+              Recent Predictions:
+            </HeaderLight>
+            <ProfileDivider style={{ marginBottom: 20 }} />
+            <ProfilePredictionsList predictionSets={predictionSets} />
           </>
         )}
       </ScrollView>

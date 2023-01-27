@@ -408,3 +408,79 @@ export const communityHistoryPredictionSetsByEventIdAndCreatedAt = /* GraphQL */
     }
   }
 `;
+
+export const getUser = /* GraphQL */ `
+  query GetUser($id: ID!) {
+    getUser(id: $id) {
+      id
+      email
+      username
+      name
+      bio
+      image
+      role
+      # Return user's 10 latest prediction sets
+      predictionSets(limit: 10, sortDirection: DESC) {
+        items {
+          id # predictionSetId
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            status
+            createdAt
+            updatedAt
+          }
+          categoryId
+          category {
+            id
+            name
+            type
+            isShortlisted
+            createdAt
+            updatedAt
+          }
+          predictions {
+            items {
+              id
+              contenderId
+              contender {
+                id
+                movieId
+                movie {
+                  id
+                  tmdbId
+                  studio
+                }
+                personId
+                person {
+                  id
+                  tmdbId
+                }
+                songId
+                song {
+                  id
+                  title
+                  artist
+                }
+                visibility
+                accolade
+                createdAt
+                updatedAt
+              }
+              ranking
+              createdAt
+              updatedAt
+            }
+          }
+          type
+          createdAt
+          updatedAt
+        }
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;

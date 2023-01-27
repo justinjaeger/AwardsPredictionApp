@@ -14,6 +14,7 @@ import {
 } from '../../API';
 import * as mutations from '../../graphql/mutations';
 import * as queries from '../../graphql/queries';
+import * as customQueries from '../../graphqlCustom/queries';
 import { GraphqlAPI, handleError, iApiResponse } from '../utils';
 
 export const getAllUsers = async (): Promise<iApiResponse<ListUsersQuery>> => {
@@ -33,7 +34,7 @@ export const getAllUsers = async (): Promise<iApiResponse<ListUsersQuery>> => {
 export const getUser = async (id: string): Promise<iApiResponse<GetUserQuery>> => {
   try {
     const { data, errors } = await GraphqlAPI<GetUserQuery, GetUserQueryVariables>(
-      queries.getUser,
+      customQueries.getUser,
       { id },
     );
     if (!data?.getUser) {
