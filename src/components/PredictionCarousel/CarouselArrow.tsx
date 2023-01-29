@@ -17,7 +17,7 @@ const CarouselArrow = ({
       style={{
         position: 'absolute',
         right: direction === 'forward' ? 0 : undefined,
-        height: '100%',
+        height: '120%', // weird but centers it
         justifyContent: 'center',
         zIndex: 2,
       }}
@@ -26,7 +26,7 @@ const CarouselArrow = ({
         style={{
           position: 'absolute',
           right: direction === 'forward' ? 0 : undefined,
-          height: '50%',
+          height: '40%',
           justifyContent: 'center',
           borderRadius: theme.borderRadius,
         }}

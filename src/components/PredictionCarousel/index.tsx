@@ -19,6 +19,8 @@ const PredictionCarousel = ({ predictionSets }: { predictionSets: iPredictionSet
   const totalBarWidth = width - theme.windowMargin * 2;
   const barWidth = totalBarWidth / predictionSets.length;
 
+  const isFinalPage = currentPage === predictionSets.length - 1;
+
   useEffect(() => {
     Animated.timing(scrollBarAnim, {
       toValue: currentPage * barWidth,
@@ -85,6 +87,7 @@ const PredictionCarousel = ({ predictionSets }: { predictionSets: iPredictionSet
     <View
       style={{
         width: '100%',
+        height: width * 0.8, // height of the box is proportionate to width
         backgroundColor: 'rgba(0,0,0,0.2)',
         borderWidth: 0.5,
         borderColor: 'rgba(255,255,255,0.3)',
@@ -101,7 +104,7 @@ const PredictionCarousel = ({ predictionSets }: { predictionSets: iPredictionSet
       <CarouselArrow
         direction={'forward'}
         onPress={onPressForward}
-        isDisabled={currentPage === predictionSets.length - 1}
+        isDisabled={isFinalPage}
       />
       <ScrollView
         horizontal
@@ -112,6 +115,7 @@ const PredictionCarousel = ({ predictionSets }: { predictionSets: iPredictionSet
           // only fires when user manually scrolls, NOT when carousel automatically animates
           terminateInterval();
         }}
+        showsHorizontalScrollIndicator={false}
         onScroll={(e) => {
           // animates the scrollbar as you scroll
           const xPos = e.nativeEvent.contentOffset.x / width;
@@ -126,7 +130,8 @@ const PredictionCarousel = ({ predictionSets }: { predictionSets: iPredictionSet
           if (disableManualScroll) return;
           // get x position of event
           const offset = e.nativeEvent.contentOffset.x / width;
-          const newXPos = offset < currentPage ? Math.ceil(offset) : Math.floor(offset);
+          const newXPos = Math.ceil(offset);
+          if (newXPos > currentPage && isFinalPage) return;
           setCurrentPage(newXPos);
         }}
       >
