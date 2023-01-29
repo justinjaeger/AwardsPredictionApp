@@ -13,10 +13,12 @@ const MovieGrid = (props: {
   predictions: iPrediction[];
   isCollapsed?: boolean;
   noLine?: boolean;
+  totalWidth?: number;
 }) => {
-  const { predictions, isCollapsed } = props;
+  const { predictions, isCollapsed, totalWidth: _totalWidth } = props;
   let noLine = props.noLine;
   const { width } = useWindowDimensions();
+  const totalWidth = _totalWidth || width;
   const { event, category } = useCategory();
 
   const predictionType = predictions[0]?.predictionType || PredictionType.NOMINATION;
@@ -36,7 +38,7 @@ const MovieGrid = (props: {
         marginLeft: theme.windowMargin - theme.posterMargin / 2,
         marginRight: theme.windowMargin - theme.posterMargin / 2,
         marginBottom: isCollapsed ? 0 : theme.windowMargin,
-        width: '100%',
+        width: totalWidth,
       }}
     >
       {predictions.map((p, i) => (
@@ -45,7 +47,7 @@ const MovieGrid = (props: {
             <Divider
               style={{
                 position: 'absolute',
-                width: width - theme.windowMargin * 2,
+                width: totalWidth - theme.windowMargin * 2,
                 marginTop: 10,
                 marginBottom: 10,
                 borderBottomWidth: 1,
@@ -63,7 +65,7 @@ const MovieGrid = (props: {
                 movieTmdbId={p.contenderMovie.tmdbId}
                 personTmdbId={p.contenderPerson?.tmdbId}
                 width={
-                  (width - theme.windowMargin * 2 + theme.posterMargin) /
+                  (totalWidth - theme.windowMargin * 2 + theme.posterMargin) /
                   (isCollapsed ? 10 : 5)
                 }
                 ranking={isCollapsed ? undefined : i + 1}

@@ -60,6 +60,34 @@ export const useSubscriptionEffect = (effect: () => Promise<void>, deps: any[]) 
   }, [trigger, ...deps]);
 };
 
+export const useNavigateAwayEffect = (effect: () => void, deps: any[]) => {
+  const navigation = useNavigation();
+
+  const [trigger, setTrigger] = useState<boolean>(false);
+
+  navigation.addListener('blur', () => {
+    setTrigger(!trigger);
+  });
+
+  useEffect(() => {
+    effect();
+  }, [trigger, ...deps]);
+};
+
+export const useNavigateToEffect = (effect: () => void, deps: any[]) => {
+  const navigation = useNavigation();
+
+  const [trigger, setTrigger] = useState<boolean>(false);
+
+  navigation.addListener('focus', () => {
+    setTrigger(!trigger);
+  });
+
+  useEffect(() => {
+    effect();
+  }, [trigger, ...deps]);
+};
+
 /**
  * use like so:
  * const [search, setSearch] = useState();

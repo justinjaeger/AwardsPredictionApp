@@ -3,6 +3,7 @@ import { Animated, ScrollView, useWindowDimensions, View } from 'react-native';
 import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
 import { iPredictionSet } from '../../types';
+import { useNavigateAwayEffect } from '../../util/hooks';
 import ProfilePredictionsList from '../UserPredictionList';
 import CarouselArrow from './CarouselArrow';
 
@@ -26,6 +27,26 @@ const PredictionCarousel = ({ predictionSets }: { predictionSets: iPredictionSet
     }).start();
   }, [currentPage]);
 
+  // Responsible for auto-animating the carousel
+  const [interval, _setInterval] = useState<NodeJS.Timeout>();
+  const terminateInterval = () => {
+    if (interval) clearInterval(interval);
+  };
+  // NOTE: it doesn't reset when using tab navigation, but who knows if I'll keep the tabs anway, and for other users' profiles it won't use tab
+  useEffect(() => {
+    terminateInterval();
+    const timer = setInterval(() => {
+      scrollForward();
+    }, 5000);
+    _setInterval(timer);
+  }, []);
+  useNavigateAwayEffect(() => {
+    // use this specifically because if profile is in a tab, the interval will never terminate / unmount
+    terminateInterval();
+    setCurrentPage(0);
+    scrollRef.current?.scrollTo({ x: 0, animated: false });
+  }, []);
+
   // lets us tap through the carousel faster; onMomentumScrollEnd doesn't fire in between taps
   const tempDisableManualScroll = () => {
     setDisableManualScroll(true);
@@ -34,15 +55,29 @@ const PredictionCarousel = ({ predictionSets }: { predictionSets: iPredictionSet
     }, 500);
   };
 
-  const onPressForward = () => {
+  const scrollForward = () => {
     scrollRef.current?.scrollTo({ x: width * currentPage + width, animated: true });
-    setCurrentPage(currentPage + 1);
+    // has to be written like this because the interval callback will use stale values for currentPage otherwise
+    setCurrentPage((cp) => {
+      if (cp === predictionSets.length - 1) {
+        scrollRef.current?.scrollTo({ x: 0, animated: true });
+        return 0;
+      }
+      scrollRef.current?.scrollTo({ x: width * cp + width, animated: true });
+      return cp + 1;
+    });
+  };
+
+  const onPressForward = () => {
+    terminateInterval();
+    scrollForward();
     tempDisableManualScroll();
   };
 
   const onPressBack = () => {
+    terminateInterval();
     scrollRef.current?.scrollTo({ x: width * currentPage - width, animated: true });
-    setCurrentPage(currentPage - 1);
+    setCurrentPage((cp) => cp - 1);
     tempDisableManualScroll();
   };
 
@@ -64,6 +99,10 @@ const PredictionCarousel = ({ predictionSets }: { predictionSets: iPredictionSet
           pagingEnabled
           style={{ width: '100%', flex: 1 }}
           ref={scrollRef}
+          onScrollBeginDrag={() => {
+            // only fires when user manually scrolls, NOT when carousel automatically animates
+            terminateInterval();
+          }}
           onScroll={(e) => {
             // animates the scrollbar as you scroll
             const xPos = e.nativeEvent.contentOffset.x / width;

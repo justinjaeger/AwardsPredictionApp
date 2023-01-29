@@ -1,6 +1,5 @@
 import React from 'react';
 import { TouchableHighlight, View } from 'react-native';
-import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
 import CustomIcon from '../CustomIcon';
 
@@ -25,24 +24,32 @@ const CarouselArrow = ({
     >
       <TouchableHighlight
         style={{
-          height: '30%',
-          backgroundColor: isDisabled ? 'transparent' : 'rgba(0,0,0,0.5)',
-          borderRadius: theme.borderRadius,
+          position: 'absolute',
+          right: direction === 'forward' ? 0 : undefined,
+          height: '50%',
           justifyContent: 'center',
-          alignItems: 'center',
-          //   width: 30,
+          borderRadius: theme.borderRadius,
         }}
-        underlayColor={isDisabled ? 'transparent' : COLORS.secondary}
+        underlayColor={isDisabled ? 'transparent' : 'rgba(0,0,0,0.5)'}
         onPress={isDisabled ? () => {} : onPress}
       >
-        <CustomIcon
-          name={
-            direction === 'forward'
-              ? 'arrow-ios-forward-outline'
-              : 'arrow-ios-back-outline'
-          }
-          color={isDisabled ? 'transparent' : undefined}
-        />
+        <View
+          style={{
+            backgroundColor: 'transparent',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: 30,
+          }}
+        >
+          <CustomIcon
+            name={
+              direction === 'forward'
+                ? 'arrow-ios-forward-outline'
+                : 'arrow-ios-back-outline'
+            }
+            color={isDisabled ? 'transparent' : undefined}
+          />
+        </View>
       </TouchableHighlight>
     </View>
   );
