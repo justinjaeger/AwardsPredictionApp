@@ -19,7 +19,6 @@ import AWSStorage from '../../services/storage';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import useQueryGetUser from '../../hooks/queries/getUser';
 import theme from '../../constants/theme';
-import { Divider } from '@ui-kitten/components';
 import PredictionCarousel from '../../components/PredictionCarousel';
 import { ProfileParamList } from '../../navigation/types';
 
@@ -118,16 +117,6 @@ const Profile = () => {
   const imageContainerWidth = width * proportion;
   const usernameContainerWidth = width * (1 - proportion);
 
-  const ProfileDivider = ({ style }: { style?: any }) => (
-    <Divider
-      style={{
-        width: '95%',
-        opacity: 0.5,
-        ...style,
-      }}
-    />
-  );
-
   return (
     <BackgroundWrapper>
       <ScrollView
@@ -202,7 +191,6 @@ const Profile = () => {
               // JUST FOR TEST: REMOVE LATER
               <Image style={{ width: 200, height: 200 }} source={{ uri: profileUri }} />
             ) : null}
-            <ProfileDivider />
             <HeaderLight
               style={{
                 alignSelf: 'flex-start',
@@ -213,9 +201,7 @@ const Profile = () => {
             >
               Recent Predictions:
             </HeaderLight>
-            <ProfileDivider style={{ marginBottom: 20 }} />
             <PredictionCarousel predictionSets={predictionSets} />
-            <ProfileDivider style={{ marginBottom: 20, marginTop: 20 }} />
           </>
         )}
       </ScrollView>

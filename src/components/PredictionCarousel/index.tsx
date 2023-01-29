@@ -82,63 +82,69 @@ const PredictionCarousel = ({ predictionSets }: { predictionSets: iPredictionSet
   };
 
   return (
-    <>
-      <View style={{ width: '100%', height: '60%' }}>
-        <CarouselArrow
-          direction={'back'}
-          onPress={onPressBack}
-          isDisabled={currentPage === 0}
-        />
-        <CarouselArrow
-          direction={'forward'}
-          onPress={onPressForward}
-          isDisabled={currentPage === predictionSets.length - 1}
-        />
-        <ScrollView
-          horizontal
-          pagingEnabled
-          style={{ width: '100%', flex: 1 }}
-          ref={scrollRef}
-          onScrollBeginDrag={() => {
-            // only fires when user manually scrolls, NOT when carousel automatically animates
-            terminateInterval();
-          }}
-          onScroll={(e) => {
-            // animates the scrollbar as you scroll
-            const xPos = e.nativeEvent.contentOffset.x / width;
-            Animated.timing(scrollBarAnim, {
-              toValue: xPos * barWidth,
-              duration: 0,
-              useNativeDriver: true,
-            }).start();
-          }}
-          scrollEventThrottle={16}
-          onMomentumScrollEnd={(e) => {
-            if (disableManualScroll) return;
-            // get x position of event
-            const offset = e.nativeEvent.contentOffset.x / width;
-            const newXPos = offset < currentPage ? Math.ceil(offset) : Math.floor(offset);
-            setCurrentPage(newXPos);
-          }}
-        >
-          <ProfilePredictionsList predictionSets={predictionSets} fixedSlots={10} />
-        </ScrollView>
-        {/* SCROLL BAR */}
-        <Animated.View
-          style={{
-            position: 'absolute',
-            bottom: 0,
-            transform: [{ translateX: scrollBarAnim }],
-            width: barWidth,
-            backgroundColor: COLORS.white,
-            height: 4,
-            borderRadius: 5,
-            zIndex: 2,
-            marginLeft: theme.windowMargin,
-          }}
-        />
-      </View>
-    </>
+    <View
+      style={{
+        width: '100%',
+        backgroundColor: 'rgba(0,0,0,0.2)',
+        borderWidth: 0.5,
+        borderColor: 'rgba(255,255,255,0.3)',
+        borderRadius: theme.borderRadius,
+        paddingTop: 20,
+        paddingBottom: 20,
+      }}
+    >
+      <CarouselArrow
+        direction={'back'}
+        onPress={onPressBack}
+        isDisabled={currentPage === 0}
+      />
+      <CarouselArrow
+        direction={'forward'}
+        onPress={onPressForward}
+        isDisabled={currentPage === predictionSets.length - 1}
+      />
+      <ScrollView
+        horizontal
+        pagingEnabled
+        style={{ width: '100%', flex: 1 }}
+        ref={scrollRef}
+        onScrollBeginDrag={() => {
+          // only fires when user manually scrolls, NOT when carousel automatically animates
+          terminateInterval();
+        }}
+        onScroll={(e) => {
+          // animates the scrollbar as you scroll
+          const xPos = e.nativeEvent.contentOffset.x / width;
+          Animated.timing(scrollBarAnim, {
+            toValue: xPos * barWidth,
+            duration: 0,
+            useNativeDriver: true,
+          }).start();
+        }}
+        scrollEventThrottle={16}
+        onMomentumScrollEnd={(e) => {
+          if (disableManualScroll) return;
+          // get x position of event
+          const offset = e.nativeEvent.contentOffset.x / width;
+          const newXPos = offset < currentPage ? Math.ceil(offset) : Math.floor(offset);
+          setCurrentPage(newXPos);
+        }}
+      >
+        <ProfilePredictionsList predictionSets={predictionSets} fixedSlots={10} />
+      </ScrollView>
+      {/* SCROLL BAR */}
+      <Animated.View
+        style={{
+          transform: [{ translateX: scrollBarAnim }],
+          width: barWidth,
+          backgroundColor: COLORS.white,
+          height: 4,
+          borderRadius: 5,
+          zIndex: 2,
+          marginLeft: theme.windowMargin,
+        }}
+      />
+    </View>
   );
 };
 
