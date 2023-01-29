@@ -16,14 +16,19 @@ import BackgroundWrapper from '../../components/BackgroundWrapper';
 import { IconButton } from '../../components/Buttons/IconButton';
 import { launchImageLibrary } from 'react-native-image-picker';
 import AWSStorage from '../../services/storage';
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import useQueryGetUser from '../../hooks/queries/getUser';
 import theme from '../../constants/theme';
 import { Divider } from '@ui-kitten/components';
 import PredictionCarousel from '../../components/PredictionCarousel';
+import { ProfileParamList } from '../../navigation/types';
 
 const Profile = () => {
-  const { userId, userEmail, signOutUser } = useAuth(); // later import userId
+  // If we pass userId as params, it loads that user's profile. If not, it attemps to get logged in profile.
+  const { params } = useRoute<RouteProp<ProfileParamList, 'Profile'>>();
+  const { userId: authUserId, userEmail, signOutUser } = useAuth(); // later import userId
+  const userId = params?.userId || authUserId;
+
   const navigation = useNavigation();
   const { width } = useWindowDimensions();
 

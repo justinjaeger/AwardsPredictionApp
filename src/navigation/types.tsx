@@ -34,6 +34,8 @@ export type AdminParamList = {
 };
 
 export type ProfileParamList = {
-  Profile: undefined;
+  Profile: {
+    userId?: string;
+  };
   ChangeUsername: undefined;
 };
