@@ -1,6 +1,6 @@
 import { Divider } from '@ui-kitten/components';
 import React from 'react';
-import { TouchableHighlight, View } from 'react-native';
+import { TouchableHighlight, useWindowDimensions, View } from 'react-native';
 import { PredictionType } from '../../API';
 import MovieGrid from '../../components/MovieGrid';
 import { Body, SubHeader } from '../../components/Text';
@@ -13,9 +13,14 @@ import { formatLastUpdated } from '../../util/formatDateTime';
 
 const ProfilePredictionsList = ({
   predictionSets,
+  displayDividers,
+  fixedSlots,
 }: {
   predictionSets: iPredictionSet[];
+  displayDividers?: boolean;
+  fixedSlots?: number;
 }) => {
+  const { width } = useWindowDimensions();
   return (
     <>
       {predictionSets.map((ps) => {
@@ -29,16 +34,15 @@ const ProfilePredictionsList = ({
           predictions[0]?.predictionType || PredictionType.NOMINATION;
         const slots = getCategorySlots(ps.event, ps.category.name, predictionType);
         const slotsToUse = slots !== 1 ? slots : 5; // slots is "1" when predictions have happened, so if predictions have happened, so for winner predictions let's just show top 5
-        const truncatedPredictions = predictions.slice(0, slotsToUse);
+        const truncatedPredictions = predictions.slice(0, fixedSlots || slotsToUse);
         const eventName = AWARDS_BODY_TO_PLURAL_STRING[ps.event.awardsBody];
         const categoryName = awardsBodyCategories[ps.category.name]?.name || '';
         const lastUpdatedText = formatLastUpdated(new Date(ps.createdAt));
         return (
-          <>
+          <View key={ps.id}>
             <TouchableHighlight
-              key={ps.id}
               style={{
-                width: '100%',
+                width,
                 alignItems: 'flex-start',
               }}
               underlayColor={COLORS.secondaryDark}
@@ -79,15 +83,17 @@ const ProfilePredictionsList = ({
                 />
               </View>
             </TouchableHighlight>
-            <Divider
-              style={{
-                width: '95%',
-                opacity: 0.5,
-                marginTop: 20,
-                marginBottom: 20,
-              }}
-            />
-          </>
+            {displayDividers ? (
+              <Divider
+                style={{
+                  width: '95%',
+                  opacity: 0.5,
+                  marginTop: 20,
+                  marginBottom: 20,
+                }}
+              />
+            ) : null}
+          </View>
         );
       })}
     </>

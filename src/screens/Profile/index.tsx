@@ -20,7 +20,7 @@ import { useNavigation } from '@react-navigation/native';
 import useQueryGetUser from '../../hooks/queries/getUser';
 import theme from '../../constants/theme';
 import { Divider } from '@ui-kitten/components';
-import ProfilePredictionsList from './ProfilePredictionsList';
+import PredictionCarousel from '../../components/PredictionCarousel';
 
 const Profile = () => {
   const { userId, userEmail, signOutUser } = useAuth(); // later import userId
@@ -209,7 +209,8 @@ const Profile = () => {
               Recent Predictions:
             </HeaderLight>
             <ProfileDivider style={{ marginBottom: 20 }} />
-            <ProfilePredictionsList predictionSets={predictionSets} />
+            <PredictionCarousel predictionSets={predictionSets} />
+            <ProfileDivider style={{ marginBottom: 20, marginTop: 20 }} />
           </>
         )}
       </ScrollView>
