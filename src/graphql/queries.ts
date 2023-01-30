@@ -31,6 +31,7 @@ export const getUser = /* GraphQL */ `
                 eventId
                 categoryId
                 type
+                comment
                 createdAt
                 updatedAt
               }
@@ -109,6 +110,7 @@ export const getUser = /* GraphQL */ `
             nextToken
           }
           type
+          comment
           createdAt
           updatedAt
         }
@@ -206,6 +208,7 @@ export const listUsers = /* GraphQL */ `
               nextToken
             }
             type
+            comment
             createdAt
             updatedAt
           }
@@ -295,6 +298,7 @@ export const getRelationship = /* GraphQL */ `
               nextToken
             }
             type
+            comment
             createdAt
             updatedAt
           }
@@ -376,6 +380,7 @@ export const getRelationship = /* GraphQL */ `
               nextToken
             }
             type
+            comment
             createdAt
             updatedAt
           }
@@ -455,6 +460,7 @@ export const listRelationships = /* GraphQL */ `
                 nextToken
               }
               type
+              comment
               createdAt
               updatedAt
             }
@@ -512,6 +518,7 @@ export const listRelationships = /* GraphQL */ `
                 nextToken
               }
               type
+              comment
               createdAt
               updatedAt
             }
@@ -1700,6 +1707,7 @@ export const getPredictionSet = /* GraphQL */ `
               nextToken
             }
             type
+            comment
             createdAt
             updatedAt
           }
@@ -1873,6 +1881,7 @@ export const getPredictionSet = /* GraphQL */ `
         nextToken
       }
       type
+      comment
       createdAt
       updatedAt
     }
@@ -1944,6 +1953,7 @@ export const listPredictionSets = /* GraphQL */ `
                 nextToken
               }
               type
+              comment
               createdAt
               updatedAt
             }
@@ -2081,6 +2091,7 @@ export const listPredictionSets = /* GraphQL */ `
           nextToken
         }
         type
+        comment
         createdAt
         updatedAt
       }
@@ -2479,6 +2490,7 @@ export const getHistoryPredictionSet = /* GraphQL */ `
               nextToken
             }
             type
+            comment
             createdAt
             updatedAt
           }
@@ -2723,6 +2735,7 @@ export const listHistoryPredictionSets = /* GraphQL */ `
                 nextToken
               }
               type
+              comment
               createdAt
               updatedAt
             }
@@ -4654,6 +4667,7 @@ export const relationshipByFollowedUserId = /* GraphQL */ `
                 nextToken
               }
               type
+              comment
               createdAt
               updatedAt
             }
@@ -4711,6 +4725,7 @@ export const relationshipByFollowedUserId = /* GraphQL */ `
                 nextToken
               }
               type
+              comment
               createdAt
               updatedAt
             }
@@ -4792,6 +4807,7 @@ export const relationshipByFollowingUserId = /* GraphQL */ `
                 nextToken
               }
               type
+              comment
               createdAt
               updatedAt
             }
@@ -4849,6 +4865,7 @@ export const relationshipByFollowingUserId = /* GraphQL */ `
                 nextToken
               }
               type
+              comment
               createdAt
               updatedAt
             }
@@ -5184,6 +5201,7 @@ export const predictionSetByUserIdAndEventId = /* GraphQL */ `
                 nextToken
               }
               type
+              comment
               createdAt
               updatedAt
             }
@@ -5321,6 +5339,7 @@ export const predictionSetByUserIdAndEventId = /* GraphQL */ `
           nextToken
         }
         type
+        comment
         createdAt
         updatedAt
       }
@@ -5396,6 +5415,7 @@ export const predictionSetByUserIdAndCreatedAt = /* GraphQL */ `
                 nextToken
               }
               type
+              comment
               createdAt
               updatedAt
             }
@@ -5533,6 +5553,7 @@ export const predictionSetByUserIdAndCreatedAt = /* GraphQL */ `
           nextToken
         }
         type
+        comment
         createdAt
         updatedAt
       }
@@ -5606,6 +5627,7 @@ export const predictionSetByEventId = /* GraphQL */ `
                 nextToken
               }
               type
+              comment
               createdAt
               updatedAt
             }
@@ -5743,6 +5765,7 @@ export const predictionSetByEventId = /* GraphQL */ `
           nextToken
         }
         type
+        comment
         createdAt
         updatedAt
       }
@@ -5947,6 +5970,7 @@ export const historyPredictionSetByUserIdAndEventIdAndCreatedAt = /* GraphQL */ 
                 nextToken
               }
               type
+              comment
               createdAt
               updatedAt
             }

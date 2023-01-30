@@ -198,6 +198,7 @@ type PredictionSet @model @auth(rules: [{ allow: public }]) {
     category: Category! @hasOne(fields: ["categoryId"])
     predictions: [Prediction] @hasMany(indexName: "byPredictionSet", fields: ["id"])
     type: PredictionType @default(value: "NOMINATION")
+    comment: String
     createdAt: AWSDateTime!
 }
 type Prediction @model @auth(rules: [{ allow: public }]) {

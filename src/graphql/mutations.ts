@@ -44,6 +44,7 @@ export const createUser = /* GraphQL */ `
                 eventId
                 categoryId
                 type
+                comment
                 createdAt
                 updatedAt
               }
@@ -122,6 +123,7 @@ export const createUser = /* GraphQL */ `
             nextToken
           }
           type
+          comment
           createdAt
           updatedAt
         }
@@ -164,6 +166,7 @@ export const updateUser = /* GraphQL */ `
                 eventId
                 categoryId
                 type
+                comment
                 createdAt
                 updatedAt
               }
@@ -242,6 +245,7 @@ export const updateUser = /* GraphQL */ `
             nextToken
           }
           type
+          comment
           createdAt
           updatedAt
         }
@@ -284,6 +288,7 @@ export const deleteUser = /* GraphQL */ `
                 eventId
                 categoryId
                 type
+                comment
                 createdAt
                 updatedAt
               }
@@ -362,6 +367,7 @@ export const deleteUser = /* GraphQL */ `
             nextToken
           }
           type
+          comment
           createdAt
           updatedAt
         }
@@ -452,6 +458,7 @@ export const createRelationship = /* GraphQL */ `
               nextToken
             }
             type
+            comment
             createdAt
             updatedAt
           }
@@ -533,6 +540,7 @@ export const createRelationship = /* GraphQL */ `
               nextToken
             }
             type
+            comment
             createdAt
             updatedAt
           }
@@ -626,6 +634,7 @@ export const updateRelationship = /* GraphQL */ `
               nextToken
             }
             type
+            comment
             createdAt
             updatedAt
           }
@@ -707,6 +716,7 @@ export const updateRelationship = /* GraphQL */ `
               nextToken
             }
             type
+            comment
             createdAt
             updatedAt
           }
@@ -800,6 +810,7 @@ export const deleteRelationship = /* GraphQL */ `
               nextToken
             }
             type
+            comment
             createdAt
             updatedAt
           }
@@ -881,6 +892,7 @@ export const deleteRelationship = /* GraphQL */ `
               nextToken
             }
             type
+            comment
             createdAt
             updatedAt
           }
@@ -2744,6 +2756,7 @@ export const createPredictionSet = /* GraphQL */ `
               nextToken
             }
             type
+            comment
             createdAt
             updatedAt
           }
@@ -2917,6 +2930,7 @@ export const createPredictionSet = /* GraphQL */ `
         nextToken
       }
       type
+      comment
       createdAt
       updatedAt
     }
@@ -3002,6 +3016,7 @@ export const updatePredictionSet = /* GraphQL */ `
               nextToken
             }
             type
+            comment
             createdAt
             updatedAt
           }
@@ -3175,6 +3190,7 @@ export const updatePredictionSet = /* GraphQL */ `
         nextToken
       }
       type
+      comment
       createdAt
       updatedAt
     }
@@ -3260,6 +3276,7 @@ export const deletePredictionSet = /* GraphQL */ `
               nextToken
             }
             type
+            comment
             createdAt
             updatedAt
           }
@@ -3433,6 +3450,7 @@ export const deletePredictionSet = /* GraphQL */ `
         nextToken
       }
       type
+      comment
       createdAt
       updatedAt
     }
@@ -4082,6 +4100,7 @@ export const createHistoryPredictionSet = /* GraphQL */ `
               nextToken
             }
             type
+            comment
             createdAt
             updatedAt
           }
@@ -4340,6 +4359,7 @@ export const updateHistoryPredictionSet = /* GraphQL */ `
               nextToken
             }
             type
+            comment
             createdAt
             updatedAt
           }
@@ -4598,6 +4618,7 @@ export const deleteHistoryPredictionSet = /* GraphQL */ `
               nextToken
             }
             type
+            comment
             createdAt
             updatedAt
           }
