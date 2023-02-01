@@ -8,18 +8,25 @@ import { AWARDS_BODY_TO_PLURAL_STRING } from '../../constants/awardsBodies';
 import { getAwardsBodyCategories, getCategorySlots } from '../../constants/categories';
 import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
+import { useCategory } from '../../context/CategoryContext';
+import { PredictionsParamList } from '../../navigation/types';
 import { iPredictionSet } from '../../types';
 import { formatLastUpdated } from '../../util/formatDateTime';
+import { useTypedNavigation } from '../../util/hooks';
 
 const ProfilePredictionsList = ({
   predictionSets,
   displayDividers,
   fixedSlots,
+  userId,
 }: {
   predictionSets: iPredictionSet[];
   displayDividers?: boolean;
   fixedSlots?: number;
+  userId: string;
 }) => {
+  const navigation = useTypedNavigation<PredictionsParamList>();
+  const { setEvent } = useCategory();
   const { width } = useWindowDimensions();
   return (
     <>
@@ -46,7 +53,11 @@ const ProfilePredictionsList = ({
                 alignItems: 'flex-start',
               }}
               underlayColor={COLORS.secondaryDark}
-              onPress={() => {}}
+              onPress={() => {
+                // navigate to user's predictions
+                setEvent(ps.event);
+                navigation.navigate('Event', { userId });
+              }}
             >
               <View>
                 <View style={{ marginLeft: theme.windowMargin }}>

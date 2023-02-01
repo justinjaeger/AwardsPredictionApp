@@ -46,6 +46,23 @@ export const getUser = async (id: string): Promise<iApiResponse<GetUserQuery>> =
   }
 };
 
+export const getUserWithRecentPredictions = async (
+  id: string,
+): Promise<iApiResponse<GetUserQuery>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<GetUserQuery, GetUserQueryVariables>(
+      customQueries.getUserWithRecentPredictions,
+      { id },
+    );
+    if (!data?.getUser) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data: data };
+  } catch (err) {
+    return handleError('error getting user by id', err);
+  }
+};
+
 // Use this to enforce uniqueness
 export const getUserByEmail = async (
   email: string,

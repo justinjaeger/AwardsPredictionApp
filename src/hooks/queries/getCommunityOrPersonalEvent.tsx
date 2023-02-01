@@ -10,7 +10,7 @@ const useQueryCommunityOrPersonalEvent = (
 ) => {
   const { event, userId, includeHidden } = params;
   if (tab === 'personal' && userId === undefined) {
-    console.warn('The user is signed out');
+    console.warn('No userId passed');
   }
   const { data, isLoading, refetch } = useQuery({
     queryKey: [
@@ -18,8 +18,8 @@ const useQueryCommunityOrPersonalEvent = (
     ],
     queryFn:
       tab === 'community'
-        ? () => getCommunityPredictionsByEvent(event, includeHidden)
-        : () => getPersonalPredictionsByEvent(event.id, userId || ''),
+        ? () => getCommunityPredictionsByEvent(event.id, includeHidden)
+        : () => getPersonalPredictionsByEvent(event.id, userId),
     enabled: tab === 'personal' ? fetchPersonalEnabled : true,
   });
 

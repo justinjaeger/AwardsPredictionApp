@@ -7,7 +7,13 @@ import { useNavigateAwayEffect } from '../../util/hooks';
 import ProfilePredictionsList from '../UserPredictionList';
 import CarouselArrow from './CarouselArrow';
 
-const PredictionCarousel = ({ predictionSets }: { predictionSets: iPredictionSet[] }) => {
+const PredictionCarousel = ({
+  predictionSets,
+  userId,
+}: {
+  predictionSets: iPredictionSet[];
+  userId: string;
+}) => {
   const { width } = useWindowDimensions();
 
   const [currentPage, setCurrentPage] = useState<number>(0);
@@ -61,7 +67,7 @@ const PredictionCarousel = ({ predictionSets }: { predictionSets: iPredictionSet
     scrollRef.current?.scrollTo({ x: width * currentPage + width, animated: true });
     // has to be written like this because the interval callback will use stale values for currentPage otherwise
     setCurrentPage((cp) => {
-      if (cp === predictionSets.length - 1) {
+      if (cp >= predictionSets.length - 1) {
         scrollRef.current?.scrollTo({ x: 0, animated: true });
         return 0;
       }
@@ -78,8 +84,15 @@ const PredictionCarousel = ({ predictionSets }: { predictionSets: iPredictionSet
 
   const onPressBack = () => {
     terminateInterval();
-    scrollRef.current?.scrollTo({ x: width * currentPage - width, animated: true });
-    setCurrentPage((cp) => cp - 1);
+    setCurrentPage((cp) => {
+      if (cp <= 0) {
+        const newPage = predictionSets.length - 1;
+        scrollRef.current?.scrollTo({ x: width * newPage, animated: true });
+        return newPage;
+      }
+      scrollRef.current?.scrollTo({ x: width * currentPage - width, animated: true });
+      return cp - 1;
+    });
     tempDisableManualScroll();
   };
 
@@ -135,7 +148,11 @@ const PredictionCarousel = ({ predictionSets }: { predictionSets: iPredictionSet
           setCurrentPage(newXPos);
         }}
       >
-        <ProfilePredictionsList predictionSets={predictionSets} fixedSlots={10} />
+        <ProfilePredictionsList
+          predictionSets={predictionSets}
+          fixedSlots={10}
+          userId={userId}
+        />
       </ScrollView>
       {/* SCROLL BAR */}
       <Animated.View

@@ -42,6 +42,7 @@ export type iContenderListItemProps = {
   subtitle?: string;
   onPressItem: (prediction: iPrediction) => void;
   onPressThumbnail?: (prediction: iPrediction) => void;
+  isFriendProfile?: boolean;
 };
 
 const TIMING = 250;
@@ -60,6 +61,7 @@ const ContenderListItem = (props: iContenderListItemProps) => {
     subtitle: _subtitle,
     onPressThumbnail,
     onPressItem,
+    isFriendProfile,
   } = props;
   const { isActive, drag } = draggable || {};
   const navigation = useNavigation();
@@ -77,6 +79,7 @@ const ContenderListItem = (props: iContenderListItemProps) => {
 
   const { category: _category, event: _event, date } = useCategory();
   const isHistory = !!date;
+  const disableEditing = isHistory || isFriendProfile;
   const category = _category as iCategory;
   const event = _event as iEvent;
 
@@ -230,7 +233,7 @@ const ContenderListItem = (props: iContenderListItemProps) => {
         paddingLeft: theme.windowMargin,
       }}
       underlayColor={COLORS.secondaryDark}
-      onLongPress={isHistory ? undefined : drag}
+      onLongPress={disableEditing ? undefined : drag}
       disabled={isActive}
     >
       <>
@@ -327,7 +330,7 @@ const ContenderListItem = (props: iContenderListItemProps) => {
                 <Body style={{ textAlign: 'right' }}>{win.toString()}</Body>
               </View>
             ) : null}
-            {variant === 'personal' && !isHistory ? (
+            {variant === 'personal' && !disableEditing ? (
               <IconButton
                 iconProps={{ name: 'menu', size: 24 }}
                 color={COLORS.white}

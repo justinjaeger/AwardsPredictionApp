@@ -1,7 +1,5 @@
-import MaskedView from '@react-native-masked-view/masked-view';
 import React, { useState } from 'react';
 import { TouchableHighlight, useWindowDimensions, View } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
 import {
   CategoryIsShortlisted,
   CategoryType,
@@ -37,6 +35,7 @@ type iContenderListItemProps = {
   };
   onPressItem: (prediction: iPrediction) => void;
   onPressThumbnail?: (prediction: iPrediction) => void;
+  isFriendProfile?: boolean;
 };
 
 const ContenderListItemCondensed = (props: iContenderListItemProps) => {
@@ -48,6 +47,7 @@ const ContenderListItemCondensed = (props: iContenderListItemProps) => {
     highlighted,
     categoryType,
     onPressItem,
+    isFriendProfile,
   } = props;
   const { isActive, drag } = draggable || {};
   const { width: windowWidth } = useWindowDimensions();
@@ -56,6 +56,7 @@ const ContenderListItemCondensed = (props: iContenderListItemProps) => {
 
   const { category: _category, event: _event, date } = useCategory();
   const isHistory = !!date;
+  const disableEditing = isHistory || isFriendProfile;
   const category = _category as iCategory;
   const event = _event as iEvent;
 
@@ -152,7 +153,7 @@ const ContenderListItemCondensed = (props: iContenderListItemProps) => {
         paddingLeft: theme.windowMargin,
       }}
       underlayColor={draggable ? COLORS.secondaryDark : 'transparent'}
-      onLongPress={isHistory ? undefined : drag}
+      onLongPress={disableEditing ? undefined : drag}
       disabled={isActive}
     >
       <>
@@ -197,7 +198,7 @@ const ContenderListItemCondensed = (props: iContenderListItemProps) => {
               </View>
             </View>
           ) : null}
-          {variant === 'personal' && !isHistory ? (
+          {variant === 'personal' && !disableEditing ? (
             <View
               style={{
                 height: itemHeight,

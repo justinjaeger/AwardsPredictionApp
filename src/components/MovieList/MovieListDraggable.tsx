@@ -21,6 +21,7 @@ type iMovieListProps = {
   setPredictions: (ps: iPrediction[]) => void;
   lastUpdatedString: string;
   isCollapsed?: boolean;
+  isFriendProfile?: boolean;
 };
 
 const MovieListDraggable = ({
@@ -28,6 +29,7 @@ const MovieListDraggable = ({
   setPredictions,
   isCollapsed,
   lastUpdatedString,
+  isFriendProfile,
 }: iMovieListProps) => {
   const navigation = useNavigation();
   const { event: _event, category: _category, date } = useCategory();
@@ -77,7 +79,7 @@ const MovieListDraggable = ({
         />
       }
       ListFooterComponent={
-        !isHistory ? (
+        !isFriendProfile ? (
           <View style={{ width: '100%', alignItems: 'center', marginTop: 10 }}>
             <TouchableHighlight
               style={{
@@ -124,6 +126,7 @@ const MovieListDraggable = ({
             isActive,
           },
           categoryType: category.type,
+          isFriendProfile,
         };
         return (
           <>

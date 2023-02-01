@@ -6,12 +6,13 @@ import CustomIcon from '../CustomIcon';
 const CarouselArrow = ({
   direction,
   onPress,
-  isDisabled,
-}: {
+}: //   isDisabled,
+{
   direction: 'back' | 'forward';
   onPress: () => void;
   isDisabled?: boolean;
 }) => {
+  const isDisabled = false; // don't let it be disabled
   return (
     <View
       style={{
@@ -26,7 +27,7 @@ const CarouselArrow = ({
         style={{
           position: 'absolute',
           right: direction === 'forward' ? 0 : undefined,
-          height: '40%',
+          height: '80%',
           justifyContent: 'center',
           borderRadius: theme.borderRadius,
         }}
@@ -37,8 +38,8 @@ const CarouselArrow = ({
           style={{
             backgroundColor: 'transparent',
             justifyContent: 'center',
-            alignItems: 'center',
-            width: 30,
+            alignItems: direction === 'forward' ? 'flex-end' : 'flex-start',
+            width: 60,
           }}
         >
           <CustomIcon

@@ -7,7 +7,11 @@ import COLORS from '../../constants/colors';
 import { useCategory } from '../../context/CategoryContext';
 import PredictionTab from './PredictionTab';
 
-const PredictionTabsNavigator = (personal: JSX.Element, community: JSX.Element) => {
+const PredictionTabsNavigator = (
+  personal: JSX.Element,
+  community: JSX.Element,
+  personalText?: string,
+) => {
   const { width } = useWindowDimensions();
   const { personalCommunityTab, setPersonalCommunityTab } = useCategory();
   const scrollBarPositionTwo = width / 2;
@@ -72,7 +76,7 @@ const PredictionTabsNavigator = (personal: JSX.Element, community: JSX.Element) 
               }}
             />
             <PredictionTab
-              text={'My Predictions'}
+              text={personalText || 'My Predictions'}
               onPress={() => openPersonalTab()}
               selected={personalCommunityTab === 'personal'}
             />

@@ -419,6 +419,22 @@ export const getUser = /* GraphQL */ `
       bio
       image
       role
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export const getUserWithRecentPredictions = /* GraphQL */ `
+  query GetUser($id: ID!) {
+    getUser(id: $id) {
+      id
+      email
+      username
+      name
+      bio
+      image
+      role
       # Return user's 10 latest prediction sets
       predictionSets(limit: 10, sortDirection: DESC) {
         items {
@@ -431,6 +447,14 @@ export const getUser = /* GraphQL */ `
             status
             createdAt
             updatedAt
+            categories {
+              items {
+                id
+                name
+                type
+                isShortlisted
+              }
+            }
           }
           categoryId
           category {

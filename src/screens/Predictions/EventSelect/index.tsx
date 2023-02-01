@@ -20,7 +20,7 @@ import useQueryAllEvents from '../../../hooks/queries/getAllEvents';
 import AwardsBodyImage from '../../../components/AwardsBodyImage';
 import { EVENT_STATUS_TO_STRING, getEventTime } from '../../../constants/events';
 import { useAuth } from '../../../context/UserContext';
-import useQueryGetUser from '../../../hooks/queries/getUser';
+import useQueryGetUser from '../../../hooks/queries/getUserWithRecentPredictions';
 import { Divider } from '@ui-kitten/components';
 
 const EVENT_ITEM_HEIGHT = 110;

@@ -21,7 +21,7 @@ import {
   getEventTime,
 } from '../../../constants/events';
 import { useAuth } from '../../../context/UserContext';
-import useQueryGetUser from '../../../hooks/queries/getUser';
+import useQueryGetUser from '../../../hooks/queries/getUserWithRecentPredictions';
 import { SubmitButton } from '../../../components/Buttons';
 import UpdateStatusModal from './UpdateStatusModal';
 import CreateEventModal from './CreateEventModal';

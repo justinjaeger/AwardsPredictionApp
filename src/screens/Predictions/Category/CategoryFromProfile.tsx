@@ -1,6 +1,4 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react';
-import PredictionTabsNavigator from '../../../navigation/PredictionTabsNavigator';
-import CategoryCommunity from './CategoryCommunity';
 import CategoryPersonal from './CategoryPersonal';
 import { useTypedNavigation } from '../../../util/hooks';
 import { PredictionsParamList } from '../../../navigation/types';
@@ -11,11 +9,15 @@ import { eventToString } from '../../../util/stringConversions';
 import { getHeaderTitleWithTrophy } from '../../../constants';
 import { useCollapsible } from '../../../hooks/animatedState/useCollapsible';
 import { iListDisplay, useDisplay } from '../../../hooks/animatedState/useDisplay';
-import { Animated } from 'react-native';
+import { Animated, View } from 'react-native';
 import DisplayFAB from '../../../components/Buttons/DisplayFAB';
 import { iEvent } from '../../../types';
 import { useAuth } from '../../../context/UserContext';
 import { RouteProp, useRoute } from '@react-navigation/native';
+import { BodyBold } from '../../../components/Text';
+import BackgroundWrapper from '../../../components/BackgroundWrapper';
+import useQueryGetUser from '../../../hooks/queries/getUser';
+import HistoryTab from '../../../components/HistoryTab';
 
 export type iCategoryProps = {
   collapsedOpacity: Animated.Value;
@@ -31,6 +33,9 @@ const Category = () => {
   const { params } = useRoute<RouteProp<PredictionsParamList, 'Category'>>();
   const { userId: authUserId } = useAuth();
   const userId = params?.userId || authUserId;
+
+  const { data } = useQueryGetUser(userId);
+  const username = data?.username || 'user';
 
   const { category, event: _event } = useCategory();
   const navigation = useTypedNavigation<PredictionsParamList>();
@@ -103,10 +108,15 @@ const Category = () => {
   return (
     <>
       <DisplayFAB state={toggleState[toggleIndex]} toggleDisplay={toggle} />
-      {PredictionTabsNavigator(
-        <CategoryPersonal {...props} />,
-        <CategoryCommunity {...props} />,
-      )}
+      <BackgroundWrapper>
+        <>
+          <BodyBold>{`${username}'s predictions`}</BodyBold>
+          <View style={{ zIndex: 2, width: '100%' }}>
+            <HistoryTab />
+          </View>
+          <CategoryPersonal {...props} />
+        </>
+      </BackgroundWrapper>
     </>
   );
 };
