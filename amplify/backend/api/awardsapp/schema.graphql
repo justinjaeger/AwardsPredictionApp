@@ -111,6 +111,9 @@ type User @model @auth(rules: [{allow: public}]) {
     bio: String
     image: String
     role: UserRole! @default(value: "USER")
+    # ON FRONTEND: perform this query but don't include nested "predictions"
+    # We can filter on this nested index and say "get me the last 10 results" or something
+    predictionSets: [PredictionSet] @hasMany(indexName: "byUser" fields: ["id"])
 }
 
 type Relationship @model @auth(rules: [{ allow: public }]) {
@@ -182,7 +185,12 @@ type Song @model @auth(rules: [{ allow: public }]) {
 # CURRENT PERSONAL
 type PredictionSet @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
-    userId: ID! @index(sortKeyFields: ["eventId"], queryField: "predictionSetByUserIdAndEventId") # used forgetting a user's predictions for a particular event
+    # we need predictionSetByUserIdAndEventId to make a request for all user's predictions in a given category
+    # what about for a social feed? We might want to know what the last 10 categories they updated were, and get it from all followers, which is DEFINITELY based on createdAt. So I'm gonna say, second index
+    # DO WE WANT CREATED_AT?? Because we might ONLY want to query for this if they've made predictions in the last month. We don't want to return ALL their predictions that's insane. At that point, it's just a separate query, predictionSetByUserIdAndEventId
+    userId: ID! 
+        @index(sortKeyFields: ["eventId"], queryField: "predictionSetByUserIdAndEventId") # used for request on a single user's predictions in given event
+        @index(name: "byUser", sortKeyFields: ["createdAt"], queryField: "predictionSetByUserIdAndCreatedAt") # need to use createdAt as sort key in order to return in order. Then in practice, put a limit on the results
     user: User! @hasOne(fields: ["userId"])
     eventId: ID! @index(queryField: "predictionSetByEventId") # used for compiling community predictions
     event: Event! @hasOne(fields: ["eventId"])
@@ -190,6 +198,8 @@ type PredictionSet @model @auth(rules: [{ allow: public }]) {
     category: Category! @hasOne(fields: ["categoryId"])
     predictions: [Prediction] @hasMany(indexName: "byPredictionSet", fields: ["id"])
     type: PredictionType @default(value: "NOMINATION")
+    comment: String
+    createdAt: AWSDateTime!
 }
 type Prediction @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
