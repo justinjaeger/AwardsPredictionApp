@@ -12,6 +12,110 @@ export const getUser = /* GraphQL */ `
       bio
       image
       role
+      predictionSets {
+        items {
+          id
+          userId
+          user {
+            id
+            email
+            username
+            name
+            bio
+            image
+            role
+            predictionSets {
+              items {
+                id
+                userId
+                eventId
+                categoryId
+                type
+                comment
+                createdAt
+                updatedAt
+              }
+              nextToken
+            }
+            createdAt
+            updatedAt
+          }
+          eventId
+          event {
+            id
+            categories {
+              items {
+                id
+                eventId
+                name
+                type
+                isShortlisted
+                createdAt
+                updatedAt
+              }
+              nextToken
+            }
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          categoryId
+          category {
+            id
+            eventId
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              nominationDateTime
+              winDateTime
+              status
+              createdAt
+              updatedAt
+            }
+            name
+            type
+            isShortlisted
+            createdAt
+            updatedAt
+          }
+          predictions {
+            items {
+              id
+              predictionSetId
+              contenderId
+              contender {
+                id
+                categoryId
+                eventId
+                movieId
+                personId
+                songId
+                visibility
+                accolade
+                createdAt
+                updatedAt
+              }
+              ranking
+              createdAt
+              updatedAt
+            }
+            nextToken
+          }
+          type
+          comment
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       createdAt
       updatedAt
     }
@@ -40,6 +144,76 @@ export const listUsers = /* GraphQL */ `
         bio
         image
         role
+        predictionSets {
+          items {
+            id
+            userId
+            user {
+              id
+              email
+              username
+              name
+              bio
+              image
+              role
+              predictionSets {
+                nextToken
+              }
+              createdAt
+              updatedAt
+            }
+            eventId
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              nominationDateTime
+              winDateTime
+              status
+              createdAt
+              updatedAt
+            }
+            categoryId
+            category {
+              id
+              eventId
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              name
+              type
+              isShortlisted
+              createdAt
+              updatedAt
+            }
+            predictions {
+              items {
+                id
+                predictionSetId
+                contenderId
+                ranking
+                createdAt
+                updatedAt
+              }
+              nextToken
+            }
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -60,6 +234,76 @@ export const getRelationship = /* GraphQL */ `
         bio
         image
         role
+        predictionSets {
+          items {
+            id
+            userId
+            user {
+              id
+              email
+              username
+              name
+              bio
+              image
+              role
+              predictionSets {
+                nextToken
+              }
+              createdAt
+              updatedAt
+            }
+            eventId
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              nominationDateTime
+              winDateTime
+              status
+              createdAt
+              updatedAt
+            }
+            categoryId
+            category {
+              id
+              eventId
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              name
+              type
+              isShortlisted
+              createdAt
+              updatedAt
+            }
+            predictions {
+              items {
+                id
+                predictionSetId
+                contenderId
+                ranking
+                createdAt
+                updatedAt
+              }
+              nextToken
+            }
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -72,6 +316,76 @@ export const getRelationship = /* GraphQL */ `
         bio
         image
         role
+        predictionSets {
+          items {
+            id
+            userId
+            user {
+              id
+              email
+              username
+              name
+              bio
+              image
+              role
+              predictionSets {
+                nextToken
+              }
+              createdAt
+              updatedAt
+            }
+            eventId
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              nominationDateTime
+              winDateTime
+              status
+              createdAt
+              updatedAt
+            }
+            categoryId
+            category {
+              id
+              eventId
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              name
+              type
+              isShortlisted
+              createdAt
+              updatedAt
+            }
+            predictions {
+              items {
+                id
+                predictionSetId
+                contenderId
+                ranking
+                createdAt
+                updatedAt
+              }
+              nextToken
+            }
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -106,6 +420,52 @@ export const listRelationships = /* GraphQL */ `
           bio
           image
           role
+          predictionSets {
+            items {
+              id
+              userId
+              user {
+                id
+                email
+                username
+                name
+                bio
+                image
+                role
+                createdAt
+                updatedAt
+              }
+              eventId
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              categoryId
+              category {
+                id
+                eventId
+                name
+                type
+                isShortlisted
+                createdAt
+                updatedAt
+              }
+              predictions {
+                nextToken
+              }
+              type
+              comment
+              createdAt
+              updatedAt
+            }
+            nextToken
+          }
           createdAt
           updatedAt
         }
@@ -118,6 +478,52 @@ export const listRelationships = /* GraphQL */ `
           bio
           image
           role
+          predictionSets {
+            items {
+              id
+              userId
+              user {
+                id
+                email
+                username
+                name
+                bio
+                image
+                role
+                createdAt
+                updatedAt
+              }
+              eventId
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              categoryId
+              category {
+                id
+                eventId
+                name
+                type
+                isShortlisted
+                createdAt
+                updatedAt
+              }
+              predictions {
+                nextToken
+              }
+              type
+              comment
+              createdAt
+              updatedAt
+            }
+            nextToken
+          }
           createdAt
           updatedAt
         }
@@ -1237,6 +1643,76 @@ export const getPredictionSet = /* GraphQL */ `
         bio
         image
         role
+        predictionSets {
+          items {
+            id
+            userId
+            user {
+              id
+              email
+              username
+              name
+              bio
+              image
+              role
+              predictionSets {
+                nextToken
+              }
+              createdAt
+              updatedAt
+            }
+            eventId
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              nominationDateTime
+              winDateTime
+              status
+              createdAt
+              updatedAt
+            }
+            categoryId
+            category {
+              id
+              eventId
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              name
+              type
+              isShortlisted
+              createdAt
+              updatedAt
+            }
+            predictions {
+              items {
+                id
+                predictionSetId
+                contenderId
+                ranking
+                createdAt
+                updatedAt
+              }
+              nextToken
+            }
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -1405,6 +1881,7 @@ export const getPredictionSet = /* GraphQL */ `
         nextToken
       }
       type
+      comment
       createdAt
       updatedAt
     }
@@ -1436,6 +1913,52 @@ export const listPredictionSets = /* GraphQL */ `
           bio
           image
           role
+          predictionSets {
+            items {
+              id
+              userId
+              user {
+                id
+                email
+                username
+                name
+                bio
+                image
+                role
+                createdAt
+                updatedAt
+              }
+              eventId
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              categoryId
+              category {
+                id
+                eventId
+                name
+                type
+                isShortlisted
+                createdAt
+                updatedAt
+              }
+              predictions {
+                nextToken
+              }
+              type
+              comment
+              createdAt
+              updatedAt
+            }
+            nextToken
+          }
           createdAt
           updatedAt
         }
@@ -1568,6 +2091,7 @@ export const listPredictionSets = /* GraphQL */ `
           nextToken
         }
         type
+        comment
         createdAt
         updatedAt
       }
@@ -1902,6 +2426,76 @@ export const getHistoryPredictionSet = /* GraphQL */ `
         bio
         image
         role
+        predictionSets {
+          items {
+            id
+            userId
+            user {
+              id
+              email
+              username
+              name
+              bio
+              image
+              role
+              predictionSets {
+                nextToken
+              }
+              createdAt
+              updatedAt
+            }
+            eventId
+            event {
+              id
+              categories {
+                nextToken
+              }
+              awardsBody
+              year
+              nominationDateTime
+              winDateTime
+              status
+              createdAt
+              updatedAt
+            }
+            categoryId
+            category {
+              id
+              eventId
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              name
+              type
+              isShortlisted
+              createdAt
+              updatedAt
+            }
+            predictions {
+              items {
+                id
+                predictionSetId
+                contenderId
+                ranking
+                createdAt
+                updatedAt
+              }
+              nextToken
+            }
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -2101,6 +2695,52 @@ export const listHistoryPredictionSets = /* GraphQL */ `
           bio
           image
           role
+          predictionSets {
+            items {
+              id
+              userId
+              user {
+                id
+                email
+                username
+                name
+                bio
+                image
+                role
+                createdAt
+                updatedAt
+              }
+              eventId
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              categoryId
+              category {
+                id
+                eventId
+                name
+                type
+                isShortlisted
+                createdAt
+                updatedAt
+              }
+              predictions {
+                nextToken
+              }
+              type
+              comment
+              createdAt
+              updatedAt
+            }
+            nextToken
+          }
           createdAt
           updatedAt
         }
@@ -3987,6 +4627,52 @@ export const relationshipByFollowedUserId = /* GraphQL */ `
           bio
           image
           role
+          predictionSets {
+            items {
+              id
+              userId
+              user {
+                id
+                email
+                username
+                name
+                bio
+                image
+                role
+                createdAt
+                updatedAt
+              }
+              eventId
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              categoryId
+              category {
+                id
+                eventId
+                name
+                type
+                isShortlisted
+                createdAt
+                updatedAt
+              }
+              predictions {
+                nextToken
+              }
+              type
+              comment
+              createdAt
+              updatedAt
+            }
+            nextToken
+          }
           createdAt
           updatedAt
         }
@@ -3999,6 +4685,52 @@ export const relationshipByFollowedUserId = /* GraphQL */ `
           bio
           image
           role
+          predictionSets {
+            items {
+              id
+              userId
+              user {
+                id
+                email
+                username
+                name
+                bio
+                image
+                role
+                createdAt
+                updatedAt
+              }
+              eventId
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              categoryId
+              category {
+                id
+                eventId
+                name
+                type
+                isShortlisted
+                createdAt
+                updatedAt
+              }
+              predictions {
+                nextToken
+              }
+              type
+              comment
+              createdAt
+              updatedAt
+            }
+            nextToken
+          }
           createdAt
           updatedAt
         }
@@ -4035,6 +4767,52 @@ export const relationshipByFollowingUserId = /* GraphQL */ `
           bio
           image
           role
+          predictionSets {
+            items {
+              id
+              userId
+              user {
+                id
+                email
+                username
+                name
+                bio
+                image
+                role
+                createdAt
+                updatedAt
+              }
+              eventId
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              categoryId
+              category {
+                id
+                eventId
+                name
+                type
+                isShortlisted
+                createdAt
+                updatedAt
+              }
+              predictions {
+                nextToken
+              }
+              type
+              comment
+              createdAt
+              updatedAt
+            }
+            nextToken
+          }
           createdAt
           updatedAt
         }
@@ -4047,6 +4825,52 @@ export const relationshipByFollowingUserId = /* GraphQL */ `
           bio
           image
           role
+          predictionSets {
+            items {
+              id
+              userId
+              user {
+                id
+                email
+                username
+                name
+                bio
+                image
+                role
+                createdAt
+                updatedAt
+              }
+              eventId
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              categoryId
+              category {
+                id
+                eventId
+                name
+                type
+                isShortlisted
+                createdAt
+                updatedAt
+              }
+              predictions {
+                nextToken
+              }
+              type
+              comment
+              createdAt
+              updatedAt
+            }
+            nextToken
+          }
           createdAt
           updatedAt
         }
@@ -4337,6 +5161,52 @@ export const predictionSetByUserIdAndEventId = /* GraphQL */ `
           bio
           image
           role
+          predictionSets {
+            items {
+              id
+              userId
+              user {
+                id
+                email
+                username
+                name
+                bio
+                image
+                role
+                createdAt
+                updatedAt
+              }
+              eventId
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              categoryId
+              category {
+                id
+                eventId
+                name
+                type
+                isShortlisted
+                createdAt
+                updatedAt
+              }
+              predictions {
+                nextToken
+              }
+              type
+              comment
+              createdAt
+              updatedAt
+            }
+            nextToken
+          }
           createdAt
           updatedAt
         }
@@ -4469,6 +5339,221 @@ export const predictionSetByUserIdAndEventId = /* GraphQL */ `
           nextToken
         }
         type
+        comment
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const predictionSetByUserIdAndCreatedAt = /* GraphQL */ `
+  query PredictionSetByUserIdAndCreatedAt(
+    $userId: ID!
+    $createdAt: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelPredictionSetFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    predictionSetByUserIdAndCreatedAt(
+      userId: $userId
+      createdAt: $createdAt
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        userId
+        user {
+          id
+          email
+          username
+          name
+          bio
+          image
+          role
+          predictionSets {
+            items {
+              id
+              userId
+              user {
+                id
+                email
+                username
+                name
+                bio
+                image
+                role
+                createdAt
+                updatedAt
+              }
+              eventId
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              categoryId
+              category {
+                id
+                eventId
+                name
+                type
+                isShortlisted
+                createdAt
+                updatedAt
+              }
+              predictions {
+                nextToken
+              }
+              type
+              comment
+              createdAt
+              updatedAt
+            }
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        eventId
+        event {
+          id
+          categories {
+            items {
+              id
+              eventId
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              name
+              type
+              isShortlisted
+              createdAt
+              updatedAt
+            }
+            nextToken
+          }
+          awardsBody
+          year
+          nominationDateTime
+          winDateTime
+          status
+          createdAt
+          updatedAt
+        }
+        categoryId
+        category {
+          id
+          eventId
+          event {
+            id
+            categories {
+              items {
+                id
+                eventId
+                name
+                type
+                isShortlisted
+                createdAt
+                updatedAt
+              }
+              nextToken
+            }
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          name
+          type
+          isShortlisted
+          createdAt
+          updatedAt
+        }
+        predictions {
+          items {
+            id
+            predictionSetId
+            contenderId
+            contender {
+              id
+              categoryId
+              category {
+                id
+                eventId
+                name
+                type
+                isShortlisted
+                createdAt
+                updatedAt
+              }
+              eventId
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              movieId
+              movie {
+                id
+                tmdbId
+                studio
+                createdAt
+                updatedAt
+              }
+              personId
+              person {
+                id
+                tmdbId
+                createdAt
+                updatedAt
+              }
+              songId
+              song {
+                id
+                movieId
+                title
+                artist
+                createdAt
+                updatedAt
+              }
+              visibility
+              accolade
+              createdAt
+              updatedAt
+            }
+            ranking
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        type
+        comment
         createdAt
         updatedAt
       }
@@ -4502,6 +5587,52 @@ export const predictionSetByEventId = /* GraphQL */ `
           bio
           image
           role
+          predictionSets {
+            items {
+              id
+              userId
+              user {
+                id
+                email
+                username
+                name
+                bio
+                image
+                role
+                createdAt
+                updatedAt
+              }
+              eventId
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              categoryId
+              category {
+                id
+                eventId
+                name
+                type
+                isShortlisted
+                createdAt
+                updatedAt
+              }
+              predictions {
+                nextToken
+              }
+              type
+              comment
+              createdAt
+              updatedAt
+            }
+            nextToken
+          }
           createdAt
           updatedAt
         }
@@ -4634,6 +5765,7 @@ export const predictionSetByEventId = /* GraphQL */ `
           nextToken
         }
         type
+        comment
         createdAt
         updatedAt
       }
@@ -4798,6 +5930,52 @@ export const historyPredictionSetByUserIdAndEventIdAndCreatedAt = /* GraphQL */ 
           bio
           image
           role
+          predictionSets {
+            items {
+              id
+              userId
+              user {
+                id
+                email
+                username
+                name
+                bio
+                image
+                role
+                createdAt
+                updatedAt
+              }
+              eventId
+              event {
+                id
+                awardsBody
+                year
+                nominationDateTime
+                winDateTime
+                status
+                createdAt
+                updatedAt
+              }
+              categoryId
+              category {
+                id
+                eventId
+                name
+                type
+                isShortlisted
+                createdAt
+                updatedAt
+              }
+              predictions {
+                nextToken
+              }
+              type
+              comment
+              createdAt
+              updatedAt
+            }
+            nextToken
+          }
           createdAt
           updatedAt
         }

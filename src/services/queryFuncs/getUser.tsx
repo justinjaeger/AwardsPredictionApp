@@ -6,7 +6,6 @@ const getUser = async (id: string | undefined): Promise<iUser | undefined> => {
   const { data } = await ApiServices.getUser(id);
   const user = data?.getUser;
   if (!user) return undefined;
-  // format events data
   return {
     id: user.id,
     email: user.email,

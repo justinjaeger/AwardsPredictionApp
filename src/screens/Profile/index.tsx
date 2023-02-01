@@ -1,26 +1,49 @@
-import React, { useLayoutEffect, useState } from 'react';
-import { Alert, ScrollView, Image } from 'react-native';
-import { SubmitButton, TouchableText } from '../../components/Buttons';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
+import {
+  Alert,
+  ScrollView,
+  Image,
+  View,
+  TouchableHighlight,
+  useWindowDimensions,
+} from 'react-native';
+import { SubmitButton } from '../../components/Buttons';
 import AuthServices from '../../services/auth';
 import Snackbar from '../../components/Snackbar';
-import { useNavigation } from '@react-navigation/native';
-import { Body } from '../../components/Text';
-import ApiServices from '../../services/graphql';
-import { useSubscriptionEffect } from '../../util/hooks';
-import { GetUserQuery } from '../../API';
+import { HeaderLight, SubHeader } from '../../components/Text';
 import { useAuth } from '../../context/UserContext';
 import BackgroundWrapper from '../../components/BackgroundWrapper';
 import { IconButton } from '../../components/Buttons/IconButton';
 import { launchImageLibrary } from 'react-native-image-picker';
 import AWSStorage from '../../services/storage';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import theme from '../../constants/theme';
+import PredictionCarousel from '../../components/PredictionCarousel';
+import { ProfileParamList } from '../../navigation/types';
+import useQueryGetUserWithRecentPredictions from '../../hooks/queries/getUserWithRecentPredictions';
 
 const Profile = () => {
-  const { userId, userEmail, signOutUser } = useAuth(); // later import userId
-  const navigation = useNavigation();
+  // If we pass userId as params, it loads that user's profile. If not, it attemps to get logged in profile.
+  const { params } = useRoute<RouteProp<ProfileParamList, 'Profile'>>();
+  const { userId: authUserId, userEmail, signOutUser } = useAuth(); // later import userId
+  const userId = params?.userId || authUserId;
 
-  const [user, setUser] = useState<GetUserQuery>();
+  const navigation = useNavigation();
+  const { width } = useWindowDimensions();
+
+  const { data: user } = useQueryGetUserWithRecentPredictions(userId);
   const [loading, setLoading] = useState<boolean>(false);
   const [profileUri, setProfileUri] = useState<string | undefined>(undefined);
+
+  const isDeviceProfile = user && userId && user?.id === userId;
+
+  const predictionSets = user?.predictionSets || [];
+
+  useEffect(() => {
+    if (!userId) {
+      navigation.navigate('ChangeUsername');
+    }
+  }, [userId]);
 
   // put the logout button in the top right corner
   useLayoutEffect(() => {
@@ -55,14 +78,6 @@ const Profile = () => {
         />
       ),
     });
-  }, []);
-
-  useSubscriptionEffect(async () => {
-    if (!userId) return;
-    const { data: u } = await ApiServices.getUser(userId);
-    if (u) {
-      setUser(u);
-    }
   }, [userId]);
 
   const logIn = () => {
@@ -98,27 +113,95 @@ const Profile = () => {
     }
   };
 
+  const proportion = 3 / 10;
+  const imageContainerWidth = width * proportion;
+  const usernameContainerWidth = width * (1 - proportion);
+
   return (
     <BackgroundWrapper>
       <ScrollView
-        contentContainerStyle={{ alignItems: 'center', marginTop: 40, width: '100%' }}
+        style={{ width: '100%' }}
+        contentContainerStyle={{
+          alignItems: 'center',
+          marginTop: 20,
+          width: '100%',
+          paddingBottom: 100,
+        }}
       >
-        <SubmitButton text={'Upload Image'} onPress={onUpload} />
-        {profileUri ? (
-          <Image style={{ width: 200, height: 200 }} source={{ uri: profileUri }} />
-        ) : null}
         {!userId ? (
-          <SubmitButton text={userEmail ? 'Log in' : 'Create Account'} onPress={logIn} />
+          <SubmitButton
+            style={{ marginTop: 20 }}
+            text={userEmail ? 'Log in' : 'Create Account'}
+            onPress={logIn}
+          />
         ) : (
           <>
-            <TouchableText
-              text={user?.getUser?.username ? 'Change Username' : 'Create Username'}
-              onPress={() => {
-                navigation.navigate('ChangeUsername', { user });
+            <View
+              style={{
+                width: width,
+                alignItems: 'center',
+                flexDirection: 'row',
+                height: 100,
+                padding: theme.windowMargin,
+                marginBottom: 20,
               }}
-              style={{ marginTop: 30 }}
-            />
-            <Body style={{ marginTop: 30 }}>{JSON.stringify(user)}</Body>
+            >
+              <View style={{ width: imageContainerWidth, paddingLeft: 10 }}>
+                <TouchableHighlight
+                  onPress={isDeviceProfile ? onUpload : undefined}
+                  style={{
+                    height: 100,
+                    width: 100,
+                    borderRadius: 100,
+                    backgroundColor: 'red',
+                  }}
+                >
+                  <View />
+                </TouchableHighlight>
+              </View>
+              <View style={{ flexDirection: 'column', paddingLeft: 10 }}>
+                <TouchableHighlight
+                  onPress={
+                    isDeviceProfile
+                      ? () => {
+                          navigation.navigate('ChangeUsername');
+                        }
+                      : undefined
+                  }
+                  underlayColor={'transaparent'}
+                >
+                  <HeaderLight>
+                    {user?.username ? user.username : 'No Username'}
+                  </HeaderLight>
+                </TouchableHighlight>
+                <View style={{ width: usernameContainerWidth }}>
+                  {isDeviceProfile && !user?.username ? (
+                    <View onTouchEnd={() => navigation.navigate('ChangeUsername')}>
+                      <SubHeader style={{ paddingRight: 20 }}>
+                        {'Must create username for others to find you'}
+                      </SubHeader>
+                    </View>
+                  ) : (
+                    <View style={{ height: 20 }} />
+                  )}
+                </View>
+              </View>
+            </View>
+            {profileUri ? (
+              // JUST FOR TEST: REMOVE LATER
+              <Image style={{ width: 200, height: 200 }} source={{ uri: profileUri }} />
+            ) : null}
+            <HeaderLight
+              style={{
+                alignSelf: 'flex-start',
+                marginBottom: 10,
+                marginTop: 10,
+                marginLeft: theme.windowMargin,
+              }}
+            >
+              Recent Predictions:
+            </HeaderLight>
+            <PredictionCarousel predictionSets={predictionSets} userId={userId} />
           </>
         )}
       </ScrollView>

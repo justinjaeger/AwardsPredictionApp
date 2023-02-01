@@ -13,52 +13,19 @@
     },
     "categories": {
       "auth": {
-        "awardsappa4e66206": {},
-        "true": {}
-      },
-      "function": {
-        "updateCommunityPredictions": {
-          "deploymentBucketName": "amplify-awardsapp-dev-115717-deployment",
-          "s3Key": "amplify-builds/updateCommunityPredictions-5844344168436a624845-build.zip"
-        },
-        "updatePersonalHistory": {
-          "deploymentBucketName": "amplify-awardsapp-dev-115717-deployment",
-          "s3Key": "amplify-builds/updatePersonalHistory-37505963517168716354-build.zip"
-        },
-        "updateCommunityHistory": {
-          "deploymentBucketName": "amplify-awardsapp-dev-115717-deployment",
-          "s3Key": "amplify-builds/updateCommunityHistory-3776386f737648785338-build.zip"
-        }
-      }
-    }
-  },
-  "prod": {
-    "awscloudformation": {
-      "AuthRoleName": "amplify-awardsapp-prod-150001-authRole",
-      "UnauthRoleArn": "arn:aws:iam::709934184485:role/amplify-awardsapp-prod-150001-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::709934184485:role/amplify-awardsapp-prod-150001-authRole",
-      "Region": "us-east-1",
-      "DeploymentBucketName": "amplify-awardsapp-prod-150001-deployment",
-      "UnauthRoleName": "amplify-awardsapp-prod-150001-unauthRole",
-      "StackName": "amplify-awardsapp-prod-150001",
-      "StackId": "arn:aws:cloudformation:us-east-1:709934184485:stack/amplify-awardsapp-prod-150001/b1f25650-976a-11ed-9013-0eb7685d618f",
-      "AmplifyAppId": "d6fn0av9g1ead"
-    },
-    "categories": {
-      "auth": {
         "awardsappa4e66206": {}
       },
       "function": {
         "updateCommunityPredictions": {
-          "deploymentBucketName": "amplify-awardsapp-prod-150001-deployment",
+          "deploymentBucketName": "amplify-awardsapp-dev-115717-deployment",
           "s3Key": "amplify-builds/updateCommunityPredictions-3052447230497655546e-build.zip"
         },
         "updatePersonalHistory": {
-          "deploymentBucketName": "amplify-awardsapp-prod-150001-deployment",
+          "deploymentBucketName": "amplify-awardsapp-dev-115717-deployment",
           "s3Key": "amplify-builds/updatePersonalHistory-6e326d42714e6a6f4566-build.zip"
         },
         "updateCommunityHistory": {
-          "deploymentBucketName": "amplify-awardsapp-prod-150001-deployment",
+          "deploymentBucketName": "amplify-awardsapp-dev-115717-deployment",
           "s3Key": "amplify-builds/updateCommunityHistory-68443274556978774d4b-build.zip"
         }
       }

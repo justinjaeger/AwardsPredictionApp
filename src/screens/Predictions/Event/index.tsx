@@ -4,32 +4,32 @@ import { PredictionsParamList } from '../../../navigation/types';
 import { useTypedNavigation } from '../../../util/hooks';
 import { useCategory } from '../../../context/CategoryContext';
 import { iCategory, iEvent } from '../../../types';
-import PredictionTabsNavigator from '../../../navigation/PredictionTabsNavigator';
-import { useAuth } from '../../../context/UserContext';
 import { eventToString } from '../../../util/stringConversions';
 import LoadingStatue from '../../../components/LoadingStatue';
 import SignedOutState from '../../../components/SignedOutState';
 import { getHeaderTitleWithTrophy } from '../../../constants';
 import EventList from './EventList';
-import { useCollapsible } from '../../../hooks/animatedState/useCollapsible';
 import _ from 'lodash';
 import { formatLastUpdated } from '../../../util/formatDateTime';
 import usePredictionData from '../../../hooks/queries/usePredictionData';
-import DisplayFAB from '../../../components/Buttons/DisplayFAB';
 import LastUpdatedText from '../../../components/LastUpdatedText';
 
 const TIMING = 300;
 
-const Event = (props: {
+const Event = ({
+  tab,
+  collapsedOpacity,
+  expandedOpacity,
+  isCollapsed,
+  userId,
+}: {
   tab: 'personal' | 'community';
   collapsedOpacity: Animated.Value;
   expandedOpacity: Animated.Value;
   isCollapsed: boolean;
+  userId: string | undefined; // if undefined means user is logged out
 }) => {
-  const { tab, collapsedOpacity, expandedOpacity, isCollapsed } = props;
-
   const { event: _event, setCategory, date } = useCategory();
-  const { userId: _userId } = useAuth();
   const navigation = useTypedNavigation<PredictionsParamList>();
 
   const loadingOpacity = useRef(new Animated.Value(1)).current;
@@ -37,9 +37,9 @@ const Event = (props: {
 
   const isHistory = !!date;
   const event = _event as iEvent;
-  const userId = _userId as string;
 
-  const { predictionData, isLoading } = usePredictionData(tab);
+  const { predictionData, isLoading } = usePredictionData(tab, userId);
+  // TODO: predictionData is defined, but I think we must be using event.categories and we're not passing that down from the user profile
 
   // define the header
   useLayoutEffect(() => {
@@ -70,7 +70,7 @@ const Event = (props: {
 
   const onSelectCategory = async (category: iCategory) => {
     setCategory(category);
-    navigation.navigate('Category');
+    navigation.navigate('Category', { userId });
   };
 
   const iterablePredictionData = _.values(predictionData || {});
@@ -144,36 +144,4 @@ const Event = (props: {
   );
 };
 
-const TabsWrapper = () => {
-  const {
-    collapsedOpacity,
-    expandedOpacity,
-    isCollapsed,
-    setIsCollapsed,
-  } = useCollapsible();
-
-  const props = {
-    collapsedOpacity,
-    expandedOpacity,
-    isCollapsed,
-  };
-
-  const toggle = () => {
-    setIsCollapsed(!isCollapsed);
-  };
-
-  return (
-    <>
-      <DisplayFAB
-        state={isCollapsed ? 'list-collapsed' : 'list'}
-        toggleDisplay={toggle}
-      />
-      {PredictionTabsNavigator(
-        <Event tab={'personal'} {...props} />,
-        <Event tab={'community'} {...props} />,
-      )}
-    </>
-  );
-};
-
-export default TabsWrapper;
+export default Event;

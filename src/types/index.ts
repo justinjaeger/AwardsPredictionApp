@@ -13,6 +13,7 @@ import {
 export enum QueryKeys {
   EVENTS = 'events',
   USER = 'user',
+  USER_WITH_PREDICTIONS = 'user-with-predictions',
   PERSONAL_EVENT = 'personal-predictions-by-event',
   COMMUNITY_EVENT = 'community-predictions-by-event',
 }
@@ -82,6 +83,19 @@ export type iIndexedEvents = {
   [eventId: string]: iEvent;
 };
 
+export type iPredictionSet = {
+  id: string;
+  event: iEvent;
+  category: {
+    id: string;
+    name: CategoryName;
+    type: CategoryType;
+    isShortlisted: CategoryIsShortlisted;
+  };
+  predictions: iPrediction[];
+  createdAt: string;
+};
+
 export type iUser = {
   id: string;
   email: string;
@@ -90,4 +104,5 @@ export type iUser = {
   bio: string | undefined;
   image: string | undefined;
   role: UserRole;
+  predictionSets?: iPredictionSet[];
 };

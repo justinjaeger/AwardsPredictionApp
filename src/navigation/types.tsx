@@ -11,10 +11,10 @@ export type MainParamList = {
 };
 
 export type PredictionsParamList = {
-  Profile: undefined;
   EventSelect: undefined;
-  Event: undefined;
+  Event: { userId: string | undefined };
   Category: {
+    userId: string | undefined;
     isSelectable?: boolean;
     onPressItem?: (contenderId: string) => void;
   };
@@ -35,5 +35,8 @@ export type AdminParamList = {
 };
 
 export type ProfileParamList = {
-  Profile: undefined;
+  Profile: {
+    userId?: string;
+  };
+  ChangeUsername: undefined;
 };

@@ -1,34 +1,21 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import BackButton from '../components/Buttons/BackButton';
-import { CategoryProvider } from '../context/CategoryContext';
 import ContenderDetailsScreen from '../screens/Predictions/ContenderDetailsScreen';
 import { PredictionsParamList } from './types';
 import Category from '../screens/Predictions/Category';
 import EventSelect from '../screens/Predictions/EventSelect';
-import Event from '../screens/Predictions/Event';
-import ProfileNavigator from './ProfileNavigator';
 import theme from '../constants/theme';
 import { getHeaderTitle, headerSettings } from '../constants';
 import AddPredictions from '../screens/Predictions/AddPredictions.tsx';
 import HistoryHeaderButton from '../components/Buttons/HistoryHeaderButton';
+import EventPersonalCommunity from '../screens/Predictions/Event/EventPersonalCommunity';
 
 const { Navigator, Screen } = createStackNavigator<PredictionsParamList>();
 
 const PredictionsNavigator = () => {
   return (
     <Navigator initialRouteName="EventSelect" headerMode="screen">
-      <Screen
-        name="Profile"
-        component={ProfileNavigator}
-        options={{
-          headerShown: false,
-          headerTitle: 'Profile',
-          headerTitleStyle: {
-            color: 'white',
-          },
-        }}
-      />
       <Screen
         name="EventSelect"
         component={EventSelect}
@@ -40,7 +27,7 @@ const PredictionsNavigator = () => {
       />
       <Screen
         name="Event"
-        component={Event}
+        component={EventPersonalCommunity}
         options={{
           headerTitle: getHeaderTitle('Event Predictions'),
           headerLeft: BackButton,
@@ -82,12 +69,4 @@ const PredictionsNavigator = () => {
   );
 };
 
-const PredictionsNavigatorWrapper = () => {
-  return (
-    <CategoryProvider>
-      <PredictionsNavigator />
-    </CategoryProvider>
-  );
-};
-
-export default PredictionsNavigatorWrapper;
+export default PredictionsNavigator;

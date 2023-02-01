@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { TouchableHighlight, View } from 'react-native';
-import { CategoryName, ContenderAccolade, PredictionType } from '../../../API';
+import { CategoryName, PredictionType } from '../../../API';
 import MovieGrid from '../../../components/MovieGrid';
 import { HeaderLight, SubHeader } from '../../../components/Text';
 import { getAwardsBodyCategories, getCategorySlots } from '../../../constants/categories';
@@ -49,19 +49,7 @@ const EventList = (props: iEventListProps) => {
           predictions[0]?.predictionType || PredictionType.NOMINATION;
         // once nominations happen, you want "slots" to be however many films are nominated
         const slots = getCategorySlots(event, category.name, predictionType);
-        // slots is "1" when predictions have happened, so if predictions have happened, we want to show all the nominees rather than the slots (in the case that Critics Choice nominates 11 films with 10 slots for ex)
-        const slotsToUse =
-          slots !== 1
-            ? slots
-            : predictions.reduce((acc, pred) => {
-                if (
-                  pred.accolade === ContenderAccolade.NOMINEE ||
-                  pred.accolade === ContenderAccolade.WINNER
-                ) {
-                  acc += 1;
-                }
-                return acc;
-              }, 0);
+        const slotsToUse = slots !== 1 ? slots : 5; // slots is "1" when predictions have happened, so if predictions have happened, so for winner predictions let's just show top 5
         const truncatedPredictions = predictions.slice(0, slotsToUse);
         return (
           <TouchableHighlight

@@ -63,7 +63,7 @@ export const UserProvider = (props: { children: React.ReactNode }) => {
       setUserId(userId);
     }
     if (email) {
-      setUserEmail(userEmail);
+      setUserEmail(email);
     }
     if (role) {
       setUserRole(role as UserRole);

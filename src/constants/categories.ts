@@ -5,7 +5,6 @@ import {
   CategoryType,
   PredictionType,
 } from '../API';
-import { iEvent } from '../types';
 
 export type iCategoryData = { name: string; type: CategoryType; slots?: number };
 
@@ -27,7 +26,10 @@ export const IS_SHORTLISTED_TO_STRING: {
 };
 
 export const getCategorySlots = (
-  event: iEvent,
+  event: {
+    awardsBody: AwardsBody;
+    year: number;
+  },
   categoryName: CategoryName,
   predictionType: PredictionType,
 ) => {

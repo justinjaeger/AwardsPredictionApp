@@ -1,4 +1,4 @@
-import { Storage } from 'aws-amplify';
+import { Auth, Storage } from 'aws-amplify';
 
 // Upload file to specified bucket.
 export const pathToImageFile = async (uri: string, email: string) => {
@@ -7,9 +7,16 @@ export const pathToImageFile = async (uri: string, email: string) => {
   //   const random = Math.floor(100000 + Math.random() * 900000);
   //   const key = email.split('@')[0] + random;
   //   console.log('key', key);
+
   try {
-    const res = await Storage.list('', { pageSize: 0 });
-    console.log('res', res);
+    // const user = await Auth.currentAuthenticatedUser();
+    // console.log('userrrrrr', user);
+    // const res = await Storage.list('');
+    // upload a simple text file and attempt to retrieve it, or one that exists if put() fails
+    // const res: any = await Storage.put('test.txt', 'This is some sample text');
+    // console.log('res1', res);
+    const res = await Storage.get('text.txt');
+    console.log('res2', res);
     // const response = await fetch(uri);
     // console.log('response', response);
     // const blob = await response.blob();

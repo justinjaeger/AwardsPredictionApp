@@ -4,14 +4,13 @@ import {
   ContenderVisibility,
   PredictionType,
 } from '../../API';
-import { iEvent, iIndexedPredictionsByCategory, iPrediction } from '../../types';
+import { iIndexedPredictionsByCategory, iPrediction } from '../../types';
 import { isWithinLastMonth } from '../../util/isWithinLastMonth';
 import { sortCommunityPredictionsByRanking } from '../../util/sortPredictions';
 import ApiServices from '../graphql';
 
-const getCommunityPredictionsByEvent = async (event: iEvent, includeHidden = false) => {
+const getCommunityPredictionsByEvent = async (eventId: string, includeHidden = false) => {
   // TODO: move this logic to lambda function. Pull directly from CommunityPredictionSet
-  const eventId = event.id;
   const { data: predictionSets } = await ApiServices.getCommunityPredictionsByEvent(
     eventId,
   );
