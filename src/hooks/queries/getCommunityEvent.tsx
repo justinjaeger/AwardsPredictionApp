@@ -6,7 +6,7 @@ const useQueryCommunityEvent = (props: { event: iEvent; includeHidden?: boolean 
   const { event, includeHidden } = props;
   const { isLoading, data } = useQuery({
     queryKey: [QueryKeys.COMMUNITY_EVENT],
-    queryFn: () => getCommunityPredictionsByEvent(event, includeHidden),
+    queryFn: () => getCommunityPredictionsByEvent(event.id, includeHidden),
   });
 
   return { data, isLoading };

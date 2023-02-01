@@ -7,6 +7,7 @@ import Navigation from './navigation';
 import theme from './theme';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { UserProvider } from './context/UserContext';
+import { CategoryProvider } from './context/CategoryContext';
 
 const queryClient = new QueryClient();
 
@@ -17,7 +18,9 @@ const App = () => {
         <IconRegistry icons={EvaIconsPack} />
         <ApplicationProvider {...eva} theme={{ ...theme }}>
           <UserProvider>
-            <Navigation />
+            <CategoryProvider>
+              <Navigation />
+            </CategoryProvider>
           </UserProvider>
         </ApplicationProvider>
       </QueryClientProvider>

@@ -11,7 +11,6 @@ import Snackbar from '../../../components/Snackbar';
 import { BodyBold } from '../../../components/Text';
 import theme from '../../../constants/theme';
 import { useCategory } from '../../../context/CategoryContext';
-import { useAuth } from '../../../context/UserContext';
 import useMutationUpdatePredictions from '../../../hooks/mutations/updatePredictions';
 import { PredictionsParamList } from '../../../navigation/types';
 import { iCategory, iEvent, iPrediction } from '../../../types';
@@ -26,6 +25,7 @@ import { eventStatusToPredictionType } from '../../../constants/events';
 import { iCategoryProps } from '.';
 import LastUpdatedText from '../../../components/LastUpdatedText';
 import HistoryHeaderButton from '../../../components/Buttons/HistoryHeaderButton';
+import { useAuth } from '../../../context/UserContext';
 
 // NOTE: Has a lot in common with ContenderListDraggable
 const CategoryPersonal = ({
@@ -35,15 +35,17 @@ const CategoryPersonal = ({
   delayedDisplay,
   gridOpacity,
   listOpacity,
+  userId,
 }: iCategoryProps) => {
   const { category: _category, event: _event, date } = useCategory();
-  const { userId: _userId } = useAuth();
   const navigation = useTypedNavigation<PredictionsParamList>();
+  const { userId: authUserId } = useAuth();
+
+  const isFriendProfile = userId !== authUserId;
 
   const isHistory = !!date;
   const category = _category as iCategory;
   const event = _event as iEvent;
-  const userId = _userId as string;
 
   const [goBackOnComplete, setGoBackOnComplete] = useAsyncReference<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -66,7 +68,7 @@ const CategoryPersonal = ({
   const { mutate: updatePredictions, isComplete } = useMutationUpdatePredictions(
     onComplete,
   );
-  const { predictionData, isLoading } = usePredictionData('personal');
+  const { predictionData, isLoading } = usePredictionData('personal', userId);
   const initialPredictions = predictionData
     ? predictionData[category.id]?.predictions || []
     : [];
@@ -122,6 +124,7 @@ const CategoryPersonal = ({
   }, [navigation]);
 
   const onSaveContenders = async () => {
+    if (!userId) return;
     if (_.isEqual(initialPredictions, predictions)) {
       setIsEditing(false);
       return;
@@ -201,6 +204,7 @@ const CategoryPersonal = ({
             predictions={predictions}
             setPredictions={(ps) => setPredictions(ps)}
             lastUpdatedString={lastUpdatedString}
+            isFriendProfile={isFriendProfile}
           />
         </Animated.View>
         <Animated.View
@@ -214,6 +218,7 @@ const CategoryPersonal = ({
             setPredictions={(ps) => setPredictions(ps)}
             lastUpdatedString={lastUpdatedString}
             isCollapsed
+            isFriendProfile={isFriendProfile}
           />
         </Animated.View>
       </Animated.View>

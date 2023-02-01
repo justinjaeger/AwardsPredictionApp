@@ -1,16 +1,17 @@
 import { useCategory } from '../../context/CategoryContext';
-import { useAuth } from '../../context/UserContext';
 import { iEvent } from '../../types';
 import useQueryCommunityOrPersonalEvent from './getCommunityOrPersonalEvent';
 import useQueryCommunityOrPersonalHistory from './getCommunityOrPersonalHistory';
 
 // note: MUST pass tab through params
-const usePredictionData = (tab: 'community' | 'personal') => {
+const usePredictionData = (tab: 'community' | 'personal', userId?: string) => {
   const { date, event: _event } = useCategory();
-  const { userId: _userId } = useAuth();
 
   const event = _event as iEvent;
-  const userId = _userId as string;
+
+  if (!userId && tab === 'personal') {
+    console.error('no userId; cannot fetch personal predictions');
+  }
 
   const today = new Date();
   // we don't want to show history for the current day

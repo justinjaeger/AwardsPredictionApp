@@ -13,6 +13,7 @@ import {
 export enum QueryKeys {
   EVENTS = 'events',
   USER = 'user',
+  USER_WITH_PREDICTIONS = 'user-with-predictions',
   PERSONAL_EVENT = 'personal-predictions-by-event',
   COMMUNITY_EVENT = 'community-predictions-by-event',
 }
@@ -84,12 +85,7 @@ export type iIndexedEvents = {
 
 export type iPredictionSet = {
   id: string;
-  event: {
-    id: string;
-    awardsBody: AwardsBody;
-    year: number;
-    status: EventStatus;
-  };
+  event: iEvent;
   category: {
     id: string;
     name: CategoryName;

@@ -3,7 +3,11 @@ import { iIndexedPredictionsByCategory } from '../../types';
 import { sortPersonalPredictions } from '../../util/sortPredictions';
 import ApiServices from '../graphql';
 
-const getPersonalPredictionsByEvent = async (eventId: string, userId: string) => {
+const getPersonalPredictionsByEvent = async (
+  eventId: string,
+  userId: string | undefined,
+) => {
+  if (!userId) return {};
   const { data: predictionSets } = await ApiServices.getPersonalPredictionsByEvent(
     eventId,
     userId,

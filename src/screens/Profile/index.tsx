@@ -17,10 +17,10 @@ import { IconButton } from '../../components/Buttons/IconButton';
 import { launchImageLibrary } from 'react-native-image-picker';
 import AWSStorage from '../../services/storage';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import useQueryGetUser from '../../hooks/queries/getUser';
 import theme from '../../constants/theme';
 import PredictionCarousel from '../../components/PredictionCarousel';
 import { ProfileParamList } from '../../navigation/types';
+import useQueryGetUserWithRecentPredictions from '../../hooks/queries/getUserWithRecentPredictions';
 
 const Profile = () => {
   // If we pass userId as params, it loads that user's profile. If not, it attemps to get logged in profile.
@@ -31,7 +31,7 @@ const Profile = () => {
   const navigation = useNavigation();
   const { width } = useWindowDimensions();
 
-  const { data: user } = useQueryGetUser(userId);
+  const { data: user } = useQueryGetUserWithRecentPredictions(userId);
   const [loading, setLoading] = useState<boolean>(false);
   const [profileUri, setProfileUri] = useState<string | undefined>(undefined);
 
@@ -201,7 +201,7 @@ const Profile = () => {
             >
               Recent Predictions:
             </HeaderLight>
-            <PredictionCarousel predictionSets={predictionSets} />
+            <PredictionCarousel predictionSets={predictionSets} userId={userId} />
           </>
         )}
       </ScrollView>
