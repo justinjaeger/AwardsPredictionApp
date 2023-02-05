@@ -1,7 +1,8 @@
 import React from 'react';
 import { ImageBackground } from 'react-native';
+import { ReactChildren } from '../../types';
 
-const BackgroundWrapper = (props: { children: React.ReactChild }) => {
+const BackgroundWrapper = (props: { children: ReactChildren }) => {
   return (
     <ImageBackground
       source={require('../../assets/background/awards-background.png')}

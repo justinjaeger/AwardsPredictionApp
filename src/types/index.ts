@@ -10,6 +10,8 @@ import {
   PredictionType,
 } from '../API';
 
+export type ReactChildren = React.ReactNode | React.ReactNode[];
+
 export enum QueryKeys {
   EVENTS = 'events',
   USER = 'user',
