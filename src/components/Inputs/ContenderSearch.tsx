@@ -8,7 +8,7 @@ import { HEADER_HEIGHT } from '../../constants';
 import { useContenderSearch } from '../../context/ContenderSearchContext';
 
 // MUST WRAP IN ContenderSearchProvider
-const SearchInput = (props: {
+const ContenderSearch = (props: {
   label?: string;
   placeholder?: string;
   caption?: string;
@@ -73,4 +73,4 @@ const SearchInput = (props: {
   );
 };
 
-export default SearchInput;
+export default ContenderSearch;

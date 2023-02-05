@@ -6,7 +6,7 @@ import Snackbar from '../../../components/Snackbar';
 import { PredictionsParamList } from '../../../navigation/types';
 import MovieListSelectable from '../../../components/MovieList/MovieListSelectable';
 import { useWindowDimensions } from 'react-native';
-import SearchInput from '../../../components/Inputs/SearchInput';
+import ContenderSearch from '../../../components/Inputs/ContenderSearch';
 import {
   ContenderSearchProvider,
   useContenderSearch,
@@ -74,7 +74,7 @@ const AddPredictions = () => {
   return (
     <>
       {letUserCreateContenders ? (
-        <SearchInput
+        <ContenderSearch
           placeholder={'Search Movies'}
           style={{ width, padding: theme.windowMargin }}
         />
