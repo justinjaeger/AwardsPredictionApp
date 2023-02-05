@@ -12,7 +12,7 @@ import CreateContender from '../CreateContender';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import theme from '../../../constants/theme';
 import BackButton from '../../../components/Buttons/BackButton';
-import { CategoryIsShortlisted, EventStatus } from '../../../API';
+import { CategoryIsShortlisted, CategoryType, EventStatus } from '../../../API';
 import { useTypedNavigation } from '../../../util/hooks';
 import { usePredictions } from './usePredictions';
 
@@ -72,7 +72,9 @@ const AddPredictions = () => {
     <>
       {letUserCreateContenders ? (
         <SearchInput
-          placeholder={'Search Movies'}
+          placeholder={
+            category.type === CategoryType.PERFORMANCE ? 'Search Actors' : 'Search Movies'
+          }
           style={{ width, padding: theme.windowMargin }}
         />
       ) : null}
