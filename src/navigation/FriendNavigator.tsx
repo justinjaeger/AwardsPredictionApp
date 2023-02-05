@@ -26,7 +26,7 @@ const FriendNavigator = () => (
         name="SearchFriends"
         component={SearchFriends}
         options={{
-          headerTitle: getHeaderTitle('My Profile'),
+          headerTitle: getHeaderTitle('Find Users'),
           ...headerSettings,
         }}
       />

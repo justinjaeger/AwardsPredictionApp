@@ -1,4 +1,5 @@
 import * as UserServices from './user';
+import * as RelationshipServices from './relationship';
 import * as EventServices from './event';
 import * as CategoryServices from './category';
 import * as ContenderServices from './contender';
@@ -23,6 +24,7 @@ const ApiServices = {
   ...CommunityPredictionServices,
   ...PersonServices,
   ...SongServices,
+  ...RelationshipServices,
 };
 
 export default ApiServices;

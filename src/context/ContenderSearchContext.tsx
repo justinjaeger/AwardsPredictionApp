@@ -35,7 +35,9 @@ export const SearchProvider = (props: { children: React.ReactNode }) => {
   const [isLoadingSearch, setIsLoadingSearch] = useState<boolean>(false);
   const [resetSearchHack, setResetSearchHack] = useState<boolean>(false);
 
-  const debouncedSearch = useDebounce(searchInput, 500, { trailing: true });
+  const debouncedSearch = useDebounce(searchInput, 500, { trailing: true }, () =>
+    setIsLoadingSearch(false),
+  );
 
   // Enables us to reset the search bar from the outer component
   useEffect(() => {
@@ -45,7 +47,11 @@ export const SearchProvider = (props: { children: React.ReactNode }) => {
 
   useEffect(() => {
     setIsSearching(true);
-    if (searchInput === '') setIsSearching(false);
+    if (searchInput === '') {
+      setIsSearching(false);
+    } else {
+      setIsLoadingSearch(true);
+    }
   }, [searchInput]);
 
   return (

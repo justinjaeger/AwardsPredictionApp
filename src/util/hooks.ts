@@ -94,12 +94,18 @@ export const useNavigateToEffect = (effect: () => void, deps: any[]) => {
  * const debouncedSearch = useDebounce(search, 500, { trailing: true });
  * useEffect(() => executeSearch(), [debouncedSearch])
  */
-export const useDebounce = <T>(value: T, delay = 1000, options?: _.DebounceSettings) => {
+export const useDebounce = <T>(
+  value: T,
+  delay = 1000,
+  options?: _.DebounceSettings,
+  callback?: () => void,
+) => {
   const [debouncedValue, setDebouncedValue] = useState(value);
 
   const debounce = useCallback(
     _.debounce(
       (_prop: T) => {
+        callback && callback();
         setDebouncedValue(_prop);
       },
       delay,

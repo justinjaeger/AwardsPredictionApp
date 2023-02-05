@@ -512,3 +512,31 @@ export const getUserWithRecentPredictions = /* GraphQL */ `
     }
   }
 `;
+
+export const listUsers = /* GraphQL */ `
+  query ListUsers(
+    $id: ID
+    $filter: ModelUserFilterInput
+    $limit: Int
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listUsers(
+      id: $id
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        id
+        email
+        username
+        name
+        bio
+        image
+        role
+      }
+    }
+  }
+`;

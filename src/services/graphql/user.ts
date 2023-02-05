@@ -173,3 +173,25 @@ export const deleteUser = async (
     return handleError('error deleting user', err);
   }
 };
+
+// NOTE: Only for mock purposes. Should never really DELETE a user
+export const searchUsers = async (
+  search: string,
+): Promise<iApiResponse<ListUsersQuery>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<ListUsersQuery, ListUsersQueryVariables>(
+      customQueries.listUsers,
+      {
+        filter: {
+          or: [{ name: { beginsWith: search } }, { username: { beginsWith: search } }],
+        },
+      },
+    );
+    if (!data?.listUsers) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data };
+  } catch (err) {
+    return handleError('error deleting user', err);
+  }
+};

@@ -246,7 +246,7 @@ const ContenderListItem = (props: iContenderListItemProps) => {
           title={tmdbMovie?.title || ''}
           animatedWidth={imageWidth}
           animatedHeight={imageHeight}
-          ranking={variant !== 'search' ? ranking : undefined}
+          ranking={['selectable', 'search'].includes(variant) ? undefined : ranking}
           onPress={onPressPoster}
         />
         <Animated.View

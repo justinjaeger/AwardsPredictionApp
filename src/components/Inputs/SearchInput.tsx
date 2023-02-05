@@ -62,6 +62,7 @@ const SearchInput = (props: {
           style={{
             position: 'absolute',
             right: 20,
+            top: 9,
             justifyContent: 'center',
             height: HEADER_HEIGHT,
           }}
