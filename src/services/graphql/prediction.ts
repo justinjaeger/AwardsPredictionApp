@@ -7,7 +7,6 @@ import {
   DeletePredictionMutationVariables,
   DeletePredictionSetMutation,
   DeletePredictionSetMutationVariables,
-  ListPredictionSetsQuery,
   ListPredictionSetsQueryVariables,
   PredictionSetByUserIdAndEventIdQuery,
   PredictionSetByUserIdAndEventIdQueryVariables,
@@ -15,6 +14,7 @@ import {
 } from '../../API';
 import * as mutations from '../../graphql/mutations';
 import * as customQueries from '../../graphqlCustom/queries';
+import { ListPredictionSetsQuery } from '../../graphqlCustom/types';
 import { GraphqlAPI, handleError, iApiResponse } from '../utils';
 
 // there can only be one prediction set from these parameters
@@ -167,7 +167,7 @@ export const getPredictionSets = async (
     }
     return { status: 'success', data };
   } catch (err) {
-    return handleError('error prediction set', err);
+    return handleError('error getting prediction set', err);
   }
 };
 

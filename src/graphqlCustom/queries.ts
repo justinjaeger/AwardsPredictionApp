@@ -92,6 +92,7 @@ export const listPredictionSets = /* GraphQL */ `
           }
         }
         type
+        comment
         createdAt
         updatedAt
       }
@@ -269,6 +270,7 @@ export const predictionSetByUserIdAndEventId = /* GraphQL */ `
           }
         }
         type
+        comment
         createdAt
         updatedAt
       }
@@ -336,6 +338,7 @@ export const historyPredictionSetByUserIdAndEventIdAndCreatedAt = /* GraphQL */ 
           }
         }
         type
+        comment
         createdAt
         updatedAt
       }
@@ -499,6 +502,7 @@ export const getUserWithRecentPredictions = /* GraphQL */ `
             }
           }
           type
+          comment
           createdAt
           updatedAt
         }
