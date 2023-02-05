@@ -17,7 +17,7 @@ import { iCreateContenderProps } from '.';
 import { CategoryType, ContenderVisibility, PredictionType } from '../../../API';
 import { SubmitButton } from '../../../components/Buttons';
 import PerformanceListSelectable from '../../../components/MovieList/PerformanceListSelectable';
-import { useContenderSearch } from '../../../context/ContenderSearchContext';
+import { useSearch } from '../../../context/ContenderSearchContext';
 
 // TODO: should only be able to do this if logged in
 const CreatePerformance = (props: iCreateContenderProps) => {
@@ -36,7 +36,7 @@ const CreatePerformance = (props: iCreateContenderProps) => {
     debouncedSearch,
     resetSearchHack,
     setResetSearchHack,
-  } = useContenderSearch();
+  } = useSearch();
   const { data: communityData } = useQueryCommunityEvent({ event, includeHidden: true }); // because we use this to see if contender exists, we want to includes hidden contenders
   const communityPredictions = communityData?.[category.id]?.predictions || [];
 

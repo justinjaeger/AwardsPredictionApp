@@ -29,7 +29,7 @@ const CategoryContext = createContext<iCategoryContext>({
   setIsLoadingSearch: () => {},
 });
 
-export const ContenderSearchProvider = (props: { children: React.ReactNode }) => {
+export const SearchProvider = (props: { children: React.ReactNode }) => {
   const [searchInput, setSearchInput] = useState<string>('');
   const [isSearching, setIsSearching] = useState<boolean>(false);
   const [isLoadingSearch, setIsLoadingSearch] = useState<boolean>(false);
@@ -67,4 +67,4 @@ export const ContenderSearchProvider = (props: { children: React.ReactNode }) =>
   );
 };
 
-export const useContenderSearch = () => useContext(CategoryContext);
+export const useSearch = () => useContext(CategoryContext);

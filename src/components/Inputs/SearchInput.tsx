@@ -5,10 +5,10 @@ import CustomIcon from '../CustomIcon';
 import COLORS from '../../constants/colors';
 import { View } from 'react-native';
 import { HEADER_HEIGHT } from '../../constants';
-import { useContenderSearch } from '../../context/ContenderSearchContext';
+import { useSearch } from '../../context/ContenderSearchContext';
 
-// MUST WRAP IN ContenderSearchProvider
-const ContenderSearch = (props: {
+// MUST WRAP IN SearchProvider
+const SearchInput = (props: {
   label?: string;
   placeholder?: string;
   caption?: string;
@@ -18,7 +18,7 @@ const ContenderSearch = (props: {
 }) => {
   const { label, placeholder, caption, onBlur, status, style } = props;
 
-  const { searchInput, setSearchInput, isLoadingSearch } = useContenderSearch();
+  const { searchInput, setSearchInput, isLoadingSearch } = useSearch();
 
   return (
     <View>
@@ -73,4 +73,4 @@ const ContenderSearch = (props: {
   );
 };
 
-export default ContenderSearch;
+export default SearchInput;

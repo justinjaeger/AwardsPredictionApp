@@ -12,7 +12,7 @@ import useMutationCreateContender from '../../../hooks/mutations/createContender
 import useQueryCommunityEvent from '../../../hooks/queries/getCommunityEvent';
 import { FAB } from '../../../components/Buttons/FAB';
 import { CategoryType, ContenderVisibility, PredictionType } from '../../../API';
-import { useContenderSearch } from '../../../context/ContenderSearchContext';
+import { useSearch } from '../../../context/ContenderSearchContext';
 import { iCreateContenderProps } from '../AddPredictions.tsx';
 
 // TODO: should only be able to do this if logged in
@@ -32,7 +32,7 @@ const CreateFilm = (props: iCreateContenderProps) => {
     debouncedSearch,
     resetSearchHack,
     setResetSearchHack,
-  } = useContenderSearch();
+  } = useSearch();
   const { data: communityData } = useQueryCommunityEvent({ event, includeHidden: true }); // because we use this to see if contender exists, we want to includes hidden contenders
   const communityPredictions = communityData?.[category.id]?.predictions || [];
 

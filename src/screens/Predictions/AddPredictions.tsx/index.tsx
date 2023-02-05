@@ -6,11 +6,8 @@ import Snackbar from '../../../components/Snackbar';
 import { PredictionsParamList } from '../../../navigation/types';
 import MovieListSelectable from '../../../components/MovieList/MovieListSelectable';
 import { useWindowDimensions } from 'react-native';
-import ContenderSearch from '../../../components/Inputs/ContenderSearch';
-import {
-  ContenderSearchProvider,
-  useContenderSearch,
-} from '../../../context/ContenderSearchContext';
+import SearchInput from '../../../components/Inputs/SearchInput';
+import { SearchProvider, useSearch } from '../../../context/ContenderSearchContext';
 import CreateContender from '../CreateContender';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import theme from '../../../constants/theme';
@@ -45,7 +42,7 @@ const AddPredictions = () => {
     selectedContenderIds,
   } = usePredictions();
 
-  const { isSearching } = useContenderSearch();
+  const { isSearching } = useSearch();
 
   // set custom back arrow functionality
   useEffect(() => {
@@ -74,7 +71,7 @@ const AddPredictions = () => {
   return (
     <>
       {letUserCreateContenders ? (
-        <ContenderSearch
+        <SearchInput
           placeholder={'Search Movies'}
           style={{ width, padding: theme.windowMargin }}
         />
@@ -93,11 +90,11 @@ const AddPredictions = () => {
 };
 
 const AddPredictionsWithProvider = () => (
-  <ContenderSearchProvider>
+  <SearchProvider>
     <BackgroundWrapper>
       <AddPredictions />
     </BackgroundWrapper>
-  </ContenderSearchProvider>
+  </SearchProvider>
 );
 
 export default AddPredictionsWithProvider;
