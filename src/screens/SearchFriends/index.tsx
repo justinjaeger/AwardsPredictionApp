@@ -2,7 +2,8 @@ import React from 'react';
 import { ScrollView, useWindowDimensions } from 'react-native';
 import BackgroundWrapper from '../../components/BackgroundWrapper';
 import SearchInput from '../../components/Inputs/SearchInput';
-import { Body, HeaderLight } from '../../components/Text';
+import { HeaderLight } from '../../components/Text';
+import UserSearchResult from '../../components/UserSearchResult';
 import theme from '../../constants/theme';
 import { useSearch } from '../../context/ContenderSearchContext';
 import useFriendSearch from './useFriendSearch';
@@ -21,7 +22,7 @@ const SearchFriends = () => {
           style={{ width, padding: theme.windowMargin }}
         />
         {isSearching ? (
-          <Body>{JSON.stringify(searchResults)}</Body>
+          <UserSearchResult users={searchResults} />
         ) : (
           <HeaderLight
             style={{

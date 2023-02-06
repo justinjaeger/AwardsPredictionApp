@@ -3,9 +3,7 @@ import {
   CreateUserMutationVariables,
   DeleteUserMutation,
   DeleteUserMutationVariables,
-  GetUserQuery,
   GetUserQueryVariables,
-  ListUsersQuery,
   ListUsersQueryVariables,
   ModelUserFilterInput,
   UpdateUserMutation,
@@ -15,6 +13,7 @@ import {
 import * as mutations from '../../graphql/mutations';
 import * as queries from '../../graphql/queries';
 import * as customQueries from '../../graphqlCustom/queries';
+import { GetUserQuery, ListUsersQuery } from '../../graphqlCustom/types';
 import { GraphqlAPI, handleError, iApiResponse } from '../utils';
 
 export const getAllUsers = async (): Promise<iApiResponse<ListUsersQuery>> => {
@@ -60,6 +59,23 @@ export const getUserWithRecentPredictions = async (
     return { status: 'success', data: data };
   } catch (err) {
     return handleError('error getting user by id', err);
+  }
+};
+
+export const getUserWithRelationships = async (
+  id: string,
+): Promise<iApiResponse<GetUserQuery>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<GetUserQuery, GetUserQueryVariables>(
+      customQueries.getUserWithRelationshipsQuery,
+      { id },
+    );
+    if (!data?.getUser) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data: data };
+  } catch (err) {
+    return handleError('error getting user with relationships', err);
   }
 };
 
@@ -174,17 +190,17 @@ export const deleteUser = async (
   }
 };
 
-// NOTE: Only for mock purposes. Should never really DELETE a user
-export const searchUsers = async (
+export const searchUsersSignedOut = async (
   search: string,
 ): Promise<iApiResponse<ListUsersQuery>> => {
   try {
     const { data, errors } = await GraphqlAPI<ListUsersQuery, ListUsersQueryVariables>(
-      customQueries.listUsers,
+      customQueries.searchUsersSignedOutQuery,
       {
         filter: {
           or: [{ name: { beginsWith: search } }, { username: { beginsWith: search } }],
         },
+        limit: 10,
       },
     );
     if (!data?.listUsers) {
@@ -192,6 +208,33 @@ export const searchUsers = async (
     }
     return { status: 'success', data };
   } catch (err) {
-    return handleError('error deleting user', err);
+    return handleError('error searching users signed out', err);
+  }
+};
+
+type ListUsersQueryVariablesCustom = ListUsersQueryVariables & {
+  searchingUserId: string;
+};
+export const searchUsersSignedIn = async (
+  search: string,
+  searchingUserId: string,
+): Promise<iApiResponse<ListUsersQuery>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<
+      ListUsersQuery,
+      ListUsersQueryVariablesCustom
+    >(customQueries.searchUsersSignedInQuery, {
+      filter: {
+        or: [{ name: { beginsWith: search } }, { username: { beginsWith: search } }],
+      },
+      limit: 10,
+      searchingUserId: searchingUserId || 'undefined',
+    });
+    if (!data?.listUsers) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data };
+  } catch (err) {
+    return handleError('error searching users signed in', err);
   }
 };

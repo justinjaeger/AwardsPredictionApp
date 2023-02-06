@@ -513,7 +513,75 @@ export const getUserWithRecentPredictions = /* GraphQL */ `
   }
 `;
 
-export const listUsers = /* GraphQL */ `
+export const getUserWithRelationshipsQuery = /* GraphQL */ `
+  query GetUser($id: ID!) {
+    getUser(id: $id) {
+      id
+      email
+      username
+      name
+      bio
+      image
+      role
+      followers {
+        items {
+          id
+          followingUserId
+          followingUser {
+            id
+            email
+            username
+            name
+            bio
+            image
+            role
+            predictionSets {
+              nextToken
+            }
+            historyPredictionSets {
+              nextToken
+            }
+            createdAt
+            updatedAt
+          }
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      following {
+        items {
+          id
+          followedUserId
+          followedUser {
+            id
+            email
+            username
+            name
+            bio
+            image
+            role
+            predictionSets {
+              nextToken
+            }
+            historyPredictionSets {
+              nextToken
+            }
+            createdAt
+            updatedAt
+          }
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export const searchUsersSignedOutQuery = /* GraphQL */ `
   query ListUsers(
     $id: ID
     $filter: ModelUserFilterInput
@@ -536,6 +604,42 @@ export const listUsers = /* GraphQL */ `
         bio
         image
         role
+      }
+    }
+  }
+`;
+
+export const searchUsersSignedInQuery = /* GraphQL */ `
+  query ListUsers(
+    $id: ID
+    $filter: ModelUserFilterInput
+    $limit: Int
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+    $searchingUserId: ID
+  ) {
+    listUsers(
+      id: $id
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        id
+        email
+        username
+        name
+        bio
+        image
+        role
+        # we want to know if we're following this person and if they're following us
+        followers(filter: { followingUserId: { eq: $searchingUserId } }) {
+          nextToken
+        }
+        following(filter: { followedUserId: { eq: $searchingUserId } }) {
+          nextToken
+        }
       }
     }
   }

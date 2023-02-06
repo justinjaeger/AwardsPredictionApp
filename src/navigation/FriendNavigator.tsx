@@ -31,10 +31,11 @@ const FriendNavigator = () => (
         }}
       />
       <Screen
-        name="Proflie"
+        name="FriendProfile"
         component={Profile}
         options={{
           headerTitle: getHeaderTitle('My Profile'),
+          headerLeft: BackButton,
           ...headerSettings,
         }}
       />
