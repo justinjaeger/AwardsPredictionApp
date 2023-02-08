@@ -582,19 +582,21 @@ export const getUserWithRelationshipsQuery = /* GraphQL */ `
 `;
 
 export const searchUsersSignedOutQuery = /* GraphQL */ `
-  query ListUsers(
-    $id: ID
-    $filter: ModelUserFilterInput
+  query SearchUsers(
+    $filter: SearchableUserFilterInput
+    $sort: [SearchableUserSortInput]
     $limit: Int
     $nextToken: String
-    $sortDirection: ModelSortDirection
+    $from: Int
+    $aggregates: [SearchableUserAggregationInput]
   ) {
-    listUsers(
-      id: $id
+    searchUsers(
       filter: $filter
+      sort: $sort
       limit: $limit
       nextToken: $nextToken
-      sortDirection: $sortDirection
+      from: $from
+      aggregates: $aggregates
     ) {
       items {
         id
@@ -610,20 +612,22 @@ export const searchUsersSignedOutQuery = /* GraphQL */ `
 `;
 
 export const searchUsersSignedInQuery = /* GraphQL */ `
-  query ListUsers(
-    $id: ID
-    $filter: ModelUserFilterInput
+  query SearchUsers(
+    $filter: SearchableUserFilterInput
+    $sort: [SearchableUserSortInput]
     $limit: Int
     $nextToken: String
-    $sortDirection: ModelSortDirection
+    $from: Int
+    $aggregates: [SearchableUserAggregationInput]
     $searchingUserId: ID
   ) {
-    listUsers(
-      id: $id
+    searchUsers(
       filter: $filter
+      sort: $sort
       limit: $limit
       nextToken: $nextToken
-      sortDirection: $sortDirection
+      from: $from
+      aggregates: $aggregates
     ) {
       items {
         id

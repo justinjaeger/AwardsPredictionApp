@@ -29,11 +29,11 @@ const useFriendSearch = () => {
       return;
     }
     const Request = userId
-      ? ApiServices.searchUsersSignedIn(s.toLowerCase(), userId)
-      : ApiServices.searchUsersSignedOut(s.toLowerCase());
+      ? ApiServices.searchUsersSignedIn(s, userId)
+      : ApiServices.searchUsersSignedOut(s);
     // TODO: add userId after success without it
     Request.then((res) => {
-      const result: iUserSearchResult[] = (res.data?.listUsers?.items || []).map(
+      const result: iUserSearchResult[] = (res.data?.searchUsers?.items || []).map(
         (item) => ({
           id: item?.id || '',
           username: item?.username || undefined,

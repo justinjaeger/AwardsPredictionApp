@@ -6,6 +6,8 @@ import {
   GetUserQueryVariables,
   ListUsersQueryVariables,
   ModelUserFilterInput,
+  SearchableUserFilterInput,
+  SearchUsersQueryVariables,
   UpdateUserMutation,
   UpdateUserMutationVariables,
   UserRole,
@@ -13,7 +15,11 @@ import {
 import * as mutations from '../../graphql/mutations';
 import * as queries from '../../graphql/queries';
 import * as customQueries from '../../graphqlCustom/queries';
-import { GetUserQuery, ListUsersQuery } from '../../graphqlCustom/types';
+import {
+  GetUserQuery,
+  ListUsersQuery,
+  SearchUsersQuery,
+} from '../../graphqlCustom/types';
 import { GraphqlAPI, handleError, iApiResponse } from '../utils';
 
 export const getAllUsers = async (): Promise<iApiResponse<ListUsersQuery>> => {
@@ -231,18 +237,21 @@ export const deleteUser = async (
 
 export const searchUsersSignedOut = async (
   search: string,
-): Promise<iApiResponse<ListUsersQuery>> => {
+): Promise<iApiResponse<SearchUsersQuery>> => {
   try {
-    const { data, errors } = await GraphqlAPI<ListUsersQuery, ListUsersQueryVariables>(
-      customQueries.searchUsersSignedOutQuery,
-      {
-        filter: {
-          or: [{ name: { beginsWith: search } }, { username: { beginsWith: search } }],
-        },
-        limit: 10,
+    const { data, errors } = await GraphqlAPI<
+      SearchUsersQuery,
+      SearchUsersQueryVariables
+    >(customQueries.searchUsersSignedOutQuery, {
+      filter: {
+        or: [
+          { name: { matchPhrasePrefix: search } },
+          { username: { matchPhrasePrefix: search } },
+        ],
       },
-    );
-    if (!data?.listUsers) {
+      limit: 10,
+    });
+    if (!data?.searchUsers) {
       throw new Error(JSON.stringify(errors));
     }
     return { status: 'success', data };
@@ -251,25 +260,32 @@ export const searchUsersSignedOut = async (
   }
 };
 
-type ListUsersQueryVariablesCustom = ListUsersQueryVariables & {
+type SearchUsersQueryVariablesCustom = SearchUsersQueryVariables & {
   searchingUserId: string;
 };
 export const searchUsersSignedIn = async (
   search: string,
   searchingUserId: string,
-): Promise<iApiResponse<ListUsersQuery>> => {
+): Promise<iApiResponse<SearchUsersQuery>> => {
   try {
+    // have to separate words because the search doesn't like spaces
+    const words = search.split(' ');
+    const or = words.reduce((acc: SearchableUserFilterInput[], word) => {
+      acc.push({ name: { wildcard: word + '*' } });
+      acc.push({ username: { wildcard: word + '*' } });
+      return acc;
+    }, []);
     const { data, errors } = await GraphqlAPI<
-      ListUsersQuery,
-      ListUsersQueryVariablesCustom
+      SearchUsersQuery,
+      SearchUsersQueryVariablesCustom
     >(customQueries.searchUsersSignedInQuery, {
       filter: {
-        or: [{ name: { beginsWith: search } }, { username: { beginsWith: search } }],
+        or,
       },
       limit: 10,
       searchingUserId: searchingUserId || 'undefined',
     });
-    if (!data?.listUsers) {
+    if (!data?.searchUsers) {
       throw new Error(JSON.stringify(errors));
     }
     return { status: 'success', data };
