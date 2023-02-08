@@ -1,6 +1,5 @@
 import ApiServices from '.';
 import {
-  ListEventsQuery,
   CreateEventMutation,
   AwardsBody,
   ListEventsQueryVariables,
@@ -13,14 +12,14 @@ import {
 } from '../../API';
 import { getAwardsBodyCategories, iCategoryData } from '../../constants/categories';
 import * as mutations from '../../graphql/mutations';
-import * as queries from '../../graphql/queries';
 import * as customQueries from '../../graphqlCustom/queries';
+import { ListEventsQuery } from '../../graphqlCustom/types';
 import { GraphqlAPI, handleError, iApiResponse } from '../utils';
 
 export const getAllEvents = async (): Promise<iApiResponse<ListEventsQuery>> => {
   try {
     const { data, errors } = await GraphqlAPI<ListEventsQuery, ListEventsQueryVariables>(
-      queries.listEvents,
+      customQueries.listEvents,
     );
     if (!data?.listEvents) {
       throw new Error(JSON.stringify(errors));
