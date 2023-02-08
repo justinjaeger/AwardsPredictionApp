@@ -27,6 +27,52 @@ export const searchUsers = /* GraphQL */ `
         bio
         image
         role
+        predictionSets {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        historyPredictionSets {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        followers {
+          items {
+            id
+            followedUserId
+            followingUserId
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        following {
+          items {
+            id
+            followedUserId
+            followingUserId
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -60,15 +106,159 @@ export const getUser = /* GraphQL */ `
       image
       role
       predictionSets {
+        items {
+          id
+          userId
+          user {
+            id
+            email
+            username
+            name
+            bio
+            image
+            role
+            createdAt
+            updatedAt
+          }
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          categoryId
+          category {
+            id
+            eventId
+            name
+            type
+            isShortlisted
+            createdAt
+            updatedAt
+          }
+          predictions {
+            nextToken
+          }
+          type
+          comment
+          createdAt
+          updatedAt
+        }
         nextToken
       }
       historyPredictionSets {
+        items {
+          id
+          userId
+          user {
+            id
+            email
+            username
+            name
+            bio
+            image
+            role
+            createdAt
+            updatedAt
+          }
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          categoryId
+          category {
+            id
+            eventId
+            name
+            type
+            isShortlisted
+            createdAt
+            updatedAt
+          }
+          predictions {
+            nextToken
+          }
+          type
+          comment
+          createdAt
+          updatedAt
+        }
         nextToken
       }
       followers {
+        items {
+          id
+          followedUserId
+          followedUser {
+            id
+            email
+            username
+            name
+            bio
+            image
+            role
+            createdAt
+            updatedAt
+          }
+          followingUserId
+          followingUser {
+            id
+            email
+            username
+            name
+            bio
+            image
+            role
+            createdAt
+            updatedAt
+          }
+          createdAt
+          updatedAt
+        }
         nextToken
       }
       following {
+        items {
+          id
+          followedUserId
+          followedUser {
+            id
+            email
+            username
+            name
+            bio
+            image
+            role
+            createdAt
+            updatedAt
+          }
+          followingUserId
+          followingUser {
+            id
+            email
+            username
+            name
+            bio
+            image
+            role
+            createdAt
+            updatedAt
+          }
+          createdAt
+          updatedAt
+        }
         nextToken
       }
       createdAt
@@ -99,6 +289,52 @@ export const listUsers = /* GraphQL */ `
         bio
         image
         role
+        predictionSets {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        historyPredictionSets {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        followers {
+          items {
+            id
+            followedUserId
+            followingUserId
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        following {
+          items {
+            id
+            followedUserId
+            followingUserId
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -119,6 +355,52 @@ export const getRelationship = /* GraphQL */ `
         bio
         image
         role
+        predictionSets {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        historyPredictionSets {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        followers {
+          items {
+            id
+            followedUserId
+            followingUserId
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        following {
+          items {
+            id
+            followedUserId
+            followingUserId
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -131,6 +413,52 @@ export const getRelationship = /* GraphQL */ `
         bio
         image
         role
+        predictionSets {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        historyPredictionSets {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        followers {
+          items {
+            id
+            followedUserId
+            followingUserId
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        following {
+          items {
+            id
+            followedUserId
+            followingUserId
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -157,7 +485,53 @@ export const listRelationships = /* GraphQL */ `
       items {
         id
         followedUserId
+        followedUser {
+          id
+          email
+          username
+          name
+          bio
+          image
+          role
+          predictionSets {
+            nextToken
+          }
+          historyPredictionSets {
+            nextToken
+          }
+          followers {
+            nextToken
+          }
+          following {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         followingUserId
+        followingUser {
+          id
+          email
+          username
+          name
+          bio
+          image
+          role
+          predictionSets {
+            nextToken
+          }
+          historyPredictionSets {
+            nextToken
+          }
+          followers {
+            nextToken
+          }
+          following {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         createdAt
         updatedAt
       }
@@ -170,6 +544,31 @@ export const getEvent = /* GraphQL */ `
     getEvent(id: $id) {
       id
       categories {
+        items {
+          id
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          name
+          type
+          isShortlisted
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         nextToken
       }
       awardsBody
@@ -178,9 +577,95 @@ export const getEvent = /* GraphQL */ `
       winDateTime
       status
       predictionSets {
+        items {
+          id
+          userId
+          user {
+            id
+            email
+            username
+            name
+            bio
+            image
+            role
+            createdAt
+            updatedAt
+          }
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          categoryId
+          category {
+            id
+            eventId
+            name
+            type
+            isShortlisted
+            createdAt
+            updatedAt
+          }
+          predictions {
+            nextToken
+          }
+          type
+          comment
+          createdAt
+          updatedAt
+        }
         nextToken
       }
       historyPredictions {
+        items {
+          id
+          userId
+          user {
+            id
+            email
+            username
+            name
+            bio
+            image
+            role
+            createdAt
+            updatedAt
+          }
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          categoryId
+          category {
+            id
+            eventId
+            name
+            type
+            isShortlisted
+            createdAt
+            updatedAt
+          }
+          predictions {
+            nextToken
+          }
+          type
+          comment
+          createdAt
+          updatedAt
+        }
         nextToken
       }
       createdAt
@@ -205,11 +690,49 @@ export const listEvents = /* GraphQL */ `
     ) {
       items {
         id
+        categories {
+          items {
+            id
+            eventId
+            name
+            type
+            isShortlisted
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         awardsBody
         year
         nominationDateTime
         winDateTime
         status
+        predictionSets {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        historyPredictions {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -224,11 +747,49 @@ export const getCategory = /* GraphQL */ `
       eventId
       event {
         id
+        categories {
+          items {
+            id
+            eventId
+            name
+            type
+            isShortlisted
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         awardsBody
         year
         nominationDateTime
         winDateTime
         status
+        predictionSets {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        historyPredictions {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -236,9 +797,95 @@ export const getCategory = /* GraphQL */ `
       type
       isShortlisted
       predictionSets {
+        items {
+          id
+          userId
+          user {
+            id
+            email
+            username
+            name
+            bio
+            image
+            role
+            createdAt
+            updatedAt
+          }
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          categoryId
+          category {
+            id
+            eventId
+            name
+            type
+            isShortlisted
+            createdAt
+            updatedAt
+          }
+          predictions {
+            nextToken
+          }
+          type
+          comment
+          createdAt
+          updatedAt
+        }
         nextToken
       }
       historyPredictions {
+        items {
+          id
+          userId
+          user {
+            id
+            email
+            username
+            name
+            bio
+            image
+            role
+            createdAt
+            updatedAt
+          }
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          categoryId
+          category {
+            id
+            eventId
+            name
+            type
+            isShortlisted
+            createdAt
+            updatedAt
+          }
+          predictions {
+            nextToken
+          }
+          type
+          comment
+          createdAt
+          updatedAt
+        }
         nextToken
       }
       createdAt
@@ -264,9 +911,54 @@ export const listCategories = /* GraphQL */ `
       items {
         id
         eventId
+        event {
+          id
+          categories {
+            nextToken
+          }
+          awardsBody
+          year
+          nominationDateTime
+          winDateTime
+          status
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         name
         type
         isShortlisted
+        predictionSets {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        historyPredictions {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -282,26 +974,124 @@ export const getContender = /* GraphQL */ `
       category {
         id
         eventId
+        event {
+          id
+          categories {
+            nextToken
+          }
+          awardsBody
+          year
+          nominationDateTime
+          winDateTime
+          status
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         name
         type
         isShortlisted
+        predictionSets {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        historyPredictions {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         createdAt
         updatedAt
       }
       eventId
       event {
         id
+        categories {
+          items {
+            id
+            eventId
+            name
+            type
+            isShortlisted
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         awardsBody
         year
         nominationDateTime
         winDateTime
         status
+        predictionSets {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        historyPredictions {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         createdAt
         updatedAt
       }
       movieId
       movie {
         id
+        contenders {
+          items {
+            id
+            categoryId
+            eventId
+            movieId
+            personId
+            songId
+            visibility
+            accolade
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         tmdbId
         studio
         createdAt
@@ -318,6 +1108,16 @@ export const getContender = /* GraphQL */ `
       song {
         id
         movieId
+        movie {
+          id
+          contenders {
+            nextToken
+          }
+          tmdbId
+          studio
+          createdAt
+          updatedAt
+        }
         title
         artist
         createdAt
@@ -348,10 +1148,85 @@ export const listContenders = /* GraphQL */ `
       items {
         id
         categoryId
+        category {
+          id
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          name
+          type
+          isShortlisted
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         eventId
+        event {
+          id
+          categories {
+            nextToken
+          }
+          awardsBody
+          year
+          nominationDateTime
+          winDateTime
+          status
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         movieId
+        movie {
+          id
+          contenders {
+            nextToken
+          }
+          tmdbId
+          studio
+          createdAt
+          updatedAt
+        }
         personId
+        person {
+          id
+          tmdbId
+          createdAt
+          updatedAt
+        }
         songId
+        song {
+          id
+          movieId
+          movie {
+            id
+            tmdbId
+            studio
+            createdAt
+            updatedAt
+          }
+          title
+          artist
+          createdAt
+          updatedAt
+        }
         visibility
         accolade
         createdAt
@@ -366,6 +1241,58 @@ export const getMovie = /* GraphQL */ `
     getMovie(id: $id) {
       id
       contenders {
+        items {
+          id
+          categoryId
+          category {
+            id
+            eventId
+            name
+            type
+            isShortlisted
+            createdAt
+            updatedAt
+          }
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          movieId
+          movie {
+            id
+            tmdbId
+            studio
+            createdAt
+            updatedAt
+          }
+          personId
+          person {
+            id
+            tmdbId
+            createdAt
+            updatedAt
+          }
+          songId
+          song {
+            id
+            movieId
+            title
+            artist
+            createdAt
+            updatedAt
+          }
+          visibility
+          accolade
+          createdAt
+          updatedAt
+        }
         nextToken
       }
       tmdbId
@@ -392,6 +1319,21 @@ export const listMovies = /* GraphQL */ `
     ) {
       items {
         id
+        contenders {
+          items {
+            id
+            categoryId
+            eventId
+            movieId
+            personId
+            songId
+            visibility
+            accolade
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         tmdbId
         studio
         createdAt
@@ -443,6 +1385,21 @@ export const getSong = /* GraphQL */ `
       movieId
       movie {
         id
+        contenders {
+          items {
+            id
+            categoryId
+            eventId
+            movieId
+            personId
+            songId
+            visibility
+            accolade
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         tmdbId
         studio
         createdAt
@@ -473,6 +1430,16 @@ export const listSongs = /* GraphQL */ `
       items {
         id
         movieId
+        movie {
+          id
+          contenders {
+            nextToken
+          }
+          tmdbId
+          studio
+          createdAt
+          updatedAt
+        }
         title
         artist
         createdAt
@@ -495,17 +1462,101 @@ export const getPredictionSet = /* GraphQL */ `
         bio
         image
         role
+        predictionSets {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        historyPredictionSets {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        followers {
+          items {
+            id
+            followedUserId
+            followingUserId
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        following {
+          items {
+            id
+            followedUserId
+            followingUserId
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         createdAt
         updatedAt
       }
       eventId
       event {
         id
+        categories {
+          items {
+            id
+            eventId
+            name
+            type
+            isShortlisted
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         awardsBody
         year
         nominationDateTime
         winDateTime
         status
+        predictionSets {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        historyPredictions {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -513,13 +1564,78 @@ export const getPredictionSet = /* GraphQL */ `
       category {
         id
         eventId
+        event {
+          id
+          categories {
+            nextToken
+          }
+          awardsBody
+          year
+          nominationDateTime
+          winDateTime
+          status
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         name
         type
         isShortlisted
+        predictionSets {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        historyPredictions {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         createdAt
         updatedAt
       }
       predictions {
+        items {
+          id
+          predictionSetId
+          contenderId
+          contender {
+            id
+            categoryId
+            eventId
+            movieId
+            personId
+            songId
+            visibility
+            accolade
+            createdAt
+            updatedAt
+          }
+          ranking
+          createdAt
+          updatedAt
+        }
         nextToken
       }
       type
@@ -547,8 +1663,86 @@ export const listPredictionSets = /* GraphQL */ `
       items {
         id
         userId
+        user {
+          id
+          email
+          username
+          name
+          bio
+          image
+          role
+          predictionSets {
+            nextToken
+          }
+          historyPredictionSets {
+            nextToken
+          }
+          followers {
+            nextToken
+          }
+          following {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         eventId
+        event {
+          id
+          categories {
+            nextToken
+          }
+          awardsBody
+          year
+          nominationDateTime
+          winDateTime
+          status
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         categoryId
+        category {
+          id
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          name
+          type
+          isShortlisted
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        predictions {
+          items {
+            id
+            predictionSetId
+            contenderId
+            ranking
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         type
         comment
         createdAt
@@ -567,10 +1761,85 @@ export const getPrediction = /* GraphQL */ `
       contender {
         id
         categoryId
+        category {
+          id
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          name
+          type
+          isShortlisted
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         eventId
+        event {
+          id
+          categories {
+            nextToken
+          }
+          awardsBody
+          year
+          nominationDateTime
+          winDateTime
+          status
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         movieId
+        movie {
+          id
+          contenders {
+            nextToken
+          }
+          tmdbId
+          studio
+          createdAt
+          updatedAt
+        }
         personId
+        person {
+          id
+          tmdbId
+          createdAt
+          updatedAt
+        }
         songId
+        song {
+          id
+          movieId
+          movie {
+            id
+            tmdbId
+            studio
+            createdAt
+            updatedAt
+          }
+          title
+          artist
+          createdAt
+          updatedAt
+        }
         visibility
         accolade
         createdAt
@@ -601,6 +1870,58 @@ export const listPredictions = /* GraphQL */ `
         id
         predictionSetId
         contenderId
+        contender {
+          id
+          categoryId
+          category {
+            id
+            eventId
+            name
+            type
+            isShortlisted
+            createdAt
+            updatedAt
+          }
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          movieId
+          movie {
+            id
+            tmdbId
+            studio
+            createdAt
+            updatedAt
+          }
+          personId
+          person {
+            id
+            tmdbId
+            createdAt
+            updatedAt
+          }
+          songId
+          song {
+            id
+            movieId
+            title
+            artist
+            createdAt
+            updatedAt
+          }
+          visibility
+          accolade
+          createdAt
+          updatedAt
+        }
         ranking
         createdAt
         updatedAt
@@ -622,17 +1943,101 @@ export const getHistoryPredictionSet = /* GraphQL */ `
         bio
         image
         role
+        predictionSets {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        historyPredictionSets {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        followers {
+          items {
+            id
+            followedUserId
+            followingUserId
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        following {
+          items {
+            id
+            followedUserId
+            followingUserId
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         createdAt
         updatedAt
       }
       eventId
       event {
         id
+        categories {
+          items {
+            id
+            eventId
+            name
+            type
+            isShortlisted
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         awardsBody
         year
         nominationDateTime
         winDateTime
         status
+        predictionSets {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        historyPredictions {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -640,13 +2045,88 @@ export const getHistoryPredictionSet = /* GraphQL */ `
       category {
         id
         eventId
+        event {
+          id
+          categories {
+            nextToken
+          }
+          awardsBody
+          year
+          nominationDateTime
+          winDateTime
+          status
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         name
         type
         isShortlisted
+        predictionSets {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        historyPredictions {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         createdAt
         updatedAt
       }
       predictions {
+        items {
+          id
+          historyPredictionSetId
+          contenderId
+          contender {
+            id
+            categoryId
+            eventId
+            movieId
+            personId
+            songId
+            visibility
+            accolade
+            createdAt
+            updatedAt
+          }
+          categoryId
+          category {
+            id
+            eventId
+            name
+            type
+            isShortlisted
+            createdAt
+            updatedAt
+          }
+          ranking
+          createdAt
+          updatedAt
+        }
         nextToken
       }
       type
@@ -674,8 +2154,87 @@ export const listHistoryPredictionSets = /* GraphQL */ `
       items {
         id
         userId
+        user {
+          id
+          email
+          username
+          name
+          bio
+          image
+          role
+          predictionSets {
+            nextToken
+          }
+          historyPredictionSets {
+            nextToken
+          }
+          followers {
+            nextToken
+          }
+          following {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         eventId
+        event {
+          id
+          categories {
+            nextToken
+          }
+          awardsBody
+          year
+          nominationDateTime
+          winDateTime
+          status
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         categoryId
+        category {
+          id
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          name
+          type
+          isShortlisted
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        predictions {
+          items {
+            id
+            historyPredictionSetId
+            contenderId
+            categoryId
+            ranking
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         type
         comment
         createdAt
@@ -694,10 +2253,85 @@ export const getHistoryPrediction = /* GraphQL */ `
       contender {
         id
         categoryId
+        category {
+          id
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          name
+          type
+          isShortlisted
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         eventId
+        event {
+          id
+          categories {
+            nextToken
+          }
+          awardsBody
+          year
+          nominationDateTime
+          winDateTime
+          status
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         movieId
+        movie {
+          id
+          contenders {
+            nextToken
+          }
+          tmdbId
+          studio
+          createdAt
+          updatedAt
+        }
         personId
+        person {
+          id
+          tmdbId
+          createdAt
+          updatedAt
+        }
         songId
+        song {
+          id
+          movieId
+          movie {
+            id
+            tmdbId
+            studio
+            createdAt
+            updatedAt
+          }
+          title
+          artist
+          createdAt
+          updatedAt
+        }
         visibility
         accolade
         createdAt
@@ -707,9 +2341,54 @@ export const getHistoryPrediction = /* GraphQL */ `
       category {
         id
         eventId
+        event {
+          id
+          categories {
+            nextToken
+          }
+          awardsBody
+          year
+          nominationDateTime
+          winDateTime
+          status
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         name
         type
         isShortlisted
+        predictionSets {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        historyPredictions {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -738,7 +2417,84 @@ export const listHistoryPredictions = /* GraphQL */ `
         id
         historyPredictionSetId
         contenderId
+        contender {
+          id
+          categoryId
+          category {
+            id
+            eventId
+            name
+            type
+            isShortlisted
+            createdAt
+            updatedAt
+          }
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          movieId
+          movie {
+            id
+            tmdbId
+            studio
+            createdAt
+            updatedAt
+          }
+          personId
+          person {
+            id
+            tmdbId
+            createdAt
+            updatedAt
+          }
+          songId
+          song {
+            id
+            movieId
+            title
+            artist
+            createdAt
+            updatedAt
+          }
+          visibility
+          accolade
+          createdAt
+          updatedAt
+        }
         categoryId
+        category {
+          id
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          name
+          type
+          isShortlisted
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         ranking
         createdAt
         updatedAt
@@ -754,11 +2510,49 @@ export const getCommunityPredictionSet = /* GraphQL */ `
       eventId
       event {
         id
+        categories {
+          items {
+            id
+            eventId
+            name
+            type
+            isShortlisted
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         awardsBody
         year
         nominationDateTime
         winDateTime
         status
+        predictionSets {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        historyPredictions {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -766,13 +2560,79 @@ export const getCommunityPredictionSet = /* GraphQL */ `
       category {
         id
         eventId
+        event {
+          id
+          categories {
+            nextToken
+          }
+          awardsBody
+          year
+          nominationDateTime
+          winDateTime
+          status
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         name
         type
         isShortlisted
+        predictionSets {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        historyPredictions {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         createdAt
         updatedAt
       }
       predictions {
+        items {
+          id
+          communityPredictionSetId
+          contenderId
+          contender {
+            id
+            categoryId
+            eventId
+            movieId
+            personId
+            songId
+            visibility
+            accolade
+            createdAt
+            updatedAt
+          }
+          ranking
+          indexedRankings
+          createdAt
+          updatedAt
+        }
         nextToken
       }
       type
@@ -799,7 +2659,63 @@ export const listCommunityPredictionSets = /* GraphQL */ `
       items {
         id
         eventId
+        event {
+          id
+          categories {
+            nextToken
+          }
+          awardsBody
+          year
+          nominationDateTime
+          winDateTime
+          status
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         categoryId
+        category {
+          id
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          name
+          type
+          isShortlisted
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        predictions {
+          items {
+            id
+            communityPredictionSetId
+            contenderId
+            ranking
+            indexedRankings
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         type
         createdAt
         updatedAt
@@ -817,10 +2733,85 @@ export const getCommunityPrediction = /* GraphQL */ `
       contender {
         id
         categoryId
+        category {
+          id
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          name
+          type
+          isShortlisted
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         eventId
+        event {
+          id
+          categories {
+            nextToken
+          }
+          awardsBody
+          year
+          nominationDateTime
+          winDateTime
+          status
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         movieId
+        movie {
+          id
+          contenders {
+            nextToken
+          }
+          tmdbId
+          studio
+          createdAt
+          updatedAt
+        }
         personId
+        person {
+          id
+          tmdbId
+          createdAt
+          updatedAt
+        }
         songId
+        song {
+          id
+          movieId
+          movie {
+            id
+            tmdbId
+            studio
+            createdAt
+            updatedAt
+          }
+          title
+          artist
+          createdAt
+          updatedAt
+        }
         visibility
         accolade
         createdAt
@@ -852,6 +2843,58 @@ export const listCommunityPredictions = /* GraphQL */ `
         id
         communityPredictionSetId
         contenderId
+        contender {
+          id
+          categoryId
+          category {
+            id
+            eventId
+            name
+            type
+            isShortlisted
+            createdAt
+            updatedAt
+          }
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          movieId
+          movie {
+            id
+            tmdbId
+            studio
+            createdAt
+            updatedAt
+          }
+          personId
+          person {
+            id
+            tmdbId
+            createdAt
+            updatedAt
+          }
+          songId
+          song {
+            id
+            movieId
+            title
+            artist
+            createdAt
+            updatedAt
+          }
+          visibility
+          accolade
+          createdAt
+          updatedAt
+        }
         ranking
         indexedRankings
         createdAt
@@ -868,11 +2911,49 @@ export const getCommunityHistoryPredictionSet = /* GraphQL */ `
       eventId
       event {
         id
+        categories {
+          items {
+            id
+            eventId
+            name
+            type
+            isShortlisted
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         awardsBody
         year
         nominationDateTime
         winDateTime
         status
+        predictionSets {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        historyPredictions {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -880,13 +2961,89 @@ export const getCommunityHistoryPredictionSet = /* GraphQL */ `
       category {
         id
         eventId
+        event {
+          id
+          categories {
+            nextToken
+          }
+          awardsBody
+          year
+          nominationDateTime
+          winDateTime
+          status
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         name
         type
         isShortlisted
+        predictionSets {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        historyPredictions {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         createdAt
         updatedAt
       }
       predictions {
+        items {
+          id
+          communityHistoryPredictionSetId
+          contenderId
+          contender {
+            id
+            categoryId
+            eventId
+            movieId
+            personId
+            songId
+            visibility
+            accolade
+            createdAt
+            updatedAt
+          }
+          categoryId
+          category {
+            id
+            eventId
+            name
+            type
+            isShortlisted
+            createdAt
+            updatedAt
+          }
+          ranking
+          indexedRankings
+          createdAt
+          updatedAt
+        }
         nextToken
       }
       type
@@ -913,7 +3070,64 @@ export const listCommunityHistoryPredictionSets = /* GraphQL */ `
       items {
         id
         eventId
+        event {
+          id
+          categories {
+            nextToken
+          }
+          awardsBody
+          year
+          nominationDateTime
+          winDateTime
+          status
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         categoryId
+        category {
+          id
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          name
+          type
+          isShortlisted
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        predictions {
+          items {
+            id
+            communityHistoryPredictionSetId
+            contenderId
+            categoryId
+            ranking
+            indexedRankings
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         type
         createdAt
         updatedAt
@@ -931,10 +3145,85 @@ export const getCommunityHistoryPrediction = /* GraphQL */ `
       contender {
         id
         categoryId
+        category {
+          id
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          name
+          type
+          isShortlisted
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         eventId
+        event {
+          id
+          categories {
+            nextToken
+          }
+          awardsBody
+          year
+          nominationDateTime
+          winDateTime
+          status
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         movieId
+        movie {
+          id
+          contenders {
+            nextToken
+          }
+          tmdbId
+          studio
+          createdAt
+          updatedAt
+        }
         personId
+        person {
+          id
+          tmdbId
+          createdAt
+          updatedAt
+        }
         songId
+        song {
+          id
+          movieId
+          movie {
+            id
+            tmdbId
+            studio
+            createdAt
+            updatedAt
+          }
+          title
+          artist
+          createdAt
+          updatedAt
+        }
         visibility
         accolade
         createdAt
@@ -944,9 +3233,54 @@ export const getCommunityHistoryPrediction = /* GraphQL */ `
       category {
         id
         eventId
+        event {
+          id
+          categories {
+            nextToken
+          }
+          awardsBody
+          year
+          nominationDateTime
+          winDateTime
+          status
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         name
         type
         isShortlisted
+        predictionSets {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        historyPredictions {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -976,7 +3310,84 @@ export const listCommunityHistoryPredictions = /* GraphQL */ `
         id
         communityHistoryPredictionSetId
         contenderId
+        contender {
+          id
+          categoryId
+          category {
+            id
+            eventId
+            name
+            type
+            isShortlisted
+            createdAt
+            updatedAt
+          }
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          movieId
+          movie {
+            id
+            tmdbId
+            studio
+            createdAt
+            updatedAt
+          }
+          personId
+          person {
+            id
+            tmdbId
+            createdAt
+            updatedAt
+          }
+          songId
+          song {
+            id
+            movieId
+            title
+            artist
+            createdAt
+            updatedAt
+          }
+          visibility
+          accolade
+          createdAt
+          updatedAt
+        }
         categoryId
+        category {
+          id
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          name
+          type
+          isShortlisted
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         ranking
         indexedRankings
         createdAt
@@ -1004,7 +3415,53 @@ export const relationshipByFollowedUserId = /* GraphQL */ `
       items {
         id
         followedUserId
+        followedUser {
+          id
+          email
+          username
+          name
+          bio
+          image
+          role
+          predictionSets {
+            nextToken
+          }
+          historyPredictionSets {
+            nextToken
+          }
+          followers {
+            nextToken
+          }
+          following {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         followingUserId
+        followingUser {
+          id
+          email
+          username
+          name
+          bio
+          image
+          role
+          predictionSets {
+            nextToken
+          }
+          historyPredictionSets {
+            nextToken
+          }
+          followers {
+            nextToken
+          }
+          following {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         createdAt
         updatedAt
       }
@@ -1030,7 +3487,53 @@ export const relationshipByFollowingUserId = /* GraphQL */ `
       items {
         id
         followedUserId
+        followedUser {
+          id
+          email
+          username
+          name
+          bio
+          image
+          role
+          predictionSets {
+            nextToken
+          }
+          historyPredictionSets {
+            nextToken
+          }
+          followers {
+            nextToken
+          }
+          following {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         followingUserId
+        followingUser {
+          id
+          email
+          username
+          name
+          bio
+          image
+          role
+          predictionSets {
+            nextToken
+          }
+          historyPredictionSets {
+            nextToken
+          }
+          followers {
+            nextToken
+          }
+          following {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         createdAt
         updatedAt
       }
@@ -1056,9 +3559,54 @@ export const categoryByEvent = /* GraphQL */ `
       items {
         id
         eventId
+        event {
+          id
+          categories {
+            nextToken
+          }
+          awardsBody
+          year
+          nominationDateTime
+          winDateTime
+          status
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         name
         type
         isShortlisted
+        predictionSets {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        historyPredictions {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -1084,10 +3632,85 @@ export const contenderByMovie = /* GraphQL */ `
       items {
         id
         categoryId
+        category {
+          id
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          name
+          type
+          isShortlisted
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         eventId
+        event {
+          id
+          categories {
+            nextToken
+          }
+          awardsBody
+          year
+          nominationDateTime
+          winDateTime
+          status
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         movieId
+        movie {
+          id
+          contenders {
+            nextToken
+          }
+          tmdbId
+          studio
+          createdAt
+          updatedAt
+        }
         personId
+        person {
+          id
+          tmdbId
+          createdAt
+          updatedAt
+        }
         songId
+        song {
+          id
+          movieId
+          movie {
+            id
+            tmdbId
+            studio
+            createdAt
+            updatedAt
+          }
+          title
+          artist
+          createdAt
+          updatedAt
+        }
         visibility
         accolade
         createdAt
@@ -1117,8 +3740,86 @@ export const predictionSetByUserIdAndEventId = /* GraphQL */ `
       items {
         id
         userId
+        user {
+          id
+          email
+          username
+          name
+          bio
+          image
+          role
+          predictionSets {
+            nextToken
+          }
+          historyPredictionSets {
+            nextToken
+          }
+          followers {
+            nextToken
+          }
+          following {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         eventId
+        event {
+          id
+          categories {
+            nextToken
+          }
+          awardsBody
+          year
+          nominationDateTime
+          winDateTime
+          status
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         categoryId
+        category {
+          id
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          name
+          type
+          isShortlisted
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        predictions {
+          items {
+            id
+            predictionSetId
+            contenderId
+            ranking
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         type
         comment
         createdAt
@@ -1148,8 +3849,86 @@ export const predictionSetByUserIdAndCategoryId = /* GraphQL */ `
       items {
         id
         userId
+        user {
+          id
+          email
+          username
+          name
+          bio
+          image
+          role
+          predictionSets {
+            nextToken
+          }
+          historyPredictionSets {
+            nextToken
+          }
+          followers {
+            nextToken
+          }
+          following {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         eventId
+        event {
+          id
+          categories {
+            nextToken
+          }
+          awardsBody
+          year
+          nominationDateTime
+          winDateTime
+          status
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         categoryId
+        category {
+          id
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          name
+          type
+          isShortlisted
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        predictions {
+          items {
+            id
+            predictionSetId
+            contenderId
+            ranking
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         type
         comment
         createdAt
@@ -1179,8 +3958,86 @@ export const predictionSetByUserIdAndCreatedAt = /* GraphQL */ `
       items {
         id
         userId
+        user {
+          id
+          email
+          username
+          name
+          bio
+          image
+          role
+          predictionSets {
+            nextToken
+          }
+          historyPredictionSets {
+            nextToken
+          }
+          followers {
+            nextToken
+          }
+          following {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         eventId
+        event {
+          id
+          categories {
+            nextToken
+          }
+          awardsBody
+          year
+          nominationDateTime
+          winDateTime
+          status
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         categoryId
+        category {
+          id
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          name
+          type
+          isShortlisted
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        predictions {
+          items {
+            id
+            predictionSetId
+            contenderId
+            ranking
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         type
         comment
         createdAt
@@ -1208,8 +4065,86 @@ export const predictionSetByEventId = /* GraphQL */ `
       items {
         id
         userId
+        user {
+          id
+          email
+          username
+          name
+          bio
+          image
+          role
+          predictionSets {
+            nextToken
+          }
+          historyPredictionSets {
+            nextToken
+          }
+          followers {
+            nextToken
+          }
+          following {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         eventId
+        event {
+          id
+          categories {
+            nextToken
+          }
+          awardsBody
+          year
+          nominationDateTime
+          winDateTime
+          status
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         categoryId
+        category {
+          id
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          name
+          type
+          isShortlisted
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        predictions {
+          items {
+            id
+            predictionSetId
+            contenderId
+            ranking
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         type
         comment
         createdAt
@@ -1238,6 +4173,58 @@ export const predictionByPredictionSetId = /* GraphQL */ `
         id
         predictionSetId
         contenderId
+        contender {
+          id
+          categoryId
+          category {
+            id
+            eventId
+            name
+            type
+            isShortlisted
+            createdAt
+            updatedAt
+          }
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          movieId
+          movie {
+            id
+            tmdbId
+            studio
+            createdAt
+            updatedAt
+          }
+          personId
+          person {
+            id
+            tmdbId
+            createdAt
+            updatedAt
+          }
+          songId
+          song {
+            id
+            movieId
+            title
+            artist
+            createdAt
+            updatedAt
+          }
+          visibility
+          accolade
+          createdAt
+          updatedAt
+        }
         ranking
         createdAt
         updatedAt
@@ -1266,8 +4253,87 @@ export const historyPredictionSetByUserIdAndCreatedAt = /* GraphQL */ `
       items {
         id
         userId
+        user {
+          id
+          email
+          username
+          name
+          bio
+          image
+          role
+          predictionSets {
+            nextToken
+          }
+          historyPredictionSets {
+            nextToken
+          }
+          followers {
+            nextToken
+          }
+          following {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         eventId
+        event {
+          id
+          categories {
+            nextToken
+          }
+          awardsBody
+          year
+          nominationDateTime
+          winDateTime
+          status
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         categoryId
+        category {
+          id
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          name
+          type
+          isShortlisted
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        predictions {
+          items {
+            id
+            historyPredictionSetId
+            contenderId
+            categoryId
+            ranking
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         type
         comment
         createdAt
@@ -1297,8 +4363,87 @@ export const historyPredictionSetByUserIdAndEventIdAndCreatedAt = /* GraphQL */ 
       items {
         id
         userId
+        user {
+          id
+          email
+          username
+          name
+          bio
+          image
+          role
+          predictionSets {
+            nextToken
+          }
+          historyPredictionSets {
+            nextToken
+          }
+          followers {
+            nextToken
+          }
+          following {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         eventId
+        event {
+          id
+          categories {
+            nextToken
+          }
+          awardsBody
+          year
+          nominationDateTime
+          winDateTime
+          status
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         categoryId
+        category {
+          id
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          name
+          type
+          isShortlisted
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        predictions {
+          items {
+            id
+            historyPredictionSetId
+            contenderId
+            categoryId
+            ranking
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         type
         comment
         createdAt
@@ -1328,8 +4473,87 @@ export const historyPredictionSetByUserIdAndCategoryIdAndCreatedAt = /* GraphQL 
       items {
         id
         userId
+        user {
+          id
+          email
+          username
+          name
+          bio
+          image
+          role
+          predictionSets {
+            nextToken
+          }
+          historyPredictionSets {
+            nextToken
+          }
+          followers {
+            nextToken
+          }
+          following {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         eventId
+        event {
+          id
+          categories {
+            nextToken
+          }
+          awardsBody
+          year
+          nominationDateTime
+          winDateTime
+          status
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         categoryId
+        category {
+          id
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          name
+          type
+          isShortlisted
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        predictions {
+          items {
+            id
+            historyPredictionSetId
+            contenderId
+            categoryId
+            ranking
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         type
         comment
         createdAt
@@ -1357,8 +4581,87 @@ export const historyPredictionSetByCategoryId = /* GraphQL */ `
       items {
         id
         userId
+        user {
+          id
+          email
+          username
+          name
+          bio
+          image
+          role
+          predictionSets {
+            nextToken
+          }
+          historyPredictionSets {
+            nextToken
+          }
+          followers {
+            nextToken
+          }
+          following {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         eventId
+        event {
+          id
+          categories {
+            nextToken
+          }
+          awardsBody
+          year
+          nominationDateTime
+          winDateTime
+          status
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         categoryId
+        category {
+          id
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          name
+          type
+          isShortlisted
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        predictions {
+          items {
+            id
+            historyPredictionSetId
+            contenderId
+            categoryId
+            ranking
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         type
         comment
         createdAt
@@ -1387,7 +4690,84 @@ export const historyPredictionByHistoryPredictionSetId = /* GraphQL */ `
         id
         historyPredictionSetId
         contenderId
+        contender {
+          id
+          categoryId
+          category {
+            id
+            eventId
+            name
+            type
+            isShortlisted
+            createdAt
+            updatedAt
+          }
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          movieId
+          movie {
+            id
+            tmdbId
+            studio
+            createdAt
+            updatedAt
+          }
+          personId
+          person {
+            id
+            tmdbId
+            createdAt
+            updatedAt
+          }
+          songId
+          song {
+            id
+            movieId
+            title
+            artist
+            createdAt
+            updatedAt
+          }
+          visibility
+          accolade
+          createdAt
+          updatedAt
+        }
         categoryId
+        category {
+          id
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          name
+          type
+          isShortlisted
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         ranking
         createdAt
         updatedAt
@@ -1415,7 +4795,84 @@ export const historyPredictionByCategoryId = /* GraphQL */ `
         id
         historyPredictionSetId
         contenderId
+        contender {
+          id
+          categoryId
+          category {
+            id
+            eventId
+            name
+            type
+            isShortlisted
+            createdAt
+            updatedAt
+          }
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          movieId
+          movie {
+            id
+            tmdbId
+            studio
+            createdAt
+            updatedAt
+          }
+          personId
+          person {
+            id
+            tmdbId
+            createdAt
+            updatedAt
+          }
+          songId
+          song {
+            id
+            movieId
+            title
+            artist
+            createdAt
+            updatedAt
+          }
+          visibility
+          accolade
+          createdAt
+          updatedAt
+        }
         categoryId
+        category {
+          id
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          name
+          type
+          isShortlisted
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         ranking
         createdAt
         updatedAt
@@ -1442,7 +4899,63 @@ export const communityPredictionSetByEventId = /* GraphQL */ `
       items {
         id
         eventId
+        event {
+          id
+          categories {
+            nextToken
+          }
+          awardsBody
+          year
+          nominationDateTime
+          winDateTime
+          status
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         categoryId
+        category {
+          id
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          name
+          type
+          isShortlisted
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        predictions {
+          items {
+            id
+            communityPredictionSetId
+            contenderId
+            ranking
+            indexedRankings
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         type
         createdAt
         updatedAt
@@ -1470,6 +4983,58 @@ export const communityPredictionByCommunityPredictionSetId = /* GraphQL */ `
         id
         communityPredictionSetId
         contenderId
+        contender {
+          id
+          categoryId
+          category {
+            id
+            eventId
+            name
+            type
+            isShortlisted
+            createdAt
+            updatedAt
+          }
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          movieId
+          movie {
+            id
+            tmdbId
+            studio
+            createdAt
+            updatedAt
+          }
+          personId
+          person {
+            id
+            tmdbId
+            createdAt
+            updatedAt
+          }
+          songId
+          song {
+            id
+            movieId
+            title
+            artist
+            createdAt
+            updatedAt
+          }
+          visibility
+          accolade
+          createdAt
+          updatedAt
+        }
         ranking
         indexedRankings
         createdAt
@@ -1499,7 +5064,64 @@ export const communityHistoryPredictionSetsByEventIdAndCreatedAt = /* GraphQL */
       items {
         id
         eventId
+        event {
+          id
+          categories {
+            nextToken
+          }
+          awardsBody
+          year
+          nominationDateTime
+          winDateTime
+          status
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         categoryId
+        category {
+          id
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          name
+          type
+          isShortlisted
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        predictions {
+          items {
+            id
+            communityHistoryPredictionSetId
+            contenderId
+            categoryId
+            ranking
+            indexedRankings
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         type
         createdAt
         updatedAt
@@ -1527,7 +5149,84 @@ export const communityHistoryPredictionByCommunityHistoryPredictionSetId = /* Gr
         id
         communityHistoryPredictionSetId
         contenderId
+        contender {
+          id
+          categoryId
+          category {
+            id
+            eventId
+            name
+            type
+            isShortlisted
+            createdAt
+            updatedAt
+          }
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          movieId
+          movie {
+            id
+            tmdbId
+            studio
+            createdAt
+            updatedAt
+          }
+          personId
+          person {
+            id
+            tmdbId
+            createdAt
+            updatedAt
+          }
+          songId
+          song {
+            id
+            movieId
+            title
+            artist
+            createdAt
+            updatedAt
+          }
+          visibility
+          accolade
+          createdAt
+          updatedAt
+        }
         categoryId
+        category {
+          id
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          name
+          type
+          isShortlisted
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         ranking
         indexedRankings
         createdAt
@@ -1556,7 +5255,84 @@ export const communityHistoryPredictionByCategoryId = /* GraphQL */ `
         id
         communityHistoryPredictionSetId
         contenderId
+        contender {
+          id
+          categoryId
+          category {
+            id
+            eventId
+            name
+            type
+            isShortlisted
+            createdAt
+            updatedAt
+          }
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          movieId
+          movie {
+            id
+            tmdbId
+            studio
+            createdAt
+            updatedAt
+          }
+          personId
+          person {
+            id
+            tmdbId
+            createdAt
+            updatedAt
+          }
+          songId
+          song {
+            id
+            movieId
+            title
+            artist
+            createdAt
+            updatedAt
+          }
+          visibility
+          accolade
+          createdAt
+          updatedAt
+        }
         categoryId
+        category {
+          id
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            createdAt
+            updatedAt
+          }
+          name
+          type
+          isShortlisted
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         ranking
         indexedRankings
         createdAt
