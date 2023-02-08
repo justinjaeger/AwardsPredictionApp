@@ -6,13 +6,10 @@ import CustomIcon from '../CustomIcon';
 const CarouselArrow = ({
   direction,
   onPress,
-}: //   isDisabled,
-{
+}: {
   direction: 'back' | 'forward';
   onPress: () => void;
-  isDisabled?: boolean;
 }) => {
-  const isDisabled = false; // don't let it be disabled
   return (
     <View
       style={{
@@ -31,8 +28,8 @@ const CarouselArrow = ({
           justifyContent: 'center',
           borderRadius: theme.borderRadius,
         }}
-        underlayColor={isDisabled ? 'transparent' : 'rgba(0,0,0,0.5)'}
-        onPress={isDisabled ? () => {} : onPress}
+        underlayColor={'rgba(0,0,0,0.5)'}
+        onPress={onPress}
       >
         <View
           style={{
@@ -48,7 +45,7 @@ const CarouselArrow = ({
                 ? 'arrow-ios-forward-outline'
                 : 'arrow-ios-back-outline'
             }
-            color={isDisabled ? 'transparent' : undefined}
+            color={undefined}
           />
         </View>
       </TouchableHighlight>

@@ -25,6 +25,7 @@ const UserSearchResult = ({ users }: { users: iUserSearchResult[] }) => {
               width: '100%',
             }}
             onPress={() => {
+              //   console.error('FriendProfile', user.id);
               navigation.navigate('FriendProfile', { userId: user.id });
             }}
             underlayColor={COLORS.secondaryDark}

@@ -18,6 +18,7 @@ export enum QueryKeys {
   USER_WITH_PREDICTIONS = 'user-with-predictions',
   PERSONAL_EVENT = 'personal-predictions-by-event',
   COMMUNITY_EVENT = 'community-predictions-by-event',
+  USER_WITH_RELATIONSHIPS = 'user-with-relationships',
 }
 
 // ex: { 1: 142 } (ranking, numberPredictingRanking)

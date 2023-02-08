@@ -34,7 +34,7 @@ const FriendNavigator = () => (
         name="FriendProfile"
         component={Profile}
         options={{
-          headerTitle: getHeaderTitle('My Profile'),
+          headerTitle: getHeaderTitle('Profile'),
           headerLeft: BackButton,
           ...headerSettings,
         }}

@@ -8,6 +8,7 @@ import {
   ModelUserFilterInput,
   SearchableUserFilterInput,
   SearchUsersQueryVariables,
+  UpdateUserInput,
   UpdateUserMutation,
   UpdateUserMutationVariables,
   UserRole,
@@ -173,23 +174,29 @@ export const createTestUser = async (
 // verify that username is unique, then update
 export const updateUsername = async (
   id: string,
-  username: string,
+  username: string | undefined,
+  name: string | undefined,
 ): Promise<iApiResponse<UpdateUserMutation>> => {
   try {
     // First, validate that username is not already taken
-    const { data: listUsersQuery } = await getUsersByUsername(username);
-    const maybeUsers = listUsersQuery?.listUsers?.items;
-    if (!maybeUsers) {
-      throw new Error('An error occured fetching users with this username');
+    if (username) {
+      const { data: listUsersQuery } = await getUsersByUsername(username);
+      const maybeUsers = listUsersQuery?.listUsers?.items;
+      if (!maybeUsers) {
+        throw new Error('An error occured fetching users with this username');
+      }
+      if (maybeUsers.length !== 0) {
+        throw new Error('This username is already taken');
+      }
     }
-    if (maybeUsers.length !== 0) {
-      throw new Error('This username is already taken');
-    }
+    const input: UpdateUserInput = { id };
+    if (username) input.username = username;
+    if (name) input.name = name;
     // If not taken, create new username
     const { data, errors } = await GraphqlAPI<
       UpdateUserMutation,
       UpdateUserMutationVariables
-    >(mutations.updateUser, { input: { id, username } });
+    >(mutations.updateUser, { input });
     if (data) {
       return { status: 'success', data };
     }

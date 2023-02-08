@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import {
   Alert,
   ScrollView,
@@ -21,6 +21,8 @@ import theme from '../../constants/theme';
 import PredictionCarousel from '../../components/PredictionCarousel';
 import { ProfileParamList } from '../../navigation/types';
 import useQueryGetUserWithRecentPredictions from '../../hooks/queries/getUserWithRecentPredictions';
+import COLORS from '../../constants/colors';
+import { useNavigateToEffect } from '../../util/hooks';
 
 const Profile = () => {
   // If we pass userId as params, it loads that user's profile. If not, it attemps to get logged in profile.
@@ -31,19 +33,17 @@ const Profile = () => {
   const navigation = useNavigation();
   const { width } = useWindowDimensions();
 
-  const { data: user } = useQueryGetUserWithRecentPredictions(userId);
+  const { data: user, refetch } = useQueryGetUserWithRecentPredictions(userId);
+
+  // refresh the profile when we navigate to it (makes it so it updates after changing username for example)
+  useNavigateToEffect(() => refetch(), []);
+
   const [loading, setLoading] = useState<boolean>(false);
   const [profileUri, setProfileUri] = useState<string | undefined>(undefined);
 
-  const isDeviceProfile = user && userId && user?.id === userId;
+  const isDeviceProfile = user && userId && user?.id === authUserId; // signed in matches params
 
   const predictionSets = user?.predictionSets || [];
-
-  useEffect(() => {
-    if (!userId) {
-      navigation.navigate('ChangeUsername');
-    }
-  }, [userId]);
 
   // put the logout button in the top right corner
   useLayoutEffect(() => {
@@ -115,7 +115,6 @@ const Profile = () => {
 
   const proportion = 3 / 10;
   const imageContainerWidth = width * proportion;
-  const usernameContainerWidth = width * (1 - proportion);
 
   return (
     <BackgroundWrapper>
@@ -168,40 +167,47 @@ const Profile = () => {
                         }
                       : undefined
                   }
-                  underlayColor={'transaparent'}
+                  style={{
+                    borderRadius: theme.borderRadius,
+                    paddingTop: 10,
+                    paddingBottom: 10,
+                  }}
+                  underlayColor={COLORS.disabled}
                 >
-                  <HeaderLight>
-                    {user?.username ? user.username : 'No Username'}
-                  </HeaderLight>
+                  <>
+                    <HeaderLight>
+                      {user?.name ? user.name : isDeviceProfile ? 'Add Name' : ''}
+                    </HeaderLight>
+                    <SubHeader style={{ marginTop: 5 }}>
+                      {user?.username
+                        ? '@' + user.username
+                        : isDeviceProfile
+                        ? 'Add Username'
+                        : ''}
+                    </SubHeader>
+                  </>
                 </TouchableHighlight>
-                <View style={{ width: usernameContainerWidth }}>
-                  {isDeviceProfile && !user?.username ? (
-                    <View onTouchEnd={() => navigation.navigate('ChangeUsername')}>
-                      <SubHeader style={{ paddingRight: 20 }}>
-                        {'Must create username for others to find you'}
-                      </SubHeader>
-                    </View>
-                  ) : (
-                    <View style={{ height: 20 }} />
-                  )}
-                </View>
               </View>
             </View>
             {profileUri ? (
               // JUST FOR TEST: REMOVE LATER
               <Image style={{ width: 200, height: 200 }} source={{ uri: profileUri }} />
             ) : null}
-            <HeaderLight
-              style={{
-                alignSelf: 'flex-start',
-                marginBottom: 10,
-                marginTop: 10,
-                marginLeft: theme.windowMargin,
-              }}
-            >
-              Recent Predictions:
-            </HeaderLight>
-            <PredictionCarousel predictionSets={predictionSets} userId={userId} />
+            {predictionSets.length > 0 ? (
+              <>
+                <HeaderLight
+                  style={{
+                    alignSelf: 'flex-start',
+                    marginBottom: 10,
+                    marginTop: 10,
+                    marginLeft: theme.windowMargin,
+                  }}
+                >
+                  Recent Predictions:
+                </HeaderLight>
+                <PredictionCarousel predictionSets={predictionSets} userId={userId} />
+              </>
+            ) : null}
           </>
         )}
       </ScrollView>

@@ -8,13 +8,15 @@ import {
   DeletePredictionSetMutation,
   DeletePredictionSetMutationVariables,
   ListPredictionSetsQueryVariables,
-  PredictionSetByUserIdAndEventIdQuery,
   PredictionSetByUserIdAndEventIdQueryVariables,
   PredictionType,
 } from '../../API';
 import * as mutations from '../../graphql/mutations';
 import * as customQueries from '../../graphqlCustom/queries';
-import { ListPredictionSetsQuery } from '../../graphqlCustom/types';
+import {
+  ListPredictionSetsQuery,
+  PredictionSetByUserIdAndEventIdQuery,
+} from '../../graphqlCustom/types';
 import { GraphqlAPI, handleError, iApiResponse } from '../utils';
 
 // there can only be one prediction set from these parameters

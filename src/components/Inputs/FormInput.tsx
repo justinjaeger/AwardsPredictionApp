@@ -3,7 +3,7 @@ import { Input } from '@ui-kitten/components';
 import { iTextContentType } from './types';
 import { EvaStatus } from '@ui-kitten/components/devsupport';
 import COLORS from '../../constants/colors';
-import { Body } from '../Text';
+import { Body, SubHeaderLight } from '../Text';
 
 const FormInput = ({
   label,
@@ -59,20 +59,32 @@ const FormInput = ({
     }
   };
 
+  const _status: EvaStatus = status || 'basic';
+
   return (
     <Input
-      label={() => <Body style={{ marginBottom: 5 }}>{label}</Body>}
+      label={() => <SubHeaderLight style={{ marginBottom: 5 }}>{label}</SubHeaderLight>}
       value={value}
       placeholder=""
       onChangeText={onChangeText}
       textContentType={textContentType}
-      caption={caption}
+      caption={() => (
+        <Body
+          style={{
+            marginTop: 5,
+            color: ['warning', 'danger'].includes(_status)
+              ? COLORS.warning
+              : COLORS.white,
+          }}
+        >
+          {caption || ''}
+        </Body>
+      )}
       onBlur={onBlur}
-      status={status || 'basic'}
-      textStyle={{ color: COLORS.white }}
+      status={_status}
+      textStyle={{ color: 'rgba(255,255,255,0.8)', fontSize: 18, padding: 5 }}
       autoFocus={autoFocus}
       style={{
-        marginBottom: 10,
         backgroundColor: 'transparent',
         borderColor: COLORS.white,
         ...style,

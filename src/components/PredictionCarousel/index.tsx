@@ -15,16 +15,12 @@ const PredictionCarousel = ({
   userId: string;
 }) => {
   const { width } = useWindowDimensions();
-
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [disableManualScroll, setDisableManualScroll] = useState<boolean>(false);
   const scrollBarAnim = useRef(new Animated.Value(0)).current;
-
   const scrollRef = useRef<ScrollView>(null);
-
   const totalBarWidth = width - theme.windowMargin * 2;
-  const barWidth = totalBarWidth / predictionSets.length;
-
+  const barWidth = totalBarWidth / (predictionSets.length || 1);
   const isFinalPage = currentPage === predictionSets.length - 1;
 
   useEffect(() => {
@@ -40,7 +36,7 @@ const PredictionCarousel = ({
   const terminateInterval = () => {
     if (interval) clearInterval(interval);
   };
-  // NOTE: it doesn't reset when using tab navigation, but who knows if I'll keep the tabs anway, and for other users' profiles it won't use tab
+  //   // NOTE: it doesn't reset when using tab navigation, but who knows if I'll keep the tabs anway, and for other users' profiles it won't use tab
   useEffect(() => {
     terminateInterval();
     const timer = setInterval(() => {
@@ -54,7 +50,6 @@ const PredictionCarousel = ({
     setCurrentPage(0);
     scrollRef.current?.scrollTo({ x: 0, animated: false });
   }, []);
-
   // lets us tap through the carousel faster; onMomentumScrollEnd doesn't fire in between taps
   const tempDisableManualScroll = () => {
     setDisableManualScroll(true);
@@ -62,7 +57,6 @@ const PredictionCarousel = ({
       setDisableManualScroll(false);
     }, 500);
   };
-
   const scrollForward = () => {
     scrollRef.current?.scrollTo({ x: width * currentPage + width, animated: true });
     // has to be written like this because the interval callback will use stale values for currentPage otherwise
@@ -75,13 +69,11 @@ const PredictionCarousel = ({
       return cp + 1;
     });
   };
-
   const onPressForward = () => {
     terminateInterval();
     scrollForward();
     tempDisableManualScroll();
   };
-
   const onPressBack = () => {
     terminateInterval();
     setCurrentPage((cp) => {
@@ -109,16 +101,8 @@ const PredictionCarousel = ({
         paddingBottom: 20,
       }}
     >
-      <CarouselArrow
-        direction={'back'}
-        onPress={onPressBack}
-        isDisabled={currentPage === 0}
-      />
-      <CarouselArrow
-        direction={'forward'}
-        onPress={onPressForward}
-        isDisabled={isFinalPage}
-      />
+      <CarouselArrow direction={'back'} onPress={onPressBack} />
+      <CarouselArrow direction={'forward'} onPress={onPressForward} />
       <ScrollView
         horizontal
         pagingEnabled

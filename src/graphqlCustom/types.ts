@@ -364,3 +364,71 @@ export type ListEventsQuery = {
     nextToken?: string | null;
   } | null;
 };
+
+export type PredictionSetByUserIdAndEventIdQuery = {
+  predictionSetByUserIdAndEventId?: {
+    __typename: 'ModelPredictionSetConnection';
+    items: Array<{
+      __typename: 'PredictionSet';
+      id: string;
+      userId: string;
+      eventId: string;
+      categoryId: string;
+      type?: PredictionType | null;
+      comment?: string | null;
+      predictions?: {
+        __typename: 'ModelPredictionConnection';
+        nextToken?: string | null;
+        items: Array<{
+          __typename: 'Prediction';
+          id: string;
+          predictionSetId: string;
+          contenderId: string;
+          contender: {
+            __typename: 'Contender';
+            id: string;
+            categoryId: string;
+            eventId: string;
+            movieId: string;
+            movie: {
+              __typename: 'Movie';
+              id: string;
+              tmdbId: number;
+              studio?: string | null;
+              createdAt: string;
+              updatedAt: string;
+            };
+            personId?: string | null;
+            person?: {
+              __typename: 'Person';
+              id: string;
+              tmdbId: number;
+              createdAt: string;
+              updatedAt: string;
+            } | null;
+            songId?: string | null;
+            song?: {
+              __typename: 'Song';
+              id: string;
+              movieId: string;
+              title: string;
+              artist: string;
+              createdAt: string;
+              updatedAt: string;
+            } | null;
+            visibility?: ContenderVisibility | null;
+            accolade?: ContenderAccolade | null;
+            createdAt: string;
+            updatedAt: string;
+          };
+          ranking: number;
+          createdAt: string;
+          updatedAt: string;
+        } | null>;
+      } | null;
+      createdAt: string;
+      updatedAt: string;
+    } | null>;
+    nextToken?: string | null;
+  } | null;
+};

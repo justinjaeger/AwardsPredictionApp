@@ -5,24 +5,35 @@ import { useNavigation } from '@react-navigation/native';
 import FormInput from '../../components/Inputs/FormInput';
 import { EvaStatus } from '@ui-kitten/components/devsupport/typings';
 import { SubmitButton } from '../../components/Buttons';
-import ApiServices from '../../services/graphql';
 import { useAuth } from '../../context/UserContext';
 import { getHeaderTitle } from '../../constants';
 import BackgroundWrapper from '../../components/BackgroundWrapper';
 import { BodyBold } from '../../components/Text';
 import useQueryGetUser from '../../hooks/queries/getUserWithRecentPredictions';
+import useUpdateUser from '../../hooks/mutations/updateUser';
 
 const ChangeUsername = () => {
   const { userId } = useAuth();
   const navigation = useNavigation();
 
   const { data: user } = useQueryGetUser(userId);
-  const [username, setUsername] = useState<string>('');
-  const [usernameStatus, setUsernameStatus] = useState<EvaStatus | undefined>(undefined);
-  const [loading, setLoading] = useState<boolean>(false);
+  const { mutate: updateUser, isComplete } = useUpdateUser(() => {
+    Snackbar.success('Username updated');
+    navigation.goBack();
+  });
 
+  const [name, setName] = useState<string>(user?.name || '');
+  const [username, setUsername] = useState<string>(user?.username || '');
+  const [usernameStatus, setUsernameStatus] = useState<EvaStatus | undefined>(undefined);
+
+  const validName = name.length >= 0;
   const validUsername = username.length >= 8;
-  const usernameBeforeEdit = user?.username || undefined;
+  const nameBeforeEdit = user?.name || '';
+  const usernameBeforeEdit = user?.username || '';
+  const enableSubmitUsername = usernameBeforeEdit !== username && validUsername;
+  const enableSubmitName = nameBeforeEdit !== name && validName;
+
+  const submitEnabled = enableSubmitUsername || enableSubmitName;
 
   useLayoutEffect(() => {
     // This is the best way to change the header
@@ -34,13 +45,10 @@ const ChangeUsername = () => {
   }, [usernameBeforeEdit, navigation]);
 
   const updateUsername = async () => {
-    setLoading(true);
+    const un = enableSubmitUsername ? username : undefined;
+    const n = enableSubmitName ? name : undefined;
     if (!user?.id) return;
-    const { data: u } = await ApiServices.updateUsername(user?.id, username);
-    setLoading(false);
-    if (!u) return;
-    Snackbar.success('Username updated');
-    navigation.goBack();
+    updateUser({ id: user?.id, username: un, name: n });
   };
 
   return (
@@ -51,7 +59,13 @@ const ChangeUsername = () => {
       >
         <View style={{ width: '80%' }}>
           <FormInput
-            label={usernameBeforeEdit ? 'New Username' : 'Username'}
+            label={'Name'}
+            value={name}
+            setValue={setName}
+            textContentType="name"
+          />
+          <FormInput
+            label={'Username'}
             value={username}
             setValue={setUsername}
             caption={
@@ -77,8 +91,8 @@ const ChangeUsername = () => {
           <SubmitButton
             text={usernameBeforeEdit ? 'Update' : 'Create'}
             onPress={updateUsername}
-            disabled={!validUsername || usernameBeforeEdit === username}
-            loading={loading}
+            disabled={!submitEnabled}
+            loading={!isComplete}
           />
         </View>
       </ScrollView>
