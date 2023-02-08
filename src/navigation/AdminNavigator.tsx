@@ -6,6 +6,7 @@ import ManageEvents from '../screens/Admin/ManageEvents.tsx';
 import Admin from '../screens/Admin';
 import ManageStudios from '../screens/Admin/ManageStudios';
 import ManageContenders from '../screens/Admin/ManageContenders';
+import AddTestUser from '../screens/Admin/AddTestUser';
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -45,6 +46,15 @@ const AdminNavigator = () => (
       component={ManageContenders}
       options={{
         headerTitle: getHeaderTitle('Manage Contenders'),
+        headerLeft: BackButton,
+        ...headerSettings,
+      }}
+    />
+    <Screen
+      name="AddTestUser"
+      component={AddTestUser}
+      options={{
+        headerTitle: getHeaderTitle('Add Test User'),
         headerLeft: BackButton,
         ...headerSettings,
       }}

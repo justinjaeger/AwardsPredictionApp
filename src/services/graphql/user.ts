@@ -125,6 +125,45 @@ export const createUser = async (
   }
 };
 
+export const createTestUser = async (
+  name: string,
+  username: string,
+  email: string,
+): Promise<iApiResponse<CreateUserMutation>> => {
+  try {
+    // Enforce email uniqueness
+    const { data: maybeUsers } = await getUserByEmail(email);
+    if (!maybeUsers?.listUsers) {
+      return { status: 'error' };
+    }
+    if (maybeUsers.listUsers.items.length > 0) {
+      throw new Error('A user with this email already exists');
+    }
+    // Enforce username uniqueness
+    const { data: listUsersQuery } = await getUsersByUsername(username);
+    const maybeUs = listUsersQuery?.listUsers?.items;
+    if (!maybeUs) {
+      throw new Error('An error occured fetching users with this username');
+    }
+    if (maybeUs.length !== 0) {
+      throw new Error('This username is already taken');
+    }
+    // Create user
+    const { data, errors } = await GraphqlAPI<
+      CreateUserMutation,
+      CreateUserMutationVariables
+    >(mutations.createUser, {
+      input: { email, username, name, role: UserRole.USER },
+    });
+    if (!data?.createUser) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data };
+  } catch (err) {
+    return handleError('error creating user', err);
+  }
+};
+
 // verify that username is unique, then update
 export const updateUsername = async (
   id: string,

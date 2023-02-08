@@ -2,7 +2,6 @@ import React from 'react';
 import { Input } from '@ui-kitten/components';
 import { iTextContentType } from './types';
 import { EvaStatus } from '@ui-kitten/components/devsupport';
-import { titleCase } from 'title-case';
 import COLORS from '../../constants/colors';
 import { Body } from '../Text';
 
@@ -51,7 +50,9 @@ const FormInput = ({
         }
         break;
       case 'name':
-        setValue(titleCase(v));
+        if (/^[a-zA-Z0-9 ]*$/.test(v) === true) {
+          setValue(v);
+        }
         break;
       default:
         setValue(v);

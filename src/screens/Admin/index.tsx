@@ -38,6 +38,11 @@ const Admin = () => {
             onPress={clearAllCache}
             style={{ marginTop: 30 }}
           />
+          <SubmitButton
+            text={'Add Test User'}
+            onPress={() => navigation.navigate('AddTestUser')}
+            style={{ marginTop: 30 }}
+          />
         </ScrollView>
       </SafeAreaView>
     </BackgroundWrapper>
