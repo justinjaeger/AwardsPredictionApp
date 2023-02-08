@@ -206,6 +206,24 @@ export const updateUsername = async (
   }
 };
 
+export const updateProfileImage = async (
+  id: string,
+  imageKey: string,
+): Promise<iApiResponse<UpdateUserMutation>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<
+      UpdateUserMutation,
+      UpdateUserMutationVariables
+    >(mutations.updateUser, { input: { id, image: imageKey } });
+    if (data) {
+      return { status: 'success', data };
+    }
+    throw new Error(JSON.stringify(errors));
+  } catch (err) {
+    return handleError('error updating username', err);
+  }
+};
+
 export const getUsersByUsername = async (
   username: string,
 ): Promise<iApiResponse<ListUsersQuery>> => {

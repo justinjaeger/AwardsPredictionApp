@@ -23,6 +23,8 @@ import { ProfileParamList } from '../../navigation/types';
 import useQueryGetUserWithRecentPredictions from '../../hooks/queries/getUserWithRecentPredictions';
 import COLORS from '../../constants/colors';
 import { useNavigateToEffect } from '../../util/hooks';
+import useUpdateProfileImage from '../../hooks/mutations/updateProfileImage';
+import useProfileImage from '../../hooks/useProfileImage';
 
 const Profile = () => {
   // If we pass userId as params, it loads that user's profile. If not, it attemps to get logged in profile.
@@ -34,6 +36,9 @@ const Profile = () => {
   const { width } = useWindowDimensions();
 
   const { data: user, refetch } = useQueryGetUserWithRecentPredictions(userId);
+  const { mutate: updateProfileImage } = useUpdateProfileImage();
+
+  const profileImage = useProfileImage(user?.image);
 
   // refresh the profile when we navigate to it (makes it so it updates after changing username for example)
   useNavigateToEffect(() => refetch(), []);
@@ -98,6 +103,7 @@ const Profile = () => {
 
   // could save the local path so that we can reference it with an <Image /> component
   const onUpload = async () => {
+    if (!authUserId) return; // don't execute if not signed in
     const result = await launchImageLibrary({
       maxWidth: 200,
       maxHeight: 200,
@@ -107,8 +113,11 @@ const Profile = () => {
       const { uri } = result.assets[0];
       if (uri) {
         setProfileUri(uri);
-        const storageResult = await AWSStorage.pathToImageFile(uri, userEmail || '');
-        console.log('storageResult', storageResult);
+        const key = await AWSStorage.uploadProfilePicture(uri, userEmail || '');
+        // store the key as user.image
+        if (key) {
+          updateProfileImage({ id: authUserId, image: key });
+        }
       }
     }
   };
@@ -152,10 +161,19 @@ const Profile = () => {
                     height: 100,
                     width: 100,
                     borderRadius: 100,
-                    backgroundColor: 'red',
                   }}
                 >
-                  <View />
+                  {profileImage ? (
+                    <Image
+                      source={{ uri: profileImage || '' }}
+                      width={200}
+                      height={200}
+                      style={{ width: 100, height: 100, borderRadius: 100 }}
+                    />
+                  ) : (
+                    // TODO: load a default image
+                    <View />
+                  )}
                 </TouchableHighlight>
               </View>
               <View style={{ flexDirection: 'column', paddingLeft: 10 }}>
