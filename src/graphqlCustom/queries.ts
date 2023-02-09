@@ -428,8 +428,8 @@ export const getUser = /* GraphQL */ `
   }
 `;
 
-export const getUserWithRecentPredictions = /* GraphQL */ `
-  query GetUser($id: ID!) {
+export const getUserProfileQuery = /* GraphQL */ `
+  query GetUser($id: ID!, $authUserId: ID) {
     getUser(id: $id) {
       id
       email
@@ -438,6 +438,17 @@ export const getUserWithRecentPredictions = /* GraphQL */ `
       bio
       image
       role
+      # we want to know if we're following this person and if they're following us
+      followers(filter: { followingUserId: { eq: $authUserId } }) {
+        items {
+          id
+        }
+      }
+      following(filter: { followedUserId: { eq: $authUserId } }) {
+        items {
+          id
+        }
+      }
       # Return user's 10 latest prediction sets
       predictionSets(limit: 10, sortDirection: DESC) {
         items {
@@ -450,6 +461,7 @@ export const getUserWithRecentPredictions = /* GraphQL */ `
             status
             createdAt
             updatedAt
+            # TODO: shouldn't really be returning this level of nesting but it's a quick fix
             categories {
               items {
                 id
@@ -639,10 +651,14 @@ export const searchUsersSignedInQuery = /* GraphQL */ `
         role
         # we want to know if we're following this person and if they're following us
         followers(filter: { followingUserId: { eq: $searchingUserId } }) {
-          nextToken
+          items {
+            id
+          }
         }
         following(filter: { followedUserId: { eq: $searchingUserId } }) {
-          nextToken
+          items {
+            id
+          }
         }
       }
     }

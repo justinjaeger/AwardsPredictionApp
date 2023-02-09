@@ -4,9 +4,7 @@ import { Storage } from 'aws-amplify';
 // Upload file to AWS storage
 export const getProfileImage = async (key: string) => {
   try {
-    const response = await Storage.get(key);
-    console.log('retrieved image', response);
-    return response;
+    return await Storage.get(key);
   } catch (err) {
     console.log('Error uploading file:', err);
   }

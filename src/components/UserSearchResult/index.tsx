@@ -2,14 +2,13 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { TouchableHighlight, View } from 'react-native';
 import COLORS from '../../constants/colors';
-import theme from '../../constants/theme';
 import { useAuth } from '../../context/UserContext';
-import { iUserSearchResult } from '../../screens/SearchFriends/useFriendSearch';
-import ApiServices from '../../services/graphql';
+import { iUser } from '../../types';
+import FollowButton from '../FollowButton';
 import ProfileImage from '../ProfileImage';
-import { Body, BodyBold, SubHeader } from '../Text';
+import { Body, SubHeader } from '../Text';
 
-const UserSearchResult = ({ users }: { users: iUserSearchResult[] }) => {
+const UserSearchResult = ({ users }: { users: iUser[] }) => {
   const { userId: authUserId } = useAuth();
   const navigation = useNavigation();
 
@@ -22,7 +21,7 @@ const UserSearchResult = ({ users }: { users: iUserSearchResult[] }) => {
       {users.map((user) => {
         const hasOnlyOneName = !(user.name && user.username);
         const isSignedInUser = user.id === authUserId;
-        const signedInUserIsFollowing = user.signedInUserIsFollowing;
+        const authUserIsFollowing = user.authUserIsFollowing || false;
         return (
           <TouchableHighlight
             key={user.id}
@@ -62,28 +61,10 @@ const UserSearchResult = ({ users }: { users: iUserSearchResult[] }) => {
                 </View>
               </View>
               {!isSignedInUser ? (
-                <TouchableHighlight
-                  onPress={
-                    signedInUserIsFollowing
-                      ? undefined
-                      : async () => {
-                          if (!authUserId) return;
-                          const res = await ApiServices.followUser(user.id, authUserId);
-                          console.log('res', res);
-                        }
-                  }
-                  style={{
-                    alignItems: 'center',
-                    backgroundColor: signedInUserIsFollowing
-                      ? COLORS.disabled
-                      : COLORS.secondaryDark,
-                    padding: 10,
-                    borderRadius: theme.borderRadius,
-                  }}
-                  underlayColor={COLORS.secondary}
-                >
-                  <BodyBold>{signedInUserIsFollowing ? 'Following' : 'Follow'}</BodyBold>
-                </TouchableHighlight>
+                <FollowButton
+                  authUserIsFollowing={authUserIsFollowing}
+                  profileUserId={user.id}
+                />
               ) : null}
             </View>
           </TouchableHighlight>

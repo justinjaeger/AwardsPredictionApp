@@ -16,6 +16,15 @@ export const followUser = async (
   followingUserId: string,
 ): Promise<iApiResponse<CreateRelationshipMutation>> => {
   try {
+    // first, safety check and don't create if relationship already exists
+    const maybeRelationships = await getRelationship(followedUserId, followingUserId);
+    if (maybeRelationships.status !== 'success') {
+      throw new Error(JSON.stringify(maybeRelationships.error));
+    }
+    if ((maybeRelationships.data?.listRelationships?.items || []).length > 0) {
+      throw new Error('relationship already exists');
+    }
+    // create relationship
     const { data, errors } = await GraphqlAPI<
       CreateRelationshipMutation,
       CreateRelationshipMutationVariables

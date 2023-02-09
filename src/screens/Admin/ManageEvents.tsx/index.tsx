@@ -21,12 +21,12 @@ import {
   getEventTime,
 } from '../../../constants/events';
 import { useAuth } from '../../../context/UserContext';
-import useQueryGetUser from '../../../hooks/queries/getUserWithRecentPredictions';
 import { SubmitButton } from '../../../components/Buttons';
 import UpdateStatusModal from './UpdateStatusModal';
 import CreateEventModal from './CreateEventModal';
 import SelectCategoryModal from './SelectCategoryModal';
 import UpdateExpirationModal from './UpdateExpirationModal';
+import useQueryGetUser from '../../../hooks/queries/getUser';
 
 const ManageEvents = () => {
   const { width } = useWindowDimensions();

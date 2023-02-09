@@ -17,11 +17,12 @@ import {
 import { sortPersonalPredictions } from '../../util/sortPredictions';
 import ApiServices from '../graphql';
 
-const getUserWithRecentPredictions = async (
+const getUserProfile = async (
   id: string | undefined,
+  authUserId: string | undefined,
 ): Promise<iUser | undefined> => {
-  if (id === undefined) return undefined;
-  const { data } = await ApiServices.getUserWithRecentPredictions(id);
+  if (id === undefined || authUserId === undefined) return undefined;
+  const { data } = await ApiServices.getUserProfile(id, authUserId);
   const user = data?.getUser;
   if (!user) return undefined;
   const predictionSets: iPredictionSet[] =
@@ -78,7 +79,7 @@ const getUserWithRecentPredictions = async (
       };
     }) || [];
   // format events data
-  return {
+  const userProfile = {
     id: user.id,
     email: user.email,
     username: user.username || undefined,
@@ -87,7 +88,11 @@ const getUserWithRecentPredictions = async (
     image: user.image || undefined,
     role: user.role,
     predictionSets,
+    authUserIsFollowing: (user?.followers?.items || []).length > 0,
+    isFollowingAuthUser: (user?.followers?.items || []).length > 0,
   };
+  console.log('userProfile', user.followers);
+  return userProfile;
 };
 
-export default getUserWithRecentPredictions;
+export default getUserProfile;

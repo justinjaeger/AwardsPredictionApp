@@ -31,7 +31,7 @@ const SearchFriends = () => {
               marginLeft: theme.windowMargin,
             }}
           >
-            Recommended
+            My Friends (TODO)
           </HeaderLight>
         )}
       </ScrollView>

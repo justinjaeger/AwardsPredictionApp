@@ -3,15 +3,25 @@ import { useState } from 'react';
 import ApiServices from '../../services/graphql';
 import { QueryKeys } from '../../types';
 
-const useUpdateProfileImage = (onComplete?: () => void) => {
+const useUpdateRelationship = (onComplete?: () => void) => {
   const queryClient = useQueryClient();
 
   const [isComplete, setIsComplete] = useState<boolean>(true);
 
   const { mutate, isLoading } = useMutation({
-    mutationFn: async (params: { id: string; image: string }) => {
+    mutationFn: async (params: {
+      action: 'follow' | 'unfollow';
+      profileUserId: string;
+      authUserId: string;
+    }) => {
+      const { action, profileUserId, authUserId } = params;
       setIsComplete(false);
-      return ApiServices.updateProfileImage(params.id, params.image);
+      if (action === 'follow') {
+        await ApiServices.followUser(profileUserId, authUserId);
+      }
+      if (action === 'unfollow') {
+        await ApiServices.unFollowUser(profileUserId, authUserId);
+      }
     },
     onSuccess: async () => {
       // re-fetch predictions so the UI updates
@@ -30,4 +40,4 @@ const useUpdateProfileImage = (onComplete?: () => void) => {
   return { mutate, isLoading, isComplete };
 };
 
-export default useUpdateProfileImage;
+export default useUpdateRelationship;

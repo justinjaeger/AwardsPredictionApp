@@ -9,8 +9,8 @@ import { useAuth } from '../../context/UserContext';
 import { getHeaderTitle } from '../../constants';
 import BackgroundWrapper from '../../components/BackgroundWrapper';
 import { BodyBold } from '../../components/Text';
-import useQueryGetUser from '../../hooks/queries/getUserWithRecentPredictions';
 import useUpdateUser from '../../hooks/mutations/updateUser';
+import useQueryGetUser from '../../hooks/queries/getUser';
 
 const ChangeUsername = () => {
   const { userId } = useAuth();

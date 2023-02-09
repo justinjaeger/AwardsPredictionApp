@@ -22,7 +22,7 @@ const useUpdateUser = (onComplete?: () => void) => {
       await queryClient.invalidateQueries({
         queryKey: [
           QueryKeys.USER,
-          QueryKeys.USER_WITH_PREDICTIONS,
+          QueryKeys.USER_PROFILE,
           QueryKeys.USER_WITH_RELATIONSHIPS,
         ],
       });

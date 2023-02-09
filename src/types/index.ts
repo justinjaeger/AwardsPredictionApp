@@ -15,7 +15,7 @@ export type ReactChildren = React.ReactNode | React.ReactNode[];
 export enum QueryKeys {
   EVENTS = 'events',
   USER = 'user',
-  USER_WITH_PREDICTIONS = 'user-with-predictions',
+  USER_PROFILE = 'user-with-predictions',
   PERSONAL_EVENT = 'personal-predictions-by-event',
   COMMUNITY_EVENT = 'community-predictions-by-event',
   USER_WITH_RELATIONSHIPS = 'user-with-relationships',
@@ -108,4 +108,6 @@ export type iUser = {
   image: string | undefined;
   role: UserRole;
   predictionSets?: iPredictionSet[];
+  authUserIsFollowing?: boolean;
+  isFollowingAuthUser?: boolean;
 };

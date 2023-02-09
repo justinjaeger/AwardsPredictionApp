@@ -52,13 +52,15 @@ export const getUser = async (id: string): Promise<iApiResponse<GetUserQuery>> =
   }
 };
 
-export const getUserWithRecentPredictions = async (
+type GetUserProfileQueryVariables = GetUserQueryVariables & { authUserId: string };
+export const getUserProfile = async (
   id: string,
+  authUserId: string,
 ): Promise<iApiResponse<GetUserQuery>> => {
   try {
-    const { data, errors } = await GraphqlAPI<GetUserQuery, GetUserQueryVariables>(
-      customQueries.getUserWithRecentPredictions,
-      { id },
+    const { data, errors } = await GraphqlAPI<GetUserQuery, GetUserProfileQueryVariables>(
+      customQueries.getUserProfileQuery,
+      { id, authUserId },
     );
     if (!data?.getUser) {
       throw new Error(JSON.stringify(errors));

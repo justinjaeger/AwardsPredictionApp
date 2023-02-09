@@ -19,22 +19,23 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import theme from '../../constants/theme';
 import PredictionCarousel from '../../components/PredictionCarousel';
 import { ProfileParamList } from '../../navigation/types';
-import useQueryGetUserWithRecentPredictions from '../../hooks/queries/getUserWithRecentPredictions';
+import useQueryGetUserProfile from '../../hooks/queries/getUserProfile';
 import COLORS from '../../constants/colors';
 import { useNavigateToEffect } from '../../util/hooks';
 import useUpdateProfileImage from '../../hooks/mutations/updateProfileImage';
 import ProfileImage from '../../components/ProfileImage';
+import FollowButton from '../../components/FollowButton';
 
 const Profile = () => {
   // If we pass userId as params, it loads that user's profile. If not, it attemps to get logged in profile.
   const { params } = useRoute<RouteProp<ProfileParamList, 'Profile'>>();
-  const { userId: authUserId, userEmail, signOutUser } = useAuth(); // later import userId
+  const { userId: authUserId, userEmail, signOutUser } = useAuth();
   const userId = params?.userId || authUserId;
 
   const navigation = useNavigation();
   const { width } = useWindowDimensions();
 
-  const { data: user, refetch } = useQueryGetUserWithRecentPredictions(userId);
+  const { data: user, refetch } = useQueryGetUserProfile(userId, authUserId);
   const { mutate: updateProfileImage } = useUpdateProfileImage();
 
   // refresh the profile when we navigate to it (makes it so it updates after changing username for example)
@@ -48,7 +49,7 @@ const Profile = () => {
 
   // put the logout button in the top right corner
   useLayoutEffect(() => {
-    if (!userId) return;
+    if (!userId || !isDeviceProfile) return; // don't set logout header if someone else's profile
     navigation.setOptions({
       headerRight: () => (
         <IconButton
@@ -98,7 +99,7 @@ const Profile = () => {
   };
 
   // could save the local path so that we can reference it with an <Image /> component
-  const onUpload = async () => {
+  const onUploadProfileImage = async () => {
     if (!authUserId) return; // don't execute if not signed in
     const result = await launchImageLibrary({
       maxWidth: 200,
@@ -148,7 +149,7 @@ const Profile = () => {
             >
               <ProfileImage
                 image={user?.image}
-                onPress={isDeviceProfile ? onUpload : undefined}
+                onPress={isDeviceProfile ? onUploadProfileImage : undefined}
               />
               <View style={{ flexDirection: 'column', paddingLeft: 10 }}>
                 <TouchableHighlight
@@ -181,6 +182,12 @@ const Profile = () => {
                 </TouchableHighlight>
               </View>
             </View>
+            {user && !isDeviceProfile ? (
+              <FollowButton
+                authUserIsFollowing={user.authUserIsFollowing || false}
+                profileUserId={user.id}
+              />
+            ) : null}
             {predictionSets.length > 0 ? (
               <>
                 <HeaderLight
