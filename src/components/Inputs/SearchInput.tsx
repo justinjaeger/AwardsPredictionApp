@@ -46,7 +46,6 @@ const SearchInput = (props: {
           fontSize: 16,
           color: COLORS.white,
         }}
-        autoFocus
         accessoryLeft={() => (
           <CustomIcon
             name="search-outline"

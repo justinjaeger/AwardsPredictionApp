@@ -11,7 +11,7 @@ const useProfileImage = (imageKey: string | undefined) => {
     setProfileImage(res);
   }, [imageKey]);
 
-  return profileImage;
+  return { uri: profileImage };
 };
 
 export default useProfileImage;

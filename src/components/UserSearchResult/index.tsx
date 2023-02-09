@@ -5,16 +5,23 @@ import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
 import { useAuth } from '../../context/UserContext';
 import { iUserSearchResult } from '../../screens/SearchFriends/useFriendSearch';
+import ApiServices from '../../services/graphql';
+import ProfileImage from '../ProfileImage';
 import { Body, BodyBold, SubHeader } from '../Text';
 
 const UserSearchResult = ({ users }: { users: iUserSearchResult[] }) => {
-  const { userId } = useAuth();
+  const { userId: authUserId } = useAuth();
   const navigation = useNavigation();
+
+  const navigateToProfile = (userId: string) => {
+    navigation.navigate('FriendProfile', { userId });
+  };
+
   return (
     <>
       {users.map((user) => {
         const hasOnlyOneName = !(user.name && user.username);
-        const isSignedInUser = user.id === userId;
+        const isSignedInUser = user.id === authUserId;
         const signedInUserIsFollowing = user.signedInUserIsFollowing;
         return (
           <TouchableHighlight
@@ -24,14 +31,10 @@ const UserSearchResult = ({ users }: { users: iUserSearchResult[] }) => {
               padding: 10,
               width: '100%',
             }}
-            onPress={() => {
-              //   console.error('FriendProfile', user.id);
-              navigation.navigate('FriendProfile', { userId: user.id });
-            }}
+            onPress={() => navigateToProfile(user.id)}
             underlayColor={COLORS.secondaryDark}
           >
             <View
-              // TODO: Put actual profile picture here
               style={{
                 flexDirection: 'row',
                 width: '100%',
@@ -40,13 +43,10 @@ const UserSearchResult = ({ users }: { users: iUserSearchResult[] }) => {
               }}
             >
               <View style={{ flexDirection: 'row' }}>
-                <View
-                  style={{
-                    height: 50,
-                    width: 50,
-                    borderRadius: 50,
-                    backgroundColor: 'blue',
-                  }}
+                <ProfileImage
+                  image={user.image}
+                  imageSize={50}
+                  onPress={() => navigateToProfile(user.id)}
                 />
                 <View
                   style={{
@@ -66,8 +66,10 @@ const UserSearchResult = ({ users }: { users: iUserSearchResult[] }) => {
                   onPress={
                     signedInUserIsFollowing
                       ? undefined
-                      : () => {
-                          // TODO: Follow user
+                      : async () => {
+                          if (!authUserId) return;
+                          const res = await ApiServices.followUser(user.id, authUserId);
+                          console.log('res', res);
                         }
                   }
                   style={{

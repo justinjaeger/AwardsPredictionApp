@@ -2,7 +2,6 @@ import React, { useLayoutEffect, useState } from 'react';
 import {
   Alert,
   ScrollView,
-  Image,
   View,
   TouchableHighlight,
   useWindowDimensions,
@@ -24,7 +23,7 @@ import useQueryGetUserWithRecentPredictions from '../../hooks/queries/getUserWit
 import COLORS from '../../constants/colors';
 import { useNavigateToEffect } from '../../util/hooks';
 import useUpdateProfileImage from '../../hooks/mutations/updateProfileImage';
-import useProfileImage from '../../hooks/useProfileImage';
+import ProfileImage from '../../components/ProfileImage';
 
 const Profile = () => {
   // If we pass userId as params, it loads that user's profile. If not, it attemps to get logged in profile.
@@ -38,13 +37,10 @@ const Profile = () => {
   const { data: user, refetch } = useQueryGetUserWithRecentPredictions(userId);
   const { mutate: updateProfileImage } = useUpdateProfileImage();
 
-  const profileImage = useProfileImage(user?.image);
-
   // refresh the profile when we navigate to it (makes it so it updates after changing username for example)
   useNavigateToEffect(() => refetch(), []);
 
   const [loading, setLoading] = useState<boolean>(false);
-  const [profileUri, setProfileUri] = useState<string | undefined>(undefined);
 
   const isDeviceProfile = user && userId && user?.id === authUserId; // signed in matches params
 
@@ -112,7 +108,6 @@ const Profile = () => {
     if (result && result.assets) {
       const { uri } = result.assets[0];
       if (uri) {
-        setProfileUri(uri);
         const key = await AWSStorage.uploadProfilePicture(uri, userEmail || '');
         // store the key as user.image
         if (key) {
@@ -121,9 +116,6 @@ const Profile = () => {
       }
     }
   };
-
-  const proportion = 3 / 10;
-  const imageContainerWidth = width * proportion;
 
   return (
     <BackgroundWrapper>
@@ -154,28 +146,10 @@ const Profile = () => {
                 marginBottom: 20,
               }}
             >
-              <View style={{ width: imageContainerWidth, paddingLeft: 10 }}>
-                <TouchableHighlight
-                  onPress={isDeviceProfile ? onUpload : undefined}
-                  style={{
-                    height: 100,
-                    width: 100,
-                    borderRadius: 100,
-                  }}
-                >
-                  {profileImage ? (
-                    <Image
-                      source={{ uri: profileImage || '' }}
-                      width={200}
-                      height={200}
-                      style={{ width: 100, height: 100, borderRadius: 100 }}
-                    />
-                  ) : (
-                    // TODO: load a default image
-                    <View />
-                  )}
-                </TouchableHighlight>
-              </View>
+              <ProfileImage
+                image={user?.image}
+                onPress={isDeviceProfile ? onUpload : undefined}
+              />
               <View style={{ flexDirection: 'column', paddingLeft: 10 }}>
                 <TouchableHighlight
                   onPress={
@@ -207,10 +181,6 @@ const Profile = () => {
                 </TouchableHighlight>
               </View>
             </View>
-            {profileUri ? (
-              // JUST FOR TEST: REMOVE LATER
-              <Image style={{ width: 200, height: 200 }} source={{ uri: profileUri }} />
-            ) : null}
             {predictionSets.length > 0 ? (
               <>
                 <HeaderLight
