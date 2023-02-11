@@ -9,7 +9,7 @@ import {
 import { SubmitButton } from '../../components/Buttons';
 import AuthServices from '../../services/auth';
 import Snackbar from '../../components/Snackbar';
-import { HeaderLight, SubHeader } from '../../components/Text';
+import { BodyBold, HeaderLight, SubHeader } from '../../components/Text';
 import { useAuth } from '../../context/UserContext';
 import BackgroundWrapper from '../../components/BackgroundWrapper';
 import { IconButton } from '../../components/Buttons/IconButton';
@@ -127,6 +127,7 @@ const Profile = () => {
           marginTop: 20,
           width: '100%',
           paddingBottom: 100,
+          marginLeft: theme.windowMargin,
         }}
       >
         {!userId ? (
@@ -143,13 +144,13 @@ const Profile = () => {
                 alignItems: 'center',
                 flexDirection: 'row',
                 height: 100,
-                padding: theme.windowMargin,
                 marginBottom: 20,
               }}
             >
               <ProfileImage
                 image={user?.image}
                 onPress={isDeviceProfile ? onUploadProfileImage : undefined}
+                style={{ marginLeft: 10, marginRight: 15 }}
               />
               <View style={{ flexDirection: 'column', paddingLeft: 10 }}>
                 <TouchableHighlight
@@ -182,12 +183,27 @@ const Profile = () => {
                 </TouchableHighlight>
               </View>
             </View>
-            {user && !isDeviceProfile ? (
-              <FollowButton
-                authUserIsFollowing={user.authUserIsFollowing || false}
-                profileUserId={user.id}
-              />
-            ) : null}
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'flex-start',
+                width: '100%',
+                marginLeft: 20,
+              }}
+            >
+              {user && !isDeviceProfile ? (
+                <FollowButton
+                  authUserIsFollowing={user.authUserIsFollowing || false}
+                  profileUserId={user.id}
+                />
+              ) : null}
+              {user?.isFollowingAuthUser ? (
+                <BodyBold style={{ marginLeft: 10, color: 'rgba(255,255,255,0.8)' }}>
+                  Follows You
+                </BodyBold>
+              ) : null}
+            </View>
             {predictionSets.length > 0 ? (
               <>
                 <HeaderLight

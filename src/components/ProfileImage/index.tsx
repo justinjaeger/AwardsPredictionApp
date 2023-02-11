@@ -5,12 +5,12 @@ import useProfileImage from '../../hooks/useProfileImage';
 const ProfileImage = ({
   image,
   imageSize,
-  containerStyle,
+  style,
   onPress,
 }: {
   image?: string;
   imageSize?: number;
-  containerStyle?: StyleProp<ViewStyle>;
+  style?: StyleProp<ViewStyle>;
   onPress?: () => void;
 }) => {
   const { uri } = useProfileImage(image);
@@ -21,10 +21,10 @@ const ProfileImage = ({
     <View
       style={[
         {
-          width: size * 1.3,
+          width: size,
           alignItems: 'center',
         },
-        containerStyle,
+        style,
       ]}
     >
       <TouchableHighlight
