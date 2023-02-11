@@ -31,25 +31,26 @@ const CategoryContext = createContext<iCategoryContext>({
 
 export const SearchProvider = (props: { children: React.ReactNode }) => {
   const [searchInput, setSearchInput] = useState<string>('');
-  const [isSearching, setIsSearching] = useState<boolean>(false);
-  const [isLoadingSearch, setIsLoadingSearch] = useState<boolean>(false);
+  const [isSearching, setIsSearching] = useState<boolean>(false); // when search input contains a value
+  // isLoadingSearch: Must set from component making the api call - true before the call, false when finished
+  const [isLoadingSearch, setIsLoadingSearch] = useState<boolean>(false); // when search is loading (shows spinner)
   const [resetSearchHack, setResetSearchHack] = useState<boolean>(false);
 
-  const debouncedSearch = useDebounce(searchInput, 500, { trailing: true }, () =>
-    setIsLoadingSearch(false),
-  );
+  const debouncedSearch = useDebounce(searchInput, 500, { trailing: true });
 
   // Enables us to reset the search bar from the outer component
   useEffect(() => {
     setSearchInput('');
     setIsSearching(false);
+    setIsLoadingSearch(false);
   }, [resetSearchHack]);
 
   useEffect(() => {
-    setIsSearching(true);
     if (searchInput === '') {
       setIsSearching(false);
+      setIsLoadingSearch(false);
     } else {
+      setIsSearching(true);
       setIsLoadingSearch(true);
     }
   }, [searchInput]);

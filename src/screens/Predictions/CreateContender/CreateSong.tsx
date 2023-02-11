@@ -24,6 +24,7 @@ import { useSearch } from '../../../context/ContenderSearchContext';
 const CreateSong = (props: iCreateContenderProps) => {
   const { onSelectPrediction } = props;
 
+  const { setIsLoadingSearch } = useSearch();
   const { category: _category, event: _event } = useCategory();
 
   const category = _category as iCategory;
@@ -91,14 +92,17 @@ const CreateSong = (props: iCreateContenderProps) => {
       resetSearch();
       return;
     }
-    TmdbServices.searchMovies(s, minReleaseYear).then((res) => {
-      setSelectedMovieTmdbId(undefined);
-      const r = res.data || [];
-      setMovieSearchResults(r);
-      if (r.length === 0) {
-        setSearchMessage('No Results');
-      }
-    });
+    setIsLoadingSearch(true);
+    TmdbServices.searchMovies(s, minReleaseYear)
+      .then((res) => {
+        setSelectedMovieTmdbId(undefined);
+        const r = res.data || [];
+        setMovieSearchResults(r);
+        if (r.length === 0) {
+          setSearchMessage('No Results');
+        }
+      })
+      .finally(() => setIsLoadingSearch(false));
   };
 
   const onSelectMovie = async () => {

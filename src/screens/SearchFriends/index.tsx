@@ -21,9 +21,8 @@ const SearchFriends = () => {
           placeholder={'Search users'}
           style={{ width, padding: theme.windowMargin }}
         />
-        {isSearching ? (
-          <UserSearchResult users={searchResults} />
-        ) : (
+        <UserSearchResult users={searchResults} />
+        {isSearching ? null : (
           <HeaderLight
             style={{
               marginTop: 40,

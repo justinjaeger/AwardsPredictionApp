@@ -5,7 +5,7 @@ import searchUsers from '../../services/queryFuncs/searchUsers';
 import { iUser } from '../../types';
 
 const useFriendSearch = () => {
-  const { searchInput, debouncedSearch } = useSearch();
+  const { searchInput, debouncedSearch, setIsLoadingSearch } = useSearch();
   const { userId: authUserId } = useAuth();
 
   // have this expire - make it part of useQuery
@@ -20,7 +20,9 @@ const useFriendSearch = () => {
       resetSearch();
       return;
     }
+    setIsLoadingSearch(true);
     const result = await searchUsers(s, authUserId);
+    setIsLoadingSearch(false);
     setSearchResults(result);
   };
 

@@ -19,6 +19,7 @@ import { iCreateContenderProps } from '../AddPredictions.tsx';
 const CreateFilm = (props: iCreateContenderProps) => {
   const { onSelectPrediction } = props;
 
+  const { setIsLoadingSearch } = useSearch();
   const { category: _category, event: _event } = useCategory();
 
   const category = _category as iCategory;
@@ -71,14 +72,17 @@ const CreateFilm = (props: iCreateContenderProps) => {
       resetSearch();
       return;
     }
-    TmdbServices.searchMovies(s, minReleaseYear).then((res) => {
-      setSelectedTmdbId(undefined);
-      const r = res.data || [];
-      setSearchResults(r);
-      if (r.length === 0) {
-        setSearchMessage('No Results');
-      }
-    });
+    setIsLoadingSearch(true);
+    TmdbServices.searchMovies(s, minReleaseYear)
+      .then((res) => {
+        setSelectedTmdbId(undefined);
+        const r = res.data || [];
+        setSearchResults(r);
+        if (r.length === 0) {
+          setSearchMessage('No Results');
+        }
+      })
+      .finally(() => setIsLoadingSearch(false));
   };
 
   const onConfirmContender = async () => {

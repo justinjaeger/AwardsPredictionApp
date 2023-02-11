@@ -2,15 +2,17 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { TouchableHighlight, View } from 'react-native';
 import COLORS from '../../constants/colors';
+import { useSearch } from '../../context/ContenderSearchContext';
 import { useAuth } from '../../context/UserContext';
 import { iUser } from '../../types';
 import FollowButton from '../FollowButton';
 import ProfileImage from '../ProfileImage';
-import { Body, SubHeader } from '../Text';
+import { Body, BodyBold, SubHeader } from '../Text';
 
 const UserSearchResult = ({ users }: { users: iUser[] }) => {
   const { userId: authUserId } = useAuth();
   const navigation = useNavigation();
+  const { isSearching, isLoadingSearch } = useSearch();
 
   const navigateToProfile = (userId: string) => {
     navigation.navigate('FriendProfile', { userId });
@@ -18,6 +20,9 @@ const UserSearchResult = ({ users }: { users: iUser[] }) => {
 
   return (
     <>
+      {users.length === 0 && isSearching && !isLoadingSearch ? (
+        <BodyBold>No Users Found</BodyBold>
+      ) : null}
       {users.map((user) => {
         const hasOnlyOneName = !(user.name && user.username);
         const isSignedInUser = user.id === authUserId;

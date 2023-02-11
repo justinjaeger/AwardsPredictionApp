@@ -29,7 +29,10 @@ const SearchInput = (props: {
         placeholderTextColor={COLORS.gray}
         onChangeText={setSearchInput}
         caption={caption}
-        onBlur={onBlur}
+        onFocus={() => {}}
+        onBlur={() => {
+          onBlur && onBlur();
+        }}
         status={status || 'basic'}
         style={{
           borderRadius: 100,

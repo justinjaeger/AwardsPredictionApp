@@ -23,6 +23,7 @@ import { useSearch } from '../../../context/ContenderSearchContext';
 const CreatePerformance = (props: iCreateContenderProps) => {
   const { onSelectPrediction } = props;
 
+  const { setIsLoadingSearch } = useSearch();
   const { category: _category, event: _event } = useCategory();
 
   const category = _category as iCategory;
@@ -85,15 +86,18 @@ const CreatePerformance = (props: iCreateContenderProps) => {
       resetSearch();
       return;
     }
-    TmdbServices.searchPeople(s).then((res) => {
-      setSelectedMovieTmdbId(undefined);
-      setSelectedPersonTmdbId(undefined);
-      const r = res.data || [];
-      setPersonSearchResults(r);
-      if (r.length === 0) {
-        setSearchMessage('No Results');
-      }
-    });
+    setIsLoadingSearch(true);
+    TmdbServices.searchPeople(s)
+      .then((res) => {
+        setSelectedMovieTmdbId(undefined);
+        setSelectedPersonTmdbId(undefined);
+        const r = res.data || [];
+        setPersonSearchResults(r);
+        if (r.length === 0) {
+          setSearchMessage('No Results');
+        }
+      })
+      .finally(() => setIsLoadingSearch(false));
   };
 
   const getPersonRecentMovies = async (personTmdbId: number) => {
