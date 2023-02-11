@@ -127,7 +127,6 @@ const Profile = () => {
           marginTop: 20,
           width: '100%',
           paddingBottom: 100,
-          marginLeft: theme.windowMargin,
         }}
       >
         {!userId ? (
@@ -145,6 +144,7 @@ const Profile = () => {
                 flexDirection: 'row',
                 height: 100,
                 marginBottom: 20,
+                marginLeft: theme.windowMargin,
               }}
             >
               <ProfileImage
@@ -189,7 +189,7 @@ const Profile = () => {
                 alignItems: 'center',
                 justifyContent: 'flex-start',
                 width: '100%',
-                marginLeft: 20,
+                marginLeft: theme.windowMargin + 20,
               }}
             >
               {user && !isDeviceProfile ? (
