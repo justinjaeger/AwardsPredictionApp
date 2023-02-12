@@ -11,6 +11,29 @@ import * as queries from '../../graphql/queries';
 // import * as customQueries from '../../graphqlCustom/queries';
 import { GraphqlAPI, handleError, iApiResponse } from '../utils';
 
+export const getRelationship = async (
+  followedUserId: string,
+  followingUserId: string,
+): Promise<iApiResponse<ListRelationshipsQuery>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<
+      ListRelationshipsQuery,
+      ListRelationshipsQueryVariables
+    >(queries.listRelationships, {
+      filter: {
+        followedUserId: { eq: followedUserId },
+        followingUserId: { eq: followingUserId },
+      },
+    });
+    if (!data?.listRelationships) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data: data };
+  } catch (err) {
+    return handleError('error getting relationship', err);
+  }
+};
+
 export const followUser = async (
   followedUserId: string,
   followingUserId: string,
@@ -35,29 +58,6 @@ export const followUser = async (
     return { status: 'success', data: data };
   } catch (err) {
     return handleError('error following user', err);
-  }
-};
-
-export const getRelationship = async (
-  followedUserId: string,
-  followingUserId: string,
-): Promise<iApiResponse<ListRelationshipsQuery>> => {
-  try {
-    const { data, errors } = await GraphqlAPI<
-      ListRelationshipsQuery,
-      ListRelationshipsQueryVariables
-    >(queries.listRelationships, {
-      filter: {
-        followedUserId: { eq: followedUserId },
-        followingUserId: { eq: followingUserId },
-      },
-    });
-    if (!data?.listRelationships) {
-      throw new Error(JSON.stringify(errors));
-    }
-    return { status: 'success', data: data };
-  } catch (err) {
-    return handleError('error getting relationship', err);
   }
 };
 
