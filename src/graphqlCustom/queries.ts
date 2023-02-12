@@ -664,3 +664,67 @@ export const searchUsersSignedInQuery = /* GraphQL */ `
     }
   }
 `;
+
+export const searchFollowers = /* GraphQL */ `
+  query SearchRelationships(
+    $filter: SearchableRelationshipFilterInput
+    $sort: [SearchableRelationshipSortInput]
+    $limit: Int
+    $nextToken: String
+    $from: Int
+    $aggregates: [SearchableRelationshipAggregationInput]
+  ) {
+    searchRelationships(
+      filter: $filter
+      sort: $sort
+      limit: $limit
+      nextToken: $nextToken
+      from: $from
+      aggregates: $aggregates
+    ) {
+      items {
+        followingUser {
+          id
+          image
+          name
+          email
+          bio
+          username
+        }
+      }
+      nextToken
+    }
+  }
+`;
+
+export const searchFollowing = /* GraphQL */ `
+  query SearchRelationships(
+    $filter: SearchableRelationshipFilterInput
+    $sort: [SearchableRelationshipSortInput]
+    $limit: Int
+    $nextToken: String
+    $from: Int
+    $aggregates: [SearchableRelationshipAggregationInput]
+  ) {
+    searchRelationships(
+      filter: $filter
+      sort: $sort
+      limit: $limit
+      nextToken: $nextToken
+      from: $from
+      aggregates: $aggregates
+    ) {
+      items {
+        followedUser {
+          id
+          image
+          name
+          email
+          bio
+          username
+        }
+      }
+      nextToken
+    }
+  }
+`;

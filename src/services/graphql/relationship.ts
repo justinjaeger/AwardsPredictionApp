@@ -5,10 +5,12 @@ import {
   DeleteRelationshipMutationVariables,
   ListRelationshipsQuery,
   ListRelationshipsQueryVariables,
+  SearchRelationshipsQuery,
+  SearchRelationshipsQueryVariables,
 } from '../../API';
 import * as mutations from '../../graphql/mutations';
 import * as queries from '../../graphql/queries';
-// import * as customQueries from '../../graphqlCustom/queries';
+import * as customQueries from '../../graphqlCustom/queries';
 import { GraphqlAPI, handleError, iApiResponse } from '../utils';
 
 export const getRelationship = async (
@@ -90,5 +92,55 @@ export const unFollowUser = async (
     return { status: 'success', data: data };
   } catch (err) {
     return handleError('error unfollowing user', err);
+  }
+};
+
+const PAGINATED_LIMIT = 20;
+
+export const getPaginatedFollowers = async (
+  followedUserId: string, // get users who are following this user
+  nextToken?: string,
+): Promise<iApiResponse<SearchRelationshipsQuery>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<
+      SearchRelationshipsQuery,
+      SearchRelationshipsQueryVariables
+    >(customQueries.searchFollowers, {
+      filter: {
+        followedUserId: { eq: followedUserId },
+      },
+      limit: PAGINATED_LIMIT,
+      nextToken,
+    });
+    if (!data?.searchRelationships) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data: data };
+  } catch (err) {
+    return handleError('error getting relationship', err);
+  }
+};
+
+export const getPaginatedFollowing = async (
+  followingUserId: string, // get users who this user is following
+  nextToken?: string,
+): Promise<iApiResponse<SearchRelationshipsQuery>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<
+      SearchRelationshipsQuery,
+      SearchRelationshipsQueryVariables
+    >(customQueries.searchFollowing, {
+      filter: {
+        followingUserId: { eq: followingUserId },
+      },
+      limit: PAGINATED_LIMIT,
+      nextToken,
+    });
+    if (!data?.searchRelationships) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data: data };
+  } catch (err) {
+    return handleError('error getting relationship', err);
   }
 };
