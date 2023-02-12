@@ -117,7 +117,7 @@ export const getPaginatedFollowers = async (
     }
     return { status: 'success', data: data };
   } catch (err) {
-    return handleError('error getting relationship', err);
+    return handleError('error getting paginated followers', err);
   }
 };
 
@@ -141,6 +141,48 @@ export const getPaginatedFollowing = async (
     }
     return { status: 'success', data: data };
   } catch (err) {
-    return handleError('error getting relationship', err);
+    return handleError('error getting paginated following', err);
+  }
+};
+
+export const getFollowerCount = async (
+  followingUserId: string,
+): Promise<iApiResponse<SearchRelationshipsQuery>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<
+      SearchRelationshipsQuery,
+      SearchRelationshipsQueryVariables
+    >(customQueries.getTotalRelationships, {
+      filter: {
+        followingUserId: { eq: followingUserId },
+      },
+    });
+    if (!data?.searchRelationships) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data: data };
+  } catch (err) {
+    return handleError('error getting follower count', err);
+  }
+};
+
+export const getFollowingCount = async (
+  followedUserId: string,
+): Promise<iApiResponse<SearchRelationshipsQuery>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<
+      SearchRelationshipsQuery,
+      SearchRelationshipsQueryVariables
+    >(customQueries.getTotalRelationships, {
+      filter: {
+        followedUserId: { eq: followedUserId },
+      },
+    });
+    if (!data?.searchRelationships) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data: data };
+  } catch (err) {
+    return handleError('error getting follower count', err);
   }
 };
