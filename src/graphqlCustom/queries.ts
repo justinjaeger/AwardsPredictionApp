@@ -728,3 +728,25 @@ export const searchFollowing = /* GraphQL */ `
     }
   }
 `;
+
+export const getTotalRelationships = /* GraphQL */ `
+  query SearchRelationships(
+    $filter: SearchableRelationshipFilterInput
+    $sort: [SearchableRelationshipSortInput]
+    $limit: Int
+    $nextToken: String
+    $from: Int
+    $aggregates: [SearchableRelationshipAggregationInput]
+  ) {
+    searchRelationships(
+      filter: $filter
+      sort: $sort
+      limit: $limit
+      nextToken: $nextToken
+      from: $from
+      aggregates: $aggregates
+    ) {
+      total
+    }
+  }
+`;
