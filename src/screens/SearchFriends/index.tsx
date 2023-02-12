@@ -22,7 +22,7 @@ const SearchFriends = () => {
           style={{ width, padding: theme.windowMargin }}
         />
         <UserSearchResult users={searchResults} />
-        {isSearching ? null : (
+        {!isSearching && searchResults.length === 0 ? (
           <HeaderLight
             style={{
               marginTop: 40,
@@ -32,7 +32,7 @@ const SearchFriends = () => {
           >
             My Friends (TODO)
           </HeaderLight>
-        )}
+        ) : null}
       </ScrollView>
     </BackgroundWrapper>
   );
