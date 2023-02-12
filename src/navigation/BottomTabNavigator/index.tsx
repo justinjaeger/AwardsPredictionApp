@@ -7,8 +7,9 @@ import AdminNavigator from '../AdminNavigator';
 import { useAuth } from '../../context/UserContext';
 import { UserRole } from '../../API';
 import FriendNavigator from '../FriendNavigator';
+import { BottomTabParamList } from '../types';
 
-const Tab = createBottomTabNavigator();
+const Tab = createBottomTabNavigator<BottomTabParamList>();
 
 const BottomTabNavigator = () => {
   const { userRole } = useAuth();

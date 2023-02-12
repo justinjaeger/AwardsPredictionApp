@@ -21,7 +21,7 @@ import PredictionCarousel from '../../components/PredictionCarousel';
 import { ProfileParamList } from '../../navigation/types';
 import useQueryGetUserProfile from '../../hooks/queries/getUserProfile';
 import COLORS from '../../constants/colors';
-import { useNavigateToEffect } from '../../util/hooks';
+import { useNavigateToEffect, useTypedNavigation } from '../../util/hooks';
 import useUpdateProfileImage from '../../hooks/mutations/updateProfileImage';
 import ProfileImage from '../../components/ProfileImage';
 import FollowButton from '../../components/FollowButton';
@@ -33,6 +33,7 @@ const Profile = () => {
   const userId = params?.userId || authUserId;
 
   const navigation = useNavigation();
+  const friendNavigation = useTypedNavigation<ProfileParamList>();
   const { width } = useWindowDimensions();
 
   const { data: user, refetch } = useQueryGetUserProfile(userId, authUserId);
@@ -182,6 +183,50 @@ const Profile = () => {
                   </>
                 </TouchableHighlight>
               </View>
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'flex-start',
+                width: '100%',
+                marginLeft: theme.windowMargin + 20,
+              }}
+            >
+              <TouchableHighlight
+                onPress={() => {
+                  friendNavigation.navigate('Followers', { userId, type: 'followers' });
+                }}
+                style={{
+                  alignItems: 'center',
+                  backgroundColor: COLORS.secondaryDark,
+                  padding: 10,
+                  borderRadius: theme.borderRadius,
+                }}
+                underlayColor={COLORS.secondary}
+              >
+                <BodyBold>{'XX Followers'}</BodyBold>
+              </TouchableHighlight>
+              <TouchableHighlight
+                onPress={() => {
+                  friendNavigation.navigate('Followers', { userId, type: 'following' });
+                }}
+                style={{
+                  alignItems: 'center',
+                  backgroundColor: COLORS.secondaryDark,
+                  padding: 10,
+                  borderRadius: theme.borderRadius,
+                  marginLeft: 10,
+                }}
+                underlayColor={COLORS.secondary}
+              >
+                <BodyBold>{'XX Following'}</BodyBold>
+              </TouchableHighlight>
+              {user?.isFollowingAuthUser ? (
+                <BodyBold style={{ marginLeft: 10, color: 'rgba(255,255,255,0.8)' }}>
+                  Follows You
+                </BodyBold>
+              ) : null}
             </View>
             <View
               style={{

@@ -10,6 +10,13 @@ export type MainParamList = {
   };
 };
 
+export type BottomTabParamList = {
+  Predictions: undefined;
+  Profile: { userId?: string };
+  Friend: undefined;
+  Admin: undefined;
+};
+
 export type PredictionsParamList = {
   EventSelect: undefined;
   Event: { userId: string | undefined };
@@ -36,6 +43,24 @@ export type AdminParamList = {
 
 export type ProfileParamList = {
   Profile: {
+    userId?: string;
+  };
+  Followers: {
+    userId: string;
+    type: 'followers' | 'following';
+  };
+  ChangeUsername: undefined;
+  Event: { userId: string | undefined };
+  Category: {
+    userId: string | undefined;
+    isSelectable?: boolean;
+    onPressItem?: (contenderId: string) => void;
+  };
+};
+
+export type FriendParamList = {
+  SearchFriends: undefined;
+  FriendProfile: {
     userId?: string;
   };
   ChangeUsername: undefined;

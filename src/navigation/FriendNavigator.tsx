@@ -1,17 +1,12 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import Profile from '../screens/Profile';
-import ChangeUsername from '../screens/Profile/ChangeUsername';
-import BackButton from '../components/Buttons/BackButton';
 import { getHeaderTitle, headerSettings } from '../constants';
-import HistoryHeaderButton from '../components/Buttons/HistoryHeaderButton';
-import theme from '../constants/theme';
-import EventFromProfile from '../screens/Predictions/Event/EventFromProfile';
-import CategoryFromProfile from '../screens/Predictions/Category/CategoryFromProfile';
 import SearchFriends from '../screens/SearchFriends';
 import { SearchProvider } from '../context/ContenderSearchContext';
+import { FriendParamList } from './types';
+import ProfileNavigator from './ProfileNavigator';
 
-const { Navigator, Screen } = createStackNavigator();
+const { Navigator, Screen } = createStackNavigator<FriendParamList>();
 
 const FriendNavigator = () => (
   <SearchProvider>
@@ -32,41 +27,9 @@ const FriendNavigator = () => (
       />
       <Screen
         name="FriendProfile"
-        component={Profile}
+        component={ProfileNavigator}
         options={{
-          headerTitle: getHeaderTitle('Profile'),
-          headerLeft: BackButton,
-          ...headerSettings,
-        }}
-      />
-      <Screen
-        name="ChangeUsername"
-        component={ChangeUsername}
-        options={{
-          headerTitle: getHeaderTitle('Enter Username'),
-          headerLeft: BackButton,
-          ...headerSettings,
-        }}
-      />
-      <Screen
-        name="Event"
-        component={EventFromProfile}
-        options={{
-          headerTitle: getHeaderTitle('Event Predictions'),
-          headerLeft: BackButton,
-          headerRight: HistoryHeaderButton,
-          ...headerSettings,
-        }}
-      />
-      <Screen
-        name="Category"
-        component={CategoryFromProfile}
-        options={{
-          headerTitle: getHeaderTitle('Category'),
-          headerLeft: BackButton,
-          headerRight: HistoryHeaderButton,
-          cardStyle: theme.cardStyle,
-          ...headerSettings,
+          headerShown: false,
         }}
       />
     </Navigator>
