@@ -1108,6 +1108,54 @@ export type SearchableAggregateBucketResultItem = {
   doc_count: number,
 };
 
+export type SearchableRelationshipFilterInput = {
+  id?: SearchableIDFilterInput | null,
+  followedUserId?: SearchableIDFilterInput | null,
+  followingUserId?: SearchableIDFilterInput | null,
+  createdAt?: SearchableStringFilterInput | null,
+  updatedAt?: SearchableStringFilterInput | null,
+  and?: Array< SearchableRelationshipFilterInput | null > | null,
+  or?: Array< SearchableRelationshipFilterInput | null > | null,
+  not?: SearchableRelationshipFilterInput | null,
+};
+
+export type SearchableRelationshipSortInput = {
+  field?: SearchableRelationshipSortableFields | null,
+  direction?: SearchableSortDirection | null,
+};
+
+export enum SearchableRelationshipSortableFields {
+  id = "id",
+  followedUserId = "followedUserId",
+  followingUserId = "followingUserId",
+  createdAt = "createdAt",
+  updatedAt = "updatedAt",
+}
+
+
+export type SearchableRelationshipAggregationInput = {
+  name: string,
+  type: SearchableAggregateType,
+  field: SearchableRelationshipAggregateField,
+};
+
+export enum SearchableRelationshipAggregateField {
+  id = "id",
+  followedUserId = "followedUserId",
+  followingUserId = "followingUserId",
+  createdAt = "createdAt",
+  updatedAt = "updatedAt",
+}
+
+
+export type SearchableRelationshipConnection = {
+  __typename: "SearchableRelationshipConnection",
+  items:  Array<Relationship | null >,
+  nextToken?: string | null,
+  total?: number | null,
+  aggregateItems:  Array<SearchableAggregateResult | null >,
+};
+
 export type ModelUserFilterInput = {
   id?: ModelIDInput | null,
   email?: ModelStringInput | null,
@@ -8712,6 +8760,103 @@ export type SearchUsersQuery = {
         } | null >,
         nextToken?: string | null,
       } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+    total?: number | null,
+    aggregateItems:  Array< {
+      __typename: "SearchableAggregateResult",
+      name: string,
+      result: ( {
+          __typename: "SearchableAggregateScalarResult",
+          value: number,
+        } | {
+          __typename: "SearchableAggregateBucketResult",
+          buckets?:  Array< {
+            __typename: string,
+            key: string,
+            doc_count: number,
+          } | null > | null,
+        }
+      ) | null,
+    } | null >,
+  } | null,
+};
+
+export type SearchRelationshipsQueryVariables = {
+  filter?: SearchableRelationshipFilterInput | null,
+  sort?: Array< SearchableRelationshipSortInput | null > | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  from?: number | null,
+  aggregates?: Array< SearchableRelationshipAggregationInput | null > | null,
+};
+
+export type SearchRelationshipsQuery = {
+  searchRelationships?:  {
+    __typename: "SearchableRelationshipConnection",
+    items:  Array< {
+      __typename: "Relationship",
+      id: string,
+      followedUserId: string,
+      followedUser:  {
+        __typename: "User",
+        id: string,
+        email: string,
+        username?: string | null,
+        name?: string | null,
+        bio?: string | null,
+        image?: string | null,
+        role: UserRole,
+        predictionSets?:  {
+          __typename: "ModelPredictionSetConnection",
+          nextToken?: string | null,
+        } | null,
+        historyPredictionSets?:  {
+          __typename: "ModelHistoryPredictionSetConnection",
+          nextToken?: string | null,
+        } | null,
+        followers?:  {
+          __typename: "ModelRelationshipConnection",
+          nextToken?: string | null,
+        } | null,
+        following?:  {
+          __typename: "ModelRelationshipConnection",
+          nextToken?: string | null,
+        } | null,
+        createdAt: string,
+        updatedAt: string,
+      },
+      followingUserId: string,
+      followingUser:  {
+        __typename: "User",
+        id: string,
+        email: string,
+        username?: string | null,
+        name?: string | null,
+        bio?: string | null,
+        image?: string | null,
+        role: UserRole,
+        predictionSets?:  {
+          __typename: "ModelPredictionSetConnection",
+          nextToken?: string | null,
+        } | null,
+        historyPredictionSets?:  {
+          __typename: "ModelHistoryPredictionSetConnection",
+          nextToken?: string | null,
+        } | null,
+        followers?:  {
+          __typename: "ModelRelationshipConnection",
+          nextToken?: string | null,
+        } | null,
+        following?:  {
+          __typename: "ModelRelationshipConnection",
+          nextToken?: string | null,
+        } | null,
+        createdAt: string,
+        updatedAt: string,
+      },
       createdAt: string,
       updatedAt: string,
     } | null >,

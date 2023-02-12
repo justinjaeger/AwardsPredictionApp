@@ -95,6 +95,95 @@ export const searchUsers = /* GraphQL */ `
     }
   }
 `;
+export const searchRelationships = /* GraphQL */ `
+  query SearchRelationships(
+    $filter: SearchableRelationshipFilterInput
+    $sort: [SearchableRelationshipSortInput]
+    $limit: Int
+    $nextToken: String
+    $from: Int
+    $aggregates: [SearchableRelationshipAggregationInput]
+  ) {
+    searchRelationships(
+      filter: $filter
+      sort: $sort
+      limit: $limit
+      nextToken: $nextToken
+      from: $from
+      aggregates: $aggregates
+    ) {
+      items {
+        id
+        followedUserId
+        followedUser {
+          id
+          email
+          username
+          name
+          bio
+          image
+          role
+          predictionSets {
+            nextToken
+          }
+          historyPredictionSets {
+            nextToken
+          }
+          followers {
+            nextToken
+          }
+          following {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        followingUserId
+        followingUser {
+          id
+          email
+          username
+          name
+          bio
+          image
+          role
+          predictionSets {
+            nextToken
+          }
+          historyPredictionSets {
+            nextToken
+          }
+          followers {
+            nextToken
+          }
+          following {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        createdAt
+        updatedAt
+      }
+      nextToken
+      total
+      aggregateItems {
+        name
+        result {
+          ... on SearchableAggregateScalarResult {
+            value
+          }
+          ... on SearchableAggregateBucketResult {
+            buckets {
+              key
+              doc_count
+            }
+          }
+        }
+      }
+    }
+  }
+`;
 export const getUser = /* GraphQL */ `
   query GetUser($id: ID!) {
     getUser(id: $id) {
