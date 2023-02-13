@@ -2,13 +2,15 @@ import { UserRole } from '../../API';
 import { iUser } from '../../types';
 import ApiServices from '../graphql';
 
+type iPaginatedUserResult = Promise<{ users: iUser[]; nextToken: string }>;
+
 export const getPaginatedFollowers = async (
   userId: string,
   nextToken?: string,
-): Promise<{ followers: iUser[]; nextToken: string }> => {
+): iPaginatedUserResult => {
   const res = await ApiServices.getPaginatedFollowers(userId, nextToken);
   const items = res.data?.searchRelationships?.items || [];
-  const followers: iUser[] = items.map((item) => {
+  const users: iUser[] = items.map((item) => {
     const u = item?.followingUser;
     // some of these values we don't care about or use so they can be default
     return {
@@ -22,17 +24,17 @@ export const getPaginatedFollowers = async (
     };
   });
 
-  return { followers, nextToken: '' };
+  return { users, nextToken: '' };
 };
 
 export const getPaginatedFollowing = async (
   userId: string,
   nextToken?: string,
-): Promise<{ followers: iUser[]; nextToken: string }> => {
+): iPaginatedUserResult => {
   const res = await ApiServices.getPaginatedFollowing(userId, nextToken);
   const items = res.data?.searchRelationships?.items || [];
   const nextPaginateToken = res.data?.searchRelationships?.nextToken; // send this in subsequent request to get the next page of results
-  const followers: iUser[] = items.map((item) => {
+  const users: iUser[] = items.map((item) => {
     const u = item?.followedUser;
     // some of these values we don't care about or use so they can be default
     return {
@@ -46,5 +48,5 @@ export const getPaginatedFollowing = async (
     };
   });
 
-  return { followers, nextToken: nextPaginateToken || '' };
+  return { users, nextToken: nextPaginateToken || '' };
 };

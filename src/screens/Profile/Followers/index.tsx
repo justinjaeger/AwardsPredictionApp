@@ -1,11 +1,16 @@
-import React, { useLayoutEffect } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { ScrollView } from 'react-native';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import { getHeaderTitle } from '../../../constants';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
-import useQueryGetUser from '../../../hooks/queries/getUser';
 import { useTypedNavigation } from '../../../util/hooks';
 import { ProfileParamList } from '../../../navigation/types';
+import {
+  getPaginatedFollowers,
+  getPaginatedFollowing,
+} from '../../../services/queryFuncs/getPaginatedRelationships';
+import { iUser } from '../../../types';
+import { Body } from '../../../components/Text';
 
 const Followers = () => {
   const navigation = useTypedNavigation<ProfileParamList>();
@@ -13,18 +18,27 @@ const Followers = () => {
     params: { userId, type },
   } = useRoute<RouteProp<ProfileParamList, 'Followers'>>();
 
-  console.error('type', type);
-  console.error('userId', userId);
+  const [paginateToken, setPaginateToken] = useState<string | undefined>(undefined);
+  const [users, setUsers] = useState<iUser[]>([]);
 
-  const { data: user } = useQueryGetUser(userId);
-  const usernameBeforeEdit = user?.username || '';
+  const fetchPage = async () => {
+    const Request = type === 'followers' ? getPaginatedFollowers : getPaginatedFollowing;
+    const { users, nextToken } = await Request(userId, paginateToken);
+    setUsers((prev) => [...prev, ...users]);
+    setPaginateToken(nextToken);
+  };
+
+  useEffect(() => {
+    // fetch page when land on screen
+    fetchPage();
+  }, []);
 
   useLayoutEffect(() => {
-    // This is the best way to change the header
+    // Render Header
     navigation.setOptions({
       headerTitle: getHeaderTitle(type === 'followers' ? 'Followers' : 'Following'),
     });
-  }, [usernameBeforeEdit, navigation]);
+  }, []);
 
   return (
     <BackgroundWrapper>
@@ -32,7 +46,7 @@ const Followers = () => {
         style={{ width: '100%' }}
         contentContainerStyle={{ alignItems: 'center', marginTop: 40 }}
       >
-        <></>
+        <Body>{JSON.stringify(users)}</Body>
       </ScrollView>
     </BackgroundWrapper>
   );

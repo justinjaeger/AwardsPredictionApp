@@ -8,6 +8,7 @@ import {
   SearchRelationshipsQuery,
   SearchRelationshipsQueryVariables,
 } from '../../API';
+import { PAGINATED_USER_LIMIT } from '../../constants';
 import * as mutations from '../../graphql/mutations';
 import * as queries from '../../graphql/queries';
 import * as customQueries from '../../graphqlCustom/queries';
@@ -95,8 +96,6 @@ export const unFollowUser = async (
   }
 };
 
-const PAGINATED_LIMIT = 20;
-
 export const getPaginatedFollowers = async (
   followedUserId: string, // get users who are following this user
   nextToken?: string,
@@ -109,7 +108,7 @@ export const getPaginatedFollowers = async (
       filter: {
         followedUserId: { eq: followedUserId },
       },
-      limit: PAGINATED_LIMIT,
+      limit: PAGINATED_USER_LIMIT,
       nextToken,
     });
     if (!data?.searchRelationships) {
@@ -133,7 +132,7 @@ export const getPaginatedFollowing = async (
       filter: {
         followingUserId: { eq: followingUserId },
       },
-      limit: PAGINATED_LIMIT,
+      limit: PAGINATED_USER_LIMIT,
       nextToken,
     });
     if (!data?.searchRelationships) {
