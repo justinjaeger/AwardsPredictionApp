@@ -1,6 +1,6 @@
 import ApiServices from '../graphql';
 
-const getNumberRelationships = async (userId: string) => {
+const getRelationshipCount = async (userId: string) => {
   const requests = [];
 
   requests.push(await ApiServices.getFollowerCount(userId));
@@ -13,4 +13,4 @@ const getNumberRelationships = async (userId: string) => {
   return { followerCount, followingCount };
 };
 
-export default getNumberRelationships;
+export default getRelationshipCount;
