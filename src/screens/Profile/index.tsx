@@ -29,6 +29,9 @@ import { iUser } from '../../types';
 import getUserProfile from '../../services/queryFuncs/getUserProfile';
 import getRelationshipCount from '../../services/queryFuncs/getRelationshipCount';
 import FollowCountButton from '../../components/FollowCountButton';
+import getUserEvents from '../../services/queryFuncs/getUserEvents';
+import useQueryAllEvents from '../../hooks/queries/getAllEvents';
+import EventList from '../Predictions/Event/EventList';
 
 const Profile = () => {
   // If we pass userId as params, it loads that user's profile. If not, it attemps to get logged in profile.
@@ -40,24 +43,35 @@ const Profile = () => {
   const friendNavigation = useTypedNavigation<ProfileParamList>();
   const { width } = useWindowDimensions();
 
+  const { data: events, isLoading: isLoadingAllEvents } = useQueryAllEvents();
   const { mutate: updateProfileImage } = useUpdateProfileImage();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [user, setUser] = useState<iUser | undefined>(undefined);
   const [followingCount, setFollowingCount] = useState<number | undefined>(undefined);
   const [followerCount, setFollowerCount] = useState<number | undefined>(undefined);
+  const [userEventIds, setUserEventIds] = useState<string[]>([]);
+
+  const iterableEvents = events ? Object.values(events) || [] : [];
+  const userEvents = Object.values(iterableEvents)?.filter((event) =>
+    userEventIds.includes(event.id),
+  );
 
   // we have to do this and NOT useQuery because it's re-used across many profile that might be in the stack
   useEffect(() => {
     if (!userId) return;
     setIsLoading(true);
+    // get user profile info
     getUserProfile(userId, authUserId)
       .then((res) => setUser(res))
       .finally(() => setIsLoading(false));
+    // get follower / following count
     getRelationshipCount(userId).then(({ followingCount, followerCount }) => {
       setFollowingCount(followingCount);
       setFollowerCount(followerCount);
     });
+    // get events user has predicted
+    getUserEvents(userId).then((eventIds) => setUserEventIds(eventIds));
   }, [userId]);
 
   const isDeviceProfile = user && userId && user?.id === authUserId; // signed in matches params
@@ -260,8 +274,8 @@ const Profile = () => {
                 <HeaderLight
                   style={{
                     alignSelf: 'flex-start',
-                    marginBottom: 10,
-                    marginTop: 10,
+                    marginBottom: 20,
+                    marginTop: 40,
                     marginLeft: theme.windowMargin,
                   }}
                 >
@@ -269,6 +283,19 @@ const Profile = () => {
                 </HeaderLight>
                 <PredictionCarousel predictionSets={predictionSets} userId={userId} />
               </>
+            ) : null}
+            <HeaderLight
+              style={{
+                alignSelf: 'flex-start',
+                marginBottom: 20,
+                marginTop: 40,
+                marginLeft: theme.windowMargin,
+              }}
+            >
+              Events
+            </HeaderLight>
+            {!isLoadingAllEvents && user && userEvents ? (
+              <EventList user={user} events={userEvents} />
             ) : null}
           </>
         )}

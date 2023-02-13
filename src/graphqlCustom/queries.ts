@@ -525,6 +525,18 @@ export const getUserProfileQuery = /* GraphQL */ `
   }
 `;
 
+export const getUserEvents = /* GraphQL */ `
+  query GetUser($id: ID!) {
+    getUser(id: $id) {
+      predictionSets {
+        items {
+          eventId
+        }
+      }
+    }
+  }
+`;
+
 export const getUserProfileQuerySignedOut = /* GraphQL */ `
   query GetUser($id: ID!) {
     getUser(id: $id) {

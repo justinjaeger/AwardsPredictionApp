@@ -5,7 +5,7 @@ import { PredictionsParamList } from '../../navigation/types';
 import { iUser } from '../../types';
 import { useTypedNavigation } from '../../util/hooks';
 import ProfileImage from '../ProfileImage';
-import { BodyBold, SubHeader, SubHeaderLight } from '../Text';
+import { SubHeaderLight } from '../Text';
 
 const UserHeader = ({ user }: { user: iUser }) => {
   const navigation = useTypedNavigation<PredictionsParamList>();

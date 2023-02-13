@@ -8,7 +8,7 @@ import { eventToString } from '../../../util/stringConversions';
 import LoadingStatue from '../../../components/LoadingStatue';
 import SignedOutState from '../../../components/SignedOutState';
 import { getHeaderTitleWithTrophy } from '../../../constants';
-import EventList from './EventList';
+import CategoryList from './CategoryList';
 import _ from 'lodash';
 import { formatLastUpdated } from '../../../util/formatDateTime';
 import usePredictionData from '../../../hooks/queries/usePredictionData';
@@ -119,7 +119,7 @@ const Event = ({
           }}
         >
           <LastUpdatedText lastUpdated={lastUpdatedString} isDisabled={isHistory} />
-          <EventList
+          <CategoryList
             isCollapsed={true}
             onSelectCategory={(category: iCategory) => onSelectCategory(category)}
             predictionData={predictionData}
@@ -133,7 +133,7 @@ const Event = ({
           }}
         >
           <LastUpdatedText lastUpdated={lastUpdatedString} isDisabled={isHistory} />
-          <EventList
+          <CategoryList
             isCollapsed={false}
             onSelectCategory={(category: iCategory) => onSelectCategory(category)}
             predictionData={predictionData}

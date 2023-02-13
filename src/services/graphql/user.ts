@@ -52,6 +52,21 @@ export const getUser = async (id: string): Promise<iApiResponse<GetUserQuery>> =
   }
 };
 
+export const getUserEvents = async (id: string): Promise<iApiResponse<GetUserQuery>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<GetUserQuery, GetUserQueryVariables>(
+      customQueries.getUserEvents,
+      { id },
+    );
+    if (!data?.getUser) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data: data };
+  } catch (err) {
+    return handleError('error getting user by id', err);
+  }
+};
+
 // Compatile with signed in and signed out users
 type GetUserQueryVariablesCustom = GetUserQueryVariables & { authUserId: string };
 export const getUserProfile = async (
