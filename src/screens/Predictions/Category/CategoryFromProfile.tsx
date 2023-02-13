@@ -14,10 +14,10 @@ import DisplayFAB from '../../../components/Buttons/DisplayFAB';
 import { iEvent } from '../../../types';
 import { useAuth } from '../../../context/UserContext';
 import { RouteProp, useRoute } from '@react-navigation/native';
-import { BodyBold } from '../../../components/Text';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import useQueryGetUser from '../../../hooks/queries/getUser';
 import HistoryTab from '../../../components/HistoryTab';
+import UserHeader from '../../../components/UserHeader';
 
 export type iCategoryProps = {
   collapsedOpacity: Animated.Value;
@@ -34,8 +34,7 @@ const Category = () => {
   const { userId: authUserId } = useAuth();
   const userId = params?.userId || authUserId;
 
-  const { data } = useQueryGetUser(userId);
-  const username = data?.username || 'user';
+  const { data: user } = useQueryGetUser(userId);
 
   const { category, event: _event } = useCategory();
   const navigation = useTypedNavigation<PredictionsParamList>();
@@ -110,7 +109,7 @@ const Category = () => {
       <DisplayFAB state={toggleState[toggleIndex]} toggleDisplay={toggle} />
       <BackgroundWrapper>
         <>
-          <BodyBold>{`${username}'s predictions`}</BodyBold>
+          {user ? <UserHeader user={user} /> : null}
           <View style={{ zIndex: 2, width: '100%' }}>
             <HistoryTab />
           </View>
