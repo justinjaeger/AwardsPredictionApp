@@ -5,13 +5,13 @@ import {
   DeleteRelationshipMutationVariables,
   ListRelationshipsQuery,
   ListRelationshipsQueryVariables,
-  SearchRelationshipsQuery,
   SearchRelationshipsQueryVariables,
 } from '../../API';
 import { PAGINATED_USER_LIMIT } from '../../constants';
 import * as mutations from '../../graphql/mutations';
 import * as queries from '../../graphql/queries';
 import * as customQueries from '../../graphqlCustom/queries';
+import { SearchRelationshipsQuery } from '../../graphqlCustom/types';
 import { GraphqlAPI, handleError, iApiResponse } from '../utils';
 
 export const getRelationship = async (
@@ -96,7 +96,61 @@ export const unFollowUser = async (
   }
 };
 
-export const getPaginatedFollowers = async (
+type SearchRelationshipsQueryVariablesCustom = SearchRelationshipsQueryVariables & {
+  authUserId: string;
+};
+export const getPaginatedFollowersSignedIn = async (
+  followedUserId: string, // get users who are following this user
+  authUserId: string,
+  nextToken?: string,
+): Promise<iApiResponse<SearchRelationshipsQuery>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<
+      SearchRelationshipsQuery,
+      SearchRelationshipsQueryVariablesCustom
+    >(customQueries.searchFollowersSignedIn, {
+      filter: {
+        followedUserId: { eq: followedUserId },
+      },
+      limit: PAGINATED_USER_LIMIT,
+      authUserId,
+      nextToken,
+    });
+    if (!data?.searchRelationships) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data: data };
+  } catch (err) {
+    return handleError('error getting paginated followers', err);
+  }
+};
+export const getPaginatedFollowingSignedIn = async (
+  followingUserId: string, // get users who this user is following
+  authUserId: string,
+  nextToken?: string,
+): Promise<iApiResponse<SearchRelationshipsQuery>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<
+      SearchRelationshipsQuery,
+      SearchRelationshipsQueryVariablesCustom
+    >(customQueries.searchFollowingSignedIn, {
+      filter: {
+        followingUserId: { eq: followingUserId },
+      },
+      limit: PAGINATED_USER_LIMIT,
+      authUserId,
+      nextToken,
+    });
+    if (!data?.searchRelationships) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data: data };
+  } catch (err) {
+    return handleError('error getting paginated following', err);
+  }
+};
+
+export const getPaginatedFollowersSignedOut = async (
   followedUserId: string, // get users who are following this user
   nextToken?: string,
 ): Promise<iApiResponse<SearchRelationshipsQuery>> => {
@@ -104,7 +158,7 @@ export const getPaginatedFollowers = async (
     const { data, errors } = await GraphqlAPI<
       SearchRelationshipsQuery,
       SearchRelationshipsQueryVariables
-    >(customQueries.searchFollowers, {
+    >(customQueries.searchFollowersSignedIn, {
       filter: {
         followedUserId: { eq: followedUserId },
       },
@@ -119,8 +173,7 @@ export const getPaginatedFollowers = async (
     return handleError('error getting paginated followers', err);
   }
 };
-
-export const getPaginatedFollowing = async (
+export const getPaginatedFollowingSignedOut = async (
   followingUserId: string, // get users who this user is following
   nextToken?: string,
 ): Promise<iApiResponse<SearchRelationshipsQuery>> => {
@@ -128,7 +181,7 @@ export const getPaginatedFollowing = async (
     const { data, errors } = await GraphqlAPI<
       SearchRelationshipsQuery,
       SearchRelationshipsQueryVariables
-    >(customQueries.searchFollowing, {
+    >(customQueries.searchFollowingSignedIn, {
       filter: {
         followingUserId: { eq: followingUserId },
       },
@@ -144,7 +197,7 @@ export const getPaginatedFollowing = async (
   }
 };
 
-export const getFollowerCount = async (
+export const getFollowingCount = async (
   followingUserId: string,
 ): Promise<iApiResponse<SearchRelationshipsQuery>> => {
   try {
@@ -165,7 +218,7 @@ export const getFollowerCount = async (
   }
 };
 
-export const getFollowingCount = async (
+export const getFollowerCount = async (
   followedUserId: string,
 ): Promise<iApiResponse<SearchRelationshipsQuery>> => {
   try {

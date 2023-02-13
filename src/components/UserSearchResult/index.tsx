@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { StackActions, useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { TouchableHighlight, View } from 'react-native';
 import COLORS from '../../constants/colors';
@@ -15,7 +15,8 @@ const UserSearchResult = ({ users }: { users: iUser[] }) => {
   const { isSearching, isLoadingSearch } = useSearch();
 
   const navigateToProfile = (userId: string) => {
-    navigation.navigate('FriendProfile', { userId });
+    // important to push so we can have multiple profiles in same stack
+    navigation.dispatch(StackActions.push('Profile', { userId }));
   };
 
   return (

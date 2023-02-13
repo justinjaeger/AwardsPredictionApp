@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import {
   AwardsBody,
   CategoryIsShortlisted,
@@ -330,6 +331,130 @@ export type SearchUsersQuery = {
       updatedAt: string;
     } | null>;
     nextToken?: string | null;
+  } | null;
+};
+
+export type SearchRelationshipsQuery = {
+  searchRelationships?: {
+    __typename: 'SearchableRelationshipConnection';
+    items: Array<{
+      __typename: 'Relationship';
+      id: string;
+      followedUserId: string;
+      followedUser: {
+        __typename: 'User';
+        id: string;
+        email: string;
+        username?: string | null;
+        name?: string | null;
+        bio?: string | null;
+        image?: string | null;
+        role: UserRole;
+        predictionSets?: {
+          __typename: 'ModelPredictionSetConnection';
+          nextToken?: string | null;
+        } | null;
+        historyPredictionSets?: {
+          __typename: 'ModelHistoryPredictionSetConnection';
+          nextToken?: string | null;
+        } | null;
+        followers?: {
+          __typename: 'ModelRelationshipConnection';
+          items: Array<{
+            __typename: 'Relationship';
+            id: string;
+            followedUserId: string;
+            followingUserId: string;
+            createdAt: string;
+            updatedAt: string;
+          } | null>;
+          nextToken?: string | null;
+        } | null;
+        following?: {
+          __typename: 'ModelRelationshipConnection';
+          items: Array<{
+            __typename: 'Relationship';
+            id: string;
+            followedUserId: string;
+            followingUserId: string;
+            createdAt: string;
+            updatedAt: string;
+          } | null>;
+          nextToken?: string | null;
+        } | null;
+        createdAt: string;
+        updatedAt: string;
+      };
+      followingUserId: string;
+      followingUser: {
+        __typename: 'User';
+        id: string;
+        email: string;
+        username?: string | null;
+        name?: string | null;
+        bio?: string | null;
+        image?: string | null;
+        role: UserRole;
+        predictionSets?: {
+          __typename: 'ModelPredictionSetConnection';
+          nextToken?: string | null;
+        } | null;
+        historyPredictionSets?: {
+          __typename: 'ModelHistoryPredictionSetConnection';
+          nextToken?: string | null;
+        } | null;
+        followers?: {
+          __typename: 'ModelRelationshipConnection';
+          items: Array<{
+            __typename: 'Relationship';
+            id: string;
+            followedUserId: string;
+            followingUserId: string;
+            createdAt: string;
+            updatedAt: string;
+          } | null>;
+          nextToken?: string | null;
+        } | null;
+        following?: {
+          __typename: 'ModelRelationshipConnection';
+          items: Array<{
+            __typename: 'Relationship';
+            id: string;
+            followedUserId: string;
+            followingUserId: string;
+            createdAt: string;
+            updatedAt: string;
+          } | null>;
+          nextToken?: string | null;
+        } | null;
+        createdAt: string;
+        updatedAt: string;
+      };
+      createdAt: string;
+      updatedAt: string;
+    } | null>;
+    nextToken?: string | null;
+    total?: number | null;
+    aggregateItems: Array<{
+      __typename: 'SearchableAggregateResult';
+      name: string;
+      result:
+        | (
+            | {
+                __typename: 'SearchableAggregateScalarResult';
+                value: number;
+              }
+            | {
+                __typename: 'SearchableAggregateBucketResult';
+                buckets?: Array<{
+                  __typename: string;
+                  key: string;
+                  doc_count: number;
+                } | null> | null;
+              }
+          )
+        | null;
+    } | null>;
   } | null;
 };
 

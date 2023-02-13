@@ -52,20 +52,32 @@ export const getUser = async (id: string): Promise<iApiResponse<GetUserQuery>> =
   }
 };
 
-type GetUserProfileQueryVariables = GetUserQueryVariables & { authUserId: string };
+// Compatile with signed in and signed out users
+type GetUserQueryVariablesCustom = GetUserQueryVariables & { authUserId: string };
 export const getUserProfile = async (
   id: string,
-  authUserId: string,
+  authUserId: string | undefined,
 ): Promise<iApiResponse<GetUserQuery>> => {
   try {
-    const { data, errors } = await GraphqlAPI<GetUserQuery, GetUserProfileQueryVariables>(
-      customQueries.getUserProfileQuery,
-      { id, authUserId },
-    );
-    if (!data?.getUser) {
-      throw new Error(JSON.stringify(errors));
+    if (authUserId) {
+      const { data, errors } = await GraphqlAPI<
+        GetUserQuery,
+        GetUserQueryVariablesCustom
+      >(customQueries.getUserProfileQuery, { id, authUserId });
+      if (!data?.getUser) {
+        throw new Error(JSON.stringify(errors));
+      }
+      return { status: 'success', data: data };
+    } else {
+      const { data, errors } = await GraphqlAPI<GetUserQuery, GetUserQueryVariables>(
+        customQueries.getUserProfileQuerySignedOut,
+        { id },
+      );
+      if (!data?.getUser) {
+        throw new Error(JSON.stringify(errors));
+      }
+      return { status: 'success', data: data };
     }
-    return { status: 'success', data: data };
   } catch (err) {
     return handleError('error getting user by id', err);
   }

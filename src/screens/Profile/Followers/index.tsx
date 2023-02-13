@@ -10,7 +10,8 @@ import {
   getPaginatedFollowing,
 } from '../../../services/queryFuncs/getPaginatedRelationships';
 import { iUser } from '../../../types';
-import { Body } from '../../../components/Text';
+import UserSearchResult from '../../../components/UserSearchResult';
+import { useAuth } from '../../../context/UserContext';
 
 const Followers = () => {
   const navigation = useTypedNavigation<ProfileParamList>();
@@ -18,12 +19,14 @@ const Followers = () => {
     params: { userId, type },
   } = useRoute<RouteProp<ProfileParamList, 'Followers'>>();
 
+  const { userId: authUserId } = useAuth();
+
   const [paginateToken, setPaginateToken] = useState<string | undefined>(undefined);
   const [users, setUsers] = useState<iUser[]>([]);
 
   const fetchPage = async () => {
     const Request = type === 'followers' ? getPaginatedFollowers : getPaginatedFollowing;
-    const { users, nextToken } = await Request(userId, paginateToken);
+    const { users, nextToken } = await Request(userId, authUserId, paginateToken);
     setUsers((prev) => [...prev, ...users]);
     setPaginateToken(nextToken);
   };
@@ -44,9 +47,9 @@ const Followers = () => {
     <BackgroundWrapper>
       <ScrollView
         style={{ width: '100%' }}
-        contentContainerStyle={{ alignItems: 'center', marginTop: 40 }}
+        contentContainerStyle={{ alignItems: 'center' }}
       >
-        <Body>{JSON.stringify(users)}</Body>
+        <UserSearchResult users={users} />
       </ScrollView>
     </BackgroundWrapper>
   );

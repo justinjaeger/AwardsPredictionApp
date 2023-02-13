@@ -6,9 +6,13 @@ type iPaginatedUserResult = Promise<{ users: iUser[]; nextToken: string }>;
 
 export const getPaginatedFollowers = async (
   userId: string,
+  authUserId: string | undefined,
   nextToken?: string,
 ): iPaginatedUserResult => {
-  const res = await ApiServices.getPaginatedFollowers(userId, nextToken);
+  const Request = authUserId
+    ? ApiServices.getPaginatedFollowersSignedIn(userId, authUserId, nextToken)
+    : ApiServices.getPaginatedFollowersSignedOut(userId, nextToken);
+  const res = await Request;
   const items = res.data?.searchRelationships?.items || [];
   const users: iUser[] = items.map((item) => {
     const u = item?.followingUser;
@@ -21,6 +25,8 @@ export const getPaginatedFollowers = async (
       name: u?.name || undefined,
       image: u?.image || undefined,
       bio: u?.bio || undefined,
+      authUserIsFollowing: (u?.followers?.items || []).length > 0,
+      isFollowingAuthUser: (u?.followers?.items || []).length > 0,
     };
   });
 
@@ -29,9 +35,13 @@ export const getPaginatedFollowers = async (
 
 export const getPaginatedFollowing = async (
   userId: string,
+  authUserId: string | undefined,
   nextToken?: string,
 ): iPaginatedUserResult => {
-  const res = await ApiServices.getPaginatedFollowing(userId, nextToken);
+  const Request = authUserId
+    ? ApiServices.getPaginatedFollowingSignedIn(userId, authUserId, nextToken)
+    : ApiServices.getPaginatedFollowingSignedOut(userId, nextToken);
+  const res = await Request;
   const items = res.data?.searchRelationships?.items || [];
   const nextPaginateToken = res.data?.searchRelationships?.nextToken; // send this in subsequent request to get the next page of results
   const users: iUser[] = items.map((item) => {
@@ -45,6 +55,8 @@ export const getPaginatedFollowing = async (
       name: u?.name || undefined,
       image: u?.image || undefined,
       bio: u?.bio || undefined,
+      authUserIsFollowing: (u?.followers?.items || []).length > 0,
+      isFollowingAuthUser: (u?.followers?.items || []).length > 0,
     };
   });
 

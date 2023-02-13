@@ -525,6 +525,92 @@ export const getUserProfileQuery = /* GraphQL */ `
   }
 `;
 
+export const getUserProfileQuerySignedOut = /* GraphQL */ `
+  query GetUser($id: ID!) {
+    getUser(id: $id) {
+      id
+      email
+      username
+      name
+      bio
+      image
+      role
+      # Return user's 10 latest prediction sets
+      predictionSets(limit: 10, sortDirection: DESC) {
+        items {
+          id # predictionSetId
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            status
+            createdAt
+            updatedAt
+            # TODO: shouldn't really be returning this level of nesting but it's a quick fix
+            categories {
+              items {
+                id
+                name
+                type
+                isShortlisted
+              }
+            }
+          }
+          categoryId
+          category {
+            id
+            name
+            type
+            isShortlisted
+            createdAt
+            updatedAt
+          }
+          predictions {
+            items {
+              id
+              contenderId
+              contender {
+                id
+                movieId
+                movie {
+                  id
+                  tmdbId
+                  studio
+                }
+                personId
+                person {
+                  id
+                  tmdbId
+                }
+                songId
+                song {
+                  id
+                  title
+                  artist
+                }
+                visibility
+                accolade
+                createdAt
+                updatedAt
+              }
+              ranking
+              createdAt
+              updatedAt
+            }
+          }
+          type
+          comment
+          createdAt
+          updatedAt
+        }
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
 export const getUserWithRelationshipsQuery = /* GraphQL */ `
   query GetUser($id: ID!) {
     getUser(id: $id) {
@@ -665,7 +751,95 @@ export const searchUsersSignedInQuery = /* GraphQL */ `
   }
 `;
 
-export const searchFollowers = /* GraphQL */ `
+export const searchFollowersSignedIn = /* GraphQL */ `
+  query SearchRelationships(
+    $filter: SearchableRelationshipFilterInput
+    $sort: [SearchableRelationshipSortInput]
+    $limit: Int
+    $nextToken: String
+    $from: Int
+    $aggregates: [SearchableRelationshipAggregationInput]
+    $authUserId: ID # we want to know if authenticated user is following this user or not
+  ) {
+    searchRelationships(
+      filter: $filter
+      sort: $sort
+      limit: $limit
+      nextToken: $nextToken
+      from: $from
+      aggregates: $aggregates
+    ) {
+      items {
+        followingUser {
+          id
+          image
+          name
+          email
+          bio
+          username
+          # we want to know if we're following this person and if they're following us
+          followers(filter: { followingUserId: { eq: $authUserId } }) {
+            items {
+              id
+            }
+          }
+          following(filter: { followedUserId: { eq: $authUserId } }) {
+            items {
+              id
+            }
+          }
+        }
+      }
+      nextToken
+    }
+  }
+`;
+
+export const searchFollowingSignedIn = /* GraphQL */ `
+  query SearchRelationships(
+    $filter: SearchableRelationshipFilterInput
+    $sort: [SearchableRelationshipSortInput]
+    $limit: Int
+    $nextToken: String
+    $from: Int
+    $aggregates: [SearchableRelationshipAggregationInput]
+    $authUserId: ID # we want to know if authenticated user is following this user or not
+  ) {
+    searchRelationships(
+      filter: $filter
+      sort: $sort
+      limit: $limit
+      nextToken: $nextToken
+      from: $from
+      aggregates: $aggregates
+    ) {
+      items {
+        followedUser {
+          id
+          image
+          name
+          email
+          bio
+          username
+          # we want to know if we're following this person and if they're following us
+          followers(filter: { followingUserId: { eq: $authUserId } }) {
+            items {
+              id
+            }
+          }
+          following(filter: { followedUserId: { eq: $authUserId } }) {
+            items {
+              id
+            }
+          }
+        }
+      }
+      nextToken
+    }
+  }
+`;
+
+export const searchFollowersSignedOut = /* GraphQL */ `
   query SearchRelationships(
     $filter: SearchableRelationshipFilterInput
     $sort: [SearchableRelationshipSortInput]
@@ -697,7 +871,7 @@ export const searchFollowers = /* GraphQL */ `
   }
 `;
 
-export const searchFollowing = /* GraphQL */ `
+export const searchFollowingSignedOut = /* GraphQL */ `
   query SearchRelationships(
     $filter: SearchableRelationshipFilterInput
     $sort: [SearchableRelationshipSortInput]

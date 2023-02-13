@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import {
   Alert,
   ScrollView,
@@ -19,12 +19,16 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import theme from '../../constants/theme';
 import PredictionCarousel from '../../components/PredictionCarousel';
 import { ProfileParamList } from '../../navigation/types';
-import useQueryGetUserProfile from '../../hooks/queries/getUserProfile';
 import COLORS from '../../constants/colors';
-import { useNavigateToEffect, useTypedNavigation } from '../../util/hooks';
+import { useTypedNavigation } from '../../util/hooks';
 import useUpdateProfileImage from '../../hooks/mutations/updateProfileImage';
 import ProfileImage from '../../components/ProfileImage';
 import FollowButton from '../../components/FollowButton';
+import BackButton from '../../components/Buttons/BackButton';
+import { iUser } from '../../types';
+import getUserProfile from '../../services/queryFuncs/getUserProfile';
+import getRelationshipCount from '../../services/queryFuncs/getRelationshipCount';
+import FollowCountButton from '../../components/FollowCountButton';
 
 const Profile = () => {
   // If we pass userId as params, it loads that user's profile. If not, it attemps to get logged in profile.
@@ -36,13 +40,25 @@ const Profile = () => {
   const friendNavigation = useTypedNavigation<ProfileParamList>();
   const { width } = useWindowDimensions();
 
-  const { data: user, refetch } = useQueryGetUserProfile(userId, authUserId);
   const { mutate: updateProfileImage } = useUpdateProfileImage();
 
-  // refresh the profile when we navigate to it (makes it so it updates after changing username for example)
-  useNavigateToEffect(() => refetch(), []);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [user, setUser] = useState<iUser | undefined>(undefined);
+  const [followingCount, setFollowingCount] = useState<number | undefined>(undefined);
+  const [followerCount, setFollowerCount] = useState<number | undefined>(undefined);
 
-  const [loading, setLoading] = useState<boolean>(false);
+  // we have to do this and NOT useQuery because it's re-used across many profile that might be in the stack
+  useEffect(() => {
+    if (!userId) return;
+    setIsLoading(true);
+    getUserProfile(userId, authUserId)
+      .then((res) => setUser(res))
+      .finally(() => setIsLoading(false));
+    getRelationshipCount(userId).then(({ followingCount, followerCount }) => {
+      setFollowingCount(followingCount);
+      setFollowerCount(followerCount);
+    });
+  }, [userId]);
 
   const isDeviceProfile = user && userId && user?.id === authUserId; // signed in matches params
 
@@ -51,14 +67,21 @@ const Profile = () => {
   // put the logout button in the top right corner
   useLayoutEffect(() => {
     if (!userId || !isDeviceProfile) return; // don't set logout header if someone else's profile
+    const headerLeft = () => {
+      // Allow back arrow if possible
+      if (navigation.canGoBack()) {
+        return <BackButton />;
+      }
+    };
     navigation.setOptions({
+      headerLeft,
       headerRight: () => (
         <IconButton
           iconProps={{
             name: 'log-out-outline',
           }}
           onPress={() => {
-            if (loading) return; // disable while loading
+            if (isLoading) return; // disable while loading
             Alert.alert('Log out', 'Are you sure you want to log out?', [
               {
                 text: 'Cancel',
@@ -88,14 +111,14 @@ const Profile = () => {
   };
 
   const logOut = () => {
-    setLoading(true);
+    setIsLoading(true);
     AuthServices.signOut().then((res) => {
       // sign out in context as well
       if (res.status === 'success') {
         signOutUser();
         Snackbar.success('You were signed out');
       }
-      setLoading(false);
+      setIsLoading(false);
     });
   };
 
@@ -193,40 +216,22 @@ const Profile = () => {
                 marginLeft: theme.windowMargin + 20,
               }}
             >
-              <TouchableHighlight
+              <FollowCountButton
                 onPress={() => {
+                  if (followerCount === 0) return;
                   friendNavigation.navigate('Followers', { userId, type: 'followers' });
                 }}
-                style={{
-                  alignItems: 'center',
-                  backgroundColor: COLORS.secondaryDark,
-                  padding: 10,
-                  borderRadius: theme.borderRadius,
-                }}
-                underlayColor={COLORS.secondary}
-              >
-                <BodyBold>{'XX Followers'}</BodyBold>
-              </TouchableHighlight>
-              <TouchableHighlight
+                text={`${followerCount} Followers`}
+                loading={followerCount === undefined}
+              />
+              <FollowCountButton
                 onPress={() => {
+                  if (followingCount === 0) return;
                   friendNavigation.navigate('Followers', { userId, type: 'following' });
                 }}
-                style={{
-                  alignItems: 'center',
-                  backgroundColor: COLORS.secondaryDark,
-                  padding: 10,
-                  borderRadius: theme.borderRadius,
-                  marginLeft: 10,
-                }}
-                underlayColor={COLORS.secondary}
-              >
-                <BodyBold>{'XX Following'}</BodyBold>
-              </TouchableHighlight>
-              {user?.isFollowingAuthUser ? (
-                <BodyBold style={{ marginLeft: 10, color: 'rgba(255,255,255,0.8)' }}>
-                  Follows You
-                </BodyBold>
-              ) : null}
+                text={`${followingCount} Following`}
+                loading={followingCount === undefined}
+              />
             </View>
             <View
               style={{
@@ -235,6 +240,7 @@ const Profile = () => {
                 justifyContent: 'flex-start',
                 width: '100%',
                 marginLeft: theme.windowMargin + 20,
+                marginTop: 10,
               }}
             >
               {user && !isDeviceProfile ? (
