@@ -89,7 +89,7 @@ const getUserProfile = async (
     role: user.role,
     predictionSets,
     authUserIsFollowing: (user?.followers?.items || []).length > 0,
-    isFollowingAuthUser: (user?.followers?.items || []).length > 0,
+    isFollowingAuthUser: (user?.following?.items || []).length > 0,
   };
   console.log('userProfile', user.followers);
   return userProfile;

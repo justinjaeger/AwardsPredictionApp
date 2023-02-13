@@ -26,7 +26,7 @@ export const getPaginatedFollowers = async (
       image: u?.image || undefined,
       bio: u?.bio || undefined,
       authUserIsFollowing: (u?.followers?.items || []).length > 0,
-      isFollowingAuthUser: (u?.followers?.items || []).length > 0,
+      isFollowingAuthUser: (u?.following?.items || []).length > 0,
     };
   });
 

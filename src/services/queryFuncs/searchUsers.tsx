@@ -19,7 +19,7 @@ const searchUsers = async (
     image: item?.image || undefined,
     bio: item?.bio || undefined,
     authUserIsFollowing: (item?.followers?.items || []).length > 0,
-    isFollowingAuthUser: (item?.followers?.items || []).length > 0,
+    isFollowingAuthUser: (item?.following?.items || []).length > 0,
   }));
   return result;
 };
