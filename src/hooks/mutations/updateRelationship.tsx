@@ -26,11 +26,7 @@ const useUpdateRelationship = (onComplete?: () => void) => {
     onSuccess: async () => {
       // re-fetch predictions so the UI updates
       await queryClient.invalidateQueries({
-        queryKey: [
-          QueryKeys.USER,
-          QueryKeys.USER_PROFILE,
-          QueryKeys.USER_WITH_RELATIONSHIPS,
-        ],
+        queryKey: [QueryKeys.USER, QueryKeys.USER_PROFILE],
       });
       setIsComplete(true);
       onComplete && onComplete();
