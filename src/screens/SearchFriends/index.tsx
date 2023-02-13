@@ -30,7 +30,7 @@ const SearchFriends = () => {
               marginLeft: theme.windowMargin,
             }}
           >
-            My Friends (TODO)
+            Following:
           </HeaderLight>
         ) : null}
       </ScrollView>

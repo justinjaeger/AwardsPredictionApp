@@ -23,6 +23,8 @@ const FollowButton = ({
   // just to display the updated value
   const [isFollowing, setIsFollowing] = useState(authUserIsFollowing);
 
+  if (!authUserId) return null; // if user not signed in, don't show follow button
+
   return (
     <TouchableHighlight
       style={[
@@ -35,7 +37,7 @@ const FollowButton = ({
         style,
       ]}
       onPress={async () => {
-        if (!profileUserId || !authUserId) return {};
+        if (!profileUserId) return {};
         if (isFollowing) {
           // warn before they unfollow?
           Alert.alert('Unfollow user?', '', [
