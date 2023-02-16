@@ -133,7 +133,6 @@ const Profile = () => {
     });
   };
 
-  // could save the local path so that we can reference it with an <Image /> component
   const onUploadProfileImage = async () => {
     if (!authUserId) return; // don't execute if not signed in
     const result = await launchImageLibrary({

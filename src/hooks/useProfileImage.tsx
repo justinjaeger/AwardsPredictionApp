@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import AWSStorage from '../services/storage';
+import ProfileImageCache from '../services/cache/profileImage';
 import { useAsyncEffect } from '../util/hooks';
 
 const useProfileImage = (imageKey: string | undefined) => {
@@ -7,8 +7,8 @@ const useProfileImage = (imageKey: string | undefined) => {
 
   useAsyncEffect(async () => {
     if (!imageKey) return;
-    const res = await AWSStorage.getProfileImage(imageKey);
-    setProfileImage(res);
+    const uri = await ProfileImageCache.getImageUri(imageKey);
+    setProfileImage(uri);
   }, [imageKey]);
 
   return { uri: profileImage };

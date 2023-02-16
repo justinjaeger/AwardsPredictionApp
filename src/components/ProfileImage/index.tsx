@@ -1,5 +1,6 @@
 import React from 'react';
-import { TouchableHighlight, View, Image, StyleProp, ViewStyle } from 'react-native';
+import { TouchableHighlight, View, StyleProp, ViewStyle } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import useProfileImage from '../../hooks/useProfileImage';
 
 const ProfileImage = ({
@@ -35,10 +36,8 @@ const ProfileImage = ({
           borderRadius: size,
         }}
       >
-        <Image
+        <FastImage
           source={uri ? { uri } : require('../../assets/PROFILE.png')}
-          width={size}
-          height={size}
           style={{ width: size, height: size, borderRadius: size }}
         />
       </TouchableHighlight>
