@@ -5,9 +5,13 @@ import {
   DeleteRelationshipMutationVariables,
   ListRelationshipsQuery,
   ListRelationshipsQueryVariables,
+  SearchableSortDirection,
   SearchRelationshipsQueryVariables,
 } from '../../API';
-import { PAGINATED_USER_LIMIT } from '../../constants';
+import {
+  PAGINATED_USER_LIMIT,
+  PAGINATED_USER_RECOMMENDATION_LIMIT,
+} from '../../constants';
 import * as mutations from '../../graphql/mutations';
 import * as queries from '../../graphql/queries';
 import * as customQueries from '../../graphqlCustom/queries';
@@ -127,7 +131,8 @@ export const getPaginatedFollowersSignedIn = async (
 export const getPaginatedFollowingSignedIn = async (
   followingUserId: string, // get users who this user is following
   authUserId: string,
-  nextToken?: string,
+  nextToken?: string | undefined,
+  paginatedLimit?: number | undefined,
 ): Promise<iApiResponse<SearchRelationshipsQuery>> => {
   try {
     const { data, errors } = await GraphqlAPI<
@@ -137,7 +142,7 @@ export const getPaginatedFollowingSignedIn = async (
       filter: {
         followingUserId: { eq: followingUserId },
       },
-      limit: PAGINATED_USER_LIMIT,
+      limit: paginatedLimit || PAGINATED_USER_LIMIT,
       authUserId,
       nextToken,
     });
@@ -236,5 +241,97 @@ export const getFollowerCount = async (
     return { status: 'success', data: data };
   } catch (err) {
     return handleError('error getting follower count', err);
+  }
+};
+
+// tries to solve problem where we're only getting the most/least recently followed instead of a random sample
+const returnOneOrZero = () => Math.round(Math.random());
+
+export const getRecommendedFollowersFromFriends = async (
+  authUserId: string,
+  nextToken?: string | undefined,
+  paginatedLimit?: number, // Careful: Returns x^2 users, because it finds X friends, multiplied by X of their friends
+): Promise<iApiResponse<SearchRelationshipsQuery>> => {
+  try {
+    const oneOrZero = returnOneOrZero();
+    // get users who authUser is following and suggest their friends' friends
+    const { data, errors } = await GraphqlAPI<
+      SearchRelationshipsQuery,
+      SearchRelationshipsQueryVariablesCustom
+    >(customQueries.searchRecommendedFollowing, {
+      filter: {
+        followingUserId: { eq: authUserId },
+      },
+      limit: paginatedLimit || PAGINATED_USER_LIMIT,
+      // so it's not biased towards old or new users
+      sort: oneOrZero
+        ? [{ direction: SearchableSortDirection.asc }]
+        : [{ direction: SearchableSortDirection.desc }],
+      authUserId,
+      nextToken,
+    });
+    if (!data?.searchRelationships) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data: data };
+  } catch (err) {
+    return handleError('error getting recommended followers', err);
+  }
+};
+
+// Even when looking for random followers, it's still a better idea to suggest random people's friends rather than random people, because the probability of suggesting a popular person is higher
+export const getRecommendedFollowersFromRandom = async (
+  authUserId: string,
+  nextToken?: string | undefined,
+  paginatedLimit?: number, // Careful: Returns x^2 users, because it finds X friends, multiplied by X of their friends
+): Promise<iApiResponse<SearchRelationshipsQuery>> => {
+  try {
+    const oneOrZero = returnOneOrZero();
+    // get random users and suggest user follow them
+    const { data, errors } = await GraphqlAPI<
+      SearchRelationshipsQuery,
+      SearchRelationshipsQueryVariablesCustom
+    >(customQueries.searchRecommendedFollowing, {
+      limit: paginatedLimit || PAGINATED_USER_RECOMMENDATION_LIMIT,
+      // so it's not biased towards old or new users
+      sort: oneOrZero
+        ? [{ direction: SearchableSortDirection.asc }]
+        : [{ direction: SearchableSortDirection.desc }],
+      authUserId,
+      nextToken,
+    });
+    if (!data?.searchRelationships) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data: data };
+  } catch (err) {
+    return handleError('error getting recommended followers', err);
+  }
+};
+
+// might want to use for signed out users
+export const getRecommendedFollowersFromRandomSignedOut = async (
+  nextToken?: string | undefined,
+  paginatedLimit?: number, // Careful: Returns x^2 users, because it finds X friends, multiplied by X of their friends
+): Promise<iApiResponse<SearchRelationshipsQuery>> => {
+  try {
+    const oneOrZero = returnOneOrZero();
+    const { data, errors } = await GraphqlAPI<
+      SearchRelationshipsQuery,
+      SearchRelationshipsQueryVariables
+    >(customQueries.searchRecommendedFollowingSignedOut, {
+      limit: paginatedLimit || PAGINATED_USER_RECOMMENDATION_LIMIT,
+      // so it's not biased towards old or new users
+      sort: oneOrZero
+        ? [{ direction: SearchableSortDirection.asc }]
+        : [{ direction: SearchableSortDirection.desc }],
+      nextToken,
+    });
+    if (!data?.searchRelationships) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data: data };
+  } catch (err) {
+    return handleError('error getting recommended followers', err);
   }
 };

@@ -39,6 +39,7 @@ const UserSearchResult = ({
         console.error('onEndReached');
         onEndReached && onEndReached();
       }}
+      onEndReachedThreshold={0.9} // triggers onEndReached at (X*100)% of list, for example 0.9 = 90% down
       renderItem={({ item }) => {
         const hasOnlyOneName = !(item.name && item.username);
         const isSignedInUser = item.id === authUserId;
@@ -78,7 +79,7 @@ const UserSearchResult = ({
                   <SubHeader>
                     {hasOnlyOneName ? item.name || item.username || '' : item.name || ''}
                   </SubHeader>
-                  <Body>{hasOnlyOneName ? 'asdfasdf' : item.username || ''}</Body>
+                  <Body>{hasOnlyOneName ? '' : item.username || ''}</Body>
                 </View>
               </View>
               {!isSignedInUser ? (

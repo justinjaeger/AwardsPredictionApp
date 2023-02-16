@@ -2,10 +2,11 @@ import React from 'react';
 import { useWindowDimensions } from 'react-native';
 import BackgroundWrapper from '../../components/BackgroundWrapper';
 import SearchInput from '../../components/Inputs/SearchInput';
-import { HeaderLight } from '../../components/Text';
+import { BodyBold, HeaderLight } from '../../components/Text';
 import UserSearchResult from '../../components/UserSearchResult';
 import theme from '../../constants/theme';
 import { useSearch } from '../../context/ContenderSearchContext';
+import useRecommendedUsers from '../../hooks/useRecommendedUsers';
 import useFriendSearch from './useFriendSearch';
 
 const SearchFriends = () => {
@@ -13,6 +14,7 @@ const SearchFriends = () => {
 
   const { isSearching } = useSearch();
   const { searchResults } = useFriendSearch();
+  const { users: recommendedUsers, fetchPage } = useRecommendedUsers();
 
   return (
     <BackgroundWrapper>
@@ -22,15 +24,22 @@ const SearchFriends = () => {
       />
 
       {!isSearching && searchResults.length === 0 ? (
-        <HeaderLight
-          style={{
-            marginTop: 40,
-            alignSelf: 'flex-start',
-            marginLeft: theme.windowMargin,
-          }}
-        >
-          Following:
-        </HeaderLight>
+        recommendedUsers.length > 0 ? (
+          <>
+            <HeaderLight
+              style={{
+                marginTop: 40,
+                alignSelf: 'flex-start',
+                marginLeft: theme.windowMargin,
+              }}
+            >
+              Recommended:
+            </HeaderLight>
+            <UserSearchResult users={recommendedUsers} onEndReached={fetchPage} />
+          </>
+        ) : (
+          <BodyBold style={{ marginTop: 20 }}>Search for users to follow</BodyBold>
+        )
       ) : (
         <UserSearchResult users={searchResults} />
       )}

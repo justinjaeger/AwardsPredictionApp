@@ -936,3 +936,76 @@ export const getTotalRelationships = /* GraphQL */ `
     }
   }
 `;
+
+export const searchRecommendedFollowing = /* GraphQL */ `
+  query SearchRelationships(
+    $filter: SearchableRelationshipFilterInput
+    $sort: [SearchableRelationshipSortInput]
+    $limit: Int # limit applies to both how many Following we return, but also how many Following's Following we return (so 10 = 100 results)
+    $nextToken: String
+    $from: Int
+    $authUserId: ID
+  ) {
+    searchRelationships(
+      filter: $filter
+      sort: $sort
+      limit: $limit
+      nextToken: $nextToken
+      from: $from
+    ) {
+      nextToken
+      total
+      items {
+        # we are already following these users
+        followedUser {
+          following(limit: $limit) {
+            items {
+              # our friends' friends
+              followedUser {
+                id
+                image
+                name
+                username
+                # we want to know if we're already following this person
+                followers(filter: { followedUserId: { eq: $authUserId } }) {
+                  items {
+                    id
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const searchRecommendedFollowingSignedOut = /* GraphQL */ `
+  query SearchRelationships(
+    $filter: SearchableRelationshipFilterInput
+    $sort: [SearchableRelationshipSortInput]
+    $limit: Int # limit applies to both how many Following we return, but also how many Following's Following we return (so 10 = 100 results)
+    $nextToken: String
+    $from: Int
+  ) {
+    searchRelationships(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      nextToken
+      total
+      items {
+        followedUser {
+          following(limit: $limit) {
+            items {
+              followedUser {
+                id
+                image
+                name
+                username
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;

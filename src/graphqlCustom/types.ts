@@ -376,6 +376,33 @@ export type SearchRelationshipsQuery = {
             __typename: 'Relationship';
             id: string;
             followedUserId: string;
+            // deeply nested but we use this for getting recommended followers
+            // this is the user that the authUser is getting recommended
+            followedUser: {
+              __typename: 'User';
+              id: string;
+              email: string;
+              username?: string | null;
+              name?: string | null;
+              bio?: string | null;
+              image?: string | null;
+              role: UserRole;
+              // extra deeply nested for checking if authUser is a follower of followedUser
+              followers?: {
+                __typename: 'ModelRelationshipConnection';
+                items: Array<{
+                  __typename: 'Relationship';
+                  id: string;
+                  followedUserId: string;
+                  followingUserId: string;
+                  createdAt: string;
+                  updatedAt: string;
+                } | null>;
+                nextToken?: string | null;
+              } | null;
+              createdAt: string;
+              updatedAt: string;
+            };
             followingUserId: string;
             createdAt: string;
             updatedAt: string;

@@ -1,16 +1,11 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import React, { useLayoutEffect } from 'react';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import { getHeaderTitle } from '../../../constants';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import { useTypedNavigation } from '../../../util/hooks';
 import { ProfileParamList } from '../../../navigation/types';
-import {
-  getPaginatedFollowers,
-  getPaginatedFollowing,
-} from '../../../services/queryFuncs/getPaginatedRelationships';
-import { iUser } from '../../../types';
 import UserSearchResult from '../../../components/UserSearchResult';
-import { useAuth } from '../../../context/UserContext';
+import usePaginatedFriends from '../../../hooks/usePaginatedFriends';
 
 const Followers = () => {
   const navigation = useTypedNavigation<ProfileParamList>();
@@ -18,22 +13,7 @@ const Followers = () => {
     params: { userId, type },
   } = useRoute<RouteProp<ProfileParamList, 'Followers'>>();
 
-  const { userId: authUserId } = useAuth();
-
-  const [paginateToken, setPaginateToken] = useState<string | undefined>(undefined);
-  const [users, setUsers] = useState<iUser[]>([]);
-
-  const fetchPage = async () => {
-    const Request = type === 'followers' ? getPaginatedFollowers : getPaginatedFollowing;
-    const { users, nextToken } = await Request(userId, authUserId, paginateToken);
-    setUsers((prev) => [...prev, ...users]);
-    setPaginateToken(nextToken);
-  };
-
-  useEffect(() => {
-    // fetch page when land on screen
-    fetchPage();
-  }, []);
+  const { users, fetchPage } = usePaginatedFriends({ userId, type });
 
   useLayoutEffect(() => {
     // Render Header

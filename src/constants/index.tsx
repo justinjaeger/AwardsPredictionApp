@@ -16,6 +16,7 @@ export const BOTTOM_TAB_HEIGHT = 50;
 export const HEADER_HEIGHT = 40;
 
 export const PAGINATED_USER_LIMIT = 20;
+export const PAGINATED_USER_RECOMMENDATION_LIMIT = 10;
 
 export const getHeaderTitle = (title: string) => {
   return () => <SubHeader>{title}</SubHeader>;
