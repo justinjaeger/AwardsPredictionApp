@@ -1,4 +1,5 @@
 import { StackActions, useNavigation } from '@react-navigation/native';
+import { Spinner } from '@ui-kitten/components';
 import React from 'react';
 import { FlatList, TouchableHighlight, View } from 'react-native';
 import COLORS from '../../constants/colors';
@@ -11,9 +12,11 @@ import { Body, BodyBold, SubHeader } from '../Text';
 
 const UserSearchResult = ({
   users,
+  isLoading,
   onEndReached,
 }: {
   users: iUser[];
+  isLoading?: boolean;
   onEndReached?: () => void;
 }) => {
   const { userId: authUserId } = useAuth();
@@ -27,6 +30,14 @@ const UserSearchResult = ({
 
   if (users.length === 0 && isSearching && !isLoadingSearch) {
     return <BodyBold>No Users Found</BodyBold>;
+  }
+
+  if (isLoading) {
+    return (
+      <View style={{ marginTop: 60 }}>
+        <Spinner />
+      </View>
+    );
   }
 
   return (

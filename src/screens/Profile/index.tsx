@@ -281,18 +281,20 @@ const Profile = () => {
                 <PredictionCarousel predictionSets={predictionSets} userId={userId} />
               </>
             ) : null}
-            <HeaderLight
-              style={{
-                alignSelf: 'flex-start',
-                marginBottom: 20,
-                marginTop: 40,
-                marginLeft: theme.windowMargin,
-              }}
-            >
-              Events
-            </HeaderLight>
-            {!isLoadingAllEvents && user && userEvents ? (
-              <EventList user={user} events={userEvents} />
+            {!isLoadingAllEvents && user && userEvents.length > 0 ? (
+              <>
+                <HeaderLight
+                  style={{
+                    alignSelf: 'flex-start',
+                    marginBottom: 20,
+                    marginTop: 40,
+                    marginLeft: theme.windowMargin,
+                  }}
+                >
+                  Events
+                </HeaderLight>
+                <EventList user={user} events={userEvents} />
+              </>
             ) : null}
           </>
         )}
