@@ -10,17 +10,20 @@ type iFABProps = {
   onPress: () => void;
   visible?: boolean;
   bottomPercentage?: string;
+  horizontalOffset?: number;
 };
 
 export const FAB = (props: iFABProps) => {
-  const { iconName, text, onPress, visible, bottomPercentage } = props;
+  const { iconName, text, onPress, visible, bottomPercentage, horizontalOffset } = props;
 
   const buttonX = useRef(new Animated.Value(0)).current;
   const buttonOpacity = useRef(new Animated.Value(0)).current;
 
+  const toValue = -(horizontalOffset || 0);
+
   useEffect(() => {
     Animated.timing(buttonX, {
-      toValue: visible ? 0 : 100,
+      toValue: visible ? toValue : 100,
       duration: 250,
       useNativeDriver: false,
     }).start();

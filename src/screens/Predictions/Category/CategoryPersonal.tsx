@@ -228,6 +228,15 @@ const CategoryPersonal = ({
         onPress={onSaveContenders}
         visible={isEditing && !isHistory}
       />
+      <FAB
+        iconName="undo"
+        text="Undo"
+        horizontalOffset={120}
+        onPress={() => {
+          setPredictions(initialPredictions);
+        }}
+        visible={isEditing && !isHistory}
+      />
     </>
   );
 };
