@@ -26,7 +26,7 @@ const FriendNavigator = () => (
         }}
       />
       <Screen
-        name="FriendProfile"
+        name="Profile"
         component={ProfileNavigator}
         options={{
           headerShown: false,

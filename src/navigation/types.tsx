@@ -60,7 +60,7 @@ export type ProfileParamList = {
 
 export type FriendParamList = {
   SearchFriends: undefined;
-  FriendProfile: {
+  Profile: {
     userId?: string;
   };
   ChangeUsername: undefined;

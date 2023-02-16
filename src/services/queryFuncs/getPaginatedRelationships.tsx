@@ -2,7 +2,7 @@ import { UserRole } from '../../API';
 import { iUser } from '../../types';
 import ApiServices from '../graphql';
 
-type iPaginatedUserResult = Promise<{ users: iUser[]; nextToken: string }>;
+type iPaginatedUserResult = Promise<{ users: iUser[]; nextToken: string | undefined }>;
 
 export const getPaginatedFollowers = async (
   userId: string,
@@ -14,6 +14,7 @@ export const getPaginatedFollowers = async (
     : ApiServices.getPaginatedFollowersSignedOut(userId, nextToken);
   const res = await Request;
   const items = res.data?.searchRelationships?.items || [];
+  const nextPaginateToken = res.data?.searchRelationships?.nextToken; // send this in subsequent request to get the next page of results
   const users: iUser[] = items.map((item) => {
     const u = item?.followingUser;
     // some of these values we don't care about or use so they can be default
@@ -30,7 +31,7 @@ export const getPaginatedFollowers = async (
     };
   });
 
-  return { users, nextToken: '' };
+  return { users, nextToken: nextPaginateToken || undefined };
 };
 
 export const getPaginatedFollowing = async (
@@ -60,5 +61,5 @@ export const getPaginatedFollowing = async (
     };
   });
 
-  return { users, nextToken: nextPaginateToken || '' };
+  return { users, nextToken: nextPaginateToken || undefined };
 };
