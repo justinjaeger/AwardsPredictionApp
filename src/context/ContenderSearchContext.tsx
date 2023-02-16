@@ -15,6 +15,7 @@ type iCategoryContext = {
   setResetSearchHack: (resetSearchHack: boolean) => void;
   isLoadingSearch: boolean;
   setIsLoadingSearch: (isLoadingSearch: boolean) => void;
+  resetSearch: () => void;
 };
 
 const CategoryContext = createContext<iCategoryContext>({
@@ -27,6 +28,7 @@ const CategoryContext = createContext<iCategoryContext>({
   setResetSearchHack: () => {},
   isLoadingSearch: false,
   setIsLoadingSearch: () => {},
+  resetSearch: () => {},
 });
 
 export const SearchProvider = (props: { children: React.ReactNode }) => {
@@ -38,11 +40,15 @@ export const SearchProvider = (props: { children: React.ReactNode }) => {
 
   const debouncedSearch = useDebounce(searchInput, 500, { trailing: true });
 
-  // Enables us to reset the search bar from the outer component
-  useEffect(() => {
+  const resetSearch = () => {
     setSearchInput('');
     setIsSearching(false);
     setIsLoadingSearch(false);
+  };
+
+  // Enables us to reset the search bar from the outer component
+  useEffect(() => {
+    resetSearch();
   }, [resetSearchHack]);
 
   useEffect(() => {
@@ -67,6 +73,7 @@ export const SearchProvider = (props: { children: React.ReactNode }) => {
         setResetSearchHack,
         isLoadingSearch,
         setIsLoadingSearch,
+        resetSearch,
       }}
     >
       {props.children}

@@ -3,7 +3,7 @@ import { Input, Spinner } from '@ui-kitten/components';
 import { EvaStatus } from '@ui-kitten/components/devsupport';
 import CustomIcon from '../CustomIcon';
 import COLORS from '../../constants/colors';
-import { View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import { HEADER_HEIGHT } from '../../constants';
 import { useSearch } from '../../context/ContenderSearchContext';
 
@@ -18,7 +18,13 @@ const SearchInput = (props: {
 }) => {
   const { label, placeholder, caption, onBlur, status, style } = props;
 
-  const { searchInput, setSearchInput, isLoadingSearch } = useSearch();
+  const {
+    searchInput,
+    setSearchInput,
+    isLoadingSearch,
+    isSearching,
+    resetSearch,
+  } = useSearch();
 
   return (
     <View>
@@ -57,6 +63,24 @@ const SearchInput = (props: {
             styles={{ marginLeft: 10 }}
           />
         )}
+        accessoryRight={
+          !isLoadingSearch && isSearching
+            ? () => (
+                <TouchableOpacity
+                  onPress={() => {
+                    resetSearch();
+                  }}
+                >
+                  <CustomIcon
+                    name="close-outline"
+                    color={COLORS.gray}
+                    size={25}
+                    styles={{ marginRight: 2 }}
+                  />
+                </TouchableOpacity>
+              )
+            : undefined
+        }
         keyboardAppearance={'dark'}
       />
       {isLoadingSearch ? (

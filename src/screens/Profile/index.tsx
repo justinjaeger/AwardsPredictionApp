@@ -80,43 +80,40 @@ const Profile = () => {
 
   // put the logout button in the top right corner
   useLayoutEffect(() => {
-    if (!userId || !isDeviceProfile) return; // don't set logout header if someone else's profile
-    const headerLeft = () => {
-      // Allow back arrow if possible
-      if (navigation.canGoBack()) {
-        return <BackButton />;
-      }
-    };
+    if (!userId) return;
     navigation.setOptions({
-      headerLeft,
-      headerRight: () => (
-        <IconButton
-          iconProps={{
-            name: 'log-out-outline',
-          }}
-          onPress={() => {
-            if (isLoading) return; // disable while loading
-            Alert.alert('Log out', 'Are you sure you want to log out?', [
-              {
-                text: 'Cancel',
-                onPress: () => {},
-                style: 'cancel',
-              },
-              {
-                text: 'Yes',
-                onPress: () => {
-                  logOut();
-                },
-              },
-            ]);
-          }}
-          styles={{
-            width: 30,
-            height: 30,
-            marginRight: 10,
-          }}
-        />
-      ),
+      headerLeft: navigation.canGoBack() ? () => <BackButton /> : undefined,
+      // don't set logout header if someone else's profile
+      headerRight: isDeviceProfile
+        ? () => (
+            <IconButton
+              iconProps={{
+                name: 'log-out-outline',
+              }}
+              onPress={() => {
+                if (isLoading) return; // disable while loading
+                Alert.alert('Log out', 'Are you sure you want to log out?', [
+                  {
+                    text: 'Cancel',
+                    onPress: () => {},
+                    style: 'cancel',
+                  },
+                  {
+                    text: 'Yes',
+                    onPress: () => {
+                      logOut();
+                    },
+                  },
+                ]);
+              }}
+              styles={{
+                width: 30,
+                height: 30,
+                marginRight: 10,
+              }}
+            />
+          )
+        : null,
     });
   }, [userId]);
 

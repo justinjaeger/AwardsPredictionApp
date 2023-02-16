@@ -40,6 +40,7 @@ const UserSearchResult = ({
         onEndReached && onEndReached();
       }}
       onEndReachedThreshold={0.9} // triggers onEndReached at (X*100)% of list, for example 0.9 = 90% down
+      keyboardShouldPersistTaps={'always'} // so keyboard doesn't dismiss when tapping on list
       renderItem={({ item }) => {
         const hasOnlyOneName = !(item.name && item.username);
         const isSignedInUser = item.id === authUserId;
