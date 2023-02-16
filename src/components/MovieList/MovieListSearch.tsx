@@ -48,6 +48,7 @@ const MovieListSearch = (props: iMovieListProps) => {
       onScroll={() => {
         Keyboard.dismiss();
       }}
+      keyboardShouldPersistTaps={'always'}
       contentContainerStyle={{ paddingBottom: disablePaddingBottom ? 0 : 200 }}
       renderItem={({ item: prediction, index: i }) => {
         const tmdbId = getTmdbId(prediction);

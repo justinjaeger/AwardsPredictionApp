@@ -35,6 +35,7 @@ const MovieListAdmin = (props: iMovieListAdminProps) => {
       keyExtractor={(item) => item.contenderId}
       style={{ width: '100%' }}
       contentContainerStyle={{ paddingBottom: 100 }}
+      keyboardShouldPersistTaps={'always'}
       renderItem={({ item: prediction, index }) => {
         const ranking = index + 1;
         const visibility =

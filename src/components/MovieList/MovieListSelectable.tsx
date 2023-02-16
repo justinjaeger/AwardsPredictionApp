@@ -46,6 +46,7 @@ const MovieListSelectable = (props: iMovieListProps) => {
       onScroll={() => {
         Keyboard.dismiss();
       }}
+      keyboardShouldPersistTaps={'always'}
       renderItem={({ item: prediction, index: i }) => {
         const highlighted = (selectedPredictions || [])
           .map((sp) => sp.contenderId)

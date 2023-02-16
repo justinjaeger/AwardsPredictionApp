@@ -44,6 +44,7 @@ const SongListSelectable = (props: iSongListSearchProps) => {
       onScroll={() => {
         Keyboard.dismiss();
       }}
+      keyboardShouldPersistTaps={'always'}
       contentContainerStyle={{ paddingBottom: disablePaddingBottom ? 0 : 200 }}
       renderItem={({ item: prediction, index: i }) => {
         const tmdbId = prediction.contenderMovie?.tmdbId;
