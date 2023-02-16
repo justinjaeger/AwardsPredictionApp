@@ -29,6 +29,7 @@ const EventList = ({ events, user }: { events: iEvent[]; user: iUser }) => {
 
   const onSelectEvent = async (event: iEvent) => {
     setEvent(event);
+    // TODO: if user is authUser, navigate to Event screen in home tab?
     navigation.navigate('Event', { userId: user.id });
   };
 

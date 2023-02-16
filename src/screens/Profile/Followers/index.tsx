@@ -1,5 +1,4 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react';
-import { ScrollView } from 'react-native';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import { getHeaderTitle } from '../../../constants';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
@@ -45,12 +44,7 @@ const Followers = () => {
 
   return (
     <BackgroundWrapper>
-      <ScrollView
-        style={{ width: '100%' }}
-        contentContainerStyle={{ alignItems: 'center' }}
-      >
-        <UserSearchResult users={users} />
-      </ScrollView>
+      <UserSearchResult users={users} onEndReached={fetchPage} />
     </BackgroundWrapper>
   );
 };

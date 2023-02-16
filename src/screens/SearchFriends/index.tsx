@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView, useWindowDimensions } from 'react-native';
+import { useWindowDimensions } from 'react-native';
 import BackgroundWrapper from '../../components/BackgroundWrapper';
 import SearchInput from '../../components/Inputs/SearchInput';
 import { HeaderLight } from '../../components/Text';
@@ -16,24 +16,24 @@ const SearchFriends = () => {
 
   return (
     <BackgroundWrapper>
-      <ScrollView>
-        <SearchInput
-          placeholder={'Search users'}
-          style={{ width, padding: theme.windowMargin }}
-        />
+      <SearchInput
+        placeholder={'Search users'}
+        style={{ width, padding: theme.windowMargin }}
+      />
+
+      {!isSearching && searchResults.length === 0 ? (
+        <HeaderLight
+          style={{
+            marginTop: 40,
+            alignSelf: 'flex-start',
+            marginLeft: theme.windowMargin,
+          }}
+        >
+          Following:
+        </HeaderLight>
+      ) : (
         <UserSearchResult users={searchResults} />
-        {!isSearching && searchResults.length === 0 ? (
-          <HeaderLight
-            style={{
-              marginTop: 40,
-              alignSelf: 'flex-start',
-              marginLeft: theme.windowMargin,
-            }}
-          >
-            Following:
-          </HeaderLight>
-        ) : null}
-      </ScrollView>
+      )}
     </BackgroundWrapper>
   );
 };

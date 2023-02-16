@@ -1,6 +1,6 @@
 import { StackActions, useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { TouchableHighlight, View } from 'react-native';
+import { FlatList, TouchableHighlight, View } from 'react-native';
 import COLORS from '../../constants/colors';
 import { useSearch } from '../../context/ContenderSearchContext';
 import { useAuth } from '../../context/UserContext';
@@ -9,7 +9,13 @@ import FollowButton from '../FollowButton';
 import ProfileImage from '../ProfileImage';
 import { Body, BodyBold, SubHeader } from '../Text';
 
-const UserSearchResult = ({ users }: { users: iUser[] }) => {
+const UserSearchResult = ({
+  users,
+  onEndReached,
+}: {
+  users: iUser[];
+  onEndReached?: () => void;
+}) => {
   const { userId: authUserId } = useAuth();
   const navigation = useNavigation();
   const { isSearching, isLoadingSearch } = useSearch();
@@ -19,24 +25,33 @@ const UserSearchResult = ({ users }: { users: iUser[] }) => {
     navigation.dispatch(StackActions.push('Profile', { userId }));
   };
 
+  if (users.length === 0 && isSearching && !isLoadingSearch) {
+    return <BodyBold>No Users Found</BodyBold>;
+  }
+
   return (
-    <>
-      {users.length === 0 && isSearching && !isLoadingSearch ? (
-        <BodyBold>No Users Found</BodyBold>
-      ) : null}
-      {users.map((user) => {
-        const hasOnlyOneName = !(user.name && user.username);
-        const isSignedInUser = user.id === authUserId;
-        const authUserIsFollowing = user.authUserIsFollowing || false;
+    <FlatList
+      style={{ width: '100%' }}
+      data={users}
+      contentContainerStyle={{ alignItems: 'center' }}
+      keyExtractor={(item) => item.id}
+      onEndReached={() => {
+        console.error('onEndReached');
+        onEndReached && onEndReached();
+      }}
+      renderItem={({ item }) => {
+        const hasOnlyOneName = !(item.name && item.username);
+        const isSignedInUser = item.id === authUserId;
+        const authUserIsFollowing = item.authUserIsFollowing || false;
         return (
           <TouchableHighlight
-            key={user.id}
+            key={item.id}
             style={{
               flexDirection: 'row',
               padding: 10,
               width: '100%',
             }}
-            onPress={() => navigateToProfile(user.id)}
+            onPress={() => navigateToProfile(item.id)}
             underlayColor={COLORS.secondaryDark}
           >
             <View
@@ -49,9 +64,9 @@ const UserSearchResult = ({ users }: { users: iUser[] }) => {
             >
               <View style={{ flexDirection: 'row' }}>
                 <ProfileImage
-                  image={user.image}
+                  image={item.image}
                   imageSize={50}
-                  onPress={() => navigateToProfile(user.id)}
+                  onPress={() => navigateToProfile(item.id)}
                 />
                 <View
                   style={{
@@ -61,22 +76,22 @@ const UserSearchResult = ({ users }: { users: iUser[] }) => {
                   }}
                 >
                   <SubHeader>
-                    {hasOnlyOneName ? user.name || user.username || '' : user.name || ''}
+                    {hasOnlyOneName ? item.name || item.username || '' : item.name || ''}
                   </SubHeader>
-                  <Body>{hasOnlyOneName ? 'asdfasdf' : user.username || ''}</Body>
+                  <Body>{hasOnlyOneName ? 'asdfasdf' : item.username || ''}</Body>
                 </View>
               </View>
               {!isSignedInUser ? (
                 <FollowButton
                   authUserIsFollowing={authUserIsFollowing}
-                  profileUserId={user.id}
+                  profileUserId={item.id}
                 />
               ) : null}
             </View>
           </TouchableHighlight>
         );
-      })}
-    </>
+      }}
+    />
   );
 };
 
