@@ -138,6 +138,27 @@ export const listEvents = /* GraphQL */ `
   }
 `;
 
+export const getEvent = /* GraphQL */ `
+  query GetEvent($id: ID!) {
+    getEvent(id: $id) {
+      id
+      categories {
+        items {
+          id
+          name
+          type
+          isShortlisted
+        }
+      }
+      awardsBody
+      year
+      nominationDateTime
+      winDateTime
+      status
+    }
+  }
+`;
+
 export const communityPredictionSetByEventId = /* GraphQL */ `
   query CommunityPredictionSetByEventId(
     $eventId: ID!
@@ -461,15 +482,6 @@ export const getUserProfileQuery = /* GraphQL */ `
             status
             createdAt
             updatedAt
-            # TODO: shouldn't really be returning this level of nesting but it's a quick fix
-            categories {
-              items {
-                id
-                name
-                type
-                isShortlisted
-              }
-            }
           }
           categoryId
           category {

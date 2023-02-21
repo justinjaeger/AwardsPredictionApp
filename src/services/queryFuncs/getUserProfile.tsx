@@ -7,13 +7,7 @@ import {
   EventStatus,
   PredictionType,
 } from '../../API';
-import {
-  iCategory,
-  iEvent,
-  iIndexedCategories,
-  iPredictionSet,
-  iUser,
-} from '../../types';
+import { iEvent, iPredictionSet, iUser } from '../../types';
 import { sortPersonalPredictions } from '../../util/sortPredictions';
 import ApiServices from '../graphql';
 
@@ -41,26 +35,12 @@ const getUserProfile = async (
         contenderSong: p?.contender.song || undefined,
         lastUpdated: p?.updatedAt || '',
       }));
-      const indexedCategories: iIndexedCategories = {};
-      const categories = ps?.event.categories?.items || [];
-      // TODO: Shouldn't return categories with each user, too large of a request
-      // Need to make a separate request for categories if they don't exist when you select an event
-      categories.forEach((c) => {
-        if (!c) return undefined;
-        const cat: iCategory = {
-          id: c.id,
-          type: c.type,
-          name: c.name,
-          isShortlisted: c.isShortlisted || CategoryIsShortlisted.FALSE,
-        };
-        indexedCategories[c.id] = cat;
-      });
       const event: iEvent = {
         id: ps?.event.id || '',
         awardsBody: ps?.event.awardsBody || AwardsBody.ACADEMY_AWARDS,
         year: ps?.event.year || 0,
         status: ps?.event.status || EventStatus.ARCHIVED,
-        categories: indexedCategories,
+        categories: {},
         nominationDateTime: ps?.event.nominationDateTime || undefined,
         winDateTime: ps?.event.winDateTime || undefined,
         createdAt: ps?.createdAt || '',

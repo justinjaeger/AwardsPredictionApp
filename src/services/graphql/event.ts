@@ -9,6 +9,8 @@ import {
   EventStatus,
   UpdateEventInput,
   CategoryName,
+  GetEventQuery,
+  GetEventQueryVariables,
 } from '../../API';
 import { getAwardsBodyCategories, iCategoryData } from '../../constants/categories';
 import * as mutations from '../../graphql/mutations';
@@ -22,6 +24,21 @@ export const getAllEvents = async (): Promise<iApiResponse<ListEventsQuery>> => 
       customQueries.listEvents,
     );
     if (!data?.listEvents) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data };
+  } catch (err) {
+    return handleError('error getting all events', err);
+  }
+};
+
+export const getEvent = async (id: string): Promise<iApiResponse<GetEventQuery>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<GetEventQuery, GetEventQueryVariables>(
+      customQueries.getEvent,
+      { id },
+    );
+    if (!data?.getEvent) {
       throw new Error(JSON.stringify(errors));
     }
     return { status: 'success', data };

@@ -20,7 +20,8 @@ type iCategoryListProps = {
 const CategoryList = (props: iCategoryListProps) => {
   const { isCollapsed, onSelectCategory, predictionData } = props;
 
-  const { event: _event, date, reset } = useCategory();
+  const { event: _event, eventCategories, date, reset } = useCategory();
+  //   console.log('eventCategories', eventCategories);
   const isHistory = !!date;
   const event = _event as iEvent;
 
@@ -29,7 +30,7 @@ const CategoryList = (props: iCategoryListProps) => {
   // we could just do query for iIndexedPredictionsByCategory and get community predictions. let's just do that
 
   const awardsBodyCategories = getAwardsBodyCategories(event.awardsBody, event.year);
-  const categoryList = Object.values(event.categories);
+  const categoryList = Object.values(eventCategories);
   const orderedCategories = sortByObjectOrder<CategoryName, iCategory>(
     awardsBodyCategories,
     categoryList,

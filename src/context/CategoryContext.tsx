@@ -1,4 +1,6 @@
 import React, { createContext, useContext, useState } from 'react';
+import { CategoryIsShortlisted, CategoryName, CategoryType } from '../API';
+import ApiServices from '../services/graphql';
 import { iCategory, iEvent } from '../types';
 
 /**
@@ -9,9 +11,11 @@ type iPersonalCommunityTab = 'personal' | 'community';
 
 type iCategoryContext = {
   event: iEvent | undefined;
-  setEvent: (event: iEvent) => Promise<void>;
+  setEvent: (event: iEvent) => void;
+  eventCategories: iCategory[];
+  setEventCategories: (categories: iCategory[]) => void;
   category: iCategory | undefined;
-  setCategory: (category: iCategory) => Promise<void>;
+  setCategory: (category: iCategory) => void;
   date: Date | undefined;
   setDate: (date: Date | undefined) => void;
   personalCommunityTab: iPersonalCommunityTab;
@@ -21,9 +25,11 @@ type iCategoryContext = {
 
 const CategoryContext = createContext<iCategoryContext>({
   event: undefined,
-  setEvent: () => new Promise(() => {}),
+  setEvent: () => {},
   category: undefined,
-  setCategory: () => new Promise(() => {}),
+  setCategory: () => {},
+  eventCategories: [],
+  setEventCategories: () => {},
   date: undefined,
   setDate: () => {},
   personalCommunityTab: 'personal',
@@ -35,18 +41,34 @@ const CategoryContext = createContext<iCategoryContext>({
 
 export const CategoryProvider = (props: { children: React.ReactNode }) => {
   const [event, _setEvent] = useState<iEvent>();
+  const [eventCategories, _setEventCategories] = useState<iCategory[]>([]);
   const [category, _setCategory] = useState<iCategory>();
   const [personalCommunityTab, setPersonalCommunityTab] = useState<iPersonalCommunityTab>(
     'personal',
   );
   const [date, setDate] = useState<Date | undefined>(undefined);
 
-  const setEvent = async (event: iEvent) => {
+  // WHEN WE SET AN EVENT automatically get the categories from it also
+  const setEvent = (event: iEvent) => {
     _setEvent(event);
+    ApiServices.getEvent(event.id).then((e) => {
+      const categories = e.data?.getEvent?.categories?.items || [];
+      const formattedCategories: iCategory[] = categories.map((cat) => ({
+        id: cat?.id || '',
+        name: cat?.name || CategoryName.PICTURE,
+        type: cat?.type || CategoryType.FILM,
+        isShortlisted: cat?.isShortlisted || CategoryIsShortlisted.FALSE,
+      }));
+      _setEventCategories(formattedCategories);
+    });
   };
 
-  const setCategory = async (cateogry: iCategory) => {
+  const setCategory = (cateogry: iCategory) => {
     _setCategory(cateogry);
+  };
+
+  const setEventCategories = (categories: iCategory[]) => {
+    _setEventCategories(categories);
   };
 
   const reset = () => {
@@ -61,6 +83,8 @@ export const CategoryProvider = (props: { children: React.ReactNode }) => {
         setEvent,
         category,
         setCategory,
+        eventCategories,
+        setEventCategories,
         personalCommunityTab,
         setPersonalCommunityTab,
         date,

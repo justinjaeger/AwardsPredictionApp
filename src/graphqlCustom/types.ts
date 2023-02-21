@@ -113,20 +113,6 @@ export type GetUserQuery = {
           nominationDateTime?: string | null;
           winDateTime?: string | null;
           status?: EventStatus | null;
-          categories?: {
-            __typename: 'ModelCategoryConnection';
-            items: Array<{
-              __typename: 'Category';
-              id: string;
-              eventId: string;
-              name: CategoryName;
-              type: CategoryType;
-              isShortlisted?: CategoryIsShortlisted | null;
-              createdAt: string;
-              updatedAt: string;
-            } | null>;
-            nextToken?: string | null;
-          } | null;
           createdAt: string;
           updatedAt: string;
         };
