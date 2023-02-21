@@ -7,6 +7,8 @@ import useQueryAllEvents from '../../../hooks/queries/getAllEvents';
 import { useAuth } from '../../../context/UserContext';
 import useQueryGetUser from '../../../hooks/queries/getUser';
 import EventList from '../Event/EventList';
+import { Body, HeaderLight } from '../../../components/Text';
+import useQueryGetFollowingRecentPredictions from '../../../hooks/queries/useQueryGetFollowingRecentPredictions';
 
 const EventSelect = () => {
   const { userId } = useAuth();
@@ -16,6 +18,9 @@ const EventSelect = () => {
 
   const { data: events, isLoading, refetch: refetchEvents } = useQueryAllEvents();
   const { data: user, refetch: refetchUser } = useQueryGetUser(userId);
+  const { data: usersWithRecentPredictionSets } = useQueryGetFollowingRecentPredictions(
+    userId,
+  );
 
   // just in case there's some refresh problem
   useEffect(() => {
@@ -44,6 +49,8 @@ const EventSelect = () => {
     }
   }, [isLoading]);
 
+  // <PredictionCarousel predictionSets={predictionSets} userId={userId} />
+
   return (
     <BackgroundWrapper>
       <>
@@ -68,9 +75,26 @@ const EventSelect = () => {
             marginLeft: theme.windowMargin,
           }}
         >
+          <HeaderLight
+            style={{
+              alignSelf: 'flex-start',
+              marginTop: 10,
+            }}
+          >
+            Events
+          </HeaderLight>
           {events && user ? (
             <EventList user={user} events={Object.values(events)} />
           ) : null}
+          <HeaderLight
+            style={{
+              alignSelf: 'flex-start',
+              marginTop: 20,
+            }}
+          >
+            Friend Predictions
+          </HeaderLight>
+          <Body>{JSON.stringify(usersWithRecentPredictionSets)}</Body>
         </Animated.ScrollView>
       </>
     </BackgroundWrapper>

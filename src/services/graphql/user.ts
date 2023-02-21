@@ -17,6 +17,7 @@ import * as mutations from '../../graphql/mutations';
 import * as queries from '../../graphql/queries';
 import * as customQueries from '../../graphqlCustom/queries';
 import {
+  GetUserFollowingPredictionsQuery,
   GetUserQuery,
   ListUsersQuery,
   SearchUsersQuery,
@@ -345,5 +346,34 @@ export const searchUsersSignedIn = async (
     return { status: 'success', data };
   } catch (err) {
     return handleError('error searching users signed in', err);
+  }
+};
+
+type GetUserRecentFollowingPredictionsQueryVariables = {
+  id: string;
+  greaterThanDate: string;
+};
+export const getUserRecentFollowingPredictions = async (
+  id: string,
+): Promise<iApiResponse<GetUserFollowingPredictionsQuery>> => {
+  // get the date 30 days ago
+  const date = new Date();
+  date.setDate(date.getDate() - 30); // 30 days ago
+  const dateString = date.toISOString();
+
+  try {
+    const { data, errors } = await GraphqlAPI<
+      GetUserFollowingPredictionsQuery,
+      GetUserRecentFollowingPredictionsQueryVariables
+    >(customQueries.getRecentFollowingPredictions, {
+      id,
+      greaterThanDate: dateString,
+    });
+    if (!data?.getUser) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data: data };
+  } catch (err) {
+    return handleError('error getting user recent following predictions', err);
   }
 };

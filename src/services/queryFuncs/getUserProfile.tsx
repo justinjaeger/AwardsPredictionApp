@@ -43,6 +43,8 @@ const getUserProfile = async (
       }));
       const indexedCategories: iIndexedCategories = {};
       const categories = ps?.event.categories?.items || [];
+      // TODO: Shouldn't return categories with each user, too large of a request
+      // Need to make a separate request for categories if they don't exist when you select an event
       categories.forEach((c) => {
         if (!c) return undefined;
         const cat: iCategory = {

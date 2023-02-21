@@ -1009,3 +1009,40 @@ export const searchRecommendedFollowingSignedOut = /* GraphQL */ `
     }
   }
 `;
+
+export const getRecentFollowingPredictions = /* GraphQL */ `
+  query GetUser($id: ID!, $greaterThanDate: String) {
+    getUser(id: $id) {
+      following {
+        items {
+          followedUser {
+            image
+            name
+            username
+            predictionSets(createdAt: { gt: $greaterThanDate }, limit: 5) {
+              items {
+                predictions(limit: 10) {
+                  items {
+                    contender {
+                      event {
+                        awardsBody
+                        id
+                      }
+                      movie {
+                        tmdbId
+                      }
+                      person {
+                        tmdbId
+                      }
+                    }
+                  }
+                }
+                createdAt
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;

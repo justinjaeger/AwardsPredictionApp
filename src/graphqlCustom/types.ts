@@ -232,6 +232,125 @@ export type GetUserQuery = {
   } | null;
 };
 
+export type GetUserFollowingPredictionsQuery = {
+  getUser?: {
+    __typename: 'User';
+    id: string;
+    email: string;
+    username?: string | null;
+    name?: string | null;
+    bio?: string | null;
+    image?: string | null;
+    role: UserRole;
+    following?: {
+      __typename: 'ModelRelationshipConnection';
+      items: Array<{
+        __typename: 'Relationship';
+        id: string;
+        followedUser: {
+          __typename: 'User';
+          id: string;
+          email: string;
+          username?: string | null;
+          name?: string | null;
+          bio?: string | null;
+          image?: string | null;
+          role: UserRole;
+          predictionSets?: {
+            __typename: 'ModelPredictionSetConnection';
+            items: Array<{
+              __typename: 'PredictionSet';
+              id: string;
+              userId: string;
+              eventId: string;
+              event: {
+                __typename: 'Event';
+                id: string;
+                awardsBody: AwardsBody;
+                year: number;
+                nominationDateTime?: string | null;
+                winDateTime?: string | null;
+                status?: EventStatus | null;
+                createdAt: string;
+                updatedAt: string;
+              };
+              categoryId: string;
+              category: {
+                __typename: 'Category';
+                id: string;
+                eventId: string;
+                name: CategoryName;
+                type: CategoryType;
+                isShortlisted?: CategoryIsShortlisted | null;
+                createdAt: string;
+                updatedAt: string;
+              };
+              type?: PredictionType | null;
+              comment?: string | null;
+              predictions?: {
+                __typename: 'ModelPredictionConnection';
+                nextToken?: string | null;
+                items: Array<{
+                  __typename: 'Prediction';
+                  id: string;
+                  predictionSetId: string;
+                  contenderId: string;
+                  contender: {
+                    __typename: 'Contender';
+                    id: string;
+                    categoryId: string;
+                    eventId: string;
+                    visibility?: ContenderVisibility | null;
+                    accolade?: ContenderAccolade | null;
+                    createdAt: string;
+                    updatedAt: string;
+                    movieId: string;
+                    movie: {
+                      __typename: 'Movie';
+                      id: string;
+                      tmdbId: number;
+                      studio?: string | null;
+                      createdAt: string;
+                      updatedAt: string;
+                    };
+                    personId?: string | null;
+                    person?: {
+                      __typename: 'Person';
+                      id: string;
+                      tmdbId: number;
+                      createdAt: string;
+                      updatedAt: string;
+                    } | null;
+                    songId?: string | null;
+                    song?: {
+                      __typename: 'Song';
+                      id: string;
+                      movieId: string;
+                      title: string;
+                      artist: string;
+                      createdAt: string;
+                      updatedAt: string;
+                    } | null;
+                  };
+                  ranking: number;
+                  createdAt: string;
+                  updatedAt: string;
+                } | null>;
+              } | null;
+              createdAt: string;
+              updatedAt: string;
+            } | null>;
+            nextToken?: string | null;
+          } | null;
+        };
+      } | null>;
+      nextToken?: string | null;
+    } | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
+};
+
 export type ListUsersQuery = {
   listUsers?: {
     __typename: 'ModelUserConnection';
