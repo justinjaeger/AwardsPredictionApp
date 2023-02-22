@@ -6,6 +6,7 @@ import { useCollapsible } from '../../../hooks/animatedState/useCollapsible';
 import DisplayFAB from '../../../components/Buttons/DisplayFAB';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import Event from './index';
+import FollowingBottomScroll from '../../../components/FollowingBottomScroll';
 
 const EventPersonalCommunity = () => {
   const { params } = useRoute<RouteProp<PredictionsParamList, 'Event'>>();
@@ -40,6 +41,7 @@ const EventPersonalCommunity = () => {
         <Event tab={'personal'} {...props} />,
         <Event tab={'community'} {...props} />,
       )}
+      {userId ? <FollowingBottomScroll userId={userId} /> : null}
     </>
   );
 };
