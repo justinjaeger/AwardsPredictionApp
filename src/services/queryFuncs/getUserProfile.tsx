@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/prefer-immediate-return */
 import {
   AwardsBody,
   CategoryIsShortlisted,
@@ -73,7 +74,6 @@ const getUserProfile = async (
     authUserIsFollowing: (user?.followers?.items || []).length > 0,
     isFollowingAuthUser: (user?.following?.items || []).length > 0,
   };
-  console.log('userProfile', user.followers);
   return userProfile;
 };
 

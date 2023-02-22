@@ -12,6 +12,7 @@ import HistoryHeaderButton from '../components/Buttons/HistoryHeaderButton';
 import EventPersonalCommunity from '../screens/Predictions/Event/EventPersonalCommunity';
 import EventFromProfile from '../screens/Predictions/Event/EventFromProfile';
 import CategoryFromProfile from '../screens/Predictions/Category/CategoryFromProfile';
+import Profile from '../screens/Profile';
 
 const { Navigator, Screen } = createStackNavigator<PredictionsParamList>();
 
@@ -85,6 +86,14 @@ const PredictionsNavigator = () => {
         options={{
           headerTitle: getHeaderTitle('Add / Remove Predictions'),
           headerLeft: BackButton,
+          ...headerSettings,
+        }}
+      />
+      <Screen
+        name="Profile"
+        component={Profile}
+        options={{
+          headerTitle: getHeaderTitle('My Profile'),
           ...headerSettings,
         }}
       />

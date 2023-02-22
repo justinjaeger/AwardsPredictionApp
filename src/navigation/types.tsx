@@ -40,6 +40,9 @@ export type PredictionsParamList = {
     initialPredictions: iPrediction[];
     onFinish: (predictions: iPrediction[]) => void;
   };
+  Profile: {
+    userId?: string;
+  };
 };
 
 export type AdminParamList = {
