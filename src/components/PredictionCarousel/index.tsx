@@ -1,20 +1,36 @@
+import { StackActions, useNavigation } from '@react-navigation/native';
 import React, { useEffect, useRef, useState } from 'react';
-import { Animated, ScrollView, useWindowDimensions, View } from 'react-native';
+import {
+  Animated,
+  ScrollView,
+  TouchableOpacity,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
 import { iPredictionSet } from '../../types';
 import { useNavigateAwayEffect } from '../../util/hooks';
+import ProfileImage from '../ProfileImage';
+import { SubHeader } from '../Text';
 import ProfilePredictionsList from '../UserPredictionList';
 import CarouselArrow from './CarouselArrow';
 
 const PredictionCarousel = ({
   predictionSets,
   userId,
+  userInfo,
 }: {
   predictionSets: iPredictionSet[];
   userId: string;
+  userInfo?: {
+    name: string;
+    image: string | undefined;
+  };
 }) => {
   const { width } = useWindowDimensions();
+  const navigation = useNavigation();
+
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [disableManualScroll, setDisableManualScroll] = useState<boolean>(false);
   const scrollBarAnim = useRef(new Animated.Value(0)).current;
@@ -89,68 +105,93 @@ const PredictionCarousel = ({
   };
 
   return (
-    <View
-      style={{
-        width: '100%',
-        height: width * 0.8, // height of the box is proportionate to width
-        backgroundColor: 'rgba(0,0,0,0.2)',
-        borderWidth: 0.5,
-        borderColor: 'rgba(255,255,255,0.3)',
-        borderRadius: theme.borderRadius,
-        paddingTop: 20,
-        paddingBottom: 20,
-      }}
-    >
-      <CarouselArrow direction={'back'} onPress={onPressBack} />
-      <CarouselArrow direction={'forward'} onPress={onPressForward} />
-      <ScrollView
-        horizontal
-        pagingEnabled
-        style={{ width: '100%', flex: 1 }}
-        ref={scrollRef}
-        onScrollBeginDrag={() => {
-          // only fires when user manually scrolls, NOT when carousel automatically animates
-          terminateInterval();
-        }}
-        showsHorizontalScrollIndicator={false}
-        onScroll={(e) => {
-          // animates the scrollbar as you scroll
-          const xPos = e.nativeEvent.contentOffset.x / width;
-          Animated.timing(scrollBarAnim, {
-            toValue: xPos * barWidth,
-            duration: 0,
-            useNativeDriver: true,
-          }).start();
-        }}
-        scrollEventThrottle={16}
-        onMomentumScrollEnd={(e) => {
-          if (disableManualScroll) return;
-          // get x position of event
-          const offset = e.nativeEvent.contentOffset.x / width;
-          const newXPos = Math.ceil(offset);
-          if (newXPos > currentPage && isFinalPage) return;
-          setCurrentPage(newXPos);
+    <>
+      {userInfo ? (
+        <TouchableOpacity
+          style={{
+            width: '100%',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+            marginBottom: 10,
+          }}
+          onPress={() => {
+            navigation.dispatch(StackActions.push('Profile', { userId }));
+          }}
+        >
+          <>
+            <ProfileImage
+              image={userInfo.image}
+              imageSize={40}
+              style={{ marginLeft: 10, marginRight: 15 }}
+            />
+            <SubHeader>{userInfo.name}</SubHeader>
+          </>
+        </TouchableOpacity>
+      ) : null}
+      <View
+        style={{
+          width: '100%',
+          height: width * 0.8, // height of the box is proportionate to width
+          backgroundColor: 'rgba(0,0,0,0.2)',
+          borderWidth: 0.5,
+          borderColor: 'rgba(255,255,255,0.3)',
+          borderRadius: theme.borderRadius,
+          paddingTop: 20,
+          paddingBottom: 20,
         }}
       >
-        <ProfilePredictionsList
-          predictionSets={predictionSets}
-          fixedSlots={10}
-          userId={userId}
+        <CarouselArrow direction={'back'} onPress={onPressBack} />
+        <CarouselArrow direction={'forward'} onPress={onPressForward} />
+        <ScrollView
+          horizontal
+          pagingEnabled
+          style={{ width: '100%', flex: 1 }}
+          ref={scrollRef}
+          onScrollBeginDrag={() => {
+            // only fires when user manually scrolls, NOT when carousel automatically animates
+            terminateInterval();
+          }}
+          showsHorizontalScrollIndicator={false}
+          onScroll={(e) => {
+            // animates the scrollbar as you scroll
+            const xPos = e.nativeEvent.contentOffset.x / width;
+            Animated.timing(scrollBarAnim, {
+              toValue: xPos * barWidth,
+              duration: 0,
+              useNativeDriver: true,
+            }).start();
+          }}
+          scrollEventThrottle={16}
+          onMomentumScrollEnd={(e) => {
+            if (disableManualScroll) return;
+            // get x position of event
+            const offset = e.nativeEvent.contentOffset.x / width;
+            const newXPos = Math.ceil(offset);
+            if (newXPos > currentPage && isFinalPage) return;
+            setCurrentPage(newXPos);
+          }}
+        >
+          <ProfilePredictionsList
+            predictionSets={predictionSets}
+            fixedSlots={10}
+            userId={userId}
+          />
+        </ScrollView>
+        {/* SCROLL BAR */}
+        <Animated.View
+          style={{
+            transform: [{ translateX: scrollBarAnim }],
+            width: barWidth,
+            backgroundColor: COLORS.white,
+            height: 4,
+            borderRadius: 5,
+            zIndex: 2,
+            marginLeft: theme.windowMargin,
+          }}
         />
-      </ScrollView>
-      {/* SCROLL BAR */}
-      <Animated.View
-        style={{
-          transform: [{ translateX: scrollBarAnim }],
-          width: barWidth,
-          backgroundColor: COLORS.white,
-          height: 4,
-          borderRadius: 5,
-          zIndex: 2,
-          marginLeft: theme.windowMargin,
-        }}
-      />
-    </View>
+      </View>
+    </>
   );
 };
 

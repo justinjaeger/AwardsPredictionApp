@@ -7,8 +7,9 @@ import useQueryAllEvents from '../../../hooks/queries/getAllEvents';
 import { useAuth } from '../../../context/UserContext';
 import useQueryGetUser from '../../../hooks/queries/getUser';
 import EventList from '../Event/EventList';
-import { Body, HeaderLight } from '../../../components/Text';
+import { HeaderLight } from '../../../components/Text';
 import useQueryGetFollowingRecentPredictions from '../../../hooks/queries/useQueryGetFollowingRecentPredictions';
+import PredictionCarousel from '../../../components/PredictionCarousel';
 
 const EventSelect = () => {
   const { userId } = useAuth();
@@ -86,15 +87,29 @@ const EventSelect = () => {
           {events && user ? (
             <EventList user={user} events={Object.values(events)} />
           ) : null}
-          <HeaderLight
-            style={{
-              alignSelf: 'flex-start',
-              marginTop: 20,
-            }}
-          >
-            Friend Predictions
-          </HeaderLight>
-          <Body>{JSON.stringify(usersWithRecentPredictionSets)}</Body>
+          {(usersWithRecentPredictionSets || []).length > 0 ? (
+            // TODO: Below display is untested
+            <>
+              <HeaderLight
+                style={{
+                  alignSelf: 'flex-start',
+                  marginTop: 20,
+                }}
+              >
+                Friend Predictions
+              </HeaderLight>
+              {(usersWithRecentPredictionSets || []).map((item) => (
+                <PredictionCarousel
+                  predictionSets={item.predictionSets}
+                  userId={item.user.id}
+                  userInfo={{
+                    name: item.user.name || item.user.username || '',
+                    image: item.user.image,
+                  }}
+                />
+              ))}
+            </>
+          ) : null}
         </Animated.ScrollView>
       </>
     </BackgroundWrapper>
