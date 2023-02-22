@@ -3,7 +3,7 @@ import { Animated } from 'react-native';
 import { PredictionsParamList } from '../../../navigation/types';
 import { useTypedNavigation } from '../../../util/hooks';
 import { useCategory } from '../../../context/CategoryContext';
-import { iCategory, iEvent } from '../../../types';
+import { iCategory, iEvent, iIndexedPredictionsByCategory } from '../../../types';
 import { eventToString } from '../../../util/stringConversions';
 import LoadingStatue from '../../../components/LoadingStatue';
 import SignedOutState from '../../../components/SignedOutState';
@@ -11,7 +11,6 @@ import { getHeaderTitleWithTrophy } from '../../../constants';
 import CategoryList from './CategoryList';
 import _ from 'lodash';
 import { formatLastUpdated } from '../../../util/formatDateTime';
-import usePredictionData from '../../../hooks/queries/usePredictionData';
 import LastUpdatedText from '../../../components/LastUpdatedText';
 
 const TIMING = 300;
@@ -22,12 +21,16 @@ const Event = ({
   expandedOpacity,
   isCollapsed,
   userId,
+  predictionData,
+  isLoading,
 }: {
   tab: 'personal' | 'community';
   collapsedOpacity: Animated.Value;
   expandedOpacity: Animated.Value;
   isCollapsed: boolean;
   userId: string | undefined; // if undefined means user is logged out
+  predictionData: iIndexedPredictionsByCategory | undefined;
+  isLoading: boolean;
 }) => {
   const { event: _event, setCategory, date } = useCategory();
   const navigation = useTypedNavigation<PredictionsParamList>();
@@ -37,9 +40,6 @@ const Event = ({
 
   const isHistory = !!date;
   const event = _event as iEvent;
-
-  const { predictionData, isLoading } = usePredictionData(tab, userId);
-  // TODO: predictionData is defined, but I think we must be using event.categories and we're not passing that down from the user profile
 
   // define the header
   useLayoutEffect(() => {

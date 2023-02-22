@@ -53,7 +53,9 @@ const FollowingBottomScroll = ({ userId }: { userId: string }) => {
               image={user.image}
               imageSize={imageWidth}
               onPress={() => {
-                navigation.dispatch(StackActions.push('Event', { userId: user.id }));
+                navigation.dispatch(
+                  StackActions.push('EventFromProflie', { userId: user.id }),
+                );
               }}
               style={{ margin: imageMargin }}
             />

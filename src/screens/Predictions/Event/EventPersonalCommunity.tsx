@@ -7,11 +7,21 @@ import DisplayFAB from '../../../components/Buttons/DisplayFAB';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import Event from './index';
 import FollowingBottomScroll from '../../../components/FollowingBottomScroll';
+import usePredictionData from '../../../hooks/queries/usePredictionData';
 
 const EventPersonalCommunity = () => {
   const { params } = useRoute<RouteProp<PredictionsParamList, 'Event'>>();
   const { userId: authUserId } = useAuth();
   const userId = params?.userId || authUserId;
+
+  const {
+    predictionData: personalPredictionData,
+    isLoading: isLoadingPersonal,
+  } = usePredictionData('personal', userId);
+  const {
+    predictionData: communityPredictionData,
+    isLoading: isLoadingCommunity,
+  } = usePredictionData('community', userId);
 
   const {
     collapsedOpacity,
@@ -38,8 +48,18 @@ const EventPersonalCommunity = () => {
         toggleDisplay={toggle}
       />
       {PredictionTabsNavigator(
-        <Event tab={'personal'} {...props} />,
-        <Event tab={'community'} {...props} />,
+        <Event
+          tab={'personal'}
+          predictionData={personalPredictionData}
+          isLoading={isLoadingPersonal}
+          {...props}
+        />,
+        <Event
+          tab={'community'}
+          predictionData={communityPredictionData}
+          isLoading={isLoadingCommunity}
+          {...props}
+        />,
       )}
       {userId ? <FollowingBottomScroll userId={userId} /> : null}
     </>

@@ -20,6 +20,7 @@ export type BottomTabParamList = {
 export type PredictionsParamList = {
   EventSelect: undefined;
   Event: { userId: string | undefined };
+  EventFromProflie: { userId: string | undefined };
   Category: {
     userId: string | undefined;
     isSelectable?: boolean;

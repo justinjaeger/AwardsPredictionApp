@@ -10,6 +10,7 @@ import { getHeaderTitle, headerSettings } from '../constants';
 import AddPredictions from '../screens/Predictions/AddPredictions.tsx';
 import HistoryHeaderButton from '../components/Buttons/HistoryHeaderButton';
 import EventPersonalCommunity from '../screens/Predictions/Event/EventPersonalCommunity';
+import EventFromProfile from '../screens/Predictions/Event/EventFromProfile';
 
 const { Navigator, Screen } = createStackNavigator<PredictionsParamList>();
 
@@ -28,6 +29,16 @@ const PredictionsNavigator = () => {
       <Screen
         name="Event"
         component={EventPersonalCommunity}
+        options={{
+          headerTitle: getHeaderTitle('Event Predictions'),
+          headerLeft: BackButton,
+          headerRight: HistoryHeaderButton,
+          ...headerSettings,
+        }}
+      />
+      <Screen
+        name="EventFromProflie"
+        component={EventFromProfile}
         options={{
           headerTitle: getHeaderTitle('Event Predictions'),
           headerLeft: BackButton,
