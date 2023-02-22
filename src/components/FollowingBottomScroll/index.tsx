@@ -1,4 +1,3 @@
-import { StackActions, useNavigation } from '@react-navigation/native';
 import { Spinner } from '@ui-kitten/components';
 import React from 'react';
 import { ScrollView, useWindowDimensions, View } from 'react-native';
@@ -6,8 +5,13 @@ import COLORS from '../../constants/colors';
 import usePaginatedFriends from '../../hooks/usePaginatedFriends';
 import ProfileImage from '../ProfileImage';
 
-const FollowingBottomScroll = ({ userId }: { userId: string }) => {
-  const navigation = useNavigation();
+const FollowingBottomScroll = ({
+  userId,
+  onPress,
+}: {
+  userId: string;
+  onPress: (userId: string) => void;
+}) => {
   const { width } = useWindowDimensions();
 
   const {
@@ -52,11 +56,7 @@ const FollowingBottomScroll = ({ userId }: { userId: string }) => {
               key={user.id}
               image={user.image}
               imageSize={imageWidth}
-              onPress={() => {
-                navigation.dispatch(
-                  StackActions.push('EventFromProflie', { userId: user.id }),
-                );
-              }}
+              onPress={() => onPress(user.id)}
               style={{ margin: imageMargin }}
             />
           ))}

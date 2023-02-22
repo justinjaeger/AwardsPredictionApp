@@ -11,13 +11,14 @@ import { useCollapsible } from '../../../hooks/animatedState/useCollapsible';
 import { iListDisplay, useDisplay } from '../../../hooks/animatedState/useDisplay';
 import { Animated, View } from 'react-native';
 import DisplayFAB from '../../../components/Buttons/DisplayFAB';
-import { iEvent } from '../../../types';
+import { iEvent, iIndexedPredictionsByCategory, iUser } from '../../../types';
 import { useAuth } from '../../../context/UserContext';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
-import useQueryGetUser from '../../../hooks/queries/getUser';
 import HistoryTab from '../../../components/HistoryTab';
 import UserHeader from '../../../components/UserHeader';
+import getPersonalPredictionsByEvent from '../../../services/queryFuncs/getPersonalPredictionsByEvent';
+import getUser from '../../../services/queryFuncs/getUser';
 
 export type iCategoryProps = {
   collapsedOpacity: Animated.Value;
@@ -34,8 +35,6 @@ const Category = () => {
   const { userId: authUserId } = useAuth();
   const userId = params?.userId || authUserId;
 
-  const { data: user } = useQueryGetUser(userId);
-
   const { category, event: _event } = useCategory();
   const navigation = useTypedNavigation<PredictionsParamList>();
   const {
@@ -46,9 +45,23 @@ const Category = () => {
   } = useCollapsible();
   const { delayedDisplay, setDisplay, gridOpacity, listOpacity } = useDisplay();
 
+  const [user, setUser] = useState<iUser | undefined>(undefined);
+  const [predictionData, setPredictionData] = useState<
+    iIndexedPredictionsByCategory | undefined
+  >(undefined);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    getPersonalPredictionsByEvent(event.id, userId)
+      .then((res) => setPredictionData(res))
+      .finally(() => setIsLoading(false));
+
+    getUser(userId).then((res) => setUser(res));
+  }, [userId]);
+
   const event = _event as iEvent;
 
-  const props: iCategoryProps = {
+  const props = {
     collapsedOpacity,
     expandedOpacity,
     isCollapsed,
@@ -113,7 +126,11 @@ const Category = () => {
           <View style={{ zIndex: 2, width: '100%' }}>
             <HistoryTab />
           </View>
-          <CategoryPersonal {...props} />
+          <CategoryPersonal
+            predictionData={predictionData}
+            isLoading={isLoading}
+            {...props}
+          />
         </>
       </BackgroundWrapper>
     </>

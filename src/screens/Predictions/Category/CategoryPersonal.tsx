@@ -20,14 +20,12 @@ import {
   useTypedNavigation,
 } from '../../../util/hooks';
 import { formatLastUpdated } from '../../../util/formatDateTime';
-import usePredictionData from '../../../hooks/queries/usePredictionData';
 import { eventStatusToPredictionType } from '../../../constants/events';
 import { iCategoryProps } from '.';
 import LastUpdatedText from '../../../components/LastUpdatedText';
 import HistoryHeaderButton from '../../../components/Buttons/HistoryHeaderButton';
 import { useAuth } from '../../../context/UserContext';
 
-// NOTE: Has a lot in common with ContenderListDraggable
 const CategoryPersonal = ({
   collapsedOpacity,
   expandedOpacity,
@@ -36,6 +34,8 @@ const CategoryPersonal = ({
   gridOpacity,
   listOpacity,
   userId,
+  predictionData,
+  isLoading,
 }: iCategoryProps) => {
   const { category: _category, event: _event, date } = useCategory();
   const navigation = useTypedNavigation<PredictionsParamList>();
@@ -68,7 +68,6 @@ const CategoryPersonal = ({
   const { mutate: updatePredictions, isComplete } = useMutationUpdatePredictions(
     onComplete,
   );
-  const { predictionData, isLoading } = usePredictionData('personal', userId);
   const initialPredictions = predictionData
     ? predictionData[category.id]?.predictions || []
     : [];
@@ -155,7 +154,7 @@ const CategoryPersonal = ({
         visible={isLoading || !isComplete}
         text={isLoading ? 'Loading Predictions...' : 'Saving changes...'}
       />
-      {predictions && predictions.length === 0 && isHistory ? (
+      {predictions && predictions.length === 0 ? (
         <View
           style={{
             width: '100%',
@@ -165,7 +164,7 @@ const CategoryPersonal = ({
           }}
         >
           <BodyBold style={{ textAlign: 'center', lineHeight: 30 }}>
-            {'No predictions for this date'}
+            {isHistory ? 'No predictions for this date' : 'No predictions'}
           </BodyBold>
         </View>
       ) : null}

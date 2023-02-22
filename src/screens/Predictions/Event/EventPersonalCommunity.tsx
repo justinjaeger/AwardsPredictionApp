@@ -4,13 +4,20 @@ import PredictionTabsNavigator from '../../../navigation/PredictionTabsNavigator
 import { useAuth } from '../../../context/UserContext';
 import { useCollapsible } from '../../../hooks/animatedState/useCollapsible';
 import DisplayFAB from '../../../components/Buttons/DisplayFAB';
-import { RouteProp, useRoute } from '@react-navigation/native';
+import {
+  RouteProp,
+  StackActions,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import Event from './index';
 import FollowingBottomScroll from '../../../components/FollowingBottomScroll';
 import usePredictionData from '../../../hooks/queries/usePredictionData';
 
 const EventPersonalCommunity = () => {
+  const navigation = useNavigation();
   const { params } = useRoute<RouteProp<PredictionsParamList, 'Event'>>();
+
   const { userId: authUserId } = useAuth();
   const userId = params?.userId || authUserId;
 
@@ -61,7 +68,14 @@ const EventPersonalCommunity = () => {
           {...props}
         />,
       )}
-      {userId ? <FollowingBottomScroll userId={userId} /> : null}
+      {userId ? (
+        <FollowingBottomScroll
+          userId={userId}
+          onPress={(id) => {
+            navigation.dispatch(StackActions.push('EventFromProflie', { userId: id }));
+          }}
+        />
+      ) : null}
     </>
   );
 };

@@ -13,9 +13,11 @@ import { useCollapsible } from '../../../hooks/animatedState/useCollapsible';
 import { iListDisplay, useDisplay } from '../../../hooks/animatedState/useDisplay';
 import { Animated } from 'react-native';
 import DisplayFAB from '../../../components/Buttons/DisplayFAB';
-import { iEvent } from '../../../types';
+import { iEvent, iIndexedPredictionsByCategory } from '../../../types';
 import { useAuth } from '../../../context/UserContext';
-import { RouteProp, useRoute } from '@react-navigation/native';
+import { RouteProp, StackActions, useRoute } from '@react-navigation/native';
+import usePredictionData from '../../../hooks/queries/usePredictionData';
+import FollowingBottomScroll from '../../../components/FollowingBottomScroll';
 
 export type iCategoryProps = {
   collapsedOpacity: Animated.Value;
@@ -25,6 +27,8 @@ export type iCategoryProps = {
   listOpacity: Animated.Value;
   gridOpacity: Animated.Value;
   userId: string | undefined;
+  predictionData: iIndexedPredictionsByCategory | undefined;
+  isLoading: boolean;
 };
 
 const Category = () => {
@@ -42,9 +46,18 @@ const Category = () => {
   } = useCollapsible();
   const { delayedDisplay, setDisplay, gridOpacity, listOpacity } = useDisplay();
 
+  const {
+    predictionData: personalPredictionData,
+    isLoading: personalIsLoading,
+  } = usePredictionData('personal', userId);
+  const {
+    predictionData: communityPredictionData,
+    isLoading: communityIsLoading,
+  } = usePredictionData('community', userId);
+
   const event = _event as iEvent;
 
-  const props: iCategoryProps = {
+  const props = {
     collapsedOpacity,
     expandedOpacity,
     isCollapsed,
@@ -104,9 +117,25 @@ const Category = () => {
     <>
       <DisplayFAB state={toggleState[toggleIndex]} toggleDisplay={toggle} />
       {PredictionTabsNavigator(
-        <CategoryPersonal {...props} />,
-        <CategoryCommunity {...props} />,
+        <CategoryPersonal
+          predictionData={personalPredictionData}
+          isLoading={personalIsLoading}
+          {...props}
+        />,
+        <CategoryCommunity
+          predictionData={communityPredictionData}
+          isLoading={communityIsLoading}
+          {...props}
+        />,
       )}
+      {userId ? (
+        <FollowingBottomScroll
+          userId={userId}
+          onPress={(id) => {
+            navigation.dispatch(StackActions.push('CategoryFromProfile', { userId: id }));
+          }}
+        />
+      ) : null}
     </>
   );
 };

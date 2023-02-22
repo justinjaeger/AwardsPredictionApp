@@ -26,6 +26,11 @@ export type PredictionsParamList = {
     isSelectable?: boolean;
     onPressItem?: (contenderId: string) => void;
   };
+  CategoryFromProfile: {
+    userId: string | undefined;
+    isSelectable?: boolean;
+    onPressItem?: (contenderId: string) => void;
+  };
   ContenderDetails: {
     categoryType: CategoryType;
     contenderId: string;
