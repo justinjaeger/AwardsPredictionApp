@@ -12,6 +12,8 @@ import CategoryList from './CategoryList';
 import _ from 'lodash';
 import { formatLastUpdated } from '../../../util/formatDateTime';
 import LastUpdatedText from '../../../components/LastUpdatedText';
+import { useAuth } from '../../../context/UserContext';
+import { StackActions } from '@react-navigation/native';
 
 const TIMING = 300;
 
@@ -32,6 +34,7 @@ const Event = ({
   predictionData: iIndexedPredictionsByCategory | undefined;
   isLoading: boolean;
 }) => {
+  const { userId: authUserId } = useAuth();
   const { event: _event, setCategory, date } = useCategory();
   const navigation = useTypedNavigation<PredictionsParamList>();
 
@@ -40,6 +43,7 @@ const Event = ({
 
   const isHistory = !!date;
   const event = _event as iEvent;
+  const isAuthUserProfile = userId === authUserId;
 
   // define the header
   useLayoutEffect(() => {
@@ -70,7 +74,11 @@ const Event = ({
 
   const onSelectCategory = async (category: iCategory) => {
     setCategory(category);
-    navigation.navigate('Category', { userId });
+    if (isAuthUserProfile) {
+      navigation.navigate('Category', { userId });
+    } else {
+      navigation.dispatch(StackActions.push('CategoryFromProfile', { userId }));
+    }
   };
 
   const iterablePredictionData = _.values(predictionData || {});
