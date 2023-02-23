@@ -66,6 +66,6 @@ export const getCommunityHistory = async (
     }
     return { status: 'success', data: maybePreSets };
   } catch (err) {
-    return handleError('error getting personal history', err);
+    return handleError('error getting community history', err);
   }
 };

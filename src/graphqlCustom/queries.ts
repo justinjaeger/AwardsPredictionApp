@@ -302,7 +302,7 @@ export const predictionSetByUserIdAndEventId = /* GraphQL */ `
 export const historyPredictionSetByUserIdAndEventIdAndCreatedAt = /* GraphQL */ `
   query HistoryPredictionSetByUserIdAndEventIdAndCreatedAt(
     $userId: ID!
-    $eventIdCreatedAt: ModelHistoryPredictionSetHistoryPredictionSetsByUserIdAndEventIdAndCreatedAtCompositeKeyConditionInput
+    $eventIdCreatedAt: ModelHistoryPredictionSetHistoryPredictionSetsbyUserIdAndEventIdAndCreatedAtCompositeKeyConditionInput
     $sortDirection: ModelSortDirection
     $filter: ModelHistoryPredictionSetFilterInput
     $limit: Int
