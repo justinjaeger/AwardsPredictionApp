@@ -131,6 +131,7 @@ const Event = ({
             isCollapsed={true}
             onSelectCategory={(category: iCategory) => onSelectCategory(category)}
             predictionData={predictionData}
+            isAuthUserProfile={isAuthUserProfile}
           />
         </Animated.View>
         <Animated.View
@@ -145,6 +146,7 @@ const Event = ({
             isCollapsed={false}
             onSelectCategory={(category: iCategory) => onSelectCategory(category)}
             predictionData={predictionData}
+            isAuthUserProfile={isAuthUserProfile}
           />
         </Animated.View>
       </Animated.ScrollView>

@@ -14,14 +14,14 @@ type iCategoryListProps = {
   isCollapsed: boolean;
   onSelectCategory: (category: iCategory) => void;
   predictionData: iIndexedPredictionsByCategory | undefined;
+  isAuthUserProfile?: boolean;
 };
 
 // Lists all categories inside an event
 const CategoryList = (props: iCategoryListProps) => {
-  const { isCollapsed, onSelectCategory, predictionData } = props;
+  const { isCollapsed, onSelectCategory, predictionData, isAuthUserProfile } = props;
 
   const { event: _event, eventCategories, date, reset } = useCategory();
-  //   console.log('eventCategories', eventCategories);
   const isHistory = !!date;
   const event = _event as iEvent;
 
@@ -76,7 +76,7 @@ const CategoryList = (props: iCategoryListProps) => {
               </SubHeader>
               {truncatedPredictions.length === 0 ? (
                 <HeaderLight style={{ marginLeft: theme.windowMargin }}>
-                  {isHistory ? 'No Predictions' : 'Add Predictions'}
+                  {isHistory || !isAuthUserProfile ? 'No Predictions' : 'Add Predictions'}
                 </HeaderLight>
               ) : null}
               <MovieGrid
