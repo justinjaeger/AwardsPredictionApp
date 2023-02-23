@@ -26,7 +26,7 @@
         },
         "updateCommunityHistory": {
           "deploymentBucketName": "amplify-awardsapp-dev-115717-deployment",
-          "s3Key": "amplify-builds/updateCommunityHistory-515673767a77796c734c-build.zip"
+          "s3Key": "amplify-builds/updateCommunityHistory-4b2f7774347a676a7677-build.zip"
         }
       }
     }
