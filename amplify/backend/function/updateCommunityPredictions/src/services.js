@@ -271,8 +271,13 @@ const createCommunityPredictions = async (
 
     // prepare createPrediction requests
     const createPredictionPromises = [];
-    for (const response of responses) {
+    for (const i in responses) {
+      const response = responses[i];
       body = await response.json();
+      if (i === '0' || i === 0) {
+        // weird that it's '0' but works
+        console.log('createPredictionSetPromises response body', body);
+      }
       // get params from body
       const predictionSet = body.data.createCommunityPredictionSet;
       const { id, eventId, categoryId } = predictionSet;
@@ -294,8 +299,13 @@ const createCommunityPredictions = async (
     }
 
     // create all predictions in parallel
-    responses = await Promise.allSettled(createPredictionPromises);
+    responses = await Promise.all(createPredictionPromises);
     console.log('createPredictionPromises response:', responses.length);
+
+    if (responses[0]) {
+      const b = await responses[0].json();
+      console.log('createPredictionPromises response body', b);
+    }
 
     return {
       status: 'success',

@@ -30,6 +30,7 @@ const predictionSetByEventId = /* GraphQL */ `
           }
         }
         type
+        comment
         createdAt
       }
     }

@@ -44,7 +44,7 @@ const getPredictionsByEventIds = async (eventIds) => {
   let response;
   let body;
   const predictionSetsFormatted = []; // ts: { id, eventId, categoryId, userId, type = 'NOMINATION' }[]
-  const predictionsFormatted = []; // ts: { ranking, contenderId, predictionSetId }[]
+  const predictionsFormatted = []; // ts: { ranking, contenderId, predictionSetId, categoryId }[]
 
   // request for all contenders
   try {
@@ -56,7 +56,7 @@ const getPredictionsByEventIds = async (eventIds) => {
       // add to predictionSetsFormatted
       predictionSets.forEach((predictionSet) => {
         const predictionSetId = predictionSet.id;
-        const { userId, categoryId, type } = predictionSet;
+        const { userId, categoryId, type, comment } = predictionSet;
         const predictions = predictionSet.predictions.items;
         predictionSetsFormatted.push({
           id: predictionSetId,
@@ -64,6 +64,7 @@ const getPredictionsByEventIds = async (eventIds) => {
           categoryId,
           userId,
           type,
+          comment,
         });
         // add to predictionsFormatted
         predictions.forEach((prediction) => {
@@ -72,6 +73,7 @@ const getPredictionsByEventIds = async (eventIds) => {
             ranking,
             contenderId,
             predictionSetId,
+            categoryId,
           });
         });
       });
@@ -104,21 +106,22 @@ const getPredictionsByEventIds = async (eventIds) => {
 };
 
 const createHistoryPredictions = async (
-  predictionSets, // ts: { id, eventId, categoryId, userId, type = 'NOMINATION' }[]
-  predictions, // ts: { ranking, contenderId, predictionSetId }[]
+  predictionSets, // ts: { id, eventId, categoryId, userId, type = 'NOMINATION', comment }[]
+  predictions, // ts: { ranking, contenderId, predictionSetId, categoryId }[]
 ) => {
   console.log('createHistoryPredictions');
 
   try {
     // Create history prediction sets
     const createPredictionSetPromises = [];
-    for (const { eventId, categoryId, userId, type } of predictionSets) {
+    for (const { eventId, categoryId, userId, type, comment } of predictionSets) {
       createPredictionSetPromises.push(
-        fetch(createHistoryPredictionSetRequest(eventId, categoryId, userId, type)),
+        fetch(
+          createHistoryPredictionSetRequest(eventId, categoryId, userId, type, comment),
+        ),
       );
     }
     const responses = await Promise.all(createPredictionSetPromises);
-    console.log('createPredictionPromises response', responses.length);
 
     // For efficiency, we want to create the predictions in a Promise.all. To do this, we need to map the historyPredictionSetId to the predictionSetId
     // important: with Promise.all, the order of repsonses is maintained, so we know that response[1] is the response for predictionSets[1]
@@ -126,22 +129,34 @@ const createHistoryPredictions = async (
     for (const i in responses) {
       const response = responses[i];
       const body = await response.json();
+      if (i === 0 || i === '0') {
+        console.log('predictionSet response body', body);
+      }
       const historyPredictionSetId = body.data.createHistoryPredictionSet.id;
       const predictionSetId = predictionSets[i].id;
       idsToHistoryIds[predictionSetId] = historyPredictionSetId;
     }
 
     const createPredictionPromises = [];
-    for (const { ranking, contenderId, predictionSetId } of predictions) {
+    for (const { ranking, contenderId, predictionSetId, categoryId } of predictions) {
       const historyPredictionSetId = idsToHistoryIds[predictionSetId]; // get the historyPredictionSetId from the mapping
       createPredictionPromises.push(
         fetch(
-          createHistoryPredictionRequest(ranking, contenderId, historyPredictionSetId),
+          createHistoryPredictionRequest(
+            ranking,
+            contenderId,
+            historyPredictionSetId,
+            categoryId,
+          ),
         ),
       );
     }
-    const createPredictionResponses = await Promise.allSettled(createPredictionPromises);
-    console.log('createPredictionPromises response:', createPredictionResponses.length);
+    const createPredictionResponses = await Promise.all(createPredictionPromises);
+
+    if (createPredictionResponses[0]) {
+      const resBody = await createPredictionResponses[0].json();
+      console.log('prediction response body', resBody);
+    }
 
     return {
       status: 'success',

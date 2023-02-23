@@ -129,6 +129,9 @@ const createCommunityHistory = async (
     for (const i in responses) {
       response = responses[i];
       body = await response.json();
+      if (i === 0 || i === '0') {
+        console.log('createHistoryPredictionSet body', body);
+      }
       const communityHistoryPredictionSetId =
         body.data.createCommunityHistoryPredictionSet.id;
       const predictionSetId = predictionSets[i].id;
@@ -156,13 +159,18 @@ const createCommunityHistory = async (
         ),
       );
     }
-    const createHistoryPredictionResponses = await Promise.allSettled(
+    const createHistoryPredictionResponses = await Promise.all(
       createHistoryPredictionPromises,
     );
     console.log(
       'createHistoryPredictionResponses response:',
       createHistoryPredictionResponses.length,
     );
+
+    if (createHistoryPredictionResponses.length > 0) {
+      const b = await createHistoryPredictionResponses[0].json();
+      console.log('createHistoryPredictionResponses body:', b);
+    }
 
     return {
       status: 'success',

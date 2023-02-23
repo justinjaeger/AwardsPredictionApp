@@ -45,6 +45,7 @@ const createHistoryPredictionSetRequest = (
   categoryId,
   userId,
   type = 'NOMINATION',
+  comment,
 ) =>
   new Request(GRAPHQL_ENDPOINT, {
     method: 'POST',
@@ -59,13 +60,19 @@ const createHistoryPredictionSetRequest = (
           userId,
           eventId,
           categoryId,
+          comment,
         },
       },
     }),
   });
 
 // ts: CreateHistoryPredictionMutationVariables
-const createHistoryPredictionRequest = (ranking, contenderId, historyPredictionSetId) =>
+const createHistoryPredictionRequest = (
+  ranking,
+  contenderId,
+  historyPredictionSetId,
+  categoryId,
+) =>
   new Request(GRAPHQL_ENDPOINT, {
     method: 'POST',
     headers: {
@@ -78,6 +85,7 @@ const createHistoryPredictionRequest = (ranking, contenderId, historyPredictionS
           ranking,
           contenderId,
           historyPredictionSetId,
+          categoryId,
         },
       },
     }),
