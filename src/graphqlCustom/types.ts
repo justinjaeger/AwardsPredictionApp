@@ -689,3 +689,122 @@ export type PredictionSetByUserIdAndEventIdQuery = {
     nextToken?: string | null;
   } | null;
 };
+
+export type ListRelationshipsQuery = {
+  listRelationships?: {
+    __typename: 'ModelRelationshipConnection';
+    items: Array<{
+      __typename: 'Relationship';
+      id: string;
+      followedUserId: string;
+      followedUser: {
+        __typename: 'User';
+        id: string;
+        email: string;
+        username?: string | null;
+        name?: string | null;
+        bio?: string | null;
+        image?: string | null;
+        role: UserRole;
+        predictionSets?: {
+          __typename: 'ModelPredictionSetConnection';
+          items: Array<{
+            __typename: 'PredictionSet';
+            id: string;
+            userId: string;
+            user: {
+              __typename: 'User';
+              id: string;
+              email: string;
+              username?: string | null;
+              name?: string | null;
+              bio?: string | null;
+              image?: string | null;
+              role: UserRole;
+              createdAt: string;
+              updatedAt: string;
+            };
+            eventId: string;
+            event: {
+              __typename: 'Event';
+              id: string;
+              awardsBody: AwardsBody;
+              year: number;
+              nominationDateTime?: string | null;
+              winDateTime?: string | null;
+              status?: EventStatus | null;
+              createdAt: string;
+              updatedAt: string;
+            };
+            categoryId: string;
+            category: {
+              __typename: 'Category';
+              id: string;
+              eventId: string;
+              name: CategoryName;
+              type: CategoryType;
+              isShortlisted?: CategoryIsShortlisted | null;
+              createdAt: string;
+              updatedAt: string;
+            };
+            predictions?: {
+              __typename: 'ModelPredictionConnection';
+              nextToken?: string | null;
+            } | null;
+            type?: PredictionType | null;
+            comment?: string | null;
+            createdAt: string;
+            updatedAt: string;
+          } | null>;
+          nextToken?: string | null;
+        } | null;
+        historyPredictionSets?: {
+          __typename: 'ModelHistoryPredictionSetConnection';
+          nextToken?: string | null;
+        } | null;
+        followers?: {
+          __typename: 'ModelRelationshipConnection';
+          nextToken?: string | null;
+        } | null;
+        following?: {
+          __typename: 'ModelRelationshipConnection';
+          nextToken?: string | null;
+        } | null;
+        createdAt: string;
+        updatedAt: string;
+      };
+      followingUserId: string;
+      followingUser: {
+        __typename: 'User';
+        id: string;
+        email: string;
+        username?: string | null;
+        name?: string | null;
+        bio?: string | null;
+        image?: string | null;
+        role: UserRole;
+        predictionSets?: {
+          __typename: 'ModelPredictionSetConnection';
+          nextToken?: string | null;
+        } | null;
+        historyPredictionSets?: {
+          __typename: 'ModelHistoryPredictionSetConnection';
+          nextToken?: string | null;
+        } | null;
+        followers?: {
+          __typename: 'ModelRelationshipConnection';
+          nextToken?: string | null;
+        } | null;
+        following?: {
+          __typename: 'ModelRelationshipConnection';
+          nextToken?: string | null;
+        } | null;
+        createdAt: string;
+        updatedAt: string;
+      };
+      createdAt: string;
+      updatedAt: string;
+    } | null>;
+    nextToken?: string | null;
+  } | null;
+};

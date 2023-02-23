@@ -3,7 +3,6 @@ import {
   CreateRelationshipMutationVariables,
   DeleteRelationshipMutation,
   DeleteRelationshipMutationVariables,
-  ListRelationshipsQuery,
   ListRelationshipsQueryVariables,
   SearchableSortDirection,
   SearchRelationshipsQueryVariables,
@@ -15,7 +14,10 @@ import {
 import * as mutations from '../../graphql/mutations';
 import * as queries from '../../graphql/queries';
 import * as customQueries from '../../graphqlCustom/queries';
-import { SearchRelationshipsQuery } from '../../graphqlCustom/types';
+import {
+  SearchRelationshipsQuery,
+  ListRelationshipsQuery,
+} from '../../graphqlCustom/types';
 import { GraphqlAPI, handleError, iApiResponse } from '../utils';
 
 export const getRelationship = async (
@@ -333,5 +335,26 @@ export const getRecommendedFollowersFromRandomSignedOut = async (
     return { status: 'success', data: data };
   } catch (err) {
     return handleError('error getting recommended followers', err);
+  }
+};
+
+export const getFriendsPredictingEvent = async (
+  followingUserId: string,
+  eventId: string,
+): Promise<iApiResponse<ListRelationshipsQuery>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<
+      ListRelationshipsQuery,
+      { followingUserId: string; eventId: string }
+    >(customQueries.getFriendsPredictingEventQuery, {
+      followingUserId,
+      eventId,
+    });
+    if (!data?.listRelationships) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data: data };
+  } catch (err) {
+    return handleError('error getting friends predicting event', err);
   }
 };

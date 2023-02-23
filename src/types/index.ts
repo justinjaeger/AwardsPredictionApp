@@ -23,6 +23,7 @@ export enum QueryKeys {
   PAGINATED_FOLLOWERS = 'paginated-followers',
   PAGINATED_FOLLOWING = 'paginated-following',
   RELATIONSHIP_COUNT = 'relationship-count',
+  FRIENDS_PREDICTING_EVENT = 'friends-predicting-event',
 }
 
 // ex: { 1: 142 } (ranking, numberPredictingRanking)

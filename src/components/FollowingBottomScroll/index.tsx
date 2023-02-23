@@ -1,10 +1,17 @@
-import { Spinner } from '@ui-kitten/components';
+// import { Spinner } from '@ui-kitten/components';
 import React from 'react';
-import { ScrollView, useWindowDimensions, View } from 'react-native';
-import COLORS from '../../constants/colors';
-import usePaginatedFriends from '../../hooks/usePaginatedFriends';
+import {
+  ScrollView,
+  // useWindowDimensions,
+  View,
+} from 'react-native';
+// import COLORS from '../../constants/colors';
+import { useCategory } from '../../context/CategoryContext';
+import useFriendsPredictingEvent from '../../hooks/useFriendsPredictingEvent';
+// import usePaginatedFriends from '../../hooks/usePaginatedFriends';
 import ProfileImage from '../ProfileImage';
 
+// NOTE: Leaving commented-out code because I'm not sure if this new solution with useFriendsPredictingEvent works, so might revert
 const FollowingBottomScroll = ({
   userId,
   onPress,
@@ -12,23 +19,25 @@ const FollowingBottomScroll = ({
   userId: string;
   onPress: (userId: string) => void;
 }) => {
-  const { width } = useWindowDimensions();
+  //   const { width } = useWindowDimensions();
+  const { event } = useCategory();
 
-  const {
-    users,
-    fetchPage,
-    isLoading: isFetchingFriends,
-    hasFetchedAll,
-  } = usePaginatedFriends({
-    userId,
-    type: 'following',
-  });
+  //   const {
+  //     users,
+  //     fetchPage,
+  //     isLoading: isFetchingFriends,
+  //     hasFetchedAll,
+  //   } = usePaginatedFriends({
+  //     userId,
+  //     type: 'following',
+  //   });
+  const { data: users } = useFriendsPredictingEvent(userId, event?.id);
 
   const imageWidth = 50;
   const imageMargin = 5;
-  const lastImagePosition = (users.length - 1) * (imageWidth + imageMargin * 2);
+  //   const lastImagePosition = (users.length - 1) * (imageWidth + imageMargin * 2);
 
-  if (users.length === 0) return null;
+  if (!users || users.length === 0) return null;
 
   return (
     <View
@@ -41,14 +50,14 @@ const FollowingBottomScroll = ({
       <ScrollView
         horizontal
         contentContainerStyle={{ justifyContent: 'center', alignItems: 'center' }}
-        onScrollEndDrag={({ nativeEvent }) => {
-          // once we hit the scroll limit, we want to fetch the next page of users
-          const scrollLimit = lastImagePosition - width + imageWidth + imageMargin * 2;
-          const x = nativeEvent.contentOffset.x; // current position of the scrollview
-          if (x >= scrollLimit) {
-            !isFetchingFriends && fetchPage(); // this should be debounced
-          }
-        }}
+        // onScrollEndDrag={({ nativeEvent }) => {
+        // once we hit the scroll limit, we want to fetch the next page of users
+        //   const scrollLimit = lastImagePosition - width + imageWidth + imageMargin * 2;
+        //   const x = nativeEvent.contentOffset.x; // current position of the scrollview
+        //   if (x >= scrollLimit) {
+        //     !isFetchingFriends && fetchPage(); // this should be debounced
+        //   }
+        // }}
       >
         <>
           {users.map((user) => (
@@ -60,11 +69,11 @@ const FollowingBottomScroll = ({
               style={{ margin: imageMargin }}
             />
           ))}
-          {!hasFetchedAll ? (
+          {/* {!hasFetchedAll ? (
             <View style={{ marginLeft: 5 }}>
               <Spinner size="medium" style={{ borderColor: COLORS.gray }} />
             </View>
-          ) : null}
+          ) : null} */}
         </>
       </ScrollView>
     </View>

@@ -1058,3 +1058,23 @@ export const getRecentFollowingPredictions = /* GraphQL */ `
     }
   }
 `;
+
+export const getFriendsPredictingEventQuery = /* GraphQL */ `
+  query ListRelationships($followingUserId: ID, $eventId: ID) {
+    listRelationships(filter: { followingUserId: { eq: $followingUserId } }) {
+      items {
+        followedUser {
+          image
+          name
+          username
+          predictionSets(filter: { eventId: { eq: $eventId } }, limit: 1) {
+            items {
+              id
+              createdAt
+            }
+          }
+        }
+      }
+    }
+  }
+`;
