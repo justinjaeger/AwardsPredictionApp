@@ -277,7 +277,7 @@ export const getRecommendedFollowersFromFriends = async (
     }
     return { status: 'success', data: data };
   } catch (err) {
-    return handleError('error getting recommended followers', err);
+    return handleError('error getting recommended followers from friends', err);
   }
 };
 
@@ -307,7 +307,7 @@ export const getRecommendedFollowersFromRandom = async (
     }
     return { status: 'success', data: data };
   } catch (err) {
-    return handleError('error getting recommended followers', err);
+    return handleError('error getting recommended followers from random', err);
   }
 };
 
@@ -334,7 +334,7 @@ export const getRecommendedFollowersFromRandomSignedOut = async (
     }
     return { status: 'success', data: data };
   } catch (err) {
-    return handleError('error getting recommended followers', err);
+    return handleError('error getting recommended followers from random signed out', err);
   }
 };
 

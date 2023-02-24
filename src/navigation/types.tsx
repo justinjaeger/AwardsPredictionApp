@@ -15,6 +15,7 @@ export type BottomTabParamList = {
   Profile: { userId?: string };
   Friend: undefined;
   Admin: undefined;
+  Help: undefined;
 };
 
 export type PredictionsParamList = {

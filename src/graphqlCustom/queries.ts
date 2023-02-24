@@ -996,10 +996,8 @@ export const searchRecommendedFollowing = /* GraphQL */ `
 export const searchRecommendedFollowingSignedOut = /* GraphQL */ `
   query SearchRelationships(
     $filter: SearchableRelationshipFilterInput
-    $sort: [SearchableRelationshipSortInput]
     $limit: Int # limit applies to both how many Following we return, but also how many Following's Following we return (so 10 = 100 results)
     $nextToken: String
-    $from: Int
   ) {
     searchRelationships(filter: $filter, limit: $limit, nextToken: $nextToken) {
       nextToken

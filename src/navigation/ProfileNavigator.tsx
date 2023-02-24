@@ -28,7 +28,7 @@ const ProfileNavigator = () => {
         name="Profile"
         component={Profile}
         options={{
-          headerTitle: getHeaderTitle('My Profile'),
+          headerTitle: getHeaderTitle('Profile'),
           ...headerSettings,
         }}
         initialParams={route.params}

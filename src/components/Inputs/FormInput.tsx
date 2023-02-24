@@ -16,6 +16,7 @@ const FormInput = ({
   status,
   style,
   autoFocus,
+  multiline,
 }: {
   label: string;
   value: string;
@@ -27,6 +28,7 @@ const FormInput = ({
   status?: EvaStatus;
   style?: any;
   autoFocus?: boolean;
+  multiline?: boolean;
 }) => {
   const onChangeText = (v: string) => {
     if (isYear) {
@@ -66,6 +68,7 @@ const FormInput = ({
       label={() => <SubHeaderLight style={{ marginBottom: 5 }}>{label}</SubHeaderLight>}
       value={value}
       placeholder=""
+      multiline={multiline}
       onChangeText={onChangeText}
       textContentType={textContentType}
       caption={() => (
@@ -82,7 +85,12 @@ const FormInput = ({
       )}
       onBlur={onBlur}
       status={_status}
-      textStyle={{ color: 'rgba(255,255,255,0.8)', fontSize: 18, padding: 5 }}
+      textStyle={{
+        color: 'rgba(255,255,255,0.8)',
+        fontSize: 18,
+        padding: 5,
+        minHeight: multiline ? 100 : undefined,
+      }}
       autoFocus={autoFocus}
       style={{
         backgroundColor: 'transparent',

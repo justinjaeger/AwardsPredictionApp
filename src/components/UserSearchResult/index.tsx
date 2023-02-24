@@ -47,7 +47,6 @@ const UserSearchResult = ({
       contentContainerStyle={{ alignItems: 'center' }}
       keyExtractor={(item) => item.id}
       onEndReached={() => {
-        console.error('onEndReached');
         onEndReached && onEndReached();
       }}
       onEndReachedThreshold={0.9} // triggers onEndReached at (X*100)% of list, for example 0.9 = 90% down

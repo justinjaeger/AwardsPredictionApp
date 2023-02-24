@@ -94,6 +94,16 @@ const TabBar = (props: ITabBarProps) => {
                     )}
                   </View>
                 );
+              case 'Help':
+                return (
+                  <View key={index}>
+                    {isFocused ? (
+                      <CustomIcon name={'question-mark-circle'} />
+                    ) : (
+                      <CustomIcon name={'question-mark-circle-outline'} />
+                    )}
+                  </View>
+                );
             }
           })();
           return (

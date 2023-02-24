@@ -8,6 +8,7 @@ import { useAuth } from '../../context/UserContext';
 import { UserRole } from '../../API';
 import FriendNavigator from '../FriendNavigator';
 import { BottomTabParamList } from '../types';
+import HelpNavigator from '../HelpNavigator';
 
 const Tab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -19,6 +20,7 @@ const BottomTabNavigator = () => {
       <Tab.Screen name="Predictions" component={PredictionsNavigator} />
       <Tab.Screen name="Profile" component={ProfileNavigator} />
       <Tab.Screen name="Friend" component={FriendNavigator} />
+      <Tab.Screen name="Help" component={HelpNavigator} />
       {userRole && userRole === UserRole.ADMIN ? (
         <Tab.Screen name="Admin" component={AdminNavigator} />
       ) : null}

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Animated, View } from 'react-native';
+import { Animated } from 'react-native';
 import theme from '../../../constants/theme';
 import LoadingStatue from '../../../components/LoadingStatue';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
@@ -7,10 +7,9 @@ import useQueryAllEvents from '../../../hooks/queries/getAllEvents';
 import { useAuth } from '../../../context/UserContext';
 import useQueryGetUser from '../../../hooks/queries/getUser';
 import EventList from '../Event/EventList';
-import { Body, HeaderLight } from '../../../components/Text';
+import { HeaderLight } from '../../../components/Text';
 import useQueryGetFollowingRecentPredictions from '../../../hooks/queries/useQueryGetFollowingRecentPredictions';
 import PredictionCarousel from '../../../components/PredictionCarousel';
-import Tmdb from '../../../assets/tmdb.svg';
 
 const EventSelect = () => {
   const { userId } = useAuth();
@@ -85,9 +84,7 @@ const EventSelect = () => {
           >
             Events
           </HeaderLight>
-          {events && user ? (
-            <EventList user={user} events={Object.values(events)} />
-          ) : null}
+          {events ? <EventList user={user} events={Object.values(events)} /> : null}
           {(usersWithRecentPredictionSets || []).length > 0 ? (
             // TODO: Below display is untested
             <>
@@ -112,10 +109,6 @@ const EventSelect = () => {
             </>
           ) : null}
         </Animated.ScrollView>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Body style={{ color: 'rgba(255,255,255,0.6)' }}>Data + images powered by</Body>
-          <Tmdb style={{ width: 80, height: 40, marginLeft: 10 }} />
-        </View>
       </>
     </BackgroundWrapper>
   );

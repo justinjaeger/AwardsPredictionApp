@@ -93,7 +93,7 @@ const PredictionsNavigator = () => {
         name="Profile"
         component={Profile}
         options={{
-          headerTitle: getHeaderTitle('My Profile'),
+          headerTitle: getHeaderTitle('Profile'),
           ...headerSettings,
         }}
       />

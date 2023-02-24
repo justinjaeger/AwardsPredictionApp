@@ -16,7 +16,7 @@ const getUserProfile = async (
   id: string | undefined,
   authUserId: string | undefined,
 ): Promise<iUser | undefined> => {
-  if (id === undefined || authUserId === undefined) return undefined;
+  if (id === undefined) return undefined;
   const { data } = await ApiServices.getUserProfile(id, authUserId);
   const user = data?.getUser;
   if (!user) return undefined;

@@ -20,7 +20,7 @@ import { Divider } from '@ui-kitten/components';
 
 const EVENT_ITEM_HEIGHT = 110;
 
-const EventList = ({ events, user }: { events: iEvent[]; user: iUser }) => {
+const EventList = ({ events, user }: { events: iEvent[]; user: iUser | undefined }) => {
   const { width } = useWindowDimensions();
   const { setEvent } = useCategory();
   const navigation = useTypedNavigation<PredictionsParamList>();
@@ -30,7 +30,7 @@ const EventList = ({ events, user }: { events: iEvent[]; user: iUser }) => {
   const onSelectEvent = async (event: iEvent) => {
     setEvent(event);
     // TODO: if user is authUser, navigate to Event screen in home tab?
-    navigation.navigate('Event', { userId: user.id });
+    navigation.navigate('Event', { userId: user?.id });
   };
 
   const orderedEvents = sortByObjectOrder<AwardsBody, iEvent>(
