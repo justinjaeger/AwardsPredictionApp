@@ -79,7 +79,7 @@ const MovieListDraggable = ({
         />
       }
       ListFooterComponent={
-        !isFriendProfile ? (
+        !isFriendProfile && !isHistory ? (
           <View style={{ width: '100%', alignItems: 'center', marginTop: 10 }}>
             <TouchableHighlight
               style={{
