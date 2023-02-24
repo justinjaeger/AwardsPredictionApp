@@ -6,7 +6,12 @@ import {
   PredictionType,
 } from '../API';
 
-export type iCategoryData = { name: string; type: CategoryType; slots?: number };
+export type iCategoryData = {
+  name: string;
+  type: CategoryType;
+  slots?: number; // 5 by default
+  hideUntilShortlisted?: boolean;
+};
 
 type iCategoryObject = {
   [key in CategoryName]: iCategoryData | undefined;
@@ -144,11 +149,17 @@ const ACADEMY_AWARDS_CATEGORIES_V1: iCategoryObject = {
   [CategoryName.SHORT_DOCUMENTARY]: {
     name: 'Documentary Short',
     type: CategoryType.FILM,
+    hideUntilShortlisted: true,
   },
-  [CategoryName.SHORT_ANIMATED]: { name: 'Animated Short', type: CategoryType.FILM },
+  [CategoryName.SHORT_ANIMATED]: {
+    name: 'Animated Short',
+    type: CategoryType.FILM,
+    hideUntilShortlisted: true,
+  },
   [CategoryName.SHORT_LIVE_ACTION]: {
     name: 'Live Action Short',
     type: CategoryType.FILM,
+    hideUntilShortlisted: true,
   },
   SCREENPLAY: undefined,
   ENSEMBLE: undefined,

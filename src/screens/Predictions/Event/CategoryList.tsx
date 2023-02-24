@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { TouchableHighlight, View } from 'react-native';
-import { CategoryName, PredictionType } from '../../../API';
+import { CategoryIsShortlisted, CategoryName, PredictionType } from '../../../API';
 import MovieGrid from '../../../components/MovieGrid';
 import { HeaderLight, SubHeader } from '../../../components/Text';
 import { getAwardsBodyCategories, getCategorySlots } from '../../../constants/categories';
@@ -42,9 +42,25 @@ const CategoryList = (props: iCategoryListProps) => {
     reset();
   }, []);
 
+  // filter out categories that are hidden until shortlisted
+  const categoriesWithHidden = orderedCategories.filter((category) => {
+    const cat = awardsBodyCategories[category.name];
+    const hideUntilShortlisted = cat?.hideUntilShortlisted || false;
+    // filter OUT (return false) if it's supposed to be hidden until shortlisted, AND category is not yet shortlisted
+    // eslint-disable-next-line sonarjs/prefer-single-boolean-return
+    if (
+      hideUntilShortlisted === true &&
+      category.isShortlisted !== CategoryIsShortlisted.TRUE
+    ) {
+      return false;
+    } else {
+      return true;
+    }
+  });
+
   return (
     <>
-      {orderedCategories.map((category) => {
+      {categoriesWithHidden.map((category) => {
         const catPredictions = predictionData?.[category.id]?.predictions || [];
         const predictions = catPredictions || [];
         const predictionType =
