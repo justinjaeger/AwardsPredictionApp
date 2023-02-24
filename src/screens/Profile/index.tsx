@@ -270,7 +270,7 @@ const Profile = () => {
                 <HeaderLight
                   style={{
                     alignSelf: 'flex-start',
-                    marginBottom: 20,
+                    marginBottom: 10,
                     marginTop: 40,
                     marginLeft: theme.windowMargin,
                   }}
@@ -285,7 +285,6 @@ const Profile = () => {
                 <HeaderLight
                   style={{
                     alignSelf: 'flex-start',
-                    marginBottom: 20,
                     marginTop: 40,
                     marginLeft: theme.windowMargin,
                   }}
