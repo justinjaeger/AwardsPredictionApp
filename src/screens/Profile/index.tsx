@@ -289,7 +289,7 @@ const Profile = () => {
                     marginLeft: theme.windowMargin,
                   }}
                 >
-                  Events
+                  All Predictions
                 </HeaderLight>
                 <EventList user={user} events={userEvents} />
               </>
