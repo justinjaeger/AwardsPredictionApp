@@ -52,6 +52,7 @@ const Category = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
+    setIsLoading(true);
     getPersonalPredictionsByEvent(event.id, userId)
       .then((res) => setPredictionData(res))
       .finally(() => setIsLoading(false));
@@ -126,11 +127,13 @@ const Category = () => {
           <View style={{ zIndex: 2, width: '100%' }}>
             <HistoryTab />
           </View>
-          <CategoryPersonal
-            predictionData={predictionData}
-            isLoading={isLoading}
-            {...props}
-          />
+          <View style={{ width: '100%' }}>
+            <CategoryPersonal
+              predictionData={predictionData}
+              isLoading={isLoading}
+              {...props}
+            />
+          </View>
         </>
       </BackgroundWrapper>
     </>

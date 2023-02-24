@@ -68,9 +68,7 @@ const CategoryPersonal = ({
   const { mutate: updatePredictions, isComplete } = useMutationUpdatePredictions(
     onComplete,
   );
-  const initialPredictions = predictionData
-    ? predictionData[category.id]?.predictions || []
-    : [];
+  const initialPredictions = predictionData?.[category.id]?.predictions || [];
   const initialPredictionIds = initialPredictions.map((p) => p.contenderId);
 
   // get last updated time
@@ -91,6 +89,11 @@ const CategoryPersonal = ({
       setPredictions(initialPredictions);
     }
   }, [isHistory]);
+
+  // when predictionData changes, should update. When we're coming from a profile this is necessary
+  useEffect(() => {
+    setPredictions(initialPredictions);
+  }, [initialPredictions.length]);
 
   // keeps track of whether we've edited the predictions from their initial state
   useDeepCompareEffect(() => {
@@ -154,7 +157,7 @@ const CategoryPersonal = ({
         visible={isLoading || !isComplete}
         text={isLoading ? 'Loading Predictions...' : 'Saving changes...'}
       />
-      {predictions && predictions.length === 0 ? (
+      {!isLoading && predictions && predictions.length === 0 ? (
         <View
           style={{
             width: '100%',
