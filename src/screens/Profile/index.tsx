@@ -15,10 +15,14 @@ import BackgroundWrapper from '../../components/BackgroundWrapper';
 import { IconButton } from '../../components/Buttons/IconButton';
 import { launchImageLibrary } from 'react-native-image-picker';
 import AWSStorage from '../../services/storage';
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import {
+  RouteProp,
+  useNavigation,
+  useRoute,
+  StackActions,
+} from '@react-navigation/native';
 import theme from '../../constants/theme';
 import PredictionCarousel from '../../components/PredictionCarousel';
-import { ProfileParamList } from '../../navigation/types';
 import COLORS from '../../constants/colors';
 import { useTypedNavigation } from '../../util/hooks';
 import useUpdateProfileImage from '../../hooks/mutations/updateProfileImage';
@@ -32,15 +36,16 @@ import FollowCountButton from '../../components/FollowCountButton';
 import getUserEvents from '../../services/queryFuncs/getUserEvents';
 import useQueryAllEvents from '../../hooks/queries/getAllEvents';
 import EventList from '../Predictions/Event/EventList';
+import { PredictionsParamList } from '../../navigation/types';
 
 const Profile = () => {
   // If we pass userId as params, it loads that user's profile. If not, it attemps to get logged in profile.
-  const { params } = useRoute<RouteProp<ProfileParamList, 'Profile'>>();
+  const { params } = useRoute<RouteProp<PredictionsParamList, 'Profile'>>();
   const { userId: authUserId, userEmail, signOutUser } = useAuth();
   const userId = params?.userId || authUserId;
 
-  const navigation = useNavigation();
-  const friendNavigation = useTypedNavigation<ProfileParamList>();
+  const globalNavigation = useNavigation();
+  const navigation = useTypedNavigation<PredictionsParamList>();
   const { width } = useWindowDimensions();
 
   const { data: events, isLoading: isLoadingAllEvents } = useQueryAllEvents();
@@ -80,9 +85,16 @@ const Profile = () => {
 
   // put the logout button in the top right corner
   useLayoutEffect(() => {
+    // helps NOT render a back arrow on root profile
+    const isFirstProfile =
+      globalNavigation
+        .dangerouslyGetState()
+        .routes.map((r) => r.name)
+        .filter((r) => r === 'Profile').length === 1;
+
     if (!userId) return;
     navigation.setOptions({
-      headerLeft: navigation.canGoBack() ? () => <BackButton /> : undefined,
+      headerLeft: navigation.canGoBack() && !isFirstProfile ? () => <BackButton /> : null,
       // don't set logout header if someone else's profile
       headerRight: isDeviceProfile
         ? () => (
@@ -118,7 +130,7 @@ const Profile = () => {
   }, [userId]);
 
   const logIn = () => {
-    navigation.navigate('Authenticator');
+    globalNavigation.navigate('Authenticator');
   };
 
   const logOut = () => {
@@ -229,7 +241,9 @@ const Profile = () => {
               <FollowCountButton
                 onPress={() => {
                   if (followerCount === 0) return;
-                  friendNavigation.navigate('Followers', { userId, type: 'followers' });
+                  navigation.dispatch(
+                    StackActions.push('Followers', { userId, type: 'followers' }),
+                  );
                 }}
                 text={`${followerCount} Followers`}
                 loading={followerCount === undefined}
@@ -237,7 +251,9 @@ const Profile = () => {
               <FollowCountButton
                 onPress={() => {
                   if (followingCount === 0) return;
-                  friendNavigation.navigate('Followers', { userId, type: 'following' });
+                  navigation.dispatch(
+                    StackActions.push('Followers', { userId, type: 'following' }),
+                  );
                 }}
                 text={`${followingCount} Following`}
                 loading={followingCount === undefined}

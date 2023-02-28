@@ -19,6 +19,7 @@ import HistoryTab from '../../../components/HistoryTab';
 import UserHeader from '../../../components/UserHeader';
 import getPersonalPredictionsByEvent from '../../../services/queryFuncs/getPersonalPredictionsByEvent';
 import getUser from '../../../services/queryFuncs/getUser';
+import CategoryCommunity from './CategoryCommunity';
 
 export type iCategoryProps = {
   collapsedOpacity: Animated.Value;
@@ -84,6 +85,8 @@ const Category = () => {
     });
   }, [navigation]);
 
+  const isAuthUserProfile = userId === authUserId;
+
   const [toggleIndex, setToggleIndex] = useState(0);
 
   const toggleState: ('list' | 'list-collapsed' | 'grid')[] = [
@@ -128,11 +131,19 @@ const Category = () => {
             <HistoryTab />
           </View>
           <View style={{ width: '100%' }}>
-            <CategoryPersonal
-              predictionData={predictionData}
-              isLoading={isLoading}
-              {...props}
-            />
+            {isAuthUserProfile ? (
+              <CategoryPersonal
+                predictionData={predictionData}
+                isLoading={isLoading}
+                {...props}
+              />
+            ) : (
+              <CategoryCommunity
+                predictionData={predictionData}
+                isLoading={isLoading}
+                {...props}
+              />
+            )}
           </View>
         </>
       </BackgroundWrapper>

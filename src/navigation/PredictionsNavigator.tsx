@@ -2,7 +2,7 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import BackButton from '../components/Buttons/BackButton';
 import ContenderDetailsScreen from '../screens/Predictions/ContenderDetailsScreen';
-import { PredictionsParamList } from './types';
+import { BottomTabParamList, PredictionsParamList } from './types';
 import Category from '../screens/Predictions/Category';
 import EventSelect from '../screens/Predictions/EventSelect';
 import theme from '../constants/theme';
@@ -13,12 +13,20 @@ import EventPersonalCommunity from '../screens/Predictions/Event/EventPersonalCo
 import EventFromProfile from '../screens/Predictions/Event/EventFromProfile';
 import CategoryFromProfile from '../screens/Predictions/Category/CategoryFromProfile';
 import Profile from '../screens/Profile';
+import ChangeUsername from '../screens/Profile/ChangeUsername';
+import SearchFriends from '../screens/SearchFriends';
+import { RouteProp, useRoute } from '@react-navigation/native';
+import Followers from '../screens/Profile/Followers';
 
 const { Navigator, Screen } = createStackNavigator<PredictionsParamList>();
 
 const PredictionsNavigator = () => {
+  const {
+    params: { initialScreen },
+  } = useRoute<RouteProp<BottomTabParamList, 'Profile'>>();
+
   return (
-    <Navigator initialRouteName="EventSelect" headerMode="screen">
+    <Navigator initialRouteName={initialScreen || 'EventSelect'} headerMode="screen">
       <Screen
         name="EventSelect"
         component={EventSelect}
@@ -28,6 +36,7 @@ const PredictionsNavigator = () => {
           ...headerSettings,
         }}
       />
+      {/* Prediction Screens */}
       <Screen
         name="Event"
         component={EventPersonalCommunity}
@@ -71,16 +80,6 @@ const PredictionsNavigator = () => {
         }}
       />
       <Screen
-        name="ContenderDetails"
-        component={ContenderDetailsScreen}
-        options={{
-          headerTitle: getHeaderTitle('Contender Details'),
-          headerLeft: BackButton,
-          cardStyle: theme.cardStyle,
-          ...headerSettings,
-        }}
-      />
-      <Screen
         name="AddPredictions"
         component={AddPredictions}
         options={{
@@ -89,11 +88,52 @@ const PredictionsNavigator = () => {
           ...headerSettings,
         }}
       />
+      {/* Profile Screens */}
       <Screen
         name="Profile"
         component={Profile}
         options={{
           headerTitle: getHeaderTitle('Profile'),
+          headerLeft: BackButton,
+          ...headerSettings,
+        }}
+      />
+      <Screen
+        name="ChangeUsername"
+        component={ChangeUsername}
+        options={{
+          headerTitle: getHeaderTitle('Enter Username'),
+          headerLeft: BackButton,
+          ...headerSettings,
+        }}
+      />
+      <Screen
+        name="Followers"
+        component={Followers}
+        options={{
+          headerTitle: getHeaderTitle('Followers'),
+          headerLeft: BackButton,
+          ...headerSettings,
+        }}
+      />
+      {/* Friend Screens */}
+      <Screen
+        name="SearchFriends"
+        component={SearchFriends}
+        options={{
+          headerLeft: BackButton,
+          headerTitle: getHeaderTitle('Follow Users'),
+          ...headerSettings,
+        }}
+      />
+      {/* Unused Screen */}
+      <Screen
+        name="ContenderDetails"
+        component={ContenderDetailsScreen}
+        options={{
+          headerTitle: getHeaderTitle('Contender Details'),
+          headerLeft: BackButton,
+          cardStyle: theme.cardStyle,
           ...headerSettings,
         }}
       />

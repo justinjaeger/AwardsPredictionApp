@@ -10,16 +10,21 @@ export type MainParamList = {
   };
 };
 
+type iBottomTabDefaultParamList = {
+  initialScreen?: keyof PredictionsParamList;
+};
+
 export type BottomTabParamList = {
-  Predictions: undefined;
-  Profile: { userId?: string };
-  Friend: undefined;
+  Predictions: iBottomTabDefaultParamList;
+  Profile: iBottomTabDefaultParamList & { userId?: string };
+  Friend: iBottomTabDefaultParamList;
   Admin: undefined;
   Help: undefined;
 };
 
 export type PredictionsParamList = {
   EventSelect: undefined;
+  // PREDICTION SCREENS
   Event: { userId: string | undefined };
   EventFromProflie: { userId: string | undefined };
   Category: {
@@ -32,26 +37,11 @@ export type PredictionsParamList = {
     isSelectable?: boolean;
     onPressItem?: (contenderId: string) => void;
   };
-  ContenderDetails: {
-    categoryType: CategoryType;
-    contenderId: string;
-    personTmdb?: number | undefined;
-  };
   AddPredictions: {
     initialPredictions: iPrediction[];
     onFinish: (predictions: iPrediction[]) => void;
   };
-  Profile: {
-    userId?: string;
-  };
-};
-
-export type AdminParamList = {
-  Admin: undefined;
-  ManageContenders: undefined;
-};
-
-export type ProfileParamList = {
+  // PROFILE SCREENS
   Profile: {
     userId?: string;
   };
@@ -60,18 +50,17 @@ export type ProfileParamList = {
     type: 'followers' | 'following';
   };
   ChangeUsername: undefined;
-  Event: { userId: string | undefined };
-  Category: {
-    userId: string | undefined;
-    isSelectable?: boolean;
-    onPressItem?: (contenderId: string) => void;
+  // UNFINISHED SCREENS
+  ContenderDetails: {
+    categoryType: CategoryType;
+    contenderId: string;
+    personTmdb?: number | undefined;
   };
+  // FRIEND SCREENS
+  SearchFriends: undefined;
 };
 
-export type FriendParamList = {
-  SearchFriends: undefined;
-  Profile: {
-    userId?: string;
-  };
-  ChangeUsername: undefined;
+export type AdminParamList = {
+  Admin: undefined;
+  ManageContenders: undefined;
 };

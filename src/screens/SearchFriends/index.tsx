@@ -10,7 +10,7 @@ import SearchInput from '../../components/Inputs/SearchInput';
 import { HeaderLight } from '../../components/Text';
 import UserSearchResult from '../../components/UserSearchResult';
 import theme from '../../constants/theme';
-import { useSearch } from '../../context/ContenderSearchContext';
+import { SearchProvider, useSearch } from '../../context/ContenderSearchContext';
 import useRecommendedUsers from '../../hooks/useRecommendedUsers';
 import useFriendSearch from './useFriendSearch';
 
@@ -59,4 +59,10 @@ const SearchFriends = () => {
   );
 };
 
-export default SearchFriends;
+const WithProvider = () => (
+  <SearchProvider>
+    <SearchFriends />
+  </SearchProvider>
+);
+
+export default WithProvider;

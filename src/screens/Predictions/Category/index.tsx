@@ -31,6 +31,7 @@ export type iCategoryProps = {
   isLoading: boolean;
 };
 
+// Essentially "Category with personal/community tabs" (uses usePredictionData)
 const Category = () => {
   const { params } = useRoute<RouteProp<PredictionsParamList, 'Category'>>();
   const { userId: authUserId } = useAuth();

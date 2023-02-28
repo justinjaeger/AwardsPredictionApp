@@ -7,7 +7,6 @@ import MovieListCommunity from '../../../components/MovieList/MovieListCommunity
 import { BodyBold } from '../../../components/Text';
 import theme from '../../../constants/theme';
 import { useCategory } from '../../../context/CategoryContext';
-import usePredictionData from '../../../hooks/queries/usePredictionData';
 import { iCategory } from '../../../types';
 import { formatLastUpdated } from '../../../util/formatDateTime';
 
@@ -18,16 +17,14 @@ const CategoryCommunity = ({
   delayedDisplay,
   gridOpacity,
   listOpacity,
+  predictionData,
 }: iCategoryProps) => {
   const { category: _category, date } = useCategory();
 
   const isHistory = !!date;
   const category = _category as iCategory;
 
-  // We use the SAME KEY as the previous screen, because it avoids a re-fetch of the data which was available previously
-  const { predictionData } = usePredictionData('community');
   const predictions = predictionData?.[category.id]?.predictions || [];
-
   const lastUpdated = predictionData?.[category.id]?.updatedAt;
   const lastUpdatedString = formatLastUpdated(new Date(lastUpdated || ''));
 

@@ -1,12 +1,10 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import ProfileNavigator from '../ProfileNavigator';
 import TabBar, { ITabBarProps } from './TabBar';
 import PredictionsNavigator from '../PredictionsNavigator';
 import AdminNavigator from '../AdminNavigator';
 import { useAuth } from '../../context/UserContext';
 import { UserRole } from '../../API';
-import FriendNavigator from '../FriendNavigator';
 import { BottomTabParamList } from '../types';
 import HelpNavigator from '../HelpNavigator';
 
@@ -17,9 +15,21 @@ const BottomTabNavigator = () => {
 
   return (
     <Tab.Navigator tabBar={(p: ITabBarProps) => <TabBar {...p} />}>
-      <Tab.Screen name="Predictions" component={PredictionsNavigator} />
-      <Tab.Screen name="Profile" component={ProfileNavigator} />
-      <Tab.Screen name="Friend" component={FriendNavigator} />
+      <Tab.Screen
+        name="Predictions"
+        component={PredictionsNavigator}
+        initialParams={{ initialScreen: 'EventSelect' }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={PredictionsNavigator}
+        initialParams={{ initialScreen: 'Profile' }}
+      />
+      <Tab.Screen
+        name="Friend"
+        component={PredictionsNavigator}
+        initialParams={{ initialScreen: 'SearchFriends' }}
+      />
       <Tab.Screen name="Help" component={HelpNavigator} />
       {userRole && userRole === UserRole.ADMIN ? (
         <Tab.Screen name="Admin" component={AdminNavigator} />
