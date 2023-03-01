@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState } from 'react';
 import { CategoryIsShortlisted, CategoryName, CategoryType } from '../API';
 import ApiServices from '../services/graphql';
 import { iCategory, iEvent } from '../types';
+import { useAuth } from './UserContext';
 
 /**
  * Context that wraps the "read only" screens shared by global and personal
@@ -40,11 +41,13 @@ const CategoryContext = createContext<iCategoryContext>({
 // TODO: think we can delete eventId since not using it
 
 export const CategoryProvider = (props: { children: React.ReactNode }) => {
+  const { userId } = useAuth();
+
   const [event, _setEvent] = useState<iEvent>();
   const [eventCategories, _setEventCategories] = useState<iCategory[]>([]);
   const [category, _setCategory] = useState<iCategory>();
   const [personalCommunityTab, setPersonalCommunityTab] = useState<iPersonalCommunityTab>(
-    'personal',
+    userId === undefined ? 'community' : 'personal',
   );
   const [date, setDate] = useState<Date | undefined>(undefined);
 

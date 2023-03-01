@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Animated, ScrollView, useWindowDimensions, View } from 'react-native';
 import BackgroundWrapper from '../../components/BackgroundWrapper';
 import HistoryTab from '../../components/HistoryTab';
@@ -16,13 +16,9 @@ const PredictionTabsNavigator = (
   const { personalCommunityTab, setPersonalCommunityTab } = useCategory();
   const scrollBarPositionTwo = width / 2;
 
-  const [initialTab] = useState<'personal' | 'community'>(
-    personalCommunityTab || 'personal',
-  );
-
   const scrollViewRef = useRef<ScrollView>(null);
   const scrollBarAnim = useRef(
-    new Animated.Value(initialTab === 'personal' ? 0 : scrollBarPositionTwo),
+    new Animated.Value(personalCommunityTab === 'personal' ? 0 : scrollBarPositionTwo),
   ).current;
 
   const SCROLL_BAR_WIDTH = width / 2;
@@ -95,8 +91,9 @@ const PredictionTabsNavigator = (
             nestedScrollEnabled
             scrollEventThrottle={1}
             scrollEnabled={false}
+            // basically a starting value
             contentOffset={{
-              x: initialTab === 'community' ? 0 : width,
+              x: personalCommunityTab === 'personal' ? 0 : width,
               y: 0,
             }}
           >
