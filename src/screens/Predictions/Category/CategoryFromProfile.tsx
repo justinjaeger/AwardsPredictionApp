@@ -11,15 +11,14 @@ import { useCollapsible } from '../../../hooks/animatedState/useCollapsible';
 import { iListDisplay, useDisplay } from '../../../hooks/animatedState/useDisplay';
 import { Animated, View } from 'react-native';
 import DisplayFAB from '../../../components/Buttons/DisplayFAB';
-import { iEvent, iIndexedPredictionsByCategory, iUser } from '../../../types';
+import { iEvent } from '../../../types';
 import { useAuth } from '../../../context/UserContext';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import HistoryTab from '../../../components/HistoryTab';
 import UserHeader from '../../../components/UserHeader';
-import getPersonalPredictionsByEvent from '../../../services/queryFuncs/getPersonalPredictionsByEvent';
-import getUser from '../../../services/queryFuncs/getUser';
 import CategoryCommunity from './CategoryCommunity';
+import { useProfilePrediction } from '../../../context/ProfilePredictionContext';
 
 export type iCategoryProps = {
   collapsedOpacity: Animated.Value;
@@ -46,20 +45,8 @@ const Category = () => {
   } = useCollapsible();
   const { delayedDisplay, setDisplay, gridOpacity, listOpacity } = useDisplay();
 
-  const [user, setUser] = useState<iUser | undefined>(undefined);
-  const [predictionData, setPredictionData] = useState<
-    iIndexedPredictionsByCategory | undefined
-  >(undefined);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-
-  useEffect(() => {
-    setIsLoading(true);
-    getPersonalPredictionsByEvent(event.id, userId)
-      .then((res) => setPredictionData(res))
-      .finally(() => setIsLoading(false));
-
-    getUser(userId).then((res) => setUser(res));
-  }, [userId]);
+  const { user, predictionData, isLoading, setUserId } = useProfilePrediction();
+  useEffect(() => setUserId(userId), [userId]);
 
   const event = _event as iEvent;
 

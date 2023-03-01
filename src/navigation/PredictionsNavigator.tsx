@@ -17,6 +17,7 @@ import ChangeUsername from '../screens/Profile/ChangeUsername';
 import SearchFriends from '../screens/SearchFriends';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import Followers from '../screens/Profile/Followers';
+import { ProfilePredictionProvider } from '../context/ProfilePredictionContext';
 
 const { Navigator, Screen } = createStackNavigator<PredictionsParamList>();
 
@@ -141,4 +142,10 @@ const PredictionsNavigator = () => {
   );
 };
 
-export default PredictionsNavigator;
+const WithProvider = () => (
+  <ProfilePredictionProvider>
+    <PredictionsNavigator />
+  </ProfilePredictionProvider>
+);
+
+export default WithProvider;
