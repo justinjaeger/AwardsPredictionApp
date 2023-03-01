@@ -9,10 +9,6 @@ const usePredictionData = (tab: 'community' | 'personal', userId?: string) => {
 
   const event = _event as iEvent;
 
-  if (!userId && tab === 'personal') {
-    console.error('no userId; cannot fetch personal predictions');
-  }
-
   const today = new Date();
   // we don't want to show history for the current day
   const showHistory = date && date.getDay() !== today.getDay();
