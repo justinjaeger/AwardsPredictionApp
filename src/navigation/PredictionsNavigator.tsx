@@ -49,7 +49,7 @@ const PredictionsNavigator = () => {
         }}
       />
       <Screen
-        name="EventFromProflie"
+        name="EventFromProfile"
         component={EventFromProfile}
         options={{
           headerTitle: getHeaderTitle('Event Predictions'),

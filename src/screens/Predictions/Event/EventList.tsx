@@ -31,10 +31,11 @@ const EventList = ({ events, user }: { events: iEvent[]; user: iUser | undefined
 
   const onSelectEvent = async (event: iEvent) => {
     setEvent(event);
-    if (authUserId && authUserId === user?.id) {
+    const noProfileSelected = !user?.id; // happens when signed out and click from home screen
+    if ((authUserId && authUserId === user?.id) || noProfileSelected) {
       navigation.navigate('Event', { userId: user?.id });
     } else {
-      navigation.navigate('EventFromProflie', { userId: user?.id });
+      navigation.navigate('EventFromProfile', { userId: user?.id });
     }
   };
 

@@ -57,14 +57,14 @@ const EventSelect = () => {
             marginLeft: theme.windowMargin,
           }}
         >
-          <HeaderLight
+          {/* <HeaderLight
             style={{
               alignSelf: 'flex-start',
               marginTop: 10,
             }}
           >
             Events
-          </HeaderLight>
+          </HeaderLight> */}
           {events ? <EventList user={user} events={Object.values(events)} /> : null}
           {(usersWithRecentPredictionSets || []).length > 0 ? (
             // TODO: Below display is untested

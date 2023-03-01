@@ -72,7 +72,7 @@ const EventPersonalCommunity = () => {
         <FollowingBottomScroll
           userId={userId}
           onPress={(id) => {
-            navigation.dispatch(StackActions.push('EventFromProflie', { userId: id }));
+            navigation.dispatch(StackActions.push('EventFromProfile', { userId: id }));
           }}
         />
       ) : null}

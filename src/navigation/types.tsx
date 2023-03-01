@@ -26,7 +26,7 @@ export type PredictionsParamList = {
   EventSelect: undefined;
   // PREDICTION SCREENS
   Event: { userId: string | undefined };
-  EventFromProflie: { userId: string | undefined };
+  EventFromProfile: { userId: string | undefined };
   Category: {
     userId: string | undefined;
     isSelectable?: boolean;
