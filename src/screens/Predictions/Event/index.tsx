@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef } from 'react';
+import React, { useLayoutEffect } from 'react';
 import { Animated } from 'react-native';
 import { PredictionsParamList } from '../../../navigation/types';
 import { useTypedNavigation } from '../../../util/hooks';
@@ -14,8 +14,7 @@ import { formatLastUpdated } from '../../../util/formatDateTime';
 import LastUpdatedText from '../../../components/LastUpdatedText';
 import { useAuth } from '../../../context/UserContext';
 import { StackActions } from '@react-navigation/native';
-
-const TIMING = 300;
+import { useLoading } from '../../../hooks/animatedState/useLoading';
 
 const Event = ({
   tab,
@@ -38,8 +37,7 @@ const Event = ({
   const { event: _event, setCategory, date } = useCategory();
   const navigation = useTypedNavigation<PredictionsParamList>();
 
-  const loadingOpacity = useRef(new Animated.Value(1)).current;
-  const bodyOpacity = useRef(new Animated.Value(0)).current;
+  const { loadingOpacity, bodyOpacity } = useLoading(isLoading);
 
   const isHistory = !!date;
   const event = _event as iEvent;
@@ -52,21 +50,6 @@ const Event = ({
       headerTitle: getHeaderTitleWithTrophy(headerTitle, event.awardsBody),
     });
   }, [navigation]);
-
-  useEffect(() => {
-    Animated.timing(loadingOpacity, {
-      toValue: isLoading ? 1 : 0,
-      duration: TIMING,
-      useNativeDriver: true,
-    }).start();
-    setTimeout(() => {
-      Animated.timing(bodyOpacity, {
-        toValue: isLoading ? 0 : 1,
-        duration: TIMING,
-        useNativeDriver: true,
-      }).start();
-    }, 250);
-  }, [isLoading]);
 
   if (!userId && tab === 'personal') {
     return <SignedOutState />;

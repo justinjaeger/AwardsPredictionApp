@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { Animated } from 'react-native';
 import theme from '../../../constants/theme';
 import LoadingStatue from '../../../components/LoadingStatue';
@@ -10,18 +10,18 @@ import EventList from '../Event/EventList';
 import { HeaderLight } from '../../../components/Text';
 import useQueryGetFollowingRecentPredictions from '../../../hooks/queries/useQueryGetFollowingRecentPredictions';
 import PredictionCarousel from '../../../components/PredictionCarousel';
+import { useLoading } from '../../../hooks/animatedState/useLoading';
 
 const EventSelect = () => {
   const { userId } = useAuth();
-
-  const loadingOpacity = useRef(new Animated.Value(1)).current;
-  const bodyOpacity = useRef(new Animated.Value(0)).current;
 
   const { data: events, isLoading, refetch: refetchEvents } = useQueryAllEvents();
   const { data: user, refetch: refetchUser } = useQueryGetUser(userId);
   const { data: usersWithRecentPredictionSets } = useQueryGetFollowingRecentPredictions(
     userId,
   );
+
+  const { loadingOpacity, bodyOpacity } = useLoading(isLoading);
 
   // just in case there's some refresh problem
   useEffect(() => {
@@ -32,25 +32,6 @@ const EventSelect = () => {
       refetchUser();
     }
   }, [events, user, userId]);
-
-  useEffect(() => {
-    if (!isLoading) {
-      Animated.timing(loadingOpacity, {
-        toValue: 0,
-        duration: 500,
-        useNativeDriver: true,
-      }).start();
-      setTimeout(() => {
-        Animated.timing(bodyOpacity, {
-          toValue: 1,
-          duration: 500,
-          useNativeDriver: true,
-        }).start();
-      }, 500);
-    }
-  }, [isLoading]);
-
-  // <PredictionCarousel predictionSets={predictionSets} userId={userId} />
 
   return (
     <BackgroundWrapper>

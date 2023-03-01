@@ -1,10 +1,10 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 import {
   Alert,
-  ScrollView,
   View,
   TouchableHighlight,
   useWindowDimensions,
+  Animated,
 } from 'react-native';
 import { SubmitButton } from '../../components/Buttons';
 import AuthServices from '../../services/auth';
@@ -37,6 +37,8 @@ import getUserEvents from '../../services/queryFuncs/getUserEvents';
 import useQueryAllEvents from '../../hooks/queries/getAllEvents';
 import EventList from '../Predictions/Event/EventList';
 import { PredictionsParamList } from '../../navigation/types';
+import LoadingStatue from '../../components/LoadingStatue';
+import { useLoading } from '../../hooks/animatedState/useLoading';
 
 const Profile = () => {
   // If we pass userId as params, it loads that user's profile. If not, it attemps to get logged in profile.
@@ -56,6 +58,8 @@ const Profile = () => {
   const [followingCount, setFollowingCount] = useState<number | undefined>(undefined);
   const [followerCount, setFollowerCount] = useState<number | undefined>(undefined);
   const [userEventIds, setUserEventIds] = useState<string[]>([]);
+
+  const { loadingOpacity, bodyOpacity } = useLoading(isLoading);
 
   const iterableEvents = events ? Object.values(events) || [] : [];
   const userEvents = Object.values(iterableEvents)?.filter((event) =>
@@ -166,8 +170,20 @@ const Profile = () => {
 
   return (
     <BackgroundWrapper>
-      <ScrollView
-        style={{ width: '100%' }}
+      <Animated.View
+        style={{
+          position: 'absolute',
+          width: '100%',
+          height: '80%',
+          alignItems: 'center',
+          justifyContent: 'center',
+          opacity: loadingOpacity,
+        }}
+      >
+        <LoadingStatue />
+      </Animated.View>
+      <Animated.ScrollView
+        style={{ opacity: bodyOpacity, width: '100%' }}
         contentContainerStyle={{
           alignItems: 'center',
           marginTop: 20,
@@ -312,7 +328,7 @@ const Profile = () => {
             ) : null}
           </>
         )}
-      </ScrollView>
+      </Animated.ScrollView>
     </BackgroundWrapper>
   );
 };
