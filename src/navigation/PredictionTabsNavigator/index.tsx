@@ -23,7 +23,7 @@ const PredictionTabsNavigator = (
 
   const scrollViewRef = useRef<ScrollView>(null);
   const scrollBarAnim = useRef(
-    new Animated.Value(initialTab === 'personal' ? 0 : scrollBarPositionTwo),
+    new Animated.Value(personalCommunityTab === 'personal' ? 0 : scrollBarPositionTwo),
   ).current;
 
   const SCROLL_BAR_WIDTH = width / 2;
