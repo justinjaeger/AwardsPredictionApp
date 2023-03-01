@@ -17,10 +17,12 @@ import theme from '../../../constants/theme';
 import AwardsBodyImage from '../../../components/AwardsBodyImage';
 import { EVENT_STATUS_TO_STRING, getEventTime } from '../../../constants/events';
 import { Divider } from '@ui-kitten/components';
+import { useAuth } from '../../../context/UserContext';
 
 const EVENT_ITEM_HEIGHT = 110;
 
 const EventList = ({ events, user }: { events: iEvent[]; user: iUser | undefined }) => {
+  const { userId: authUserId } = useAuth();
   const { width } = useWindowDimensions();
   const { setEvent } = useCategory();
   const navigation = useTypedNavigation<PredictionsParamList>();
@@ -29,8 +31,11 @@ const EventList = ({ events, user }: { events: iEvent[]; user: iUser | undefined
 
   const onSelectEvent = async (event: iEvent) => {
     setEvent(event);
-    // TODO: if user is authUser, navigate to Event screen in home tab?
-    navigation.navigate('Event', { userId: user?.id });
+    if (authUserId && authUserId === user?.id) {
+      navigation.navigate('Event', { userId: user?.id });
+    } else {
+      navigation.navigate('EventFromProflie', { userId: user?.id });
+    }
   };
 
   const orderedEvents = sortByObjectOrder<AwardsBody, iEvent>(
