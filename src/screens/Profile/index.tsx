@@ -53,7 +53,7 @@ const Profile = () => {
   const { data: events, isLoading: isLoadingAllEvents } = useQueryAllEvents();
   const { mutate: updateProfileImage } = useUpdateProfileImage();
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [user, setUser] = useState<iUser | undefined>(undefined);
   const [followingCount, setFollowingCount] = useState<number | undefined>(undefined);
   const [followerCount, setFollowerCount] = useState<number | undefined>(undefined);
