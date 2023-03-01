@@ -3,15 +3,15 @@ import { RouteProp, useRoute } from '@react-navigation/native';
 import { getHeaderTitle } from '../../../constants';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import { useTypedNavigation } from '../../../util/hooks';
-import { ProfileParamList } from '../../../navigation/types';
 import UserSearchResult from '../../../components/UserSearchResult';
 import usePaginatedFriends from '../../../hooks/usePaginatedFriends';
+import { PredictionsParamList } from '../../../navigation/types';
 
 const Followers = () => {
-  const navigation = useTypedNavigation<ProfileParamList>();
+  const navigation = useTypedNavigation<PredictionsParamList>();
   const {
     params: { userId, type },
-  } = useRoute<RouteProp<ProfileParamList, 'Followers'>>();
+  } = useRoute<RouteProp<PredictionsParamList, 'Followers'>>();
 
   const { users, fetchPage, isLoading } = usePaginatedFriends({ userId, type });
 
