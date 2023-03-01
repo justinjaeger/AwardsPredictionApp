@@ -1,18 +1,9 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react';
-import {
-  Alert,
-  View,
-  TouchableHighlight,
-  useWindowDimensions,
-  Animated,
-} from 'react-native';
+import React from 'react';
+import { View, TouchableHighlight, useWindowDimensions, Animated } from 'react-native';
 import { SubmitButton } from '../../components/Buttons';
-import AuthServices from '../../services/auth';
-import Snackbar from '../../components/Snackbar';
 import { BodyBold, HeaderLight, SubHeader } from '../../components/Text';
 import { useAuth } from '../../context/UserContext';
 import BackgroundWrapper from '../../components/BackgroundWrapper';
-import { IconButton } from '../../components/Buttons/IconButton';
 import { launchImageLibrary } from 'react-native-image-picker';
 import AWSStorage from '../../services/storage';
 import {
@@ -28,22 +19,19 @@ import { useTypedNavigation } from '../../util/hooks';
 import useUpdateProfileImage from '../../hooks/mutations/updateProfileImage';
 import ProfileImage from '../../components/ProfileImage';
 import FollowButton from '../../components/FollowButton';
-import BackButton from '../../components/Buttons/BackButton';
-import { iUser } from '../../types';
-import getUserProfile from '../../services/queryFuncs/getUserProfile';
-import getRelationshipCount from '../../services/queryFuncs/getRelationshipCount';
 import FollowCountButton from '../../components/FollowCountButton';
-import getUserEvents from '../../services/queryFuncs/getUserEvents';
 import useQueryAllEvents from '../../hooks/queries/getAllEvents';
 import EventList from '../Predictions/Event/EventList';
 import { PredictionsParamList } from '../../navigation/types';
 import LoadingStatue from '../../components/LoadingStatue';
 import { useLoading } from '../../hooks/animatedState/useLoading';
+import useProfileUser from './useProfileUser';
+import useProfileHeader from './useProfileHeader';
 
 const Profile = () => {
   // If we pass userId as params, it loads that user's profile. If not, it attemps to get logged in profile.
   const { params } = useRoute<RouteProp<PredictionsParamList, 'Profile'>>();
-  const { userId: authUserId, userEmail, signOutUser } = useAuth();
+  const { userId: authUserId, userEmail } = useAuth();
   const userId = params?.userId || authUserId;
 
   const globalNavigation = useNavigation();
@@ -53,11 +41,17 @@ const Profile = () => {
   const { data: events, isLoading: isLoadingAllEvents } = useQueryAllEvents();
   const { mutate: updateProfileImage } = useUpdateProfileImage();
 
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [user, setUser] = useState<iUser | undefined>(undefined);
-  const [followingCount, setFollowingCount] = useState<number | undefined>(undefined);
-  const [followerCount, setFollowerCount] = useState<number | undefined>(undefined);
-  const [userEventIds, setUserEventIds] = useState<string[]>([]);
+  const {
+    isLoading,
+    setIsLoading,
+    user,
+    followingCount,
+    followerCount,
+    userEventIds,
+  } = useProfileUser(userId);
+
+  // handles the header (and logout button)
+  useProfileHeader(userId, isLoading, setIsLoading);
 
   const { loadingOpacity, bodyOpacity } = useLoading(isLoading);
 
@@ -66,87 +60,12 @@ const Profile = () => {
     userEventIds.includes(event.id),
   );
 
-  // we have to do this and NOT useQuery because it's re-used across many profile that might be in the stack
-  useEffect(() => {
-    if (!userId) return;
-    setIsLoading(true);
-    // get user profile info
-    getUserProfile(userId, authUserId)
-      .then((res) => setUser(res))
-      .finally(() => setIsLoading(false));
-    // get follower / following count
-    getRelationshipCount(userId).then(({ followingCount, followerCount }) => {
-      setFollowingCount(followingCount);
-      setFollowerCount(followerCount);
-    });
-    // get events user has predicted
-    getUserEvents(userId).then((eventIds) => setUserEventIds(eventIds));
-  }, [userId]);
-
-  const isDeviceProfile = user && userId && user?.id === authUserId; // signed in matches params
+  const isDeviceProfile = user && userId && user?.id === authUserId;
 
   const predictionSets = user?.predictionSets || [];
 
-  // put the logout button in the top right corner
-  useLayoutEffect(() => {
-    // helps NOT render a back arrow on root profile
-    const isFirstProfile =
-      globalNavigation
-        .dangerouslyGetState()
-        .routes.map((r) => r.name)
-        .filter((r) => r === 'Profile').length === 1;
-
-    if (!userId) return;
-    navigation.setOptions({
-      headerLeft: navigation.canGoBack() && !isFirstProfile ? () => <BackButton /> : null,
-      // don't set logout header if someone else's profile
-      headerRight: isDeviceProfile
-        ? () => (
-            <IconButton
-              iconProps={{
-                name: 'log-out-outline',
-              }}
-              onPress={() => {
-                if (isLoading) return; // disable while loading
-                Alert.alert('Log out', 'Are you sure you want to log out?', [
-                  {
-                    text: 'Cancel',
-                    onPress: () => {},
-                    style: 'cancel',
-                  },
-                  {
-                    text: 'Yes',
-                    onPress: () => {
-                      logOut();
-                    },
-                  },
-                ]);
-              }}
-              styles={{
-                width: 30,
-                height: 30,
-                marginRight: 10,
-              }}
-            />
-          )
-        : null,
-    });
-  }, [userId]);
-
   const logIn = () => {
     globalNavigation.navigate('Authenticator');
-  };
-
-  const logOut = () => {
-    setIsLoading(true);
-    AuthServices.signOut().then((res) => {
-      // sign out in context as well
-      if (res.status === 'success') {
-        signOutUser();
-        Snackbar.success('You were signed out');
-      }
-      setIsLoading(false);
-    });
   };
 
   const onUploadProfileImage = async () => {
@@ -232,11 +151,11 @@ const Profile = () => {
                 >
                   <>
                     <HeaderLight>
-                      {user?.name ? user.name : isDeviceProfile ? 'Add Name' : ''}
+                      {user?.name || (isDeviceProfile ? 'Add Name' : '')}
                     </HeaderLight>
                     <SubHeader style={{ marginTop: 5 }}>
                       {user?.username
-                        ? '@' + user.username
+                        ? '@' + user?.username
                         : isDeviceProfile
                         ? 'Add Username'
                         : ''}

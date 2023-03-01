@@ -20,7 +20,10 @@ const useUpdateUser = (onComplete?: () => void) => {
     onSuccess: async () => {
       // re-fetch predictions so the UI updates
       await queryClient.invalidateQueries({
-        queryKey: [QueryKeys.USER, QueryKeys.USER_PROFILE],
+        queryKey: [QueryKeys.USER],
+      });
+      await queryClient.invalidateQueries({
+        queryKey: [QueryKeys.USER_PROFILE],
       });
       setIsComplete(true);
       onComplete && onComplete();
