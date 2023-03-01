@@ -3,7 +3,7 @@ import { useCategory } from '../context/CategoryContext';
 import getPersonalHistory from '../services/queryFuncs/getPersonalHistory';
 import getPersonalPredictionsByEvent from '../services/queryFuncs/getPersonalPredictionsByEvent';
 import getUser from '../services/queryFuncs/getUser';
-import { iEvent, iIndexedPredictionsByCategory, iUser } from '../types';
+import { iIndexedPredictionsByCategory, iUser } from '../types';
 
 /**
  * Lets us get the userId and userEmail synchronously
@@ -24,9 +24,7 @@ const ProfilePredictionContext = createContext<iProfilePredictionContext>({
 });
 
 export const ProfilePredictionProvider = (props: { children: React.ReactNode }) => {
-  const { event: _event, date } = useCategory();
-
-  const event = _event as iEvent;
+  const { event, date } = useCategory();
 
   const [userId, setUserId] = useState<string | undefined>(undefined);
 
@@ -45,15 +43,17 @@ export const ProfilePredictionProvider = (props: { children: React.ReactNode }) 
 
   // can't use react-query because data must be re-fetched for each userId (it's not a pure component)
   useEffect(() => {
-    getPersonalPredictionsByEvent(event.id, userId)
-      .then((res) => setContemporaryData(res))
-      .finally(() => setIsLoading(false));
+    if (event) {
+      getPersonalPredictionsByEvent(event.id, userId)
+        .then((res) => setContemporaryData(res))
+        .finally(() => setIsLoading(false));
+    }
 
     getUser(userId).then((res) => setUser(res));
   }, [userId]);
 
   useEffect(() => {
-    if (userId && showHistory) {
+    if (userId && showHistory && event) {
       getPersonalHistory(event.id, userId, date)
         .then((res) => setHistoryData(res))
         .finally(() => setIsLoading(false));
