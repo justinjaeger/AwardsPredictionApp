@@ -16,6 +16,7 @@ const PredictionTabsNavigator = (
   const { personalCommunityTab, setPersonalCommunityTab } = useCategory();
   const scrollBarPositionTwo = width / 2;
 
+  // This seems unnecessary but without, it breaks the animation
   const [initialTab] = useState<'personal' | 'community'>(
     personalCommunityTab || 'personal',
   );
@@ -95,8 +96,9 @@ const PredictionTabsNavigator = (
             nestedScrollEnabled
             scrollEventThrottle={1}
             scrollEnabled={false}
+            // basically a starting value
             contentOffset={{
-              x: initialTab === 'community' ? 0 : width,
+              x: initialTab === 'personal' ? 0 : width,
               y: 0,
             }}
           >
