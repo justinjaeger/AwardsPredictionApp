@@ -16,7 +16,7 @@ const HelpNavigator = () => (
     <Screen
       name="SendMessage"
       component={SendMessage}
-      options={{ headerTitle: getHeaderTitle('Help'), ...headerSettings }}
+      options={{ headerTitle: getHeaderTitle('Contact'), ...headerSettings }}
     />
   </Navigator>
 );
