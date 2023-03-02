@@ -209,7 +209,7 @@ export const updateUsername = async (
 ): Promise<iApiResponse<UpdateUserMutation>> => {
   try {
     // First, validate that username is not already taken
-    if (username) {
+    if (username !== undefined) {
       const { data: listUsersQuery } = await getUsersByUsername(username);
       const maybeUsers = listUsersQuery?.listUsers?.items;
       if (!maybeUsers) {
@@ -220,8 +220,8 @@ export const updateUsername = async (
       }
     }
     const input: UpdateUserInput = { id };
-    if (username) input.username = username;
-    if (name) input.name = name;
+    if (username !== undefined) input.username = username;
+    if (name !== undefined) input.name = name;
     // If not taken, create new username
     const { data, errors } = await GraphqlAPI<
       UpdateUserMutation,
