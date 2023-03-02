@@ -122,7 +122,7 @@ const Profile = () => {
                   onPress={
                     isDeviceProfile
                       ? () => {
-                          navigation.navigate('ChangeUsername');
+                          navigation.navigate('UpdateProfileInfo');
                         }
                       : undefined
                   }

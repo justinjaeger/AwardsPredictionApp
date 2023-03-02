@@ -49,7 +49,7 @@ export type PredictionsParamList = {
     userId: string;
     type: 'followers' | 'following';
   };
-  ChangeUsername: undefined;
+  UpdateProfileInfo: undefined;
   // UNFINISHED SCREENS
   ContenderDetails: {
     categoryType: CategoryType;

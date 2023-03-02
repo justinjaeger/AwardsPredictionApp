@@ -51,7 +51,7 @@ const ConfirmSignUp = (p: any) => {
             signInUser(u.id, u.email, u.role);
             navigation.navigate('BottomTabNavigator', {
               screen: 'Profile',
-              params: { screen: 'ChangeUsername' },
+              params: { screen: 'UpdateProfileInfo' },
             });
           }
         });

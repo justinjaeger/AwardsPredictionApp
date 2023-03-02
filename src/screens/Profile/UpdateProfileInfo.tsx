@@ -15,7 +15,7 @@ import ProfileImage from '../../components/ProfileImage';
 import useUpdateProfileImage from '../../hooks/mutations/updateProfileImage';
 import BackButton from '../../components/Buttons/BackButton';
 
-const ChangeUsername = () => {
+const UpdateProfileInfo = () => {
   const { userId, userEmail } = useAuth();
   const navigation = useNavigation();
 
@@ -142,4 +142,4 @@ const ChangeUsername = () => {
   );
 };
 
-export default ChangeUsername;
+export default UpdateProfileInfo;
