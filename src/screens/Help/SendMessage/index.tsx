@@ -113,13 +113,6 @@ const SendMessage = () => {
           ))}
         </View>
         <FormInput
-          label={'Contact (optional)'}
-          value={contact}
-          setValue={setContact}
-          style={{ marginTop: 20 }}
-          textContentType={'emailAddress'}
-        />
-        <FormInput
           label={'Message'}
           caption={
             submitIsDisabled && !showConfirmation
@@ -129,6 +122,14 @@ const SendMessage = () => {
           value={message}
           setValue={setMessage}
           multiline
+          style={{ marginTop: 20 }}
+        />
+        <FormInput
+          label={'Your contact (optional)'}
+          value={contact}
+          setValue={setContact}
+          style={{ marginTop: 20 }}
+          textContentType={'emailAddress'}
         />
         <SubmitButton
           text={'Submit'}
