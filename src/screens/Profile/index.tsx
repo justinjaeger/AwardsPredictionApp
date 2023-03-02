@@ -4,8 +4,6 @@ import { SubmitButton } from '../../components/Buttons';
 import { BodyBold, HeaderLight, SubHeader } from '../../components/Text';
 import { useAuth } from '../../context/UserContext';
 import BackgroundWrapper from '../../components/BackgroundWrapper';
-import { launchImageLibrary } from 'react-native-image-picker';
-import AWSStorage from '../../services/storage';
 import {
   RouteProp,
   useNavigation,
@@ -69,22 +67,8 @@ const Profile = () => {
   };
 
   const onUploadProfileImage = async () => {
-    if (!authUserId) return; // don't execute if not signed in
-    const result = await launchImageLibrary({
-      maxWidth: 200,
-      maxHeight: 200,
-      mediaType: 'photo',
-    });
-    if (result && result.assets) {
-      const { uri } = result.assets[0];
-      if (uri) {
-        const key = await AWSStorage.uploadProfilePicture(uri, userEmail || '');
-        // store the key as user.image
-        if (key) {
-          updateProfileImage({ id: authUserId, image: key });
-        }
-      }
-    }
+    if (!authUserId || !userEmail) return; // don't execute if not signed in
+    updateProfileImage({ userId: authUserId, userEmail });
   };
 
   return (

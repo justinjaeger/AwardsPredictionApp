@@ -18,7 +18,7 @@ const ConfirmSignUp = (p: any) => {
     setEmail: setContextEmail,
     password: contextPassword,
   } = useAuthenticator();
-  const { goBack } = useNavigation();
+  const navigation = useNavigation();
   const { signInUser } = useAuth();
 
   const [code, setCode] = useState<string>('');
@@ -49,7 +49,10 @@ const ConfirmSignUp = (p: any) => {
         AuthServices.signIn(email, password).then((res) => {
           if (res.status === 'success') {
             signInUser(u.id, u.email, u.role);
-            goBack();
+            navigation.navigate('BottomTabNavigator', {
+              screen: 'Profile',
+              params: { screen: 'ChangeUsername' },
+            });
           }
         });
       }

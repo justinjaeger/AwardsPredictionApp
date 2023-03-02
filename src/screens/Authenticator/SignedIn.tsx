@@ -5,6 +5,7 @@ import AuthServices from '../../services/auth';
 import { Body } from '../../components/Text';
 import { useAuth } from '../../context/UserContext';
 import COLORS from '../../constants/colors';
+import LoadingStatue from '../../components/LoadingStatue';
 
 const SignedIn = () => {
   const { signOutUser } = useAuth();
@@ -20,7 +21,10 @@ const SignedIn = () => {
 
   return (
     <View style={{ width: '100%', backgroundColor: COLORS.primary }}>
-      <Body>You are signed in</Body>
+      <View style={{ alignSelf: 'center' }}>
+        <Body style={{ textAlign: 'center' }}>Just a moment...</Body>
+        <LoadingStatue />
+      </View>
       <SubmitButton
         text={'Sign out'}
         onPress={signOut}
