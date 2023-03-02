@@ -25,6 +25,7 @@ const ForgotPassword = (p: any) => {
     AuthServices.forgotPassword(email).then((res) => {
       if (res.status === 'success') {
         Snackbar.success(`Confirm the email we sent to ${email}`);
+        navigate('requireNewPassword');
       }
       setLoading(false);
     });

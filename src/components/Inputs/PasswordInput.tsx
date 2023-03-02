@@ -3,16 +3,17 @@ import { Icon, Input } from '@ui-kitten/components';
 import { ImageProps, TouchableWithoutFeedback } from 'react-native';
 import { EvaStatus } from '@ui-kitten/components/devsupport';
 import COLORS from '../../constants/colors';
-import { Body } from '../Text';
+import { SubHeaderLight } from '../Text';
 
 const PasswordInput = (props: {
   value: string;
   setValue: (v: string) => void;
+  label?: string;
   caption?: string;
   onBlur?: () => void;
   status?: EvaStatus;
 }) => {
-  const { value, setValue, caption, onBlur, status } = props;
+  const { value, setValue, label, caption, onBlur, status } = props;
 
   const [secureTextEntry, setSecureTextEntry] = useState<boolean>(true);
 
@@ -25,7 +26,9 @@ const PasswordInput = (props: {
   return (
     <Input
       value={value}
-      label={() => <Body style={{ marginBottom: 5 }}>{'Password'}</Body>}
+      label={() => (
+        <SubHeaderLight style={{ marginBottom: 5 }}>{label || 'Password'}</SubHeaderLight>
+      )}
       placeholder=""
       caption={caption}
       accessoryRight={showPassIcon}
