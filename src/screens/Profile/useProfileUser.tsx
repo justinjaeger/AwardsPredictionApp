@@ -27,7 +27,10 @@ const useProfileUser = (userId: string | undefined) => {
 
   // we have to do this and NOT useQuery because it's re-used across many profile that might be in the stack
   useEffect(() => {
-    if (!userId) return;
+    if (!userId) {
+      setIsLoading(false);
+      return;
+    }
     setIsLoading(true);
     // get user profile info
     getUserProfile(userId, authUserId)

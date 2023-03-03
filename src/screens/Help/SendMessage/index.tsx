@@ -8,6 +8,7 @@ import COLORS from '../../../constants/colors';
 import SlackApi, { SlackChannel } from '../../../services/slack';
 import Tmdb from '../../../assets/tmdb.svg';
 import { useAuth } from '../../../context/UserContext';
+import { useNavigateAwayEffect } from '../../../util/hooks';
 
 type iTypeButtonProps = { text: string; selected: boolean; onPress: () => void };
 
@@ -45,6 +46,15 @@ const SendMessage = () => {
   const [contact, setContact] = useState<string>('');
   const [showConfirmation, setShowConfirmation] = useState<boolean>(false);
   const [userDidSubmitContact, setUserDidSubmitContact] = useState<boolean>(false);
+
+  const reset = () => {
+    setShowConfirmation(false);
+    setUserDidSubmitContact(false);
+  };
+
+  useNavigateAwayEffect(() => {
+    reset();
+  }, []);
 
   const data: iTypeButtonProps[] = [
     {
@@ -154,13 +164,13 @@ const SendMessage = () => {
             ) : null}
           </View>
         ) : null}
+        <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 40 }}>
+          <Body style={{ color: 'rgba(255,255,255,0.6)' }}>
+            Movie data and images powered by
+          </Body>
+          <Tmdb style={{ width: 80, height: 40, marginLeft: 10 }} />
+        </View>
       </ScrollView>
-      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <Body style={{ color: 'rgba(255,255,255,0.6)' }}>
-          Movie data and images powered by
-        </Body>
-        <Tmdb style={{ width: 80, height: 40, marginLeft: 10 }} />
-      </View>
     </BackgroundWrapper>
   );
 };

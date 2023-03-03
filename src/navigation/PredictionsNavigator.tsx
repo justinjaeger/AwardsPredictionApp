@@ -6,7 +6,7 @@ import { BottomTabParamList, PredictionsParamList } from './types';
 import Category from '../screens/Predictions/Category';
 import EventSelect from '../screens/Predictions/EventSelect';
 import theme from '../constants/theme';
-import { getHeaderTitle, headerSettings } from '../constants';
+import { getHeaderTitle, headerSettings, largeHeaderSettings } from '../constants';
 import AddPredictions from '../screens/Predictions/AddPredictions.tsx';
 import HistoryHeaderButton from '../components/Buttons/HistoryHeaderButton';
 import EventPersonalCommunity from '../screens/Predictions/Event/EventPersonalCommunity';
@@ -45,7 +45,7 @@ const PredictionsNavigator = () => {
           headerTitle: getHeaderTitle('Event Predictions'),
           headerLeft: BackButton,
           headerRight: HistoryHeaderButton,
-          ...headerSettings,
+          ...largeHeaderSettings,
         }}
       />
       <Screen
@@ -55,7 +55,7 @@ const PredictionsNavigator = () => {
           headerTitle: getHeaderTitle('Event Predictions'),
           headerLeft: BackButton,
           headerRight: HistoryHeaderButton,
-          ...headerSettings,
+          ...largeHeaderSettings,
         }}
       />
       <Screen
@@ -66,7 +66,7 @@ const PredictionsNavigator = () => {
           headerLeft: BackButton,
           headerRight: HistoryHeaderButton,
           cardStyle: theme.cardStyle,
-          ...headerSettings,
+          ...largeHeaderSettings,
         }}
       />
       <Screen
@@ -77,7 +77,7 @@ const PredictionsNavigator = () => {
           headerLeft: BackButton,
           headerRight: HistoryHeaderButton,
           cardStyle: theme.cardStyle,
-          ...headerSettings,
+          ...largeHeaderSettings,
         }}
       />
       <Screen
@@ -95,7 +95,6 @@ const PredictionsNavigator = () => {
         component={Profile}
         options={{
           headerTitle: getHeaderTitle('Profile'),
-          headerLeft: BackButton,
           ...headerSettings,
         }}
       />
@@ -112,8 +111,8 @@ const PredictionsNavigator = () => {
         name="Followers"
         component={Followers}
         options={{
-          headerTitle: getHeaderTitle('Followers'),
           headerLeft: BackButton,
+          headerTitle: getHeaderTitle('Followers'),
           ...headerSettings,
         }}
       />
@@ -122,7 +121,6 @@ const PredictionsNavigator = () => {
         name="SearchFriends"
         component={SearchFriends}
         options={{
-          headerLeft: BackButton,
           headerTitle: getHeaderTitle('Follow Users'),
           ...headerSettings,
         }}
