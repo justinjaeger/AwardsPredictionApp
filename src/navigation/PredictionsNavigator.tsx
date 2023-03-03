@@ -6,7 +6,7 @@ import { BottomTabParamList, PredictionsParamList } from './types';
 import Category from '../screens/Predictions/Category';
 import EventSelect from '../screens/Predictions/EventSelect';
 import theme from '../constants/theme';
-import { getHeaderTitle, headerSettings, largeHeaderSettings } from '../constants';
+import { getHeaderTitle } from '../constants';
 import AddPredictions from '../screens/Predictions/AddPredictions.tsx';
 import HistoryHeaderButton from '../components/Buttons/HistoryHeaderButton';
 import EventPersonalCommunity from '../screens/Predictions/Event/EventPersonalCommunity';
@@ -18,6 +18,7 @@ import SearchFriends from '../screens/SearchFriends';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import Followers from '../screens/Profile/Followers';
 import { ProfilePredictionProvider } from '../context/ProfilePredictionContext';
+import { useHeaderSettings } from '../hooks/useHeaderSettings';
 
 const { Navigator, Screen } = createStackNavigator<PredictionsParamList>();
 
@@ -25,6 +26,7 @@ const PredictionsNavigator = () => {
   const {
     params: { initialScreen },
   } = useRoute<RouteProp<BottomTabParamList, 'Profile'>>();
+  const { medium, large } = useHeaderSettings();
 
   return (
     <Navigator initialRouteName={initialScreen || 'EventSelect'} headerMode="screen">
@@ -34,7 +36,7 @@ const PredictionsNavigator = () => {
         options={{
           headerTitle: getHeaderTitle('Select Event'),
           cardStyle: theme.cardStyle,
-          ...headerSettings,
+          ...medium,
         }}
       />
       {/* Prediction Screens */}
@@ -45,7 +47,7 @@ const PredictionsNavigator = () => {
           headerTitle: getHeaderTitle('Event Predictions'),
           headerLeft: BackButton,
           headerRight: HistoryHeaderButton,
-          ...largeHeaderSettings,
+          ...large,
         }}
       />
       <Screen
@@ -55,7 +57,7 @@ const PredictionsNavigator = () => {
           headerTitle: getHeaderTitle('Event Predictions'),
           headerLeft: BackButton,
           headerRight: HistoryHeaderButton,
-          ...largeHeaderSettings,
+          ...large,
         }}
       />
       <Screen
@@ -66,7 +68,7 @@ const PredictionsNavigator = () => {
           headerLeft: BackButton,
           headerRight: HistoryHeaderButton,
           cardStyle: theme.cardStyle,
-          ...largeHeaderSettings,
+          ...large,
         }}
       />
       <Screen
@@ -77,7 +79,7 @@ const PredictionsNavigator = () => {
           headerLeft: BackButton,
           headerRight: HistoryHeaderButton,
           cardStyle: theme.cardStyle,
-          ...largeHeaderSettings,
+          ...large,
         }}
       />
       <Screen
@@ -86,7 +88,7 @@ const PredictionsNavigator = () => {
         options={{
           headerTitle: getHeaderTitle('Add / Remove Predictions'),
           headerLeft: BackButton,
-          ...headerSettings,
+          ...medium,
         }}
       />
       {/* Profile Screens */}
@@ -95,7 +97,7 @@ const PredictionsNavigator = () => {
         component={Profile}
         options={{
           headerTitle: getHeaderTitle('Profile'),
-          ...headerSettings,
+          ...medium,
         }}
       />
       <Screen
@@ -104,7 +106,7 @@ const PredictionsNavigator = () => {
         options={{
           headerTitle: getHeaderTitle('Enter Username'),
           headerLeft: BackButton,
-          ...headerSettings,
+          ...medium,
         }}
       />
       <Screen
@@ -113,7 +115,7 @@ const PredictionsNavigator = () => {
         options={{
           headerLeft: BackButton,
           headerTitle: getHeaderTitle('Followers'),
-          ...headerSettings,
+          ...medium,
         }}
       />
       {/* Friend Screens */}
@@ -122,7 +124,7 @@ const PredictionsNavigator = () => {
         component={SearchFriends}
         options={{
           headerTitle: getHeaderTitle('Follow Users'),
-          ...headerSettings,
+          ...medium,
         }}
       />
       {/* Unused Screen */}
@@ -133,7 +135,7 @@ const PredictionsNavigator = () => {
           headerTitle: getHeaderTitle('Contender Details'),
           headerLeft: BackButton,
           cardStyle: theme.cardStyle,
-          ...headerSettings,
+          ...medium,
         }}
       />
     </Navigator>

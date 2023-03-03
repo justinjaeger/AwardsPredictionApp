@@ -164,7 +164,15 @@ const SendMessage = () => {
             ) : null}
           </View>
         ) : null}
-        <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 40 }}>
+        <View
+          style={{
+            flexDirection: 'row',
+            width: '100%',
+            alignItems: 'center',
+            marginTop: 40,
+            marginLeft: '5%',
+          }}
+        >
           <Body style={{ color: 'rgba(255,255,255,0.6)' }}>
             Movie data and images powered by
           </Body>
