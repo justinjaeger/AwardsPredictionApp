@@ -4,6 +4,7 @@
 
 enum UserRole {
   ADMIN
+  TESTER
   USER
 }
 
@@ -143,6 +144,7 @@ type Event @model @auth(rules: [{ allow: public }]) {
         @hasMany(indexName: "predictionSetsByUserIdAndEventId", fields: ["id"]) # get a user's predictions for an event
     historyPredictions: [HistoryPredictionSet] 
         @hasMany(indexName: "historyPredictionSetsbyUserIdAndEventIdAndCreatedAt", fields: ["id"]) # get a user's predictions for an event at x date
+    liveAt: AWSDateTime
 }
 
 type Category @model @auth(rules: [{ allow: public }]) {

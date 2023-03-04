@@ -85,6 +85,7 @@ export type iEvent = {
   nominationDateTime: string | undefined;
   winDateTime: string | undefined;
   createdAt: string;
+  liveAt: string | undefined;
 };
 
 export type iIndexedEvents = {

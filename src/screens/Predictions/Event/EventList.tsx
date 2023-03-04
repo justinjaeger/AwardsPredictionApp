@@ -46,7 +46,9 @@ const EventList = ({ events, user }: { events: iEvent[]; user: iUser | undefined
   );
   const groupedByYear = _.groupBy(orderedEvents, (e) => e.year);
 
-  const userIsAdmin = user ? user.role === UserRole.ADMIN : false;
+  const userIsAdminOrTester = user
+    ? user.role === UserRole.ADMIN || user.role === UserRole.TESTER
+    : false;
 
   const trophyPercentage = 20;
 
@@ -76,7 +78,7 @@ const EventList = ({ events, user }: { events: iEvent[]; user: iUser | undefined
               {events.map((event) => {
                 const { awardsBody, status } = event;
                 const eventIsAdminOnly = status === EventStatus.NOMS_STAGING;
-                if (eventIsAdminOnly && !userIsAdmin) return null; // don't display events with status NOMS_STAGING to non-admin
+                if (eventIsAdminOnly && !userIsAdminOrTester) return null; // don't display events with status NOMS_STAGING to non-admin
                 const closeTime = getEventTime(event);
                 return (
                   <TouchableHighlight

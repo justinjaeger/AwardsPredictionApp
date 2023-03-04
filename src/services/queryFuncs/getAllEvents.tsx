@@ -32,6 +32,7 @@ const getAllEvents = async () => {
       winDateTime: e.winDateTime || undefined,
       nominationDateTime: e.nominationDateTime || undefined,
       createdAt: e.createdAt,
+      liveAt: e.liveAt || undefined,
     };
   });
   return indexedEvents;

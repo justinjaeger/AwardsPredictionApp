@@ -217,6 +217,7 @@ export const getUser = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -263,6 +264,7 @@ export const getUser = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -643,6 +645,7 @@ export const getEvent = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -688,6 +691,7 @@ export const getEvent = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -734,6 +738,7 @@ export const getEvent = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -757,6 +762,7 @@ export const getEvent = /* GraphQL */ `
         }
         nextToken
       }
+      liveAt
       createdAt
       updatedAt
     }
@@ -822,6 +828,7 @@ export const listEvents = /* GraphQL */ `
           }
           nextToken
         }
+        liveAt
         createdAt
         updatedAt
       }
@@ -879,6 +886,7 @@ export const getCategory = /* GraphQL */ `
           }
           nextToken
         }
+        liveAt
         createdAt
         updatedAt
       }
@@ -908,6 +916,7 @@ export const getCategory = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -954,6 +963,7 @@ export const getCategory = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -1016,6 +1026,7 @@ export const listCategories = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -1079,6 +1090,7 @@ export const getContender = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -1160,6 +1172,7 @@ export const getContender = /* GraphQL */ `
           }
           nextToken
         }
+        liveAt
         createdAt
         updatedAt
       }
@@ -1247,6 +1260,7 @@ export const listContenders = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -1279,6 +1293,7 @@ export const listContenders = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -1350,6 +1365,7 @@ export const getMovie = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -1646,6 +1662,7 @@ export const getPredictionSet = /* GraphQL */ `
           }
           nextToken
         }
+        liveAt
         createdAt
         updatedAt
       }
@@ -1669,6 +1686,7 @@ export const getPredictionSet = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -1792,6 +1810,7 @@ export const listPredictionSets = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -1806,6 +1825,7 @@ export const listPredictionSets = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -1860,6 +1880,7 @@ export const getPrediction = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -1892,6 +1913,7 @@ export const getPrediction = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -1979,6 +2001,7 @@ export const listPredictions = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -2127,6 +2150,7 @@ export const getHistoryPredictionSet = /* GraphQL */ `
           }
           nextToken
         }
+        liveAt
         createdAt
         updatedAt
       }
@@ -2150,6 +2174,7 @@ export const getHistoryPredictionSet = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -2283,6 +2308,7 @@ export const listHistoryPredictionSets = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -2297,6 +2323,7 @@ export const listHistoryPredictionSets = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -2352,6 +2379,7 @@ export const getHistoryPrediction = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -2384,6 +2412,7 @@ export const getHistoryPrediction = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -2446,6 +2475,7 @@ export const getHistoryPrediction = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -2526,6 +2556,7 @@ export const listHistoryPredictions = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -2569,6 +2600,7 @@ export const listHistoryPredictions = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -2642,6 +2674,7 @@ export const getCommunityPredictionSet = /* GraphQL */ `
           }
           nextToken
         }
+        liveAt
         createdAt
         updatedAt
       }
@@ -2665,6 +2698,7 @@ export const getCommunityPredictionSet = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -2764,6 +2798,7 @@ export const listCommunityPredictionSets = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -2778,6 +2813,7 @@ export const listCommunityPredictionSets = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -2832,6 +2868,7 @@ export const getCommunityPrediction = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -2864,6 +2901,7 @@ export const getCommunityPrediction = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -2952,6 +2990,7 @@ export const listCommunityPredictions = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -3043,6 +3082,7 @@ export const getCommunityHistoryPredictionSet = /* GraphQL */ `
           }
           nextToken
         }
+        liveAt
         createdAt
         updatedAt
       }
@@ -3066,6 +3106,7 @@ export const getCommunityHistoryPredictionSet = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -3175,6 +3216,7 @@ export const listCommunityHistoryPredictionSets = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -3189,6 +3231,7 @@ export const listCommunityHistoryPredictionSets = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -3244,6 +3287,7 @@ export const getCommunityHistoryPrediction = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -3276,6 +3320,7 @@ export const getCommunityHistoryPrediction = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -3338,6 +3383,7 @@ export const getCommunityHistoryPrediction = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -3419,6 +3465,7 @@ export const listCommunityHistoryPredictions = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -3462,6 +3509,7 @@ export const listCommunityHistoryPredictions = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -3664,6 +3712,7 @@ export const categoryByEvent = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -3731,6 +3780,7 @@ export const contenderByMovie = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -3763,6 +3813,7 @@ export const contenderByMovie = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -3869,6 +3920,7 @@ export const predictionSetByUserIdAndEventId = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -3883,6 +3935,7 @@ export const predictionSetByUserIdAndEventId = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -3978,6 +4031,7 @@ export const predictionSetByUserIdAndCategoryId = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -3992,6 +4046,7 @@ export const predictionSetByUserIdAndCategoryId = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -4087,6 +4142,7 @@ export const predictionSetByUserIdAndCreatedAt = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -4101,6 +4157,7 @@ export const predictionSetByUserIdAndCreatedAt = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -4194,6 +4251,7 @@ export const predictionSetByEventId = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -4208,6 +4266,7 @@ export const predictionSetByEventId = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -4282,6 +4341,7 @@ export const predictionByPredictionSetId = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -4382,6 +4442,7 @@ export const historyPredictionSetByUserIdAndCreatedAt = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -4396,6 +4457,7 @@ export const historyPredictionSetByUserIdAndCreatedAt = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -4492,6 +4554,7 @@ export const historyPredictionSetByUserIdAndEventIdAndCreatedAt = /* GraphQL */ 
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -4506,6 +4569,7 @@ export const historyPredictionSetByUserIdAndEventIdAndCreatedAt = /* GraphQL */ 
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -4602,6 +4666,7 @@ export const historyPredictionSetByUserIdAndCategoryIdAndCreatedAt = /* GraphQL 
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -4616,6 +4681,7 @@ export const historyPredictionSetByUserIdAndCategoryIdAndCreatedAt = /* GraphQL 
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -4710,6 +4776,7 @@ export const historyPredictionSetByCategoryId = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -4724,6 +4791,7 @@ export const historyPredictionSetByCategoryId = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -4799,6 +4867,7 @@ export const historyPredictionByHistoryPredictionSetId = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -4842,6 +4911,7 @@ export const historyPredictionByHistoryPredictionSetId = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -4904,6 +4974,7 @@ export const historyPredictionByCategoryId = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -4947,6 +5018,7 @@ export const historyPredictionByCategoryId = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -5004,6 +5076,7 @@ export const communityPredictionSetByEventId = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -5018,6 +5091,7 @@ export const communityPredictionSetByEventId = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -5092,6 +5166,7 @@ export const communityPredictionByCommunityPredictionSetId = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -5169,6 +5244,7 @@ export const communityHistoryPredictionSetsByEventIdAndCreatedAt = /* GraphQL */
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -5183,6 +5259,7 @@ export const communityHistoryPredictionSetsByEventIdAndCreatedAt = /* GraphQL */
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -5258,6 +5335,7 @@ export const communityHistoryPredictionByCommunityHistoryPredictionSetId = /* Gr
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -5301,6 +5379,7 @@ export const communityHistoryPredictionByCommunityHistoryPredictionSetId = /* Gr
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -5364,6 +5443,7 @@ export const communityHistoryPredictionByCategoryId = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -5407,6 +5487,7 @@ export const communityHistoryPredictionByCategoryId = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }

@@ -62,7 +62,9 @@ const ManageEvents = () => {
   );
   const groupedByYear = _.groupBy(orderedEvents, (e) => e.year);
 
-  const userIsAdmin = user ? user.role === UserRole.ADMIN : false;
+  const userIsAdminOrTester = user
+    ? user.role === UserRole.ADMIN || user.role === UserRole.TESTER
+    : false;
 
   const EventProperty = (_props: {
     event: iEvent;
@@ -133,7 +135,7 @@ const ManageEvents = () => {
                     {events.map((event) => {
                       const { awardsBody, status } = event;
                       const eventIsAdminOnly = status === EventStatus.NOMS_STAGING;
-                      if (eventIsAdminOnly && !userIsAdmin) return null; // don't display events with status NOMS_STAGING to non-admin
+                      if (eventIsAdminOnly && !userIsAdminOrTester) return null; // don't display events with status NOMS_STAGING to non-admin or non-tester
                       const dateTime = getEventTime(event);
                       return (
                         <TouchableHighlight

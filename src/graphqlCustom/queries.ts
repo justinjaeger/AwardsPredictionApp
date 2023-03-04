@@ -133,6 +133,7 @@ export const listEvents = /* GraphQL */ `
         status
         createdAt
         updatedAt
+        liveAt
       }
     }
   }
@@ -482,6 +483,7 @@ export const getUserProfileQuery = /* GraphQL */ `
             status
             createdAt
             updatedAt
+            liveAt
           }
           categoryId
           category {
@@ -571,6 +573,7 @@ export const getUserProfileQuerySignedOut = /* GraphQL */ `
             status
             createdAt
             updatedAt
+            liveAt
             # TODO: shouldn't really be returning this level of nesting but it's a quick fix
             categories {
               items {

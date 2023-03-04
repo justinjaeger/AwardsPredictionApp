@@ -130,7 +130,16 @@ export const updateEvent = async (
   const input: UpdateEventInput = { id: eventId };
   if (awardsBody) input.awardsBody = awardsBody;
   if (year) input.year = year;
-  if (status) input.status = status;
+  if (status) {
+    input.status = status;
+    if (input.status === EventStatus.NOMS_LIVE) {
+      input.liveAt = new Date().toISOString();
+    }
+    // TODO: add logic for when winners go live, but not sure how handling this yet so TBD
+    if (input.status === EventStatus.WINS_LIVE) {
+      //   input.winsLive = new Date().toISOString();
+    }
+  }
   if (nominationDateTime !== undefined) input.nominationDateTime = nominationDateTime;
   if (winDateTime !== undefined) input.winDateTime = winDateTime;
   try {

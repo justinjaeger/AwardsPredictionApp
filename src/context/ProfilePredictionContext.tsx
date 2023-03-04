@@ -53,7 +53,7 @@ export const ProfilePredictionProvider = (props: { children: React.ReactNode }) 
   }, [userId]);
 
   useEffect(() => {
-    if (userId && showHistory && event) {
+    if (userId && showHistory && event && date) {
       getPersonalHistory(event.id, userId, date)
         .then((res) => setHistoryData(res))
         .finally(() => setIsLoading(false));

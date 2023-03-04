@@ -28,7 +28,7 @@ const UpdateExpirationModal = (props: {
 
   const onUpdateExpiration = async () => {
     if (!eventId || !date) return;
-    const newTime = date.toISOString(); // TODO: Check if this is correct
+    const newTime = date.toISOString();
     const params =
       propertyToUpdate === 'nominationDateTime'
         ? {

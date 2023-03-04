@@ -45,6 +45,7 @@ const getUserProfile = async (
         nominationDateTime: ps?.event.nominationDateTime || undefined,
         winDateTime: ps?.event.winDateTime || undefined,
         createdAt: ps?.createdAt || '',
+        liveAt: ps?.event.liveAt || undefined,
       };
       // orders the predictions
       const sortedPredictions = sortPersonalPredictions(predictions);

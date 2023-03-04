@@ -22,7 +22,7 @@ const HistoryTab = () => {
   const dateOfClose = event.winDateTime ? new Date(event.winDateTime) : new Date();
   const today = new Date();
   const maxDate = dateOfClose > today ? today : dateOfClose; // if date of close is in the past, use today
-  const minDate = new Date(event.createdAt);
+  const minDate = new Date(event.liveAt || event.createdAt);
   minDate.setDate(minDate.getDate() + 1); // add a day to when it was created for safety
 
   // is is archived, don't let date be undefined; instead default to last day of event

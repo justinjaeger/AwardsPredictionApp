@@ -41,6 +41,7 @@ export type ListPredictionSetsQuery = {
         status?: EventStatus | null;
         createdAt: string;
         updatedAt: string;
+        liveAt?: string | null;
       };
       categoryId: string;
       category: {
@@ -115,6 +116,7 @@ export type GetUserQuery = {
           status?: EventStatus | null;
           createdAt: string;
           updatedAt: string;
+          liveAt?: string | null;
         };
         categoryId: string;
         category: {
@@ -259,6 +261,7 @@ export type GetUserFollowingPredictionsQuery = {
                 status?: EventStatus | null;
                 createdAt: string;
                 updatedAt: string;
+                liveAt?: string | null;
               };
               categoryId: string;
               category: {
@@ -617,6 +620,7 @@ export type ListEventsQuery = {
       } | null;
       createdAt: string;
       updatedAt: string;
+      liveAt?: string | null;
     } | null>;
     nextToken?: string | null;
   } | null;
@@ -735,6 +739,7 @@ export type ListRelationshipsQuery = {
               status?: EventStatus | null;
               createdAt: string;
               updatedAt: string;
+              liveAt?: string | null;
             };
             categoryId: string;
             category: {
@@ -802,6 +807,400 @@ export type ListRelationshipsQuery = {
         createdAt: string;
         updatedAt: string;
       };
+      createdAt: string;
+      updatedAt: string;
+    } | null>;
+    nextToken?: string | null;
+  } | null;
+};
+
+export type HistoryPredictionSetByUserIdAndEventIdAndCreatedAtQuery = {
+  historyPredictionSetByUserIdAndEventIdAndCreatedAt?: {
+    __typename: 'ModelHistoryPredictionSetConnection';
+    items: Array<{
+      __typename: 'HistoryPredictionSet';
+      id: string;
+      userId: string;
+      user: {
+        __typename: 'User';
+        id: string;
+        email: string;
+        username?: string | null;
+        name?: string | null;
+        bio?: string | null;
+        image?: string | null;
+        role: UserRole;
+        predictionSets?: {
+          __typename: 'ModelPredictionSetConnection';
+          nextToken?: string | null;
+        } | null;
+        historyPredictionSets?: {
+          __typename: 'ModelHistoryPredictionSetConnection';
+          nextToken?: string | null;
+        } | null;
+        followers?: {
+          __typename: 'ModelRelationshipConnection';
+          nextToken?: string | null;
+        } | null;
+        following?: {
+          __typename: 'ModelRelationshipConnection';
+          nextToken?: string | null;
+        } | null;
+        createdAt: string;
+        updatedAt: string;
+      };
+      eventId: string;
+      event: {
+        __typename: 'Event';
+        id: string;
+        categories?: {
+          __typename: 'ModelCategoryConnection';
+          nextToken?: string | null;
+        } | null;
+        awardsBody: AwardsBody;
+        year: number;
+        nominationDateTime?: string | null;
+        winDateTime?: string | null;
+        status?: EventStatus | null;
+        predictionSets?: {
+          __typename: 'ModelPredictionSetConnection';
+          nextToken?: string | null;
+        } | null;
+        historyPredictions?: {
+          __typename: 'ModelHistoryPredictionSetConnection';
+          nextToken?: string | null;
+        } | null;
+        liveAt?: string | null;
+        createdAt: string;
+        updatedAt: string;
+      };
+      categoryId: string;
+      category: {
+        __typename: 'Category';
+        id: string;
+        eventId: string;
+        event: {
+          __typename: 'Event';
+          id: string;
+          awardsBody: AwardsBody;
+          year: number;
+          nominationDateTime?: string | null;
+          winDateTime?: string | null;
+          status?: EventStatus | null;
+          liveAt?: string | null;
+          createdAt: string;
+          updatedAt: string;
+        };
+        name: CategoryName;
+        type: CategoryType;
+        isShortlisted?: CategoryIsShortlisted | null;
+        predictionSets?: {
+          __typename: 'ModelPredictionSetConnection';
+          nextToken?: string | null;
+        } | null;
+        historyPredictions?: {
+          __typename: 'ModelHistoryPredictionSetConnection';
+          nextToken?: string | null;
+        } | null;
+        createdAt: string;
+        updatedAt: string;
+      };
+      predictions?: {
+        __typename: 'ModelHistoryPredictionConnection';
+        items: Array<{
+          __typename: 'HistoryPrediction';
+          id: string;
+          historyPredictionSetId: string;
+          contenderId: string;
+          contender: {
+            __typename: 'Contender';
+            id: string;
+            categoryId: string;
+            eventId: string;
+            visibility?: ContenderVisibility | null;
+            accolade?: ContenderAccolade | null;
+            createdAt: string;
+            updatedAt: string;
+            movieId: string;
+            movie: {
+              __typename: 'Movie';
+              id: string;
+              tmdbId: number;
+              studio?: string | null;
+              createdAt: string;
+              updatedAt: string;
+            };
+            personId?: string | null;
+            person?: {
+              __typename: 'Person';
+              id: string;
+              tmdbId: number;
+              createdAt: string;
+              updatedAt: string;
+            } | null;
+            songId?: string | null;
+            song?: {
+              __typename: 'Song';
+              id: string;
+              movieId: string;
+              title: string;
+              artist: string;
+              createdAt: string;
+              updatedAt: string;
+            } | null;
+          };
+          categoryId: string;
+          ranking: number;
+          createdAt: string;
+          updatedAt: string;
+        } | null>;
+        nextToken?: string | null;
+      } | null;
+      type?: PredictionType | null;
+      comment?: string | null;
+      createdAt: string;
+      updatedAt: string;
+    } | null>;
+    nextToken?: string | null;
+  } | null;
+};
+
+export type CommunityHistoryPredictionSetsByEventIdAndCreatedAtQuery = {
+  communityHistoryPredictionSetsByEventIdAndCreatedAt?: {
+    __typename: 'ModelCommunityHistoryPredictionSetConnection';
+    items: Array<{
+      __typename: 'CommunityHistoryPredictionSet';
+      id: string;
+      eventId: string;
+      event: {
+        __typename: 'Event';
+        id: string;
+        categories?: {
+          __typename: 'ModelCategoryConnection';
+          nextToken?: string | null;
+        } | null;
+        awardsBody: AwardsBody;
+        year: number;
+        nominationDateTime?: string | null;
+        winDateTime?: string | null;
+        status?: EventStatus | null;
+        predictionSets?: {
+          __typename: 'ModelPredictionSetConnection';
+          nextToken?: string | null;
+        } | null;
+        historyPredictions?: {
+          __typename: 'ModelHistoryPredictionSetConnection';
+          nextToken?: string | null;
+        } | null;
+        liveAt?: string | null;
+        createdAt: string;
+        updatedAt: string;
+      };
+      categoryId: string;
+      category: {
+        __typename: 'Category';
+        id: string;
+        eventId: string;
+        event: {
+          __typename: 'Event';
+          id: string;
+          awardsBody: AwardsBody;
+          year: number;
+          nominationDateTime?: string | null;
+          winDateTime?: string | null;
+          status?: EventStatus | null;
+          liveAt?: string | null;
+          createdAt: string;
+          updatedAt: string;
+        };
+        name: CategoryName;
+        type: CategoryType;
+        isShortlisted?: CategoryIsShortlisted | null;
+        predictionSets?: {
+          __typename: 'ModelPredictionSetConnection';
+          nextToken?: string | null;
+        } | null;
+        historyPredictions?: {
+          __typename: 'ModelHistoryPredictionSetConnection';
+          nextToken?: string | null;
+        } | null;
+        createdAt: string;
+        updatedAt: string;
+      };
+      predictions?: {
+        __typename: 'ModelCommunityHistoryPredictionConnection';
+        items: Array<{
+          __typename: 'CommunityHistoryPrediction';
+          id: string;
+          communityHistoryPredictionSetId: string;
+          contenderId: string;
+          contender: {
+            __typename: 'Contender';
+            id: string;
+            categoryId: string;
+            eventId: string;
+            visibility?: ContenderVisibility | null;
+            accolade?: ContenderAccolade | null;
+            createdAt: string;
+            updatedAt: string;
+            movieId: string;
+            movie: {
+              __typename: 'Movie';
+              id: string;
+              tmdbId: number;
+              studio?: string | null;
+              createdAt: string;
+              updatedAt: string;
+            };
+            personId?: string | null;
+            person?: {
+              __typename: 'Person';
+              id: string;
+              tmdbId: number;
+              createdAt: string;
+              updatedAt: string;
+            } | null;
+            songId?: string | null;
+            song?: {
+              __typename: 'Song';
+              id: string;
+              movieId: string;
+              title: string;
+              artist: string;
+              createdAt: string;
+              updatedAt: string;
+            } | null;
+          };
+          categoryId: string;
+          ranking: number;
+          indexedRankings?: string | null;
+          createdAt: string;
+          updatedAt: string;
+        } | null>;
+        nextToken?: string | null;
+      } | null;
+      type?: PredictionType | null;
+      createdAt: string;
+      updatedAt: string;
+    } | null>;
+    nextToken?: string | null;
+  } | null;
+};
+
+export type CommunityPredictionSetByEventIdQuery = {
+  communityPredictionSetByEventId?: {
+    __typename: 'ModelCommunityPredictionSetConnection';
+    items: Array<{
+      __typename: 'CommunityPredictionSet';
+      id: string;
+      eventId: string;
+      event: {
+        __typename: 'Event';
+        id: string;
+        categories?: {
+          __typename: 'ModelCategoryConnection';
+          nextToken?: string | null;
+        } | null;
+        awardsBody: AwardsBody;
+        year: number;
+        nominationDateTime?: string | null;
+        winDateTime?: string | null;
+        status?: EventStatus | null;
+        predictionSets?: {
+          __typename: 'ModelPredictionSetConnection';
+          nextToken?: string | null;
+        } | null;
+        historyPredictions?: {
+          __typename: 'ModelHistoryPredictionSetConnection';
+          nextToken?: string | null;
+        } | null;
+        liveAt?: string | null;
+        createdAt: string;
+        updatedAt: string;
+      };
+      categoryId: string;
+      category: {
+        __typename: 'Category';
+        id: string;
+        eventId: string;
+        event: {
+          __typename: 'Event';
+          id: string;
+          awardsBody: AwardsBody;
+          year: number;
+          nominationDateTime?: string | null;
+          winDateTime?: string | null;
+          status?: EventStatus | null;
+          liveAt?: string | null;
+          createdAt: string;
+          updatedAt: string;
+        };
+        name: CategoryName;
+        type: CategoryType;
+        isShortlisted?: CategoryIsShortlisted | null;
+        predictionSets?: {
+          __typename: 'ModelPredictionSetConnection';
+          nextToken?: string | null;
+        } | null;
+        historyPredictions?: {
+          __typename: 'ModelHistoryPredictionSetConnection';
+          nextToken?: string | null;
+        } | null;
+        createdAt: string;
+        updatedAt: string;
+      };
+      predictions?: {
+        __typename: 'ModelCommunityPredictionConnection';
+        items: Array<{
+          __typename: 'CommunityPrediction';
+          id: string;
+          communityPredictionSetId: string;
+          contenderId: string;
+          contender: {
+            __typename: 'Contender';
+            id: string;
+            categoryId: string;
+            eventId: string;
+            visibility?: ContenderVisibility | null;
+            accolade?: ContenderAccolade | null;
+            createdAt: string;
+            updatedAt: string;
+            movieId: string;
+            movie: {
+              __typename: 'Movie';
+              id: string;
+              tmdbId: number;
+              studio?: string | null;
+              createdAt: string;
+              updatedAt: string;
+            };
+            personId?: string | null;
+            person?: {
+              __typename: 'Person';
+              id: string;
+              tmdbId: number;
+              createdAt: string;
+              updatedAt: string;
+            } | null;
+            songId?: string | null;
+            song?: {
+              __typename: 'Song';
+              id: string;
+              movieId: string;
+              title: string;
+              artist: string;
+              createdAt: string;
+              updatedAt: string;
+            } | null;
+          };
+          ranking: number;
+          indexedRankings?: string | null;
+          createdAt: string;
+          updatedAt: string;
+        } | null>;
+        nextToken?: string | null;
+      } | null;
+      type?: PredictionType | null;
       createdAt: string;
       updatedAt: string;
     } | null>;

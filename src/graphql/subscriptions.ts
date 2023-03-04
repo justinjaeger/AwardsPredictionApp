@@ -35,6 +35,7 @@ export const onCreateUser = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -81,6 +82,7 @@ export const onCreateUser = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -206,6 +208,7 @@ export const onUpdateUser = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -252,6 +255,7 @@ export const onUpdateUser = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -377,6 +381,7 @@ export const onDeleteUser = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -423,6 +428,7 @@ export const onDeleteUser = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -905,6 +911,7 @@ export const onCreateEvent = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -950,6 +957,7 @@ export const onCreateEvent = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -996,6 +1004,7 @@ export const onCreateEvent = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -1019,6 +1028,7 @@ export const onCreateEvent = /* GraphQL */ `
         }
         nextToken
       }
+      liveAt
       createdAt
       updatedAt
     }
@@ -1039,6 +1049,7 @@ export const onUpdateEvent = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -1084,6 +1095,7 @@ export const onUpdateEvent = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -1130,6 +1142,7 @@ export const onUpdateEvent = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -1153,6 +1166,7 @@ export const onUpdateEvent = /* GraphQL */ `
         }
         nextToken
       }
+      liveAt
       createdAt
       updatedAt
     }
@@ -1173,6 +1187,7 @@ export const onDeleteEvent = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -1218,6 +1233,7 @@ export const onDeleteEvent = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -1264,6 +1280,7 @@ export const onDeleteEvent = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -1287,6 +1304,7 @@ export const onDeleteEvent = /* GraphQL */ `
         }
         nextToken
       }
+      liveAt
       createdAt
       updatedAt
     }
@@ -1342,6 +1360,7 @@ export const onCreateCategory = /* GraphQL */ `
           }
           nextToken
         }
+        liveAt
         createdAt
         updatedAt
       }
@@ -1371,6 +1390,7 @@ export const onCreateCategory = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -1417,6 +1437,7 @@ export const onCreateCategory = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -1495,6 +1516,7 @@ export const onUpdateCategory = /* GraphQL */ `
           }
           nextToken
         }
+        liveAt
         createdAt
         updatedAt
       }
@@ -1524,6 +1546,7 @@ export const onUpdateCategory = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -1570,6 +1593,7 @@ export const onUpdateCategory = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -1648,6 +1672,7 @@ export const onDeleteCategory = /* GraphQL */ `
           }
           nextToken
         }
+        liveAt
         createdAt
         updatedAt
       }
@@ -1677,6 +1702,7 @@ export const onDeleteCategory = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -1723,6 +1749,7 @@ export const onDeleteCategory = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -1775,6 +1802,7 @@ export const onCreateContender = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -1856,6 +1884,7 @@ export const onCreateContender = /* GraphQL */ `
           }
           nextToken
         }
+        liveAt
         createdAt
         updatedAt
       }
@@ -1939,6 +1968,7 @@ export const onUpdateContender = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -2020,6 +2050,7 @@ export const onUpdateContender = /* GraphQL */ `
           }
           nextToken
         }
+        liveAt
         createdAt
         updatedAt
       }
@@ -2103,6 +2134,7 @@ export const onDeleteContender = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -2184,6 +2216,7 @@ export const onDeleteContender = /* GraphQL */ `
           }
           nextToken
         }
+        liveAt
         createdAt
         updatedAt
       }
@@ -2268,6 +2301,7 @@ export const onCreateMovie = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -2334,6 +2368,7 @@ export const onUpdateMovie = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -2400,6 +2435,7 @@ export const onDeleteMovie = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -2681,6 +2717,7 @@ export const onCreatePredictionSet = /* GraphQL */ `
           }
           nextToken
         }
+        liveAt
         createdAt
         updatedAt
       }
@@ -2704,6 +2741,7 @@ export const onCreatePredictionSet = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -2877,6 +2915,7 @@ export const onUpdatePredictionSet = /* GraphQL */ `
           }
           nextToken
         }
+        liveAt
         createdAt
         updatedAt
       }
@@ -2900,6 +2939,7 @@ export const onUpdatePredictionSet = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -3073,6 +3113,7 @@ export const onDeletePredictionSet = /* GraphQL */ `
           }
           nextToken
         }
+        liveAt
         createdAt
         updatedAt
       }
@@ -3096,6 +3137,7 @@ export const onDeletePredictionSet = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -3180,6 +3222,7 @@ export const onCreatePrediction = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -3212,6 +3255,7 @@ export const onCreatePrediction = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -3279,6 +3323,7 @@ export const onUpdatePrediction = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -3311,6 +3356,7 @@ export const onUpdatePrediction = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -3378,6 +3424,7 @@ export const onDeletePrediction = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -3410,6 +3457,7 @@ export const onDeletePrediction = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -3566,6 +3614,7 @@ export const onCreateHistoryPredictionSet = /* GraphQL */ `
           }
           nextToken
         }
+        liveAt
         createdAt
         updatedAt
       }
@@ -3589,6 +3638,7 @@ export const onCreateHistoryPredictionSet = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -3772,6 +3822,7 @@ export const onUpdateHistoryPredictionSet = /* GraphQL */ `
           }
           nextToken
         }
+        liveAt
         createdAt
         updatedAt
       }
@@ -3795,6 +3846,7 @@ export const onUpdateHistoryPredictionSet = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -3978,6 +4030,7 @@ export const onDeleteHistoryPredictionSet = /* GraphQL */ `
           }
           nextToken
         }
+        liveAt
         createdAt
         updatedAt
       }
@@ -4001,6 +4054,7 @@ export const onDeleteHistoryPredictionSet = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -4095,6 +4149,7 @@ export const onCreateHistoryPrediction = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -4127,6 +4182,7 @@ export const onCreateHistoryPrediction = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -4189,6 +4245,7 @@ export const onCreateHistoryPrediction = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -4249,6 +4306,7 @@ export const onUpdateHistoryPrediction = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -4281,6 +4339,7 @@ export const onUpdateHistoryPrediction = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -4343,6 +4402,7 @@ export const onUpdateHistoryPrediction = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -4403,6 +4463,7 @@ export const onDeleteHistoryPrediction = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -4435,6 +4496,7 @@ export const onDeleteHistoryPrediction = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -4497,6 +4559,7 @@ export const onDeleteHistoryPrediction = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -4588,6 +4651,7 @@ export const onCreateCommunityPredictionSet = /* GraphQL */ `
           }
           nextToken
         }
+        liveAt
         createdAt
         updatedAt
       }
@@ -4611,6 +4675,7 @@ export const onCreateCommunityPredictionSet = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -4726,6 +4791,7 @@ export const onUpdateCommunityPredictionSet = /* GraphQL */ `
           }
           nextToken
         }
+        liveAt
         createdAt
         updatedAt
       }
@@ -4749,6 +4815,7 @@ export const onUpdateCommunityPredictionSet = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -4864,6 +4931,7 @@ export const onDeleteCommunityPredictionSet = /* GraphQL */ `
           }
           nextToken
         }
+        liveAt
         createdAt
         updatedAt
       }
@@ -4887,6 +4955,7 @@ export const onDeleteCommunityPredictionSet = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -4971,6 +5040,7 @@ export const onCreateCommunityPrediction = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -5003,6 +5073,7 @@ export const onCreateCommunityPrediction = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -5071,6 +5142,7 @@ export const onUpdateCommunityPrediction = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -5103,6 +5175,7 @@ export const onUpdateCommunityPrediction = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -5171,6 +5244,7 @@ export const onDeleteCommunityPrediction = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -5203,6 +5277,7 @@ export const onDeleteCommunityPrediction = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -5302,6 +5377,7 @@ export const onCreateCommunityHistoryPredictionSet = /* GraphQL */ `
           }
           nextToken
         }
+        liveAt
         createdAt
         updatedAt
       }
@@ -5325,6 +5401,7 @@ export const onCreateCommunityHistoryPredictionSet = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -5450,6 +5527,7 @@ export const onUpdateCommunityHistoryPredictionSet = /* GraphQL */ `
           }
           nextToken
         }
+        liveAt
         createdAt
         updatedAt
       }
@@ -5473,6 +5551,7 @@ export const onUpdateCommunityHistoryPredictionSet = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -5598,6 +5677,7 @@ export const onDeleteCommunityHistoryPredictionSet = /* GraphQL */ `
           }
           nextToken
         }
+        liveAt
         createdAt
         updatedAt
       }
@@ -5621,6 +5701,7 @@ export const onDeleteCommunityHistoryPredictionSet = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -5715,6 +5796,7 @@ export const onCreateCommunityHistoryPrediction = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -5747,6 +5829,7 @@ export const onCreateCommunityHistoryPrediction = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -5809,6 +5892,7 @@ export const onCreateCommunityHistoryPrediction = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -5870,6 +5954,7 @@ export const onUpdateCommunityHistoryPrediction = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -5902,6 +5987,7 @@ export const onUpdateCommunityHistoryPrediction = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -5964,6 +6050,7 @@ export const onUpdateCommunityHistoryPrediction = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -6025,6 +6112,7 @@ export const onDeleteCommunityHistoryPrediction = /* GraphQL */ `
             nominationDateTime
             winDateTime
             status
+            liveAt
             createdAt
             updatedAt
           }
@@ -6057,6 +6145,7 @@ export const onDeleteCommunityHistoryPrediction = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }
@@ -6119,6 +6208,7 @@ export const onDeleteCommunityHistoryPrediction = /* GraphQL */ `
           historyPredictions {
             nextToken
           }
+          liveAt
           createdAt
           updatedAt
         }

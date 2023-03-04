@@ -1,9 +1,7 @@
-import {
-  CommunityPredictionSetByEventIdQueryVariables,
-  CommunityPredictionSetByEventIdQuery,
-} from '../../API';
+import { CommunityPredictionSetByEventIdQueryVariables } from '../../API';
 import { GraphqlAPI, handleError, iApiResponse } from '../utils';
 import * as customQueries from '../../graphqlCustom/queries';
+import { CommunityPredictionSetByEventIdQuery } from '../../graphqlCustom/types';
 
 export const getCommunityPredictionsByEvent = async (
   eventId: string,

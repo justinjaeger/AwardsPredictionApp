@@ -1,10 +1,12 @@
 import {
-  CommunityHistoryPredictionSetsByEventIdAndCreatedAtQuery,
   CommunityHistoryPredictionSetsByEventIdAndCreatedAtQueryVariables,
-  HistoryPredictionSetByUserIdAndEventIdAndCreatedAtQuery,
   HistoryPredictionSetByUserIdAndEventIdAndCreatedAtQueryVariables,
 } from '../../API';
 import * as customQueries from '../../graphqlCustom/queries';
+import {
+  HistoryPredictionSetByUserIdAndEventIdAndCreatedAtQuery,
+  CommunityHistoryPredictionSetsByEventIdAndCreatedAtQuery,
+} from '../../graphqlCustom/types';
 import { GraphqlAPI, handleError, iApiResponse } from '../utils';
 
 export const getPersonalHistory = async (
