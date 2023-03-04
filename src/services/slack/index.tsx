@@ -19,21 +19,30 @@ const channelIds: {
   [SlackChannel.OTHER]: 'C04R0DV5HJ9',
 };
 
-const sendMessage = async (message: string, channel: SlackChannel) => {
+const sendMessage = (message: string, channel: SlackChannel) => {
   const channelId = channelIds[channel];
-  await axios.post(
-    'https://slack.com/api/chat.postMessage',
-    {
-      channel: channelId,
-      text: message,
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${SLACK_BOT_TOKEN}`,
-        'Content-Type': 'application/json',
+  axios
+    .post(
+      'https://slack.com/api/chat.postMessage',
+      {
+        channel: channelId,
+        text: message,
       },
-    },
-  );
+      {
+        headers: {
+          Authorization: `Bearer ${SLACK_BOT_TOKEN}`,
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+    .then((res) => {
+      if (res.data.ok === false) {
+        throw Error(JSON.stringify(res.data));
+      }
+    })
+    .catch((err) => {
+      console.error('error sending message', err);
+    });
 };
 
 const SlackApi = {
