@@ -17,6 +17,12 @@ const signUp = async (
     });
     return { status: 'success', data: user };
   } catch (error) {
+    // if user is not confirmed, resend verification code
+    if ((error as any)?.code === 'UsernameExistsException') {
+      const e: any = error;
+      e.message = 'User already exists - Sign in instead!';
+      return handleError('Error signing up.', e);
+    }
     return handleError('Error signing up.', error);
   }
 };
