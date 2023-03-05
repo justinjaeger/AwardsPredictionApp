@@ -1,8 +1,6 @@
 import {
   CreateUserMutation,
   CreateUserMutationVariables,
-  DeleteUserMutation,
-  DeleteUserMutationVariables,
   GetUserQueryVariables,
   ListUsersQueryVariables,
   ModelUserFilterInput,
@@ -269,24 +267,6 @@ export const getUsersByUsername = async (
     return { status: 'success', data };
   } catch (err) {
     return handleError('error getting users by username', err);
-  }
-};
-
-// NOTE: Only for mock purposes. Should never really DELETE a user
-export const deleteUser = async (
-  id: string,
-): Promise<iApiResponse<DeleteUserMutation>> => {
-  try {
-    const { data, errors } = await GraphqlAPI<
-      DeleteUserMutation,
-      DeleteUserMutationVariables
-    >(mutations.deleteUser, { input: { id } });
-    if (!data?.deleteUser) {
-      throw new Error(JSON.stringify(errors));
-    }
-    return { status: 'success', data };
-  } catch (err) {
-    return handleError('error deleting user', err);
   }
 };
 

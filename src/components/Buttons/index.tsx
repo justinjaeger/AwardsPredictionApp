@@ -11,6 +11,7 @@ interface iButtonProps {
   disabled?: boolean;
   loading?: boolean;
   style?: any;
+  underlayColor?: string;
 }
 
 export const SubmitButton = (props: iButtonProps) => (
@@ -27,7 +28,7 @@ export const SubmitButton = (props: iButtonProps) => (
       paddingRight: 20,
       ...props.style,
     }}
-    underlayColor={COLORS.secondary}
+    underlayColor={props.underlayColor || COLORS.secondary}
   >
     <View style={{ height: '100%', justifyContent: 'center', alignItems: 'center' }}>
       {props.loading ? (

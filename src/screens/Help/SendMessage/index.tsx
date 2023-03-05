@@ -3,10 +3,9 @@ import { ScrollView, TouchableOpacity, View } from 'react-native';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import { SubmitButton } from '../../../components/Buttons';
 import FormInput from '../../../components/Inputs/FormInput';
-import { Body, BodyBold, SubHeader } from '../../../components/Text';
+import { BodyBold, SubHeader } from '../../../components/Text';
 import COLORS from '../../../constants/colors';
 import SlackApi, { SlackChannel } from '../../../services/slack';
-import Tmdb from '../../../assets/tmdb.svg';
 import { useAuth } from '../../../context/UserContext';
 import { useNavigateAwayEffect } from '../../../util/hooks';
 
@@ -164,20 +163,6 @@ const SendMessage = () => {
             ) : null}
           </View>
         ) : null}
-        <View
-          style={{
-            flexDirection: 'row',
-            width: '100%',
-            alignItems: 'center',
-            marginTop: 40,
-            marginLeft: '5%',
-          }}
-        >
-          <Body style={{ color: 'rgba(255,255,255,0.6)' }}>
-            Movie data and images powered by
-          </Body>
-          <Tmdb style={{ width: 80, height: 40, marginLeft: 10 }} />
-        </View>
       </ScrollView>
     </BackgroundWrapper>
   );
