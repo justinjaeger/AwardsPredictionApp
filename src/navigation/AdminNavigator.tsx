@@ -8,11 +8,20 @@ import ManageStudios from '../screens/Admin/ManageStudios';
 import ManageContenders from '../screens/Admin/ManageContenders';
 import AddTestUser from '../screens/Admin/AddTestUser';
 import { useHeaderSettings } from '../hooks/useHeaderSettings';
+import { useAuth } from '../context/UserContext';
+import { UserRole } from '../API';
 
 const { Navigator, Screen } = createStackNavigator();
 
 const AdminNavigator = () => {
+  const { userRole } = useAuth();
   const { medium } = useHeaderSettings();
+
+  // for safety
+  if (!(userRole && userRole === UserRole.ADMIN)) {
+    return null;
+  }
+
   return (
     <Navigator
       initialRouteName="Proflie"
