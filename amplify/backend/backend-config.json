@@ -103,5 +103,11 @@
       "providerPlugin": "awscloudformation",
       "dependsOn": []
     }
+  },
+  "analytics": {
+    "awardsapp": {
+      "service": "Pinpoint",
+      "providerPlugin": "awscloudformation"
+    }
   }
 }
