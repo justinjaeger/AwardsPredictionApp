@@ -12,6 +12,11 @@
       "AmplifyAppId": "d6fn0av9g1ead"
     },
     "categories": {
+      "api": {
+        "awardsapp": {
+          "OpenSearchInstanceType": "t2.medium.elasticsearch"
+        }
+      },
       "auth": {
         "awardsappa4e66206": {}
       },
@@ -44,6 +49,11 @@
       "AmplifyAppId": "d6fn0av9g1ead"
     },
     "categories": {
+      "api": {
+        "awardsapp": {
+          "OpenSearchInstanceType": "t2.small.elasticsearch"
+        }
+      },
       "auth": {
         "awardsappa4e66206": {}
       },
