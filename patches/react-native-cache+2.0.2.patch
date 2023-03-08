@@ -1,0 +1,14 @@
+diff --git a/node_modules/react-native-cache/dist/cache.js b/node_modules/react-native-cache/dist/cache.js
+index fe6824d..717d73f 100644
+--- a/node_modules/react-native-cache/dist/cache.js
++++ b/node_modules/react-native-cache/dist/cache.js
+@@ -69,7 +69,8 @@ class Cache {
+         if (entry) {
+             value = entry.value;
+             if (this.policy.stdTTL > 0) {
+-                console.dir(Date.parse(entry.created));
++                // BREAKS THE APP:
++                // console.dir(Date.parse(entry.created));
+                 const created = entry.created ? Date.parse(entry.created) : 0;
+                 const deadline = created + this.policy.stdTTL * 1000;
+                 const now = Date.now();
