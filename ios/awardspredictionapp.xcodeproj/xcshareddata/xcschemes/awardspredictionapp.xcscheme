@@ -5,6 +5,15 @@
    <BuildAction
       parallelizeBuildables = "YES"
       buildImplicitDependencies = "YES">
+      <PreActions>
+         <ExecutionAction
+            ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
+            <ActionContent
+               title = "Run Script"
+               scriptText = "# Type a script or drag a script file from your workspace to insert its path.&#10;">
+            </ActionContent>
+         </ExecutionAction>
+      </PreActions>
       <BuildActionEntries>
          <BuildActionEntry
             buildForTesting = "YES"
@@ -15,7 +24,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "awardspredictionapp.app"
+               BuildableName = "Oscar Expert.app"
                BlueprintName = "awardspredictionapp"
                ReferencedContainer = "container:awardspredictionapp.xcodeproj">
             </BuildableReference>
@@ -55,11 +64,18 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "awardspredictionapp.app"
+            BuildableName = "Oscar Expert.app"
             BlueprintName = "awardspredictionapp"
             ReferencedContainer = "container:awardspredictionapp.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <EnvironmentVariables>
+         <EnvironmentVariable
+            key = "SLACK_BOT_TOKEN"
+            value = "xoxb-4866036373969-4853381313811-lLvGKCLGlch16Uz4nLIaFCJN"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+      </EnvironmentVariables>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -72,7 +88,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "awardspredictionapp.app"
+            BuildableName = "Oscar Expert.app"
             BlueprintName = "awardspredictionapp"
             ReferencedContainer = "container:awardspredictionapp.xcodeproj">
          </BuildableReference>

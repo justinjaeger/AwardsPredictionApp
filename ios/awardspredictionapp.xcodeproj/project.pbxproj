@@ -30,7 +30,7 @@
 		00E356EE1AD99517003FC87E /* awardspredictionappTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = awardspredictionappTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* awardspredictionappTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = awardspredictionappTests.m; sourceTree = "<group>"; };
-		13B07F961A680F5B00A75B9A /* awardspredictionapp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = awardspredictionapp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07F961A680F5B00A75B9A /* Oscar Expert.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Oscar Expert.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = awardspredictionapp/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = awardspredictionapp/AppDelegate.m; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = awardspredictionapp/Images.xcassets; sourceTree = "<group>"; };
@@ -142,7 +142,7 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* awardspredictionapp.app */,
+				13B07F961A680F5B00A75B9A /* Oscar Expert.app */,
 				00E356EE1AD99517003FC87E /* awardspredictionappTests.xctest */,
 			);
 			name = Products;
@@ -189,7 +189,7 @@
 			);
 			name = awardspredictionapp;
 			productName = awardspredictionapp;
-			productReference = 13B07F961A680F5B00A75B9A /* awardspredictionapp.app */;
+			productReference = 13B07F961A680F5B00A75B9A /* Oscar Expert.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -448,22 +448,29 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = K6J8V6U24L;
+				DEVELOPMENT_TEAM = G58BGA5P2Z;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = awardspredictionapp/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Oscar Expert";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = awardspredictionapp;
+				PRODUCT_NAME = "Oscar Expert";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -475,20 +482,27 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = K6J8V6U24L;
+				DEVELOPMENT_TEAM = G58BGA5P2Z;
 				INFOPLIST_FILE = awardspredictionapp/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Oscar Expert";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = awardspredictionapp;
+				PRODUCT_NAME = "Oscar Expert";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
