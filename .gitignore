@@ -59,6 +59,9 @@ buck-out/
 /ios/Pods/
 .jest
 
+# MY Additions
+.env
+
 #amplify-do-not-edit-begin
 amplify/\#current-cloud-backend
 amplify/.config/local-*
