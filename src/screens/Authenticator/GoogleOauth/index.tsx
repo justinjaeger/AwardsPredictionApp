@@ -1,13 +1,16 @@
 import React from 'react';
-import { StyleProp, TextStyle, View } from 'react-native';
+import { StyleProp, TextStyle, Image, View, useWindowDimensions } from 'react-native';
 import LoadingStatue from '../../../components/LoadingStatue';
 import { Body } from '../../../components/Text';
 import COLORS from '../../../constants/colors';
 import GoogleOauthButton from './GoogleOauthButton';
 import useGoogleSignIn from './useGoogleSignIn';
+// @ts-ignore - it exists
+import AppIcon from '../../../assets/branding/icon.jpg';
 
 const GoogleOauthPage = () => {
   const { isLoading, isError } = useGoogleSignIn();
+  const { width } = useWindowDimensions();
 
   const errorTextStyles: StyleProp<TextStyle> = {
     color: COLORS.white,
@@ -17,13 +20,15 @@ const GoogleOauthPage = () => {
     lineHeight: 20,
   };
 
+  const appIconDimensions = Math.min(150, width * 0.3);
+
   return (
     <View
       style={{
         width: '100%',
         height: '100%',
         backgroundColor: COLORS.primary,
-        paddingTop: 40,
+        paddingTop: 30,
       }}
     >
       {isLoading ? (
@@ -33,17 +38,38 @@ const GoogleOauthPage = () => {
         </View>
       ) : (
         <>
+          <Image
+            source={AppIcon}
+            style={{
+              width: appIconDimensions,
+              height: appIconDimensions,
+              borderRadius: 10,
+              alignSelf: 'center',
+              marginBottom: 30,
+              borderWidth: 1,
+              borderColor: COLORS.white,
+            }}
+          />
           <GoogleOauthButton />
-          <View style={{ width: '100%', alignItems: 'center', marginTop: 40 }}>
-            {isError ? (
-              <>
-                <Body style={errorTextStyles}>{'Sorry, an error has occured.'}</Body>
-                <Body style={errorTextStyles}>
-                  {'Notify our developer by going back and messaging in the "?" tab.'}
-                </Body>
-              </>
-            ) : null}
-          </View>
+          {isError ? (
+            <View style={{ width: '100%', alignItems: 'center', marginTop: 40 }}>
+              <Body style={errorTextStyles}>{'Sorry, an error has occured.'}</Body>
+              <Body style={errorTextStyles}>
+                {'Notify our developer by going back and messaging in the "?" tab.'}
+              </Body>
+            </View>
+          ) : null}
+          <Body
+            style={{
+              textAlign: 'center',
+              marginTop: 30,
+              lineHeight: 20,
+              width: '90%',
+              alignSelf: 'center',
+            }}
+          >
+            {'Your info will never be used for\nthird party services.'}
+          </Body>
         </>
       )}
     </View>

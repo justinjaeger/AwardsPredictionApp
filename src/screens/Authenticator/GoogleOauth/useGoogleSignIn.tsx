@@ -26,11 +26,11 @@ const useGoogleSignIn = () => {
   const signIn = async () => {
     try {
       setIsLoading(true);
+      // get the cognito user's attributes
       const authenticatedUser = await Auth.currentAuthenticatedUser();
       const email = authenticatedUser?.attributes?.email;
-
       if (!email) {
-        throw new Error('No email extracted from body');
+        throw new Error('Error finding cognito user');
       }
       // First, attempt to get user from database using email
       const { data: getUserRes } = await ApiServices.getUserByEmail(email);

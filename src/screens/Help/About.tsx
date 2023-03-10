@@ -1,8 +1,10 @@
 import React from 'react';
-import { ScrollView, View } from 'react-native';
+import { Linking, ScrollView, TouchableOpacity, View } from 'react-native';
 import BackgroundWrapper from '../../components/BackgroundWrapper';
-import { Body } from '../../components/Text';
+import { Body, SubHeaderLight } from '../../components/Text';
 import Tmdb from '../../assets/tmdb.svg';
+
+const PRIVACY_URL = 'https://sites.google.com/view/oscarexpert-predictawards/privacy';
 
 const About = () => {
   return (
@@ -11,6 +13,21 @@ const About = () => {
         style={{ width: '100%' }}
         contentContainerStyle={{ width: '90%', alignSelf: 'center' }}
       >
+        <TouchableOpacity
+          onPress={() => {
+            Linking.canOpenURL(PRIVACY_URL).then((supported) => {
+              if (supported) {
+                Linking.openURL(PRIVACY_URL);
+              }
+            });
+          }}
+          style={{ alignSelf: 'center', marginTop: 40, padding: 10 }}
+          activeOpacity={0.8}
+        >
+          <SubHeaderLight style={{ color: 'rgba(255,255,255,0.8)' }}>
+            Privacy
+          </SubHeaderLight>
+        </TouchableOpacity>
         <View
           style={{
             flexDirection: 'row',
