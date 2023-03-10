@@ -32,10 +32,11 @@ export const searchMovies = async (
         const releaseYear = movie.release_date
           ? parseInt(movie.release_date.slice(0, 4), 10)
           : undefined;
-        if (releaseYear) {
-          return releaseYear >= minReleaseYear - 1;
+        if (!releaseYear) {
+          // always show movies without release date
+          return true;
         } else {
-          return 0;
+          return releaseYear >= minReleaseYear - 1;
         }
       })
       .sort((m1, m2) => {
