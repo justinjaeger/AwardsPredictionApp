@@ -22,4 +22,17 @@
         </intent-filter>
       </activity>
     </application>
+    <!-- For Cognito Auth -->
+    <application>
+    <activity
+      android:name=".MainActivity"
+      android:launchMode="singleInstance">     
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <data android:scheme="oscar" />
+      </intent-filter>
+    </activity>
+    </application>
 </manifest>

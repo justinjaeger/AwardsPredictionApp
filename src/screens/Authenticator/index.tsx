@@ -1,76 +1,34 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react';
-// @ts-ignore - doesn't have typescript package
-import { Authenticator } from 'aws-amplify-react-native';
-import { iAuthState } from './types';
-import { AuthProvider } from './context';
-import SignUp from './SignUp';
-import ConfirmSignUp from './ConfirmSignUp';
-import ForgotPassword from './ForgotPassword';
-import RequireNewPassword from './RequireNewPassword';
-import SignIn from './SignIn';
-import { useNavigation } from '@react-navigation/native';
-import { ScrollView, View } from 'react-native';
-import SignedIn from './SignedIn';
-import { useAuth } from '../../context/UserContext';
+import React from 'react';
+import { View } from 'react-native';
 import COLORS from '../../constants/colors';
-import { getHeaderTitle } from '../../constants';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import GoogleOauthPage from './GoogleOauth';
+import AuthRoot from './Root';
 
-const headerTitles: { [key in iAuthState]: string } = {
-  signIn: 'Log In',
-  signUp: 'Sign Up',
-  confirmSignIn: 'Confirm Sign In',
-  confirmSignUp: 'Confirm Your Email',
-  forgotPassword: 'Reset Password',
-  requireNewPassword: 'Create New Password',
-  verifyContact: 'Verify Contact',
-  signedIn: 'You are signed in!',
-};
+const Tab = createMaterialTopTabNavigator();
 
-const Auth = () => {
-  const navigation = useNavigation();
-  const { userEmail } = useAuth();
-
-  const [authState, setAuthState] = useState<iAuthState>('signIn');
-
-  useLayoutEffect(() => {
-    // This is the best way to change the header
-    navigation.setOptions({
-      headerTitle: getHeaderTitle(headerTitles[authState]),
-    });
-  }, [authState, navigation]);
-
-  useEffect(() => {
-    setAuthState(userEmail ? 'signIn' : 'signUp');
-  }, [userEmail]);
-
+const AuthTabs = () => {
   return (
-    <AuthProvider>
-      <ScrollView
-        style={{ width: '100%', backgroundColor: COLORS.primary }}
-        contentContainerStyle={{
-          alignItems: 'center',
-          marginTop: 40,
-          width: '100%',
+    <View
+      style={{ flex: 1, width: '100%', height: '100%', backgroundColor: COLORS.primary }}
+    >
+      <Tab.Navigator
+        tabBarOptions={{
+          style: {
+            backgroundColor: COLORS.primary,
+            borderBottomColor: 'rgba(255,255,255,0.1)',
+            borderBottomWidth: 1,
+          },
+          labelStyle: { color: COLORS.white, fontSize: 16, textTransform: 'none' },
+          indicatorStyle: { backgroundColor: COLORS.white },
+          activeTintColor: COLORS.primary,
         }}
       >
-        <View style={{ width: '80%' }}>
-          <Authenticator
-            authState={authState}
-            hideDefault={true}
-            onStateChange={setAuthState}
-            validAuthStates={['signedIn']}
-          >
-            {authState === 'signIn' ? <SignIn /> : <></>}
-            {authState === 'signUp' ? <SignUp /> : <></>}
-            {authState === 'confirmSignUp' ? <ConfirmSignUp /> : <></>}
-            {authState === 'forgotPassword' ? <ForgotPassword /> : <></>}
-            {authState === 'requireNewPassword' ? <RequireNewPassword /> : <></>}
-            {authState === 'signedIn' ? <SignedIn /> : <></>}
-          </Authenticator>
-        </View>
-      </ScrollView>
-    </AuthProvider>
+        <Tab.Screen name="Gmail" component={GoogleOauthPage} />
+        <Tab.Screen name="Email" component={AuthRoot} />
+      </Tab.Navigator>
+    </View>
   );
 };
 
-export default Auth;
+export default AuthTabs;

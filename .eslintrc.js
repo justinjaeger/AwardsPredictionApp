@@ -48,5 +48,6 @@ module.exports = {
     'react-hooks/exhaustive-deps': 0,
     'import/no-named-as-default': 0,
     'sonarjs/no-duplicate-string': 0,
+    'sonarjs/prefer-immediate-return': 0,
   },
 };

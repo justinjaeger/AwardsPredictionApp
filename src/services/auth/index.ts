@@ -1,6 +1,7 @@
 import { CognitoUser } from 'amazon-cognito-identity-js';
 import { Auth } from 'aws-amplify';
 import { handleError, iApiResponse } from '../utils';
+import { CognitoHostedUIIdentityProvider } from '@aws-amplify/auth';
 
 const signUp = async (
   email: string,
@@ -105,6 +106,19 @@ const deleteUser = async (): Promise<iApiResponse<any>> => {
   }
 };
 
+// GOOGLE OAUTH
+
+const googleSignIn = async (): Promise<iApiResponse<any>> => {
+  try {
+    await Auth.federatedSignIn({
+      provider: CognitoHostedUIIdentityProvider.Google,
+    });
+    return { status: 'success' };
+  } catch (error) {
+    return handleError('Error deleting user.', error);
+  }
+};
+
 const AuthServices = {
   signUp,
   signIn,
@@ -114,6 +128,7 @@ const AuthServices = {
   forgotPasswordSubmit,
   resendSignUp,
   deleteUser,
+  googleSignIn,
 };
 
 export default AuthServices;
