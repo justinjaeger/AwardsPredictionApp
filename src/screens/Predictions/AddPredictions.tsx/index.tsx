@@ -15,6 +15,7 @@ import BackButton from '../../../components/Buttons/BackButton';
 import { CategoryIsShortlisted, CategoryType, EventStatus } from '../../../API';
 import { useTypedNavigation } from '../../../util/hooks';
 import { usePredictions } from './usePredictions';
+import { FAB } from '../../../components/Buttons/FAB';
 
 export type iCreateContenderProps = {
   onSelectPrediction: (p: iPrediction) => void;
@@ -87,6 +88,12 @@ const AddPredictions = () => {
           setSelectedPredictions={(ps) => setSelectedPredictions(ps)}
         />
       )}
+      <FAB
+        iconName="checkmark-outline"
+        text="Done"
+        onPress={() => navigation.goBack()}
+        visible={true}
+      />
     </>
   );
 };

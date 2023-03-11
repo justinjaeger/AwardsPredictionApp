@@ -130,7 +130,7 @@ const Event = ({
             isCollapsed={false}
             onSelectCategory={(category: iCategory) => onSelectCategory(category)}
             predictionData={predictionData}
-            isAuthUserProfile={isAuthUserProfile}
+            isAuthUserProfile={isAuthUserProfile && tab === 'personal'}
           />
         </Animated.View>
       </Animated.ScrollView>
