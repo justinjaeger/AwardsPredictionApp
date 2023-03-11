@@ -54,7 +54,6 @@ const EventSelect = () => {
             alignSelf: 'flex-start',
             marginTop: theme.windowMargin,
             paddingBottom: 100,
-            marginLeft: theme.windowMargin,
           }}
         >
           {events ? <EventList user={user} events={Object.values(events)} /> : null}
