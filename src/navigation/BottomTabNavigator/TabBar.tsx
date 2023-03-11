@@ -1,9 +1,9 @@
 import React from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { TouchableOpacity, View } from 'react-native';
 import CustomIcon from '../../components/CustomIcon';
 import COLORS from '../../constants/colors';
 import { BOTTOM_TAB_HEIGHT } from '../../constants';
+import SafeAreaViewFixed from '../../components/SafeAreaViewFixed';
 
 export type ITabBarProps = {
   state: any;
@@ -20,7 +20,7 @@ const TabBar = (props: ITabBarProps) => {
   }
 
   return (
-    <SafeAreaView
+    <SafeAreaViewFixed
       edges={['bottom']}
       style={{
         borderTopWidth: 1,
@@ -31,6 +31,7 @@ const TabBar = (props: ITabBarProps) => {
           width: 0,
         },
         backgroundColor: COLORS.primary,
+        // paddingBottom: bottom,
       }}
     >
       <View
@@ -126,7 +127,7 @@ const TabBar = (props: ITabBarProps) => {
           );
         })}
       </View>
-    </SafeAreaView>
+    </SafeAreaViewFixed>
   );
 };
 

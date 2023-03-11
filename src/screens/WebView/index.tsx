@@ -4,9 +4,9 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { MainParamList } from '../../navigation/types';
 import { ActivityIndicator, View } from 'react-native';
 import COLORS from '../../constants/colors';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { IconButton } from '../../components/Buttons/IconButton';
 import { BOTTOM_TAB_HEIGHT } from '../../constants';
+import SafeAreaViewFixed from '../../components/SafeAreaViewFixed';
 
 const WebViewScreen = () => {
   const {
@@ -37,7 +37,9 @@ const WebViewScreen = () => {
   );
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.primary, width: '100%' }}>
+    <SafeAreaViewFixed
+      style={{ flex: 1, backgroundColor: COLORS.primary, width: '100%' }}
+    >
       <WebView
         ref={webviewRef}
         source={{ uri }}
@@ -77,7 +79,7 @@ const WebViewScreen = () => {
           styles={{ width: 30, height: 30, marginRight: 10 }}
         />
       </View>
-    </SafeAreaView>
+    </SafeAreaViewFixed>
   );
 };
 

@@ -1,8 +1,9 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { SafeAreaView, ScrollView } from 'react-native';
+import { ScrollView } from 'react-native';
 import BackgroundWrapper from '../../components/BackgroundWrapper';
 import { SubmitButton } from '../../components/Buttons';
+import SafeAreaViewFixed from '../../components/SafeAreaViewFixed';
 import TmdbMovieCache from '../../services/cache/tmdbMovie';
 import TmdbPersonCache from '../../services/cache/tmdbPerson';
 
@@ -16,7 +17,7 @@ const Admin = () => {
 
   return (
     <BackgroundWrapper>
-      <SafeAreaView style={{ width: '100%', height: '100%' }}>
+      <SafeAreaViewFixed style={{ width: '100%', height: '100%' }}>
         <ScrollView
           contentContainerStyle={{
             alignItems: 'center',
@@ -44,7 +45,7 @@ const Admin = () => {
             style={{ marginTop: 30 }}
           />
         </ScrollView>
-      </SafeAreaView>
+      </SafeAreaViewFixed>
     </BackgroundWrapper>
   );
 };

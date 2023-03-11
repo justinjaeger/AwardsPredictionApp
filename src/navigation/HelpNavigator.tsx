@@ -2,15 +2,18 @@ import React from 'react';
 import SendMessage from '../screens/Help/SendMessage';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import Settings from '../screens/Help/Settings';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import COLORS from '../constants/colors';
 import About from '../screens/Help/About';
+import SafeAreaViewFixed from '../components/SafeAreaViewFixed';
 
 const Tab = createMaterialTopTabNavigator();
 
 const HelpTabs = () => {
   return (
-    <SafeAreaView edges={['top']} style={{ flex: 1, backgroundColor: COLORS.primary }}>
+    <SafeAreaViewFixed
+      edges={['top']}
+      style={{ flex: 1, backgroundColor: COLORS.primary }}
+    >
       <Tab.Navigator
         tabBarOptions={{
           style: {
@@ -27,7 +30,7 @@ const HelpTabs = () => {
         <Tab.Screen name="Settings" component={Settings} />
         <Tab.Screen name="About" component={About} />
       </Tab.Navigator>
-    </SafeAreaView>
+    </SafeAreaViewFixed>
   );
 };
 
