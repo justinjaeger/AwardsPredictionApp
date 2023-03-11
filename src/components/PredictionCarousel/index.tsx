@@ -3,9 +3,11 @@ import React, { useEffect, useRef, useState } from 'react';
 import {
   Animated,
   ScrollView,
+  StyleProp,
   TouchableOpacity,
   useWindowDimensions,
   View,
+  ViewStyle,
 } from 'react-native';
 import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
@@ -20,6 +22,8 @@ const PredictionCarousel = ({
   predictionSets,
   userId,
   userInfo,
+  enableArrows,
+  style,
 }: {
   predictionSets: iPredictionSet[];
   userId: string;
@@ -27,6 +31,8 @@ const PredictionCarousel = ({
     name: string;
     image: string | undefined;
   };
+  enableArrows?: boolean;
+  style?: StyleProp<ViewStyle>;
 }) => {
   const { width } = useWindowDimensions();
   const navigation = useNavigation();
@@ -105,7 +111,7 @@ const PredictionCarousel = ({
   };
 
   return (
-    <>
+    <View style={[{ width: '100%' }, style]}>
       {userInfo ? (
         <TouchableOpacity
           style={{
@@ -133,16 +139,21 @@ const PredictionCarousel = ({
         style={{
           width: '100%',
           height: width * 0.8, // height of the box is proportionate to width
-          backgroundColor: 'rgba(0,0,0,0.2)',
           borderWidth: 0.5,
           borderColor: 'rgba(255,255,255,0.3)',
-          borderRadius: theme.borderRadius,
+          borderRadius: theme.windowMargin, // basically acts as a marginLeft and marginRight to top/bottom borders
+          borderLeftWidth: 0,
+          borderRightWidth: 0,
           paddingTop: 20,
           paddingBottom: 20,
         }}
       >
-        <CarouselArrow direction={'back'} onPress={onPressBack} />
-        <CarouselArrow direction={'forward'} onPress={onPressForward} />
+        {enableArrows ? (
+          <>
+            <CarouselArrow direction={'back'} onPress={onPressBack} />
+            <CarouselArrow direction={'forward'} onPress={onPressForward} />
+          </>
+        ) : null}
         <ScrollView
           horizontal
           pagingEnabled
@@ -191,7 +202,7 @@ const PredictionCarousel = ({
           }}
         />
       </View>
-    </>
+    </View>
   );
 };
 

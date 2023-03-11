@@ -93,6 +93,7 @@ const Profile = () => {
           width: '100%',
           paddingBottom: 100,
         }}
+        showsVerticalScrollIndicator={false}
       >
         {!userId ? (
           <SubmitButton
@@ -212,7 +213,11 @@ const Profile = () => {
                 >
                   Recent Predictions:
                 </HeaderLight>
-                <PredictionCarousel predictionSets={predictionSets} userId={userId} />
+                <PredictionCarousel
+                  predictionSets={predictionSets}
+                  userId={userId}
+                  style={{ marginTop: 10 }}
+                />
               </>
             ) : null}
             {!isLoadingAllEvents && user && userEvents.length > 0 ? (

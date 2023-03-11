@@ -75,7 +75,7 @@ const MovieListDraggable = ({
         <LastUpdatedText
           lastUpdated={lastUpdatedString}
           isDisabled={isHistory}
-          style={{ top: -30 }}
+          style={{ top: -35 }}
         />
       }
       ListFooterComponent={

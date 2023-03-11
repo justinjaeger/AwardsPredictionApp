@@ -101,6 +101,7 @@ const Event = ({
           alignItems: 'flex-start',
           paddingBottom: 100,
         }}
+        showsVerticalScrollIndicator={false}
       >
         <Animated.View
           style={{

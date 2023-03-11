@@ -17,7 +17,7 @@ const LastUpdatedText = ({
     <View
       style={{
         position: 'absolute',
-        top: -20,
+        top: -25,
         right: 10,
         flexDirection: 'row',
         alignItems: 'center',

@@ -180,12 +180,13 @@ const CategoryPersonal = ({
           paddingBottom: 100,
           marginTop: theme.windowMargin,
         }}
+        showsVerticalScrollIndicator={false}
       >
         <Animated.View style={{ opacity: gridOpacity }}>
           <LastUpdatedText
             lastUpdated={lastUpdatedString}
             isDisabled={isHistory}
-            style={{ top: -30 }}
+            style={{ top: -35 }}
           />
           <MovieGrid predictions={predictions} />
         </Animated.View>
