@@ -9,7 +9,7 @@ import ForgotPassword from './ForgotPassword';
 import RequireNewPassword from './RequireNewPassword';
 import SignIn from './SignIn';
 import { useNavigation } from '@react-navigation/native';
-import { ScrollView, View } from 'react-native';
+import { Keyboard, ScrollView, View } from 'react-native';
 import SignedIn from './SignedIn';
 import { useAuth } from '../../context/UserContext';
 import COLORS from '../../constants/colors';
@@ -51,6 +51,8 @@ const Auth = () => {
           alignItems: 'center',
           width: '100%',
         }}
+        keyboardShouldPersistTaps
+        onScroll={() => Keyboard.dismiss()}
       >
         <View style={{ width: '80%', marginTop: 40 }}>
           <Authenticator
