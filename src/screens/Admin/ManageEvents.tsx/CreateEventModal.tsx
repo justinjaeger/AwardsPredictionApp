@@ -58,7 +58,8 @@ const CreateEventModal = (props: {
             value={(year || '')?.toString()}
             setValue={(y) => setYear(parseInt(y, 10))}
             isYear
-            style={{ alignSelf: 'center', width: '80%' }}
+            caption={'The year of the EVENT TELECAST, so next year'}
+            style={{ alignSelf: 'center', width: '80%', marginBottom: 10 }}
           />
           <ScrollView
             style={{ flex: 1 }}

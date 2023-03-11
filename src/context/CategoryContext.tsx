@@ -21,6 +21,8 @@ type iCategoryContext = {
   setDate: (date: Date | undefined) => void;
   personalCommunityTab: iPersonalCommunityTab;
   setPersonalCommunityTab: (d: iPersonalCommunityTab) => void;
+  isEditing: boolean;
+  setIsEditing: (v: boolean) => void;
   reset: () => void;
 };
 
@@ -35,6 +37,8 @@ const CategoryContext = createContext<iCategoryContext>({
   setDate: () => {},
   personalCommunityTab: 'personal',
   setPersonalCommunityTab: () => {},
+  isEditing: false,
+  setIsEditing: () => {},
   reset: () => {},
 });
 
@@ -50,6 +54,7 @@ export const CategoryProvider = (props: { children: React.ReactNode }) => {
     userId === undefined ? 'community' : 'personal',
   );
   const [date, setDate] = useState<Date | undefined>(undefined);
+  const [isEditing, _setIsEditing] = useState<boolean>(false);
 
   // WHEN WE SET AN EVENT automatically get the categories from it also
   const setEvent = (event: iEvent) => {
@@ -68,6 +73,10 @@ export const CategoryProvider = (props: { children: React.ReactNode }) => {
 
   const setCategory = (cateogry: iCategory) => {
     _setCategory(cateogry);
+  };
+
+  const setIsEditing = (isEditing: boolean) => {
+    _setIsEditing(isEditing);
   };
 
   const setEventCategories = (categories: iCategory[]) => {
@@ -92,6 +101,8 @@ export const CategoryProvider = (props: { children: React.ReactNode }) => {
         setPersonalCommunityTab,
         date,
         setDate,
+        isEditing,
+        setIsEditing,
         reset,
       }}
     >

@@ -37,7 +37,8 @@ const Category = () => {
   const { userId: authUserId } = useAuth();
   const userId = params?.userId || authUserId;
 
-  const { category, event: _event } = useCategory();
+  const { category, event: _event, date, isEditing } = useCategory();
+  const isHistory = !!date;
   const navigation = useTypedNavigation<PredictionsParamList>();
   const {
     collapsedOpacity,
@@ -129,7 +130,7 @@ const Category = () => {
           {...props}
         />,
       )}
-      {userId ? (
+      {userId && !isHistory && !isEditing ? (
         <FollowingBottomScroll
           userId={userId}
           onPress={(id) => {

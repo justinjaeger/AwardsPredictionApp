@@ -125,7 +125,7 @@ const UpdateProfileInfo = () => {
             }}
           />
           {usernameBeforeEdit ? null : (
-            <BodyBold style={{ textAlign: 'center', marginBottom: 20 }}>
+            <BodyBold style={{ textAlign: 'center', marginBottom: 20, marginTop: 20 }}>
               {'You MUST create a username \n so other users can find you'}
             </BodyBold>
           )}

@@ -37,7 +37,12 @@ const CategoryPersonal = ({
   predictionData,
   isLoading,
 }: iCategoryProps) => {
-  const { category: _category, event: _event, date } = useCategory();
+  const {
+    category: _category,
+    event: _event,
+    date,
+    setIsEditing: contextSetIsEditing,
+  } = useCategory();
   const navigation = useTypedNavigation<PredictionsParamList>();
   const { userId: authUserId } = useAuth();
 
@@ -48,13 +53,19 @@ const CategoryPersonal = ({
   const event = _event as iEvent;
 
   const [goBackOnComplete, setGoBackOnComplete] = useAsyncReference<boolean>(false);
-  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [isEditing, localSetIsEditing] = useState<boolean>(false);
 
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => <HistoryHeaderButton isDisabled={!!isEditing} />,
     });
   }, [isEditing]);
+
+  // updates for context so the friend bar can go away and buttons can appear at bottom
+  const setIsEditing = (v: boolean) => {
+    localSetIsEditing(v);
+    contextSetIsEditing(v);
+  };
 
   const onComplete = () => {
     setIsEditing(false);
