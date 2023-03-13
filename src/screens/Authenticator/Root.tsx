@@ -51,7 +51,7 @@ const Auth = () => {
           alignItems: 'center',
           width: '100%',
         }}
-        keyboardShouldPersistTaps
+        keyboardShouldPersistTaps={'always'}
         onScroll={() => Keyboard.dismiss()}
       >
         <View style={{ width: '80%', marginTop: 40 }}>
