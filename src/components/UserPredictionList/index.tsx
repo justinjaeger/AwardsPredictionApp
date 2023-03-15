@@ -9,6 +9,7 @@ import { getAwardsBodyCategories, getCategorySlots } from '../../constants/categ
 import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
 import { useCategory } from '../../context/CategoryContext';
+import { useAuth } from '../../context/UserContext';
 import { PredictionsParamList } from '../../navigation/types';
 import { iPredictionSet } from '../../types';
 import { formatLastUpdated } from '../../util/formatDateTime';
@@ -25,9 +26,11 @@ const ProfilePredictionsList = ({
   fixedSlots?: number;
   userId: string;
 }) => {
+  const { userId: authUserId } = useAuth();
   const navigation = useTypedNavigation<PredictionsParamList>();
-  const { setEvent } = useCategory();
+  const { setEvent, setCategory } = useCategory();
   const { width } = useWindowDimensions();
+  const isAuthUserProfile = userId === authUserId;
   return (
     <>
       {predictionSets.map((ps) => {
@@ -56,7 +59,18 @@ const ProfilePredictionsList = ({
               onPress={() => {
                 // navigate to user's predictions
                 setEvent(ps.event);
-                navigation.navigate('Event', { userId });
+                setCategory(ps.category);
+                if (isAuthUserProfile) {
+                  navigation.navigate('Category', {
+                    userId,
+                    showEventLink: true,
+                  });
+                } else {
+                  navigation.navigate('CategoryFromProfile', {
+                    userId,
+                    showEventLink: true,
+                  });
+                }
               }}
             >
               <View>

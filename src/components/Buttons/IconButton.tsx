@@ -14,19 +14,20 @@ type iIconButtonProps = {
   color?: string;
   enableOnPressIn?: boolean;
   styles?: any;
+  underlayColor?: string;
 };
 
 const SIZE = 30;
 
 export const IconButton = (props: iIconButtonProps) => {
-  const { onPress, iconProps, color, enableOnPressIn, styles } = props;
+  const { onPress, iconProps, color, enableOnPressIn, styles, underlayColor } = props;
   return (
     <TouchableHighlight
       style={{
         borderRadius: theme.borderRadius,
         ...styles,
       }}
-      underlayColor={COLORS.secondary}
+      underlayColor={underlayColor || COLORS.secondary}
       onPress={onPress}
       onPressIn={enableOnPressIn ? onPress : undefined}
     >

@@ -91,8 +91,8 @@ const AddPredictions = () => {
       <FAB
         iconName="checkmark-outline"
         text="Done"
-        onPress={() => navigation.goBack()}
-        visible={true}
+        onPress={onSave}
+        visible={!isSearching} // crutial!! Or else it will overlap the search add button
       />
     </>
   );

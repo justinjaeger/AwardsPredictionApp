@@ -1,13 +1,20 @@
 import { StackActions } from '@react-navigation/native';
 import React from 'react';
-import { View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import { PredictionsParamList } from '../../navigation/types';
 import { iUser } from '../../types';
 import { useTypedNavigation } from '../../util/hooks';
+import CustomIcon from '../CustomIcon';
 import ProfileImage from '../ProfileImage';
-import { SubHeaderLight } from '../Text';
+import { SubHeader, SubHeaderLight } from '../Text';
 
-const UserHeader = ({ user }: { user: iUser }) => {
+const UserHeader = ({
+  user,
+  showEventLink,
+}: {
+  user: iUser;
+  showEventLink?: boolean;
+}) => {
   const navigation = useTypedNavigation<PredictionsParamList>();
 
   const name = user?.name || user?.username || 'user';
@@ -34,7 +41,23 @@ const UserHeader = ({ user }: { user: iUser }) => {
         }}
         style={{ marginLeft: 10, marginRight: 15 }}
       />
-      <SubHeaderLight>{`${name}'s predictions`}</SubHeaderLight>
+      {showEventLink ? (
+        <TouchableOpacity
+          onPress={() => {
+            navigation.dispatch(
+              StackActions.replace('EventFromProfile', { userId: user.id }),
+            );
+          }}
+          style={{ flexDirection: 'row', alignItems: 'center' }}
+        >
+          <>
+            <SubHeader>See Event Predictions</SubHeader>
+            <CustomIcon name={'chevron-right'} />
+          </>
+        </TouchableOpacity>
+      ) : (
+        <SubHeaderLight>{`${name}'s predictions`}</SubHeaderLight>
+      )}
     </View>
   );
 };

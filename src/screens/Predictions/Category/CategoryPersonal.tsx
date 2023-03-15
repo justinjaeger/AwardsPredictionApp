@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
-import { Animated, View } from 'react-native';
+import { Animated, TouchableOpacity, View } from 'react-native';
 import BackButton from '../../../components/Buttons/BackButton';
 import { FAB } from '../../../components/Buttons/FAB';
 import LoadingStatueModal from '../../../components/LoadingStatueModal';
@@ -8,7 +8,7 @@ import MovieGrid from '../../../components/MovieGrid';
 import MovieListDraggable from '../../../components/MovieList/MovieListDraggable';
 import SignedOutState from '../../../components/SignedOutState';
 import Snackbar from '../../../components/Snackbar';
-import { BodyBold } from '../../../components/Text';
+import { BodyBold, SubHeader } from '../../../components/Text';
 import theme from '../../../constants/theme';
 import { useCategory } from '../../../context/CategoryContext';
 import useMutationUpdatePredictions from '../../../hooks/mutations/updatePredictions';
@@ -25,17 +25,18 @@ import { iCategoryProps } from '.';
 import LastUpdatedText from '../../../components/LastUpdatedText';
 import HistoryHeaderButton from '../../../components/Buttons/HistoryHeaderButton';
 import { useAuth } from '../../../context/UserContext';
+import { StackActions } from '@react-navigation/native';
+import CustomIcon from '../../../components/CustomIcon';
 
 const CategoryPersonal = ({
   collapsedOpacity,
   expandedOpacity,
-  isCollapsed,
   delayedDisplay,
   gridOpacity,
-  listOpacity,
   userId,
   predictionData,
   isLoading,
+  showEventLink,
 }: iCategoryProps) => {
   const {
     category: _category,
@@ -182,6 +183,26 @@ const CategoryPersonal = ({
           </BodyBold>
         </View>
       ) : null}
+      {showEventLink ? (
+        <TouchableOpacity
+          onPress={() => {
+            navigation.dispatch(StackActions.replace('Event', { userId }));
+          }}
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'flex-end',
+            alignItems: 'center',
+            width: '100%',
+            marginRight: theme.windowMargin,
+            marginTop: 10,
+          }}
+        >
+          <>
+            <SubHeader>Go To Event</SubHeader>
+            <CustomIcon name={'chevron-right'} />
+          </>
+        </TouchableOpacity>
+      ) : null}
       <Animated.ScrollView
         style={{
           display: delayedDisplay === 'grid' ? 'flex' : 'none',
@@ -204,37 +225,30 @@ const CategoryPersonal = ({
       </Animated.ScrollView>
       <Animated.View
         style={{
-          opacity: listOpacity,
           display: delayedDisplay === 'list' ? 'flex' : 'none',
+          opacity: expandedOpacity,
         }}
       >
-        <Animated.View
-          style={{
-            display: !isCollapsed ? 'flex' : 'none',
-            opacity: expandedOpacity,
-          }}
-        >
-          <MovieListDraggable
-            predictions={predictions}
-            setPredictions={(ps) => setPredictions(ps)}
-            lastUpdatedString={lastUpdatedString}
-            isFriendProfile={isFriendProfile}
-          />
-        </Animated.View>
-        <Animated.View
-          style={{
-            display: isCollapsed ? 'flex' : 'none',
-            opacity: collapsedOpacity,
-          }}
-        >
-          <MovieListDraggable
-            predictions={predictions}
-            setPredictions={(ps) => setPredictions(ps)}
-            lastUpdatedString={lastUpdatedString}
-            isCollapsed
-            isFriendProfile={isFriendProfile}
-          />
-        </Animated.View>
+        <MovieListDraggable
+          predictions={predictions}
+          setPredictions={(ps) => setPredictions(ps)}
+          lastUpdatedString={lastUpdatedString}
+          isFriendProfile={isFriendProfile}
+        />
+      </Animated.View>
+      <Animated.View
+        style={{
+          display: delayedDisplay === 'list-collapsed' ? 'flex' : 'none',
+          opacity: collapsedOpacity,
+        }}
+      >
+        <MovieListDraggable
+          predictions={predictions}
+          setPredictions={(ps) => setPredictions(ps)}
+          lastUpdatedString={lastUpdatedString}
+          isCollapsed
+          isFriendProfile={isFriendProfile}
+        />
       </Animated.View>
       <FAB
         iconName="save-outline"

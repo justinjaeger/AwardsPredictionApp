@@ -1,8 +1,10 @@
 import React from 'react';
 import { Linking, ScrollView, TouchableOpacity, View } from 'react-native';
 import BackgroundWrapper from '../../components/BackgroundWrapper';
-import { Body, SubHeaderLight } from '../../components/Text';
+import { Body, SubHeader } from '../../components/Text';
 import Tmdb from '../../assets/tmdb.svg';
+import COLORS from '../../constants/colors';
+import theme from '../../constants/theme';
 
 const PRIVACY_URL = 'https://sites.google.com/view/oscarexpert-predictawards/privacy';
 
@@ -21,12 +23,20 @@ const About = () => {
               }
             });
           }}
-          style={{ alignSelf: 'center', marginTop: 40, padding: 10 }}
+          style={{
+            alignSelf: 'center',
+            marginTop: 40,
+            padding: 10,
+            flexDirection: 'row',
+            width: '50%',
+            justifyContent: 'space-around',
+            borderWidth: 1,
+            borderColor: COLORS.white,
+            borderRadius: theme.borderRadius,
+          }}
           activeOpacity={0.8}
         >
-          <SubHeaderLight style={{ color: 'rgba(255,255,255,0.8)' }}>
-            Privacy
-          </SubHeaderLight>
+          <SubHeader style={{ color: 'rgba(255,255,255,0.8)' }}>Privacy</SubHeader>
         </TouchableOpacity>
         <View
           style={{

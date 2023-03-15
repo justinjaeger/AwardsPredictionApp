@@ -1,17 +1,13 @@
-// import { Spinner } from '@ui-kitten/components';
-import React from 'react';
-import {
-  ScrollView,
-  // useWindowDimensions,
-  View,
-} from 'react-native';
-// import COLORS from '../../constants/colors';
+import React, { useEffect, useRef } from 'react';
+import { Animated, ScrollView, View } from 'react-native';
+import COLORS from '../../constants/colors';
+import theme from '../../constants/theme';
 import { useCategory } from '../../context/CategoryContext';
+import { useFollowingBar } from '../../context/FollowingBarContext';
 import useFriendsPredictingEvent from '../../hooks/useFriendsPredictingEvent';
-// import usePaginatedFriends from '../../hooks/usePaginatedFriends';
+import { IconButton } from '../Buttons/IconButton';
 import ProfileImage from '../ProfileImage';
 
-// NOTE: Leaving commented-out code because I'm not sure if this new solution with useFriendsPredictingEvent works, so might revert
 const FollowingBottomScroll = ({
   userId,
   onPress,
@@ -19,62 +15,66 @@ const FollowingBottomScroll = ({
   userId: string;
   onPress: (userId: string) => void;
 }) => {
-  //   const { width } = useWindowDimensions();
+  const friendsYPos = useRef(new Animated.Value(0)).current;
   const { event } = useCategory();
-
-  //   const {
-  //     users,
-  //     fetchPage,
-  //     isLoading: isFetchingFriends,
-  //     hasFetchedAll,
-  //   } = usePaginatedFriends({
-  //     userId,
-  //     type: 'following',
-  //   });
+  const { isHidden, setIsHidden } = useFollowingBar();
   const { data: users } = useFriendsPredictingEvent(userId, event?.id);
 
   const imageWidth = 50;
   const imageMargin = 5;
-  //   const lastImagePosition = (users.length - 1) * (imageWidth + imageMargin * 2);
+
+  useEffect(() => {
+    Animated.timing(friendsYPos, {
+      toValue: isHidden ? 60 : 0,
+      duration: 250,
+      useNativeDriver: true,
+    }).start();
+  }, [isHidden]);
 
   if (!users || users.length === 0) return null;
 
   return (
     <View
       style={{
-        backgroundColor: 'rgba(255,255,255,0.1)',
-        width: '100%',
-        justifyContent: 'center',
+        position: 'absolute',
+        bottom: 0,
+        backgroundColor: 'transparent',
+        alignItems: 'center',
+        flexDirection: 'row',
+        height: 60,
       }}
     >
+      <IconButton
+        iconProps={{ name: isHidden ? 'people-outline' : 'chevron-down-outline' }}
+        color={COLORS.white}
+        styles={{
+          backgroundColor: COLORS.secondaryDark,
+          marginLeft: theme.windowMargin,
+        }}
+        onPress={() => setIsHidden(!isHidden)}
+      />
       <ScrollView
         horizontal
         contentContainerStyle={{ justifyContent: 'center', alignItems: 'center' }}
-        // onScrollEndDrag={({ nativeEvent }) => {
-        // once we hit the scroll limit, we want to fetch the next page of users
-        //   const scrollLimit = lastImagePosition - width + imageWidth + imageMargin * 2;
-        //   const x = nativeEvent.contentOffset.x; // current position of the scrollview
-        //   if (x >= scrollLimit) {
-        //     !isFetchingFriends && fetchPage(); // this should be debounced
-        //   }
-        // }}
       >
-        <>
+        <Animated.View
+          style={{ transform: [{ translateY: friendsYPos }], marginLeft: 10 }}
+        >
           {users.map((user) => (
             <ProfileImage
               key={user.id}
               image={user.image}
               imageSize={imageWidth}
               onPress={() => onPress(user.id)}
-              style={{ margin: imageMargin }}
+              style={{
+                margin: imageMargin,
+                borderWidth: 1,
+                borderColor: COLORS.secondary,
+                borderRadius: 100,
+              }}
             />
           ))}
-          {/* {!hasFetchedAll ? (
-            <View style={{ marginLeft: 5 }}>
-              <Spinner size="medium" style={{ borderColor: COLORS.gray }} />
-            </View>
-          ) : null} */}
-        </>
+        </Animated.View>
       </ScrollView>
     </View>
   );

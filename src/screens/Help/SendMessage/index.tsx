@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ScrollView, TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import { SubmitButton } from '../../../components/Buttons';
 import FormInput from '../../../components/Inputs/FormInput';
@@ -8,6 +8,7 @@ import COLORS from '../../../constants/colors';
 import SlackApi, { SlackChannel } from '../../../services/slack';
 import { useAuth } from '../../../context/UserContext';
 import { useNavigateAwayEffect } from '../../../util/hooks';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 type iTypeButtonProps = { text: string; selected: boolean; onPress: () => void };
 
@@ -104,7 +105,8 @@ const SendMessage = () => {
 
   return (
     <BackgroundWrapper>
-      <ScrollView
+      <KeyboardAwareScrollView
+        extraHeight={200}
         style={{ width: '100%' }}
         contentContainerStyle={{ width: '90%', alignSelf: 'center' }}
       >
@@ -163,7 +165,7 @@ const SendMessage = () => {
             ) : null}
           </View>
         ) : null}
-      </ScrollView>
+      </KeyboardAwareScrollView>
     </BackgroundWrapper>
   );
 };

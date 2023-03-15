@@ -13,10 +13,8 @@ import { formatLastUpdated } from '../../../util/formatDateTime';
 const CategoryCommunity = ({
   collapsedOpacity,
   expandedOpacity,
-  isCollapsed,
   delayedDisplay,
   gridOpacity,
-  listOpacity,
   predictionData,
 }: iCategoryProps) => {
   const { category: _category, date } = useCategory();
@@ -73,34 +71,27 @@ const CategoryCommunity = ({
       </Animated.ScrollView>
       <Animated.View
         style={{
-          opacity: listOpacity,
           display: delayedDisplay === 'list' ? 'flex' : 'none',
+          opacity: expandedOpacity,
+          width: '100%',
         }}
       >
-        <Animated.View
-          style={{
-            display: !isCollapsed ? 'flex' : 'none',
-            opacity: expandedOpacity,
-            width: '100%',
-          }}
-        >
-          <MovieListCommunity
-            predictions={predictions}
-            lastUpdatedString={lastUpdatedString}
-          />
-        </Animated.View>
-        <Animated.View
-          style={{
-            display: isCollapsed ? 'flex' : 'none',
-            opacity: collapsedOpacity,
-          }}
-        >
-          <MovieListCommunity
-            predictions={predictions}
-            lastUpdatedString={lastUpdatedString}
-            isCollapsed
-          />
-        </Animated.View>
+        <MovieListCommunity
+          predictions={predictions}
+          lastUpdatedString={lastUpdatedString}
+        />
+      </Animated.View>
+      <Animated.View
+        style={{
+          display: delayedDisplay === 'list-collapsed' ? 'flex' : 'none',
+          opacity: collapsedOpacity,
+        }}
+      >
+        <MovieListCommunity
+          predictions={predictions}
+          lastUpdatedString={lastUpdatedString}
+          isCollapsed
+        />
       </Animated.View>
     </>
   );

@@ -7,6 +7,8 @@ import { useAuth } from '../../context/UserContext';
 import { UserRole } from '../../API';
 import { BottomTabParamList } from '../types';
 import HelpNavigator from '../HelpNavigator';
+import { FollowingBarProvider } from '../../context/FollowingBarContext';
+import { DisplayProvider } from '../../context/DisplayStateContext';
 
 const Tab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -38,4 +40,12 @@ const BottomTabNavigator = () => {
   );
 };
 
-export default BottomTabNavigator;
+const WithContext = () => (
+  <FollowingBarProvider>
+    <DisplayProvider>
+      <BottomTabNavigator />
+    </DisplayProvider>
+  </FollowingBarProvider>
+);
+
+export default WithContext;

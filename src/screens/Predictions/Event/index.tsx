@@ -15,12 +15,13 @@ import LastUpdatedText from '../../../components/LastUpdatedText';
 import { useAuth } from '../../../context/UserContext';
 import { StackActions } from '@react-navigation/native';
 import { useLoading } from '../../../hooks/animatedState/useLoading';
+import { iEventDisplayState } from '../../../context/DisplayStateContext';
 
 const Event = ({
   tab,
   collapsedOpacity,
   expandedOpacity,
-  isCollapsed,
+  delayedDisplay,
   userId,
   predictionData,
   isLoading,
@@ -28,7 +29,7 @@ const Event = ({
   tab: 'personal' | 'community';
   collapsedOpacity: Animated.Value;
   expandedOpacity: Animated.Value;
-  isCollapsed: boolean;
+  delayedDisplay: iEventDisplayState;
   userId: string | undefined; // if undefined means user is logged out
   predictionData: iIndexedPredictionsByCategory | undefined;
   isLoading: boolean;
@@ -107,7 +108,7 @@ const Event = ({
           style={{
             opacity: collapsedOpacity,
             width: '100%',
-            display: isCollapsed ? 'flex' : 'none',
+            display: delayedDisplay === 'collapsed' ? 'flex' : 'none',
           }}
         >
           <LastUpdatedText lastUpdated={lastUpdatedString} isDisabled={isHistory} />
@@ -122,7 +123,7 @@ const Event = ({
           style={{
             opacity: expandedOpacity,
             width: '100%',
-            display: isCollapsed ? 'none' : 'flex',
+            display: delayedDisplay === 'default' ? 'flex' : 'none',
           }}
         >
           <LastUpdatedText lastUpdated={lastUpdatedString} isDisabled={isHistory} />

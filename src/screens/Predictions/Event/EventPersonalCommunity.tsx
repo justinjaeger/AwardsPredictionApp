@@ -2,8 +2,7 @@ import React from 'react';
 import { PredictionsParamList } from '../../../navigation/types';
 import PredictionTabsNavigator from '../../../navigation/PredictionTabsNavigator';
 import { useAuth } from '../../../context/UserContext';
-import { useCollapsible } from '../../../hooks/animatedState/useCollapsible';
-import DisplayFAB from '../../../components/Buttons/DisplayFAB';
+import { EventDisplayFab } from '../../../components/Buttons/DisplayFAB';
 import {
   RouteProp,
   StackActions,
@@ -13,6 +12,7 @@ import {
 import Event from './index';
 import FollowingBottomScroll from '../../../components/FollowingBottomScroll';
 import usePredictionData from '../../../hooks/queries/usePredictionData';
+import { useEventDisplay } from '../../../hooks/animatedState/useDisplay';
 
 const EventPersonalCommunity = () => {
   const navigation = useNavigation();
@@ -30,30 +30,18 @@ const EventPersonalCommunity = () => {
     isLoading: isLoadingCommunity,
   } = usePredictionData('community', userId);
 
-  const {
-    collapsedOpacity,
-    expandedOpacity,
-    isCollapsed,
-    setIsCollapsed,
-  } = useCollapsible();
+  const { collapsedOpacity, expandedOpacity, delayedDisplay } = useEventDisplay();
 
   const props = {
     collapsedOpacity,
     expandedOpacity,
-    isCollapsed,
+    delayedDisplay,
     userId,
-  };
-
-  const toggle = () => {
-    setIsCollapsed(!isCollapsed);
   };
 
   return (
     <>
-      <DisplayFAB
-        state={isCollapsed ? 'list-collapsed' : 'list'}
-        toggleDisplay={toggle}
-      />
+      <EventDisplayFab />
       {PredictionTabsNavigator(
         <Event
           tab={'personal'}
@@ -68,9 +56,9 @@ const EventPersonalCommunity = () => {
           {...props}
         />,
       )}
-      {userId ? (
+      {authUserId ? (
         <FollowingBottomScroll
-          userId={userId}
+          userId={authUserId}
           onPress={(id) => {
             navigation.dispatch(StackActions.push('EventFromProfile', { userId: id }));
           }}
