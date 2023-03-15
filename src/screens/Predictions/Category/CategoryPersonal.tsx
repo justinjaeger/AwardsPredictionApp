@@ -47,7 +47,7 @@ const CategoryPersonal = ({
   const navigation = useTypedNavigation<PredictionsParamList>();
   const { userId: authUserId } = useAuth();
 
-  const isFriendProfile = userId !== authUserId;
+  const isAuthUserProfile = userId === authUserId;
 
   const isHistory = !!date;
   const category = _category as iCategory;
@@ -79,6 +79,7 @@ const CategoryPersonal = ({
   // We use the SAME KEY as the previous screen, because it avoids a re-fetch of the data which was available previously
   const { mutate: updatePredictions, isComplete } = useMutationUpdatePredictions(
     onComplete,
+    isAuthUserProfile,
   );
   const initialPredictions = predictionData?.[category.id]?.predictions || [];
   const initialPredictionIds = initialPredictions.map((p) => p.contenderId);
@@ -233,7 +234,7 @@ const CategoryPersonal = ({
           predictions={predictions}
           setPredictions={(ps) => setPredictions(ps)}
           lastUpdatedString={lastUpdatedString}
-          isFriendProfile={isFriendProfile}
+          isFriendProfile={!isAuthUserProfile}
         />
       </Animated.View>
       <Animated.View
@@ -247,7 +248,7 @@ const CategoryPersonal = ({
           setPredictions={(ps) => setPredictions(ps)}
           lastUpdatedString={lastUpdatedString}
           isCollapsed
-          isFriendProfile={isFriendProfile}
+          isFriendProfile={!isAuthUserProfile}
         />
       </Animated.View>
       <FAB

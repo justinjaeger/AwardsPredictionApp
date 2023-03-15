@@ -8,7 +8,7 @@ const useQueryGetUserProfile = (
 ) => {
   const { isLoading, data, refetch } = useQuery({
     queryKey: [QueryKeys.USER_PROFILE],
-    queryFn: () => (id !== authUserId ? {} : getUserProfile(id, authUserId)),
+    queryFn: () => getUserProfile(id, authUserId),
   });
 
   return { data, isLoading, refetch };
