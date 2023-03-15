@@ -63,6 +63,7 @@ const FollowingBottomScroll = ({
           style={{
             transform: [{ translateY: friendsYPos }],
             marginLeft: 10,
+            flexDirection: 'row',
           }}
         >
           {users.map((user) => (

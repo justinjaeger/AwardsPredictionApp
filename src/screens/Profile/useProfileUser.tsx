@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../context/UserContext';
 import useQueryGetUser from '../../hooks/queries/getUser';
+import useQueryGetRelationshipCount from '../../hooks/queries/useQueryGetRelationshipCount';
 import getRelationshipCount from '../../services/queryFuncs/getRelationshipCount';
 import getUserEvents from '../../services/queryFuncs/getUserEvents';
 import getUserProfile from '../../services/queryFuncs/getUserProfile';
@@ -20,6 +21,8 @@ const useProfileUser = (userId: string | undefined) => {
   // See the "if" statement before the bottom "return"
   // The more detailed/nested query is handled by getUserProfile in the useEffect, so that data isn't refetched when queryKey expires e.g. profile pic changes
   const { data: authUser, isLoading: isLoadingAuthUser } = useQueryGetUser(authUserId);
+  // get relationship count for auth user because these values also need to update with useQuery keys
+  const { data: authRelationshipCountData } = useQueryGetRelationshipCount(authUserId);
 
   const isLoading = isLoadingAuthUser || isLoadingProfileUser;
 
@@ -54,12 +57,19 @@ const useProfileUser = (userId: string | undefined) => {
     user.name = authUser?.name;
   }
 
+  const _followingCount = isDeviceProfile
+    ? authRelationshipCountData?.followingCount || 0
+    : followingCount || 0;
+  const _followerCount = isDeviceProfile
+    ? authRelationshipCountData?.followerCount || 0
+    : followerCount || 0;
+
   return {
     isLoading,
     setIsLoading,
     user,
-    followingCount,
-    followerCount,
+    followingCount: _followingCount,
+    followerCount: _followerCount,
     userEventIds,
     authUser,
   };

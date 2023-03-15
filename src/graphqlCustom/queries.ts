@@ -931,23 +931,24 @@ export const searchFollowingSignedOut = /* GraphQL */ `
 `;
 
 export const getTotalRelationships = /* GraphQL */ `
-  query SearchRelationships(
-    $filter: SearchableRelationshipFilterInput
-    $sort: [SearchableRelationshipSortInput]
+  query ListRelationships(
+    $id: ID
+    $filter: ModelRelationshipFilterInput
     $limit: Int
     $nextToken: String
-    $from: Int
-    $aggregates: [SearchableRelationshipAggregationInput]
+    $sortDirection: ModelSortDirection
   ) {
-    searchRelationships(
+    listRelationships(
+      id: $id
       filter: $filter
-      sort: $sort
       limit: $limit
       nextToken: $nextToken
-      from: $from
-      aggregates: $aggregates
+      sortDirection: $sortDirection
     ) {
-      total
+      # Just enough to derive the relationship count
+      items {
+        id
+      }
     }
   }
 `;

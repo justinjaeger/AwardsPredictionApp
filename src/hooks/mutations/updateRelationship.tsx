@@ -17,16 +17,16 @@ const useUpdateRelationship = (onComplete?: () => void) => {
       const { action, profileUserId, authUserId } = params;
       setIsComplete(false);
       if (action === 'follow') {
-        await ApiServices.followUser(profileUserId, authUserId);
+        return ApiServices.followUser(profileUserId, authUserId);
       }
       if (action === 'unfollow') {
-        await ApiServices.unFollowUser(profileUserId, authUserId);
+        return ApiServices.unFollowUser(profileUserId, authUserId);
       }
     },
     onSuccess: async () => {
       // re-fetch predictions so the UI updates
       await queryClient.invalidateQueries({
-        queryKey: [QueryKeys.USER, QueryKeys.USER_PROFILE],
+        queryKey: [QueryKeys.RELATIONSHIP_COUNT],
       });
       setIsComplete(true);
       onComplete && onComplete();

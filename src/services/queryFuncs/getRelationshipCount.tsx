@@ -1,14 +1,15 @@
 import ApiServices from '../graphql';
 
-const getRelationshipCount = async (userId: string) => {
-  const requests = [];
+const getRelationshipCount = async (
+  userId: string | undefined,
+): Promise<{ followerCount: number; followingCount: number }> => {
+  if (userId === undefined) return { followerCount: 0, followingCount: 0 };
 
-  requests.push(await ApiServices.getFollowerCount(userId));
-  requests.push(await ApiServices.getFollowingCount(userId));
+  const followerResult = await ApiServices.getFollowerCount(userId);
+  const followingResult = await ApiServices.getFollowingCount(userId);
 
-  const result = await Promise.all(requests);
-  const followerCount = result[0].data?.searchRelationships?.total || 0;
-  const followingCount = result[1].data?.searchRelationships?.total || 0;
+  const followerCount = followerResult.data?.listRelationships?.items?.length || 0;
+  const followingCount = followingResult.data?.listRelationships?.items?.length || 0;
 
   return { followerCount, followingCount };
 };

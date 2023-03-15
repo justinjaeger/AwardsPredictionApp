@@ -19,7 +19,6 @@ export enum QueryKeys {
   FOLLOWING_RECENT_PREDICTIONS = 'following-recent-predictions',
   PERSONAL_EVENT = 'personal-predictions-by-event',
   COMMUNITY_EVENT = 'community-predictions-by-event',
-  USER_WITH_RELATIONSHIPS = 'user-with-relationships',
   PAGINATED_FOLLOWERS = 'paginated-followers',
   PAGINATED_FOLLOWING = 'paginated-following',
   RELATIONSHIP_COUNT = 'relationship-count',

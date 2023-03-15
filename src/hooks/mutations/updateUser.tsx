@@ -22,9 +22,6 @@ const useUpdateUser = (onComplete?: () => void) => {
       await queryClient.invalidateQueries({
         queryKey: [QueryKeys.USER],
       });
-      await queryClient.invalidateQueries({
-        queryKey: [QueryKeys.USER_PROFILE],
-      });
       setIsComplete(true);
       onComplete && onComplete();
     },

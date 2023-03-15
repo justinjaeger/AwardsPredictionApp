@@ -206,17 +206,17 @@ export const getPaginatedFollowingSignedOut = async (
 
 export const getFollowingCount = async (
   followingUserId: string,
-): Promise<iApiResponse<SearchRelationshipsQuery>> => {
+): Promise<iApiResponse<ListRelationshipsQuery>> => {
   try {
     const { data, errors } = await GraphqlAPI<
-      SearchRelationshipsQuery,
-      SearchRelationshipsQueryVariables
+      ListRelationshipsQuery,
+      ListRelationshipsQueryVariables
     >(customQueries.getTotalRelationships, {
       filter: {
         followingUserId: { eq: followingUserId },
       },
     });
-    if (!data?.searchRelationships) {
+    if (!data?.listRelationships) {
       throw new Error(JSON.stringify(errors));
     }
     return { status: 'success', data: data };
@@ -227,17 +227,17 @@ export const getFollowingCount = async (
 
 export const getFollowerCount = async (
   followedUserId: string,
-): Promise<iApiResponse<SearchRelationshipsQuery>> => {
+): Promise<iApiResponse<ListRelationshipsQuery>> => {
   try {
     const { data, errors } = await GraphqlAPI<
-      SearchRelationshipsQuery,
-      SearchRelationshipsQueryVariables
+      ListRelationshipsQuery,
+      ListRelationshipsQueryVariables
     >(customQueries.getTotalRelationships, {
       filter: {
         followedUserId: { eq: followedUserId },
       },
     });
-    if (!data?.searchRelationships) {
+    if (!data?.listRelationships) {
       throw new Error(JSON.stringify(errors));
     }
     return { status: 'success', data: data };
