@@ -234,7 +234,7 @@ const CategoryPersonal = ({
           predictions={predictions}
           setPredictions={(ps) => setPredictions(ps)}
           lastUpdatedString={lastUpdatedString}
-          isFriendProfile={!isAuthUserProfile}
+          isAuthProfile={isAuthUserProfile}
         />
       </Animated.View>
       <Animated.View
@@ -248,7 +248,7 @@ const CategoryPersonal = ({
           setPredictions={(ps) => setPredictions(ps)}
           lastUpdatedString={lastUpdatedString}
           isCollapsed
-          isFriendProfile={!isAuthUserProfile}
+          isAuthProfile={isAuthUserProfile}
         />
       </Animated.View>
       <FAB

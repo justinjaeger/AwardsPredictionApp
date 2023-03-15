@@ -35,7 +35,7 @@ type iContenderListItemProps = {
   };
   onPressItem: (prediction: iPrediction) => void;
   onPressThumbnail?: (prediction: iPrediction) => void;
-  isFriendProfile?: boolean;
+  isAuthProfile?: boolean;
 };
 
 const ContenderListItemCondensed = (props: iContenderListItemProps) => {
@@ -47,7 +47,7 @@ const ContenderListItemCondensed = (props: iContenderListItemProps) => {
     highlighted,
     categoryType,
     onPressItem,
-    isFriendProfile,
+    isAuthProfile,
   } = props;
   const { isActive, drag } = draggable || {};
   const { width: windowWidth } = useWindowDimensions();
@@ -56,7 +56,7 @@ const ContenderListItemCondensed = (props: iContenderListItemProps) => {
 
   const { category: _category, event: _event, date } = useCategory();
   const isHistory = !!date;
-  const disableEditing = isHistory || isFriendProfile;
+  const disableEditing = isHistory || !isAuthProfile;
   const category = _category as iCategory;
   const event = _event as iEvent;
 
