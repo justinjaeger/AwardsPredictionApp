@@ -93,6 +93,7 @@ const Category = () => {
               <CategoryCommunity
                 predictionData={predictionData}
                 isLoading={isLoading}
+                isIndividualProfile={true}
                 {...props}
               />
             )}
