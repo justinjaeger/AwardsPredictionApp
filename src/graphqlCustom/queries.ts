@@ -1029,6 +1029,7 @@ export const getRecentFollowingPredictions = /* GraphQL */ `
       following {
         items {
           followedUser {
+            id
             image
             name
             username
@@ -1065,6 +1066,7 @@ export const getFriendsPredictingEventQuery = /* GraphQL */ `
     listRelationships(filter: { followingUserId: { eq: $followingUserId } }) {
       items {
         followedUser {
+          id
           image
           name
           username
