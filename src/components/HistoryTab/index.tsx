@@ -64,6 +64,10 @@ const HistoryTab = () => {
     }
   }, [isHistory]);
 
+  if (minDate > maxDate) {
+    return null;
+  }
+
   return (
     <Animated.View
       style={{

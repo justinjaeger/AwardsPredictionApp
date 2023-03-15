@@ -133,6 +133,7 @@ export const updateEvent = async (
   if (status) {
     input.status = status;
     if (input.status === EventStatus.NOMS_LIVE) {
+      // WARN: This means that if you ever switch to another status, then back, it's going to reset the liveAt value, which resets the minimum history date, which makes it seem like history is missing. Could just manually edit in the backend
       input.liveAt = new Date().toISOString();
     }
     // TODO: add logic for when winners go live, but not sure how handling this yet so TBD
