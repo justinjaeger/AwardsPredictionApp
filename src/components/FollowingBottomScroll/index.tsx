@@ -25,7 +25,7 @@ const FollowingBottomScroll = ({
 
   useEffect(() => {
     Animated.timing(friendsYPos, {
-      toValue: isHidden ? 60 : 0,
+      toValue: isHidden ? 80 : 0,
       duration: 250,
       useNativeDriver: true,
     }).start();
@@ -41,15 +41,17 @@ const FollowingBottomScroll = ({
         backgroundColor: 'transparent',
         alignItems: 'center',
         flexDirection: 'row',
-        height: 60,
       }}
     >
       <IconButton
-        iconProps={{ name: isHidden ? 'people-outline' : 'chevron-down-outline' }}
+        iconProps={{
+          name: isHidden ? 'people-outline' : 'chevron-down-outline',
+        }}
         color={COLORS.white}
         styles={{
           backgroundColor: COLORS.secondaryDark,
           marginLeft: theme.windowMargin,
+          padding: 3,
         }}
         onPress={() => setIsHidden(!isHidden)}
       />
@@ -58,7 +60,10 @@ const FollowingBottomScroll = ({
         contentContainerStyle={{ justifyContent: 'center', alignItems: 'center' }}
       >
         <Animated.View
-          style={{ transform: [{ translateY: friendsYPos }], marginLeft: 10 }}
+          style={{
+            transform: [{ translateY: friendsYPos }],
+            marginLeft: 10,
+          }}
         >
           {users.map((user) => (
             <ProfileImage
@@ -67,10 +72,15 @@ const FollowingBottomScroll = ({
               imageSize={imageWidth}
               onPress={() => onPress(user.id)}
               style={{
+                width: imageWidth + 6,
                 margin: imageMargin,
-                borderWidth: 1,
+                borderWidth: 4,
                 borderColor: COLORS.secondary,
                 borderRadius: 100,
+                shadowRadius: 20,
+                shadowColor: 'black',
+                shadowOpacity: 1,
+                shadowOffset: { height: 10, width: 0 },
               }}
             />
           ))}
