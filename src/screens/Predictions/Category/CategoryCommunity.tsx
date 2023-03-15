@@ -16,7 +16,8 @@ const CategoryCommunity = ({
   delayedDisplay,
   gridOpacity,
   predictionData,
-}: iCategoryProps) => {
+  isIndividualProfile,
+}: iCategoryProps & { isIndividualProfile?: boolean }) => {
   const { category: _category, date } = useCategory();
 
   const isHistory = !!date;
@@ -79,6 +80,7 @@ const CategoryCommunity = ({
         <MovieListCommunity
           predictions={predictions}
           lastUpdatedString={lastUpdatedString}
+          disableHeader={isIndividualProfile}
         />
       </Animated.View>
       <Animated.View
@@ -91,6 +93,7 @@ const CategoryCommunity = ({
           predictions={predictions}
           lastUpdatedString={lastUpdatedString}
           isCollapsed
+          disableHeader={isIndividualProfile}
         />
       </Animated.View>
     </>

@@ -36,7 +36,7 @@ const useUpdateProfileImage = (onComplete?: () => void) => {
     onSuccess: async () => {
       // re-fetch predictions so the UI updates
       await queryClient.invalidateQueries({
-        queryKey: [QueryKeys.USER],
+        queryKey: [QueryKeys.USER_PROFILE],
       });
       setIsComplete(true);
       onComplete && onComplete();

@@ -16,12 +16,14 @@ type iMovieListProps = {
   predictions: iPrediction[];
   lastUpdatedString: string;
   isCollapsed?: boolean;
+  disableHeader?: boolean;
 };
 
 const MovieListCommunity = ({
   predictions,
   isCollapsed,
   lastUpdatedString,
+  disableHeader,
 }: iMovieListProps) => {
   const { event: _event, category: _category, date } = useCategory();
   const isHistory = !!date;
@@ -58,30 +60,33 @@ const MovieListCommunity = ({
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 padding: theme.windowMargin,
+                paddingTop: disableHeader ? 0 : undefined,
               }}
             >
               <View style={{ flexDirection: 'row' }} />
-              <Animated.View
-                style={{
-                  flexDirection: 'row',
-                  width: 120,
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}
-              >
-                {predictionType === PredictionType.WIN ? (
-                  <View />
-                ) : (
+              {!disableHeader ? (
+                <Animated.View
+                  style={{
+                    flexDirection: 'row',
+                    width: 120,
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}
+                >
+                  {predictionType === PredictionType.WIN ? (
+                    <View />
+                  ) : (
+                    <View>
+                      <BodyBold style={{ textAlign: 'right' }}>Predict</BodyBold>
+                      <BodyBold style={{ textAlign: 'right' }}>Nom</BodyBold>
+                    </View>
+                  )}
                   <View>
                     <BodyBold style={{ textAlign: 'right' }}>Predict</BodyBold>
-                    <BodyBold style={{ textAlign: 'right' }}>Nom</BodyBold>
+                    <BodyBold style={{ textAlign: 'right' }}>Win</BodyBold>
                   </View>
-                )}
-                <View>
-                  <BodyBold style={{ textAlign: 'right' }}>Predict</BodyBold>
-                  <BodyBold style={{ textAlign: 'right' }}>Win</BodyBold>
-                </View>
-              </Animated.View>
+                </Animated.View>
+              ) : null}
             </View>
           ) : null}
         </>

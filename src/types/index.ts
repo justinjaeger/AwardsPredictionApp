@@ -15,6 +15,7 @@ export type ReactChildren = React.ReactNode | React.ReactNode[];
 export enum QueryKeys {
   EVENTS = 'events',
   USER = 'user',
+  USER_PROFILE = 'user-profile',
   FOLLOWING_RECENT_PREDICTIONS = 'following-recent-predictions',
   PERSONAL_EVENT = 'personal-predictions-by-event',
   COMMUNITY_EVENT = 'community-predictions-by-event',
