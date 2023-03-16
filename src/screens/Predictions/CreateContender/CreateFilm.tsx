@@ -73,16 +73,19 @@ const CreateFilm = (props: iCreateContenderProps) => {
       return;
     }
     setIsLoadingSearch(true);
-    TmdbServices.searchMovies(s, minReleaseYear)
-      .then((res) => {
-        setSelectedTmdbId(undefined);
-        const r = res.data || [];
-        setSearchResults(r);
-        if (r.length === 0) {
-          setSearchMessage('No Results');
-        }
-      })
-      .finally(() => setIsLoadingSearch(false));
+    let Request = TmdbServices.searchMovies(s, minReleaseYear);
+    if (parseInt(s, 10).toString().length === 6) {
+      // search by id instead if they put in a 6 digit number
+      Request = TmdbServices.searchMovieById(s);
+    }
+    Request.then((res) => {
+      setSelectedTmdbId(undefined);
+      const r = res.data || [];
+      setSearchResults(r);
+      if (r.length === 0) {
+        setSearchMessage('No Results');
+      }
+    }).finally(() => setIsLoadingSearch(false));
   };
 
   const onConfirmContender = async () => {

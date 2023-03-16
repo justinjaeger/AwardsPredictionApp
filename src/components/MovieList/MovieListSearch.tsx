@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, Keyboard } from 'react-native';
+import { Alert, FlatList, Keyboard, Linking, TouchableOpacity } from 'react-native';
 import { CategoryType } from '../../API';
+import COLORS from '../../constants/colors';
 import { iPrediction } from '../../types';
 import ContenderListItem from '../List/ContenderList/ContenderListItem';
+import { BodyBold } from '../Text';
 
 type iMovieListProps = {
   predictions: iPrediction[];
@@ -50,6 +52,38 @@ const MovieListSearch = (props: iMovieListProps) => {
       }}
       keyboardShouldPersistTaps={'always'}
       contentContainerStyle={{ paddingBottom: disablePaddingBottom ? 0 : 200 }}
+      ListFooterComponent={
+        <TouchableOpacity
+          onPress={() => {
+            Alert.alert(
+              // eslint-disable-next-line prettier/prettier
+              'Can\'t find what you\'re looking for?',
+              // eslint-disable-next-line prettier/prettier
+              'If you\'re sure it\'s not a spelling mistake, tap the link below and search your movie or person.\n\nCopy the id, which is the 6 digits located in the url.\n\nGo back here and paste id in the search bar.',
+              [
+                {
+                  text: 'themoviedb.com',
+                  onPress: () => {
+                    Linking.openURL('https://www.themoviedb.org/');
+                  },
+                },
+                { text: 'Close', onPress: () => {} },
+              ],
+            );
+          }}
+        >
+          <BodyBold
+            style={{
+              color: COLORS.gray,
+              alignSelf: 'center',
+              textAlign: 'center',
+              marginTop: 20,
+            }}
+          >
+            Can't find what you're looking for?
+          </BodyBold>
+        </TouchableOpacity>
+      }
       renderItem={({ item: prediction, index: i }) => {
         const tmdbId = getTmdbId(prediction);
         const selected = tmdbId === selectedTmdbId;

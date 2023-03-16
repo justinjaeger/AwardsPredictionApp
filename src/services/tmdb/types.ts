@@ -44,6 +44,8 @@ export type iTmdbSearchMoviesResponse = {
   total_results: number;
 };
 
+export type iTmdbSearchMovieIdResponse = iTmdbMovieFromSearch;
+
 export type iTmdbPersonFromSearch = {
   profile_path: string | null;
   adult: boolean;
