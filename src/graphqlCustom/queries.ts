@@ -494,7 +494,8 @@ export const getUserProfileQuery = /* GraphQL */ `
             createdAt
             updatedAt
           }
-          predictions {
+          # Return only the top 5 predictions
+          predictions(limit: 5) {
             items {
               id
               contenderId
@@ -972,20 +973,21 @@ export const searchRecommendedFollowing = /* GraphQL */ `
       nextToken
       total
       items {
-        # we are already following these users
         followedUser {
-          following(limit: $limit) {
+          # I follow Ron, say
+          following(limit: 10) {
             items {
-              # our friends' friends
               followedUser {
+                # Ron follows Cole, but I might follow Cole
                 id
                 image
                 name
                 username
-                # we want to know if we're already following this person
-                followers(filter: { followedUserId: { eq: $authUserId } }) {
+                # I might be in this list, so detect me in the list
+                followers(filter: { followingUserId: { eq: $authUserId } }) {
                   items {
                     id
+                    followedUserId
                   }
                 }
               }
@@ -1036,23 +1038,47 @@ export const getRecentFollowingPredictions = /* GraphQL */ `
             username
             predictionSets(createdAt: { gt: $greaterThanDate }, limit: 5) {
               items {
-                predictions(limit: 10) {
+                type
+                event {
+                  id
+                  awardsBody
+                  year
+                  status
+                  createdAt
+                  updatedAt
+                  liveAt
+                }
+                category {
+                  id
+                  name
+                  type
+                  isShortlisted
+                  createdAt
+                  updatedAt
+                }
+                createdAt
+                updatedAt
+                # Return only the top 5 predictions
+                predictions(limit: 5) {
                   items {
+                    ranking
                     contender {
-                      event {
-                        awardsBody
-                        id
-                      }
                       movie {
                         tmdbId
                       }
                       person {
                         tmdbId
                       }
+                      song {
+                        title
+                        artist
+                      }
+                      accolade
+                      visibility
+                      updatedAt
                     }
                   }
                 }
-                createdAt
               }
             }
           }

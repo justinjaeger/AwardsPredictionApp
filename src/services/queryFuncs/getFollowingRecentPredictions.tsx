@@ -12,55 +12,55 @@ import { iCategory, iEvent, iPredictionSet, iUser } from '../../types';
 import { sortPersonalPredictions } from '../../util/sortPredictions';
 import ApiServices from '../graphql';
 
-export type iUserWithRecentPredictions = {
-  user: iUser;
-  predictionSets: iPredictionSet[];
-};
-
 const getFollowingRecentPredictions = async (
   userId: string | undefined,
-): Promise<iUserWithRecentPredictions[]> => {
-  if (!userId) return [];
-  const { data } = await ApiServices.getUserRecentFollowingPredictions(userId);
-  const user = data?.getUser;
-  if (!user) return [];
-  const followedUsers = user.following?.items || [];
-  // get most recent prediction for each user
-  const recentPredictions: {
-    userId: string;
-    mostRecentPrediction: string;
-  }[] = followedUsers.map((fu) => {
-    const userId = fu?.followedUser.id;
+): Promise<iUser[]> => {
+  try {
     if (!userId) {
-      return {
-        userId: '',
-        mostRecentPrediction: '',
-      };
+      throw new Error('No userId');
     }
-    let mostRecentPrediction = '';
-    const predictionSets = fu?.followedUser.predictionSets?.items || [];
-    for (const ps of predictionSets) {
-      if (ps?.createdAt && ps.createdAt > mostRecentPrediction) {
-        mostRecentPrediction = ps.createdAt;
+    const { data } = await ApiServices.getUserRecentFollowingPredictions(userId);
+    const user = data?.getUser;
+    if (!user) {
+      throw new Error('No user');
+    }
+    const followedUsers = user.following?.items || [];
+    // get most recent prediction for each user
+    const longAgo = new Date(+0).toISOString();
+    const recentPredictions: {
+      userId: string;
+      mostRecentPrediction: string;
+    }[] = followedUsers.map((fu) => {
+      const userId = fu?.followedUser.id;
+      if (!userId) {
+        return {
+          userId: '',
+          mostRecentPrediction: longAgo,
+        };
       }
-    }
-    return {
-      userId,
-      mostRecentPrediction,
-    };
-  });
-  // get the 10 with most recent
-  const sortedRecentPredictions = recentPredictions.sort((u1, u2) => {
-    if (u1.mostRecentPrediction > u2.mostRecentPrediction) return -1;
-    if (u1.mostRecentPrediction < u2.mostRecentPrediction) return 1;
-    return 0;
-  });
-  // 10 most recent predictions / users
-  const limitedSortedPredictions = sortedRecentPredictions.slice(0, 10);
-  const includedUserIds = limitedSortedPredictions.map((u) => u.userId);
+      let mostRecentPrediction = longAgo;
+      const predictionSets = fu?.followedUser.predictionSets?.items || [];
+      for (const ps of predictionSets) {
+        if (ps?.createdAt && ps.createdAt > mostRecentPrediction) {
+          mostRecentPrediction = ps.createdAt;
+        }
+      }
+      return {
+        userId,
+        mostRecentPrediction,
+      };
+    });
+    // get the 10 with most recent
+    const sortedRecentPredictions = recentPredictions.sort((u1, u2) => {
+      if (u1.mostRecentPrediction > u2.mostRecentPrediction) return -1;
+      if (u1.mostRecentPrediction < u2.mostRecentPrediction) return 1;
+      return 0;
+    });
+    // 10 most recent predictions / users
+    const limitedSortedPredictions = sortedRecentPredictions.slice(0, 10);
+    const includedUserIds = limitedSortedPredictions.map((u) => u.userId);
 
-  const usersWithRecentPredictions: iUserWithRecentPredictions[] = followedUsers.reduce(
-    (acc: { user: iUser; predictionSets: iPredictionSet[] }[], fu) => {
+    const usersWithRecentPredictions = followedUsers.reduce((acc: iUser[], fu) => {
       // filter by users who are included in the 10 most recent
       const u = fu?.followedUser;
       if (!u || !includedUserIds.includes(u.id)) return acc;
@@ -119,14 +119,18 @@ const getFollowingRecentPredictions = async (
         };
       });
 
-      acc.push({ user: formattedUser, predictionSets: formattedPredictionSets });
+      formattedUser.predictionSets = formattedPredictionSets;
+
+      acc.push(formattedUser);
 
       return acc;
-    },
-    [],
-  );
+    }, []);
 
-  return usersWithRecentPredictions;
+    return usersWithRecentPredictions;
+  } catch (error) {
+    console.error('error in getFollowingRecentPredictions', error);
+    return [];
+  }
 };
 
 export default getFollowingRecentPredictions;

@@ -68,7 +68,7 @@ const MovieListDraggable = ({
       keyExtractor={(item) => item.contenderId}
       style={{ width: '100%' }}
       contentContainerStyle={{
-        paddingBottom: 100,
+        paddingBottom: 150,
         paddingTop: theme.windowMargin,
       }}
       ListHeaderComponent={
@@ -80,7 +80,7 @@ const MovieListDraggable = ({
       }
       ListFooterComponent={
         isAuthProfile && !isHistory ? (
-          <View style={{ width: '100%', alignItems: 'center', marginTop: 10 }}>
+          <View style={{ width: '100%', alignItems: 'center', marginTop: 40 }}>
             <TouchableHighlight
               style={{
                 width: '90%',

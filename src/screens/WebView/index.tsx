@@ -2,11 +2,12 @@ import React from 'react';
 import { WebView } from 'react-native-webview';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { MainParamList } from '../../navigation/types';
-import { ActivityIndicator, View } from 'react-native';
+import { ActivityIndicator, TouchableOpacity, View } from 'react-native';
 import COLORS from '../../constants/colors';
 import { IconButton } from '../../components/Buttons/IconButton';
 import { BOTTOM_TAB_HEIGHT } from '../../constants';
 import SafeAreaViewFixed from '../../components/SafeAreaViewFixed';
+import { BodyBold } from '../../components/Text';
 
 const WebViewScreen = () => {
   const {
@@ -40,6 +41,26 @@ const WebViewScreen = () => {
     <SafeAreaViewFixed
       style={{ flex: 1, backgroundColor: COLORS.primary, width: '100%' }}
     >
+      <View
+        style={{
+          alignItems: 'center',
+          flexDirection: 'row',
+          justifyContent: 'flex-start',
+          height: BOTTOM_TAB_HEIGHT,
+        }}
+      >
+        <IconButton
+          iconProps={{
+            name: 'arrow-ios-back-outline',
+            styles: { color: COLORS.primary, width: 30, height: 30 },
+          }}
+          onPress={goBack}
+          styles={{ width: 30, marginLeft: 10 }}
+        />
+        <TouchableOpacity onPress={goBack}>
+          <BodyBold style={{ color: COLORS.gray, marginLeft: 10 }}>Back to app</BodyBold>
+        </TouchableOpacity>
+      </View>
       <WebView
         ref={webviewRef}
         source={{ uri }}
@@ -50,7 +71,7 @@ const WebViewScreen = () => {
         style={{
           alignItems: 'center',
           flexDirection: 'row',
-          justifyContent: 'space-between',
+          justifyContent: 'space-around',
           height: BOTTOM_TAB_HEIGHT,
         }}
       >
@@ -60,14 +81,6 @@ const WebViewScreen = () => {
             styles: { color: COLORS.primary, width: 30, height: 30 },
           }}
           onPress={webViewgoback}
-          styles={{ width: 30, height: 30, marginLeft: 10 }}
-        />
-        <IconButton
-          iconProps={{
-            name: 'close-outline',
-            styles: { color: COLORS.primary, width: 30, height: 30 },
-          }}
-          onPress={goBack}
           styles={{ width: 30, height: 30, marginLeft: 10 }}
         />
         <IconButton

@@ -34,36 +34,44 @@ const FollowingBottomScroll = ({
   if (!users || users.length === 0) return null;
 
   return (
-    <View
-      style={{
-        position: 'absolute',
-        bottom: 0,
-        backgroundColor: 'transparent',
-        alignItems: 'center',
-        flexDirection: 'row',
-      }}
-    >
-      <IconButton
-        iconProps={{
-          name: isHidden ? 'people-outline' : 'chevron-down-outline',
+    <>
+      <View
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          alignItems: 'center',
+          flexDirection: 'row',
+          marginBottom: 10,
         }}
-        color={COLORS.white}
-        styles={{
-          backgroundColor: COLORS.secondaryDark,
-          marginLeft: theme.windowMargin,
-          padding: 3,
-        }}
-        onPress={() => setIsHidden(!isHidden)}
-      />
-      <ScrollView
-        horizontal
-        contentContainerStyle={{ justifyContent: 'center', alignItems: 'center' }}
       >
-        <Animated.View
-          style={{
-            transform: [{ translateY: friendsYPos }],
-            marginLeft: 10,
-            flexDirection: 'row',
+        <IconButton
+          iconProps={{
+            name: isHidden ? 'people-outline' : 'chevron-down-outline',
+          }}
+          color={COLORS.white}
+          styles={{
+            backgroundColor: COLORS.secondaryDark,
+            marginLeft: theme.windowMargin,
+            padding: 3,
+          }}
+          onPress={() => setIsHidden(!isHidden)}
+        />
+      </View>
+      <Animated.View
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          alignItems: 'center',
+          flexDirection: 'row',
+          marginLeft: 80,
+          transform: [{ translateY: friendsYPos }],
+        }}
+      >
+        <ScrollView
+          horizontal
+          contentContainerStyle={{
+            justifyContent: 'center',
+            alignItems: 'center',
           }}
         >
           {users.map((user) => (
@@ -85,9 +93,9 @@ const FollowingBottomScroll = ({
               }}
             />
           ))}
-        </Animated.View>
-      </ScrollView>
-    </View>
+        </ScrollView>
+      </Animated.View>
+    </>
   );
 };
 

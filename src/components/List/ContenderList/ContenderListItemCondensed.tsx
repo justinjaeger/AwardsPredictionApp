@@ -16,7 +16,7 @@ import TmdbServices from '../../../services/tmdb';
 import { iCategory, iEvent, iPrediction } from '../../../types';
 import { getNumPredicting } from '../../../util/getNumPredicting';
 import { useAsyncEffect } from '../../../util/hooks';
-import CustomIcon from '../../CustomIcon';
+import { IconButton } from '../../Buttons/IconButton';
 import { Body, SubHeader } from '../../Text';
 import AccoladeTag from './AccoladeTag';
 
@@ -206,7 +206,20 @@ const ContenderListItemCondensed = (props: iContenderListItemProps) => {
                 marginRight: 13,
               }}
             >
-              <CustomIcon name={'menu'} color={COLORS.white} size={24} />
+              <IconButton
+                iconProps={{ name: 'menu', size: 24 }}
+                color={COLORS.white}
+                enableOnPressIn
+                onPress={drag || (() => {})}
+                styles={{
+                  height: 24,
+                  width: 40,
+                  justifyContent: 'center',
+                  marginRight: 13,
+                  alignSelf: 'center',
+                  alignItems: 'center',
+                }}
+              />
             </View>
           ) : null}
         </View>

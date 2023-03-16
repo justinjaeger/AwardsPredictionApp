@@ -54,8 +54,20 @@ const getRecommendedUsers = async (
     return users.length;
   };
 
+  // filter out duplicates (users could be following the same person)
+  // filter out ourselves from the potential user list (we could potentially get recommended to ourselves)
+  // do this before we hit the while loop so we fetch for more users if the last one had a bunch of duplicates we just removed
+  const uniqueUsersWhoArentUs = finalUsers.filter((user, index, self) => {
+    const isDuplicate = index === self.findIndex((u) => u.id === user.id);
+    const isNotUs = user.id !== authUserId;
+    return isDuplicate && isNotUs;
+  });
+
   // request until we accumulate enough recommendations, OR until a request returns ZERO users (maybe we don't have many friends)
-  while (returnedZeroUsers === false && finalUsers.length < NUM_USERS_TO_FETCH) {
+  while (
+    returnedZeroUsers === false &&
+    uniqueUsersWhoArentUs.length < NUM_USERS_TO_FETCH
+  ) {
     const returnCount = await fetchPage();
     if (returnCount === 0) {
       returnedZeroUsers = true;
@@ -67,7 +79,7 @@ const getRecommendedUsers = async (
     await fetchPage(true);
   }
 
-  return { users: finalUsers, nextToken: localNextToken };
+  return { users: uniqueUsersWhoArentUs, nextToken: localNextToken };
 };
 
 export default getRecommendedUsers;

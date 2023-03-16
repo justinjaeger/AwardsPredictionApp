@@ -4,6 +4,7 @@ import axios from 'axios';
 import { handleError, iApiResponse } from '../utils';
 import {
   iTmdbResponse,
+  iTmdbSearchMovieIdResponse,
   iTmdbSearchMoviesResponse,
   iTmdbSearchPeopleResponse,
 } from './types';
@@ -54,6 +55,33 @@ export const searchMovies = async (
         tmdbId: d.id,
         image: d.poster_path,
       })),
+    };
+  } catch (err) {
+    return handleError('error in searchMovies', err);
+  }
+};
+
+export const searchMovieById = async (
+  searchText: string,
+): Promise<iApiResponse<iSearchData>> => {
+  const url = `${TMDB_URL}/movie/${searchText}?api_key=${TMDB_API_KEY}`;
+  try {
+    const result = (await axios(url)) as iTmdbResponse<iTmdbSearchMovieIdResponse>;
+    if (result?.status === 'error') {
+      throw new Error(result?.message);
+    }
+    const data = result.data;
+    return {
+      status: 'success',
+      // eslint-disable-next-line sonarjs/no-identical-functions
+      data: [
+        {
+          title: `${data.title} (${data.release_date.slice(0, 4)})`,
+          description: data.overview,
+          tmdbId: data.id,
+          image: data.poster_path,
+        },
+      ],
     };
   } catch (err) {
     return handleError('error in searchMovies', err);
