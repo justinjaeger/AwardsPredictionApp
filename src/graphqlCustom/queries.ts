@@ -972,20 +972,21 @@ export const searchRecommendedFollowing = /* GraphQL */ `
       nextToken
       total
       items {
-        # we are already following these users
         followedUser {
-          following(limit: $limit) {
+          # I follow Ron, say
+          following(limit: 10) {
             items {
-              # our friends' friends
               followedUser {
+                # Ron follows Cole, but I might follow Cole
                 id
                 image
                 name
                 username
-                # we want to know if we're already following this person
-                followers(filter: { followedUserId: { eq: $authUserId } }) {
+                # I might be in this list, so detect me in the list
+                followers(filter: { followingUserId: { eq: $authUserId } }) {
                   items {
                     id
+                    followedUserId
                   }
                 }
               }
