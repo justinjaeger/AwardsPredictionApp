@@ -494,7 +494,8 @@ export const getUserProfileQuery = /* GraphQL */ `
             createdAt
             updatedAt
           }
-          predictions {
+          # Return only the top 5 predictions
+          predictions(limit: 5) {
             items {
               id
               contenderId
@@ -1037,23 +1038,47 @@ export const getRecentFollowingPredictions = /* GraphQL */ `
             username
             predictionSets(createdAt: { gt: $greaterThanDate }, limit: 5) {
               items {
-                predictions(limit: 10) {
+                type
+                event {
+                  id
+                  awardsBody
+                  year
+                  status
+                  createdAt
+                  updatedAt
+                  liveAt
+                }
+                category {
+                  id
+                  name
+                  type
+                  isShortlisted
+                  createdAt
+                  updatedAt
+                }
+                createdAt
+                updatedAt
+                # Return only the top 5 predictions
+                predictions(limit: 5) {
                   items {
+                    ranking
                     contender {
-                      event {
-                        awardsBody
-                        id
-                      }
                       movie {
                         tmdbId
                       }
                       person {
                         tmdbId
                       }
+                      song {
+                        title
+                        artist
+                      }
+                      accolade
+                      visibility
+                      updatedAt
                     }
                   }
                 }
-                createdAt
               }
             }
           }

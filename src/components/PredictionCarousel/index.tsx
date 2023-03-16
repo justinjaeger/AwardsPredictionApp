@@ -138,7 +138,6 @@ const PredictionCarousel = ({
       <View
         style={{
           width: '100%',
-          height: width * 0.8, // height of the box is proportionate to width
           borderWidth: 0.5,
           borderColor: 'rgba(255,255,255,0.3)',
           borderRadius: theme.windowMargin, // basically acts as a marginLeft and marginRight to top/bottom borders

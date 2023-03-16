@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
-import { Animated } from 'react-native';
-import theme from '../../../constants/theme';
+import { Animated, useWindowDimensions } from 'react-native';
 import LoadingStatue from '../../../components/LoadingStatue';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import useQueryAllEvents from '../../../hooks/queries/getAllEvents';
@@ -11,15 +10,18 @@ import { HeaderLight } from '../../../components/Text';
 import useQueryGetFollowingRecentPredictions from '../../../hooks/queries/useQueryGetFollowingRecentPredictions';
 import PredictionCarousel from '../../../components/PredictionCarousel';
 import { useLoading } from '../../../hooks/animatedState/useLoading';
+import theme from '../../../constants/theme';
 
 const EventSelect = () => {
+  const { width } = useWindowDimensions();
   const { userId } = useAuth();
 
   const { data: events, isLoading, refetch: refetchEvents } = useQueryAllEvents();
   const { data: user, refetch: refetchUser } = useQueryGetUser(userId);
-  const { data: usersWithRecentPredictionSets } = useQueryGetFollowingRecentPredictions(
-    userId,
-  );
+  const {
+    data: usersWithRecentPredictionSets,
+    refetch: refetchFollowingPredictions,
+  } = useQueryGetFollowingRecentPredictions(userId);
 
   const { loadingOpacity, bodyOpacity } = useLoading(isLoading);
 
@@ -31,6 +33,10 @@ const EventSelect = () => {
     if (user === undefined) {
       refetchUser();
     }
+    if (usersWithRecentPredictionSets === undefined) {
+      // WARN: sometimes refetch appears to be not working, but mostly it seems ok?
+      refetchFollowingPredictions({ throwOnError: true });
+    }
   }, [events, user, userId]);
 
   return (
@@ -39,7 +45,6 @@ const EventSelect = () => {
         <Animated.View
           style={{
             position: 'absolute',
-            width: '100%',
             height: '80%',
             alignItems: 'center',
             justifyContent: 'center',
@@ -51,31 +56,35 @@ const EventSelect = () => {
         <Animated.ScrollView
           style={{ opacity: bodyOpacity }}
           contentContainerStyle={{
-            alignSelf: 'flex-start',
-            marginTop: theme.windowMargin,
+            alignItems: 'center',
+            marginTop: 20,
+            width,
             paddingBottom: 100,
           }}
+          showsVerticalScrollIndicator={false}
         >
           {events ? <EventList user={user} events={Object.values(events)} /> : null}
           {(usersWithRecentPredictionSets || []).length > 0 ? (
-            // TODO: Below display is untested
             <>
               <HeaderLight
                 style={{
                   alignSelf: 'flex-start',
                   marginTop: 20,
+                  marginLeft: theme.windowMargin,
                 }}
               >
                 Friend Predictions
               </HeaderLight>
-              {(usersWithRecentPredictionSets || []).map((item) => (
+              {(usersWithRecentPredictionSets || []).map((u) => (
                 <PredictionCarousel
-                  predictionSets={item.predictionSets}
-                  userId={item.user.id}
+                  key={u.id}
+                  predictionSets={u.predictionSets || []}
+                  userId={u.id}
                   userInfo={{
-                    name: item.user.name || item.user.username || '',
-                    image: item.user.image,
+                    name: u.name || u.username || '',
+                    image: u.image,
                   }}
+                  style={{ marginTop: 20 }}
                 />
               ))}
             </>
