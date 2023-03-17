@@ -9,7 +9,7 @@ export const EventDisplayFab = () => {
     <View style={{ position: 'absolute', zIndex: 10, bottom: 80, right: 10 }}>
       <FloatingButton
         onPress={toggleEventDisplay}
-        icon={eventDisplayState === 'default' ? 'grid' : 'collapse'}
+        icon={eventDisplayState === 'default' ? 'collapse' : 'grid'}
       />
     </View>
   );
