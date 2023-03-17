@@ -13,6 +13,7 @@ import {
 import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
 import { iPredictionSet } from '../../types';
+import { hexToRgb } from '../../util/hexToRgb';
 import { useNavigateAwayEffect } from '../../util/hooks';
 import ProfileImage from '../ProfileImage';
 import { SubHeader } from '../Text';
@@ -199,7 +200,7 @@ const PredictionCarousel = ({
           style={{
             transform: [{ translateX: scrollBarAnim }],
             width: barWidth,
-            backgroundColor: COLORS.gray,
+            backgroundColor: hexToRgb(COLORS.white, 0.2),
             height: 2,
             borderRadius: 5,
             zIndex: 2,
@@ -210,7 +211,7 @@ const PredictionCarousel = ({
           style={{
             width: '92%',
             alignSelf: 'center',
-            opacity: 0.5,
+            opacity: 0.6,
             marginTop: 30,
           }}
         />

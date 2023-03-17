@@ -30,12 +30,12 @@ const EventSelect = () => {
     if (events === undefined) {
       refetchEvents();
     }
-    if (user === undefined) {
+    if (userId && user === undefined) {
       refetchUser();
     }
-    if (usersWithRecentPredictionSets === undefined) {
+    if (userId) {
       // WARN: sometimes refetch appears to be not working, but mostly it seems ok?
-      refetchFollowingPredictions({ throwOnError: true });
+      refetchFollowingPredictions();
     }
   }, [events, user, userId]);
 
@@ -69,7 +69,7 @@ const EventSelect = () => {
               marginLeft: theme.windowMargin,
             }}
           >
-            Events
+            Make Predictions
           </HeaderLight>
           {events ? <EventList user={user} events={Object.values(events)} /> : null}
           {(usersWithRecentPredictionSets || []).length > 0 ? (
@@ -82,7 +82,7 @@ const EventSelect = () => {
                   marginBottom: 10,
                 }}
               >
-                Friend Predictions
+                New From Friends
               </HeaderLight>
               {(usersWithRecentPredictionSets || []).map((u) => (
                 <PredictionCarousel
