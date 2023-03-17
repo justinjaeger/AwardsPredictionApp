@@ -22,6 +22,9 @@ export const useHeaderSettings = () => {
     headerStyle: largeHeaderStyle,
     headerTitleStyle,
   };
+  const toolbarOnly: any = {
+    headerStyle: { backgroundColor: COLORS.secondaryDark, height: top },
+  };
 
-  return { medium: headerSettings, large: largeHeaderSettings };
+  return { toolbarOnly, medium: headerSettings, large: largeHeaderSettings };
 };

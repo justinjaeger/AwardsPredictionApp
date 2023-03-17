@@ -5,7 +5,6 @@ import {
   useWindowDimensions,
   View,
 } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import BackgroundWrapper from '../../components/BackgroundWrapper';
 import SearchInput from '../../components/Inputs/SearchInput';
 import { HeaderLight } from '../../components/Text';
@@ -21,7 +20,6 @@ const SearchFriends = () => {
   const { isSearching } = useSearch();
   const { searchResults } = useFriendSearch();
   const { users: recommendedUsers, fetchPage } = useRecommendedUsers();
-  const { top } = useSafeAreaInsets();
 
   return (
     <BackgroundWrapper>
@@ -31,7 +29,6 @@ const SearchFriends = () => {
             width: '100%',
             height: '100%',
             alignItems: 'center',
-            paddingTop: top,
           }}
         >
           <SearchInput

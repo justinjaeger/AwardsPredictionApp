@@ -11,12 +11,10 @@ import useQueryGetFollowingRecentPredictions from '../../../hooks/queries/useQue
 import PredictionCarousel from '../../../components/PredictionCarousel';
 import { useLoading } from '../../../hooks/animatedState/useLoading';
 import theme from '../../../constants/theme';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const EventSelect = () => {
   const { width } = useWindowDimensions();
   const { userId } = useAuth();
-  const { top } = useSafeAreaInsets();
 
   const { data: events, isLoading, refetch: refetchEvents } = useQueryAllEvents();
   const { data: user, refetch: refetchUser } = useQueryGetUser(userId);
@@ -59,7 +57,6 @@ const EventSelect = () => {
           style={{ opacity: bodyOpacity }}
           contentContainerStyle={{
             alignItems: 'center',
-            marginTop: top,
             width,
             paddingBottom: 100,
           }}
