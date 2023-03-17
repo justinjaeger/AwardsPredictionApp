@@ -12,8 +12,6 @@ import PredictionCarousel from '../../../components/PredictionCarousel';
 import { useLoading } from '../../../hooks/animatedState/useLoading';
 import theme from '../../../constants/theme';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Divider } from '@ui-kitten/components';
-import COLORS from '../../../constants/colors';
 
 const EventSelect = () => {
   const { width } = useWindowDimensions();
@@ -77,17 +75,14 @@ const EventSelect = () => {
             Events
           </HeaderLight>
           {events ? <EventList user={user} events={Object.values(events)} /> : null}
-
           {(usersWithRecentPredictionSets || []).length > 0 ? (
             <>
-              <Divider
-                style={{ width: '95%', backgroundColor: COLORS.gray, marginTop: 20 }}
-              />
               <HeaderLight
                 style={{
                   alignSelf: 'flex-start',
                   marginTop: 20,
                   marginLeft: theme.windowMargin,
+                  marginBottom: 10,
                 }}
               >
                 Friend Predictions
@@ -101,7 +96,6 @@ const EventSelect = () => {
                     name: u.name || u.username || '',
                     image: u.image,
                   }}
-                  style={{ marginTop: 20 }}
                 />
               ))}
             </>

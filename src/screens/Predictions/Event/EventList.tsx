@@ -18,6 +18,7 @@ import AwardsBodyImage from '../../../components/AwardsBodyImage';
 import { EVENT_STATUS_TO_STRING, getEventTime } from '../../../constants/events';
 import { Divider } from '@ui-kitten/components';
 import { useAuth } from '../../../context/UserContext';
+import { hexToRgb } from '../../../util/hexToRgb';
 
 const EVENT_ITEM_HEIGHT = 110;
 
@@ -94,7 +95,9 @@ const EventList = ({
                     style={{
                       flexDirection: 'row',
                       height: EVENT_ITEM_HEIGHT,
-                      backgroundColor: isSubtle ? 'transparent' : COLORS.secondaryDarkest,
+                      backgroundColor: isSubtle
+                        ? 'transparent'
+                        : hexToRgb(COLORS.secondaryDark, 1),
                       borderRadius: theme.borderRadius,
                       borderWidth: 1,
                       borderColor: COLORS.white,

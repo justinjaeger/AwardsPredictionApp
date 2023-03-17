@@ -1,4 +1,3 @@
-import { Divider } from '@ui-kitten/components';
 import React from 'react';
 import { TouchableHighlight, useWindowDimensions, View } from 'react-native';
 import { PredictionType } from '../../API';
@@ -17,12 +16,10 @@ import { useTypedNavigation } from '../../util/hooks';
 
 const ProfilePredictionsList = ({
   predictionSets,
-  displayDividers,
   fixedSlots,
   userId,
 }: {
   predictionSets: iPredictionSet[];
-  displayDividers?: boolean;
   fixedSlots?: number;
   userId: string;
 }) => {
@@ -49,76 +46,55 @@ const ProfilePredictionsList = ({
         const categoryName = awardsBodyCategories[ps.category.name]?.name || '';
         const lastUpdatedText = formatLastUpdated(new Date(ps.createdAt));
         return (
-          <View key={ps.id}>
-            <TouchableHighlight
-              style={{
-                width,
-                alignItems: 'flex-start',
-              }}
-              underlayColor={COLORS.secondaryDark}
-              onPress={() => {
-                // navigate to user's predictions
-                setEvent(ps.event);
-                setCategory(ps.category);
-                if (isAuthUserProfile) {
-                  navigation.navigate('Category', {
-                    userId,
-                    showEventLink: true,
-                  });
-                } else {
-                  navigation.navigate('CategoryFromProfile', {
-                    userId,
-                    showEventLink: true,
-                  });
-                }
-              }}
-            >
-              <View>
-                <View style={{ marginLeft: theme.windowMargin }}>
-                  <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
-                    <SubHeader
-                      style={{
-                        color: COLORS.lightest,
-                      }}
-                    >
-                      {categoryName}
-                    </SubHeader>
-                    <Body
-                      style={{
-                        color: COLORS.lightest,
-                      }}
-                    >
-                      {' | ' + eventName}
-                    </Body>
-                  </View>
-                  <Body
-                    style={{
-                      marginTop: theme.windowMargin / 4,
-                      marginBottom: theme.windowMargin / 2,
-                      fontSize: 12,
-                    }}
-                  >
-                    {'Updated' + ': ' + lastUpdatedText}
-                  </Body>
-                </View>
-                <MovieGrid
-                  predictions={truncatedPredictions}
-                  isCollapsed={false} // TODO
-                  noLine
-                />
-              </View>
-            </TouchableHighlight>
-            {displayDividers ? (
-              <Divider
+          <TouchableHighlight
+            key={ps.id}
+            style={{
+              width,
+              alignItems: 'flex-start',
+            }}
+            underlayColor={COLORS.secondaryDark}
+            onPress={() => {
+              // navigate to user's predictions
+              setEvent(ps.event);
+              setCategory(ps.category);
+              if (isAuthUserProfile) {
+                navigation.navigate('Category', {
+                  userId,
+                  showEventLink: true,
+                });
+              } else {
+                navigation.navigate('CategoryFromProfile', {
+                  userId,
+                  showEventLink: true,
+                });
+              }
+            }}
+          >
+            <>
+              <View
                 style={{
-                  width: '95%',
-                  opacity: 0.5,
-                  marginTop: 20,
-                  marginBottom: 20,
+                  width: '100%',
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'baseline',
+                  paddingLeft: theme.windowMargin,
+                  paddingRight: theme.windowMargin,
+                  marginBottom: 10,
                 }}
+              >
+                <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
+                  <SubHeader style={{ color: COLORS.lightest }}>{categoryName}</SubHeader>
+                  <Body style={{ color: COLORS.lightest }}>{'  |  ' + eventName}</Body>
+                </View>
+                <Body style={{ fontSize: 12 }}>{'Updated' + ': ' + lastUpdatedText}</Body>
+              </View>
+              <MovieGrid
+                predictions={truncatedPredictions}
+                isCollapsed={false} // TODO
+                noLine
               />
-            ) : null}
-          </View>
+            </>
+          </TouchableHighlight>
         );
       })}
     </>
