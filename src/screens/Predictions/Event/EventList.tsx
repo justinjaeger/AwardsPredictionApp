@@ -21,7 +21,15 @@ import { useAuth } from '../../../context/UserContext';
 
 const EVENT_ITEM_HEIGHT = 110;
 
-const EventList = ({ events, user }: { events: iEvent[]; user: iUser | undefined }) => {
+const EventList = ({
+  events,
+  user,
+  isSubtle,
+}: {
+  events: iEvent[];
+  user: iUser | undefined;
+  isSubtle?: boolean;
+}) => {
   const { userId: authUserId } = useAuth();
   const { width } = useWindowDimensions();
   const { setEvent } = useCategory();
@@ -86,7 +94,7 @@ const EventList = ({ events, user }: { events: iEvent[]; user: iUser | undefined
                     style={{
                       flexDirection: 'row',
                       height: EVENT_ITEM_HEIGHT,
-                      backgroundColor: 'rgba(0,0,0,0.1)',
+                      backgroundColor: isSubtle ? 'transparent' : COLORS.secondaryDarkest,
                       borderRadius: theme.borderRadius,
                       borderWidth: 1,
                       borderColor: COLORS.white,
@@ -95,7 +103,7 @@ const EventList = ({ events, user }: { events: iEvent[]; user: iUser | undefined
                       alignItems: 'center',
                       justifyContent: 'center',
                     }}
-                    underlayColor={COLORS.secondaryDark}
+                    underlayColor={isSubtle ? COLORS.secondaryDark : COLORS.secondary}
                     onPress={() => onSelectEvent(event)}
                     onPressIn={() => setHighlightedEvent(event.id)}
                     onPressOut={() => setHighlightedEvent('')}
@@ -111,7 +119,7 @@ const EventList = ({ events, user }: { events: iEvent[]; user: iUser | undefined
                       >
                         <AwardsBodyImage
                           awardsBody={awardsBody}
-                          white={highlightedEvent === event.id}
+                          white={isSubtle ? highlightedEvent === event.id : true}
                           size={EVENT_ITEM_HEIGHT - 20}
                         />
                       </View>
@@ -133,12 +141,13 @@ const EventList = ({ events, user }: { events: iEvent[]; user: iUser | undefined
                             color: COLORS.white,
                             marginTop: 5,
                             marginBottom: 10,
+                            fontWeight: '700',
                           }}
                         >{`${EVENT_STATUS_TO_STRING[status]}`}</HeaderLight>
                         <View style={{ alignItems: 'flex-end' }}>
                           <Body
                             style={{
-                              color: COLORS.white,
+                              color: isSubtle ? COLORS.secondary : COLORS.white,
                             }}
                           >
                             {closeTime === '' ? '' : `Closes: ${closeTime}`}

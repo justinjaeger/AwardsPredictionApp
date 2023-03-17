@@ -58,7 +58,7 @@ const Profile = () => {
     userEventIds.includes(event.id),
   );
 
-  const isDeviceProfile = user && userId && user?.id === authUserId;
+  const isAuthUser = user && userId && user?.id === authUserId;
 
   const predictionSets = user?.predictionSets || [];
 
@@ -115,13 +115,13 @@ const Profile = () => {
             >
               <ProfileImage
                 image={user?.image}
-                onPress={isDeviceProfile ? onUploadProfileImage : undefined}
+                onPress={isAuthUser ? onUploadProfileImage : undefined}
                 style={{ marginLeft: 10, marginRight: 15 }}
               />
               <View style={{ flexDirection: 'column', paddingLeft: 10 }}>
                 <TouchableHighlight
                   onPress={
-                    isDeviceProfile
+                    isAuthUser
                       ? () => {
                           navigation.navigate('UpdateProfileInfo');
                         }
@@ -136,12 +136,12 @@ const Profile = () => {
                 >
                   <>
                     <HeaderLight>
-                      {user?.name || (isDeviceProfile ? 'Add Name' : '')}
+                      {user?.name || (isAuthUser ? 'Add Name' : '')}
                     </HeaderLight>
                     <SubHeader style={{ marginTop: 5 }}>
                       {user?.username
                         ? '@' + user?.username
-                        : isDeviceProfile
+                        : isAuthUser
                         ? 'Add Username'
                         : ''}
                     </SubHeader>
@@ -189,7 +189,7 @@ const Profile = () => {
                 marginTop: 10,
               }}
             >
-              {user && !isDeviceProfile ? (
+              {user && !isAuthUser ? (
                 <FollowButton
                   authUserIsFollowing={user.authUserIsFollowing || false}
                   profileUserId={user.id}
@@ -229,9 +229,10 @@ const Profile = () => {
                     marginLeft: theme.windowMargin,
                   }}
                 >
-                  All Predictions
+                  {(isAuthUser ? 'My' : user.name ? `${user.name}'s` : 'All') +
+                    ' Predictions'}
                 </HeaderLight>
-                <EventList user={user} events={userEvents} />
+                <EventList user={user} events={userEvents} isSubtle={true} />
               </>
             ) : null}
           </>

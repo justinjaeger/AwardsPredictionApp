@@ -58,7 +58,7 @@ const PredictionCarousel = ({
   const terminateInterval = () => {
     if (interval) clearInterval(interval);
   };
-  //   // NOTE: it doesn't reset when using tab navigation, but who knows if I'll keep the tabs anway, and for other users' profiles it won't use tab
+  // NOTE: it doesn't reset when using tab navigation, but who knows if I'll keep the tabs anway, and for other users' profiles it won't use tab
   useEffect(() => {
     terminateInterval();
     const timer = setInterval(() => {
@@ -130,6 +130,7 @@ const PredictionCarousel = ({
               image={userInfo.image}
               imageSize={40}
               style={{ marginLeft: 10, marginRight: 15 }}
+              isDisabled
             />
             <SubHeader>{userInfo.name}</SubHeader>
           </>
@@ -138,12 +139,9 @@ const PredictionCarousel = ({
       <View
         style={{
           width: '100%',
-          borderWidth: 0.5,
-          borderColor: 'rgba(255,255,255,0.3)',
           borderRadius: theme.windowMargin, // basically acts as a marginLeft and marginRight to top/bottom borders
           borderLeftWidth: 0,
           borderRightWidth: 0,
-          paddingTop: 20,
           paddingBottom: 20,
         }}
       >
@@ -193,8 +191,8 @@ const PredictionCarousel = ({
           style={{
             transform: [{ translateX: scrollBarAnim }],
             width: barWidth,
-            backgroundColor: COLORS.white,
-            height: 4,
+            backgroundColor: COLORS.gray,
+            height: 2,
             borderRadius: 5,
             zIndex: 2,
             marginLeft: theme.windowMargin,

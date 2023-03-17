@@ -51,8 +51,8 @@ const SearchInput = (props: {
         textStyle={{
           marginLeft: 10,
           marginRight: '20%',
-          height: HEADER_HEIGHT - 15,
-          fontSize: 16,
+          height: HEADER_HEIGHT,
+          fontSize: 20,
           color: COLORS.white,
         }}
         accessoryLeft={() => (

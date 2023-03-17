@@ -34,9 +34,7 @@ const PredictionsNavigator = () => {
         name="EventSelect"
         component={EventSelect}
         options={{
-          headerTitle: getHeaderTitle('Select Event'),
-          cardStyle: theme.cardStyle,
-          ...medium,
+          headerShown: false,
         }}
       />
       {/* Prediction Screens */}
@@ -96,7 +94,7 @@ const PredictionsNavigator = () => {
         name="Profile"
         component={Profile}
         options={{
-          headerTitle: getHeaderTitle('Profile'),
+          headerTitle: '',
           ...medium,
         }}
       />
@@ -123,8 +121,7 @@ const PredictionsNavigator = () => {
         name="SearchFriends"
         component={SearchFriends}
         options={{
-          headerTitle: getHeaderTitle('Follow Users'),
-          ...medium,
+          headerShown: false,
         }}
       />
       {/* Unused Screen */}

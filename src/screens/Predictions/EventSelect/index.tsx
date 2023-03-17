@@ -11,10 +11,14 @@ import useQueryGetFollowingRecentPredictions from '../../../hooks/queries/useQue
 import PredictionCarousel from '../../../components/PredictionCarousel';
 import { useLoading } from '../../../hooks/animatedState/useLoading';
 import theme from '../../../constants/theme';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Divider } from '@ui-kitten/components';
+import COLORS from '../../../constants/colors';
 
 const EventSelect = () => {
   const { width } = useWindowDimensions();
   const { userId } = useAuth();
+  const { top } = useSafeAreaInsets();
 
   const { data: events, isLoading, refetch: refetchEvents } = useQueryAllEvents();
   const { data: user, refetch: refetchUser } = useQueryGetUser(userId);
@@ -57,15 +61,28 @@ const EventSelect = () => {
           style={{ opacity: bodyOpacity }}
           contentContainerStyle={{
             alignItems: 'center',
-            marginTop: 20,
+            marginTop: top,
             width,
             paddingBottom: 100,
           }}
           showsVerticalScrollIndicator={false}
         >
+          <HeaderLight
+            style={{
+              alignSelf: 'flex-start',
+              marginTop: 20,
+              marginLeft: theme.windowMargin,
+            }}
+          >
+            Events
+          </HeaderLight>
           {events ? <EventList user={user} events={Object.values(events)} /> : null}
+
           {(usersWithRecentPredictionSets || []).length > 0 ? (
             <>
+              <Divider
+                style={{ width: '95%', backgroundColor: COLORS.gray, marginTop: 20 }}
+              />
               <HeaderLight
                 style={{
                   alignSelf: 'flex-start',
