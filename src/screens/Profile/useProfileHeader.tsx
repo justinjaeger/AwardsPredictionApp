@@ -18,7 +18,7 @@ const useProfileHeader = (
   const navigation = useTypedNavigation<PredictionsParamList>();
   const { userId: authUserId, signOutUser } = useAuth();
 
-  const isDeviceProfile = userId && userId === authUserId;
+  const isAuthUser = userId && userId === authUserId;
 
   const logOut = () => {
     setIsLoading(true);
@@ -43,10 +43,13 @@ const useProfileHeader = (
 
     if (!userId) return;
     navigation.setOptions({
-      headerLeft: navigation.canGoBack() && !isFirstProfile ? () => <BackButton /> : null,
+      headerLeft:
+        navigation.canGoBack() && (!isFirstProfile || !isAuthUser)
+          ? () => <BackButton />
+          : null,
       // don't set logout header if someone else's profile
       headerRight:
-        isDeviceProfile && !isLoading
+        isAuthUser && !isLoading
           ? () => (
               <IconButton
                 iconProps={{

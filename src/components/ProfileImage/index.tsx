@@ -8,11 +8,13 @@ const ProfileImage = ({
   imageSize,
   style,
   onPress,
+  isDisabled,
 }: {
   image?: string;
   imageSize?: number;
   style?: StyleProp<ViewStyle>;
   onPress?: () => void;
+  isDisabled?: boolean;
 }) => {
   const { uri } = useProfileImage(image);
 
@@ -35,6 +37,7 @@ const ProfileImage = ({
           width: size,
           borderRadius: size,
         }}
+        disabled={isDisabled}
       >
         <FastImage
           source={uri ? { uri } : require('../../assets/PROFILE.png')}
