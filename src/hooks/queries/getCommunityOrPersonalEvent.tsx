@@ -10,7 +10,7 @@ const useQueryCommunityOrPersonalEvent = (
 ) => {
   const { event, userId, includeHidden } = params;
   if (tab === 'personal' && userId === undefined) {
-    console.warn('No userId passed');
+    console.log('No userId passed');
   }
   const { data, isLoading, refetch } = useQuery({
     queryKey: [

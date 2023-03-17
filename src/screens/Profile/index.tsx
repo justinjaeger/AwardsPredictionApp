@@ -96,11 +96,18 @@ const Profile = () => {
         showsVerticalScrollIndicator={false}
       >
         {!userId ? (
-          <SubmitButton
-            style={{ marginTop: 20 }}
-            text={userEmail ? 'Log in' : 'Create Account'}
-            onPress={logIn}
-          />
+          <>
+            <SubHeader style={{ marginTop: '10%', fontWeight: '700' }}>
+              {userEmail
+                ? 'Log in to make predictions!'
+                : 'Create profile and make predictions!'}
+            </SubHeader>
+            <SubmitButton
+              style={{ marginTop: 20, maxWidth: 180 }}
+              text={userEmail ? 'Log in' : 'Create Account'}
+              onPress={logIn}
+            />
+          </>
         ) : (
           <>
             <View
@@ -216,7 +223,7 @@ const Profile = () => {
                 <PredictionCarousel
                   predictionSets={predictionSets}
                   userId={userId}
-                  style={{ marginTop: 10 }}
+                  style={{ marginTop: 10, minHeight: 10 }}
                 />
               </>
             ) : null}
@@ -225,7 +232,7 @@ const Profile = () => {
                 <HeaderLight
                   style={{
                     alignSelf: 'flex-start',
-                    marginTop: 40,
+                    marginTop: 20,
                     marginLeft: theme.windowMargin,
                   }}
                 >

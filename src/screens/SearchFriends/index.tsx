@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import BackgroundWrapper from '../../components/BackgroundWrapper';
 import SearchInput from '../../components/Inputs/SearchInput';
-import { HeaderLight } from '../../components/Text';
+import { HeaderLight, SubHeader } from '../../components/Text';
 import UserSearchResult from '../../components/UserSearchResult';
 import theme from '../../constants/theme';
 import { SearchProvider, useSearch } from '../../context/ContenderSearchContext';
@@ -49,7 +49,11 @@ const SearchFriends = () => {
                 </HeaderLight>
                 <UserSearchResult users={recommendedUsers} onEndReached={fetchPage} />
               </>
-            ) : null
+            ) : (
+              <SubHeader style={{ marginTop: '5%', fontWeight: '700' }}>
+                {'Find other users to follow!'}
+              </SubHeader>
+            )
           ) : (
             <UserSearchResult users={searchResults} />
           )}
