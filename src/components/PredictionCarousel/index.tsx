@@ -1,4 +1,5 @@
 import { StackActions, useNavigation } from '@react-navigation/native';
+import { Divider } from '@ui-kitten/components';
 import React, { useEffect, useRef, useState } from 'react';
 import {
   Animated,
@@ -12,10 +13,11 @@ import {
 import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
 import { iPredictionSet } from '../../types';
+import { hexToRgb } from '../../util/hexToRgb';
 import { useNavigateAwayEffect } from '../../util/hooks';
 import ProfileImage from '../ProfileImage';
 import { SubHeader } from '../Text';
-import ProfilePredictionsList from '../UserPredictionList';
+import UserPredictionList from '../UserPredictionList';
 import CarouselArrow from './CarouselArrow';
 
 const PredictionCarousel = ({
@@ -111,15 +113,19 @@ const PredictionCarousel = ({
   };
 
   return (
-    <View style={[{ width: '100%' }, style]}>
+    <>
       {userInfo ? (
         <TouchableOpacity
           style={{
-            width: '100%',
+            alignSelf: 'flex-start',
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'flex-start',
-            marginBottom: 10,
+            marginTop: 15,
+            marginLeft: theme.windowMargin,
+            marginRight: theme.windowMargin,
+            marginBottom: 15,
+            borderRadius: theme.borderRadius,
           }}
           onPress={() => {
             navigation.dispatch(StackActions.push('Profile', { userId }));
@@ -129,7 +135,7 @@ const PredictionCarousel = ({
             <ProfileImage
               image={userInfo.image}
               imageSize={40}
-              style={{ marginLeft: 10, marginRight: 15 }}
+              style={{ marginRight: 15 }}
               isDisabled
             />
             <SubHeader>{userInfo.name}</SubHeader>
@@ -137,13 +143,16 @@ const PredictionCarousel = ({
         </TouchableOpacity>
       ) : null}
       <View
-        style={{
-          width: '100%',
-          borderRadius: theme.windowMargin, // basically acts as a marginLeft and marginRight to top/bottom borders
-          borderLeftWidth: 0,
-          borderRightWidth: 0,
-          paddingBottom: 20,
-        }}
+        style={[
+          {
+            width: '100%',
+            borderRadius: theme.windowMargin, // basically acts as a marginLeft and marginRight to top/bottom borders
+            borderLeftWidth: 0,
+            borderRightWidth: 0,
+            paddingBottom: 10,
+          },
+          style,
+        ]}
       >
         {enableArrows ? (
           <>
@@ -180,7 +189,7 @@ const PredictionCarousel = ({
             setCurrentPage(newXPos);
           }}
         >
-          <ProfilePredictionsList
+          <UserPredictionList
             predictionSets={predictionSets}
             fixedSlots={10}
             userId={userId}
@@ -191,15 +200,23 @@ const PredictionCarousel = ({
           style={{
             transform: [{ translateX: scrollBarAnim }],
             width: barWidth,
-            backgroundColor: COLORS.gray,
+            backgroundColor: hexToRgb(COLORS.white, 0.2),
             height: 2,
             borderRadius: 5,
             zIndex: 2,
             marginLeft: theme.windowMargin,
           }}
         />
+        <Divider
+          style={{
+            width: '92%',
+            alignSelf: 'center',
+            opacity: 0.6,
+            marginTop: 30,
+          }}
+        />
       </View>
-    </View>
+    </>
   );
 };
 

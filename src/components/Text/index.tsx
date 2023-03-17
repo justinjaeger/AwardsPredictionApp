@@ -45,7 +45,7 @@ export const HeaderLight = (props: iTextProps) => {
     <Text
       category={'h4'}
       style={{
-        fontWeight: '300',
+        fontWeight: '700',
         color: COLORS.lightest,
         // @ts-ignore
         ...props.style,

@@ -26,7 +26,7 @@ const PredictionsNavigator = () => {
   const {
     params: { initialScreen },
   } = useRoute<RouteProp<BottomTabParamList, 'Profile'>>();
-  const { medium, large } = useHeaderSettings();
+  const { toolbarOnly, medium, large } = useHeaderSettings();
 
   return (
     <Navigator initialRouteName={initialScreen || 'EventSelect'} headerMode="screen">
@@ -34,7 +34,8 @@ const PredictionsNavigator = () => {
         name="EventSelect"
         component={EventSelect}
         options={{
-          headerShown: false,
+          headerTitle: '',
+          ...toolbarOnly,
         }}
       />
       {/* Prediction Screens */}
@@ -121,7 +122,7 @@ const PredictionsNavigator = () => {
         name="SearchFriends"
         component={SearchFriends}
         options={{
-          headerShown: false,
+          ...toolbarOnly,
         }}
       />
       {/* Unused Screen */}
