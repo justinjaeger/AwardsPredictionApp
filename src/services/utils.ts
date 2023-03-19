@@ -1,6 +1,7 @@
 import { API } from 'aws-amplify';
 import { GraphQLQuery } from '@aws-amplify/api';
 import Snackbar from '../components/Snackbar';
+import SlackApi, { SlackChannel } from './slack';
 
 export interface iApiResponse<T> {
   status: 'success' | 'error';
@@ -13,6 +14,12 @@ export const handleError = (message?: string, error?: any): iApiResponse<any> =>
   const m = error.message || message || 'something went wrong';
   console.error(message, JSON.stringify(error), m);
   Snackbar.error(m || '');
+  const allInfo = `
+    Message: ${message}
+    Error: ${JSON.stringify(error)}
+    m: ${m}
+`;
+  SlackApi.sendMessage(allInfo, SlackChannel.ERRORS); // TODO: Create channel "Errors"
   return { status: 'error', message: m, error: error.name };
 };
 
