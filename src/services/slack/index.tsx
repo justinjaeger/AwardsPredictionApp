@@ -7,6 +7,7 @@ export enum SlackChannel {
   QUESTIONS = 'QUESTIONS',
   SUPPORT = 'SUPPORT',
   OTHER = 'OTHER',
+  ERRORS = 'ERRORS',
 }
 
 const channelIds: {
@@ -17,6 +18,7 @@ const channelIds: {
   [SlackChannel.QUESTIONS]: 'C04R18GU961',
   [SlackChannel.SUPPORT]: 'C04QXKEQBSA',
   [SlackChannel.OTHER]: 'C04R0DV5HJ9',
+  [SlackChannel.ERRORS]: 'C04VB9EHCC8',
 };
 
 const sendMessage = (message: string, channel: SlackChannel) => {
