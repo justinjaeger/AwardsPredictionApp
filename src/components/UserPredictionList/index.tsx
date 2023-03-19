@@ -74,7 +74,7 @@ const ProfilePredictionsList = ({
               <View
                 style={{
                   width: '100%',
-                  flexDirection: 'row',
+                  flexDirection: 'column',
                   justifyContent: 'space-between',
                   alignItems: 'baseline',
                   paddingLeft: theme.windowMargin,
@@ -86,12 +86,15 @@ const ProfilePredictionsList = ({
                   <SubHeader style={{ color: COLORS.lightest }}>{categoryName}</SubHeader>
                   <Body style={{ color: COLORS.lightest }}>{'  |  ' + eventName}</Body>
                 </View>
-                <Body style={{ fontSize: 12 }}>{'Updated' + ': ' + lastUpdatedText}</Body>
+                <Body style={{ fontSize: 12, marginTop: 5 }}>
+                  {'Updated' + ': ' + lastUpdatedText}
+                </Body>
               </View>
               <MovieGrid
                 predictions={truncatedPredictions}
                 isCollapsed={false} // TODO
                 noLine
+                style={{ marginBottom: 0 }}
               />
             </>
           </TouchableHighlight>

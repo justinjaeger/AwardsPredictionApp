@@ -1,6 +1,6 @@
 import { Divider } from '@ui-kitten/components';
 import React from 'react';
-import { useWindowDimensions, View } from 'react-native';
+import { StyleProp, useWindowDimensions, View, ViewStyle } from 'react-native';
 import { PredictionType } from '../../API';
 import { getCategorySlots } from '../../constants/categories';
 import COLORS from '../../constants/colors';
@@ -14,8 +14,9 @@ const MovieGrid = (props: {
   isCollapsed?: boolean;
   noLine?: boolean;
   totalWidth?: number;
+  style?: StyleProp<ViewStyle>;
 }) => {
-  const { predictions, isCollapsed, totalWidth: _totalWidth } = props;
+  const { predictions, isCollapsed, totalWidth: _totalWidth, style } = props;
   let noLine = props.noLine;
   const { width } = useWindowDimensions();
   const totalWidth = _totalWidth || width;
@@ -32,14 +33,17 @@ const MovieGrid = (props: {
 
   return (
     <View
-      style={{
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        marginLeft: theme.windowMargin - theme.posterMargin / 2,
-        marginRight: theme.windowMargin - theme.posterMargin / 2,
-        marginBottom: isCollapsed ? 0 : theme.windowMargin,
-        width: totalWidth,
-      }}
+      style={[
+        {
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          marginLeft: theme.windowMargin - theme.posterMargin / 2,
+          marginRight: theme.windowMargin - theme.posterMargin / 2,
+          marginBottom: isCollapsed ? 0 : theme.windowMargin,
+          width: totalWidth,
+        },
+        style,
+      ]}
     >
       {predictions.map((p, i) => (
         <View key={p.contenderId}>

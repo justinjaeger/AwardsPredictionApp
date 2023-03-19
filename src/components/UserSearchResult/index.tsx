@@ -8,7 +8,7 @@ import { useAuth } from '../../context/UserContext';
 import { iUser } from '../../types';
 import FollowButton from '../FollowButton';
 import ProfileImage from '../ProfileImage';
-import { Body, BodyBold, SubHeader } from '../Text';
+import { Body, SubHeader } from '../Text';
 
 const UserSearchResult = ({
   users,
@@ -29,7 +29,9 @@ const UserSearchResult = ({
   };
 
   if (users.length === 0 && isSearching && !isLoadingSearch) {
-    return <BodyBold>No Users Found</BodyBold>;
+    return (
+      <SubHeader style={{ marginTop: '5%', fontWeight: '700' }}>No Users Found</SubHeader>
+    );
   }
 
   if (isLoading) {

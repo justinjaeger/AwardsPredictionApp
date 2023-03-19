@@ -338,6 +338,29 @@ export const getRecommendedFollowersFromRandomSignedOut = async (
   }
 };
 
+// might want to use for signed out users
+export const getAnyUsers = async (): Promise<iApiResponse<SearchRelationshipsQuery>> => {
+  try {
+    const oneOrZero = returnOneOrZero();
+    const { data, errors } = await GraphqlAPI<
+      SearchRelationshipsQuery,
+      SearchRelationshipsQueryVariables
+    >(customQueries.searchRecommendedFollowingSignedOut, {
+      limit: PAGINATED_USER_RECOMMENDATION_LIMIT,
+      // so it's not biased towards old or new users
+      sort: oneOrZero
+        ? [{ direction: SearchableSortDirection.asc }]
+        : [{ direction: SearchableSortDirection.desc }],
+    });
+    if (!data?.searchRelationships) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data: data };
+  } catch (err) {
+    return handleError('error getting any recommended followers', err);
+  }
+};
+
 export const getFriendsPredictingEvent = async (
   followingUserId: string,
   eventId: string,
