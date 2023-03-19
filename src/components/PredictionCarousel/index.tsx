@@ -200,19 +200,20 @@ const PredictionCarousel = ({
           style={{
             transform: [{ translateX: scrollBarAnim }],
             width: barWidth,
-            backgroundColor: hexToRgb(COLORS.white, 0.2),
+            backgroundColor: hexToRgb(COLORS.white, 0.8),
             height: 2,
             borderRadius: 5,
             zIndex: 2,
             marginLeft: theme.windowMargin,
+            marginTop: 20,
           }}
         />
         <Divider
           style={{
             width: '92%',
             alignSelf: 'center',
-            opacity: 0.6,
-            marginTop: 30,
+            opacity: 0.2,
+            marginTop: -2,
           }}
         />
       </View>
