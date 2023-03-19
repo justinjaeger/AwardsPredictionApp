@@ -78,11 +78,12 @@ const getFollowingRecentPredictions = async (
       const predictionSets = fu?.followedUser.predictionSets?.items || [];
       const formattedPredictionSets: iPredictionSet[] = predictionSets.map((ps) => {
         const predictions = (ps?.predictions?.items || []).map((p) => ({
+          id: p?.id,
           ranking: p?.ranking || 0,
           accolade: p?.contender.accolade || undefined,
           visibility: p?.contender.visibility || ContenderVisibility.VISIBLE,
           predictionType: ps?.type || PredictionType.NOMINATION,
-          contenderId: p?.contenderId || '',
+          contenderId: p?.contender.id || '',
           // @ts-ignore - the typescript isn't this nested
           contenderMovie: p?.contender.movie || undefined,
           // @ts-ignore - the typescript isn't this nested
@@ -128,7 +129,7 @@ const getFollowingRecentPredictions = async (
 
     return usersWithRecentPredictions;
   } catch (error) {
-    console.error('error in getFollowingRecentPredictions', error);
+    console.log('error in getFollowingRecentPredictions', error);
     return [];
   }
 };

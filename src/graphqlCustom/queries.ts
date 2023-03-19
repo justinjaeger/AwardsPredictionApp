@@ -1029,8 +1029,10 @@ export const searchRecommendedFollowingSignedOut = /* GraphQL */ `
 export const getRecentFollowingPredictions = /* GraphQL */ `
   query GetUser($id: ID!, $greaterThanDate: String) {
     getUser(id: $id) {
+      id
       following {
         items {
+          id
           followedUser {
             id
             image
@@ -1038,6 +1040,7 @@ export const getRecentFollowingPredictions = /* GraphQL */ `
             username
             predictionSets(createdAt: { gt: $greaterThanDate }, limit: 5) {
               items {
+                id
                 type
                 event {
                   id
@@ -1061,8 +1064,10 @@ export const getRecentFollowingPredictions = /* GraphQL */ `
                 # Return only the top 5 predictions
                 predictions(limit: 5) {
                   items {
+                    id
                     ranking
                     contender {
+                      id
                       movie {
                         tmdbId
                       }
