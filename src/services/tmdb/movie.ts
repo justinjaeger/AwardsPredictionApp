@@ -98,7 +98,7 @@ export const getTmdbMovie = async (
     };
 
     // before returning, set in cache
-    await TmdbMovieCache.set(tmdbId, data);
+    TmdbMovieCache.set(tmdbId, data);
 
     return {
       status: 'success',

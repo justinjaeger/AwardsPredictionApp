@@ -34,7 +34,7 @@ export const getTmdbPerson = async (
     };
 
     // before returning, set in cache
-    await TmdbPersonCache.set(tmdbId, data);
+    TmdbPersonCache.set(tmdbId, data);
 
     return {
       status: 'success',
