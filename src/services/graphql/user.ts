@@ -11,6 +11,7 @@ import {
   UpdateUserMutationVariables,
   UserRole,
 } from '../../API';
+import { PAGINATED_USER_RECOMMENDATION_LIMIT } from '../../constants';
 import * as mutations from '../../graphql/mutations';
 import * as queries from '../../graphql/queries';
 import * as customQueries from '../../graphqlCustom/queries';
@@ -22,10 +23,13 @@ import {
 } from '../../graphqlCustom/types';
 import { GraphqlAPI, handleError, iApiResponse } from '../utils';
 
-export const getAllUsers = async (): Promise<iApiResponse<ListUsersQuery>> => {
+export const getAllUsers = async (
+  paginatedLimit?: number,
+): Promise<iApiResponse<ListUsersQuery>> => {
   try {
     const { data, errors } = await GraphqlAPI<ListUsersQuery, ListUsersQueryVariables>(
       queries.listUsers,
+      { limit: paginatedLimit || PAGINATED_USER_RECOMMENDATION_LIMIT },
     );
     if (!data?.listUsers) {
       throw new Error(JSON.stringify(errors));
@@ -33,6 +37,28 @@ export const getAllUsers = async (): Promise<iApiResponse<ListUsersQuery>> => {
     return { status: 'success', data };
   } catch (err) {
     return handleError('error getting all users', err);
+  }
+};
+
+// it does return users we are following but we get info that can indicate if we follow them
+export const getUsersNotFollowing = async (
+  authUserId: string,
+  paginatedLimit?: number,
+): Promise<iApiResponse<ListUsersQuery>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<
+      ListUsersQuery,
+      ListUsersQueryVariables & { authUserId: string }
+    >(customQueries.listUsersWithIsFollowing, {
+      limit: paginatedLimit || PAGINATED_USER_RECOMMENDATION_LIMIT,
+      authUserId,
+    });
+    if (!data?.listUsers) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data };
+  } catch (err) {
+    return handleError('error getting all users not following', err);
   }
 };
 

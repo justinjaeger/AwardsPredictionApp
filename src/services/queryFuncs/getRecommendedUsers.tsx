@@ -6,6 +6,15 @@ type iPaginatedUserResult = Promise<{ users: iUser[]; nextToken: string | undefi
 
 const NUM_USERS_TO_FETCH = 15;
 
+// filter out duplicates (users could be following the same person)
+// filter out ourselves from the potential user list (we could potentially get recommended to ourselves)
+const getUniqueUsersWhoAreNotUs = (users: iUser[], authUserId: string | undefined) =>
+  users.filter((user, index, self) => {
+    const isDuplicate = index === self.findIndex((u) => u.id === user.id);
+    const isNotUs = user.id !== authUserId;
+    return isDuplicate && isNotUs;
+  });
+
 // TODO: We don't actually know if this works, need to test with many more users, all of whom are following people
 // It fetches recommended users by getting either your friends' or random users' followers and suggesting those
 const getRecommendedUsers = async (
@@ -50,24 +59,15 @@ const getRecommendedUsers = async (
       }
       return acc;
     }, []);
-    finalUsers.push(...users);
-    return users.length;
+
+    const uniqueUsersWhoArentUs = getUniqueUsersWhoAreNotUs(users, authUserId);
+
+    finalUsers.push(...uniqueUsersWhoArentUs);
+    return uniqueUsersWhoArentUs.length;
   };
 
-  // filter out duplicates (users could be following the same person)
-  // filter out ourselves from the potential user list (we could potentially get recommended to ourselves)
-  // do this before we hit the while loop so we fetch for more users if the last one had a bunch of duplicates we just removed
-  const uniqueUsersWhoArentUs = finalUsers.filter((user, index, self) => {
-    const isDuplicate = index === self.findIndex((u) => u.id === user.id);
-    const isNotUs = user.id !== authUserId;
-    return isDuplicate && isNotUs;
-  });
-
   // request until we accumulate enough recommendations, OR until a request returns ZERO users (maybe we don't have many friends)
-  while (
-    returnedZeroUsers === false &&
-    uniqueUsersWhoArentUs.length < NUM_USERS_TO_FETCH
-  ) {
+  while (returnedZeroUsers === false && finalUsers.length < NUM_USERS_TO_FETCH) {
     const returnCount = await fetchPage();
     if (returnCount === 0) {
       returnedZeroUsers = true;
@@ -75,11 +75,36 @@ const getRecommendedUsers = async (
   }
 
   // if we returned zero users, it means we couldn't find enough recommendations from friends. So, try to get random recommendations
-  if (returnedZeroUsers && authUserId) {
-    await fetchPage(true);
+  if (returnedZeroUsers) {
+    const returnCount = await fetchPage(true);
+    if (returnCount === 0) {
+      // if STILL zero, just get random users. Other requests try to get users who others follow, who are already popular. This is just purely random
+      const Request = authUserId
+        ? ApiServices.getUsersNotFollowing(authUserId)
+        : ApiServices.getAllUsers();
+      const { data } = await Request;
+      const formattedUsers: iUser[] = (data?.listUsers?.items || []).map((u) => ({
+        id: u?.id || '',
+        email: '',
+        role: UserRole.USER,
+        username: u?.username || undefined,
+        name: u?.name || undefined,
+        image: u?.image || undefined,
+        bio: u?.bio || undefined,
+        authUserIsFollowing: (u?.followers?.items || []).length > 0, // might just be a ts error
+      }));
+      const usersWeDoNotFollow = formattedUsers.filter(
+        (user) => user.authUserIsFollowing === false,
+      );
+      const uniqueUsersWhoArentUs = getUniqueUsersWhoAreNotUs(
+        usersWeDoNotFollow,
+        authUserId,
+      );
+      finalUsers.push(...uniqueUsersWhoArentUs);
+    }
   }
 
-  return { users: uniqueUsersWhoArentUs, nextToken: localNextToken };
+  return { users: finalUsers, nextToken: localNextToken };
 };
 
 export default getRecommendedUsers;

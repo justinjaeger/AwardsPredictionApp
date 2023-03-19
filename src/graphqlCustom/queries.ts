@@ -1113,3 +1113,38 @@ export const getFriendsPredictingEventQuery = /* GraphQL */ `
     }
   }
 `;
+
+// lists all users but with an indication of whether we are already following them
+export const listUsersWithIsFollowing = /* GraphQL */ `
+  query ListUsers(
+    $id: ID
+    $filter: ModelUserFilterInput
+    $limit: Int
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+    $authUserId: ID
+  ) {
+    listUsers(
+      id: $id
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        id
+        email
+        username
+        name
+        bio
+        image
+        role
+        followers(filter: { followingUserId: { eq: $authUserId } }) {
+          items {
+            id
+          }
+        }
+      }
+    }
+  }
+`;

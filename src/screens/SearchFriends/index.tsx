@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
+  Animated,
   Keyboard,
   TouchableWithoutFeedback,
   useWindowDimensions,
@@ -7,6 +8,7 @@ import {
 } from 'react-native';
 import BackgroundWrapper from '../../components/BackgroundWrapper';
 import SearchInput from '../../components/Inputs/SearchInput';
+import LoadingStatue from '../../components/LoadingStatue';
 import { HeaderLight, SubHeader } from '../../components/Text';
 import UserSearchResult from '../../components/UserSearchResult';
 import theme from '../../constants/theme';
@@ -16,10 +18,25 @@ import useFriendSearch from './useFriendSearch';
 
 const SearchFriends = () => {
   const { width } = useWindowDimensions();
+  const loadingOpacity = useRef(new Animated.Value(1)).current;
+  const bodyOpacity = useRef(new Animated.Value(0)).current;
 
   const { isSearching } = useSearch();
   const { searchResults } = useFriendSearch();
-  const { users: recommendedUsers, fetchPage } = useRecommendedUsers();
+  const { users: recommendedUsers, isFetching } = useRecommendedUsers();
+
+  useEffect(() => {
+    Animated.timing(loadingOpacity, {
+      toValue: isFetching ? 1 : 0,
+      duration: 250,
+      useNativeDriver: false,
+    }).start();
+    Animated.timing(bodyOpacity, {
+      toValue: isFetching ? 0 : 1,
+      duration: 250,
+      useNativeDriver: false,
+    }).start();
+  }, [isFetching]);
 
   return (
     <BackgroundWrapper>
@@ -35,28 +52,36 @@ const SearchFriends = () => {
             placeholder={'Search users'}
             style={{ width, padding: theme.windowMargin }}
           />
-          {!isSearching && searchResults.length === 0 ? (
-            recommendedUsers.length > 0 ? (
-              <>
-                <HeaderLight
-                  style={{
-                    marginTop: 40,
-                    alignSelf: 'flex-start',
-                    marginLeft: theme.windowMargin,
-                  }}
-                >
-                  Recommended:
-                </HeaderLight>
-                <UserSearchResult users={recommendedUsers} onEndReached={fetchPage} />
-              </>
+          <Animated.View
+            style={{ position: 'absolute', opacity: loadingOpacity, top: '10%' }}
+          >
+            <LoadingStatue />
+          </Animated.View>
+          <Animated.View style={{ opacity: bodyOpacity }}>
+            {!isSearching && searchResults.length === 0 ? (
+              recommendedUsers.length > 0 ? (
+                <>
+                  <HeaderLight
+                    style={{
+                      marginTop: 20,
+                      alignSelf: 'flex-start',
+                      marginLeft: theme.windowMargin,
+                      marginBottom: 10,
+                    }}
+                  >
+                    Recommended:
+                  </HeaderLight>
+                  <UserSearchResult users={recommendedUsers} />
+                </>
+              ) : (
+                <SubHeader style={{ marginTop: '5%', fontWeight: '700' }}>
+                  {'Find other users to follow!'}
+                </SubHeader>
+              )
             ) : (
-              <SubHeader style={{ marginTop: '5%', fontWeight: '700' }}>
-                {'Find other users to follow!'}
-              </SubHeader>
-            )
-          ) : (
-            <UserSearchResult users={searchResults} />
-          )}
+              <UserSearchResult users={searchResults} />
+            )}
+          </Animated.View>
         </View>
       </TouchableWithoutFeedback>
     </BackgroundWrapper>
