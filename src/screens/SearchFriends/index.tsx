@@ -1,11 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import {
-  Animated,
-  Keyboard,
-  TouchableWithoutFeedback,
-  useWindowDimensions,
-  View,
-} from 'react-native';
+import { Animated, Keyboard, TouchableWithoutFeedback, View } from 'react-native';
 import BackgroundWrapper from '../../components/BackgroundWrapper';
 import SearchInput from '../../components/Inputs/SearchInput';
 import LoadingStatue from '../../components/LoadingStatue';
@@ -17,7 +11,6 @@ import useRecommendedUsers from '../../hooks/useRecommendedUsers';
 import useFriendSearch from './useFriendSearch';
 
 const SearchFriends = () => {
-  const { width } = useWindowDimensions();
   const loadingOpacity = useRef(new Animated.Value(1)).current;
   const bodyOpacity = useRef(new Animated.Value(0)).current;
 
@@ -48,10 +41,7 @@ const SearchFriends = () => {
             alignItems: 'center',
           }}
         >
-          <SearchInput
-            placeholder={'Search users'}
-            style={{ width, padding: theme.windowMargin }}
-          />
+          <SearchInput placeholder={'Search users'} />
           <Animated.View
             style={{ position: 'absolute', opacity: loadingOpacity, top: '10%' }}
           >

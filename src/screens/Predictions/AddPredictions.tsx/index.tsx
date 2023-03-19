@@ -5,12 +5,10 @@ import { CATEGORY_TYPE_TO_STRING } from '../../../constants/categories';
 import Snackbar from '../../../components/Snackbar';
 import { PredictionsParamList } from '../../../navigation/types';
 import MovieListSelectable from '../../../components/MovieList/MovieListSelectable';
-import { useWindowDimensions } from 'react-native';
 import SearchInput from '../../../components/Inputs/SearchInput';
 import { SearchProvider, useSearch } from '../../../context/ContenderSearchContext';
 import CreateContender from '../CreateContender';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
-import theme from '../../../constants/theme';
 import BackButton from '../../../components/Buttons/BackButton';
 import { CategoryIsShortlisted, CategoryType, EventStatus } from '../../../API';
 import { useTypedNavigation } from '../../../util/hooks';
@@ -23,8 +21,6 @@ export type iCreateContenderProps = {
 
 // TODO: should only be able to do this if logged in
 const AddPredictions = () => {
-  const { width } = useWindowDimensions();
-
   const navigation = useTypedNavigation<PredictionsParamList>();
   const { category: _category, event: _event } = useCategory();
 
@@ -76,7 +72,6 @@ const AddPredictions = () => {
           placeholder={
             category.type === CategoryType.PERFORMANCE ? 'Search Actors' : 'Search Movies'
           }
-          style={{ width, padding: theme.windowMargin }}
         />
       ) : null}
       {isSearching ? (

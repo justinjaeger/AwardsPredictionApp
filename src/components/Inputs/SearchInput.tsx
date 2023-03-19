@@ -3,9 +3,10 @@ import { Input, Spinner } from '@ui-kitten/components';
 import { EvaStatus } from '@ui-kitten/components/devsupport';
 import CustomIcon from '../CustomIcon';
 import COLORS from '../../constants/colors';
-import { TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, useWindowDimensions, View } from 'react-native';
 import { HEADER_HEIGHT } from '../../constants';
 import { useSearch } from '../../context/ContenderSearchContext';
+import theme from '../../constants/theme';
 
 // MUST WRAP IN SearchProvider
 const SearchInput = (props: {
@@ -18,6 +19,8 @@ const SearchInput = (props: {
 }) => {
   const { label, placeholder, caption, onBlur, status, style } = props;
 
+  const { width } = useWindowDimensions();
+
   const {
     searchInput,
     setSearchInput,
@@ -26,8 +29,10 @@ const SearchInput = (props: {
     resetSearch,
   } = useSearch();
 
+  const searchHeight = HEADER_HEIGHT;
+
   return (
-    <View>
+    <View style={{ position: 'relative', width, padding: theme.windowMargin }}>
       <Input
         label={label}
         value={searchInput}
@@ -51,7 +56,7 @@ const SearchInput = (props: {
         textStyle={{
           marginLeft: 10,
           marginRight: '20%',
-          height: HEADER_HEIGHT,
+          height: searchHeight,
           fontSize: 20,
           color: COLORS.white,
         }}
@@ -87,10 +92,10 @@ const SearchInput = (props: {
         <View
           style={{
             position: 'absolute',
-            right: 20,
-            top: 9,
+            right: theme.windowMargin + 15,
+            top: searchHeight / 2 + 2,
             justifyContent: 'center',
-            height: HEADER_HEIGHT,
+            height: searchHeight,
           }}
         >
           <Spinner size="medium" style={{ borderColor: COLORS.gray }} />
