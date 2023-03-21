@@ -29,11 +29,14 @@ const useRecommendedUsers = () => {
 
   // fetches when you navigate away, so when you come back it's fresh
   useNavigateAwayEffect(() => {
-    const newStopFetching = false;
-    setPaginateToken(undefined);
-    setStopFetching(newStopFetching);
-    setUsers([]);
-    fetchPage(newStopFetching);
+    // delay until after transition
+    setTimeout(() => {
+      const newStopFetching = false;
+      setPaginateToken(undefined);
+      setStopFetching(newStopFetching);
+      setUsers([]);
+      fetchPage(newStopFetching);
+    }, 500);
   }, []);
 
   // Note: Not using this at the moment, but it's here if we want to add a "load more" button
