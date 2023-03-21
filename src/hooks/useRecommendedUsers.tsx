@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { iUser } from '../types';
 import { useAuth } from '../context/UserContext';
 import getRecommendedUsers from '../services/queryFuncs/getRecommendedUsers';
@@ -14,8 +14,8 @@ const useRecommendedUsers = () => {
   const [users, setUsers] = useState<iUser[]>([]);
   const [isFetching, setIsFetching] = useState<boolean>(false);
 
-  const fetchPage = async () => {
-    if (stopFetching) return;
+  const fetchPage = async (newStopFetching: boolean) => {
+    if (newStopFetching) return;
     setIsFetching(true);
     const { users, nextToken } = await getRecommendedUsers(authUserId, paginateToken);
     setIsFetching(false);
@@ -27,19 +27,22 @@ const useRecommendedUsers = () => {
     setPaginateToken(nextToken);
   };
 
-  useEffect(() => {
-    // fetch page when land on screen (the navigateAway will reset so it refreshes when we navigate somewhere else)
-    fetchPage();
-  }, [paginateToken === undefined]);
-
+  // fetches when you navigate away, so when you come back it's fresh
   useNavigateAwayEffect(() => {
-    setUsers([]);
+    const newStopFetching = false;
     setPaginateToken(undefined);
-    setStopFetching(false);
+    setStopFetching(newStopFetching);
+    setUsers([]);
+    fetchPage(newStopFetching);
   }, []);
 
+  // Note: Not using this at the moment, but it's here if we want to add a "load more" button
+  const fetchMoreResults = () => {
+    fetchPage(stopFetching);
+  };
+
   // export fetchPage to allow user to fetch next page
-  return { users, isFetching };
+  return { users, isFetching, fetchMoreResults };
 };
 
 export default useRecommendedUsers;
