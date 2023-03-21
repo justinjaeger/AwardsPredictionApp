@@ -19,10 +19,16 @@ const useProfileUser = (userId: string | undefined) => {
   // The following queries fetch auth profile separately
   // allows avoiding refetch every time it's focused, instead updating from query keys
   // We shouldn't do this for other users' profiles though bc query keys can't expire their data, has to be fetched onFocus every time
-  const { data: authUser, isLoading: isLoadingAuthUser } = useQueryGetUserProfile(
-    authUserId,
-    authUserId,
-  );
+  const {
+    data: authUser,
+    isLoading: isLoadingAuthUser,
+    refetch: refetchAuthUserProfile,
+  } = useQueryGetUserProfile(authUserId, authUserId);
+  // refetch auth user profile when a new user is logged in
+  useEffect(() => {
+    refetchAuthUserProfile();
+  }, [authUserId]);
+
   const { data: authRelationshipCountData } = useQueryGetRelationshipCount(authUserId);
 
   const isLoading = isLoadingAuthUser || isLoadingProfileUser;
