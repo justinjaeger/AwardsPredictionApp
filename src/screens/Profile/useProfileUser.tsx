@@ -24,12 +24,17 @@ const useProfileUser = (userId: string | undefined) => {
     isLoading: isLoadingAuthUser,
     refetch: refetchAuthUserProfile,
   } = useQueryGetUserProfile(authUserId, authUserId);
-  // refetch auth user profile when a new user is logged in
+
+  const {
+    data: authRelationshipCountData,
+    refetch: refetchAuthRelationshipCount,
+  } = useQueryGetRelationshipCount(authUserId);
+
+  // refetch auth user profile when a new user is logged in (else it's stale)
   useEffect(() => {
     refetchAuthUserProfile();
+    refetchAuthRelationshipCount();
   }, [authUserId]);
-
-  const { data: authRelationshipCountData } = useQueryGetRelationshipCount(authUserId);
 
   const isLoading = isLoadingAuthUser || isLoadingProfileUser;
 
@@ -54,7 +59,7 @@ const useProfileUser = (userId: string | undefined) => {
     });
     // get events user has predicted
     getUserEvents(userId).then((eventIds) => setUserEventIds(eventIds));
-  }, [userId]);
+  }, [authUserId, userId]);
 
   const user = profileUser;
   // Should use the authUser's data from useQuery hook because this info can change and it will never be stale
