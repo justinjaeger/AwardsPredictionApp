@@ -71,6 +71,25 @@ const Profile = () => {
     updateProfileImage({ userId: authUserId, userEmail });
   };
 
+  if (!userId) {
+    return (
+      <BackgroundWrapper>
+        <>
+          <SubHeader style={{ marginTop: '10%', fontWeight: '700' }}>
+            {userEmail
+              ? 'Log in to make predictions!'
+              : 'Create profile and make predictions!'}
+          </SubHeader>
+          <SubmitButton
+            style={{ marginTop: 20, maxWidth: 180 }}
+            text={userEmail ? 'Log in' : 'Create Account'}
+            onPress={logIn}
+          />
+        </>
+      </BackgroundWrapper>
+    );
+  }
+
   return (
     <BackgroundWrapper>
       <Animated.View
@@ -95,155 +114,140 @@ const Profile = () => {
         }}
         showsVerticalScrollIndicator={false}
       >
-        {!userId ? (
-          <>
-            <SubHeader style={{ marginTop: '10%', fontWeight: '700' }}>
-              {userEmail
-                ? 'Log in to make predictions!'
-                : 'Create profile and make predictions!'}
-            </SubHeader>
-            <SubmitButton
-              style={{ marginTop: 20, maxWidth: 180 }}
-              text={userEmail ? 'Log in' : 'Create Account'}
-              onPress={logIn}
+        <>
+          <View
+            style={{
+              width: width,
+              alignItems: 'center',
+              flexDirection: 'row',
+              height: 100,
+              marginBottom: 20,
+              marginLeft: theme.windowMargin,
+            }}
+          >
+            <ProfileImage
+              image={user?.image}
+              onPress={isAuthUser ? onUploadProfileImage : undefined}
+              style={{ marginLeft: 10, marginRight: 15 }}
             />
-          </>
-        ) : (
-          <>
-            <View
-              style={{
-                width: width,
-                alignItems: 'center',
-                flexDirection: 'row',
-                height: 100,
-                marginBottom: 20,
-                marginLeft: theme.windowMargin,
-              }}
-            >
-              <ProfileImage
-                image={user?.image}
-                onPress={isAuthUser ? onUploadProfileImage : undefined}
-                style={{ marginLeft: 10, marginRight: 15 }}
-              />
-              <View style={{ flexDirection: 'column', paddingLeft: 10 }}>
-                <TouchableHighlight
-                  onPress={
-                    isAuthUser
-                      ? () => {
-                          navigation.navigate('UpdateProfileInfo');
-                        }
-                      : undefined
-                  }
-                  style={{
-                    borderRadius: theme.borderRadius,
-                    paddingTop: 10,
-                    paddingBottom: 10,
-                  }}
-                  underlayColor={COLORS.disabled}
-                >
-                  <>
-                    <HeaderLight>
-                      {user?.name || (isAuthUser ? 'Add Name' : '')}
-                    </HeaderLight>
-                    <SubHeader style={{ marginTop: 5 }}>
-                      {user?.username
-                        ? '@' + user?.username
-                        : isAuthUser
-                        ? 'Add Username'
-                        : ''}
-                    </SubHeader>
-                  </>
-                </TouchableHighlight>
-              </View>
-            </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'flex-start',
-                width: '100%',
-                marginLeft: theme.windowMargin + 20,
-              }}
-            >
-              <FollowCountButton
-                onPress={() => {
-                  if (followerCount === 0) return;
-                  navigation.dispatch(
-                    StackActions.push('Followers', { userId, type: 'followers' }),
-                  );
+            <View style={{ flexDirection: 'column', paddingLeft: 10 }}>
+              <TouchableHighlight
+                onPress={
+                  isAuthUser
+                    ? () => {
+                        navigation.navigate('UpdateProfileInfo');
+                      }
+                    : undefined
+                }
+                style={{
+                  borderRadius: theme.borderRadius,
+                  paddingTop: 10,
+                  paddingBottom: 10,
                 }}
-                text={`${followerCount} Followers`}
-                loading={followerCount === undefined}
-              />
-              <FollowCountButton
-                onPress={() => {
-                  if (followingCount === 0) return;
-                  navigation.dispatch(
-                    StackActions.push('Followers', { userId, type: 'following' }),
-                  );
-                }}
-                text={`${followingCount} Following`}
-                loading={followingCount === undefined}
-              />
+                underlayColor={COLORS.disabled}
+              >
+                <>
+                  <HeaderLight>
+                    {user?.name || (isAuthUser ? 'Add Name' : '')}
+                  </HeaderLight>
+                  <SubHeader style={{ marginTop: 5 }}>
+                    {user?.username
+                      ? '@' + user?.username
+                      : isAuthUser
+                      ? 'Add Username'
+                      : ''}
+                  </SubHeader>
+                </>
+              </TouchableHighlight>
             </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'flex-start',
-                width: '100%',
-                marginLeft: theme.windowMargin + 20,
-                marginTop: 10,
+          </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'flex-start',
+              width: '100%',
+              marginLeft: theme.windowMargin + 20,
+            }}
+          >
+            <FollowCountButton
+              onPress={() => {
+                if (followerCount === 0) return;
+                navigation.dispatch(
+                  StackActions.push('Followers', { userId, type: 'followers' }),
+                );
               }}
-            >
-              {user && !isAuthUser ? (
-                <FollowButton
-                  authUserIsFollowing={user.authUserIsFollowing || false}
-                  profileUserId={user.id}
-                />
-              ) : null}
-              {user?.isFollowingAuthUser ? (
-                <BodyBold style={{ marginLeft: 10, color: 'rgba(255,255,255,0.8)' }}>
-                  Follows You
-                </BodyBold>
-              ) : null}
-            </View>
-            {predictionSets.length > 0 ? (
-              <>
-                <HeaderLight
-                  style={{
-                    alignSelf: 'flex-start',
-                    marginBottom: 10,
-                    marginTop: 40,
-                    marginLeft: theme.windowMargin,
-                  }}
-                >
-                  Recent Predictions:
-                </HeaderLight>
-                <PredictionCarousel
-                  predictionSets={predictionSets}
-                  userId={userId}
-                  style={{ marginTop: 10, minHeight: 10 }}
-                />
-              </>
+              text={`${followerCount} Followers`}
+              loading={followerCount === undefined}
+            />
+            <FollowCountButton
+              onPress={() => {
+                if (followingCount === 0) return;
+                navigation.dispatch(
+                  StackActions.push('Followers', { userId, type: 'following' }),
+                );
+              }}
+              text={`${followingCount} Following`}
+              loading={followingCount === undefined}
+            />
+          </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'flex-start',
+              width: '100%',
+              marginLeft: theme.windowMargin + 20,
+              marginTop: 10,
+            }}
+          >
+            {user && !isAuthUser ? (
+              <FollowButton
+                authUserIsFollowing={user.authUserIsFollowing || false}
+                profileUserId={user.id}
+              />
             ) : null}
-            {!isLoadingAllEvents && user && userEvents.length > 0 ? (
-              <>
-                <HeaderLight
-                  style={{
-                    alignSelf: 'flex-start',
-                    marginTop: 20,
-                    marginLeft: theme.windowMargin,
-                  }}
-                >
-                  {(isAuthUser ? 'My' : user.name ? `${user.name}'s` : 'All') +
-                    ' Predictions'}
-                </HeaderLight>
-                <EventList user={user} events={userEvents} isSubtle={true} />
-              </>
+            {user?.isFollowingAuthUser ? (
+              <BodyBold style={{ marginLeft: 10, color: 'rgba(255,255,255,0.8)' }}>
+                Follows You
+              </BodyBold>
             ) : null}
-          </>
-        )}
+          </View>
+          {predictionSets.length > 0 ? (
+            <>
+              <HeaderLight
+                style={{
+                  alignSelf: 'flex-start',
+                  marginBottom: 10,
+                  marginTop: 40,
+                  marginLeft: theme.windowMargin,
+                }}
+              >
+                Recent Predictions:
+              </HeaderLight>
+              <PredictionCarousel
+                predictionSets={predictionSets}
+                userId={userId}
+                style={{ marginTop: 10, minHeight: 10 }}
+              />
+            </>
+          ) : null}
+          {!isLoadingAllEvents && user && userEvents.length > 0 ? (
+            <>
+              <HeaderLight
+                style={{
+                  alignSelf: 'flex-start',
+                  marginTop: 20,
+                  marginLeft: theme.windowMargin,
+                }}
+              >
+                {(isAuthUser ? 'My' : user.name ? `${user.name}'s` : 'All') +
+                  ' Predictions'}
+              </HeaderLight>
+              <EventList user={user} events={userEvents} isSubtle={true} />
+            </>
+          ) : null}
+        </>
       </Animated.ScrollView>
     </BackgroundWrapper>
   );

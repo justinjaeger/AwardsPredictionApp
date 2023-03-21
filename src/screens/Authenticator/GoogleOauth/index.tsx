@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleProp, TextStyle, Image, View, useWindowDimensions } from 'react-native';
 import LoadingStatue from '../../../components/LoadingStatue';
-import { Body } from '../../../components/Text';
+import { Body, BodyBold } from '../../../components/Text';
 import COLORS from '../../../constants/colors';
 import GoogleOauthButton from './GoogleOauthButton';
 import useGoogleSignIn from './useGoogleSignIn';
@@ -34,7 +34,7 @@ const GoogleOauthPage = () => {
       {isLoading ? (
         <View style={{ width: '100%', alignItems: 'center' }}>
           <LoadingStatue />
-          <Body style={{ textAlign: 'center' }}>Signing in...</Body>
+          <BodyBold style={{ textAlign: 'center' }}>Signing in...</BodyBold>
         </View>
       ) : (
         <>

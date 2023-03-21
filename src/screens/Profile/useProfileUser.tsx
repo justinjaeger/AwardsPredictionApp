@@ -11,7 +11,7 @@ const useProfileUser = (userId: string | undefined) => {
   const { userId: authUserId } = useAuth();
 
   const [isLoadingProfileUser, setIsLoading] = useState<boolean>(true);
-  const [profileUser, setUser] = useState<iUser | undefined>(undefined);
+  const [profileUser, setProfileUser] = useState<iUser | undefined>(undefined);
   const [followingCount, setFollowingCount] = useState<number | undefined>(undefined);
   const [followerCount, setFollowerCount] = useState<number | undefined>(undefined);
   const [userEventIds, setUserEventIds] = useState<string[]>([]);
@@ -19,11 +19,22 @@ const useProfileUser = (userId: string | undefined) => {
   // The following queries fetch auth profile separately
   // allows avoiding refetch every time it's focused, instead updating from query keys
   // We shouldn't do this for other users' profiles though bc query keys can't expire their data, has to be fetched onFocus every time
-  const { data: authUser, isLoading: isLoadingAuthUser } = useQueryGetUserProfile(
-    authUserId,
-    authUserId,
-  );
-  const { data: authRelationshipCountData } = useQueryGetRelationshipCount(authUserId);
+  const {
+    data: authUser,
+    isLoading: isLoadingAuthUser,
+    refetch: refetchAuthUserProfile,
+  } = useQueryGetUserProfile(authUserId, authUserId);
+
+  const {
+    data: authRelationshipCountData,
+    refetch: refetchAuthRelationshipCount,
+  } = useQueryGetRelationshipCount(authUserId);
+
+  // refetch auth user profile when a new user is logged in (else it's stale)
+  useEffect(() => {
+    refetchAuthUserProfile();
+    refetchAuthRelationshipCount();
+  }, [authUserId]);
 
   const isLoading = isLoadingAuthUser || isLoadingProfileUser;
 
@@ -39,7 +50,7 @@ const useProfileUser = (userId: string | undefined) => {
     setIsLoading(true);
     // get user profile info
     getUserProfile(userId, authUserId)
-      .then((res) => setUser(res))
+      .then((res) => setProfileUser(res))
       .finally(() => setIsLoading(false));
     // get follower / following count
     getRelationshipCount(userId).then(({ followingCount, followerCount }) => {
@@ -48,7 +59,7 @@ const useProfileUser = (userId: string | undefined) => {
     });
     // get events user has predicted
     getUserEvents(userId).then((eventIds) => setUserEventIds(eventIds));
-  }, [userId]);
+  }, [authUserId, userId]);
 
   const user = profileUser;
   // Should use the authUser's data from useQuery hook because this info can change and it will never be stale

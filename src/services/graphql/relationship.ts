@@ -127,7 +127,7 @@ export const getPaginatedFollowersSignedIn = async (
     }
     return { status: 'success', data: data };
   } catch (err) {
-    return handleError('error getting paginated followers', err);
+    return handleError('error getting paginated followers signed in', err);
   }
 };
 export const getPaginatedFollowingSignedIn = async (
@@ -165,7 +165,7 @@ export const getPaginatedFollowersSignedOut = async (
     const { data, errors } = await GraphqlAPI<
       SearchRelationshipsQuery,
       SearchRelationshipsQueryVariables
-    >(customQueries.searchFollowersSignedIn, {
+    >(customQueries.searchFollowersSignedOut, {
       filter: {
         followedUserId: { eq: followedUserId },
       },
@@ -177,7 +177,7 @@ export const getPaginatedFollowersSignedOut = async (
     }
     return { status: 'success', data: data };
   } catch (err) {
-    return handleError('error getting paginated followers', err);
+    return handleError('error getting paginated followers signed out', err);
   }
 };
 export const getPaginatedFollowingSignedOut = async (

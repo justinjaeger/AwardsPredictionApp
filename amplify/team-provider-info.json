@@ -18,7 +18,8 @@
         }
       },
       "auth": {
-        "awardsappa4e66206": {}
+        "awardsappa4e66206": {},
+        "true": {}
       },
       "function": {
         "updateCommunityPredictions": {

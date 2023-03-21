@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { iUser } from '../types';
 import { useAuth } from '../context/UserContext';
 import getRecommendedUsers from '../services/queryFuncs/getRecommendedUsers';
@@ -14,8 +14,9 @@ const useRecommendedUsers = () => {
   const [users, setUsers] = useState<iUser[]>([]);
   const [isFetching, setIsFetching] = useState<boolean>(false);
 
-  const fetchPage = async () => {
-    if (stopFetching) return;
+  // the "resetUsers" is so that when we fetch and DO NOT use a paginateToken, we don't accumulate users; we just reset
+  const fetchPage = async (newStopFetching: boolean, resetUsers: boolean) => {
+    if (newStopFetching) return;
     setIsFetching(true);
     const { users, nextToken } = await getRecommendedUsers(authUserId, paginateToken);
     setIsFetching(false);
@@ -23,23 +24,30 @@ const useRecommendedUsers = () => {
     if (users.length < PAGINATED_USER_LIMIT || nextToken === undefined) {
       setStopFetching(true);
     }
-    setUsers((prev) => [...prev, ...users]);
+    if (resetUsers) {
+      setUsers(users);
+    } else {
+      setUsers((prev) => [...prev, ...users]);
+    }
     setPaginateToken(nextToken);
   };
 
-  useEffect(() => {
-    // fetch page when land on screen (the navigateAway will reset so it refreshes when we navigate somewhere else)
-    fetchPage();
-  }, [paginateToken === undefined]);
-
+  // fetches when you navigate away, so when you come back it's fresh
   useNavigateAwayEffect(() => {
-    setUsers([]);
+    // delay until after transition
+    const newStopFetching = false;
     setPaginateToken(undefined);
-    setStopFetching(false);
+    setStopFetching(newStopFetching);
+    fetchPage(newStopFetching, true);
   }, []);
 
+  // Note: Not using this at the moment, but it's here if we want to add a "load more" button
+  const fetchMoreResults = () => {
+    fetchPage(stopFetching, false);
+  };
+
   // export fetchPage to allow user to fetch next page
-  return { users, isFetching };
+  return { users, isFetching, fetchMoreResults };
 };
 
 export default useRecommendedUsers;

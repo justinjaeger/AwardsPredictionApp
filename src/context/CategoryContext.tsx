@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { CategoryIsShortlisted, CategoryName, CategoryType } from '../API';
 import ApiServices from '../services/graphql';
 import { iCategory, iEvent } from '../types';
@@ -55,6 +55,11 @@ export const CategoryProvider = (props: { children: React.ReactNode }) => {
   );
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [isEditing, _setIsEditing] = useState<boolean>(false);
+
+  // if user is logged out, show community predictions by default
+  useEffect(() => {
+    setPersonalCommunityTab(userId === undefined ? 'community' : 'personal');
+  }, [userId === undefined]);
 
   // WHEN WE SET AN EVENT automatically get the categories from it also
   const setEvent = (event: iEvent) => {
