@@ -14,7 +14,8 @@ const useRecommendedUsers = () => {
   const [users, setUsers] = useState<iUser[]>([]);
   const [isFetching, setIsFetching] = useState<boolean>(false);
 
-  const fetchPage = async (newStopFetching: boolean) => {
+  // the "resetUsers" is so that when we fetch and DO NOT use a paginateToken, we don't accumulate users; we just reset
+  const fetchPage = async (newStopFetching: boolean, resetUsers: boolean) => {
     if (newStopFetching) return;
     setIsFetching(true);
     const { users, nextToken } = await getRecommendedUsers(authUserId, paginateToken);
@@ -23,25 +24,26 @@ const useRecommendedUsers = () => {
     if (users.length < PAGINATED_USER_LIMIT || nextToken === undefined) {
       setStopFetching(true);
     }
-    setUsers((prev) => [...prev, ...users]);
+    if (resetUsers) {
+      setUsers(users);
+    } else {
+      setUsers((prev) => [...prev, ...users]);
+    }
     setPaginateToken(nextToken);
   };
 
   // fetches when you navigate away, so when you come back it's fresh
   useNavigateAwayEffect(() => {
     // delay until after transition
-    setTimeout(() => {
-      const newStopFetching = false;
-      setPaginateToken(undefined);
-      setStopFetching(newStopFetching);
-      setUsers([]);
-      fetchPage(newStopFetching);
-    }, 500);
+    const newStopFetching = false;
+    setPaginateToken(undefined);
+    setStopFetching(newStopFetching);
+    fetchPage(newStopFetching, true);
   }, []);
 
   // Note: Not using this at the moment, but it's here if we want to add a "load more" button
   const fetchMoreResults = () => {
-    fetchPage(stopFetching);
+    fetchPage(stopFetching, false);
   };
 
   // export fetchPage to allow user to fetch next page

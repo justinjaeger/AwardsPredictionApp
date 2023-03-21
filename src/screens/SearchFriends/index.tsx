@@ -18,18 +18,19 @@ const SearchFriends = () => {
   const { searchResults } = useFriendSearch();
   const { users: recommendedUsers, isFetching } = useRecommendedUsers();
 
+  const showLoading = isFetching && recommendedUsers.length === 0;
   useEffect(() => {
     Animated.timing(loadingOpacity, {
-      toValue: isFetching ? 1 : 0,
+      toValue: showLoading ? 1 : 0,
       duration: 250,
       useNativeDriver: false,
     }).start();
     Animated.timing(bodyOpacity, {
-      toValue: isFetching ? 0 : 1,
+      toValue: showLoading ? 0 : 1,
       duration: 250,
       useNativeDriver: false,
     }).start();
-  }, [isFetching]);
+  }, [showLoading]);
 
   return (
     <BackgroundWrapper>
