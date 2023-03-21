@@ -21,7 +21,7 @@ const getRecommendedUsers = async (
   authUserId?: string | undefined,
   nextToken?: string | undefined,
 ): iPaginatedUserResult => {
-  const finalUsers: iUser[] = [];
+  let finalUsers: iUser[] = [];
   let localNextToken: string | undefined = nextToken;
   let returnedZeroUsers = false;
 
@@ -60,10 +60,12 @@ const getRecommendedUsers = async (
       return acc;
     }, []);
 
-    const uniqueUsersWhoArentUs = getUniqueUsersWhoAreNotUs(users, authUserId);
-
-    finalUsers.push(...uniqueUsersWhoArentUs);
-    return uniqueUsersWhoArentUs.length;
+    const uniqueUsersWhoArentUs = getUniqueUsersWhoAreNotUs(
+      [...users, ...finalUsers],
+      authUserId,
+    );
+    finalUsers = uniqueUsersWhoArentUs;
+    return users.length; // return THIS because it actually only matters what the last request returned for the while loop to continue, not what the total is
   };
 
   // request until we accumulate enough recommendations, OR until a request returns ZERO users (maybe we don't have many friends)
@@ -97,10 +99,10 @@ const getRecommendedUsers = async (
         (user) => user.authUserIsFollowing === false,
       );
       const uniqueUsersWhoArentUs = getUniqueUsersWhoAreNotUs(
-        usersWeDoNotFollow,
+        [...usersWeDoNotFollow, ...finalUsers],
         authUserId,
       );
-      finalUsers.push(...uniqueUsersWhoArentUs);
+      finalUsers = uniqueUsersWhoArentUs;
     }
   }
 
