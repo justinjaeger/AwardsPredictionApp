@@ -594,7 +594,7 @@ export const getUserProfileQuerySignedOut = /* GraphQL */ `
             createdAt
             updatedAt
           }
-          predictions {
+          predictions(limit: 5) {
             items {
               id
               contenderId

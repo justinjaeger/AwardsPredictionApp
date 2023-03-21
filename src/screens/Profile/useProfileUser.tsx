@@ -11,7 +11,7 @@ const useProfileUser = (userId: string | undefined) => {
   const { userId: authUserId } = useAuth();
 
   const [isLoadingProfileUser, setIsLoading] = useState<boolean>(true);
-  const [profileUser, setUser] = useState<iUser | undefined>(undefined);
+  const [profileUser, setProfileUser] = useState<iUser | undefined>(undefined);
   const [followingCount, setFollowingCount] = useState<number | undefined>(undefined);
   const [followerCount, setFollowerCount] = useState<number | undefined>(undefined);
   const [userEventIds, setUserEventIds] = useState<string[]>([]);
@@ -39,7 +39,7 @@ const useProfileUser = (userId: string | undefined) => {
     setIsLoading(true);
     // get user profile info
     getUserProfile(userId, authUserId)
-      .then((res) => setUser(res))
+      .then((res) => setProfileUser(res))
       .finally(() => setIsLoading(false));
     // get follower / following count
     getRelationshipCount(userId).then(({ followingCount, followerCount }) => {
