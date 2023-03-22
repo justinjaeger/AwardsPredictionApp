@@ -28,6 +28,9 @@ const useUpdateRelationship = (onComplete?: () => void) => {
       await queryClient.invalidateQueries({
         queryKey: [QueryKeys.RELATIONSHIP_COUNT],
       });
+      await queryClient.invalidateQueries({
+        queryKey: [QueryKeys.FOLLOWING_RECENT_PREDICTIONS],
+      }); // because this is the query we get other users' carousel predictions from
       setIsComplete(true);
       onComplete && onComplete();
     },
