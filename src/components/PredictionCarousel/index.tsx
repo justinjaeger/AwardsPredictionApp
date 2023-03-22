@@ -150,6 +150,7 @@ const PredictionCarousel = ({
             borderLeftWidth: 0,
             borderRightWidth: 0,
             paddingBottom: 10,
+            height: width / 5 + 120, // messy, but prevents a bug. has to be a factor of width since poster height is
           },
           style,
         ]}
