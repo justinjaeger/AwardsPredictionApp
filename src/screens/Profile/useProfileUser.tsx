@@ -61,15 +61,6 @@ const useProfileUser = (userId: string | undefined) => {
     getUserEvents(userId).then((eventIds) => setUserEventIds(eventIds));
   }, [authUserId, userId]);
 
-  const user = profileUser;
-  // Should use the authUser's data from useQuery hook because this info can change and it will never be stale
-  if (user && isDeviceProfile) {
-    user.username = authUser?.username;
-    user.bio = authUser?.bio;
-    user.image = authUser?.image;
-    user.name = authUser?.name;
-  }
-
   const _followingCount = isDeviceProfile
     ? authRelationshipCountData?.followingCount || 0
     : followingCount || 0;
@@ -77,12 +68,12 @@ const useProfileUser = (userId: string | undefined) => {
     ? authRelationshipCountData?.followerCount || 0
     : followerCount || 0;
 
-  const _user = isDeviceProfile ? authUser : profileUser;
+  const user = isDeviceProfile ? authUser : profileUser;
 
   return {
     isLoading,
     setIsLoading,
-    user: _user,
+    user,
     followingCount: _followingCount,
     followerCount: _followerCount,
     userEventIds,

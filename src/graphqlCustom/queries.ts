@@ -1038,7 +1038,11 @@ export const getRecentFollowingPredictions = /* GraphQL */ `
             image
             name
             username
-            predictionSets(createdAt: { gt: $greaterThanDate }, limit: 5) {
+            predictionSets(
+              createdAt: { gt: $greaterThanDate }
+              limit: 5
+              sortDirection: DESC
+            ) {
               items {
                 id
                 type
