@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
-import { Animated, TouchableOpacity, View } from 'react-native';
+import { Alert, Animated, TouchableOpacity, View } from 'react-native';
 import BackButton from '../../../components/Buttons/BackButton';
 import { FAB } from '../../../components/Buttons/FAB';
 import LoadingStatueModal from '../../../components/LoadingStatueModal';
@@ -262,7 +262,17 @@ const CategoryPersonal = ({
         text="Undo"
         horizontalOffset={120}
         onPress={() => {
-          setPredictions(initialPredictions);
+          Alert.alert('Undo Changes?', 'Reverts all changes since last saved', [
+            {
+              text: 'Cancel',
+              onPress: () => {},
+              style: 'cancel',
+            },
+            {
+              text: 'Yes',
+              onPress: () => setPredictions(initialPredictions),
+            },
+          ]);
         }}
         visible={isEditing && !isHistory}
       />
