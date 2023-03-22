@@ -494,8 +494,8 @@ export const getUserProfileQuery = /* GraphQL */ `
             createdAt
             updatedAt
           }
-          # Return only the top 5 predictions
-          predictions(limit: 5) {
+          # essentially this limits the result to the top 5 predictions
+          predictions(filter: { ranking: { le: 5 } }) {
             items {
               id
               contenderId
@@ -594,7 +594,8 @@ export const getUserProfileQuerySignedOut = /* GraphQL */ `
             createdAt
             updatedAt
           }
-          predictions(limit: 5) {
+          # essentially this limits the result to the top 5 predictions
+          predictions(filter: { ranking: { le: 5 } }) {
             items {
               id
               contenderId
@@ -1065,8 +1066,8 @@ export const getRecentFollowingPredictions = /* GraphQL */ `
                 }
                 createdAt
                 updatedAt
-                # Return only the top 5 predictions
-                predictions(limit: 5) {
+                # essentially this limits the result to the top 5 predictions
+                predictions(filter: { ranking: { le: 5 } }) {
                   items {
                     id
                     ranking
