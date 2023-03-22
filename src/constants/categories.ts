@@ -66,10 +66,10 @@ export const getAwardsBodyCategories = (
 export const ALL_CATEGORIES: { [key in CategoryName]: undefined } = {
   [CategoryName.PICTURE]: undefined,
   [CategoryName.DIRECTOR]: undefined,
-  [CategoryName.ACTOR]: undefined,
   [CategoryName.ACTRESS]: undefined,
-  [CategoryName.SUPPORTING_ACTOR]: undefined,
+  [CategoryName.ACTOR]: undefined,
   [CategoryName.SUPPORTING_ACTRESS]: undefined,
+  [CategoryName.SUPPORTING_ACTOR]: undefined,
   [CategoryName.ORIGINAL_SCREENPLAY]: undefined,
   [CategoryName.ADAPTED_SCREENPLAY]: undefined,
   [CategoryName.INTERNATIONAL]: undefined,
@@ -110,14 +110,14 @@ export const ALL_CATEGORIES: { [key in CategoryName]: undefined } = {
 const ACADEMY_AWARDS_CATEGORIES_V1: iCategoryObject = {
   [CategoryName.PICTURE]: { name: 'Picture', type: CategoryType.FILM, slots: 10 },
   [CategoryName.DIRECTOR]: { name: 'Director', type: CategoryType.FILM },
-  [CategoryName.ACTOR]: { name: 'Actor', type: CategoryType.PERFORMANCE },
   [CategoryName.ACTRESS]: { name: 'Actress', type: CategoryType.PERFORMANCE },
-  [CategoryName.SUPPORTING_ACTOR]: {
-    name: 'Supporting Actor',
-    type: CategoryType.PERFORMANCE,
-  },
+  [CategoryName.ACTOR]: { name: 'Actor', type: CategoryType.PERFORMANCE },
   [CategoryName.SUPPORTING_ACTRESS]: {
     name: 'Supporting Actress',
+    type: CategoryType.PERFORMANCE,
+  },
+  [CategoryName.SUPPORTING_ACTOR]: {
+    name: 'Supporting Actor',
     type: CategoryType.PERFORMANCE,
   },
   [CategoryName.ORIGINAL_SCREENPLAY]: {
