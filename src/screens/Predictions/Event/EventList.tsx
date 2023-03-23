@@ -38,6 +38,8 @@ const EventList = ({
   const navigation = useTypedNavigation<PredictionsParamList>();
   const { isPad } = useDevice();
 
+  const eventItemHeight = EVENT_ITEM_HEIGHT * (isPad ? 1.5 : 1);
+
   const [highlightedEvent, setHighlightedEvent] = useState<string>('');
 
   const onSelectEvent = async (event: iEvent) => {
@@ -102,7 +104,7 @@ const EventList = ({
                     style={{
                       marginLeft: theme.windowMargin,
                       flexDirection: 'row',
-                      height: EVENT_ITEM_HEIGHT,
+                      height: eventItemHeight,
                       backgroundColor: isSubtle
                         ? 'transparent'
                         : hexToRgb(COLORS.secondaryDark, 1),
@@ -131,7 +133,7 @@ const EventList = ({
                         <AwardsBodyImage
                           awardsBody={awardsBody}
                           white={isSubtle ? highlightedEvent === event.id : true}
-                          size={EVENT_ITEM_HEIGHT - 20}
+                          size={EVENT_ITEM_HEIGHT - 20} // Important that this DOES NOT scale with iPad, because AwardsBodyImage already does
                         />
                       </View>
                       <View
@@ -144,17 +146,19 @@ const EventList = ({
                           paddingLeft: 0,
                         }}
                       >
-                        <SubHeader>
-                          {year + ' ' + AWARDS_BODY_TO_PLURAL_STRING[awardsBody]}
-                        </SubHeader>
-                        <HeaderLight
-                          style={{
-                            color: COLORS.white,
-                            marginTop: 5,
-                            marginBottom: 10,
-                            fontWeight: '700',
-                          }}
-                        >{`${EVENT_STATUS_TO_STRING[status]}`}</HeaderLight>
+                        <View style={{ justifyContent: 'flex-start' }}>
+                          <SubHeader>
+                            {year + ' ' + AWARDS_BODY_TO_PLURAL_STRING[awardsBody]}
+                          </SubHeader>
+                          <HeaderLight
+                            style={{
+                              color: COLORS.white,
+                              marginTop: 5,
+                              marginBottom: 10,
+                              fontWeight: '700',
+                            }}
+                          >{`${EVENT_STATUS_TO_STRING[status]}`}</HeaderLight>
+                        </View>
                         <View style={{ alignItems: 'flex-end' }}>
                           <Body
                             style={{

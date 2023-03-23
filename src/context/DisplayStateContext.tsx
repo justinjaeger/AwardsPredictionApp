@@ -11,7 +11,7 @@ type iDisplayStateContext = {
   eventDisplayState: iEventDisplayState;
   categoryDisplayState: iCategoryDisplayState;
   toggleEventDisplay: () => void;
-  toggleCategoriesDisplay: () => void;
+  toggleCategoriesDisplay: (skipGrid?: boolean) => void;
 };
 
 const DisplayStateContext = createContext<iDisplayStateContext>({
@@ -21,7 +21,7 @@ const DisplayStateContext = createContext<iDisplayStateContext>({
   toggleCategoriesDisplay: () => {},
 });
 
-export const DisplayProvider = (props: { children: React.ReactNode }) => {
+export const DisplayProvider = ({ children }: { children: React.ReactNode }) => {
   const [eventDisplayState, setEventDisplayState] = useState<iEventDisplayState>(
     'default',
   );
@@ -40,13 +40,17 @@ export const DisplayProvider = (props: { children: React.ReactNode }) => {
     }
   };
 
-  const toggleCategoriesDisplay = () => {
+  const toggleCategoriesDisplay = (skipGrid?: boolean) => {
     switch (categoryDisplayState) {
       case 'list':
         setCategoryDisplayState('list-collapsed');
         break;
       case 'list-collapsed':
-        setCategoryDisplayState('grid');
+        if (skipGrid) {
+          setCategoryDisplayState('list');
+        } else {
+          setCategoryDisplayState('grid');
+        }
         break;
       case 'grid':
         setCategoryDisplayState('list');
@@ -63,7 +67,7 @@ export const DisplayProvider = (props: { children: React.ReactNode }) => {
         toggleCategoriesDisplay,
       }}
     >
-      {props.children}
+      {children}
     </DisplayStateContext.Provider>
   );
 };

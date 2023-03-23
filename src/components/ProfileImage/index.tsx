@@ -4,6 +4,8 @@ import FastImage from 'react-native-fast-image';
 import useProfileImage from '../../hooks/useProfileImage';
 import useDevice from '../../util/device';
 
+export const IPAD_PROFILE_IMAGE_SCALE = 1.5;
+
 const ProfileImage = ({
   image,
   imageSize,
@@ -20,7 +22,7 @@ const ProfileImage = ({
   const { isPad } = useDevice();
   const { uri } = useProfileImage(image);
 
-  const size = (imageSize || 100) * (isPad ? 1.5 : 1);
+  const size = (imageSize || 100) * (isPad ? IPAD_PROFILE_IMAGE_SCALE : 1);
 
   return (
     <View

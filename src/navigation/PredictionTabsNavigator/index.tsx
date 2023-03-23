@@ -59,7 +59,6 @@ const PredictionTabsNavigator = (
           <View
             style={{
               flexDirection: 'row',
-              height: TOP_TAB_HEIGHT,
               width,
             }}
           >

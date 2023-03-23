@@ -2,7 +2,7 @@ import React from 'react';
 import { TouchableHighlight, useWindowDimensions, View } from 'react-native';
 import { PredictionType } from '../../API';
 import MovieGrid from '../../components/MovieGrid';
-import { Body, SubHeader } from '../../components/Text';
+import { Body, Label, SubHeader } from '../../components/Text';
 import { AWARDS_BODY_TO_PLURAL_STRING } from '../../constants/awardsBodies';
 import { getAwardsBodyCategories, getCategorySlots } from '../../constants/categories';
 import COLORS from '../../constants/colors';
@@ -86,9 +86,9 @@ const ProfilePredictionsList = ({
                   <SubHeader style={{ color: COLORS.lightest }}>{categoryName}</SubHeader>
                   <Body style={{ color: COLORS.lightest }}>{'  |  ' + eventName}</Body>
                 </View>
-                <Body style={{ fontSize: 12, marginTop: 5 }}>
+                <Label style={{ marginTop: 5 }}>
                   {'Updated' + ': ' + lastUpdatedText}
-                </Body>
+                </Label>
               </View>
               <MovieGrid
                 predictions={truncatedPredictions}

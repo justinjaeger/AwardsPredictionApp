@@ -2,7 +2,7 @@ import React from 'react';
 import { Animated, ImageStyle, StyleProp, TouchableOpacity, View } from 'react-native';
 import COLORS from '../../constants/colors';
 import { TMDB_IMAGE_URL } from '../../constants';
-import { Body } from '../Text';
+import { Body, Label } from '../Text';
 import theme from '../../constants/theme';
 
 type iAnimatedPosterProps = {
@@ -85,15 +85,14 @@ const AnimatedPoster = (props: iAnimatedPosterProps) => {
               padding: theme.posterMargin,
             }}
           >
-            <Body
+            <Label
               style={{
                 textAlign: 'center',
                 color: COLORS.primaryLightest,
-                fontSize: 10,
               }}
             >
               {title}
-            </Body>
+            </Label>
           </Animated.View>
         )}
       </>

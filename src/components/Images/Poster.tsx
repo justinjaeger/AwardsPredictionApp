@@ -14,7 +14,7 @@ import {
   POSTER_SIZE,
 } from '../../constants/posterDimensions';
 import { TMDB_IMAGE_URL } from '../../constants';
-import { Body } from '../Text';
+import { Body, Label } from '../Text';
 import theme from '../../constants/theme';
 import { ContenderAccolade, PredictionType } from '../../API';
 import AccoladeTag from '../List/ContenderList/AccoladeTag';
@@ -139,15 +139,14 @@ const Poster = (props: iPosterProps) => {
             }}
           >
             {(width || 0) > PosterSize.SMALL ? (
-              <Body
+              <Label
                 style={{
                   textAlign: 'center',
                   color: COLORS.primaryLightest,
-                  fontSize: 10,
                 }}
               >
                 {title}
-              </Body>
+              </Label>
             ) : null}
           </View>
         )}

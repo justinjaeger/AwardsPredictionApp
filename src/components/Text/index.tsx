@@ -95,3 +95,21 @@ export const BodyBold = (props: iTextProps) => {
     </Text>
   );
 };
+
+export const Label = (props: iTextProps) => {
+  const { isPad } = useDevice();
+
+  return (
+    <Text
+      category={isPad ? 'h6' : 'label'}
+      style={{
+        fontWeight: '400',
+        color: COLORS.lightest,
+        // @ts-ignore
+        ...props.style,
+      }}
+    >
+      {props.children}
+    </Text>
+  );
+};

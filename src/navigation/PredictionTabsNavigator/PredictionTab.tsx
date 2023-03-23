@@ -16,11 +16,11 @@ const PredictionTab = (props: {
       style={{
         alignItems: 'center',
         justifyContent: 'center',
-        height: '100%',
         width: '50%',
         borderRadius: 0,
         borderBottomColor: COLORS.primaryLight,
         borderBottomWidth: 1,
+        padding: 20,
       }}
       onPress={onPress}
       underlayColor={COLORS.secondary}

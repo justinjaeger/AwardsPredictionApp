@@ -14,6 +14,7 @@ import { useCategory } from '../../../context/CategoryContext';
 import { iCachedTmdbMovie, iCachedTmdbPerson } from '../../../services/cache/types';
 import TmdbServices from '../../../services/tmdb';
 import { iCategory, iEvent, iPrediction } from '../../../types';
+import useDevice from '../../../util/device';
 import { getNumPredicting } from '../../../util/getNumPredicting';
 import { useAsyncEffect } from '../../../util/hooks';
 import { IconButton } from '../../Buttons/IconButton';
@@ -51,6 +52,7 @@ const ContenderListItemCondensed = (props: iContenderListItemProps) => {
   } = props;
   const { isActive, drag } = draggable || {};
   const { width: windowWidth } = useWindowDimensions();
+  const { isPad } = useDevice();
 
   const RIGHT_COL_WIDTH = windowWidth / 3;
 
@@ -60,7 +62,7 @@ const ContenderListItemCondensed = (props: iContenderListItemProps) => {
   const category = _category as iCategory;
   const event = _event as iEvent;
 
-  const itemHeight = 25;
+  const itemHeight = 25 * (isPad ? 1.2 : 1);
 
   const [tmdbMovie, setTmdbMovie] = useState<iCachedTmdbMovie | undefined>();
   const [tmdbPerson, setTmdbPerson] = useState<iCachedTmdbPerson | undefined>();
@@ -140,12 +142,13 @@ const ContenderListItemCondensed = (props: iContenderListItemProps) => {
         onPressItem(prediction);
       }}
       style={{
-        backgroundColor:
-          isUnqualified && (variant !== 'selectable' || highlighted)
-            ? COLORS.error
-            : highlighted
-            ? COLORS.secondaryDark
-            : 'transparent',
+        backgroundColor: isActive
+          ? COLORS.secondaryDark
+          : isUnqualified && (variant !== 'selectable' || highlighted)
+          ? COLORS.error
+          : highlighted
+          ? COLORS.secondaryDark
+          : 'transparent',
         width: '100%',
         paddingTop: theme.windowMargin / 4,
         paddingBottom: theme.windowMargin / 4,
@@ -164,7 +167,9 @@ const ContenderListItemCondensed = (props: iContenderListItemProps) => {
             width: '100%',
           }}
         >
-          <SubHeader style={{ width: 30 }}>{ranking.toString() + '.'}</SubHeader>
+          <SubHeader style={{ width: isPad ? 50 : 30 }}>
+            {ranking.toString() + '.'}
+          </SubHeader>
           <View
             style={{
               flex: 1,

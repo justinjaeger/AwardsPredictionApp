@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { Animated, TouchableHighlight, View } from 'react-native';
 import COLORS from '../../constants/colors';
+import useDevice from '../../util/device';
 import CustomIcon from '../CustomIcon';
 import { SubHeader } from '../Text';
 
@@ -15,6 +16,7 @@ type iFABProps = {
 
 export const FAB = (props: iFABProps) => {
   const { iconName, text, onPress, visible, bottomPercentage, horizontalOffset } = props;
+  const { isPad } = useDevice();
 
   const buttonX = useRef(new Animated.Value(0)).current;
   const buttonOpacity = useRef(new Animated.Value(0)).current;
@@ -51,7 +53,7 @@ export const FAB = (props: iFABProps) => {
           borderWidth: 1,
           borderRadius: 100,
           alignItems: 'center',
-          padding: 15,
+          padding: 15 * (isPad ? 2 : 1),
           margin: 10,
         }}
         onPress={onPress}

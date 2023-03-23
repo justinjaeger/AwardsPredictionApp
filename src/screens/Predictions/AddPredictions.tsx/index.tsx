@@ -14,12 +14,14 @@ import { CategoryIsShortlisted, CategoryType, EventStatus } from '../../../API';
 import { useTypedNavigation } from '../../../util/hooks';
 import { usePredictions } from './usePredictions';
 import { FAB } from '../../../components/Buttons/FAB';
+import { Animated } from 'react-native';
+import { useCategoryDisplay } from '../../../hooks/animatedState/useDisplay';
+import { CategoryDisplayFab } from '../../../components/Buttons/DisplayFAB';
 
 export type iCreateContenderProps = {
   onSelectPrediction: (p: iPrediction) => void;
 };
 
-// TODO: should only be able to do this if logged in
 const AddPredictions = () => {
   const navigation = useTypedNavigation<PredictionsParamList>();
   const { category: _category, event: _event } = useCategory();
@@ -38,6 +40,7 @@ const AddPredictions = () => {
     onSave,
     selectedContenderIds,
   } = usePredictions();
+  const { delayedDisplay, expandedOpacity, collapsedOpacity } = useCategoryDisplay();
 
   const { isSearching } = useSearch();
 
@@ -77,12 +80,35 @@ const AddPredictions = () => {
       {isSearching ? (
         <CreateContender onSelectPrediction={onSelectPredictionFromSearch} />
       ) : (
-        <MovieListSelectable
-          predictions={predictionsInList}
-          selectedPredictions={selectedPredictions}
-          setSelectedPredictions={(ps) => setSelectedPredictions(ps)}
-        />
+        <>
+          <Animated.View
+            style={{
+              display: delayedDisplay === 'list' ? 'flex' : 'none',
+              opacity: expandedOpacity,
+            }}
+          >
+            <MovieListSelectable
+              predictions={predictionsInList}
+              selectedPredictions={selectedPredictions}
+              setSelectedPredictions={(ps) => setSelectedPredictions(ps)}
+            />
+          </Animated.View>
+          <Animated.View
+            style={{
+              display: delayedDisplay === 'list-collapsed' ? 'flex' : 'none',
+              opacity: collapsedOpacity,
+            }}
+          >
+            <MovieListSelectable
+              predictions={predictionsInList}
+              selectedPredictions={selectedPredictions}
+              setSelectedPredictions={(ps) => setSelectedPredictions(ps)}
+              isCollapsed
+            />
+          </Animated.View>
+        </>
       )}
+      <CategoryDisplayFab skipGrid />
       <FAB
         iconName="checkmark-outline"
         text="Done"

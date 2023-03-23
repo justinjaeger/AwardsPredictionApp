@@ -5,8 +5,12 @@ import theme from '../../constants/theme';
 import { useCategory } from '../../context/CategoryContext';
 import { useFollowingBar } from '../../context/FollowingBarContext';
 import useFriendsPredictingEvent from '../../hooks/useFriendsPredictingEvent';
+import useDevice from '../../util/device';
 import { IconButton } from '../Buttons/IconButton';
-import ProfileImage from '../ProfileImage';
+import ProfileImage, { IPAD_PROFILE_IMAGE_SCALE } from '../ProfileImage';
+
+const IMAGE_WIDTH = 50;
+const IMAGE_MARGIN = 5;
 
 const FollowingBottomScroll = ({
   userId,
@@ -19,13 +23,11 @@ const FollowingBottomScroll = ({
   const { event } = useCategory();
   const { isHidden, setIsHidden } = useFollowingBar();
   const { data: users } = useFriendsPredictingEvent(userId, event?.id);
-
-  const imageWidth = 50;
-  const imageMargin = 5;
+  const { isPad } = useDevice();
 
   useEffect(() => {
     Animated.timing(friendsYPos, {
-      toValue: isHidden ? 80 : 0,
+      toValue: isHidden ? 100 : 0,
       duration: 250,
       useNativeDriver: true,
     }).start();
@@ -78,11 +80,11 @@ const FollowingBottomScroll = ({
             <ProfileImage
               key={user.id}
               image={user.image}
-              imageSize={imageWidth}
+              imageSize={IMAGE_WIDTH}
               onPress={() => onPress(user.id)}
               style={{
-                width: imageWidth + 6,
-                margin: imageMargin,
+                width: (IMAGE_WIDTH + 3) * (isPad ? IPAD_PROFILE_IMAGE_SCALE : 1), // this only makes sense because the profile image is equally scaled
+                margin: IMAGE_MARGIN,
                 borderWidth: 4,
                 borderColor: COLORS.secondary,
                 borderRadius: 100,

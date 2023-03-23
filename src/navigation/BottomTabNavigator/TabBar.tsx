@@ -4,6 +4,7 @@ import CustomIcon from '../../components/CustomIcon';
 import COLORS from '../../constants/colors';
 import { BOTTOM_TAB_HEIGHT } from '../../constants';
 import SafeAreaViewFixed from '../../components/SafeAreaViewFixed';
+import useDevice from '../../util/device';
 
 export type ITabBarProps = {
   state: any;
@@ -14,6 +15,7 @@ export type ITabBarProps = {
 const TabBar = (props: ITabBarProps) => {
   const { state, descriptors, navigation } = props;
   const { tabBarVisible } = descriptors[state.routes[state.index].key].options;
+  const { isPad } = useDevice();
 
   if (tabBarVisible === false) {
     return null;
@@ -31,13 +33,12 @@ const TabBar = (props: ITabBarProps) => {
           width: 0,
         },
         backgroundColor: COLORS.primary,
-        // paddingBottom: bottom,
       }}
     >
       <View
         style={{
           flexDirection: 'row',
-          height: BOTTOM_TAB_HEIGHT,
+          height: BOTTOM_TAB_HEIGHT * (isPad ? 1.3 : 1),
         }}
       >
         {state.routes.map((route: any, index: number) => {

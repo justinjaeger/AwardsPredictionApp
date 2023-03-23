@@ -5,6 +5,7 @@ import {
   AWARDS_BODY_TO_IMAGE,
   AWARDS_BODY_TO_IMAGE_WHITE,
 } from '../../constants/awardsBodies';
+import useDevice from '../../util/device';
 
 const DEFAULT_SIZE = 60;
 
@@ -15,7 +16,9 @@ const AwardsBodyImage = (props: {
   style?: any;
 }) => {
   const { awardsBody, white, size, style } = props;
-  const _size = size || DEFAULT_SIZE;
+  const { isPad } = useDevice();
+
+  const _size = (size || DEFAULT_SIZE) * (isPad ? 1.5 : 1);
 
   const source = white
     ? AWARDS_BODY_TO_IMAGE_WHITE[awardsBody]
