@@ -11,6 +11,7 @@ import {
   ViewStyle,
 } from 'react-native';
 import COLORS from '../../constants/colors';
+import { getPosterDimensionsByWidth } from '../../constants/posterDimensions';
 import theme from '../../constants/theme';
 import { iPredictionSet } from '../../types';
 import useDevice from '../../util/device';
@@ -152,7 +153,7 @@ const PredictionCarousel = ({
             borderLeftWidth: 0,
             borderRightWidth: 0,
             paddingBottom: 10,
-            height: width / 2.5, // messy, but prevents a bug. has to be a factor of width since poster height is
+            height: getPosterDimensionsByWidth(width / 5).height + (isPad ? 100 : 80), // messy, but prevents a bug. has to be a factor of width since poster height is
           },
           style,
         ]}

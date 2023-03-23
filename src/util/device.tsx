@@ -1,10 +1,14 @@
-import { Platform } from 'react-native';
+import { Platform, useWindowDimensions } from 'react-native';
 
 const useDevice = () => {
+  const { width } = useWindowDimensions();
   // @ts-ignore
   const isPad = Platform.constants?.interfaceIdiom === 'pad'; // boolean
 
-  return { isPad };
+  const isSmallScreen = width < 400;
+  const isLargeScreen = width > 900;
+
+  return { isPad, isSmallScreen, isLargeScreen };
 };
 
 export default useDevice;

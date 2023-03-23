@@ -10,10 +10,10 @@ interface iTextProps {
 }
 
 export const SubHeader = (props: iTextProps) => {
-  const { isPad } = useDevice();
+  const { isLargeScreen, isSmallScreen } = useDevice();
   return (
     <Text
-      category={isPad ? 'h4' : 'h6'}
+      category={isLargeScreen ? 'h4' : isSmallScreen ? 'b2' : 'h6'}
       style={{
         fontWeight: '700',
         color: COLORS.lightest,
@@ -27,10 +27,10 @@ export const SubHeader = (props: iTextProps) => {
 };
 
 export const SubHeaderLight = (props: iTextProps) => {
-  const { isPad } = useDevice();
+  const { isLargeScreen, isSmallScreen } = useDevice();
   return (
     <Text
-      category={isPad ? 'h4' : 'h6'}
+      category={isLargeScreen ? 'h4' : isSmallScreen ? 'b2' : 'h6'}
       style={{
         fontWeight: '400',
         color: COLORS.lightest,
@@ -44,10 +44,10 @@ export const SubHeaderLight = (props: iTextProps) => {
 };
 
 export const HeaderLight = (props: iTextProps) => {
-  const { isPad } = useDevice();
+  const { isLargeScreen, isSmallScreen } = useDevice();
   return (
     <Text
-      category={isPad ? 'h2' : 'h4'}
+      category={isLargeScreen ? 'h2' : isSmallScreen ? 'h6' : 'h4'}
       style={{
         fontWeight: '700',
         color: COLORS.lightest,
@@ -61,11 +61,11 @@ export const HeaderLight = (props: iTextProps) => {
 };
 
 export const Body = (props: iTextProps) => {
-  const { isPad } = useDevice();
+  const { isLargeScreen, isSmallScreen } = useDevice();
 
   return (
     <Text
-      category={isPad ? 'h6' : 'p1'}
+      category={isLargeScreen ? 'h6' : isSmallScreen ? 'label' : 'p1'}
       style={{
         fontWeight: '400',
         color: COLORS.lightest,
@@ -79,11 +79,11 @@ export const Body = (props: iTextProps) => {
 };
 
 export const BodyBold = (props: iTextProps) => {
-  const { isPad } = useDevice();
+  const { isLargeScreen, isSmallScreen } = useDevice();
 
   return (
     <Text
-      category={isPad ? 'h6' : 'p1'}
+      category={isLargeScreen ? 'h6' : isSmallScreen ? 'label' : 'p1'}
       style={{
         fontWeight: '700',
         color: COLORS.lightest,
@@ -97,11 +97,11 @@ export const BodyBold = (props: iTextProps) => {
 };
 
 export const Label = (props: iTextProps) => {
-  const { isPad } = useDevice();
+  const { isLargeScreen } = useDevice();
 
   return (
     <Text
-      category={isPad ? 'h6' : 'label'}
+      category={isLargeScreen ? 'h6' : 'label'}
       style={{
         fontWeight: '400',
         color: COLORS.lightest,
