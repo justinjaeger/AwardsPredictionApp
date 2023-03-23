@@ -19,6 +19,7 @@ import theme from '../../constants/theme';
 import { ContenderAccolade, PredictionType } from '../../API';
 import AccoladeTag from '../List/ContenderList/AccoladeTag';
 import { useCategory } from '../../context/CategoryContext';
+import useDevice from '../../util/device';
 
 type iPosterProps = {
   title: string;
@@ -48,6 +49,7 @@ const Poster = (props: iPosterProps) => {
   } = props;
   const { width: windowWidth } = useWindowDimensions();
   const { date } = useCategory();
+  const { isPad } = useDevice();
   const isHistory = !!date;
 
   const width = _width || PosterSize.MEDIUM;
@@ -89,6 +91,7 @@ const Poster = (props: iPosterProps) => {
               borderTopLeftRadius: 5,
               borderWidth: 1,
               borderColor: COLORS.secondary,
+              padding: isPad ? 5 : 0,
             }}
           >
             <Body
@@ -98,6 +101,7 @@ const Poster = (props: iPosterProps) => {
                 padding: 1,
                 paddingLeft: 2,
                 paddingRight: 2,
+                fontSize: isPad ? 22 : undefined,
               }}
             >
               {ranking.toString()}
