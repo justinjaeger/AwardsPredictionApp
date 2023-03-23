@@ -2,6 +2,7 @@ import React from 'react';
 import { Text } from '@ui-kitten/components';
 import { StyleProp, TextStyle } from 'react-native';
 import COLORS from '../../constants/colors';
+import useDevice from '../../util/device';
 
 interface iTextProps {
   children: string;
@@ -9,9 +10,10 @@ interface iTextProps {
 }
 
 export const SubHeader = (props: iTextProps) => {
+  const { isPad } = useDevice();
   return (
     <Text
-      category={'h6'}
+      category={isPad ? 'h4' : 'h6'}
       style={{
         fontWeight: '700',
         color: COLORS.lightest,
@@ -25,9 +27,10 @@ export const SubHeader = (props: iTextProps) => {
 };
 
 export const SubHeaderLight = (props: iTextProps) => {
+  const { isPad } = useDevice();
   return (
     <Text
-      category={'h6'}
+      category={isPad ? 'h4' : 'h6'}
       style={{
         fontWeight: '400',
         color: COLORS.lightest,
@@ -41,9 +44,10 @@ export const SubHeaderLight = (props: iTextProps) => {
 };
 
 export const HeaderLight = (props: iTextProps) => {
+  const { isPad } = useDevice();
   return (
     <Text
-      category={'h4'}
+      category={isPad ? 'h2' : 'h4'}
       style={{
         fontWeight: '700',
         color: COLORS.lightest,
@@ -57,9 +61,11 @@ export const HeaderLight = (props: iTextProps) => {
 };
 
 export const Body = (props: iTextProps) => {
+  const { isPad } = useDevice();
+
   return (
     <Text
-      category={'p1'}
+      category={isPad ? 'h6' : 'p1'}
       style={{
         fontWeight: '400',
         color: COLORS.lightest,
@@ -73,9 +79,11 @@ export const Body = (props: iTextProps) => {
 };
 
 export const BodyBold = (props: iTextProps) => {
+  const { isPad } = useDevice();
+
   return (
     <Text
-      category={'p1'}
+      category={isPad ? 'h6' : 'p1'}
       style={{
         fontWeight: '700',
         color: COLORS.lightest,

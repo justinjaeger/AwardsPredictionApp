@@ -19,6 +19,7 @@ import { EVENT_STATUS_TO_STRING, getEventTime } from '../../../constants/events'
 import { Divider } from '@ui-kitten/components';
 import { useAuth } from '../../../context/UserContext';
 import { hexToRgb } from '../../../util/hexToRgb';
+import useDevice from '../../../util/device';
 
 const EVENT_ITEM_HEIGHT = 110;
 
@@ -35,6 +36,7 @@ const EventList = ({
   const { width } = useWindowDimensions();
   const { setEvent } = useCategory();
   const navigation = useTypedNavigation<PredictionsParamList>();
+  const { isPad } = useDevice();
 
   const [highlightedEvent, setHighlightedEvent] = useState<string>('');
 
@@ -67,7 +69,7 @@ const EventList = ({
         // sort by year
         .sort(([yearA], [yearB]) => (parseInt(yearA, 10) > parseInt(yearB, 10) ? -1 : 1))
         .map(([year, events], i) => (
-          <View key={year}>
+          <View key={year} style={{ width: '100%' }}>
             <View style={{ flexDirection: 'column' }}>
               {i > 0 ? (
                 <Divider
@@ -83,7 +85,12 @@ const EventList = ({
                 <View style={{ marginTop: 20 }} />
               )}
             </View>
-            <View style={{ flexWrap: 'wrap', flexDirection: 'row' }}>
+            <View
+              style={{
+                flexWrap: 'wrap',
+                flexDirection: 'row',
+              }}
+            >
               {events.map((event) => {
                 const { awardsBody, status } = event;
                 const eventIsAdminOnly = status === EventStatus.NOMS_STAGING;
@@ -93,6 +100,7 @@ const EventList = ({
                   <TouchableHighlight
                     key={event.awardsBody + year}
                     style={{
+                      marginLeft: theme.windowMargin,
                       flexDirection: 'row',
                       height: EVENT_ITEM_HEIGHT,
                       backgroundColor: isSubtle
@@ -102,7 +110,7 @@ const EventList = ({
                       borderWidth: 1,
                       borderColor: COLORS.white,
                       marginBottom: theme.windowMargin,
-                      width: width - theme.windowMargin * 2,
+                      width: (isPad ? width / 2 : width) - theme.windowMargin * 1.5,
                       alignItems: 'center',
                       justifyContent: 'center',
                     }}

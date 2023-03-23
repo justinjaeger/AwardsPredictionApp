@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TouchableHighlight, useWindowDimensions, Animated } from 'react-native';
+import { View, TouchableHighlight, Animated } from 'react-native';
 import { SubmitButton } from '../../components/Buttons';
 import { BodyBold, HeaderLight, SubHeader } from '../../components/Text';
 import { useAuth } from '../../context/UserContext';
@@ -34,7 +34,6 @@ const Profile = () => {
 
   const globalNavigation = useNavigation();
   const navigation = useTypedNavigation<PredictionsParamList>();
-  const { width } = useWindowDimensions();
 
   const { data: events, isLoading: isLoadingAllEvents } = useQueryAllEvents();
   const { mutate: updateProfileImage } = useUpdateProfileImage();
@@ -114,13 +113,17 @@ const Profile = () => {
         }}
         showsVerticalScrollIndicator={false}
       >
-        <>
+        <View
+          style={{
+            width: '100%',
+            flex: 1,
+            justifyContent: 'center',
+          }}
+        >
           <View
             style={{
-              width: width,
               alignItems: 'center',
               flexDirection: 'row',
-              height: 100,
               marginBottom: 20,
               marginLeft: theme.windowMargin,
             }}
@@ -167,7 +170,7 @@ const Profile = () => {
               alignItems: 'center',
               justifyContent: 'flex-start',
               width: '100%',
-              marginLeft: theme.windowMargin + 20,
+              marginLeft: theme.windowMargin + 10,
             }}
           >
             <FollowCountButton
@@ -247,7 +250,7 @@ const Profile = () => {
               <EventList user={user} events={userEvents} isSubtle={true} />
             </>
           ) : null}
-        </>
+        </View>
       </Animated.ScrollView>
     </BackgroundWrapper>
   );

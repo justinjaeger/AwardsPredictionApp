@@ -13,6 +13,7 @@ import {
 import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
 import { iPredictionSet } from '../../types';
+import useDevice from '../../util/device';
 import { hexToRgb } from '../../util/hexToRgb';
 import { useNavigateAwayEffect } from '../../util/hooks';
 import ProfileImage from '../ProfileImage';
@@ -38,6 +39,7 @@ const PredictionCarousel = ({
 }) => {
   const { width } = useWindowDimensions();
   const navigation = useNavigation();
+  const { isPad } = useDevice();
 
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [disableManualScroll, setDisableManualScroll] = useState<boolean>(false);
@@ -150,12 +152,12 @@ const PredictionCarousel = ({
             borderLeftWidth: 0,
             borderRightWidth: 0,
             paddingBottom: 10,
-            height: width / 5 + 120, // messy, but prevents a bug. has to be a factor of width since poster height is
+            height: width / 2.5, // messy, but prevents a bug. has to be a factor of width since poster height is
           },
           style,
         ]}
       >
-        {enableArrows ? (
+        {isPad || enableArrows ? (
           <>
             <CarouselArrow direction={'back'} onPress={onPressBack} />
             <CarouselArrow direction={'forward'} onPress={onPressForward} />

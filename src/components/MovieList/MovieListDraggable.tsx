@@ -84,7 +84,7 @@ const MovieListDraggable = ({
             <TouchableHighlight
               style={{
                 width: '90%',
-                height: 40,
+                maxWidth: 400,
                 borderRadius: theme.borderRadius,
                 borderWidth: 1,
                 borderColor: COLORS.white,
@@ -102,7 +102,7 @@ const MovieListDraggable = ({
                 });
               }}
             >
-              <SubHeader>
+              <SubHeader style={{ padding: 10 }}>
                 {predictions.length === 0
                   ? `+ Add ${CATEGORY_TYPE_TO_STRING[category.type]}s`
                   : `Add/Delete ${CATEGORY_TYPE_TO_STRING[category.type]}s`}
