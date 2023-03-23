@@ -13,7 +13,7 @@ export const SubHeader = (props: iTextProps) => {
   const { isLargeScreen, isSmallScreen } = useDevice();
   return (
     <Text
-      category={isLargeScreen ? 'h4' : isSmallScreen ? 'b2' : 'h6'}
+      category={isLargeScreen ? 'h4' : isSmallScreen ? 'p1' : 'h6'}
       style={{
         fontWeight: '700',
         color: COLORS.lightest,
@@ -30,7 +30,7 @@ export const SubHeaderLight = (props: iTextProps) => {
   const { isLargeScreen, isSmallScreen } = useDevice();
   return (
     <Text
-      category={isLargeScreen ? 'h4' : isSmallScreen ? 'b2' : 'h6'}
+      category={isLargeScreen ? 'h4' : isSmallScreen ? 'p1' : 'h6'}
       style={{
         fontWeight: '400',
         color: COLORS.lightest,
@@ -47,7 +47,7 @@ export const HeaderLight = (props: iTextProps) => {
   const { isLargeScreen, isSmallScreen } = useDevice();
   return (
     <Text
-      category={isLargeScreen ? 'h2' : isSmallScreen ? 'h6' : 'h4'}
+      category={isLargeScreen ? 'h2' : isSmallScreen ? 'h5' : 'h4'}
       style={{
         fontWeight: '700',
         color: COLORS.lightest,

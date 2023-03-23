@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Animated, ScrollView, useWindowDimensions, View } from 'react-native';
 import BackgroundWrapper from '../../components/BackgroundWrapper';
 import HistoryTab from '../../components/HistoryTab';
-import { TOP_TAB_HEIGHT } from '../../constants';
 import COLORS from '../../constants/colors';
 import { useCategory } from '../../context/CategoryContext';
 import PredictionTab from './PredictionTab';
