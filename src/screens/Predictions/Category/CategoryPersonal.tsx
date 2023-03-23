@@ -268,16 +268,18 @@ const CategoryPersonal = ({
           onPressAdd={onPressAdd}
         />
       </Animated.View>
-      <Animated.View
-        style={{
-          opacity: animatedOpacity,
-          position: 'absolute',
-          bottom: '1%',
-          alignSelf: 'flex-end',
-        }}
-      >
-        <AddPredictionsFab onPress={onPressAdd} />
-      </Animated.View>
+      {isPad ? (
+        <Animated.View
+          style={{
+            opacity: animatedOpacity,
+            position: 'absolute',
+            bottom: '1%',
+            alignSelf: 'flex-end',
+          }}
+        >
+          <AddPredictionsFab onPress={onPressAdd} />
+        </Animated.View>
+      ) : null}
       <FAB
         iconName="save-outline"
         text="Save"
