@@ -1,6 +1,7 @@
 import React from 'react';
 import { TouchableHighlight } from 'react-native';
 import COLORS from '../../constants/colors';
+import useDevice from '../../util/device';
 import CustomIcon from '../CustomIcon';
 
 const SIZE = 50;
@@ -17,18 +18,18 @@ const FloatingButton = (props: {
   disabled?: boolean;
 }) => {
   const { icon, onPress, customIcon, disabled, style } = props;
-  const iconProps = icon
-    ? {
-        name: icon,
-      }
-    : undefined;
+  const { isPad } = useDevice();
+
+  const iconProps = icon ? { name: icon } : undefined;
+
+  const size = isPad ? SIZE * 1.5 : SIZE;
 
   return (
     <TouchableHighlight
       style={{
-        width: SIZE,
-        height: SIZE,
-        borderRadius: SIZE,
+        width: size,
+        height: size,
+        borderRadius: size,
         backgroundColor: disabled ? COLORS.disabled : COLORS.secondaryDark,
         borderWidth: 2,
         borderColor: COLORS.white,

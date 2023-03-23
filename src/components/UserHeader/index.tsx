@@ -6,7 +6,7 @@ import { iUser } from '../../types';
 import { useTypedNavigation } from '../../util/hooks';
 import CustomIcon from '../CustomIcon';
 import ProfileImage from '../ProfileImage';
-import { SubHeader, SubHeaderLight } from '../Text';
+import { SubHeader } from '../Text';
 
 const UserHeader = ({
   user,
@@ -56,7 +56,7 @@ const UserHeader = ({
           </>
         </TouchableOpacity>
       ) : (
-        <SubHeaderLight>{`${name}'s predictions`}</SubHeaderLight>
+        <SubHeader>{`${name}'s predictions`}</SubHeader>
       )}
     </View>
   );

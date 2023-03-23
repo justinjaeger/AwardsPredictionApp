@@ -1,6 +1,7 @@
 import React from 'react';
 import { TouchableHighlight, View } from 'react-native';
 import theme from '../../constants/theme';
+import useDevice from '../../util/device';
 import CustomIcon from '../CustomIcon';
 
 const CarouselArrow = ({
@@ -10,6 +11,7 @@ const CarouselArrow = ({
   direction: 'back' | 'forward';
   onPress: () => void;
 }) => {
+  const { isPad } = useDevice();
   return (
     <View
       style={{
@@ -36,7 +38,7 @@ const CarouselArrow = ({
             backgroundColor: 'transparent',
             justifyContent: 'center',
             alignItems: direction === 'forward' ? 'flex-end' : 'flex-start',
-            width: 60,
+            width: isPad ? 80 : 60,
           }}
         >
           <CustomIcon
@@ -45,6 +47,7 @@ const CarouselArrow = ({
                 ? 'arrow-ios-forward-outline'
                 : 'arrow-ios-back-outline'
             }
+            size={isPad ? 60 : 30}
             color={undefined}
           />
         </View>

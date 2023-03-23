@@ -1,4 +1,3 @@
-import { useNavigation } from '@react-navigation/native';
 import { Divider } from '@ui-kitten/components';
 import React, { useState } from 'react';
 import { TouchableHighlight, View } from 'react-native';
@@ -22,6 +21,7 @@ type iMovieListProps = {
   lastUpdatedString: string;
   isCollapsed?: boolean;
   isAuthProfile?: boolean;
+  onPressAdd: () => void;
 };
 
 const MovieListDraggable = ({
@@ -30,8 +30,8 @@ const MovieListDraggable = ({
   isCollapsed,
   lastUpdatedString,
   isAuthProfile,
+  onPressAdd,
 }: iMovieListProps) => {
-  const navigation = useNavigation();
   const { event: _event, category: _category, date } = useCategory();
   const isHistory = !!date;
 
@@ -84,23 +84,16 @@ const MovieListDraggable = ({
             <TouchableHighlight
               style={{
                 width: '90%',
-                height: 40,
+                maxWidth: 400,
                 borderRadius: theme.borderRadius,
                 borderWidth: 1,
                 borderColor: COLORS.white,
                 alignItems: 'center',
                 justifyContent: 'center',
+                padding: 10,
               }}
               underlayColor={COLORS.secondaryDark}
-              onPress={() => {
-                navigation.navigate('AddPredictions', {
-                  initialPredictions: predictions,
-                  onFinish: (predictions: iPrediction[]) => {
-                    console.log('predictions', predictions.length);
-                    setPredictions(predictions);
-                  },
-                });
-              }}
+              onPress={onPressAdd}
             >
               <SubHeader>
                 {predictions.length === 0

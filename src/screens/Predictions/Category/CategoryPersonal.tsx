@@ -27,6 +27,9 @@ import HistoryHeaderButton from '../../../components/Buttons/HistoryHeaderButton
 import { useAuth } from '../../../context/UserContext';
 import { StackActions } from '@react-navigation/native';
 import CustomIcon from '../../../components/CustomIcon';
+import useDevice from '../../../util/device';
+import { AddPredictionsFab } from '../../../components/Buttons/DisplayFAB';
+import useShowAddTab from '../../../hooks/useShowAddTab';
 
 const CategoryPersonal = ({
   collapsedOpacity,
@@ -46,8 +49,11 @@ const CategoryPersonal = ({
   } = useCategory();
   const navigation = useTypedNavigation<PredictionsParamList>();
   const { userId: authUserId } = useAuth();
+  const { isPad } = useDevice();
 
   const isAuthUserProfile = userId === authUserId;
+
+  const { animatedOpacity } = useShowAddTab();
 
   const isHistory = !!date;
   const category = _category as iCategory;
@@ -160,6 +166,15 @@ const CategoryPersonal = ({
     });
   };
 
+  const onPressAdd = () => {
+    navigation.navigate('AddPredictions', {
+      initialPredictions: predictions,
+      onFinish: (predictions: iPrediction[]) => {
+        setPredictions(predictions);
+      },
+    });
+  };
+
   if (!userId) {
     return <SignedOutState />;
   }
@@ -235,6 +250,7 @@ const CategoryPersonal = ({
           setPredictions={(ps) => setPredictions(ps)}
           lastUpdatedString={lastUpdatedString}
           isAuthProfile={isAuthUserProfile}
+          onPressAdd={onPressAdd}
         />
       </Animated.View>
       <Animated.View
@@ -249,8 +265,21 @@ const CategoryPersonal = ({
           lastUpdatedString={lastUpdatedString}
           isCollapsed
           isAuthProfile={isAuthUserProfile}
+          onPressAdd={onPressAdd}
         />
       </Animated.View>
+      {isPad ? (
+        <Animated.View
+          style={{
+            opacity: animatedOpacity,
+            position: 'absolute',
+            bottom: '1%',
+            alignSelf: 'flex-end',
+          }}
+        >
+          <AddPredictionsFab onPress={onPressAdd} />
+        </Animated.View>
+      ) : null}
       <FAB
         iconName="save-outline"
         text="Save"
@@ -260,7 +289,7 @@ const CategoryPersonal = ({
       <FAB
         iconName="undo"
         text="Undo"
-        horizontalOffset={120}
+        horizontalOffset={120 * (isPad ? 2 : 1)}
         onPress={() => {
           Alert.alert('Undo Changes?', 'Reverts all changes since last saved', [
             {
