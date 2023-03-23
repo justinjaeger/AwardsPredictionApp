@@ -1,13 +1,13 @@
 import React, { useLayoutEffect } from 'react';
-import { Alert } from 'react-native';
+import { Alert, TouchableOpacity } from 'react-native';
 import AuthServices from '../../services/auth';
 import Snackbar from '../../components/Snackbar';
 import { useAuth } from '../../context/UserContext';
-import { IconButton } from '../../components/Buttons/IconButton';
 import { useNavigation } from '@react-navigation/native';
 import { useTypedNavigation } from '../../util/hooks';
 import BackButton from '../../components/Buttons/BackButton';
 import { PredictionsParamList } from '../../navigation/types';
+import { BodyBold } from '../../components/Text';
 
 const useProfileHeader = (
   userId: string | undefined,
@@ -51,10 +51,7 @@ const useProfileHeader = (
       headerRight:
         isAuthUser && !isLoading
           ? () => (
-              <IconButton
-                iconProps={{
-                  name: 'log-out-outline',
-                }}
+              <TouchableOpacity
                 onPress={() => {
                   Alert.alert('Log out', 'Are you sure you want to log out?', [
                     {
@@ -70,12 +67,11 @@ const useProfileHeader = (
                     },
                   ]);
                 }}
-                styles={{
-                  width: 30,
-                  height: 30,
-                  marginRight: 10,
-                }}
-              />
+              >
+                <BodyBold style={{ color: 'rgba(255,255,255,0.5)', marginRight: 10 }}>
+                  Log out
+                </BodyBold>
+              </TouchableOpacity>
             )
           : null,
     });
