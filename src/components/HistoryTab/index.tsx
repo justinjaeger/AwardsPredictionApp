@@ -103,12 +103,14 @@ const HistoryTab = () => {
           />
         ) : null}
       </View>
-      <IconButton
-        onPress={() => {
-          setDate(undefined);
-        }}
-        iconProps={{ name: 'close-outline', size: 26 }}
-      />
+      {!disableInput ? (
+        <IconButton
+          onPress={() => {
+            setDate(undefined);
+          }}
+          iconProps={{ name: 'close-outline', size: 26 }}
+        />
+      ) : null}
     </Animated.View>
   );
 };
