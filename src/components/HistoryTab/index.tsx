@@ -89,7 +89,18 @@ const HistoryTab = () => {
         <SubHeader style={{ marginBottom: 5, marginTop: 5 }}>Time Machine: </SubHeader>
         {!disableInput ? (
           // disableInput check is necessary bc date will handle clicks even when hidden
-          <DateInput date={date} setDate={setDate} minDate={minDate} maxDate={maxDate} />
+          <DateInput
+            date={date}
+            setDate={(d) => {
+              if (d.getDate() === new Date().getDate()) {
+                setDate(undefined);
+              } else {
+                setDate(d);
+              }
+            }}
+            minDate={minDate}
+            maxDate={maxDate}
+          />
         ) : null}
       </View>
       <IconButton
