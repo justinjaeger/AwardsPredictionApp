@@ -4,15 +4,15 @@ import { ScrollView } from 'react-native';
 import BackgroundWrapper from '../../components/BackgroundWrapper';
 import { SubmitButton } from '../../components/Buttons';
 import SafeAreaViewFixed from '../../components/SafeAreaViewFixed';
-import TmdbMovieCache from '../../services/cache/tmdbMovie';
-import TmdbPersonCache from '../../services/cache/tmdbPerson';
+// import TmdbMovieCache from '../../services/cache/tmdbMovie';
+// import TmdbPersonCache from '../../services/cache/tmdbPerson';
 
 const Admin = () => {
   const navigation = useNavigation();
 
   const clearAllCache = () => {
-    TmdbMovieCache.clearAll();
-    TmdbPersonCache.clearAll();
+    // TmdbMovieCache.clearAll();
+    // TmdbPersonCache.clearAll();
   };
 
   return (
