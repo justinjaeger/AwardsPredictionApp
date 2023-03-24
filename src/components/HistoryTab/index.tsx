@@ -85,8 +85,8 @@ const HistoryTab = () => {
         paddingRight: theme.windowMargin,
       }}
     >
-      <View style={{ flexDirection: 'row' }}>
-        <SubHeader style={{ marginBottom: 5, marginTop: 5 }}>Time Machine: </SubHeader>
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <SubHeader>Time Machine: </SubHeader>
         {!disableInput ? (
           // disableInput check is necessary bc date will handle clicks even when hidden
           <DateInput

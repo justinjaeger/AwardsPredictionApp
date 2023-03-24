@@ -23,7 +23,7 @@ export const DateInput = (props: {
     <View
       style={{
         flexDirection: 'row',
-        backgroundColor: COLORS.white,
+        backgroundColor: COLORS.primary,
         justifyContent: 'center',
         borderRadius: theme.borderRadius,
         alignItems: 'center',
