@@ -83,7 +83,7 @@ const FollowingBottomScroll = ({
               imageSize={IMAGE_WIDTH}
               onPress={() => onPress(user.id)}
               style={{
-                width: (IMAGE_WIDTH + 3) * (isPad ? IPAD_PROFILE_IMAGE_SCALE : 1), // this only makes sense because the profile image is equally scaled
+                width: (IMAGE_WIDTH + 6) * (isPad ? IPAD_PROFILE_IMAGE_SCALE : 1), // this only makes sense because the profile image is equally scaled
                 margin: IMAGE_MARGIN,
                 borderWidth: 4,
                 borderColor: COLORS.secondary,

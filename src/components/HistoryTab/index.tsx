@@ -1,8 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Animated } from 'react-native';
+import { Animated, View } from 'react-native';
 import { EventStatus } from '../../API';
+import theme from '../../constants/theme';
 import { useCategory } from '../../context/CategoryContext';
 import { iEvent } from '../../types';
+import { IconButton } from '../Buttons/IconButton';
 import { DateInput } from '../Inputs/DateInput';
 import { SubHeader } from '../Text';
 
@@ -75,17 +77,27 @@ const HistoryTab = () => {
         opacity,
         width: '100%',
         flexDirection: 'row',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         alignItems: 'center',
         borderBottomWidth: 0.5,
         borderBottomColor: 'rgba(255,255,255,0.3)',
+        paddingLeft: theme.windowMargin,
+        paddingRight: theme.windowMargin,
       }}
     >
-      <SubHeader style={{ marginBottom: 5, marginTop: 5 }}>Time Machine: </SubHeader>
-      {!disableInput ? (
-        // disableInput check is necessary bc date will handle clicks even when hidden
-        <DateInput date={date} setDate={setDate} minDate={minDate} maxDate={maxDate} />
-      ) : null}
+      <View style={{ flexDirection: 'row' }}>
+        <SubHeader style={{ marginBottom: 5, marginTop: 5 }}>Time Machine: </SubHeader>
+        {!disableInput ? (
+          // disableInput check is necessary bc date will handle clicks even when hidden
+          <DateInput date={date} setDate={setDate} minDate={minDate} maxDate={maxDate} />
+        ) : null}
+      </View>
+      <IconButton
+        onPress={() => {
+          setDate(undefined);
+        }}
+        iconProps={{ name: 'close-outline', size: 26 }}
+      />
     </Animated.View>
   );
 };

@@ -17,6 +17,7 @@ import { StackActions } from '@react-navigation/native';
 import { useLoading } from '../../../hooks/animatedState/useLoading';
 import { iEventDisplayState } from '../../../context/DisplayStateContext';
 
+// This is shared by EventPersonalCommunity AND EventFromProfile
 const Event = ({
   tab,
   collapsedOpacity,

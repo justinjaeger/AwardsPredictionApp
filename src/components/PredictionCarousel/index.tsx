@@ -16,7 +16,6 @@ import theme from '../../constants/theme';
 import { iPredictionSet } from '../../types';
 import useDevice from '../../util/device';
 import { hexToRgb } from '../../util/hexToRgb';
-// import { useNavigateAwayEffect } from '../../util/hooks';
 import ProfileImage from '../ProfileImage';
 import { SubHeader } from '../Text';
 import UserPredictionList from '../UserPredictionList';
@@ -58,26 +57,6 @@ const PredictionCarousel = ({
     }).start();
   }, [currentPage]);
 
-  // DISABLING AUTOMATIC SCROLLING
-  // Responsible for auto-animating the carousel
-  //   const [interval, _setInterval] = useState<NodeJS.Timeout>();
-  //   const terminateInterval = () => {
-  //     if (interval) clearInterval(interval);
-  //   };
-  // NOTE: it doesn't reset when using tab navigation, but who knows if I'll keep the tabs anway, and for other users' profiles it won't use tab
-  //   useEffect(() => {
-  //     terminateInterval();
-  //     const timer = setInterval(() => {
-  //       scrollForward();
-  //     }, 5000);
-  //     _setInterval(timer);
-  //   }, []);
-  //   useNavigateAwayEffect(() => {
-  //     // use this specifically because if profile is in a tab, the interval will never terminate / unmount
-  //     terminateInterval();
-  //     setCurrentPage(0);
-  //     scrollRef.current?.scrollTo({ x: 0, animated: false });
-  //   }, []);
   // lets us tap through the carousel faster; onMomentumScrollEnd doesn't fire in between taps
   const tempDisableManualScroll = () => {
     setDisableManualScroll(true);
@@ -98,12 +77,10 @@ const PredictionCarousel = ({
     });
   };
   const onPressForward = () => {
-    // terminateInterval();
     scrollForward();
     tempDisableManualScroll();
   };
   const onPressBack = () => {
-    // terminateInterval();
     setCurrentPage((cp) => {
       if (cp <= 0) {
         const newPage = predictionSets.length - 1;
@@ -170,10 +147,6 @@ const PredictionCarousel = ({
           pagingEnabled
           style={{ width: '100%', flex: 1 }}
           ref={scrollRef}
-          onScrollBeginDrag={() => {
-            // only fires when user manually scrolls, NOT when carousel automatically animates
-            // terminateInterval();
-          }}
           showsHorizontalScrollIndicator={false}
           onScroll={(e) => {
             // animates the scrollbar as you scroll

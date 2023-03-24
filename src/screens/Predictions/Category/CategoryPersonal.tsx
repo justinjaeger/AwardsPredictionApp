@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
-import { Alert, Animated, TouchableOpacity, View } from 'react-native';
+import { Alert, Animated, View } from 'react-native';
 import BackButton from '../../../components/Buttons/BackButton';
 import { FAB } from '../../../components/Buttons/FAB';
 import LoadingStatueModal from '../../../components/LoadingStatueModal';
@@ -8,7 +8,7 @@ import MovieGrid from '../../../components/MovieGrid';
 import MovieListDraggable from '../../../components/MovieList/MovieListDraggable';
 import SignedOutState from '../../../components/SignedOutState';
 import Snackbar from '../../../components/Snackbar';
-import { BodyBold, SubHeader } from '../../../components/Text';
+import { BodyBold } from '../../../components/Text';
 import theme from '../../../constants/theme';
 import { useCategory } from '../../../context/CategoryContext';
 import useMutationUpdatePredictions from '../../../hooks/mutations/updatePredictions';
@@ -25,11 +25,10 @@ import { iCategoryProps } from '.';
 import LastUpdatedText from '../../../components/LastUpdatedText';
 import HistoryHeaderButton from '../../../components/Buttons/HistoryHeaderButton';
 import { useAuth } from '../../../context/UserContext';
-import { StackActions } from '@react-navigation/native';
-import CustomIcon from '../../../components/CustomIcon';
 import useDevice from '../../../util/device';
 import { AddPredictionsFab } from '../../../components/Buttons/DisplayFAB';
 import useShowAddTab from '../../../hooks/useShowAddTab';
+import EventLink from './EventLink';
 
 const CategoryPersonal = ({
   collapsedOpacity,
@@ -98,7 +97,7 @@ const CategoryPersonal = ({
     initialPredictions || [],
   );
 
-  // _predictions is for editing, initialPredictions has the history
+  // _predictions is for editing, initialPredictions has the history. History is disallowed if editing, so this isn't a problem
   const predictions = isHistory ? initialPredictions : _predictions;
   const predictionIds = predictions.map((p) => p.contenderId);
 
@@ -144,13 +143,14 @@ const CategoryPersonal = ({
     });
   }, [navigation]);
 
-  const onSaveContenders = async () => {
+  const onSaveContenders = async (ps?: iPrediction[]) => {
+    const predictionsToSave = ps || predictions;
     if (!userId) return;
-    if (_.isEqual(initialPredictions, predictions)) {
+    if (_.isEqual(initialPredictions, predictionsToSave)) {
       setIsEditing(false);
       return;
     }
-    const newPredictionData = predictions.map((p, i) => ({
+    const newPredictionData = predictionsToSave.map((p, i) => ({
       contenderId: p.contenderId,
       ranking: i + 1,
     }));
@@ -169,8 +169,9 @@ const CategoryPersonal = ({
   const onPressAdd = () => {
     navigation.navigate('AddPredictions', {
       initialPredictions: predictions,
-      onFinish: (predictions: iPrediction[]) => {
-        setPredictions(predictions);
+      onFinish: (ps: iPrediction[]) => {
+        setPredictions(ps);
+        onSaveContenders(ps); // save when you finish adding predictions
       },
     });
   };
@@ -199,26 +200,7 @@ const CategoryPersonal = ({
           </BodyBold>
         </View>
       ) : null}
-      {showEventLink ? (
-        <TouchableOpacity
-          onPress={() => {
-            navigation.dispatch(StackActions.replace('Event', { userId }));
-          }}
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'flex-end',
-            alignItems: 'center',
-            width: '100%',
-            marginRight: theme.windowMargin,
-            marginTop: 10,
-          }}
-        >
-          <>
-            <SubHeader>Go To Event</SubHeader>
-            <CustomIcon name={'chevron-right'} />
-          </>
-        </TouchableOpacity>
-      ) : null}
+      {showEventLink ? <EventLink userId={userId} /> : null}
       <Animated.ScrollView
         style={{
           display: delayedDisplay === 'grid' ? 'flex' : 'none',
