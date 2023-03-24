@@ -43,7 +43,7 @@ const Settings = () => {
     // alert user that this is permanent
     Alert.alert(
       'Delete Account',
-      'Are you sure? This action cannot be undone.',
+      'This removes your profile and relationships with other users permanently.',
       [
         {
           text: 'Cancel',
@@ -53,8 +53,8 @@ const Settings = () => {
           text: 'Delete',
           onPress: () => {
             Alert.alert(
-              'Are you sure?',
-              'This removes your history, all predictions, follower relationships, and profile info from our records permanently.',
+              'Delete account',
+              'Are you sure? This action cannot be undone.',
               [
                 {
                   text: 'Cancel',

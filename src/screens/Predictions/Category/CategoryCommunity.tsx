@@ -9,7 +9,9 @@ import theme from '../../../constants/theme';
 import { useCategory } from '../../../context/CategoryContext';
 import { iCategory } from '../../../types';
 import { formatLastUpdated } from '../../../util/formatDateTime';
+import EventLink from './EventLink';
 
+// Note: We ALSO use this for non-authenticated user profiles
 const CategoryCommunity = ({
   collapsedOpacity,
   expandedOpacity,
@@ -17,6 +19,7 @@ const CategoryCommunity = ({
   gridOpacity,
   predictionData,
   isIndividualProfile,
+  showEventLink,
 }: iCategoryProps & { isIndividualProfile?: boolean }) => {
   const { category: _category, date } = useCategory();
 
@@ -43,12 +46,13 @@ const CategoryCommunity = ({
           }}
         >
           <BodyBold>
-            {!isHistory
+            {!isHistory && !isIndividualProfile
               ? 'Community predictions not yet tallied'
               : 'No predictions for this date'}
           </BodyBold>
         </View>
       ) : null}
+      {showEventLink ? <EventLink userId={undefined} /> : null}
       <Animated.ScrollView
         style={{
           display: delayedDisplay === 'grid' ? 'flex' : 'none',

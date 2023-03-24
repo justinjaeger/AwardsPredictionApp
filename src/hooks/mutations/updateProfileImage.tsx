@@ -38,6 +38,9 @@ const useUpdateProfileImage = (onComplete?: () => void) => {
       await queryClient.invalidateQueries({
         queryKey: [QueryKeys.USER_PROFILE],
       });
+      await queryClient.invalidateQueries({
+        queryKey: [QueryKeys.USER],
+      });
       setIsComplete(true);
       onComplete && onComplete();
     },

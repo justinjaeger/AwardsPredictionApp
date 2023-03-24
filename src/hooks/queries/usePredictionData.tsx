@@ -11,7 +11,7 @@ const usePredictionData = (tab: 'community' | 'personal', userId?: string) => {
 
   const today = new Date();
   // we don't want to show history for the current day
-  const showHistory = date && date.getDay() !== today.getDay();
+  const showHistory = date && date.getDate() !== today.getDate();
 
   // Contemporary predictions
   const {

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   DeleteHistoryPredictionMutation,
   DeleteHistoryPredictionMutationVariables,
@@ -20,6 +21,8 @@ import {
   ListPredictionsQueryVariables,
   ListRelationshipsQuery,
   ListRelationshipsQueryVariables,
+  UpdateUserMutation,
+  UpdateUserMutationVariables,
 } from '../../API';
 import * as mutations from '../../graphql/mutations';
 import { ListPredictionSetsQuery } from '../../graphqlCustom/types';
@@ -439,13 +442,34 @@ const deleteUser = async (id: string): Promise<iApiResponse<DeleteUserMutation>>
   return { status: 'success', data: data };
 };
 
-// NOTE: When executing this, also need to delete from cognito pool via AuthServices
+const wipeUserInfo = async (id: string): Promise<iApiResponse<UpdateUserMutation>> => {
+  const { data, errors } = await GraphqlAPI<
+    UpdateUserMutation,
+    UpdateUserMutationVariables
+  >(mutations.updateUser, {
+    input: {
+      id,
+      email: undefined,
+      username: undefined,
+      name: undefined,
+      bio: undefined,
+      image: undefined,
+    },
+  });
+  if (!data?.updateUser) {
+    throw new Error(JSON.stringify(errors));
+  }
+  return { status: 'success', data: data };
+};
+
 // Should catch all exceptions since no nested functions are try/catch
 export const permanentlyDeleteUser = async (id: string): Promise<iApiResponse<any>> => {
   try {
     await removeAllRelationships(id);
-    await deleteAllUserPredictions(id);
-    await deleteUser(id);
+    // I don't think this is that important to do
+    // await deleteAllUserPredictions(id);
+    // deleting user can be deleting all info except for id
+    await wipeUserInfo(id);
     return { status: 'success' };
   } catch (err) {
     return handleError('error permanently deleting user', err);

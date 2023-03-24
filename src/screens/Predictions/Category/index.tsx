@@ -86,12 +86,13 @@ const Category = () => {
         <CategoryPersonal
           predictionData={personalPredictionData}
           isLoading={personalIsLoading}
-          showEventLink={showEventLink}
+          showEventLink={showEventLink && !isEditing}
           {...props}
         />,
         <CategoryCommunity
           predictionData={communityPredictionData}
           isLoading={communityIsLoading}
+          showEventLink={showEventLink && !isEditing}
           {...props}
         />,
       )}
