@@ -18,6 +18,7 @@ import { RouteProp, StackActions, useRoute } from '@react-navigation/native';
 import usePredictionData from '../../../hooks/queries/usePredictionData';
 import FollowingBottomScroll from '../../../components/FollowingBottomScroll';
 import { iCategoryDisplayState } from '../../../context/DisplayStateContext';
+import useQueryPersonalCategoryPredictions from '../../../hooks/queries/useQueryGetPersonalCategoyPredictions';
 
 export type iCategoryProps = {
   collapsedOpacity: Animated.Value;
@@ -48,9 +49,9 @@ const Category = () => {
   } = useCategoryDisplay();
 
   const {
-    predictionData: personalPredictionData,
+    predictions: personalPredictionData,
     isLoading: personalIsLoading,
-  } = usePredictionData('personal', userId);
+  } = useQueryPersonalCategoryPredictions({ userId, categoryId: category?.id });
   const {
     predictionData: communityPredictionData,
     isLoading: communityIsLoading,
