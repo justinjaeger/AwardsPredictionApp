@@ -39,6 +39,7 @@ const CategoryPersonal = ({
   predictionData,
   isLoading,
   showEventLink,
+  allIsLoading, // this also disables editing while true
 }: iCategoryProps) => {
   const {
     category: _category,
@@ -63,7 +64,7 @@ const CategoryPersonal = ({
 
   useEffect(() => {
     navigation.setOptions({
-      headerRight: () => <HistoryHeaderButton isDisabled={!!isEditing} />,
+      headerRight: () => <HistoryHeaderButton isDisabled={isEditing} />,
     });
   }, [isEditing]);
 
@@ -218,7 +219,7 @@ const CategoryPersonal = ({
             isDisabled={isHistory}
             style={{ top: -35 }}
           />
-          <MovieGrid predictions={predictions} />
+          <MovieGrid predictions={predictions} allIsLoading={allIsLoading} />
         </Animated.View>
       </Animated.ScrollView>
       <Animated.View
@@ -233,6 +234,7 @@ const CategoryPersonal = ({
           lastUpdatedString={lastUpdatedString}
           isAuthProfile={isAuthUserProfile}
           onPressAdd={onPressAdd}
+          allIsLoading={allIsLoading}
         />
       </Animated.View>
       <Animated.View
@@ -248,6 +250,7 @@ const CategoryPersonal = ({
           isCollapsed
           isAuthProfile={isAuthUserProfile}
           onPressAdd={onPressAdd}
+          allIsLoading={allIsLoading}
         />
       </Animated.View>
       {isPad ? (

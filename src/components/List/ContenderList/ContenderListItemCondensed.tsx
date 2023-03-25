@@ -13,31 +13,14 @@ import theme from '../../../constants/theme';
 import { useCategory } from '../../../context/CategoryContext';
 import { iCachedTmdbMovie, iCachedTmdbPerson } from '../../../services/cache/types';
 import TmdbServices from '../../../services/tmdb';
-import { iCategory, iEvent, iPrediction } from '../../../types';
+import { iCategory, iEvent } from '../../../types';
 import useDevice from '../../../util/device';
 import { getNumPredicting } from '../../../util/getNumPredicting';
 import { useAsyncEffect } from '../../../util/hooks';
 import { IconButton } from '../../Buttons/IconButton';
 import { Body, SubHeader } from '../../Text';
 import AccoladeTag from './AccoladeTag';
-
-type iContenderListItemProps = {
-  variant: 'community' | 'personal' | 'selectable' | 'search';
-  prediction: iPrediction;
-  categoryType: CategoryType;
-  ranking: number;
-  selected: boolean;
-  disabled?: boolean;
-  highlighted?: boolean;
-  posterWidth?: number;
-  draggable?: {
-    isActive: boolean;
-    drag: () => void;
-  };
-  onPressItem: (prediction: iPrediction) => void;
-  onPressThumbnail?: (prediction: iPrediction) => void;
-  isAuthProfile?: boolean;
-};
+import { iContenderListItemProps } from './ContenderListItem';
 
 const ContenderListItemCondensed = (props: iContenderListItemProps) => {
   const {
@@ -49,6 +32,7 @@ const ContenderListItemCondensed = (props: iContenderListItemProps) => {
     categoryType,
     onPressItem,
     isAuthProfile,
+    disableEditing: _disableEditing,
   } = props;
   const { isActive, drag } = draggable || {};
   const { width: windowWidth } = useWindowDimensions();
@@ -58,7 +42,7 @@ const ContenderListItemCondensed = (props: iContenderListItemProps) => {
 
   const { category: _category, event: _event, date } = useCategory();
   const isHistory = !!date;
-  const disableEditing = isHistory || !isAuthProfile;
+  const disableEditing = _disableEditing || isHistory || !isAuthProfile;
   const category = _category as iCategory;
   const event = _event as iEvent;
 

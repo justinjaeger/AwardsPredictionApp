@@ -43,6 +43,7 @@ export type iContenderListItemProps = {
   onPressItem: (prediction: iPrediction) => void;
   onPressThumbnail?: (prediction: iPrediction) => void;
   isAuthProfile?: boolean;
+  disableEditing?: boolean;
 };
 
 const TIMING = 250;

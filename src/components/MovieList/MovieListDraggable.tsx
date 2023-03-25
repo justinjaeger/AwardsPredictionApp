@@ -13,6 +13,7 @@ import ContenderListItem, {
   iContenderListItemProps,
 } from '../List/ContenderList/ContenderListItem';
 import ContenderListItemCondensed from '../List/ContenderList/ContenderListItemCondensed';
+import LoadingStatue from '../LoadingStatue';
 import { SubHeader } from '../Text';
 
 type iMovieListProps = {
@@ -21,6 +22,7 @@ type iMovieListProps = {
   lastUpdatedString: string;
   isCollapsed?: boolean;
   isAuthProfile?: boolean;
+  allIsLoading?: boolean;
   onPressAdd: () => void;
 };
 
@@ -31,6 +33,7 @@ const MovieListDraggable = ({
   lastUpdatedString,
   isAuthProfile,
   onPressAdd,
+  allIsLoading,
 }: iMovieListProps) => {
   const { event: _event, category: _category, date } = useCategory();
   const isHistory = !!date;
@@ -79,7 +82,11 @@ const MovieListDraggable = ({
         />
       }
       ListFooterComponent={
-        isAuthProfile && !isHistory ? (
+        allIsLoading ? (
+          <View style={{ width: '100%', alignItems: 'center' }}>
+            <LoadingStatue />
+          </View>
+        ) : isAuthProfile && !isHistory ? (
           <View style={{ width: '100%', alignItems: 'center', marginTop: 40 }}>
             <TouchableHighlight
               style={{
@@ -114,6 +121,7 @@ const MovieListDraggable = ({
           selected: selectedContenderId === prediction.contenderId,
           onPressItem,
           onPressThumbnail,
+          disableEditing: allIsLoading,
           draggable: {
             drag,
             isActive,

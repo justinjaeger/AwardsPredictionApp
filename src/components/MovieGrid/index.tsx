@@ -8,16 +8,24 @@ import theme from '../../constants/theme';
 import { useCategory } from '../../context/CategoryContext';
 import { iPrediction } from '../../types';
 import PosterFromTmdbId from '../Images/PosterFromTmdbId';
+import LoadingStatue from '../LoadingStatue';
 
-const MovieGrid = (props: {
+const MovieGrid = ({
+  predictions,
+  isCollapsed,
+  totalWidth: _totalWidth,
+  style,
+  allIsLoading,
+  noLine: _noLine,
+}: {
   predictions: iPrediction[];
   isCollapsed?: boolean;
   noLine?: boolean;
   totalWidth?: number;
   style?: StyleProp<ViewStyle>;
+  allIsLoading?: boolean;
 }) => {
-  const { predictions, isCollapsed, totalWidth: _totalWidth, style } = props;
-  let noLine = props.noLine;
+  let noLine = _noLine;
   const { width } = useWindowDimensions();
   const totalWidth = _totalWidth || width;
   const { event, category } = useCategory();
@@ -80,6 +88,11 @@ const MovieGrid = (props: {
           ) : null}
         </View>
       ))}
+      {allIsLoading ? (
+        <View style={{ width: '100%', alignItems: 'center' }}>
+          <LoadingStatue />
+        </View>
+      ) : null}
     </View>
   );
 };

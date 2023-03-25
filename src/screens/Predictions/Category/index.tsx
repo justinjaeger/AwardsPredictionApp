@@ -28,6 +28,7 @@ export type iCategoryProps = {
   userId: string | undefined;
   predictionData: iIndexedPredictionsByCategory | undefined;
   isLoading: boolean;
+  allIsLoading?: boolean;
   showEventLink?: boolean;
 };
 
@@ -48,10 +49,20 @@ const Category = () => {
     expandedOpacity,
   } = useCategoryDisplay();
 
+  // this loads the top slots initially+immediately, because we already fetched this data if coming from an event
+  // TODO: If loading just a category, we don't need to getch the first query, we only want the second
   const {
-    predictions: personalPredictionData,
-    isLoading: personalIsLoading,
+    predictionData: initialPredictions,
+    isLoading: initialPredictionsIsLoading,
+  } = usePredictionData('personal', userId);
+  // but this loads ALL the predictions for the category, and replaces the top result once it loads
+  const {
+    predictions: allPredictions,
+    isLoading: allPredictionsIsLoading,
   } = useQueryPersonalCategoryPredictions({ userId, categoryId: category?.id });
+
+  const personalPredictionData = allPredictions || initialPredictions;
+
   const {
     predictionData: communityPredictionData,
     isLoading: communityIsLoading,
@@ -86,7 +97,8 @@ const Category = () => {
       {PredictionTabsNavigator(
         <CategoryPersonal
           predictionData={personalPredictionData}
-          isLoading={personalIsLoading}
+          isLoading={initialPredictionsIsLoading}
+          allIsLoading={allPredictionsIsLoading}
           showEventLink={showEventLink && !isEditing}
           {...props}
         />,
