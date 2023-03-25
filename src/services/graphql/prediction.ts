@@ -8,6 +8,7 @@ import {
   DeletePredictionSetMutation,
   DeletePredictionSetMutationVariables,
   ListPredictionSetsQueryVariables,
+  ModelPredictionSetFilterInput,
   PredictionSetByUserIdAndEventIdQueryVariables,
   PredictionType,
 } from '../../API';
@@ -172,6 +173,92 @@ export const getPredictionSets = async (
     return handleError('error getting prediction set', err);
   }
 };
+
+// declare the request
+export const getPersonalPredictionsByEventLimitSlots = async (
+  userId: string,
+  filter: ModelPredictionSetFilterInput,
+  predictionLimit: number,
+): Promise<iApiResponse<PredictionSetByUserIdAndEventIdQuery>> => {
+  const { data: maybePreSets, errors } = await GraphqlAPI<
+    PredictionSetByUserIdAndEventIdQuery,
+    PredictionSetByUserIdAndEventIdQueryVariables & { predictionLimit: number }
+  >(customQueries.predictionSetByUserIdAndEventId, {
+    userId,
+    filter,
+    predictionLimit,
+  });
+  if (!maybePreSets?.predictionSetByUserIdAndEventId) {
+    throw new Error(JSON.stringify(errors));
+  }
+  return { status: 'success', data: maybePreSets };
+};
+
+// Returns exactly the number of predictions per slots specified in the category
+// export const getPersonalPredictionsByEventLimitSlots = async (
+//   event: iEvent,
+//   userId: string,
+//   defaultSlots?: number,
+// ): Promise<iApiResponse<PredictionSetByUserIdAndEventIdQuery[]>> => {
+//   const SLOTS = defaultSlots || 5;
+//   const awardsBodyCategories = getAwardsBodyCategories(event.awardsBody, event.year);
+//   // group by slots
+//   const iterable = _.entries(awardsBodyCategories).filter(([, c]) => c !== undefined); // [{ 10: { catData} }]
+//   const grouped = _.groupBy(iterable, ([, c]) => c?.slots || SLOTS); // { 10: [PICTURE: {}], 5: [DIRECTOR: {}] }
+
+//   // get categories that deviate from default num of slots
+//   // we do this for deviant categories because it costs to fetch their ids, which are required to filter predictions
+//   const categoriesWithNotDeviantSlotNum = _.entries(grouped).filter(
+//     ([k]) => k !== SLOTS.toString(),
+//   );
+
+//   try {
+//     // get categories that have deviant num of slots
+
+//     // push requests to array
+//     const categoryRequests = [];
+//     for (const [, categories] of categoriesWithNotDeviantSlotNum) {
+//       const categoryNames = categories.map(([k]) => k) as CategoryName[];
+//       categoryRequests.push(getCategoriesByName(categoryNames));
+//     }
+//     // execute all requests
+//     const results = await Promise.all(categoryRequests);
+
+//     // format requests as: { 10: [catId1, catId2], 5: [catId3, catId4] }
+//     const slotsToCategoryIds: { [slots: string]: string[] } = {};
+//     const iterableSlots = categoriesWithNotDeviantSlotNum.map(([k]) => k);
+//     for (let i = 0; i < results.length; i++) {
+//       const { data } = results[i];
+//       const categoryIds = data?.listCategories?.items.map((c) => c?.id || '') || [];
+//       slotsToCategoryIds[iterableSlots[i]] = categoryIds;
+//     }
+
+//     const requests: Promise<PredictionSetByUserIdAndEventIdQuery>[] = [];
+
+//     // loop through deviant slot categories and fetch [key] number of predictions for each of these categories
+//     for (const [slots, categoryIds] of _.entries(slotsToCategoryIds)) {
+//       const req = fetch(
+//         { or: categoryIds.map((id) => ({ categoryId: { eq: id } })) },
+//         parseInt(slots, 10),
+//       );
+//       requests.push(req);
+//     }
+
+//     // fetch remaining non-deviant predictions
+//     const allDeviantCategoryIds = _.flatten(Object.values(slotsToCategoryIds));
+//     const req = fetch(
+//       { and: allDeviantCategoryIds.map((id) => ({ categoryId: { ne: id } })) },
+//       SLOTS,
+//     );
+//     requests.push(req);
+
+//     const output = await Promise.all(requests);
+
+//     return { status: 'success', data: output };
+//   } catch (err) {
+//     return handleError('error getting personal predictions by event', err);
+//   }
+// };
 
 export const getPersonalPredictionsByEvent = async (
   eventId: string,

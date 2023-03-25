@@ -19,7 +19,7 @@ const useQueryCommunityOrPersonalEvent = (
     queryFn:
       tab === 'community'
         ? () => getCommunityPredictionsByEvent(event.id, includeHidden)
-        : () => getPersonalPredictionsByEvent(event.id, userId),
+        : () => getPersonalPredictionsByEvent(event, userId),
     enabled: tab === 'personal' ? fetchPersonalEnabled : true,
   });
 

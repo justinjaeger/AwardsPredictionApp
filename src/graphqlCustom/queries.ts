@@ -186,7 +186,7 @@ export const communityPredictionSetByEventId = /* GraphQL */ `
           createdAt
           updatedAt
         }
-        predictions {
+        predictions(filter: { ranking: { le: 5 } }) {
           items {
             id
             communityPredictionSetId
@@ -237,6 +237,7 @@ export const predictionSetByUserIdAndEventId = /* GraphQL */ `
     $sortDirection: ModelSortDirection
     $filter: ModelPredictionSetFilterInput
     $limit: Int
+    $predictionLimit: Int
     $nextToken: String
   ) {
     predictionSetByUserIdAndEventId(
@@ -258,7 +259,7 @@ export const predictionSetByUserIdAndEventId = /* GraphQL */ `
           createdAt
           updatedAt
         }
-        predictions {
+        predictions(filter: { ranking: { le: $predictionLimit } }) {
           items {
             id
             predictionSetId
