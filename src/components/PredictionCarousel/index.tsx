@@ -93,6 +93,10 @@ const PredictionCarousel = ({
     tempDisableManualScroll();
   };
 
+  if (predictionSets.length === 0) {
+    return null;
+  }
+
   return (
     <>
       {userInfo ? (
