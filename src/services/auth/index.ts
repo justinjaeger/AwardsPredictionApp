@@ -119,6 +119,17 @@ const googleSignIn = async (): Promise<iApiResponse<any>> => {
   }
 };
 
+const appleSignIn = async (): Promise<iApiResponse<any>> => {
+  try {
+    await Auth.federatedSignIn({
+      provider: CognitoHostedUIIdentityProvider.Apple,
+    });
+    return { status: 'success' };
+  } catch (error) {
+    return handleError('Error deleting user.', error);
+  }
+};
+
 const AuthServices = {
   signUp,
   signIn,
@@ -129,6 +140,7 @@ const AuthServices = {
   resendSignUp,
   deleteUser,
   googleSignIn,
+  appleSignIn,
 };
 
 export default AuthServices;

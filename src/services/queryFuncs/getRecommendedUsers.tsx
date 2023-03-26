@@ -12,7 +12,9 @@ const getUniqueUsersWhoAreNotUs = (users: iUser[], authUserId: string | undefine
   users.filter((user, index, self) => {
     const isDuplicate = index === self.findIndex((u) => u.id === user.id);
     const isNotUs = user.id !== authUserId;
-    return isDuplicate && isNotUs;
+    // ...AND get users who actually have a username
+    const userHasNameOrUsername = user.username || user.name;
+    return isDuplicate && isNotUs && userHasNameOrUsername;
   });
 
 // TODO: We don't actually know if this works, need to test with many more users, all of whom are following people

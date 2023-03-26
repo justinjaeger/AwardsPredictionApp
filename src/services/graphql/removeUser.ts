@@ -443,17 +443,19 @@ const deleteUser = async (id: string): Promise<iApiResponse<DeleteUserMutation>>
 };
 
 const wipeUserInfo = async (id: string): Promise<iApiResponse<UpdateUserMutation>> => {
+  const randomSixDigits = Math.floor(100000 + Math.random() * 900000);
+  const newEmail = `deleted-user-${randomSixDigits}`;
   const { data, errors } = await GraphqlAPI<
     UpdateUserMutation,
     UpdateUserMutationVariables
   >(mutations.updateUser, {
     input: {
       id,
-      email: undefined,
-      username: undefined,
-      name: undefined,
-      bio: undefined,
-      image: undefined,
+      email: newEmail,
+      username: null,
+      name: null,
+      bio: null,
+      image: null,
     },
   });
   if (!data?.updateUser) {

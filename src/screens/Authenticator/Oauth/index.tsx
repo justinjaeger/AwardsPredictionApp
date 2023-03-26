@@ -7,8 +7,9 @@ import GoogleOauthButton from './GoogleOauthButton';
 import useGoogleSignIn from './useGoogleSignIn';
 // @ts-ignore - it exists
 import AppIcon from '../../../assets/branding/icon.jpg';
+import AppleOauthButton from './AppleOauthButton';
 
-const GoogleOauthPage = () => {
+const OauthPage = () => {
   const { isLoading, isError } = useGoogleSignIn();
   const { width } = useWindowDimensions();
 
@@ -51,6 +52,7 @@ const GoogleOauthPage = () => {
             }}
           />
           <GoogleOauthButton />
+          <AppleOauthButton />
           {isError ? (
             <View style={{ width: '100%', alignItems: 'center', marginTop: 40 }}>
               <Body style={errorTextStyles}>{'Sorry, an error has occured.'}</Body>
@@ -76,4 +78,4 @@ const GoogleOauthPage = () => {
   );
 };
 
-export default GoogleOauthPage;
+export default OauthPage;
