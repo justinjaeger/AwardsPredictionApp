@@ -162,7 +162,7 @@ const EventList = ({
                         <View style={{ alignItems: 'flex-end' }}>
                           <Body
                             style={{
-                              color: isSubtle ? COLORS.secondary : COLORS.white,
+                              color: isSubtle ? COLORS.gray : COLORS.white,
                             }}
                           >
                             {closeTime === '' ? '' : `Closes: ${closeTime}`}
