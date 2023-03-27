@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { Alert, ScrollView, View } from 'react-native';
 import Snackbar from '../../components/Snackbar';
 import { useNavigation } from '@react-navigation/native';
@@ -38,6 +38,11 @@ const UpdateProfileInfo = () => {
   const enableSubmitName = nameBeforeEdit !== name && validName;
 
   const submitEnabled = enableSubmitUsername || enableSubmitName;
+
+  useEffect(() => {
+    setName(user?.name || '');
+    setUsername(user?.username || '');
+  }, [user?.name, user?.username]);
 
   useLayoutEffect(() => {
     // This is the best way to change the header
@@ -126,7 +131,7 @@ const UpdateProfileInfo = () => {
           />
           {usernameBeforeEdit ? null : (
             <BodyBold style={{ textAlign: 'center', marginBottom: 20, marginTop: 20 }}>
-              {'You MUST create a username \n so other users can find you'}
+              {'Creating a username lets\nother users find you'}
             </BodyBold>
           )}
           <SubmitButton

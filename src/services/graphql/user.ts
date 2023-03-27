@@ -207,7 +207,10 @@ export const createTestUser = async (
       throw new Error('An error occured fetching users with this username');
     }
     if (maybeUs.length !== 0) {
-      throw new Error('This username is already taken');
+      return {
+        status: 'error',
+        message: 'This username is already taken',
+      };
     }
     // Create user
     const { data, errors } = await GraphqlAPI<
@@ -240,7 +243,10 @@ export const updateUsername = async (
         throw new Error('An error occured fetching users with this username');
       }
       if (maybeUsers.length !== 0) {
-        throw new Error('This username is already taken');
+        return {
+          status: 'error',
+          message: 'This username is already taken',
+        };
       }
     }
     const input: UpdateUserInput = { id };

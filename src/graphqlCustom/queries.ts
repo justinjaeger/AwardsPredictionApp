@@ -981,6 +981,7 @@ export const searchRecommendedFollowing = /* GraphQL */ `
               followedUser {
                 # Ron follows Cole, but I might follow Cole
                 id
+                email
                 image
                 name
                 username
@@ -1015,6 +1016,7 @@ export const searchRecommendedFollowingSignedOut = /* GraphQL */ `
             items {
               followedUser {
                 id
+                email
                 image
                 name
                 username

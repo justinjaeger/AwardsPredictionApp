@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import COLORS from '../../constants/colors';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import GoogleOauthPage from './GoogleOauth';
+import OauthPage from './Oauth';
 import AuthRoot from './Root';
 import BackButton from '../../components/Buttons/BackButton';
 import SafeAreaViewFixed from '../../components/SafeAreaViewFixed';
@@ -30,7 +30,7 @@ const AuthTabs = () => {
           activeTintColor: COLORS.primary,
         }}
       >
-        <Tab.Screen name="Gmail" component={GoogleOauthPage} />
+        <Tab.Screen name="Social" component={OauthPage} />
         <Tab.Screen name="Email" component={AuthRoot} />
       </Tab.Navigator>
     </SafeAreaViewFixed>

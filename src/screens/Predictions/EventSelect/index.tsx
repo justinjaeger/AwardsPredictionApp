@@ -11,6 +11,7 @@ import useQueryGetFollowingRecentPredictions from '../../../hooks/queries/useQue
 import PredictionCarousel from '../../../components/PredictionCarousel';
 import { useLoading } from '../../../hooks/animatedState/useLoading';
 import theme from '../../../constants/theme';
+import RecommendedUsers from '../../../components/RecommendedUsers';
 
 const EventSelect = () => {
   const { width } = useWindowDimensions();
@@ -72,6 +73,10 @@ const EventSelect = () => {
             Make Predictions
           </HeaderLight>
           {events ? <EventList user={user} events={Object.values(events)} /> : null}
+          {!userId ? (
+            // users not signed in can see recommended users
+            <RecommendedUsers header={'Follow Users'} />
+          ) : null}
           {(usersWithRecentPredictionSets || []).length > 0 ? (
             <>
               <HeaderLight

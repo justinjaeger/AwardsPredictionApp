@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import { Spinner } from '@ui-kitten/components';
 import React, { useState } from 'react';
 import { Alert, StyleProp, TouchableHighlight, ViewStyle } from 'react-native';
@@ -17,13 +18,12 @@ const FollowButton = ({
   style?: StyleProp<ViewStyle>;
 }) => {
   const { userId: authUserId } = useAuth();
+  const navigation = useNavigation();
 
   const { mutate: updateRelationship, isComplete } = useUpdateRelationship();
 
   // just to display the updated value
   const [isFollowing, setIsFollowing] = useState(authUserIsFollowing);
-
-  if (!authUserId) return null; // if user not signed in, don't show follow button
 
   return (
     <TouchableHighlight
@@ -37,8 +37,9 @@ const FollowButton = ({
         style,
       ]}
       onPress={async () => {
-        if (!profileUserId) return {};
-        if (isFollowing) {
+        if (!authUserId) {
+          navigation.navigate('Authenticator');
+        } else if (isFollowing) {
           // warn before they unfollow?
           Alert.alert('Unfollow user?', '', [
             {
@@ -59,6 +60,7 @@ const FollowButton = ({
             },
           ]);
         } else {
+          if (!authUserId) return;
           await updateRelationship({ action: 'follow', profileUserId, authUserId });
           setIsFollowing(true);
         }

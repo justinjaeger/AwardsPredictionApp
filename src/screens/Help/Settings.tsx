@@ -11,7 +11,7 @@ import ApiServices from '../../services/graphql';
 import { useNavigateAwayEffect } from '../../util/hooks';
 
 const Settings = () => {
-  const { userId } = useAuth();
+  const { userId, signOutUser } = useAuth();
   const [deletionStatus, setDeletionStatus] = useState<
     'isLoading' | 'error' | 'success' | undefined
   >('error');
@@ -37,6 +37,14 @@ const Settings = () => {
     if (authRes.status !== 'success') {
       handleError();
     }
+    setDeletionStatus('success');
+    // then log the user out
+    AuthServices.signOut().then((res) => {
+      // sign out in context as well
+      if (res.status === 'success') {
+        signOutUser();
+      }
+    });
   };
 
   const onPressDelete = () => {

@@ -4,6 +4,9 @@ import ApiServices from '../graphql';
 
 type iPaginatedUserResult = Promise<{ users: iUser[]; nextToken: string | undefined }>;
 
+const TEST_USER_EMAILS = ['ronjaeger@icloud.com', 'test@test.com'];
+const TEST_USER_IMAGE_PREFIX = ['fjw8rchrbb'];
+
 const NUM_USERS_TO_FETCH = 15;
 
 // filter out duplicates (users could be following the same person)
@@ -12,7 +15,14 @@ const getUniqueUsersWhoAreNotUs = (users: iUser[], authUserId: string | undefine
   users.filter((user, index, self) => {
     const isDuplicate = index === self.findIndex((u) => u.id === user.id);
     const isNotUs = user.id !== authUserId;
-    return isDuplicate && isNotUs;
+    // ...AND get users who actually have a username
+    const userHasNameOrUsername = user.username || user.name;
+    // ...AND not test user accounts (prod only)
+    const maybeAppleTestUserId = (user?.image || '').split('.')[0].slice(0, -6); // the test user email is never exposed so this is a workaround
+    const isNotTestUser =
+      !TEST_USER_EMAILS.includes(user?.email) &&
+      !TEST_USER_IMAGE_PREFIX.includes(maybeAppleTestUserId);
+    return isDuplicate && isNotUs && userHasNameOrUsername && isNotTestUser;
   });
 
 // TODO: We don't actually know if this works, need to test with many more users, all of whom are following people
@@ -47,7 +57,7 @@ const getRecommendedUsers = async (
           // some of these values we don't care about or use so they can be default
           acc.push({
             id: recommendedUser?.id || '',
-            email: '',
+            email: recommendedUser?.email || '',
             role: UserRole.USER,
             username: recommendedUser?.username || undefined,
             name: recommendedUser?.name || undefined,
@@ -78,9 +88,9 @@ const getRecommendedUsers = async (
 
   // if we returned zero users, it means we couldn't find enough recommendations from friends. So, try to get random recommendations
   if (returnedZeroUsers) {
-    const returnCount = await fetchPage(true);
-    if (returnCount === 0) {
-      // if STILL zero, just get random users. Other requests try to get users who others follow, who are already popular. This is just purely random
+    await fetchPage(true); // fetches random users, but still returns who a user is following instead of the user
+    if (finalUsers.length < NUM_USERS_TO_FETCH) {
+      // if STILL less, just get random users. Other requests try to get users who others follow, who are already popular. This is just purely random
       const Request = authUserId
         ? ApiServices.getUsersNotFollowing(authUserId)
         : ApiServices.getAllUsers();
