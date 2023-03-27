@@ -3,7 +3,7 @@ import { Animated } from 'react-native';
 
 const TIMING = 300;
 
-export const useLoading = (isLoading: boolean) => {
+export const useLoading = (isLoading: boolean, deps?: any) => {
   const loadingOpacity = useRef(new Animated.Value(1)).current;
   const bodyOpacity = useRef(new Animated.Value(0)).current;
 
@@ -20,7 +20,7 @@ export const useLoading = (isLoading: boolean) => {
         useNativeDriver: true,
       }).start();
     }, 250);
-  }, [isLoading]);
+  }, [isLoading, ...(deps || [])]);
 
   return { loadingOpacity, bodyOpacity };
 };
