@@ -506,7 +506,7 @@
 					"\"${PODS_ROOT}/Headers/Public/LinkingIOS\"",
 				);
 				INFOPLIST_FILE = awardspredictionapp/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Oscar Expert";
+				INFOPLIST_KEY_CFBundleDisplayName = "Award Expert";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -592,7 +592,7 @@
 					"\"${PODS_ROOT}/Headers/Public/LinkingIOS\"",
 				);
 				INFOPLIST_FILE = awardspredictionapp/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Oscar Expert";
+				INFOPLIST_KEY_CFBundleDisplayName = "Award Expert";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
