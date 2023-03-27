@@ -24,7 +24,12 @@ const Followers = () => {
 
   return (
     <BackgroundWrapper>
-      <UserSearchResult users={users} onEndReached={fetchPage} isLoading={isLoading} />
+      <UserSearchResult
+        users={users}
+        onEndReached={fetchPage}
+        isLoading={isLoading}
+        noHeader
+      />
     </BackgroundWrapper>
   );
 };

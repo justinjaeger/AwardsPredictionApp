@@ -4,8 +4,11 @@ import ApiServices from '../graphql';
 
 type iPaginatedUserResult = Promise<{ users: iUser[]; nextToken: string | undefined }>;
 
-const TEST_USER_EMAILS = ['ronjaeger@icloud.com', 'test@test.com'];
-const TEST_USER_IMAGE_PREFIX = ['fjw8rchrbb'];
+const TEST_USER_EMAILS = [
+  'ronjaeger@icloud.com',
+  'test@test.com',
+  'fjw8rchrbb@privaterelay.appleid.com',
+];
 
 const NUM_USERS_TO_FETCH = 15;
 
@@ -18,10 +21,7 @@ const getUniqueUsersWhoAreNotUs = (users: iUser[], authUserId: string | undefine
     // ...AND get users who actually have a username
     const userHasNameOrUsername = user.username || user.name;
     // ...AND not test user accounts (prod only)
-    const maybeAppleTestUserId = (user?.image || '').split('.')[0].slice(0, -6); // the test user email is never exposed so this is a workaround
-    const isNotTestUser =
-      !TEST_USER_EMAILS.includes(user?.email) &&
-      !TEST_USER_IMAGE_PREFIX.includes(maybeAppleTestUserId);
+    const isNotTestUser = !TEST_USER_EMAILS.includes(user?.email);
     return isDuplicate && isNotUs && userHasNameOrUsername && isNotTestUser;
   });
 
@@ -97,7 +97,7 @@ const getRecommendedUsers = async (
       const { data } = await Request;
       const formattedUsers: iUser[] = (data?.listUsers?.items || []).map((u) => ({
         id: u?.id || '',
-        email: '',
+        email: u?.email || '',
         role: UserRole.USER,
         username: u?.username || undefined,
         name: u?.name || undefined,
@@ -112,6 +112,7 @@ const getRecommendedUsers = async (
         [...usersWeDoNotFollow, ...finalUsers],
         authUserId,
       );
+
       finalUsers = uniqueUsersWhoArentUs;
     }
   }
