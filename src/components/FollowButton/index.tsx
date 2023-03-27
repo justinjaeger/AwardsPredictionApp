@@ -25,6 +25,9 @@ const FollowButton = ({
   // just to display the updated value
   const [isFollowing, setIsFollowing] = useState(authUserIsFollowing);
 
+  const isAuthUserProfile = profileUserId === authUserId;
+  if (isAuthUserProfile) return null;
+
   return (
     <TouchableHighlight
       style={[
