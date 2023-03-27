@@ -3,21 +3,24 @@ import { Spinner } from '@ui-kitten/components';
 import React from 'react';
 import { FlatList, TouchableHighlight, View } from 'react-native';
 import COLORS from '../../constants/colors';
+import theme from '../../constants/theme';
 import { useSearch } from '../../context/ContenderSearchContext';
 import { useAuth } from '../../context/UserContext';
 import { iUser } from '../../types';
 import FollowButton from '../FollowButton';
 import ProfileImage from '../ProfileImage';
-import { Body, SubHeader } from '../Text';
+import { Body, HeaderLight, SubHeader } from '../Text';
 
 const UserSearchResult = ({
   users,
   isLoading,
   onEndReached,
+  header,
 }: {
   users: iUser[];
   isLoading?: boolean;
   onEndReached?: () => void;
+  header?: string;
 }) => {
   const { userId: authUserId } = useAuth();
   const navigation = useNavigation();
@@ -46,13 +49,25 @@ const UserSearchResult = ({
     <FlatList
       style={{ width: '100%' }}
       data={users}
-      contentContainerStyle={{ alignItems: 'center' }}
+      contentContainerStyle={{ alignItems: 'flex-start' }}
       keyExtractor={(item) => item.id}
       onEndReached={() => {
         onEndReached && onEndReached();
       }}
       onEndReachedThreshold={0.9} // triggers onEndReached at (X*100)% of list, for example 0.9 = 90% down
       keyboardShouldPersistTaps={'always'} // so keyboard doesn't dismiss when tapping on list
+      ListHeaderComponent={
+        <HeaderLight
+          style={{
+            marginTop: 20,
+            alignSelf: 'flex-start',
+            marginLeft: theme.windowMargin,
+            marginBottom: 10,
+          }}
+        >
+          {header || 'Recommended:'}
+        </HeaderLight>
+      }
       renderItem={({ item }) => {
         const hasOnlyOneName = !(item.name && item.username);
         const isSignedInUser = item.id === authUserId;

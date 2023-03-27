@@ -200,11 +200,11 @@ const Profile = () => {
               alignItems: 'center',
               justifyContent: 'flex-start',
               width: '100%',
-              marginLeft: theme.windowMargin + 20,
+              marginLeft: theme.windowMargin + 10,
               marginTop: 10,
             }}
           >
-            {user && !isAuthUser ? (
+            {user ? (
               <FollowButton
                 authUserIsFollowing={user.authUserIsFollowing || false}
                 profileUserId={user.id}
