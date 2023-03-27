@@ -37,14 +37,6 @@ const UserSearchResult = ({
     );
   }
 
-  if (isLoading) {
-    return (
-      <View style={{ marginTop: 60 }}>
-        <Spinner />
-      </View>
-    );
-  }
-
   return (
     <FlatList
       style={{ width: '100%' }}
@@ -67,6 +59,13 @@ const UserSearchResult = ({
         >
           {header || 'Recommended:'}
         </HeaderLight>
+      }
+      ListFooterComponent={
+        isLoading ? (
+          <View style={{ marginTop: 20, marginLeft: 20 }}>
+            <Spinner />
+          </View>
+        ) : null
       }
       renderItem={({ item }) => {
         const hasOnlyOneName = !(item.name && item.username);
