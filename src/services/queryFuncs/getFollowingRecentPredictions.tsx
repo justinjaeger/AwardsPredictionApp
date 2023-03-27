@@ -127,7 +127,16 @@ const getFollowingRecentPredictions = async (
       return acc;
     }, []);
 
-    return usersWithRecentPredictions;
+    // Sort users by who predicted most recently
+    // because usersWithRecentPredictions should correspond with each includedUserId (since we filtered for that), every "find" operation should return not undefined
+    const sorted = includedUserIds.map((id) => {
+      const user = usersWithRecentPredictions.find((u) => {
+        return u.id === id;
+      }) as iUser; // !!ts - take note if bug, it might be because of this
+      return user;
+    });
+
+    return sorted;
   } catch (error) {
     console.log('error in getFollowingRecentPredictions', error);
     return [];

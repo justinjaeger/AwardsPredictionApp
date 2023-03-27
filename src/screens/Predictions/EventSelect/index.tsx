@@ -76,8 +76,7 @@ const EventSelect = () => {
           {!userId ? (
             // users not signed in can see recommended users
             <RecommendedUsers header={'Follow Users'} />
-          ) : null}
-          {(usersWithRecentPredictionSets || []).length > 0 ? (
+          ) : usersWithRecentPredictionSets ? (
             <>
               <HeaderLight
                 style={{
@@ -89,7 +88,7 @@ const EventSelect = () => {
               >
                 New From Friends
               </HeaderLight>
-              {(usersWithRecentPredictionSets || []).map((u) => (
+              {usersWithRecentPredictionSets.map((u) => (
                 <PredictionCarousel
                   key={u.id}
                   predictionSets={u.predictionSets || []}

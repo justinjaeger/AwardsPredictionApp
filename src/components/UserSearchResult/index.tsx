@@ -1,5 +1,4 @@
 import { StackActions, useNavigation } from '@react-navigation/native';
-import { Spinner } from '@ui-kitten/components';
 import React from 'react';
 import { FlatList, TouchableHighlight, View } from 'react-native';
 import COLORS from '../../constants/colors';
@@ -10,17 +9,22 @@ import { iUser } from '../../types';
 import FollowButton from '../FollowButton';
 import ProfileImage from '../ProfileImage';
 import { Body, HeaderLight, SubHeader } from '../Text';
+import UserListSkeleton from '../Skeletons/UserListSkeleton';
+
+const IMAGE_SIZE = 50;
 
 const UserSearchResult = ({
   users,
   isLoading,
   onEndReached,
   header,
+  noHeader,
 }: {
   users: iUser[];
   isLoading?: boolean;
   onEndReached?: () => void;
   header?: string;
+  noHeader?: boolean;
 }) => {
   const { userId: authUserId } = useAuth();
   const navigation = useNavigation();
@@ -33,9 +37,13 @@ const UserSearchResult = ({
 
   if (users.length === 0 && isSearching && !isLoadingSearch) {
     return (
-      <SubHeader style={{ marginTop: '5%', fontWeight: '700' }}>No Users Found</SubHeader>
+      <SubHeader style={{ marginTop: '5%', fontWeight: '700' }}>
+        {'No Users Found'}
+      </SubHeader>
     );
   }
+
+  const noResults = users.length === 0 && !isLoading;
 
   return (
     <FlatList
@@ -49,24 +57,20 @@ const UserSearchResult = ({
       onEndReachedThreshold={0.9} // triggers onEndReached at (X*100)% of list, for example 0.9 = 90% down
       keyboardShouldPersistTaps={'always'} // so keyboard doesn't dismiss when tapping on list
       ListHeaderComponent={
-        <HeaderLight
-          style={{
-            marginTop: 20,
-            alignSelf: 'flex-start',
-            marginLeft: theme.windowMargin,
-            marginBottom: 10,
-          }}
-        >
-          {header || 'Recommended:'}
-        </HeaderLight>
+        noHeader || noResults ? null : (
+          <HeaderLight
+            style={{
+              marginTop: 20,
+              alignSelf: 'flex-start',
+              marginLeft: theme.windowMargin,
+              marginBottom: 10,
+            }}
+          >
+            {header || 'Recommended:'}
+          </HeaderLight>
+        )
       }
-      ListFooterComponent={
-        isLoading ? (
-          <View style={{ marginTop: 20, marginLeft: 20 }}>
-            <Spinner />
-          </View>
-        ) : null
-      }
+      ListFooterComponent={isLoading ? <UserListSkeleton imageSize={IMAGE_SIZE} /> : null}
       renderItem={({ item }) => {
         const hasOnlyOneName = !(item.name && item.username);
         const isSignedInUser = item.id === authUserId;
@@ -93,7 +97,7 @@ const UserSearchResult = ({
               <View style={{ flexDirection: 'row' }}>
                 <ProfileImage
                   image={item.image}
-                  imageSize={50}
+                  imageSize={IMAGE_SIZE}
                   onPress={() => navigateToProfile(item.id)}
                 />
                 <View
