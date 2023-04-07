@@ -5,8 +5,8 @@ import LinearGradient from 'react-native-linear-gradient';
 
 const BackgroundWrapper = (props: { children: ReactChildren }) => {
   const { width, height } = useWindowDimensions();
-  const f = 10;
-  const dotSpacing = width / f;
+  const spacingFactor = 10;
+  const dotSpacing = width / spacingFactor;
   const dotSize = 6;
   return (
     <LinearGradient
@@ -25,7 +25,7 @@ const BackgroundWrapper = (props: { children: ReactChildren }) => {
           width: width + dotSpacing,
         }}
       >
-        {Array.from({ length: (height / f) * (height / width) }).map(() => (
+        {Array.from({ length: (height / spacingFactor) * (height / width) }).map(() => (
           <View
             style={{
               width: dotSpacing + 1,
@@ -36,7 +36,7 @@ const BackgroundWrapper = (props: { children: ReactChildren }) => {
           >
             <View
               style={{
-                backgroundColor: 'rgba(255,255,255,0.02)',
+                backgroundColor: 'rgba(255,255,255,0.01)',
                 width: dotSize,
                 height: dotSize,
                 borderRadius: 10,

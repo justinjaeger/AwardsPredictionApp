@@ -15,7 +15,7 @@ export const useHeaderSettings = () => {
   };
   const largeHeaderStyle = {
     backgroundColor: COLORS.secondaryDark,
-    height: headerHeight * 2 + top,
+    height: headerHeight * 1.5 + top,
   };
   const headerTitleStyle = { color: COLORS.white };
   const headerSettings: any = {

@@ -1,14 +1,16 @@
 import React from 'react';
-import { Linking, ScrollView, TouchableOpacity, View } from 'react-native';
+import { ScrollView, TouchableOpacity, View } from 'react-native';
 import BackgroundWrapper from '../../components/BackgroundWrapper';
 import { Body, SubHeader } from '../../components/Text';
 import Tmdb from '../../assets/tmdb.svg';
 import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
+import { useNavigation } from '@react-navigation/native';
 
 const PRIVACY_URL = 'https://sites.google.com/view/oscarexpert-predictawards/privacy';
 
 const About = () => {
+  const navigation = useNavigation();
   return (
     <BackgroundWrapper>
       <ScrollView
@@ -17,10 +19,8 @@ const About = () => {
       >
         <TouchableOpacity
           onPress={() => {
-            Linking.canOpenURL(PRIVACY_URL).then((supported) => {
-              if (supported) {
-                Linking.openURL(PRIVACY_URL);
-              }
+            navigation.navigate('WebView', {
+              uri: PRIVACY_URL,
             });
           }}
           style={{

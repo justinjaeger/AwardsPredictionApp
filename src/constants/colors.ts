@@ -7,7 +7,7 @@ const COLORS = {
   secondaryLight: '#F1BE46',
   secondary: '#c49933',
   secondaryMiddle: theme['color-gold-700'],
-  secondaryDark: '#a37400',
+  secondaryDark: '#c48900',
   success: theme['color-success-700'],
   warning: theme['color-warning-400'],
   error: '#BD4040',

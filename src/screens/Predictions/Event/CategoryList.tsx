@@ -84,8 +84,8 @@ const CategoryList = (props: iCategoryListProps) => {
                 style={{
                   color: COLORS.lightest,
                   marginLeft: theme.windowMargin,
-                  marginBottom: isCollapsed ? 0 : theme.windowMargin,
-                  marginTop: isCollapsed ? 5 : theme.windowMargin,
+                  marginBottom: isCollapsed ? 0 : 5,
+                  marginTop: 5,
                 }}
               >
                 {awardsBodyCategories[category.name]?.name || ''}
