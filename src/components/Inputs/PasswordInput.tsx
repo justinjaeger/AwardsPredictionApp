@@ -37,11 +37,15 @@ const PasswordInput = (props: {
       onChangeText={(nextValue) => setValue(nextValue)}
       onBlur={onBlur}
       status={status}
-      textStyle={{ color: COLORS.white }}
       style={{
         marginBottom: 10,
         backgroundColor: COLORS.primary,
         borderColor: COLORS.white,
+      }}
+      textStyle={{
+        color: 'rgba(255,255,255,0.8)',
+        fontSize: 18,
+        padding: 5,
       }}
     />
   );

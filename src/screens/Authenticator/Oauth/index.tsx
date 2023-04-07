@@ -6,8 +6,9 @@ import COLORS from '../../../constants/colors';
 import GoogleOauthButton from './GoogleOauthButton';
 import useGoogleSignIn from './useGoogleSignIn';
 // @ts-ignore - it exists
-import AppIcon from '../../../assets/branding/icon.jpg';
+import AppIcon from '../../../assets/branding/icon.png';
 import AppleOauthButton from './AppleOauthButton';
+import EmailButton from './EmailButton';
 
 const OauthPage = () => {
   const { isLoading, isError } = useGoogleSignIn();
@@ -53,6 +54,7 @@ const OauthPage = () => {
           />
           <GoogleOauthButton />
           <AppleOauthButton />
+          <EmailButton />
           {isError ? (
             <View style={{ width: '100%', alignItems: 'center', marginTop: 40 }}>
               <Body style={errorTextStyles}>{'Sorry, an error has occured.'}</Body>

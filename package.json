@@ -16,7 +16,8 @@
     "lint:prettier": "prettier --check \"**/*.ts\"",
     "bundle-ios": "node node_modules/react-native/local-cli/cli.js bundle --entry-file='./index.js' --bundle-output='./ios/awardspredictionapp/main.jsbundle' --assets-dest='./ios/awardspredictionapp' --dev=false --platform='ios'",
     "bundle-android": "node node_modules/react-native/local-cli/cli.js bundle --entry-file='./index.android.js' --bundle-output='./android/app/src/main/assets/main.jsbundle' --assets-dest='./android/app/src/main/res/' --dev=false --platform='android'",
-    "clean": "react-native-clean-project"
+    "clean": "react-native-clean-project",
+    "postinstall": "patch-package"
   },
   "contributors": [
     {
@@ -46,6 +47,7 @@
     "lodash": "^4.17.21",
     "lottie-react-native": "4.0.2",
     "patch-package": "^6.5.1",
+    "postinstall-postinstall": "^2.1.0",
     "react": "17.0.1",
     "react-native": "0.64.0",
     "react-native-bootsplash": "^3.2.3",

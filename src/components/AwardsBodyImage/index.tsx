@@ -1,11 +1,8 @@
 import React from 'react';
-import { Image } from 'react-native';
 import { AwardsBody } from '../../API';
-import {
-  AWARDS_BODY_TO_IMAGE,
-  AWARDS_BODY_TO_IMAGE_WHITE,
-} from '../../constants/awardsBodies';
 import useDevice from '../../util/device';
+import Trophy from '../../assets/awardsBodies/trophy.svg';
+import TrophyWhite from '../../assets/awardsBodies/trophy_white.svg';
 
 const DEFAULT_SIZE = 60;
 
@@ -15,23 +12,29 @@ const AwardsBodyImage = (props: {
   size?: number;
   style?: any;
 }) => {
-  const { awardsBody, white, size, style } = props;
+  const { white, size } = props;
   const { isPad } = useDevice();
 
   const _size = (size || DEFAULT_SIZE) * (isPad ? 1.5 : 1);
 
-  const source = white
-    ? AWARDS_BODY_TO_IMAGE_WHITE[awardsBody]
-    : AWARDS_BODY_TO_IMAGE[awardsBody];
-
-  return (
-    <Image
-      source={source}
-      width={_size}
-      height={_size}
-      style={{ width: _size, height: _size, ...style }}
-    />
+  return white ? (
+    <TrophyWhite width={_size} height={_size} />
+  ) : (
+    <Trophy width={_size} height={_size} />
   );
+
+  //   const source = white
+  //     ? AWARDS_BODY_TO_IMAGE_WHITE[awardsBody]
+  //     : AWARDS_BODY_TO_IMAGE[awardsBody];
+
+  //   return (
+  //     <Image
+  //       source={source}
+  //       width={_size}
+  //       height={_size}
+  //       style={{ width: _size, height: _size, ...style }}
+  //     />
+  //   );
 };
 
 export default AwardsBodyImage;
