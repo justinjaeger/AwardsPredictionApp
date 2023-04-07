@@ -7,6 +7,7 @@ export type MainParamList = {
   WebView: {
     uri: string;
     title: string;
+    showWebLink?: boolean;
   };
 };
 
