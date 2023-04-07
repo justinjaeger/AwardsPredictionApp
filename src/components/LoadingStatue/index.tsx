@@ -1,6 +1,6 @@
 import React from 'react';
 import AnimatedComponent from '../AnimatedComponent';
-import SpinningStatue from '../../assets/animation/loading_statue.json';
+import LoadingTrophy from '../../assets/animation/loading_trophy.json';
 import useDevice from '../../util/device';
 
 const LoadingStatue = (props: { size?: number }) => {
@@ -9,7 +9,7 @@ const LoadingStatue = (props: { size?: number }) => {
   const _size = size || 200 * (isPad ? 1.5 : 1);
   return (
     <AnimatedComponent
-      source={SpinningStatue}
+      source={LoadingTrophy}
       loop
       autoPlay
       width={_size}

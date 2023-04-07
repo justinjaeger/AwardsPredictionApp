@@ -6,7 +6,7 @@ import COLORS from '../../../constants/colors';
 import GoogleOauthButton from './GoogleOauthButton';
 import useGoogleSignIn from './useGoogleSignIn';
 // @ts-ignore - it exists
-import AppIcon from '../../../assets/branding/icon.jpg';
+import AppIcon from '../../../assets/branding/icon.png';
 import AppleOauthButton from './AppleOauthButton';
 import EmailButton from './EmailButton';
 
