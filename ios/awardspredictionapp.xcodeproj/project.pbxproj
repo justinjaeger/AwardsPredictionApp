@@ -42,6 +42,7 @@
 		832BEEFB6975132179876545 /* Pods-awardspredictionapp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-awardspredictionapp.debug.xcconfig"; path = "Target Support Files/Pods-awardspredictionapp/Pods-awardspredictionapp.debug.xcconfig"; sourceTree = "<group>"; };
 		C1F7F63735A471D3BBC324F1 /* libPods-awardspredictionapp-awardspredictionappTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-awardspredictionapp-awardspredictionappTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CB92F8ADE8FD477E8315231E /* Pods-awardspredictionapp-awardspredictionappTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-awardspredictionapp-awardspredictionappTests.release.xcconfig"; path = "Target Support Files/Pods-awardspredictionapp-awardspredictionappTests/Pods-awardspredictionapp-awardspredictionappTests.release.xcconfig"; sourceTree = "<group>"; };
+		CECAB04429E3B5D4000A7AD8 /* awardspredictionapp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = awardspredictionapp.entitlements; path = awardspredictionapp/awardspredictionapp.entitlements; sourceTree = "<group>"; };
 		D8C889D1A6130DF1AC02A178 /* Pods-awardspredictionapp-awardspredictionappTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-awardspredictionapp-awardspredictionappTests.debug.xcconfig"; path = "Target Support Files/Pods-awardspredictionapp-awardspredictionappTests/Pods-awardspredictionapp-awardspredictionappTests.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -86,6 +87,7 @@
 		13B07FAE1A68108700A75B9A /* awardspredictionapp */ = {
 			isa = PBXGroup;
 			children = (
+				CECAB04429E3B5D4000A7AD8 /* awardspredictionapp.entitlements */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -449,6 +451,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = awardspredictionapp/awardspredictionapp.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = G58BGA5P2Z;
 				ENABLE_BITCODE = NO;
@@ -538,6 +541,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = awardspredictionapp/awardspredictionapp.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = G58BGA5P2Z;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
