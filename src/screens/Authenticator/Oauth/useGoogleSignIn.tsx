@@ -5,6 +5,7 @@ import { useAuth } from '../../../context/UserContext';
 import ApiServices from '../../../services/graphql';
 import { useNavigateAwayEffect } from '../../../util/hooks';
 
+// Used for ALL Oauth providers (misnamed)
 const useGoogleSignIn = () => {
   const navigation = useNavigation();
 
@@ -22,16 +23,8 @@ const useGoogleSignIn = () => {
     return unsubscribe;
   }, []);
 
-  // Attempt to sign user in
-  const signIn = async () => {
+  const signInDb = async (email: string) => {
     try {
-      setIsLoading(true);
-      // get the cognito user's attributes
-      const authenticatedUser = await Auth.currentAuthenticatedUser();
-      const email = authenticatedUser?.attributes?.email;
-      if (!email) {
-        throw new Error('Error finding cognito user');
-      }
       // First, attempt to get user from database using email
       const { data: getUserRes } = await ApiServices.getUserByEmail(email);
       const dbUser = getUserRes?.listUsers?.items[0];
@@ -57,6 +50,24 @@ const useGoogleSignIn = () => {
     } catch (err) {
       console.error(err);
       setIsError(true);
+    }
+  };
+
+  // Attempt to sign user in
+  const signIn = async () => {
+    try {
+      setIsLoading(true);
+      // get the cognito user's attributes
+      const authenticatedUser = await Auth.currentAuthenticatedUser();
+      //   const attrs = await Auth.currentUserInfo();
+      const email = authenticatedUser?.attributes?.email;
+      if (!email) {
+        throw new Error('Error finding cognito user');
+      }
+      signInDb(email);
+    } catch (err) {
+      console.error(err);
+      setIsError(true);
     } finally {
       setIsLoading(false);
     }
@@ -67,7 +78,7 @@ const useGoogleSignIn = () => {
     setIsError(false);
   }, []);
 
-  return { isLoading, isError };
+  return { isLoading, isError, signInDb };
 };
 
 export default useGoogleSignIn;
