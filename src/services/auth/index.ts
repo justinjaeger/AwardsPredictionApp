@@ -106,8 +106,6 @@ const deleteUser = async (): Promise<iApiResponse<any>> => {
   }
 };
 
-// GOOGLE OAUTH
-
 const googleSignIn = async (): Promise<iApiResponse<any>> => {
   try {
     await Auth.federatedSignIn({
