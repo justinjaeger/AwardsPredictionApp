@@ -16,7 +16,7 @@ const RequireNewPassword = (p: any) => {
   const props = p as iAuthScreenProps; // typecasting because props are automatically passed from Authenticator
   const { email } = useAuthenticator();
   const { signInUser } = useAuth();
-  const { goBack } = useNavigation();
+  const navigation = useNavigation();
 
   const [code, setCode] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -38,7 +38,10 @@ const RequireNewPassword = (p: any) => {
         const u = user?.listUsers?.items[0];
         if (!u) return;
         signInUser(u.id, u.email, u.role);
-        goBack();
+        navigation.navigate('BottomTabNavigator', {
+          screen: 'Profile',
+        });
+        navigation.goBack();
       }
       setLoading(false);
     });
@@ -61,8 +64,14 @@ const RequireNewPassword = (p: any) => {
 
   return (
     <View style={{ width: '100%', backgroundColor: COLORS.primary }}>
+      <FormInput
+        label="Code"
+        value={code}
+        setValue={setCode}
+        caption="Sent to your email"
+        style={{ marginBottom: 10 }}
+      />
       <PasswordInput label="New Password" value={password} setValue={setPassword} />
-      <FormInput label="Code" value={code} setValue={setCode} />
       <SubmitButton text={'Submit'} onPress={submit} loading={loading} />
       <TouchableText
         text={'Go to sign up'}

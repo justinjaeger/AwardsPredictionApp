@@ -3,16 +3,21 @@ import * as RNLocalize from 'react-native-localize';
 /**
  * Formats datetime for locale of user
  */
-export const formatDateTime = (date: Date) => {
+export const formatDateTime = (date: Date, showTime?: boolean) => {
   const locale = RNLocalize.getLocales();
   const tag = locale[0].languageTag;
 
-  return date.toLocaleString(tag, {
+  const options: Intl.DateTimeFormatOptions = {
     month: 'numeric',
     day: 'numeric',
-    hour: 'numeric',
-    minute: '2-digit',
-  });
+  };
+
+  if (showTime) {
+    options.hour = 'numeric';
+    options.minute = '2-digit';
+  }
+
+  return date.toLocaleString(tag, options);
 };
 
 /**

@@ -12,6 +12,7 @@ export const onCreateUser = /* GraphQL */ `
       bio
       image
       role
+      oauthId
       predictionSets {
         items {
           id
@@ -24,6 +25,7 @@ export const onCreateUser = /* GraphQL */ `
             bio
             image
             role
+            oauthId
             createdAt
             updatedAt
           }
@@ -71,6 +73,7 @@ export const onCreateUser = /* GraphQL */ `
             bio
             image
             role
+            oauthId
             createdAt
             updatedAt
           }
@@ -118,6 +121,7 @@ export const onCreateUser = /* GraphQL */ `
             bio
             image
             role
+            oauthId
             createdAt
             updatedAt
           }
@@ -130,6 +134,7 @@ export const onCreateUser = /* GraphQL */ `
             bio
             image
             role
+            oauthId
             createdAt
             updatedAt
           }
@@ -150,6 +155,7 @@ export const onCreateUser = /* GraphQL */ `
             bio
             image
             role
+            oauthId
             createdAt
             updatedAt
           }
@@ -162,6 +168,7 @@ export const onCreateUser = /* GraphQL */ `
             bio
             image
             role
+            oauthId
             createdAt
             updatedAt
           }
@@ -185,6 +192,7 @@ export const onUpdateUser = /* GraphQL */ `
       bio
       image
       role
+      oauthId
       predictionSets {
         items {
           id
@@ -197,6 +205,7 @@ export const onUpdateUser = /* GraphQL */ `
             bio
             image
             role
+            oauthId
             createdAt
             updatedAt
           }
@@ -244,6 +253,7 @@ export const onUpdateUser = /* GraphQL */ `
             bio
             image
             role
+            oauthId
             createdAt
             updatedAt
           }
@@ -291,6 +301,7 @@ export const onUpdateUser = /* GraphQL */ `
             bio
             image
             role
+            oauthId
             createdAt
             updatedAt
           }
@@ -303,6 +314,7 @@ export const onUpdateUser = /* GraphQL */ `
             bio
             image
             role
+            oauthId
             createdAt
             updatedAt
           }
@@ -323,6 +335,7 @@ export const onUpdateUser = /* GraphQL */ `
             bio
             image
             role
+            oauthId
             createdAt
             updatedAt
           }
@@ -335,6 +348,7 @@ export const onUpdateUser = /* GraphQL */ `
             bio
             image
             role
+            oauthId
             createdAt
             updatedAt
           }
@@ -358,6 +372,7 @@ export const onDeleteUser = /* GraphQL */ `
       bio
       image
       role
+      oauthId
       predictionSets {
         items {
           id
@@ -370,6 +385,7 @@ export const onDeleteUser = /* GraphQL */ `
             bio
             image
             role
+            oauthId
             createdAt
             updatedAt
           }
@@ -417,6 +433,7 @@ export const onDeleteUser = /* GraphQL */ `
             bio
             image
             role
+            oauthId
             createdAt
             updatedAt
           }
@@ -464,6 +481,7 @@ export const onDeleteUser = /* GraphQL */ `
             bio
             image
             role
+            oauthId
             createdAt
             updatedAt
           }
@@ -476,6 +494,7 @@ export const onDeleteUser = /* GraphQL */ `
             bio
             image
             role
+            oauthId
             createdAt
             updatedAt
           }
@@ -496,6 +515,7 @@ export const onDeleteUser = /* GraphQL */ `
             bio
             image
             role
+            oauthId
             createdAt
             updatedAt
           }
@@ -508,6 +528,7 @@ export const onDeleteUser = /* GraphQL */ `
             bio
             image
             role
+            oauthId
             createdAt
             updatedAt
           }
@@ -534,6 +555,7 @@ export const onCreateRelationship = /* GraphQL */ `
         bio
         image
         role
+        oauthId
         predictionSets {
           items {
             id
@@ -592,6 +614,7 @@ export const onCreateRelationship = /* GraphQL */ `
         bio
         image
         role
+        oauthId
         predictionSets {
           items {
             id
@@ -659,6 +682,7 @@ export const onUpdateRelationship = /* GraphQL */ `
         bio
         image
         role
+        oauthId
         predictionSets {
           items {
             id
@@ -717,6 +741,7 @@ export const onUpdateRelationship = /* GraphQL */ `
         bio
         image
         role
+        oauthId
         predictionSets {
           items {
             id
@@ -784,6 +809,7 @@ export const onDeleteRelationship = /* GraphQL */ `
         bio
         image
         role
+        oauthId
         predictionSets {
           items {
             id
@@ -842,6 +868,7 @@ export const onDeleteRelationship = /* GraphQL */ `
         bio
         image
         role
+        oauthId
         predictionSets {
           items {
             id
@@ -946,6 +973,7 @@ export const onCreateEvent = /* GraphQL */ `
             bio
             image
             role
+            oauthId
             createdAt
             updatedAt
           }
@@ -993,6 +1021,7 @@ export const onCreateEvent = /* GraphQL */ `
             bio
             image
             role
+            oauthId
             createdAt
             updatedAt
           }
@@ -1084,6 +1113,7 @@ export const onUpdateEvent = /* GraphQL */ `
             bio
             image
             role
+            oauthId
             createdAt
             updatedAt
           }
@@ -1131,6 +1161,7 @@ export const onUpdateEvent = /* GraphQL */ `
             bio
             image
             role
+            oauthId
             createdAt
             updatedAt
           }
@@ -1222,6 +1253,7 @@ export const onDeleteEvent = /* GraphQL */ `
             bio
             image
             role
+            oauthId
             createdAt
             updatedAt
           }
@@ -1269,6 +1301,7 @@ export const onDeleteEvent = /* GraphQL */ `
             bio
             image
             role
+            oauthId
             createdAt
             updatedAt
           }
@@ -1379,6 +1412,7 @@ export const onCreateCategory = /* GraphQL */ `
             bio
             image
             role
+            oauthId
             createdAt
             updatedAt
           }
@@ -1426,6 +1460,7 @@ export const onCreateCategory = /* GraphQL */ `
             bio
             image
             role
+            oauthId
             createdAt
             updatedAt
           }
@@ -1535,6 +1570,7 @@ export const onUpdateCategory = /* GraphQL */ `
             bio
             image
             role
+            oauthId
             createdAt
             updatedAt
           }
@@ -1582,6 +1618,7 @@ export const onUpdateCategory = /* GraphQL */ `
             bio
             image
             role
+            oauthId
             createdAt
             updatedAt
           }
@@ -1691,6 +1728,7 @@ export const onDeleteCategory = /* GraphQL */ `
             bio
             image
             role
+            oauthId
             createdAt
             updatedAt
           }
@@ -1738,6 +1776,7 @@ export const onDeleteCategory = /* GraphQL */ `
             bio
             image
             role
+            oauthId
             createdAt
             updatedAt
           }
@@ -2622,6 +2661,7 @@ export const onCreatePredictionSet = /* GraphQL */ `
         bio
         image
         role
+        oauthId
         predictionSets {
           items {
             id
@@ -2820,6 +2860,7 @@ export const onUpdatePredictionSet = /* GraphQL */ `
         bio
         image
         role
+        oauthId
         predictionSets {
           items {
             id
@@ -3018,6 +3059,7 @@ export const onDeletePredictionSet = /* GraphQL */ `
         bio
         image
         role
+        oauthId
         predictionSets {
           items {
             id
@@ -3519,6 +3561,7 @@ export const onCreateHistoryPredictionSet = /* GraphQL */ `
         bio
         image
         role
+        oauthId
         predictionSets {
           items {
             id
@@ -3727,6 +3770,7 @@ export const onUpdateHistoryPredictionSet = /* GraphQL */ `
         bio
         image
         role
+        oauthId
         predictionSets {
           items {
             id
@@ -3935,6 +3979,7 @@ export const onDeleteHistoryPredictionSet = /* GraphQL */ `
         bio
         image
         role
+        oauthId
         predictionSets {
           items {
             id

@@ -1,18 +1,15 @@
 import React from 'react';
-import { StyleProp, TextStyle, Image, View, useWindowDimensions } from 'react-native';
+import { StyleProp, TextStyle, View } from 'react-native';
 import LoadingStatue from '../../../components/LoadingStatue';
 import { Body, BodyBold } from '../../../components/Text';
 import COLORS from '../../../constants/colors';
 import GoogleOauthButton from './GoogleOauthButton';
 import useGoogleSignIn from './useGoogleSignIn';
-// @ts-ignore - it exists
-import AppIcon from '../../../assets/branding/icon.png';
 import AppleOauthButton from './AppleOauthButton';
 import EmailButton from './EmailButton';
 
 const OauthPage = () => {
   const { isLoading, isError } = useGoogleSignIn();
-  const { width } = useWindowDimensions();
 
   const errorTextStyles: StyleProp<TextStyle> = {
     color: COLORS.white,
@@ -21,8 +18,6 @@ const OauthPage = () => {
     marginTop: 10,
     lineHeight: 20,
   };
-
-  const appIconDimensions = Math.min(150, width * 0.3);
 
   return (
     <View
@@ -40,18 +35,6 @@ const OauthPage = () => {
         </View>
       ) : (
         <>
-          <Image
-            source={AppIcon}
-            style={{
-              width: appIconDimensions,
-              height: appIconDimensions,
-              borderRadius: 10,
-              alignSelf: 'center',
-              marginBottom: 30,
-              borderWidth: 1,
-              borderColor: COLORS.white,
-            }}
-          />
           <GoogleOauthButton />
           <AppleOauthButton />
           <EmailButton />
