@@ -27,6 +27,7 @@ export const searchUsers = /* GraphQL */ `
         bio
         image
         role
+        oauthId
         predictionSets {
           items {
             id
@@ -123,6 +124,7 @@ export const searchRelationships = /* GraphQL */ `
           bio
           image
           role
+          oauthId
           predictionSets {
             nextToken
           }
@@ -147,6 +149,7 @@ export const searchRelationships = /* GraphQL */ `
           bio
           image
           role
+          oauthId
           predictionSets {
             nextToken
           }
@@ -194,6 +197,7 @@ export const getUser = /* GraphQL */ `
       bio
       image
       role
+      oauthId
       predictionSets {
         items {
           id
@@ -206,6 +210,7 @@ export const getUser = /* GraphQL */ `
             bio
             image
             role
+            oauthId
             createdAt
             updatedAt
           }
@@ -253,6 +258,7 @@ export const getUser = /* GraphQL */ `
             bio
             image
             role
+            oauthId
             createdAt
             updatedAt
           }
@@ -300,6 +306,7 @@ export const getUser = /* GraphQL */ `
             bio
             image
             role
+            oauthId
             createdAt
             updatedAt
           }
@@ -312,6 +319,7 @@ export const getUser = /* GraphQL */ `
             bio
             image
             role
+            oauthId
             createdAt
             updatedAt
           }
@@ -332,6 +340,7 @@ export const getUser = /* GraphQL */ `
             bio
             image
             role
+            oauthId
             createdAt
             updatedAt
           }
@@ -344,6 +353,7 @@ export const getUser = /* GraphQL */ `
             bio
             image
             role
+            oauthId
             createdAt
             updatedAt
           }
@@ -380,6 +390,7 @@ export const listUsers = /* GraphQL */ `
         bio
         image
         role
+        oauthId
         predictionSets {
           items {
             id
@@ -446,6 +457,7 @@ export const getRelationship = /* GraphQL */ `
         bio
         image
         role
+        oauthId
         predictionSets {
           items {
             id
@@ -504,6 +516,7 @@ export const getRelationship = /* GraphQL */ `
         bio
         image
         role
+        oauthId
         predictionSets {
           items {
             id
@@ -584,6 +597,7 @@ export const listRelationships = /* GraphQL */ `
           bio
           image
           role
+          oauthId
           predictionSets {
             nextToken
           }
@@ -608,6 +622,7 @@ export const listRelationships = /* GraphQL */ `
           bio
           image
           role
+          oauthId
           predictionSets {
             nextToken
           }
@@ -680,6 +695,7 @@ export const getEvent = /* GraphQL */ `
             bio
             image
             role
+            oauthId
             createdAt
             updatedAt
           }
@@ -727,6 +743,7 @@ export const getEvent = /* GraphQL */ `
             bio
             image
             role
+            oauthId
             createdAt
             updatedAt
           }
@@ -905,6 +922,7 @@ export const getCategory = /* GraphQL */ `
             bio
             image
             role
+            oauthId
             createdAt
             updatedAt
           }
@@ -952,6 +970,7 @@ export const getCategory = /* GraphQL */ `
             bio
             image
             role
+            oauthId
             createdAt
             updatedAt
           }
@@ -1567,6 +1586,7 @@ export const getPredictionSet = /* GraphQL */ `
         bio
         image
         role
+        oauthId
         predictionSets {
           items {
             id
@@ -1778,6 +1798,7 @@ export const listPredictionSets = /* GraphQL */ `
           bio
           image
           role
+          oauthId
           predictionSets {
             nextToken
           }
@@ -2055,6 +2076,7 @@ export const getHistoryPredictionSet = /* GraphQL */ `
         bio
         image
         role
+        oauthId
         predictionSets {
           items {
             id
@@ -2276,6 +2298,7 @@ export const listHistoryPredictionSets = /* GraphQL */ `
           bio
           image
           role
+          oauthId
           predictionSets {
             nextToken
           }
@@ -3560,6 +3583,7 @@ export const relationshipByFollowedUserId = /* GraphQL */ `
           bio
           image
           role
+          oauthId
           predictionSets {
             nextToken
           }
@@ -3584,6 +3608,7 @@ export const relationshipByFollowedUserId = /* GraphQL */ `
           bio
           image
           role
+          oauthId
           predictionSets {
             nextToken
           }
@@ -3632,6 +3657,7 @@ export const relationshipByFollowingUserId = /* GraphQL */ `
           bio
           image
           role
+          oauthId
           predictionSets {
             nextToken
           }
@@ -3656,6 +3682,7 @@ export const relationshipByFollowingUserId = /* GraphQL */ `
           bio
           image
           role
+          oauthId
           predictionSets {
             nextToken
           }
@@ -3888,6 +3915,7 @@ export const predictionSetByUserIdAndEventId = /* GraphQL */ `
           bio
           image
           role
+          oauthId
           predictionSets {
             nextToken
           }
@@ -3999,6 +4027,7 @@ export const predictionSetByUserIdAndCategoryId = /* GraphQL */ `
           bio
           image
           role
+          oauthId
           predictionSets {
             nextToken
           }
@@ -4110,6 +4139,7 @@ export const predictionSetByUserIdAndCreatedAt = /* GraphQL */ `
           bio
           image
           role
+          oauthId
           predictionSets {
             nextToken
           }
@@ -4219,6 +4249,7 @@ export const predictionSetByEventId = /* GraphQL */ `
           bio
           image
           role
+          oauthId
           predictionSets {
             nextToken
           }
@@ -4410,6 +4441,7 @@ export const historyPredictionSetByUserIdAndCreatedAt = /* GraphQL */ `
           bio
           image
           role
+          oauthId
           predictionSets {
             nextToken
           }
@@ -4522,6 +4554,7 @@ export const historyPredictionSetByUserIdAndEventIdAndCreatedAt = /* GraphQL */ 
           bio
           image
           role
+          oauthId
           predictionSets {
             nextToken
           }
@@ -4634,6 +4667,7 @@ export const historyPredictionSetByUserIdAndCategoryIdAndCreatedAt = /* GraphQL 
           bio
           image
           role
+          oauthId
           predictionSets {
             nextToken
           }
@@ -4744,6 +4778,7 @@ export const historyPredictionSetByCategoryId = /* GraphQL */ `
           bio
           image
           role
+          oauthId
           predictionSets {
             nextToken
           }
