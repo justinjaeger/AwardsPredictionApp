@@ -1,16 +1,19 @@
 import React, { useEffect } from 'react';
-// import AuthServices from '../../../services/auth';
 import AppleIcon from '../../../assets/apple.svg';
 import { TouchableOpacity, useWindowDimensions, View } from 'react-native';
 import COLORS from '../../../constants/colors';
 import { SubHeaderLight } from '../../../components/Text';
 import { appleAuth } from '@invertase/react-native-apple-authentication';
 import Snackbar from '../../../components/Snackbar';
-import useGoogleSignIn from './useGoogleSignIn';
+import ApiServices from '../../../services/graphql';
+import { UserRole } from '../../../API';
+import { useAuth } from '../../../context/UserContext';
+import { useNavigation } from '@react-navigation/native';
 
 const AppleOauthButton = () => {
   const { width } = useWindowDimensions();
-  const { signInDb } = useGoogleSignIn();
+  const navigation = useNavigation();
+  const { signInUser } = useAuth();
 
   const onAppleButtonPress = async () => {
     // NOTE: AFTER FIRST LOGIN, THE USER'S INFORMATION WILL NOT BE RETURNED.
@@ -22,9 +25,10 @@ const AppleOauthButton = () => {
         // Note: it appears putting FULL_NAME first is important, see issue #293
         requestedScopes: [appleAuth.Scope.FULL_NAME, appleAuth.Scope.EMAIL],
       });
-      console.error('appleAuthRequestResponse', appleAuthRequestResponse);
-      const userUniqueId = appleAuthRequestResponse.user;
-      // 000966.65bcf194fd044478868943a8d873fc89.212
+      const oauthId = appleAuthRequestResponse.user;
+      if (!oauthId) {
+        throw new Error('No oauthId found');
+      }
 
       // get current authentication state for user
       // /!\ This method must be tested on a real device. On the iOS simulator it always throws an error.
@@ -33,22 +37,49 @@ const AppleOauthButton = () => {
       );
 
       // use credentialState response to ensure the user is authenticated
-      if (credentialState === appleAuth.State.AUTHORIZED) {
-        // user is authenticated
-        const email = appleAuthRequestResponse.email;
-        if (!email) {
-          console.error('no email found', email);
-          throw new Error('Email not returned from Apple');
-        }
-        signInDb(email);
-        // TODO: Handle default name, but remember only to set it if not already set
+      if (credentialState !== appleAuth.State.AUTHORIZED) {
+        throw new Error('Apple signin is unauthorized');
+      }
+
+      // Important: The user's email and name ONLY comes back on the first login
+      // So if they exist, we assume it's the first time they're logging in
+      // If not, we have to identify them by their oauthId
+      const email = appleAuthRequestResponse.email;
+      // If email is returned assume it's the first time they're logging in, and create a new user
+      if (email) {
         const firstName = appleAuthRequestResponse.fullName?.givenName || '';
         const lastName = appleAuthRequestResponse.fullName?.familyName || '';
-        // sign the user in
+        const name = firstName + ' ' + lastName;
+        const { status, data } = await ApiServices.createUser(
+          email,
+          UserRole.USER,
+          name,
+          oauthId,
+        );
+        const newUser = data?.createUser;
+        if (status === 'error' || !newUser) {
+          throw new Error('Error creating user');
+        }
+        signInUser(newUser.id, newUser.email, newUser.role);
+        navigation.navigate('BottomTabNavigator', {
+          screen: 'Profile',
+          params: { screen: 'UpdateProfileInfo' },
+        });
+      } else {
+        // If not, assume it's not first time signing in and attempt to find user by oauthId
+        const { data: getUserRes } = await ApiServices.getUserByOauthId(oauthId);
+        const dbUser = getUserRes?.listUsers?.items[0];
+        if (!dbUser) {
+          throw new Error('Error finding user');
+        }
+        signInUser(dbUser.id, dbUser.email, dbUser.role);
+        navigation.navigate('BottomTabNavigator', {
+          screen: 'Profile',
+        });
       }
     } catch (e) {
-      Snackbar.error('Something went wrong');
-      console.log(e);
+      Snackbar.error(JSON.stringify(e) || 'Something went wrong');
+      console.error(e);
     }
   };
 
