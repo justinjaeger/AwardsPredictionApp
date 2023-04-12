@@ -247,7 +247,7 @@ const Profile = () => {
                 {(isAuthUser ? 'My' : user.name ? `${user.name}'s` : 'All') +
                   ' Predictions'}
               </HeaderLight>
-              <EventList user={user} events={userEvents} isSubtle={true} />
+              <EventList user={user} events={userEvents} isProfile={true} />
             </>
           ) : null}
         </View>

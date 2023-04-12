@@ -10,6 +10,7 @@ export type CreateUserInput = {
   bio?: string | null,
   image?: string | null,
   role: UserRole,
+  oauthId?: string | null,
 };
 
 export enum UserRole {
@@ -26,6 +27,7 @@ export type ModelUserConditionInput = {
   bio?: ModelStringInput | null,
   image?: ModelStringInput | null,
   role?: ModelUserRoleInput | null,
+  oauthId?: ModelStringInput | null,
   and?: Array< ModelUserConditionInput | null > | null,
   or?: Array< ModelUserConditionInput | null > | null,
   not?: ModelUserConditionInput | null,
@@ -85,6 +87,7 @@ export type User = {
   bio?: string | null,
   image?: string | null,
   role: UserRole,
+  oauthId?: string | null,
   predictionSets?: ModelPredictionSetConnection | null,
   historyPredictionSets?: ModelHistoryPredictionSetConnection | null,
   followers?: ModelRelationshipConnection | null,
@@ -392,6 +395,7 @@ export type UpdateUserInput = {
   bio?: string | null,
   image?: string | null,
   role?: UserRole | null,
+  oauthId?: string | null,
 };
 
 export type DeleteUserInput = {
@@ -987,6 +991,7 @@ export type SearchableUserFilterInput = {
   name?: SearchableStringFilterInput | null,
   bio?: SearchableStringFilterInput | null,
   image?: SearchableStringFilterInput | null,
+  oauthId?: SearchableStringFilterInput | null,
   createdAt?: SearchableStringFilterInput | null,
   updatedAt?: SearchableStringFilterInput | null,
   role?: SearchableStringFilterInput | null,
@@ -1041,6 +1046,7 @@ export enum SearchableUserSortableFields {
   name = "name",
   bio = "bio",
   image = "image",
+  oauthId = "oauthId",
   createdAt = "createdAt",
   updatedAt = "updatedAt",
 }
@@ -1075,6 +1081,7 @@ export enum SearchableUserAggregateField {
   bio = "bio",
   image = "image",
   role = "role",
+  oauthId = "oauthId",
   createdAt = "createdAt",
   updatedAt = "updatedAt",
 }
@@ -1169,6 +1176,7 @@ export type ModelUserFilterInput = {
   bio?: ModelStringInput | null,
   image?: ModelStringInput | null,
   role?: ModelUserRoleInput | null,
+  oauthId?: ModelStringInput | null,
   and?: Array< ModelUserFilterInput | null > | null,
   or?: Array< ModelUserFilterInput | null > | null,
   not?: ModelUserFilterInput | null,
@@ -1476,6 +1484,7 @@ export type CreateUserMutation = {
     bio?: string | null,
     image?: string | null,
     role: UserRole,
+    oauthId?: string | null,
     predictionSets?:  {
       __typename: "ModelPredictionSetConnection",
       items:  Array< {
@@ -1491,6 +1500,7 @@ export type CreateUserMutation = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -1544,6 +1554,7 @@ export type CreateUserMutation = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -1597,6 +1608,7 @@ export type CreateUserMutation = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -1610,6 +1622,7 @@ export type CreateUserMutation = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -1633,6 +1646,7 @@ export type CreateUserMutation = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -1646,6 +1660,7 @@ export type CreateUserMutation = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -1674,6 +1689,7 @@ export type UpdateUserMutation = {
     bio?: string | null,
     image?: string | null,
     role: UserRole,
+    oauthId?: string | null,
     predictionSets?:  {
       __typename: "ModelPredictionSetConnection",
       items:  Array< {
@@ -1689,6 +1705,7 @@ export type UpdateUserMutation = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -1742,6 +1759,7 @@ export type UpdateUserMutation = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -1795,6 +1813,7 @@ export type UpdateUserMutation = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -1808,6 +1827,7 @@ export type UpdateUserMutation = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -1831,6 +1851,7 @@ export type UpdateUserMutation = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -1844,6 +1865,7 @@ export type UpdateUserMutation = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -1872,6 +1894,7 @@ export type DeleteUserMutation = {
     bio?: string | null,
     image?: string | null,
     role: UserRole,
+    oauthId?: string | null,
     predictionSets?:  {
       __typename: "ModelPredictionSetConnection",
       items:  Array< {
@@ -1887,6 +1910,7 @@ export type DeleteUserMutation = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -1940,6 +1964,7 @@ export type DeleteUserMutation = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -1993,6 +2018,7 @@ export type DeleteUserMutation = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -2006,6 +2032,7 @@ export type DeleteUserMutation = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -2029,6 +2056,7 @@ export type DeleteUserMutation = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -2042,6 +2070,7 @@ export type DeleteUserMutation = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -2074,6 +2103,7 @@ export type CreateRelationshipMutation = {
       bio?: string | null,
       image?: string | null,
       role: UserRole,
+      oauthId?: string | null,
       predictionSets?:  {
         __typename: "ModelPredictionSetConnection",
         items:  Array< {
@@ -2141,6 +2171,7 @@ export type CreateRelationshipMutation = {
       bio?: string | null,
       image?: string | null,
       role: UserRole,
+      oauthId?: string | null,
       predictionSets?:  {
         __typename: "ModelPredictionSetConnection",
         items:  Array< {
@@ -2222,6 +2253,7 @@ export type UpdateRelationshipMutation = {
       bio?: string | null,
       image?: string | null,
       role: UserRole,
+      oauthId?: string | null,
       predictionSets?:  {
         __typename: "ModelPredictionSetConnection",
         items:  Array< {
@@ -2289,6 +2321,7 @@ export type UpdateRelationshipMutation = {
       bio?: string | null,
       image?: string | null,
       role: UserRole,
+      oauthId?: string | null,
       predictionSets?:  {
         __typename: "ModelPredictionSetConnection",
         items:  Array< {
@@ -2370,6 +2403,7 @@ export type DeleteRelationshipMutation = {
       bio?: string | null,
       image?: string | null,
       role: UserRole,
+      oauthId?: string | null,
       predictionSets?:  {
         __typename: "ModelPredictionSetConnection",
         items:  Array< {
@@ -2437,6 +2471,7 @@ export type DeleteRelationshipMutation = {
       bio?: string | null,
       image?: string | null,
       role: UserRole,
+      oauthId?: string | null,
       predictionSets?:  {
         __typename: "ModelPredictionSetConnection",
         items:  Array< {
@@ -2562,6 +2597,7 @@ export type CreateEventMutation = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -2615,6 +2651,7 @@ export type CreateEventMutation = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -2722,6 +2759,7 @@ export type UpdateEventMutation = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -2775,6 +2813,7 @@ export type UpdateEventMutation = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -2882,6 +2921,7 @@ export type DeleteEventMutation = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -2935,6 +2975,7 @@ export type DeleteEventMutation = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -3063,6 +3104,7 @@ export type CreateCategoryMutation = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -3116,6 +3158,7 @@ export type CreateCategoryMutation = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -3243,6 +3286,7 @@ export type UpdateCategoryMutation = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -3296,6 +3340,7 @@ export type UpdateCategoryMutation = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -3423,6 +3468,7 @@ export type DeleteCategoryMutation = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -3476,6 +3522,7 @@ export type DeleteCategoryMutation = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -4528,6 +4575,7 @@ export type CreatePredictionSetMutation = {
       bio?: string | null,
       image?: string | null,
       role: UserRole,
+      oauthId?: string | null,
       predictionSets?:  {
         __typename: "ModelPredictionSetConnection",
         items:  Array< {
@@ -4759,6 +4807,7 @@ export type UpdatePredictionSetMutation = {
       bio?: string | null,
       image?: string | null,
       role: UserRole,
+      oauthId?: string | null,
       predictionSets?:  {
         __typename: "ModelPredictionSetConnection",
         items:  Array< {
@@ -4990,6 +5039,7 @@ export type DeletePredictionSetMutation = {
       bio?: string | null,
       image?: string | null,
       role: UserRole,
+      oauthId?: string | null,
       predictionSets?:  {
         __typename: "ModelPredictionSetConnection",
         items:  Array< {
@@ -5581,6 +5631,7 @@ export type CreateHistoryPredictionSetMutation = {
       bio?: string | null,
       image?: string | null,
       role: UserRole,
+      oauthId?: string | null,
       predictionSets?:  {
         __typename: "ModelPredictionSetConnection",
         items:  Array< {
@@ -5823,6 +5874,7 @@ export type UpdateHistoryPredictionSetMutation = {
       bio?: string | null,
       image?: string | null,
       role: UserRole,
+      oauthId?: string | null,
       predictionSets?:  {
         __typename: "ModelPredictionSetConnection",
         items:  Array< {
@@ -6065,6 +6117,7 @@ export type DeleteHistoryPredictionSetMutation = {
       bio?: string | null,
       image?: string | null,
       role: UserRole,
+      oauthId?: string | null,
       predictionSets?:  {
         __typename: "ModelPredictionSetConnection",
         items:  Array< {
@@ -8802,6 +8855,7 @@ export type SearchUsersQuery = {
       bio?: string | null,
       image?: string | null,
       role: UserRole,
+      oauthId?: string | null,
       predictionSets?:  {
         __typename: "ModelPredictionSetConnection",
         items:  Array< {
@@ -8905,6 +8959,7 @@ export type SearchRelationshipsQuery = {
         bio?: string | null,
         image?: string | null,
         role: UserRole,
+        oauthId?: string | null,
         predictionSets?:  {
           __typename: "ModelPredictionSetConnection",
           nextToken?: string | null,
@@ -8934,6 +8989,7 @@ export type SearchRelationshipsQuery = {
         bio?: string | null,
         image?: string | null,
         role: UserRole,
+        oauthId?: string | null,
         predictionSets?:  {
           __typename: "ModelPredictionSetConnection",
           nextToken?: string | null,
@@ -8991,6 +9047,7 @@ export type GetUserQuery = {
     bio?: string | null,
     image?: string | null,
     role: UserRole,
+    oauthId?: string | null,
     predictionSets?:  {
       __typename: "ModelPredictionSetConnection",
       items:  Array< {
@@ -9006,6 +9063,7 @@ export type GetUserQuery = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -9059,6 +9117,7 @@ export type GetUserQuery = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -9112,6 +9171,7 @@ export type GetUserQuery = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -9125,6 +9185,7 @@ export type GetUserQuery = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -9148,6 +9209,7 @@ export type GetUserQuery = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -9161,6 +9223,7 @@ export type GetUserQuery = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -9194,6 +9257,7 @@ export type ListUsersQuery = {
       bio?: string | null,
       image?: string | null,
       role: UserRole,
+      oauthId?: string | null,
       predictionSets?:  {
         __typename: "ModelPredictionSetConnection",
         items:  Array< {
@@ -9273,6 +9337,7 @@ export type GetRelationshipQuery = {
       bio?: string | null,
       image?: string | null,
       role: UserRole,
+      oauthId?: string | null,
       predictionSets?:  {
         __typename: "ModelPredictionSetConnection",
         items:  Array< {
@@ -9340,6 +9405,7 @@ export type GetRelationshipQuery = {
       bio?: string | null,
       image?: string | null,
       role: UserRole,
+      oauthId?: string | null,
       predictionSets?:  {
         __typename: "ModelPredictionSetConnection",
         items:  Array< {
@@ -9426,6 +9492,7 @@ export type ListRelationshipsQuery = {
         bio?: string | null,
         image?: string | null,
         role: UserRole,
+        oauthId?: string | null,
         predictionSets?:  {
           __typename: "ModelPredictionSetConnection",
           nextToken?: string | null,
@@ -9455,6 +9522,7 @@ export type ListRelationshipsQuery = {
         bio?: string | null,
         image?: string | null,
         role: UserRole,
+        oauthId?: string | null,
         predictionSets?:  {
           __typename: "ModelPredictionSetConnection",
           nextToken?: string | null,
@@ -9543,6 +9611,7 @@ export type GetEventQuery = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -9596,6 +9665,7 @@ export type GetEventQuery = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -9794,6 +9864,7 @@ export type GetCategoryQuery = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -9847,6 +9918,7 @@ export type GetCategoryQuery = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -10529,6 +10601,7 @@ export type GetPredictionSetQuery = {
       bio?: string | null,
       image?: string | null,
       role: UserRole,
+      oauthId?: string | null,
       predictionSets?:  {
         __typename: "ModelPredictionSetConnection",
         items:  Array< {
@@ -10765,6 +10838,7 @@ export type ListPredictionSetsQuery = {
         bio?: string | null,
         image?: string | null,
         role: UserRole,
+        oauthId?: string | null,
         predictionSets?:  {
           __typename: "ModelPredictionSetConnection",
           nextToken?: string | null,
@@ -11082,6 +11156,7 @@ export type GetHistoryPredictionSetQuery = {
       bio?: string | null,
       image?: string | null,
       role: UserRole,
+      oauthId?: string | null,
       predictionSets?:  {
         __typename: "ModelPredictionSetConnection",
         items:  Array< {
@@ -11329,6 +11404,7 @@ export type ListHistoryPredictionSetsQuery = {
         bio?: string | null,
         image?: string | null,
         role: UserRole,
+        oauthId?: string | null,
         predictionSets?:  {
           __typename: "ModelPredictionSetConnection",
           nextToken?: string | null,
@@ -12775,6 +12851,7 @@ export type RelationshipByFollowedUserIdQuery = {
         bio?: string | null,
         image?: string | null,
         role: UserRole,
+        oauthId?: string | null,
         predictionSets?:  {
           __typename: "ModelPredictionSetConnection",
           nextToken?: string | null,
@@ -12804,6 +12881,7 @@ export type RelationshipByFollowedUserIdQuery = {
         bio?: string | null,
         image?: string | null,
         role: UserRole,
+        oauthId?: string | null,
         predictionSets?:  {
           __typename: "ModelPredictionSetConnection",
           nextToken?: string | null,
@@ -12854,6 +12932,7 @@ export type RelationshipByFollowingUserIdQuery = {
         bio?: string | null,
         image?: string | null,
         role: UserRole,
+        oauthId?: string | null,
         predictionSets?:  {
           __typename: "ModelPredictionSetConnection",
           nextToken?: string | null,
@@ -12883,6 +12962,7 @@ export type RelationshipByFollowingUserIdQuery = {
         bio?: string | null,
         image?: string | null,
         role: UserRole,
+        oauthId?: string | null,
         predictionSets?:  {
           __typename: "ModelPredictionSetConnection",
           nextToken?: string | null,
@@ -13131,6 +13211,7 @@ export type PredictionSetByUserIdAndEventIdQuery = {
         bio?: string | null,
         image?: string | null,
         role: UserRole,
+        oauthId?: string | null,
         predictionSets?:  {
           __typename: "ModelPredictionSetConnection",
           nextToken?: string | null,
@@ -13253,6 +13334,7 @@ export type PredictionSetByUserIdAndCategoryIdQuery = {
         bio?: string | null,
         image?: string | null,
         role: UserRole,
+        oauthId?: string | null,
         predictionSets?:  {
           __typename: "ModelPredictionSetConnection",
           nextToken?: string | null,
@@ -13375,6 +13457,7 @@ export type PredictionSetByUserIdAndCreatedAtQuery = {
         bio?: string | null,
         image?: string | null,
         role: UserRole,
+        oauthId?: string | null,
         predictionSets?:  {
           __typename: "ModelPredictionSetConnection",
           nextToken?: string | null,
@@ -13496,6 +13579,7 @@ export type PredictionSetByEventIdQuery = {
         bio?: string | null,
         image?: string | null,
         role: UserRole,
+        oauthId?: string | null,
         predictionSets?:  {
           __typename: "ModelPredictionSetConnection",
           nextToken?: string | null,
@@ -13701,6 +13785,7 @@ export type HistoryPredictionSetByUserIdAndCreatedAtQuery = {
         bio?: string | null,
         image?: string | null,
         role: UserRole,
+        oauthId?: string | null,
         predictionSets?:  {
           __typename: "ModelPredictionSetConnection",
           nextToken?: string | null,
@@ -13824,6 +13909,7 @@ export type HistoryPredictionSetByUserIdAndEventIdAndCreatedAtQuery = {
         bio?: string | null,
         image?: string | null,
         role: UserRole,
+        oauthId?: string | null,
         predictionSets?:  {
           __typename: "ModelPredictionSetConnection",
           nextToken?: string | null,
@@ -13947,6 +14033,7 @@ export type HistoryPredictionSetByUserIdAndCategoryIdAndCreatedAtQuery = {
         bio?: string | null,
         image?: string | null,
         role: UserRole,
+        oauthId?: string | null,
         predictionSets?:  {
           __typename: "ModelPredictionSetConnection",
           nextToken?: string | null,
@@ -14069,6 +14156,7 @@ export type HistoryPredictionSetByCategoryIdQuery = {
         bio?: string | null,
         image?: string | null,
         role: UserRole,
+        oauthId?: string | null,
         predictionSets?:  {
           __typename: "ModelPredictionSetConnection",
           nextToken?: string | null,
@@ -14905,6 +14993,7 @@ export type OnCreateUserSubscription = {
     bio?: string | null,
     image?: string | null,
     role: UserRole,
+    oauthId?: string | null,
     predictionSets?:  {
       __typename: "ModelPredictionSetConnection",
       items:  Array< {
@@ -14920,6 +15009,7 @@ export type OnCreateUserSubscription = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -14973,6 +15063,7 @@ export type OnCreateUserSubscription = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -15026,6 +15117,7 @@ export type OnCreateUserSubscription = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -15039,6 +15131,7 @@ export type OnCreateUserSubscription = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -15062,6 +15155,7 @@ export type OnCreateUserSubscription = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -15075,6 +15169,7 @@ export type OnCreateUserSubscription = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -15098,6 +15193,7 @@ export type OnUpdateUserSubscription = {
     bio?: string | null,
     image?: string | null,
     role: UserRole,
+    oauthId?: string | null,
     predictionSets?:  {
       __typename: "ModelPredictionSetConnection",
       items:  Array< {
@@ -15113,6 +15209,7 @@ export type OnUpdateUserSubscription = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -15166,6 +15263,7 @@ export type OnUpdateUserSubscription = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -15219,6 +15317,7 @@ export type OnUpdateUserSubscription = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -15232,6 +15331,7 @@ export type OnUpdateUserSubscription = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -15255,6 +15355,7 @@ export type OnUpdateUserSubscription = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -15268,6 +15369,7 @@ export type OnUpdateUserSubscription = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -15291,6 +15393,7 @@ export type OnDeleteUserSubscription = {
     bio?: string | null,
     image?: string | null,
     role: UserRole,
+    oauthId?: string | null,
     predictionSets?:  {
       __typename: "ModelPredictionSetConnection",
       items:  Array< {
@@ -15306,6 +15409,7 @@ export type OnDeleteUserSubscription = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -15359,6 +15463,7 @@ export type OnDeleteUserSubscription = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -15412,6 +15517,7 @@ export type OnDeleteUserSubscription = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -15425,6 +15531,7 @@ export type OnDeleteUserSubscription = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -15448,6 +15555,7 @@ export type OnDeleteUserSubscription = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -15461,6 +15569,7 @@ export type OnDeleteUserSubscription = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -15488,6 +15597,7 @@ export type OnCreateRelationshipSubscription = {
       bio?: string | null,
       image?: string | null,
       role: UserRole,
+      oauthId?: string | null,
       predictionSets?:  {
         __typename: "ModelPredictionSetConnection",
         items:  Array< {
@@ -15555,6 +15665,7 @@ export type OnCreateRelationshipSubscription = {
       bio?: string | null,
       image?: string | null,
       role: UserRole,
+      oauthId?: string | null,
       predictionSets?:  {
         __typename: "ModelPredictionSetConnection",
         items:  Array< {
@@ -15631,6 +15742,7 @@ export type OnUpdateRelationshipSubscription = {
       bio?: string | null,
       image?: string | null,
       role: UserRole,
+      oauthId?: string | null,
       predictionSets?:  {
         __typename: "ModelPredictionSetConnection",
         items:  Array< {
@@ -15698,6 +15810,7 @@ export type OnUpdateRelationshipSubscription = {
       bio?: string | null,
       image?: string | null,
       role: UserRole,
+      oauthId?: string | null,
       predictionSets?:  {
         __typename: "ModelPredictionSetConnection",
         items:  Array< {
@@ -15774,6 +15887,7 @@ export type OnDeleteRelationshipSubscription = {
       bio?: string | null,
       image?: string | null,
       role: UserRole,
+      oauthId?: string | null,
       predictionSets?:  {
         __typename: "ModelPredictionSetConnection",
         items:  Array< {
@@ -15841,6 +15955,7 @@ export type OnDeleteRelationshipSubscription = {
       bio?: string | null,
       image?: string | null,
       role: UserRole,
+      oauthId?: string | null,
       predictionSets?:  {
         __typename: "ModelPredictionSetConnection",
         items:  Array< {
@@ -15961,6 +16076,7 @@ export type OnCreateEventSubscription = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -16014,6 +16130,7 @@ export type OnCreateEventSubscription = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -16116,6 +16233,7 @@ export type OnUpdateEventSubscription = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -16169,6 +16287,7 @@ export type OnUpdateEventSubscription = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -16271,6 +16390,7 @@ export type OnDeleteEventSubscription = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -16324,6 +16444,7 @@ export type OnDeleteEventSubscription = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -16447,6 +16568,7 @@ export type OnCreateCategorySubscription = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -16500,6 +16622,7 @@ export type OnCreateCategorySubscription = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -16622,6 +16745,7 @@ export type OnUpdateCategorySubscription = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -16675,6 +16799,7 @@ export type OnUpdateCategorySubscription = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -16797,6 +16922,7 @@ export type OnDeleteCategorySubscription = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -16850,6 +16976,7 @@ export type OnDeleteCategorySubscription = {
           bio?: string | null,
           image?: string | null,
           role: UserRole,
+          oauthId?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -17837,6 +17964,7 @@ export type OnCreatePredictionSetSubscription = {
       bio?: string | null,
       image?: string | null,
       role: UserRole,
+      oauthId?: string | null,
       predictionSets?:  {
         __typename: "ModelPredictionSetConnection",
         items:  Array< {
@@ -18063,6 +18191,7 @@ export type OnUpdatePredictionSetSubscription = {
       bio?: string | null,
       image?: string | null,
       role: UserRole,
+      oauthId?: string | null,
       predictionSets?:  {
         __typename: "ModelPredictionSetConnection",
         items:  Array< {
@@ -18289,6 +18418,7 @@ export type OnDeletePredictionSetSubscription = {
       bio?: string | null,
       image?: string | null,
       role: UserRole,
+      oauthId?: string | null,
       predictionSets?:  {
         __typename: "ModelPredictionSetConnection",
         items:  Array< {
@@ -18860,6 +18990,7 @@ export type OnCreateHistoryPredictionSetSubscription = {
       bio?: string | null,
       image?: string | null,
       role: UserRole,
+      oauthId?: string | null,
       predictionSets?:  {
         __typename: "ModelPredictionSetConnection",
         items:  Array< {
@@ -19097,6 +19228,7 @@ export type OnUpdateHistoryPredictionSetSubscription = {
       bio?: string | null,
       image?: string | null,
       role: UserRole,
+      oauthId?: string | null,
       predictionSets?:  {
         __typename: "ModelPredictionSetConnection",
         items:  Array< {
@@ -19334,6 +19466,7 @@ export type OnDeleteHistoryPredictionSetSubscription = {
       bio?: string | null,
       image?: string | null,
       role: UserRole,
+      oauthId?: string | null,
       predictionSets?:  {
         __typename: "ModelPredictionSetConnection",
         items:  Array< {

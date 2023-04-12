@@ -112,6 +112,7 @@ type User @model @searchable @auth(rules: [{allow: public}]) {
     bio: String
     image: String
     role: UserRole! @default(value: "USER")
+    oauthId: String
     predictionSets: [PredictionSet] 
         @hasMany(indexName: "predictionSetsbyUserIdAndCreatedAt" fields: ["id"]) # get recent predictions from user
     historyPredictionSets: [HistoryPredictionSet] 

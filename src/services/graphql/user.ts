@@ -158,10 +158,29 @@ export const getUserByEmail = async (
   }
 };
 
+export const getUserByOauthId = async (
+  oauthId: string,
+): Promise<iApiResponse<ListUsersQuery>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<ListUsersQuery, ListUsersQueryVariables>(
+      queries.listUsers,
+      { filter: { oauthId: { eq: oauthId } } },
+    );
+    if (!data?.listUsers) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data };
+  } catch (err) {
+    return handleError('error getting user by email', err);
+  }
+};
+
 // create a new user after confirming email
 export const createUser = async (
   email: string,
   role?: UserRole,
+  name?: string,
+  oauthId?: string,
 ): Promise<iApiResponse<CreateUserMutation>> => {
   try {
     // Enforce uniqueness!!
@@ -176,7 +195,14 @@ export const createUser = async (
     const { data, errors } = await GraphqlAPI<
       CreateUserMutation,
       CreateUserMutationVariables
-    >(mutations.createUser, { input: { email, role: role || UserRole.USER } });
+    >(mutations.createUser, {
+      input: {
+        email,
+        role: role || UserRole.USER,
+        name: name || null,
+        oauthId: oauthId || null,
+      },
+    });
     if (!data?.createUser) {
       throw new Error(JSON.stringify(errors));
     }

@@ -30,13 +30,13 @@ const getCommunityPredictionsByEvent = async (eventId: string, includeHidden = f
       const ranking = p?.ranking || 0;
       const lastUpdated = p?.updatedAt || '';
       // don't include hidden contenders in tally
-      // don't include rankings higher than 20
+      // don't include rankings higher than 50
       // don't include if prediction is more than a month old
       // don't include if category is shortlisted and contender doesn't have an accolade
       // don't include if nominations have happened and contender is not a nominee
       const isRecentPrediction = isWithinLastMonth(lastUpdated);
       const isHidden = contender.visibility === ContenderVisibility.HIDDEN;
-      const isLowOnList = ranking > 20;
+      const isLowOnList = ranking > 50;
       const contenderIsNotShortlisted =
         ps?.category.isShortlisted === CategoryIsShortlisted.TRUE && !contender.accolade;
       const contenderIsNotNominated =
