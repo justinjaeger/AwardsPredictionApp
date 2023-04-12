@@ -163,9 +163,10 @@ const EventList = ({
                           <Body
                             style={{
                               color: isSubtle ? COLORS.gray : COLORS.white,
+                              fontWeight: '600',
                             }}
                           >
-                            {closeTime === '' ? '' : `Closes: ${closeTime}`}
+                            {closeTime === '' ? '' : `Closes ${closeTime}`}
                           </Body>
                         </View>
                       </View>

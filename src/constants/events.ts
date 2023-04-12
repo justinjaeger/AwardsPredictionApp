@@ -49,13 +49,19 @@ export const getEventTime = (event: iEvent) => {
   const nomDateTime = new Date(event?.nominationDateTime || '');
   const winDateTime = new Date(event?.winDateTime || '');
 
+  const now = new Date();
+  // set showTimeNom to true if is within one week of event
+  const oneWeek = 7 * 24 * 60 * 60 * 1000;
+  const showTimeNom = now.getTime() - nomDateTime.getTime() < oneWeek;
+  const showTimeWin = now.getTime() - winDateTime.getTime() < oneWeek;
+
   return EventStatus.ARCHIVED === event.status
     ? ''
     : eventStatusToPredictionType(event.status) === PredictionType.NOMINATION
     ? event.nominationDateTime
-      ? formatDateTime(nomDateTime)
+      ? formatDateTime(nomDateTime, showTimeNom)
       : ''
     : event.winDateTime
-    ? formatDateTime(winDateTime)
+    ? formatDateTime(winDateTime, showTimeWin)
     : '';
 };
