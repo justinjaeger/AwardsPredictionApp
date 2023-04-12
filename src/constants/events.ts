@@ -12,6 +12,16 @@ export const EVENT_STATUS_TO_STRING: {
   [EventStatus.ARCHIVED]: 'View Results', // view history only
 };
 
+export const EVENT_STATUS_TO_STRING_SHORT: {
+  [key in EventStatus]: string;
+} = {
+  [EventStatus.NOMS_STAGING]: 'Pending Release', // shouldn't show this to user / start preparing nominations
+  [EventStatus.NOMS_LIVE]: 'Nominations', // let users predict nominations
+  [EventStatus.WINS_STAGING]: 'Nominations Closed', // start preparing winners
+  [EventStatus.WINS_LIVE]: 'Winners', // let users predict winners
+  [EventStatus.ARCHIVED]: 'Complete', // view history only
+};
+
 export const ACCOLADE_TO_STRING: {
   [key in ContenderAccolade]: string;
 } = {

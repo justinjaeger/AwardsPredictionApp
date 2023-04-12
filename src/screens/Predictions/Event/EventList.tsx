@@ -15,7 +15,11 @@ import { useCategory } from '../../../context/CategoryContext';
 import { iEvent, iUser } from '../../../types';
 import theme from '../../../constants/theme';
 import AwardsBodyImage from '../../../components/AwardsBodyImage';
-import { EVENT_STATUS_TO_STRING, getEventTime } from '../../../constants/events';
+import {
+  EVENT_STATUS_TO_STRING,
+  EVENT_STATUS_TO_STRING_SHORT,
+  getEventTime,
+} from '../../../constants/events';
 import { Divider } from '@ui-kitten/components';
 import { useAuth } from '../../../context/UserContext';
 import { hexToRgb } from '../../../util/hexToRgb';
@@ -26,11 +30,11 @@ const EVENT_ITEM_HEIGHT = 110;
 const EventList = ({
   events,
   user,
-  isSubtle,
+  isProfile,
 }: {
   events: iEvent[];
   user: iUser | undefined;
-  isSubtle?: boolean;
+  isProfile?: boolean;
 }) => {
   const { userId: authUserId } = useAuth();
   const { width } = useWindowDimensions();
@@ -105,7 +109,7 @@ const EventList = ({
                       marginLeft: theme.windowMargin,
                       flexDirection: 'row',
                       height: eventItemHeight,
-                      backgroundColor: isSubtle
+                      backgroundColor: isProfile
                         ? 'transparent'
                         : hexToRgb(COLORS.secondaryDark, 1),
                       borderRadius: theme.borderRadius,
@@ -116,7 +120,7 @@ const EventList = ({
                       alignItems: 'center',
                       justifyContent: 'center',
                     }}
-                    underlayColor={isSubtle ? COLORS.secondaryDark : COLORS.secondary}
+                    underlayColor={isProfile ? COLORS.secondaryDark : COLORS.secondary}
                     onPress={() => onSelectEvent(event)}
                     onPressIn={() => setHighlightedEvent(event.id)}
                     onPressOut={() => setHighlightedEvent('')}
@@ -132,7 +136,7 @@ const EventList = ({
                       >
                         <AwardsBodyImage
                           awardsBody={awardsBody}
-                          white={isSubtle ? highlightedEvent === event.id : true}
+                          white={isProfile ? highlightedEvent === event.id : true}
                           size={EVENT_ITEM_HEIGHT - 20} // Important that this DOES NOT scale with iPad, because AwardsBodyImage already does
                         />
                       </View>
@@ -157,12 +161,16 @@ const EventList = ({
                               marginBottom: 10,
                               fontWeight: '700',
                             }}
-                          >{`${EVENT_STATUS_TO_STRING[status]}`}</HeaderLight>
+                          >
+                            {isProfile
+                              ? `${EVENT_STATUS_TO_STRING_SHORT[status]}`
+                              : `${EVENT_STATUS_TO_STRING[status]}`}
+                          </HeaderLight>
                         </View>
                         <View style={{ alignItems: 'flex-end' }}>
                           <Body
                             style={{
-                              color: isSubtle ? COLORS.gray : COLORS.white,
+                              color: isProfile ? COLORS.gray : COLORS.white,
                               fontWeight: '600',
                             }}
                           >
