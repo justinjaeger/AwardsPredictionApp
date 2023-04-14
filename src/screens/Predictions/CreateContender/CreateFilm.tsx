@@ -74,7 +74,9 @@ const CreateFilm = (props: iCreateContenderProps) => {
     }
     setIsLoadingSearch(true);
     let Request = TmdbServices.searchMovies(s, minReleaseYear);
-    if (parseInt(s, 10).toString().length === 6) {
+    // number of digits in search (trying to identify an id)
+    const digitCount = parseInt(s, 10).toString().length;
+    if ([5, 6, 7, 8].includes(digitCount)) {
       // search by id instead if they put in a 6 digit number
       Request = TmdbServices.searchMovieById(s);
     }

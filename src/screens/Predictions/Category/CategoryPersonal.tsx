@@ -2,7 +2,6 @@ import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { Alert, Animated, View } from 'react-native';
 import BackButton from '../../../components/Buttons/BackButton';
-import { FAB } from '../../../components/Buttons/FAB';
 import LoadingStatueModal from '../../../components/LoadingStatueModal';
 import MovieGrid from '../../../components/MovieGrid';
 import MovieListDraggable from '../../../components/MovieList/MovieListDraggable';
@@ -29,6 +28,7 @@ import useDevice from '../../../util/device';
 import { AddPredictionsFab } from '../../../components/Buttons/DisplayFAB';
 import useShowAddTab from '../../../hooks/useShowAddTab';
 import EventLink from './EventLink';
+import EditToolbar from '../../../components/Buttons/EditToolbar';
 
 const CategoryPersonal = ({
   collapsedOpacity,
@@ -262,30 +262,37 @@ const CategoryPersonal = ({
           <AddPredictionsFab onPress={onPressAdd} />
         </Animated.View>
       ) : null}
-      <FAB
-        iconName="save-outline"
-        text="Save"
-        onPress={onSaveContenders}
+      <EditToolbar
         visible={isEditing && !isHistory}
-      />
-      <FAB
-        iconName="undo"
-        text="Undo"
-        horizontalOffset={120 * (isPad ? 2 : 1)}
-        onPress={() => {
-          Alert.alert('Undo Changes?', 'Reverts all changes since last saved', [
-            {
-              text: 'Cancel',
-              onPress: () => {},
-              style: 'cancel',
+        buttons={[
+          {
+            text: 'Undo',
+            iconName: 'undo',
+            onPress: () => {
+              Alert.alert('Undo Changes?', 'Reverts all changes since last saved', [
+                {
+                  text: 'Cancel',
+                  onPress: () => {},
+                  style: 'cancel',
+                },
+                {
+                  text: 'Yes',
+                  onPress: () => setPredictions(initialPredictions),
+                },
+              ]);
             },
-            {
-              text: 'Yes',
-              onPress: () => setPredictions(initialPredictions),
-            },
-          ]);
-        }}
-        visible={isEditing && !isHistory}
+          },
+          {
+            text: 'Add',
+            iconName: 'plus',
+            onPress: () => onPressAdd(),
+          },
+          {
+            text: 'Save',
+            iconName: 'save-outline',
+            onPress: () => onSaveContenders(),
+          },
+        ]}
       />
     </>
   );

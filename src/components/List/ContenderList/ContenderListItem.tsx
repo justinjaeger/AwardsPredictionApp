@@ -25,6 +25,8 @@ import { IconButton } from '../../Buttons/IconButton';
 import AnimatedPoster from '../../Images/AnimatedPoster';
 import { Body, SubHeader } from '../../Text';
 import AccoladeTag from './AccoladeTag';
+import CustomIcon from '../../CustomIcon';
+import { hexToRgb } from '../../../util/hexToRgb';
 
 export type iContenderListItemProps = {
   variant: 'community' | 'personal' | 'selectable' | 'search';
@@ -223,8 +225,10 @@ const ContenderListItem = (props: iContenderListItemProps) => {
         backgroundColor:
           isUnqualified && (variant !== 'selectable' || highlighted) // if variant IS selectable (false), must be selected
             ? COLORS.error
-            : isActive || highlighted
+            : isActive
             ? COLORS.secondaryDark
+            : highlighted
+            ? hexToRgb(COLORS.secondaryLight, 0.15)
             : 'transparent',
         width: '100%',
         paddingTop: theme.windowMargin / 8,
@@ -253,7 +257,6 @@ const ContenderListItem = (props: iContenderListItemProps) => {
           style={{
             flexDirection: 'column',
             justifyContent: 'space-between',
-            width: itemWidth,
             height: imageHeight,
           }}
         >
@@ -345,6 +348,15 @@ const ContenderListItem = (props: iContenderListItemProps) => {
                   alignItems: 'center',
                 }}
               />
+            ) : highlighted ? (
+              <View style={{ justifyContent: 'center' }}>
+                <CustomIcon
+                  name="checkmark-circle-2"
+                  size={24}
+                  color={COLORS.secondary}
+                  styles={{ right: 15 }}
+                />
+              </View>
             ) : null}
           </View>
           {/* TODO: Instead of linking to IMDB, display a bunch of info from TMDB */}

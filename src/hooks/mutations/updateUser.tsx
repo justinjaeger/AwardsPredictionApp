@@ -14,9 +14,15 @@ const useUpdateUser = (onComplete?: () => void) => {
       id: string;
       username: string | undefined;
       name: string | undefined;
+      bio: string | undefined;
     }) => {
       setIsComplete(false);
-      return ApiServices.updateUsername(params.id, params.username, params.name);
+      return ApiServices.updateUsername(
+        params.id,
+        params.username,
+        params.name,
+        params.bio,
+      );
     },
     onSuccess: async (res) => {
       if (res.status === 'error') {

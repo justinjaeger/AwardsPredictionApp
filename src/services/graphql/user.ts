@@ -259,6 +259,7 @@ export const updateUsername = async (
   id: string,
   username: string | undefined,
   name: string | undefined,
+  bio: string | undefined,
 ): Promise<iApiResponse<UpdateUserMutation>> => {
   try {
     // First, validate that username is not already taken
@@ -278,6 +279,7 @@ export const updateUsername = async (
     const input: UpdateUserInput = { id };
     if (username !== undefined) input.username = username;
     if (name !== undefined) input.name = name;
+    if (bio !== undefined) input.bio = bio;
     // If not taken, create new username
     const { data, errors } = await GraphqlAPI<
       UpdateUserMutation,
