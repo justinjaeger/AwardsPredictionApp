@@ -158,7 +158,7 @@ const Profile = () => {
               style={{
                 padding: 10,
                 margin: 20,
-                marginTop: 10,
+                marginTop: 0,
                 borderRadius: theme.borderRadius,
               }}
               underlayColor={COLORS.disabled}
