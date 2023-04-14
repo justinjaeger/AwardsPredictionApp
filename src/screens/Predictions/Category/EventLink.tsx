@@ -1,19 +1,18 @@
 import { StackActions, useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { TouchableHighlight } from 'react-native';
-import AwardsBodyImage from '../../../components/AwardsBodyImage';
 import CustomIcon from '../../../components/CustomIcon';
 import COLORS from '../../../constants/colors';
 import theme from '../../../constants/theme';
 import { useCategory } from '../../../context/CategoryContext';
+import { BodyBold } from '../../../components/Text';
+import { hexToRgb } from '../../../util/hexToRgb';
 
 const EventLink = ({ userId }: { userId: string | undefined }) => {
   const navigation = useNavigation();
   const { event } = useCategory();
 
   if (!event) return null;
-
-  const image = <AwardsBodyImage awardsBody={event.awardsBody} white size={36} />;
 
   return (
     <TouchableHighlight
@@ -27,11 +26,10 @@ const EventLink = ({ userId }: { userId: string | undefined }) => {
         flexDirection: 'row',
         justifyContent: 'flex-end',
         alignItems: 'center',
-        padding: 5,
         paddingLeft: 10,
         zIndex: 100,
         borderRadius: theme.borderRadius,
-        backgroundColor: COLORS.primary,
+        backgroundColor: hexToRgb(COLORS.primary, 0.8),
         borderWidth: 1,
         borderColor: COLORS.primaryLight,
         borderTopWidth: 0,
@@ -40,8 +38,8 @@ const EventLink = ({ userId }: { userId: string | undefined }) => {
       underlayColor={COLORS.secondaryDark}
     >
       <>
-        {image}
-        <CustomIcon name={'chevron-right'} />
+        <BodyBold>All Categories</BodyBold>
+        <CustomIcon name={'chevron-right'} size={30} />
       </>
     </TouchableHighlight>
   );

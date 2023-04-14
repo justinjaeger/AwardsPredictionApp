@@ -1,5 +1,5 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react';
-import { Alert, ScrollView, View } from 'react-native';
+import { Alert, View } from 'react-native';
 import Snackbar from '../../components/Snackbar';
 import { useNavigation } from '@react-navigation/native';
 import FormInput from '../../components/Inputs/FormInput';
@@ -14,6 +14,9 @@ import useQueryGetUser from '../../hooks/queries/getUser';
 import ProfileImage from '../../components/ProfileImage';
 import useUpdateProfileImage from '../../hooks/mutations/updateProfileImage';
 import BackButton from '../../components/Buttons/BackButton';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+
+const BIO_CHAR_LIMIT = 150;
 
 const UpdateProfileInfo = () => {
   const { userId, userEmail } = useAuth();
@@ -21,28 +24,33 @@ const UpdateProfileInfo = () => {
 
   const { data: user } = useQueryGetUser(userId);
   const { mutate: updateUser, isComplete } = useUpdateUser(() => {
-    Snackbar.success('Username updated');
+    Snackbar.success('Profile updated');
     navigation.goBack();
   });
   const { mutate: updateProfileImage } = useUpdateProfileImage();
 
   const [name, setName] = useState<string>(user?.name || '');
+  const [bio, setBio] = useState<string>(user?.bio || '');
   const [username, setUsername] = useState<string>(user?.username || '');
   const [usernameStatus, setUsernameStatus] = useState<EvaStatus | undefined>(undefined);
 
   const validName = name.length >= 0;
   const validUsername = username.length >= 8;
+  const validBio = bio.length < 200;
   const nameBeforeEdit = user?.name || '';
   const usernameBeforeEdit = user?.username || '';
+  const bioBeforeEdit = user?.bio || '';
   const enableSubmitUsername = usernameBeforeEdit !== username && validUsername;
   const enableSubmitName = nameBeforeEdit !== name && validName;
+  const enableSubmitBio = bioBeforeEdit !== bio && validBio;
 
-  const submitEnabled = enableSubmitUsername || enableSubmitName;
+  const submitEnabled = enableSubmitUsername || enableSubmitName || enableSubmitBio;
 
   useEffect(() => {
     setName(user?.name || '');
     setUsername(user?.username || '');
-  }, [user?.name, user?.username]);
+    setBio(user?.bio || '');
+  }, [user?.name, user?.username, user?.bio]);
 
   useLayoutEffect(() => {
     // This is the best way to change the header
@@ -79,8 +87,9 @@ const UpdateProfileInfo = () => {
   const updateInfo = async () => {
     const un = enableSubmitUsername ? username : undefined;
     const n = enableSubmitName ? name : undefined;
+    const b = enableSubmitBio ? bio : undefined;
     if (!user?.id) return;
-    updateUser({ id: user?.id, username: un, name: n });
+    updateUser({ id: user?.id, username: un, name: n, bio: b });
   };
 
   const onUploadProfileImage = async () => {
@@ -90,9 +99,13 @@ const UpdateProfileInfo = () => {
 
   return (
     <BackgroundWrapper>
-      <ScrollView
+      <KeyboardAwareScrollView
         style={{ width: '100%' }}
-        contentContainerStyle={{ alignItems: 'center', marginTop: 40 }}
+        contentContainerStyle={{
+          alignItems: 'center',
+          marginTop: 40,
+          paddingBottom: 200,
+        }}
       >
         <View style={{ width: '80%', alignItems: 'center' }}>
           <ProfileImage
@@ -129,20 +142,33 @@ const UpdateProfileInfo = () => {
               }
             }}
           />
+          <FormInput
+            label={'Bio'}
+            value={bio}
+            setValue={setBio}
+            caption={
+              bioBeforeEdit !== bio
+                ? `${BIO_CHAR_LIMIT - bio.length} characters left`
+                : ''
+            }
+            status={bio.length > BIO_CHAR_LIMIT ? 'danger' : undefined}
+            style={{ marginTop: 20 }}
+            multiline
+          />
           {usernameBeforeEdit ? null : (
             <BodyBold style={{ textAlign: 'center', marginBottom: 20, marginTop: 20 }}>
               {'Creating a username lets\nother users find you'}
             </BodyBold>
           )}
-          <SubmitButton
-            text={usernameBeforeEdit ? 'Update' : 'Create'}
-            onPress={updateInfo}
-            disabled={!submitEnabled}
-            loading={!isComplete}
-            style={{ marginTop: 20, width: '100%' }}
-          />
         </View>
-      </ScrollView>
+      </KeyboardAwareScrollView>
+      <SubmitButton
+        text={usernameBeforeEdit ? 'Update' : 'Create'}
+        onPress={() => updateInfo()}
+        disabled={!submitEnabled}
+        loading={!isComplete}
+        style={{ width: '90%', marginBottom: 10 }}
+      />
     </BackgroundWrapper>
   );
 };

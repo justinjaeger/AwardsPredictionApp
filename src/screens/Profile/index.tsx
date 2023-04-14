@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, TouchableHighlight, Animated } from 'react-native';
 import { SubmitButton } from '../../components/Buttons';
-import { BodyBold, HeaderLight, SubHeader } from '../../components/Text';
+import { Body, BodyBold, HeaderLight, SubHeader } from '../../components/Text';
 import { useAuth } from '../../context/UserContext';
 import BackgroundWrapper from '../../components/BackgroundWrapper';
 import {
@@ -14,7 +14,6 @@ import theme from '../../constants/theme';
 import PredictionCarousel from '../../components/PredictionCarousel';
 import COLORS from '../../constants/colors';
 import { useTypedNavigation } from '../../util/hooks';
-import useUpdateProfileImage from '../../hooks/mutations/updateProfileImage';
 import ProfileImage from '../../components/ProfileImage';
 import FollowButton from '../../components/FollowButton';
 import FollowCountButton from '../../components/FollowCountButton';
@@ -36,7 +35,6 @@ const Profile = () => {
   const navigation = useTypedNavigation<PredictionsParamList>();
 
   const { data: events, isLoading: isLoadingAllEvents } = useQueryAllEvents();
-  const { mutate: updateProfileImage } = useUpdateProfileImage();
 
   const {
     isLoading,
@@ -65,10 +63,7 @@ const Profile = () => {
     globalNavigation.navigate('Authenticator');
   };
 
-  const onUploadProfileImage = async () => {
-    if (!authUserId || !userEmail) return; // don't execute if not signed in
-    updateProfileImage({ userId: authUserId, userEmail });
-  };
+  const onPressProfileInfo = () => isAuthUser && navigation.navigate('UpdateProfileInfo');
 
   if (!userId) {
     return (
@@ -124,24 +119,17 @@ const Profile = () => {
             style={{
               alignItems: 'center',
               flexDirection: 'row',
-              marginBottom: 20,
               marginLeft: theme.windowMargin,
             }}
           >
             <ProfileImage
               image={user?.image}
-              onPress={isAuthUser ? onUploadProfileImage : undefined}
+              onPress={isAuthUser ? () => onPressProfileInfo() : undefined}
               style={{ marginLeft: 10, marginRight: 15 }}
             />
             <View style={{ flexDirection: 'column', paddingLeft: 10 }}>
               <TouchableHighlight
-                onPress={
-                  isAuthUser
-                    ? () => {
-                        navigation.navigate('UpdateProfileInfo');
-                      }
-                    : undefined
-                }
+                onPress={isAuthUser ? () => onPressProfileInfo() : undefined}
                 style={{
                   borderRadius: theme.borderRadius,
                   paddingTop: 10,
@@ -164,6 +152,22 @@ const Profile = () => {
               </TouchableHighlight>
             </View>
           </View>
+          {user?.bio ? (
+            <TouchableHighlight
+              onPress={isAuthUser ? () => onPressProfileInfo() : undefined}
+              style={{
+                padding: 10,
+                margin: 20,
+                marginTop: 10,
+                borderRadius: theme.borderRadius,
+              }}
+              underlayColor={COLORS.disabled}
+            >
+              <Body>{user.bio || ''}</Body>
+            </TouchableHighlight>
+          ) : (
+            <View style={{ marginTop: 20 }} />
+          )}
           <View
             style={{
               flexDirection: 'row',

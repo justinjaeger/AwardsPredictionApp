@@ -20,6 +20,7 @@ import { useAsyncEffect } from '../../../util/hooks';
 import { IconButton } from '../../Buttons/IconButton';
 import { Body, SubHeader } from '../../Text';
 import AccoladeTag from './AccoladeTag';
+import CustomIcon from '../../CustomIcon';
 
 type iContenderListItemProps = {
   variant: 'community' | 'personal' | 'selectable' | 'search';
@@ -146,8 +147,6 @@ const ContenderListItemCondensed = (props: iContenderListItemProps) => {
           ? COLORS.secondaryDark
           : isUnqualified && (variant !== 'selectable' || highlighted)
           ? COLORS.error
-          : highlighted
-          ? COLORS.secondaryDark
           : 'transparent',
         width: '100%',
         paddingTop: theme.windowMargin / 4,
@@ -155,7 +154,7 @@ const ContenderListItemCondensed = (props: iContenderListItemProps) => {
         flexDirection: 'row',
         paddingLeft: theme.windowMargin,
       }}
-      underlayColor={draggable ? COLORS.secondaryDark : 'transparent'}
+      underlayColor={COLORS.secondaryDark}
       onLongPress={disableEditing ? undefined : drag}
       disabled={isActive}
     >
@@ -216,6 +215,28 @@ const ContenderListItemCondensed = (props: iContenderListItemProps) => {
                 color={COLORS.white}
                 enableOnPressIn
                 onPress={drag || (() => {})}
+                styles={{
+                  height: 24,
+                  width: 40,
+                  justifyContent: 'center',
+                  marginRight: 13,
+                  alignSelf: 'center',
+                  alignItems: 'center',
+                }}
+              />
+            </View>
+          ) : highlighted ? (
+            <View
+              style={{
+                height: itemHeight,
+                justifyContent: 'center',
+                marginRight: 13,
+              }}
+            >
+              <CustomIcon
+                name="checkmark-circle-2"
+                size={24}
+                color={COLORS.secondary}
                 styles={{
                   height: 24,
                   width: 40,
