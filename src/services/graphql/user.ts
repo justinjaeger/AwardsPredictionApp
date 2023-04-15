@@ -2,7 +2,6 @@ import {
   CreateUserMutation,
   CreateUserMutationVariables,
   GetUserQueryVariables,
-  ListUsersQueryVariables,
   ModelUserFilterInput,
   SearchableUserFilterInput,
   SearchUsersQueryVariables,
@@ -18,20 +17,21 @@ import * as customQueries from '../../graphqlCustom/queries';
 import {
   GetUserFollowingPredictionsQuery,
   GetUserQuery,
-  ListUsersQuery,
   SearchUsersQuery,
 } from '../../graphqlCustom/types';
 import { GraphqlAPI, handleError, iApiResponse } from '../utils';
 
 export const getAllUsers = async (
   paginatedLimit?: number,
-): Promise<iApiResponse<ListUsersQuery>> => {
+): Promise<iApiResponse<SearchUsersQuery>> => {
   try {
-    const { data, errors } = await GraphqlAPI<ListUsersQuery, ListUsersQueryVariables>(
-      queries.listUsers,
-      { limit: paginatedLimit || PAGINATED_USER_RECOMMENDATION_LIMIT },
-    );
-    if (!data?.listUsers) {
+    const { data, errors } = await GraphqlAPI<
+      SearchUsersQuery,
+      SearchUsersQueryVariables
+    >(queries.searchUsers, {
+      limit: paginatedLimit || PAGINATED_USER_RECOMMENDATION_LIMIT,
+    });
+    if (!data?.searchUsers) {
       throw new Error(JSON.stringify(errors));
     }
     return { status: 'success', data };
@@ -44,16 +44,16 @@ export const getAllUsers = async (
 export const getUsersNotFollowing = async (
   authUserId: string,
   paginatedLimit?: number,
-): Promise<iApiResponse<ListUsersQuery>> => {
+): Promise<iApiResponse<SearchUsersQuery>> => {
   try {
     const { data, errors } = await GraphqlAPI<
-      ListUsersQuery,
-      ListUsersQueryVariables & { authUserId: string }
-    >(customQueries.listUsersWithIsFollowing, {
+      SearchUsersQuery,
+      SearchUsersQueryVariables & { authUserId: string }
+    >(customQueries.searchUsersWithIsFollowing, {
       limit: paginatedLimit || PAGINATED_USER_RECOMMENDATION_LIMIT,
       authUserId,
     });
-    if (!data?.listUsers) {
+    if (!data?.searchUsers) {
       throw new Error(JSON.stringify(errors));
     }
     return { status: 'success', data };
@@ -143,13 +143,13 @@ export const getUserWithRelationships = async (
 // Use this to enforce uniqueness
 export const getUserByEmail = async (
   email: string,
-): Promise<iApiResponse<ListUsersQuery>> => {
+): Promise<iApiResponse<SearchUsersQuery>> => {
   try {
-    const { data, errors } = await GraphqlAPI<ListUsersQuery, ListUsersQueryVariables>(
-      queries.listUsers,
-      { filter: { email: { eq: email } } },
-    );
-    if (!data?.listUsers) {
+    const { data, errors } = await GraphqlAPI<
+      SearchUsersQuery,
+      SearchUsersQueryVariables
+    >(customQueries.searchUsers, { filter: { email: { eq: email } } });
+    if (!data?.searchUsers) {
       throw new Error(JSON.stringify(errors));
     }
     return { status: 'success', data };
@@ -160,13 +160,13 @@ export const getUserByEmail = async (
 
 export const getUserByOauthId = async (
   oauthId: string,
-): Promise<iApiResponse<ListUsersQuery>> => {
+): Promise<iApiResponse<SearchUsersQuery>> => {
   try {
-    const { data, errors } = await GraphqlAPI<ListUsersQuery, ListUsersQueryVariables>(
-      queries.listUsers,
-      { filter: { oauthId: { eq: oauthId } } },
-    );
-    if (!data?.listUsers) {
+    const { data, errors } = await GraphqlAPI<
+      SearchUsersQuery,
+      SearchUsersQueryVariables
+    >(queries.searchUsers, { filter: { oauthId: { eq: oauthId } } });
+    if (!data?.searchUsers) {
       throw new Error(JSON.stringify(errors));
     }
     return { status: 'success', data };
@@ -185,10 +185,10 @@ export const createUser = async (
   try {
     // Enforce uniqueness!!
     const { data: maybeUsers } = await getUserByEmail(email);
-    if (!maybeUsers?.listUsers) {
+    if (!maybeUsers?.searchUsers) {
       return { status: 'error' };
     }
-    if (maybeUsers.listUsers.items.length > 0) {
+    if (maybeUsers.searchUsers.items.length > 0) {
       throw new Error('A user with this email already exists');
     }
     // Create user
@@ -220,15 +220,15 @@ export const createTestUser = async (
   try {
     // Enforce email uniqueness
     const { data: maybeUsers } = await getUserByEmail(email);
-    if (!maybeUsers?.listUsers) {
+    if (!maybeUsers?.searchUsers) {
       return { status: 'error' };
     }
-    if (maybeUsers.listUsers.items.length > 0) {
+    if (maybeUsers.searchUsers.items.length > 0) {
       throw new Error('A user with this email already exists');
     }
     // Enforce username uniqueness
-    const { data: listUsersQuery } = await getUsersByUsername(username);
-    const maybeUs = listUsersQuery?.listUsers?.items;
+    const { data: searchUsersQuery } = await getUsersByUsername(username);
+    const maybeUs = searchUsersQuery?.searchUsers?.items;
     if (!maybeUs) {
       throw new Error('An error occured fetching users with this username');
     }
@@ -264,8 +264,8 @@ export const updateUsername = async (
   try {
     // First, validate that username is not already taken
     if (username !== undefined) {
-      const { data: listUsersQuery } = await getUsersByUsername(username);
-      const maybeUsers = listUsersQuery?.listUsers?.items;
+      const { data: searchUsersQuery } = await getUsersByUsername(username);
+      const maybeUsers = searchUsersQuery?.searchUsers?.items;
       if (!maybeUsers) {
         throw new Error('An error occured fetching users with this username');
       }
@@ -314,14 +314,14 @@ export const updateProfileImage = async (
 
 export const getUsersByUsername = async (
   username: string,
-): Promise<iApiResponse<ListUsersQuery>> => {
+): Promise<iApiResponse<SearchUsersQuery>> => {
   try {
     const filter: ModelUserFilterInput = { username: { eq: username } };
-    const { data, errors } = await GraphqlAPI<ListUsersQuery, ListUsersQueryVariables>(
-      queries.listUsers,
-      { filter },
-    );
-    if (!data?.listUsers) {
+    const { data, errors } = await GraphqlAPI<
+      SearchUsersQuery,
+      SearchUsersQueryVariables
+    >(queries.searchUsers, { filter });
+    if (!data?.searchUsers) {
       throw new Error(JSON.stringify(errors));
     }
     return { status: 'success', data };

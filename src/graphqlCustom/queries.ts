@@ -708,6 +708,36 @@ export const getUserWithRelationshipsQuery = /* GraphQL */ `
   }
 `;
 
+export const searchUsers = /* GraphQL */ `
+  query SearchUsers(
+    $filter: SearchableUserFilterInput
+    $sort: [SearchableUserSortInput]
+    $limit: Int
+    $nextToken: String
+    $from: Int
+    $aggregates: [SearchableUserAggregationInput]
+  ) {
+    searchUsers(
+      filter: $filter
+      sort: $sort
+      limit: $limit
+      nextToken: $nextToken
+      from: $from
+      aggregates: $aggregates
+    ) {
+      items {
+        id
+        email
+        username
+        name
+        bio
+        image
+        role
+      }
+    }
+  }
+`;
+
 export const searchUsersSignedOutQuery = /* GraphQL */ `
   query SearchUsers(
     $filter: SearchableUserFilterInput
@@ -1137,6 +1167,42 @@ export const listUsersWithIsFollowing = /* GraphQL */ `
       limit: $limit
       nextToken: $nextToken
       sortDirection: $sortDirection
+    ) {
+      items {
+        id
+        email
+        username
+        name
+        bio
+        image
+        role
+        followers(filter: { followingUserId: { eq: $authUserId } }) {
+          items {
+            id
+          }
+        }
+      }
+    }
+  }
+`;
+
+// lists all users but with an indication of whether we are already following them
+export const searchUsersWithIsFollowing = /* GraphQL */ `
+  query SearchUsers(
+    $filter: SearchableUserFilterInput
+    $sort: [SearchableUserSortInput]
+    $limit: Int
+    $nextToken: String
+    $from: Int
+    $aggregates: [SearchableUserAggregationInput]
+  ) {
+    searchUsers(
+      filter: $filter
+      sort: $sort
+      limit: $limit
+      nextToken: $nextToken
+      from: $from
+      aggregates: $aggregates
     ) {
       items {
         id

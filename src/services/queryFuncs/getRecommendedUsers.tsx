@@ -95,7 +95,7 @@ const getRecommendedUsers = async (
         ? ApiServices.getUsersNotFollowing(authUserId)
         : ApiServices.getAllUsers();
       const { data } = await Request;
-      const formattedUsers: iUser[] = (data?.listUsers?.items || []).map((u) => ({
+      const formattedUsers: iUser[] = (data?.searchUsers?.items || []).map((u) => ({
         id: u?.id || '',
         email: u?.email || '',
         role: UserRole.USER,
