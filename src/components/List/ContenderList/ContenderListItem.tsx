@@ -71,7 +71,8 @@ const ContenderListItem = (props: iContenderListItemProps) => {
 
   const LARGE_POSTER = windowWidth / 3;
   const SMALL_POSTER = windowWidth / 10;
-  const RIGHT_COL_WIDTH = variant === 'personal' ? 45 : variant === 'community' ? 75 : 10;
+  const RIGHT_COL_WIDTH =
+    variant === 'personal' ? 45 : variant === 'community' ? 100 : 10;
   const BODY_WIDTH_SELECTED =
     windowWidth - LARGE_POSTER - theme.windowMargin * 2 - RIGHT_COL_WIDTH;
   const BODY_WIDTH_UNSELECTED =
@@ -321,16 +322,26 @@ const ContenderListItem = (props: iContenderListItemProps) => {
                 style={{
                   width: RIGHT_COL_WIDTH,
                   flexDirection: 'row',
-                  justifyContent: 'space-between',
                   paddingRight: theme.windowMargin,
                 }}
               >
                 {nominationsHaveHappened ? (
                   <View />
                 ) : (
-                  <Body style={{ textAlign: 'right' }}>{nom.toString()}</Body>
+                  <View style={{ width: RIGHT_COL_WIDTH / 2 }}>
+                    <Body
+                      style={{
+                        textAlign: 'right',
+                        marginRight: 10,
+                      }}
+                    >
+                      {nom.toString()}
+                    </Body>
+                  </View>
                 )}
-                <Body style={{ textAlign: 'right' }}>{win.toString()}</Body>
+                <Body style={{ textAlign: 'right', width: RIGHT_COL_WIDTH / 2 }}>
+                  {win.toString()}
+                </Body>
               </View>
             ) : null}
             {variant === 'personal' && !disableEditing ? (

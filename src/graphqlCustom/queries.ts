@@ -186,7 +186,9 @@ export const communityPredictionSetByEventId = /* GraphQL */ `
           createdAt
           updatedAt
         }
-        predictions {
+        # only return the top 10 predictions in each category"
+        predictions(filter: { ranking: { le: 30 } }, limit: 1000) {
+          # there shouldn't be more than 1000 contenders, right? So this LIMIT should be ok
           items {
             id
             communityPredictionSetId
@@ -963,24 +965,22 @@ export const searchFollowingSignedOut = /* GraphQL */ `
 `;
 
 export const getTotalRelationships = /* GraphQL */ `
-  query ListRelationships(
-    $id: ID
-    $filter: ModelRelationshipFilterInput
-    $limit: Int
+  query SearchRelationships(
+    $filter: SearchableRelationshipFilterInput
+    $sort: [SearchableRelationshipSortInput]
+    $limit: Int # limit applies to both how many Following we return, but also how many Following's Following we return (so 10 = 100 results)
     $nextToken: String
-    $sortDirection: ModelSortDirection
+    $from: Int
   ) {
-    listRelationships(
-      id: $id
+    searchRelationships(
       filter: $filter
+      sort: $sort
       limit: $limit
       nextToken: $nextToken
-      sortDirection: $sortDirection
+      from: $from
     ) {
       # Just enough to derive the relationship count
-      items {
-        id
-      }
+      total
     }
   }
 `;
@@ -1133,6 +1133,27 @@ export const getRecentFollowingPredictions = /* GraphQL */ `
 export const getFriendsPredictingEventQuery = /* GraphQL */ `
   query ListRelationships($followingUserId: ID, $eventId: ID) {
     listRelationships(filter: { followingUserId: { eq: $followingUserId } }) {
+      items {
+        followedUser {
+          id
+          image
+          name
+          username
+          predictionSets(filter: { eventId: { eq: $eventId } }, limit: 1) {
+            items {
+              id
+              createdAt
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const searchFriendsPredictingEventQuery = /* GraphQL */ `
+  query SearchRelationships($followingUserId: ID, $eventId: ID) {
+    searchRelationships(filter: { followingUserId: { eq: $followingUserId } }) {
       items {
         followedUser {
           id

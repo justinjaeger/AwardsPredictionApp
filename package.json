@@ -7,6 +7,7 @@
     "typescript": "tsc --noEmit --skipLibCheck",
     "android": "react-native run-android",
     "ios": "react-native run-ios",
+    "free-up-memory": "node --max-old-space-size=8192 node_modules/react-native/local-cli/cli.js",
     "start": "react-native start",
     "fix": "yarn fix:prettier && yarn fix:eslint",
     "fix:eslint": "eslint --fix \"**/*.ts\"",
