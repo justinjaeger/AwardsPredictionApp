@@ -7,7 +7,7 @@ const {
 const {
   getOpenEventsRequest,
   predictionSetByEventIdRequest,
-  communityPredictionSetByEventIdRequest,
+  communityPredictionSetIdsOnlyByEventIdRequest,
   createCommunityPredictionSet,
   createCommunityPrediction,
   deleteCommunityPredictionSet,
@@ -56,7 +56,7 @@ const getFormerCommunityPredictions = async (eventIds) => {
 
   try {
     for (const eventId of eventIds) {
-      response = await fetch(communityPredictionSetByEventIdRequest(eventId));
+      response = await fetch(communityPredictionSetIdsOnlyByEventIdRequest(eventId));
       body = await response.json();
       if (body.errors) throw new Error(JSON.stringify(body.errors));
       const predictionSets = body.data.communityPredictionSetByEventId.items;
@@ -118,10 +118,22 @@ const getPredictions = async (eventIds, openEvents) => {
       if (!indexedRankings[eventId]) {
         indexedRankings[eventId] = {};
       }
-      response = await fetch(predictionSetByEventIdRequest(eventId));
-      body = await response.json();
-      if (body.errors) throw new Error(JSON.stringify(body.errors));
-      const predictionSets = body.data.predictionSetByEventId.items;
+      const predictionSets = [];
+      let nextToken; // will be null when it's the last one. undefined to start
+      while (nextToken !== null) {
+        console.log('in while loop', predictionSets.length);
+        response = await fetch(predictionSetByEventIdRequest(eventId, nextToken));
+        body = await response.json();
+        if (body.errors) throw new Error(JSON.stringify(body.errors));
+        const newItems = body.data.predictionSetByEventId.items;
+        predictionSets.push(...newItems);
+        nextToken = body.data.predictionSetByEventId.nextToken;
+      }
+      //   response = await fetch(predictionSetByEventIdRequest(eventId));
+      //   body = await response.json();
+      //   if (body.errors) throw new Error(JSON.stringify(body.errors));
+      //   const predictionSets = body.data.predictionSetByEventId.items;
+
       // add to formerPredictionSetIds
       predictionSets.forEach((predictionSet) => {
         const categoryId = predictionSet.categoryId;
@@ -129,46 +141,48 @@ const getPredictions = async (eventIds, openEvents) => {
         if (!indexedRankings[eventId][categoryId]) {
           indexedRankings[eventId][categoryId] = {};
         }
-        const predictions = predictionSet.predictions.items;
-        predictions.forEach((prediction) => {
-          // add to indexed rankings
-          const { contenderId, contender, ranking: _ranking, createdAt } = prediction;
-          const ranking = _ranking || 0; // make sure ranking is a number
-          // don't include hidden contenders in tally
-          // don't include rankings higher than 50
-          // don't include if prediction is more than a month old
-          // don't include if category is shortlisted and contender doesn't have an accolade
-          // don't include if nominations have happened and contender is not a nominee
-          const isHidden = contender.visibility === 'HIDDEN';
-          const isLowOnList = ranking > 50;
-          const isRecentPrediction = isWithinLastMonth(createdAt);
-          const contenderIsNotShortlisted =
-            predictionSet?.category.isShortlisted === 'TRUE' && !contender.accolade;
-          const nomsHaveHappened =
-            event.status !== 'NOMS_LIVE' && event.status !== 'NOMS_STAGING';
-          const contenderIsNominated =
-            contender.accolade === 'NOMINEE' || contender.accolade === 'WINNER';
-          const isNotNominated = nomsHaveHappened && !contenderIsNominated;
-          if (
-            isHidden ||
-            isLowOnList ||
-            !isRecentPrediction ||
-            contenderIsNotShortlisted ||
-            isNotNominated
-          ) {
-            return;
-          }
-          // Create space for contender entry if it doesn't exist
-          if (!indexedRankings[eventId][categoryId][contenderId]) {
-            indexedRankings[eventId][categoryId][contenderId] = {};
-          }
-          // if ranking doesn't exist, initialize to zero
-          if (!indexedRankings[eventId][categoryId][contenderId][ranking]) {
-            indexedRankings[eventId][categoryId][contenderId][ranking] = 0;
-          }
-          // tally user's ranking
-          indexedRankings[eventId][categoryId][contenderId][ranking] += 1;
-        });
+        const predictions = predictionSet.predictions?.items;
+        if (predictions) {
+          predictions.forEach((prediction) => {
+            // add to indexed rankings
+            const { contenderId, contender, ranking: _ranking, createdAt } = prediction;
+            const ranking = _ranking || 0; // make sure ranking is a number
+            // don't include hidden contenders in tally
+            // don't include rankings higher than 50
+            // don't include if prediction is more than a month old
+            // don't include if category is shortlisted and contender doesn't have an accolade
+            // don't include if nominations have happened and contender is not a nominee
+            const isHidden = contender.visibility === 'HIDDEN';
+            const isLowOnList = ranking > 50;
+            const isRecentPrediction = isWithinLastMonth(createdAt);
+            const contenderIsNotShortlisted =
+              predictionSet?.category.isShortlisted === 'TRUE' && !contender.accolade;
+            const nomsHaveHappened =
+              event.status !== 'NOMS_LIVE' && event.status !== 'NOMS_STAGING';
+            const contenderIsNominated =
+              contender.accolade === 'NOMINEE' || contender.accolade === 'WINNER';
+            const isNotNominated = nomsHaveHappened && !contenderIsNominated;
+            if (
+              isHidden ||
+              isLowOnList ||
+              !isRecentPrediction ||
+              contenderIsNotShortlisted ||
+              isNotNominated
+            ) {
+              return;
+            }
+            // Create space for contender entry if it doesn't exist
+            if (!indexedRankings[eventId][categoryId][contenderId]) {
+              indexedRankings[eventId][categoryId][contenderId] = {};
+            }
+            // if ranking doesn't exist, initialize to zero
+            if (!indexedRankings[eventId][categoryId][contenderId][ranking]) {
+              indexedRankings[eventId][categoryId][contenderId][ranking] = 0;
+            }
+            // tally user's ranking
+            indexedRankings[eventId][categoryId][contenderId][ranking] += 1;
+          });
+        }
       });
     }
 
@@ -268,6 +282,7 @@ const createCommunityPredictions = async (
 
     // create all predictionSets in parallel
     responses = await Promise.all(createPredictionSetPromises);
+    console.log('createPredictionSets response:', responses.length);
 
     // prepare createPrediction requests
     const createPredictionPromises = [];
