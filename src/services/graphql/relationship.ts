@@ -3,7 +3,6 @@ import {
   CreateRelationshipMutationVariables,
   DeleteRelationshipMutation,
   DeleteRelationshipMutationVariables,
-  ListRelationshipsQueryVariables,
   SearchableSortDirection,
   SearchRelationshipsQueryVariables,
 } from '../../API';
@@ -14,27 +13,24 @@ import {
 import * as mutations from '../../graphql/mutations';
 import * as queries from '../../graphql/queries';
 import * as customQueries from '../../graphqlCustom/queries';
-import {
-  SearchRelationshipsQuery,
-  ListRelationshipsQuery,
-} from '../../graphqlCustom/types';
+import { SearchRelationshipsQuery } from '../../graphqlCustom/types';
 import { GraphqlAPI, handleError, iApiResponse } from '../utils';
 
 export const getRelationship = async (
   followedUserId: string,
   followingUserId: string,
-): Promise<iApiResponse<ListRelationshipsQuery>> => {
+): Promise<iApiResponse<SearchRelationshipsQuery>> => {
   try {
     const { data, errors } = await GraphqlAPI<
-      ListRelationshipsQuery,
-      ListRelationshipsQueryVariables
-    >(queries.listRelationships, {
+      SearchRelationshipsQuery,
+      SearchRelationshipsQueryVariables
+    >(queries.searchRelationships, {
       filter: {
         followedUserId: { eq: followedUserId },
         followingUserId: { eq: followingUserId },
       },
     });
-    if (!data?.listRelationships) {
+    if (!data?.searchRelationships) {
       throw new Error(JSON.stringify(errors));
     }
     return { status: 'success', data: data };
@@ -53,7 +49,7 @@ export const followUser = async (
     if (maybeRelationships.status !== 'success') {
       throw new Error(JSON.stringify(maybeRelationships.error));
     }
-    if ((maybeRelationships.data?.listRelationships?.items || []).length > 0) {
+    if ((maybeRelationships.data?.searchRelationships?.items || []).length > 0) {
       throw new Error('relationship already exists');
     }
     // create relationship
@@ -80,10 +76,10 @@ export const unFollowUser = async (
     if (maybeRelationships.status !== 'success') {
       throw new Error(JSON.stringify(maybeRelationships.error));
     }
-    if (maybeRelationships.data?.listRelationships?.items?.length === 0) {
+    if (maybeRelationships.data?.searchRelationships?.items?.length === 0) {
       throw new Error('relationship not found');
     }
-    const relationship = maybeRelationships.data?.listRelationships?.items[0];
+    const relationship = maybeRelationships.data?.searchRelationships?.items[0];
     const relationshipId = relationship?.id;
     if (!relationshipId) {
       throw new Error('relationship id not found');
@@ -206,17 +202,17 @@ export const getPaginatedFollowingSignedOut = async (
 
 export const getFollowingCount = async (
   followingUserId: string,
-): Promise<iApiResponse<ListRelationshipsQuery>> => {
+): Promise<iApiResponse<SearchRelationshipsQuery>> => {
   try {
     const { data, errors } = await GraphqlAPI<
-      ListRelationshipsQuery,
-      ListRelationshipsQueryVariables
+      SearchRelationshipsQuery,
+      SearchRelationshipsQueryVariables
     >(customQueries.getTotalRelationships, {
       filter: {
         followingUserId: { eq: followingUserId },
       },
     });
-    if (!data?.listRelationships) {
+    if (!data?.searchRelationships) {
       throw new Error(JSON.stringify(errors));
     }
     return { status: 'success', data: data };
@@ -227,17 +223,17 @@ export const getFollowingCount = async (
 
 export const getFollowerCount = async (
   followedUserId: string,
-): Promise<iApiResponse<ListRelationshipsQuery>> => {
+): Promise<iApiResponse<SearchRelationshipsQuery>> => {
   try {
     const { data, errors } = await GraphqlAPI<
-      ListRelationshipsQuery,
-      ListRelationshipsQueryVariables
+      SearchRelationshipsQuery,
+      SearchRelationshipsQueryVariables
     >(customQueries.getTotalRelationships, {
       filter: {
         followedUserId: { eq: followedUserId },
       },
     });
-    if (!data?.listRelationships) {
+    if (!data?.searchRelationships) {
       throw new Error(JSON.stringify(errors));
     }
     return { status: 'success', data: data };
@@ -364,16 +360,16 @@ export const getAnyUsers = async (): Promise<iApiResponse<SearchRelationshipsQue
 export const getFriendsPredictingEvent = async (
   followingUserId: string,
   eventId: string,
-): Promise<iApiResponse<ListRelationshipsQuery>> => {
+): Promise<iApiResponse<SearchRelationshipsQuery>> => {
   try {
     const { data, errors } = await GraphqlAPI<
-      ListRelationshipsQuery,
+      SearchRelationshipsQuery,
       { followingUserId: string; eventId: string }
-    >(customQueries.getFriendsPredictingEventQuery, {
+    >(customQueries.searchFriendsPredictingEventQuery, {
       followingUserId,
       eventId,
     });
-    if (!data?.listRelationships) {
+    if (!data?.searchRelationships) {
       throw new Error(JSON.stringify(errors));
     }
     return { status: 'success', data: data };

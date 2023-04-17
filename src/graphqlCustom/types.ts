@@ -460,6 +460,55 @@ export type SearchRelationshipsQuery = {
         role: UserRole;
         predictionSets?: {
           __typename: 'ModelPredictionSetConnection';
+          items: Array<{
+            __typename: 'PredictionSet';
+            id: string;
+            userId: string;
+            user: {
+              __typename: 'User';
+              id: string;
+              email: string;
+              username?: string | null;
+              name?: string | null;
+              bio?: string | null;
+              image?: string | null;
+              role: UserRole;
+              createdAt: string;
+              updatedAt: string;
+            };
+            eventId: string;
+            event: {
+              __typename: 'Event';
+              id: string;
+              awardsBody: AwardsBody;
+              year: number;
+              nominationDateTime?: string | null;
+              winDateTime?: string | null;
+              status?: EventStatus | null;
+              createdAt: string;
+              updatedAt: string;
+              liveAt?: string | null;
+            };
+            categoryId: string;
+            category: {
+              __typename: 'Category';
+              id: string;
+              eventId: string;
+              name: CategoryName;
+              type: CategoryType;
+              isShortlisted?: CategoryIsShortlisted | null;
+              createdAt: string;
+              updatedAt: string;
+            };
+            predictions?: {
+              __typename: 'ModelPredictionConnection';
+              nextToken?: string | null;
+            } | null;
+            type?: PredictionType | null;
+            comment?: string | null;
+            createdAt: string;
+            updatedAt: string;
+          } | null>;
           nextToken?: string | null;
         } | null;
         historyPredictionSets?: {
