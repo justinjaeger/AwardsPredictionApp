@@ -186,7 +186,9 @@ export const communityPredictionSetByEventId = /* GraphQL */ `
           createdAt
           updatedAt
         }
-        predictions {
+        # only return the top 10 predictions in each category"
+        predictions(filter: { ranking: { le: 30 } }, limit: 1000) {
+          # there shouldn't be more than 1000 contenders, right? So this LIMIT should be ok
           items {
             id
             communityPredictionSetId
@@ -708,6 +710,36 @@ export const getUserWithRelationshipsQuery = /* GraphQL */ `
   }
 `;
 
+export const searchUsers = /* GraphQL */ `
+  query SearchUsers(
+    $filter: SearchableUserFilterInput
+    $sort: [SearchableUserSortInput]
+    $limit: Int
+    $nextToken: String
+    $from: Int
+    $aggregates: [SearchableUserAggregationInput]
+  ) {
+    searchUsers(
+      filter: $filter
+      sort: $sort
+      limit: $limit
+      nextToken: $nextToken
+      from: $from
+      aggregates: $aggregates
+    ) {
+      items {
+        id
+        email
+        username
+        name
+        bio
+        image
+        role
+      }
+    }
+  }
+`;
+
 export const searchUsersSignedOutQuery = /* GraphQL */ `
   query SearchUsers(
     $filter: SearchableUserFilterInput
@@ -933,24 +965,22 @@ export const searchFollowingSignedOut = /* GraphQL */ `
 `;
 
 export const getTotalRelationships = /* GraphQL */ `
-  query ListRelationships(
-    $id: ID
-    $filter: ModelRelationshipFilterInput
-    $limit: Int
+  query SearchRelationships(
+    $filter: SearchableRelationshipFilterInput
+    $sort: [SearchableRelationshipSortInput]
+    $limit: Int # limit applies to both how many Following we return, but also how many Following's Following we return (so 10 = 100 results)
     $nextToken: String
-    $sortDirection: ModelSortDirection
+    $from: Int
   ) {
-    listRelationships(
-      id: $id
+    searchRelationships(
       filter: $filter
+      sort: $sort
       limit: $limit
       nextToken: $nextToken
-      sortDirection: $sortDirection
+      from: $from
     ) {
       # Just enough to derive the relationship count
-      items {
-        id
-      }
+      total
     }
   }
 `;
@@ -1121,6 +1151,27 @@ export const getFriendsPredictingEventQuery = /* GraphQL */ `
   }
 `;
 
+export const searchFriendsPredictingEventQuery = /* GraphQL */ `
+  query SearchRelationships($followingUserId: ID, $eventId: ID) {
+    searchRelationships(filter: { followingUserId: { eq: $followingUserId } }) {
+      items {
+        followedUser {
+          id
+          image
+          name
+          username
+          predictionSets(filter: { eventId: { eq: $eventId } }, limit: 1) {
+            items {
+              id
+              createdAt
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
 // lists all users but with an indication of whether we are already following them
 export const listUsersWithIsFollowing = /* GraphQL */ `
   query ListUsers(
@@ -1137,6 +1188,42 @@ export const listUsersWithIsFollowing = /* GraphQL */ `
       limit: $limit
       nextToken: $nextToken
       sortDirection: $sortDirection
+    ) {
+      items {
+        id
+        email
+        username
+        name
+        bio
+        image
+        role
+        followers(filter: { followingUserId: { eq: $authUserId } }) {
+          items {
+            id
+          }
+        }
+      }
+    }
+  }
+`;
+
+// lists all users but with an indication of whether we are already following them
+export const searchUsersWithIsFollowing = /* GraphQL */ `
+  query SearchUsers(
+    $filter: SearchableUserFilterInput
+    $sort: [SearchableUserSortInput]
+    $limit: Int
+    $nextToken: String
+    $from: Int
+    $aggregates: [SearchableUserAggregationInput]
+  ) {
+    searchUsers(
+      filter: $filter
+      sort: $sort
+      limit: $limit
+      nextToken: $nextToken
+      from: $from
+      aggregates: $aggregates
     ) {
       items {
         id

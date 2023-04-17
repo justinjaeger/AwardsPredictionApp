@@ -12,8 +12,9 @@ const getEventsQuery = /* GraphQL */ `
 `;
 
 const predictionSetByEventId = /* GraphQL */ `
-  query PredictionSetByEventId($eventId: ID!) {
-    predictionSetByEventId(eventId: $eventId) {
+  query PredictionSetByEventId($eventId: ID!, $nextToken: String) {
+    predictionSetByEventId(eventId: $eventId, nextToken: $nextToken, limit: 500) {
+      nextToken
       items {
         id # predictionSetid
         categoryId
@@ -64,8 +65,24 @@ const communityPredictionSetByEventId = /* GraphQL */ `
   }
 `;
 
+const communityPredictionSetIdsOnlyByEventId = /* GraphQL */ `
+  query CommunityPredictionSetByEventId($eventId: ID!) {
+    communityPredictionSetByEventId(eventId: $eventId, limit: 100000) {
+      items {
+        id # communityPredictionSetid
+        predictions(limit: 100000) {
+          items {
+            id # communityPredictionId
+          }
+        }
+      }
+    }
+  }
+`;
+
 module.exports = {
   getEventsQuery,
   predictionSetByEventId,
   communityPredictionSetByEventId,
+  communityPredictionSetIdsOnlyByEventId,
 };

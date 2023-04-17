@@ -68,7 +68,7 @@ const AppleOauthButton = () => {
       } else {
         // If not, assume it's not first time signing in and attempt to find user by oauthId
         const { data: getUserRes } = await ApiServices.getUserByOauthId(oauthId);
-        const dbUser = getUserRes?.listUsers?.items[0];
+        const dbUser = getUserRes?.searchUsers?.items[0];
         if (!dbUser) {
           throw new Error('Error finding user');
         }

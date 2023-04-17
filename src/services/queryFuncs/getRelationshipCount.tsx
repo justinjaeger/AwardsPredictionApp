@@ -8,8 +8,8 @@ const getRelationshipCount = async (
   const followerResult = await ApiServices.getFollowerCount(userId);
   const followingResult = await ApiServices.getFollowingCount(userId);
 
-  const followerCount = followerResult.data?.listRelationships?.items?.length || 0;
-  const followingCount = followingResult.data?.listRelationships?.items?.length || 0;
+  const followerCount = followerResult.data?.searchRelationships?.total || 0;
+  const followingCount = followingResult.data?.searchRelationships?.total || 0;
 
   return { followerCount, followingCount };
 };

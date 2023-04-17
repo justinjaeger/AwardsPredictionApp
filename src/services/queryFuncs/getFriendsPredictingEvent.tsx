@@ -9,7 +9,7 @@ const getFriendsPredictingEvent = async (
 ): Promise<iUser[]> => {
   if (!followingUserId || !eventId) return [];
   const { data } = await ApiServices.getFriendsPredictingEvent(followingUserId, eventId);
-  const relationships = data?.listRelationships?.items || [];
+  const relationships = data?.searchRelationships?.items || [];
   const users = relationships
     .map((r) => r?.followedUser)
     .filter((user) => {
