@@ -70,6 +70,8 @@ const getFormerCommunityPredictions = async (eventIds) => {
         });
       });
     }
+    console.log('formerPredictionSetIds', formerPredictionSetIds.length);
+    console.log('formerPredictionIds', formerPredictionIds.length);
     return {
       status: 'success',
       data: { formerPredictionSetIds, formerPredictionIds },

@@ -67,10 +67,10 @@ const communityPredictionSetByEventId = /* GraphQL */ `
 
 const communityPredictionSetIdsOnlyByEventId = /* GraphQL */ `
   query CommunityPredictionSetByEventId($eventId: ID!) {
-    communityPredictionSetByEventId(eventId: $eventId) {
+    communityPredictionSetByEventId(eventId: $eventId, limit: 100000) {
       items {
         id # communityPredictionSetid
-        predictions {
+        predictions(limit: 100000) {
           items {
             id # communityPredictionId
           }
