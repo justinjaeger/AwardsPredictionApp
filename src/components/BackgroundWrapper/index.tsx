@@ -36,7 +36,7 @@ const BackgroundWrapper = (props: { children: ReactChildren }) => {
           >
             <View
               style={{
-                backgroundColor: 'rgba(255,255,255,0.01)',
+                backgroundColor: 'rgba(255,255,255,0.02)',
                 width: dotSize,
                 height: dotSize,
                 borderRadius: 10,
