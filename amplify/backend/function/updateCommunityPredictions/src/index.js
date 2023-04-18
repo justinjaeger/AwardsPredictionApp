@@ -35,6 +35,15 @@ exports.handler = async () => {
     }
     const { formerPredictionSetIds, formerPredictionIds } = response.data;
 
+    // delete former predictions
+    response = await deletePreviousCommunityPredictions(
+      formerPredictionSetIds,
+      formerPredictionIds,
+    );
+    if (response.status === 'error') {
+      throw new Error(response.data.errors);
+    }
+
     // Get all predictions sets with openEventIds & create IndexedRankings
     response = await getPredictions(openEventIds, openEvents);
     if (response.status === 'error') {
@@ -46,14 +55,6 @@ exports.handler = async () => {
       indexedRankings,
       contenderPoints,
       openEvents,
-    );
-    if (response.status === 'error') {
-      throw new Error(response.data.errors);
-    }
-
-    response = await deletePreviousCommunityPredictions(
-      formerPredictionSetIds,
-      formerPredictionIds,
     );
     if (response.status === 'error') {
       throw new Error(response.data.errors);
