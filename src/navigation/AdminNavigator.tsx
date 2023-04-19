@@ -10,6 +10,7 @@ import AddTestUser from '../screens/Admin/AddTestUser';
 import { useHeaderSettings } from '../hooks/useHeaderSettings';
 import { useAuth } from '../context/UserContext';
 import { UserRole } from '../API';
+import AdminScripts from '../screens/Admin/Scripts';
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -67,6 +68,15 @@ const AdminNavigator = () => {
         component={AddTestUser}
         options={{
           headerTitle: getHeaderTitle('Add Test User'),
+          headerLeft: BackButton,
+          ...medium,
+        }}
+      />
+      <Screen
+        name="AdminScripts"
+        component={AdminScripts}
+        options={{
+          headerTitle: getHeaderTitle('Admin Scripts'),
           headerLeft: BackButton,
           ...medium,
         }}

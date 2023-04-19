@@ -44,6 +44,11 @@ const Admin = () => {
             onPress={() => navigation.navigate('AddTestUser')}
             style={{ marginTop: 30 }}
           />
+          <SubmitButton
+            text={'Scripts'}
+            onPress={() => navigation.navigate('AdminScripts')}
+            style={{ marginTop: 30 }}
+          />
         </ScrollView>
       </SafeAreaViewFixed>
     </BackgroundWrapper>

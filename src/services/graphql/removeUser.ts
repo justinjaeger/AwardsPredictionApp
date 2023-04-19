@@ -19,8 +19,8 @@ import {
   ListPredictionSetsQueryVariables,
   ListPredictionsQuery,
   ListPredictionsQueryVariables,
-  ListRelationshipsQuery,
-  ListRelationshipsQueryVariables,
+  SearchRelationshipsQuery,
+  SearchRelationshipsQueryVariables,
   UpdateUserMutation,
   UpdateUserMutationVariables,
 } from '../../API';
@@ -33,9 +33,9 @@ import { GraphqlAPI, handleError, iApiResponse } from '../utils';
 
 // QUERIES
 
-const listRelationshipsQuery = /* GraphQL */ `
-  query ListRelationships($id: ID, $filter: ModelRelationshipFilterInput) {
-    listRelationships(id: $id, filter: $filter) {
+const searchRelationshipsQuery = /* GraphQL */ `
+  query SearchRelationships($id: ID, $filter: ModelRelationshipFilterInput) {
+    searchRelationships(id: $id, filter: $filter) {
       items {
         id
       }
@@ -43,6 +43,7 @@ const listRelationshipsQuery = /* GraphQL */ `
   }
 `;
 
+// NOTE: LIST OPERATIONS ARE FUCKED (IN CASE USING THIS)
 const listPredictionSetsQuery = /* GraphQL */ `
   query ListPredictionSets($id: ID, $filter: ModelPredictionSetFilterInput) {
     listPredictionSets(id: $id, filter: $filter) {
@@ -54,6 +55,7 @@ const listPredictionSetsQuery = /* GraphQL */ `
   }
 `;
 
+// NOTE: LIST OPERATIONS ARE FUCKED (IN CASE USING THIS)
 const listPredictionsQuery = /* GraphQL */ `
   query ListPredictions($id: ID, $filter: ModelPredictionFilterInput) {
     listPredictions(id: $id, filter: $filter) {
@@ -64,6 +66,7 @@ const listPredictionsQuery = /* GraphQL */ `
   }
 `;
 
+// NOTE: LIST OPERATIONS ARE FUCKED (IN CASE USING THIS)
 const listHistoryPredictionSetsQuery = /* GraphQL */ `
   query ListHistoryPredictionSets(
     $id: ID
@@ -86,6 +89,7 @@ const listHistoryPredictionSetsQuery = /* GraphQL */ `
   }
 `;
 
+// NOTE: LIST OPERATIONS ARE FUCKED (IN CASE USING THIS)
 const listHistoryPredictionsQuery = /* GraphQL */ `
   query ListHistoryPredictions(
     $id: ID
@@ -298,16 +302,16 @@ const deleteHistoryPredictionSet = async (
 
 const getAllFollowings = async (
   followedUserId: string,
-): Promise<iApiResponse<ListRelationshipsQuery>> => {
+): Promise<iApiResponse<SearchRelationshipsQuery>> => {
   const { data, errors } = await GraphqlAPI<
-    ListRelationshipsQuery,
-    ListRelationshipsQueryVariables
-  >(listRelationshipsQuery, {
+    SearchRelationshipsQuery,
+    SearchRelationshipsQueryVariables
+  >(searchRelationshipsQuery, {
     filter: {
       followedUserId: { eq: followedUserId },
     },
   });
-  if (!data?.listRelationships) {
+  if (!data?.searchRelationships) {
     throw new Error(JSON.stringify(errors));
   }
   return { status: 'success', data: data };
@@ -315,16 +319,16 @@ const getAllFollowings = async (
 
 const getAllFollowers = async (
   followingUserId: string,
-): Promise<iApiResponse<ListRelationshipsQuery>> => {
+): Promise<iApiResponse<SearchRelationshipsQuery>> => {
   const { data, errors } = await GraphqlAPI<
-    ListRelationshipsQuery,
-    ListRelationshipsQueryVariables
-  >(listRelationshipsQuery, {
+    SearchRelationshipsQuery,
+    SearchRelationshipsQueryVariables
+  >(searchRelationshipsQuery, {
     filter: {
       followingUserId: { eq: followingUserId },
     },
   });
-  if (!data?.listRelationships) {
+  if (!data?.searchRelationships) {
     throw new Error(JSON.stringify(errors));
   }
   return { status: 'success', data: data };
@@ -347,21 +351,22 @@ const deleteRelationship = async (
 
 const removeAllRelationships = async (userId: string): Promise<any> => {
   // going to push all promises into an array and then await them all
-  const promises: Promise<any>[] = [];
+  const deletePromises: Promise<any>[] = [];
   // we handle follower and followings relationship deletion the same way
   const handleRelationships = (
-    listRelationshipsResponse: iApiResponse<ListRelationshipsQuery>,
+    searchRelationshipsResponse: iApiResponse<SearchRelationshipsQuery>,
   ) => {
-    if (listRelationshipsResponse.status !== 'success') {
-      throw new Error(JSON.stringify(listRelationshipsResponse.error));
+    if (searchRelationshipsResponse.status !== 'success') {
+      throw new Error(JSON.stringify(searchRelationshipsResponse.error));
     }
-    const relationships = listRelationshipsResponse.data?.listRelationships?.items || [];
+    const relationships =
+      searchRelationshipsResponse.data?.searchRelationships?.items || [];
     const relationshipIds = relationships?.map((r) => r?.id);
     for (let i = 0; i < relationshipIds.length; i++) {
       const id = relationshipIds[i];
       if (id) {
         // push delete relationship promise to queue
-        promises.push(deleteRelationship(id));
+        deletePromises.push(deleteRelationship(id));
       }
     }
   };
@@ -371,7 +376,7 @@ const removeAllRelationships = async (userId: string): Promise<any> => {
   const relationships2 = await getAllFollowers(userId);
   handleRelationships(relationships2);
   // Execute promises
-  await Promise.all(promises);
+  await Promise.all(deletePromises);
   return { status: 'success' };
 };
 

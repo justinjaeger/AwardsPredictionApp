@@ -1173,6 +1173,29 @@ export const searchFriendsPredictingEventQuery = /* GraphQL */ `
 `;
 
 // lists all users but with an indication of whether we are already following them
+export const listAllUsers = /* GraphQL */ `
+  query ListUsers(
+    $id: ID
+    $filter: ModelUserFilterInput
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listUsers(
+      id: $id
+      filter: $filter
+      limit: 10000
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        id
+        email
+      }
+    }
+  }
+`;
+
+// lists all users but with an indication of whether we are already following them
 export const listUsersWithIsFollowing = /* GraphQL */ `
   query ListUsers(
     $id: ID

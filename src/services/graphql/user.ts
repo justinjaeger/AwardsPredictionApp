@@ -2,6 +2,8 @@ import {
   CreateUserMutation,
   CreateUserMutationVariables,
   GetUserQueryVariables,
+  ListUsersQuery,
+  ListUsersQueryVariables,
   ModelUserFilterInput,
   SearchableUserFilterInput,
   SearchUsersQueryVariables,
@@ -20,6 +22,20 @@ import {
   SearchUsersQuery,
 } from '../../graphqlCustom/types';
 import { GraphqlAPI, handleError, iApiResponse } from '../utils';
+
+export const getEveryUser = async (): Promise<iApiResponse<ListUsersQuery>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<ListUsersQuery, ListUsersQueryVariables>(
+      customQueries.listAllUsers,
+    );
+    if (!data?.listUsers) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data };
+  } catch (err) {
+    return handleError('error getting all users', err);
+  }
+};
 
 export const getAllUsers = async (
   paginatedLimit?: number,
