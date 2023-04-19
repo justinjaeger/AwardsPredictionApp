@@ -7,7 +7,7 @@ export const getNumPredicting = (
   const keys = Object.keys(ir);
   const nom = keys.reduce((acc, key) => {
     const num = parseInt(key, 10);
-    if (num > 1 && num <= slots) {
+    if (num <= slots) {
       acc += ir[num];
     }
     return acc;
