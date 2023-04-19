@@ -4,6 +4,7 @@ import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import { SubmitButton } from '../../../components/Buttons';
 import SafeAreaViewFixed from '../../../components/SafeAreaViewFixed';
 import deleteDuplicateUsers from '../../../services/scripts/deleteDuplicateUsers';
+import deleteDuplicatedRelationships from '../../../services/scripts/deleteDuplicatedRelationships';
 
 const AdminScripts = () => {
   return (
@@ -19,6 +20,13 @@ const AdminScripts = () => {
             text={'Delete Duplicated Users'}
             onPress={() => {
               deleteDuplicateUsers();
+            }}
+            style={{ marginTop: 30 }}
+          />
+          <SubmitButton
+            text={'Delete Duplicated Relationships'}
+            onPress={() => {
+              deleteDuplicatedRelationships();
             }}
             style={{ marginTop: 30 }}
           />

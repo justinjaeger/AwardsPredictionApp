@@ -1059,6 +1059,18 @@ export const searchRecommendedFollowingSignedOut = /* GraphQL */ `
   }
 `;
 
+export const listEveryRelationship = /* GraphQL */ `
+  query ListRelationships {
+    listRelationships(limit: 100000) {
+      items {
+        id
+        followedUserId
+        followingUserId
+      }
+    }
+  }
+`;
+
 export const getRecentFollowingPredictions = /* GraphQL */ `
   query GetUser($id: ID!, $greaterThanDate: String) {
     getUser(id: $id) {

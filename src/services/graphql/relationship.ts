@@ -3,6 +3,8 @@ import {
   CreateRelationshipMutationVariables,
   DeleteRelationshipMutation,
   DeleteRelationshipMutationVariables,
+  ListRelationshipsQuery,
+  ListRelationshipsQueryVariables,
   SearchableSortDirection,
   SearchRelationshipsQueryVariables,
 } from '../../API';
@@ -31,6 +33,23 @@ export const getRelationship = async (
       },
     });
     if (!data?.searchRelationships) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data: data };
+  } catch (err) {
+    return handleError('error getting relationship', err);
+  }
+};
+
+export const listEveryRelationship = async (): Promise<
+  iApiResponse<ListRelationshipsQuery>
+> => {
+  try {
+    const { data, errors } = await GraphqlAPI<
+      ListRelationshipsQuery,
+      ListRelationshipsQueryVariables
+    >(customQueries.listEveryRelationship);
+    if (!data?.listRelationships) {
       throw new Error(JSON.stringify(errors));
     }
     return { status: 'success', data: data };
@@ -89,6 +108,24 @@ export const unFollowUser = async (
       DeleteRelationshipMutation,
       DeleteRelationshipMutationVariables
     >(mutations.deleteRelationship, { input: { id: relationshipId } });
+    if (!data?.deleteRelationship) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data: data };
+  } catch (err) {
+    return handleError('error unfollowing user', err);
+  }
+};
+
+export const deleteRelationshipById = async (
+  id: string,
+): Promise<iApiResponse<DeleteRelationshipMutation>> => {
+  try {
+    // use relationship id to delete
+    const { data, errors } = await GraphqlAPI<
+      DeleteRelationshipMutation,
+      DeleteRelationshipMutationVariables
+    >(mutations.deleteRelationship, { input: { id } });
     if (!data?.deleteRelationship) {
       throw new Error(JSON.stringify(errors));
     }
