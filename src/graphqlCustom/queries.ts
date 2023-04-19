@@ -463,12 +463,12 @@ export const getUserProfileQuery = /* GraphQL */ `
       image
       role
       # we want to know if we're following this person and if they're following us
-      followers(filter: { followingUserId: { eq: $authUserId } }) {
+      followers(filter: { followingUserId: { eq: $authUserId } }, limit: 10000) {
         items {
           id
         }
       }
-      following(filter: { followedUserId: { eq: $authUserId } }) {
+      following(filter: { followedUserId: { eq: $authUserId } }, limit: 10000) {
         items {
           id
         }
@@ -797,12 +797,12 @@ export const searchUsersSignedInQuery = /* GraphQL */ `
         image
         role
         # we want to know if we're following this person and if they're following us
-        followers(filter: { followingUserId: { eq: $searchingUserId } }) {
+        followers(filter: { followingUserId: { eq: $searchingUserId } }, limit: 10000) {
           items {
             id
           }
         }
-        following(filter: { followedUserId: { eq: $searchingUserId } }) {
+        following(filter: { followedUserId: { eq: $searchingUserId } }, limit: 10000) {
           items {
             id
           }
@@ -839,12 +839,12 @@ export const searchFollowersSignedIn = /* GraphQL */ `
           bio
           username
           # we want to know if we're following this person and if they're following us
-          followers(filter: { followingUserId: { eq: $authUserId } }) {
+          followers(filter: { followingUserId: { eq: $authUserId } }, limit: 10000) {
             items {
               id
             }
           }
-          following(filter: { followedUserId: { eq: $authUserId } }) {
+          following(filter: { followedUserId: { eq: $authUserId } }, limit: 10000) {
             items {
               id
             }
@@ -883,12 +883,12 @@ export const searchFollowingSignedIn = /* GraphQL */ `
           bio
           username
           # we want to know if we're following this person and if they're following us
-          followers(filter: { followingUserId: { eq: $authUserId } }) {
+          followers(filter: { followingUserId: { eq: $authUserId } }, limit: 10000) {
             items {
               id
             }
           }
-          following(filter: { followedUserId: { eq: $authUserId } }) {
+          following(filter: { followedUserId: { eq: $authUserId } }, limit: 10000) {
             items {
               id
             }
@@ -1016,7 +1016,10 @@ export const searchRecommendedFollowing = /* GraphQL */ `
                 name
                 username
                 # I might be in this list, so detect me in the list
-                followers(filter: { followingUserId: { eq: $authUserId } }) {
+                followers(
+                  filter: { followingUserId: { eq: $authUserId } }
+                  limit: 10000
+                ) {
                   items {
                     id
                     followedUserId

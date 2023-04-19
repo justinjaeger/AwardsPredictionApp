@@ -143,6 +143,8 @@ export const getPaginatedFollowersSignedIn = async (
   authUserId: string,
   nextToken?: string,
 ): Promise<iApiResponse<SearchRelationshipsQuery>> => {
+  console.log('followedUserId', followedUserId);
+  console.log('authUserId', authUserId);
   try {
     const { data, errors } = await GraphqlAPI<
       SearchRelationshipsQuery,

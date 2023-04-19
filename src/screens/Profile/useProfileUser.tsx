@@ -69,6 +69,7 @@ const useProfileUser = (userId: string | undefined) => {
     : followerCount || 0;
 
   const user = isDeviceProfile ? authUser : profileUser;
+  console.error('user', user);
 
   return {
     isLoading,
