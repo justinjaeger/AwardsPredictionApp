@@ -14,6 +14,8 @@ const {
   deleteCommunityPrediction,
 } = require('./requests');
 
+const CONCURRENCY_LIMIT = 100;
+
 const getOpenEventIds = async () => {
   console.log('getOpenEventIds');
 
@@ -353,17 +355,28 @@ const deletePreviousCommunityPredictions = async (
 
   try {
     // Have to delete predictions first, then predictionSets
-    const deletePredictionPromises = [];
+    let deletePredictionPromises = [];
+    const uploadBatch = async () => {
+      response = await Promise.all(deletePredictionPromises);
+      console.log('deletePredictionPromises response:', response.length);
+      deletePredictionPromises = [];
+    };
     for (const predictionId of formerPredictionIds) {
+      // every CON_LIMIT # of predictions, run a promise.all, then reset deletePredictionPromises
+      if (deletePredictionPromises.length === CONCURRENCY_LIMIT) {
+        await uploadBatch();
+      }
       deletePredictionPromises.push(fetch(deleteCommunityPrediction(predictionId)));
+      //   await fetch(deleteCommunityPrediction(predictionId));
     }
-    response = await Promise.all(deletePredictionPromises);
-    console.log('deletePredictionPromises response:', response.length);
+    await uploadBatch();
+    // don't worry about uploading in batches because there are far less prediction sets
     const deletePredictionSetPromises = [];
     for (const predictionSetId of formerPredictionSetIds) {
       deletePredictionSetPromises.push(
         fetch(deleteCommunityPredictionSet(predictionSetId)),
       );
+      //   await fetch(deleteCommunityPredictionSet(predictionSetId));
     }
     response = await Promise.all(deletePredictionSetPromises);
     console.log('deletePredictionSetPromises response:', response.length);
