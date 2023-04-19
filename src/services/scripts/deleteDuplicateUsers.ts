@@ -70,6 +70,7 @@ const deleteDuplicateUsers = async () => {
           for (const idToDelete of idsToDelete) {
             await ApiServices.permanentlyDeleteUser(idToDelete);
           }
+          console.log('done!');
         },
       },
     ]);

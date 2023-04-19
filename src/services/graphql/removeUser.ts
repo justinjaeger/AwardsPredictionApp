@@ -34,8 +34,8 @@ import { GraphqlAPI, handleError, iApiResponse } from '../utils';
 // QUERIES
 
 const searchRelationshipsQuery = /* GraphQL */ `
-  query SearchRelationships($id: ID, $filter: ModelRelationshipFilterInput) {
-    searchRelationships(id: $id, filter: $filter) {
+  query SearchRelationships($filter: SearchableRelationshipFilterInput) {
+    searchRelationships(filter: $filter) {
       items {
         id
       }
