@@ -125,7 +125,7 @@ const getPredictions = async (eventIds, openEvents) => {
       const predictionSets = [];
       let nextToken; // will be null when it's the last one. undefined to start
       while (nextToken !== null) {
-        console.log('in while loop', predictionSets.length);
+        console.log('fetching predictions', predictionSets.length);
         response = await fetch(predictionSetByEventIdRequest(eventId, nextToken));
         body = await response.json();
         if (body.errors) throw new Error(JSON.stringify(body.errors));
@@ -267,9 +267,6 @@ const createCommunityPredictions = async (
 ) => {
   console.log('createCommunityPredictions');
 
-  let responses;
-  let body;
-
   try {
     // prepare createPredictionSet mutations
     const createPredictionSetPromises = [];
@@ -285,20 +282,25 @@ const createCommunityPredictions = async (
     }
 
     // create all predictionSets in parallel
-    responses = await Promise.all(createPredictionSetPromises);
-    console.log('createPredictionSets response:', responses.length);
+    const createPredictionSetResponses = await Promise.all(createPredictionSetPromises);
+    console.log('createPredictionSets response:', createPredictionSetResponses.length);
 
     // prepare createPrediction requests
-    const createPredictionPromises = [];
-    for (const i in responses) {
-      const response = responses[i];
-      body = await response.json();
+    let createPredictionPromises = [];
+    const uploadBatch = async () => {
+      const createPredictionResponses = await Promise.all(createPredictionPromises);
+      console.log('createPredictionPromises response:', createPredictionResponses.length);
+      createPredictionPromises = [];
+    };
+    for (const i in createPredictionSetResponses) {
+      const response = createPredictionSetResponses[i];
+      const psBody = await response.json();
       if (i === '0' || i === 0) {
         // weird that it's '0' but works
-        console.log('createPredictionSetPromises response body', body);
+        console.log('createPredictionSetPromises response body', psBody);
       }
       // get params from body
-      const predictionSet = body.data.createCommunityPredictionSet;
+      const predictionSet = psBody.data.createCommunityPredictionSet;
       const { id, eventId, categoryId } = predictionSet;
       // push createPrediction requests to array
       const indexedContenders = indexedRankings[eventId][categoryId];
@@ -309,6 +311,10 @@ const createCommunityPredictions = async (
       for (const [contenderId, indexedRankings] of Object.entries(indexedContenders)) {
         const points = contenderPoints[categoryId][contenderId];
         const relativeRanking = sortedPoints.indexOf(points) + 1;
+        if (createPredictionPromises.length === CONCURRENCY_LIMIT) {
+          // upload 100 predictions
+          await uploadBatch();
+        }
         createPredictionPromises.push(
           fetch(
             createCommunityPrediction(id, contenderId, indexedRankings, relativeRanking),
@@ -316,15 +322,15 @@ const createCommunityPredictions = async (
         );
       }
     }
-
+    await uploadBatch();
     // create all predictions in parallel
-    responses = await Promise.all(createPredictionPromises);
-    console.log('createPredictionPromises response:', responses.length);
+    // responses = await Promise.all(createPredictionPromises);
+    // console.log('createPredictionPromises response:', responses.length);
 
-    if (responses[0]) {
-      const b = await responses[0].json();
-      console.log('createPredictionPromises response body', b);
-    }
+    // if (createPredictionResponses[0]) {
+    //   const b = await createPredictionResponses[0].json();
+    //   console.log('createPredictionPromises response body', b);
+    // }
 
     return {
       status: 'success',
