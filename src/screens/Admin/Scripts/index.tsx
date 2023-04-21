@@ -5,6 +5,8 @@ import { SubmitButton } from '../../../components/Buttons';
 import SafeAreaViewFixed from '../../../components/SafeAreaViewFixed';
 import deleteDuplicateUsers from '../../../services/scripts/deleteDuplicateUsers';
 import deleteDuplicatedRelationships from '../../../services/scripts/deleteDuplicatedRelationships';
+import deleteDuplicatedContenders from '../../../services/scripts/deleteDuplicatedContenders';
+import deleteDuplicatedMovies from '../../../services/scripts/deleteDuplicatedMovies';
 
 const AdminScripts = () => {
   return (
@@ -27,6 +29,20 @@ const AdminScripts = () => {
             text={'Delete Duplicated Relationships'}
             onPress={() => {
               deleteDuplicatedRelationships();
+            }}
+            style={{ marginTop: 30 }}
+          />
+          <SubmitButton
+            text={'Delete Duplicated Movies'}
+            onPress={() => {
+              deleteDuplicatedMovies();
+            }}
+            style={{ marginTop: 30 }}
+          />
+          <SubmitButton
+            text={'Delete Duplicated Contenders'}
+            onPress={() => {
+              deleteDuplicatedContenders();
             }}
             style={{ marginTop: 30 }}
           />

@@ -461,6 +461,7 @@ const wipeUserInfo = async (id: string): Promise<iApiResponse<UpdateUserMutation
       name: null,
       bio: null,
       image: null,
+      oauthId: null,
     },
   });
   if (!data?.updateUser) {

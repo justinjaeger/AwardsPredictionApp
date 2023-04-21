@@ -14,6 +14,7 @@ import {
   PredictionType,
 } from '../../API';
 import * as mutations from '../../graphql/mutations';
+import * as customMutations from '../../graphqlCustom/mutations';
 import * as queries from '../../graphql/queries';
 import * as customQueries from '../../graphqlCustom/queries';
 import { GraphqlAPI, handleError, iApiResponse } from '../utils';
@@ -302,6 +303,83 @@ export const updateContenderAccolade = async (
       UpdateContenderMutationVariables
     >(mutations.updateContender, {
       input: { id: contenderId, accolade },
+    });
+    if (!data?.updateContender) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data };
+  } catch (err) {
+    return handleError('error updating contender hidden', err);
+  }
+};
+
+export const listEveryContender = async (): Promise<
+  iApiResponse<ListContendersQuery>
+> => {
+  try {
+    const { data, errors } = await GraphqlAPI<
+      ListContendersQuery,
+      ListContendersQueryVariables
+    >(customQueries.listEveryContender);
+    if (!data?.listContenders) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data };
+  } catch (err) {
+    return handleError('error getting contenders by event', err);
+  }
+};
+
+const PAGINATED_LIMIT = 500;
+
+export const listEveryContenderPaginated = async (
+  nextToken?: string | null,
+): Promise<iApiResponse<ListContendersQuery>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<
+      ListContendersQuery,
+      ListContendersQueryVariables
+    >(customQueries.listEveryContenderPaginated, { nextToken, limit: PAGINATED_LIMIT });
+    if (!data?.listContenders) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data };
+  } catch (err) {
+    return handleError('error getting contenders by event', err);
+  }
+};
+
+export const listContendersByMovieId = async (
+  movieId: string,
+): Promise<iApiResponse<ListContendersQuery>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<
+      ListContendersQuery,
+      ListContendersQueryVariables
+    >(customQueries.listContenders, {
+      filter: {
+        movieId: { eq: movieId },
+      },
+    });
+    if (!data?.listContenders) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data };
+  } catch (err) {
+    return handleError('error getting contenders by event', err);
+  }
+};
+
+export const updateContenderMovie = async (
+  contenderId: string,
+  movieId: string,
+): Promise<iApiResponse<UpdateContenderMutation>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<
+      UpdateContenderMutation,
+      UpdateContenderMutationVariables
+    >(customMutations.updateContender, {
+      input: { id: contenderId, movieId },
     });
     if (!data?.updateContender) {
       throw new Error(JSON.stringify(errors));
