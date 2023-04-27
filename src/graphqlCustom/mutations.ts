@@ -24,3 +24,25 @@ export const deleteMovie = /* GraphQL */ `
     }
   }
 `;
+
+export const updatePrediction = /* GraphQL */ `
+  mutation UpdatePrediction(
+    $input: UpdatePredictionInput!
+    $condition: ModelPredictionConditionInput
+  ) {
+    updatePrediction(input: $input, condition: $condition) {
+      id
+    }
+  }
+`;
+
+export const deleteContender = /* GraphQL */ `
+  mutation DeleteContender(
+    $input: DeleteContenderInput!
+    $condition: ModelContenderConditionInput
+  ) {
+    deleteContender(input: $input, condition: $condition) {
+      id
+    }
+  }
+`;

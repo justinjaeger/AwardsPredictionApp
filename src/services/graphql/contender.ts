@@ -12,6 +12,8 @@ import {
   UpdateContenderMutationVariables,
   ContenderAccolade,
   PredictionType,
+  DeleteContenderMutation,
+  DeleteContenderMutationVariables,
 } from '../../API';
 import * as mutations from '../../graphql/mutations';
 import * as customMutations from '../../graphqlCustom/mutations';
@@ -387,5 +389,22 @@ export const updateContenderMovie = async (
     return { status: 'success', data };
   } catch (err) {
     return handleError('error updating contender hidden', err);
+  }
+};
+
+export const deleteContenderById = async (
+  id: string,
+): Promise<iApiResponse<DeleteContenderMutation>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<
+      DeleteContenderMutation,
+      DeleteContenderMutationVariables
+    >(customMutations.deleteContender, { input: { id } });
+    if (!data?.deleteContender) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data };
+  } catch (err) {
+    return handleError('error deleting movie by id', err);
   }
 };

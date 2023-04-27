@@ -1,21 +1,5 @@
-import { Alert } from 'react-native';
 import ApiServices from '../graphql';
-
-const alert = async (warning: string, onPress: () => void) => {
-  Alert.alert(warning, '', [
-    {
-      text: 'Cancel',
-      onPress: () => {
-        console.log('Cancel Pressed');
-        throw new Error('Cancelled');
-      },
-    },
-    {
-      text: 'DELETE',
-      onPress,
-    },
-  ]);
-};
+import alertHelper from './alertHelper';
 
 const deleteDuplicatedMovies = async () => {
   try {
@@ -89,7 +73,7 @@ const deleteDuplicatedMovies = async () => {
     // const oneMovieBatch = [movieBatches[0]];
     // console.log('oneMovieBatch', oneMovieBatch);
 
-    alert(
+    alertHelper(
       `About to update songs, contenders, and delete movies from ${movieBatches.length} movies`,
       async () => {
         for (const batch of movieBatches) {

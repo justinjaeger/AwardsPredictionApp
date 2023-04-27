@@ -1419,3 +1419,27 @@ export const listEverySong = /* GraphQL */ `
     }
   }
 `;
+
+export const listEveryPersonalPrediction = /* GraphQL */ `
+  query ListPredictions(
+    $id: ID
+    $filter: ModelPredictionFilterInput
+    $limit: Int
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listPredictions(
+      id: $id
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        id
+        contenderId
+      }
+      nextToken
+    }
+  }
+`;
