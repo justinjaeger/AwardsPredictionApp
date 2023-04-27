@@ -61,6 +61,23 @@ const deleteDuplicatedContenders = async () => {
     }
     console.log('contenders', contenders.length);
 
+    // get all instances where personal predictions are referring to a contender that doesn't exist
+    const invalidPredictions = predictions.filter(
+      (p) => !contenders.find((c) => c.id === p.contenderId),
+    );
+    console.log('invalidPredictions', invalidPredictions.length);
+    // offer to delete them
+    if (invalidPredictions.length > 0) {
+      alertHelper(
+        `Found ${invalidPredictions.length} predictions that point to now-deleted contenders. Delete?`,
+        async () => {
+          await Promise.all(
+            invalidPredictions.map((p) => ApiServices.deletePersonalPrediction(p.id)),
+          );
+        },
+      );
+    }
+
     // [contendersThatShouldBeTheSame]: duplicatedContenderIds[]
     const groupedContenders = (contenders || []).reduce(
       (
