@@ -262,6 +262,28 @@ export const listEveryPersonalPrediction = async (
 };
 
 // for delete duplicate script
+export const listEveryPersonalPredictionSet = async (
+  nextToken?: string | null,
+): Promise<iApiResponse<ListPredictionSetsQuery>> => {
+  try {
+    // Get all prediction sets matching params (should only be one)
+    const { data, errors } = await GraphqlAPI<
+      ListPredictionSetsQuery,
+      ListPredictionSetsQueryVariables
+    >(customQueries.listEveryPersonalPredictionSet, {
+      nextToken,
+      limit: PAGINATED_LIMIT,
+    });
+    if (!data?.listPredictionSets) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data };
+  } catch (err) {
+    return handleError('error getting prediction set', err);
+  }
+};
+
+// for delete duplicate script
 export const updatePredictionContender = async (
   predictionId: string,
   contenderId: string,
@@ -279,5 +301,41 @@ export const updatePredictionContender = async (
     return { status: 'success', data };
   } catch (err) {
     return handleError('error updating contender hidden', err);
+  }
+};
+
+// for delete duplicate script
+export const deletePersonalPrediction = async (
+  predictionId: string,
+): Promise<iApiResponse<DeletePredictionMutation>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<
+      DeletePredictionMutation,
+      DeletePredictionMutationVariables
+    >(customMutations.deletePrediction, { input: { id: predictionId } });
+    if (!data?.deletePrediction) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data };
+  } catch (err) {
+    return handleError('error deleting prediction', err);
+  }
+};
+
+// for delete duplicate script
+export const deletePersonalPredictionSet = async (
+  predictionSetId: string,
+): Promise<iApiResponse<DeletePredictionSetMutation>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<
+      DeletePredictionSetMutation,
+      DeletePredictionSetMutationVariables
+    >(customMutations.deletePredictionSet, { input: { id: predictionSetId } });
+    if (!data?.deletePredictionSet) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data };
+  } catch (err) {
+    return handleError('error deleting prediction set', err);
   }
 };

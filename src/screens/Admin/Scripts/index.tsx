@@ -7,6 +7,7 @@ import deleteDuplicateUsers from '../../../services/scripts/deleteDuplicateUsers
 import deleteDuplicatedRelationships from '../../../services/scripts/deleteDuplicatedRelationships';
 import deleteDuplicatedContenders from '../../../services/scripts/deleteDuplicatedContenders';
 import deleteDuplicatedMovies from '../../../services/scripts/deleteDuplicatedMovies';
+import deleteDuplicatedPredictionSets from '../../../services/scripts/deleteDuplicatedPredictionSets';
 
 const AdminScripts = () => {
   return (
@@ -43,6 +44,13 @@ const AdminScripts = () => {
             text={'Delete Duplicated Contenders'}
             onPress={() => {
               deleteDuplicatedContenders();
+            }}
+            style={{ marginTop: 30 }}
+          />
+          <SubmitButton
+            text={'Delete Duplicated PredictionSets'}
+            onPress={() => {
+              deleteDuplicatedPredictionSets();
             }}
             style={{ marginTop: 30 }}
           />

@@ -234,27 +234,6 @@ export const createSongContender = async (params: {
   }
 };
 
-export const getContendersByEvent = async (
-  eventId: string,
-): Promise<iApiResponse<ListContendersQuery>> => {
-  try {
-    const { data, errors } = await GraphqlAPI<
-      ListContendersQuery,
-      ListContendersQueryVariables
-    >(customQueries.listContenders, {
-      filter: {
-        eventId: { eq: eventId },
-      },
-    });
-    if (!data?.listContenders) {
-      throw new Error(JSON.stringify(errors));
-    }
-    return { status: 'success', data };
-  } catch (err) {
-    return handleError('error getting contenders by event', err);
-  }
-};
-
 export const getContenderById = async (
   contenderId: string,
 ): Promise<iApiResponse<GetContenderQuery>> => {
@@ -315,6 +294,7 @@ export const updateContenderAccolade = async (
   }
 };
 
+// For duplicate script
 export const listEveryContender = async (): Promise<
   iApiResponse<ListContendersQuery>
 > => {
@@ -332,46 +312,7 @@ export const listEveryContender = async (): Promise<
   }
 };
 
-const PAGINATED_LIMIT = 500;
-
-export const listEveryContenderPaginated = async (
-  nextToken?: string | null,
-): Promise<iApiResponse<ListContendersQuery>> => {
-  try {
-    const { data, errors } = await GraphqlAPI<
-      ListContendersQuery,
-      ListContendersQueryVariables
-    >(customQueries.listEveryContenderPaginated, { nextToken, limit: PAGINATED_LIMIT });
-    if (!data?.listContenders) {
-      throw new Error(JSON.stringify(errors));
-    }
-    return { status: 'success', data };
-  } catch (err) {
-    return handleError('error getting contenders by event', err);
-  }
-};
-
-export const listContendersByMovieId = async (
-  movieId: string,
-): Promise<iApiResponse<ListContendersQuery>> => {
-  try {
-    const { data, errors } = await GraphqlAPI<
-      ListContendersQuery,
-      ListContendersQueryVariables
-    >(customQueries.listContenders, {
-      filter: {
-        movieId: { eq: movieId },
-      },
-    });
-    if (!data?.listContenders) {
-      throw new Error(JSON.stringify(errors));
-    }
-    return { status: 'success', data };
-  } catch (err) {
-    return handleError('error getting contenders by event', err);
-  }
-};
-
+// For duplicate script
 export const updateContenderMovie = async (
   contenderId: string,
   movieId: string,
@@ -392,6 +333,7 @@ export const updateContenderMovie = async (
   }
 };
 
+// For duplicate script
 export const deleteContenderById = async (
   id: string,
 ): Promise<iApiResponse<DeleteContenderMutation>> => {
@@ -406,5 +348,24 @@ export const deleteContenderById = async (
     return { status: 'success', data };
   } catch (err) {
     return handleError('error deleting movie by id', err);
+  }
+};
+
+// For duplicate script
+const PAGINATED_LIMIT = 500;
+export const listEveryContenderPaginated = async (
+  nextToken?: string | null,
+): Promise<iApiResponse<ListContendersQuery>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<
+      ListContendersQuery,
+      ListContendersQueryVariables
+    >(customQueries.listEveryContenderPaginated, { nextToken, limit: PAGINATED_LIMIT });
+    if (!data?.listContenders) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data };
+  } catch (err) {
+    return handleError('error getting contenders by event', err);
   }
 };

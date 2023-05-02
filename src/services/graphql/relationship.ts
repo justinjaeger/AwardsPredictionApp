@@ -41,23 +41,6 @@ export const getRelationship = async (
   }
 };
 
-export const listEveryRelationship = async (): Promise<
-  iApiResponse<ListRelationshipsQuery>
-> => {
-  try {
-    const { data, errors } = await GraphqlAPI<
-      ListRelationshipsQuery,
-      ListRelationshipsQueryVariables
-    >(customQueries.listEveryRelationship);
-    if (!data?.listRelationships) {
-      throw new Error(JSON.stringify(errors));
-    }
-    return { status: 'success', data: data };
-  } catch (err) {
-    return handleError('error getting relationship', err);
-  }
-};
-
 export const followUser = async (
   followedUserId: string,
   followingUserId: string,
@@ -414,5 +397,23 @@ export const getFriendsPredictingEvent = async (
     return { status: 'success', data: data };
   } catch (err) {
     return handleError('error getting friends predicting event', err);
+  }
+};
+
+// Used for delete duplicate script
+export const listEveryRelationship = async (): Promise<
+  iApiResponse<ListRelationshipsQuery>
+> => {
+  try {
+    const { data, errors } = await GraphqlAPI<
+      ListRelationshipsQuery,
+      ListRelationshipsQueryVariables
+    >(customQueries.listEveryRelationship);
+    if (!data?.listRelationships) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data: data };
+  } catch (err) {
+    return handleError('error getting relationship', err);
   }
 };

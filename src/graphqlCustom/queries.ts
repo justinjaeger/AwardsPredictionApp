@@ -1443,3 +1443,30 @@ export const listEveryPersonalPrediction = /* GraphQL */ `
     }
   }
 `;
+
+export const listEveryPersonalPredictionSet = /* GraphQL */ `
+  query ListPredictionSets(
+    $id: ID
+    $filter: ModelPredictionSetFilterInput
+    $limit: Int
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listPredictionSets(
+      id: $id
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        id
+        userId
+        eventId
+        categoryId
+        createdAt
+      }
+      nextToken
+    }
+  }
+`;

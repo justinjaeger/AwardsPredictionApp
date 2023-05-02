@@ -46,3 +46,25 @@ export const deleteContender = /* GraphQL */ `
     }
   }
 `;
+
+export const deletePrediction = /* GraphQL */ `
+  mutation DeletePrediction(
+    $input: DeletePredictionInput!
+    $condition: ModelPredictionConditionInput
+  ) {
+    deletePrediction(input: $input, condition: $condition) {
+      id
+    }
+  }
+`;
+
+export const deletePredictionSet = /* GraphQL */ `
+  mutation DeletePredictionSet(
+    $input: DeletePredictionSetInput!
+    $condition: ModelPredictionSetConditionInput
+  ) {
+    deletePredictionSet(input: $input, condition: $condition) {
+      id
+    }
+  }
+`;
