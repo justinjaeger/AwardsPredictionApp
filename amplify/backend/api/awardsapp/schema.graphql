@@ -107,12 +107,13 @@ enum CategoryName {
 type User @model @searchable @auth(rules: [{allow: public}]) {
     id: ID! @primaryKey
     email: String!
+        @index(name: "userByEmail", queryField: "userByEmail")
+    oauthId: String
     username: String
     name: String
     bio: String
     image: String
     role: UserRole! @default(value: "USER")
-    oauthId: String
     predictionSets: [PredictionSet] 
         @hasMany(indexName: "predictionSetsbyUserIdAndCreatedAt" fields: ["id"]) # get recent predictions from user
     historyPredictionSets: [HistoryPredictionSet] 

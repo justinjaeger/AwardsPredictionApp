@@ -7,12 +7,12 @@ export const onCreateUser = /* GraphQL */ `
     onCreateUser {
       id
       email
+      oauthId
       username
       name
       bio
       image
       role
-      oauthId
       predictionSets {
         items {
           id
@@ -20,12 +20,12 @@ export const onCreateUser = /* GraphQL */ `
           user {
             id
             email
+            oauthId
             username
             name
             bio
             image
             role
-            oauthId
             createdAt
             updatedAt
           }
@@ -68,12 +68,12 @@ export const onCreateUser = /* GraphQL */ `
           user {
             id
             email
+            oauthId
             username
             name
             bio
             image
             role
-            oauthId
             createdAt
             updatedAt
           }
@@ -116,12 +116,12 @@ export const onCreateUser = /* GraphQL */ `
           followedUser {
             id
             email
+            oauthId
             username
             name
             bio
             image
             role
-            oauthId
             createdAt
             updatedAt
           }
@@ -129,12 +129,12 @@ export const onCreateUser = /* GraphQL */ `
           followingUser {
             id
             email
+            oauthId
             username
             name
             bio
             image
             role
-            oauthId
             createdAt
             updatedAt
           }
@@ -150,12 +150,12 @@ export const onCreateUser = /* GraphQL */ `
           followedUser {
             id
             email
+            oauthId
             username
             name
             bio
             image
             role
-            oauthId
             createdAt
             updatedAt
           }
@@ -163,12 +163,12 @@ export const onCreateUser = /* GraphQL */ `
           followingUser {
             id
             email
+            oauthId
             username
             name
             bio
             image
             role
-            oauthId
             createdAt
             updatedAt
           }
@@ -187,12 +187,12 @@ export const onUpdateUser = /* GraphQL */ `
     onUpdateUser {
       id
       email
+      oauthId
       username
       name
       bio
       image
       role
-      oauthId
       predictionSets {
         items {
           id
@@ -200,12 +200,12 @@ export const onUpdateUser = /* GraphQL */ `
           user {
             id
             email
+            oauthId
             username
             name
             bio
             image
             role
-            oauthId
             createdAt
             updatedAt
           }
@@ -248,12 +248,12 @@ export const onUpdateUser = /* GraphQL */ `
           user {
             id
             email
+            oauthId
             username
             name
             bio
             image
             role
-            oauthId
             createdAt
             updatedAt
           }
@@ -296,12 +296,12 @@ export const onUpdateUser = /* GraphQL */ `
           followedUser {
             id
             email
+            oauthId
             username
             name
             bio
             image
             role
-            oauthId
             createdAt
             updatedAt
           }
@@ -309,12 +309,12 @@ export const onUpdateUser = /* GraphQL */ `
           followingUser {
             id
             email
+            oauthId
             username
             name
             bio
             image
             role
-            oauthId
             createdAt
             updatedAt
           }
@@ -330,12 +330,12 @@ export const onUpdateUser = /* GraphQL */ `
           followedUser {
             id
             email
+            oauthId
             username
             name
             bio
             image
             role
-            oauthId
             createdAt
             updatedAt
           }
@@ -343,12 +343,12 @@ export const onUpdateUser = /* GraphQL */ `
           followingUser {
             id
             email
+            oauthId
             username
             name
             bio
             image
             role
-            oauthId
             createdAt
             updatedAt
           }
@@ -367,12 +367,12 @@ export const onDeleteUser = /* GraphQL */ `
     onDeleteUser {
       id
       email
+      oauthId
       username
       name
       bio
       image
       role
-      oauthId
       predictionSets {
         items {
           id
@@ -380,12 +380,12 @@ export const onDeleteUser = /* GraphQL */ `
           user {
             id
             email
+            oauthId
             username
             name
             bio
             image
             role
-            oauthId
             createdAt
             updatedAt
           }
@@ -428,12 +428,12 @@ export const onDeleteUser = /* GraphQL */ `
           user {
             id
             email
+            oauthId
             username
             name
             bio
             image
             role
-            oauthId
             createdAt
             updatedAt
           }
@@ -476,12 +476,12 @@ export const onDeleteUser = /* GraphQL */ `
           followedUser {
             id
             email
+            oauthId
             username
             name
             bio
             image
             role
-            oauthId
             createdAt
             updatedAt
           }
@@ -489,12 +489,12 @@ export const onDeleteUser = /* GraphQL */ `
           followingUser {
             id
             email
+            oauthId
             username
             name
             bio
             image
             role
-            oauthId
             createdAt
             updatedAt
           }
@@ -510,12 +510,12 @@ export const onDeleteUser = /* GraphQL */ `
           followedUser {
             id
             email
+            oauthId
             username
             name
             bio
             image
             role
-            oauthId
             createdAt
             updatedAt
           }
@@ -523,12 +523,12 @@ export const onDeleteUser = /* GraphQL */ `
           followingUser {
             id
             email
+            oauthId
             username
             name
             bio
             image
             role
-            oauthId
             createdAt
             updatedAt
           }
@@ -550,12 +550,12 @@ export const onCreateRelationship = /* GraphQL */ `
       followedUser {
         id
         email
+        oauthId
         username
         name
         bio
         image
         role
-        oauthId
         predictionSets {
           items {
             id
@@ -609,12 +609,12 @@ export const onCreateRelationship = /* GraphQL */ `
       followingUser {
         id
         email
+        oauthId
         username
         name
         bio
         image
         role
-        oauthId
         predictionSets {
           items {
             id
@@ -677,12 +677,12 @@ export const onUpdateRelationship = /* GraphQL */ `
       followedUser {
         id
         email
+        oauthId
         username
         name
         bio
         image
         role
-        oauthId
         predictionSets {
           items {
             id
@@ -736,12 +736,12 @@ export const onUpdateRelationship = /* GraphQL */ `
       followingUser {
         id
         email
+        oauthId
         username
         name
         bio
         image
         role
-        oauthId
         predictionSets {
           items {
             id
@@ -804,12 +804,12 @@ export const onDeleteRelationship = /* GraphQL */ `
       followedUser {
         id
         email
+        oauthId
         username
         name
         bio
         image
         role
-        oauthId
         predictionSets {
           items {
             id
@@ -863,12 +863,12 @@ export const onDeleteRelationship = /* GraphQL */ `
       followingUser {
         id
         email
+        oauthId
         username
         name
         bio
         image
         role
-        oauthId
         predictionSets {
           items {
             id
@@ -968,12 +968,12 @@ export const onCreateEvent = /* GraphQL */ `
           user {
             id
             email
+            oauthId
             username
             name
             bio
             image
             role
-            oauthId
             createdAt
             updatedAt
           }
@@ -1016,12 +1016,12 @@ export const onCreateEvent = /* GraphQL */ `
           user {
             id
             email
+            oauthId
             username
             name
             bio
             image
             role
-            oauthId
             createdAt
             updatedAt
           }
@@ -1108,12 +1108,12 @@ export const onUpdateEvent = /* GraphQL */ `
           user {
             id
             email
+            oauthId
             username
             name
             bio
             image
             role
-            oauthId
             createdAt
             updatedAt
           }
@@ -1156,12 +1156,12 @@ export const onUpdateEvent = /* GraphQL */ `
           user {
             id
             email
+            oauthId
             username
             name
             bio
             image
             role
-            oauthId
             createdAt
             updatedAt
           }
@@ -1248,12 +1248,12 @@ export const onDeleteEvent = /* GraphQL */ `
           user {
             id
             email
+            oauthId
             username
             name
             bio
             image
             role
-            oauthId
             createdAt
             updatedAt
           }
@@ -1296,12 +1296,12 @@ export const onDeleteEvent = /* GraphQL */ `
           user {
             id
             email
+            oauthId
             username
             name
             bio
             image
             role
-            oauthId
             createdAt
             updatedAt
           }
@@ -1407,12 +1407,12 @@ export const onCreateCategory = /* GraphQL */ `
           user {
             id
             email
+            oauthId
             username
             name
             bio
             image
             role
-            oauthId
             createdAt
             updatedAt
           }
@@ -1455,12 +1455,12 @@ export const onCreateCategory = /* GraphQL */ `
           user {
             id
             email
+            oauthId
             username
             name
             bio
             image
             role
-            oauthId
             createdAt
             updatedAt
           }
@@ -1565,12 +1565,12 @@ export const onUpdateCategory = /* GraphQL */ `
           user {
             id
             email
+            oauthId
             username
             name
             bio
             image
             role
-            oauthId
             createdAt
             updatedAt
           }
@@ -1613,12 +1613,12 @@ export const onUpdateCategory = /* GraphQL */ `
           user {
             id
             email
+            oauthId
             username
             name
             bio
             image
             role
-            oauthId
             createdAt
             updatedAt
           }
@@ -1723,12 +1723,12 @@ export const onDeleteCategory = /* GraphQL */ `
           user {
             id
             email
+            oauthId
             username
             name
             bio
             image
             role
-            oauthId
             createdAt
             updatedAt
           }
@@ -1771,12 +1771,12 @@ export const onDeleteCategory = /* GraphQL */ `
           user {
             id
             email
+            oauthId
             username
             name
             bio
             image
             role
-            oauthId
             createdAt
             updatedAt
           }
@@ -2656,12 +2656,12 @@ export const onCreatePredictionSet = /* GraphQL */ `
       user {
         id
         email
+        oauthId
         username
         name
         bio
         image
         role
-        oauthId
         predictionSets {
           items {
             id
@@ -2855,12 +2855,12 @@ export const onUpdatePredictionSet = /* GraphQL */ `
       user {
         id
         email
+        oauthId
         username
         name
         bio
         image
         role
-        oauthId
         predictionSets {
           items {
             id
@@ -3054,12 +3054,12 @@ export const onDeletePredictionSet = /* GraphQL */ `
       user {
         id
         email
+        oauthId
         username
         name
         bio
         image
         role
-        oauthId
         predictionSets {
           items {
             id
@@ -3556,12 +3556,12 @@ export const onCreateHistoryPredictionSet = /* GraphQL */ `
       user {
         id
         email
+        oauthId
         username
         name
         bio
         image
         role
-        oauthId
         predictionSets {
           items {
             id
@@ -3765,12 +3765,12 @@ export const onUpdateHistoryPredictionSet = /* GraphQL */ `
       user {
         id
         email
+        oauthId
         username
         name
         bio
         image
         role
-        oauthId
         predictionSets {
           items {
             id
@@ -3974,12 +3974,12 @@ export const onDeleteHistoryPredictionSet = /* GraphQL */ `
       user {
         id
         email
+        oauthId
         username
         name
         bio
         image
         role
-        oauthId
         predictionSets {
           items {
             id

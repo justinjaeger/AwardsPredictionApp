@@ -22,12 +22,12 @@ export const searchUsers = /* GraphQL */ `
       items {
         id
         email
+        oauthId
         username
         name
         bio
         image
         role
-        oauthId
         predictionSets {
           items {
             id
@@ -119,12 +119,12 @@ export const searchRelationships = /* GraphQL */ `
         followedUser {
           id
           email
+          oauthId
           username
           name
           bio
           image
           role
-          oauthId
           predictionSets {
             nextToken
           }
@@ -144,12 +144,12 @@ export const searchRelationships = /* GraphQL */ `
         followingUser {
           id
           email
+          oauthId
           username
           name
           bio
           image
           role
-          oauthId
           predictionSets {
             nextToken
           }
@@ -192,12 +192,12 @@ export const getUser = /* GraphQL */ `
     getUser(id: $id) {
       id
       email
+      oauthId
       username
       name
       bio
       image
       role
-      oauthId
       predictionSets {
         items {
           id
@@ -205,12 +205,12 @@ export const getUser = /* GraphQL */ `
           user {
             id
             email
+            oauthId
             username
             name
             bio
             image
             role
-            oauthId
             createdAt
             updatedAt
           }
@@ -253,12 +253,12 @@ export const getUser = /* GraphQL */ `
           user {
             id
             email
+            oauthId
             username
             name
             bio
             image
             role
-            oauthId
             createdAt
             updatedAt
           }
@@ -301,12 +301,12 @@ export const getUser = /* GraphQL */ `
           followedUser {
             id
             email
+            oauthId
             username
             name
             bio
             image
             role
-            oauthId
             createdAt
             updatedAt
           }
@@ -314,12 +314,12 @@ export const getUser = /* GraphQL */ `
           followingUser {
             id
             email
+            oauthId
             username
             name
             bio
             image
             role
-            oauthId
             createdAt
             updatedAt
           }
@@ -335,12 +335,12 @@ export const getUser = /* GraphQL */ `
           followedUser {
             id
             email
+            oauthId
             username
             name
             bio
             image
             role
-            oauthId
             createdAt
             updatedAt
           }
@@ -348,12 +348,12 @@ export const getUser = /* GraphQL */ `
           followingUser {
             id
             email
+            oauthId
             username
             name
             bio
             image
             role
-            oauthId
             createdAt
             updatedAt
           }
@@ -385,12 +385,12 @@ export const listUsers = /* GraphQL */ `
       items {
         id
         email
+        oauthId
         username
         name
         bio
         image
         role
-        oauthId
         predictionSets {
           items {
             id
@@ -452,12 +452,12 @@ export const getRelationship = /* GraphQL */ `
       followedUser {
         id
         email
+        oauthId
         username
         name
         bio
         image
         role
-        oauthId
         predictionSets {
           items {
             id
@@ -511,12 +511,12 @@ export const getRelationship = /* GraphQL */ `
       followingUser {
         id
         email
+        oauthId
         username
         name
         bio
         image
         role
-        oauthId
         predictionSets {
           items {
             id
@@ -592,12 +592,12 @@ export const listRelationships = /* GraphQL */ `
         followedUser {
           id
           email
+          oauthId
           username
           name
           bio
           image
           role
-          oauthId
           predictionSets {
             nextToken
           }
@@ -617,12 +617,12 @@ export const listRelationships = /* GraphQL */ `
         followingUser {
           id
           email
+          oauthId
           username
           name
           bio
           image
           role
-          oauthId
           predictionSets {
             nextToken
           }
@@ -690,12 +690,12 @@ export const getEvent = /* GraphQL */ `
           user {
             id
             email
+            oauthId
             username
             name
             bio
             image
             role
-            oauthId
             createdAt
             updatedAt
           }
@@ -738,12 +738,12 @@ export const getEvent = /* GraphQL */ `
           user {
             id
             email
+            oauthId
             username
             name
             bio
             image
             role
-            oauthId
             createdAt
             updatedAt
           }
@@ -917,12 +917,12 @@ export const getCategory = /* GraphQL */ `
           user {
             id
             email
+            oauthId
             username
             name
             bio
             image
             role
-            oauthId
             createdAt
             updatedAt
           }
@@ -965,12 +965,12 @@ export const getCategory = /* GraphQL */ `
           user {
             id
             email
+            oauthId
             username
             name
             bio
             image
             role
-            oauthId
             createdAt
             updatedAt
           }
@@ -1581,12 +1581,12 @@ export const getPredictionSet = /* GraphQL */ `
       user {
         id
         email
+        oauthId
         username
         name
         bio
         image
         role
-        oauthId
         predictionSets {
           items {
             id
@@ -1793,12 +1793,12 @@ export const listPredictionSets = /* GraphQL */ `
         user {
           id
           email
+          oauthId
           username
           name
           bio
           image
           role
-          oauthId
           predictionSets {
             nextToken
           }
@@ -2071,12 +2071,12 @@ export const getHistoryPredictionSet = /* GraphQL */ `
       user {
         id
         email
+        oauthId
         username
         name
         bio
         image
         role
-        oauthId
         predictionSets {
           items {
             id
@@ -2293,12 +2293,12 @@ export const listHistoryPredictionSets = /* GraphQL */ `
         user {
           id
           email
+          oauthId
           username
           name
           bio
           image
           role
-          oauthId
           predictionSets {
             nextToken
           }
@@ -3557,6 +3557,83 @@ export const listCommunityHistoryPredictions = /* GraphQL */ `
     }
   }
 `;
+export const userByEmail = /* GraphQL */ `
+  query UserByEmail(
+    $email: String!
+    $sortDirection: ModelSortDirection
+    $filter: ModelUserFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    userByEmail(
+      email: $email
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        email
+        oauthId
+        username
+        name
+        bio
+        image
+        role
+        predictionSets {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        historyPredictionSets {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        followers {
+          items {
+            id
+            followedUserId
+            followingUserId
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        following {
+          items {
+            id
+            followedUserId
+            followingUserId
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
 export const relationshipByFollowedUserId = /* GraphQL */ `
   query RelationshipByFollowedUserId(
     $followedUserId: ID!
@@ -3578,12 +3655,12 @@ export const relationshipByFollowedUserId = /* GraphQL */ `
         followedUser {
           id
           email
+          oauthId
           username
           name
           bio
           image
           role
-          oauthId
           predictionSets {
             nextToken
           }
@@ -3603,12 +3680,12 @@ export const relationshipByFollowedUserId = /* GraphQL */ `
         followingUser {
           id
           email
+          oauthId
           username
           name
           bio
           image
           role
-          oauthId
           predictionSets {
             nextToken
           }
@@ -3652,12 +3729,12 @@ export const relationshipByFollowingUserId = /* GraphQL */ `
         followedUser {
           id
           email
+          oauthId
           username
           name
           bio
           image
           role
-          oauthId
           predictionSets {
             nextToken
           }
@@ -3677,12 +3754,12 @@ export const relationshipByFollowingUserId = /* GraphQL */ `
         followingUser {
           id
           email
+          oauthId
           username
           name
           bio
           image
           role
-          oauthId
           predictionSets {
             nextToken
           }
@@ -3910,12 +3987,12 @@ export const predictionSetByUserIdAndEventId = /* GraphQL */ `
         user {
           id
           email
+          oauthId
           username
           name
           bio
           image
           role
-          oauthId
           predictionSets {
             nextToken
           }
@@ -4022,12 +4099,12 @@ export const predictionSetByUserIdAndCategoryId = /* GraphQL */ `
         user {
           id
           email
+          oauthId
           username
           name
           bio
           image
           role
-          oauthId
           predictionSets {
             nextToken
           }
@@ -4134,12 +4211,12 @@ export const predictionSetByUserIdAndCreatedAt = /* GraphQL */ `
         user {
           id
           email
+          oauthId
           username
           name
           bio
           image
           role
-          oauthId
           predictionSets {
             nextToken
           }
@@ -4244,12 +4321,12 @@ export const predictionSetByEventId = /* GraphQL */ `
         user {
           id
           email
+          oauthId
           username
           name
           bio
           image
           role
-          oauthId
           predictionSets {
             nextToken
           }
@@ -4436,12 +4513,12 @@ export const historyPredictionSetByUserIdAndCreatedAt = /* GraphQL */ `
         user {
           id
           email
+          oauthId
           username
           name
           bio
           image
           role
-          oauthId
           predictionSets {
             nextToken
           }
@@ -4549,12 +4626,12 @@ export const historyPredictionSetByUserIdAndEventIdAndCreatedAt = /* GraphQL */ 
         user {
           id
           email
+          oauthId
           username
           name
           bio
           image
           role
-          oauthId
           predictionSets {
             nextToken
           }
@@ -4662,12 +4739,12 @@ export const historyPredictionSetByUserIdAndCategoryIdAndCreatedAt = /* GraphQL 
         user {
           id
           email
+          oauthId
           username
           name
           bio
           image
           role
-          oauthId
           predictionSets {
             nextToken
           }
@@ -4773,12 +4850,12 @@ export const historyPredictionSetByCategoryId = /* GraphQL */ `
         user {
           id
           email
+          oauthId
           username
           name
           bio
           image
           role
-          oauthId
           predictionSets {
             nextToken
           }
