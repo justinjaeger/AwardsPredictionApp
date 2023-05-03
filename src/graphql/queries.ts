@@ -4304,6 +4304,111 @@ export const contenderByMovie = /* GraphQL */ `
     }
   }
 `;
+export const movieByTmdbId = /* GraphQL */ `
+  query MovieByTmdbId(
+    $tmdbId: Int!
+    $sortDirection: ModelSortDirection
+    $filter: ModelMovieFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    movieByTmdbId(
+      tmdbId: $tmdbId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        contenders {
+          items {
+            id
+            categoryId
+            eventId
+            movieId
+            personId
+            songId
+            visibility
+            accolade
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        tmdbId
+        studio
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const personByTmdbId = /* GraphQL */ `
+  query PersonByTmdbId(
+    $tmdbId: Int!
+    $sortDirection: ModelSortDirection
+    $filter: ModelPersonFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    personByTmdbId(
+      tmdbId: $tmdbId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        tmdbId
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const songByMovieIdAndTitle = /* GraphQL */ `
+  query SongByMovieIdAndTitle(
+    $movieId: ID!
+    $title: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelSongFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    songByMovieIdAndTitle(
+      movieId: $movieId
+      title: $title
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        movieId
+        movie {
+          id
+          contenders {
+            nextToken
+          }
+          tmdbId
+          studio
+          createdAt
+          updatedAt
+        }
+        title
+        artist
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
 export const predictionSetByUserIdAndEventId = /* GraphQL */ `
   query PredictionSetByUserIdAndEventId(
     $userId: ID!

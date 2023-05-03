@@ -13649,6 +13649,105 @@ export type ContenderByMovieQuery = {
   } | null,
 };
 
+export type MovieByTmdbIdQueryVariables = {
+  tmdbId: number,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelMovieFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type MovieByTmdbIdQuery = {
+  movieByTmdbId?:  {
+    __typename: "ModelMovieConnection",
+    items:  Array< {
+      __typename: "Movie",
+      id: string,
+      contenders?:  {
+        __typename: "ModelContenderConnection",
+        items:  Array< {
+          __typename: "Contender",
+          id: string,
+          categoryId: string,
+          eventId: string,
+          movieId: string,
+          personId?: string | null,
+          songId?: string | null,
+          visibility?: ContenderVisibility | null,
+          accolade?: ContenderAccolade | null,
+          createdAt: string,
+          updatedAt: string,
+        } | null >,
+        nextToken?: string | null,
+      } | null,
+      tmdbId: number,
+      studio?: string | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type PersonByTmdbIdQueryVariables = {
+  tmdbId: number,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelPersonFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type PersonByTmdbIdQuery = {
+  personByTmdbId?:  {
+    __typename: "ModelPersonConnection",
+    items:  Array< {
+      __typename: "Person",
+      id: string,
+      tmdbId: number,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type SongByMovieIdAndTitleQueryVariables = {
+  movieId: string,
+  title?: ModelStringKeyConditionInput | null,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelSongFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type SongByMovieIdAndTitleQuery = {
+  songByMovieIdAndTitle?:  {
+    __typename: "ModelSongConnection",
+    items:  Array< {
+      __typename: "Song",
+      id: string,
+      movieId: string,
+      movie:  {
+        __typename: "Movie",
+        id: string,
+        contenders?:  {
+          __typename: "ModelContenderConnection",
+          nextToken?: string | null,
+        } | null,
+        tmdbId: number,
+        studio?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      },
+      title: string,
+      artist: string,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
 export type PredictionSetByUserIdAndEventIdQueryVariables = {
   userId: string,
   eventId?: ModelIDKeyConditionInput | null,

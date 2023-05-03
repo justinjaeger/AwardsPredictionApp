@@ -190,17 +190,20 @@ type Movie @model @auth(rules: [{ allow: public }]) {
     contenders: [Contender] 
         @hasMany(indexName: "byMovie", fields: ["id"])
     tmdbId: Int! # unique value
+        @index(name: "movieByTmdbId", queryField: "movieByTmdbId")
     studio: String # distribution studio
 }
 
 type Person @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
     tmdbId: Int! # unique value
+        @index(name: "personByTmdbId", queryField: "personByTmdbId")
 }
   
 type Song @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
     movieId: ID!
+        @index(name: "songByMovieIdAndTitle", sortKeyFields: ["title"] queryField: "songByMovieIdAndTitle")
     movie: Movie! @hasOne(fields: ["movieId"])
     title: String!
     artist: String!
