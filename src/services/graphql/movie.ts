@@ -7,9 +7,13 @@ import {
   GetMovieQueryVariables,
   CreateMovieMutationVariables,
   ListMoviesQueryVariables,
+  DeleteMovieMutation,
+  DeleteMovieMutationVariables,
 } from '../../API';
 import * as mutations from '../../graphql/mutations';
+import * as customMutations from '../../graphqlCustom/mutations';
 import * as queries from '../../graphql/queries';
+import * as customQueries from '../../graphqlCustom/queries';
 import { GraphqlAPI, handleError, iApiResponse } from '../utils';
 
 export const getMovie = async (id: string): Promise<iApiResponse<GetMovieQuery>> => {
@@ -30,7 +34,7 @@ export const getMovie = async (id: string): Promise<iApiResponse<GetMovieQuery>>
 export const getAllMovies = async (): Promise<iApiResponse<ListMoviesQuery>> => {
   try {
     const { data, errors } = await GraphqlAPI<ListMoviesQuery, ListMoviesQueryVariables>(
-      queries.listMovies,
+      customQueries.listMovies,
     );
     if (!data?.listMovies) {
       throw new Error(JSON.stringify(errors));
@@ -49,7 +53,7 @@ export const getMoviesByTmdb = async (
 ): Promise<iApiResponse<ListMoviesQuery>> => {
   try {
     const { data, errors } = await GraphqlAPI<ListMoviesQuery, ListMoviesQueryVariables>(
-      queries.listMovies,
+      customQueries.listMovies,
       { filter: { tmdbId: { eq: tmdbId } } },
     );
     if (!data?.listMovies) {
@@ -124,5 +128,22 @@ export const updateStudio = async (
     return { status: 'success', data };
   } catch (err) {
     return handleError('error updating studio', err);
+  }
+};
+
+export const deleteMovieById = async (
+  id: string,
+): Promise<iApiResponse<DeleteMovieMutation>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<
+      DeleteMovieMutation,
+      DeleteMovieMutationVariables
+    >(customMutations.deleteMovie, { input: { id } });
+    if (!data?.deleteMovie) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data };
+  } catch (err) {
+    return handleError('error deleting movie by id', err);
   }
 };

@@ -8,10 +8,15 @@ import {
   DeletePredictionSetMutation,
   DeletePredictionSetMutationVariables,
   ListPredictionSetsQueryVariables,
+  ListPredictionsQuery,
+  ListPredictionsQueryVariables,
   PredictionSetByUserIdAndEventIdQueryVariables,
   PredictionType,
+  UpdatePredictionMutation,
+  UpdatePredictionMutationVariables,
 } from '../../API';
 import * as mutations from '../../graphql/mutations';
+import * as customMutations from '../../graphqlCustom/mutations';
 import * as customQueries from '../../graphqlCustom/queries';
 import {
   ListPredictionSetsQuery,
@@ -233,5 +238,104 @@ export const createOrUpdatePredictions = async (
     return { status: 'success' };
   } catch (err) {
     return handleError('error creating or updating predictions', err);
+  }
+};
+
+// for delete duplicate script
+const PAGINATED_LIMIT = 2000;
+export const listEveryPersonalPrediction = async (
+  nextToken?: string | null,
+): Promise<iApiResponse<ListPredictionsQuery>> => {
+  try {
+    // Get all prediction sets matching params (should only be one)
+    const { data, errors } = await GraphqlAPI<
+      ListPredictionsQuery,
+      ListPredictionsQueryVariables
+    >(customQueries.listEveryPersonalPrediction, { nextToken, limit: PAGINATED_LIMIT });
+    if (!data?.listPredictions) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data };
+  } catch (err) {
+    return handleError('error getting prediction set', err);
+  }
+};
+
+// for delete duplicate script
+export const listEveryPersonalPredictionSet = async (
+  nextToken?: string | null,
+): Promise<iApiResponse<ListPredictionSetsQuery>> => {
+  try {
+    // Get all prediction sets matching params (should only be one)
+    const { data, errors } = await GraphqlAPI<
+      ListPredictionSetsQuery,
+      ListPredictionSetsQueryVariables
+    >(customQueries.listEveryPersonalPredictionSet, {
+      nextToken,
+      limit: PAGINATED_LIMIT,
+    });
+    if (!data?.listPredictionSets) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data };
+  } catch (err) {
+    return handleError('error getting prediction set', err);
+  }
+};
+
+// for delete duplicate script
+export const updatePredictionContender = async (
+  predictionId: string,
+  contenderId: string,
+): Promise<iApiResponse<UpdatePredictionMutation>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<
+      UpdatePredictionMutation,
+      UpdatePredictionMutationVariables
+    >(customMutations.updatePrediction, {
+      input: { id: predictionId, contenderId },
+    });
+    if (!data?.updatePrediction) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data };
+  } catch (err) {
+    return handleError('error updating contender hidden', err);
+  }
+};
+
+// for delete duplicate script
+export const deletePersonalPrediction = async (
+  predictionId: string,
+): Promise<iApiResponse<DeletePredictionMutation>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<
+      DeletePredictionMutation,
+      DeletePredictionMutationVariables
+    >(customMutations.deletePrediction, { input: { id: predictionId } });
+    if (!data?.deletePrediction) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data };
+  } catch (err) {
+    return handleError('error deleting prediction', err);
+  }
+};
+
+// for delete duplicate script
+export const deletePersonalPredictionSet = async (
+  predictionSetId: string,
+): Promise<iApiResponse<DeletePredictionSetMutation>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<
+      DeletePredictionSetMutation,
+      DeletePredictionSetMutationVariables
+    >(customMutations.deletePredictionSet, { input: { id: predictionSetId } });
+    if (!data?.deletePredictionSet) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data };
+  } catch (err) {
+    return handleError('error deleting prediction set', err);
   }
 };

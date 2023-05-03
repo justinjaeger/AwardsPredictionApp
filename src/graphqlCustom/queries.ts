@@ -2,14 +2,13 @@ export const listContenders = /* GraphQL */ `
   query ListContenders(
     $id: ID
     $filter: ModelContenderFilterInput
-    $limit: Int
     $nextToken: String
     $sortDirection: ModelSortDirection
   ) {
     listContenders(
       id: $id
       filter: $filter
-      limit: $limit
+      limit: 10000
       nextToken: $nextToken
       sortDirection: $sortDirection
     ) {
@@ -34,6 +33,56 @@ export const listContenders = /* GraphQL */ `
         }
         visibility
         accolade
+      }
+    }
+  }
+`;
+
+export const listEveryContender = /* GraphQL */ `
+  query ListContenders(
+    $id: ID
+    $filter: ModelContenderFilterInput
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listContenders(
+      id: $id
+      filter: $filter
+      limit: 10000
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        id
+        movieId
+        personId
+        songId
+      }
+    }
+  }
+`;
+
+export const listEveryContenderPaginated = /* GraphQL */ `
+  query ListContenders(
+    $id: ID
+    $limit: Int
+    $filter: ModelContenderFilterInput
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listContenders(
+      id: $id
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      nextToken
+      items {
+        id
+        movieId
+        personId
+        songId
       }
     }
   }
@@ -1277,6 +1326,147 @@ export const searchUsersWithIsFollowing = /* GraphQL */ `
           }
         }
       }
+    }
+  }
+`;
+
+export const listMovies = /* GraphQL */ `
+  query ListMovies(
+    $id: ID
+    $filter: ModelMovieFilterInput
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listMovies(
+      id: $id
+      filter: $filter
+      limit: 10000
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        id
+        tmdbId
+        studio
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+
+export const listSongs = /* GraphQL */ `
+  query ListSongs(
+    $id: ID
+    $filter: ModelSongFilterInput
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listSongs(
+      id: $id
+      filter: $filter
+      limit: 1000
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        id
+        movieId
+        movie {
+          id
+          contenders {
+            nextToken
+          }
+          tmdbId
+          studio
+          createdAt
+          updatedAt
+        }
+        title
+        artist
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+
+export const listEverySong = /* GraphQL */ `
+  query ListSongs(
+    $id: ID
+    $filter: ModelSongFilterInput
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listSongs(
+      id: $id
+      filter: $filter
+      limit: 1000
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        id
+        movieId
+        title
+        artist
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+
+export const listEveryPersonalPrediction = /* GraphQL */ `
+  query ListPredictions(
+    $id: ID
+    $filter: ModelPredictionFilterInput
+    $limit: Int
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listPredictions(
+      id: $id
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        id
+        contenderId
+      }
+      nextToken
+    }
+  }
+`;
+
+export const listEveryPersonalPredictionSet = /* GraphQL */ `
+  query ListPredictionSets(
+    $id: ID
+    $filter: ModelPredictionSetFilterInput
+    $limit: Int
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listPredictionSets(
+      id: $id
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        id
+        userId
+        eventId
+        categoryId
+        createdAt
+      }
+      nextToken
     }
   }
 `;
