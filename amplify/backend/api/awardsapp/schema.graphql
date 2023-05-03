@@ -216,7 +216,7 @@ type PredictionSet @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
     userId: ID! 
         @index(name: "predictionSetsByUserIdAndEventId", sortKeyFields: ["eventId"], queryField: "predictionSetByUserIdAndEventId") # used for request on all user's predictions in given event
-        @index(name: "predictionSetsByUserIdAndCategoryId", sortKeyFields: ["categoryId"], queryField: "predictionSetByUserIdAndCategoryId") # used for request on user's predictions in given category
+        @index(name: "predictionSetsByUserIdAndCategoryId", sortKeyFields: ["categoryId"], queryField: "predictionSetByUserIdAndCategoryId") # used for request on user's predictions in given category (should be UNIQUE and return one only)
         @index(name: "predictionSetsbyUserIdAndCreatedAt", sortKeyFields: ["createdAt"], queryField: "predictionSetByUserIdAndCreatedAt") # return a user's predictions by most recent (say, last ten predictions updated)
     user: User! @hasOne(fields: ["userId"])
     eventId: ID! 
@@ -233,7 +233,7 @@ type PredictionSet @model @auth(rules: [{ allow: public }]) {
 type Prediction @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
     predictionSetId: ID! 
-        @index(name: "predictionByPredictionSetId", queryField: "predictionByPredictionSetId")
+        @index(name: "predictionByPredictionSetId", sortKeyFields: ["ranking"], queryField: "predictionByPredictionSetId")
     contenderId: ID!
     contender: Contender! @hasOne(fields: ["contenderId"])
     ranking: Int!
@@ -285,7 +285,7 @@ type CommunityPredictionSet @model @auth(rules: [{ allow: public }]) {
 type CommunityPrediction @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
     communityPredictionSetId: ID! 
-        @index(name: "byCommunityPredictionSet", queryField: "communityPredictionByCommunityPredictionSetId")
+        @index(name: "byCommunityPredictionSet", sortKeyFields: ["ranking"], queryField: "communityPredictionByCommunityPredictionSetId")
     contenderId: ID!
     contender: Contender! 
         @hasOne(fields: ["contenderId"])

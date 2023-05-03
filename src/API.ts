@@ -1431,6 +1431,15 @@ export type ModelStringKeyConditionInput = {
   beginsWith?: string | null,
 };
 
+export type ModelIntKeyConditionInput = {
+  eq?: number | null,
+  le?: number | null,
+  lt?: number | null,
+  ge?: number | null,
+  gt?: number | null,
+  between?: Array< number | null > | null,
+};
+
 export type ModelHistoryPredictionSetHistoryPredictionSetsbyUserIdAndEventIdAndCreatedAtCompositeKeyConditionInput = {
   eq?: ModelHistoryPredictionSetHistoryPredictionSetsbyUserIdAndEventIdAndCreatedAtCompositeKeyInput | null,
   le?: ModelHistoryPredictionSetHistoryPredictionSetsbyUserIdAndEventIdAndCreatedAtCompositeKeyInput | null,
@@ -14241,6 +14250,7 @@ export type PredictionSetByEventIdQuery = {
 
 export type PredictionByPredictionSetIdQueryVariables = {
   predictionSetId: string,
+  ranking?: ModelIntKeyConditionInput | null,
   sortDirection?: ModelSortDirection | null,
   filter?: ModelPredictionFilterInput | null,
   limit?: number | null,
@@ -15139,6 +15149,7 @@ export type CommunityPredictionSetByEventIdQuery = {
 
 export type CommunityPredictionByCommunityPredictionSetIdQueryVariables = {
   communityPredictionSetId: string,
+  ranking?: ModelIntKeyConditionInput | null,
   sortDirection?: ModelSortDirection | null,
   filter?: ModelCommunityPredictionFilterInput | null,
   limit?: number | null,

@@ -4858,6 +4858,7 @@ export const predictionSetByEventId = /* GraphQL */ `
 export const predictionByPredictionSetId = /* GraphQL */ `
   query PredictionByPredictionSetId(
     $predictionSetId: ID!
+    $ranking: ModelIntKeyConditionInput
     $sortDirection: ModelSortDirection
     $filter: ModelPredictionFilterInput
     $limit: Int
@@ -4865,6 +4866,7 @@ export const predictionByPredictionSetId = /* GraphQL */ `
   ) {
     predictionByPredictionSetId(
       predictionSetId: $predictionSetId
+      ranking: $ranking
       sortDirection: $sortDirection
       filter: $filter
       limit: $limit
@@ -5687,6 +5689,7 @@ export const communityPredictionSetByEventId = /* GraphQL */ `
 export const communityPredictionByCommunityPredictionSetId = /* GraphQL */ `
   query CommunityPredictionByCommunityPredictionSetId(
     $communityPredictionSetId: ID!
+    $ranking: ModelIntKeyConditionInput
     $sortDirection: ModelSortDirection
     $filter: ModelCommunityPredictionFilterInput
     $limit: Int
@@ -5694,6 +5697,7 @@ export const communityPredictionByCommunityPredictionSetId = /* GraphQL */ `
   ) {
     communityPredictionByCommunityPredictionSetId(
       communityPredictionSetId: $communityPredictionSetId
+      ranking: $ranking
       sortDirection: $sortDirection
       filter: $filter
       limit: $limit
