@@ -3634,6 +3634,160 @@ export const userByEmail = /* GraphQL */ `
     }
   }
 `;
+export const userByOauthId = /* GraphQL */ `
+  query UserByOauthId(
+    $oauthId: String!
+    $sortDirection: ModelSortDirection
+    $filter: ModelUserFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    userByOauthId(
+      oauthId: $oauthId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        email
+        oauthId
+        username
+        name
+        bio
+        image
+        role
+        predictionSets {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        historyPredictionSets {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        followers {
+          items {
+            id
+            followedUserId
+            followingUserId
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        following {
+          items {
+            id
+            followedUserId
+            followingUserId
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const userByUsername = /* GraphQL */ `
+  query UserByUsername(
+    $username: String!
+    $sortDirection: ModelSortDirection
+    $filter: ModelUserFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    userByUsername(
+      username: $username
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        email
+        oauthId
+        username
+        name
+        bio
+        image
+        role
+        predictionSets {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        historyPredictionSets {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        followers {
+          items {
+            id
+            followedUserId
+            followingUserId
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        following {
+          items {
+            id
+            followedUserId
+            followingUserId
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
 export const relationshipByFollowedUserId = /* GraphQL */ `
   query RelationshipByFollowedUserId(
     $followedUserId: ID!

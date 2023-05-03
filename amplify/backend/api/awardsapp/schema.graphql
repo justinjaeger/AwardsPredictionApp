@@ -105,11 +105,13 @@ enum CategoryName {
 }
 
 type User @model @searchable @auth(rules: [{allow: public}]) {
-    id: ID! @primaryKey
+    id: ID! @primaryKey(sortKeyFields: ["name", "username"])
     email: String!
         @index(name: "userByEmail", queryField: "userByEmail")
     oauthId: String
+        @index(name: "userByOauthId", queryField: "userByOauthId")
     username: String
+        @index(name: "userByUsername", queryField: "userByUsername")
     name: String
     bio: String
     image: String
