@@ -13154,6 +13154,88 @@ export type RelationshipByFollowedUserIdQuery = {
   } | null,
 };
 
+export type UniqueRelationshipViaFollowedUserQueryVariables = {
+  followedUserId: string,
+  followingUserId?: ModelIDKeyConditionInput | null,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelRelationshipFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type UniqueRelationshipViaFollowedUserQuery = {
+  uniqueRelationshipViaFollowedUser?:  {
+    __typename: "ModelRelationshipConnection",
+    items:  Array< {
+      __typename: "Relationship",
+      id: string,
+      followedUserId: string,
+      followedUser:  {
+        __typename: "User",
+        id: string,
+        email: string,
+        oauthId?: string | null,
+        username?: string | null,
+        name?: string | null,
+        bio?: string | null,
+        image?: string | null,
+        role: UserRole,
+        predictionSets?:  {
+          __typename: "ModelPredictionSetConnection",
+          nextToken?: string | null,
+        } | null,
+        historyPredictionSets?:  {
+          __typename: "ModelHistoryPredictionSetConnection",
+          nextToken?: string | null,
+        } | null,
+        followers?:  {
+          __typename: "ModelRelationshipConnection",
+          nextToken?: string | null,
+        } | null,
+        following?:  {
+          __typename: "ModelRelationshipConnection",
+          nextToken?: string | null,
+        } | null,
+        createdAt: string,
+        updatedAt: string,
+      },
+      followingUserId: string,
+      followingUser:  {
+        __typename: "User",
+        id: string,
+        email: string,
+        oauthId?: string | null,
+        username?: string | null,
+        name?: string | null,
+        bio?: string | null,
+        image?: string | null,
+        role: UserRole,
+        predictionSets?:  {
+          __typename: "ModelPredictionSetConnection",
+          nextToken?: string | null,
+        } | null,
+        historyPredictionSets?:  {
+          __typename: "ModelHistoryPredictionSetConnection",
+          nextToken?: string | null,
+        } | null,
+        followers?:  {
+          __typename: "ModelRelationshipConnection",
+          nextToken?: string | null,
+        } | null,
+        following?:  {
+          __typename: "ModelRelationshipConnection",
+          nextToken?: string | null,
+        } | null,
+        createdAt: string,
+        updatedAt: string,
+      },
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
 export type RelationshipByFollowingUserIdQueryVariables = {
   followingUserId: string,
   sortDirection?: ModelSortDirection | null,

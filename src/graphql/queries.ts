@@ -3862,6 +3862,82 @@ export const relationshipByFollowedUserId = /* GraphQL */ `
     }
   }
 `;
+export const uniqueRelationshipViaFollowedUser = /* GraphQL */ `
+  query UniqueRelationshipViaFollowedUser(
+    $followedUserId: ID!
+    $followingUserId: ModelIDKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelRelationshipFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    uniqueRelationshipViaFollowedUser(
+      followedUserId: $followedUserId
+      followingUserId: $followingUserId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        followedUserId
+        followedUser {
+          id
+          email
+          oauthId
+          username
+          name
+          bio
+          image
+          role
+          predictionSets {
+            nextToken
+          }
+          historyPredictionSets {
+            nextToken
+          }
+          followers {
+            nextToken
+          }
+          following {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        followingUserId
+        followingUser {
+          id
+          email
+          oauthId
+          username
+          name
+          bio
+          image
+          role
+          predictionSets {
+            nextToken
+          }
+          historyPredictionSets {
+            nextToken
+          }
+          followers {
+            nextToken
+          }
+          following {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
 export const relationshipByFollowingUserId = /* GraphQL */ `
   query RelationshipByFollowingUserId(
     $followingUserId: ID!
