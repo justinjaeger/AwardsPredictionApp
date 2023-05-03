@@ -1405,6 +1405,22 @@ export type ModelIDKeyConditionInput = {
   beginsWith?: string | null,
 };
 
+export type ModelContenderGetUniqueContenderCompositeKeyConditionInput = {
+  eq?: ModelContenderGetUniqueContenderCompositeKeyInput | null,
+  le?: ModelContenderGetUniqueContenderCompositeKeyInput | null,
+  lt?: ModelContenderGetUniqueContenderCompositeKeyInput | null,
+  ge?: ModelContenderGetUniqueContenderCompositeKeyInput | null,
+  gt?: ModelContenderGetUniqueContenderCompositeKeyInput | null,
+  between?: Array< ModelContenderGetUniqueContenderCompositeKeyInput | null > | null,
+  beginsWith?: ModelContenderGetUniqueContenderCompositeKeyInput | null,
+};
+
+export type ModelContenderGetUniqueContenderCompositeKeyInput = {
+  movieId?: string | null,
+  personId?: string | null,
+  songId?: string | null,
+};
+
 export type ModelStringKeyConditionInput = {
   eq?: string | null,
   le?: string | null,
@@ -13389,6 +13405,125 @@ export type CategoryByEventQuery = {
         } | null >,
         nextToken?: string | null,
       } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type GetUniqueContenderQueryVariables = {
+  eventId: string,
+  movieIdPersonIdSongId?: ModelContenderGetUniqueContenderCompositeKeyConditionInput | null,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelContenderFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type GetUniqueContenderQuery = {
+  getUniqueContender?:  {
+    __typename: "ModelContenderConnection",
+    items:  Array< {
+      __typename: "Contender",
+      id: string,
+      categoryId: string,
+      category:  {
+        __typename: "Category",
+        id: string,
+        eventId: string,
+        event:  {
+          __typename: "Event",
+          id: string,
+          awardsBody: AwardsBody,
+          year: number,
+          nominationDateTime?: string | null,
+          winDateTime?: string | null,
+          status?: EventStatus | null,
+          liveAt?: string | null,
+          createdAt: string,
+          updatedAt: string,
+        },
+        name: CategoryName,
+        type: CategoryType,
+        isShortlisted?: CategoryIsShortlisted | null,
+        predictionSets?:  {
+          __typename: "ModelPredictionSetConnection",
+          nextToken?: string | null,
+        } | null,
+        historyPredictions?:  {
+          __typename: "ModelHistoryPredictionSetConnection",
+          nextToken?: string | null,
+        } | null,
+        createdAt: string,
+        updatedAt: string,
+      },
+      eventId: string,
+      event:  {
+        __typename: "Event",
+        id: string,
+        categories?:  {
+          __typename: "ModelCategoryConnection",
+          nextToken?: string | null,
+        } | null,
+        awardsBody: AwardsBody,
+        year: number,
+        nominationDateTime?: string | null,
+        winDateTime?: string | null,
+        status?: EventStatus | null,
+        predictionSets?:  {
+          __typename: "ModelPredictionSetConnection",
+          nextToken?: string | null,
+        } | null,
+        historyPredictions?:  {
+          __typename: "ModelHistoryPredictionSetConnection",
+          nextToken?: string | null,
+        } | null,
+        liveAt?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      },
+      movieId: string,
+      movie:  {
+        __typename: "Movie",
+        id: string,
+        contenders?:  {
+          __typename: "ModelContenderConnection",
+          nextToken?: string | null,
+        } | null,
+        tmdbId: number,
+        studio?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      },
+      personId?: string | null,
+      person?:  {
+        __typename: "Person",
+        id: string,
+        tmdbId: number,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      songId?: string | null,
+      song?:  {
+        __typename: "Song",
+        id: string,
+        movieId: string,
+        movie:  {
+          __typename: "Movie",
+          id: string,
+          tmdbId: number,
+          studio?: string | null,
+          createdAt: string,
+          updatedAt: string,
+        },
+        title: string,
+        artist: string,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      visibility?: ContenderVisibility | null,
+      accolade?: ContenderAccolade | null,
       createdAt: string,
       updatedAt: string,
     } | null >,

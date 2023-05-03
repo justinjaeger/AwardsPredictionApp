@@ -172,6 +172,7 @@ type Contender @model @auth(rules: [{ allow: public }]) {
     categoryId: ID!
     category: Category! @hasOne(fields: ["categoryId"])
     eventId: ID!
+        @index(name: "getUniqueContender", sortKeyFields: ["movieId", "personId", "songId"], queryField: "getUniqueContender")
     event: Event! @hasOne(fields: ["eventId"])
     movieId: ID! 
         @index(name: "byMovie", queryField: "contenderByMovie")
