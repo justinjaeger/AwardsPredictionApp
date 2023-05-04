@@ -4089,7 +4089,7 @@ export const categoryByEvent = /* GraphQL */ `
 export const getUniqueContender = /* GraphQL */ `
   query GetUniqueContender(
     $eventId: ID!
-    $movieIdPersonIdSongId: ModelContenderGetUniqueContenderCompositeKeyConditionInput
+    $movieIdPersonId: ModelContenderGetUniqueContenderCompositeKeyConditionInput
     $sortDirection: ModelSortDirection
     $filter: ModelContenderFilterInput
     $limit: Int
@@ -4097,7 +4097,117 @@ export const getUniqueContender = /* GraphQL */ `
   ) {
     getUniqueContender(
       eventId: $eventId
-      movieIdPersonIdSongId: $movieIdPersonIdSongId
+      movieIdPersonId: $movieIdPersonId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        categoryId
+        category {
+          id
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            liveAt
+            createdAt
+            updatedAt
+          }
+          name
+          type
+          isShortlisted
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        eventId
+        event {
+          id
+          categories {
+            nextToken
+          }
+          awardsBody
+          year
+          nominationDateTime
+          winDateTime
+          status
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          liveAt
+          createdAt
+          updatedAt
+        }
+        movieId
+        movie {
+          id
+          contenders {
+            nextToken
+          }
+          tmdbId
+          studio
+          createdAt
+          updatedAt
+        }
+        personId
+        person {
+          id
+          tmdbId
+          createdAt
+          updatedAt
+        }
+        songId
+        song {
+          id
+          movieId
+          movie {
+            id
+            tmdbId
+            studio
+            createdAt
+            updatedAt
+          }
+          title
+          artist
+          createdAt
+          updatedAt
+        }
+        visibility
+        accolade
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getUniqueSongContender = /* GraphQL */ `
+  query GetUniqueSongContender(
+    $eventId: ID!
+    $movieIdSongId: ModelContenderGetUniqueSongContenderCompositeKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelContenderFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    getUniqueSongContender(
+      eventId: $eventId
+      movieIdSongId: $movieIdSongId
       sortDirection: $sortDirection
       filter: $filter
       limit: $limit

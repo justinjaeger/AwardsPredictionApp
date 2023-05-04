@@ -104,6 +104,7 @@ enum CategoryName {
     BREAKTHROUGH
 }
 
+# TODO: remove @searchable after confirming possibl
 type User @model @searchable @auth(rules: [{allow: public}]) {
     id: ID! @primaryKey
     email: String!
@@ -126,6 +127,7 @@ type User @model @searchable @auth(rules: [{allow: public}]) {
         @hasMany(indexName: "followingByUser", fields: ["id"])
 }
 
+# TODO: remove @searchable after confirming possible
 type Relationship @model @searchable @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
     followedUserId: ID! 
@@ -172,7 +174,8 @@ type Contender @model @auth(rules: [{ allow: public }]) {
     categoryId: ID!
     category: Category! @hasOne(fields: ["categoryId"])
     eventId: ID!
-        @index(name: "getUniqueContender", sortKeyFields: ["movieId", "personId", "songId"], queryField: "getUniqueContender")
+        @index(name: "getUniqueContender", sortKeyFields: ["movieId", "personId"], queryField: "getUniqueContender")
+        @index(name: "getUniqueSongContender", sortKeyFields: ["movieId", "songId"], queryField: "getUniqueSongContender")
     event: Event! @hasOne(fields: ["eventId"])
     movieId: ID! 
         @index(name: "byMovie", queryField: "contenderByMovie")
