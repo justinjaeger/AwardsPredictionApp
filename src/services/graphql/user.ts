@@ -4,84 +4,33 @@ import {
   GetUserQueryVariables,
   ListUsersQuery,
   ListUsersQueryVariables,
-  ModelUserFilterInput,
   SearchableUserFilterInput,
   SearchUsersQueryVariables,
   UpdateUserInput,
   UpdateUserMutation,
   UpdateUserMutationVariables,
+  UserByEmailQuery,
+  UserByEmailQueryVariables,
+  UserByOauthIdQuery,
+  UserByOauthIdQueryVariables,
+  UserByUsernameQuery,
+  UserByUsernameQueryVariables,
   UserRole,
 } from '../../API';
 import { PAGINATED_USER_RECOMMENDATION_LIMIT } from '../../constants';
 import * as mutations from '../../graphql/mutations';
-import * as queries from '../../graphql/queries';
 import * as customQueries from '../../graphqlCustom/queries';
-import {
-  GetUserFollowingPredictionsQuery,
-  GetUserQuery,
-  SearchUsersQuery,
-} from '../../graphqlCustom/types';
+import { GetUserQuery, SearchUsersQuery } from '../../graphqlCustom/types';
 import { GraphqlAPI, handleError, iApiResponse } from '../utils';
 
-export const getEveryUser = async (): Promise<iApiResponse<ListUsersQuery>> => {
-  try {
-    const { data, errors } = await GraphqlAPI<ListUsersQuery, ListUsersQueryVariables>(
-      customQueries.listAllUsers,
-    );
-    if (!data?.listUsers) {
-      throw new Error(JSON.stringify(errors));
-    }
-    return { status: 'success', data };
-  } catch (err) {
-    return handleError('error getting all users', err);
-  }
-};
+/**
+ * UNIQUE USER QUERIES
+ */
 
-export const getAllUsers = async (
-  paginatedLimit?: number,
-): Promise<iApiResponse<SearchUsersQuery>> => {
-  try {
-    const { data, errors } = await GraphqlAPI<
-      SearchUsersQuery,
-      SearchUsersQueryVariables
-    >(queries.searchUsers, {
-      limit: paginatedLimit || PAGINATED_USER_RECOMMENDATION_LIMIT,
-    });
-    if (!data?.searchUsers) {
-      throw new Error(JSON.stringify(errors));
-    }
-    return { status: 'success', data };
-  } catch (err) {
-    return handleError('error getting all users', err);
-  }
-};
-
-// it does return users we are following but we get info that can indicate if we follow them
-export const getUsersNotFollowing = async (
-  authUserId: string,
-  paginatedLimit?: number,
-): Promise<iApiResponse<SearchUsersQuery>> => {
-  try {
-    const { data, errors } = await GraphqlAPI<
-      SearchUsersQuery,
-      SearchUsersQueryVariables & { authUserId: string }
-    >(customQueries.searchUsersWithIsFollowing, {
-      limit: paginatedLimit || PAGINATED_USER_RECOMMENDATION_LIMIT,
-      authUserId,
-    });
-    if (!data?.searchUsers) {
-      throw new Error(JSON.stringify(errors));
-    }
-    return { status: 'success', data };
-  } catch (err) {
-    return handleError('error getting all users not following', err);
-  }
-};
-
-export const getUser = async (id: string): Promise<iApiResponse<GetUserQuery>> => {
+export const getUserById = async (id: string): Promise<iApiResponse<GetUserQuery>> => {
   try {
     const { data, errors } = await GraphqlAPI<GetUserQuery, GetUserQueryVariables>(
-      customQueries.getUser,
+      customQueries.getUserBasic,
       { id },
     );
     if (!data?.getUser) {
@@ -93,10 +42,66 @@ export const getUser = async (id: string): Promise<iApiResponse<GetUserQuery>> =
   }
 };
 
+export const getUserByEmail = async (
+  email: string,
+): Promise<iApiResponse<UserByEmailQuery>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<
+      UserByEmailQuery,
+      UserByEmailQueryVariables
+    >(customQueries.userByEmailBasic, { email });
+    if (!data?.userByEmail) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data };
+  } catch (err) {
+    return handleError('error getting user by email', err);
+  }
+};
+
+export const getUserByOauthId = async (
+  oauthId: string,
+): Promise<iApiResponse<UserByOauthIdQuery>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<
+      UserByOauthIdQuery,
+      UserByOauthIdQueryVariables
+    >(customQueries.userByOauthIdBasic, { oauthId });
+    if (!data?.userByOauthId) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data };
+  } catch (err) {
+    return handleError('error getting user by email', err);
+  }
+};
+
+export const getUserByUsername = async (
+  username: string,
+): Promise<iApiResponse<UserByUsernameQuery>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<
+      UserByUsernameQuery,
+      UserByUsernameQueryVariables
+    >(customQueries.userByUsernameBasic, { username });
+    if (!data?.userByUsername) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data };
+  } catch (err) {
+    return handleError('error getting user by email', err);
+  }
+};
+
+/**
+ * GET USER WITH SOMETHING ELSE
+ */
+
+// returns user with eventIds they're predicting (via getting their predictionSets)
 export const getUserEvents = async (id: string): Promise<iApiResponse<GetUserQuery>> => {
   try {
     const { data, errors } = await GraphqlAPI<GetUserQuery, GetUserQueryVariables>(
-      customQueries.getUserEvents,
+      customQueries.getUserWithPredictedEventIds,
       { id },
     );
     if (!data?.getUser) {
@@ -156,40 +161,54 @@ export const getUserWithRelationships = async (
   }
 };
 
-// Use this to enforce uniqueness
-export const getUserByEmail = async (
-  email: string,
-): Promise<iApiResponse<SearchUsersQuery>> => {
+/**
+ * FOR RECOMMENDATIONS
+ */
+
+export const getUsersPaginated = async (
+  paginatedLimit?: number,
+): Promise<iApiResponse<ListUsersQuery>> => {
   try {
-    const { data, errors } = await GraphqlAPI<
-      SearchUsersQuery,
-      SearchUsersQueryVariables
-    >(customQueries.searchUsers, { filter: { email: { eq: email } } });
-    if (!data?.searchUsers) {
+    const { data, errors } = await GraphqlAPI<ListUsersQuery, ListUsersQueryVariables>(
+      customQueries.listUsersPaginated,
+      {
+        limit: paginatedLimit || PAGINATED_USER_RECOMMENDATION_LIMIT,
+      },
+    );
+    if (!data?.listUsers) {
       throw new Error(JSON.stringify(errors));
     }
     return { status: 'success', data };
   } catch (err) {
-    return handleError('error getting user by email', err);
+    return handleError('error getting all users', err);
   }
 };
 
-export const getUserByOauthId = async (
-  oauthId: string,
-): Promise<iApiResponse<SearchUsersQuery>> => {
+// it does return users we are following but we get info that can indicate if we follow them
+export const getUsersPaginatedNotFollowing = async (
+  authUserId: string,
+  paginatedLimit?: number,
+): Promise<iApiResponse<ListUsersQuery>> => {
   try {
     const { data, errors } = await GraphqlAPI<
-      SearchUsersQuery,
-      SearchUsersQueryVariables
-    >(queries.searchUsers, { filter: { oauthId: { eq: oauthId } } });
-    if (!data?.searchUsers) {
+      ListUsersQuery,
+      ListUsersQueryVariables & { authUserId: string }
+    >(customQueries.listUsersPaginatedWithIsFollowing, {
+      limit: paginatedLimit || PAGINATED_USER_RECOMMENDATION_LIMIT,
+      authUserId,
+    });
+    if (!data?.listUsers) {
       throw new Error(JSON.stringify(errors));
     }
     return { status: 'success', data };
   } catch (err) {
-    return handleError('error getting user by email', err);
+    return handleError('error getting all users not following', err);
   }
 };
+
+/**
+ * CREATE/UPDATE USER
+ */
 
 // create a new user after confirming email
 export const createUser = async (
@@ -201,10 +220,10 @@ export const createUser = async (
   try {
     // Enforce uniqueness!!
     const { data: maybeUsers } = await getUserByEmail(email);
-    if (!maybeUsers?.searchUsers) {
+    if (!maybeUsers?.userByEmail) {
       return { status: 'error' };
     }
-    if (maybeUsers.searchUsers.items.length > 0) {
+    if (maybeUsers.userByEmail.items.length > 0) {
       throw new Error('A user with this email already exists');
     }
     // Create user
@@ -228,48 +247,6 @@ export const createUser = async (
   }
 };
 
-export const createTestUser = async (
-  name: string,
-  username: string,
-  email: string,
-): Promise<iApiResponse<CreateUserMutation>> => {
-  try {
-    // Enforce email uniqueness
-    const { data: maybeUsers } = await getUserByEmail(email);
-    if (!maybeUsers?.searchUsers) {
-      return { status: 'error' };
-    }
-    if (maybeUsers.searchUsers.items.length > 0) {
-      throw new Error('A user with this email already exists');
-    }
-    // Enforce username uniqueness
-    const { data: searchUsersQuery } = await getUsersByUsername(username);
-    const maybeUs = searchUsersQuery?.searchUsers?.items;
-    if (!maybeUs) {
-      throw new Error('An error occured fetching users with this username');
-    }
-    if (maybeUs.length !== 0) {
-      return {
-        status: 'error',
-        message: 'This username is already taken',
-      };
-    }
-    // Create user
-    const { data, errors } = await GraphqlAPI<
-      CreateUserMutation,
-      CreateUserMutationVariables
-    >(mutations.createUser, {
-      input: { email, username, name, role: UserRole.USER },
-    });
-    if (!data?.createUser) {
-      throw new Error(JSON.stringify(errors));
-    }
-    return { status: 'success', data };
-  } catch (err) {
-    return handleError('error creating user', err);
-  }
-};
-
 // verify that username is unique, then update
 export const updateUsername = async (
   id: string,
@@ -280,8 +257,8 @@ export const updateUsername = async (
   try {
     // First, validate that username is not already taken
     if (username !== undefined) {
-      const { data: searchUsersQuery } = await getUsersByUsername(username);
-      const maybeUsers = searchUsersQuery?.searchUsers?.items;
+      const { data: listUsersQuery } = await getUserByUsername(username);
+      const maybeUsers = listUsersQuery?.userByUsername?.items;
       if (!maybeUsers) {
         throw new Error('An error occured fetching users with this username');
       }
@@ -328,23 +305,10 @@ export const updateProfileImage = async (
   }
 };
 
-export const getUsersByUsername = async (
-  username: string,
-): Promise<iApiResponse<SearchUsersQuery>> => {
-  try {
-    const filter: ModelUserFilterInput = { username: { eq: username } };
-    const { data, errors } = await GraphqlAPI<
-      SearchUsersQuery,
-      SearchUsersQueryVariables
-    >(queries.searchUsers, { filter });
-    if (!data?.searchUsers) {
-      throw new Error(JSON.stringify(errors));
-    }
-    return { status: 'success', data };
-  } catch (err) {
-    return handleError('error getting users by username', err);
-  }
-};
+/**
+ * SEARCHABLE
+ * TODO: Can we replace these somehow? We can use "name" and "username" as sortKeyFields on the user, then do beginsWith filters
+ */
 
 export const searchUsersSignedOut = async (
   search: string,
@@ -405,31 +369,67 @@ export const searchUsersSignedIn = async (
   }
 };
 
-type GetUserRecentFollowingPredictionsQueryVariables = {
-  id: string;
-  greaterThanDate: string;
-};
-export const getUserRecentFollowingPredictions = async (
-  id: string,
-): Promise<iApiResponse<GetUserFollowingPredictionsQuery>> => {
-  // get the date 30 days ago
-  const date = new Date();
-  date.setDate(date.getDate() - 30); // 30 days ago
-  const dateString = date.toISOString();
+/**
+ * FOR DELETION SCRIPT
+ */
 
+export const getEveryUser = async (): Promise<iApiResponse<ListUsersQuery>> => {
   try {
-    const { data, errors } = await GraphqlAPI<
-      GetUserFollowingPredictionsQuery,
-      GetUserRecentFollowingPredictionsQueryVariables
-    >(customQueries.getRecentFollowingPredictions, {
-      id,
-      greaterThanDate: dateString,
-    });
-    if (!data?.getUser) {
+    const { data, errors } = await GraphqlAPI<ListUsersQuery, ListUsersQueryVariables>(
+      customQueries.listAllUsers,
+    );
+    if (!data?.listUsers) {
       throw new Error(JSON.stringify(errors));
     }
-    return { status: 'success', data: data };
+    return { status: 'success', data };
   } catch (err) {
-    return handleError('error getting user recent following predictions', err);
+    return handleError('error getting all users', err);
+  }
+};
+
+/**
+ * FOR TESTING (NOT USED)
+ */
+
+// Not really used
+export const createTestUser = async (
+  name: string,
+  username: string,
+  email: string,
+): Promise<iApiResponse<CreateUserMutation>> => {
+  try {
+    // Enforce email uniqueness
+    const { data: maybeUsers } = await getUserByEmail(email);
+    if (!maybeUsers?.userByEmail) {
+      return { status: 'error' };
+    }
+    if (maybeUsers.userByEmail.items.length > 0) {
+      throw new Error('A user with this email already exists');
+    }
+    // Enforce username uniqueness
+    const { data: listUsersQuery } = await getUserByUsername(username);
+    const maybeUs = listUsersQuery?.userByUsername?.items;
+    if (!maybeUs) {
+      throw new Error('An error occured fetching users with this username');
+    }
+    if (maybeUs.length !== 0) {
+      return {
+        status: 'error',
+        message: 'This username is already taken',
+      };
+    }
+    // Create user
+    const { data, errors } = await GraphqlAPI<
+      CreateUserMutation,
+      CreateUserMutationVariables
+    >(mutations.createUser, {
+      input: { email, username, name, role: UserRole.USER },
+    });
+    if (!data?.createUser) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data };
+  } catch (err) {
+    return handleError('error creating user', err);
   }
 };

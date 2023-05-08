@@ -154,6 +154,7 @@ const deletePrediction = async (
   }
 };
 
+// TODO: replace with predictionSetsByUserIdAndCategoryId
 export const getPredictionSets = async (
   params: iPredictionSetParams,
 ): Promise<iApiResponse<ListPredictionSetsQuery>> => {

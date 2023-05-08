@@ -25,50 +25,99 @@ const getUniqueUsersWhoAreNotUs = (users: iUser[], authUserId: string | undefine
     return isDuplicate && isNotUs && userHasNameOrUsername && isNotTestUser;
   });
 
-// TODO: We don't actually know if this works, need to test with many more users, all of whom are following people
 // It fetches recommended users by getting either your friends' or random users' followers and suggesting those
 const getRecommendedUsers = async (
   authUserId?: string | undefined,
   nextToken?: string | undefined,
 ): iPaginatedUserResult => {
   let finalUsers: iUser[] = [];
-  let localNextToken: string | undefined = nextToken;
+  const localNextToken: string | undefined = nextToken;
   let returnedZeroUsers = false;
 
-  const fetchPage = async (fetchRandom = false) => {
-    // handle case for signed in and signed out
-    const Request = authUserId
-      ? fetchRandom
-        ? ApiServices.getRecommendedFollowersFromRandom(authUserId, localNextToken)
-        : ApiServices.getRecommendedFollowersFromFriends(authUserId, localNextToken)
-      : ApiServices.getRecommendedFollowersFromRandomSignedOut(localNextToken);
-
-    const { data } = await Request;
-    const followedUsers = data?.searchRelationships?.items || [];
-    localNextToken = data?.searchRelationships?.nextToken || undefined; // send this in subsequent request to get the next page of results
-
-    const users: iUser[] = followedUsers.reduce((acc: iUser[], item) => {
-      const recommendedUsers = item?.followedUser?.following?.items || [];
-      for (const u of recommendedUsers) {
-        const recommendedUser = u?.followedUser;
-        const authUserIsFollowing = (recommendedUser?.followers?.items || []).length > 0; // might just be a ts error
-        // if authUser is NOT already following them, add them to the list
-        if (!authUserIsFollowing) {
-          // some of these values we don't care about or use so they can be default
-          acc.push({
-            id: recommendedUser?.id || '',
-            email: recommendedUser?.email || '',
-            role: UserRole.USER,
-            username: recommendedUser?.username || undefined,
-            name: recommendedUser?.name || undefined,
-            image: recommendedUser?.image || undefined,
-            bio: recommendedUser?.bio || undefined,
-            authUserIsFollowing,
-          });
+  let alreadyFollowedUserIds: string[] = [];
+  if (authUserId) {
+    // we want alreadyFollowedUserIds so we don't recommend people the user is already following later
+    const { data } = await ApiServices.getWhoUserIsFollowing(authUserId);
+    alreadyFollowedUserIds =
+      data?.relationshipByFollowingUserId?.items?.reduce((acc: string[], item) => {
+        if (item?.id) {
+          acc.push(item.id);
         }
-      }
-      return acc;
-    }, []);
+        return acc;
+      }, []) || [];
+  }
+
+  const fetchPage = async (fetchRandom = false) => {
+    let users: iUser[] = []; // a user which has a property "following" which is a list of users they follow
+    let localNextToken;
+    if (authUserId && !fetchRandom) {
+      // base recommendations off who your friends follow
+      const { data: data1 } = await ApiServices.getWhoPeopleUserFollowsAreFollowing(
+        authUserId,
+        localNextToken,
+      );
+      localNextToken = data1?.relationshipByFollowingUserId?.nextToken || undefined;
+      const peopelWhoUserFollows = data1?.relationshipByFollowingUserId?.items || [];
+      users = peopelWhoUserFollows.reduce((acc: iUser[], item) => {
+        const relationships = item?.followedUser?.following?.items || [];
+        // IDENTICAL TO OTHER STATEMENT!! (if below must change, so should other)
+        for (const r of relationships) {
+          const recommendedUser = r?.followedUser;
+          if (!recommendedUser) {
+            return acc;
+          }
+          const authUserIsFollowing = alreadyFollowedUserIds.includes(recommendedUser.id);
+          // if authUser is NOT already following them, add them to the list
+          if (!authUserIsFollowing) {
+            // some of these values we don't care about or use so they can be default
+            acc.push({
+              id: recommendedUser.id,
+              email: recommendedUser.email,
+              role: UserRole.USER,
+              username: recommendedUser.username || undefined,
+              name: recommendedUser.name || undefined,
+              image: recommendedUser.image || undefined,
+              bio: recommendedUser.bio || undefined,
+              authUserIsFollowing,
+            });
+          }
+        }
+        return acc;
+      }, []);
+    } else {
+      // base recommendarions off who random users follow
+      const { data: data2 } = await ApiServices.getWhoRandomUsersAreFollowing(
+        localNextToken,
+      );
+      localNextToken = data2?.listUsers?.nextToken || undefined;
+      const items2 = data2?.listUsers?.items || [];
+      users = items2.reduce((acc: iUser[], item) => {
+        const relationships = item?.following?.items || [];
+        // IDENTICAL TO OTHER STATEMENT!! (if below must change, so should other)
+        for (const r of relationships) {
+          const recommendedUser = r?.followedUser;
+          if (!recommendedUser) {
+            return acc;
+          }
+          const authUserIsFollowing = alreadyFollowedUserIds.includes(recommendedUser.id);
+          // if authUser is NOT already following them, add them to the list
+          if (!authUserIsFollowing) {
+            // some of these values we don't care about or use so they can be default
+            acc.push({
+              id: recommendedUser.id,
+              email: recommendedUser.email,
+              role: UserRole.USER,
+              username: recommendedUser.username || undefined,
+              name: recommendedUser.name || undefined,
+              image: recommendedUser.image || undefined,
+              bio: recommendedUser.bio || undefined,
+              authUserIsFollowing,
+            });
+          }
+        }
+        return acc;
+      }, []);
+    }
 
     const uniqueUsersWhoArentUs = getUniqueUsersWhoAreNotUs(
       [...users, ...finalUsers],
@@ -91,20 +140,26 @@ const getRecommendedUsers = async (
     await fetchPage(true); // fetches random users, but still returns who a user is following instead of the user
     if (finalUsers.length < NUM_USERS_TO_FETCH) {
       // if STILL less, just get random users. Other requests try to get users who others follow, who are already popular. This is just purely random
-      const Request = authUserId
-        ? ApiServices.getUsersNotFollowing(authUserId)
-        : ApiServices.getAllUsers();
-      const { data } = await Request;
-      const formattedUsers: iUser[] = (data?.searchUsers?.items || []).map((u) => ({
-        id: u?.id || '',
-        email: u?.email || '',
-        role: UserRole.USER,
-        username: u?.username || undefined,
-        name: u?.name || undefined,
-        image: u?.image || undefined,
-        bio: u?.bio || undefined,
-        authUserIsFollowing: (u?.followers?.items || []).length > 0, // might just be a ts error
-      }));
+      const { data } = await ApiServices.getUsersPaginated();
+      const formattedUsers: iUser[] = (data?.listUsers?.items || []).reduce(
+        (acc: iUser[], u) => {
+          if (u) {
+            const authUserIsFollowing = alreadyFollowedUserIds.includes(u.id);
+            acc.push({
+              id: u.id,
+              email: u.email,
+              role: UserRole.USER,
+              username: u.username || undefined,
+              name: u.name || undefined,
+              image: u.image || undefined,
+              bio: u.bio || undefined,
+              authUserIsFollowing,
+            });
+          }
+          return acc;
+        },
+        [],
+      );
       const usersWeDoNotFollow = formattedUsers.filter(
         (user) => user.authUserIsFollowing === false,
       );

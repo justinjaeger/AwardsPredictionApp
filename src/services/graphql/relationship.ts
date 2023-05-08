@@ -5,41 +5,52 @@ import {
   DeleteRelationshipMutationVariables,
   ListRelationshipsQuery,
   ListRelationshipsQueryVariables,
-  SearchableSortDirection,
+  ListUsersQueryVariables,
+  ModelSortDirection,
+  RelationshipByFollowedUserIdQuery,
+  RelationshipByFollowedUserIdQueryVariables,
+  RelationshipByFollowingUserIdQuery,
+  RelationshipByFollowingUserIdQueryVariables,
   SearchRelationshipsQueryVariables,
+  UniqueRelationshipViaFollowedUserQuery,
+  UniqueRelationshipViaFollowedUserQueryVariables,
 } from '../../API';
-import {
-  PAGINATED_USER_LIMIT,
-  PAGINATED_USER_RECOMMENDATION_LIMIT,
-} from '../../constants';
 import * as mutations from '../../graphql/mutations';
-import * as queries from '../../graphql/queries';
 import * as customQueries from '../../graphqlCustom/queries';
-import { SearchRelationshipsQuery } from '../../graphqlCustom/types';
+import {
+  ListUsersQuery,
+  RelationshipByFollowingUserIdQueryCustom,
+  SearchRelationshipsQuery,
+} from '../../graphqlCustom/types';
 import { GraphqlAPI, handleError, iApiResponse } from '../utils';
 
-export const getRelationship = async (
+// tries to solve problem where we're only getting the most/least recently followed instead of a random sample
+const returnOneOrZero = () => Math.round(Math.random());
+
+export const getUniqueRelationship = async (
   followedUserId: string,
   followingUserId: string,
-): Promise<iApiResponse<SearchRelationshipsQuery>> => {
+): Promise<iApiResponse<UniqueRelationshipViaFollowedUserQuery>> => {
   try {
     const { data, errors } = await GraphqlAPI<
-      SearchRelationshipsQuery,
-      SearchRelationshipsQueryVariables
-    >(queries.searchRelationships, {
-      filter: {
-        followedUserId: { eq: followedUserId },
-        followingUserId: { eq: followingUserId },
-      },
+      UniqueRelationshipViaFollowedUserQuery,
+      UniqueRelationshipViaFollowedUserQueryVariables
+    >(customQueries.uniqueRelationshipViaFollowedUser, {
+      followedUserId,
+      followingUserId: { eq: followingUserId },
     });
-    if (!data?.searchRelationships) {
+    if (!data?.uniqueRelationshipViaFollowedUser) {
       throw new Error(JSON.stringify(errors));
     }
-    return { status: 'success', data: data };
+    return { status: 'success', data };
   } catch (err) {
     return handleError('error getting relationship', err);
   }
 };
+
+/**
+ * MUTTIONS
+ */
 
 export const followUser = async (
   followedUserId: string,
@@ -47,11 +58,16 @@ export const followUser = async (
 ): Promise<iApiResponse<CreateRelationshipMutation>> => {
   try {
     // first, safety check and don't create if relationship already exists
-    const maybeRelationships = await getRelationship(followedUserId, followingUserId);
+    const maybeRelationships = await getUniqueRelationship(
+      followedUserId,
+      followingUserId,
+    );
     if (maybeRelationships.status !== 'success') {
       throw new Error(JSON.stringify(maybeRelationships.error));
     }
-    if ((maybeRelationships.data?.searchRelationships?.items || []).length > 0) {
+    if (
+      (maybeRelationships.data?.uniqueRelationshipViaFollowedUser?.items || []).length > 0
+    ) {
       throw new Error('relationship already exists');
     }
     // create relationship
@@ -74,14 +90,18 @@ export const unFollowUser = async (
 ): Promise<iApiResponse<DeleteRelationshipMutation>> => {
   try {
     // first, get the relationship id (should be only one with these inputs)
-    const maybeRelationships = await getRelationship(followedUserId, followingUserId);
+    const maybeRelationships = await getUniqueRelationship(
+      followedUserId,
+      followingUserId,
+    );
     if (maybeRelationships.status !== 'success') {
       throw new Error(JSON.stringify(maybeRelationships.error));
     }
-    if (maybeRelationships.data?.searchRelationships?.items?.length === 0) {
+    if (maybeRelationships.data?.uniqueRelationshipViaFollowedUser?.items?.length === 0) {
       throw new Error('relationship not found');
     }
-    const relationship = maybeRelationships.data?.searchRelationships?.items[0];
+    const relationship =
+      maybeRelationships.data?.uniqueRelationshipViaFollowedUser?.items[0];
     const relationshipId = relationship?.id;
     if (!relationshipId) {
       throw new Error('relationship id not found');
@@ -118,109 +138,109 @@ export const deleteRelationshipById = async (
   }
 };
 
-type SearchRelationshipsQueryVariablesCustom = SearchRelationshipsQueryVariables & {
-  authUserId: string;
-};
-export const getPaginatedFollowersSignedIn = async (
-  followedUserId: string, // get users who are following this user
-  authUserId: string,
+/**
+ * GENERIC "WHO IS FOLLOWING" QUERIES (optional pagination)
+ */
+
+export const getWhoUserIsFollowedBy = async (
+  followedUserId: string,
+  limit?: number,
   nextToken?: string,
-): Promise<iApiResponse<SearchRelationshipsQuery>> => {
-  console.log('followedUserId', followedUserId);
-  console.log('authUserId', authUserId);
+): Promise<iApiResponse<RelationshipByFollowedUserIdQuery>> => {
   try {
     const { data, errors } = await GraphqlAPI<
-      SearchRelationshipsQuery,
-      SearchRelationshipsQueryVariablesCustom
-    >(customQueries.searchFollowersSignedIn, {
-      filter: {
-        followedUserId: { eq: followedUserId },
-      },
-      limit: PAGINATED_USER_LIMIT,
-      authUserId,
+      RelationshipByFollowedUserIdQuery,
+      RelationshipByFollowedUserIdQueryVariables
+    >(customQueries.getWhoUserIsFollowedBy, {
+      followedUserId,
+      limit,
       nextToken,
     });
-    if (!data?.searchRelationships) {
+    if (!data?.relationshipByFollowedUserId) {
       throw new Error(JSON.stringify(errors));
     }
-    return { status: 'success', data: data };
+    return { status: 'success', data };
   } catch (err) {
     return handleError('error getting paginated followers signed in', err);
   }
 };
-export const getPaginatedFollowingSignedIn = async (
+
+export const getWhoUserIsFollowing = async (
   followingUserId: string, // get users who this user is following
-  authUserId: string,
+  limit?: number,
   nextToken?: string | undefined,
-  paginatedLimit?: number | undefined,
-): Promise<iApiResponse<SearchRelationshipsQuery>> => {
+): Promise<iApiResponse<RelationshipByFollowingUserIdQuery>> => {
   try {
     const { data, errors } = await GraphqlAPI<
-      SearchRelationshipsQuery,
-      SearchRelationshipsQueryVariablesCustom
-    >(customQueries.searchFollowingSignedIn, {
-      filter: {
-        followingUserId: { eq: followingUserId },
-      },
-      limit: paginatedLimit || PAGINATED_USER_LIMIT,
-      authUserId,
+      RelationshipByFollowingUserIdQuery,
+      RelationshipByFollowingUserIdQueryVariables
+    >(customQueries.getWhoUserIsFollowing, {
+      followingUserId,
+      limit,
       nextToken,
     });
-    if (!data?.searchRelationships) {
+    if (!data?.relationshipByFollowingUserId) {
       throw new Error(JSON.stringify(errors));
     }
-    return { status: 'success', data: data };
+    return { status: 'success', data };
   } catch (err) {
     return handleError('error getting paginated following signed in', err);
   }
 };
 
-export const getPaginatedFollowersSignedOut = async (
-  followedUserId: string, // get users who are following this user
-  nextToken?: string,
-): Promise<iApiResponse<SearchRelationshipsQuery>> => {
+/**
+ * PAGINATED QUERIES (for recommendations, pagination enforced in query)
+ */
+
+// Gets users who you are following, then who THEY are following
+export const getWhoPeopleUserFollowsAreFollowing = async (
+  followingUserId: string,
+  nextToken?: string | undefined,
+): Promise<iApiResponse<RelationshipByFollowingUserIdQueryCustom>> => {
   try {
+    const oneOrZero = returnOneOrZero();
     const { data, errors } = await GraphqlAPI<
-      SearchRelationshipsQuery,
-      SearchRelationshipsQueryVariables
-    >(customQueries.searchFollowersSignedOut, {
-      filter: {
-        followedUserId: { eq: followedUserId },
-      },
-      limit: PAGINATED_USER_LIMIT,
+      RelationshipByFollowingUserIdQueryCustom,
+      RelationshipByFollowingUserIdQueryVariables
+    >(customQueries.getWhoPeopleUserFollowsAreFollowing, {
+      followingUserId,
       nextToken,
+      sortDirection: oneOrZero ? ModelSortDirection.ASC : ModelSortDirection.DESC,
     });
-    if (!data?.searchRelationships) {
+    if (!data?.relationshipByFollowingUserId) {
       throw new Error(JSON.stringify(errors));
     }
-    return { status: 'success', data: data };
+    return { status: 'success', data };
   } catch (err) {
-    return handleError('error getting paginated followers signed out', err);
+    return handleError('error getting paginated following signed in', err);
   }
 };
-export const getPaginatedFollowingSignedOut = async (
-  followingUserId: string, // get users who this user is following
-  nextToken?: string,
-): Promise<iApiResponse<SearchRelationshipsQuery>> => {
+
+// Gets random users, then who THEY are following
+export const getWhoRandomUsersAreFollowing = async (
+  nextToken?: string | undefined,
+): Promise<iApiResponse<ListUsersQuery>> => {
   try {
-    const { data, errors } = await GraphqlAPI<
-      SearchRelationshipsQuery,
-      SearchRelationshipsQueryVariables
-    >(customQueries.searchFollowingSignedOut, {
-      filter: {
-        followingUserId: { eq: followingUserId },
+    const oneOrZero = returnOneOrZero();
+    const { data, errors } = await GraphqlAPI<ListUsersQuery, ListUsersQueryVariables>(
+      customQueries.getWhoRandomUsersAreFollowing,
+      {
+        nextToken,
+        sortDirection: oneOrZero ? ModelSortDirection.ASC : ModelSortDirection.DESC,
       },
-      limit: PAGINATED_USER_LIMIT,
-      nextToken,
-    });
-    if (!data?.searchRelationships) {
+    );
+    if (!data?.listUsers) {
       throw new Error(JSON.stringify(errors));
     }
-    return { status: 'success', data: data };
+    return { status: 'success', data };
   } catch (err) {
-    return handleError('error getting paginated following signed out', err);
+    return handleError('error getting paginated following signed in', err);
   }
 };
+
+/**
+ * COUNT queries (uses OpenSearch so we COULD replace if expensiv)
+ */
 
 export const getFollowingCount = async (
   followingUserId: string,
@@ -264,134 +284,24 @@ export const getFollowerCount = async (
   }
 };
 
-// tries to solve problem where we're only getting the most/least recently followed instead of a random sample
-const returnOneOrZero = () => Math.round(Math.random());
+/**
+ * RELATIONSHIPS WITH EXTRA INFO
+ */
 
-export const getRecommendedFollowersFromFriends = async (
-  authUserId: string,
-  nextToken?: string | undefined,
-  paginatedLimit?: number, // Careful: Returns x^2 users, because it finds X friends, multiplied by X of their friends
-): Promise<iApiResponse<SearchRelationshipsQuery>> => {
-  try {
-    const oneOrZero = returnOneOrZero();
-    // get users who authUser is following and suggest their friends' friends
-    const { data, errors } = await GraphqlAPI<
-      SearchRelationshipsQuery,
-      SearchRelationshipsQueryVariablesCustom
-    >(customQueries.searchRecommendedFollowing, {
-      filter: {
-        followingUserId: { eq: authUserId },
-      },
-      limit: paginatedLimit || PAGINATED_USER_LIMIT,
-      // so it's not biased towards old or new users
-      sort: oneOrZero
-        ? [{ direction: SearchableSortDirection.asc }]
-        : [{ direction: SearchableSortDirection.desc }],
-      authUserId,
-      nextToken,
-    });
-    if (!data?.searchRelationships) {
-      throw new Error(JSON.stringify(errors));
-    }
-    return { status: 'success', data: data };
-  } catch (err) {
-    return handleError('error getting recommended followers from friends', err);
-  }
-};
-
-// Even when looking for random followers, it's still a better idea to suggest random people's friends rather than random people, because the probability of suggesting a popular person is higher
-export const getRecommendedFollowersFromRandom = async (
-  authUserId: string,
-  nextToken?: string | undefined,
-  paginatedLimit?: number, // Careful: Returns x^2 users, because it finds X friends, multiplied by X of their friends
-): Promise<iApiResponse<SearchRelationshipsQuery>> => {
-  try {
-    const oneOrZero = returnOneOrZero();
-    // get random users and suggest user follow them
-    const { data, errors } = await GraphqlAPI<
-      SearchRelationshipsQuery,
-      SearchRelationshipsQueryVariablesCustom
-    >(customQueries.searchRecommendedFollowing, {
-      limit: paginatedLimit || PAGINATED_USER_RECOMMENDATION_LIMIT,
-      // so it's not biased towards old or new users
-      sort: oneOrZero
-        ? [{ direction: SearchableSortDirection.asc }]
-        : [{ direction: SearchableSortDirection.desc }],
-      authUserId,
-      nextToken,
-    });
-    if (!data?.searchRelationships) {
-      throw new Error(JSON.stringify(errors));
-    }
-    return { status: 'success', data: data };
-  } catch (err) {
-    return handleError('error getting recommended followers from random', err);
-  }
-};
-
-// might want to use for signed out users
-export const getRecommendedFollowersFromRandomSignedOut = async (
-  nextToken?: string | undefined,
-  paginatedLimit?: number, // Careful: Returns x^2 users, because it finds X friends, multiplied by X of their friends
-): Promise<iApiResponse<SearchRelationshipsQuery>> => {
-  try {
-    const oneOrZero = returnOneOrZero();
-    const { data, errors } = await GraphqlAPI<
-      SearchRelationshipsQuery,
-      SearchRelationshipsQueryVariables
-    >(customQueries.searchRecommendedFollowingSignedOut, {
-      limit: paginatedLimit || PAGINATED_USER_RECOMMENDATION_LIMIT,
-      // so it's not biased towards old or new users
-      sort: oneOrZero
-        ? [{ direction: SearchableSortDirection.asc }]
-        : [{ direction: SearchableSortDirection.desc }],
-      nextToken,
-    });
-    if (!data?.searchRelationships) {
-      throw new Error(JSON.stringify(errors));
-    }
-    return { status: 'success', data: data };
-  } catch (err) {
-    return handleError('error getting recommended followers from random signed out', err);
-  }
-};
-
-// might want to use for signed out users
-export const getAnyUsers = async (): Promise<iApiResponse<SearchRelationshipsQuery>> => {
-  try {
-    const oneOrZero = returnOneOrZero();
-    const { data, errors } = await GraphqlAPI<
-      SearchRelationshipsQuery,
-      SearchRelationshipsQueryVariables
-    >(customQueries.searchRecommendedFollowingSignedOut, {
-      limit: PAGINATED_USER_RECOMMENDATION_LIMIT,
-      // so it's not biased towards old or new users
-      sort: oneOrZero
-        ? [{ direction: SearchableSortDirection.asc }]
-        : [{ direction: SearchableSortDirection.desc }],
-    });
-    if (!data?.searchRelationships) {
-      throw new Error(JSON.stringify(errors));
-    }
-    return { status: 'success', data: data };
-  } catch (err) {
-    return handleError('error getting any recommended followers', err);
-  }
-};
-
+// TODO: can optimize. See query for details (is fine for now but should be optimized for scaling)
 export const getFriendsPredictingEvent = async (
   followingUserId: string,
   eventId: string,
-): Promise<iApiResponse<SearchRelationshipsQuery>> => {
+): Promise<iApiResponse<RelationshipByFollowingUserIdQuery>> => {
   try {
     const { data, errors } = await GraphqlAPI<
-      SearchRelationshipsQuery,
-      { followingUserId: string; eventId: string }
-    >(customQueries.searchFriendsPredictingEventQuery, {
+      RelationshipByFollowingUserIdQuery,
+      RelationshipByFollowingUserIdQueryVariables & { eventId: string }
+    >(customQueries.getFriendsPredictingEventQuery, {
       followingUserId,
       eventId,
     });
-    if (!data?.searchRelationships) {
+    if (!data?.relationshipByFollowingUserId) {
       throw new Error(JSON.stringify(errors));
     }
     return { status: 'success', data: data };
@@ -399,6 +309,39 @@ export const getFriendsPredictingEvent = async (
     return handleError('error getting friends predicting event', err);
   }
 };
+
+// returns user with the recent predictions of those they follow
+export const getRecentFollowingPredictions = async (
+  followingUserId: string,
+): Promise<iApiResponse<RelationshipByFollowingUserIdQueryCustom>> => {
+  // get the date 30 days ago, so we don't return predictions that are too old
+  const date = new Date();
+  date.setDate(date.getDate() - 30); // 30 days ago
+  const dateString = date.toISOString();
+
+  try {
+    const { data, errors } = await GraphqlAPI<
+      RelationshipByFollowingUserIdQueryCustom,
+      RelationshipByFollowingUserIdQueryVariables & {
+        followingUserId: string;
+        greaterThanDate: string;
+      }
+    >(customQueries.getRecentFollowingPredictions, {
+      followingUserId,
+      greaterThanDate: dateString,
+    });
+    if (!data?.relationshipByFollowingUserId) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data };
+  } catch (err) {
+    return handleError('error getting user recent following predictions', err);
+  }
+};
+
+/**
+ * USED FOR SCRIPTS
+ */
 
 // Used for delete duplicate script
 export const listEveryRelationship = async (): Promise<

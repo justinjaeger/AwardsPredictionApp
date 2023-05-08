@@ -20,6 +20,7 @@ type iSongParams = {
   movieId: string;
 };
 
+// TODO: use index to get song by movieId and title
 export const getSong = async (id: string): Promise<iApiResponse<GetSongQuery>> => {
   try {
     const { data, errors } = await GraphqlAPI<GetSongQuery, GetSongQueryVariables>(

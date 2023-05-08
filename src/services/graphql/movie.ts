@@ -45,9 +45,7 @@ export const getAllMovies = async (): Promise<iApiResponse<ListMoviesQuery>> => 
   }
 };
 
-/**
- * enforce tmdb being unique
- */
+// TODO: use index to get movie
 export const getMoviesByTmdb = async (
   tmdbId: number,
 ): Promise<iApiResponse<ListMoviesQuery>> => {

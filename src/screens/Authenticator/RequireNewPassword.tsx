@@ -35,7 +35,7 @@ const RequireNewPassword = (p: any) => {
       if (res.status === 'success') {
         // SIGN USER IN
         const { data: user } = await ApiServices.getUserByEmail(email);
-        const u = user?.searchUsers?.items[0];
+        const u = user?.userByEmail?.items[0];
         if (!u) return;
         signInUser(u.id, u.email, u.role);
         navigation.navigate('BottomTabNavigator', {

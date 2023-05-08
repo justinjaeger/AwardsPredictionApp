@@ -100,6 +100,7 @@ const createContender = async (
 };
 
 // We want to return iPrediction here so that the user's predictions can update immediately
+// TODO: use index, getContenderByCategoryIdAndMovieIdAndPersonIdAndSongId (getUniqueContender)
 const createUniqueContender = async (
   params: iContenderParams,
 ): Promise<iApiResponse<iPrediction>> => {

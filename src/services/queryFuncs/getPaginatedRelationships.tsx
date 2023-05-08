@@ -9,12 +9,21 @@ export const getPaginatedFollowers = async (
   authUserId: string | undefined,
   nextToken?: string,
 ): iPaginatedUserResult => {
-  const Request = authUserId
-    ? ApiServices.getPaginatedFollowersSignedIn(userId, authUserId, nextToken)
-    : ApiServices.getPaginatedFollowersSignedOut(userId, nextToken);
-  const res = await Request;
-  const items = res.data?.searchRelationships?.items || [];
-  const nextPaginateToken = res.data?.searchRelationships?.nextToken; // send this in subsequent request to get the next page of results
+  let items = [];
+  let nextPaginateToken; // send this in subsequent request to get the next page of results
+  if (authUserId) {
+    const res = await ApiServices.getPaginatedFollowersSignedIn(
+      userId,
+      authUserId,
+      nextToken,
+    );
+    items = res.data?.relationshipByFollowedUserId?.items || [];
+    nextPaginateToken = res.data?.relationshipByFollowedUserId?.nextToken;
+  } else {
+    const res = await ApiServices.getPaginatedFollowersSignedOut(userId, nextToken);
+    items = res.data?.relationshipByFollowedUserId?.items || [];
+    nextPaginateToken = res.data?.relationshipByFollowedUserId?.nextToken;
+  }
   const users: iUser[] = items.map((item) => {
     const u = item?.followingUser;
     // some of these values we don't care about or use so they can be default
@@ -26,7 +35,9 @@ export const getPaginatedFollowers = async (
       name: u?.name || undefined,
       image: u?.image || undefined,
       bio: u?.bio || undefined,
+      // @ts-ignore
       authUserIsFollowing: (u?.followers?.items || []).length > 0,
+      // @ts-ignore
       isFollowingAuthUser: (u?.following?.items || []).length > 0,
     };
   });
@@ -39,12 +50,21 @@ export const getPaginatedFollowing = async (
   authUserId: string | undefined,
   nextToken?: string,
 ): iPaginatedUserResult => {
-  const Request = authUserId
-    ? ApiServices.getPaginatedFollowingSignedIn(userId, authUserId, nextToken)
-    : ApiServices.getPaginatedFollowingSignedOut(userId, nextToken);
-  const res = await Request;
-  const items = res.data?.searchRelationships?.items || [];
-  const nextPaginateToken = res.data?.searchRelationships?.nextToken; // send this in subsequent request to get the next page of results
+  let items = [];
+  let nextPaginateToken; // send this in subsequent request to get the next page of results
+  if (authUserId) {
+    const res = await ApiServices.getPaginatedFollowingSignedIn(
+      userId,
+      authUserId,
+      nextToken,
+    );
+    items = res.data?.relationshipByFollowingUserId?.items || [];
+    nextPaginateToken = res.data?.relationshipByFollowingUserId?.nextToken;
+  } else {
+    const res = await ApiServices.getPaginatedFollowingSignedOut(userId, nextToken);
+    items = res.data?.relationshipByFollowingUserId?.items || [];
+    nextPaginateToken = res.data?.relationshipByFollowingUserId?.nextToken;
+  }
   const users: iUser[] = items.map((item) => {
     const u = item?.followedUser;
     // some of these values we don't care about or use so they can be default
@@ -56,7 +76,9 @@ export const getPaginatedFollowing = async (
       name: u?.name || undefined,
       image: u?.image || undefined,
       bio: u?.bio || undefined,
+      // @ts-ignore
       authUserIsFollowing: (u?.followers?.items || []).length > 0,
+      // @ts-ignore
       isFollowingAuthUser: (u?.followers?.items || []).length > 0,
     };
   });

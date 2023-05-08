@@ -25,9 +25,7 @@ export const getPerson = async (id: string): Promise<iApiResponse<GetPersonQuery
   }
 };
 
-/**
- * enforce tmdb being unique
- */
+// TODO: use index to get person
 export const getPeopleByTmdb = async (
   tmdbId: number,
 ): Promise<iApiResponse<ListPeopleQuery>> => {

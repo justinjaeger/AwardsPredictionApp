@@ -10,7 +10,7 @@ const getUniqueContenderId = (
   return categoryId + movieId + (personId || '') + (songId || '');
 };
 
-// NOT COMPLETE!
+// TODO: Delete all history predictions after running this
 const deleteDuplicatedContenders = async () => {
   try {
     // Get all personal predictions
