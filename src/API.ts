@@ -1414,17 +1414,17 @@ export type ModelIntKeyConditionInput = {
   between?: Array< number | null > | null,
 };
 
-export type ModelContenderGetUniqueContenderCompositeKeyConditionInput = {
-  eq?: ModelContenderGetUniqueContenderCompositeKeyInput | null,
-  le?: ModelContenderGetUniqueContenderCompositeKeyInput | null,
-  lt?: ModelContenderGetUniqueContenderCompositeKeyInput | null,
-  ge?: ModelContenderGetUniqueContenderCompositeKeyInput | null,
-  gt?: ModelContenderGetUniqueContenderCompositeKeyInput | null,
-  between?: Array< ModelContenderGetUniqueContenderCompositeKeyInput | null > | null,
-  beginsWith?: ModelContenderGetUniqueContenderCompositeKeyInput | null,
+export type ModelContenderGetUniquePersonContenderCompositeKeyConditionInput = {
+  eq?: ModelContenderGetUniquePersonContenderCompositeKeyInput | null,
+  le?: ModelContenderGetUniquePersonContenderCompositeKeyInput | null,
+  lt?: ModelContenderGetUniquePersonContenderCompositeKeyInput | null,
+  ge?: ModelContenderGetUniquePersonContenderCompositeKeyInput | null,
+  gt?: ModelContenderGetUniquePersonContenderCompositeKeyInput | null,
+  between?: Array< ModelContenderGetUniquePersonContenderCompositeKeyInput | null > | null,
+  beginsWith?: ModelContenderGetUniquePersonContenderCompositeKeyInput | null,
 };
 
-export type ModelContenderGetUniqueContenderCompositeKeyInput = {
+export type ModelContenderGetUniquePersonContenderCompositeKeyInput = {
   movieId?: string | null,
   personId?: string | null,
 };
@@ -13507,17 +13507,136 @@ export type CategoryByEventQuery = {
   } | null,
 };
 
-export type GetUniqueContenderQueryVariables = {
+export type GetUniqueMovieContenderQueryVariables = {
   categoryId: string,
-  movieIdPersonId?: ModelContenderGetUniqueContenderCompositeKeyConditionInput | null,
+  movieId?: ModelIDKeyConditionInput | null,
   sortDirection?: ModelSortDirection | null,
   filter?: ModelContenderFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
 };
 
-export type GetUniqueContenderQuery = {
-  getUniqueContender?:  {
+export type GetUniqueMovieContenderQuery = {
+  getUniqueMovieContender?:  {
+    __typename: "ModelContenderConnection",
+    items:  Array< {
+      __typename: "Contender",
+      id: string,
+      categoryId: string,
+      category:  {
+        __typename: "Category",
+        id: string,
+        eventId: string,
+        event:  {
+          __typename: "Event",
+          id: string,
+          awardsBody: AwardsBody,
+          year: number,
+          nominationDateTime?: string | null,
+          winDateTime?: string | null,
+          status?: EventStatus | null,
+          liveAt?: string | null,
+          createdAt: string,
+          updatedAt: string,
+        },
+        name: CategoryName,
+        type: CategoryType,
+        isShortlisted?: CategoryIsShortlisted | null,
+        predictionSets?:  {
+          __typename: "ModelPredictionSetConnection",
+          nextToken?: string | null,
+        } | null,
+        historyPredictions?:  {
+          __typename: "ModelHistoryPredictionSetConnection",
+          nextToken?: string | null,
+        } | null,
+        createdAt: string,
+        updatedAt: string,
+      },
+      eventId: string,
+      event:  {
+        __typename: "Event",
+        id: string,
+        categories?:  {
+          __typename: "ModelCategoryConnection",
+          nextToken?: string | null,
+        } | null,
+        awardsBody: AwardsBody,
+        year: number,
+        nominationDateTime?: string | null,
+        winDateTime?: string | null,
+        status?: EventStatus | null,
+        predictionSets?:  {
+          __typename: "ModelPredictionSetConnection",
+          nextToken?: string | null,
+        } | null,
+        historyPredictions?:  {
+          __typename: "ModelHistoryPredictionSetConnection",
+          nextToken?: string | null,
+        } | null,
+        liveAt?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      },
+      movieId: string,
+      movie:  {
+        __typename: "Movie",
+        id: string,
+        contenders?:  {
+          __typename: "ModelContenderConnection",
+          nextToken?: string | null,
+        } | null,
+        tmdbId: number,
+        studio?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      },
+      personId?: string | null,
+      person?:  {
+        __typename: "Person",
+        id: string,
+        tmdbId: number,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      songId?: string | null,
+      song?:  {
+        __typename: "Song",
+        id: string,
+        movieId: string,
+        movie:  {
+          __typename: "Movie",
+          id: string,
+          tmdbId: number,
+          studio?: string | null,
+          createdAt: string,
+          updatedAt: string,
+        },
+        title: string,
+        artist: string,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      visibility?: ContenderVisibility | null,
+      accolade?: ContenderAccolade | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type GetUniquePersonContenderQueryVariables = {
+  categoryId: string,
+  movieIdPersonId?: ModelContenderGetUniquePersonContenderCompositeKeyConditionInput | null,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelContenderFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type GetUniquePersonContenderQuery = {
+  getUniquePersonContender?:  {
     __typename: "ModelContenderConnection",
     items:  Array< {
       __typename: "Contender",

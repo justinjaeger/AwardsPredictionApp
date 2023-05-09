@@ -4156,16 +4156,126 @@ export const categoryByEvent = /* GraphQL */ `
     }
   }
 `;
-export const getUniqueContender = /* GraphQL */ `
-  query GetUniqueContender(
+export const getUniqueMovieContender = /* GraphQL */ `
+  query GetUniqueMovieContender(
     $categoryId: ID!
-    $movieIdPersonId: ModelContenderGetUniqueContenderCompositeKeyConditionInput
+    $movieId: ModelIDKeyConditionInput
     $sortDirection: ModelSortDirection
     $filter: ModelContenderFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    getUniqueContender(
+    getUniqueMovieContender(
+      categoryId: $categoryId
+      movieId: $movieId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        categoryId
+        category {
+          id
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            liveAt
+            createdAt
+            updatedAt
+          }
+          name
+          type
+          isShortlisted
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        eventId
+        event {
+          id
+          categories {
+            nextToken
+          }
+          awardsBody
+          year
+          nominationDateTime
+          winDateTime
+          status
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          liveAt
+          createdAt
+          updatedAt
+        }
+        movieId
+        movie {
+          id
+          contenders {
+            nextToken
+          }
+          tmdbId
+          studio
+          createdAt
+          updatedAt
+        }
+        personId
+        person {
+          id
+          tmdbId
+          createdAt
+          updatedAt
+        }
+        songId
+        song {
+          id
+          movieId
+          movie {
+            id
+            tmdbId
+            studio
+            createdAt
+            updatedAt
+          }
+          title
+          artist
+          createdAt
+          updatedAt
+        }
+        visibility
+        accolade
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getUniquePersonContender = /* GraphQL */ `
+  query GetUniquePersonContender(
+    $categoryId: ID!
+    $movieIdPersonId: ModelContenderGetUniquePersonContenderCompositeKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelContenderFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    getUniquePersonContender(
       categoryId: $categoryId
       movieIdPersonId: $movieIdPersonId
       sortDirection: $sortDirection
