@@ -143,6 +143,7 @@ type Event @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
     categories: [Category] @hasMany(indexName: "byEvent", fields: ["id"])
     awardsBody: AwardsBody!
+        @index(name: "eventByAwardsBodyAndYear", sortKeyFields: ["year"], queryField: "eventByAwardsBodyAndYear")
     year: Int!
     nominationDateTime: AWSDateTime # nullable. admin sets this
     winDateTime: AWSDateTime # nullable. admin sets this
@@ -172,10 +173,10 @@ type Category @model @auth(rules: [{ allow: public }]) {
 type Contender @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
     categoryId: ID!
-    category: Category! @hasOne(fields: ["categoryId"])
-    eventId: ID!
         @index(name: "getUniqueContender", sortKeyFields: ["movieId", "personId"], queryField: "getUniqueContender")
         @index(name: "getUniqueSongContender", sortKeyFields: ["movieId", "songId"], queryField: "getUniqueSongContender")
+    category: Category! @hasOne(fields: ["categoryId"])
+    eventId: ID!
     event: Event! @hasOne(fields: ["eventId"])
     movieId: ID! 
         @index(name: "byMovie", queryField: "contenderByMovie")

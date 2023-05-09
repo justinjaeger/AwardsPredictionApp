@@ -4012,6 +4012,76 @@ export const relationshipByFollowingUserId = /* GraphQL */ `
     }
   }
 `;
+export const eventByAwardsBodyAndYear = /* GraphQL */ `
+  query EventByAwardsBodyAndYear(
+    $awardsBody: AwardsBody!
+    $year: ModelIntKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelEventFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    eventByAwardsBodyAndYear(
+      awardsBody: $awardsBody
+      year: $year
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        categories {
+          items {
+            id
+            eventId
+            name
+            type
+            isShortlisted
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        awardsBody
+        year
+        nominationDateTime
+        winDateTime
+        status
+        predictionSets {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        historyPredictions {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        liveAt
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
 export const categoryByEvent = /* GraphQL */ `
   query CategoryByEvent(
     $eventId: ID!
@@ -4088,7 +4158,7 @@ export const categoryByEvent = /* GraphQL */ `
 `;
 export const getUniqueContender = /* GraphQL */ `
   query GetUniqueContender(
-    $eventId: ID!
+    $categoryId: ID!
     $movieIdPersonId: ModelContenderGetUniqueContenderCompositeKeyConditionInput
     $sortDirection: ModelSortDirection
     $filter: ModelContenderFilterInput
@@ -4096,7 +4166,7 @@ export const getUniqueContender = /* GraphQL */ `
     $nextToken: String
   ) {
     getUniqueContender(
-      eventId: $eventId
+      categoryId: $categoryId
       movieIdPersonId: $movieIdPersonId
       sortDirection: $sortDirection
       filter: $filter
@@ -4198,7 +4268,7 @@ export const getUniqueContender = /* GraphQL */ `
 `;
 export const getUniqueSongContender = /* GraphQL */ `
   query GetUniqueSongContender(
-    $eventId: ID!
+    $categoryId: ID!
     $movieIdSongId: ModelContenderGetUniqueSongContenderCompositeKeyConditionInput
     $sortDirection: ModelSortDirection
     $filter: ModelContenderFilterInput
@@ -4206,7 +4276,7 @@ export const getUniqueSongContender = /* GraphQL */ `
     $nextToken: String
   ) {
     getUniqueSongContender(
-      eventId: $eventId
+      categoryId: $categoryId
       movieIdSongId: $movieIdSongId
       sortDirection: $sortDirection
       filter: $filter

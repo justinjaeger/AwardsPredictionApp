@@ -1405,6 +1405,15 @@ export type ModelIDKeyConditionInput = {
   beginsWith?: string | null,
 };
 
+export type ModelIntKeyConditionInput = {
+  eq?: number | null,
+  le?: number | null,
+  lt?: number | null,
+  ge?: number | null,
+  gt?: number | null,
+  between?: Array< number | null > | null,
+};
+
 export type ModelContenderGetUniqueContenderCompositeKeyConditionInput = {
   eq?: ModelContenderGetUniqueContenderCompositeKeyInput | null,
   le?: ModelContenderGetUniqueContenderCompositeKeyInput | null,
@@ -1443,15 +1452,6 @@ export type ModelStringKeyConditionInput = {
   gt?: string | null,
   between?: Array< string | null > | null,
   beginsWith?: string | null,
-};
-
-export type ModelIntKeyConditionInput = {
-  eq?: number | null,
-  le?: number | null,
-  lt?: number | null,
-  ge?: number | null,
-  gt?: number | null,
-  between?: Array< number | null > | null,
 };
 
 export type ModelHistoryPredictionSetHistoryPredictionSetsbyUserIdAndEventIdAndCreatedAtCompositeKeyConditionInput = {
@@ -13356,6 +13356,78 @@ export type RelationshipByFollowingUserIdQuery = {
   } | null,
 };
 
+export type EventByAwardsBodyAndYearQueryVariables = {
+  awardsBody: AwardsBody,
+  year?: ModelIntKeyConditionInput | null,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelEventFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type EventByAwardsBodyAndYearQuery = {
+  eventByAwardsBodyAndYear?:  {
+    __typename: "ModelEventConnection",
+    items:  Array< {
+      __typename: "Event",
+      id: string,
+      categories?:  {
+        __typename: "ModelCategoryConnection",
+        items:  Array< {
+          __typename: "Category",
+          id: string,
+          eventId: string,
+          name: CategoryName,
+          type: CategoryType,
+          isShortlisted?: CategoryIsShortlisted | null,
+          createdAt: string,
+          updatedAt: string,
+        } | null >,
+        nextToken?: string | null,
+      } | null,
+      awardsBody: AwardsBody,
+      year: number,
+      nominationDateTime?: string | null,
+      winDateTime?: string | null,
+      status?: EventStatus | null,
+      predictionSets?:  {
+        __typename: "ModelPredictionSetConnection",
+        items:  Array< {
+          __typename: "PredictionSet",
+          id: string,
+          userId: string,
+          eventId: string,
+          categoryId: string,
+          type?: PredictionType | null,
+          comment?: string | null,
+          createdAt: string,
+          updatedAt: string,
+        } | null >,
+        nextToken?: string | null,
+      } | null,
+      historyPredictions?:  {
+        __typename: "ModelHistoryPredictionSetConnection",
+        items:  Array< {
+          __typename: "HistoryPredictionSet",
+          id: string,
+          userId: string,
+          eventId: string,
+          categoryId: string,
+          type?: PredictionType | null,
+          comment?: string | null,
+          createdAt: string,
+          updatedAt: string,
+        } | null >,
+        nextToken?: string | null,
+      } | null,
+      liveAt?: string | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
 export type CategoryByEventQueryVariables = {
   eventId: string,
   sortDirection?: ModelSortDirection | null,
@@ -13436,7 +13508,7 @@ export type CategoryByEventQuery = {
 };
 
 export type GetUniqueContenderQueryVariables = {
-  eventId: string,
+  categoryId: string,
   movieIdPersonId?: ModelContenderGetUniqueContenderCompositeKeyConditionInput | null,
   sortDirection?: ModelSortDirection | null,
   filter?: ModelContenderFilterInput | null,
@@ -13555,7 +13627,7 @@ export type GetUniqueContenderQuery = {
 };
 
 export type GetUniqueSongContenderQueryVariables = {
-  eventId: string,
+  categoryId: string,
   movieIdSongId?: ModelContenderGetUniqueSongContenderCompositeKeyConditionInput | null,
   sortDirection?: ModelSortDirection | null,
   filter?: ModelContenderFilterInput | null,
