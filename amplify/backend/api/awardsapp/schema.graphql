@@ -173,9 +173,9 @@ type Category @model @auth(rules: [{ allow: public }]) {
 type Contender @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
     categoryId: ID!
+        # If looking in a category that's one movie per contender, this returns just one result
+        # If looking in a person category, where there could be a few contenders (movieId#personId), you can just filter for personId
         @index(name: "getUniqueMovieContender", sortKeyFields: ["movieId"], queryField: "getUniqueMovieContender")
-        @index(name: "getUniquePersonContender", sortKeyFields: ["movieId", "personId"], queryField: "getUniquePersonContender")
-        @index(name: "getUniqueSongContender", sortKeyFields: ["movieId", "songId"], queryField: "getUniqueSongContender")
     category: Category! @hasOne(fields: ["categoryId"])
     eventId: ID!
     event: Event! @hasOne(fields: ["eventId"])
