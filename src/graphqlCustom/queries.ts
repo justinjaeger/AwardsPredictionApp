@@ -1070,7 +1070,6 @@ export const getWhoRandomUsersAreFollowing = /* GraphQL */ `
               role
             }
           }
-          nextToken
         }
       }
       nextToken

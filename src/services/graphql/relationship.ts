@@ -6,7 +6,6 @@ import {
   ListRelationshipsQuery,
   ListRelationshipsQueryVariables,
   ListUsersQueryVariables,
-  ModelSortDirection,
   RelationshipByFollowedUserIdQuery,
   RelationshipByFollowedUserIdQueryVariables,
   RelationshipByFollowingUserIdQuery,
@@ -23,9 +22,6 @@ import {
   SearchRelationshipsQuery,
 } from '../../graphqlCustom/types';
 import { GraphqlAPI, handleError, iApiResponse } from '../utils';
-
-// tries to solve problem where we're only getting the most/least recently followed instead of a random sample
-const returnOneOrZero = () => Math.round(Math.random());
 
 export const getUniqueRelationship = async (
   followedUserId: string,
@@ -198,14 +194,12 @@ export const getWhoPeopleUserFollowsAreFollowing = async (
   nextToken?: string | undefined,
 ): Promise<iApiResponse<RelationshipByFollowingUserIdQueryCustom>> => {
   try {
-    const oneOrZero = returnOneOrZero();
     const { data, errors } = await GraphqlAPI<
       RelationshipByFollowingUserIdQueryCustom,
       RelationshipByFollowingUserIdQueryVariables
     >(customQueries.getWhoPeopleUserFollowsAreFollowing, {
       followingUserId,
       nextToken,
-      sortDirection: oneOrZero ? ModelSortDirection.ASC : ModelSortDirection.DESC,
     });
     if (!data?.relationshipByFollowingUserId) {
       throw new Error(JSON.stringify(errors));
@@ -221,13 +215,9 @@ export const getWhoRandomUsersAreFollowing = async (
   nextToken?: string | undefined,
 ): Promise<iApiResponse<ListUsersQuery>> => {
   try {
-    const oneOrZero = returnOneOrZero();
     const { data, errors } = await GraphqlAPI<ListUsersQuery, ListUsersQueryVariables>(
       customQueries.getWhoRandomUsersAreFollowing,
-      {
-        nextToken,
-        sortDirection: oneOrZero ? ModelSortDirection.ASC : ModelSortDirection.DESC,
-      },
+      { nextToken },
     );
     if (!data?.listUsers) {
       throw new Error(JSON.stringify(errors));

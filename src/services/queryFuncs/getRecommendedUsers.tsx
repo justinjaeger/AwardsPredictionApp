@@ -47,9 +47,15 @@ const getRecommendedUsers = async (
       }, []) || [];
   }
 
-  const fetchPage = async (fetchRandom = false) => {
+  const fetchPage = async ({
+    nextToken,
+    fetchRandom,
+  }: {
+    nextToken?: string;
+    fetchRandom?: boolean;
+  }): Promise<{ nextToken: string | undefined; returnCount: number }> => {
     let users: iUser[] = []; // a user which has a property "following" which is a list of users they follow
-    let localNextToken;
+    let localNextToken = nextToken;
     if (authUserId && !fetchRandom) {
       // base recommendations off who your friends follow
       const { data: data1 } = await ApiServices.getWhoPeopleUserFollowsAreFollowing(
@@ -85,7 +91,7 @@ const getRecommendedUsers = async (
         return acc;
       }, []);
     } else {
-      // base recommendarions off who random users follow
+      // base recommendations off who random users follow
       const { data: data2 } = await ApiServices.getWhoRandomUsersAreFollowing(
         localNextToken,
       );
@@ -124,20 +130,22 @@ const getRecommendedUsers = async (
       authUserId,
     );
     finalUsers = uniqueUsersWhoArentUs;
-    return users.length; // return THIS because it actually only matters what the last request returned for the while loop to continue, not what the total is
+    return { nextToken: localNextToken, returnCount: users.length }; // return THIS because it actually only matters what the last request returned for the while loop to continue, not what the total is
   };
 
   // request until we accumulate enough recommendations, OR until a request returns ZERO users (maybe we don't have many friends)
+  let nt;
   while (returnedZeroUsers === false && finalUsers.length < NUM_USERS_TO_FETCH) {
-    const returnCount = await fetchPage();
-    if (returnCount === 0) {
+    const { nextToken } = await fetchPage({ nextToken: nt });
+    if (!nextToken) {
       returnedZeroUsers = true;
     }
+    nt = nextToken;
   }
 
   // if we returned zero users, it means we couldn't find enough recommendations from friends. So, try to get random recommendations
   if (returnedZeroUsers) {
-    await fetchPage(true); // fetches random users, but still returns who a user is following instead of the user
+    await fetchPage({ fetchRandom: true }); // fetches random users, but still returns who a user is following instead of the user
     if (finalUsers.length < NUM_USERS_TO_FETCH) {
       // if STILL less, just get random users. Other requests try to get users who others follow, who are already popular. This is just purely random
       const { data } = await ApiServices.getUsersPaginated();
