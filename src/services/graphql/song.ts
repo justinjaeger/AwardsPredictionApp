@@ -7,10 +7,10 @@ import {
   ListSongsQuery,
   UpdateSongMutation,
   UpdateSongMutationVariables,
+  SongByMovieIdAndTitleQueryVariables,
+  SongByMovieIdAndTitleQuery,
 } from '../../API';
-import * as mutations from '../../graphql/mutations';
 import * as customMutations from '../../graphqlCustom/mutations';
-import * as queries from '../../graphql/queries';
 import * as customQueries from '../../graphqlCustom/queries';
 import { GraphqlAPI, handleError, iApiResponse } from '../utils';
 
@@ -20,11 +20,10 @@ type iSongParams = {
   movieId: string;
 };
 
-// TODO: use index to get song by movieId and title
-export const getSong = async (id: string): Promise<iApiResponse<GetSongQuery>> => {
+export const getSongById = async (id: string): Promise<iApiResponse<GetSongQuery>> => {
   try {
     const { data, errors } = await GraphqlAPI<GetSongQuery, GetSongQueryVariables>(
-      queries.getSong,
+      customQueries.getSong,
       { id },
     );
     if (!data?.getSong) {
@@ -36,24 +35,20 @@ export const getSong = async (id: string): Promise<iApiResponse<GetSongQuery>> =
   }
 };
 
-/**
- * enforce songs being unique
- */
+// enforce songs being unique
 export const getUniqueSongs = async (
   params: iSongParams,
-): Promise<iApiResponse<ListSongsQuery>> => {
+): Promise<iApiResponse<SongByMovieIdAndTitleQuery>> => {
   const { title, movieId } = params;
   try {
-    const { data, errors } = await GraphqlAPI<ListSongsQuery, ListSongsQueryVariables>(
-      customQueries.listSongs,
-      {
-        filter: {
-          title: { eq: title },
-          movieId: { eq: movieId },
-        },
-      },
-    );
-    if (!data?.listSongs) {
+    const { data, errors } = await GraphqlAPI<
+      SongByMovieIdAndTitleQuery,
+      SongByMovieIdAndTitleQueryVariables
+    >(customQueries.songByMovieIdAndTitle, {
+      movieId,
+      title: { eq: title },
+    });
+    if (!data?.songByMovieIdAndTitle) {
       throw new Error(JSON.stringify(errors));
     }
     return { status: 'success', data };
@@ -70,7 +65,7 @@ export const createSong = async (
     const { data, errors } = await GraphqlAPI<
       CreateSongMutation,
       CreateSongMutationVariables
-    >(mutations.createSong, { input: { title, artist, movieId } });
+    >(customMutations.createSong, { input: { title, artist, movieId } });
     if (!data?.createSong) {
       throw new Error(JSON.stringify(errors));
     }
@@ -86,14 +81,14 @@ export const createSong = async (
  */
 export const getOrCreateSong = async (
   params: iSongParams,
-): Promise<iApiResponse<GetSongQuery>> => {
+): Promise<iApiResponse<string>> => {
   try {
-    // get songs with tmdbId
+    // get songs with tmdbId + title
     const { data: maybeSongs } = await getUniqueSongs(params);
-    if (!maybeSongs?.listSongs) {
+    if (!maybeSongs?.songByMovieIdAndTitle) {
       return { status: 'error' };
     }
-    let songId = maybeSongs.listSongs.items[0]?.id || undefined;
+    let songId = maybeSongs.songByMovieIdAndTitle.items[0]?.id || undefined;
     // if no movie exists with tmdbId, create one
     if (!songId) {
       const { data: newSong } = await createSong(params);
@@ -103,13 +98,15 @@ export const getOrCreateSong = async (
       }
       songId = sId;
     }
-    // finally, with existing or created movieId, get the movie
-    const { data } = await getSong(songId);
-    return { status: 'success', data };
+    return { status: 'success', data: songId };
   } catch (err) {
     return handleError('error getting or creating song', err);
   }
 };
+
+/**
+ * FOR SCRIPTS ONLY
+ */
 
 export const listEverySong = async (): Promise<iApiResponse<ListSongsQuery>> => {
   try {

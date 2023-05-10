@@ -153,14 +153,13 @@ export const listEvents = /* GraphQL */ `
   query ListEvents(
     $id: ID
     $filter: ModelEventFilterInput
-    $limit: Int
     $nextToken: String
     $sortDirection: ModelSortDirection
   ) {
     listEvents(
       id: $id
       filter: $filter
-      limit: $limit
+      limit: 1000 # would never happen but is safety measure
       nextToken: $nextToken
       sortDirection: $sortDirection
     ) {
@@ -309,7 +308,8 @@ export const predictionSetByUserIdAndEventId = /* GraphQL */ `
           createdAt
           updatedAt
         }
-        predictions {
+        # would never be over 50 most likely so just a safety measure
+        predictions(limit: 1000) {
           items {
             id
             predictionSetId
@@ -1700,6 +1700,256 @@ export const uniqueRelationshipViaFollowedUser = /* GraphQL */ `
           image
           role
         }
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+
+export const getUniquePredictionSet = /* GraphQL */ `
+  query PredictionSetByUserIdAndCategoryId(
+    $userId: ID!
+    $categoryId: ModelIDKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelPredictionSetFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    predictionSetByUserIdAndCategoryId(
+      userId: $userId
+      categoryId: $categoryId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        categoryId
+        # would probably not even be over 50 but just in case
+        predictions(limit: 1000) {
+          items {
+            id
+            predictionSetId
+            contenderId
+            contender {
+              id
+              movieId
+              movie {
+                id
+                tmdbId
+                studio
+              }
+              personId
+              person {
+                id
+                tmdbId
+              }
+              songId
+              song {
+                id
+                title
+                artist
+              }
+              visibility
+              accolade
+              createdAt
+              updatedAt
+            }
+            ranking
+            createdAt
+            updatedAt
+          }
+        }
+        type
+        comment
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+
+export const movieByTmdbId = /* GraphQL */ `
+  query MovieByTmdbId(
+    $tmdbId: Int!
+    $sortDirection: ModelSortDirection
+    $filter: ModelMovieFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    movieByTmdbId(
+      tmdbId: $tmdbId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        tmdbId
+        studio
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+
+export const personByTmdbId = /* GraphQL */ `
+  query PersonByTmdbId(
+    $tmdbId: Int!
+    $sortDirection: ModelSortDirection
+    $filter: ModelPersonFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    personByTmdbId(
+      tmdbId: $tmdbId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        tmdbId
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+
+export const getMovie = /* GraphQL */ `
+  query GetMovie($id: ID!) {
+    getMovie(id: $id) {
+      id
+    }
+  }
+`;
+
+export const getSong = /* GraphQL */ `
+  query GetSong($id: ID!) {
+    getSong(id: $id) {
+      id
+      movieId
+      movie {
+        id
+        tmdbId
+        studio
+        createdAt
+        updatedAt
+      }
+      title
+      artist
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export const songByMovieIdAndTitle = /* GraphQL */ `
+  query SongByMovieIdAndTitle(
+    $movieId: ID!
+    $title: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelSongFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    songByMovieIdAndTitle(
+      movieId: $movieId
+      title: $title
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        movieId
+        movie {
+          id
+          tmdbId
+          studio
+          createdAt
+          updatedAt
+        }
+        title
+        artist
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+
+export const eventByAwardsBodyAndYear = /* GraphQL */ `
+  query EventByAwardsBodyAndYear(
+    $awardsBody: AwardsBody!
+    $year: ModelIntKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelEventFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    eventByAwardsBodyAndYear(
+      awardsBody: $awardsBody
+      year: $year
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        awardsBody
+        year
+        nominationDateTime
+        winDateTime
+        status
+        liveAt
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+
+export const getUniqueMovieContender = /* GraphQL */ `
+  query GetUniqueMovieContender(
+    $categoryId: ID!
+    $movieId: ModelIDKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelContenderFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    getUniqueMovieContender(
+      categoryId: $categoryId
+      movieId: $movieId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        categoryId
+        eventId
+        movieId
+        personId
+        songId
+        visibility
+        accolade
         createdAt
         updatedAt
       }

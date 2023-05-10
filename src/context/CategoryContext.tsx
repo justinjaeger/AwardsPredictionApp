@@ -64,7 +64,7 @@ export const CategoryProvider = (props: { children: React.ReactNode }) => {
   // WHEN WE SET AN EVENT automatically get the categories from it also
   const setEvent = (event: iEvent) => {
     _setEvent(event);
-    ApiServices.getEvent(event.id).then((e) => {
+    ApiServices.getEventById(event.id).then((e) => {
       const categories = e.data?.getEvent?.categories?.items || [];
       const formattedCategories: iCategory[] = categories.map((cat) => ({
         id: cat?.id || '',

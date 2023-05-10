@@ -184,7 +184,7 @@ export const getWhoUserIsFollowing = async (
     }
     return { status: 'success', data };
   } catch (err) {
-    return handleError('error getting paginated following signed in', err);
+    return handleError('error getting who user is following', err);
   }
 };
 
@@ -212,7 +212,7 @@ export const getWhoPeopleUserFollowsAreFollowing = async (
     }
     return { status: 'success', data };
   } catch (err) {
-    return handleError('error getting paginated following signed in', err);
+    return handleError('error getting who people user follows are following', err);
   }
 };
 
@@ -234,7 +234,7 @@ export const getWhoRandomUsersAreFollowing = async (
     }
     return { status: 'success', data };
   } catch (err) {
-    return handleError('error getting paginated following signed in', err);
+    return handleError('error getting who random users are following', err);
   }
 };
 

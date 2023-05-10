@@ -1,13 +1,14 @@
 import {
   GetPersonQuery,
   GetPersonQueryVariables,
-  ListPeopleQuery,
-  ListPeopleQueryVariables,
   CreatePersonMutation,
   CreatePersonMutationVariables,
+  PersonByTmdbIdQueryVariables,
+  PersonByTmdbIdQuery,
 } from '../../API';
 import * as mutations from '../../graphql/mutations';
 import * as queries from '../../graphql/queries';
+import * as customQueries from '../../graphqlCustom/queries';
 import { GraphqlAPI, handleError, iApiResponse } from '../utils';
 
 export const getPerson = async (id: string): Promise<iApiResponse<GetPersonQuery>> => {
@@ -25,21 +26,20 @@ export const getPerson = async (id: string): Promise<iApiResponse<GetPersonQuery
   }
 };
 
-// TODO: use index to get person
-export const getPeopleByTmdb = async (
+const getPeopleByTmdb = async (
   tmdbId: number,
-): Promise<iApiResponse<ListPeopleQuery>> => {
+): Promise<iApiResponse<PersonByTmdbIdQuery>> => {
   try {
-    const { data, errors } = await GraphqlAPI<ListPeopleQuery, ListPeopleQueryVariables>(
-      queries.listPeople,
-      { filter: { tmdbId: { eq: tmdbId } } },
-    );
-    if (!data?.listPeople) {
+    const { data, errors } = await GraphqlAPI<
+      PersonByTmdbIdQuery,
+      PersonByTmdbIdQueryVariables
+    >(customQueries.personByTmdbId, { tmdbId });
+    if (!data?.personByTmdbId) {
       throw new Error(JSON.stringify(errors));
     }
     return { status: 'success', data };
   } catch (err) {
-    return handleError('error getting people by tmdb', err);
+    return handleError('error getting movie by tmdb', err);
   }
 };
 
@@ -66,14 +66,14 @@ export const createPerson = async (
  */
 export const getOrCreatePerson = async (
   tmdbId: number,
-): Promise<iApiResponse<GetPersonQuery>> => {
+): Promise<iApiResponse<string>> => {
   try {
     // get people by tmdbId
     const { data: maybePeople } = await getPeopleByTmdb(tmdbId);
-    if (!maybePeople?.listPeople) {
+    if (!maybePeople?.personByTmdbId) {
       return { status: 'error' };
     }
-    let personId = maybePeople.listPeople.items[0]?.id || undefined;
+    let personId = maybePeople.personByTmdbId.items[0]?.id || undefined;
     // if no person exists with tmdbId, create one
     if (!personId) {
       const { data: newPerson } = await createPerson(tmdbId);
@@ -83,9 +83,7 @@ export const getOrCreatePerson = async (
       }
       personId = pId;
     }
-    // finally, with existing or created movieId, get the person
-    const { data } = await getPerson(personId);
-    return { status: 'success', data };
+    return { status: 'success', data: personId };
   } catch (err) {
     return handleError('error getting or creating person', err);
   }
