@@ -234,8 +234,8 @@ export const communityPredictionSetByEventId = /* GraphQL */ `
           createdAt
           updatedAt
         }
-        # only return the top 10 predictions in each category"
-        predictions(filter: { ranking: { le: 30 } }, limit: 1000) {
+        # only return the top 10 predictions in each category (10 because it's just displaying in the event page)
+        predictions(filter: { ranking: { le: 10 } }, limit: 1000) {
           # there shouldn't be more than 1000 contenders, right? So this LIMIT should be ok
           items {
             id
