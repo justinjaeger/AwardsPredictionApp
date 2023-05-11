@@ -305,8 +305,7 @@ export const predictionSetByUserIdAndEventId = /* GraphQL */ `
           createdAt
           updatedAt
         }
-        # would never be over 50 most likely so just a safety measure
-        predictions(limit: 1000) {
+        predictions(ranking: { le: 10 }) {
           items {
             id
             predictionSetId

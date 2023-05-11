@@ -44,9 +44,10 @@ type iPredictionParams = {
  * GET UNIQUE
  */
 
-export const getPersonalPredictionsByCategory = async (
-  params: iPredictionSetParams,
-): Promise<iApiResponse<PredictionSetByUserIdAndCategoryIdQuery>> => {
+export const getPersonalPredictionsByCategory = async (params: {
+  userId: string;
+  categoryId: string;
+}): Promise<iApiResponse<PredictionSetByUserIdAndCategoryIdQuery>> => {
   const { userId, categoryId } = params;
   try {
     // Get all prediction sets matching params (should only be one)
@@ -96,7 +97,10 @@ const deletePredictions = async (
 ): Promise<iApiResponse<any>> => {
   try {
     // get prediction sets (user + category)
-    const { data: pSets } = await getPersonalPredictionsByCategory(params);
+    const { data: pSets } = await getPersonalPredictionsByCategory({
+      userId: params.userId,
+      categoryId: params.categoryId,
+    });
     const predictionSets = pSets?.predictionSetByUserIdAndCategoryId?.items;
     if (!predictionSets) {
       // no prediction sets found, which is fine
