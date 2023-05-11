@@ -231,12 +231,9 @@ export const communityPredictionSetByEventId = /* GraphQL */ `
           name
           type
           isShortlisted
-          createdAt
-          updatedAt
         }
         # only return the top 10 predictions in each category (10 because it's just displaying in the event page)
-        predictions(filter: { ranking: { le: 10 } }, limit: 1000) {
-          # there shouldn't be more than 1000 contenders, right? So this LIMIT should be ok
+        predictions(ranking: { le: 10 }) {
           items {
             id
             communityPredictionSetId
@@ -640,8 +637,7 @@ export const getUserProfileQuery = /* GraphQL */ `
             createdAt
             updatedAt
           }
-          # essentially this limits the result to the top 5 predictions (probably would never have 1000)
-          predictions(filter: { ranking: { le: 5 } }, limit: 1000) {
+          predictions(ranking: { le: 5 }) {
             items {
               id
               contenderId
@@ -740,8 +736,7 @@ export const getUserProfileQuerySignedOut = /* GraphQL */ `
             createdAt
             updatedAt
           }
-          # essentially this limits the result to the top 5 predictions
-          predictions(filter: { ranking: { le: 5 } }) {
+          predictions(ranking: { le: 5 }) {
             items {
               id
               contenderId
@@ -1304,8 +1299,7 @@ export const getRecentFollowingPredictions = /* GraphQL */ `
               }
               createdAt
               updatedAt
-              # essentially this limits the result to the top 5 predictions, but it will have to scan all of them
-              predictions(filter: { ranking: { le: 5 } }, limit: 1000) {
+              predictions(ranking: { le: 5 }) {
                 items {
                   id
                   ranking
