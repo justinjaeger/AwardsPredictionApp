@@ -25,7 +25,7 @@ import { AddPredictionsFab } from '../../../components/Buttons/DisplayFAB';
 import useShowAddTab from '../../../hooks/useShowAddTab';
 import EventLink from './EventLink';
 import EditToolbar from '../../../components/Buttons/EditToolbar';
-import useCategoryPredictions from './useCategoryPredictions';
+import useCategoryPersonalPredictions from './useCategoryPersonalPredictions';
 
 // used in both FromProfile and from event
 const CategoryPersonal = ({
@@ -75,7 +75,7 @@ const CategoryPersonal = ({
     initialPredictions,
     updatedPredictions: predictions,
     setUpdatedPredictions: setPredictions,
-  } = useCategoryPredictions({
+  } = useCategoryPersonalPredictions({
     predictionData: predictionData || {},
     userId,
   });
@@ -135,13 +135,13 @@ const CategoryPersonal = ({
     });
   };
 
-  if (!userId) {
-    return <SignedOutState />;
-  }
-
   // get last updated time
   const lastUpdated = predictionData?.[category.id]?.updatedAt;
   const lastUpdatedString = formatLastUpdated(new Date(lastUpdated || ''));
+
+  if (!userId) {
+    return <SignedOutState />;
+  }
 
   return (
     <>

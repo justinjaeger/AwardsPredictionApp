@@ -27,6 +27,7 @@ const CategoryCommunity = ({
   const category = _category as iCategory;
 
   const predictions = predictionData?.[category.id]?.predictions || [];
+
   const lastUpdated = predictionData?.[category.id]?.updatedAt;
   const lastUpdatedString = formatLastUpdated(new Date(lastUpdated || ''));
 

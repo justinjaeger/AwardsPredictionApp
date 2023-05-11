@@ -7,7 +7,7 @@ import { predictionsSerializer } from '../../../serializers';
 import _ from 'lodash';
 
 // feeds "initialPredictions" and "updatedPredictions" to CategoryPersonal
-const useCategoryPredictions = ({
+const useCategoryPersonalPredictions = ({
   predictionData,
   userId,
 }: {
@@ -71,4 +71,4 @@ const useCategoryPredictions = ({
   };
 };
 
-export default useCategoryPredictions;
+export default useCategoryPersonalPredictions;
