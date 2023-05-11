@@ -3,7 +3,7 @@ import { useCategory } from '../../../context/CategoryContext';
 import { iCategory, iIndexedPredictionsByCategory, iPrediction } from '../../../types';
 import { useAsyncEffect, useDeepCompareEffect } from '../../../util/hooks';
 import ApiServices from '../../../services/graphql';
-import { predictionsSerializer } from '../../../serializers';
+import Serializers from '../../../serializers';
 import _ from 'lodash';
 
 // feeds "initialPredictions" and "updatedPredictions" to CategoryPersonal
@@ -38,7 +38,7 @@ const useCategoryPersonalPredictions = ({
       const predictionSets = data.predictionSetByUserIdAndCategoryId?.items || [];
       if (predictionSets.length > 0) {
         const predictionSet = predictionSets[0];
-        const predictions = predictionsSerializer(
+        const predictions = Serializers.predictionsSerializer(
           predictionSet?.predictions?.items || [],
           predictionSet?.type,
         );

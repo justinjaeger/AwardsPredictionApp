@@ -1,7 +1,7 @@
-import { ContenderVisibility, PredictionType } from '../../API';
 import { iIndexedPredictionsByCategory } from '../../types';
 import { sortPersonalPredictions } from '../../util/sortPredictions';
 import ApiServices from '../graphql';
+import Serializers from '../../serializers';
 
 const getPersonalHistory = async (eventId: string, userId: string, createdAt: Date) => {
   const { data: predictionSets } = await ApiServices.getPersonalHistory(
@@ -15,17 +15,10 @@ const getPersonalHistory = async (eventId: string, userId: string, createdAt: Da
   const data: iIndexedPredictionsByCategory = {};
   pSets.forEach((ps) => {
     const categoryId = ps?.categoryId || '';
-    const predictions = (ps?.predictions?.items || []).map((p) => ({
-      ranking: p?.ranking || 0,
-      accolade: p?.contender.accolade || undefined,
-      visibility: p?.contender.visibility || ContenderVisibility.VISIBLE,
-      predictionType: ps?.type || PredictionType.NOMINATION,
-      contenderId: p?.contenderId || '',
-      contenderMovie: p?.contender.movie || undefined,
-      contenderPerson: p?.contender.person || undefined,
-      contenderSong: p?.contender.song || undefined,
-      lastUpdated: p?.updatedAt || '',
-    }));
+    const predictions = Serializers.historyPredictionsSerializer(
+      ps?.predictions?.items || [],
+      ps?.type,
+    );
     const sortedPredictions = sortPersonalPredictions(predictions);
     data[categoryId] = { predictions: sortedPredictions, updatedAt: ps?.updatedAt || '' };
   });
