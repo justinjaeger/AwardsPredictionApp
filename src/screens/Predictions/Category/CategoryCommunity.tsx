@@ -10,6 +10,7 @@ import { useCategory } from '../../../context/CategoryContext';
 import { iCategory } from '../../../types';
 import { formatLastUpdated } from '../../../util/formatDateTime';
 import EventLink from './EventLink';
+import useCategoryCommunityPredictions from './useCategoryCommunityPredictions';
 
 // Note: We ALSO use this for non-authenticated user profiles
 const CategoryCommunity = ({
@@ -26,7 +27,9 @@ const CategoryCommunity = ({
   const isHistory = !!date;
   const category = _category as iCategory;
 
-  const predictions = predictionData?.[category.id]?.predictions || [];
+  const { predictions } = useCategoryCommunityPredictions({
+    predictionData: predictionData || {},
+  });
 
   const lastUpdated = predictionData?.[category.id]?.updatedAt;
   const lastUpdatedString = formatLastUpdated(new Date(lastUpdated || ''));
