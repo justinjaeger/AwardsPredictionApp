@@ -282,6 +282,7 @@ type CommunityPredictionSet @model @auth(rules: [{ allow: public }]) {
         @index(queryField: "communityPredictionSetByEventId")
     event: Event! @hasOne(fields: ["eventId"])
     categoryId: ID!
+        @index(queryField: "communityPredictionSetByCategoryId")
     category: Category! @hasOne(fields: ["categoryId"])
     predictions: [CommunityPrediction] 
         @hasMany(indexName: "byCommunityPredictionSet", fields: ["id"])

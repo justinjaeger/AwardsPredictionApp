@@ -5756,6 +5756,91 @@ export const communityPredictionSetByEventId = /* GraphQL */ `
     }
   }
 `;
+export const communityPredictionSetByCategoryId = /* GraphQL */ `
+  query CommunityPredictionSetByCategoryId(
+    $categoryId: ID!
+    $sortDirection: ModelSortDirection
+    $filter: ModelCommunityPredictionSetFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    communityPredictionSetByCategoryId(
+      categoryId: $categoryId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        eventId
+        event {
+          id
+          categories {
+            nextToken
+          }
+          awardsBody
+          year
+          nominationDateTime
+          winDateTime
+          status
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          liveAt
+          createdAt
+          updatedAt
+        }
+        categoryId
+        category {
+          id
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            liveAt
+            createdAt
+            updatedAt
+          }
+          name
+          type
+          isShortlisted
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        predictions {
+          items {
+            id
+            communityPredictionSetId
+            contenderId
+            ranking
+            indexedRankings
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        type
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
 export const communityPredictionByCommunityPredictionSetId = /* GraphQL */ `
   query CommunityPredictionByCommunityPredictionSetId(
     $communityPredictionSetId: ID!

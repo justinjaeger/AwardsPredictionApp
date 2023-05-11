@@ -15203,6 +15203,98 @@ export type CommunityPredictionSetByEventIdQuery = {
   } | null,
 };
 
+export type CommunityPredictionSetByCategoryIdQueryVariables = {
+  categoryId: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelCommunityPredictionSetFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type CommunityPredictionSetByCategoryIdQuery = {
+  communityPredictionSetByCategoryId?:  {
+    __typename: "ModelCommunityPredictionSetConnection",
+    items:  Array< {
+      __typename: "CommunityPredictionSet",
+      id: string,
+      eventId: string,
+      event:  {
+        __typename: "Event",
+        id: string,
+        categories?:  {
+          __typename: "ModelCategoryConnection",
+          nextToken?: string | null,
+        } | null,
+        awardsBody: AwardsBody,
+        year: number,
+        nominationDateTime?: string | null,
+        winDateTime?: string | null,
+        status?: EventStatus | null,
+        predictionSets?:  {
+          __typename: "ModelPredictionSetConnection",
+          nextToken?: string | null,
+        } | null,
+        historyPredictions?:  {
+          __typename: "ModelHistoryPredictionSetConnection",
+          nextToken?: string | null,
+        } | null,
+        liveAt?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      },
+      categoryId: string,
+      category:  {
+        __typename: "Category",
+        id: string,
+        eventId: string,
+        event:  {
+          __typename: "Event",
+          id: string,
+          awardsBody: AwardsBody,
+          year: number,
+          nominationDateTime?: string | null,
+          winDateTime?: string | null,
+          status?: EventStatus | null,
+          liveAt?: string | null,
+          createdAt: string,
+          updatedAt: string,
+        },
+        name: CategoryName,
+        type: CategoryType,
+        isShortlisted?: CategoryIsShortlisted | null,
+        predictionSets?:  {
+          __typename: "ModelPredictionSetConnection",
+          nextToken?: string | null,
+        } | null,
+        historyPredictions?:  {
+          __typename: "ModelHistoryPredictionSetConnection",
+          nextToken?: string | null,
+        } | null,
+        createdAt: string,
+        updatedAt: string,
+      },
+      predictions?:  {
+        __typename: "ModelCommunityPredictionConnection",
+        items:  Array< {
+          __typename: "CommunityPrediction",
+          id: string,
+          communityPredictionSetId: string,
+          contenderId: string,
+          ranking: number,
+          indexedRankings?: string | null,
+          createdAt: string,
+          updatedAt: string,
+        } | null >,
+        nextToken?: string | null,
+      } | null,
+      type?: PredictionType | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
 export type CommunityPredictionByCommunityPredictionSetIdQueryVariables = {
   communityPredictionSetId: string,
   ranking?: ModelIntKeyConditionInput | null,
