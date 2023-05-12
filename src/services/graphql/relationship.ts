@@ -138,11 +138,12 @@ export const deleteRelationshipById = async (
  * GENERIC "WHO IS FOLLOWING" QUERIES (optional pagination)
  */
 
+// aka, get followers (returns followingUsers)
 export const getWhoUserIsFollowedBy = async (
   followedUserId: string,
-  limit?: number,
-  nextToken?: string,
+  options?: { limit?: number; nextToken?: string },
 ): Promise<iApiResponse<RelationshipByFollowedUserIdQuery>> => {
+  const { limit, nextToken } = options || {};
   try {
     const { data, errors } = await GraphqlAPI<
       RelationshipByFollowedUserIdQuery,
@@ -157,15 +158,16 @@ export const getWhoUserIsFollowedBy = async (
     }
     return { status: 'success', data };
   } catch (err) {
-    return handleError('error getting paginated followers signed in', err);
+    return handleError('error getting who user is followed by', err);
   }
 };
 
+// aka, get followings (returns followedUsers)
 export const getWhoUserIsFollowing = async (
   followingUserId: string, // get users who this user is following
-  limit?: number,
-  nextToken?: string | undefined,
+  options?: { limit?: number; nextToken?: string },
 ): Promise<iApiResponse<RelationshipByFollowingUserIdQuery>> => {
+  const { limit, nextToken } = options || {};
   try {
     const { data, errors } = await GraphqlAPI<
       RelationshipByFollowingUserIdQuery,

@@ -1,8 +1,8 @@
-import { ContenderVisibility, PredictionType } from '../API';
-import { iPrediction } from '../types';
+import { ContenderVisibility, PredictionType, UserRole } from '../API';
+import { iPrediction, iUser } from '../types';
 
 const predictionSerializer = (
-  p: any,
+  p: any, // __typename: "Prediction"
   predictionType?: PredictionType | undefined | null,
 ): iPrediction => {
   // Have to parse this because the field is a json stringified object
@@ -24,12 +24,12 @@ const predictionSerializer = (
 };
 
 const predictionsSerializer = (
-  predictions: any[],
+  predictions: any[], // __typename: "Prediction"
   predictionType?: PredictionType | undefined | null,
 ): iPrediction[] => predictions.map((p) => predictionSerializer(p, predictionType));
 
 const historyPredictionSerializer = (
-  p: any,
+  p: any, // __typename: "HistoryPrediction"
   predictionType?: PredictionType | undefined | null,
 ): iPrediction => {
   const contender = p?.contender;
@@ -51,16 +51,54 @@ const historyPredictionSerializer = (
 };
 
 const historyPredictionsSerializer = (
-  predictions: any[],
+  predictions: any[], // __typename: "Prediction"
   predictionType?: PredictionType | undefined | null,
 ): iPrediction[] =>
   predictions.map((p) => historyPredictionSerializer(p, predictionType));
+
+const userSerializer = (u: any): iUser => {
+  return {
+    id: u?.id || '',
+    email: u?.email || '',
+    role: u?.role || UserRole.USER,
+    username: u?.username || undefined,
+    name: u?.name || undefined,
+    image: u?.image || undefined,
+    bio: u?.bio || undefined,
+  };
+};
+
+const usersSerializer = (
+  users: any[], // __typename: "User"
+): iUser[] => users.map((u) => userSerializer(u));
+
+const getUsersWithIsFollowing = (
+  users: any[], // __typename: "User"
+  authFollowingUserIds: string[],
+): iUser[] => {
+  return users.map((u) => {
+    const serialized = userSerializer(u);
+    // some of these values we don't care about or use so they can be default
+    console.log(
+      'authFollowingUserIds.includes(serialized.id)',
+      authFollowingUserIds.includes(serialized.id),
+    );
+    console.log('authFollowingUserIds', authFollowingUserIds);
+    return {
+      ...serialized,
+      authUserIsFollowing: authFollowingUserIds.includes(serialized.id),
+    };
+  });
+};
 
 const Serializers = {
   predictionSerializer,
   predictionsSerializer,
   historyPredictionSerializer,
   historyPredictionsSerializer,
+  userSerializer,
+  usersSerializer,
+  getUsersWithIsFollowing,
 };
 
 export default Serializers;
