@@ -78,12 +78,6 @@ const getUsersWithIsFollowing = (
 ): iUser[] => {
   return users.map((u) => {
     const serialized = userSerializer(u);
-    // some of these values we don't care about or use so they can be default
-    console.log(
-      'authFollowingUserIds.includes(serialized.id)',
-      authFollowingUserIds.includes(serialized.id),
-    );
-    console.log('authFollowingUserIds', authFollowingUserIds);
     return {
       ...serialized,
       authUserIsFollowing: authFollowingUserIds.includes(serialized.id),

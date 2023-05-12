@@ -1,20 +1,9 @@
 import Serializers from '../../serializers';
 import { iUser } from '../../types';
 import ApiServices from '../graphql';
+import getAuthFollowingUserIds from './getAuthFollowingUserIds';
 
 type iPaginatedUserResult = Promise<{ users: iUser[]; nextToken: string | undefined }>;
-
-const getauthFollowingUserIds = async (authUserId: string | undefined) => {
-  let authFollowingUserIds: string[] = [];
-  if (authUserId) {
-    const { data } = await ApiServices.getWhoUserIsFollowing(authUserId);
-    const followedUsers = (data?.relationshipByFollowingUserId?.items || []).map(
-      (r) => r?.followedUser,
-    );
-    authFollowingUserIds = followedUsers.map((u) => u?.id || '');
-  }
-  return authFollowingUserIds;
-};
 
 export const getPaginatedFollowers = async (
   userId: string,
@@ -22,7 +11,7 @@ export const getPaginatedFollowers = async (
   nextToken?: string,
 ): iPaginatedUserResult => {
   // To get authUserIsFollowing, get who WE follow, then check if the user is in that list
-  const authFollowingUserIds = await getauthFollowingUserIds(authUserId);
+  const authFollowingUserIds = await getAuthFollowingUserIds(authUserId);
 
   const res = await ApiServices.getWhoUserIsFollowedBy(userId, { nextToken });
   const nextPaginateToken = res.data?.relationshipByFollowedUserId?.nextToken;
@@ -41,7 +30,7 @@ export const getPaginatedFollowing = async (
   nextToken?: string,
 ): iPaginatedUserResult => {
   // To get authUserIsFollowing, get who WE follow, then check if the user is in that list
-  const authFollowingUserIds = await getauthFollowingUserIds(authUserId);
+  const authFollowingUserIds = await getAuthFollowingUserIds(authUserId);
 
   const res = await ApiServices.getWhoUserIsFollowing(userId, { nextToken });
   const nextPaginateToken = res.data?.relationshipByFollowingUserId?.nextToken;
