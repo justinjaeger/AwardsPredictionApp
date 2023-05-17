@@ -277,7 +277,7 @@ export const updateContenderVisibilty = async (
     }
     return { status: 'success', data };
   } catch (err) {
-    return handleError('error updating contender hidden', err);
+    return handleError('error updateContenderVisibilty', err);
   }
 };
 
@@ -297,7 +297,7 @@ export const updateContenderAccolade = async (
     }
     return { status: 'success', data };
   } catch (err) {
-    return handleError('error updating contender hidden', err);
+    return handleError('error updateContenderAccolade', err);
   }
 };
 
@@ -336,7 +336,7 @@ export const updateContenderMovie = async (
     }
     return { status: 'success', data };
   } catch (err) {
-    return handleError('error updating contender hidden', err);
+    return handleError('error updateContenderMovie', err);
   }
 };
 

@@ -13,28 +13,7 @@ const getUniqueContenderId = (
 // TODO: Delete all history predictions after running this
 const deleteDuplicatedContenders = async () => {
   try {
-    // Get all personal predictions
-    const predictions: {
-      id: string;
-      contenderId: string;
-    }[] = [];
-    let pNextToken;
-    while (pNextToken !== null) {
-      console.log('fetching predictions', predictions.length);
-      const { data: predictionData } = await ApiServices.listEveryPersonalPrediction(
-        pNextToken,
-      );
-      const list = predictionData?.listPredictions?.items || [];
-      const formattedList = list.map((p) => ({
-        id: p!.id,
-        contenderId: p!.contenderId,
-      }));
-      predictions.push(...formattedList);
-      pNextToken = predictionData?.listPredictions?.nextToken;
-    }
-    console.log('predictions', predictions.length);
-
-    // Get all contenders
+    // Get all CONTEDERS
     const contenders: {
       id: string;
       movieId: string;
@@ -45,9 +24,11 @@ const deleteDuplicatedContenders = async () => {
     let cNextToken;
     while (cNextToken !== null) {
       console.log('fetching contenders', contenders.length);
-      const { data: contenderData } = await ApiServices.listEveryContenderPaginated(
-        cNextToken,
-      );
+      const {
+        data: contenderData,
+        status,
+      } = await ApiServices.listEveryContenderPaginated(cNextToken);
+      if (status === 'error') throw new Error('listEveryContenderPaginated');
       const list = contenderData?.listContenders?.items || [];
       const formattedList = list.map((c) => ({
         id: c!.id,
@@ -61,7 +42,30 @@ const deleteDuplicatedContenders = async () => {
     }
     console.log('contenders', contenders.length);
 
-    // get all instances where personal predictions are referring to a contender that doesn't exist
+    // Get all PERSONAL PREDICTIONS
+    const predictions: {
+      id: string;
+      contenderId: string;
+    }[] = [];
+    let pNextToken;
+    while (pNextToken !== null) {
+      console.log('fetching predictions', predictions.length);
+      const {
+        data: predictionData,
+        status,
+      } = await ApiServices.listEveryPersonalPrediction(pNextToken);
+      if (status === 'error') throw new Error('listEveryPersonalPrediction');
+      const list = predictionData?.listPredictions?.items || [];
+      const formattedList = list.map((p) => ({
+        id: p!.id,
+        contenderId: p!.contenderId,
+      }));
+      predictions.push(...formattedList);
+      pNextToken = predictionData?.listPredictions?.nextToken;
+    }
+    console.log('predictions', predictions.length);
+
+    // PERSONAL - get all instances where personal predictions are referring to a contender that doesn't exist
     const invalidPredictions = predictions.filter(
       (p) => !contenders.find((c) => c.id === p.contenderId),
     );
@@ -73,9 +77,156 @@ const deleteDuplicatedContenders = async () => {
         async () => {
           await Promise.all(
             invalidPredictions.map((p) => ApiServices.deletePersonalPrediction(p.id)),
-          );
+          ).catch(() => {
+            throw new Error('deletePersonalPrediction');
+          });
         },
       );
+      return; // let it be the only thing that happens
+    }
+
+    // Get all PERSONAL HISTORY PREDICTIONS
+    const historyPredictions: {
+      id: string;
+      contenderId: string;
+    }[] = [];
+    let hpNextToken;
+    while (hpNextToken !== null) {
+      console.log('fetching history predictions', historyPredictions.length);
+      const {
+        data: predictionData,
+        status,
+      } = await ApiServices.listEveryPersonalHistoryPrediction(hpNextToken);
+      if (status === 'error') throw new Error('listEveryPersonalHistoryPrediction');
+      const list = predictionData?.listHistoryPredictions?.items || [];
+      const formattedList = list.map((p) => ({
+        id: p!.id,
+        contenderId: p!.contenderId,
+      }));
+      historyPredictions.push(...formattedList);
+      hpNextToken = predictionData?.listHistoryPredictions?.nextToken;
+    }
+    console.log('historyPredictions', historyPredictions.length);
+
+    // PERSONAL HISTORY - get all instances where personal history predictions are referring to a contender that doesn't exist
+    const invalidPersonalHistoryPredictions = historyPredictions.filter(
+      (p) => !contenders.find((c) => c.id === p.contenderId),
+    );
+    console.log(
+      'invalidPersonalHistoryPredictions',
+      invalidPersonalHistoryPredictions.length,
+    );
+    // offer to delete them
+    if (invalidPersonalHistoryPredictions.length > 0) {
+      alertHelper(
+        `Found ${invalidPersonalHistoryPredictions.length} personal history predictions that point to now-deleted contenders. Delete?`,
+        async () => {
+          await Promise.all(
+            invalidPersonalHistoryPredictions.map((p) =>
+              ApiServices.deletePersonalHistoryPrediction(p.id),
+            ),
+          ).catch(() => {
+            throw new Error('deletePersonalHistoryPrediction');
+          });
+        },
+      );
+      return; // let it be the only thing that happens
+    }
+
+    // Get all COMMUNITY PREDICTIONS
+    const communityPredictions: {
+      id: string;
+      contenderId: string;
+    }[] = [];
+    let cpNextToken;
+    while (cpNextToken !== null) {
+      console.log('fetching communityPredictions', communityPredictions.length);
+      const {
+        data: predictionData,
+        status,
+      } = await ApiServices.listEveryCommunityPrediction(cpNextToken);
+      if (status === 'error') throw new Error('listEveryCommunityPrediction');
+      const list = predictionData?.listCommunityPredictions?.items || [];
+      const formattedList = list.map((p) => ({
+        id: p!.id,
+        contenderId: p!.contenderId,
+      }));
+      communityPredictions.push(...formattedList);
+      cpNextToken = predictionData?.listCommunityPredictions?.nextToken;
+    }
+    console.log('communityPredictions', communityPredictions.length);
+
+    // COMMUNITY - get all instances where community predictions are referring to a contender that doesn't exist
+    const invalidCommunityPredictions = communityPredictions.filter(
+      (p) => !contenders.find((c) => c.id === p.contenderId),
+    );
+    console.log('invalidCommunityPredictions', invalidCommunityPredictions.length);
+    // offer to delete them
+    if (invalidCommunityPredictions.length > 0) {
+      alertHelper(
+        `Found ${invalidCommunityPredictions.length} community predictions that point to now-deleted contenders. Delete?`,
+        async () => {
+          await Promise.all(
+            invalidCommunityPredictions.map((p) =>
+              ApiServices.deleteCommunityPrediction(p.id),
+            ),
+          ).catch(() => {
+            throw new Error('deleteCommunityPrediction');
+          });
+        },
+      );
+      return; // let it be the only thing that happens
+    }
+
+    // Get all COMMUNITY HISTORY PREDICTIONS
+    const communityHistoryPredictions: {
+      id: string;
+      contenderId: string;
+    }[] = [];
+    let chNextToken;
+    while (chNextToken !== null) {
+      console.log(
+        'fetching communityHistoryPredictions',
+        communityHistoryPredictions.length,
+      );
+      const {
+        data: predictionData,
+        status,
+      } = await ApiServices.listEveryCommunityHistoryPrediction(chNextToken);
+      if (status === 'error') throw new Error('listEveryCommunityHistoryPrediction');
+      const list = predictionData?.listCommunityHistoryPredictions?.items || [];
+      const formattedList = list.map((p) => ({
+        id: p!.id,
+        contenderId: p!.contenderId,
+      }));
+      communityHistoryPredictions.push(...formattedList);
+      chNextToken = predictionData?.listCommunityHistoryPredictions?.nextToken;
+    }
+    console.log('communityHistoryPredictions', communityHistoryPredictions.length);
+
+    // COMMUNITY HISTORY - get all instances where community history predictions are referring to a contender that doesn't exist
+    const invalidCommunityHistoryPredictions = communityHistoryPredictions.filter(
+      (p) => !contenders.find((c) => c.id === p.contenderId),
+    );
+    console.log(
+      'invalidCommunityHistoryPredictions',
+      invalidCommunityHistoryPredictions.length,
+    );
+    // offer to delete them
+    if (invalidCommunityHistoryPredictions.length > 0) {
+      alertHelper(
+        `Found ${invalidCommunityHistoryPredictions.length} community history predictions that point to now-deleted contenders. Delete?`,
+        async () => {
+          await Promise.all(
+            invalidCommunityHistoryPredictions.map((p) =>
+              ApiServices.deleteCommunityHistoryPrediction(p.id),
+            ),
+          ).catch(() => {
+            throw new Error('deleteCommunityHistoryPrediction');
+          });
+        },
+      );
+      return; // let it be the only thing that happens
     }
 
     // [contendersThatShouldBeTheSame]: duplicatedContenderIds[]
@@ -115,8 +266,14 @@ const deleteDuplicatedContenders = async () => {
       toDeleteIds: ids.slice(1),
     }));
 
-    const getPredictionsByContenderId = (contenderId: string) => {
-      return predictions.filter((p) => p && p.contenderId === contenderId);
+    const getPredictionsByContenderId = (
+      contenderId: string,
+      ps: {
+        id: string;
+        contenderId: string;
+      }[],
+    ) => {
+      return ps.filter((p) => p && p.contenderId === contenderId);
     };
 
     /**
@@ -141,7 +298,12 @@ const deleteDuplicatedContenders = async () => {
 
           for (const idToDelete of toDeleteIds) {
             console.log('idToDelete:', idToDelete);
-            const predictionsThatUseContender = getPredictionsByContenderId(idToDelete);
+
+            // PERSONAL PREDICTIONS
+            const predictionsThatUseContender = getPredictionsByContenderId(
+              idToDelete,
+              predictions,
+            );
             console.log(
               'predictionsThatUseContender',
               predictionsThatUseContender.length,
@@ -160,12 +322,93 @@ const deleteDuplicatedContenders = async () => {
                 predictionId,
                 toKeepId,
               );
-              if (res1.status === 'error') throw new Error('updateContenderMovie');
+              if (res1.status === 'error') throw new Error('updatePredictionContender');
             }
 
-            // VERY IMPORTANT: Deleting the movie comes LAST
+            // PERSONAL HISTORY PREDICTIONS
+            const historyPredictionsThatUseContender = getPredictionsByContenderId(
+              idToDelete,
+              historyPredictions,
+            );
+            console.log(
+              'historyPredictionsThatUseContender',
+              historyPredictionsThatUseContender.length,
+            );
+            // go through each contender that uses movie and replace it with the "keeper"
+            for (const prediction of historyPredictionsThatUseContender) {
+              const { id: predictionId } = prediction;
+              console.log(
+                'updating this prediction:',
+                predictionId,
+                'with this contender:',
+                toKeepId,
+              );
+              // THIS IS GOING TO SWITCH THE CONTENDER MOVIE FROM ONE TO ANOTHER (the keeper)
+              const res1 = await ApiServices.updateHistoryPredictionContender(
+                predictionId,
+                toKeepId,
+              );
+              if (res1.status === 'error')
+                throw new Error('updateHistoryPredictionContender');
+            }
 
-            // Delete the movie
+            // COMMUNITY PREDICTIONS
+            const communityPredictionsThatUseContender = getPredictionsByContenderId(
+              idToDelete,
+              communityPredictions,
+            );
+            console.log(
+              'communityPredictionsThatUseContender',
+              communityPredictionsThatUseContender.length,
+            );
+            // go through each contender that uses movie and replace it with the "keeper"
+            for (const prediction of communityPredictionsThatUseContender) {
+              const { id: predictionId } = prediction;
+              console.log(
+                'updating this prediction:',
+                predictionId,
+                'with this contender:',
+                toKeepId,
+              );
+              // THIS IS GOING TO SWITCH THE CONTENDER MOVIE FROM ONE TO ANOTHER (the keeper)
+              const res1 = await ApiServices.updateCommunityPredictionContender(
+                predictionId,
+                toKeepId,
+              );
+              if (res1.status === 'error')
+                throw new Error('communityPredictionsThatUseContender');
+            }
+
+            // COMMUNITY HISTORY PREDICTIONS
+            const communityHistoryPredictionsThatUseContender = getPredictionsByContenderId(
+              idToDelete,
+              communityHistoryPredictions,
+            );
+            console.log(
+              'communityHistoryPredictionsThatUseContender',
+              communityHistoryPredictionsThatUseContender.length,
+            );
+            // go through each contender that uses movie and replace it with the "keeper"
+            for (const prediction of communityHistoryPredictionsThatUseContender) {
+              const { id: predictionId } = prediction;
+              console.log(
+                'updating this prediction:',
+                predictionId,
+                'with this contender:',
+                toKeepId,
+              );
+              // THIS IS GOING TO SWITCH THE CONTENDER MOVIE FROM ONE TO ANOTHER (the keeper)
+              const res1 = await ApiServices.updateCommunityHistoryPredictionContender(
+                predictionId,
+                toKeepId,
+              );
+              if (res1.status === 'error')
+                throw new Error('communityHistoryPredictionsThatUseContender');
+            }
+
+            // VERY IMPORTANT: Deleting the contender comes LAST
+
+            // Delete the contender
             console.log('deleting this contender:', idToDelete);
             const res3 = await ApiServices.deleteContenderById(idToDelete);
             if (res3.status === 'error') throw new Error('deleteContenderById');
@@ -173,6 +416,7 @@ const deleteDuplicatedContenders = async () => {
         }
       },
     );
+    console.log('done!');
   } catch (err) {
     console.error(JSON.stringify(err));
   }

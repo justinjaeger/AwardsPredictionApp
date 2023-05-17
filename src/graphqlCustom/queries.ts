@@ -1685,6 +1685,78 @@ export const listEveryPersonalPrediction = /* GraphQL */ `
   }
 `;
 
+export const listEveryPersonalHistoryPrediction = /* GraphQL */ `
+  query ListHistoryPredictions(
+    $id: ID
+    $filter: ModelHistoryPredictionFilterInput
+    $limit: Int
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listHistoryPredictions(
+      id: $id
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        id
+        contenderId
+      }
+      nextToken
+    }
+  }
+`;
+
+export const listEveryCommunityPrediction = /* GraphQL */ `
+  query ListCommunityPredictions(
+    $id: ID
+    $filter: ModelCommunityPredictionFilterInput
+    $limit: Int
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listCommunityPredictions(
+      id: $id
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        id
+        contenderId
+      }
+      nextToken
+    }
+  }
+`;
+
+export const listEveryCommunityHistoryPrediction = /* GraphQL */ `
+  query ListCommunityHistoryPredictions(
+    $id: ID
+    $filter: ModelCommunityHistoryPredictionFilterInput
+    $limit: Int
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listCommunityHistoryPredictions(
+      id: $id
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        id
+        contenderId
+      }
+      nextToken
+    }
+  }
+`;
+
 export const listEveryPersonalPredictionSet = /* GraphQL */ `
   query ListPredictionSets(
     $id: ID

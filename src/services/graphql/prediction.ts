@@ -3,10 +3,22 @@ import {
   CreatePredictionMutationVariables,
   CreatePredictionSetMutation,
   CreatePredictionSetMutationVariables,
+  DeleteCommunityHistoryPredictionMutation,
+  DeleteCommunityHistoryPredictionMutationVariables,
+  DeleteCommunityPredictionMutation,
+  DeleteCommunityPredictionMutationVariables,
+  DeleteHistoryPredictionMutation,
+  DeleteHistoryPredictionMutationVariables,
   DeletePredictionMutation,
   DeletePredictionMutationVariables,
   DeletePredictionSetMutation,
   DeletePredictionSetMutationVariables,
+  ListCommunityHistoryPredictionsQuery,
+  ListCommunityHistoryPredictionsQueryVariables,
+  ListCommunityPredictionsQuery,
+  ListCommunityPredictionsQueryVariables,
+  ListHistoryPredictionsQuery,
+  ListHistoryPredictionsQueryVariables,
   ListPredictionSetsQueryVariables,
   ListPredictionsQuery,
   ListPredictionsQueryVariables,
@@ -14,6 +26,12 @@ import {
   PredictionSetByUserIdAndCategoryIdQueryVariables,
   PredictionSetByUserIdAndEventIdQueryVariables,
   PredictionType,
+  UpdateCommunityHistoryPredictionMutation,
+  UpdateCommunityHistoryPredictionMutationVariables,
+  UpdateCommunityPredictionMutation,
+  UpdateCommunityPredictionMutationVariables,
+  UpdateHistoryPredictionMutation,
+  UpdateHistoryPredictionMutationVariables,
   UpdatePredictionMutation,
   UpdatePredictionMutationVariables,
 } from '../../API';
@@ -274,7 +292,70 @@ export const listEveryPersonalPrediction = async (
     }
     return { status: 'success', data };
   } catch (err) {
-    return handleError('error getting prediction set', err);
+    return handleError('error listing every prediction', err);
+  }
+};
+
+export const listEveryPersonalHistoryPrediction = async (
+  nextToken?: string | null,
+): Promise<iApiResponse<ListHistoryPredictionsQuery>> => {
+  try {
+    // Get all prediction sets matching params (should only be one)
+    const { data, errors } = await GraphqlAPI<
+      ListHistoryPredictionsQuery,
+      ListHistoryPredictionsQueryVariables
+    >(customQueries.listEveryPersonalHistoryPrediction, {
+      nextToken,
+      limit: PAGINATED_LIMIT,
+    });
+    if (!data?.listHistoryPredictions) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data };
+  } catch (err) {
+    return handleError('error listing every history prediction', err);
+  }
+};
+
+export const listEveryCommunityPrediction = async (
+  nextToken?: string | null,
+): Promise<iApiResponse<ListCommunityPredictionsQuery>> => {
+  try {
+    // Get all prediction sets matching params (should only be one)
+    const { data, errors } = await GraphqlAPI<
+      ListCommunityPredictionsQuery,
+      ListCommunityPredictionsQueryVariables
+    >(customQueries.listEveryCommunityPrediction, {
+      nextToken,
+      limit: PAGINATED_LIMIT,
+    });
+    if (!data?.listCommunityPredictions) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data };
+  } catch (err) {
+    return handleError('error listing every community prediction', err);
+  }
+};
+
+export const listEveryCommunityHistoryPrediction = async (
+  nextToken?: string | null,
+): Promise<iApiResponse<ListCommunityHistoryPredictionsQuery>> => {
+  try {
+    // Get all prediction sets matching params (should only be one)
+    const { data, errors } = await GraphqlAPI<
+      ListCommunityHistoryPredictionsQuery,
+      ListCommunityHistoryPredictionsQueryVariables
+    >(customQueries.listEveryCommunityHistoryPrediction, {
+      nextToken,
+      limit: PAGINATED_LIMIT,
+    });
+    if (!data?.listCommunityHistoryPredictions) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data };
+  } catch (err) {
+    return handleError('error listing every community history prediction', err);
   }
 };
 
@@ -299,6 +380,10 @@ export const listEveryPersonalPredictionSet = async (
   }
 };
 
+/**
+ * UPDATE FUNCS for deletion script
+ */
+
 export const updatePredictionContender = async (
   predictionId: string,
   contenderId: string,
@@ -315,9 +400,73 @@ export const updatePredictionContender = async (
     }
     return { status: 'success', data };
   } catch (err) {
-    return handleError('error updating contender hidden', err);
+    return handleError('error updatePredictionContender', err);
   }
 };
+
+export const updateHistoryPredictionContender = async (
+  predictionId: string,
+  contenderId: string,
+): Promise<iApiResponse<UpdateHistoryPredictionMutation>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<
+      UpdateHistoryPredictionMutation,
+      UpdateHistoryPredictionMutationVariables
+    >(customMutations.updateHistoryPrediction, {
+      input: { id: predictionId, contenderId },
+    });
+    if (!data?.updateHistoryPrediction) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data };
+  } catch (err) {
+    return handleError('error updateHistoryPredictionContender', err);
+  }
+};
+
+export const updateCommunityPredictionContender = async (
+  predictionId: string,
+  contenderId: string,
+): Promise<iApiResponse<UpdateCommunityPredictionMutation>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<
+      UpdateCommunityPredictionMutation,
+      UpdateCommunityPredictionMutationVariables
+    >(customMutations.updateCommunityPrediction, {
+      input: { id: predictionId, contenderId },
+    });
+    if (!data?.updateCommunityPrediction) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data };
+  } catch (err) {
+    return handleError('error updateCommunityPredictionContender', err);
+  }
+};
+
+export const updateCommunityHistoryPredictionContender = async (
+  predictionId: string,
+  contenderId: string,
+): Promise<iApiResponse<UpdateCommunityHistoryPredictionMutation>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<
+      UpdateCommunityHistoryPredictionMutation,
+      UpdateCommunityHistoryPredictionMutationVariables
+    >(customMutations.updateCommunityHistoryPrediction, {
+      input: { id: predictionId, contenderId },
+    });
+    if (!data?.updateCommunityHistoryPrediction) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data };
+  } catch (err) {
+    return handleError('error updateCommunityHistoryPredictionContender', err);
+  }
+};
+
+/**
+ * DELETION FUNCS for deletion script
+ */
 
 export const deletePersonalPrediction = async (
   predictionId: string,
@@ -328,6 +477,57 @@ export const deletePersonalPrediction = async (
       DeletePredictionMutationVariables
     >(customMutations.deletePrediction, { input: { id: predictionId } });
     if (!data?.deletePrediction) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data };
+  } catch (err) {
+    return handleError('error deleting prediction', err);
+  }
+};
+
+export const deletePersonalHistoryPrediction = async (
+  predictionId: string,
+): Promise<iApiResponse<DeleteHistoryPredictionMutation>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<
+      DeleteHistoryPredictionMutation,
+      DeleteHistoryPredictionMutationVariables
+    >(customMutations.deleteHistoryPrediction, { input: { id: predictionId } });
+    if (!data?.deleteHistoryPrediction) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data };
+  } catch (err) {
+    return handleError('error deleting prediction', err);
+  }
+};
+
+export const deleteCommunityPrediction = async (
+  predictionId: string,
+): Promise<iApiResponse<DeleteCommunityPredictionMutation>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<
+      DeleteCommunityPredictionMutation,
+      DeleteCommunityPredictionMutationVariables
+    >(customMutations.deleteCommunityPrediction, { input: { id: predictionId } });
+    if (!data?.deleteCommunityPrediction) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data };
+  } catch (err) {
+    return handleError('error deleting prediction', err);
+  }
+};
+
+export const deleteCommunityHistoryPrediction = async (
+  predictionId: string,
+): Promise<iApiResponse<DeleteCommunityHistoryPredictionMutation>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<
+      DeleteCommunityHistoryPredictionMutation,
+      DeleteCommunityHistoryPredictionMutationVariables
+    >(customMutations.deleteCommunityHistoryPrediction, { input: { id: predictionId } });
+    if (!data?.deleteCommunityHistoryPrediction) {
       throw new Error(JSON.stringify(errors));
     }
     return { status: 'success', data };

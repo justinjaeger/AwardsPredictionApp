@@ -36,6 +36,39 @@ export const updatePrediction = /* GraphQL */ `
   }
 `;
 
+export const updateHistoryPrediction = /* GraphQL */ `
+  mutation UpdateHistoryPrediction(
+    $input: UpdateHistoryPredictionInput!
+    $condition: ModelHistoryPredictionConditionInput
+  ) {
+    updateHistoryPrediction(input: $input, condition: $condition) {
+      id
+    }
+  }
+`;
+
+export const updateCommunityPrediction = /* GraphQL */ `
+  mutation UpdateCommunityPrediction(
+    $input: UpdateCommunityPredictionInput!
+    $condition: ModelCommunityPredictionConditionInput
+  ) {
+    updateCommunityPrediction(input: $input, condition: $condition) {
+      id
+    }
+  }
+`;
+
+export const updateCommunityHistoryPrediction = /* GraphQL */ `
+  mutation UpdateCommunityHistoryPrediction(
+    $input: UpdateCommunityHistoryPredictionInput!
+    $condition: ModelCommunityHistoryPredictionConditionInput
+  ) {
+    updateCommunityHistoryPrediction(input: $input, condition: $condition) {
+      id
+    }
+  }
+`;
+
 export const deleteContender = /* GraphQL */ `
   mutation DeleteContender(
     $input: DeleteContenderInput!
@@ -53,6 +86,39 @@ export const deletePrediction = /* GraphQL */ `
     $condition: ModelPredictionConditionInput
   ) {
     deletePrediction(input: $input, condition: $condition) {
+      id
+    }
+  }
+`;
+
+export const deleteHistoryPrediction = /* GraphQL */ `
+  mutation DeleteHistoryPrediction(
+    $input: DeleteHistoryPredictionInput!
+    $condition: ModelHistoryPredictionConditionInput
+  ) {
+    deleteHistoryPrediction(input: $input, condition: $condition) {
+      id
+    }
+  }
+`;
+
+export const deleteCommunityPrediction = /* GraphQL */ `
+  mutation DeleteCommunityPrediction(
+    $input: DeleteCommunityPredictionInput!
+    $condition: ModelCommunityPredictionConditionInput
+  ) {
+    deleteCommunityPrediction(input: $input, condition: $condition) {
+      id
+    }
+  }
+`;
+
+export const deleteCommunityHistoryPrediction = /* GraphQL */ `
+  mutation DeleteCommunityHistoryPrediction(
+    $input: DeleteCommunityHistoryPredictionInput!
+    $condition: ModelCommunityHistoryPredictionConditionInput
+  ) {
+    deleteCommunityHistoryPrediction(input: $input, condition: $condition) {
       id
     }
   }
