@@ -26,10 +26,8 @@ const useGoogleSignIn = () => {
   const signInDb = async (email: string) => {
     try {
       // First, attempt to get user from database using email
-      console.error('email', email);
       const { data: getUserRes } = await ApiServices.getUserByEmail(email);
       const dbUser = getUserRes?.userByEmail?.items[0];
-      console.error('dbUser', dbUser);
       if (dbUser) {
         signInUser(dbUser.id, dbUser.email, dbUser.role);
         navigation.navigate('BottomTabNavigator', {
