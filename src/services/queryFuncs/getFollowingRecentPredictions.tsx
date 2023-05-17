@@ -19,12 +19,8 @@ const getFollowingRecentPredictions = async (
     if (!userId) {
       throw new Error('No userId');
     }
-    const { data } = await ApiServices.getUserRecentFollowingPredictions(userId);
-    const user = data?.getUser;
-    if (!user) {
-      throw new Error('No user');
-    }
-    const followedUsers = user.following?.items || [];
+    const { data } = await ApiServices.getRecentFollowingPredictions(userId);
+    const followedUsers = data?.relationshipByFollowingUserId?.items || [];
     // get most recent prediction for each user
     const longAgo = new Date(+0).toISOString();
     const recentPredictions: {

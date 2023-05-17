@@ -104,15 +104,19 @@ enum CategoryName {
     BREAKTHROUGH
 }
 
+# TODO: remove @searchable after confirming possibl
 type User @model @searchable @auth(rules: [{allow: public}]) {
     id: ID! @primaryKey
     email: String!
+        @index(name: "userByEmail", queryField: "userByEmail") # UNIQUE
+    oauthId: String
+        @index(name: "userByOauthId", queryField: "userByOauthId") # UNIQUE
     username: String
+        @index(name: "userByUsername", queryField: "userByUsername") # UNIQUE
     name: String
     bio: String
     image: String
     role: UserRole! @default(value: "USER")
-    oauthId: String
     predictionSets: [PredictionSet] 
         @hasMany(indexName: "predictionSetsbyUserIdAndCreatedAt" fields: ["id"]) # get recent predictions from user
     historyPredictionSets: [HistoryPredictionSet] 
@@ -123,10 +127,12 @@ type User @model @searchable @auth(rules: [{allow: public}]) {
         @hasMany(indexName: "followingByUser", fields: ["id"])
 }
 
+# TODO: remove @searchable after confirming possible
 type Relationship @model @searchable @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
     followedUserId: ID! 
         @index(name: "followersByUser", queryField: "relationshipByFollowedUserId")
+        @index(name: "uniqueRelationshipViaFollowedUser", sortKeyFields: ["followingUserId"], queryField: "uniqueRelationshipViaFollowedUser") # used for getting unique followings
     followedUser: User! @hasOne(fields: ["followedUserId"])
     followingUserId: ID! 
         @index(name: "followingByUser", queryField: "relationshipByFollowingUserId")
@@ -137,6 +143,7 @@ type Event @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
     categories: [Category] @hasMany(indexName: "byEvent", fields: ["id"])
     awardsBody: AwardsBody!
+        @index(name: "eventByAwardsBodyAndYear", sortKeyFields: ["year"], queryField: "eventByAwardsBodyAndYear")
     year: Int!
     nominationDateTime: AWSDateTime # nullable. admin sets this
     winDateTime: AWSDateTime # nullable. admin sets this
@@ -166,6 +173,9 @@ type Category @model @auth(rules: [{ allow: public }]) {
 type Contender @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
     categoryId: ID!
+        # If looking in a category that's one movie per contender, this returns just one result
+        # If looking in a person category, where there could be a few contenders (movieId#personId), you can just filter for personId
+        @index(name: "getUniqueMovieContender", sortKeyFields: ["movieId"], queryField: "getUniqueMovieContender")
     category: Category! @hasOne(fields: ["categoryId"])
     eventId: ID!
     event: Event! @hasOne(fields: ["eventId"])
@@ -185,17 +195,20 @@ type Movie @model @auth(rules: [{ allow: public }]) {
     contenders: [Contender] 
         @hasMany(indexName: "byMovie", fields: ["id"])
     tmdbId: Int! # unique value
+        @index(name: "movieByTmdbId", queryField: "movieByTmdbId")
     studio: String # distribution studio
 }
 
 type Person @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
     tmdbId: Int! # unique value
+        @index(name: "personByTmdbId", queryField: "personByTmdbId")
 }
   
 type Song @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
     movieId: ID!
+        @index(name: "songByMovieIdAndTitle", sortKeyFields: ["title"] queryField: "songByMovieIdAndTitle")
     movie: Movie! @hasOne(fields: ["movieId"])
     title: String!
     artist: String!
@@ -208,7 +221,7 @@ type PredictionSet @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
     userId: ID! 
         @index(name: "predictionSetsByUserIdAndEventId", sortKeyFields: ["eventId"], queryField: "predictionSetByUserIdAndEventId") # used for request on all user's predictions in given event
-        @index(name: "predictionSetsByUserIdAndCategoryId", sortKeyFields: ["categoryId"], queryField: "predictionSetByUserIdAndCategoryId") # used for request on user's predictions in given category
+        @index(name: "predictionSetsByUserIdAndCategoryId", sortKeyFields: ["categoryId"], queryField: "predictionSetByUserIdAndCategoryId") # used for request on user's predictions in given category (should be UNIQUE and return one only)
         @index(name: "predictionSetsbyUserIdAndCreatedAt", sortKeyFields: ["createdAt"], queryField: "predictionSetByUserIdAndCreatedAt") # return a user's predictions by most recent (say, last ten predictions updated)
     user: User! @hasOne(fields: ["userId"])
     eventId: ID! 
@@ -225,7 +238,7 @@ type PredictionSet @model @auth(rules: [{ allow: public }]) {
 type Prediction @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
     predictionSetId: ID! 
-        @index(name: "predictionByPredictionSetId", queryField: "predictionByPredictionSetId")
+        @index(name: "predictionByPredictionSetId", sortKeyFields: ["ranking"], queryField: "predictionByPredictionSetId")
     contenderId: ID!
     contender: Contender! @hasOne(fields: ["contenderId"])
     ranking: Int!
@@ -269,6 +282,7 @@ type CommunityPredictionSet @model @auth(rules: [{ allow: public }]) {
         @index(queryField: "communityPredictionSetByEventId")
     event: Event! @hasOne(fields: ["eventId"])
     categoryId: ID!
+        @index(queryField: "communityPredictionSetByCategoryId")
     category: Category! @hasOne(fields: ["categoryId"])
     predictions: [CommunityPrediction] 
         @hasMany(indexName: "byCommunityPredictionSet", fields: ["id"])
@@ -277,7 +291,7 @@ type CommunityPredictionSet @model @auth(rules: [{ allow: public }]) {
 type CommunityPrediction @model @auth(rules: [{ allow: public }]) {
     id: ID! @primaryKey
     communityPredictionSetId: ID! 
-        @index(name: "byCommunityPredictionSet", queryField: "communityPredictionByCommunityPredictionSetId")
+        @index(name: "byCommunityPredictionSet", sortKeyFields: ["ranking"], queryField: "communityPredictionByCommunityPredictionSetId")
     contenderId: ID!
     contender: Contender! 
         @hasOne(fields: ["contenderId"])

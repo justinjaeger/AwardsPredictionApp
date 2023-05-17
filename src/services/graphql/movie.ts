@@ -1,62 +1,29 @@
 import {
   ListMoviesQuery,
-  GetMovieQuery,
   CreateMovieMutation,
   UpdateMovieMutation,
   UpdateMovieMutationVariables,
-  GetMovieQueryVariables,
   CreateMovieMutationVariables,
   ListMoviesQueryVariables,
   DeleteMovieMutation,
   DeleteMovieMutationVariables,
+  MovieByTmdbIdQuery,
+  MovieByTmdbIdQueryVariables,
 } from '../../API';
 import * as mutations from '../../graphql/mutations';
 import * as customMutations from '../../graphqlCustom/mutations';
-import * as queries from '../../graphql/queries';
 import * as customQueries from '../../graphqlCustom/queries';
 import { GraphqlAPI, handleError, iApiResponse } from '../utils';
 
-export const getMovie = async (id: string): Promise<iApiResponse<GetMovieQuery>> => {
-  try {
-    const { data, errors } = await GraphqlAPI<GetMovieQuery, GetMovieQueryVariables>(
-      queries.getMovie,
-      { id },
-    );
-    if (!data?.getMovie) {
-      throw new Error(JSON.stringify(errors));
-    }
-    return { status: 'success', data };
-  } catch (err) {
-    return handleError('error getting movie by id', err);
-  }
-};
-
-export const getAllMovies = async (): Promise<iApiResponse<ListMoviesQuery>> => {
-  try {
-    const { data, errors } = await GraphqlAPI<ListMoviesQuery, ListMoviesQueryVariables>(
-      customQueries.listMovies,
-    );
-    if (!data?.listMovies) {
-      throw new Error(JSON.stringify(errors));
-    }
-    return { status: 'success', data };
-  } catch (err) {
-    return handleError('error getting all movies', err);
-  }
-};
-
-/**
- * enforce tmdb being unique
- */
-export const getMoviesByTmdb = async (
+const getMoviesByTmdb = async (
   tmdbId: number,
-): Promise<iApiResponse<ListMoviesQuery>> => {
+): Promise<iApiResponse<MovieByTmdbIdQuery>> => {
   try {
-    const { data, errors } = await GraphqlAPI<ListMoviesQuery, ListMoviesQueryVariables>(
-      customQueries.listMovies,
-      { filter: { tmdbId: { eq: tmdbId } } },
-    );
-    if (!data?.listMovies) {
+    const { data, errors } = await GraphqlAPI<
+      MovieByTmdbIdQuery,
+      MovieByTmdbIdQueryVariables
+    >(customQueries.movieByTmdbId, { tmdbId });
+    if (!data?.movieByTmdbId) {
       throw new Error(JSON.stringify(errors));
     }
     return { status: 'success', data };
@@ -72,7 +39,7 @@ export const createMovie = async (
     const { data, errors } = await GraphqlAPI<
       CreateMovieMutation,
       CreateMovieMutationVariables
-    >(mutations.createMovie, { input: { tmdbId } });
+    >(customMutations.createMovie, { input: { tmdbId } });
     if (!data?.createMovie) {
       throw new Error(JSON.stringify(errors));
     }
@@ -85,17 +52,16 @@ export const createMovie = async (
 /**
  * enforce tmdb being unique
  * check to see if movie is already stored (identified by tmdbId)
+ * once gotten or created, return just the movie id
  */
-export const getOrCreateMovie = async (
-  tmdbId: number,
-): Promise<iApiResponse<GetMovieQuery>> => {
+export const getOrCreateMovie = async (tmdbId: number): Promise<iApiResponse<string>> => {
   try {
     // get movies with tmdbId
     const { data: maybeMovies } = await getMoviesByTmdb(tmdbId);
-    if (!maybeMovies?.listMovies) {
+    if (!maybeMovies?.movieByTmdbId) {
       return { status: 'error' };
     }
-    let movieId = maybeMovies.listMovies.items[0]?.id || undefined;
+    let movieId = maybeMovies.movieByTmdbId.items[0]?.id || undefined;
     // if no movie exists with tmdbId, create one
     if (!movieId) {
       const { data: newMovie } = await createMovie(tmdbId);
@@ -105,9 +71,7 @@ export const getOrCreateMovie = async (
       }
       movieId = mId;
     }
-    // finally, with existing or created movieId, get the movie
-    const { data } = await getMovie(movieId);
-    return { status: 'success', data };
+    return { status: 'success', data: movieId };
   } catch (err) {
     return handleError('error getting or creating movie', err);
   }
@@ -145,5 +109,20 @@ export const deleteMovieById = async (
     return { status: 'success', data };
   } catch (err) {
     return handleError('error deleting movie by id', err);
+  }
+};
+
+// For duplicate script and manage studios thing
+export const getAllMovies = async (): Promise<iApiResponse<ListMoviesQuery>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<ListMoviesQuery, ListMoviesQueryVariables>(
+      customQueries.listMovies,
+    );
+    if (!data?.listMovies) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data };
+  } catch (err) {
+    return handleError('error getting all movies', err);
   }
 };

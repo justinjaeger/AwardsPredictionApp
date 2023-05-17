@@ -11,6 +11,8 @@ import {
   CategoryName,
   GetEventQuery,
   GetEventQueryVariables,
+  EventByAwardsBodyAndYearQuery,
+  EventByAwardsBodyAndYearQueryVariables,
 } from '../../API';
 import { getAwardsBodyCategories, iCategoryData } from '../../constants/categories';
 import * as mutations from '../../graphql/mutations';
@@ -32,7 +34,7 @@ export const getAllEvents = async (): Promise<iApiResponse<ListEventsQuery>> => 
   }
 };
 
-export const getEvent = async (id: string): Promise<iApiResponse<GetEventQuery>> => {
+export const getEventById = async (id: string): Promise<iApiResponse<GetEventQuery>> => {
   try {
     const { data, errors } = await GraphqlAPI<GetEventQuery, GetEventQueryVariables>(
       customQueries.getEvent,
@@ -47,22 +49,21 @@ export const getEvent = async (id: string): Promise<iApiResponse<GetEventQuery>>
   }
 };
 
+// NOTE: If we ever decide to create unique events for "nomination" vs "win" this would need to accommodate that (it might return 2 results)
 export const getUniqueEvents = async (
   awardsBody: AwardsBody,
   year: number,
-): Promise<iApiResponse<ListEventsQuery>> => {
+): Promise<iApiResponse<EventByAwardsBodyAndYearQuery>> => {
   try {
     // enforce uniqueness - don't allow duplicate events to be created
-    const { data, errors } = await GraphqlAPI<ListEventsQuery, ListEventsQueryVariables>(
-      customQueries.listEvents,
-      {
-        filter: {
-          awardsBody: { eq: awardsBody },
-          year: { eq: year },
-        },
-      },
-    );
-    if (!data?.listEvents) {
+    const { data, errors } = await GraphqlAPI<
+      EventByAwardsBodyAndYearQuery,
+      EventByAwardsBodyAndYearQueryVariables
+    >(customQueries.eventByAwardsBodyAndYear, {
+      awardsBody,
+      year: { eq: year },
+    });
+    if (!data?.eventByAwardsBodyAndYear) {
       throw new Error(JSON.stringify(errors));
     }
     return { status: 'success', data };
@@ -81,7 +82,7 @@ export const createEvent = async (
     // enforce uniqueness - don't allow duplicate events to be created
     const { data: d } = await getUniqueEvents(awardsBody, year);
     if (!d) return { status: 'error' };
-    if (d.listEvents?.items.length !== 0) {
+    if (d.eventByAwardsBodyAndYear?.items.length !== 0) {
       return { status: 'error', message: 'This event has already been created' };
     }
     // Create event

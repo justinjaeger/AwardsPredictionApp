@@ -3,7 +3,6 @@ import {
   ListContendersQueryVariables,
   CreateContenderMutation,
   CreateContenderMutationVariables,
-  ModelContenderFilterInput,
   CreateContenderInput,
   GetContenderQuery,
   GetContenderQueryVariables,
@@ -14,6 +13,9 @@ import {
   PredictionType,
   DeleteContenderMutation,
   DeleteContenderMutationVariables,
+  GetUniqueMovieContenderQueryVariables,
+  GetUniqueMovieContenderQuery,
+  ModelContenderFilterInput,
 } from '../../API';
 import * as mutations from '../../graphql/mutations';
 import * as customMutations from '../../graphqlCustom/mutations';
@@ -23,6 +25,17 @@ import { GraphqlAPI, handleError, iApiResponse } from '../utils';
 import ApiServices from '.';
 import { iPrediction } from '../../types';
 
+/**
+ * LEAVING OFF HERE:
+ * - already did user.ts and relationship.ts
+ * - need to do contender.ts
+ * - I'm gonna commit everything though to not lose it
+ * - but to see diff just run
+ * git reset --soft HEAD~1
+ *
+ * TODO: Must backfill the sort key field for getUniqueContender & getUniqueSongContender
+ */
+
 type iContenderParams = {
   eventId: string;
   categoryId: string;
@@ -31,31 +44,30 @@ type iContenderParams = {
   songId?: string;
 };
 
-// should return a SINGLE contender
+// if movie category, returns a single contender
+// if song category, may return several contenders
+// if person category, may return several contenders
 const getUniqueContenders = async (
   params: iContenderParams,
-): Promise<iApiResponse<ListContendersQuery>> => {
+): Promise<iApiResponse<GetUniqueMovieContenderQuery>> => {
   const { categoryId, movieId, personId, songId } = params;
-  // Create filter based on params passed
-  const filter: ModelContenderFilterInput = {
-    categoryId: { eq: categoryId },
-    movieId: { eq: movieId },
-  };
-  if (personId) {
-    filter.personId = { eq: personId };
-  }
-  if (songId) {
-    filter.songId = { eq: songId };
-  }
-  // perform the query
   try {
+    let filter: ModelContenderFilterInput | null = null;
+    if (songId) {
+      filter = { songId: { eq: songId } };
+    }
+    if (personId) {
+      filter = { personId: { eq: personId } };
+    }
     const { data, errors } = await GraphqlAPI<
-      ListContendersQuery,
-      ListContendersQueryVariables
-    >(customQueries.listContenders, {
+      GetUniqueMovieContenderQuery,
+      GetUniqueMovieContenderQueryVariables
+    >(customQueries.getUniqueMovieContender, {
+      categoryId,
+      movieId: { eq: movieId },
       filter,
     });
-    if (!data?.listContenders) {
+    if (!data?.getUniqueMovieContender) {
       throw new Error(JSON.stringify(errors));
     }
     return { status: 'success', data };
@@ -100,15 +112,16 @@ const createContender = async (
 };
 
 // We want to return iPrediction here so that the user's predictions can update immediately
+// TODO: use index, getContenderByCategoryIdAndMovieIdAndPersonIdAndSongId (getUniqueContender)
 const createUniqueContender = async (
   params: iContenderParams,
 ): Promise<iApiResponse<iPrediction>> => {
   // get contenders with unique-defining params
   const { data: maybeContenders } = await getUniqueContenders(params);
-  if (!maybeContenders?.listContenders) {
+  if (!maybeContenders?.getUniqueMovieContender) {
     return { status: 'error' };
   }
-  let contender = maybeContenders.listContenders.items[0];
+  let contender = maybeContenders.getUniqueMovieContender.items[0];
   // if no contender exists, create one
   if (!contender) {
     const { data: newMovie } = await createContender(params);
@@ -152,8 +165,7 @@ export const createFilmContender = async (params: {
 }): Promise<iApiResponse<iPrediction>> => {
   const { eventId, categoryId, movieTmdbId } = params;
   try {
-    const { data: movieResponse } = await ApiServices.getOrCreateMovie(movieTmdbId);
-    const movieId = movieResponse?.getMovie?.id;
+    const { data: movieId } = await ApiServices.getOrCreateMovie(movieTmdbId);
     if (!movieId) {
       return { status: 'error' };
     }
@@ -176,14 +188,11 @@ export const createActingContender = async (params: {
 }): Promise<iApiResponse<iPrediction>> => {
   const { eventId, categoryId, movieTmdbId, personTmdbId } = params;
   try {
-    const { data: movieResponse } = await ApiServices.getOrCreateMovie(movieTmdbId);
-    const movieId = movieResponse?.getMovie?.id;
+    const { data: movieId } = await ApiServices.getOrCreateMovie(movieTmdbId);
     if (!movieId) {
       return { status: 'error' };
     }
-    const { data: personResponse } = await ApiServices.getOrCreatePerson(personTmdbId);
-    console.log('personResponse', personResponse);
-    const personId = personResponse?.getPerson?.id;
+    const { data: personId } = await ApiServices.getOrCreatePerson(personTmdbId);
     if (!personId) {
       return { status: 'error' };
     }
@@ -207,17 +216,15 @@ export const createSongContender = async (params: {
   artist: string;
 }): Promise<iApiResponse<iPrediction>> => {
   const { eventId, categoryId, movieTmdbId, title, artist } = params;
-  const { data: movieResponse } = await ApiServices.getOrCreateMovie(movieTmdbId);
-  const movieId = movieResponse?.getMovie?.id;
+  const { data: movieId } = await ApiServices.getOrCreateMovie(movieTmdbId);
   if (!movieId) {
     return { status: 'error' };
   }
-  const { data: personResponse } = await ApiServices.getOrCreateSong({
+  const { data: songId } = await ApiServices.getOrCreateSong({
     title,
     artist,
     movieId,
   });
-  const songId = personResponse?.getSong?.id;
   if (!songId) {
     return { status: 'error' };
   }
@@ -270,7 +277,7 @@ export const updateContenderVisibilty = async (
     }
     return { status: 'success', data };
   } catch (err) {
-    return handleError('error updating contender hidden', err);
+    return handleError('error updateContenderVisibilty', err);
   }
 };
 
@@ -290,7 +297,7 @@ export const updateContenderAccolade = async (
     }
     return { status: 'success', data };
   } catch (err) {
-    return handleError('error updating contender hidden', err);
+    return handleError('error updateContenderAccolade', err);
   }
 };
 
@@ -329,7 +336,7 @@ export const updateContenderMovie = async (
     }
     return { status: 'success', data };
   } catch (err) {
-    return handleError('error updating contender hidden', err);
+    return handleError('error updateContenderMovie', err);
   }
 };
 

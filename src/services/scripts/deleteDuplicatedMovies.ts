@@ -167,6 +167,7 @@ const deleteDuplicatedMovies = async () => {
     //     });
     //   }
     // }
+    console.log('done!');
   } catch (err) {
     console.error(JSON.stringify(err));
   }

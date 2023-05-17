@@ -1,6 +1,7 @@
-import { UserRole } from '../../API';
+import Serializers from '../../serializers';
 import { iUser } from '../../types';
 import ApiServices from '../graphql';
+import getAuthFollowingUserIds from './getAuthFollowingUserIds';
 
 type iPaginatedUserResult = Promise<{ users: iUser[]; nextToken: string | undefined }>;
 
@@ -9,27 +10,16 @@ export const getPaginatedFollowers = async (
   authUserId: string | undefined,
   nextToken?: string,
 ): iPaginatedUserResult => {
-  const Request = authUserId
-    ? ApiServices.getPaginatedFollowersSignedIn(userId, authUserId, nextToken)
-    : ApiServices.getPaginatedFollowersSignedOut(userId, nextToken);
-  const res = await Request;
-  const items = res.data?.searchRelationships?.items || [];
-  const nextPaginateToken = res.data?.searchRelationships?.nextToken; // send this in subsequent request to get the next page of results
-  const users: iUser[] = items.map((item) => {
-    const u = item?.followingUser;
-    // some of these values we don't care about or use so they can be default
-    return {
-      id: u?.id || '',
-      email: '',
-      role: UserRole.USER,
-      username: u?.username || undefined,
-      name: u?.name || undefined,
-      image: u?.image || undefined,
-      bio: u?.bio || undefined,
-      authUserIsFollowing: (u?.followers?.items || []).length > 0,
-      isFollowingAuthUser: (u?.following?.items || []).length > 0,
-    };
-  });
+  // To get authUserIsFollowing, get who WE follow, then check if the user is in that list
+  const authFollowingUserIds = await getAuthFollowingUserIds(authUserId);
+
+  const res = await ApiServices.getWhoUserIsFollowedBy(userId, { nextToken });
+  const nextPaginateToken = res.data?.relationshipByFollowedUserId?.nextToken;
+  const followingUsers = (res.data?.relationshipByFollowedUserId?.items || []).map(
+    (item) => item?.followingUser,
+  );
+
+  const users = Serializers.getUsersWithIsFollowing(followingUsers, authFollowingUserIds);
 
   return { users, nextToken: nextPaginateToken || undefined };
 };
@@ -39,27 +29,16 @@ export const getPaginatedFollowing = async (
   authUserId: string | undefined,
   nextToken?: string,
 ): iPaginatedUserResult => {
-  const Request = authUserId
-    ? ApiServices.getPaginatedFollowingSignedIn(userId, authUserId, nextToken)
-    : ApiServices.getPaginatedFollowingSignedOut(userId, nextToken);
-  const res = await Request;
-  const items = res.data?.searchRelationships?.items || [];
-  const nextPaginateToken = res.data?.searchRelationships?.nextToken; // send this in subsequent request to get the next page of results
-  const users: iUser[] = items.map((item) => {
-    const u = item?.followedUser;
-    // some of these values we don't care about or use so they can be default
-    return {
-      id: u?.id || '',
-      email: '',
-      role: UserRole.USER,
-      username: u?.username || undefined,
-      name: u?.name || undefined,
-      image: u?.image || undefined,
-      bio: u?.bio || undefined,
-      authUserIsFollowing: (u?.followers?.items || []).length > 0,
-      isFollowingAuthUser: (u?.followers?.items || []).length > 0,
-    };
-  });
+  // To get authUserIsFollowing, get who WE follow, then check if the user is in that list
+  const authFollowingUserIds = await getAuthFollowingUserIds(authUserId);
+
+  const res = await ApiServices.getWhoUserIsFollowing(userId, { nextToken });
+  const nextPaginateToken = res.data?.relationshipByFollowingUserId?.nextToken;
+  const followedUsers = (res.data?.relationshipByFollowingUserId?.items || []).map(
+    (item) => item?.followedUser,
+  );
+
+  const users = Serializers.getUsersWithIsFollowing(followedUsers, authFollowingUserIds);
 
   return { users, nextToken: nextPaginateToken || undefined };
 };

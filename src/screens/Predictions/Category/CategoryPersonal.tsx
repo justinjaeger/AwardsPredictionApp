@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import React, { useEffect, useState } from 'react';
+import React, { useLayoutEffect } from 'react';
 import { Alert, Animated, View } from 'react-native';
 import BackButton from '../../../components/Buttons/BackButton';
 import LoadingStatueModal from '../../../components/LoadingStatueModal';
@@ -13,11 +13,7 @@ import { useCategory } from '../../../context/CategoryContext';
 import useMutationUpdatePredictions from '../../../hooks/mutations/updatePredictions';
 import { PredictionsParamList } from '../../../navigation/types';
 import { iCategory, iEvent, iPrediction } from '../../../types';
-import {
-  useAsyncReference,
-  useDeepCompareEffect,
-  useTypedNavigation,
-} from '../../../util/hooks';
+import { useAsyncReference, useTypedNavigation } from '../../../util/hooks';
 import { formatLastUpdated } from '../../../util/formatDateTime';
 import { eventStatusToPredictionType } from '../../../constants/events';
 import { iCategoryProps } from '.';
@@ -29,7 +25,9 @@ import { AddPredictionsFab } from '../../../components/Buttons/DisplayFAB';
 import useShowAddTab from '../../../hooks/useShowAddTab';
 import EventLink from './EventLink';
 import EditToolbar from '../../../components/Buttons/EditToolbar';
+import useCategoryPersonalPredictions from './useCategoryPersonalPredictions';
 
+// used in both FromProfile and from event
 const CategoryPersonal = ({
   collapsedOpacity,
   expandedOpacity,
@@ -44,35 +42,22 @@ const CategoryPersonal = ({
     category: _category,
     event: _event,
     date,
-    setIsEditing: contextSetIsEditing,
+    isEditing,
+    setIsEditing,
   } = useCategory();
   const navigation = useTypedNavigation<PredictionsParamList>();
   const { userId: authUserId } = useAuth();
   const { isPad } = useDevice();
-
-  const isAuthUserProfile = userId === authUserId;
-
   const { animatedOpacity } = useShowAddTab();
 
+  const isAuthUserProfile = userId === authUserId;
   const isHistory = !!date;
   const category = _category as iCategory;
   const event = _event as iEvent;
 
   const [goBackOnComplete, setGoBackOnComplete] = useAsyncReference<boolean>(false);
-  const [isEditing, localSetIsEditing] = useState<boolean>(false);
 
-  useEffect(() => {
-    navigation.setOptions({
-      headerRight: () => <HistoryHeaderButton isDisabled={!!isEditing} />,
-    });
-  }, [isEditing]);
-
-  // updates for context so the friend bar can go away and buttons can appear at bottom
-  const setIsEditing = (v: boolean) => {
-    localSetIsEditing(v);
-    contextSetIsEditing(v);
-  };
-
+  // func to fire after we update predictions on db
   const onComplete = () => {
     setIsEditing(false);
     Snackbar.success('Changes saved!');
@@ -80,51 +65,25 @@ const CategoryPersonal = ({
       navigation.goBack();
     }
   };
-
-  // We use the SAME KEY as the previous screen, because it avoids a re-fetch of the data which was available previously
   const { mutate: updatePredictions, isComplete } = useMutationUpdatePredictions(
     onComplete,
     isAuthUserProfile,
   );
-  const initialPredictions = predictionData?.[category.id]?.predictions || [];
-  const initialPredictionIds = initialPredictions.map((p) => p.contenderId);
 
-  // get last updated time
-  const lastUpdated = predictionData?.[category.id]?.updatedAt;
-  const lastUpdatedString = formatLastUpdated(new Date(lastUpdated || ''));
+  // get the initialPredictions and updatedPredictions
+  const {
+    initialPredictions,
+    updatedPredictions: predictions,
+    setUpdatedPredictions: setPredictions,
+  } = useCategoryPersonalPredictions({
+    predictionData: predictionData || {},
+    userId,
+  });
 
-  const [_predictions, setPredictions] = useState<iPrediction[]>(
-    initialPredictions || [],
-  );
-
-  // _predictions is for editing, initialPredictions has the history. History is disallowed if editing, so this isn't a problem
-  const predictions = isHistory ? initialPredictions : _predictions;
-  const predictionIds = predictions.map((p) => p.contenderId);
-
-  // if we go to history, then switch back to current, this will let us see current
-  useEffect(() => {
-    if (!isHistory) {
-      setPredictions(initialPredictions);
-    }
-  }, [isHistory]);
-
-  // when predictionData changes, should update. When we're coming from a profile this is necessary
-  useEffect(() => {
-    setPredictions(initialPredictions);
-  }, [initialPredictions.length]);
-
-  // keeps track of whether we've edited the predictions from their initial state
-  useDeepCompareEffect(() => {
-    // only can edit if not viewing history
-    if (!isHistory) {
-      const resultIsSame = _.isEqual(predictionIds, initialPredictionIds);
-      setIsEditing(!resultIsSame);
-    }
-  }, [predictionIds]);
-
-  // set custom back arrow functionality
-  useEffect(() => {
+  // set custom back arrow functionality & hide history button when editing
+  useLayoutEffect(() => {
     navigation.setOptions({
+      headerRight: () => <HistoryHeaderButton isDisabled={!!isEditing} />,
       headerLeft: () => (
         <BackButton
           onPress={async () => {
@@ -141,7 +100,7 @@ const CategoryPersonal = ({
         />
       ),
     });
-  }, [navigation]);
+  }, [navigation, isEditing]);
 
   const onSaveContenders = async (ps?: iPrediction[]) => {
     const predictionsToSave = ps || predictions;
@@ -175,6 +134,10 @@ const CategoryPersonal = ({
       },
     });
   };
+
+  // get last updated time
+  const lastUpdated = predictionData?.[category.id]?.updatedAt;
+  const lastUpdatedString = formatLastUpdated(new Date(lastUpdated || ''));
 
   if (!userId) {
     return <SignedOutState />;

@@ -25,7 +25,7 @@ const SongDetails = (props: iSongDetailsProps) => {
   const [song, setSong] = useState<GetSongQuery>();
 
   useAsyncEffect(async () => {
-    const { data: song } = await ApiServices.getSong(songId);
+    const { data: song } = await ApiServices.getSongById(songId);
     setSong(song);
   }, [songId]);
 

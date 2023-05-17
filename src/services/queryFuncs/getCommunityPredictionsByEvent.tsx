@@ -8,6 +8,7 @@ import { iIndexedPredictionsByCategory, iPrediction } from '../../types';
 import { isWithinLastMonth } from '../../util/isWithinLastMonth';
 import { sortCommunityPredictionsByRanking } from '../../util/sortPredictions';
 import ApiServices from '../graphql';
+import Serializers from '../../serializers';
 
 const getCommunityPredictionsByEvent = async (eventId: string, includeHidden = false) => {
   // TODO: move this logic to lambda function. Pull directly from CommunityPredictionSet
@@ -54,22 +55,8 @@ const getCommunityPredictionsByEvent = async (eventId: string, includeHidden = f
       ) {
         return;
       }
-      // Have to parse this because the field is a json stringified object
-      const indexedRankings = (p?.indexedRankings
-        ? JSON.parse(p?.indexedRankings)
-        : {}) as { [key: number]: number };
 
-      predictions.push({
-        ranking: p?.ranking || 0,
-        accolade: contender.accolade || undefined,
-        indexedRankings: indexedRankings,
-        predictionType: ps?.type || PredictionType.NOMINATION,
-        visibility: contender.visibility || ContenderVisibility.VISIBLE,
-        contenderId: contender.id || '',
-        contenderMovie: contender.movie || undefined,
-        contenderPerson: contender.person || undefined,
-        contenderSong: contender.song || undefined,
-      });
+      predictions.push(Serializers.predictionSerializer(p, ps?.type));
     });
     const sortedPredictions = sortCommunityPredictionsByRanking(predictions);
     data[categoryId] = { predictions: sortedPredictions, updatedAt: ps?.updatedAt || '' };

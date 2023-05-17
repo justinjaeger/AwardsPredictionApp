@@ -22,12 +22,12 @@ export const searchUsers = /* GraphQL */ `
       items {
         id
         email
+        oauthId
         username
         name
         bio
         image
         role
-        oauthId
         predictionSets {
           items {
             id
@@ -119,12 +119,12 @@ export const searchRelationships = /* GraphQL */ `
         followedUser {
           id
           email
+          oauthId
           username
           name
           bio
           image
           role
-          oauthId
           predictionSets {
             nextToken
           }
@@ -144,12 +144,12 @@ export const searchRelationships = /* GraphQL */ `
         followingUser {
           id
           email
+          oauthId
           username
           name
           bio
           image
           role
-          oauthId
           predictionSets {
             nextToken
           }
@@ -192,12 +192,12 @@ export const getUser = /* GraphQL */ `
     getUser(id: $id) {
       id
       email
+      oauthId
       username
       name
       bio
       image
       role
-      oauthId
       predictionSets {
         items {
           id
@@ -205,12 +205,12 @@ export const getUser = /* GraphQL */ `
           user {
             id
             email
+            oauthId
             username
             name
             bio
             image
             role
-            oauthId
             createdAt
             updatedAt
           }
@@ -253,12 +253,12 @@ export const getUser = /* GraphQL */ `
           user {
             id
             email
+            oauthId
             username
             name
             bio
             image
             role
-            oauthId
             createdAt
             updatedAt
           }
@@ -301,12 +301,12 @@ export const getUser = /* GraphQL */ `
           followedUser {
             id
             email
+            oauthId
             username
             name
             bio
             image
             role
-            oauthId
             createdAt
             updatedAt
           }
@@ -314,12 +314,12 @@ export const getUser = /* GraphQL */ `
           followingUser {
             id
             email
+            oauthId
             username
             name
             bio
             image
             role
-            oauthId
             createdAt
             updatedAt
           }
@@ -335,12 +335,12 @@ export const getUser = /* GraphQL */ `
           followedUser {
             id
             email
+            oauthId
             username
             name
             bio
             image
             role
-            oauthId
             createdAt
             updatedAt
           }
@@ -348,12 +348,12 @@ export const getUser = /* GraphQL */ `
           followingUser {
             id
             email
+            oauthId
             username
             name
             bio
             image
             role
-            oauthId
             createdAt
             updatedAt
           }
@@ -385,12 +385,12 @@ export const listUsers = /* GraphQL */ `
       items {
         id
         email
+        oauthId
         username
         name
         bio
         image
         role
-        oauthId
         predictionSets {
           items {
             id
@@ -452,12 +452,12 @@ export const getRelationship = /* GraphQL */ `
       followedUser {
         id
         email
+        oauthId
         username
         name
         bio
         image
         role
-        oauthId
         predictionSets {
           items {
             id
@@ -511,12 +511,12 @@ export const getRelationship = /* GraphQL */ `
       followingUser {
         id
         email
+        oauthId
         username
         name
         bio
         image
         role
-        oauthId
         predictionSets {
           items {
             id
@@ -592,12 +592,12 @@ export const listRelationships = /* GraphQL */ `
         followedUser {
           id
           email
+          oauthId
           username
           name
           bio
           image
           role
-          oauthId
           predictionSets {
             nextToken
           }
@@ -617,12 +617,12 @@ export const listRelationships = /* GraphQL */ `
         followingUser {
           id
           email
+          oauthId
           username
           name
           bio
           image
           role
-          oauthId
           predictionSets {
             nextToken
           }
@@ -690,12 +690,12 @@ export const getEvent = /* GraphQL */ `
           user {
             id
             email
+            oauthId
             username
             name
             bio
             image
             role
-            oauthId
             createdAt
             updatedAt
           }
@@ -738,12 +738,12 @@ export const getEvent = /* GraphQL */ `
           user {
             id
             email
+            oauthId
             username
             name
             bio
             image
             role
-            oauthId
             createdAt
             updatedAt
           }
@@ -917,12 +917,12 @@ export const getCategory = /* GraphQL */ `
           user {
             id
             email
+            oauthId
             username
             name
             bio
             image
             role
-            oauthId
             createdAt
             updatedAt
           }
@@ -965,12 +965,12 @@ export const getCategory = /* GraphQL */ `
           user {
             id
             email
+            oauthId
             username
             name
             bio
             image
             role
-            oauthId
             createdAt
             updatedAt
           }
@@ -1581,12 +1581,12 @@ export const getPredictionSet = /* GraphQL */ `
       user {
         id
         email
+        oauthId
         username
         name
         bio
         image
         role
-        oauthId
         predictionSets {
           items {
             id
@@ -1793,12 +1793,12 @@ export const listPredictionSets = /* GraphQL */ `
         user {
           id
           email
+          oauthId
           username
           name
           bio
           image
           role
-          oauthId
           predictionSets {
             nextToken
           }
@@ -2071,12 +2071,12 @@ export const getHistoryPredictionSet = /* GraphQL */ `
       user {
         id
         email
+        oauthId
         username
         name
         bio
         image
         role
-        oauthId
         predictionSets {
           items {
             id
@@ -2293,12 +2293,12 @@ export const listHistoryPredictionSets = /* GraphQL */ `
         user {
           id
           email
+          oauthId
           username
           name
           bio
           image
           role
-          oauthId
           predictionSets {
             nextToken
           }
@@ -3557,6 +3557,237 @@ export const listCommunityHistoryPredictions = /* GraphQL */ `
     }
   }
 `;
+export const userByEmail = /* GraphQL */ `
+  query UserByEmail(
+    $email: String!
+    $sortDirection: ModelSortDirection
+    $filter: ModelUserFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    userByEmail(
+      email: $email
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        email
+        oauthId
+        username
+        name
+        bio
+        image
+        role
+        predictionSets {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        historyPredictionSets {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        followers {
+          items {
+            id
+            followedUserId
+            followingUserId
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        following {
+          items {
+            id
+            followedUserId
+            followingUserId
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const userByOauthId = /* GraphQL */ `
+  query UserByOauthId(
+    $oauthId: String!
+    $sortDirection: ModelSortDirection
+    $filter: ModelUserFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    userByOauthId(
+      oauthId: $oauthId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        email
+        oauthId
+        username
+        name
+        bio
+        image
+        role
+        predictionSets {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        historyPredictionSets {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        followers {
+          items {
+            id
+            followedUserId
+            followingUserId
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        following {
+          items {
+            id
+            followedUserId
+            followingUserId
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const userByUsername = /* GraphQL */ `
+  query UserByUsername(
+    $username: String!
+    $sortDirection: ModelSortDirection
+    $filter: ModelUserFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    userByUsername(
+      username: $username
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        email
+        oauthId
+        username
+        name
+        bio
+        image
+        role
+        predictionSets {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        historyPredictionSets {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        followers {
+          items {
+            id
+            followedUserId
+            followingUserId
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        following {
+          items {
+            id
+            followedUserId
+            followingUserId
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
 export const relationshipByFollowedUserId = /* GraphQL */ `
   query RelationshipByFollowedUserId(
     $followedUserId: ID!
@@ -3578,12 +3809,12 @@ export const relationshipByFollowedUserId = /* GraphQL */ `
         followedUser {
           id
           email
+          oauthId
           username
           name
           bio
           image
           role
-          oauthId
           predictionSets {
             nextToken
           }
@@ -3603,12 +3834,88 @@ export const relationshipByFollowedUserId = /* GraphQL */ `
         followingUser {
           id
           email
+          oauthId
           username
           name
           bio
           image
           role
+          predictionSets {
+            nextToken
+          }
+          historyPredictionSets {
+            nextToken
+          }
+          followers {
+            nextToken
+          }
+          following {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const uniqueRelationshipViaFollowedUser = /* GraphQL */ `
+  query UniqueRelationshipViaFollowedUser(
+    $followedUserId: ID!
+    $followingUserId: ModelIDKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelRelationshipFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    uniqueRelationshipViaFollowedUser(
+      followedUserId: $followedUserId
+      followingUserId: $followingUserId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        followedUserId
+        followedUser {
+          id
+          email
           oauthId
+          username
+          name
+          bio
+          image
+          role
+          predictionSets {
+            nextToken
+          }
+          historyPredictionSets {
+            nextToken
+          }
+          followers {
+            nextToken
+          }
+          following {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        followingUserId
+        followingUser {
+          id
+          email
+          oauthId
+          username
+          name
+          bio
+          image
+          role
           predictionSets {
             nextToken
           }
@@ -3652,12 +3959,12 @@ export const relationshipByFollowingUserId = /* GraphQL */ `
         followedUser {
           id
           email
+          oauthId
           username
           name
           bio
           image
           role
-          oauthId
           predictionSets {
             nextToken
           }
@@ -3677,12 +3984,12 @@ export const relationshipByFollowingUserId = /* GraphQL */ `
         followingUser {
           id
           email
+          oauthId
           username
           name
           bio
           image
           role
-          oauthId
           predictionSets {
             nextToken
           }
@@ -3698,6 +4005,76 @@ export const relationshipByFollowingUserId = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const eventByAwardsBodyAndYear = /* GraphQL */ `
+  query EventByAwardsBodyAndYear(
+    $awardsBody: AwardsBody!
+    $year: ModelIntKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelEventFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    eventByAwardsBodyAndYear(
+      awardsBody: $awardsBody
+      year: $year
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        categories {
+          items {
+            id
+            eventId
+            name
+            type
+            isShortlisted
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        awardsBody
+        year
+        nominationDateTime
+        winDateTime
+        status
+        predictionSets {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        historyPredictions {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        liveAt
         createdAt
         updatedAt
       }
@@ -3772,6 +4149,116 @@ export const categoryByEvent = /* GraphQL */ `
           }
           nextToken
         }
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getUniqueMovieContender = /* GraphQL */ `
+  query GetUniqueMovieContender(
+    $categoryId: ID!
+    $movieId: ModelIDKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelContenderFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    getUniqueMovieContender(
+      categoryId: $categoryId
+      movieId: $movieId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        categoryId
+        category {
+          id
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            liveAt
+            createdAt
+            updatedAt
+          }
+          name
+          type
+          isShortlisted
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        eventId
+        event {
+          id
+          categories {
+            nextToken
+          }
+          awardsBody
+          year
+          nominationDateTime
+          winDateTime
+          status
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          liveAt
+          createdAt
+          updatedAt
+        }
+        movieId
+        movie {
+          id
+          contenders {
+            nextToken
+          }
+          tmdbId
+          studio
+          createdAt
+          updatedAt
+        }
+        personId
+        person {
+          id
+          tmdbId
+          createdAt
+          updatedAt
+        }
+        songId
+        song {
+          id
+          movieId
+          movie {
+            id
+            tmdbId
+            studio
+            createdAt
+            updatedAt
+          }
+          title
+          artist
+          createdAt
+          updatedAt
+        }
+        visibility
+        accolade
         createdAt
         updatedAt
       }
@@ -3887,6 +4374,111 @@ export const contenderByMovie = /* GraphQL */ `
     }
   }
 `;
+export const movieByTmdbId = /* GraphQL */ `
+  query MovieByTmdbId(
+    $tmdbId: Int!
+    $sortDirection: ModelSortDirection
+    $filter: ModelMovieFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    movieByTmdbId(
+      tmdbId: $tmdbId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        contenders {
+          items {
+            id
+            categoryId
+            eventId
+            movieId
+            personId
+            songId
+            visibility
+            accolade
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        tmdbId
+        studio
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const personByTmdbId = /* GraphQL */ `
+  query PersonByTmdbId(
+    $tmdbId: Int!
+    $sortDirection: ModelSortDirection
+    $filter: ModelPersonFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    personByTmdbId(
+      tmdbId: $tmdbId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        tmdbId
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const songByMovieIdAndTitle = /* GraphQL */ `
+  query SongByMovieIdAndTitle(
+    $movieId: ID!
+    $title: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelSongFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    songByMovieIdAndTitle(
+      movieId: $movieId
+      title: $title
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        movieId
+        movie {
+          id
+          contenders {
+            nextToken
+          }
+          tmdbId
+          studio
+          createdAt
+          updatedAt
+        }
+        title
+        artist
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
 export const predictionSetByUserIdAndEventId = /* GraphQL */ `
   query PredictionSetByUserIdAndEventId(
     $userId: ID!
@@ -3910,12 +4502,12 @@ export const predictionSetByUserIdAndEventId = /* GraphQL */ `
         user {
           id
           email
+          oauthId
           username
           name
           bio
           image
           role
-          oauthId
           predictionSets {
             nextToken
           }
@@ -4022,12 +4614,12 @@ export const predictionSetByUserIdAndCategoryId = /* GraphQL */ `
         user {
           id
           email
+          oauthId
           username
           name
           bio
           image
           role
-          oauthId
           predictionSets {
             nextToken
           }
@@ -4134,12 +4726,12 @@ export const predictionSetByUserIdAndCreatedAt = /* GraphQL */ `
         user {
           id
           email
+          oauthId
           username
           name
           bio
           image
           role
-          oauthId
           predictionSets {
             nextToken
           }
@@ -4244,12 +4836,12 @@ export const predictionSetByEventId = /* GraphQL */ `
         user {
           id
           email
+          oauthId
           username
           name
           bio
           image
           role
-          oauthId
           predictionSets {
             nextToken
           }
@@ -4336,6 +4928,7 @@ export const predictionSetByEventId = /* GraphQL */ `
 export const predictionByPredictionSetId = /* GraphQL */ `
   query PredictionByPredictionSetId(
     $predictionSetId: ID!
+    $ranking: ModelIntKeyConditionInput
     $sortDirection: ModelSortDirection
     $filter: ModelPredictionFilterInput
     $limit: Int
@@ -4343,6 +4936,7 @@ export const predictionByPredictionSetId = /* GraphQL */ `
   ) {
     predictionByPredictionSetId(
       predictionSetId: $predictionSetId
+      ranking: $ranking
       sortDirection: $sortDirection
       filter: $filter
       limit: $limit
@@ -4436,12 +5030,12 @@ export const historyPredictionSetByUserIdAndCreatedAt = /* GraphQL */ `
         user {
           id
           email
+          oauthId
           username
           name
           bio
           image
           role
-          oauthId
           predictionSets {
             nextToken
           }
@@ -4549,12 +5143,12 @@ export const historyPredictionSetByUserIdAndEventIdAndCreatedAt = /* GraphQL */ 
         user {
           id
           email
+          oauthId
           username
           name
           bio
           image
           role
-          oauthId
           predictionSets {
             nextToken
           }
@@ -4662,12 +5256,12 @@ export const historyPredictionSetByUserIdAndCategoryIdAndCreatedAt = /* GraphQL 
         user {
           id
           email
+          oauthId
           username
           name
           bio
           image
           role
-          oauthId
           predictionSets {
             nextToken
           }
@@ -4773,12 +5367,12 @@ export const historyPredictionSetByCategoryId = /* GraphQL */ `
         user {
           id
           email
+          oauthId
           username
           name
           bio
           image
           role
-          oauthId
           predictionSets {
             nextToken
           }
@@ -5162,9 +5756,95 @@ export const communityPredictionSetByEventId = /* GraphQL */ `
     }
   }
 `;
+export const communityPredictionSetByCategoryId = /* GraphQL */ `
+  query CommunityPredictionSetByCategoryId(
+    $categoryId: ID!
+    $sortDirection: ModelSortDirection
+    $filter: ModelCommunityPredictionSetFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    communityPredictionSetByCategoryId(
+      categoryId: $categoryId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        eventId
+        event {
+          id
+          categories {
+            nextToken
+          }
+          awardsBody
+          year
+          nominationDateTime
+          winDateTime
+          status
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          liveAt
+          createdAt
+          updatedAt
+        }
+        categoryId
+        category {
+          id
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            liveAt
+            createdAt
+            updatedAt
+          }
+          name
+          type
+          isShortlisted
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        predictions {
+          items {
+            id
+            communityPredictionSetId
+            contenderId
+            ranking
+            indexedRankings
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        type
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
 export const communityPredictionByCommunityPredictionSetId = /* GraphQL */ `
   query CommunityPredictionByCommunityPredictionSetId(
     $communityPredictionSetId: ID!
+    $ranking: ModelIntKeyConditionInput
     $sortDirection: ModelSortDirection
     $filter: ModelCommunityPredictionFilterInput
     $limit: Int
@@ -5172,6 +5852,7 @@ export const communityPredictionByCommunityPredictionSetId = /* GraphQL */ `
   ) {
     communityPredictionByCommunityPredictionSetId(
       communityPredictionSetId: $communityPredictionSetId
+      ranking: $ranking
       sortDirection: $sortDirection
       filter: $filter
       limit: $limit

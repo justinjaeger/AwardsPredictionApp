@@ -38,6 +38,7 @@ export type iPrediction = {
   predictionType: PredictionType;
   indexedRankings?: iIndexedRankings; // COMMUNITY ONLY
   contenderId: string;
+  lastUpdated?: string;
   contenderMovie?:
     | {
         id: string;

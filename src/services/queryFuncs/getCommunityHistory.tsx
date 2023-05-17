@@ -1,7 +1,7 @@
-import { ContenderVisibility, PredictionType } from '../../API';
 import { iEvent, iIndexedPredictionsByCategory, iPrediction } from '../../types';
 import { sortCommunityPredictionsByRanking } from '../../util/sortPredictions';
 import ApiServices from '../graphql';
+import Serializers from '../../serializers';
 
 const getCommunityHistory = async (event: iEvent, createdAt: Date) => {
   // TODO: move this logic to lambda function. Pull directly from CommunityPredictionSet
@@ -22,21 +22,7 @@ const getCommunityHistory = async (event: iEvent, createdAt: Date) => {
     (ps?.predictions?.items || []).forEach((p) => {
       const contender = p?.contender;
       if (!contender) return;
-      // TODO: after amplify push / codegen this should work
-      const indexedRankings = (p?.indexedRankings
-        ? JSON.parse(p?.indexedRankings)
-        : {}) as { [key: number]: number };
-      predictions.push({
-        ranking: p?.ranking || 0,
-        accolade: contender.accolade || undefined,
-        predictionType: ps?.type || PredictionType.NOMINATION,
-        indexedRankings: indexedRankings,
-        visibility: contender.visibility || ContenderVisibility.VISIBLE,
-        contenderId: contender.id || '',
-        contenderMovie: contender.movie || undefined,
-        contenderPerson: contender.person || undefined,
-        contenderSong: contender.song || undefined,
-      });
+      predictions.push(Serializers.historyPredictionSerializer(p, ps?.type));
     });
     const sortedPredictions = sortCommunityPredictionsByRanking(predictions);
     data[categoryId] = { predictions: sortedPredictions, updatedAt: ps?.updatedAt || '' };
