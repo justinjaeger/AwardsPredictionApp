@@ -8,7 +8,7 @@ import Snackbar from '../../../components/Snackbar';
 import ApiServices from '../../../services/graphql';
 import { UserRole } from '../../../API';
 import { useAuth } from '../../../context/UserContext';
-import { useNavigation } from '@react-navigation/native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 
 const AppleOauthButton = () => {
   const { width } = useWindowDimensions();
@@ -16,8 +16,8 @@ const AppleOauthButton = () => {
   const { signInUser } = useAuth();
 
   const onAppleButtonPress = async () => {
-    // NOTE: AFTER FIRST LOGIN, THE USER'S INFORMATION WILL NOT BE RETURNED.
-    // ON FIRST LOGIN, WILL RECEIVE EMAIL and NAME, THEN SUBSEQUENT LOGINS ARE JUST A UUID
+    // NOTE: AFTER FIRST LOGIN, THE USER'S INFORMATION MAY NOT BE RETURNED.
+    // ON FIRST LOGIN, WILL RECEIVE EMAIL and NAME, THEN SUBSEQUENT LOGINS MAY JUST BE A UUID
     try {
       // performs login request
       const appleAuthRequestResponse = await appleAuth.performRequest({
@@ -25,6 +25,7 @@ const AppleOauthButton = () => {
         // Note: it appears putting FULL_NAME first is important, see issue #293
         requestedScopes: [appleAuth.Scope.FULL_NAME, appleAuth.Scope.EMAIL],
       });
+      const email = appleAuthRequestResponse.email;
       const oauthId = appleAuthRequestResponse.user;
       if (!oauthId) {
         throw new Error('No oauthId found');
@@ -41,12 +42,22 @@ const AppleOauthButton = () => {
         throw new Error('Apple signin is unauthorized');
       }
 
-      // Important: The user's email and name ONLY comes back on the first login
-      // So if they exist, we assume it's the first time they're logging in
-      // If not, we have to identify them by their oauthId
-      const email = appleAuthRequestResponse.email;
-      // If email is returned assume it's the first time they're logging in, and create a new user
-      if (email) {
+      // If it's the first log in, the user's email will come back
+      // If the user hasn't been created, the try will fail and we'll create a new user in the catch
+      try {
+        const { data: getUserRes } = await ApiServices.getUserByOauthId(oauthId);
+        const dbUser = getUserRes?.userByOauthId?.items[0];
+        if (!dbUser) {
+          throw new Error('Did not find user. Attempting to create new user');
+        }
+        signInUser(dbUser.id, dbUser.email, dbUser.role);
+        navigation.navigate('BottomTabNavigator', {
+          screen: 'Profile',
+        });
+      } catch {
+        if (!email) {
+          throw new Error('No email found, cannot create user');
+        }
         const firstName = appleAuthRequestResponse.fullName?.givenName || '';
         const lastName = appleAuthRequestResponse.fullName?.familyName || '';
         const name = firstName + ' ' + lastName;
@@ -61,21 +72,22 @@ const AppleOauthButton = () => {
           throw new Error('Error creating user');
         }
         signInUser(newUser.id, newUser.email, newUser.role);
-        navigation.navigate('BottomTabNavigator', {
-          screen: 'Profile',
-          params: { screen: 'UpdateProfileInfo' },
-        });
-      } else {
-        // If not, assume it's not first time signing in and attempt to find user by oauthId
-        const { data: getUserRes } = await ApiServices.getUserByOauthId(oauthId);
-        const dbUser = getUserRes?.searchUsers?.items[0];
-        if (!dbUser) {
-          throw new Error('Error finding user');
-        }
-        signInUser(dbUser.id, dbUser.email, dbUser.role);
-        navigation.navigate('BottomTabNavigator', {
-          screen: 'Profile',
-        });
+        // Navigate to profile creation
+        // if you don't stick these two screens in like this, you could get stuck not being able to go back
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 1,
+            routes: [
+              { name: 'BottomTabNavigator', state: { routes: [{ name: 'Profile' }] } },
+              {
+                name: 'BottomTabNavigator',
+                state: {
+                  routes: [{ name: 'Profile', params: { screen: 'UpdateProfileInfo' } }],
+                },
+              },
+            ],
+          }),
+        );
       }
     } catch (e) {
       Snackbar.error(JSON.stringify(e) || 'Something went wrong');
@@ -104,7 +116,6 @@ const AppleOauthButton = () => {
         }}
         onPress={() => {
           onAppleButtonPress();
-          //   AuthServices.appleSignIn();
         }}
         activeOpacity={0.9}
       >
