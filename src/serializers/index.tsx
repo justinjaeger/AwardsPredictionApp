@@ -1,5 +1,14 @@
-import { ContenderVisibility, PredictionType, UserRole } from '../API';
-import { iPrediction, iUser } from '../types';
+import {
+  AwardsBody,
+  CategoryIsShortlisted,
+  CategoryName,
+  CategoryType,
+  ContenderVisibility,
+  EventStatus,
+  PredictionType,
+  UserRole,
+} from '../API';
+import { iCategory, iEvent, iPrediction, iUser } from '../types';
 
 const predictionSerializer = (
   p: any, // __typename: "Prediction"
@@ -85,6 +94,31 @@ const getUsersWithIsFollowing = (
   });
 };
 
+// NOTE: will return blank categories
+const eventSerializer = (
+  event: any, // __typename: "Event"
+  createdAt?: string | undefined | null,
+): iEvent => ({
+  id: event.id || '',
+  awardsBody: event.awardsBody || AwardsBody.ACADEMY_AWARDS,
+  year: event.year || 0,
+  status: event.status || EventStatus.ARCHIVED,
+  categories: {},
+  nominationDateTime: event.nominationDateTime || undefined,
+  winDateTime: event.winDateTime || undefined,
+  createdAt: createdAt || event.createdAt || '',
+  liveAt: event.liveAt || undefined,
+});
+
+const categorySerializer = (
+  category: any, // __typename: "Category"
+): iCategory => ({
+  id: category?.id || '',
+  name: category?.name || CategoryName.PICTURE, // fake values
+  type: category?.type || CategoryType.FILM, // fake values
+  isShortlisted: category?.isShortlisted || CategoryIsShortlisted.FALSE, // fake values
+});
+
 const Serializers = {
   predictionSerializer,
   predictionsSerializer,
@@ -93,6 +127,8 @@ const Serializers = {
   userSerializer,
   usersSerializer,
   getUsersWithIsFollowing,
+  eventSerializer,
+  categorySerializer,
 };
 
 export default Serializers;
