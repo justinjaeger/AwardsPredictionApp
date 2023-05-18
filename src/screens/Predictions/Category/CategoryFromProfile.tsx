@@ -16,7 +16,6 @@ import { RouteProp, useRoute } from '@react-navigation/native';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import HistoryTab from '../../../components/HistoryTab';
 import UserHeader from '../../../components/UserHeader';
-import CategoryCommunity from './CategoryCommunity';
 import { useProfilePrediction } from '../../../context/ProfilePredictionContext';
 import { iCategoryDisplayState } from '../../../context/DisplayStateContext';
 
@@ -70,8 +69,6 @@ const Category = () => {
     });
   }, [navigation]);
 
-  const isAuthUserProfile = userId === authUserId;
-
   // TODO: History is always open in archived state
   return (
     <>
@@ -83,20 +80,11 @@ const Category = () => {
             <HistoryTab />
           </View>
           <View style={{ width: '100%' }}>
-            {isAuthUserProfile ? (
-              <CategoryPersonal
-                predictionData={predictionData}
-                isLoading={isLoading}
-                {...props}
-              />
-            ) : (
-              <CategoryCommunity
-                predictionData={predictionData}
-                isLoading={isLoading}
-                isIndividualProfile={true}
-                {...props}
-              />
-            )}
+            <CategoryPersonal
+              predictionData={predictionData}
+              isLoading={isLoading}
+              {...props}
+            />
           </View>
         </>
       </BackgroundWrapper>

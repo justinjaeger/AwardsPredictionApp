@@ -49,8 +49,10 @@ export const ProfilePredictionProvider = (props: { children: React.ReactNode }) 
         .finally(() => setIsLoading(false));
     }
 
-    getUser(userId).then((res) => setUser(res));
-  }, [userId]);
+    getUser(userId).then((res) => {
+      setUser(res);
+    });
+  }, [userId, event?.id]);
 
   useEffect(() => {
     if (userId && showHistory && event && date) {
@@ -58,7 +60,7 @@ export const ProfilePredictionProvider = (props: { children: React.ReactNode }) 
         .then((res) => setHistoryData(res))
         .finally(() => setIsLoading(false));
     }
-  }, [date]);
+  }, [date, userId, event?.id, showHistory]);
 
   const predictionData = showHistory ? historyData : contemporaryData;
 
