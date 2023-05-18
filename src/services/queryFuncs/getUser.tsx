@@ -3,7 +3,7 @@ import ApiServices from '../graphql';
 
 const getUser = async (id: string | undefined): Promise<iUser | undefined> => {
   if (id === undefined) return undefined;
-  const { data } = await ApiServices.getUser(id);
+  const { data } = await ApiServices.getUserById(id);
   const user = data?.getUser;
   if (!user) return undefined;
   return {
