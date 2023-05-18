@@ -49,6 +49,7 @@ const UserSearchResult = ({
     <FlatList
       style={{ width: '100%' }}
       data={users}
+      indicatorStyle="white"
       contentContainerStyle={{ alignItems: 'flex-start' }}
       keyExtractor={(item) => item.id}
       onEndReached={() => {
