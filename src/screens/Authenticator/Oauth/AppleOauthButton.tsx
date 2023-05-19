@@ -8,7 +8,8 @@ import Snackbar from '../../../components/Snackbar';
 import ApiServices from '../../../services/graphql';
 import { UserRole } from '../../../API';
 import { useAuth } from '../../../context/UserContext';
-import { CommonActions, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
+import { goToAccountSetup } from '../../../util/navigationActions';
 
 const AppleOauthButton = () => {
   const { width } = useWindowDimensions();
@@ -25,11 +26,21 @@ const AppleOauthButton = () => {
         // Note: it appears putting FULL_NAME first is important, see issue #293
         requestedScopes: [appleAuth.Scope.FULL_NAME, appleAuth.Scope.EMAIL],
       });
+      // ISSUE: https://github.com/invertase/react-native-apple-authentication/issues/293
+      // https://developer.apple.com/documentation/authenticationservices/implementing_user_authentication_with_sign_in_with_apple#3546459
       const email = appleAuthRequestResponse.email;
-      const oauthId = appleAuthRequestResponse.user;
+      const oauthId = appleAuthRequestResponse.user; // This is a SPECIAL APPLE ACCOUNT (SAA)
+      const firstName = appleAuthRequestResponse.fullName?.givenName || '';
+      const lastName = appleAuthRequestResponse.fullName?.familyName || '';
+      console.error('email', email);
+      console.error('oauthId', oauthId);
+      console.error('name', firstName, lastName);
       if (!oauthId) {
         throw new Error('No oauthId found');
       }
+
+      // REQUESTING existing credentials
+      // https://developer.apple.com/documentation/authenticationservices/implementing_user_authentication_with_sign_in_with_apple#3546460
 
       // get current authentication state for user
       // /!\ This method must be tested on a real device. On the iOS simulator it always throws an error.
@@ -42,24 +53,24 @@ const AppleOauthButton = () => {
         throw new Error('Apple signin is unauthorized');
       }
 
-      // If it's the first log in, the user's email will come back
-      // If the user hasn't been created, the try will fail and we'll create a new user in the catch
-      try {
-        const { data: getUserRes } = await ApiServices.getUserByOauthId(oauthId);
-        const dbUser = getUserRes?.userByOauthId?.items[0];
-        if (!dbUser) {
-          throw new Error('Did not find user. Attempting to create new user');
+      // Get user from DB based on oauthId
+      // attempt to get user with the oauthId apple sent back
+      const { data: getUserRes } = await ApiServices.getUserByOauthId(oauthId);
+      const dbUser = getUserRes?.userByOauthId?.items[0];
+
+      // DECLARE create / sign in functions
+      const logInExistingUser = () => {
+        if (dbUser) {
+          signInUser(dbUser.id, dbUser.email, dbUser.role);
+          navigation.navigate('BottomTabNavigator', {
+            screen: 'Profile',
+          });
         }
-        signInUser(dbUser.id, dbUser.email, dbUser.role);
-        navigation.navigate('BottomTabNavigator', {
-          screen: 'Profile',
-        });
-      } catch {
+      };
+      const createNewUser = async () => {
         if (!email) {
           throw new Error('No email found, cannot create user');
         }
-        const firstName = appleAuthRequestResponse.fullName?.givenName || '';
-        const lastName = appleAuthRequestResponse.fullName?.familyName || '';
         const name = firstName + ' ' + lastName;
         const { status, data } = await ApiServices.createUser(
           email,
@@ -73,21 +84,13 @@ const AppleOauthButton = () => {
         }
         signInUser(newUser.id, newUser.email, newUser.role);
         // Navigate to profile creation
-        // if you don't stick these two screens in like this, you could get stuck not being able to go back
-        navigation.dispatch(
-          CommonActions.reset({
-            index: 1,
-            routes: [
-              { name: 'BottomTabNavigator', state: { routes: [{ name: 'Profile' }] } },
-              {
-                name: 'BottomTabNavigator',
-                state: {
-                  routes: [{ name: 'Profile', params: { screen: 'UpdateProfileInfo' } }],
-                },
-              },
-            ],
-          }),
-        );
+        navigation.dispatch(goToAccountSetup);
+      };
+
+      if (!dbUser) {
+        await createNewUser();
+      } else {
+        logInExistingUser();
       }
     } catch (e) {
       Snackbar.error(JSON.stringify(e) || 'Something went wrong');

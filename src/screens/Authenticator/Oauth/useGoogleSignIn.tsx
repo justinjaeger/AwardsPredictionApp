@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '../../../context/UserContext';
 import ApiServices from '../../../services/graphql';
 import { useNavigateAwayEffect } from '../../../util/hooks';
+import { goToAccountSetup } from '../../../util/navigationActions';
 
 // Used for ALL Oauth providers (misnamed)
 const useGoogleSignIn = () => {
@@ -43,10 +44,7 @@ const useGoogleSignIn = () => {
         throw new Error('Could not create user');
       }
       signInUser(newUser.id, newUser.email, newUser.role);
-      navigation.navigate('BottomTabNavigator', {
-        screen: 'Profile',
-        params: { screen: 'UpdateProfileInfo' },
-      });
+      navigation.dispatch(goToAccountSetup);
     } catch (err) {
       console.error(err);
       setIsError(true);

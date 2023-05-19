@@ -10,6 +10,7 @@ import { useNavigation } from '@react-navigation/native';
 import ApiServices from '../../services/graphql';
 import { useAuth } from '../../context/UserContext';
 import COLORS from '../../constants/colors';
+import { goToAccountSetup } from '../../util/navigationActions';
 
 const ConfirmSignUp = (p: any) => {
   const props = p as iAuthScreenProps; // typecasting because props are automatically passed from Authenticator
@@ -49,10 +50,7 @@ const ConfirmSignUp = (p: any) => {
         AuthServices.signIn(email, password).then((res) => {
           if (res.status === 'success') {
             signInUser(u.id, u.email, u.role);
-            navigation.navigate('BottomTabNavigator', {
-              screen: 'Profile',
-              params: { screen: 'UpdateProfileInfo' },
-            });
+            navigation.dispatch(goToAccountSetup);
           }
         });
       }
