@@ -110,13 +110,16 @@ const SendMessage = () => {
         style={{ width: '100%' }}
         contentContainerStyle={{ width: '90%', alignSelf: 'center' }}
       >
+        <BodyBold style={{ textAlign: 'center', marginTop: 10 }}>
+          Updates will be communicated via twitter @withbrotherbro
+        </BodyBold>
         <View
           style={{
             flexDirection: 'row',
             justifyContent: 'center',
             flexWrap: 'wrap',
             alignItems: 'center',
-            marginTop: 20,
+            marginTop: 10,
           }}
         >
           {data.map((item) => (
