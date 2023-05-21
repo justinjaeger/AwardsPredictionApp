@@ -111,7 +111,7 @@ const SendMessage = () => {
         contentContainerStyle={{ width: '90%', alignSelf: 'center' }}
       >
         <BodyBold style={{ textAlign: 'center', marginTop: 10 }}>
-          Updates will be communicated via twitter @withbrotherbro
+          For updates and communications, see twitter @withbrotherbro
         </BodyBold>
         <View
           style={{
