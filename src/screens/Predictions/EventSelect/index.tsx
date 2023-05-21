@@ -15,14 +15,14 @@ import RecommendedUsers from '../../../components/RecommendedUsers';
 
 const EventSelect = () => {
   const { width } = useWindowDimensions();
-  const { userId } = useAuth();
+  const { userId: authUserId } = useAuth();
 
   const { data: events, isLoading, refetch: refetchEvents } = useQueryAllEvents();
-  const { data: user, refetch: refetchUser } = useQueryGetUser(userId);
+  const { data: user, refetch: refetchUser } = useQueryGetUser(authUserId);
   const {
     data: usersWithRecentPredictionSets,
     refetch: refetchFollowingPredictions,
-  } = useQueryGetFollowingRecentPredictions(userId);
+  } = useQueryGetFollowingRecentPredictions(authUserId);
 
   const { loadingOpacity, bodyOpacity } = useLoading(isLoading);
 
@@ -31,17 +31,17 @@ const EventSelect = () => {
     if (events === undefined) {
       refetchEvents();
     }
-    if (userId === undefined) {
+    if (authUserId === undefined) {
       refetchUser();
     }
-    if (userId && user === undefined) {
+    if (authUserId && user === undefined) {
       refetchUser();
     }
-    if (userId) {
+    if (authUserId) {
       // WARN: sometimes refetch appears to be not working, but mostly it seems ok?
       refetchFollowingPredictions();
     }
-  }, [events, user, userId]);
+  }, [events, user, authUserId]);
 
   return (
     <BackgroundWrapper>
@@ -77,11 +77,11 @@ const EventSelect = () => {
           </HeaderLight>
           {events ? (
             <EventList
-              user={userId ? user : undefined} // so if the user is signed out they don't see their old predictions
+              user={authUserId ? user : undefined} // so if the user is signed out they don't see their old predictions
               events={Object.values(events)}
             />
           ) : null}
-          {!userId ? (
+          {!authUserId ? (
             // users not signed in can see recommended users
             <RecommendedUsers header={'Follow Users'} />
           ) : usersWithRecentPredictionSets ? (

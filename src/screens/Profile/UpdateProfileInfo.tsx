@@ -19,10 +19,10 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 const BIO_CHAR_LIMIT = 150;
 
 const UpdateProfileInfo = () => {
-  const { userId, userEmail } = useAuth();
+  const { userId: authUserId, userEmail } = useAuth();
   const navigation = useNavigation();
 
-  const { data: user } = useQueryGetUser(userId);
+  const { data: user } = useQueryGetUser(authUserId);
   const { mutate: updateUser, isComplete } = useUpdateUser(() => {
     Snackbar.success('Profile updated');
     navigation.goBack();
@@ -93,8 +93,8 @@ const UpdateProfileInfo = () => {
   };
 
   const onUploadProfileImage = async () => {
-    if (!userId || !userEmail) return; // don't execute if not signed in
-    updateProfileImage({ userId, userEmail });
+    if (!authUserId || !userEmail) return; // don't execute if not signed in
+    updateProfileImage({ userId: authUserId, userEmail });
   };
 
   return (

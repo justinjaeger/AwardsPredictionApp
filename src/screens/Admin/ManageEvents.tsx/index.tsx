@@ -30,10 +30,10 @@ import useQueryGetUser from '../../../hooks/queries/getUser';
 
 const ManageEvents = () => {
   const { width } = useWindowDimensions();
-  const { userId } = useAuth();
+  const { userId: authUserId } = useAuth();
 
   const { data: events, isLoading, refetch: refetchEvents } = useQueryAllEvents();
-  const { data: user, refetch: refetchUser } = useQueryGetUser(userId);
+  const { data: user, refetch: refetchUser } = useQueryGetUser(authUserId);
 
   const [highlightedEvent, setHighlightedEvent] = useState<string>('');
   const [selectedEvent, setSelectedEvent] = useState<iEvent | undefined>();
@@ -52,7 +52,7 @@ const ManageEvents = () => {
     if (user === undefined) {
       refetchUser();
     }
-  }, [events, user, userId]);
+  }, [events, user, authUserId]);
 
   const eventList = _.values(events || {});
   const orderedEvents = sortByObjectOrder<AwardsBody, iEvent>(
