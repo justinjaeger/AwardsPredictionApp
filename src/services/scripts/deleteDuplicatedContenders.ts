@@ -238,7 +238,6 @@ const deleteDuplicatedContenders = async () => {
         contender,
       ) => {
         if (!contender) return acc;
-        // NOTE: When I reform the tables, id is movieId+categoryId+personId, and personId and songId, and those last 2 can just be null
         const key = getUniqueContenderId(
           contender.categoryId,
           contender.movieId,

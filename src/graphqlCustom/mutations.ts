@@ -25,6 +25,25 @@ export const deleteMovie = /* GraphQL */ `
   }
 `;
 
+export const deletePerson = /* GraphQL */ `
+  mutation DeletePerson(
+    $input: DeletePersonInput!
+    $condition: ModelPersonConditionInput
+  ) {
+    deletePerson(input: $input, condition: $condition) {
+      id
+    }
+  }
+`;
+
+export const deleteSong = /* GraphQL */ `
+  mutation DeleteSong($input: DeleteSongInput!, $condition: ModelSongConditionInput) {
+    deleteSong(input: $input, condition: $condition) {
+      id
+    }
+  }
+`;
+
 export const updatePrediction = /* GraphQL */ `
   mutation UpdatePrediction(
     $input: UpdatePredictionInput!

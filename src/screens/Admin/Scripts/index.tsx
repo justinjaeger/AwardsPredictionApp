@@ -8,6 +8,8 @@ import deleteDuplicatedRelationships from '../../../services/scripts/deleteDupli
 import deleteDuplicatedContenders from '../../../services/scripts/deleteDuplicatedContenders';
 import deleteDuplicatedMovies from '../../../services/scripts/deleteDuplicatedMovies';
 import deleteDuplicatedPredictionSets from '../../../services/scripts/deleteDuplicatedPredictionSets';
+import deleteDuplicatedPeople from '../../../services/scripts/deleteDuplicatedPeople';
+import deleteDuplicatedSongs from '../../../services/scripts/deleteDuplicatedSongs';
 
 const AdminScripts = () => {
   return (
@@ -37,6 +39,20 @@ const AdminScripts = () => {
             text={'Delete Duplicated Movies'}
             onPress={() => {
               deleteDuplicatedMovies();
+            }}
+            style={{ marginTop: 30 }}
+          />
+          <SubmitButton
+            text={'Delete Duplicated People'}
+            onPress={() => {
+              deleteDuplicatedPeople();
+            }}
+            style={{ marginTop: 30 }}
+          />
+          <SubmitButton
+            text={'Delete Duplicated Songs'}
+            onPress={() => {
+              deleteDuplicatedSongs();
             }}
             style={{ marginTop: 30 }}
           />

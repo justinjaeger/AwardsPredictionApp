@@ -1661,6 +1661,31 @@ export const listEverySong = /* GraphQL */ `
   }
 `;
 
+export const listEveryPerson = /* GraphQL */ `
+  query ListPeople(
+    $id: ID
+    $filter: ModelPersonFilterInput
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listPeople(
+      id: $id
+      filter: $filter
+      limit: 10000
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        id
+        tmdbId
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+
 export const listEveryPersonalPrediction = /* GraphQL */ `
   query ListPredictions(
     $id: ID

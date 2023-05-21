@@ -9,6 +9,8 @@ import {
   UpdateSongMutationVariables,
   SongByMovieIdAndTitleQueryVariables,
   SongByMovieIdAndTitleQuery,
+  DeleteSongMutation,
+  DeleteSongMutationVariables,
 } from '../../API';
 import * as customMutations from '../../graphqlCustom/mutations';
 import * as customQueries from '../../graphqlCustom/queries';
@@ -142,5 +144,22 @@ export const updateSongMovie = async (
     return { status: 'success', data };
   } catch (err) {
     return handleError('error getting people by tmdb', err);
+  }
+};
+
+export const deleteSongById = async (
+  id: string,
+): Promise<iApiResponse<DeleteSongMutation>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<
+      DeleteSongMutation,
+      DeleteSongMutationVariables
+    >(customMutations.deleteSong, { input: { id } });
+    if (!data?.deleteSong) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data };
+  } catch (err) {
+    return handleError('error deleting movie by id', err);
   }
 };

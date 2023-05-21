@@ -5,8 +5,13 @@ import {
   CreatePersonMutationVariables,
   PersonByTmdbIdQueryVariables,
   PersonByTmdbIdQuery,
+  ListPeopleQuery,
+  ListPeopleQueryVariables,
+  DeletePersonMutation,
+  DeletePersonMutationVariables,
 } from '../../API';
 import * as mutations from '../../graphql/mutations';
+import * as customMutations from '../../graphqlCustom/mutations';
 import * as queries from '../../graphql/queries';
 import * as customQueries from '../../graphqlCustom/queries';
 import { GraphqlAPI, handleError, iApiResponse } from '../utils';
@@ -86,5 +91,40 @@ export const getOrCreatePerson = async (
     return { status: 'success', data: personId };
   } catch (err) {
     return handleError('error getting or creating person', err);
+  }
+};
+
+/**
+ * FOR SCRIPTS ONLY
+ */
+
+export const listEveryPerson = async (): Promise<iApiResponse<ListPeopleQuery>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<ListPeopleQuery, ListPeopleQueryVariables>(
+      customQueries.listEveryPerson,
+    );
+    if (!data?.listPeople) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data };
+  } catch (err) {
+    return handleError('error getting people by tmdb', err);
+  }
+};
+
+export const deletePersonById = async (
+  id: string,
+): Promise<iApiResponse<DeletePersonMutation>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<
+      DeletePersonMutation,
+      DeletePersonMutationVariables
+    >(customMutations.deletePerson, { input: { id } });
+    if (!data?.deletePerson) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data };
+  } catch (err) {
+    return handleError('error deleting movie by id', err);
   }
 };

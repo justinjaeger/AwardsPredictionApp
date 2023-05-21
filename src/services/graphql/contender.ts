@@ -301,7 +301,10 @@ export const updateContenderAccolade = async (
   }
 };
 
-// For duplicate script
+/**
+ * FOR DUPLICATE SCRIPT
+ */
+
 export const listEveryContender = async (): Promise<
   iApiResponse<ListContendersQuery>
 > => {
@@ -319,7 +322,6 @@ export const listEveryContender = async (): Promise<
   }
 };
 
-// For duplicate script
 export const updateContenderMovie = async (
   contenderId: string,
   movieId: string,
@@ -340,7 +342,46 @@ export const updateContenderMovie = async (
   }
 };
 
-// For duplicate script
+export const updateContenderPerson = async (
+  contenderId: string,
+  personId: string,
+): Promise<iApiResponse<UpdateContenderMutation>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<
+      UpdateContenderMutation,
+      UpdateContenderMutationVariables
+    >(customMutations.updateContender, {
+      input: { id: contenderId, personId },
+    });
+    if (!data?.updateContender) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data };
+  } catch (err) {
+    return handleError('error updateContenderMovie', err);
+  }
+};
+
+export const updateContenderSong = async (
+  contenderId: string,
+  songId: string,
+): Promise<iApiResponse<UpdateContenderMutation>> => {
+  try {
+    const { data, errors } = await GraphqlAPI<
+      UpdateContenderMutation,
+      UpdateContenderMutationVariables
+    >(customMutations.updateContender, {
+      input: { id: contenderId, songId },
+    });
+    if (!data?.updateContender) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return { status: 'success', data };
+  } catch (err) {
+    return handleError('error updateContenderMovie', err);
+  }
+};
+
 export const deleteContenderById = async (
   id: string,
 ): Promise<iApiResponse<DeleteContenderMutation>> => {
@@ -358,7 +399,6 @@ export const deleteContenderById = async (
   }
 };
 
-// For duplicate script
 const PAGINATED_LIMIT = 500;
 export const listEveryContenderPaginated = async (
   nextToken?: string | null,

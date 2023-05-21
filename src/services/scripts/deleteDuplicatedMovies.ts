@@ -4,6 +4,8 @@ import alertHelper from './alertHelper';
 const deleteDuplicatedMovies = async () => {
   try {
     // Get contenders and songs
+
+    // Get all contenders
     const allContenders: {
       id: string;
       movieId: string;
@@ -24,21 +26,23 @@ const deleteDuplicatedMovies = async () => {
     }
     console.log('allContenders', allContenders.length);
 
-    // used to filter for contenders that include a movie id
-    const getContendersByMovieId = (mId: string) =>
-      allContenders.filter((c) => c.movieId === mId);
-
+    // Get all songs
     const songRes = await ApiServices.listEverySong();
     const allSongs = songRes?.data?.listSongs?.items || [];
     console.log('allSongs', allSongs.length);
 
-    // used to filter for contenders that include a movie id
-    const getSongsByMovieId = (mId: string) =>
-      allSongs.filter((s) => s && s.movieId === mId);
-    // First, get all user accounts
+    // Get all movies
     const { data } = await ApiServices.getAllMovies();
     const movies = data?.listMovies?.items || [];
     console.log('allMovies', movies.length);
+
+    // used to filter for contenders that include a movie id
+    const getContendersByMovieId = (mId: string) =>
+      allContenders.filter((c) => c.movieId === mId);
+
+    // used to filter for contenders that include a movie id
+    const getSongsByMovieId = (mId: string) =>
+      allSongs.filter((s) => s && s.movieId === mId);
 
     // movies grouped by tmdbId
     const groupedMovies = (movies || []).reduce(
