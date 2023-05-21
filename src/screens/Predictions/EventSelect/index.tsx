@@ -31,6 +31,9 @@ const EventSelect = () => {
     if (events === undefined) {
       refetchEvents();
     }
+    if (userId === undefined) {
+      refetchUser();
+    }
     if (userId && user === undefined) {
       refetchUser();
     }
@@ -72,7 +75,12 @@ const EventSelect = () => {
           >
             Make Predictions
           </HeaderLight>
-          {events ? <EventList user={user} events={Object.values(events)} /> : null}
+          {events ? (
+            <EventList
+              user={userId ? user : undefined} // so if the user is signed out they don't see their old predictions
+              events={Object.values(events)}
+            />
+          ) : null}
           {!userId ? (
             // users not signed in can see recommended users
             <RecommendedUsers header={'Follow Users'} />
