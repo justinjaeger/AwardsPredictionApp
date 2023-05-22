@@ -3,9 +3,11 @@ import { useState } from 'react';
 import Snackbar from '../../components/Snackbar';
 import ApiServices from '../../services/graphql';
 import { QueryKeys } from '../../types';
+import { useAuth } from '../../context/UserContext';
 
 const useUpdateUser = (onComplete?: () => void) => {
   const queryClient = useQueryClient();
+  const { userId: authUserId } = useAuth();
 
   const [isComplete, setIsComplete] = useState<boolean>(true);
 
@@ -32,7 +34,7 @@ const useUpdateUser = (onComplete?: () => void) => {
       }
       // re-fetch predictions so the UI updates
       await queryClient.invalidateQueries({
-        queryKey: [QueryKeys.USER_PROFILE],
+        queryKey: [QueryKeys.USER_PROFILE + authUserId],
       });
       setIsComplete(true);
       onComplete && onComplete();

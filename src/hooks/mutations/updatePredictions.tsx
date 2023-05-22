@@ -3,11 +3,13 @@ import { useState } from 'react';
 import ApiServices from '../../services/graphql';
 import { iPredictionData, iPredictionSetParams } from '../../services/graphql/prediction';
 import { QueryKeys } from '../../types';
+import { useAuth } from '../../context/UserContext';
 
 const useMutationUpdatePredictions = (
   onComplete?: () => void,
   isAuthUserProfile?: boolean,
 ) => {
+  const { userId: authUserId } = useAuth();
   const queryClient = useQueryClient();
 
   const [isComplete, setIsComplete] = useState<boolean>(true);
@@ -27,7 +29,9 @@ const useMutationUpdatePredictions = (
       // re-fetch predictions so the UI updates
       await queryClient.invalidateQueries({ queryKey: [QueryKeys.PERSONAL_EVENT] });
       if (isAuthUserProfile) {
-        await queryClient.invalidateQueries({ queryKey: [QueryKeys.USER_PROFILE] });
+        await queryClient.invalidateQueries({
+          queryKey: [QueryKeys.USER_PROFILE + authUserId],
+        });
       }
       setIsComplete(true);
       onComplete && onComplete();

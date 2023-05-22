@@ -38,7 +38,7 @@ export const getUserById = async (id: string): Promise<iApiResponse<GetUserQuery
     }
     return { status: 'success', data: data };
   } catch (err) {
-    return handleError('error getting user by id', err);
+    return handleError('error getting user - try logging out', err);
   }
 };
 

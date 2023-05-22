@@ -4,7 +4,7 @@ import { QueryKeys } from '../../types';
 
 const useQueryGetUser = (id: string | undefined) => {
   const { isLoading, data, refetch } = useQuery({
-    queryKey: [QueryKeys.USER],
+    queryKey: [QueryKeys.USER + id],
     queryFn: () => getUser(id),
   });
 

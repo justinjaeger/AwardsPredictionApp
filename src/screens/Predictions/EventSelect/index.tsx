@@ -26,14 +26,7 @@ const EventSelect = () => {
 
   const { loadingOpacity, bodyOpacity } = useLoading(isLoading);
 
-  // just in case there's some refresh problem
   useEffect(() => {
-    if (events === undefined) {
-      refetchEvents();
-    }
-    if (authUserId === undefined) {
-      refetchUser();
-    }
     if (authUserId && user === undefined) {
       refetchUser();
     }
@@ -41,7 +34,14 @@ const EventSelect = () => {
       // WARN: sometimes refetch appears to be not working, but mostly it seems ok?
       refetchFollowingPredictions();
     }
-  }, [events, user, authUserId]);
+  }, [authUserId, user]);
+
+  // just in case there's some refresh problem
+  useEffect(() => {
+    if (events === undefined) {
+      refetchEvents();
+    }
+  }, [events]);
 
   return (
     <BackgroundWrapper>
