@@ -1,13 +1,6 @@
 /* eslint-disable sonarjs/prefer-immediate-return */
-import {
-  AwardsBody,
-  CategoryIsShortlisted,
-  CategoryName,
-  CategoryType,
-  ContenderVisibility,
-  EventStatus,
-  PredictionType,
-} from '../../API';
+import { PredictionType } from '../../API';
+import Serializers from '../../serializers';
 import { iCategory, iEvent, iPredictionSet, iUser } from '../../types';
 import { sortPersonalPredictions } from '../../util/sortPredictions';
 import ApiServices from '../graphql';
@@ -61,60 +54,34 @@ const getFollowingRecentPredictions = async (
       const u = fu?.followedUser;
       if (!u || !includedUserIds.includes(u.id)) return acc;
 
-      const formattedUser: iUser = {
-        id: u.id,
-        email: u.email,
-        username: u.username || undefined,
-        name: u.name || undefined,
-        bio: u.bio || undefined,
-        image: u.image || undefined,
-        role: u.role,
-      };
+      const formattedUser: iUser = Serializers.userSerializer(u);
 
       const predictionSets = fu?.followedUser.predictionSets?.items || [];
-      const formattedPredictionSets: iPredictionSet[] = predictionSets.map((ps) => {
-        const predictions = (ps?.predictions?.items || []).map((p) => ({
-          id: p?.id,
-          ranking: p?.ranking || 0,
-          accolade: p?.contender.accolade || undefined,
-          visibility: p?.contender.visibility || ContenderVisibility.VISIBLE,
-          predictionType: ps?.type || PredictionType.NOMINATION,
-          contenderId: p?.contender.id || '',
-          // @ts-ignore - the typescript isn't this nested
-          contenderMovie: p?.contender.movie || undefined,
-          // @ts-ignore - the typescript isn't this nested
-          contenderPerson: p?.contender.person || undefined,
-          // @ts-ignore - the typescript isn't this nested
-          contenderSong: p?.contender.song || undefined,
-          lastUpdated: p?.updatedAt || '',
-        }));
-        const event: iEvent = {
-          id: ps?.event.id || '',
-          awardsBody: ps?.event.awardsBody || AwardsBody.ACADEMY_AWARDS,
-          year: ps?.event.year || 0,
-          status: ps?.event.status || EventStatus.ARCHIVED,
-          categories: {},
-          nominationDateTime: ps?.event.nominationDateTime || undefined,
-          winDateTime: ps?.event.winDateTime || undefined,
-          createdAt: ps?.createdAt || '',
-          liveAt: ps?.event.liveAt || undefined,
-        };
-        const category: iCategory = {
-          id: ps?.category?.id || '',
-          name: ps?.category?.name || CategoryName.PICTURE, // fake values
-          type: ps?.category?.type || CategoryType.FILM, // fake values
-          isShortlisted: ps?.category?.isShortlisted || CategoryIsShortlisted.FALSE, // fake values
-        };
-        // orders the predictions
-        const sortedPredictions = sortPersonalPredictions(predictions);
-        return {
-          id: ps?.id || '',
-          category,
-          event,
-          createdAt: ps?.createdAt || '',
-          predictions: sortedPredictions,
-        };
-      });
+      const formattedPredictionSets = predictionSets.reduce(
+        (acc: iPredictionSet[], ps) => {
+          const predictions = Serializers.predictionsSerializer(
+            ps?.predictions?.items || [],
+            ps?.type || PredictionType.NOMINATION,
+          );
+          // makes sure we're not returning any blank prediction sets for carousel
+          if (predictions.length === 0) {
+            return acc;
+          }
+          const event: iEvent = Serializers.eventSerializer(ps?.event);
+          const category: iCategory = Serializers.categorySerializer(ps?.category);
+          // orders the predictions
+          const sortedPredictions = sortPersonalPredictions(predictions);
+          acc.push({
+            id: ps?.id || '',
+            category,
+            event,
+            createdAt: ps?.createdAt || '',
+            predictions: sortedPredictions,
+          });
+          return acc;
+        },
+        [],
+      );
 
       formattedUser.predictionSets = formattedPredictionSets;
 
