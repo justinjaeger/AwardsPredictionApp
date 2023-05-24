@@ -18,6 +18,7 @@ import HistoryTab from '../../../components/HistoryTab';
 import UserHeader from '../../../components/UserHeader';
 import { useProfilePrediction } from '../../../context/ProfilePredictionContext';
 import { iCategoryDisplayState } from '../../../context/DisplayStateContext';
+import LoadingStatueModal from '../../../components/LoadingStatueModal';
 
 export type iCategoryProps = {
   collapsedOpacity: Animated.Value;
@@ -47,6 +48,8 @@ const Category = () => {
   const { user, predictionData, isLoading, setUserId } = useProfilePrediction();
   useEffect(() => setUserId(userId), [userId]);
 
+  console.error('isLoading', isLoading);
+
   const event = _event as iEvent;
 
   const props = {
@@ -75,17 +78,22 @@ const Category = () => {
       <CategoryDisplayFab />
       <BackgroundWrapper>
         <>
-          {user ? <UserHeader user={user} showEventLink={showEventLink} /> : null}
-          <View style={{ zIndex: 2, width: '100%' }}>
-            <HistoryTab />
-          </View>
-          <View style={{ width: '100%' }}>
-            <CategoryPersonal
-              predictionData={predictionData}
-              isLoading={isLoading}
-              {...props}
-            />
-          </View>
+          <LoadingStatueModal visible={isLoading} text={'Loading Predictions...'} />
+          {!isLoading ? (
+            <>
+              {user ? <UserHeader user={user} showEventLink={showEventLink} /> : null}
+              <View style={{ zIndex: 2, width: '100%' }}>
+                <HistoryTab />
+              </View>
+              <View style={{ width: '100%' }}>
+                <CategoryPersonal
+                  predictionData={predictionData}
+                  isLoading={isLoading}
+                  {...props}
+                />
+              </View>
+            </>
+          ) : null}
         </>
       </BackgroundWrapper>
     </>

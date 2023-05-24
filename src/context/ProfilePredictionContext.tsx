@@ -4,6 +4,7 @@ import { useCategory } from '../context/CategoryContext';
 import getPersonalPredictionsByEvent from '../services/queryFuncs/getPersonalPredictionsByEvent';
 import getUser from '../services/queryFuncs/getUser';
 import { iIndexedPredictionsByCategory, iUser } from '../types';
+import { useAsyncEffect } from '../util/hooks';
 
 /**
  * Lets us get the userId and userEmail synchronously
@@ -32,27 +33,26 @@ export const ProfilePredictionProvider = (props: { children: React.ReactNode }) 
   const [contemporaryData, setContemporaryData] = useState<
     iIndexedPredictionsByCategory | undefined
   >(undefined);
-  const [historyData, setHistoryData] = useState<
-    iIndexedPredictionsByCategory | undefined
-  >(undefined);
+  //   const [historyData, setHistoryData] = useState<
+  //     iIndexedPredictionsByCategory | undefined
+  //   >(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const today = new Date();
+  //   const today = new Date();
   // we don't want to show history for the current day
-  const showHistory = date && date.getDay() !== today.getDay();
+  //   const showHistory = date && date.getDay() !== today.getDay();
 
   // can't use react-query because data must be re-fetched for each userId (it's not a pure component)
-  useEffect(() => {
-    if (event) {
-      getPersonalPredictionsByEvent(event.id, userId)
-        .then((res) => setContemporaryData(res))
-        .finally(() => setIsLoading(false));
+  useAsyncEffect(async () => {
+    if (event?.id && userId) {
+      setIsLoading(true);
+      const ps = await getPersonalPredictionsByEvent(event.id, userId);
+      setContemporaryData(ps);
+      const u = await getUser(userId);
+      setUser(u);
+      setIsLoading(false);
     }
-
-    getUser(userId).then((res) => {
-      setUser(res);
-    });
-  }, [userId, event?.id]);
+  }, [event?.id, userId]);
 
   //   useEffect(() => {
   //     if (userId && showHistory && event && date) {
@@ -62,13 +62,13 @@ export const ProfilePredictionProvider = (props: { children: React.ReactNode }) 
   //     }
   //   }, [date, userId, event?.id, showHistory]);
 
-  const predictionData = showHistory ? historyData : contemporaryData;
+  //   const predictionData = showHistory ? historyData : contemporaryData;
 
   return (
     <ProfilePredictionContext.Provider
       value={{
         user,
-        predictionData,
+        predictionData: contemporaryData,
         isLoading,
         setUserId,
       }}
