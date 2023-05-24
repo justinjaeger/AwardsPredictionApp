@@ -8,13 +8,13 @@ import theme from './theme';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { UserProvider } from './context/UserContext';
 import { CategoryProvider } from './context/CategoryContext';
-import useInitialURL from './hooks/useInitialUrl';
+// import useInitialURL from './hooks/useInitialUrl';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const queryClient = new QueryClient();
 
 const App = () => {
-  useInitialURL(); // For getting deep links when app is not open
+  //   useInitialURL(); // For getting deep links when app is not open
 
   return (
     <QueryClientProvider client={queryClient}>

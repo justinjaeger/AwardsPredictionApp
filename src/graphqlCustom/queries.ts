@@ -1363,6 +1363,7 @@ export const getRecentFollowingPredictions = /* GraphQL */ `
                 items {
                   id
                   ranking
+                  contenderId
                   contender {
                     id
                     movie {

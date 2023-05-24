@@ -12,8 +12,9 @@ const UserListSkeleton = ({ imageSize }: { imageSize: number }) => (
       highlightColor={COLORS.primaryLight}
     >
       <View style={{ flexDirection: 'column' }}>
-        {['', '', ''].map(() => (
+        {['', '', ''].map((x, i) => (
           <View
+            key={i}
             style={{
               marginLeft: 10,
               marginTop: 10,

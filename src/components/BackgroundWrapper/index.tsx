@@ -25,25 +25,28 @@ const BackgroundWrapper = (props: { children: ReactChildren }) => {
           width: width + dotSpacing,
         }}
       >
-        {Array.from({ length: (height / spacingFactor) * (height / width) }).map(() => (
-          <View
-            style={{
-              width: dotSpacing + 1,
-              height: dotSpacing,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
+        {Array.from({ length: (height / spacingFactor) * (height / width) }).map(
+          (x, i) => (
             <View
+              key={i}
               style={{
-                backgroundColor: 'rgba(255,255,255,0.02)',
-                width: dotSize,
-                height: dotSize,
-                borderRadius: 10,
+                width: dotSpacing + 1,
+                height: dotSpacing,
+                alignItems: 'center',
+                justifyContent: 'center',
               }}
-            />
-          </View>
-        ))}
+            >
+              <View
+                style={{
+                  backgroundColor: 'rgba(255,255,255,0.02)',
+                  width: dotSize,
+                  height: dotSize,
+                  borderRadius: 10,
+                }}
+              />
+            </View>
+          ),
+        )}
       </View>
       <View
         style={{

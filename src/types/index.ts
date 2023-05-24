@@ -32,6 +32,7 @@ export type iIndexedRankings = {
 
 // represents predictions for ONE predictionSet
 export type iPrediction = {
+  id: string;
   ranking: number; // PERSONAL ONLY
   visibility: ContenderVisibility;
   accolade: ContenderAccolade | undefined;

@@ -19,6 +19,7 @@ const predictionSerializer = (
     [key: number]: number;
   };
   return {
+    id: p?.id || '',
     ranking: p?.ranking || 0,
     accolade: p?.contender.accolade || undefined,
     visibility: p?.contender.visibility || ContenderVisibility.VISIBLE,
@@ -47,6 +48,7 @@ const historyPredictionSerializer = (
     [key: number]: number;
   };
   return {
+    id: p?.id || '',
     ranking: p?.ranking || 0,
     accolade: contender.accolade || undefined,
     predictionType: predictionType || PredictionType.NOMINATION,

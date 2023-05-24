@@ -7,21 +7,21 @@ const useInitialURL = () => {
   const [url, setUrl] = useState<string | null>(null);
   const [processing, setProcessing] = useState(true);
 
-  useEffect(() => {
-    const getUrlAsync = async () => {
-      // Get the deep link used to open the app
-      // Resolves to a link if one was used
-      const initialUrl = await Linking.getInitialURL();
+  //   useEffect(() => {
+  //     const getUrlAsync = async () => {
+  //       // Get the deep link used to open the app
+  //       // Resolves to a link if one was used
+  //       const initialUrl = await Linking.getInitialURL();
 
-      // The setTimeout is just for testing purpose
-      setTimeout(() => {
-        setUrl(initialUrl);
-        setProcessing(false);
-      }, 1000);
-    };
+  //       // The setTimeout is just for testing purpose
+  //       setTimeout(() => {
+  //         setUrl(initialUrl);
+  //         setProcessing(false);
+  //       }, 1000);
+  //     };
 
-    getUrlAsync();
-  }, []);
+  //     getUrlAsync();
+  //   }, []);
 
   return { url, processing };
 };
