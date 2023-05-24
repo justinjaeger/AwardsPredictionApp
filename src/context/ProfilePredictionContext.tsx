@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useCategory } from '../context/CategoryContext';
-import getPersonalHistory from '../services/queryFuncs/getPersonalHistory';
+// import getPersonalHistory from '../services/queryFuncs/getPersonalHistory';
 import getPersonalPredictionsByEvent from '../services/queryFuncs/getPersonalPredictionsByEvent';
 import getUser from '../services/queryFuncs/getUser';
 import { iIndexedPredictionsByCategory, iUser } from '../types';
@@ -54,13 +54,13 @@ export const ProfilePredictionProvider = (props: { children: React.ReactNode }) 
     });
   }, [userId, event?.id]);
 
-  useEffect(() => {
-    if (userId && showHistory && event && date) {
-      getPersonalHistory(event.id, userId, date)
-        .then((res) => setHistoryData(res))
-        .finally(() => setIsLoading(false));
-    }
-  }, [date, userId, event?.id, showHistory]);
+  //   useEffect(() => {
+  //     if (userId && showHistory && event && date) {
+  //       getPersonalHistory(event.id, userId, date)
+  //         .then((res) => setHistoryData(res))
+  //         .finally(() => setIsLoading(false));
+  //     }
+  //   }, [date, userId, event?.id, showHistory]);
 
   const predictionData = showHistory ? historyData : contemporaryData;
 
