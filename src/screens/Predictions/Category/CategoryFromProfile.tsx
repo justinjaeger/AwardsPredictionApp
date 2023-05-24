@@ -48,8 +48,6 @@ const Category = () => {
   const { user, predictionData, isLoading, setUserId } = useProfilePrediction();
   useEffect(() => setUserId(userId), [userId]);
 
-  console.error('isLoading', isLoading);
-
   const event = _event as iEvent;
 
   const props = {
