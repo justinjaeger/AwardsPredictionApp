@@ -79,7 +79,12 @@ const EditToolbar = ({
       }}
     >
       {buttons.map((b) => (
-        <ToolbarButton text={b.text} iconName={b.iconName} onPress={b.onPress} />
+        <ToolbarButton
+          key={b.iconName}
+          text={b.text}
+          iconName={b.iconName}
+          onPress={b.onPress}
+        />
       ))}
     </Animated.View>
   );

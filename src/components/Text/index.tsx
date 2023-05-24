@@ -14,12 +14,13 @@ export const SubHeader = (props: iTextProps) => {
   return (
     <Text
       category={isLargeScreen ? 'h4' : isSmallScreen ? 'p1' : 'h6'}
-      style={{
-        fontWeight: '700',
-        color: COLORS.lightest,
-        // @ts-ignore
-        ...props.style,
-      }}
+      style={[
+        {
+          fontWeight: '700',
+          color: COLORS.lightest,
+        },
+        props.style,
+      ]}
     >
       {props.children}
     </Text>
@@ -31,12 +32,13 @@ export const SubHeaderLight = (props: iTextProps) => {
   return (
     <Text
       category={isLargeScreen ? 'h4' : isSmallScreen ? 'p1' : 'h6'}
-      style={{
-        fontWeight: '400',
-        color: COLORS.lightest,
-        // @ts-ignore
-        ...props.style,
-      }}
+      style={[
+        {
+          fontWeight: '400',
+          color: COLORS.lightest,
+        },
+        props.style,
+      ]}
     >
       {props.children}
     </Text>
@@ -48,12 +50,13 @@ export const HeaderLight = (props: iTextProps) => {
   return (
     <Text
       category={isLargeScreen ? 'h2' : isSmallScreen ? 'h5' : 'h4'}
-      style={{
-        fontWeight: '700',
-        color: COLORS.lightest,
-        // @ts-ignore
-        ...props.style,
-      }}
+      style={[
+        {
+          fontWeight: '700',
+          color: COLORS.lightest,
+        },
+        props.style,
+      ]}
     >
       {props.children}
     </Text>
@@ -66,12 +69,13 @@ export const Body = (props: iTextProps) => {
   return (
     <Text
       category={isLargeScreen ? 'h6' : isSmallScreen ? 'label' : 'p1'}
-      style={{
-        fontWeight: '400',
-        color: COLORS.lightest,
-        // @ts-ignore
-        ...props.style,
-      }}
+      style={[
+        {
+          fontWeight: '400',
+          color: COLORS.lightest,
+        },
+        props.style,
+      ]}
     >
       {props.children}
     </Text>
@@ -84,12 +88,13 @@ export const BodyBold = (props: iTextProps) => {
   return (
     <Text
       category={isLargeScreen ? 'h6' : isSmallScreen ? 'label' : 'p1'}
-      style={{
-        fontWeight: '700',
-        color: COLORS.lightest,
-        // @ts-ignore
-        ...props.style,
-      }}
+      style={[
+        {
+          fontWeight: '700',
+          color: COLORS.lightest,
+        },
+        props.style,
+      ]}
     >
       {props.children}
     </Text>
@@ -102,12 +107,13 @@ export const Label = (props: iTextProps) => {
   return (
     <Text
       category={isLargeScreen ? 'h6' : 'label'}
-      style={{
-        fontWeight: '400',
-        color: COLORS.lightest,
-        // @ts-ignore
-        ...props.style,
-      }}
+      style={[
+        {
+          fontWeight: '400',
+          color: COLORS.lightest,
+        },
+        props.style,
+      ]}
     >
       {props.children}
     </Text>
