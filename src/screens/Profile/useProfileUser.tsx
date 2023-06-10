@@ -25,10 +25,8 @@ const useProfileUser = (userId: string | undefined) => {
     refetch: refetchAuthUserProfile,
   } = useQueryGetUserProfile(authUserId, authUserId);
 
-  const {
-    data: authRelationshipCountData,
-    refetch: refetchAuthRelationshipCount,
-  } = useQueryGetRelationshipCount(authUserId);
+  const { data: authRelationshipCountData, refetch: refetchAuthRelationshipCount } =
+    useQueryGetRelationshipCount(authUserId);
 
   // refetch auth user profile when a new user is logged in (else it's stale)
   useEffect(() => {

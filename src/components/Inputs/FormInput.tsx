@@ -65,13 +65,13 @@ const FormInput = ({
 
   return (
     <Input
-      label={() => <SubHeaderLight style={{ marginBottom: 5 }}>{label}</SubHeaderLight>}
+      label={<SubHeaderLight style={{ marginBottom: 5 }}>{label}</SubHeaderLight>}
       value={value}
       placeholder=""
       multiline={multiline}
       onChangeText={onChangeText}
       textContentType={textContentType}
-      caption={() => (
+      caption={
         <Body
           style={{
             marginTop: 5,
@@ -82,7 +82,7 @@ const FormInput = ({
         >
           {caption || ''}
         </Body>
-      )}
+      }
       onBlur={onBlur}
       status={_status}
       textStyle={{

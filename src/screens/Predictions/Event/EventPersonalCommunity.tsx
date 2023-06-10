@@ -21,14 +21,10 @@ const EventPersonalCommunity = () => {
   const { userId: authUserId } = useAuth();
   const userId = params?.userId || authUserId;
 
-  const {
-    predictionData: personalPredictionData,
-    isLoading: isLoadingPersonal,
-  } = usePredictionData('personal', userId);
-  const {
-    predictionData: communityPredictionData,
-    isLoading: isLoadingCommunity,
-  } = usePredictionData('community', userId);
+  const { predictionData: personalPredictionData, isLoading: isLoadingPersonal } =
+    usePredictionData('personal', userId);
+  const { predictionData: communityPredictionData, isLoading: isLoadingCommunity } =
+    usePredictionData('community', userId);
 
   const { collapsedOpacity, expandedOpacity, delayedDisplay } = useEventDisplay();
 

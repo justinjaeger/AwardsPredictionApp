@@ -58,7 +58,7 @@ const UpdateProfileInfo = () => {
       headerTitle: getHeaderTitle(
         usernameBeforeEdit ? 'Update Profile' : 'Create Profile',
       ),
-      headerLeft: () => (
+      headerLeft: (
         <BackButton
           onPress={
             submitEnabled

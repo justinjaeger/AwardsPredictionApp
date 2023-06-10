@@ -23,9 +23,8 @@ const useCategoryPersonalPredictions = ({
     predictionData?.[categoryId]?.predictions || [],
   );
 
-  const [updatedPredictions, setUpdatedPredictions] = useState<iPrediction[]>(
-    initialPredictions,
-  );
+  const [updatedPredictions, setUpdatedPredictions] =
+    useState<iPrediction[]>(initialPredictions);
 
   // when mounts, we want to fetch beyond the first 10 predictions, which is what's returned in predictionData
   useAsyncEffect(async () => {

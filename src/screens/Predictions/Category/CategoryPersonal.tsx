@@ -83,8 +83,8 @@ const CategoryPersonal = ({
   // set custom back arrow functionality & hide history button when editing
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight: () => <HistoryHeaderButton isDisabled={!!isEditing} />,
-      headerLeft: () => (
+      headerRight: <HistoryHeaderButton isDisabled={!!isEditing} />,
+      headerLeft: (
         <BackButton
           onPress={async () => {
             const onGoBack = () => {

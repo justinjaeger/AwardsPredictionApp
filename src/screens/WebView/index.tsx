@@ -9,6 +9,17 @@ import { BOTTOM_TAB_HEIGHT } from '../../constants';
 import SafeAreaViewFixed from '../../components/SafeAreaViewFixed';
 import { BodyBold } from '../../components/Text';
 
+const LoadingIndicatorView = () => (
+  <ActivityIndicator
+    color="#009b88"
+    size="large"
+    style={{
+      flex: 1,
+      justifyContent: 'center',
+    }}
+  />
+);
+
 const WebViewScreen = () => {
   const {
     params: { uri },
@@ -26,17 +37,6 @@ const WebViewScreen = () => {
   };
 
   const goBack = () => navigation.goBack();
-
-  const LoadingIndicatorView = () => (
-    <ActivityIndicator
-      color="#009b88"
-      size="large"
-      style={{
-        flex: 1,
-        justifyContent: 'center',
-      }}
-    />
-  );
 
   const openInBrowser = () => {
     Linking.canOpenURL(uri).then((supported) => {

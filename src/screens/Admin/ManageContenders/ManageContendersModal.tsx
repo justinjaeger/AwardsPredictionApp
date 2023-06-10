@@ -12,6 +12,29 @@ import COLORS from '../../../constants/colors';
 import { FAB } from '../../../components/Buttons/FAB';
 import useMutationUpdateContenderAccolade from '../../../hooks/mutations/updateContenderAccolade';
 
+const ContenderSetting = ({
+  text,
+  buttonText,
+  onPress,
+}: {
+  text: string;
+  buttonText: string;
+  onPress: () => void;
+}) => (
+  <View
+    style={{
+      flexDirection: 'row',
+      alignItems: 'center',
+      width: '100%',
+      justifyContent: 'space-between',
+      padding: 20,
+    }}
+  >
+    <Body style={{ fontWeight: '700' }}>{text}</Body>
+    <SubmitButton onPress={onPress} text={buttonText} />
+  </View>
+);
+
 /**
  * Lets you change visibility on an item
  */
@@ -23,14 +46,10 @@ const ManageContendersModal = (props: {
 }) => {
   const { visible, onClose, prediction, onSaveSuccess } = props;
 
-  const {
-    updateContenderVisibility,
-    isComplete: visibilityIsComplete,
-  } = useMutationUpdateContenderVisibility();
-  const {
-    updateContenderAccolade,
-    isComplete: accoladeIsComplete,
-  } = useMutationUpdateContenderAccolade();
+  const { updateContenderVisibility, isComplete: visibilityIsComplete } =
+    useMutationUpdateContenderVisibility();
+  const { updateContenderAccolade, isComplete: accoladeIsComplete } =
+    useMutationUpdateContenderAccolade();
 
   const [selectedAccolade, setSelectedAccolade] = useState<ContenderAccolade | undefined>(
     prediction.accolade,
@@ -60,29 +79,6 @@ const ManageContendersModal = (props: {
     });
     onSaveSuccess();
   };
-
-  const ContenderSetting = ({
-    text,
-    buttonText,
-    onPress,
-  }: {
-    text: string;
-    buttonText: string;
-    onPress: () => void;
-  }) => (
-    <View
-      style={{
-        flexDirection: 'row',
-        alignItems: 'center',
-        width: '100%',
-        justifyContent: 'space-between',
-        padding: 20,
-      }}
-    >
-      <Body style={{ fontWeight: '700' }}>{text}</Body>
-      <SubmitButton onPress={onPress} text={buttonText} />
-    </View>
-  );
 
   return (
     <>

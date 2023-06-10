@@ -1,4 +1,5 @@
 module.exports = {
+  root: true,
   parser: '@typescript-eslint/parser', // Specifies the ESLint parser
   plugins: ['@typescript-eslint', 'prettier', 'sonarjs'],
   extends: [
@@ -49,5 +50,6 @@ module.exports = {
     'import/no-named-as-default': 0,
     'sonarjs/no-duplicate-string': 0,
     'sonarjs/prefer-immediate-return': 0,
+    '@typescript-eslint/no-non-null-assertion': 0,
   },
 };

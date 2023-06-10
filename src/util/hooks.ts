@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 type NavigationParams<
   ParamList,
-  RouteName extends keyof ParamList
+  RouteName extends keyof ParamList,
 > = ParamList[RouteName];
 
 export const useTypedNavigation = <ParamList>() => {
@@ -38,7 +38,7 @@ const useDeepCompareMemoize = (value: any) => {
   return ref.current;
 };
 
-export const useDeepCompareEffect = (effect: VoidFunction, deps: any[]) => {
+export const useDeepCompareEffect = (effect: () => void, deps: any[]) => {
   useEffect(effect, deps.map(useDeepCompareMemoize));
 };
 

@@ -10,6 +10,25 @@ import {
 } from '../API';
 import { iCategory, iEvent, iPrediction, iUser } from '../types';
 
+// NOTE: sort of a hack
+const contenderToPredictionSerializer = (
+  contender: any, // __typename: "Contender"
+  predictionType?: PredictionType | undefined | null,
+): iPrediction => {
+  return {
+    id: '',
+    ranking: 0,
+    accolade: contender.accolade || undefined,
+    visibility: contender.visibility || ContenderVisibility.VISIBLE,
+    predictionType: predictionType || PredictionType.NOMINATION,
+    contenderId: contender.id || '',
+    contenderMovie: contender.movie || undefined,
+    contenderPerson: contender.person || undefined,
+    contenderSong: contender.song || undefined,
+    lastUpdated: '',
+  };
+};
+
 const predictionSerializer = (
   p: any, // __typename: "Prediction"
   predictionType?: PredictionType | undefined | null,
@@ -122,6 +141,7 @@ const categorySerializer = (
 });
 
 const Serializers = {
+  contenderToPredictionSerializer,
   predictionSerializer,
   predictionsSerializer,
   historyPredictionSerializer,

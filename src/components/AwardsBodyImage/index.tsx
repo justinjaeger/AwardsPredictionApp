@@ -1,9 +1,9 @@
 import React from 'react';
-import { Image } from 'react-native';
 import { AwardsBody } from '../../API';
 import useDevice from '../../util/device';
 import Trophy from '../../assets/awardsBodies/trophy_color.png';
 import TrophyWhite from '../../assets/awardsBodies/trophy.png';
+import { Image } from 'react-native';
 
 const DEFAULT_SIZE = 60;
 
@@ -20,14 +20,7 @@ const AwardsBodyImage = (props: {
 
   const source = white ? TrophyWhite : Trophy;
 
-  return (
-    <Image
-      source={source}
-      width={_size}
-      height={_size}
-      style={{ width: _size, height: _size, ...style }}
-    />
-  );
+  return <Image source={source} style={{ width: _size, height: _size, ...style }} />;
 };
 
 export default AwardsBodyImage;

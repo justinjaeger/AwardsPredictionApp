@@ -16,9 +16,8 @@ export const useCategoryDisplay = () => {
 
   const { categoryDisplayState } = useDisplayState();
 
-  const [delayedDisplay, setDelayedDisplay] = useState<iCategoryDisplayState>(
-    categoryDisplayState,
-  );
+  const [delayedDisplay, setDelayedDisplay] =
+    useState<iCategoryDisplayState>(categoryDisplayState);
 
   const stateToAnimatedRef: { [key: string]: Animated.Value } = {
     list: expandedOpacity,
@@ -68,9 +67,8 @@ export const useEventDisplay = () => {
 
   const { eventDisplayState } = useDisplayState();
 
-  const [delayedDisplay, setDelayedDisplay] = useState<iEventDisplayState>(
-    eventDisplayState,
-  );
+  const [delayedDisplay, setDelayedDisplay] =
+    useState<iEventDisplayState>(eventDisplayState);
 
   const stateToAnimatedRef: { [key: string]: Animated.Value } = {
     default: expandedOpacity,

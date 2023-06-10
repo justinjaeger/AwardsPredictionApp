@@ -15,6 +15,7 @@ type iProfilePredictionContext = {
   predictionData: iIndexedPredictionsByCategory | undefined;
   isLoading: boolean;
   setUserId: (userId: string | undefined) => void;
+  resetProfileUser: () => void;
 };
 
 const ProfilePredictionContext = createContext<iProfilePredictionContext>({
@@ -22,6 +23,7 @@ const ProfilePredictionContext = createContext<iProfilePredictionContext>({
   predictionData: undefined,
   isLoading: true,
   setUserId: () => {},
+  resetProfileUser: () => {},
 });
 
 export const ProfilePredictionProvider = (props: { children: React.ReactNode }) => {
@@ -54,6 +56,12 @@ export const ProfilePredictionProvider = (props: { children: React.ReactNode }) 
     }
   }, [event?.id, userId]);
 
+  const resetProfileUser = () => {
+    setUser(undefined);
+    setContemporaryData(undefined);
+    setUserId(undefined);
+  };
+
   //   useEffect(() => {
   //     if (userId && showHistory && event && date) {
   //       getPersonalHistory(event.id, userId, date)
@@ -71,6 +79,7 @@ export const ProfilePredictionProvider = (props: { children: React.ReactNode }) 
         predictionData: contemporaryData,
         isLoading,
         setUserId,
+        resetProfileUser,
       }}
     >
       {props.children}

@@ -26,9 +26,9 @@ const PasswordInput = (props: {
   return (
     <Input
       value={value}
-      label={() => (
+      label={
         <SubHeaderLight style={{ marginBottom: 5 }}>{label || 'Password'}</SubHeaderLight>
-      )}
+      }
       placeholder=""
       caption={caption}
       accessoryRight={showPassIcon}

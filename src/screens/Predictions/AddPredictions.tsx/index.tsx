@@ -47,7 +47,7 @@ const AddPredictions = () => {
   // set custom back arrow functionality
   useEffect(() => {
     navigation.setOptions({
-      headerLeft: () => <BackButton onPress={onSave} />,
+      headerLeft: <BackButton onPress={onSave} />,
     });
   }, [navigation]);
 

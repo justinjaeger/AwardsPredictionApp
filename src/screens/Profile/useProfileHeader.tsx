@@ -8,6 +8,7 @@ import { useTypedNavigation } from '../../util/hooks';
 import BackButton from '../../components/Buttons/BackButton';
 import { PredictionsParamList } from '../../navigation/types';
 import { BodyBold } from '../../components/Text';
+import { useProfilePrediction } from '../../context/ProfilePredictionContext';
 
 const useProfileHeader = (
   userId: string | undefined,
@@ -17,15 +18,18 @@ const useProfileHeader = (
   const globalNavigation = useNavigation();
   const navigation = useTypedNavigation<PredictionsParamList>();
   const { userId: authUserId, signOutUser } = useAuth();
+  const { resetProfileUser } = useProfilePrediction();
 
   const isAuthUser = userId && userId === authUserId;
 
   const logOut = () => {
     setIsLoading(true);
     AuthServices.signOut().then((res) => {
+      console.error('res', res.status);
       // sign out in context as well
       if (res.status === 'success') {
         signOutUser();
+        resetProfileUser();
         Snackbar.success('You were signed out');
       }
       setIsLoading(false);
@@ -37,7 +41,7 @@ const useProfileHeader = (
     // helps NOT render a back arrow on root profile
     const isFirstProfile =
       globalNavigation
-        .dangerouslyGetState()
+        .getState()
         .routes.map((r) => r.name)
         .filter((r) => r === 'Profile').length === 1;
 

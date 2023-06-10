@@ -23,13 +23,10 @@ const ManageContenders = () => {
   const { data: communityData } = useQueryCommunityEvent({ event, includeHidden: true });
   const contenders = communityData?.[category.id]?.predictions || [];
 
-  const [showManageContendersModal, setShowManageContendersModal] = useState<boolean>(
-    false,
-  );
-  const [
-    showUpdateCategoryShortlistedModal,
-    setShowUpdateCategoryShortlistedModal,
-  ] = useState<boolean>(false);
+  const [showManageContendersModal, setShowManageContendersModal] =
+    useState<boolean>(false);
+  const [showUpdateCategoryShortlistedModal, setShowUpdateCategoryShortlistedModal] =
+    useState<boolean>(false);
   const [selectedPrediction, setSelectedPrediction] = useState<iPrediction | undefined>(
     undefined,
   );

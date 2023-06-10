@@ -166,11 +166,11 @@ export const getWhoUserIsFollowedBy = async (
 export const getWhoUserIsFollowing = async (
   followingUserId: string, // get users who this user is following
   options?: { limit?: number; nextToken?: string },
-): Promise<iApiResponse<RelationshipByFollowingUserIdQuery>> => {
+): Promise<iApiResponse<RelationshipByFollowingUserIdQueryCustom>> => {
   const { limit, nextToken } = options || {};
   try {
     const { data, errors } = await GraphqlAPI<
-      RelationshipByFollowingUserIdQuery,
+      RelationshipByFollowingUserIdQueryCustom,
       RelationshipByFollowingUserIdQueryVariables
     >(customQueries.getWhoUserIsFollowing, {
       followingUserId,
@@ -284,10 +284,10 @@ export const getFollowerCount = async (
 export const getFriendsPredictingEvent = async (
   followingUserId: string,
   eventId: string,
-): Promise<iApiResponse<RelationshipByFollowingUserIdQuery>> => {
+): Promise<iApiResponse<RelationshipByFollowingUserIdQueryCustom>> => {
   try {
     const { data, errors } = await GraphqlAPI<
-      RelationshipByFollowingUserIdQuery,
+      RelationshipByFollowingUserIdQueryCustom,
       RelationshipByFollowingUserIdQueryVariables & { eventId: string }
     >(customQueries.getFriendsPredictingEventQuery, {
       followingUserId,

@@ -36,14 +36,8 @@ const Profile = () => {
 
   const { data: events, isLoading: isLoadingAllEvents } = useQueryAllEvents();
 
-  const {
-    isLoading,
-    setIsLoading,
-    user,
-    followingCount,
-    followerCount,
-    userEventIds,
-  } = useProfileUser(userId);
+  const { isLoading, setIsLoading, user, followingCount, followerCount, userEventIds } =
+    useProfileUser(userId);
 
   // handles the header (and logout button)
   useProfileHeader(userId, isLoading, setIsLoading);

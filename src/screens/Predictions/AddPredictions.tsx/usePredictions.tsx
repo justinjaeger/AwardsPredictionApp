@@ -19,9 +19,8 @@ export const usePredictions = () => {
   const { data: communityData } = useQueryCommunityEvent({ event });
   const communityDataPredictions = communityData?.[category.id]?.predictions || [];
 
-  const [selectedPredictions, setSelectedPredictions] = useState<iPrediction[]>(
-    initialPredictions,
-  );
+  const [selectedPredictions, setSelectedPredictions] =
+    useState<iPrediction[]>(initialPredictions);
 
   const [hiddenPredictions, setHiddenPredictions] = useState<iPrediction[]>([]); // for predictions that communityPredictions isn't aware of
 
