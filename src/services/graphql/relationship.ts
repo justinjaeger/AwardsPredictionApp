@@ -8,7 +8,6 @@ import {
   ListUsersQueryVariables,
   RelationshipByFollowedUserIdQuery,
   RelationshipByFollowedUserIdQueryVariables,
-  RelationshipByFollowingUserIdQuery,
   RelationshipByFollowingUserIdQueryVariables,
   SearchRelationshipsQueryVariables,
   UniqueRelationshipViaFollowedUserQuery,
