@@ -10,6 +10,7 @@ import { useAsyncEffect } from '../../util/hooks';
 import ApiServices from '../../services/graphql';
 import { GetSongQuery } from '../../API';
 import { getHeaderTitle } from '../../constants';
+import { MainScreenNavigationProp } from '../../navigation/types';
 
 type iSongDetailsProps = {
   movieTmdbId: number;
@@ -19,7 +20,7 @@ type iSongDetailsProps = {
 const SongDetails = (props: iSongDetailsProps) => {
   const { movieTmdbId, songId } = props;
 
-  const navigation = useNavigation();
+  const navigation = useNavigation<MainScreenNavigationProp>();
 
   const [movieDetails, setMovieDetails] = useState<iCachedTmdbMovie | undefined>();
   const [song, setSong] = useState<GetSongQuery>();

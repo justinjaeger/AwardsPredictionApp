@@ -19,7 +19,7 @@ import FollowButton from '../../components/FollowButton';
 import FollowCountButton from '../../components/FollowCountButton';
 import useQueryAllEvents from '../../hooks/queries/getAllEvents';
 import EventList from '../Predictions/Event/EventList';
-import { PredictionsParamList } from '../../navigation/types';
+import { MainScreenNavigationProp, PredictionsParamList } from '../../navigation/types';
 import LoadingStatue from '../../components/LoadingStatue';
 import { useLoading } from '../../hooks/animatedState/useLoading';
 import useProfileUser from './useProfileUser';
@@ -31,7 +31,7 @@ const Profile = () => {
   const { userId: authUserId, userEmail } = useAuth();
   const userId = params?.userId || authUserId;
 
-  const globalNavigation = useNavigation();
+  const globalNavigation = useNavigation<MainScreenNavigationProp>();
   const navigation = useTypedNavigation<PredictionsParamList>();
 
   const { data: events, isLoading: isLoadingAllEvents } = useQueryAllEvents();

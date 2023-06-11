@@ -26,8 +26,8 @@ const AdminNavigator = () => {
   return (
     <Navigator
       initialRouteName="Proflie"
-      headerMode={'screen'}
       screenOptions={{
+        headerMode: 'screen',
         animationTypeForReplace: 'push',
       }}
     >

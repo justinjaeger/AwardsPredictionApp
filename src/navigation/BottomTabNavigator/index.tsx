@@ -18,7 +18,12 @@ const BottomTabNavigator = () => {
   const { userRole } = useAuth();
 
   return (
-    <Tab.Navigator tabBar={TB}>
+    <Tab.Navigator
+      tabBar={TB}
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
       <Tab.Screen
         name="Predictions"
         component={PredictionsNavigator}

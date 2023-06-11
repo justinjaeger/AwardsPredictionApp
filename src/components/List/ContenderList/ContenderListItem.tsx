@@ -27,6 +27,7 @@ import { Body, SubHeader } from '../../Text';
 import AccoladeTag from './AccoladeTag';
 import CustomIcon from '../../CustomIcon';
 import { hexToRgb } from '../../../util/hexToRgb';
+import { MainScreenNavigationProp } from '../../../navigation/types';
 
 export type iContenderListItemProps = {
   variant: 'community' | 'personal' | 'selectable' | 'search';
@@ -66,7 +67,7 @@ const ContenderListItem = (props: iContenderListItemProps) => {
     isAuthProfile,
   } = props;
   const { isActive, drag } = draggable || {};
-  const navigation = useNavigation();
+  const navigation = useNavigation<MainScreenNavigationProp>();
   const { width: windowWidth } = useWindowDimensions();
 
   const LARGE_POSTER = windowWidth / 3;

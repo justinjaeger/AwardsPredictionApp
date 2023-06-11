@@ -11,12 +11,13 @@ import ApiServices from '../../services/graphql';
 import { useAuth } from '../../context/UserContext';
 import { useNavigation } from '@react-navigation/native';
 import PasswordInput from '../../components/Inputs/PasswordInput';
+import { MainScreenNavigationProp } from '../../navigation/types';
 
 const RequireNewPassword = (p: any) => {
   const props = p as iAuthScreenProps; // typecasting because props are automatically passed from Authenticator
   const { email } = useAuthenticator();
   const { signInUser } = useAuth();
-  const navigation = useNavigation();
+  const navigation = useNavigation<MainScreenNavigationProp>();
 
   const [code, setCode] = useState<string>('');
   const [password, setPassword] = useState<string>('');

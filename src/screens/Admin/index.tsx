@@ -4,11 +4,12 @@ import { ScrollView } from 'react-native';
 import BackgroundWrapper from '../../components/BackgroundWrapper';
 import { SubmitButton } from '../../components/Buttons';
 import SafeAreaViewFixed from '../../components/SafeAreaViewFixed';
+import { AdminNavigationProp } from '../../navigation/types';
 // import TmdbMovieCache from '../../services/cache/tmdbMovie';
 // import TmdbPersonCache from '../../services/cache/tmdbPerson';
 
 const Admin = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<AdminNavigationProp>();
 
   const clearAllCache = () => {
     // TmdbMovieCache.clearAll();

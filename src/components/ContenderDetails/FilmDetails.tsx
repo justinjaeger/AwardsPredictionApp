@@ -8,6 +8,7 @@ import { PosterSize } from '../../constants/posterDimensions';
 import { iCachedTmdbMovie } from '../../services/cache/types';
 import TmdbServices from '../../services/tmdb';
 import { getHeaderTitle } from '../../constants';
+import { MainScreenNavigationProp } from '../../navigation/types';
 
 type iFilmDetailsProps = {
   movieTmdbId: number;
@@ -21,7 +22,7 @@ type iFilmDetailsProps = {
 const FilmDetails = (props: iFilmDetailsProps) => {
   const { movieTmdbId, movieStudio } = props;
 
-  const navigation = useNavigation();
+  const navigation = useNavigation<MainScreenNavigationProp>();
 
   const [movieDetails, setContenderDetails] = useState<iCachedTmdbMovie | undefined>();
 

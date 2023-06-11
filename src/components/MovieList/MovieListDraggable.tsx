@@ -104,8 +104,8 @@ const MovieListDraggable = ({
           </View>
         ) : null
       }
-      renderItem={({ item: prediction, index: _index, drag, isActive }) => {
-        const index = _index || 0;
+      renderItem={({ item: prediction, getIndex, drag, isActive }) => {
+        const index = getIndex() || 0;
         const ranking = index + 1;
         const listItemProps: iContenderListItemProps = {
           variant: 'personal',

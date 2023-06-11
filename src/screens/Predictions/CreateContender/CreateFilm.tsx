@@ -104,6 +104,7 @@ const CreateFilm = (props: iCreateContenderProps) => {
 
   // these are sort of "fake" values
   const movieData: iPrediction[] = searchResults.map((m) => ({
+    id: m.tmdbId.toString(),
     ranking: 0,
     accolade: undefined,
     visibility: ContenderVisibility.VISIBLE,

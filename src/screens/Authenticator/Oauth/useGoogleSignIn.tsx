@@ -5,10 +5,11 @@ import { useAuth } from '../../../context/UserContext';
 import ApiServices from '../../../services/graphql';
 import { useNavigateAwayEffect } from '../../../util/hooks';
 import { goToAccountSetup } from '../../../util/navigationActions';
+import { MainScreenNavigationProp } from '../../../navigation/types';
 
 // Used for ALL Oauth providers (misnamed)
 const useGoogleSignIn = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<MainScreenNavigationProp>();
 
   const { signInUser } = useAuth();
 

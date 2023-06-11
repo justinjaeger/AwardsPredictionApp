@@ -29,7 +29,10 @@ const PredictionsNavigator = () => {
   const { toolbarOnly, medium, large } = useHeaderSettings();
 
   return (
-    <Navigator initialRouteName={initialScreen || 'EventSelect'} headerMode="screen">
+    <Navigator
+      initialRouteName={initialScreen || 'EventSelect'}
+      screenOptions={{ headerMode: 'screen' }}
+    >
       <Screen
         name="EventSelect"
         component={EventSelect}
