@@ -47,7 +47,8 @@ const AddPredictions = () => {
   // set custom back arrow functionality
   useEffect(() => {
     navigation.setOptions({
-      headerLeft: <BackButton onPress={onSave} />,
+      // eslint-disable-next-line react/no-unstable-nested-components
+      headerLeft: () => <BackButton onPress={onSave} />,
     });
   }, [navigation]);
 
