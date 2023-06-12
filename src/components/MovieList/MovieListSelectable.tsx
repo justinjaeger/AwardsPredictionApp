@@ -3,7 +3,9 @@ import { FlatList, Keyboard } from 'react-native';
 import { useCategory } from '../../context/CategoryContext';
 import { iCategory, iPrediction } from '../../types';
 import { removePredictionFromList } from '../../util/removePredictionFromList';
-import ContenderListItem from '../List/ContenderList/ContenderListItem';
+import ContenderListItem, {
+  iContenderListItemProps,
+} from '../List/ContenderList/ContenderListItem';
 import ContenderListItemCondensed from '../List/ContenderList/ContenderListItemCondensed';
 
 type iMovieListProps = {
@@ -13,8 +15,12 @@ type iMovieListProps = {
   isCollapsed?: boolean;
 };
 
-const MovieListSelectable = (props: iMovieListProps) => {
-  const { predictions, selectedPredictions, setSelectedPredictions, isCollapsed } = props;
+const MovieListSelectable = ({
+  predictions,
+  selectedPredictions,
+  setSelectedPredictions,
+  isCollapsed,
+}: iMovieListProps) => {
   const { category: _category } = useCategory();
   const category = _category as iCategory;
 
@@ -54,28 +60,21 @@ const MovieListSelectable = (props: iMovieListProps) => {
         const highlighted = (selectedPredictions || [])
           .map((sp) => sp.contenderId)
           .includes(prediction.contenderId);
+
+        const listItemProps: iContenderListItemProps = {
+          variant: 'selectable',
+          prediction,
+          ranking: i + 1,
+          isSelected: selectedContenderId === prediction.contenderId,
+          onPressItem,
+          onPressThumbnail,
+          categoryType: category.type,
+          highlighted,
+        };
         return isCollapsed ? (
-          <ContenderListItemCondensed
-            prediction={prediction}
-            ranking={i + 1}
-            onPressItem={onPressItem}
-            onPressThumbnail={onPressThumbnail}
-            isSelected={selectedContenderId === prediction.contenderId}
-            highlighted={highlighted}
-            variant={'selectable'}
-            categoryType={category.type}
-          />
+          <ContenderListItemCondensed {...listItemProps} />
         ) : (
-          <ContenderListItem
-            prediction={prediction}
-            ranking={i + 1}
-            onPressItem={onPressItem}
-            onPressThumbnail={onPressThumbnail}
-            isSelected={selectedContenderId === prediction.contenderId}
-            highlighted={highlighted}
-            variant={'selectable'}
-            categoryType={category.type}
-          />
+          <ContenderListItem {...listItemProps} />
         );
       }}
     />

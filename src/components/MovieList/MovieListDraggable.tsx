@@ -40,27 +40,9 @@ const MovieListDraggable = ({
 
   const [selectedContenderId, setSelectedContenderId] = useState<string | undefined>(); // this selection is whether the film is big or not
 
-  const onPressThumbnail = (prediction: iPrediction) => {
-    const id = prediction.contenderId;
-    if (selectedContenderId === id) {
-      setSelectedContenderId(undefined);
-    } else {
-      setSelectedContenderId(id);
-    }
-  };
-
   const predictionType = predictions[0]?.predictionType || PredictionType.NOMINATION;
 
   const slots = getCategorySlots(event, category.name, predictionType);
-
-  const onPressItem = (item: iPrediction) => {
-    const id = item.contenderId;
-    if (selectedContenderId === id) {
-      setSelectedContenderId(undefined);
-    } else {
-      setSelectedContenderId(id);
-    }
-  };
 
   return (
     <DraggableFlatList
@@ -107,13 +89,23 @@ const MovieListDraggable = ({
       renderItem={({ item: prediction, getIndex, drag, isActive }) => {
         const index = getIndex() || 0;
         const ranking = index + 1;
+
+        const onPressItem = (item: iPrediction) => {
+          const id = item.contenderId;
+          if (selectedContenderId === id) {
+            setSelectedContenderId(undefined);
+          } else {
+            setSelectedContenderId(id);
+          }
+        };
+
         const listItemProps: iContenderListItemProps = {
           variant: 'personal',
           prediction,
           ranking,
           isSelected: selectedContenderId === prediction.contenderId,
           onPressItem,
-          onPressThumbnail,
+          onPressThumbnail: onPressItem,
           draggable: {
             drag,
             isActive,

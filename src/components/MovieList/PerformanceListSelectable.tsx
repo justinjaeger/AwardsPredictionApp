@@ -10,9 +10,11 @@ type iPerformanceListSelectableProps = {
   onSelect: (personTmdbId: number, movieTmdbId: number) => void;
 };
 
-const PerformanceListSelectable = (props: iPerformanceListSelectableProps) => {
-  const { predictions, disablePaddingBottom, onSelect } = props;
-
+const PerformanceListSelectable = ({
+  predictions,
+  disablePaddingBottom,
+  onSelect,
+}: iPerformanceListSelectableProps) => {
   const [selectedPerformance, setSelectedPerformance] = useState<
     { personTmdbId: number; movieTmdbId: number } | undefined
   >(undefined);
@@ -49,11 +51,12 @@ const PerformanceListSelectable = (props: iPerformanceListSelectableProps) => {
       keyboardShouldPersistTaps={'always'}
       contentContainerStyle={{ paddingBottom: disablePaddingBottom ? 0 : 200 }}
       renderItem={({ item: prediction, index: i }) => {
-        const movieTmdbId = prediction.contenderMovie?.tmdbId;
-        const personTmdbId = prediction.contenderPerson?.tmdbId;
+        const movieTmdbId = prediction?.contenderMovie?.tmdbId;
+        const personTmdbId = prediction?.contenderPerson?.tmdbId;
         const selected =
           movieTmdbId === selectedPerformance?.movieTmdbId &&
           personTmdbId === selectedPerformance?.personTmdbId;
+
         return (
           <ContenderListItem
             prediction={prediction}

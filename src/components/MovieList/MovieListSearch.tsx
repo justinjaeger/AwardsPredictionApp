@@ -13,9 +13,12 @@ type iMovieListProps = {
   onSelect: (id: number) => void;
 };
 
-const MovieListSearch = (props: iMovieListProps) => {
-  const { predictions, categoryType, disablePaddingBottom, onSelect } = props;
-
+const MovieListSearch = ({
+  predictions,
+  categoryType,
+  disablePaddingBottom,
+  onSelect,
+}: iMovieListProps) => {
   const [selectedTmdbId, setSelectedTmdbId] = useState<number | undefined>(undefined);
 
   // reset whenever list data changes
@@ -87,6 +90,7 @@ const MovieListSearch = (props: iMovieListProps) => {
       renderItem={({ item: prediction, index: i }) => {
         const tmdbId = getTmdbId(prediction);
         const selected = tmdbId === selectedTmdbId;
+
         return (
           <ContenderListItem
             prediction={prediction}

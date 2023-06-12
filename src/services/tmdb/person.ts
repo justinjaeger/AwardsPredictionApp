@@ -3,16 +3,81 @@ import axios from 'axios';
 import { handleError, iApiResponse } from '../utils';
 import { iTmdbPersonMovieCredits, iTmdbPersonResponse, iTmdbResponse } from './types';
 import { TMDB_URL } from '.';
-import TmdbPersonCache from '../cache/tmdbPerson';
+import TmdbCache from '../cache/tmdb';
 import { iCachedTmdbPerson } from '../cache/types';
 import { iSearchData } from './search';
+
+type iTmdbPeopleStorage = { [tmdbId: number]: iCachedTmdbPerson };
+
+// Note: Not used
+export const getTmdbPeople = async (
+  tmdbIds: number[],
+): Promise<iApiResponse<iTmdbPeopleStorage>> => {
+  try {
+    if (tmdbIds.length === 0) return { status: 'success' };
+    // get all from cache, (undefined if not set)
+    const cacheResponse = await TmdbCache.getMany<iCachedTmdbPerson>(tmdbIds);
+    if (!cacheResponse) return { status: 'error' };
+
+    // sort what's in cache and what's not
+    const cacheData: iTmdbPeopleStorage = {};
+    const tmdbIdsNotInCache: number[] = [];
+    for (let i = 0; i < tmdbIds.length; i++) {
+      const tmdbId = tmdbIds[i];
+      const cacheRes = cacheResponse[i];
+      if (cacheRes === undefined) {
+        tmdbIdsNotInCache.push(tmdbId);
+      } else {
+        cacheData[tmdbId] = cacheRes;
+      }
+    }
+
+    // compile requests for tmdb
+    const results: iTmdbResponse<iTmdbPersonResponse>[] = [];
+    for (const tmdbId of tmdbIdsNotInCache) {
+      const url = `${TMDB_URL}/person/${tmdbId}?api_key=${TMDB_API_KEY}`;
+      const res = (await axios(url)) as iTmdbResponse<iTmdbPersonResponse>;
+      results.push(res);
+    }
+
+    // format results so we can set it in cache
+    const newData: iTmdbPeopleStorage = {};
+    const newDataForCache: { tmdbId: number; value: iCachedTmdbPerson }[] = [];
+    results.forEach((result) => {
+      if (result?.status === 'error') {
+        throw new Error(result?.message);
+      }
+      const value = {
+        name: result.data.name,
+        gender: result.data.gender,
+        profilePath: result.data.profile_path,
+        imdbId: result.data.imdb_id,
+        biography: result.data.biography,
+      };
+      newData[result.data.id] = value;
+      newDataForCache.push({
+        tmdbId: result.data.id,
+        value,
+      });
+    });
+
+    // bulk set items in cache (but don't await)
+    TmdbCache.setMany<iCachedTmdbPerson>(newDataForCache);
+
+    // merge new data with cache data
+    const mergedData = { ...cacheData, ...newData };
+    return { status: 'success', data: mergedData };
+  } catch (err) {
+    return handleError('error in getTmdbPeople', err, true);
+  }
+};
 
 export const getTmdbPerson = async (
   tmdbId: number,
 ): Promise<iApiResponse<iCachedTmdbPerson>> => {
   try {
     // attempt to get from cache first
-    const cacheResponse = await TmdbPersonCache.get(tmdbId);
+    const cacheResponse = await TmdbCache.get<iCachedTmdbPerson>(tmdbId);
     if (cacheResponse) {
       return { status: 'success', data: cacheResponse };
     }
@@ -34,7 +99,7 @@ export const getTmdbPerson = async (
     };
 
     // before returning, set in cache
-    TmdbPersonCache.set(tmdbId, data);
+    TmdbCache.set(tmdbId, data);
 
     return {
       status: 'success',

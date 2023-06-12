@@ -16,8 +16,7 @@ type iMovieListAdminProps = {
 /**
  * Lets you pass in an onPressItem function, which we use to open a modal and handle more specific functionality there
  */
-const MovieListAdmin = (props: iMovieListAdminProps) => {
-  const { predictions, onPressItem } = props;
+const MovieListAdmin = ({ predictions, onPressItem }: iMovieListAdminProps) => {
   const { event: _event, category: _category } = useCategory();
 
   const event = _event as iEvent;

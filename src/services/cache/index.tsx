@@ -16,16 +16,35 @@ const getItem = async (key: string): Promise<any | undefined> => {
       return undefined;
     }
     const { value, expiryTime } = JSON.parse(item) as iCachedItem;
-
     // remove the item from the cache if expired, but still return the value for now
     const isExpired = expiryTime < Date.now();
     if (isExpired) {
       AsyncStorage.removeItem(key);
     }
-
     return value;
   } catch (err) {
     console.error('error setting item in cache', err);
+  }
+};
+
+const getItems = async (keys: string[]) => {
+  try {
+    const items = await AsyncStorage.multiGet(keys);
+    // for each item, check if expired. If so, remove from cache, but still return the value. Next time fetched, will return undefined, and that will indicate to store it.
+    const values = items.map(([key, item]): any => {
+      if (!item) {
+        return undefined;
+      }
+      const { value, expiryTime } = JSON.parse(item) as iCachedItem;
+      const isExpired = expiryTime < Date.now();
+      if (isExpired) {
+        AsyncStorage.removeItem(key);
+      }
+      return value;
+    });
+    return values;
+  } catch (err) {
+    console.error('error getting items in cache', err);
   }
 };
 
@@ -44,9 +63,26 @@ const setItem = async (key: string, value: any) => {
   }
 };
 
+const setItems = async (items: { key: string; value: any }[]) => {
+  const stringifiedValues: [string, string][] = items.map(({ key, value }) => {
+    const cacheValue: iCachedItem = {
+      expiryTime: Date.now() + TIME_TO_LIVE,
+      value,
+    };
+    return [key, JSON.stringify(cacheValue)];
+  });
+  try {
+    AsyncStorage.multiSet(stringifiedValues);
+  } catch (err) {
+    console.error('error setting items in cache', err);
+  }
+};
+
 const AsyncStorageCache = {
   getItem,
+  getItems,
   setItem,
+  setItems,
 };
 
 export default AsyncStorageCache;

@@ -10,9 +10,11 @@ type iSongListSearchProps = {
   onSelect: (tmdbId: number, songTitle: string) => void;
 };
 
-const SongListSelectable = (props: iSongListSearchProps) => {
-  const { predictions, disablePaddingBottom, onSelect } = props;
-
+const SongListSelectable = ({
+  predictions,
+  disablePaddingBottom,
+  onSelect,
+}: iSongListSearchProps) => {
   const [selectedSong, setSelectedSong] = useState<
     { tmdbId: number; songTitle: string } | undefined
   >(undefined);
@@ -47,10 +49,10 @@ const SongListSelectable = (props: iSongListSearchProps) => {
       keyboardShouldPersistTaps={'always'}
       contentContainerStyle={{ paddingBottom: disablePaddingBottom ? 0 : 200 }}
       renderItem={({ item: prediction, index: i }) => {
-        const tmdbId = prediction.contenderMovie?.tmdbId;
+        const movieTmdbId = prediction?.contenderMovie?.tmdbId;
         const songTitle = prediction.contenderSong?.title;
         const selected =
-          tmdbId === selectedSong?.tmdbId && songTitle === selectedSong?.songTitle;
+          movieTmdbId === selectedSong?.tmdbId && songTitle === selectedSong?.songTitle;
         return (
           <ContenderListItem
             prediction={prediction}

@@ -10,10 +10,16 @@ export interface iApiResponse<T> {
   message?: string;
 }
 
-export const handleError = (message?: string, error?: any): iApiResponse<any> => {
+export const handleError = (
+  message?: string,
+  error?: any,
+  hideFromUser?: boolean,
+): iApiResponse<any> => {
   const m = error.message || message || 'something went wrong';
   console.error(message, JSON.stringify(error), m);
-  Snackbar.error(m || '');
+  if (!hideFromUser) {
+    Snackbar.error(m || '');
+  }
   const allInfo = `
     Message: ${message}
     Error: ${JSON.stringify(error)}
