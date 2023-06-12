@@ -1,17 +1,15 @@
 import { StackActions, useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { FlatList, TouchableHighlight, View } from 'react-native';
-import COLORS from '../../constants/colors';
+import { FlatList } from 'react-native';
 import theme from '../../constants/theme';
 import { useSearch } from '../../context/ContenderSearchContext';
 import { useAuth } from '../../context/UserContext';
 import { iUser } from '../../types';
-import FollowButton from '../FollowButton';
-import ProfileImage from '../ProfileImage';
-import { Body, HeaderLight, SubHeader } from '../Text';
+import { HeaderLight, SubHeader } from '../Text';
 import UserListSkeleton from '../Skeletons/UserListSkeleton';
+import UserSearchResultItem from './UserSearchResultItem';
 
-const IMAGE_SIZE = 50;
+export const IMAGE_SIZE = 50;
 
 const UserSearchResult = ({
   users,
@@ -35,6 +33,8 @@ const UserSearchResult = ({
     navigation.dispatch(StackActions.push('Profile', { userId }));
   };
 
+  const noResults = users.length === 0 && !isLoading;
+
   if (users.length === 0 && isSearching && !isLoadingSearch) {
     return (
       <SubHeader style={{ marginTop: '5%', fontWeight: '700' }}>
@@ -43,19 +43,29 @@ const UserSearchResult = ({
     );
   }
 
-  const noResults = users.length === 0 && !isLoading;
-
   return (
     <FlatList
-      style={{ width: '100%' }}
+      style={{ height: '100%', width: '100%' }}
       data={users}
       indicatorStyle="white"
-      contentContainerStyle={{ alignItems: 'flex-start' }}
-      keyExtractor={(item) => item.id}
-      onEndReached={() => {
-        onEndReached && onEndReached();
+      contentContainerStyle={{
+        alignItems: 'flex-start',
       }}
-      onEndReachedThreshold={0.9} // triggers onEndReached at (X*100)% of list, for example 0.9 = 90% down
+      keyExtractor={(item) => item.id}
+      onScrollEndDrag={(e) => {
+        // Fetches more at bottom of scroll. Note the high event throttle to prevent too many requests
+        // get position of current scroll
+        const currentOffset = e.nativeEvent.contentOffset.y;
+        // get max bottom of scroll
+        const maxOffset =
+          e.nativeEvent.contentSize.height - e.nativeEvent.layoutMeasurement.height;
+        // if we're close to the bottom fetch more
+        if (currentOffset > maxOffset - 50) {
+          onEndReached && onEndReached();
+        }
+      }}
+      scrollEventThrottle={1000}
+      onEndReachedThreshold={0.5} // triggers onEndReached at (X*100)% of list, for example 0.9 = 90% down
       keyboardShouldPersistTaps={'always'} // so keyboard doesn't dismiss when tapping on list
       ListHeaderComponent={
         noHeader || noResults ? null : (
@@ -72,58 +82,13 @@ const UserSearchResult = ({
         )
       }
       ListFooterComponent={isLoading ? <UserListSkeleton imageSize={IMAGE_SIZE} /> : null}
-      renderItem={({ item }) => {
-        const hasOnlyOneName = !(item.name && item.username);
-        const isSignedInUser = item.id === authUserId;
-        const authUserIsFollowing = item.authUserIsFollowing || false;
-        return (
-          <TouchableHighlight
-            key={item.id}
-            style={{
-              flexDirection: 'row',
-              padding: 10,
-              width: '100%',
-            }}
-            onPress={() => navigateToProfile(item.id)}
-            underlayColor={COLORS.secondaryDark}
-          >
-            <View
-              style={{
-                flexDirection: 'row',
-                width: '100%',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
-            >
-              <View style={{ flexDirection: 'row' }}>
-                <ProfileImage
-                  image={item.image}
-                  imageSize={IMAGE_SIZE}
-                  onPress={() => navigateToProfile(item.id)}
-                />
-                <View
-                  style={{
-                    flexDirection: 'column',
-                    justifyContent: 'space-around',
-                    marginLeft: 10,
-                  }}
-                >
-                  <SubHeader>
-                    {hasOnlyOneName ? item.name || item.username || '' : item.name || ''}
-                  </SubHeader>
-                  <Body>{hasOnlyOneName ? '' : item.username || ''}</Body>
-                </View>
-              </View>
-              {!isSignedInUser ? (
-                <FollowButton
-                  authUserIsFollowing={authUserIsFollowing}
-                  profileUserId={item.id}
-                />
-              ) : null}
-            </View>
-          </TouchableHighlight>
-        );
-      }}
+      renderItem={({ item }) => (
+        <UserSearchResultItem
+          item={item}
+          authUserId={authUserId}
+          onPress={navigateToProfile}
+        />
+      )}
     />
   );
 };
