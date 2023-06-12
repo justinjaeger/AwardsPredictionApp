@@ -1,7 +1,7 @@
 /* eslint-disable sonarjs/no-duplicate-string */
 import MaskedView from '@react-native-masked-view/masked-view';
 import { useNavigation } from '@react-navigation/native';
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import { Animated, TouchableHighlight, useWindowDimensions, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {
@@ -16,11 +16,8 @@ import COLORS from '../../../constants/colors';
 import { getPosterDimensionsByWidth } from '../../../constants/posterDimensions';
 import theme from '../../../constants/theme';
 import { useCategory } from '../../../context/CategoryContext';
-import { iCachedTmdbMovie, iCachedTmdbPerson } from '../../../services/cache/types';
-import TmdbServices from '../../../services/tmdb';
 import { iCategory, iEvent, iPrediction } from '../../../types';
 import { getNumPredicting } from '../../../util/getNumPredicting';
-import { useAsyncEffect } from '../../../util/hooks';
 import { IconButton } from '../../Buttons/IconButton';
 import AnimatedPoster from '../../Images/AnimatedPoster';
 import { Body, SubHeader } from '../../Text';
@@ -28,6 +25,8 @@ import AccoladeTag from './AccoladeTag';
 import CustomIcon from '../../CustomIcon';
 import { hexToRgb } from '../../../util/hexToRgb';
 import { MainScreenNavigationProp } from '../../../navigation/types';
+import useTmdb from './useTmdb';
+import useListItemAnimation from './useListItemAnimation';
 
 export type iContenderListItemProps = {
   variant: 'community' | 'personal' | 'selectable' | 'search';
@@ -47,9 +46,6 @@ export type iContenderListItemProps = {
   onPressThumbnail?: (prediction: iPrediction) => void;
   isAuthProfile?: boolean;
 };
-
-const TIMING = 250;
-const TIMING_FADE = 500;
 
 const ContenderListItem = (props: iContenderListItemProps) => {
   const {
@@ -74,12 +70,6 @@ const ContenderListItem = (props: iContenderListItemProps) => {
   const SMALL_POSTER = windowWidth / 10;
   const RIGHT_COL_WIDTH =
     variant === 'personal' ? 45 : variant === 'community' ? 100 : 10;
-  const BODY_WIDTH_SELECTED =
-    windowWidth - LARGE_POSTER - theme.windowMargin * 2 - RIGHT_COL_WIDTH;
-  const BODY_WIDTH_UNSELECTED =
-    windowWidth - SMALL_POSTER - theme.windowMargin * 2 - RIGHT_COL_WIDTH;
-  const ITEM_WIDTH_SELECTED = RIGHT_COL_WIDTH + BODY_WIDTH_SELECTED;
-  const ITEM_WIDTH_UNSELECTED = RIGHT_COL_WIDTH + BODY_WIDTH_UNSELECTED;
 
   const { category: _category, event: _event, date } = useCategory();
   const isHistory = !!date;
@@ -90,67 +80,23 @@ const ContenderListItem = (props: iContenderListItemProps) => {
   const width = isSelected ? LARGE_POSTER : SMALL_POSTER;
   const { height } = getPosterDimensionsByWidth(width);
 
-  const imageWidth = useRef(new Animated.Value(width)).current;
-  const imageHeight = useRef(new Animated.Value(height)).current;
-  const hiddenOpacity = useRef(new Animated.Value(0)).current;
-  const itemWidth = useRef(new Animated.Value(ITEM_WIDTH_UNSELECTED)).current;
-  const bodyWidth = useRef(new Animated.Value(BODY_WIDTH_UNSELECTED)).current;
+  const { imageWidth, imageHeight, hiddenOpacity, bodyWidth } = useListItemAnimation(
+    isSelected,
+    RIGHT_COL_WIDTH,
+    width,
+    height,
+    LARGE_POSTER,
+    SMALL_POSTER,
+    windowWidth,
+  );
 
-  const [tmdbMovie, setTmdbMovie] = useState<iCachedTmdbMovie | undefined>();
-  const [tmdbPerson, setTmdbPerson] = useState<iCachedTmdbPerson | undefined>();
+  const { tmdbMovie, tmdbPerson } = useTmdb(prediction);
 
   const tmdbMovieId = prediction.contenderMovie?.tmdbId;
   const tmdbPersonId = prediction.contenderPerson?.tmdbId;
   const movieStudio = prediction.contenderMovie?.studio;
 
   const eventIsArchived = event.status === EventStatus.ARCHIVED;
-
-  useEffect(() => {
-    Animated.timing(imageWidth, {
-      toValue: width,
-      duration: TIMING,
-      useNativeDriver: false,
-    }).start();
-    Animated.timing(imageHeight, {
-      toValue: height,
-      duration: TIMING,
-      useNativeDriver: false,
-    }).start();
-    Animated.timing(hiddenOpacity, {
-      toValue: isSelected ? 1 : 0,
-      duration: TIMING_FADE,
-      useNativeDriver: true,
-    }).start();
-    Animated.timing(bodyWidth, {
-      toValue: isSelected ? BODY_WIDTH_SELECTED : BODY_WIDTH_UNSELECTED,
-      duration: TIMING,
-      useNativeDriver: false,
-    }).start();
-    Animated.timing(itemWidth, {
-      toValue: isSelected ? ITEM_WIDTH_SELECTED : ITEM_WIDTH_UNSELECTED,
-      duration: TIMING,
-      useNativeDriver: false,
-    }).start();
-  }, [isSelected]);
-
-  useAsyncEffect(async () => {
-    if (tmdbPersonId) {
-      // get tmdb person info
-      const { data: personData, status: personStatus } = await TmdbServices.getTmdbPerson(
-        tmdbPersonId,
-      );
-      if (personStatus === 'success') {
-        setTmdbPerson(personData);
-      }
-    }
-    if (tmdbMovieId) {
-      // get movie tmdb info
-      const { data, status } = await TmdbServices.getTmdbMovie(tmdbMovieId);
-      if (status === 'success') {
-        setTmdbMovie(data);
-      }
-    }
-  }, [tmdbMovieId]);
 
   const onPressPoster = () => {
     if (disabled) return;
@@ -162,6 +108,26 @@ const ContenderListItem = (props: iContenderListItemProps) => {
   const categoryInfo = catInfo ? catInfo?.join(', ') : undefined;
   const indexedRankings =
     variant === 'community' ? prediction.indexedRankings : undefined;
+
+  const showBotomButtons = isSelected && tmdbMovie;
+
+  const fadeBottom = isSelected !== true && variant === 'search';
+
+  const nominationsHaveHappened = prediction.predictionType === PredictionType.WIN;
+
+  const predictionIsNotNominated =
+    ['personal', 'selectable'].includes(variant) &&
+    nominationsHaveHappened &&
+    prediction.accolade !== ContenderAccolade.NOMINEE &&
+    prediction.accolade !== ContenderAccolade.WINNER;
+
+  const predictionIsNotShortlisted =
+    ['personal', 'selectable'].includes(variant) &&
+    category.isShortlisted === CategoryIsShortlisted.TRUE &&
+    !prediction.accolade;
+
+  const isUnqualified =
+    !eventIsArchived && (predictionIsNotNominated || predictionIsNotShortlisted);
 
   let title = '';
   let subtitle = '';
@@ -180,29 +146,6 @@ const ContenderListItem = (props: iContenderListItemProps) => {
       subtitle = tmdbMovie?.title || '';
       break;
   }
-
-  const fadeBottom = isSelected !== true && variant === 'search';
-
-  const { win, nom } = getNumPredicting(
-    indexedRankings || {},
-    getCategorySlots(event, category.name, prediction.predictionType),
-  );
-
-  const showBotomButtons = isSelected && tmdbMovie;
-
-  const nominationsHaveHappened = prediction.predictionType === PredictionType.WIN;
-
-  const predictionIsNotNominated =
-    ['personal', 'selectable'].includes(variant) &&
-    nominationsHaveHappened &&
-    prediction.accolade !== ContenderAccolade.NOMINEE &&
-    prediction.accolade !== ContenderAccolade.WINNER;
-
-  const predictionIsNotShortlisted =
-    ['personal', 'selectable'].includes(variant) &&
-    category.isShortlisted === CategoryIsShortlisted.TRUE &&
-    !prediction.accolade;
-
   if (!eventIsArchived) {
     if (predictionIsNotNominated) {
       subtitle =
@@ -215,8 +158,10 @@ const ContenderListItem = (props: iContenderListItemProps) => {
     }
   }
 
-  const isUnqualified =
-    !eventIsArchived && (predictionIsNotNominated || predictionIsNotShortlisted);
+  const { win, nom } = getNumPredicting(
+    indexedRankings || {},
+    getCategorySlots(event, category.name, prediction.predictionType),
+  );
 
   return (
     <TouchableHighlight
@@ -385,24 +330,50 @@ const ContenderListItem = (props: iContenderListItemProps) => {
                 marginLeft: theme.windowMargin,
               }}
             >
-              <ExternalLinkButton
-                text={'More Info'}
-                onPress={() => {
-                  navigation.navigate('WebView', {
-                    uri: `https://www.themoviedb.org/movie/${tmdbMovieId}/`,
-                    title: tmdbMovie?.title || '',
-                  });
-                }}
-              />
-              <ExternalLinkButton
-                text={'Cast'}
-                onPress={() => {
-                  navigation.navigate('WebView', {
-                    uri: `https://www.themoviedb.org/movie/${tmdbMovieId}/cast/`,
-                    title: tmdbMovie?.title || '',
-                  });
-                }}
-              />
+              {tmdbPersonId ? (
+                <>
+                  <ExternalLinkButton
+                    text={'More Info'}
+                    onPress={() => {
+                      navigation.navigate('WebView', {
+                        uri: `https://www.themoviedb.org/person/${tmdbPersonId}/`,
+                        title: tmdbPerson?.name || '',
+                      });
+                    }}
+                  />
+                  <ExternalLinkButton
+                    text={'Film'}
+                    onPress={() => {
+                      navigation.navigate('WebView', {
+                        uri: `https://www.themoviedb.org/movie/${tmdbMovieId}/`,
+                        title: tmdbMovie?.title || '',
+                      });
+                    }}
+                  />
+                </>
+              ) : (
+                <>
+                  <ExternalLinkButton
+                    text={'More Info'}
+                    // eslint-disable-next-line sonarjs/no-identical-functions
+                    onPress={() => {
+                      navigation.navigate('WebView', {
+                        uri: `https://www.themoviedb.org/movie/${tmdbMovieId}/`,
+                        title: tmdbMovie?.title || '',
+                      });
+                    }}
+                  />
+                  <ExternalLinkButton
+                    text={'Cast'}
+                    onPress={() => {
+                      navigation.navigate('WebView', {
+                        uri: `https://www.themoviedb.org/movie/${tmdbMovieId}/cast/`,
+                        title: tmdbMovie?.title || '',
+                      });
+                    }}
+                  />
+                </>
+              )}
             </Animated.View>
           ) : null}
         </Animated.View>

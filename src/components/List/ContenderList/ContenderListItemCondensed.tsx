@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { TouchableHighlight, useWindowDimensions, View } from 'react-native';
 import {
   CategoryIsShortlisted,
@@ -11,16 +11,14 @@ import { getCategorySlots } from '../../../constants/categories';
 import COLORS from '../../../constants/colors';
 import theme from '../../../constants/theme';
 import { useCategory } from '../../../context/CategoryContext';
-import { iCachedTmdbMovie, iCachedTmdbPerson } from '../../../services/cache/types';
-import TmdbServices from '../../../services/tmdb';
 import { iCategory, iEvent, iPrediction } from '../../../types';
 import useDevice from '../../../util/device';
 import { getNumPredicting } from '../../../util/getNumPredicting';
-import { useAsyncEffect } from '../../../util/hooks';
 import { IconButton } from '../../Buttons/IconButton';
 import { Body, SubHeader } from '../../Text';
 import AccoladeTag from './AccoladeTag';
 import CustomIcon from '../../CustomIcon';
+import useTmdb from './useTmdb';
 
 type iContenderListItemProps = {
   variant: 'community' | 'personal' | 'selectable' | 'search';
@@ -65,32 +63,9 @@ const ContenderListItemCondensed = (props: iContenderListItemProps) => {
 
   const itemHeight = 25 * (isPad ? 1.2 : 1);
 
-  const [tmdbMovie, setTmdbMovie] = useState<iCachedTmdbMovie | undefined>();
-  const [tmdbPerson, setTmdbPerson] = useState<iCachedTmdbPerson | undefined>();
-
-  const tmdbMovieId = prediction.contenderMovie?.tmdbId;
-  const tmdbPersonId = prediction.contenderPerson?.tmdbId;
+  const { tmdbMovie, tmdbPerson } = useTmdb(prediction);
 
   const eventIsArchived = event.status === EventStatus.ARCHIVED;
-
-  useAsyncEffect(async () => {
-    if (tmdbPersonId) {
-      // get tmdb person info
-      const { data: personData, status: personStatus } = await TmdbServices.getTmdbPerson(
-        tmdbPersonId,
-      );
-      if (personStatus === 'success') {
-        setTmdbPerson(personData);
-      }
-    }
-    if (tmdbMovieId) {
-      // get movie tmdb info
-      const { data, status } = await TmdbServices.getTmdbMovie(tmdbMovieId);
-      if (status === 'success') {
-        setTmdbMovie(data);
-      }
-    }
-  }, [tmdbMovieId]);
 
   const categoryName = category.name;
   const catInfo = tmdbMovie?.categoryInfo?.[categoryName];
