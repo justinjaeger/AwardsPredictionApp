@@ -71,7 +71,7 @@ const UserSearchResult = ({
         noHeader || noResults ? null : (
           <HeaderLight
             style={{
-              marginTop: 20,
+              paddingTop: 10,
               alignSelf: 'flex-start',
               marginLeft: theme.windowMargin,
               marginBottom: 10,
