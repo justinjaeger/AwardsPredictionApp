@@ -117,7 +117,7 @@ const MovieListCommunity = ({
                     setSelectedContenderId(id);
                   }
                 }}
-                selected={selectedContenderId === prediction.contenderId}
+                isSelected={selectedContenderId === prediction.contenderId}
                 variant={'community'}
                 categoryType={category.type}
               />
@@ -126,7 +126,7 @@ const MovieListCommunity = ({
                 prediction={prediction}
                 onPressItem={() => {}}
                 ranking={ranking}
-                selected={selectedContenderId === prediction.contenderId}
+                isSelected={selectedContenderId === prediction.contenderId}
                 variant={'community'}
                 categoryType={category.type}
               />

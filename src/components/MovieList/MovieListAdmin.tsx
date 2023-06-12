@@ -65,7 +65,7 @@ const MovieListAdmin = (props: iMovieListAdminProps) => {
                 }
               }}
               subtitle={`${visibility} • ${accolade}`}
-              selected={selectedContenderId === prediction.contenderId}
+              isSelected={selectedContenderId === prediction.contenderId}
               variant={'community'}
               categoryType={category.type}
             />

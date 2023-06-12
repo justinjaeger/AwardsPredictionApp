@@ -27,7 +27,7 @@ type iContenderListItemProps = {
   prediction: iPrediction;
   categoryType: CategoryType;
   ranking: number;
-  selected: boolean;
+  isSelected: boolean;
   disabled?: boolean;
   highlighted?: boolean;
   posterWidth?: number;

@@ -57,7 +57,7 @@ const SongListSelectable = (props: iSongListSearchProps) => {
             ranking={i + 1}
             onPressItem={onPressItem}
             onPressThumbnail={onPressItem}
-            selected={false}
+            isSelected={false}
             highlighted={selected}
             variant={'search'}
             categoryType={CategoryType.SONG}

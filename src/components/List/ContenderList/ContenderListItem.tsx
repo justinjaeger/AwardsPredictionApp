@@ -34,7 +34,7 @@ export type iContenderListItemProps = {
   prediction: iPrediction;
   categoryType: CategoryType;
   ranking: number;
-  selected: boolean;
+  isSelected: boolean;
   disabled?: boolean;
   highlighted?: boolean;
   posterWidth?: number;
@@ -55,7 +55,7 @@ const ContenderListItem = (props: iContenderListItemProps) => {
   const {
     variant,
     prediction,
-    selected,
+    isSelected,
     ranking,
     disabled,
     draggable,
@@ -87,7 +87,7 @@ const ContenderListItem = (props: iContenderListItemProps) => {
   const category = _category as iCategory;
   const event = _event as iEvent;
 
-  const width = selected ? LARGE_POSTER : SMALL_POSTER;
+  const width = isSelected ? LARGE_POSTER : SMALL_POSTER;
   const { height } = getPosterDimensionsByWidth(width);
 
   const imageWidth = useRef(new Animated.Value(width)).current;
@@ -117,21 +117,21 @@ const ContenderListItem = (props: iContenderListItemProps) => {
       useNativeDriver: false,
     }).start();
     Animated.timing(hiddenOpacity, {
-      toValue: selected ? 1 : 0,
+      toValue: isSelected ? 1 : 0,
       duration: TIMING_FADE,
       useNativeDriver: true,
     }).start();
     Animated.timing(bodyWidth, {
-      toValue: selected ? BODY_WIDTH_SELECTED : BODY_WIDTH_UNSELECTED,
+      toValue: isSelected ? BODY_WIDTH_SELECTED : BODY_WIDTH_UNSELECTED,
       duration: TIMING,
       useNativeDriver: false,
     }).start();
     Animated.timing(itemWidth, {
-      toValue: selected ? ITEM_WIDTH_SELECTED : ITEM_WIDTH_UNSELECTED,
+      toValue: isSelected ? ITEM_WIDTH_SELECTED : ITEM_WIDTH_UNSELECTED,
       duration: TIMING,
       useNativeDriver: false,
     }).start();
-  }, [selected]);
+  }, [isSelected]);
 
   useAsyncEffect(async () => {
     if (tmdbPersonId) {
@@ -181,14 +181,14 @@ const ContenderListItem = (props: iContenderListItemProps) => {
       break;
   }
 
-  const fadeBottom = selected !== true && variant === 'search';
+  const fadeBottom = isSelected !== true && variant === 'search';
 
   const { win, nom } = getNumPredicting(
     indexedRankings || {},
     getCategorySlots(event, category.name, prediction.predictionType),
   );
 
-  const showBotomButtons = selected && tmdbMovie;
+  const showBotomButtons = isSelected && tmdbMovie;
 
   const nominationsHaveHappened = prediction.predictionType === PredictionType.WIN;
 

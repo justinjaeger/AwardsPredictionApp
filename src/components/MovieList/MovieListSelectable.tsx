@@ -60,7 +60,7 @@ const MovieListSelectable = (props: iMovieListProps) => {
             ranking={i + 1}
             onPressItem={onPressItem}
             onPressThumbnail={onPressThumbnail}
-            selected={selectedContenderId === prediction.contenderId}
+            isSelected={selectedContenderId === prediction.contenderId}
             highlighted={highlighted}
             variant={'selectable'}
             categoryType={category.type}
@@ -71,7 +71,7 @@ const MovieListSelectable = (props: iMovieListProps) => {
             ranking={i + 1}
             onPressItem={onPressItem}
             onPressThumbnail={onPressThumbnail}
-            selected={selectedContenderId === prediction.contenderId}
+            isSelected={selectedContenderId === prediction.contenderId}
             highlighted={highlighted}
             variant={'selectable'}
             categoryType={category.type}

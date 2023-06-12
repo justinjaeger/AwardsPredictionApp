@@ -93,7 +93,7 @@ const MovieListSearch = (props: iMovieListProps) => {
             ranking={i + 1}
             onPressItem={onPressItem}
             onPressThumbnail={onPressItem}
-            selected={selected}
+            isSelected={selected}
             highlighted={selected}
             variant={'search'}
             categoryType={categoryType}

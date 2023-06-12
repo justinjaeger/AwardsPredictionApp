@@ -111,7 +111,7 @@ const MovieListDraggable = ({
           variant: 'personal',
           prediction,
           ranking,
-          selected: selectedContenderId === prediction.contenderId,
+          isSelected: selectedContenderId === prediction.contenderId,
           onPressItem,
           onPressThumbnail,
           draggable: {
