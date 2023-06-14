@@ -17,6 +17,11 @@ export const updatePersonalHistory = /* GraphQL */ `
     updatePersonalHistory(msg: $msg)
   }
 `;
+export const sendEmail = /* GraphQL */ `
+  mutation SendEmail($msg: String) {
+    sendEmail(msg: $msg)
+  }
+`;
 export const createUser = /* GraphQL */ `
   mutation CreateUser(
     $input: CreateUserInput!

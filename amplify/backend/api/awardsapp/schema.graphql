@@ -331,4 +331,5 @@ type Mutation {
   updateCommunityPredictions(msg: String): String @function(name: "updateCommunityPredictions-${env}")
   updateCommunityHistory(msg: String): String @function(name: "updateCommunityHistory-${env}")
   updatePersonalHistory(msg: String): String @function(name: "updatePersonalHistory-${env}")
+  sendEmail(msg: String): String @function(name: "sendEmail-${env}")
 }

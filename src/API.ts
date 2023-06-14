@@ -1478,6 +1478,14 @@ export type UpdatePersonalHistoryMutation = {
   updatePersonalHistory?: string | null,
 };
 
+export type SendEmailMutationVariables = {
+  msg?: string | null,
+};
+
+export type SendEmailMutation = {
+  sendEmail?: string | null,
+};
+
 export type CreateUserMutationVariables = {
   input: CreateUserInput,
   condition?: ModelUserConditionInput | null,

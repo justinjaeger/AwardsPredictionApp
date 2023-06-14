@@ -98,6 +98,11 @@
           ]
         }
       ]
+    },
+    "sendEmail": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
     }
   },
   "storage": {
