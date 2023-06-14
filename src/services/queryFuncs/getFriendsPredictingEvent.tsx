@@ -1,5 +1,5 @@
 /* eslint-disable sonarjs/prefer-immediate-return */
-import { UserRole } from '../../API';
+import Serializers from '../../serializers';
 import { iUser } from '../../types';
 import ApiServices from '../graphql';
 
@@ -9,7 +9,7 @@ const getFriendsPredictingEvent = async (
 ): Promise<iUser[]> => {
   if (!followingUserId || !eventId) return [];
   const { data } = await ApiServices.getFriendsPredictingEvent(followingUserId, eventId);
-  const relationships = data?.searchRelationships?.items || [];
+  const relationships = data?.relationshipByFollowingUserId?.items || [];
   const users = relationships
     .map((r) => r?.followedUser)
     .filter((user) => {
@@ -26,15 +26,7 @@ const getFriendsPredictingEvent = async (
   });
 
   // return
-  const result: iUser[] = usersSortedByCreatedAt.map((u) => ({
-    id: u?.id || '',
-    email: u?.email || '',
-    username: u?.username || undefined,
-    name: u?.name || undefined,
-    bio: u?.bio || undefined,
-    image: u?.image || undefined,
-    role: u?.role || UserRole.USER,
-  }));
+  const result: iUser[] = Serializers.usersSerializer(usersSortedByCreatedAt);
   return result;
 };
 

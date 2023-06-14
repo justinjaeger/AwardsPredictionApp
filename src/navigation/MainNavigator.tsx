@@ -6,15 +6,15 @@ import { MainParamList } from './types';
 import WebView from '../screens/WebView';
 import { StatusBar } from 'expo-status-bar';
 
-const { Navigator, Screen } = createStackNavigator<MainParamList>();
+const { Navigator, Screen } = createStackNavigator();
 
 const MainNavigator = () => (
   <>
     <StatusBar style={'light'} />
     <Navigator
       initialRouteName="BottomTabNavigator"
-      headerMode={'none'}
       screenOptions={{
+        headerShown: false,
         animationTypeForReplace: 'push',
       }}
     >

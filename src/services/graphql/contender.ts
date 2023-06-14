@@ -10,7 +10,6 @@ import {
   UpdateContenderMutation,
   UpdateContenderMutationVariables,
   ContenderAccolade,
-  PredictionType,
   DeleteContenderMutation,
   DeleteContenderMutationVariables,
   GetUniqueMovieContenderQueryVariables,
@@ -24,6 +23,7 @@ import * as customQueries from '../../graphqlCustom/queries';
 import { GraphqlAPI, handleError, iApiResponse } from '../utils';
 import ApiServices from '.';
 import { iPrediction } from '../../types';
+import Serializers from '../../serializers';
 
 /**
  * LEAVING OFF HERE:
@@ -134,27 +134,7 @@ const createUniqueContender = async (
   // format "data" in response to match iPrediction
   return {
     status: 'success',
-    data: {
-      ranking: 0, // just filler, might be a problem idk
-      accolade: contender.accolade || undefined,
-      visibility: contender.visibility || ContenderVisibility.VISIBLE,
-      predictionType: PredictionType.NOMINATION, // they only add predictions for nominations
-      contenderId: contender.id,
-      contenderMovie: contender.movie,
-      contenderPerson: contender.person
-        ? {
-            id: contender.person.id,
-            tmdbId: contender.person.tmdbId,
-          }
-        : undefined,
-      contenderSong: contender.song
-        ? {
-            id: contender.song.id,
-            title: contender.song.title,
-            artist: contender.song.artist,
-          }
-        : undefined,
-    },
+    data: Serializers.contenderToPredictionSerializer(contender),
   };
 };
 

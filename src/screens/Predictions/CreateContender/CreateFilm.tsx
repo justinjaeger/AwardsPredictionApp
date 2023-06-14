@@ -28,12 +28,8 @@ const CreateFilm = (props: iCreateContenderProps) => {
   // when adding a contender to the list of overall contenders
   const { mutate, isComplete, response } = useMutationCreateContender();
 
-  const {
-    searchInput,
-    debouncedSearch,
-    resetSearchHack,
-    setResetSearchHack,
-  } = useSearch();
+  const { searchInput, debouncedSearch, resetSearchHack, setResetSearchHack } =
+    useSearch();
   const { data: communityData } = useQueryCommunityEvent({ event, includeHidden: true }); // because we use this to see if contender exists, we want to includes hidden contenders
   const communityPredictions = communityData?.[category.id]?.predictions || [];
 
@@ -108,6 +104,7 @@ const CreateFilm = (props: iCreateContenderProps) => {
 
   // these are sort of "fake" values
   const movieData: iPrediction[] = searchResults.map((m) => ({
+    id: m.tmdbId.toString(),
     ranking: 0,
     accolade: undefined,
     visibility: ContenderVisibility.VISIBLE,

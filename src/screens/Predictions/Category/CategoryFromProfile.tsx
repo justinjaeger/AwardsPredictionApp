@@ -38,12 +38,8 @@ const Category = () => {
 
   const { category, event: _event } = useCategory();
   const navigation = useTypedNavigation<PredictionsParamList>();
-  const {
-    delayedDisplay,
-    gridOpacity,
-    expandedOpacity,
-    collapsedOpacity,
-  } = useCategoryDisplay();
+  const { delayedDisplay, gridOpacity, expandedOpacity, collapsedOpacity } =
+    useCategoryDisplay();
 
   const { user, predictionData, isLoading, setUserId } = useProfilePrediction();
   useEffect(() => setUserId(userId), [userId]);

@@ -24,10 +24,8 @@ const deleteDuplicatedContenders = async () => {
     let cNextToken;
     while (cNextToken !== null) {
       console.log('fetching contenders', contenders.length);
-      const {
-        data: contenderData,
-        status,
-      } = await ApiServices.listEveryContenderPaginated(cNextToken);
+      const { data: contenderData, status } =
+        await ApiServices.listEveryContenderPaginated(cNextToken);
       if (status === 'error') throw new Error('listEveryContenderPaginated');
       const list = contenderData?.listContenders?.items || [];
       const formattedList = list.map((c) => ({
@@ -50,10 +48,8 @@ const deleteDuplicatedContenders = async () => {
     let pNextToken;
     while (pNextToken !== null) {
       console.log('fetching predictions', predictions.length);
-      const {
-        data: predictionData,
-        status,
-      } = await ApiServices.listEveryPersonalPrediction(pNextToken);
+      const { data: predictionData, status } =
+        await ApiServices.listEveryPersonalPrediction(pNextToken);
       if (status === 'error') throw new Error('listEveryPersonalPrediction');
       const list = predictionData?.listPredictions?.items || [];
       const formattedList = list.map((p) => ({
@@ -93,10 +89,8 @@ const deleteDuplicatedContenders = async () => {
     let hpNextToken;
     while (hpNextToken !== null) {
       console.log('fetching history predictions', historyPredictions.length);
-      const {
-        data: predictionData,
-        status,
-      } = await ApiServices.listEveryPersonalHistoryPrediction(hpNextToken);
+      const { data: predictionData, status } =
+        await ApiServices.listEveryPersonalHistoryPrediction(hpNextToken);
       if (status === 'error') throw new Error('listEveryPersonalHistoryPrediction');
       const list = predictionData?.listHistoryPredictions?.items || [];
       const formattedList = list.map((p) => ({
@@ -141,10 +135,8 @@ const deleteDuplicatedContenders = async () => {
     let cpNextToken;
     while (cpNextToken !== null) {
       console.log('fetching communityPredictions', communityPredictions.length);
-      const {
-        data: predictionData,
-        status,
-      } = await ApiServices.listEveryCommunityPrediction(cpNextToken);
+      const { data: predictionData, status } =
+        await ApiServices.listEveryCommunityPrediction(cpNextToken);
       if (status === 'error') throw new Error('listEveryCommunityPrediction');
       const list = predictionData?.listCommunityPredictions?.items || [];
       const formattedList = list.map((p) => ({
@@ -189,10 +181,8 @@ const deleteDuplicatedContenders = async () => {
         'fetching communityHistoryPredictions',
         communityHistoryPredictions.length,
       );
-      const {
-        data: predictionData,
-        status,
-      } = await ApiServices.listEveryCommunityHistoryPrediction(chNextToken);
+      const { data: predictionData, status } =
+        await ApiServices.listEveryCommunityHistoryPrediction(chNextToken);
       if (status === 'error') throw new Error('listEveryCommunityHistoryPrediction');
       const list = predictionData?.listCommunityHistoryPredictions?.items || [];
       const formattedList = list.map((p) => ({
@@ -379,10 +369,8 @@ const deleteDuplicatedContenders = async () => {
             }
 
             // COMMUNITY HISTORY PREDICTIONS
-            const communityHistoryPredictionsThatUseContender = getPredictionsByContenderId(
-              idToDelete,
-              communityHistoryPredictions,
-            );
+            const communityHistoryPredictionsThatUseContender =
+              getPredictionsByContenderId(idToDelete, communityHistoryPredictions);
             console.log(
               'communityHistoryPredictionsThatUseContender',
               communityHistoryPredictionsThatUseContender.length,

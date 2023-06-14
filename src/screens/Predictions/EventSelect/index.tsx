@@ -19,10 +19,8 @@ const EventSelect = () => {
 
   const { data: events, isLoading, refetch: refetchEvents } = useQueryAllEvents();
   const { data: user, refetch: refetchUser } = useQueryGetUser(authUserId);
-  const {
-    data: usersWithRecentPredictionSets,
-    refetch: refetchFollowingPredictions,
-  } = useQueryGetFollowingRecentPredictions(authUserId);
+  const { data: usersWithRecentPredictionSets, refetch: refetchFollowingPredictions } =
+    useQueryGetFollowingRecentPredictions(authUserId);
 
   const { loadingOpacity, bodyOpacity } = useLoading(isLoading);
 

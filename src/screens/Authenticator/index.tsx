@@ -19,15 +19,15 @@ const AuthTabs = () => {
         <BackButton />
       </View>
       <Tab.Navigator
-        tabBarOptions={{
-          style: {
+        screenOptions={{
+          tabBarStyle: {
             backgroundColor: COLORS.primary,
             borderBottomColor: 'rgba(255,255,255,0.1)',
             borderBottomWidth: 1,
           },
-          labelStyle: { color: COLORS.white, fontSize: 16, textTransform: 'none' },
-          indicatorStyle: { backgroundColor: COLORS.white },
-          activeTintColor: COLORS.primary,
+          tabBarLabelStyle: { color: COLORS.white, fontSize: 16, textTransform: 'none' },
+          tabBarIndicatorStyle: { backgroundColor: COLORS.white },
+          tabBarActiveTintColor: COLORS.primary,
         }}
       >
         <Tab.Screen name="Social" component={OauthPage} />

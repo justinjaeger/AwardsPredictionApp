@@ -6,11 +6,12 @@ import Tmdb from '../../assets/tmdb.svg';
 import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
 import { useNavigation } from '@react-navigation/native';
+import { MainScreenNavigationProp } from '../../navigation/types';
 
 const PRIVACY_URL = 'https://sites.google.com/view/oscarexpert-predictawards/privacy';
 
 const About = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<MainScreenNavigationProp>();
   return (
     <BackgroundWrapper>
       <ScrollView

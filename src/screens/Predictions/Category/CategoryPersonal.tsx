@@ -83,7 +83,9 @@ const CategoryPersonal = ({
   // set custom back arrow functionality & hide history button when editing
   useLayoutEffect(() => {
     navigation.setOptions({
+      // eslint-disable-next-line react/no-unstable-nested-components
       headerRight: () => <HistoryHeaderButton isDisabled={!!isEditing} />,
+      // eslint-disable-next-line react/no-unstable-nested-components
       headerLeft: () => (
         <BackButton
           onPress={async () => {

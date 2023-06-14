@@ -10,10 +10,11 @@ import { UserRole } from '../../../API';
 import { useAuth } from '../../../context/UserContext';
 import { useNavigation } from '@react-navigation/native';
 import { goToAccountSetup } from '../../../util/navigationActions';
+import { MainScreenNavigationProp } from '../../../navigation/types';
 
 const AppleOauthButton = () => {
   const { width } = useWindowDimensions();
-  const navigation = useNavigation();
+  const navigation = useNavigation<MainScreenNavigationProp>();
   const { signInUser } = useAuth();
 
   const onAppleButtonPress = async () => {

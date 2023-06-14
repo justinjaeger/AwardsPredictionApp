@@ -7,6 +7,7 @@ import theme from '../../constants/theme';
 import { useAuth } from '../../context/UserContext';
 import useUpdateRelationship from '../../hooks/mutations/updateRelationship';
 import { BodyBold } from '../Text';
+import { MainScreenNavigationProp } from '../../navigation/types';
 
 const FollowButton = ({
   authUserIsFollowing,
@@ -18,7 +19,7 @@ const FollowButton = ({
   style?: StyleProp<ViewStyle>;
 }) => {
   const { userId: authUserId } = useAuth();
-  const navigation = useNavigation();
+  const navigation = useNavigation<MainScreenNavigationProp>();
 
   const { mutate: updateRelationship, isComplete } = useUpdateRelationship();
 

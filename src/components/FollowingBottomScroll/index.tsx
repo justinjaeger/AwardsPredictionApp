@@ -44,6 +44,7 @@ const FollowingBottomScroll = ({
           alignItems: 'center',
           flexDirection: 'row',
           marginBottom: 10,
+          zIndex: 2,
         }}
       >
         <IconButton
@@ -61,11 +62,11 @@ const FollowingBottomScroll = ({
       </View>
       <Animated.View
         style={{
+          zIndex: 1,
           position: 'absolute',
           bottom: 0,
           alignItems: 'center',
           flexDirection: 'row',
-          marginLeft: 80,
           transform: [{ translateY: friendsYPos }],
         }}
       >
@@ -74,6 +75,7 @@ const FollowingBottomScroll = ({
           contentContainerStyle={{
             justifyContent: 'center',
             alignItems: 'center',
+            paddingLeft: 80,
           }}
         >
           {users.map((user) => (

@@ -22,12 +22,10 @@ const DisplayStateContext = createContext<iDisplayStateContext>({
 });
 
 export const DisplayProvider = ({ children }: { children: React.ReactNode }) => {
-  const [eventDisplayState, setEventDisplayState] = useState<iEventDisplayState>(
-    'default',
-  );
-  const [categoryDisplayState, setCategoryDisplayState] = useState<iCategoryDisplayState>(
-    'list',
-  );
+  const [eventDisplayState, setEventDisplayState] =
+    useState<iEventDisplayState>('default');
+  const [categoryDisplayState, setCategoryDisplayState] =
+    useState<iCategoryDisplayState>('list');
 
   const toggleEventDisplay = () => {
     switch (eventDisplayState) {

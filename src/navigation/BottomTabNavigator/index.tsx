@@ -12,11 +12,18 @@ import { DisplayProvider } from '../../context/DisplayStateContext';
 
 const Tab = createBottomTabNavigator<BottomTabParamList>();
 
+const TB = (p: ITabBarProps) => <TabBar {...p} />;
+
 const BottomTabNavigator = () => {
   const { userRole } = useAuth();
 
   return (
-    <Tab.Navigator tabBar={(p: ITabBarProps) => <TabBar {...p} />}>
+    <Tab.Navigator
+      tabBar={TB}
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
       <Tab.Screen
         name="Predictions"
         component={PredictionsNavigator}

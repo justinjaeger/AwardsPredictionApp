@@ -17,20 +17,20 @@ const HelpTabs = () => {
       style={{ flex: 1, backgroundColor: COLORS.primary }}
     >
       <Tab.Navigator
-        tabBarOptions={{
-          style: {
+        screenOptions={{
+          tabBarStyle: {
             backgroundColor: COLORS.primary,
             borderBottomColor: 'rgba(255,255,255,0.1)',
             borderBottomWidth: 1,
             padding: isPad ? 10 : 0,
           },
-          labelStyle: {
+          tabBarLabelStyle: {
             color: COLORS.white,
             fontSize: isPad ? 20 : 14,
             textTransform: 'none',
           },
-          indicatorStyle: { backgroundColor: COLORS.white },
-          activeTintColor: COLORS.primary,
+          tabBarIndicatorStyle: { backgroundColor: COLORS.white },
+          tabBarActiveTintColor: COLORS.primary,
         }}
       >
         <Tab.Screen name="Contact" component={SendMessage} />

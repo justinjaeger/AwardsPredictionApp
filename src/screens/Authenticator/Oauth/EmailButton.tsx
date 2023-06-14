@@ -4,10 +4,11 @@ import COLORS from '../../../constants/colors';
 import { SubHeaderLight } from '../../../components/Text';
 import CustomIcon from '../../../components/CustomIcon';
 import { useNavigation } from '@react-navigation/native';
+import { AuthTabNavigationProp } from '../../../navigation/types';
 
 const AppleOauthButton = () => {
   const { width } = useWindowDimensions();
-  const navigation = useNavigation();
+  const navigation = useNavigation<AuthTabNavigationProp>();
 
   return (
     <>

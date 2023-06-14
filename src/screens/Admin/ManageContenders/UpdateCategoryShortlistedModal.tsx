@@ -25,14 +25,11 @@ const UpdateCategoryShortlistedModal = (props: {
 
   const navigation = useNavigation();
 
-  const {
-    updateContenderIsShortlisted,
-    isComplete,
-  } = useMutationUpdateCategoryIsShortlisted(() => navigation.goBack());
+  const { updateContenderIsShortlisted, isComplete } =
+    useMutationUpdateCategoryIsShortlisted(() => navigation.goBack());
 
-  const [isShortlisted, setIsShortlisted] = useState<CategoryIsShortlisted>(
-    initialIsShortlisted,
-  );
+  const [isShortlisted, setIsShortlisted] =
+    useState<CategoryIsShortlisted>(initialIsShortlisted);
 
   const onSetIsShortlisted = async () => {
     if (isShortlisted) {

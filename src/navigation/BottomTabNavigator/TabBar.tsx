@@ -26,12 +26,6 @@ const TabBar = (props: ITabBarProps) => {
       edges={['bottom']}
       style={{
         borderTopWidth: 1,
-        shadowOpacity: 0.2,
-        shadowRadius: 10,
-        shadowOffset: {
-          height: -5,
-          width: 0,
-        },
         backgroundColor: COLORS.primary,
       }}
     >

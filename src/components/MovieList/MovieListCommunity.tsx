@@ -8,7 +8,9 @@ import theme from '../../constants/theme';
 import { useCategory } from '../../context/CategoryContext';
 import { iCategory, iEvent, iPrediction } from '../../types';
 import LastUpdatedText from '../LastUpdatedText';
-import ContenderListItem from '../List/ContenderList/ContenderListItem';
+import ContenderListItem, {
+  iContenderListItemProps,
+} from '../List/ContenderList/ContenderListItem';
 import ContenderListItemCondensed from '../List/ContenderList/ContenderListItemCondensed';
 import { BodyBold } from '../Text';
 
@@ -32,15 +34,6 @@ const MovieListCommunity = ({
   const category = _category as iCategory;
 
   const [selectedContenderId, setSelectedContenderId] = useState<string | undefined>(); // this selection is whether the film is big or not
-
-  const onPressItem = async (prediction: iPrediction) => {
-    const id = prediction.contenderId;
-    if (selectedContenderId === id) {
-      setSelectedContenderId(undefined);
-    } else {
-      setSelectedContenderId(id);
-    }
-  };
 
   const predictionType = predictions[0]?.predictionType || PredictionType.NOMINATION;
   const slots = getCategorySlots(event, category.name, predictionType);
@@ -93,6 +86,24 @@ const MovieListCommunity = ({
       }
       renderItem={({ item: prediction, index }) => {
         const ranking = index + 1;
+        const onPressItem = async (prediction: iPrediction) => {
+          if (isCollapsed) return; // do nothing if is collapsed
+          const id = prediction.contenderId;
+          if (selectedContenderId === id) {
+            setSelectedContenderId(undefined);
+          } else {
+            setSelectedContenderId(id);
+          }
+        };
+        const listItemProps: iContenderListItemProps = {
+          variant: 'community',
+          prediction,
+          ranking,
+          isSelected: selectedContenderId === prediction.contenderId,
+          onPressItem,
+          onPressThumbnail: onPressItem,
+          categoryType: category.type,
+        };
         return (
           <>
             {index === slots ? (
@@ -105,31 +116,9 @@ const MovieListCommunity = ({
               />
             ) : null}
             {!isCollapsed ? (
-              <ContenderListItem
-                prediction={prediction}
-                ranking={ranking}
-                onPressItem={onPressItem}
-                onPressThumbnail={(item) => {
-                  const id = item.contenderId;
-                  if (selectedContenderId === id) {
-                    setSelectedContenderId(undefined);
-                  } else {
-                    setSelectedContenderId(id);
-                  }
-                }}
-                selected={selectedContenderId === prediction.contenderId}
-                variant={'community'}
-                categoryType={category.type}
-              />
+              <ContenderListItem {...listItemProps} />
             ) : (
-              <ContenderListItemCondensed
-                prediction={prediction}
-                onPressItem={() => {}}
-                ranking={ranking}
-                selected={selectedContenderId === prediction.contenderId}
-                variant={'community'}
-                categoryType={category.type}
-              />
+              <ContenderListItemCondensed {...listItemProps} />
             )}
           </>
         );

@@ -40,21 +40,13 @@ const Category = () => {
   const { category, event: _event, date, isEditing } = useCategory();
   const isHistory = !!date;
   const navigation = useTypedNavigation<PredictionsParamList>();
-  const {
-    delayedDisplay,
-    gridOpacity,
-    collapsedOpacity,
-    expandedOpacity,
-  } = useCategoryDisplay();
+  const { delayedDisplay, gridOpacity, collapsedOpacity, expandedOpacity } =
+    useCategoryDisplay();
 
-  const {
-    predictionData: personalPredictionData,
-    isLoading: personalIsLoading,
-  } = usePredictionData('personal', userId);
-  const {
-    predictionData: communityPredictionData,
-    isLoading: communityIsLoading,
-  } = usePredictionData('community', userId);
+  const { predictionData: personalPredictionData, isLoading: personalIsLoading } =
+    usePredictionData('personal', userId);
+  const { predictionData: communityPredictionData, isLoading: communityIsLoading } =
+    usePredictionData('community', userId);
 
   const event = _event as iEvent;
 

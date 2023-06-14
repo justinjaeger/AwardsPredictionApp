@@ -13,14 +13,8 @@ const UpdateExpirationModal = (props: {
   initialDateTime: string | undefined; // this is an ISO string (AWSDateTime)
   onSaveSuccess: () => void;
 }) => {
-  const {
-    visible,
-    onClose,
-    eventId,
-    propertyToUpdate,
-    initialDateTime,
-    onSaveSuccess,
-  } = props;
+  const { visible, onClose, eventId, propertyToUpdate, initialDateTime, onSaveSuccess } =
+    props;
 
   const [date, setDate] = useState<Date | undefined>(
     initialDateTime ? new Date(initialDateTime) : undefined,

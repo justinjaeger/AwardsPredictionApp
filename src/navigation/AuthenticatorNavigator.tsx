@@ -8,7 +8,6 @@ const AuthenticatorNavigator = () => {
   return (
     <Navigator
       initialRouteName="Authenticator"
-      headerMode={'screen'}
       screenOptions={{
         animationTypeForReplace: 'push',
       }}

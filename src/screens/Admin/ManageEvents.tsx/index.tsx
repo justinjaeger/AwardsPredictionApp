@@ -28,6 +28,29 @@ import SelectCategoryModal from './SelectCategoryModal';
 import UpdateExpirationModal from './UpdateExpirationModal';
 import useQueryGetUser from '../../../hooks/queries/getUser';
 
+const EventProperty = (_props: {
+  label: string;
+  buttonLabel: string;
+  onPress: () => void;
+}) => (
+  <View style={{ flexDirection: 'row', alignItems: 'center', margin: 5 }}>
+    <Body
+      style={{
+        color: COLORS.white,
+      }}
+    >
+      {_props.label}
+    </Body>
+    <SubmitButton
+      onPress={() => {
+        _props.onPress();
+      }}
+      text={_props.buttonLabel}
+      style={{ width: 'auto', padding: 5, marginLeft: 10 }}
+    />
+  </View>
+);
+
 const ManageEvents = () => {
   const { width } = useWindowDimensions();
   const { userId: authUserId } = useAuth();
@@ -38,9 +61,8 @@ const ManageEvents = () => {
   const [highlightedEvent, setHighlightedEvent] = useState<string>('');
   const [selectedEvent, setSelectedEvent] = useState<iEvent | undefined>();
   const [openUpdateStatusModal, setOpenUpdateStatusModal] = useState<boolean>(false);
-  const [openUpdateExpirationModal, setOpenUpdateExpirationModal] = useState<boolean>(
-    false,
-  );
+  const [openUpdateExpirationModal, setOpenUpdateExpirationModal] =
+    useState<boolean>(false);
   const [openCreateEventModal, setOpenCreateEventModal] = useState<boolean>(false);
   const [openSelectCategoryModal, setOpenSelectCategoryModal] = useState<boolean>(false);
 
@@ -65,31 +87,6 @@ const ManageEvents = () => {
   const userIsAdminOrTester = user
     ? user.role === UserRole.ADMIN || user.role === UserRole.TESTER
     : false;
-
-  const EventProperty = (_props: {
-    event: iEvent;
-    label: string;
-    buttonLabel: string;
-    onPress: () => void;
-  }) => (
-    <View style={{ flexDirection: 'row', alignItems: 'center', margin: 5 }}>
-      <Body
-        style={{
-          color: COLORS.white,
-        }}
-      >
-        {_props.label}
-      </Body>
-      <SubmitButton
-        onPress={() => {
-          setSelectedEvent(_props.event);
-          _props.onPress();
-        }}
-        text={_props.buttonLabel}
-        style={{ width: 'auto', padding: 5, marginLeft: 10 }}
-      />
-    </View>
-  );
 
   return (
     <BackgroundWrapper>
@@ -176,20 +173,26 @@ const ManageEvents = () => {
                             <EventProperty
                               label={EVENT_STATUS_TO_STRING[status]}
                               buttonLabel={'Update Status'}
-                              event={event}
-                              onPress={() => setOpenUpdateStatusModal(true)}
+                              onPress={() => {
+                                setSelectedEvent(event);
+                                setOpenUpdateStatusModal(true);
+                              }}
                             />
                             <EventProperty
                               label={dateTime === '' ? 'no time set' : dateTime}
                               buttonLabel={'Update Expiration'}
-                              event={event}
-                              onPress={() => setOpenUpdateExpirationModal(true)}
+                              onPress={() => {
+                                setSelectedEvent(event);
+                                setOpenUpdateExpirationModal(true);
+                              }}
                             />
                             <EventProperty
                               label={'Manage Contenders'}
                               buttonLabel={'Manage Contenders'}
-                              event={event}
-                              onPress={() => setOpenSelectCategoryModal(true)}
+                              onPress={() => {
+                                setSelectedEvent(event);
+                                setOpenSelectCategoryModal(true);
+                              }}
                             />
                           </>
                         </TouchableHighlight>

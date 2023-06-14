@@ -21,13 +21,8 @@ const SearchInput = (props: {
 
   const { width } = useWindowDimensions();
 
-  const {
-    searchInput,
-    setSearchInput,
-    isLoadingSearch,
-    isSearching,
-    resetSearch,
-  } = useSearch();
+  const { searchInput, setSearchInput, isLoadingSearch, isSearching, resetSearch } =
+    useSearch();
 
   const searchHeight = HEADER_HEIGHT;
 
@@ -60,31 +55,29 @@ const SearchInput = (props: {
           fontSize: 20,
           color: COLORS.white,
         }}
-        accessoryLeft={() => (
+        accessoryLeft={
           <CustomIcon
             name="search-outline"
             color={COLORS.gray}
             size={25}
             styles={{ marginLeft: 10 }}
           />
-        )}
+        }
         accessoryRight={
-          !isLoadingSearch && isSearching
-            ? () => (
-                <TouchableOpacity
-                  onPress={() => {
-                    resetSearch();
-                  }}
-                >
-                  <CustomIcon
-                    name="close-outline"
-                    color={COLORS.gray}
-                    size={25}
-                    styles={{ marginRight: 2 }}
-                  />
-                </TouchableOpacity>
-              )
-            : undefined
+          !isLoadingSearch && isSearching ? (
+            <TouchableOpacity
+              onPress={() => {
+                resetSearch();
+              }}
+            >
+              <CustomIcon
+                name="close-outline"
+                color={COLORS.gray}
+                size={25}
+                styles={{ marginRight: 2 }}
+              />
+            </TouchableOpacity>
+          ) : undefined
         }
         keyboardAppearance={'dark'}
       />

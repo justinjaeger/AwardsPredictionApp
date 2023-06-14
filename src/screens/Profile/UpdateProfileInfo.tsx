@@ -58,6 +58,7 @@ const UpdateProfileInfo = () => {
       headerTitle: getHeaderTitle(
         usernameBeforeEdit ? 'Update Profile' : 'Create Profile',
       ),
+      // eslint-disable-next-line react/no-unstable-nested-components
       headerLeft: () => (
         <BackButton
           onPress={

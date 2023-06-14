@@ -3,9 +3,10 @@ import React from 'react';
 import BackgroundWrapper from '../BackgroundWrapper';
 import { SubmitButton } from '../Buttons';
 import { SubHeader } from '../Text';
+import { MainScreenNavigationProp } from '../../navigation/types';
 
 const SignedOutState = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<MainScreenNavigationProp>();
 
   return (
     <BackgroundWrapper>

@@ -7,6 +7,7 @@ import { Body, SubHeader } from '../Text';
 import { iCachedTmdbMovie, iCachedTmdbPerson } from '../../services/cache/types';
 import TmdbServices from '../../services/tmdb';
 import { getHeaderTitle } from '../../constants';
+import { MainScreenNavigationProp } from '../../navigation/types';
 
 type iPerformanceDetailsProps = {
   personTmdbId: number;
@@ -16,7 +17,7 @@ type iPerformanceDetailsProps = {
 const PerformanceDetails = (props: iPerformanceDetailsProps) => {
   const { personTmdbId, movieTmdbId } = props;
 
-  const navigation = useNavigation();
+  const navigation = useNavigation<MainScreenNavigationProp>();
 
   const [movieDetails, setContenderDetails] = useState<iCachedTmdbMovie | undefined>();
   const [personDetails, setPersonDetails] = useState<iCachedTmdbPerson | undefined>();

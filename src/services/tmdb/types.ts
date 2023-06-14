@@ -177,7 +177,7 @@ export type iTmdbPersonMovieCredits = {
     genre_ids: number[];
     original_language: string;
     original_title: string;
-    popularity: SVGAnimatedNumberList;
+    popularity: any;
     id: number;
     backdrop_path: string | null;
     overview: string;
