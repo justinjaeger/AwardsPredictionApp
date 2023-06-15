@@ -10,6 +10,8 @@ import deleteDuplicatedMovies from '../../../services/scripts/deleteDuplicatedMo
 import deleteDuplicatedPredictionSets from '../../../services/scripts/deleteDuplicatedPredictionSets';
 import deleteDuplicatedPeople from '../../../services/scripts/deleteDuplicatedPeople';
 import deleteDuplicatedSongs from '../../../services/scripts/deleteDuplicatedSongs';
+import EmailService from '../../../services/email';
+import Snackbar from '../../../components/Snackbar';
 
 const AdminScripts = () => {
   return (
@@ -21,6 +23,20 @@ const AdminScripts = () => {
             paddingBottom: 200,
           }}
         >
+          <SubmitButton
+            text={'Test Confirmation Email'}
+            onPress={async () => {
+              const { status } = await EmailService.sendConfirmationCode(
+                'jjustinjaeger@gmail.com',
+              );
+              if (status === 'success') {
+                Snackbar.success('Email sent!');
+              } else {
+                Snackbar.error('Email failed to send');
+              }
+            }}
+            style={{ marginTop: 30 }}
+          />
           <SubmitButton
             text={'Delete Duplicated Users'}
             onPress={() => {

@@ -73,7 +73,7 @@
         },
         "sendEmail": {
           "deploymentBucketName": "amplify-awardsapp-dev-115717-deployment",
-          "s3Key": "amplify-builds/sendEmail-4a536376316c6d464868-build.zip"
+          "s3Key": "amplify-builds/sendEmail-35547443684a56765630-build.zip"
         }
       }
     }

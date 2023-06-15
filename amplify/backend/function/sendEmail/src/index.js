@@ -5,17 +5,12 @@ const sgMail = require('@sendgrid/mail');
  */
 
 exports.handler = async (event) => {
-  // Probably won't need this bc the console logs just work
-  //   const binArrayToJson = (binArray) => {
-  //     let str = '';
-  //     for (let i = 0; i < binArray.length; i++) {
-  //       str += String.fromCharCode(parseInt(binArray[i]));
-  //     }
-  //     return JSON.parse(str);
-  //   };
+  // TODO: Import as env variable
+  const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY;
+
+  sgMail.setApiKey(SENDGRID_API_KEY); // important
 
   const email = event.email;
-  console.log(`EVENT: ${JSON.stringify(event)}`);
   console.log('EMAIL:', event.email);
 
   const SENDER = 'noreply@oscarexpert.com';
@@ -32,25 +27,18 @@ exports.handler = async (event) => {
     text: `Your confirmation code is ${code}`,
   };
 
-  // TODO: Figure out how to get this from the environment variables
-  sgMail.setApiKey(SENDGRID_API_KEY); // important
-
   try {
-    sgMail.send(msg);
-    console.error('Confirmation code sent!');
-    // return { status: 'success' };
+    await sgMail.send(msg);
+    console.log('Confirmation code sent!');
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ status: 'success' }),
+    };
   } catch (error) {
-    console.error('error sending confirmation code:', error);
-    // return { status: 'error' };
+    console.error('Error sending confirmation code:', error);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ status: 'error' }),
+    };
   }
-
-  return {
-    statusCode: 200,
-    //  Uncomment below to enable CORS requests
-    //  headers: {
-    //      "Access-Control-Allow-Origin": "*",
-    //      "Access-Control-Allow-Headers": "*"
-    //  },
-    body: JSON.stringify('Hello from Lambda!'),
-  };
 };
