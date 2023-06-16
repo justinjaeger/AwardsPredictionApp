@@ -3,22 +3,37 @@ import { Linking } from 'react-native';
 
 // NOTE: This prefix "oscar", if changed, must also change in Info.plist AND AndroidManifeset
 // It is also part of the amplify auth configuration, and if changed, also needs to update there "amplify update auth"
-const URL = 'oscar://signin/';
+export const SIGN_IN_PREFIX = 'oscar://signin/';
 
-// NOTE: None of this code is active, this is just a reference for the future if wanting to use deep links
+// urls will look like this:
+// "oscar://signin/?code=1234567890"
 const useDeepLink = () => {
+  // For links when app is ALREADY OPEN
   useEffect(() => {
     Linking.addEventListener('url', ({ url }) => {
-      // url will look like this:
-      // "oscar://signin/?code=b19d8728-adc7-44c1-9a42-78e9275bc845&state=omTFMhAaNjOtpuevv9giYbyMhE27TmWj#"
-      if (url.includes(URL)) {
-        handleSignIn();
+      if (url.includes(SIGN_IN_PREFIX)) {
+        handleSignIn('open');
       }
     });
   }, []);
 
-  const handleSignIn = () => {
+  // useInitialUrl - For links when app is NOT OPEN
+  useEffect(() => {
+    const getUrlAsync = async () => {
+      // Get the deep link used to open the app
+      // Resolves to a link if one was used
+      const url = await Linking.getInitialURL();
+      if (url?.includes(SIGN_IN_PREFIX)) {
+        handleSignIn('closed');
+      }
+    };
+
+    getUrlAsync();
+  }, []);
+
+  const handleSignIn = (source: 'open' | 'closed') => {
     //
+    console.log('handleSignIn', source);
   };
 };
 
