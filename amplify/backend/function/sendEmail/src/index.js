@@ -10,21 +10,34 @@ exports.handler = async (event) => {
 
   sgMail.setApiKey(SENDGRID_API_KEY); // important
 
-  const email = event.email;
-  console.log('EMAIL:', event.email);
+  const { email, link } = event;
+  console.log('EMAIL:', email);
+  console.log('LINK:', link);
 
   const SENDER = 'noreply@oscarexpert.com';
 
-  const generateCode = () => {
-    return Math.floor(100000 + Math.random() * 900000);
-  };
-
-  const code = generateCode();
   const msg = {
     to: email, // Change to your recipient
     from: SENDER, // Change to your verified sender
     subject: 'Award Expert - Confirm your email',
-    text: `Your confirmation code is ${code}`,
+    html: `
+        <div>
+            <h3 style="color: #1F1F1F; margin-bottom: 5px;">
+                Click to verify your account
+            </h3>
+            <a href=${link}>
+                <button style="background-color: #c48900; color: white; font-weight: 700; border: none; border-radius: 5px; padding: 10px 20px; cursor: pointer;">
+                    Verify Account
+                </button>
+            </a>
+            <body style="color: #5E5E5E; margin-top: 20px;">
+                You must verify on the same device you signed up on.
+            </body>
+            <body style="color: #5E5E5E;">
+                If you did not sign up for Award Expert, please ignore this email.
+            </body>
+        </div>
+    `,
   };
 
   try {
