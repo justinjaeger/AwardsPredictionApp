@@ -32,6 +32,7 @@ type iUserContext = {
   setAccessToken: (token: string) => void;
   verificationCode: iVerificationCode;
   generateVerificationCode: () => string | undefined;
+  validateVerificationCode: (c: string) => void;
 };
 
 const UserContext = createContext<iUserContext>({
@@ -45,6 +46,7 @@ const UserContext = createContext<iUserContext>({
   setAccessToken: () => {},
   verificationCode: undefined,
   generateVerificationCode: () => undefined,
+  validateVerificationCode: () => ({ isValid: false }),
 });
 
 export const UserProvider = (props: { children: React.ReactNode }) => {
@@ -115,6 +117,29 @@ export const UserProvider = (props: { children: React.ReactNode }) => {
     return code;
   };
 
+  const validateVerificationCode = (
+    code: string,
+  ): {
+    isValid: boolean;
+    message?: string;
+  } => {
+    if (verificationCode?.code !== code) {
+      return {
+        isValid: false,
+        message: 'Invalid verification code',
+      };
+    }
+    if (verificationCode.expTime > new Date()) {
+      return {
+        isValid: false,
+        message: 'Verification code expired',
+      };
+    }
+    return {
+      isValid: true,
+    };
+  };
+
   return (
     <UserContext.Provider
       value={{
@@ -128,6 +153,7 @@ export const UserProvider = (props: { children: React.ReactNode }) => {
         setAccessToken,
         verificationCode,
         generateVerificationCode,
+        validateVerificationCode,
       }}
     >
       {props.children}
