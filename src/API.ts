@@ -9074,6 +9074,29 @@ export type ListTokensQuery = {
   } | null,
 };
 
+export type TokenByTokenQueryVariables = {
+  token: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelTokenFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type TokenByTokenQuery = {
+  tokenByToken?:  {
+    __typename: "ModelTokenConnection",
+    items:  Array< {
+      __typename: "Token",
+      id: string,
+      token: string,
+      userId: string,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
 export type TokenByUserIdQueryVariables = {
   userId: string,
   sortDirection?: ModelSortDirection | null,

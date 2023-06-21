@@ -82,6 +82,32 @@ export const listTokens = /* GraphQL */ `
     }
   }
 `;
+export const tokenByToken = /* GraphQL */ `
+  query TokenByToken(
+    $token: String!
+    $sortDirection: ModelSortDirection
+    $filter: ModelTokenFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    tokenByToken(
+      token: $token
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        token
+        userId
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
 export const tokenByUserId = /* GraphQL */ `
   query TokenByUserId(
     $userId: ID!
