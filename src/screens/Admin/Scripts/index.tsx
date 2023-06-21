@@ -28,6 +28,7 @@ const AdminScripts = () => {
             onPress={async () => {
               const { status } = await EmailService.sendConfirmationCode(
                 'jjustinjaeger@gmail.com',
+                'oscar://signin/?code=1234567890',
               );
               if (status === 'success') {
                 Snackbar.success('Email sent!');

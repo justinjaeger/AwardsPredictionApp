@@ -17,16 +17,19 @@ const toUint8array = (json: any) => {
   return ret;
 };
 
-const sendConfirmationCode = async (email: string): Promise<iApiResponse<any>> => {
+const sendConfirmationCode = async (
+  email: string,
+  link: string,
+): Promise<iApiResponse<any>> => {
   try {
     // https://stackoverflow.com/questions/56106825/invoke-lambda-function-from-amplify-generated-react-app-without-using-api-gatewa
-    const credentials = await Auth.currentCredentials();
+    const credentials = await Auth.currentCredentials(); // expect user to be signed out "unauth" since we don't use the Cognito user pools anymore
     if (!credentials) throw new Error('No credentials in sendConfirmationCode');
     const lambda = new LambdaClient({
       region: 'us-east-1',
       credentials: Auth.essentialCredentials(credentials),
     });
-    const payload = { email };
+    const payload = { email, link };
     const command = new InvokeCommand({
       FunctionName: 'sendEmail-dev', // TODO: change to prod
       Payload: toUint8array(payload),

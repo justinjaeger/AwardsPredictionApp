@@ -14,6 +14,13 @@ import KeychainStorage from '../services/keychain';
  * Lets us get the userId and userEmail synchronously
  */
 
+type iVerificationCode =
+  | {
+      code: string;
+      expTime: Date;
+    }
+  | undefined;
+
 type iUserContext = {
   userId: string | undefined;
   userEmail: string | undefined;
@@ -23,6 +30,8 @@ type iUserContext = {
   accessToken: string | undefined;
   refreshToken: string | undefined;
   setAccessToken: (token: string) => void;
+  verificationCode: iVerificationCode;
+  generateVerificationCode: () => string | undefined;
 };
 
 const UserContext = createContext<iUserContext>({
@@ -34,12 +43,15 @@ const UserContext = createContext<iUserContext>({
   accessToken: undefined,
   refreshToken: undefined,
   setAccessToken: () => {},
+  verificationCode: undefined,
+  generateVerificationCode: () => undefined,
 });
 
 export const UserProvider = (props: { children: React.ReactNode }) => {
   const [accessToken, setAccessToken] = useState<string | undefined>(undefined);
   const [refreshToken, setRefreshToken] = useState<string | undefined>(undefined);
   const [userInfo, setUserInfo] = useState<iJwtPayload | undefined>(undefined);
+  const [verificationCode, setVerificationCode] = useState<iVerificationCode>(undefined);
 
   // on inital load, we need to replenish userInfo with access tokens from KeychainStorage
   useAsyncEffect(async () => {
@@ -93,6 +105,16 @@ export const UserProvider = (props: { children: React.ReactNode }) => {
     setUserInfo(undefined);
   };
 
+  const generateVerificationCode = () => {
+    // random string of 12 characters including special characters
+    const code = Math.random().toString(36).slice(-12);
+    // set a datetime for ten minutes from now
+    const expTime = new Date();
+    expTime.setMinutes(expTime.getMinutes() + 10);
+    setVerificationCode({ code, expTime });
+    return code;
+  };
+
   return (
     <UserContext.Provider
       value={{
@@ -104,6 +126,8 @@ export const UserProvider = (props: { children: React.ReactNode }) => {
         accessToken,
         refreshToken,
         setAccessToken,
+        verificationCode,
+        generateVerificationCode,
       }}
     >
       {props.children}
