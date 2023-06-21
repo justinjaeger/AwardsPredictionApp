@@ -1,36 +1,14 @@
 import React, { createContext, useContext, useState } from 'react';
 import { useAsyncEffect } from '../util/hooks';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { UserRole } from '../API';
+import JwtService, { iJwtPayload } from '../services/jwt';
+import ApiServices from '../services/graphql';
+import KeychainStorage from '../services/keychain';
 
 /** Async Storage Functions (to persist data when user closes app)
  * We're not exporting the async functions because we ONLY want to use them in here, or else syncing persisted state with this context is annoying
  * The purpose of this is to keep this context in sync with the async storage for the user's login info
  */
-
-enum AsyncStorageKeys {
-  USER_ID = 'userId',
-  USER_EMAIL = 'userEmail',
-  USER_ROLE = 'userRole',
-}
-
-const asyncStorageSignIn = async (userId: string, email: string, role: UserRole) => {
-  await AsyncStorage.setItem(AsyncStorageKeys.USER_ID, userId);
-  await AsyncStorage.setItem(AsyncStorageKeys.USER_EMAIL, email);
-  await AsyncStorage.setItem(AsyncStorageKeys.USER_ROLE, role);
-};
-
-const asyncStorageSignOut = async () => {
-  await AsyncStorage.removeItem(AsyncStorageKeys.USER_ID);
-  await AsyncStorage.removeItem(AsyncStorageKeys.USER_ROLE);
-};
-
-const asyncStorageGetUser = async () => {
-  const userId = await AsyncStorage.getItem(AsyncStorageKeys.USER_ID);
-  const email = await AsyncStorage.getItem(AsyncStorageKeys.USER_EMAIL);
-  const role = await AsyncStorage.getItem(AsyncStorageKeys.USER_ROLE);
-  return { userId, email, role };
-};
 
 /**
  * Lets us get the userId and userEmail synchronously
@@ -42,6 +20,9 @@ type iUserContext = {
   userRole: UserRole | undefined;
   signInUser: (id: string, email: string, role: UserRole) => void;
   signOutUser: () => void;
+  accessToken: string | undefined;
+  refreshToken: string | undefined;
+  setAccessToken: (token: string) => void;
 };
 
 const UserContext = createContext<iUserContext>({
@@ -50,48 +31,79 @@ const UserContext = createContext<iUserContext>({
   userRole: undefined,
   signInUser: () => {},
   signOutUser: () => {},
+  accessToken: undefined,
+  refreshToken: undefined,
+  setAccessToken: () => {},
 });
 
 export const UserProvider = (props: { children: React.ReactNode }) => {
-  const [userId, setUserId] = useState<string>();
-  const [userEmail, setUserEmail] = useState<string>();
-  const [userRole, setUserRole] = useState<UserRole | undefined>(undefined);
+  const [accessToken, setAccessToken] = useState<string | undefined>(undefined);
+  const [refreshToken, setRefreshToken] = useState<string | undefined>(undefined);
+  const [userInfo, setUserInfo] = useState<iJwtPayload | undefined>(undefined);
 
+  // on inital load, we need to replenish userInfo with access tokens from KeychainStorage
   useAsyncEffect(async () => {
-    const { userId, email, role } = await asyncStorageGetUser();
-    if (userId) {
-      setUserId(userId);
-    }
-    if (email) {
-      setUserEmail(email);
-    }
-    if (role) {
-      setUserRole(role as UserRole);
+    const { data: payload } = await KeychainStorage.get();
+    if (payload) {
+      setAccessToken(payload.accessToken);
+      setRefreshToken(payload.refreshToken);
     }
   }, []);
 
-  const signInUser = (id: string, email: string, role: UserRole) => {
-    setUserId(id);
-    setUserEmail(email);
-    setUserRole(role);
-    asyncStorageSignIn(id, email, role);
+  // populate user info with the decoded access token
+  useAsyncEffect(async () => {
+    const { data: payload } = await JwtService.decode(accessToken || '');
+    if (payload) {
+      setUserInfo(payload);
+    } else {
+      setUserInfo(undefined);
+    }
+  }, [accessToken]);
+
+  // sync keychains to the current state of accessToken and refreshToken
+  useAsyncEffect(async () => {
+    if (accessToken && refreshToken) {
+      await KeychainStorage.set(accessToken, refreshToken);
+    } else {
+      await KeychainStorage.remove();
+    }
+  }, [accessToken]);
+
+  const signInUser = async (userId: string, email: string, role: UserRole) => {
+    const payload: iJwtPayload = { userId, email, role };
+    // CREATE ACCESS TOKEN
+    const { data: newAccessToken } = await JwtService.createAccessToken(payload);
+    setAccessToken(newAccessToken);
+    // CREATE REFRESH TOKEN
+    const { data: newRefreshToken } = await JwtService.createRefreshToken(payload);
+    setRefreshToken(newRefreshToken);
+    // SET REFRESH TOKEN IN DB
+    if (newRefreshToken) {
+      await ApiServices.createRefreshToken(newRefreshToken, userId);
+    }
   };
 
-  const signOutUser = () => {
-    // Notable: doesn't clear the email. This way if you're signed out it remembers who was last signed in
-    setUserId(undefined);
-    setUserRole(undefined);
-    asyncStorageSignOut();
+  const signOutUser = async () => {
+    // DELETE REFRESH TOKEN FROM DB
+    if (refreshToken) {
+      await ApiServices.deleteToken(refreshToken || '');
+    }
+    setAccessToken(undefined);
+    setRefreshToken(undefined);
+    setUserInfo(undefined);
   };
 
   return (
     <UserContext.Provider
       value={{
-        userId,
-        userEmail,
-        userRole,
+        userId: userInfo?.userId,
+        userEmail: userInfo?.email,
+        userRole: userInfo?.role,
         signInUser,
         signOutUser,
+        accessToken,
+        refreshToken,
+        setAccessToken,
       }}
     >
       {props.children}

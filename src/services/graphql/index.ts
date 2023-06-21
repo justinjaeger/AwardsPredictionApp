@@ -11,6 +11,7 @@ import * as PersonServices from './person';
 import * as SongServices from './song';
 import * as DeleteUserServices from './removeUser';
 import * as EmailAuthServices from './emailAuth';
+import * as TokenServices from './token';
 
 // https://docs.amplify.aws/lib/graphqlapi/getting-started/q/platform/js/#configure-your-application
 // https://github.com/aws-amplify/amplify-js/issues/4257
@@ -29,6 +30,7 @@ const ApiServices = {
   ...RelationshipServices,
   ...DeleteUserServices,
   ...EmailAuthServices,
+  ...TokenServices,
 };
 
 export default ApiServices;
