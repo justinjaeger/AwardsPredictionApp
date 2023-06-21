@@ -2,6 +2,39 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const onCreateToken = /* GraphQL */ `
+  subscription OnCreateToken {
+    onCreateToken {
+      id
+      token
+      userId
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateToken = /* GraphQL */ `
+  subscription OnUpdateToken {
+    onUpdateToken {
+      id
+      token
+      userId
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteToken = /* GraphQL */ `
+  subscription OnDeleteToken {
+    onDeleteToken {
+      id
+      token
+      userId
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const onCreateUser = /* GraphQL */ `
   subscription OnCreateUser {
     onCreateUser {
@@ -537,39 +570,6 @@ export const onDeleteUser = /* GraphQL */ `
         }
         nextToken
       }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onCreateToken = /* GraphQL */ `
-  subscription OnCreateToken {
-    onCreateToken {
-      id
-      token
-      userId
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onUpdateToken = /* GraphQL */ `
-  subscription OnUpdateToken {
-    onUpdateToken {
-      id
-      token
-      userId
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onDeleteToken = /* GraphQL */ `
-  subscription OnDeleteToken {
-    onDeleteToken {
-      id
-      token
-      userId
       createdAt
       updatedAt
     }

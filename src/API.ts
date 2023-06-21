@@ -1017,46 +1017,15 @@ export type CreateSongInput = {
   artist: string,
 };
 
-export type ModelUserFilterInput = {
-  id?: ModelIDInput | null,
-  email?: ModelStringInput | null,
-  oauthId?: ModelStringInput | null,
-  username?: ModelStringInput | null,
-  name?: ModelStringInput | null,
-  bio?: ModelStringInput | null,
-  image?: ModelStringInput | null,
-  role?: ModelUserRoleInput | null,
-  and?: Array< ModelUserFilterInput | null > | null,
-  or?: Array< ModelUserFilterInput | null > | null,
-  not?: ModelUserFilterInput | null,
-};
-
-export enum ModelSortDirection {
-  ASC = "ASC",
-  DESC = "DESC",
-}
-
-
-export type ModelUserConnection = {
-  __typename: "ModelUserConnection",
-  items:  Array<User | null >,
-  nextToken?: string | null,
-};
-
-export type SearchableUserFilterInput = {
+export type SearchableTokenFilterInput = {
   id?: SearchableIDFilterInput | null,
-  email?: SearchableStringFilterInput | null,
-  oauthId?: SearchableStringFilterInput | null,
-  username?: SearchableStringFilterInput | null,
-  name?: SearchableStringFilterInput | null,
-  bio?: SearchableStringFilterInput | null,
-  image?: SearchableStringFilterInput | null,
+  token?: SearchableStringFilterInput | null,
+  userId?: SearchableIDFilterInput | null,
   createdAt?: SearchableStringFilterInput | null,
   updatedAt?: SearchableStringFilterInput | null,
-  role?: SearchableStringFilterInput | null,
-  and?: Array< SearchableUserFilterInput | null > | null,
-  or?: Array< SearchableUserFilterInput | null > | null,
-  not?: SearchableUserFilterInput | null,
+  and?: Array< SearchableTokenFilterInput | null > | null,
+  or?: Array< SearchableTokenFilterInput | null > | null,
+  not?: SearchableTokenFilterInput | null,
 };
 
 export type SearchableIDFilterInput = {
@@ -1093,19 +1062,15 @@ export type SearchableStringFilterInput = {
   range?: Array< string | null > | null,
 };
 
-export type SearchableUserSortInput = {
-  field?: SearchableUserSortableFields | null,
+export type SearchableTokenSortInput = {
+  field?: SearchableTokenSortableFields | null,
   direction?: SearchableSortDirection | null,
 };
 
-export enum SearchableUserSortableFields {
+export enum SearchableTokenSortableFields {
   id = "id",
-  email = "email",
-  oauthId = "oauthId",
-  username = "username",
-  name = "name",
-  bio = "bio",
-  image = "image",
+  token = "token",
+  userId = "userId",
   createdAt = "createdAt",
   updatedAt = "updatedAt",
 }
@@ -1117,10 +1082,10 @@ export enum SearchableSortDirection {
 }
 
 
-export type SearchableUserAggregationInput = {
+export type SearchableTokenAggregationInput = {
   name: string,
   type: SearchableAggregateType,
-  field: SearchableUserAggregateField,
+  field: SearchableTokenAggregateField,
 };
 
 export enum SearchableAggregateType {
@@ -1132,23 +1097,18 @@ export enum SearchableAggregateType {
 }
 
 
-export enum SearchableUserAggregateField {
+export enum SearchableTokenAggregateField {
   id = "id",
-  email = "email",
-  oauthId = "oauthId",
-  username = "username",
-  name = "name",
-  bio = "bio",
-  image = "image",
-  role = "role",
+  token = "token",
+  userId = "userId",
   createdAt = "createdAt",
   updatedAt = "updatedAt",
 }
 
 
-export type SearchableUserConnection = {
-  __typename: "SearchableUserConnection",
-  items:  Array<User | null >,
+export type SearchableTokenConnection = {
+  __typename: "SearchableTokenConnection",
+  items:  Array<Token | null >,
   nextToken?: string | null,
   total?: number | null,
   aggregateItems:  Array<SearchableAggregateResult | null >,
@@ -1188,55 +1148,95 @@ export type ModelTokenFilterInput = {
   not?: ModelTokenFilterInput | null,
 };
 
+export enum ModelSortDirection {
+  ASC = "ASC",
+  DESC = "DESC",
+}
+
+
 export type ModelTokenConnection = {
   __typename: "ModelTokenConnection",
   items:  Array<Token | null >,
   nextToken?: string | null,
 };
 
-export type SearchableTokenFilterInput = {
-  id?: SearchableIDFilterInput | null,
-  token?: SearchableStringFilterInput | null,
-  userId?: SearchableIDFilterInput | null,
-  createdAt?: SearchableStringFilterInput | null,
-  updatedAt?: SearchableStringFilterInput | null,
-  and?: Array< SearchableTokenFilterInput | null > | null,
-  or?: Array< SearchableTokenFilterInput | null > | null,
-  not?: SearchableTokenFilterInput | null,
+export type ModelUserFilterInput = {
+  id?: ModelIDInput | null,
+  email?: ModelStringInput | null,
+  oauthId?: ModelStringInput | null,
+  username?: ModelStringInput | null,
+  name?: ModelStringInput | null,
+  bio?: ModelStringInput | null,
+  image?: ModelStringInput | null,
+  role?: ModelUserRoleInput | null,
+  and?: Array< ModelUserFilterInput | null > | null,
+  or?: Array< ModelUserFilterInput | null > | null,
+  not?: ModelUserFilterInput | null,
 };
 
-export type SearchableTokenSortInput = {
-  field?: SearchableTokenSortableFields | null,
+export type ModelUserConnection = {
+  __typename: "ModelUserConnection",
+  items:  Array<User | null >,
+  nextToken?: string | null,
+};
+
+export type SearchableUserFilterInput = {
+  id?: SearchableIDFilterInput | null,
+  email?: SearchableStringFilterInput | null,
+  oauthId?: SearchableStringFilterInput | null,
+  username?: SearchableStringFilterInput | null,
+  name?: SearchableStringFilterInput | null,
+  bio?: SearchableStringFilterInput | null,
+  image?: SearchableStringFilterInput | null,
+  createdAt?: SearchableStringFilterInput | null,
+  updatedAt?: SearchableStringFilterInput | null,
+  role?: SearchableStringFilterInput | null,
+  and?: Array< SearchableUserFilterInput | null > | null,
+  or?: Array< SearchableUserFilterInput | null > | null,
+  not?: SearchableUserFilterInput | null,
+};
+
+export type SearchableUserSortInput = {
+  field?: SearchableUserSortableFields | null,
   direction?: SearchableSortDirection | null,
 };
 
-export enum SearchableTokenSortableFields {
+export enum SearchableUserSortableFields {
   id = "id",
-  token = "token",
-  userId = "userId",
+  email = "email",
+  oauthId = "oauthId",
+  username = "username",
+  name = "name",
+  bio = "bio",
+  image = "image",
   createdAt = "createdAt",
   updatedAt = "updatedAt",
 }
 
 
-export type SearchableTokenAggregationInput = {
+export type SearchableUserAggregationInput = {
   name: string,
   type: SearchableAggregateType,
-  field: SearchableTokenAggregateField,
+  field: SearchableUserAggregateField,
 };
 
-export enum SearchableTokenAggregateField {
+export enum SearchableUserAggregateField {
   id = "id",
-  token = "token",
-  userId = "userId",
+  email = "email",
+  oauthId = "oauthId",
+  username = "username",
+  name = "name",
+  bio = "bio",
+  image = "image",
+  role = "role",
   createdAt = "createdAt",
   updatedAt = "updatedAt",
 }
 
 
-export type SearchableTokenConnection = {
-  __typename: "SearchableTokenConnection",
-  items:  Array<Token | null >,
+export type SearchableUserConnection = {
+  __typename: "SearchableUserConnection",
+  items:  Array<User | null >,
   nextToken?: string | null,
   total?: number | null,
   aggregateItems:  Array<SearchableAggregateResult | null >,
@@ -8995,6 +8995,131 @@ export type CreateSongMutation = {
   } | null,
 };
 
+export type SearchTokensQueryVariables = {
+  filter?: SearchableTokenFilterInput | null,
+  sort?: Array< SearchableTokenSortInput | null > | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  from?: number | null,
+  aggregates?: Array< SearchableTokenAggregationInput | null > | null,
+};
+
+export type SearchTokensQuery = {
+  searchTokens?:  {
+    __typename: "SearchableTokenConnection",
+    items:  Array< {
+      __typename: "Token",
+      id: string,
+      token: string,
+      userId: string,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+    total?: number | null,
+    aggregateItems:  Array< {
+      __typename: "SearchableAggregateResult",
+      name: string,
+      result: ( {
+          __typename: "SearchableAggregateScalarResult",
+          value: number,
+        } | {
+          __typename: "SearchableAggregateBucketResult",
+          buckets?:  Array< {
+            __typename: string,
+            key: string,
+            doc_count: number,
+          } | null > | null,
+        }
+      ) | null,
+    } | null >,
+  } | null,
+};
+
+export type GetTokenQueryVariables = {
+  id: string,
+};
+
+export type GetTokenQuery = {
+  getToken?:  {
+    __typename: "Token",
+    id: string,
+    token: string,
+    userId: string,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type ListTokensQueryVariables = {
+  id?: string | null,
+  filter?: ModelTokenFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  sortDirection?: ModelSortDirection | null,
+};
+
+export type ListTokensQuery = {
+  listTokens?:  {
+    __typename: "ModelTokenConnection",
+    items:  Array< {
+      __typename: "Token",
+      id: string,
+      token: string,
+      userId: string,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type TokenByTokenQueryVariables = {
+  token: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelTokenFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type TokenByTokenQuery = {
+  tokenByToken?:  {
+    __typename: "ModelTokenConnection",
+    items:  Array< {
+      __typename: "Token",
+      id: string,
+      token: string,
+      userId: string,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type TokenByUserIdQueryVariables = {
+  userId: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelTokenFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type TokenByUserIdQuery = {
+  tokenByUserId?:  {
+    __typename: "ModelTokenConnection",
+    items:  Array< {
+      __typename: "Token",
+      id: string,
+      token: string,
+      userId: string,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
 export type GetUserQueryVariables = {
   id: string,
 };
@@ -9603,131 +9728,6 @@ export type SearchUsersQuery = {
         } | null >,
         nextToken?: string | null,
       } | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null >,
-    nextToken?: string | null,
-    total?: number | null,
-    aggregateItems:  Array< {
-      __typename: "SearchableAggregateResult",
-      name: string,
-      result: ( {
-          __typename: "SearchableAggregateScalarResult",
-          value: number,
-        } | {
-          __typename: "SearchableAggregateBucketResult",
-          buckets?:  Array< {
-            __typename: string,
-            key: string,
-            doc_count: number,
-          } | null > | null,
-        }
-      ) | null,
-    } | null >,
-  } | null,
-};
-
-export type GetTokenQueryVariables = {
-  id: string,
-};
-
-export type GetTokenQuery = {
-  getToken?:  {
-    __typename: "Token",
-    id: string,
-    token: string,
-    userId: string,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type ListTokensQueryVariables = {
-  id?: string | null,
-  filter?: ModelTokenFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-  sortDirection?: ModelSortDirection | null,
-};
-
-export type ListTokensQuery = {
-  listTokens?:  {
-    __typename: "ModelTokenConnection",
-    items:  Array< {
-      __typename: "Token",
-      id: string,
-      token: string,
-      userId: string,
-      createdAt: string,
-      updatedAt: string,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
-};
-
-export type TokenByTokenQueryVariables = {
-  token: string,
-  sortDirection?: ModelSortDirection | null,
-  filter?: ModelTokenFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type TokenByTokenQuery = {
-  tokenByToken?:  {
-    __typename: "ModelTokenConnection",
-    items:  Array< {
-      __typename: "Token",
-      id: string,
-      token: string,
-      userId: string,
-      createdAt: string,
-      updatedAt: string,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
-};
-
-export type TokenByUserIdQueryVariables = {
-  userId: string,
-  sortDirection?: ModelSortDirection | null,
-  filter?: ModelTokenFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type TokenByUserIdQuery = {
-  tokenByUserId?:  {
-    __typename: "ModelTokenConnection",
-    items:  Array< {
-      __typename: "Token",
-      id: string,
-      token: string,
-      userId: string,
-      createdAt: string,
-      updatedAt: string,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
-};
-
-export type SearchTokensQueryVariables = {
-  filter?: SearchableTokenFilterInput | null,
-  sort?: Array< SearchableTokenSortInput | null > | null,
-  limit?: number | null,
-  nextToken?: string | null,
-  from?: number | null,
-  aggregates?: Array< SearchableTokenAggregationInput | null > | null,
-};
-
-export type SearchTokensQuery = {
-  searchTokens?:  {
-    __typename: "SearchableTokenConnection",
-    items:  Array< {
-      __typename: "Token",
-      id: string,
-      token: string,
-      userId: string,
       createdAt: string,
       updatedAt: string,
     } | null >,
@@ -15981,6 +15981,39 @@ export type CommunityHistoryPredictionByCategoryIdQuery = {
   } | null,
 };
 
+export type OnCreateTokenSubscription = {
+  onCreateToken?:  {
+    __typename: "Token",
+    id: string,
+    token: string,
+    userId: string,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnUpdateTokenSubscription = {
+  onUpdateToken?:  {
+    __typename: "Token",
+    id: string,
+    token: string,
+    userId: string,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnDeleteTokenSubscription = {
+  onDeleteToken?:  {
+    __typename: "Token",
+    id: string,
+    token: string,
+    userId: string,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
 export type OnCreateUserSubscription = {
   onCreateUser?:  {
     __typename: "User",
@@ -16576,39 +16609,6 @@ export type OnDeleteUserSubscription = {
       } | null >,
       nextToken?: string | null,
     } | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type OnCreateTokenSubscription = {
-  onCreateToken?:  {
-    __typename: "Token",
-    id: string,
-    token: string,
-    userId: string,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type OnUpdateTokenSubscription = {
-  onUpdateToken?:  {
-    __typename: "Token",
-    id: string,
-    token: string,
-    userId: string,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type OnDeleteTokenSubscription = {
-  onDeleteToken?:  {
-    __typename: "Token",
-    id: string,
-    token: string,
-    userId: string,
     createdAt: string,
     updatedAt: string,
   } | null,

@@ -58,6 +58,19 @@ exports.handler = async (event) => {
     if (!userId) {
       return unauthorizedResponse;
     }
+    // TODO: This might be a string?
+    const isRefreshToken = decodedJwt.isRefreshToken;
+    console.log('isRefreshToken', isRefreshToken);
+    console.log('typeof isRefreshToken', typeof isRefreshToken);
+    /**
+     * If it's a refresh token, it must meet two conditions:
+     * 1. operationName must be GetToken
+     * 2. userId in query must be the same as the one in the token (which we already check with userIdMatchesRequest)
+     * The only request a refresh token should be making is to read the token table
+     */
+    if (isRefreshToken && operationName !== 'GetToken') {
+      return unauthorizedResponse;
+    }
   } catch (err) {
     // NOTE: we catch / refresh expired tokens on the client side,
     // so we don't need to handle that here. If the token is expired, auth should simply fail

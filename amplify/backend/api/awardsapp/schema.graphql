@@ -138,9 +138,8 @@ type User @model @searchable @auth(rules: [
         @hasMany(indexName: "followingByUser", fields: ["id"])
 }
 
-# for storing refresh tokens
+# for storing refresh tokens. We don't allow reads here. Only requests authenticated with a refresh token are allowed to read
 type Token @model @searchable @auth(rules: [
-    { allow: public, operations: [read] },
     { allow: custom }, # to do ANY operation, user will need to to be interacting with their own token, OR is admin
 ]) {
     id: ID! @primaryKey
