@@ -19,6 +19,7 @@ import {
 } from '../../API';
 import { PAGINATED_USER_RECOMMENDATION_LIMIT } from '../../constants';
 import * as mutations from '../../graphql/mutations';
+import * as customMutations from '../../graphqlCustom/mutations';
 import * as customQueries from '../../graphqlCustom/queries';
 import { GetUserQuery, SearchUsersQuery } from '../../graphqlCustom/types';
 import { GraphqlAPI, handleError, iApiResponse } from '../utils';
@@ -230,7 +231,7 @@ export const createUser = async (
     const { data, errors } = await GraphqlAPI<
       CreateUserMutation,
       CreateUserMutationVariables
-    >(mutations.createUser, {
+    >(customMutations.createUser, {
       input: {
         email,
         role: role || UserRole.USER,
