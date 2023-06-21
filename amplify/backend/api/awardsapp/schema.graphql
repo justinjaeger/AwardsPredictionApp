@@ -140,6 +140,7 @@ type User @model @searchable @auth(rules: [
 
 # for storing refresh tokens
 type Token @model @searchable @auth(rules: [
+    { allow: public, operations: [read] },
     { allow: custom }, # to do ANY operation, user will need to to be interacting with their own token, OR is admin
 ]) {
     id: ID! @primaryKey

@@ -2,138 +2,6 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const searchTokens = /* GraphQL */ `
-  query SearchTokens(
-    $filter: SearchableTokenFilterInput
-    $sort: [SearchableTokenSortInput]
-    $limit: Int
-    $nextToken: String
-    $from: Int
-    $aggregates: [SearchableTokenAggregationInput]
-  ) {
-    searchTokens(
-      filter: $filter
-      sort: $sort
-      limit: $limit
-      nextToken: $nextToken
-      from: $from
-      aggregates: $aggregates
-    ) {
-      items {
-        id
-        token
-        userId
-        createdAt
-        updatedAt
-      }
-      nextToken
-      total
-      aggregateItems {
-        name
-        result {
-          ... on SearchableAggregateScalarResult {
-            value
-          }
-          ... on SearchableAggregateBucketResult {
-            buckets {
-              key
-              doc_count
-            }
-          }
-        }
-      }
-    }
-  }
-`;
-export const getToken = /* GraphQL */ `
-  query GetToken($id: ID!) {
-    getToken(id: $id) {
-      id
-      token
-      userId
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const listTokens = /* GraphQL */ `
-  query ListTokens(
-    $id: ID
-    $filter: ModelTokenFilterInput
-    $limit: Int
-    $nextToken: String
-    $sortDirection: ModelSortDirection
-  ) {
-    listTokens(
-      id: $id
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      sortDirection: $sortDirection
-    ) {
-      items {
-        id
-        token
-        userId
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-  }
-`;
-export const tokenByToken = /* GraphQL */ `
-  query TokenByToken(
-    $token: String!
-    $sortDirection: ModelSortDirection
-    $filter: ModelTokenFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    tokenByToken(
-      token: $token
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        token
-        userId
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-  }
-`;
-export const tokenByUserId = /* GraphQL */ `
-  query TokenByUserId(
-    $userId: ID!
-    $sortDirection: ModelSortDirection
-    $filter: ModelTokenFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    tokenByUserId(
-      userId: $userId
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        token
-        userId
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-  }
-`;
 export const getUser = /* GraphQL */ `
   query GetUser($id: ID!) {
     getUser(id: $id) {
@@ -694,6 +562,138 @@ export const searchUsers = /* GraphQL */ `
           }
           nextToken
         }
+        createdAt
+        updatedAt
+      }
+      nextToken
+      total
+      aggregateItems {
+        name
+        result {
+          ... on SearchableAggregateScalarResult {
+            value
+          }
+          ... on SearchableAggregateBucketResult {
+            buckets {
+              key
+              doc_count
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+export const getToken = /* GraphQL */ `
+  query GetToken($id: ID!) {
+    getToken(id: $id) {
+      id
+      token
+      userId
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listTokens = /* GraphQL */ `
+  query ListTokens(
+    $id: ID
+    $filter: ModelTokenFilterInput
+    $limit: Int
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listTokens(
+      id: $id
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        id
+        token
+        userId
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const tokenByToken = /* GraphQL */ `
+  query TokenByToken(
+    $token: String!
+    $sortDirection: ModelSortDirection
+    $filter: ModelTokenFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    tokenByToken(
+      token: $token
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        token
+        userId
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const tokenByUserId = /* GraphQL */ `
+  query TokenByUserId(
+    $userId: ID!
+    $sortDirection: ModelSortDirection
+    $filter: ModelTokenFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    tokenByUserId(
+      userId: $userId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        token
+        userId
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const searchTokens = /* GraphQL */ `
+  query SearchTokens(
+    $filter: SearchableTokenFilterInput
+    $sort: [SearchableTokenSortInput]
+    $limit: Int
+    $nextToken: String
+    $from: Int
+    $aggregates: [SearchableTokenAggregationInput]
+  ) {
+    searchTokens(
+      filter: $filter
+      sort: $sort
+      limit: $limit
+      nextToken: $nextToken
+      from: $from
+      aggregates: $aggregates
+    ) {
+      items {
+        id
+        token
+        userId
         createdAt
         updatedAt
       }
