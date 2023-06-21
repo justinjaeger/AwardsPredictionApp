@@ -22,189 +22,6 @@ export const sendEmail = /* GraphQL */ `
     sendEmail(msg: $msg)
   }
 `;
-export const createUser = /* GraphQL */ `
-  mutation CreateUser(
-    $input: CreateUserInput!
-    $condition: ModelUserConditionInput
-  ) {
-    createUser(input: $input, condition: $condition) {
-      id
-      email
-      oauthId
-      username
-      name
-      bio
-      image
-      role
-      predictionSets {
-        items {
-          id
-          userId
-          user {
-            id
-            email
-            oauthId
-            username
-            name
-            bio
-            image
-            role
-            createdAt
-            updatedAt
-          }
-          eventId
-          event {
-            id
-            awardsBody
-            year
-            nominationDateTime
-            winDateTime
-            status
-            liveAt
-            createdAt
-            updatedAt
-          }
-          categoryId
-          category {
-            id
-            eventId
-            name
-            type
-            isShortlisted
-            createdAt
-            updatedAt
-          }
-          predictions {
-            nextToken
-          }
-          type
-          comment
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-      historyPredictionSets {
-        items {
-          id
-          userId
-          user {
-            id
-            email
-            oauthId
-            username
-            name
-            bio
-            image
-            role
-            createdAt
-            updatedAt
-          }
-          eventId
-          event {
-            id
-            awardsBody
-            year
-            nominationDateTime
-            winDateTime
-            status
-            liveAt
-            createdAt
-            updatedAt
-          }
-          categoryId
-          category {
-            id
-            eventId
-            name
-            type
-            isShortlisted
-            createdAt
-            updatedAt
-          }
-          predictions {
-            nextToken
-          }
-          type
-          comment
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-      followers {
-        items {
-          id
-          followedUserId
-          followedUser {
-            id
-            email
-            oauthId
-            username
-            name
-            bio
-            image
-            role
-            createdAt
-            updatedAt
-          }
-          followingUserId
-          followingUser {
-            id
-            email
-            oauthId
-            username
-            name
-            bio
-            image
-            role
-            createdAt
-            updatedAt
-          }
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-      following {
-        items {
-          id
-          followedUserId
-          followedUser {
-            id
-            email
-            oauthId
-            username
-            name
-            bio
-            image
-            role
-            createdAt
-            updatedAt
-          }
-          followingUserId
-          followingUser {
-            id
-            email
-            oauthId
-            username
-            name
-            bio
-            image
-            role
-            createdAt
-            updatedAt
-          }
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
 export const updateUser = /* GraphQL */ `
   mutation UpdateUser(
     $input: UpdateUserInput!
@@ -566,6 +383,48 @@ export const deleteUser = /* GraphQL */ `
         }
         nextToken
       }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createToken = /* GraphQL */ `
+  mutation CreateToken(
+    $input: CreateTokenInput!
+    $condition: ModelTokenConditionInput
+  ) {
+    createToken(input: $input, condition: $condition) {
+      id
+      token
+      userId
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateToken = /* GraphQL */ `
+  mutation UpdateToken(
+    $input: UpdateTokenInput!
+    $condition: ModelTokenConditionInput
+  ) {
+    updateToken(input: $input, condition: $condition) {
+      id
+      token
+      userId
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteToken = /* GraphQL */ `
+  mutation DeleteToken(
+    $input: DeleteTokenInput!
+    $condition: ModelTokenConditionInput
+  ) {
+    deleteToken(input: $input, condition: $condition) {
+      id
+      token
+      userId
       createdAt
       updatedAt
     }
@@ -1873,175 +1732,6 @@ export const deleteCategory = /* GraphQL */ `
     }
   }
 `;
-export const createContender = /* GraphQL */ `
-  mutation CreateContender(
-    $input: CreateContenderInput!
-    $condition: ModelContenderConditionInput
-  ) {
-    createContender(input: $input, condition: $condition) {
-      id
-      categoryId
-      category {
-        id
-        eventId
-        event {
-          id
-          categories {
-            nextToken
-          }
-          awardsBody
-          year
-          nominationDateTime
-          winDateTime
-          status
-          predictionSets {
-            nextToken
-          }
-          historyPredictions {
-            nextToken
-          }
-          liveAt
-          createdAt
-          updatedAt
-        }
-        name
-        type
-        isShortlisted
-        predictionSets {
-          items {
-            id
-            userId
-            eventId
-            categoryId
-            type
-            comment
-            createdAt
-            updatedAt
-          }
-          nextToken
-        }
-        historyPredictions {
-          items {
-            id
-            userId
-            eventId
-            categoryId
-            type
-            comment
-            createdAt
-            updatedAt
-          }
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
-      eventId
-      event {
-        id
-        categories {
-          items {
-            id
-            eventId
-            name
-            type
-            isShortlisted
-            createdAt
-            updatedAt
-          }
-          nextToken
-        }
-        awardsBody
-        year
-        nominationDateTime
-        winDateTime
-        status
-        predictionSets {
-          items {
-            id
-            userId
-            eventId
-            categoryId
-            type
-            comment
-            createdAt
-            updatedAt
-          }
-          nextToken
-        }
-        historyPredictions {
-          items {
-            id
-            userId
-            eventId
-            categoryId
-            type
-            comment
-            createdAt
-            updatedAt
-          }
-          nextToken
-        }
-        liveAt
-        createdAt
-        updatedAt
-      }
-      movieId
-      movie {
-        id
-        contenders {
-          items {
-            id
-            categoryId
-            eventId
-            movieId
-            personId
-            songId
-            visibility
-            accolade
-            createdAt
-            updatedAt
-          }
-          nextToken
-        }
-        tmdbId
-        studio
-        createdAt
-        updatedAt
-      }
-      personId
-      person {
-        id
-        tmdbId
-        createdAt
-        updatedAt
-      }
-      songId
-      song {
-        id
-        movieId
-        movie {
-          id
-          contenders {
-            nextToken
-          }
-          tmdbId
-          studio
-          createdAt
-          updatedAt
-        }
-        title
-        artist
-        createdAt
-        updatedAt
-      }
-      visibility
-      accolade
-      createdAt
-      updatedAt
-    }
-  }
-`;
 export const updateContender = /* GraphQL */ `
   mutation UpdateContender(
     $input: UpdateContenderInput!
@@ -2380,76 +2070,6 @@ export const deleteContender = /* GraphQL */ `
     }
   }
 `;
-export const createMovie = /* GraphQL */ `
-  mutation CreateMovie(
-    $input: CreateMovieInput!
-    $condition: ModelMovieConditionInput
-  ) {
-    createMovie(input: $input, condition: $condition) {
-      id
-      contenders {
-        items {
-          id
-          categoryId
-          category {
-            id
-            eventId
-            name
-            type
-            isShortlisted
-            createdAt
-            updatedAt
-          }
-          eventId
-          event {
-            id
-            awardsBody
-            year
-            nominationDateTime
-            winDateTime
-            status
-            liveAt
-            createdAt
-            updatedAt
-          }
-          movieId
-          movie {
-            id
-            tmdbId
-            studio
-            createdAt
-            updatedAt
-          }
-          personId
-          person {
-            id
-            tmdbId
-            createdAt
-            updatedAt
-          }
-          songId
-          song {
-            id
-            movieId
-            title
-            artist
-            createdAt
-            updatedAt
-          }
-          visibility
-          accolade
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-      tmdbId
-      studio
-      createdAt
-      updatedAt
-    }
-  }
-`;
 export const updateMovie = /* GraphQL */ `
   mutation UpdateMovie(
     $input: UpdateMovieInput!
@@ -2590,19 +2210,6 @@ export const deleteMovie = /* GraphQL */ `
     }
   }
 `;
-export const createPerson = /* GraphQL */ `
-  mutation CreatePerson(
-    $input: CreatePersonInput!
-    $condition: ModelPersonConditionInput
-  ) {
-    createPerson(input: $input, condition: $condition) {
-      id
-      tmdbId
-      createdAt
-      updatedAt
-    }
-  }
-`;
 export const updatePerson = /* GraphQL */ `
   mutation UpdatePerson(
     $input: UpdatePersonInput!
@@ -2624,43 +2231,6 @@ export const deletePerson = /* GraphQL */ `
     deletePerson(input: $input, condition: $condition) {
       id
       tmdbId
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const createSong = /* GraphQL */ `
-  mutation CreateSong(
-    $input: CreateSongInput!
-    $condition: ModelSongConditionInput
-  ) {
-    createSong(input: $input, condition: $condition) {
-      id
-      movieId
-      movie {
-        id
-        contenders {
-          items {
-            id
-            categoryId
-            eventId
-            movieId
-            personId
-            songId
-            visibility
-            accolade
-            createdAt
-            updatedAt
-          }
-          nextToken
-        }
-        tmdbId
-        studio
-        createdAt
-        updatedAt
-      }
-      title
-      artist
       createdAt
       updatedAt
     }
@@ -6455,6 +6025,478 @@ export const deleteCommunityHistoryPrediction = /* GraphQL */ `
       }
       ranking
       indexedRankings
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createUser = /* GraphQL */ `
+  mutation CreateUser(
+    $input: CreateUserInput!
+    $condition: ModelUserConditionInput
+  ) {
+    createUser(input: $input, condition: $condition) {
+      id
+      email
+      oauthId
+      username
+      name
+      bio
+      image
+      role
+      predictionSets {
+        items {
+          id
+          userId
+          user {
+            id
+            email
+            oauthId
+            username
+            name
+            bio
+            image
+            role
+            createdAt
+            updatedAt
+          }
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            liveAt
+            createdAt
+            updatedAt
+          }
+          categoryId
+          category {
+            id
+            eventId
+            name
+            type
+            isShortlisted
+            createdAt
+            updatedAt
+          }
+          predictions {
+            nextToken
+          }
+          type
+          comment
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      historyPredictionSets {
+        items {
+          id
+          userId
+          user {
+            id
+            email
+            oauthId
+            username
+            name
+            bio
+            image
+            role
+            createdAt
+            updatedAt
+          }
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            liveAt
+            createdAt
+            updatedAt
+          }
+          categoryId
+          category {
+            id
+            eventId
+            name
+            type
+            isShortlisted
+            createdAt
+            updatedAt
+          }
+          predictions {
+            nextToken
+          }
+          type
+          comment
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      followers {
+        items {
+          id
+          followedUserId
+          followedUser {
+            id
+            email
+            oauthId
+            username
+            name
+            bio
+            image
+            role
+            createdAt
+            updatedAt
+          }
+          followingUserId
+          followingUser {
+            id
+            email
+            oauthId
+            username
+            name
+            bio
+            image
+            role
+            createdAt
+            updatedAt
+          }
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      following {
+        items {
+          id
+          followedUserId
+          followedUser {
+            id
+            email
+            oauthId
+            username
+            name
+            bio
+            image
+            role
+            createdAt
+            updatedAt
+          }
+          followingUserId
+          followingUser {
+            id
+            email
+            oauthId
+            username
+            name
+            bio
+            image
+            role
+            createdAt
+            updatedAt
+          }
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createContender = /* GraphQL */ `
+  mutation CreateContender(
+    $input: CreateContenderInput!
+    $condition: ModelContenderConditionInput
+  ) {
+    createContender(input: $input, condition: $condition) {
+      id
+      categoryId
+      category {
+        id
+        eventId
+        event {
+          id
+          categories {
+            nextToken
+          }
+          awardsBody
+          year
+          nominationDateTime
+          winDateTime
+          status
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          liveAt
+          createdAt
+          updatedAt
+        }
+        name
+        type
+        isShortlisted
+        predictionSets {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        historyPredictions {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      eventId
+      event {
+        id
+        categories {
+          items {
+            id
+            eventId
+            name
+            type
+            isShortlisted
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        awardsBody
+        year
+        nominationDateTime
+        winDateTime
+        status
+        predictionSets {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        historyPredictions {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        liveAt
+        createdAt
+        updatedAt
+      }
+      movieId
+      movie {
+        id
+        contenders {
+          items {
+            id
+            categoryId
+            eventId
+            movieId
+            personId
+            songId
+            visibility
+            accolade
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        tmdbId
+        studio
+        createdAt
+        updatedAt
+      }
+      personId
+      person {
+        id
+        tmdbId
+        createdAt
+        updatedAt
+      }
+      songId
+      song {
+        id
+        movieId
+        movie {
+          id
+          contenders {
+            nextToken
+          }
+          tmdbId
+          studio
+          createdAt
+          updatedAt
+        }
+        title
+        artist
+        createdAt
+        updatedAt
+      }
+      visibility
+      accolade
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createMovie = /* GraphQL */ `
+  mutation CreateMovie(
+    $input: CreateMovieInput!
+    $condition: ModelMovieConditionInput
+  ) {
+    createMovie(input: $input, condition: $condition) {
+      id
+      contenders {
+        items {
+          id
+          categoryId
+          category {
+            id
+            eventId
+            name
+            type
+            isShortlisted
+            createdAt
+            updatedAt
+          }
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            liveAt
+            createdAt
+            updatedAt
+          }
+          movieId
+          movie {
+            id
+            tmdbId
+            studio
+            createdAt
+            updatedAt
+          }
+          personId
+          person {
+            id
+            tmdbId
+            createdAt
+            updatedAt
+          }
+          songId
+          song {
+            id
+            movieId
+            title
+            artist
+            createdAt
+            updatedAt
+          }
+          visibility
+          accolade
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      tmdbId
+      studio
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createPerson = /* GraphQL */ `
+  mutation CreatePerson(
+    $input: CreatePersonInput!
+    $condition: ModelPersonConditionInput
+  ) {
+    createPerson(input: $input, condition: $condition) {
+      id
+      tmdbId
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createSong = /* GraphQL */ `
+  mutation CreateSong(
+    $input: CreateSongInput!
+    $condition: ModelSongConditionInput
+  ) {
+    createSong(input: $input, condition: $condition) {
+      id
+      movieId
+      movie {
+        id
+        contenders {
+          items {
+            id
+            categoryId
+            eventId
+            movieId
+            personId
+            songId
+            visibility
+            accolade
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        tmdbId
+        studio
+        createdAt
+        updatedAt
+      }
+      title
+      artist
       createdAt
       updatedAt
     }

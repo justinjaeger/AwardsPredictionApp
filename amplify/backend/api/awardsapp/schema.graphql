@@ -1,7 +1,3 @@
-## This "input" configures a global authorization rule to enable public access to
-## all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
-# input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONLY!
-
 enum UserRole {
   ADMIN
   TESTER
@@ -104,8 +100,23 @@ enum CategoryName {
     BREAKTHROUGH
 }
 
-# TODO: remove @searchable after confirming possibl
-type User @model @searchable @auth(rules: [{allow: public}]) {
+# HOW do I authorize a LAMBDA function to do read/write operations?
+# https://docs.amplify.aws/cli/function/#utilizing-lambda-function-template-iam-authorization
+# - seems like I can do it by configuring advanced settings
+# - allow it to access your api
+# - BUT don't need to do a template just do a hello world
+# - https://docs.aws.amazon.com/lambda/latest/dg/lambda-intro-execution-role.html
+# - ^ it would seem that this SHOULD create a special IAM role under the hood for the func
+# - ^ every lambda has an execution role with minimal permissions by default
+# - ^ lambdas assume the execution role they're assigned, so I need to 
+
+# NOTE: When combining multiple authorization rules, they are "logically OR"-ed. So if you pass one, you're in.
+
+# TODO: remove @searchable after confirming possible
+type User @model @searchable @auth(rules: [
+    { allow: public, operations: [read, create] },
+    { allow: custom }, # to do ANY operation, user will need to pass the authToken check
+]) {
     id: ID! @primaryKey
     email: String!
         @index(name: "userByEmail", queryField: "userByEmail") # UNIQUE
@@ -127,8 +138,20 @@ type User @model @searchable @auth(rules: [{allow: public}]) {
         @hasMany(indexName: "followingByUser", fields: ["id"])
 }
 
+# for storing refresh tokens
+type Token @model @searchable @auth(rules: [
+    { allow: custom }, # to do ANY operation, user will need to to be interacting with their own token, OR is admin
+]) {
+    id: ID! @primaryKey
+    token: String!
+    userId: ID! @index(name: "tokenByUserId", queryField: "tokenByUserId")
+}
+
 # TODO: remove @searchable after confirming possible
-type Relationship @model @searchable @auth(rules: [{ allow: public }]) {
+type Relationship @model @searchable @auth(rules: [
+    { allow: public, operations: [read] },
+    { allow: custom }, # passes if user is modifying their own data OR is an admin
+]) {
     id: ID! @primaryKey
     followedUserId: ID! 
         @index(name: "followersByUser", queryField: "relationshipByFollowedUserId")
@@ -139,7 +162,10 @@ type Relationship @model @searchable @auth(rules: [{ allow: public }]) {
     followingUser: User! @hasOne(fields: ["followingUserId"])
 }
 
-type Event @model @auth(rules: [{ allow: public }]) {
+type Event @model @auth(rules: [
+    { allow: public, operations: [read] },
+    { allow: custom }, # passes if user is modifying their own data OR is an admin (Event isn't user data, so would fail)
+]) {
     id: ID! @primaryKey
     categories: [Category] @hasMany(indexName: "byEvent", fields: ["id"])
     awardsBody: AwardsBody!
@@ -155,7 +181,10 @@ type Event @model @auth(rules: [{ allow: public }]) {
     liveAt: AWSDateTime
 }
 
-type Category @model @auth(rules: [{ allow: public }]) {
+type Category @model @auth(rules: [
+    { allow: public, operations: [read] },
+    { allow: custom }, # passes if user is modifying their own data OR is an admin (Event isn't user data, so would fail)
+]) {
     id: ID! @primaryKey
     eventId: ID! 
         @index(name: "byEvent", queryField: "categoryByEvent")
@@ -170,7 +199,10 @@ type Category @model @auth(rules: [{ allow: public }]) {
 }
 
 # Belongs to a particular category
-type Contender @model @auth(rules: [{ allow: public }]) {
+type Contender @model @auth(rules: [
+    { allow: public, operations: [read, create] },
+    { allow: custom }, # passes if user is modifying their own data OR is an admin (in this case it's just for admin)
+]) {
     id: ID! @primaryKey
     categoryId: ID!
         # If looking in a category that's one movie per contender, this returns just one result
@@ -190,7 +222,10 @@ type Contender @model @auth(rules: [{ allow: public }]) {
     accolade: ContenderAccolade # nullable
 }
 
-type Movie @model @auth(rules: [{ allow: public }]) {
+type Movie @model @auth(rules: [
+    { allow: public, operations: [read, create] },
+    { allow: custom }, # passes if user is modifying their own data OR is an admin (in this case it's just for admin)
+]) {
     id: ID! @primaryKey
     contenders: [Contender] 
         @hasMany(indexName: "byMovie", fields: ["id"])
@@ -199,13 +234,19 @@ type Movie @model @auth(rules: [{ allow: public }]) {
     studio: String # distribution studio
 }
 
-type Person @model @auth(rules: [{ allow: public }]) {
+type Person @model @auth(rules: [
+    { allow: public, operations: [read, create] },
+    { allow: custom }, # passes if user is modifying their own data OR is an admin (in this case it's just for admin)
+]) {
     id: ID! @primaryKey
     tmdbId: Int! # unique value
         @index(name: "personByTmdbId", queryField: "personByTmdbId")
 }
   
-type Song @model @auth(rules: [{ allow: public }]) {
+type Song @model @auth(rules: [
+    { allow: public, operations: [read, create] },
+    { allow: custom }, # passes if user is modifying their own data OR is an admin (in this case it's just for admin)
+]) {
     id: ID! @primaryKey
     movieId: ID!
         @index(name: "songByMovieIdAndTitle", sortKeyFields: ["title"] queryField: "songByMovieIdAndTitle")
@@ -217,7 +258,10 @@ type Song @model @auth(rules: [{ allow: public }]) {
 # PREDICTIONS:
 
 # CURRENT PERSONAL
-type PredictionSet @model @auth(rules: [{ allow: public }]) {
+type PredictionSet @model @auth(rules: [
+    { allow: public, operations: [read] },
+    { allow: custom }, # to do ANY operation, user will need to pass the authToken check
+]) {
     id: ID! @primaryKey
     userId: ID! 
         @index(name: "predictionSetsByUserIdAndEventId", sortKeyFields: ["eventId"], queryField: "predictionSetByUserIdAndEventId") # used for request on all user's predictions in given event
@@ -235,7 +279,10 @@ type PredictionSet @model @auth(rules: [{ allow: public }]) {
     comment: String
     createdAt: AWSDateTime!
 }
-type Prediction @model @auth(rules: [{ allow: public }]) {
+type Prediction @model @auth(rules: [
+    { allow: public, operations: [read] },
+    { allow: custom }, # to do ANY operation, user will need to pass the authToken check
+]) {
     id: ID! @primaryKey
     predictionSetId: ID! 
         @index(name: "predictionByPredictionSetId", sortKeyFields: ["ranking"], queryField: "predictionByPredictionSetId")
@@ -245,7 +292,11 @@ type Prediction @model @auth(rules: [{ allow: public }]) {
 }
 
 # HISTORY PERSONAL
-type HistoryPredictionSet @model @auth(rules: [{ allow: public }]) {
+type HistoryPredictionSet @model @auth(rules: [
+    { allow: public, operations: [read] },
+    { allow: custom }, # passes if user is modifying their own data OR is an admin
+    # allow the lambda func
+]) {
     id: ID! @primaryKey
     userId: ID! 
         @index(name: "historyPredictionSetsbyUserIdAndCreatedAt", sortKeyFields: ["createdAt"], queryField: "historyPredictionSetByUserIdAndCreatedAt")
@@ -263,7 +314,11 @@ type HistoryPredictionSet @model @auth(rules: [{ allow: public }]) {
     comment: String
     createdAt: AWSDateTime!
 }
-type HistoryPrediction @model @auth(rules: [{ allow: public }]) {
+type HistoryPrediction @model @auth(rules: [
+    { allow: public, operations: [read] },
+    { allow: custom }, # passes if user is modifying their own data OR is an admin
+    # allow the lambda func
+]) {
     id: ID! @primaryKey
     historyPredictionSetId: ID! 
         @index(name: "byHistoryPredictionSet", queryField: "historyPredictionByHistoryPredictionSetId")
@@ -276,7 +331,11 @@ type HistoryPrediction @model @auth(rules: [{ allow: public }]) {
 }
 
 # CURRENT COMMUINTY
-type CommunityPredictionSet @model @auth(rules: [{ allow: public }]) {
+type CommunityPredictionSet @model @auth(rules: [
+    { allow: public, operations: [read] },
+    { allow: custom }, # passes if user is modifying their own data OR is an admin (in this case it's just for admin)
+    # allow the lambda func
+]) {
     id: ID! @primaryKey
     eventId: ID! 
         @index(queryField: "communityPredictionSetByEventId")
@@ -288,7 +347,11 @@ type CommunityPredictionSet @model @auth(rules: [{ allow: public }]) {
         @hasMany(indexName: "byCommunityPredictionSet", fields: ["id"])
     type: PredictionType @default(value: "NOMINATION")
 }
-type CommunityPrediction @model @auth(rules: [{ allow: public }]) {
+type CommunityPrediction @model @auth(rules: [
+    { allow: public, operations: [read] },
+    { allow: custom }, # passes if user is modifying their own data OR is an admin (in this case it's just for admin)
+    # allow the lambda func
+]) {
     id: ID! @primaryKey
     communityPredictionSetId: ID! 
         @index(name: "byCommunityPredictionSet", sortKeyFields: ["ranking"], queryField: "communityPredictionByCommunityPredictionSetId")
@@ -300,7 +363,11 @@ type CommunityPrediction @model @auth(rules: [{ allow: public }]) {
 }
 
 # HISTORY COMMUINTY
-type CommunityHistoryPredictionSet @model @auth(rules: [{ allow: public }]) {
+type CommunityHistoryPredictionSet @model @auth(rules: [
+    { allow: public, operations: [read] },
+    { allow: custom }, # passes if user is modifying their own data OR is an admin (in this case it's just for admin)
+    # allow the lambda func
+]) {
     id: ID! @primaryKey
     eventId: ID! 
         @index(sortKeyFields: ["createdAt"], queryField: "communityHistoryPredictionSetsByEventIdAndCreatedAt")
@@ -312,7 +379,11 @@ type CommunityHistoryPredictionSet @model @auth(rules: [{ allow: public }]) {
     type: PredictionType @default(value: "NOMINATION")
     createdAt: AWSDateTime!
 }
-type CommunityHistoryPrediction @model @auth(rules: [{ allow: public }]) {
+type CommunityHistoryPrediction @model @auth(rules: [
+    { allow: public, operations: [read] },
+    { allow: custom }, # passes if user is modifying their own data OR is an admin (in this case it's just for admin)
+    # allow the lambda func
+]) {
     id: ID! @primaryKey
     communityHistoryPredictionSetId: ID! 
         @index(name: "byCommunityHistoryPredictionSet", queryField: "communityHistoryPredictionByCommunityHistoryPredictionSetId")
