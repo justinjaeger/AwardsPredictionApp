@@ -20,6 +20,7 @@ const GoogleOauthButton = () => {
           position: 'relative',
         }}
         onPress={() => {
+          // TODO: Replace with not Amplify (this is the last thing that uses Amplify)
           AuthServices.googleSignIn();
         }}
         activeOpacity={0.9}
