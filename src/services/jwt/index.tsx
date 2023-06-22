@@ -1,5 +1,5 @@
 import { handleError, iApiResponse } from '../utils';
-import jwt from 'jsonwebtoken';
+import { sign as jwtSign, decode as jwtDecode } from 'react-native-pure-jwt';
 import { JWT_SECRET } from '../../config';
 import { UserRole } from '../../API';
 import ApiServices from '../graphql';
@@ -13,12 +13,19 @@ export type iJwtPayload = {
 
 const createAccessToken = async (payload: iJwtPayload): Promise<iApiResponse<string>> => {
   try {
-    const newToken = jwt.sign({ data: payload }, JWT_SECRET, {
-      expiresIn: '30m',
-    });
+    const newToken = await jwtSign(
+      {
+        ...payload,
+        exp: new Date().getTime() + 1000 * 60 * 30, // in ms, so 30 minutes
+      },
+      JWT_SECRET,
+      {
+        alg: 'HS256',
+      },
+    );
     return { status: 'success', data: newToken };
   } catch (err) {
-    return handleError('Error creating JWT', err);
+    return handleError('Error creating access token', err);
   }
 };
 
@@ -26,19 +33,30 @@ const createRefreshToken = async (
   payload: iJwtPayload,
 ): Promise<iApiResponse<string>> => {
   try {
-    const newToken = jwt.sign({ data: { ...payload, isRefreshToken: true } }, JWT_SECRET);
+    const newToken = await jwtSign(
+      {
+        ...payload,
+        isRefreshToken: true,
+        exp: new Date().getTime() + 1000 * 60 * 60 * 24 * 365 * 100, // in ms, 100 years
+      },
+      JWT_SECRET,
+      {
+        alg: 'HS256',
+      },
+    );
     return { status: 'success', data: newToken };
   } catch (err) {
-    return handleError('Error creating JWT', err);
+    return handleError('Error creating refresh token', err);
   }
 };
 
 const decode = async (token: string): Promise<iApiResponse<iJwtPayload | undefined>> => {
   try {
-    const payload = jwt.verify(token, JWT_SECRET) as iJwtPayload | undefined;
+    const response = await jwtDecode(token, JWT_SECRET);
+    const payload = response?.payload as iJwtPayload | undefined;
     return { status: 'success', data: payload };
   } catch (err: any) {
-    return handleError('Error creating JWT', err);
+    return handleError('Error decoding jwt', err);
   }
 };
 
@@ -48,7 +66,7 @@ const verifyOrRefresh = async (
   refreshToken: string,
 ): Promise<iApiResponse<string | undefined>> => {
   try {
-    jwt.verify(accessToken, JWT_SECRET);
+    await jwtDecode(accessToken, JWT_SECRET);
     return { status: 'success', data: accessToken };
   } catch (err: any) {
     /**
