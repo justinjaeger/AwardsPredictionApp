@@ -384,7 +384,7 @@ export const getEveryUser = async (): Promise<iApiResponse<ListUsersQuery>> => {
     }
     return { status: 'success', data };
   } catch (err) {
-    return handleError('error getting all users', err);
+    return handleError('error getting every user', err);
   }
 };
 

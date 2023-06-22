@@ -23,7 +23,7 @@ const get = async (): Promise<iApiResponse<iKeychainPayload>> => {
     // Retrieve the credentials
     const keychainRes = await Keychain.getGenericPassword();
     if (!keychainRes) {
-      throw new Error('No credentials stored');
+      return { status: 'success', data: undefined };
     }
     const stringifiedPayload = keychainRes?.password;
     const keychainPayload = JSON.parse(stringifiedPayload) as iKeychainPayload;

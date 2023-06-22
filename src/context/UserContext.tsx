@@ -66,7 +66,11 @@ export const UserProvider = (props: { children: React.ReactNode }) => {
 
   // populate user info with the decoded access token
   useAsyncEffect(async () => {
-    const { data: payload } = await JwtService.decode(accessToken || '');
+    let payload;
+    if (accessToken) {
+      const { data } = await JwtService.decode(accessToken);
+      payload = data;
+    }
     if (payload) {
       setUserInfo(payload);
     } else {

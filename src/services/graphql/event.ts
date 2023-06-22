@@ -45,7 +45,7 @@ export const getEventById = async (id: string): Promise<iApiResponse<GetEventQue
     }
     return { status: 'success', data };
   } catch (err) {
-    return handleError('error getting all events', err);
+    return handleError('error getting event by id', err);
   }
 };
 
