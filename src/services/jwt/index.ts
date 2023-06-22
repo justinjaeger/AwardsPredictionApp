@@ -60,14 +60,20 @@ const decode = async (token: string): Promise<iApiResponse<iJwtPayload | undefin
   }
 };
 
-// Returns a non-expired ACCESS token, or nothing if fails
+// On success: returns a non-expired ACCESS token and payload
+// On fail: return undefined
 const verifyOrRefresh = async (
   accessToken: string,
   refreshToken: string,
-): Promise<iApiResponse<string | undefined>> => {
+): Promise<
+  iApiResponse<{ verifiedAccessToken: string | undefined; payload: iJwtPayload }>
+> => {
   try {
-    await jwtDecode(accessToken, JWT_SECRET);
-    return { status: 'success', data: accessToken };
+    const { data: payload } = await decode(accessToken);
+    if (!payload) {
+      return handleError('Error decoding jwt, no payload');
+    }
+    return { status: 'success', data: { verifiedAccessToken: accessToken, payload } };
   } catch (err: any) {
     /**
      * Because the Token table is PRIVATE, even for read operations, we need the refresh token to read itself from the database
@@ -84,14 +90,18 @@ const verifyOrRefresh = async (
       if (!payload) {
         return handleError('Error decoding dbRefreshToken', err);
       }
-      // create/return new access token
-      // Important: notice we don't pass the entire payload. That's because the refresh token has a special isRefreshToken property on the payload
-      const { data: newAccessToken } = await createAccessToken({
+      const accessTokenPayload = {
         userId: payload.userId,
         email: payload.email,
         role: payload.role,
-      });
-      return { status: 'success', data: newAccessToken };
+      };
+      // create/return new access token
+      // Important: notice we don't pass the entire payload. That's because the refresh token has a special isRefreshToken property on the payload
+      const { data: verifiedAccessToken } = await createAccessToken(accessTokenPayload);
+      return {
+        status: 'success',
+        data: { verifiedAccessToken, payload: accessTokenPayload },
+      };
     }
     return handleError('Error verifying or refreshing jwt', err);
   }
@@ -100,7 +110,6 @@ const verifyOrRefresh = async (
 const JwtService = {
   createAccessToken,
   createRefreshToken,
-  decode,
   verifyOrRefresh,
 };
 

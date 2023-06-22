@@ -1,9 +1,9 @@
-import React, { createContext, useContext, useState } from 'react';
-import { useAsyncEffect } from '../util/hooks';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { UserRole } from '../API';
 import JwtService, { iJwtPayload } from '../services/jwt';
 import ApiServices from '../services/graphql';
 import KeychainStorage from '../services/keychain';
+import KeychainEventEmitter from '../util/keychainEventEmitter';
 
 /** Async Storage Functions (to persist data when user closes app)
  * We're not exporting the async functions because we ONLY want to use them in here, or else syncing persisted state with this context is annoying
@@ -27,9 +27,6 @@ type iUserContext = {
   userRole: UserRole | undefined;
   signInUser: (id: string, email: string, role: UserRole) => void;
   signOutUser: () => void;
-  accessToken: string | undefined;
-  refreshToken: string | undefined;
-  setAccessToken: (token: string) => void;
   verificationCode: iVerificationCode;
   generateVerificationCode: () => string | undefined;
   validateVerificationCode: (c: string) => void;
@@ -41,73 +38,71 @@ const UserContext = createContext<iUserContext>({
   userRole: undefined,
   signInUser: () => {},
   signOutUser: () => {},
-  accessToken: undefined,
-  refreshToken: undefined,
-  setAccessToken: () => {},
   verificationCode: undefined,
   generateVerificationCode: () => undefined,
   validateVerificationCode: () => ({ isValid: false }),
 });
 
 export const UserProvider = (props: { children: React.ReactNode }) => {
-  const [accessToken, setAccessToken] = useState<string | undefined>(undefined);
-  const [refreshToken, setRefreshToken] = useState<string | undefined>(undefined);
   const [userInfo, setUserInfo] = useState<iJwtPayload | undefined>(undefined);
   const [verificationCode, setVerificationCode] = useState<iVerificationCode>(undefined);
 
-  // on inital load, we need to replenish userInfo with access tokens from KeychainStorage
-  useAsyncEffect(async () => {
-    const { data: payload } = await KeychainStorage.get();
-    if (payload) {
-      setAccessToken(payload.accessToken);
-      setRefreshToken(payload.refreshToken);
-    }
+  // On initial load, populates user info if is stored in keychain
+  // attaches event listener that fires whenever KeychainStorage is modified
+  useEffect(() => {
+    const callback = async () => {
+      console.error('KEYCHAIN EVENT EMITTER FIRED');
+      const { data: payload } = await KeychainStorage.get();
+      // sign out the user if there's no payload / no tokens stored
+      if (!payload) {
+        return signOutUser();
+      }
+      // read the token & set user info
+      const { accessToken, refreshToken } = payload || {};
+      const { data } = await JwtService.verifyOrRefresh(accessToken, refreshToken);
+      if (!data) {
+        return signOutUser();
+      }
+      const userInfo = data.payload;
+      setUserInfo(userInfo);
+    };
+
+    // attach event listener
+    KeychainEventEmitter.listen(callback);
+
+    // on initial load we want to get the user data from the keychain/token
+    KeychainEventEmitter.emit();
+
+    return () => {
+      KeychainEventEmitter.remove();
+    };
   }, []);
-
-  // populate user info with the decoded access token
-  useAsyncEffect(async () => {
-    let payload;
-    if (accessToken) {
-      const { data } = await JwtService.decode(accessToken);
-      payload = data;
-    }
-    if (payload) {
-      setUserInfo(payload);
-    } else {
-      setUserInfo(undefined);
-    }
-  }, [accessToken]);
-
-  // sync keychains to the current state of accessToken and refreshToken
-  useAsyncEffect(async () => {
-    if (accessToken && refreshToken) {
-      await KeychainStorage.set(accessToken, refreshToken);
-    } else {
-      await KeychainStorage.remove();
-    }
-  }, [accessToken]);
 
   const signInUser = async (userId: string, email: string, role: UserRole) => {
     const payload: iJwtPayload = { userId, email, role };
     // CREATE ACCESS TOKEN
     const { data: newAccessToken } = await JwtService.createAccessToken(payload);
-    setAccessToken(newAccessToken);
     // CREATE REFRESH TOKEN
     const { data: newRefreshToken } = await JwtService.createRefreshToken(payload);
-    setRefreshToken(newRefreshToken);
-    // SET REFRESH TOKEN IN DB
-    if (newRefreshToken) {
-      await ApiServices.createRefreshToken(newRefreshToken, userId);
+    if (newAccessToken && newRefreshToken) {
+      // SET USER INFO
+      setUserInfo(payload);
+      // SET IN KEYCHAIN
+      KeychainStorage.set(newAccessToken, newRefreshToken);
+      // SET REFRESH TOKEN IN DB
+      if (newRefreshToken) {
+        await ApiServices.createRefreshToken(newRefreshToken, userId);
+      }
     }
   };
 
   const signOutUser = async () => {
+    const { data: payload } = await KeychainStorage.get();
+    const { refreshToken } = payload || {};
     // DELETE REFRESH TOKEN FROM DB
     if (refreshToken) {
       await ApiServices.deleteToken(refreshToken || '');
     }
-    setAccessToken(undefined);
-    setRefreshToken(undefined);
     setUserInfo(undefined);
   };
 
@@ -152,9 +147,6 @@ export const UserProvider = (props: { children: React.ReactNode }) => {
         userRole: userInfo?.role,
         signInUser,
         signOutUser,
-        accessToken,
-        refreshToken,
-        setAccessToken,
         verificationCode,
         generateVerificationCode,
         validateVerificationCode,

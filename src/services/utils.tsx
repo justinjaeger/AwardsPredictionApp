@@ -2,8 +2,8 @@ import { API } from 'aws-amplify';
 import { GraphQLQuery } from '@aws-amplify/api';
 import Snackbar from '../components/Snackbar';
 import SlackApi, { SlackChannel } from './slack';
-import { useAuth } from '../context/UserContext';
 import JwtService from './jwt';
+import KeychainStorage from './keychain';
 
 export interface iApiResponse<T> {
   status: 'success' | 'error';
@@ -41,17 +41,21 @@ export const GraphqlAPI = async <Query, Variables>(
   query: string,
   variables?: Variables,
 ) => {
-  const { accessToken, refreshToken, setAccessToken, signOutUser } = useAuth();
+  const { data: payload } = await KeychainStorage.get();
+  const { accessToken, refreshToken } = payload || {};
 
-  const { data: verifiedAccessToken } = await JwtService.verifyOrRefresh(
-    accessToken || '',
-    refreshToken || '',
-  );
-  if (!verifiedAccessToken) {
-    signOutUser();
-  } else if (verifiedAccessToken !== accessToken) {
-    console.error('setting new access token...');
-    setAccessToken(verifiedAccessToken);
+  let verifiedAccessToken: string | undefined;
+  if (accessToken && refreshToken) {
+    const { data } = await JwtService.verifyOrRefresh(accessToken, refreshToken);
+    verifiedAccessToken = data?.verifiedAccessToken;
+    if (!verifiedAccessToken) {
+      console.log('removing access token if exists...');
+      await KeychainStorage.remove();
+    } else if (verifiedAccessToken !== accessToken) {
+      // if there's a new token
+      console.log('setting new access token...');
+      await KeychainStorage.set(verifiedAccessToken, refreshToken);
+    }
   }
 
   return API.graphql<GraphQLQuery<Query>>({
@@ -72,7 +76,9 @@ export const GraphqlAPIRefreshToken = async <Query, Variables>(
   query: string,
   variables?: Variables,
 ) => {
-  const { refreshToken } = useAuth();
+  //   const { refreshToken } = useAuth();
+  const { data: payload } = await KeychainStorage.get();
+  const { refreshToken } = payload || {};
 
   return API.graphql<GraphQLQuery<Query>>({
     query,

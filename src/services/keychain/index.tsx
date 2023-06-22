@@ -1,5 +1,6 @@
 import * as Keychain from 'react-native-keychain';
 import { handleError, iApiResponse } from '../utils';
+import KeychainEventEmitter from '../../util/keychainEventEmitter';
 
 export type iKeychainPayload = { accessToken: string; refreshToken: string };
 
@@ -9,6 +10,7 @@ const set = async (
   accessToken: string,
   refreshToken: string,
 ): Promise<iApiResponse<any>> => {
+  KeychainEventEmitter.emit();
   const keychainPayload: iKeychainPayload = { accessToken, refreshToken };
   try {
     await Keychain.setGenericPassword(KEYCHAIN_KEY_NAME, JSON.stringify(keychainPayload));
@@ -36,6 +38,7 @@ const get = async (): Promise<iApiResponse<iKeychainPayload>> => {
 const remove = async (): Promise<iApiResponse<any>> => {
   try {
     await Keychain.resetGenericPassword();
+    KeychainEventEmitter.emit();
     return { status: 'success' };
   } catch (error) {
     return handleError('Error removing keychain credentials', error);
