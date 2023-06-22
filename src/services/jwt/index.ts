@@ -80,6 +80,7 @@ const verifyOrRefresh = async (
      * If it reads itself, it's safe to replenish the access token
      */
     if (err.name === 'TokenExpiredError') {
+      console.error('TokenExpiredError'); // TODO: remove
       const { data } = await ApiServices.getToken(refreshToken);
       const dbRefreshToken = data?.tokenByToken?.items?.[0]?.token;
       if (!dbRefreshToken) {

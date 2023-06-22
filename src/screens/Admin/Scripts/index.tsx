@@ -26,11 +26,8 @@ const AdminScripts = () => {
           <SubmitButton
             text={'Test Confirmation Email'}
             onPress={async () => {
-              const { status } = await EmailService.sendConfirmationCode(
-                'jjustinjaeger@gmail.com',
-                'oscar://signin/?code=1234567890',
-              );
-              if (status === 'success') {
+              const isSuccess = await EmailService.sendCode('jjustinjaeger@gmail.com');
+              if (isSuccess) {
                 Snackbar.success('Email sent!');
               } else {
                 Snackbar.error('Email failed to send');

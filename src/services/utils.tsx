@@ -18,17 +18,25 @@ export const handleError = (
   hideFromUser?: boolean,
 ): iApiResponse<any> => {
   // TODO: Catch unauthorized errors - log user out if unauthorized
-  const m = error.message || message || 'something went wrong';
-  console.error(message, JSON.stringify(error), m);
-  if (!hideFromUser) {
-    Snackbar.error(m || '');
+  const isUnauthorized = error?.errors?.[0]?.errorType === 'Unauthorized';
+  let m = '';
+  if (isUnauthorized) {
+    m = error?.message;
+    console.error('Unauthorized error:', m);
+    Snackbar.error(m);
+  } else {
+    const m = error.message || message || 'something went wrong';
+    console.error(message, JSON.stringify(error), m);
+    if (!hideFromUser) {
+      Snackbar.error(m);
+    }
   }
   const allInfo = `
     Message: ${message}
     Error: ${JSON.stringify(error)}
     m: ${m}
-`;
-  SlackApi.sendMessage(allInfo, SlackChannel.ERRORS); // TODO: Create channel "Errors"
+  `;
+  SlackApi.sendMessage(allInfo, SlackChannel.ERRORS);
   return { status: 'error', message: m, error: error.name };
 };
 
@@ -49,11 +57,11 @@ export const GraphqlAPI = async <Query, Variables>(
     const { data } = await JwtService.verifyOrRefresh(accessToken, refreshToken);
     verifiedAccessToken = data?.verifiedAccessToken;
     if (!verifiedAccessToken) {
-      console.log('removing access token if exists...');
+      console.error('removing access token if exists...'); // TODO: remove
       await KeychainStorage.remove();
     } else if (verifiedAccessToken !== accessToken) {
       // if there's a new token
-      console.log('setting new access token...');
+      console.error('setting new access token...'); // TODO: remove
       await KeychainStorage.set(verifiedAccessToken, refreshToken);
     }
   }

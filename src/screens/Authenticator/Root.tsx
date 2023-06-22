@@ -28,9 +28,10 @@ const Auth = () => {
 
   // set up verification link listener callback
   const handleSignIn = async (url: string) => {
-    console.error('handleSignIn', url);
+    console.error('handleSignIn', user);
     if (!user) {
       Snackbar.error('error confirming code: try sending another code');
+      console.error('error: user object undefined');
       setAuthScreen('signIn');
       return;
     }
