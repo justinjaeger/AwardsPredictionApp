@@ -20,6 +20,8 @@
     "bundle-ios": "node node_modules/react-native/local-cli/cli.js bundle --entry-file='./index.js' --bundle-output='./ios/awardspredictionapp/main.jsbundle' --assets-dest='./ios/awardspredictionapp' --dev=false --platform='ios'",
     "bundle-android": "node node_modules/react-native/local-cli/cli.js bundle --entry-file='./index.android.js' --bundle-output='./android/app/src/main/assets/main.jsbundle' --assets-dest='./android/app/src/main/res/' --dev=false --platform='android'",
     "clean": "react-native-clean-project",
+    "pod-clean-cache": "rm -rf ~/Library/Caches/CocoaPods; rm -rf Pods; rm -rf ~/Library/Developer/Xcode/DerivedData/*",
+    "pod-clean": "cd ios && pod deintegrate; pod setup; pod install;",
     "postinstall": "patch-package"
   },
   "dependencies": {
@@ -43,7 +45,6 @@
     "aws-amplify-react-native": "^6.0.5",
     "axios": "^0.27.2",
     "expo-status-bar": "^1.4.2",
-    "jsonwebtoken": "^9.0.0",
     "lodash": "^4.17.21",
     "lottie-react-native": "^5.1.6",
     "patch-package": "^6.5.1",
@@ -63,6 +64,7 @@
     "react-native-linear-gradient": "^2.6.2",
     "react-native-localize": "^2.2.4",
     "react-native-pager-view": "^6.2.0",
+    "react-native-pure-jwt": "^3.0.1",
     "react-native-reanimated": "^3.1.0",
     "react-native-safe-area-context": "^4.5.3",
     "react-native-screens": "^3.20.0",
@@ -83,7 +85,6 @@
     "@react-native-community/eslint-config": "^3.2.0",
     "@tsconfig/react-native": "^2.0.2",
     "@types/jest": "^29.2.1",
-    "@types/jsonwebtoken": "^9.0.2",
     "@types/lodash": "^4.14.184",
     "@types/react": "^18.0.24",
     "@types/react-native": "^0.64.0",
