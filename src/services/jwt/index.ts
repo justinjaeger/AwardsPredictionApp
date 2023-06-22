@@ -90,6 +90,7 @@ const verifyOrRefresh = async (
       if (!payload) {
         return handleError('Error decoding dbRefreshToken', err);
       }
+      // create a new access token
       const accessTokenPayload = {
         userId: payload.userId,
         email: payload.email,
