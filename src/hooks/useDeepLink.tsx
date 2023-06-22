@@ -7,34 +7,29 @@ export const SIGN_IN_PREFIX = 'oscar://signin/';
 
 // urls will look like this:
 // "oscar://signin/?code=1234567890"
-const useDeepLink = () => {
+const useDeepLink = (handleSignIn: (url: string) => void) => {
   // For links when app is ALREADY OPEN
   useEffect(() => {
     Linking.addEventListener('url', ({ url }) => {
       if (url.includes(SIGN_IN_PREFIX)) {
-        handleSignIn('open');
+        handleSignIn(url);
       }
     });
   }, []);
 
   // useInitialUrl - For links when app is NOT OPEN
-  useEffect(() => {
-    const getUrlAsync = async () => {
-      // Get the deep link used to open the app
-      // Resolves to a link if one was used
-      const url = await Linking.getInitialURL();
-      if (url?.includes(SIGN_IN_PREFIX)) {
-        handleSignIn('closed');
-      }
-    };
+  //   useEffect(() => {
+  //     const getUrlAsync = async () => {
+  //       // Get the deep link used to open the app
+  //       // Resolves to a link if one was used
+  //       const url = await Linking.getInitialURL();
+  //       if (url?.includes(SIGN_IN_PREFIX)) {
+  //         handleSignIn();
+  //       }
+  //     };
 
-    getUrlAsync();
-  }, []);
-
-  const handleSignIn = (source: 'open' | 'closed') => {
-    //
-    console.log('handleSignIn', source);
-  };
+  //     getUrlAsync();
+  //   }, []);
 };
 
 export default useDeepLink;

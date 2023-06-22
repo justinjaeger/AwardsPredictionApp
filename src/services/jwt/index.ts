@@ -46,7 +46,7 @@ const createRefreshToken = async (
     );
     return { status: 'success', data: newToken };
   } catch (err) {
-    return handleError('Error creating refresh token', err);
+    return handleError('Error creating jwt refresh token', err);
   }
 };
 

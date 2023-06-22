@@ -5,6 +5,9 @@ import { Auth } from 'aws-amplify';
 import 'react-native-url-polyfill/auto';
 import 'react-native-get-random-values';
 import { iApiResponse } from '../utils';
+import { SIGN_IN_PREFIX } from '../../hooks/useDeepLink';
+import VerificationCodeStorage from '../keychain/verificationCode';
+import Snackbar from '../../components/Snackbar';
 
 // https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-lambda/classes/invokecommand.html
 
@@ -44,8 +47,50 @@ const sendConfirmationCode = async (
   }
 };
 
+/**
+ * generateVerificationCode
+ * generate link
+ * email link to the user
+ */
+const sendCode = async (email: string): Promise<boolean> => {
+  // GENERATE LINK (will be like: "oscar://signin/?code=1234567890")
+  const code = Math.random().toString(36).slice(-12); // random string of 12 characters including special characters
+  // STORE IN LOCAL STORAGE and make it expire in like 10 minutes
+  const link = SIGN_IN_PREFIX + '?code=' + code;
+  console.log('verification link:', link);
+  const { status } = await sendConfirmationCode(email, link);
+  if (status === 'error') {
+    return false;
+  }
+  const { status: vcStatus } = await VerificationCodeStorage.set(code);
+  if (vcStatus === 'error') {
+    return false;
+  }
+  return true;
+};
+
+/**
+ * parse the code from the link
+ * verify that the code is valid
+ * show an error message if throws an error
+ */
+const confirmCode = async (link: string): Promise<boolean> => {
+  const code = link.split('?code=')[1];
+  const { status, data } = await VerificationCodeStorage.verify(code);
+  if (status === 'success') {
+    await VerificationCodeStorage.remove();
+    return true;
+  }
+  const maybeMessage = data?.message;
+  if (maybeMessage) {
+    Snackbar.error(maybeMessage);
+  }
+  return false;
+};
+
 const EmailService = {
-  sendConfirmationCode,
+  sendCode,
+  confirmCode,
 };
 
 export default EmailService;

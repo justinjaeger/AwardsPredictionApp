@@ -9,13 +9,10 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { UserProvider } from './context/UserContext';
 import { CategoryProvider } from './context/CategoryContext';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import useDeepLink from './hooks/useDeepLink';
 
 const queryClient = new QueryClient();
 
 const App = () => {
-  useDeepLink();
-
   return (
     <QueryClientProvider client={queryClient}>
       <IconRegistry icons={EvaIconsPack} />

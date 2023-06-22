@@ -1,47 +1,66 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import React, { useState } from 'react';
 // @ts-ignore - doesn't have typescript package
-import { Authenticator } from 'aws-amplify-react-native';
-import { iAuthState } from './types';
 import { AuthProvider } from './context';
-import SignUp from './SignUp';
-import ConfirmSignUp from './ConfirmSignUp';
-import ForgotPassword from './ForgotPassword';
-import RequireNewPassword from './RequireNewPassword';
-import SignIn from './SignIn';
-import { useNavigation } from '@react-navigation/native';
 import { Keyboard, ScrollView, View } from 'react-native';
-import SignedIn from './SignedIn';
-import { useAuth } from '../../context/UserContext';
+import FormInput from '../../components/Inputs/FormInput';
+import { SubmitButton } from '../../components/Buttons';
+import Snackbar from '../../components/Snackbar';
+import { Body } from '../../components/Text';
+import ApiServices from '../../services/graphql';
 import COLORS from '../../constants/colors';
-import { getHeaderTitle } from '../../constants';
+import { UserRole } from '../../API';
+import Serializers from '../../serializers';
+import { iUser } from '../../types';
+import EmailService from '../../services/email';
+import useDeepLink from '../../hooks/useDeepLink';
+import { useAuth } from '../../context/UserContext';
 
-const headerTitles: { [key in iAuthState]: string } = {
-  signIn: 'Log In',
-  signUp: 'Sign Up',
-  confirmSignIn: 'Confirm Sign In',
-  confirmSignUp: 'Confirm Your Email',
-  forgotPassword: 'Reset Password',
-  requireNewPassword: 'Create New Password',
-  verifyContact: 'Verify Contact',
-  signedIn: 'You are signed in!',
-};
+type iAuthScreen = 'signIn' | 'confirmCode';
 
 const Auth = () => {
-  const navigation = useNavigation();
-  const { userEmail } = useAuth();
+  const { signInUser } = useAuth();
 
-  const [authState, setAuthState] = useState<iAuthState>('signIn');
+  const [email, setEmail] = useState<string>('');
+  const validEmail = email.length > 0 && email.includes('.') && email.includes('@');
+  const [loading, setLoading] = useState<boolean>(false);
+  const [authScreen, setAuthScreen] = useState<iAuthScreen>('signIn');
+  const [user, setUser] = useState<iUser | undefined>(undefined);
 
-  useLayoutEffect(() => {
-    // This is the best way to change the header
-    navigation.setOptions({
-      headerTitle: getHeaderTitle(headerTitles[authState]),
-    });
-  }, [authState, navigation]);
+  // set up verification link listener callback
+  const handleSignIn = async (url: string) => {
+    console.error('handleSignIn', url);
+    if (!user) {
+      Snackbar.error('error confirming code: try sending another code');
+      setAuthScreen('signIn');
+      return;
+    }
+    const isConfirmed = await EmailService.confirmCode(url); // handles snackbar error messages already
+    if (isConfirmed) {
+      // log user in
+      signInUser(user.id, user.email, user.role);
+    }
+  };
+  useDeepLink((u: string) => handleSignIn(u)); // listens for verification link
 
-  useEffect(() => {
-    setAuthState(userEmail ? 'signIn' : 'signUp');
-  }, [userEmail]);
+  const submitEmail = async () => {
+    setLoading(true);
+    const { data } = await ApiServices.getUserByEmail(email);
+    let user = data?.userByEmail?.items?.[0];
+    // if no user exists, create one
+    if (!user) {
+      const { data: createUserData } = await ApiServices.createUser(email, UserRole.USER);
+      user = createUserData?.createUser;
+    }
+    if (!user) {
+      Snackbar.error('error signing in with email');
+    } else {
+      const serializedUser = Serializers.userSerializer(user);
+      setAuthScreen('confirmCode');
+      setUser(serializedUser);
+      await EmailService.sendCode(email);
+    }
+    setLoading(false);
+  };
 
   return (
     <AuthProvider>
@@ -54,21 +73,34 @@ const Auth = () => {
         keyboardShouldPersistTaps={'always'}
         onScroll={() => Keyboard.dismiss()}
       >
-        <View style={{ width: '80%', marginTop: 40 }}>
-          <Authenticator
-            authState={authState}
-            hideDefault={true}
-            onStateChange={setAuthState}
-            validAuthStates={['signedIn']}
-          >
-            {authState === 'signIn' ? <SignIn /> : <></>}
-            {authState === 'signUp' ? <SignUp /> : <></>}
-            {authState === 'confirmSignUp' ? <ConfirmSignUp /> : <></>}
-            {authState === 'forgotPassword' ? <ForgotPassword /> : <></>}
-            {authState === 'requireNewPassword' ? <RequireNewPassword /> : <></>}
-            {authState === 'signedIn' ? <SignedIn /> : <></>}
-          </Authenticator>
-        </View>
+        {authScreen === 'signIn' ? (
+          <View style={{ width: '100%', backgroundColor: COLORS.primary }}>
+            <FormInput
+              label="Email"
+              value={email}
+              setValue={(v) => {
+                setEmail(v);
+              }}
+              textContentType="emailAddress"
+            />
+            <SubmitButton
+              text={'Sign in'}
+              onPress={() => submitEmail()}
+              disabled={!validEmail}
+              loading={loading}
+              style={{ marginTop: 30 }}
+            />
+          </View>
+        ) : (
+          <View style={{ width: '100%', backgroundColor: COLORS.primary }}>
+            <Body>{`We sent a code to ${email}`}</Body>
+            <SubmitButton
+              text={'Send again'}
+              onPress={() => setAuthScreen('signIn')}
+              style={{ marginTop: 30 }}
+            />
+          </View>
+        )}
       </ScrollView>
     </AuthProvider>
   );

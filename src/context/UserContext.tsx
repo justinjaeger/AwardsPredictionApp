@@ -53,12 +53,12 @@ export const UserProvider = (props: { children: React.ReactNode }) => {
     const callback = async () => {
       console.error('KEYCHAIN EVENT EMITTER FIRED');
       const { data: payload } = await KeychainStorage.get();
+      const { accessToken, refreshToken } = payload || {};
       // sign out the user if there's no payload / no tokens stored
-      if (!payload) {
-        return signOutUser();
+      if (!accessToken || !refreshToken) {
+        return signOutUser(); // maybe this is because the verification code is being used and not the tokens
       }
       // read the token & set user info
-      const { accessToken, refreshToken } = payload || {};
       const { data } = await JwtService.verifyOrRefresh(accessToken, refreshToken);
       if (!data) {
         return signOutUser();
