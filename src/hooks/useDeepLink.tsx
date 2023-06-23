@@ -17,19 +17,19 @@ const useDeepLink = (handleSignIn: (url: string) => void) => {
     });
   }, []);
 
-  // useInitialUrl - For links when app is NOT OPEN
-  //   useEffect(() => {
-  //     const getUrlAsync = async () => {
-  //       // Get the deep link used to open the app
-  //       // Resolves to a link if one was used
-  //       const url = await Linking.getInitialURL();
-  //       if (url?.includes(SIGN_IN_PREFIX)) {
-  //         handleSignIn();
-  //       }
-  //     };
+  //   useInitialUrl - For links when app is NOT OPEN
+  useEffect(() => {
+    const getUrlAsync = async () => {
+      // Get the deep link used to open the app
+      // Resolves to a link if one was used
+      const url = await Linking.getInitialURL();
+      if (url?.includes(SIGN_IN_PREFIX)) {
+        handleSignIn(url);
+      }
+    };
 
-  //     getUrlAsync();
-  //   }, []);
+    getUrlAsync();
+  }, []);
 };
 
 export default useDeepLink;
