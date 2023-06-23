@@ -21,11 +21,13 @@ export const handleError = (
   const isUnauthorized = error?.errors?.[0]?.errorType === 'Unauthorized';
   let m = '';
   if (isUnauthorized) {
+    // TODO: Might make more sense to verify the refresh token HERE instead of before we send the request.
+    // My problem is, how do I reattempt the request after the refresh token is verified?
     m = error?.message;
-    console.error('Unauthorized error:', m);
+    console.error('Unauthorized error:', error);
     Snackbar.error(m);
   } else {
-    const m = error.message || message || 'something went wrong';
+    const m = error?.message || message || 'something went wrong';
     console.error(message, JSON.stringify(error), m);
     if (!hideFromUser) {
       Snackbar.error(m);
@@ -65,6 +67,8 @@ export const GraphqlAPI = async <Query, Variables>(
       await KeychainStorage.set(verifiedAccessToken, refreshToken);
     }
   }
+
+  console.error('verifiedAccessToken', verifiedAccessToken);
 
   return API.graphql<GraphQLQuery<Query>>({
     query,
