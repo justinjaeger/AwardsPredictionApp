@@ -9,8 +9,6 @@ import { Body } from '../../components/Text';
 import ApiServices from '../../services/graphql';
 import COLORS from '../../constants/colors';
 import { UserRole } from '../../API';
-import Serializers from '../../serializers';
-import { iUser } from '../../types';
 import EmailService from '../../services/email';
 import useDeepLink from '../../hooks/useDeepLink';
 import { useAuth } from '../../context/UserContext';
@@ -24,22 +22,22 @@ const Auth = () => {
   const validEmail = email.length > 0 && email.includes('.') && email.includes('@');
   const [loading, setLoading] = useState<boolean>(false);
   const [authScreen, setAuthScreen] = useState<iAuthScreen>('signIn');
-  const [user, setUser] = useState<iUser | undefined>(undefined);
 
   // set up verification link listener callback
   const handleSignIn = async (url: string) => {
-    console.error('handleSignIn', user);
-    if (!user) {
-      Snackbar.error('error confirming code: try sending another code');
-      console.error('error: user object undefined');
+    const maybeEmail = await EmailService.confirmCode(url); // handles snackbar error messages already
+    if (!maybeEmail) {
+      console.error('error: confirmation code not confirmed');
       setAuthScreen('signIn');
       return;
     }
-    const isConfirmed = await EmailService.confirmCode(url); // handles snackbar error messages already
-    if (isConfirmed) {
-      // log user in
-      signInUser(user.id, user.email, user.role);
+    const { data } = await ApiServices.getUserByEmail(maybeEmail);
+    const user = data?.userByEmail?.items?.[0];
+    if (!user) {
+      console.error('something went wrong getting user by email during sign in');
+      return;
     }
+    signInUser(user.id, user.email, user.role);
   };
   useDeepLink((u: string) => handleSignIn(u)); // listens for verification link
 
@@ -55,9 +53,7 @@ const Auth = () => {
     if (!user) {
       Snackbar.error('error signing in with email');
     } else {
-      const serializedUser = Serializers.userSerializer(user);
       setAuthScreen('confirmCode');
-      setUser(serializedUser);
       await EmailService.sendCode(email);
     }
     setLoading(false);

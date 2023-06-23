@@ -54,9 +54,9 @@ const sendConfirmationCode = async (
  */
 const sendCode = async (email: string): Promise<boolean> => {
   // GENERATE LINK (will be like: "oscar://signin/?code=1234567890")
-  const code = Math.random().toString(36).slice(-12); // random string of 12 characters including special characters
+  const code = Math.random().toString().slice(-12); // random string of 12 numbers
   // STORE IN LOCAL STORAGE and make it expire in like 10 minutes
-  const link = SIGN_IN_PREFIX + '?code=' + code;
+  const link = SIGN_IN_PREFIX + '?code=' + code + '&email=' + email;
   console.log('verification link:', link);
   const { status } = await sendConfirmationCode(email, link);
   if (status === 'error') {
@@ -74,18 +74,28 @@ const sendCode = async (email: string): Promise<boolean> => {
  * verify that the code is valid
  * show an error message if throws an error
  */
-const confirmCode = async (link: string): Promise<boolean> => {
-  const code = link.split('?code=')[1];
+const confirmCode = async (link: string): Promise<string | undefined> => {
+  // parse query params from link
+  const queryParams = link.split('?')[1];
+  const keyValuePairs = queryParams.split('&').map((qp) => qp.split('='));
+  const object: { [key: string]: string } = {};
+  keyValuePairs.forEach((pair) => {
+    object[pair[0]] = pair[1];
+  });
+  const { code, email } = object;
+  console.log('code', code);
+  console.log('email', email);
   const { status, data } = await VerificationCodeStorage.verify(code);
   if (status === 'success') {
     await VerificationCodeStorage.remove();
-    return true;
+    return email;
   }
   const maybeMessage = data?.message;
   if (maybeMessage) {
     Snackbar.error(maybeMessage);
   }
-  return false;
+  console.error('error getting confirmation code', maybeMessage);
+  return undefined;
 };
 
 const EmailService = {
