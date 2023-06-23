@@ -17,6 +17,7 @@ const createAccessToken = async (payload: iJwtPayload): Promise<iApiResponse<str
       {
         ...payload,
         exp: new Date().getTime() + 1000 * 60 * 30, // in ms, so 30 minutes
+        // exp: new Date().getTime() + 10000, // 10 seconds for testing only
       },
       JWT_SECRET,
       {
@@ -36,7 +37,7 @@ const createRefreshToken = async (
     const newToken = await jwtSign(
       {
         ...payload,
-        isRefreshToken: true,
+        isRefreshToken: true, // important to distinguish between access and refresh tokens in lambda
         exp: new Date().getTime() + 1000 * 60 * 60 * 24 * 365 * 100, // in ms, 100 years
       },
       JWT_SECRET,
@@ -56,7 +57,7 @@ const decode = async (token: string): Promise<iApiResponse<iJwtPayload | undefin
     const payload = response?.payload as iJwtPayload | undefined;
     return { status: 'success', data: payload };
   } catch (err: any) {
-    return handleError('Error decoding jwt', err);
+    return handleError('Error decoding jwt', err, true); // hide bc it's not necessarily an error if jwt is expired
   }
 };
 
@@ -71,7 +72,7 @@ const verifyOrRefresh = async (
   try {
     const { data: payload } = await decode(accessToken);
     if (!payload) {
-      return handleError('Error decoding jwt, no payload');
+      return handleError('Error verifying or refreshing jwt, no payload');
     }
     return { status: 'success', data: { verifiedAccessToken: accessToken, payload } };
   } catch (err: any) {
@@ -98,7 +99,7 @@ const verifyOrRefresh = async (
         role: payload.role,
       };
       // create/return new access token
-      // Important: notice we don't pass the entire payload. That's because the refresh token has a special isRefreshToken property on the payload
+      // Important: notice we don't pass the entire payload. That's because the refresh token has a special isRefreshToken property that we don't want to pass
       const { data: verifiedAccessToken } = await createAccessToken(accessTokenPayload);
       return {
         status: 'success',
