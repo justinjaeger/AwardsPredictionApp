@@ -6,8 +6,7 @@ import 'react-native-url-polyfill/auto';
 import 'react-native-get-random-values';
 import { iApiResponse } from '../utils';
 import { SIGN_IN_PREFIX } from '../../hooks/useDeepLink';
-import VerificationCodeStorage from '../keychain/verificationCode';
-import Snackbar from '../../components/Snackbar';
+import JwtService from '../jwt';
 
 // https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-lambda/classes/invokecommand.html
 
@@ -48,22 +47,15 @@ const sendConfirmationCode = async (
 };
 
 /**
- * generateVerificationCode
- * generate link
- * email link to the user
+ * sends email verification link
  */
 const sendCode = async (email: string): Promise<boolean> => {
-  // GENERATE LINK (will be like: "oscar://signin/?code=1234567890")
-  const code = Math.random().toString().slice(-12); // random string of 12 numbers
-  // STORE IN LOCAL STORAGE and make it expire in like 10 minutes
-  const link = SIGN_IN_PREFIX + '?code=' + code + '&email=' + email;
+  // GENERATE LINK (will be like: "oscar://signin/?token={jwt}?email={email")
+  const { data: token } = await JwtService.createVerificationCode(email);
+  const link = SIGN_IN_PREFIX + '?token=' + token + '&email=' + email;
   console.log('verification link:', link);
   const { status } = await sendConfirmationCode(email, link);
   if (status === 'error') {
-    return false;
-  }
-  const { status: vcStatus } = await VerificationCodeStorage.set(code);
-  if (vcStatus === 'error') {
     return false;
   }
   return true;
@@ -78,24 +70,14 @@ const confirmCode = async (link: string): Promise<string | undefined> => {
   // parse query params from link
   const queryParams = link.split('?')[1];
   const keyValuePairs = queryParams.split('&').map((qp) => qp.split('='));
-  const object: { [key: string]: string } = {};
+  const paramsAsObject: { [key: string]: string } = {};
   keyValuePairs.forEach((pair) => {
-    object[pair[0]] = pair[1];
+    paramsAsObject[pair[0]] = pair[1];
   });
-  const { code, email } = object;
-  console.log('code', code);
-  console.log('email', email);
-  const { status, data } = await VerificationCodeStorage.verify(code);
-  if (status === 'success') {
-    await VerificationCodeStorage.remove();
-    return email;
-  }
-  const maybeMessage = data?.message;
-  if (maybeMessage) {
-    Snackbar.error(maybeMessage);
-  }
-  console.error('error getting confirmation code', maybeMessage);
-  return undefined;
+  const { token, email } = paramsAsObject;
+  const { data: maybeEmail } = await JwtService.verifyCode(token, email);
+  // if email is returned, it's valid
+  return maybeEmail;
 };
 
 const EmailService = {

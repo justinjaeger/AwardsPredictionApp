@@ -23,7 +23,7 @@ const Auth = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [authScreen, setAuthScreen] = useState<iAuthScreen>('signIn');
 
-  // set up verification link listener callback
+  // when verification link is clicked, this callback fires
   const handleSignIn = async (url: string) => {
     const maybeEmail = await EmailService.confirmCode(url); // handles snackbar error messages already
     if (!maybeEmail) {

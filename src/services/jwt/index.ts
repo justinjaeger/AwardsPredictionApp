@@ -4,6 +4,10 @@ import { JWT_SECRET } from '../../config';
 import { UserRole } from '../../API';
 import ApiServices from '../graphql';
 
+/**
+ * FOR ACCESS TOKENS:
+ */
+
 export type iJwtPayload = {
   userId: string;
   email: string;
@@ -110,10 +114,56 @@ const verifyOrRefresh = async (
   }
 };
 
+/**
+ * FOR CODES:
+ */
+
+// creates a jwt with user's email in the payload
+const createVerificationCode = async (email: string): Promise<iApiResponse<string>> => {
+  try {
+    const newToken = await jwtSign(
+      {
+        email, // payload
+        exp: new Date().getTime() + 1000 * 60 * 10, // in ms, so 10 minutes
+      },
+      JWT_SECRET,
+      {
+        alg: 'HS256',
+      },
+    );
+    return { status: 'success', data: newToken };
+  } catch (err) {
+    return handleError('Error creating access token', err);
+  }
+};
+
+// must be valid jwt (and not expired) & jwt must have email matching the email param
+const verifyCode = async (
+  token: string,
+  email: string,
+): Promise<iApiResponse<string | undefined>> => {
+  try {
+    const response = await jwtDecode(token, JWT_SECRET);
+    const payload = response?.payload as any;
+    const payloadEmail = payload?.email as string | undefined;
+    if (!payloadEmail || payloadEmail !== email) {
+      return handleError('Invalid payload');
+    }
+    return { status: 'success', data: email };
+  } catch (err: any) {
+    if (err.name === 'TokenExpiredError') {
+      return handleError('Code has expired', err);
+    }
+    return handleError('Invalid code', err);
+  }
+};
+
 const JwtService = {
   createAccessToken,
   createRefreshToken,
   verifyOrRefresh,
+  createVerificationCode,
+  verifyCode,
 };
 
 export default JwtService;
