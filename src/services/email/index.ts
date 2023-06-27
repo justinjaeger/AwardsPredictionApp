@@ -37,8 +37,7 @@ const sendConfirmationCode = async (
       Payload: toUint8array(payload),
     });
     // NOTE: This doesn't handle bugs on the LAMBDA FUNCTION side, just says "success we attempted it"
-    const res = await lambda.send(command);
-    console.log('res', res);
+    await lambda.send(command);
     return { status: 'success' };
   } catch (err) {
     console.log('Error in sendConfirmationCode: ', err);
