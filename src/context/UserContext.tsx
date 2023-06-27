@@ -78,6 +78,7 @@ export const UserProvider = (props: { children: React.ReactNode }) => {
     };
   }, []);
 
+  // creates the access+refresh tokens and stores them in keychain
   const signInUser = async (userId: string, email: string, role: UserRole) => {
     const payload: iJwtPayload = { userId, email, role };
     // CREATE ACCESS TOKEN
@@ -88,7 +89,7 @@ export const UserProvider = (props: { children: React.ReactNode }) => {
       // SET USER INFO
       setUserInfo(payload);
       // SET IN KEYCHAIN
-      KeychainStorage.set(newAccessToken, newRefreshToken);
+      await KeychainStorage.set(newAccessToken, newRefreshToken);
       // SET REFRESH TOKEN IN DB
       if (newRefreshToken) {
         await ApiServices.createRefreshToken(newRefreshToken, userId);
