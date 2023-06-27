@@ -22,18 +22,21 @@ const useProfileHeader = (
 
   const isAuthUser = userId && userId === authUserId;
 
-  const logOut = () => {
+  const logOut = async () => {
     setIsLoading(true);
-    AuthServices.signOut().then((res) => {
-      console.error('res', res.status);
-      // sign out in context as well
-      if (res.status === 'success') {
-        signOutUser();
-        resetProfileUser();
-        Snackbar.success('You were signed out');
-      }
-      setIsLoading(false);
-    });
+    await signOutUser();
+    resetProfileUser();
+    Snackbar.success('You were signed out');
+    setIsLoading(false);
+    // AuthServices.signOut().then((res) => {
+    //   // sign out in context as well
+    //   if (res.status === 'success') {
+    //     signOutUser();
+    //     resetProfileUser();
+    //     Snackbar.success('You were signed out');
+    //   }
+    //   setIsLoading(false);
+    // });
   };
 
   // put the logout button in the top right corner

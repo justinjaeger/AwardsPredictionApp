@@ -87,9 +87,9 @@ const deleteTokenById = async (
 };
 
 export const deleteToken = async (
-  token: string,
+  refreshToken: string,
 ): Promise<iApiResponse<DeleteTokenMutation>> => {
-  const { data } = await getToken(token);
+  const { data } = await getToken(refreshToken);
   if (!data) {
     return { status: 'error' };
   }

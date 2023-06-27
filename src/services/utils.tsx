@@ -4,6 +4,7 @@ import Snackbar from '../components/Snackbar';
 import SlackApi, { SlackChannel } from './slack';
 import JwtService from './jwt';
 import KeychainStorage from './keychain';
+import KeychainEventEmitter from '../util/keychainEventEmitter';
 
 export interface iApiResponse<T> {
   status: 'success' | 'error';
@@ -59,16 +60,15 @@ export const GraphqlAPI = async <Query, Variables>(
     const { data } = await JwtService.verifyOrRefresh(accessToken, refreshToken);
     verifiedAccessToken = data?.verifiedAccessToken;
     if (!verifiedAccessToken) {
-      console.error('removing access token if exists...'); // TODO: remove
+      console.error('verifyOrRefresh has failed');
       await KeychainStorage.remove();
+      KeychainEventEmitter.emit(); // this will sign the user out
     } else if (verifiedAccessToken !== accessToken) {
       // if there's a new token
       console.error('setting new access token...'); // TODO: remove
       await KeychainStorage.set(verifiedAccessToken, refreshToken);
     }
   }
-
-  console.error('verifiedAccessToken', verifiedAccessToken);
 
   return API.graphql<GraphQLQuery<Query>>({
     query,

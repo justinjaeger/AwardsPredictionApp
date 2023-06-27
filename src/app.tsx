@@ -6,7 +6,6 @@ import * as eva from '@eva-design/eva';
 import Navigation from './navigation';
 import theme from './theme';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { UserProvider } from './context/UserContext';
 import { CategoryProvider } from './context/CategoryContext';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
@@ -17,13 +16,11 @@ const App = () => {
     <QueryClientProvider client={queryClient}>
       <IconRegistry icons={EvaIconsPack} />
       <ApplicationProvider {...eva} theme={{ ...theme }}>
-        <UserProvider>
-          <CategoryProvider>
-            <SafeAreaProvider>
-              <Navigation />
-            </SafeAreaProvider>
-          </CategoryProvider>
-        </UserProvider>
+        <CategoryProvider>
+          <SafeAreaProvider>
+            <Navigation />
+          </SafeAreaProvider>
+        </CategoryProvider>
       </ApplicationProvider>
     </QueryClientProvider>
   );

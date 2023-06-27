@@ -10,10 +10,10 @@ const set = async (
   accessToken: string,
   refreshToken: string,
 ): Promise<iApiResponse<any>> => {
-  KeychainEventEmitter.emit();
   const keychainPayload: iKeychainPayload = { accessToken, refreshToken };
   try {
     await Keychain.setGenericPassword(KEYCHAIN_KEY_NAME, JSON.stringify(keychainPayload));
+    KeychainEventEmitter.emit(); // important that this is AFTER it's set
     return { status: 'success' };
   } catch (error) {
     return handleError('Error storing keychain credentials', error);

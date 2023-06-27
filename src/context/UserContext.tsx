@@ -4,6 +4,9 @@ import JwtService, { iJwtPayload } from '../services/jwt';
 import ApiServices from '../services/graphql';
 import KeychainStorage from '../services/keychain';
 import KeychainEventEmitter from '../util/keychainEventEmitter';
+import { useNavigation } from '@react-navigation/native';
+import { MainScreenNavigationProp } from '../navigation/types';
+import { goToAccountSetup } from '../util/navigationActions';
 
 /** Async Storage Functions (to persist data when user closes app)
  * We're not exporting the async functions because we ONLY want to use them in here, or else syncing persisted state with this context is annoying
@@ -44,21 +47,24 @@ const UserContext = createContext<iUserContext>({
 });
 
 export const UserProvider = (props: { children: React.ReactNode }) => {
+  const navigation = useNavigation<MainScreenNavigationProp>();
+
   const [userInfo, setUserInfo] = useState<iJwtPayload | undefined>(undefined);
   const [verificationCode, setVerificationCode] = useState<iVerificationCode>(undefined);
 
-  // On initial load, populates user info if is stored in keychain
+  // On initial load, OR when keychain/token is set, populates user info to context
   // attaches event listener that fires whenever KeychainStorage is modified
   useEffect(() => {
     const callback = async () => {
       console.error('KEYCHAIN EVENT EMITTER FIRED');
       const { data: payload } = await KeychainStorage.get();
       const { accessToken, refreshToken } = payload || {};
-      // sign out the user if there's no payload / no tokens stored
+      // sign out the user if there's no payload / no tokens stored in keychain
       if (!accessToken || !refreshToken) {
-        return signOutUser(); // maybe this is because the verification code is being used and not the tokens
+        console.error('no tokens in keychain');
+        return signOutUser();
       }
-      // read the token & set user info
+      // else, read the token & set user info
       const { data } = await JwtService.verifyOrRefresh(accessToken, refreshToken);
       if (!data) {
         return signOutUser();
@@ -94,16 +100,30 @@ export const UserProvider = (props: { children: React.ReactNode }) => {
       if (newRefreshToken) {
         await ApiServices.createRefreshToken(newRefreshToken, userId);
       }
+      // NAVIGATE TO PROFILE
+      // if user is new (has no username), navigate to account setup. If not, navigate to profile
+      const { data: user } = await ApiServices.getUserById(userId);
+      const { username } = user?.getUser || {};
+      if (!username) {
+        navigation.dispatch(goToAccountSetup);
+      } else {
+        navigation.navigate('BottomTabNavigator', {
+          screen: 'Profile',
+        });
+      }
     }
   };
 
   const signOutUser = async () => {
+    console.error('signOutUser');
     const { data: payload } = await KeychainStorage.get();
     const { refreshToken } = payload || {};
     // DELETE REFRESH TOKEN FROM DB
+    // get the userId from the jwt
     if (refreshToken) {
-      await ApiServices.deleteToken(refreshToken || '');
+      await ApiServices.deleteToken(refreshToken);
     }
+    await KeychainStorage.remove();
     setUserInfo(undefined);
   };
 
