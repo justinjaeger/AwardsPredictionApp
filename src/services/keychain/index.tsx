@@ -38,7 +38,6 @@ const get = async (): Promise<iApiResponse<iKeychainPayload>> => {
 const remove = async (): Promise<iApiResponse<any>> => {
   try {
     await Keychain.resetGenericPassword();
-    KeychainEventEmitter.emit();
     return { status: 'success' };
   } catch (error) {
     return handleError('Error removing keychain credentials', error);
