@@ -12,11 +12,12 @@ import { UserRole } from '../../API';
 import EmailService from '../../services/email';
 import useDeepLink from '../../hooks/useDeepLink';
 import { useAuth } from '../../context/UserContext';
+import LoadingStatueModal from '../../components/LoadingStatueModal';
 
 type iAuthScreen = 'signIn' | 'confirmCode';
 
 const Auth = () => {
-  const { signInUser } = useAuth();
+  const { signInUser, isLoadingAuth } = useAuth();
 
   const [email, setEmail] = useState<string>('');
   const validEmail = email.length > 0 && email.includes('.') && email.includes('@');
@@ -61,6 +62,7 @@ const Auth = () => {
 
   return (
     <AuthProvider>
+      <LoadingStatueModal visible={isLoadingAuth} />
       <ScrollView
         style={{ width: '100%', backgroundColor: COLORS.primary }}
         contentContainerStyle={{

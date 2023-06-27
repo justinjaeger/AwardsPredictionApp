@@ -7,6 +7,9 @@ import KeychainEventEmitter from '../util/keychainEventEmitter';
 import { useNavigation } from '@react-navigation/native';
 import { MainScreenNavigationProp } from '../navigation/types';
 import { goToAccountSetup } from '../util/navigationActions';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AsyncStorageKeys } from '../types';
+import { useAsyncEffect } from '../util/hooks';
 
 /** Async Storage Functions (to persist data when user closes app)
  * We're not exporting the async functions because we ONLY want to use them in here, or else syncing persisted state with this context is annoying
@@ -33,6 +36,8 @@ type iUserContext = {
   verificationCode: iVerificationCode;
   generateVerificationCode: () => string | undefined;
   validateVerificationCode: (c: string) => void;
+  isLoadingAuth: boolean;
+  isNewUser: boolean;
 };
 
 const UserContext = createContext<iUserContext>({
@@ -44,6 +49,8 @@ const UserContext = createContext<iUserContext>({
   verificationCode: undefined,
   generateVerificationCode: () => undefined,
   validateVerificationCode: () => ({ isValid: false }),
+  isLoadingAuth: false,
+  isNewUser: true,
 });
 
 export const UserProvider = (props: { children: React.ReactNode }) => {
@@ -51,6 +58,14 @@ export const UserProvider = (props: { children: React.ReactNode }) => {
 
   const [userInfo, setUserInfo] = useState<iJwtPayload | undefined>(undefined);
   const [verificationCode, setVerificationCode] = useState<iVerificationCode>(undefined);
+  const [isLoadingAuth, setIsLoadingAuth] = useState<boolean>(true);
+  const [isNewUser, setIsNewUser] = useState<boolean>(false);
+
+  // On initial load, checks if user is new
+  useAsyncEffect(async () => {
+    const isNotFirstTime = await AsyncStorage.getItem(AsyncStorageKeys.IS_NOT_FIRST_TIME);
+    setIsNewUser(isNotFirstTime !== 'true');
+  }, []);
 
   // On initial load, OR when keychain/token is set, populates user info to context
   // attaches event listener that fires whenever KeychainStorage is modified
@@ -86,6 +101,7 @@ export const UserProvider = (props: { children: React.ReactNode }) => {
 
   // creates the access+refresh tokens and stores them in keychain
   const signInUser = async (userId: string, email: string, role: UserRole) => {
+    setIsLoadingAuth(true);
     const payload: iJwtPayload = { userId, email, role };
     // CREATE ACCESS TOKEN
     const { data: newAccessToken } = await JwtService.createAccessToken(payload);
@@ -111,11 +127,15 @@ export const UserProvider = (props: { children: React.ReactNode }) => {
           screen: 'Profile',
         });
       }
+      // SET IN ASYNC STORAGE (lets us remember whether user has signed in or not)
+      AsyncStorage.setItem(AsyncStorageKeys.IS_NOT_FIRST_TIME, 'true');
     }
+    setIsLoadingAuth(false);
   };
 
   const signOutUser = async () => {
     console.error('signOutUser');
+    setIsLoadingAuth(true);
     const { data: payload } = await KeychainStorage.get();
     const { refreshToken } = payload || {};
     // DELETE REFRESH TOKEN FROM DB
@@ -125,6 +145,7 @@ export const UserProvider = (props: { children: React.ReactNode }) => {
     }
     await KeychainStorage.remove();
     setUserInfo(undefined);
+    setIsLoadingAuth(false);
   };
 
   const generateVerificationCode = () => {
@@ -171,6 +192,8 @@ export const UserProvider = (props: { children: React.ReactNode }) => {
         verificationCode,
         generateVerificationCode,
         validateVerificationCode,
+        isLoadingAuth,
+        isNewUser,
       }}
     >
       {props.children}
