@@ -9,9 +9,13 @@ import { useAuth } from '../../context/UserContext';
 import AuthServices from '../../services/auth';
 import ApiServices from '../../services/graphql';
 import { useNavigateAwayEffect } from '../../util/hooks';
+import { useProfilePrediction } from '../../context/ProfilePredictionContext';
+import Snackbar from '../../components/Snackbar';
 
 const Settings = () => {
   const { userId, signOutUser } = useAuth();
+  const { resetProfileUser } = useProfilePrediction();
+
   const [deletionStatus, setDeletionStatus] = useState<
     'isLoading' | 'error' | 'success' | undefined
   >('error');
@@ -43,6 +47,8 @@ const Settings = () => {
       // sign out in context as well
       if (res.status === 'success') {
         signOutUser();
+        resetProfileUser();
+        Snackbar.success('You were signed out');
       }
     });
   };
