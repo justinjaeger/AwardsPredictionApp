@@ -388,20 +388,6 @@ export const deleteUser = /* GraphQL */ `
     }
   }
 `;
-export const createToken = /* GraphQL */ `
-  mutation CreateToken(
-    $input: CreateTokenInput!
-    $condition: ModelTokenConditionInput
-  ) {
-    createToken(input: $input, condition: $condition) {
-      id
-      token
-      userId
-      createdAt
-      updatedAt
-    }
-  }
-`;
 export const updateToken = /* GraphQL */ `
   mutation UpdateToken(
     $input: UpdateTokenInput!
@@ -6208,6 +6194,20 @@ export const createUser = /* GraphQL */ `
         }
         nextToken
       }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createToken = /* GraphQL */ `
+  mutation CreateToken(
+    $input: CreateTokenInput!
+    $condition: ModelTokenConditionInput
+  ) {
+    createToken(input: $input, condition: $condition) {
+      id
+      token
+      userId
       createdAt
       updatedAt
     }

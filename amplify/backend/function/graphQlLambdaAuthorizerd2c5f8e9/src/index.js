@@ -11,105 +11,126 @@ const jwt = require('jsonwebtoken');
  * Users will only have the ability to update and create on certain things so this is going to say
  * If we can verify this auth token AND the user is the owner of the thing they are trying to update, allow it
  * OR If this authenticated user is an admin, allow it
+ * Note: For delete operations to be valid, in addition to the id of the item being deleted, it must also include the userId of the authenticated user passed as a "condition"
+ * this includes: relationships, tokens, predictionSets, predictions, historyPredictionSets, historyPredictions
  */
+
 const ADMIN_USER_IDS = [
   '420f68ea-03ec-4d67-8bb2-99fd1bfe5210', // dev
   'b16842a5-43d7-41a4-b544-1d32c2068247', // prod
 ];
 
-const DENIED_OPERATIONS = ['DeleteUser'];
+const DENIED_OPERATIONS = ['deleteUser']; // anything that the user can't do to their own data
+const VALID_REFRESH_TOKEN_QUERIES = ['tokenByToken'];
+const RELATIONSHIP_MUTATIONS = [
+  'createRelationship',
+  'updateRelationship',
+  'deleteRelationship',
+];
+const VALID_USER_MUTATIONS = ['updateUser'];
 
+// right now, handling the expired token on the client side so it always expect tokent to be fresh
 exports.handler = async (event) => {
   console.log(`EVENT: ${JSON.stringify(event)}`);
   const {
     authorizationToken, // sent from the client
     requestContext: {
       // https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html
-      apiId, // AppSync API ID
-      accountId, // AWS Account ID
-      queryString, // example: "mutation CreateEvent {...}\n\nquery MyQuery {...}\n", # GraphQL query
-      operationName, // example: "MyQuery", # GraphQL operation name
-      variables, // example: {} # any additional variables supplied to the operation
+      // apiId, // AppSync API ID
+      // accountId, // AWS Account ID
+      queryString, // example: "mutation MyMutation {\n  updateUser(input: {id: \"xxx\", name: \"new name\"}) {\n    id\n    name\n  }\n}\n", # GraphQL query
+      // operationName, // example: "MyQuery", # GraphQL operation name
+      // variables, // example: {} # any additional variables supplied to the operation
     },
   } = event;
 
   const unauthorizedResponse = {
-    // required
     isAuthorized: false,
-    resolverContext: {
-      hello: 'hi', // just to test what this is
-    },
+    resolverContext: {},
+  };
+  const authorizedResponse = {
+    isAuthorized: true,
+    resolverContext: {},
   };
 
-  let isAuthorized = false;
-  // WHAT IF we verify the token on the CLIENT SIDE first so we can make sure it's not expired
-  // so if the JWT fails or is expired, we know it's an actual error and don't need to handle it here
   if (!authorizationToken) {
-    // just return with this being false
     return unauthorizedResponse;
   }
 
   let userId = null;
+  let isRefreshToken = false;
 
   // verify the token
   try {
     const decodedJwt = jwt.verify(authorizationToken, process.env.JWT_SECRET);
+    console.log('decodedJwt', decodedJwt);
     userId = decodedJwt.userId;
     if (!userId) {
       return unauthorizedResponse;
     }
-    // TODO: This might be a string?
-    const isRefreshToken = decodedJwt.isRefreshToken;
+
+    isRefreshToken = decodedJwt.isRefreshToken === true;
     console.log('isRefreshToken', isRefreshToken);
-    console.log('typeof isRefreshToken', typeof isRefreshToken);
-    /**
-     * If it's a refresh token, it must meet two conditions:
-     * 1. operationName must be GetToken
-     * 2. userId in query must be the same as the one in the token (which we already check with userIdMatchesRequest)
-     * The only request a refresh token should be making is to read the token table
-     */
-    if (isRefreshToken && operationName !== 'GetToken') {
-      return unauthorizedResponse;
-    }
   } catch (err) {
-    // NOTE: we catch / refresh expired tokens on the client side,
-    // so we don't need to handle that here. If the token is expired, auth should simply fail
+    // Note: we catch / refresh expired tokens on the client side,
+    // so we don't need to handle that here. If the token is expired, auth should simply fail.
+    // We might want to change this later though.
+    console.error('error verifying jwt', err);
     return unauthorizedResponse;
   }
 
-  // if user is admin, let them do anything. When userId is defined it means the JWT is valid so can trust it
-  if (ADMIN_USER_IDS.includes(userId)) {
-    isAuthorized = true;
+  // if user is admin, let them do anything
+  const isAdmin = ADMIN_USER_IDS.find((id) => id === userId);
+  if (isAdmin) {
+    return authorizedResponse;
   }
 
-  // don't let any non-admin user do these even to their own data
-  if (DENIED_OPERATIONS.includes(operationName)) {
+  // don't let any user do these even to their own data
+  const isDeniedOperation = DENIED_OPERATIONS.find((deniedOp) =>
+    queryString.includes(deniedOp),
+  );
+  if (isDeniedOperation) {
     return unauthorizedResponse;
   }
 
   /**
-   * Only authorize if user is attempting to mutate their own data:
-   * Case: UpdateUser
-   * - the "id" passed as a param has to match userId
-   * Case: UpdateOrDeleteOrCreateRelationship
-   * - the "followingUserId" passed as a param has to match userId
-   * Case: UpdateOrDeleteAnythingElse
-   * - the "userId" passed as a param has to match userId
+   * TOKEN OPERATIONS
+   * Token queries will fail unless they pass the userId in the query string, as with "get all user's tokens"
+   * The exception is refresh tokens, which are allowed to do a tokenByToken query, and nothing else
+   * This makes refresh tokens unusable to hackers for everything except verifying themselves
    */
-  // TODO: Figure out how to actually implement this
-  const userIdMatchesRequest = JSON.stringify(variables).includes(userId); // TODO: hacky
-
-  if (userIdMatchesRequest) {
-    isAuthorized = true;
+  if (isRefreshToken) {
+    const isValidRefreshTokenQuery = VALID_REFRESH_TOKEN_QUERIES.find((q) =>
+      queryString.includes(q),
+    );
+    if (isValidRefreshTokenQuery) {
+      return authorizedResponse;
+    } else {
+      return unauthorizedResponse;
+    }
   }
 
-  const response = {
-    // required
-    isAuthorized,
-    resolverContext: {
-      hello: 'hi', // just to test what this is
-    },
-  };
-  console.log('response >', JSON.stringify(response, null, 2));
-  return response;
+  /**
+   * Only accept mutations where a user is trying to mutate their own data, across all tables (queries are generally allowed, except with tokens)
+   * We REQUIRE the queryString to include the auth user's userId. But there are 2 special cases:
+   * - isRelationship, in which case auth user is passed as followingUserId
+   * - isUserMutation, in which case auth user is passed as id
+   */
+  const isRelationship = RELATIONSHIP_MUTATIONS.find((m) => queryString.includes(m));
+  const isUserMutation = VALID_USER_MUTATIONS.find((m) => queryString.includes(m));
+  let fieldWithAuthUserId = 'userId';
+  if (isRelationship) {
+    fieldWithAuthUserId = 'followingUserId';
+  } else if (isUserMutation) {
+    fieldWithAuthUserId = 'id';
+  }
+  const isModifyingSelf =
+    queryString.includes(`${fieldWithAuthUserId}: \"${userId}`) ||
+    queryString.includes(`(condition: {${fieldWithAuthUserId}: {eq: \"${userId}"}})`); // in the case of a delete, which otherwise only requires the id of the item being deleted
+  console.log('isModifyingSelf', isModifyingSelf);
+  if (!isModifyingSelf) {
+    return unauthorizedResponse;
+  }
+
+  return authorizedResponse;
 };

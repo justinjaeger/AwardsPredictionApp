@@ -391,10 +391,10 @@ export type DeleteUserInput = {
   id: string,
 };
 
-export type CreateTokenInput = {
-  id?: string | null,
-  token: string,
-  userId: string,
+export type UpdateTokenInput = {
+  id: string,
+  token?: string | null,
+  userId?: string | null,
 };
 
 export type ModelTokenConditionInput = {
@@ -428,12 +428,6 @@ export type Token = {
   userId: string,
   createdAt: string,
   updatedAt: string,
-};
-
-export type UpdateTokenInput = {
-  id: string,
-  token?: string | null,
-  userId?: string | null,
 };
 
 export type DeleteTokenInput = {
@@ -986,6 +980,12 @@ export type CreateUserInput = {
   bio?: string | null,
   image?: string | null,
   role: UserRole,
+};
+
+export type CreateTokenInput = {
+  id?: string | null,
+  token: string,
+  userId: string,
 };
 
 export type CreateContenderInput = {
@@ -1987,22 +1987,6 @@ export type DeleteUserMutation = {
       } | null >,
       nextToken?: string | null,
     } | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type CreateTokenMutationVariables = {
-  input: CreateTokenInput,
-  condition?: ModelTokenConditionInput | null,
-};
-
-export type CreateTokenMutation = {
-  createToken?:  {
-    __typename: "Token",
-    id: string,
-    token: string,
-    userId: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -8660,6 +8644,22 @@ export type CreateUserMutation = {
       } | null >,
       nextToken?: string | null,
     } | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type CreateTokenMutationVariables = {
+  input: CreateTokenInput,
+  condition?: ModelTokenConditionInput | null,
+};
+
+export type CreateTokenMutation = {
+  createToken?:  {
+    __typename: "Token",
+    id: string,
+    token: string,
+    userId: string,
     createdAt: string,
     updatedAt: string,
   } | null,
