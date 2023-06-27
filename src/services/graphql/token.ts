@@ -67,12 +67,16 @@ export const createRefreshToken = async (
 
 const deleteTokenById = async (
   tokenId: string,
+  userId: string,
 ): Promise<iApiResponse<DeleteTokenMutation>> => {
   try {
     const { data, errors } = await GraphqlAPI<
       DeleteTokenMutation,
       DeleteTokenMutationVariables
-    >(mutations.createToken, { input: { id: tokenId } });
+    >(mutations.createToken, {
+      input: { id: tokenId },
+      condition: { userId: { eq: userId } },
+    });
     if (!data?.deleteToken) {
       throw new Error(JSON.stringify(errors));
     }
@@ -90,9 +94,13 @@ export const deleteToken = async (
     return { status: 'error' };
   }
   const tokenId = data.tokenByToken?.items[0]?.id; // should be only one
+  const userId = data.tokenByToken?.items[0]?.userId;
   if (!tokenId) {
-    return { status: 'error', message: 'token not found' };
+    return { status: 'error', message: 'token not found in deleteToken' };
   }
-  const { status } = await deleteTokenById(tokenId);
+  if (!userId) {
+    return { status: 'error', message: 'userId not found in deleteToken' };
+  }
+  const { status } = await deleteTokenById(tokenId, userId);
   return { status };
 };

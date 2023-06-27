@@ -105,7 +105,10 @@ export const unFollowUser = async (
     const { data, errors } = await GraphqlAPI<
       DeleteRelationshipMutation,
       DeleteRelationshipMutationVariables
-    >(mutations.deleteRelationship, { input: { id: relationshipId } });
+    >(mutations.deleteRelationship, {
+      input: { id: relationshipId },
+      condition: { followingUserId: { eq: followingUserId } },
+    });
     if (!data?.deleteRelationship) {
       throw new Error(JSON.stringify(errors));
     }
@@ -115,6 +118,7 @@ export const unFollowUser = async (
   }
 };
 
+// going to fail unless it's the admin
 export const deleteRelationshipById = async (
   id: string,
 ): Promise<iApiResponse<DeleteRelationshipMutation>> => {

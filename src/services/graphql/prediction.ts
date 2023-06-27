@@ -135,7 +135,7 @@ const deletePredictions = async (
         }),
       );
       // Delete prediction set
-      await deletePredictionSetById(ps.id);
+      await deletePredictionSetById(ps.id, ps.userId);
     });
 
     return { status: 'success' };
@@ -146,12 +146,16 @@ const deletePredictions = async (
 
 const deletePredictionSetById = async (
   id: string,
+  userId: string,
 ): Promise<iApiResponse<DeletePredictionSetMutation>> => {
   try {
     const { data, errors } = await GraphqlAPI<
       DeletePredictionSetMutation,
       DeletePredictionSetMutationVariables
-    >(customMutations.deletePredictionSet, { input: { id } });
+    >(customMutations.deletePredictionSet, {
+      input: { id },
+      condition: { userId: { eq: userId } },
+    });
     if (!data?.deletePredictionSet) {
       throw new Error(JSON.stringify(errors));
     }
@@ -161,6 +165,7 @@ const deletePredictionSetById = async (
   }
 };
 
+// TODO: After migrate to V2 Predictions, pass userId
 const deletePredictionById = async (
   id: string,
 ): Promise<iApiResponse<DeletePredictionMutation>> => {
@@ -404,6 +409,7 @@ export const updatePredictionContender = async (
   }
 };
 
+// note: gonna be changed so ignoring
 export const updateHistoryPredictionContender = async (
   predictionId: string,
   contenderId: string,
@@ -536,6 +542,7 @@ export const deleteCommunityHistoryPrediction = async (
   }
 };
 
+// Will fail unless you're the admin
 export const deletePersonalPredictionSet = async (
   predictionSetId: string,
 ): Promise<iApiResponse<DeletePredictionSetMutation>> => {
