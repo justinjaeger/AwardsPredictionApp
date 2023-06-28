@@ -84,33 +84,34 @@ const verifyOrRefresh = async (
      * Because the Token table is PRIVATE, even for read operations, we need the refresh token to read itself from the database
      * If it reads itself, it's safe to replenish the access token
      */
-    if (err.name === 'TokenExpiredError') {
-      console.error('TokenExpiredError'); // TODO: remove
-      const { data } = await ApiServices.getToken(refreshToken);
-      const dbRefreshToken = data?.tokenByToken?.items?.[0]?.token;
-      if (!dbRefreshToken) {
-        return handleError('Error getting refresh token after token expired', err);
-      }
-      // decode refresh token to get the payload
-      const { data: payload } = await decode(dbRefreshToken);
-      if (!payload) {
-        return handleError('Error decoding dbRefreshToken', err);
-      }
-      // create a new access token
-      const accessTokenPayload = {
-        userId: payload.userId,
-        email: payload.email,
-        role: payload.role,
-      };
-      // create/return new access token
-      // Important: notice we don't pass the entire payload. That's because the refresh token has a special isRefreshToken property that we don't want to pass
-      const { data: verifiedAccessToken } = await createAccessToken(accessTokenPayload);
-      return {
-        status: 'success',
-        data: { verifiedAccessToken, payload: accessTokenPayload },
-      };
+    // if (err.name === 'TokenExpiredError') {
+    // Since the error handling sucks with this library, we'll just assume it's a TokenExpiredError
+    console.error('TokenExpiredError'); // TODO: remove
+    const { data } = await ApiServices.getToken(refreshToken);
+    const dbRefreshToken = data?.tokenByToken?.items?.[0]?.token;
+    if (!dbRefreshToken) {
+      return handleError('Error getting refresh token after token expired', err);
     }
-    return handleError('Error verifying or refreshing jwt', err);
+    // decode refresh token to get the payload
+    const { data: payload } = await decode(dbRefreshToken);
+    if (!payload) {
+      return handleError('Error decoding dbRefreshToken', err);
+    }
+    // create a new access token
+    const accessTokenPayload = {
+      userId: payload.userId,
+      email: payload.email,
+      role: payload.role,
+    };
+    // create/return new access token
+    // Important: notice we don't pass the entire payload. That's because the refresh token has a special isRefreshToken property that we don't want to pass
+    const { data: verifiedAccessToken } = await createAccessToken(accessTokenPayload);
+    return {
+      status: 'success',
+      data: { verifiedAccessToken, payload: accessTokenPayload },
+    };
+    // }
+    // return handleError('Error verifying or refreshing jwt', err);
   }
 };
 
@@ -151,10 +152,8 @@ const verifyCode = async (
     }
     return { status: 'success', data: email };
   } catch (err: any) {
-    if (err.name === 'TokenExpiredError') {
-      return handleError('Code has expired', err);
-    }
-    return handleError('Invalid code', err);
+    console.error('err', err); // it just says "Error: Decoding failed" - which sucks because it doesn't tell us why
+    return handleError('Link has expired', err);
   }
 };
 

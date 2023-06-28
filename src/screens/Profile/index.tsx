@@ -13,7 +13,7 @@ import {
 import theme from '../../constants/theme';
 import PredictionCarousel from '../../components/PredictionCarousel';
 import COLORS from '../../constants/colors';
-import { useTypedNavigation } from '../../util/hooks';
+import { useNavigateToEffect, useTypedNavigation } from '../../util/hooks';
 import ProfileImage from '../../components/ProfileImage';
 import FollowButton from '../../components/FollowButton';
 import FollowCountButton from '../../components/FollowCountButton';
@@ -50,6 +50,12 @@ const Profile = () => {
   );
 
   const isAuthUser = user && userId && user?.id === authUserId;
+
+  useNavigateToEffect(() => {
+    if (isAuthUser && !user.username) {
+      navigation.navigate('UpdateProfileInfo');
+    }
+  }, [user?.username]);
 
   const predictionSets = user?.predictionSets || [];
 

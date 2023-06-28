@@ -20,15 +20,13 @@ export const handleError = (
 ): iApiResponse<any> => {
   // TODO: Catch unauthorized errors - log user out if unauthorized
   const isUnauthorized = error?.errors?.[0]?.errorType === 'Unauthorized';
-  let m = '';
+  const m = message || error?.message || 'something went wrong';
   if (isUnauthorized) {
     // TODO: Might make more sense to verify the refresh token HERE instead of before we send the request.
     // My problem is, how do I reattempt the request after the refresh token is verified?
-    m = error?.message;
     console.error('Unauthorized error:', error);
     Snackbar.error(m);
   } else {
-    const m = error?.message || message || 'something went wrong';
     console.error(message, JSON.stringify(error), m);
     if (!hideFromUser) {
       Snackbar.error(m);

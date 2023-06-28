@@ -6,10 +6,10 @@ import KeychainStorage from '../services/keychain';
 import KeychainEventEmitter from '../util/keychainEventEmitter';
 import { useNavigation } from '@react-navigation/native';
 import { MainScreenNavigationProp } from '../navigation/types';
-import { goToAccountSetup } from '../util/navigationActions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AsyncStorageKeys } from '../types';
 import { useAsyncEffect } from '../util/hooks';
+import { resetToProfile } from '../util/navigationActions';
 
 /** Async Storage Functions (to persist data when user closes app)
  * We're not exporting the async functions because we ONLY want to use them in here, or else syncing persisted state with this context is annoying
@@ -117,16 +117,7 @@ export const UserProvider = (props: { children: React.ReactNode }) => {
         await ApiServices.createRefreshToken(newRefreshToken, userId);
       }
       // NAVIGATE TO PROFILE
-      // if user is new (has no username), navigate to account setup. If not, navigate to profile
-      const { data: user } = await ApiServices.getUserById(userId);
-      const { username } = user?.getUser || {};
-      if (!username) {
-        navigation.dispatch(goToAccountSetup);
-      } else {
-        navigation.navigate('BottomTabNavigator', {
-          screen: 'Profile',
-        });
-      }
+      navigation.dispatch(resetToProfile);
       // SET IN ASYNC STORAGE (lets us remember whether user has signed in or not)
       AsyncStorage.setItem(AsyncStorageKeys.IS_NOT_FIRST_TIME, 'true');
     }

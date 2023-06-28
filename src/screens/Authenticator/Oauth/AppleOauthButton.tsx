@@ -9,8 +9,8 @@ import ApiServices from '../../../services/graphql';
 import { UserRole } from '../../../API';
 import { useAuth } from '../../../context/UserContext';
 import { useNavigation } from '@react-navigation/native';
-import { goToAccountSetup } from '../../../util/navigationActions';
 import { MainScreenNavigationProp } from '../../../navigation/types';
+import { resetToProfile } from '../../../util/navigationActions';
 
 const AppleOauthButton = () => {
   const { width } = useWindowDimensions();
@@ -59,13 +59,15 @@ const AppleOauthButton = () => {
       const { data: getUserRes } = await ApiServices.getUserByOauthId(oauthId);
       const dbUser = getUserRes?.userByOauthId?.items[0];
 
+      const navigateToProfile = () => {
+        navigation.dispatch(resetToProfile);
+      };
+
       // DECLARE create / sign in functions
       const logInExistingUser = () => {
         if (dbUser) {
           signInUser(dbUser.id, dbUser.email, dbUser.role);
-          navigation.navigate('BottomTabNavigator', {
-            screen: 'Profile',
-          });
+          navigateToProfile();
         }
       };
       const createNewUser = async () => {
@@ -85,7 +87,7 @@ const AppleOauthButton = () => {
         }
         signInUser(newUser.id, newUser.email, newUser.role);
         // Navigate to profile creation
-        navigation.dispatch(goToAccountSetup);
+        navigateToProfile();
       };
 
       if (!dbUser) {
