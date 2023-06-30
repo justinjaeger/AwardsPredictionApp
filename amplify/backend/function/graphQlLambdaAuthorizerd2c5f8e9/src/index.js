@@ -19,9 +19,8 @@ const ADMIN_USER_IDS = [
   '420f68ea-03ec-4d67-8bb2-99fd1bfe5210', // dev
   'b16842a5-43d7-41a4-b544-1d32c2068247', // prod
 ];
-
 const DENIED_OPERATIONS = ['deleteUser']; // anything that the user can't do to their own data
-const VALID_REFRESH_TOKEN_QUERIES = ['tokenByToken'];
+const VALID_TOKEN_QUERIES = ['tokenByToken'];
 const RELATIONSHIP_MUTATIONS = [
   'createRelationship',
   'updateRelationship',
@@ -99,15 +98,15 @@ exports.handler = async (event) => {
    * The exception is refresh tokens, which are allowed to do a tokenByToken query, and nothing else
    * This makes refresh tokens unusable to hackers for everything except verifying themselves
    */
+  const isValidRefreshTokenQuery = VALID_TOKEN_QUERIES.find((q) =>
+    queryString.includes(q),
+  );
+  if (isValidRefreshTokenQuery) {
+    return authorizedResponse;
+  }
+  // refresh token should be useless except for the conditions above, and we'd only hit this if token query wasn't valid
   if (isRefreshToken) {
-    const isValidRefreshTokenQuery = VALID_REFRESH_TOKEN_QUERIES.find((q) =>
-      queryString.includes(q),
-    );
-    if (isValidRefreshTokenQuery) {
-      return authorizedResponse;
-    } else {
-      return unauthorizedResponse;
-    }
+    return unauthorizedResponse;
   }
 
   /**
