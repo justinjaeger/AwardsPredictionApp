@@ -76,7 +76,7 @@ const verifyOrRefresh = async (
   try {
     const { data: payload } = await decode(accessToken);
     if (!payload) {
-      return handleError('Error verifying or refreshing jwt, no payload');
+      throw new Error('Error verifying or refreshing jwt, no payload');
     }
     return { status: 'success', data: { verifiedAccessToken: accessToken, payload } };
   } catch (err: any) {
