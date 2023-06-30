@@ -1,8 +1,7 @@
 import { handleError, iApiResponse } from '../utils';
-import { sign as jwtSign, decode as jwtDecode } from 'react-native-pure-jwt';
-import { JWT_SECRET } from '../../config';
 import { UserRole } from '../../API';
 import ApiServices from '../graphql';
+import CryptoService from '../crypto';
 
 /**
  * FOR ACCESS TOKENS:
@@ -15,54 +14,24 @@ export type iJwtPayload = {
   isRefreshToken?: boolean;
 };
 
-const createAccessToken = async (payload: iJwtPayload): Promise<iApiResponse<string>> => {
-  try {
-    const newToken = await jwtSign(
-      {
-        ...payload,
-        exp: new Date().getTime() + 1000 * 60 * 30, // in ms, so 30 minutes
-        // exp: new Date().getTime() + 10000, // 10 seconds for testing only
-      },
-      JWT_SECRET,
-      {
-        alg: 'HS256',
-      },
-    );
-    return { status: 'success', data: newToken };
-  } catch (err) {
-    return handleError('Error creating access token', err);
-  }
+export type iVerificationPayload = {
+  email: string;
 };
 
-const createRefreshToken = async (
-  payload: iJwtPayload,
-): Promise<iApiResponse<string>> => {
-  try {
-    const newToken = await jwtSign(
-      {
-        ...payload,
-        isRefreshToken: true, // important to distinguish between access and refresh tokens in lambda
-        exp: new Date().getTime() + 1000 * 60 * 60 * 24 * 365 * 100, // in ms, 100 years
-      },
-      JWT_SECRET,
-      {
-        alg: 'HS256',
-      },
-    );
-    return { status: 'success', data: newToken };
-  } catch (err) {
-    return handleError('Error creating jwt refresh token', err);
-  }
+const ACCESS_TOKEN_EXP_IN_MINUTES = 30;
+const VERIFICATION_TOKEN_EXP_IN_MINUTES = 10;
+
+const createAccessToken = (payload: iJwtPayload): string => {
+  const exp = new Date().getTime() + 1000 * 60 * ACCESS_TOKEN_EXP_IN_MINUTES;
+  return CryptoService.encode(payload, exp);
 };
 
-const decode = async (token: string): Promise<iApiResponse<iJwtPayload | undefined>> => {
-  try {
-    const response = await jwtDecode(token, JWT_SECRET);
-    const payload = response?.payload as iJwtPayload | undefined;
-    return { status: 'success', data: payload };
-  } catch (err: any) {
-    return handleError('Error decoding jwt', err, true); // hide bc it's not necessarily an error if jwt is expired
-  }
+const createRefreshToken = (payload: iJwtPayload): string => {
+  return CryptoService.encode(payload);
+};
+
+const decode = <T>(token: string) => {
+  return CryptoService.decode<T>(token);
 };
 
 // On success: returns a non-expired ACCESS token and payload
@@ -74,44 +43,42 @@ const verifyOrRefresh = async (
   iApiResponse<{ verifiedAccessToken: string | undefined; payload: iJwtPayload }>
 > => {
   try {
-    const { data: payload } = await decode(accessToken);
-    if (!payload) {
-      throw new Error('Error verifying or refreshing jwt, no payload');
+    const decoded = decode<iJwtPayload>(accessToken);
+    if (decoded) {
+      return {
+        status: 'success',
+        data: {
+          verifiedAccessToken: accessToken,
+          payload: decoded,
+        },
+      };
     }
-    return { status: 'success', data: { verifiedAccessToken: accessToken, payload } };
-  } catch (err: any) {
-    /**
-     * Because the Token table is PRIVATE, even for read operations, we need the refresh token to read itself from the database
-     * If it reads itself, it's safe to replenish the access token
-     */
-    // if (err.name === 'TokenExpiredError') {
-    // Since the error handling sucks with this library, we'll just assume it's a TokenExpiredError
-    console.error('TokenExpiredError'); // TODO: remove
+    // if not decoded, assume it's expired
+    console.error('token expired; attempting to refresh');
     const { data } = await ApiServices.getToken(refreshToken);
     const dbRefreshToken = data?.tokenByToken?.items?.[0]?.token;
     if (!dbRefreshToken) {
-      return handleError('Error getting refresh token after token expired', err);
+      return handleError('Error getting refresh token after token expired');
     }
     // decode refresh token to get the payload
-    const { data: payload } = await decode(dbRefreshToken);
-    if (!payload) {
-      return handleError('Error decoding dbRefreshToken', err);
+    const decodedRefresh = decode<iJwtPayload>(dbRefreshToken);
+    if (!decodedRefresh) {
+      return handleError('Error decoding dbRefreshToken');
     }
-    // create a new access token
+    // create a new access token (note we're removing the "isRefreshToken" property to do so)
     const accessTokenPayload = {
-      userId: payload.userId,
-      email: payload.email,
-      role: payload.role,
+      userId: decodedRefresh.userId,
+      email: decodedRefresh.email,
+      role: decodedRefresh.role,
     };
     // create/return new access token
-    // Important: notice we don't pass the entire payload. That's because the refresh token has a special isRefreshToken property that we don't want to pass
-    const { data: verifiedAccessToken } = await createAccessToken(accessTokenPayload);
+    const verifiedAccessToken = createAccessToken(accessTokenPayload);
     return {
       status: 'success',
       data: { verifiedAccessToken, payload: accessTokenPayload },
     };
-    // }
-    // return handleError('Error verifying or refreshing jwt', err);
+  } catch (err) {
+    return { status: 'error' };
   }
 };
 
@@ -120,40 +87,19 @@ const verifyOrRefresh = async (
  */
 
 // creates a jwt with user's email in the payload
-const createVerificationCode = async (email: string): Promise<iApiResponse<string>> => {
-  try {
-    const newToken = await jwtSign(
-      {
-        email, // payload
-        exp: new Date().getTime() + 1000 * 60 * 10, // in ms, so 10 minutes
-      },
-      JWT_SECRET,
-      {
-        alg: 'HS256',
-      },
-    );
-    return { status: 'success', data: newToken };
-  } catch (err) {
-    return handleError('Error creating access token', err);
-  }
+const createVerificationCode = (email: string): string => {
+  const exp = new Date().getTime() + 1000 * 60 * VERIFICATION_TOKEN_EXP_IN_MINUTES;
+  return CryptoService.encode<iVerificationPayload>({ email }, exp);
 };
 
 // must be valid jwt (and not expired) & jwt must have email matching the email param
-const verifyCode = async (
-  token: string,
-  email: string,
-): Promise<iApiResponse<string | undefined>> => {
-  try {
-    const response = await jwtDecode(token, JWT_SECRET);
-    const payload = response?.payload as any;
-    const payloadEmail = payload?.email as string | undefined;
-    if (!payloadEmail || payloadEmail !== email) {
-      return handleError('Invalid payload');
-    }
-    return { status: 'success', data: email };
-  } catch (err: any) {
-    console.error('err', err); // it just says "Error: Decoding failed" - which sucks because it doesn't tell us why
-    return handleError('Link has expired', err);
+const verifyCode = (token: string, email: string): string | undefined => {
+  const payload = decode<iVerificationPayload>(token);
+  const payloadEmail = payload?.email;
+  if (!payloadEmail || payloadEmail !== email) {
+    return undefined;
+  } else {
+    return payloadEmail;
   }
 };
 

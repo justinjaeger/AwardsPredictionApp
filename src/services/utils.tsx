@@ -42,6 +42,23 @@ export const handleError = (
 };
 
 /**
+ * Handles all PUBLIC requests
+ */
+export const GraphqlAPIPublic = async <Query, Variables>(
+  query: string,
+  variables?: Variables,
+) => {
+  // NOTE: If you do authMode = AWS_LAMBDA, you have to pass SOME STRING... even if it's garbage
+  // If you do authMode = API_KEY it doesn't matter what that field is
+  return API.graphql<GraphQLQuery<Query>>({
+    query,
+    // @ts-ignore
+    variables,
+    authMode: 'API_KEY',
+  });
+};
+
+/**
  * Important: handles expired tokens
  * This means can assume the access token is valid in the Lambda check (it doesn't need to handle expired)
  * If refreshing the token fails, we log the user out, and the request resumes with an undefined token
@@ -52,6 +69,8 @@ export const GraphqlAPI = async <Query, Variables>(
 ) => {
   const { data: payload } = await KeychainStorage.get();
   const { accessToken, refreshToken } = payload || {};
+  console.log('accessToken', accessToken); // TODO: delete before deploying
+  console.log('refreshToken', refreshToken); // TODO: delete before deploying
 
   let verifiedAccessToken: string | undefined;
   if (accessToken && refreshToken) {
@@ -68,11 +87,22 @@ export const GraphqlAPI = async <Query, Variables>(
     }
   }
 
+  //   const res = await API.graphql<GraphQLQuery<Query>>({
+  //     query,
+  //     // @ts-ignore
+  //     variables,
+  //     authToken: verifiedAccessToken,
+  //   });
+  //   console.log('GraphqlAPI', JSON.stringify(res));
+
+  // NOTE: If you do authMode = AWS_LAMBDA, you have to pass SOME STRING... even if it's garbage
+  // If you do authMode = API_KEY it doesn't matter what that field is
   return API.graphql<GraphQLQuery<Query>>({
     query,
     // @ts-ignore
     variables,
-    authToken: verifiedAccessToken,
+    // authToken: verifiedAccessToken || 'none',
+    authMode: 'API_KEY',
   });
 };
 

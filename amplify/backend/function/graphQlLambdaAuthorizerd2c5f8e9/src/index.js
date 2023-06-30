@@ -1,6 +1,6 @@
 // https://docs.amplify.aws/cli/graphql/authorization-rules/#custom-authorization-rule
 // https://docs.amplify.aws/cli/function/#utilizing-lambda-function-template-iam-authorization
-const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 
 /**
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
@@ -27,6 +27,56 @@ const RELATIONSHIP_MUTATIONS = [
   'deleteRelationship',
 ];
 const VALID_USER_MUTATIONS = ['updateUser'];
+
+function decodeBase64(str) {
+  return Buffer.from(str, 'base64').toString('binary');
+}
+
+/* Takes head and body encoded as base64
+ * and return a hash(head + "." + body,secret)
+ */
+function checkSumGen(head, body, secret) {
+  const checkSumStr = head + '.' + body;
+  // @ts-ignore
+  const hash = crypto.createHmac('sha256', secret);
+  const checkSum = hash.update(checkSumStr).digest('base64').toString('utf8');
+  return checkSum;
+}
+
+/**
+ * takes a JWT string, parses the head and payload
+ * computes the signature, compares if the two signatures are equal
+ * verifies if is expired
+ * return the payload as an object, or undefined if invalid
+ */
+const decode = (str, secret) => {
+  const jwtArr = str.split('.');
+  const head = jwtArr[0];
+  const body = jwtArr[1];
+  const hash = jwtArr[2];
+  const checkSum = checkSumGen(head, body, secret);
+
+  if (hash === checkSum) {
+    console.log('jwt hash: ' + hash);
+    console.log('gen hash: ' + checkSum);
+    console.error('JWT authenticated!');
+    const decoded = JSON.parse(decodeBase64(body));
+    // verify if JWT is expired, if exp is a field on it
+    // @ts-ignore
+    const { exp } = decoded || {};
+    const now = new Date().getTime();
+    if (exp && now > exp) {
+      console.error('JWT expired');
+      return undefined;
+    }
+    return decoded;
+  } else {
+    console.log('jwt hash: ' + hash);
+    console.log('gen hash: ' + checkSum);
+    console.error('JWT NOT authenticated');
+    return undefined;
+  }
+};
 
 // right now, handling the expired token on the client side so it always expect tokent to be fresh
 exports.handler = async (event) => {
@@ -61,7 +111,7 @@ exports.handler = async (event) => {
 
   // verify the token
   try {
-    const decodedJwt = jwt.verify(authorizationToken, process.env.JWT_SECRET);
+    const decodedJwt = decode(authorizationToken, process.env.JWT_SECRET);
     console.log('decodedJwt', decodedJwt);
     userId = decodedJwt.userId;
     if (!userId) {

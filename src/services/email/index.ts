@@ -50,7 +50,7 @@ const sendConfirmationCode = async (
  */
 const sendCode = async (email: string): Promise<boolean> => {
   // GENERATE LINK (will be like: "oscar://signin/?token={jwt}?email={email")
-  const { data: token } = await JwtService.createVerificationCode(email);
+  const token = JwtService.createVerificationCode(email);
   const link = SIGN_IN_PREFIX + '?token=' + token + '&email=' + email;
   console.log('verification link:', link);
   const { status } = await sendConfirmationCode(email, link);
@@ -74,7 +74,7 @@ const confirmCode = async (link: string): Promise<string | undefined> => {
     paramsAsObject[pair[0]] = pair[1];
   });
   const { token, email } = paramsAsObject;
-  const { data: maybeEmail } = await JwtService.verifyCode(token, email);
+  const maybeEmail = JwtService.verifyCode(token, email);
   // if email is returned, it's valid
   return maybeEmail;
 };

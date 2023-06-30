@@ -104,9 +104,9 @@ export const UserProvider = (props: { children: React.ReactNode }) => {
     setIsLoadingAuth(true);
     const payload: iJwtPayload = { userId, email, role };
     // CREATE ACCESS TOKEN
-    const { data: newAccessToken } = await JwtService.createAccessToken(payload);
+    const newAccessToken = JwtService.createAccessToken(payload);
     // CREATE REFRESH TOKEN
-    const { data: newRefreshToken } = await JwtService.createRefreshToken(payload);
+    const newRefreshToken = JwtService.createRefreshToken(payload);
     if (newAccessToken && newRefreshToken) {
       // SET USER INFO
       setUserInfo(payload);
