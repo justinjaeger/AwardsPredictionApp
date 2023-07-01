@@ -26,7 +26,12 @@ import {
 } from '../../API';
 import * as mutations from '../../graphql/mutations';
 import { ListPredictionSetsQuery } from '../../graphqlCustom/types';
-import { GraphqlAPI, handleError, iApiResponse } from '../utils';
+import {
+  GraphqlAPIProtected,
+  GraphqlAPIPublic,
+  handleError,
+  iApiResponse,
+} from '../utils';
 /**
  * All operations associated with removing a user
  */
@@ -176,7 +181,7 @@ const getPredictionSets = async (
   userId: string,
 ): Promise<iApiResponse<ListPredictionSetsQuery>> => {
   // Get all prediction sets matching params (should only be one)
-  const { data, errors } = await GraphqlAPI<
+  const { data, errors } = await GraphqlAPIPublic<
     ListPredictionSetsQuery,
     ListPredictionSetsQueryVariables
   >(listPredictionSetsQuery, {
@@ -194,7 +199,7 @@ const getHistoryPredictionSets = async (
   userId: string,
 ): Promise<iApiResponse<ListHistoryPredictionSetsQuery>> => {
   // Get all prediction sets matching params (should only be one)
-  const { data, errors } = await GraphqlAPI<
+  const { data, errors } = await GraphqlAPIPublic<
     ListHistoryPredictionSetsQuery,
     ListHistoryPredictionSetsQueryVariables
   >(listHistoryPredictionSetsQuery, {
@@ -212,7 +217,7 @@ const getPredictions = async (
   predictionSetId: string,
 ): Promise<iApiResponse<ListPredictionsQuery>> => {
   // Get all prediction sets matching params (should only be one)
-  const { data, errors } = await GraphqlAPI<
+  const { data, errors } = await GraphqlAPIPublic<
     ListPredictionsQuery,
     ListPredictionsQueryVariables
   >(listPredictionsQuery, {
@@ -230,7 +235,7 @@ const getHistoryPredictions = async (
   historyPredictionSetId: string,
 ): Promise<iApiResponse<ListHistoryPredictionsQuery>> => {
   // Get all prediction sets matching params (should only be one)
-  const { data, errors } = await GraphqlAPI<
+  const { data, errors } = await GraphqlAPIPublic<
     ListHistoryPredictionsQuery,
     ListHistoryPredictionsQueryVariables
   >(listHistoryPredictionsQuery, {
@@ -248,7 +253,7 @@ const deletePrediction = async (
   id: string,
 ): Promise<iApiResponse<DeletePredictionMutation>> => {
   try {
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIProtected<
       DeletePredictionMutation,
       DeletePredictionMutationVariables
     >(deletePredictionMutation, { input: { id } });
@@ -264,7 +269,7 @@ const deletePrediction = async (
 const deletePredictionSet = async (
   id: string,
 ): Promise<iApiResponse<DeletePredictionSetMutation>> => {
-  const { data, errors } = await GraphqlAPI<
+  const { data, errors } = await GraphqlAPIProtected<
     DeletePredictionSetMutation,
     DeletePredictionSetMutationVariables
   >(deletePredictionSetMutation, { input: { id } });
@@ -277,7 +282,7 @@ const deletePredictionSet = async (
 const deleteHistoryPrediction = async (
   id: string,
 ): Promise<iApiResponse<DeleteHistoryPredictionMutation>> => {
-  const { data, errors } = await GraphqlAPI<
+  const { data, errors } = await GraphqlAPIProtected<
     DeleteHistoryPredictionMutation,
     DeleteHistoryPredictionMutationVariables
   >(deleteHistoryPredictionMutation, { input: { id } });
@@ -290,7 +295,7 @@ const deleteHistoryPrediction = async (
 const deleteHistoryPredictionSet = async (
   id: string,
 ): Promise<iApiResponse<DeleteHistoryPredictionSetMutation>> => {
-  const { data, errors } = await GraphqlAPI<
+  const { data, errors } = await GraphqlAPIProtected<
     DeleteHistoryPredictionSetMutation,
     DeleteHistoryPredictionSetMutationVariables
   >(deleteHistoryPredictionSetMutation, { input: { id } });
@@ -303,7 +308,7 @@ const deleteHistoryPredictionSet = async (
 const getAllFollowings = async (
   followedUserId: string,
 ): Promise<iApiResponse<SearchRelationshipsQuery>> => {
-  const { data, errors } = await GraphqlAPI<
+  const { data, errors } = await GraphqlAPIPublic<
     SearchRelationshipsQuery,
     SearchRelationshipsQueryVariables
   >(searchRelationshipsQuery, {
@@ -320,7 +325,7 @@ const getAllFollowings = async (
 const getAllFollowers = async (
   followingUserId: string,
 ): Promise<iApiResponse<SearchRelationshipsQuery>> => {
-  const { data, errors } = await GraphqlAPI<
+  const { data, errors } = await GraphqlAPIPublic<
     SearchRelationshipsQuery,
     SearchRelationshipsQueryVariables
   >(searchRelationshipsQuery, {
@@ -337,7 +342,7 @@ const getAllFollowers = async (
 const deleteRelationship = async (
   id: string,
 ): Promise<iApiResponse<DeleteRelationshipMutation>> => {
-  const { data, errors } = await GraphqlAPI<
+  const { data, errors } = await GraphqlAPIProtected<
     DeleteRelationshipMutation,
     DeleteRelationshipMutationVariables
   >(deleteRelationshipMutation, { input: { id } });
@@ -437,7 +442,7 @@ const deleteAllUserPredictions = async (userId: string): Promise<any> => {
 };
 
 const deleteUser = async (id: string): Promise<iApiResponse<DeleteUserMutation>> => {
-  const { data, errors } = await GraphqlAPI<
+  const { data, errors } = await GraphqlAPIProtected<
     DeleteUserMutation,
     DeleteUserMutationVariables
   >(mutations.deleteUser, { input: { id } });
@@ -450,7 +455,7 @@ const deleteUser = async (id: string): Promise<iApiResponse<DeleteUserMutation>>
 const wipeUserInfo = async (id: string): Promise<iApiResponse<UpdateUserMutation>> => {
   const randomSixDigits = Math.floor(100000 + Math.random() * 900000);
   const newEmail = `deleted-user-${randomSixDigits}`;
-  const { data, errors } = await GraphqlAPI<
+  const { data, errors } = await GraphqlAPIProtected<
     UpdateUserMutation,
     UpdateUserMutationVariables
   >(mutations.updateUser, {

@@ -14,14 +14,19 @@ import * as mutations from '../../graphql/mutations';
 import * as customMutations from '../../graphqlCustom/mutations';
 import * as queries from '../../graphql/queries';
 import * as customQueries from '../../graphqlCustom/queries';
-import { GraphqlAPI, handleError, iApiResponse } from '../utils';
+import {
+  GraphqlAPIProtected,
+  GraphqlAPIPublic,
+  handleError,
+  iApiResponse,
+} from '../utils';
 
 export const getPerson = async (id: string): Promise<iApiResponse<GetPersonQuery>> => {
   try {
-    const { data, errors } = await GraphqlAPI<GetPersonQuery, GetPersonQueryVariables>(
-      queries.getPerson,
-      { id },
-    );
+    const { data, errors } = await GraphqlAPIPublic<
+      GetPersonQuery,
+      GetPersonQueryVariables
+    >(queries.getPerson, { id });
     if (!data?.getPerson) {
       throw new Error(JSON.stringify(errors));
     }
@@ -35,7 +40,7 @@ const getPeopleByTmdb = async (
   tmdbId: number,
 ): Promise<iApiResponse<PersonByTmdbIdQuery>> => {
   try {
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIPublic<
       PersonByTmdbIdQuery,
       PersonByTmdbIdQueryVariables
     >(customQueries.personByTmdbId, { tmdbId });
@@ -52,7 +57,7 @@ export const createPerson = async (
   tmdbId: number,
 ): Promise<iApiResponse<CreatePersonMutation>> => {
   try {
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIPublic<
       CreatePersonMutation,
       CreatePersonMutationVariables
     >(mutations.createPerson, { input: { tmdbId } });
@@ -100,9 +105,10 @@ export const getOrCreatePerson = async (
 
 export const listEveryPerson = async (): Promise<iApiResponse<ListPeopleQuery>> => {
   try {
-    const { data, errors } = await GraphqlAPI<ListPeopleQuery, ListPeopleQueryVariables>(
-      customQueries.listEveryPerson,
-    );
+    const { data, errors } = await GraphqlAPIPublic<
+      ListPeopleQuery,
+      ListPeopleQueryVariables
+    >(customQueries.listEveryPerson);
     if (!data?.listPeople) {
       throw new Error(JSON.stringify(errors));
     }
@@ -116,7 +122,7 @@ export const deletePersonById = async (
   id: string,
 ): Promise<iApiResponse<DeletePersonMutation>> => {
   try {
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIProtected<
       DeletePersonMutation,
       DeletePersonMutationVariables
     >(customMutations.deletePerson, { input: { id } });

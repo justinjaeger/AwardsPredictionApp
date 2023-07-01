@@ -59,11 +59,12 @@ export const GraphqlAPIPublic = async <Query, Variables>(
 };
 
 /**
+ * For all requests that require authentication
  * Important: handles expired tokens
  * This means can assume the access token is valid in the Lambda check (it doesn't need to handle expired)
  * If refreshing the token fails, we log the user out, and the request resumes with an undefined token
  */
-export const GraphqlAPI = async <Query, Variables>(
+export const GraphqlAPIProtected = async <Query, Variables>(
   query: string,
   variables?: Variables,
 ) => {
@@ -87,22 +88,13 @@ export const GraphqlAPI = async <Query, Variables>(
     }
   }
 
-  //   const res = await API.graphql<GraphQLQuery<Query>>({
-  //     query,
-  //     // @ts-ignore
-  //     variables,
-  //     authToken: verifiedAccessToken,
-  //   });
-  //   console.log('GraphqlAPI', JSON.stringify(res));
-
   // NOTE: If you do authMode = AWS_LAMBDA, you have to pass SOME STRING... even if it's garbage
   // If you do authMode = API_KEY it doesn't matter what that field is
   return API.graphql<GraphQLQuery<Query>>({
     query,
     // @ts-ignore
     variables,
-    // authToken: verifiedAccessToken || 'none',
-    authMode: 'API_KEY',
+    authToken: verifiedAccessToken || 'none',
   });
 };
 

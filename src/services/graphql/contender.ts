@@ -20,7 +20,12 @@ import * as mutations from '../../graphql/mutations';
 import * as customMutations from '../../graphqlCustom/mutations';
 import * as queries from '../../graphql/queries';
 import * as customQueries from '../../graphqlCustom/queries';
-import { GraphqlAPI, handleError, iApiResponse } from '../utils';
+import {
+  GraphqlAPIPublic,
+  GraphqlAPIProtected,
+  handleError,
+  iApiResponse,
+} from '../utils';
 import ApiServices from '.';
 import { iPrediction } from '../../types';
 import Serializers from '../../serializers';
@@ -45,8 +50,7 @@ type iContenderParams = {
 };
 
 // if movie category, returns a single contender
-// if song category, may return several contenders
-// if person category, may return several contenders
+// if song or person category, may return several contenders
 const getUniqueContenders = async (
   params: iContenderParams,
 ): Promise<iApiResponse<GetUniqueMovieContenderQuery>> => {
@@ -59,7 +63,7 @@ const getUniqueContenders = async (
     if (personId) {
       filter = { personId: { eq: personId } };
     }
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIPublic<
       GetUniqueMovieContenderQuery,
       GetUniqueMovieContenderQueryVariables
     >(customQueries.getUniqueMovieContender, {
@@ -96,7 +100,7 @@ const createContender = async (
   }
   // perform mutation
   try {
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIPublic<
       CreateContenderMutation,
       CreateContenderMutationVariables
     >(mutations.createContender, {
@@ -225,7 +229,7 @@ export const getContenderById = async (
   contenderId: string,
 ): Promise<iApiResponse<GetContenderQuery>> => {
   try {
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIPublic<
       GetContenderQuery,
       GetContenderQueryVariables
     >(queries.getContender, {
@@ -246,7 +250,7 @@ export const updateContenderVisibilty = async (
   visibility: ContenderVisibility,
 ): Promise<iApiResponse<UpdateContenderMutation>> => {
   try {
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIProtected<
       UpdateContenderMutation,
       UpdateContenderMutationVariables
     >(mutations.updateContender, {
@@ -266,7 +270,7 @@ export const updateContenderAccolade = async (
   accolade: ContenderAccolade | null,
 ): Promise<iApiResponse<UpdateContenderMutation>> => {
   try {
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIProtected<
       UpdateContenderMutation,
       UpdateContenderMutationVariables
     >(mutations.updateContender, {
@@ -289,7 +293,7 @@ export const listEveryContender = async (): Promise<
   iApiResponse<ListContendersQuery>
 > => {
   try {
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIPublic<
       ListContendersQuery,
       ListContendersQueryVariables
     >(customQueries.listEveryContender);
@@ -307,7 +311,7 @@ export const updateContenderMovie = async (
   movieId: string,
 ): Promise<iApiResponse<UpdateContenderMutation>> => {
   try {
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIProtected<
       UpdateContenderMutation,
       UpdateContenderMutationVariables
     >(customMutations.updateContender, {
@@ -327,7 +331,7 @@ export const updateContenderPerson = async (
   personId: string,
 ): Promise<iApiResponse<UpdateContenderMutation>> => {
   try {
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIProtected<
       UpdateContenderMutation,
       UpdateContenderMutationVariables
     >(customMutations.updateContender, {
@@ -347,7 +351,7 @@ export const updateContenderSong = async (
   songId: string,
 ): Promise<iApiResponse<UpdateContenderMutation>> => {
   try {
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIProtected<
       UpdateContenderMutation,
       UpdateContenderMutationVariables
     >(customMutations.updateContender, {
@@ -366,7 +370,7 @@ export const deleteContenderById = async (
   id: string,
 ): Promise<iApiResponse<DeleteContenderMutation>> => {
   try {
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIProtected<
       DeleteContenderMutation,
       DeleteContenderMutationVariables
     >(customMutations.deleteContender, { input: { id } });
@@ -384,7 +388,7 @@ export const listEveryContenderPaginated = async (
   nextToken?: string | null,
 ): Promise<iApiResponse<ListContendersQuery>> => {
   try {
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIPublic<
       ListContendersQuery,
       ListContendersQueryVariables
     >(customQueries.listEveryContenderPaginated, { nextToken, limit: PAGINATED_LIMIT });

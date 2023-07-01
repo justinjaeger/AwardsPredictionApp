@@ -10,7 +10,13 @@ import {
 } from '../../API';
 import * as queries from '../../graphql/queries';
 import * as mutations from '../../graphql/mutations';
-import { GraphqlAPI, GraphqlAPIRefreshToken, handleError, iApiResponse } from '../utils';
+import {
+  GraphqlAPIProtected,
+  GraphqlAPIPublic,
+  GraphqlAPIRefreshToken,
+  handleError,
+  iApiResponse,
+} from '../utils';
 
 export const getToken = async (
   token: string,
@@ -52,7 +58,7 @@ export const createRefreshToken = async (
   userId: string,
 ): Promise<iApiResponse<CreateTokenMutation>> => {
   try {
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIPublic<
       CreateTokenMutation,
       CreateTokenMutationVariables
     >(mutations.createToken, { input: { token, userId } });
@@ -70,7 +76,7 @@ const deleteTokenById = async (
   userId: string,
 ): Promise<iApiResponse<DeleteTokenMutation>> => {
   try {
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIProtected<
       DeleteTokenMutation,
       DeleteTokenMutationVariables
     >(mutations.createToken, {

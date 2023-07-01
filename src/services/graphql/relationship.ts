@@ -20,14 +20,19 @@ import {
   RelationshipByFollowingUserIdQueryCustom,
   SearchRelationshipsQuery,
 } from '../../graphqlCustom/types';
-import { GraphqlAPI, handleError, iApiResponse } from '../utils';
+import {
+  GraphqlAPIProtected,
+  GraphqlAPIPublic,
+  handleError,
+  iApiResponse,
+} from '../utils';
 
 export const getUniqueRelationship = async (
   followedUserId: string,
   followingUserId: string,
 ): Promise<iApiResponse<UniqueRelationshipViaFollowedUserQuery>> => {
   try {
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIPublic<
       UniqueRelationshipViaFollowedUserQuery,
       UniqueRelationshipViaFollowedUserQueryVariables
     >(customQueries.uniqueRelationshipViaFollowedUser, {
@@ -44,7 +49,7 @@ export const getUniqueRelationship = async (
 };
 
 /**
- * MUTTIONS
+ * MUTATIONS
  */
 
 export const followUser = async (
@@ -66,7 +71,7 @@ export const followUser = async (
       throw new Error('relationship already exists');
     }
     // create relationship
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIProtected<
       CreateRelationshipMutation,
       CreateRelationshipMutationVariables
     >(mutations.createRelationship, { input: { followedUserId, followingUserId } });
@@ -102,7 +107,7 @@ export const unFollowUser = async (
       throw new Error('relationship id not found');
     }
     // use relationship id to delete
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIProtected<
       DeleteRelationshipMutation,
       DeleteRelationshipMutationVariables
     >(mutations.deleteRelationship, {
@@ -118,13 +123,12 @@ export const unFollowUser = async (
   }
 };
 
-// going to fail unless it's the admin
 export const deleteRelationshipById = async (
   id: string,
 ): Promise<iApiResponse<DeleteRelationshipMutation>> => {
   try {
     // use relationship id to delete
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIProtected<
       DeleteRelationshipMutation,
       DeleteRelationshipMutationVariables
     >(mutations.deleteRelationship, { input: { id } });
@@ -148,7 +152,7 @@ export const getWhoUserIsFollowedBy = async (
 ): Promise<iApiResponse<RelationshipByFollowedUserIdQuery>> => {
   const { limit, nextToken } = options || {};
   try {
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIPublic<
       RelationshipByFollowedUserIdQuery,
       RelationshipByFollowedUserIdQueryVariables
     >(customQueries.getWhoUserIsFollowedBy, {
@@ -172,7 +176,7 @@ export const getWhoUserIsFollowing = async (
 ): Promise<iApiResponse<RelationshipByFollowingUserIdQueryCustom>> => {
   const { limit, nextToken } = options || {};
   try {
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIPublic<
       RelationshipByFollowingUserIdQueryCustom,
       RelationshipByFollowingUserIdQueryVariables
     >(customQueries.getWhoUserIsFollowing, {
@@ -199,7 +203,7 @@ export const getWhoPeopleUserFollowsAreFollowing = async (
   nextToken?: string | undefined,
 ): Promise<iApiResponse<RelationshipByFollowingUserIdQueryCustom>> => {
   try {
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIPublic<
       RelationshipByFollowingUserIdQueryCustom,
       RelationshipByFollowingUserIdQueryVariables
     >(customQueries.getWhoPeopleUserFollowsAreFollowing, {
@@ -220,10 +224,10 @@ export const getWhoRandomUsersAreFollowing = async (
   nextToken?: string | undefined,
 ): Promise<iApiResponse<ListUsersQuery>> => {
   try {
-    const { data, errors } = await GraphqlAPI<ListUsersQuery, ListUsersQueryVariables>(
-      customQueries.getWhoRandomUsersAreFollowing,
-      { nextToken },
-    );
+    const { data, errors } = await GraphqlAPIPublic<
+      ListUsersQuery,
+      ListUsersQueryVariables
+    >(customQueries.getWhoRandomUsersAreFollowing, { nextToken });
     if (!data?.listUsers) {
       throw new Error(JSON.stringify(errors));
     }
@@ -241,7 +245,7 @@ export const getFollowingCount = async (
   followingUserId: string,
 ): Promise<iApiResponse<SearchRelationshipsQuery>> => {
   try {
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIPublic<
       SearchRelationshipsQuery,
       SearchRelationshipsQueryVariables
     >(customQueries.getTotalRelationships, {
@@ -262,7 +266,7 @@ export const getFollowerCount = async (
   followedUserId: string,
 ): Promise<iApiResponse<SearchRelationshipsQuery>> => {
   try {
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIPublic<
       SearchRelationshipsQuery,
       SearchRelationshipsQueryVariables
     >(customQueries.getTotalRelationships, {
@@ -289,7 +293,7 @@ export const getFriendsPredictingEvent = async (
   eventId: string,
 ): Promise<iApiResponse<RelationshipByFollowingUserIdQueryCustom>> => {
   try {
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIPublic<
       RelationshipByFollowingUserIdQueryCustom,
       RelationshipByFollowingUserIdQueryVariables & { eventId: string }
     >(customQueries.getFriendsPredictingEventQuery, {
@@ -315,7 +319,7 @@ export const getRecentFollowingPredictions = async (
   const dateString = date.toISOString();
 
   try {
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIPublic<
       RelationshipByFollowingUserIdQueryCustom,
       RelationshipByFollowingUserIdQueryVariables & {
         followingUserId: string;
@@ -343,7 +347,7 @@ export const listEveryRelationship = async (): Promise<
   iApiResponse<ListRelationshipsQuery>
 > => {
   try {
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIPublic<
       ListRelationshipsQuery,
       ListRelationshipsQueryVariables
     >(customQueries.listEveryRelationship);

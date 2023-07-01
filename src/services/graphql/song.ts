@@ -14,7 +14,12 @@ import {
 } from '../../API';
 import * as customMutations from '../../graphqlCustom/mutations';
 import * as customQueries from '../../graphqlCustom/queries';
-import { GraphqlAPI, handleError, iApiResponse } from '../utils';
+import {
+  GraphqlAPIProtected,
+  GraphqlAPIPublic,
+  handleError,
+  iApiResponse,
+} from '../utils';
 
 type iSongParams = {
   title: string;
@@ -24,7 +29,7 @@ type iSongParams = {
 
 export const getSongById = async (id: string): Promise<iApiResponse<GetSongQuery>> => {
   try {
-    const { data, errors } = await GraphqlAPI<GetSongQuery, GetSongQueryVariables>(
+    const { data, errors } = await GraphqlAPIPublic<GetSongQuery, GetSongQueryVariables>(
       customQueries.getSong,
       { id },
     );
@@ -43,7 +48,7 @@ export const getUniqueSongs = async (
 ): Promise<iApiResponse<SongByMovieIdAndTitleQuery>> => {
   const { title, movieId } = params;
   try {
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIPublic<
       SongByMovieIdAndTitleQuery,
       SongByMovieIdAndTitleQueryVariables
     >(customQueries.songByMovieIdAndTitle, {
@@ -64,7 +69,7 @@ export const createSong = async (
 ): Promise<iApiResponse<CreateSongMutation>> => {
   const { title, artist, movieId } = params;
   try {
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIPublic<
       CreateSongMutation,
       CreateSongMutationVariables
     >(customMutations.createSong, { input: { title, artist, movieId } });
@@ -112,9 +117,10 @@ export const getOrCreateSong = async (
 
 export const listEverySong = async (): Promise<iApiResponse<ListSongsQuery>> => {
   try {
-    const { data, errors } = await GraphqlAPI<ListSongsQuery, ListSongsQueryVariables>(
-      customQueries.listEverySong,
-    );
+    const { data, errors } = await GraphqlAPIPublic<
+      ListSongsQuery,
+      ListSongsQueryVariables
+    >(customQueries.listEverySong);
     if (!data?.listSongs) {
       throw new Error(JSON.stringify(errors));
     }
@@ -129,7 +135,7 @@ export const updateSongMovie = async (
   movieId: string,
 ): Promise<iApiResponse<UpdateSongMutation>> => {
   try {
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIProtected<
       UpdateSongMutation,
       UpdateSongMutationVariables
     >(customMutations.updateSong, {
@@ -151,7 +157,7 @@ export const deleteSongById = async (
   id: string,
 ): Promise<iApiResponse<DeleteSongMutation>> => {
   try {
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIProtected<
       DeleteSongMutation,
       DeleteSongMutationVariables
     >(customMutations.deleteSong, { input: { id } });

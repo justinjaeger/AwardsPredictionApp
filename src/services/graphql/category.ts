@@ -8,7 +8,7 @@ import {
   UpdateCategoryMutationVariables,
 } from '../../API';
 import * as mutations from '../../graphql/mutations';
-import { GraphqlAPI, handleError, iApiResponse } from '../utils';
+import { GraphqlAPIProtected, handleError, iApiResponse } from '../utils';
 
 export const createCategory = async (
   name: CategoryName,
@@ -16,7 +16,7 @@ export const createCategory = async (
   eventId: string,
 ): Promise<iApiResponse<CreateCategoryMutation>> => {
   try {
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIProtected<
       CreateCategoryMutation,
       CreateCategoryMutationVariables
     >(mutations.createCategory, { input: { name, type, eventId } });
@@ -34,7 +34,7 @@ export const updateCategoryIsShortlisted = async (
   isShortlisted: CategoryIsShortlisted,
 ): Promise<iApiResponse<UpdateCategoryMutation>> => {
   try {
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIProtected<
       UpdateCategoryMutation,
       UpdateCategoryMutationVariables
     >(mutations.updateCategory, { input: { id: categoryId, isShortlisted } });

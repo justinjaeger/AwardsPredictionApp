@@ -41,7 +41,12 @@ import {
   ListPredictionSetsQuery,
   PredictionSetByUserIdAndEventIdQuery,
 } from '../../graphqlCustom/types';
-import { GraphqlAPI, handleError, iApiResponse } from '../utils';
+import {
+  GraphqlAPIProtected,
+  GraphqlAPIPublic,
+  handleError,
+  iApiResponse,
+} from '../utils';
 
 // there can only be one prediction set from these parameters
 export type iPredictionSetParams = {
@@ -69,7 +74,7 @@ export const getPersonalPredictionsByCategory = async (params: {
   const { userId, categoryId } = params;
   try {
     // Get all prediction sets matching params (should only be one)
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIPublic<
       PredictionSetByUserIdAndCategoryIdQuery,
       PredictionSetByUserIdAndCategoryIdQueryVariables
     >(customQueries.getUniquePredictionSet, {
@@ -90,7 +95,7 @@ export const getPersonalPredictionsByEvent = async (
   userId: string,
 ): Promise<iApiResponse<PredictionSetByUserIdAndEventIdQuery>> => {
   try {
-    const { data: maybePreSets, errors } = await GraphqlAPI<
+    const { data: maybePreSets, errors } = await GraphqlAPIPublic<
       PredictionSetByUserIdAndEventIdQuery,
       PredictionSetByUserIdAndEventIdQueryVariables
     >(customQueries.predictionSetByUserIdAndEventId, {
@@ -149,7 +154,7 @@ const deletePredictionSetById = async (
   userId: string,
 ): Promise<iApiResponse<DeletePredictionSetMutation>> => {
   try {
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIProtected<
       DeletePredictionSetMutation,
       DeletePredictionSetMutationVariables
     >(customMutations.deletePredictionSet, {
@@ -170,7 +175,7 @@ const deletePredictionById = async (
   id: string,
 ): Promise<iApiResponse<DeletePredictionMutation>> => {
   try {
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIProtected<
       DeletePredictionMutation,
       DeletePredictionMutationVariables
     >(customMutations.deletePrediction, { input: { id } });
@@ -192,7 +197,7 @@ const createPredictionSet = async (
 ): Promise<iApiResponse<CreatePredictionSetMutation>> => {
   const { userId, categoryId, eventId, type } = params;
   try {
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIProtected<
       CreatePredictionSetMutation,
       CreatePredictionSetMutationVariables
     >(customMutations.createPredictionSet, {
@@ -217,7 +222,7 @@ const createPrediction = async (
 ): Promise<iApiResponse<CreatePredictionMutation>> => {
   const { contenderId, predictionSetId, ranking } = params;
   try {
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIProtected<
       CreatePredictionMutation,
       CreatePredictionMutationVariables
     >(customMutations.createPrediction, {
@@ -288,7 +293,7 @@ export const listEveryPersonalPrediction = async (
 ): Promise<iApiResponse<ListPredictionsQuery>> => {
   try {
     // Get all prediction sets matching params (should only be one)
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIPublic<
       ListPredictionsQuery,
       ListPredictionsQueryVariables
     >(customQueries.listEveryPersonalPrediction, { nextToken, limit: PAGINATED_LIMIT });
@@ -306,7 +311,7 @@ export const listEveryPersonalHistoryPrediction = async (
 ): Promise<iApiResponse<ListHistoryPredictionsQuery>> => {
   try {
     // Get all prediction sets matching params (should only be one)
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIPublic<
       ListHistoryPredictionsQuery,
       ListHistoryPredictionsQueryVariables
     >(customQueries.listEveryPersonalHistoryPrediction, {
@@ -327,7 +332,7 @@ export const listEveryCommunityPrediction = async (
 ): Promise<iApiResponse<ListCommunityPredictionsQuery>> => {
   try {
     // Get all prediction sets matching params (should only be one)
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIPublic<
       ListCommunityPredictionsQuery,
       ListCommunityPredictionsQueryVariables
     >(customQueries.listEveryCommunityPrediction, {
@@ -348,7 +353,7 @@ export const listEveryCommunityHistoryPrediction = async (
 ): Promise<iApiResponse<ListCommunityHistoryPredictionsQuery>> => {
   try {
     // Get all prediction sets matching params (should only be one)
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIPublic<
       ListCommunityHistoryPredictionsQuery,
       ListCommunityHistoryPredictionsQueryVariables
     >(customQueries.listEveryCommunityHistoryPrediction, {
@@ -369,7 +374,7 @@ export const listEveryPersonalPredictionSet = async (
 ): Promise<iApiResponse<ListPredictionSetsQuery>> => {
   try {
     // Get all prediction sets matching params (should only be one)
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIPublic<
       ListPredictionSetsQuery,
       ListPredictionSetsQueryVariables
     >(customQueries.listEveryPersonalPredictionSet, {
@@ -394,7 +399,7 @@ export const updatePredictionContender = async (
   contenderId: string,
 ): Promise<iApiResponse<UpdatePredictionMutation>> => {
   try {
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIProtected<
       UpdatePredictionMutation,
       UpdatePredictionMutationVariables
     >(customMutations.updatePrediction, {
@@ -415,7 +420,7 @@ export const updateHistoryPredictionContender = async (
   contenderId: string,
 ): Promise<iApiResponse<UpdateHistoryPredictionMutation>> => {
   try {
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIProtected<
       UpdateHistoryPredictionMutation,
       UpdateHistoryPredictionMutationVariables
     >(customMutations.updateHistoryPrediction, {
@@ -435,7 +440,7 @@ export const updateCommunityPredictionContender = async (
   contenderId: string,
 ): Promise<iApiResponse<UpdateCommunityPredictionMutation>> => {
   try {
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIProtected<
       UpdateCommunityPredictionMutation,
       UpdateCommunityPredictionMutationVariables
     >(customMutations.updateCommunityPrediction, {
@@ -455,7 +460,7 @@ export const updateCommunityHistoryPredictionContender = async (
   contenderId: string,
 ): Promise<iApiResponse<UpdateCommunityHistoryPredictionMutation>> => {
   try {
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIProtected<
       UpdateCommunityHistoryPredictionMutation,
       UpdateCommunityHistoryPredictionMutationVariables
     >(customMutations.updateCommunityHistoryPrediction, {
@@ -478,7 +483,7 @@ export const deletePersonalPrediction = async (
   predictionId: string,
 ): Promise<iApiResponse<DeletePredictionMutation>> => {
   try {
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIProtected<
       DeletePredictionMutation,
       DeletePredictionMutationVariables
     >(customMutations.deletePrediction, { input: { id: predictionId } });
@@ -495,7 +500,7 @@ export const deletePersonalHistoryPrediction = async (
   predictionId: string,
 ): Promise<iApiResponse<DeleteHistoryPredictionMutation>> => {
   try {
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIProtected<
       DeleteHistoryPredictionMutation,
       DeleteHistoryPredictionMutationVariables
     >(customMutations.deleteHistoryPrediction, { input: { id: predictionId } });
@@ -512,7 +517,7 @@ export const deleteCommunityPrediction = async (
   predictionId: string,
 ): Promise<iApiResponse<DeleteCommunityPredictionMutation>> => {
   try {
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIProtected<
       DeleteCommunityPredictionMutation,
       DeleteCommunityPredictionMutationVariables
     >(customMutations.deleteCommunityPrediction, { input: { id: predictionId } });
@@ -529,7 +534,7 @@ export const deleteCommunityHistoryPrediction = async (
   predictionId: string,
 ): Promise<iApiResponse<DeleteCommunityHistoryPredictionMutation>> => {
   try {
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIProtected<
       DeleteCommunityHistoryPredictionMutation,
       DeleteCommunityHistoryPredictionMutationVariables
     >(customMutations.deleteCommunityHistoryPrediction, { input: { id: predictionId } });
@@ -547,7 +552,7 @@ export const deletePersonalPredictionSet = async (
   predictionSetId: string,
 ): Promise<iApiResponse<DeletePredictionSetMutation>> => {
   try {
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIProtected<
       DeletePredictionSetMutation,
       DeletePredictionSetMutationVariables
     >(customMutations.deletePredictionSet, { input: { id: predictionSetId } });

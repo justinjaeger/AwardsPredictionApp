@@ -79,8 +79,6 @@ const decode = <T>(str: string): T | undefined => {
     }
     return decoded;
   } else {
-    console.log('jwt hash: ' + hash);
-    console.log('gen hash: ' + checkSum);
     console.error('JWT NOT authenticated');
     return undefined;
   }
