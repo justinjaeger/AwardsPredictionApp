@@ -68,12 +68,15 @@ const sendCode = async (email: string): Promise<boolean> => {
 const confirmCode = async (link: string): Promise<string | undefined> => {
   // parse query params from link
   const queryParams = link.split('?')[1];
-  const keyValuePairs = queryParams.split('&').map((qp) => qp.split('='));
-  const paramsAsObject: { [key: string]: string } = {};
-  keyValuePairs.forEach((pair) => {
-    paramsAsObject[pair[0]] = pair[1];
+  const keyValuePairs: { [key: string]: string } = {};
+  queryParams.split('&').forEach((item) => {
+    const s = item.split('=');
+    const key = s[0];
+    // value is everything after the first '=
+    const value = s.slice(1).join('=');
+    keyValuePairs[key] = value;
   });
-  const { token, email } = paramsAsObject;
+  const { token, email } = keyValuePairs; // token is not correct
   const maybeEmail = JwtService.verifyCode(token, email);
   // if email is returned, it's valid
   return maybeEmail;
