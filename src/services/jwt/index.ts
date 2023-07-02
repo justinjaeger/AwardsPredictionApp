@@ -27,7 +27,7 @@ const createAccessToken = (payload: iJwtPayload): string => {
 };
 
 const createRefreshToken = (payload: iJwtPayload): string => {
-  return CryptoService.encode(payload);
+  return CryptoService.encode({ ...payload, isRefreshToken: true });
 };
 
 const decode = <T>(token: string) => {
