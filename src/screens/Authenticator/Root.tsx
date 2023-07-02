@@ -5,7 +5,7 @@ import { Keyboard, ScrollView, View } from 'react-native';
 import FormInput from '../../components/Inputs/FormInput';
 import { SubmitButton } from '../../components/Buttons';
 import Snackbar from '../../components/Snackbar';
-import { Body } from '../../components/Text';
+import { HeaderLight } from '../../components/Text';
 import ApiServices from '../../services/graphql';
 import COLORS from '../../constants/colors';
 import { UserRole } from '../../API';
@@ -17,7 +17,7 @@ import LoadingStatueModal from '../../components/LoadingStatueModal';
 type iAuthScreen = 'signIn' | 'confirmCode';
 
 const Auth = () => {
-  const { signInUser, isLoadingAuth } = useAuth();
+  const { signInUser, isLoadingAuth, isNewUser, localEnv } = useAuth();
 
   const [email, setEmail] = useState<string>('');
   const validEmail = email.length > 0 && email.includes('.') && email.includes('@');
@@ -55,7 +55,7 @@ const Auth = () => {
       Snackbar.error('error signing in with email');
     } else {
       setAuthScreen('confirmCode');
-      await EmailService.sendCode(email);
+      await EmailService.sendCode(email, localEnv);
     }
     setLoading(false);
   };
@@ -68,12 +68,13 @@ const Auth = () => {
         contentContainerStyle={{
           alignItems: 'center',
           width: '100%',
+          marginTop: 20,
         }}
         keyboardShouldPersistTaps={'always'}
         onScroll={() => Keyboard.dismiss()}
       >
         {authScreen === 'signIn' ? (
-          <View style={{ width: '100%', backgroundColor: COLORS.primary }}>
+          <View style={{ width: '80%', backgroundColor: COLORS.primary }}>
             <FormInput
               label="Email"
               value={email}
@@ -83,16 +84,18 @@ const Auth = () => {
               textContentType="emailAddress"
             />
             <SubmitButton
-              text={'Sign in'}
+              text={isNewUser ? 'Create account' : 'Sign in'}
               onPress={() => submitEmail()}
               disabled={!validEmail}
               loading={loading}
-              style={{ marginTop: 30 }}
+              style={{ marginTop: 20 }}
             />
           </View>
         ) : (
           <View style={{ width: '100%', backgroundColor: COLORS.primary }}>
-            <Body>{`We sent a code to ${email}`}</Body>
+            <HeaderLight
+              style={{ textAlign: 'center', fontWeight: '500' }}
+            >{`We sent a link to ${email}`}</HeaderLight>
             <SubmitButton
               text={'Send again'}
               onPress={() => setAuthScreen('signIn')}
