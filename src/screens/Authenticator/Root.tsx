@@ -17,7 +17,7 @@ import LoadingStatueModal from '../../components/LoadingStatueModal';
 type iAuthScreen = 'signIn' | 'confirmCode';
 
 const Auth = () => {
-  const { signInUser, isLoadingAuth, isNewUser, localEnv } = useAuth();
+  const { signInUser, isLoadingAuth, isNewUser, amplifyEnv } = useAuth();
 
   const [email, setEmail] = useState<string>('');
   const validEmail = email.length > 0 && email.includes('.') && email.includes('@');
@@ -55,7 +55,7 @@ const Auth = () => {
       Snackbar.error('error signing in with email');
     } else {
       setAuthScreen('confirmCode');
-      await EmailService.sendCode(email, localEnv);
+      await EmailService.sendCode(email, amplifyEnv);
     }
     setLoading(false);
   };

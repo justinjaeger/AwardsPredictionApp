@@ -39,7 +39,7 @@ type iUserContext = {
   validateVerificationCode: (c: string) => void;
   isLoadingAuth: boolean;
   isNewUser: boolean;
-  localEnv: 'dev' | 'prod';
+  amplifyEnv: 'dev' | 'prod';
 };
 
 const UserContext = createContext<iUserContext>({
@@ -53,7 +53,7 @@ const UserContext = createContext<iUserContext>({
   validateVerificationCode: () => ({ isValid: false }),
   isLoadingAuth: false,
   isNewUser: true,
-  localEnv: 'prod', // important that it defaults to prod just in case
+  amplifyEnv: 'prod', // important that it defaults to prod just in case
 });
 
 // wraps the main navigator so pretty top level
@@ -64,7 +64,7 @@ export const UserProvider = (props: { children: React.ReactNode }) => {
   const [verificationCode, setVerificationCode] = useState<iVerificationCode>(undefined);
   const [isLoadingAuth, setIsLoadingAuth] = useState<boolean>(true);
   const [isNewUser, setIsNewUser] = useState<boolean>(false);
-  const [localEnv] = useState<'dev' | 'prod'>(
+  const [amplifyEnv] = useState<'dev' | 'prod'>(
     AMPLIFY_CONFIG.envName === 'dev' ? 'dev' : 'prod',
   );
 
@@ -192,7 +192,7 @@ export const UserProvider = (props: { children: React.ReactNode }) => {
         validateVerificationCode,
         isLoadingAuth,
         isNewUser,
-        localEnv,
+        amplifyEnv,
       }}
     >
       {props.children}

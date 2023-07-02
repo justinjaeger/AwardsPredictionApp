@@ -15,7 +15,7 @@ import Snackbar from '../../../components/Snackbar';
 import { useAuth } from '../../../context/UserContext';
 
 const AdminScripts = () => {
-  const { localEnv } = useAuth();
+  const { amplifyEnv } = useAuth();
   return (
     <BackgroundWrapper>
       <SafeAreaViewFixed style={{ width: '100%', height: '100%' }}>
@@ -30,7 +30,7 @@ const AdminScripts = () => {
             onPress={async () => {
               const isSuccess = await EmailService.sendCode(
                 'jjustinjaeger@gmail.com',
-                localEnv,
+                amplifyEnv,
               );
               if (isSuccess) {
                 Snackbar.success('Email sent!');
