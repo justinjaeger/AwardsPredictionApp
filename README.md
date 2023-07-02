@@ -1,3 +1,9 @@
+## Awards Expert App
+• Predict any film
+• See aggregate "community" rankings
+• Follow friends, see recent updates
+• Track your history throughout awards season
+
 ## Amplify instructions
 - (https://docs.amplify.aws/start/getting-started/installation/q/integration/react-native/)
 - amplify configure
