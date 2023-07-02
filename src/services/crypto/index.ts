@@ -65,8 +65,6 @@ const decode = <T>(str: string): T | undefined => {
   const checkSum = checkSumGen(head, body);
 
   if (hash === checkSum) {
-    console.log('jwt hash: ' + hash);
-    console.log('gen hash: ' + checkSum);
     console.error('JWT authenticated!');
     const decoded = JSON.parse(decodeBase64(body)) as T;
     // verify if JWT is expired, if exp is a field on it
