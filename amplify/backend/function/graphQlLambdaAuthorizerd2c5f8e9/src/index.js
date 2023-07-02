@@ -40,6 +40,7 @@ function checkSumGen(head, body, secret) {
   // @ts-ignore
   const hash = crypto.createHmac('sha256', secret);
   const checkSum = hash.update(checkSumStr).digest('base64').toString('utf8');
+  console.log('checkSumm', checkSum);
   return checkSum;
 }
 
@@ -57,8 +58,6 @@ const decode = (str, secret) => {
   const checkSum = checkSumGen(head, body, secret);
 
   if (hash === checkSum) {
-    console.log('jwt hash: ' + hash);
-    console.log('gen hash: ' + checkSum);
     console.error('JWT authenticated!');
     const decoded = JSON.parse(decodeBase64(body));
     // verify if JWT is expired, if exp is a field on it
@@ -113,6 +112,9 @@ exports.handler = async (event) => {
   try {
     const decodedJwt = decode(authorizationToken, process.env.JWT_SECRET);
     console.log('decodedJwt', decodedJwt);
+    if (!decodedJwt) {
+      return unauthorizedResponse;
+    }
     userId = decodedJwt.userId;
     if (!userId) {
       return unauthorizedResponse;
@@ -144,7 +146,7 @@ exports.handler = async (event) => {
 
   /**
    * TOKEN OPERATIONS
-   * Token queries will fail unless they pass the userId in the query string, as with "get all user's tokens"
+   * Token queries will fail unless they pass the userId in the query string, as with "get all user's tokens" and "delete token by id" (where condition is passed)
    * The exception is refresh tokens, which are allowed to do a tokenByToken query, and nothing else
    * This makes refresh tokens unusable to hackers for everything except verifying themselves
    */

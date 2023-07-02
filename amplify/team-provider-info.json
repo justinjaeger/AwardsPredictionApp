@@ -81,7 +81,7 @@
         },
         "graphQlLambdaAuthorizerd2c5f8e9": {
           "deploymentBucketName": "amplify-awardsapp-dev-115717-deployment",
-          "s3Key": "amplify-builds/graphQlLambdaAuthorizerd2c5f8e9-6e634d71647744736b44-build.zip"
+          "s3Key": "amplify-builds/graphQlLambdaAuthorizerd2c5f8e9-4959356c2b2f4d4d6d36-build.zip"
         }
       }
     }
