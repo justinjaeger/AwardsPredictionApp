@@ -80,7 +80,7 @@ export const GraphqlAPIProtected = async <Query, Variables>(
     if (!verifiedAccessToken) {
       console.error('verifyOrRefresh has failed');
       await KeychainStorage.remove();
-      KeychainEventEmitter.emit(); // this will sign the user out
+      KeychainEventEmitter.emit(); // this will sign the user out since no longer in KeychainStorage
     } else if (verifiedAccessToken !== accessToken) {
       // if there's a new token
       console.error('setting new access token...'); // TODO: remove
@@ -116,6 +116,6 @@ export const GraphqlAPIRefreshToken = async <Query, Variables>(
     query,
     // @ts-ignore
     variables,
-    authToken: refreshToken,
+    authToken: refreshToken || 'none',
   });
 };
