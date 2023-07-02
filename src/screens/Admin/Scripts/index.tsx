@@ -12,8 +12,10 @@ import deleteDuplicatedPeople from '../../../services/scripts/deleteDuplicatedPe
 import deleteDuplicatedSongs from '../../../services/scripts/deleteDuplicatedSongs';
 import EmailService from '../../../services/email';
 import Snackbar from '../../../components/Snackbar';
+import { useAuth } from '../../../context/UserContext';
 
 const AdminScripts = () => {
+  const { localEnv } = useAuth();
   return (
     <BackgroundWrapper>
       <SafeAreaViewFixed style={{ width: '100%', height: '100%' }}>
@@ -26,7 +28,10 @@ const AdminScripts = () => {
           <SubmitButton
             text={'Test Confirmation Email'}
             onPress={async () => {
-              const isSuccess = await EmailService.sendCode('jjustinjaeger@gmail.com');
+              const isSuccess = await EmailService.sendCode(
+                'jjustinjaeger@gmail.com',
+                localEnv,
+              );
               if (isSuccess) {
                 Snackbar.success('Email sent!');
               } else {

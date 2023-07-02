@@ -10,6 +10,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AsyncStorageKeys } from '../types';
 import { useAsyncEffect } from '../util/hooks';
 import { resetToProfile } from '../util/navigationActions';
+import AMPLIFY_CONFIG from '../../amplify/.config/local-env-info.json';
 
 /** Async Storage Functions (to persist data when user closes app)
  * We're not exporting the async functions because we ONLY want to use them in here, or else syncing persisted state with this context is annoying
@@ -38,6 +39,7 @@ type iUserContext = {
   validateVerificationCode: (c: string) => void;
   isLoadingAuth: boolean;
   isNewUser: boolean;
+  localEnv: 'dev' | 'prod';
 };
 
 const UserContext = createContext<iUserContext>({
@@ -51,8 +53,10 @@ const UserContext = createContext<iUserContext>({
   validateVerificationCode: () => ({ isValid: false }),
   isLoadingAuth: false,
   isNewUser: true,
+  localEnv: 'prod', // important that it defaults to prod just in case
 });
 
+// wraps the main navigator so pretty top level
 export const UserProvider = (props: { children: React.ReactNode }) => {
   const navigation = useNavigation<MainScreenNavigationProp>();
 
@@ -60,6 +64,9 @@ export const UserProvider = (props: { children: React.ReactNode }) => {
   const [verificationCode, setVerificationCode] = useState<iVerificationCode>(undefined);
   const [isLoadingAuth, setIsLoadingAuth] = useState<boolean>(true);
   const [isNewUser, setIsNewUser] = useState<boolean>(false);
+  const [localEnv] = useState<'dev' | 'prod'>(
+    AMPLIFY_CONFIG.envName === 'dev' ? 'dev' : 'prod',
+  );
 
   // On initial load, checks if user is new
   useAsyncEffect(async () => {
@@ -185,6 +192,7 @@ export const UserProvider = (props: { children: React.ReactNode }) => {
         validateVerificationCode,
         isLoadingAuth,
         isNewUser,
+        localEnv,
       }}
     >
       {props.children}

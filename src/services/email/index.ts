@@ -22,6 +22,7 @@ const toUint8array = (json: any) => {
 const sendConfirmationCode = async (
   email: string,
   link: string,
+  localEnv: 'dev' | 'prod',
 ): Promise<iApiResponse<any>> => {
   try {
     // https://stackoverflow.com/questions/56106825/invoke-lambda-function-from-amplify-generated-react-app-without-using-api-gatewa
@@ -33,7 +34,7 @@ const sendConfirmationCode = async (
     });
     const payload = { email, link };
     const command = new InvokeCommand({
-      FunctionName: 'sendEmail-dev', // TODO: change to prod
+      FunctionName: `sendEmail-${localEnv}`, // TODO: change to prod
       Payload: toUint8array(payload),
     });
     // NOTE: This doesn't handle bugs on the LAMBDA FUNCTION side, just says "success we attempted it"
@@ -48,12 +49,12 @@ const sendConfirmationCode = async (
 /**
  * sends email verification link
  */
-const sendCode = async (email: string): Promise<boolean> => {
+const sendCode = async (email: string, localEnv: 'dev' | 'prod'): Promise<boolean> => {
   // GENERATE LINK (will be like: "oscar://signin/?token={jwt}?email={email")
   const token = JwtService.createVerificationCode(email);
   const link = SIGN_IN_PREFIX + '?token=' + token + '&email=' + email;
   console.log('verification link:', link);
-  const { status } = await sendConfirmationCode(email, link);
+  const { status } = await sendConfirmationCode(email, link, localEnv);
   if (status === 'error') {
     return false;
   }
