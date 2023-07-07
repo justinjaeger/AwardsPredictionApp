@@ -8,13 +8,9 @@ import Snackbar from '../../../components/Snackbar';
 import ApiServices from '../../../services/graphql';
 import { UserRole } from '../../../API';
 import { useAuth } from '../../../context/UserContext';
-import { useNavigation } from '@react-navigation/native';
-import { MainScreenNavigationProp } from '../../../navigation/types';
-import { resetToProfile } from '../../../util/navigationActions';
 
 const AppleOauthButton = () => {
   const { width } = useWindowDimensions();
-  const navigation = useNavigation<MainScreenNavigationProp>();
   const { signInUser } = useAuth();
 
   const onAppleButtonPress = async () => {
@@ -77,7 +73,6 @@ const AppleOauthButton = () => {
       }
       // dbUser shouldn't be undefined; sign in the user
       signInUser(dbUser.id, dbUser.email, dbUser.role);
-      navigation.dispatch(resetToProfile);
     } catch (e) {
       Snackbar.error(JSON.stringify(e) || 'Something went wrong');
       console.error(e);

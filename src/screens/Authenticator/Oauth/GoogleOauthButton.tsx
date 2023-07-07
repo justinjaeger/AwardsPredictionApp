@@ -7,14 +7,11 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import ApiServices from '../../../services/graphql';
 import { UserRole } from '../../../API';
 import { useAuth } from '../../../context/UserContext';
-import { useNavigation } from '@react-navigation/native';
-import { resetToProfile } from '../../../util/navigationActions';
 import Snackbar from '../../../components/Snackbar';
 
 const GoogleOauthButton = () => {
   const { width } = useWindowDimensions();
   const { signInUser } = useAuth();
-  const navigation = useNavigation();
 
   const googleSignIn = async () => {
     try {
@@ -40,7 +37,6 @@ const GoogleOauthButton = () => {
       }
       // dbUser shouldn't be undefined; sign in the user
       signInUser(dbUser.id, dbUser.email, dbUser.role);
-      navigation.dispatch(resetToProfile);
     } catch (e) {
       Snackbar.error(JSON.stringify(e) || 'Something went wrong');
       console.error(e);
