@@ -20,12 +20,15 @@
 	<string>1.22</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+    <key>GIDClientID</key>
+    <string>802686350083-sg8uhe59kefdf46kkrts7u114jertheh.apps.googleusercontent.com</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>oscar</string>
+                <string>com.googleusercontent.apps.802686350083-sg8uhe59kefdf46kkrts7u114jertheh</string>
 			</array>
 		</dict>
 	</array>

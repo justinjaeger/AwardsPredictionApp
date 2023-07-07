@@ -33,9 +33,8 @@ const AppleOauthButton = () => {
       const oauthId = appleAuthRequestResponse.user; // This is a SPECIAL APPLE ACCOUNT (SAA)
       const firstName = appleAuthRequestResponse.fullName?.givenName || '';
       const lastName = appleAuthRequestResponse.fullName?.familyName || '';
-      console.error('email', email);
-      console.error('oauthId', oauthId);
-      console.error('name', firstName, lastName);
+      const name = firstName + ' ' + lastName;
+
       if (!oauthId) {
         throw new Error('No oauthId found');
       }
@@ -57,24 +56,13 @@ const AppleOauthButton = () => {
       // Get user from DB based on oauthId
       // attempt to get user with the oauthId apple sent back
       const { data: getUserRes } = await ApiServices.getUserByOauthId(oauthId);
-      const dbUser = getUserRes?.userByOauthId?.items[0];
+      let dbUser = getUserRes?.userByOauthId?.items[0];
 
-      const navigateToProfile = () => {
-        navigation.dispatch(resetToProfile);
-      };
-
-      // DECLARE create / sign in functions
-      const logInExistingUser = () => {
-        if (dbUser) {
-          signInUser(dbUser.id, dbUser.email, dbUser.role);
-          navigateToProfile();
-        }
-      };
-      const createNewUser = async () => {
+      // if user with this email doesn't exist, create the user
+      if (!dbUser) {
         if (!email) {
           throw new Error('No email found, cannot create user');
         }
-        const name = firstName + ' ' + lastName;
         const { status, data } = await ApiServices.createUser(
           email,
           UserRole.USER,
@@ -85,16 +73,11 @@ const AppleOauthButton = () => {
         if (status === 'error' || !newUser) {
           throw new Error('Error creating user');
         }
-        signInUser(newUser.id, newUser.email, newUser.role);
-        // Navigate to profile creation
-        navigateToProfile();
-      };
-
-      if (!dbUser) {
-        await createNewUser();
-      } else {
-        logInExistingUser();
+        dbUser = newUser;
       }
+      // dbUser shouldn't be undefined; sign in the user
+      signInUser(dbUser.id, dbUser.email, dbUser.role);
+      navigation.dispatch(resetToProfile);
     } catch (e) {
       Snackbar.error(JSON.stringify(e) || 'Something went wrong');
       console.error(e);

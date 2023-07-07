@@ -75,7 +75,7 @@ const Profile = () => {
               : 'Log in to make predictions!'}
           </SubHeader>
           <SubmitButton
-            style={{ marginTop: 20, maxWidth: 180 }}
+            style={{ marginTop: 20 }}
             text={isNewUser ? 'Create Account' : 'Log in'}
             onPress={logIn}
           />

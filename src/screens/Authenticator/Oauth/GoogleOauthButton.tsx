@@ -1,12 +1,51 @@
 import React from 'react';
-import AuthServices from '../../../services/auth';
 import GoogleIcon from '../../../assets/google.svg';
 import { TouchableOpacity, useWindowDimensions, View } from 'react-native';
 import COLORS from '../../../constants/colors';
 import { SubHeaderLight } from '../../../components/Text';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import ApiServices from '../../../services/graphql';
+import { UserRole } from '../../../API';
+import { useAuth } from '../../../context/UserContext';
+import { useNavigation } from '@react-navigation/native';
+import { resetToProfile } from '../../../util/navigationActions';
+import Snackbar from '../../../components/Snackbar';
 
 const GoogleOauthButton = () => {
   const { width } = useWindowDimensions();
+  const { signInUser } = useAuth();
+  const navigation = useNavigation();
+
+  const googleSignIn = async () => {
+    try {
+      // google modal pops up, we get the user info
+      const res = await GoogleSignin.signIn();
+      const { email, name } = res.user;
+      // see if this user exists
+      const { data: getUserRes } = await ApiServices.getUserByEmail(email);
+      let dbUser = getUserRes?.userByEmail?.items[0];
+
+      // if user with this email doesn't exist, create the user
+      if (!dbUser) {
+        const { status, data } = await ApiServices.createUser(
+          email,
+          UserRole.USER,
+          name || undefined,
+        );
+        const newUser = data?.createUser;
+        if (status === 'error' || !newUser) {
+          throw new Error('Error creating user');
+        }
+        dbUser = newUser;
+      }
+      // dbUser shouldn't be undefined; sign in the user
+      signInUser(dbUser.id, dbUser.email, dbUser.role);
+      navigation.dispatch(resetToProfile);
+    } catch (e) {
+      Snackbar.error(JSON.stringify(e) || 'Something went wrong');
+      console.error(e);
+    }
+  };
 
   return (
     <>
@@ -20,8 +59,7 @@ const GoogleOauthButton = () => {
           position: 'relative',
         }}
         onPress={() => {
-          // TODO: Replace with not Amplify (this is the last thing that uses Amplify)
-          AuthServices.googleSignIn();
+          googleSignIn();
         }}
         activeOpacity={0.9}
       >

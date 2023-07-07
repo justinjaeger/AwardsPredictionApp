@@ -11,9 +11,9 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		3DBEC8CF72231238C44B9423 /* libPods-awardspredictionapp-awardspredictionappTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D10B8108DB314FB81EA4E00 /* libPods-awardspredictionapp-awardspredictionappTests.a */; };
-		4FE1A908D78528479BAC57BE /* libPods-awardspredictionapp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C5B06DCCF8CC1E1371FB4EF2 /* libPods-awardspredictionapp.a */; };
+		4808640E53F0B05FDB08FF9C /* libPods-awardspredictionapp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 400BBE58582D77264E7C8541 /* libPods-awardspredictionapp.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		D9FC3C1483E99305A08A1FEE /* libPods-awardspredictionapp-awardspredictionappTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE993714BAD0EE10A9C1F6DC /* libPods-awardspredictionapp-awardspredictionappTests.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -30,20 +30,20 @@
 		00E356EE1AD99517003FC87E /* awardspredictionappTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = awardspredictionappTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* awardspredictionappTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = awardspredictionappTests.m; sourceTree = "<group>"; };
+		04787B82293E29735EFDDA3A /* Pods-awardspredictionapp-awardspredictionappTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-awardspredictionapp-awardspredictionappTests.release.xcconfig"; path = "Target Support Files/Pods-awardspredictionapp-awardspredictionappTests/Pods-awardspredictionapp-awardspredictionappTests.release.xcconfig"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* Oscar Expert.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Oscar Expert.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = awardspredictionapp/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = awardspredictionapp/AppDelegate.m; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = awardspredictionapp/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = awardspredictionapp/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = awardspredictionapp/main.m; sourceTree = "<group>"; };
-		1D10B8108DB314FB81EA4E00 /* libPods-awardspredictionapp-awardspredictionappTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-awardspredictionapp-awardspredictionappTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		302E96F19DC502700BA0446A /* Pods-awardspredictionapp-awardspredictionappTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-awardspredictionapp-awardspredictionappTests.debug.xcconfig"; path = "Target Support Files/Pods-awardspredictionapp-awardspredictionappTests/Pods-awardspredictionapp-awardspredictionappTests.debug.xcconfig"; sourceTree = "<group>"; };
-		51435D966FE803EBA9CFB7D5 /* Pods-awardspredictionapp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-awardspredictionapp.release.xcconfig"; path = "Target Support Files/Pods-awardspredictionapp/Pods-awardspredictionapp.release.xcconfig"; sourceTree = "<group>"; };
+		400BBE58582D77264E7C8541 /* libPods-awardspredictionapp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-awardspredictionapp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = awardspredictionapp/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		959EA5AC969ECCA61DA5D2BE /* Pods-awardspredictionapp-awardspredictionappTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-awardspredictionapp-awardspredictionappTests.release.xcconfig"; path = "Target Support Files/Pods-awardspredictionapp-awardspredictionappTests/Pods-awardspredictionapp-awardspredictionappTests.release.xcconfig"; sourceTree = "<group>"; };
-		C5B06DCCF8CC1E1371FB4EF2 /* libPods-awardspredictionapp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-awardspredictionapp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B773A45BD58AD43BE310F1CC /* Pods-awardspredictionapp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-awardspredictionapp.release.xcconfig"; path = "Target Support Files/Pods-awardspredictionapp/Pods-awardspredictionapp.release.xcconfig"; sourceTree = "<group>"; };
+		CA34A595791A55A52AA6397B /* Pods-awardspredictionapp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-awardspredictionapp.debug.xcconfig"; path = "Target Support Files/Pods-awardspredictionapp/Pods-awardspredictionapp.debug.xcconfig"; sourceTree = "<group>"; };
+		CE993714BAD0EE10A9C1F6DC /* libPods-awardspredictionapp-awardspredictionappTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-awardspredictionapp-awardspredictionappTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CECAB04429E3B5D4000A7AD8 /* awardspredictionapp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = awardspredictionapp.entitlements; path = awardspredictionapp/awardspredictionapp.entitlements; sourceTree = "<group>"; };
-		E9EE346E402950DF429E2680 /* Pods-awardspredictionapp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-awardspredictionapp.debug.xcconfig"; path = "Target Support Files/Pods-awardspredictionapp/Pods-awardspredictionapp.debug.xcconfig"; sourceTree = "<group>"; };
+		D2341287AD5BC93D6CE68144 /* Pods-awardspredictionapp-awardspredictionappTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-awardspredictionapp-awardspredictionappTests.debug.xcconfig"; path = "Target Support Files/Pods-awardspredictionapp-awardspredictionappTests/Pods-awardspredictionapp-awardspredictionappTests.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -52,7 +52,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3DBEC8CF72231238C44B9423 /* libPods-awardspredictionapp-awardspredictionappTests.a in Frameworks */,
+				D9FC3C1483E99305A08A1FEE /* libPods-awardspredictionapp-awardspredictionappTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -60,7 +60,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4FE1A908D78528479BAC57BE /* libPods-awardspredictionapp.a in Frameworks */,
+				4808640E53F0B05FDB08FF9C /* libPods-awardspredictionapp.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -102,8 +102,8 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				C5B06DCCF8CC1E1371FB4EF2 /* libPods-awardspredictionapp.a */,
-				1D10B8108DB314FB81EA4E00 /* libPods-awardspredictionapp-awardspredictionappTests.a */,
+				400BBE58582D77264E7C8541 /* libPods-awardspredictionapp.a */,
+				CE993714BAD0EE10A9C1F6DC /* libPods-awardspredictionapp-awardspredictionappTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -111,10 +111,10 @@
 		33070364903BEE79C5A9D755 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				E9EE346E402950DF429E2680 /* Pods-awardspredictionapp.debug.xcconfig */,
-				51435D966FE803EBA9CFB7D5 /* Pods-awardspredictionapp.release.xcconfig */,
-				302E96F19DC502700BA0446A /* Pods-awardspredictionapp-awardspredictionappTests.debug.xcconfig */,
-				959EA5AC969ECCA61DA5D2BE /* Pods-awardspredictionapp-awardspredictionappTests.release.xcconfig */,
+				CA34A595791A55A52AA6397B /* Pods-awardspredictionapp.debug.xcconfig */,
+				B773A45BD58AD43BE310F1CC /* Pods-awardspredictionapp.release.xcconfig */,
+				D2341287AD5BC93D6CE68144 /* Pods-awardspredictionapp-awardspredictionappTests.debug.xcconfig */,
+				04787B82293E29735EFDDA3A /* Pods-awardspredictionapp-awardspredictionappTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -157,12 +157,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "awardspredictionappTests" */;
 			buildPhases = (
-				C6642E9A5A150520A820E5C1 /* [CP] Check Pods Manifest.lock */,
+				B22A6D3303506F4DA35D4701 /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				1ACB00FB852392783A9F307C /* [CP] Embed Pods Frameworks */,
-				EB5C576A5551BEDFE3A52A82 /* [CP] Copy Pods Resources */,
+				56F1FE1DB4D27A16DCEC08DB /* [CP] Embed Pods Frameworks */,
+				FC8E37D2CF4D1B2B34A3D432 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -178,14 +178,14 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "awardspredictionapp" */;
 			buildPhases = (
-				32389006C26138ABE933B7ED /* [CP] Check Pods Manifest.lock */,
+				1064572208D62F8C1B938B0C /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				50DE25EF3F012733E398798A /* [CP] Embed Pods Frameworks */,
-				E97F476FF7E823633956F908 /* [CP] Copy Pods Resources */,
+				DCB050793AA17184830D4FE0 /* [CP] Embed Pods Frameworks */,
+				886A090E7083DB192742DDE2 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -266,24 +266,7 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nexport NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
 		};
-		1ACB00FB852392783A9F307C /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-awardspredictionapp-awardspredictionappTests/Pods-awardspredictionapp-awardspredictionappTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-awardspredictionapp-awardspredictionappTests/Pods-awardspredictionapp-awardspredictionappTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-awardspredictionapp-awardspredictionappTests/Pods-awardspredictionapp-awardspredictionappTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		32389006C26138ABE933B7ED /* [CP] Check Pods Manifest.lock */ = {
+		1064572208D62F8C1B938B0C /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -305,24 +288,41 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		50DE25EF3F012733E398798A /* [CP] Embed Pods Frameworks */ = {
+		56F1FE1DB4D27A16DCEC08DB /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-awardspredictionapp/Pods-awardspredictionapp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-awardspredictionapp-awardspredictionappTests/Pods-awardspredictionapp-awardspredictionappTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-awardspredictionapp/Pods-awardspredictionapp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-awardspredictionapp-awardspredictionappTests/Pods-awardspredictionapp-awardspredictionappTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-awardspredictionapp/Pods-awardspredictionapp-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-awardspredictionapp-awardspredictionappTests/Pods-awardspredictionapp-awardspredictionappTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		C6642E9A5A150520A820E5C1 /* [CP] Check Pods Manifest.lock */ = {
+		886A090E7083DB192742DDE2 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-awardspredictionapp/Pods-awardspredictionapp-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-awardspredictionapp/Pods-awardspredictionapp-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-awardspredictionapp/Pods-awardspredictionapp-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B22A6D3303506F4DA35D4701 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -344,24 +344,24 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		E97F476FF7E823633956F908 /* [CP] Copy Pods Resources */ = {
+		DCB050793AA17184830D4FE0 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-awardspredictionapp/Pods-awardspredictionapp-resources-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-awardspredictionapp/Pods-awardspredictionapp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			name = "[CP] Copy Pods Resources";
+			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-awardspredictionapp/Pods-awardspredictionapp-resources-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-awardspredictionapp/Pods-awardspredictionapp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-awardspredictionapp/Pods-awardspredictionapp-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-awardspredictionapp/Pods-awardspredictionapp-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		EB5C576A5551BEDFE3A52A82 /* [CP] Copy Pods Resources */ = {
+		FC8E37D2CF4D1B2B34A3D432 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -430,7 +430,7 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 302E96F19DC502700BA0446A /* Pods-awardspredictionapp-awardspredictionappTests.debug.xcconfig */;
+			baseConfigurationReference = D2341287AD5BC93D6CE68144 /* Pods-awardspredictionapp-awardspredictionappTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				DEVELOPMENT_TEAM = G58BGA5P2Z;
@@ -458,7 +458,7 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 959EA5AC969ECCA61DA5D2BE /* Pods-awardspredictionapp-awardspredictionappTests.release.xcconfig */;
+			baseConfigurationReference = 04787B82293E29735EFDDA3A /* Pods-awardspredictionapp-awardspredictionappTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
@@ -483,7 +483,7 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E9EE346E402950DF429E2680 /* Pods-awardspredictionapp.debug.xcconfig */;
+			baseConfigurationReference = CA34A595791A55A52AA6397B /* Pods-awardspredictionapp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -573,7 +573,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 51435D966FE803EBA9CFB7D5 /* Pods-awardspredictionapp.release.xcconfig */;
+			baseConfigurationReference = B773A45BD58AD43BE310F1CC /* Pods-awardspredictionapp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
