@@ -58,21 +58,19 @@ const decode = (str, secret) => {
   const checkSum = checkSumGen(head, body, secret);
 
   if (hash === checkSum) {
-    console.error('JWT authenticated!');
+    console.log('JWT authenticated!');
     const decoded = JSON.parse(decodeBase64(body));
     // verify if JWT is expired, if exp is a field on it
     // @ts-ignore
     const { exp } = decoded || {};
     const now = new Date().getTime();
     if (exp && now > exp) {
-      console.error('JWT expired');
+      console.log('JWT expired');
       return undefined;
     }
     return decoded;
   } else {
-    console.log('jwt hash: ' + hash);
-    console.log('gen hash: ' + checkSum);
-    console.error('JWT NOT authenticated');
+    console.log('JWT NOT authenticated');
     return undefined;
   }
 };
@@ -102,6 +100,7 @@ exports.handler = async (event) => {
   };
 
   if (!authorizationToken) {
+    console.log('no token passed');
     return unauthorizedResponse;
   }
 
@@ -117,6 +116,7 @@ exports.handler = async (event) => {
     }
     userId = decodedJwt.userId;
     if (!userId) {
+      console.log('no userId in jwt');
       return unauthorizedResponse;
     }
 
@@ -133,6 +133,7 @@ exports.handler = async (event) => {
   // if user is admin, let them do anything
   const isAdmin = ADMIN_USER_IDS.find((id) => id === userId);
   if (isAdmin) {
+    console.log('is admin!! authorizing...');
     return authorizedResponse;
   }
 
@@ -141,6 +142,7 @@ exports.handler = async (event) => {
     queryString.includes(deniedOp),
   );
   if (isDeniedOperation) {
+    console.log('operation denied');
     return unauthorizedResponse;
   }
 
@@ -154,10 +156,12 @@ exports.handler = async (event) => {
     queryString.includes(q),
   );
   if (isValidRefreshTokenQuery) {
+    console.log('is valid refresh token query');
     return authorizedResponse;
   }
   // refresh token should be useless except for the conditions above, and we'd only hit this if token query wasn't valid
   if (isRefreshToken) {
+    console.log('is refresh token but the query is not valid');
     return unauthorizedResponse;
   }
 
