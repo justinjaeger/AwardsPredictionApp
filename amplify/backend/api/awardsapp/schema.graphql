@@ -192,7 +192,8 @@ type Category @model @auth(rules: [
     event: Event! @belongsTo(fields: ["eventId"])
     name: CategoryName!
     type: CategoryType! @default(value: "FILM")
-    isShortlisted: CategoryIsShortlisted @default(value: "FALSE")
+    phase: ContenderAccolade
+    lockTime: AWSDateTime # admin sets this to lock predictions for whatever reason after certain time
     predictionSets: [PredictionSet] 
         @hasMany(indexName: "predictionSetsByUserIdAndCategoryId", fields: ["id"]) # get a user's predictions for a category
     historyPredictions: [HistoryPredictionSet] 
@@ -257,6 +258,89 @@ type Song @model @auth(rules: [
 }
 
 # PREDICTIONS:
+
+# going to run migration script to transfer all PredictionSet and Predictions to these new tables
+# we're going to store history AND current predictions all in the same table,
+# and query the current one by createdAt DESC and only get the first result
+# I'm assuming we should be able to do this without listing createdAt as a sort key... I think if I orderBy desc, I can return the first result only to get the most recent. And I believe this is fast...
+type PredictionSetV2 @model @auth(rules: [
+    { allow: public, operations: [read] },
+    { allow: custom }, # to do ANY operation, user will need to pass the authToken check
+]) {
+    id: ID! @primaryKey
+    userId: ID!
+        @index(name: "v2PredictionSetsByUserIdAndCategoryIdAndPhase", sortKeyFields: ["categoryId", "phase"], queryField: "v2PredictionSetsByUserIdAndCategoryIdAndPhase") # used for request on all user's predictions in given event (current if you pass createdAt)
+        @index(name: "v2PredictionSetsByUserIdAndEventIdAndPhase", sortKeyFields: ["eventId", "phase"], queryField: "v2PredictionSetsByUserIdAndEventIdAndPhase") # used for request on all user's predictions in given event (current if you pass createdAt)
+    user: User! @hasOne(fields: ["userId"])
+    categoryId: ID!
+    category: Category! @hasOne(fields: ["categoryId"])
+    phase: ContenderAccolade!
+    eventId: ID!
+        @index(name: "v2PredictionSetByEventIdAndPhase", sortKeyFields: ["phase"], queryField: "v2PredictionSetByEventIdAndPhase") # used for compiling community predictions
+    event: Event!
+        @hasOne(fields: ["eventId"])
+    predictions: [PredictionV2] 
+        @hasMany(indexName: "v2PredictionByPredictionSetId", fields: ["id"])
+    comment: String
+    createdAt: AWSDateTime!
+}
+type PredictionV2 @model @auth(rules: [
+    { allow: public, operations: [read] },
+    { allow: custom }, # to do ANY operation, user will need to pass the authToken check
+]) {
+    id: ID! @primaryKey
+    predictionSetId: ID!
+        @index(name: "v2PredictionByPredictionSetId", sortKeyFields: ["ranking"], queryField: "v2PredictionByPredictionSetId")
+    contenderId: ID!
+        @index(name: "v2PredictionByContenderId", sortKeyFields: ["ranking"], queryField: "v2PredictionByContenderId")
+    contender: Contender!
+        @hasOne(fields: ["contenderId"])
+    userId: ID!
+        # could be for getting a user's predictions for a contender across time (not implemented yet)
+        @index(name: "v2PredictionByUserIdAndContenderId", sortKeyFields: ["contenderId"], queryField: "v2PredictionByUserIdAndContenderId")
+    user: User! @hasOne(fields: ["userId"])
+    ranking: Int!
+}
+
+type CommunityPredictionSetV2 @model @auth(rules: [
+    { allow: public, operations: [read] },
+    { allow: custom }, # to do ANY operation, user will need to pass the authToken check
+]) {
+    id: ID! @primaryKey
+    categoryId: ID!
+    category: Category! @hasOne(fields: ["categoryId"])
+    eventId: ID!
+        @index(name: "v2CommunityPredictionSetByEventIdAndPhase", sortKeyFields: ["phase"], queryField: "v2CommunityPredictionSetByEventIdAndPhase") # used for compiling community predictions
+    event: Event!
+        @hasOne(fields: ["eventId"])
+    predictions: [CommunityPredictionV2] 
+        @hasMany(indexName: "v2CommunityPredictionByPredictionSetId", fields: ["id"])
+    phase: ContenderAccolade!
+    comment: String
+    createdAt: AWSDateTime!
+}
+
+type CommunityPredictionV2 @model @auth(rules: [
+    { allow: public, operations: [read] },
+    { allow: custom }, # to do ANY operation, user will need to pass the authToken check
+]) {
+    id: ID! @primaryKey
+    communityPredictionSetId: ID!
+        @index(name: "v2CommunityPredictionByPredictionSetId", sortKeyFields: ["ranking"], queryField: "v2CommunityPredictionByPredictionSetId")
+    contenderId: ID!
+    contender: Contender!
+        @hasOne(fields: ["contenderId"])
+    phase: ContenderAccolade!
+    ranking: Int!
+}
+
+##########
+##########
+##########
+# LEGACY #
+##########
+##########
+##########
 
 # CURRENT PERSONAL
 type PredictionSet @model @auth(rules: [

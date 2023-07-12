@@ -179,7 +179,8 @@ export const getUser = /* GraphQL */ `
             eventId
             name
             type
-            isShortlisted
+            phase
+            lockTime
             createdAt
             updatedAt
           }
@@ -227,7 +228,8 @@ export const getUser = /* GraphQL */ `
             eventId
             name
             type
-            isShortlisted
+            phase
+            lockTime
             createdAt
             updatedAt
           }
@@ -1253,7 +1255,8 @@ export const getEvent = /* GraphQL */ `
           }
           name
           type
-          isShortlisted
+          phase
+          lockTime
           predictionSets {
             nextToken
           }
@@ -1304,7 +1307,8 @@ export const getEvent = /* GraphQL */ `
             eventId
             name
             type
-            isShortlisted
+            phase
+            lockTime
             createdAt
             updatedAt
           }
@@ -1352,7 +1356,8 @@ export const getEvent = /* GraphQL */ `
             eventId
             name
             type
-            isShortlisted
+            phase
+            lockTime
             createdAt
             updatedAt
           }
@@ -1395,7 +1400,8 @@ export const listEvents = /* GraphQL */ `
             eventId
             name
             type
-            isShortlisted
+            phase
+            lockTime
             createdAt
             updatedAt
           }
@@ -1465,7 +1471,8 @@ export const eventByAwardsBodyAndYear = /* GraphQL */ `
             eventId
             name
             type
-            isShortlisted
+            phase
+            lockTime
             createdAt
             updatedAt
           }
@@ -1523,7 +1530,8 @@ export const getCategory = /* GraphQL */ `
             eventId
             name
             type
-            isShortlisted
+            phase
+            lockTime
             createdAt
             updatedAt
           }
@@ -1566,7 +1574,8 @@ export const getCategory = /* GraphQL */ `
       }
       name
       type
-      isShortlisted
+      phase
+      lockTime
       predictionSets {
         items {
           id
@@ -1601,7 +1610,8 @@ export const getCategory = /* GraphQL */ `
             eventId
             name
             type
-            isShortlisted
+            phase
+            lockTime
             createdAt
             updatedAt
           }
@@ -1649,7 +1659,8 @@ export const getCategory = /* GraphQL */ `
             eventId
             name
             type
-            isShortlisted
+            phase
+            lockTime
             createdAt
             updatedAt
           }
@@ -1708,7 +1719,8 @@ export const listCategories = /* GraphQL */ `
         }
         name
         type
-        isShortlisted
+        phase
+        lockTime
         predictionSets {
           items {
             id
@@ -1782,7 +1794,8 @@ export const categoryByEvent = /* GraphQL */ `
         }
         name
         type
-        isShortlisted
+        phase
+        lockTime
         predictionSets {
           items {
             id
@@ -1846,7 +1859,8 @@ export const getContender = /* GraphQL */ `
         }
         name
         type
-        isShortlisted
+        phase
+        lockTime
         predictionSets {
           items {
             id
@@ -1885,7 +1899,8 @@ export const getContender = /* GraphQL */ `
             eventId
             name
             type
-            isShortlisted
+            phase
+            lockTime
             createdAt
             updatedAt
           }
@@ -2016,7 +2031,8 @@ export const listContenders = /* GraphQL */ `
           }
           name
           type
-          isShortlisted
+          phase
+          lockTime
           predictionSets {
             nextToken
           }
@@ -2126,7 +2142,8 @@ export const getUniqueMovieContender = /* GraphQL */ `
           }
           name
           type
-          isShortlisted
+          phase
+          lockTime
           predictionSets {
             nextToken
           }
@@ -2234,7 +2251,8 @@ export const contenderByMovie = /* GraphQL */ `
           }
           name
           type
-          isShortlisted
+          phase
+          lockTime
           predictionSets {
             nextToken
           }
@@ -2321,7 +2339,8 @@ export const getMovie = /* GraphQL */ `
             eventId
             name
             type
-            isShortlisted
+            phase
+            lockTime
             createdAt
             updatedAt
           }
@@ -2627,6 +2646,1853 @@ export const songByMovieIdAndTitle = /* GraphQL */ `
     }
   }
 `;
+export const getPredictionSetV2 = /* GraphQL */ `
+  query GetPredictionSetV2($id: ID!) {
+    getPredictionSetV2(id: $id) {
+      id
+      userId
+      user {
+        id
+        email
+        oauthId
+        username
+        name
+        bio
+        image
+        role
+        predictionSets {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        historyPredictionSets {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        followers {
+          items {
+            id
+            followedUserId
+            followingUserId
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        following {
+          items {
+            id
+            followedUserId
+            followingUserId
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      categoryId
+      category {
+        id
+        eventId
+        event {
+          id
+          categories {
+            nextToken
+          }
+          awardsBody
+          year
+          nominationDateTime
+          winDateTime
+          status
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          liveAt
+          createdAt
+          updatedAt
+        }
+        name
+        type
+        phase
+        lockTime
+        predictionSets {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        historyPredictions {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      phase
+      eventId
+      event {
+        id
+        categories {
+          items {
+            id
+            eventId
+            name
+            type
+            phase
+            lockTime
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        awardsBody
+        year
+        nominationDateTime
+        winDateTime
+        status
+        predictionSets {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        historyPredictions {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        liveAt
+        createdAt
+        updatedAt
+      }
+      predictions {
+        items {
+          id
+          predictionSetId
+          contenderId
+          contender {
+            id
+            categoryId
+            eventId
+            movieId
+            personId
+            songId
+            visibility
+            accolade
+            createdAt
+            updatedAt
+          }
+          userId
+          user {
+            id
+            email
+            oauthId
+            username
+            name
+            bio
+            image
+            role
+            createdAt
+            updatedAt
+          }
+          ranking
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      comment
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listPredictionSetV2s = /* GraphQL */ `
+  query ListPredictionSetV2s(
+    $id: ID
+    $filter: ModelPredictionSetV2FilterInput
+    $limit: Int
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listPredictionSetV2s(
+      id: $id
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        id
+        userId
+        user {
+          id
+          email
+          oauthId
+          username
+          name
+          bio
+          image
+          role
+          predictionSets {
+            nextToken
+          }
+          historyPredictionSets {
+            nextToken
+          }
+          followers {
+            nextToken
+          }
+          following {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        categoryId
+        category {
+          id
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            liveAt
+            createdAt
+            updatedAt
+          }
+          name
+          type
+          phase
+          lockTime
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        phase
+        eventId
+        event {
+          id
+          categories {
+            nextToken
+          }
+          awardsBody
+          year
+          nominationDateTime
+          winDateTime
+          status
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          liveAt
+          createdAt
+          updatedAt
+        }
+        predictions {
+          items {
+            id
+            predictionSetId
+            contenderId
+            userId
+            ranking
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        comment
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const v2PredictionSetsByUserIdAndCategoryIdAndPhase = /* GraphQL */ `
+  query V2PredictionSetsByUserIdAndCategoryIdAndPhase(
+    $userId: ID!
+    $categoryIdPhase: ModelPredictionSetV2V2PredictionSetsByUserIdAndCategoryIdAndPhaseCompositeKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelPredictionSetV2FilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    v2PredictionSetsByUserIdAndCategoryIdAndPhase(
+      userId: $userId
+      categoryIdPhase: $categoryIdPhase
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        userId
+        user {
+          id
+          email
+          oauthId
+          username
+          name
+          bio
+          image
+          role
+          predictionSets {
+            nextToken
+          }
+          historyPredictionSets {
+            nextToken
+          }
+          followers {
+            nextToken
+          }
+          following {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        categoryId
+        category {
+          id
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            liveAt
+            createdAt
+            updatedAt
+          }
+          name
+          type
+          phase
+          lockTime
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        phase
+        eventId
+        event {
+          id
+          categories {
+            nextToken
+          }
+          awardsBody
+          year
+          nominationDateTime
+          winDateTime
+          status
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          liveAt
+          createdAt
+          updatedAt
+        }
+        predictions {
+          items {
+            id
+            predictionSetId
+            contenderId
+            userId
+            ranking
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        comment
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const v2PredictionSetsByUserIdAndEventIdAndPhase = /* GraphQL */ `
+  query V2PredictionSetsByUserIdAndEventIdAndPhase(
+    $userId: ID!
+    $eventIdPhase: ModelPredictionSetV2V2PredictionSetsByUserIdAndEventIdAndPhaseCompositeKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelPredictionSetV2FilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    v2PredictionSetsByUserIdAndEventIdAndPhase(
+      userId: $userId
+      eventIdPhase: $eventIdPhase
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        userId
+        user {
+          id
+          email
+          oauthId
+          username
+          name
+          bio
+          image
+          role
+          predictionSets {
+            nextToken
+          }
+          historyPredictionSets {
+            nextToken
+          }
+          followers {
+            nextToken
+          }
+          following {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        categoryId
+        category {
+          id
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            liveAt
+            createdAt
+            updatedAt
+          }
+          name
+          type
+          phase
+          lockTime
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        phase
+        eventId
+        event {
+          id
+          categories {
+            nextToken
+          }
+          awardsBody
+          year
+          nominationDateTime
+          winDateTime
+          status
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          liveAt
+          createdAt
+          updatedAt
+        }
+        predictions {
+          items {
+            id
+            predictionSetId
+            contenderId
+            userId
+            ranking
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        comment
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const v2PredictionSetByEventIdAndPhase = /* GraphQL */ `
+  query V2PredictionSetByEventIdAndPhase(
+    $eventId: ID!
+    $phase: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelPredictionSetV2FilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    v2PredictionSetByEventIdAndPhase(
+      eventId: $eventId
+      phase: $phase
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        userId
+        user {
+          id
+          email
+          oauthId
+          username
+          name
+          bio
+          image
+          role
+          predictionSets {
+            nextToken
+          }
+          historyPredictionSets {
+            nextToken
+          }
+          followers {
+            nextToken
+          }
+          following {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        categoryId
+        category {
+          id
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            liveAt
+            createdAt
+            updatedAt
+          }
+          name
+          type
+          phase
+          lockTime
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        phase
+        eventId
+        event {
+          id
+          categories {
+            nextToken
+          }
+          awardsBody
+          year
+          nominationDateTime
+          winDateTime
+          status
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          liveAt
+          createdAt
+          updatedAt
+        }
+        predictions {
+          items {
+            id
+            predictionSetId
+            contenderId
+            userId
+            ranking
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        comment
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getPredictionV2 = /* GraphQL */ `
+  query GetPredictionV2($id: ID!) {
+    getPredictionV2(id: $id) {
+      id
+      predictionSetId
+      contenderId
+      contender {
+        id
+        categoryId
+        category {
+          id
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            liveAt
+            createdAt
+            updatedAt
+          }
+          name
+          type
+          phase
+          lockTime
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        eventId
+        event {
+          id
+          categories {
+            nextToken
+          }
+          awardsBody
+          year
+          nominationDateTime
+          winDateTime
+          status
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          liveAt
+          createdAt
+          updatedAt
+        }
+        movieId
+        movie {
+          id
+          contenders {
+            nextToken
+          }
+          tmdbId
+          studio
+          createdAt
+          updatedAt
+        }
+        personId
+        person {
+          id
+          tmdbId
+          createdAt
+          updatedAt
+        }
+        songId
+        song {
+          id
+          movieId
+          movie {
+            id
+            tmdbId
+            studio
+            createdAt
+            updatedAt
+          }
+          title
+          artist
+          createdAt
+          updatedAt
+        }
+        visibility
+        accolade
+        createdAt
+        updatedAt
+      }
+      userId
+      user {
+        id
+        email
+        oauthId
+        username
+        name
+        bio
+        image
+        role
+        predictionSets {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        historyPredictionSets {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        followers {
+          items {
+            id
+            followedUserId
+            followingUserId
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        following {
+          items {
+            id
+            followedUserId
+            followingUserId
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      ranking
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listPredictionV2s = /* GraphQL */ `
+  query ListPredictionV2s(
+    $id: ID
+    $filter: ModelPredictionV2FilterInput
+    $limit: Int
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listPredictionV2s(
+      id: $id
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        id
+        predictionSetId
+        contenderId
+        contender {
+          id
+          categoryId
+          category {
+            id
+            eventId
+            name
+            type
+            phase
+            lockTime
+            createdAt
+            updatedAt
+          }
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            liveAt
+            createdAt
+            updatedAt
+          }
+          movieId
+          movie {
+            id
+            tmdbId
+            studio
+            createdAt
+            updatedAt
+          }
+          personId
+          person {
+            id
+            tmdbId
+            createdAt
+            updatedAt
+          }
+          songId
+          song {
+            id
+            movieId
+            title
+            artist
+            createdAt
+            updatedAt
+          }
+          visibility
+          accolade
+          createdAt
+          updatedAt
+        }
+        userId
+        user {
+          id
+          email
+          oauthId
+          username
+          name
+          bio
+          image
+          role
+          predictionSets {
+            nextToken
+          }
+          historyPredictionSets {
+            nextToken
+          }
+          followers {
+            nextToken
+          }
+          following {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        ranking
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const v2PredictionByPredictionSetId = /* GraphQL */ `
+  query V2PredictionByPredictionSetId(
+    $predictionSetId: ID!
+    $ranking: ModelIntKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelPredictionV2FilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    v2PredictionByPredictionSetId(
+      predictionSetId: $predictionSetId
+      ranking: $ranking
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        predictionSetId
+        contenderId
+        contender {
+          id
+          categoryId
+          category {
+            id
+            eventId
+            name
+            type
+            phase
+            lockTime
+            createdAt
+            updatedAt
+          }
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            liveAt
+            createdAt
+            updatedAt
+          }
+          movieId
+          movie {
+            id
+            tmdbId
+            studio
+            createdAt
+            updatedAt
+          }
+          personId
+          person {
+            id
+            tmdbId
+            createdAt
+            updatedAt
+          }
+          songId
+          song {
+            id
+            movieId
+            title
+            artist
+            createdAt
+            updatedAt
+          }
+          visibility
+          accolade
+          createdAt
+          updatedAt
+        }
+        userId
+        user {
+          id
+          email
+          oauthId
+          username
+          name
+          bio
+          image
+          role
+          predictionSets {
+            nextToken
+          }
+          historyPredictionSets {
+            nextToken
+          }
+          followers {
+            nextToken
+          }
+          following {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        ranking
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const v2PredictionByContenderId = /* GraphQL */ `
+  query V2PredictionByContenderId(
+    $contenderId: ID!
+    $ranking: ModelIntKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelPredictionV2FilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    v2PredictionByContenderId(
+      contenderId: $contenderId
+      ranking: $ranking
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        predictionSetId
+        contenderId
+        contender {
+          id
+          categoryId
+          category {
+            id
+            eventId
+            name
+            type
+            phase
+            lockTime
+            createdAt
+            updatedAt
+          }
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            liveAt
+            createdAt
+            updatedAt
+          }
+          movieId
+          movie {
+            id
+            tmdbId
+            studio
+            createdAt
+            updatedAt
+          }
+          personId
+          person {
+            id
+            tmdbId
+            createdAt
+            updatedAt
+          }
+          songId
+          song {
+            id
+            movieId
+            title
+            artist
+            createdAt
+            updatedAt
+          }
+          visibility
+          accolade
+          createdAt
+          updatedAt
+        }
+        userId
+        user {
+          id
+          email
+          oauthId
+          username
+          name
+          bio
+          image
+          role
+          predictionSets {
+            nextToken
+          }
+          historyPredictionSets {
+            nextToken
+          }
+          followers {
+            nextToken
+          }
+          following {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        ranking
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const v2PredictionByUserIdAndContenderId = /* GraphQL */ `
+  query V2PredictionByUserIdAndContenderId(
+    $userId: ID!
+    $contenderId: ModelIDKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelPredictionV2FilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    v2PredictionByUserIdAndContenderId(
+      userId: $userId
+      contenderId: $contenderId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        predictionSetId
+        contenderId
+        contender {
+          id
+          categoryId
+          category {
+            id
+            eventId
+            name
+            type
+            phase
+            lockTime
+            createdAt
+            updatedAt
+          }
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            liveAt
+            createdAt
+            updatedAt
+          }
+          movieId
+          movie {
+            id
+            tmdbId
+            studio
+            createdAt
+            updatedAt
+          }
+          personId
+          person {
+            id
+            tmdbId
+            createdAt
+            updatedAt
+          }
+          songId
+          song {
+            id
+            movieId
+            title
+            artist
+            createdAt
+            updatedAt
+          }
+          visibility
+          accolade
+          createdAt
+          updatedAt
+        }
+        userId
+        user {
+          id
+          email
+          oauthId
+          username
+          name
+          bio
+          image
+          role
+          predictionSets {
+            nextToken
+          }
+          historyPredictionSets {
+            nextToken
+          }
+          followers {
+            nextToken
+          }
+          following {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        ranking
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getCommunityPredictionSetV2 = /* GraphQL */ `
+  query GetCommunityPredictionSetV2($id: ID!) {
+    getCommunityPredictionSetV2(id: $id) {
+      id
+      categoryId
+      category {
+        id
+        eventId
+        event {
+          id
+          categories {
+            nextToken
+          }
+          awardsBody
+          year
+          nominationDateTime
+          winDateTime
+          status
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          liveAt
+          createdAt
+          updatedAt
+        }
+        name
+        type
+        phase
+        lockTime
+        predictionSets {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        historyPredictions {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      eventId
+      event {
+        id
+        categories {
+          items {
+            id
+            eventId
+            name
+            type
+            phase
+            lockTime
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        awardsBody
+        year
+        nominationDateTime
+        winDateTime
+        status
+        predictionSets {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        historyPredictions {
+          items {
+            id
+            userId
+            eventId
+            categoryId
+            type
+            comment
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        liveAt
+        createdAt
+        updatedAt
+      }
+      predictions {
+        items {
+          id
+          communityPredictionSetId
+          contenderId
+          contender {
+            id
+            categoryId
+            eventId
+            movieId
+            personId
+            songId
+            visibility
+            accolade
+            createdAt
+            updatedAt
+          }
+          phase
+          ranking
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      phase
+      comment
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listCommunityPredictionSetV2s = /* GraphQL */ `
+  query ListCommunityPredictionSetV2s(
+    $id: ID
+    $filter: ModelCommunityPredictionSetV2FilterInput
+    $limit: Int
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listCommunityPredictionSetV2s(
+      id: $id
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        id
+        categoryId
+        category {
+          id
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            liveAt
+            createdAt
+            updatedAt
+          }
+          name
+          type
+          phase
+          lockTime
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        eventId
+        event {
+          id
+          categories {
+            nextToken
+          }
+          awardsBody
+          year
+          nominationDateTime
+          winDateTime
+          status
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          liveAt
+          createdAt
+          updatedAt
+        }
+        predictions {
+          items {
+            id
+            communityPredictionSetId
+            contenderId
+            phase
+            ranking
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        phase
+        comment
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const v2CommunityPredictionSetByEventIdAndPhase = /* GraphQL */ `
+  query V2CommunityPredictionSetByEventIdAndPhase(
+    $eventId: ID!
+    $phase: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelCommunityPredictionSetV2FilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    v2CommunityPredictionSetByEventIdAndPhase(
+      eventId: $eventId
+      phase: $phase
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        categoryId
+        category {
+          id
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            liveAt
+            createdAt
+            updatedAt
+          }
+          name
+          type
+          phase
+          lockTime
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        eventId
+        event {
+          id
+          categories {
+            nextToken
+          }
+          awardsBody
+          year
+          nominationDateTime
+          winDateTime
+          status
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          liveAt
+          createdAt
+          updatedAt
+        }
+        predictions {
+          items {
+            id
+            communityPredictionSetId
+            contenderId
+            phase
+            ranking
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        phase
+        comment
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getCommunityPredictionV2 = /* GraphQL */ `
+  query GetCommunityPredictionV2($id: ID!) {
+    getCommunityPredictionV2(id: $id) {
+      id
+      communityPredictionSetId
+      contenderId
+      contender {
+        id
+        categoryId
+        category {
+          id
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            liveAt
+            createdAt
+            updatedAt
+          }
+          name
+          type
+          phase
+          lockTime
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        eventId
+        event {
+          id
+          categories {
+            nextToken
+          }
+          awardsBody
+          year
+          nominationDateTime
+          winDateTime
+          status
+          predictionSets {
+            nextToken
+          }
+          historyPredictions {
+            nextToken
+          }
+          liveAt
+          createdAt
+          updatedAt
+        }
+        movieId
+        movie {
+          id
+          contenders {
+            nextToken
+          }
+          tmdbId
+          studio
+          createdAt
+          updatedAt
+        }
+        personId
+        person {
+          id
+          tmdbId
+          createdAt
+          updatedAt
+        }
+        songId
+        song {
+          id
+          movieId
+          movie {
+            id
+            tmdbId
+            studio
+            createdAt
+            updatedAt
+          }
+          title
+          artist
+          createdAt
+          updatedAt
+        }
+        visibility
+        accolade
+        createdAt
+        updatedAt
+      }
+      phase
+      ranking
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listCommunityPredictionV2s = /* GraphQL */ `
+  query ListCommunityPredictionV2s(
+    $id: ID
+    $filter: ModelCommunityPredictionV2FilterInput
+    $limit: Int
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listCommunityPredictionV2s(
+      id: $id
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        id
+        communityPredictionSetId
+        contenderId
+        contender {
+          id
+          categoryId
+          category {
+            id
+            eventId
+            name
+            type
+            phase
+            lockTime
+            createdAt
+            updatedAt
+          }
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            liveAt
+            createdAt
+            updatedAt
+          }
+          movieId
+          movie {
+            id
+            tmdbId
+            studio
+            createdAt
+            updatedAt
+          }
+          personId
+          person {
+            id
+            tmdbId
+            createdAt
+            updatedAt
+          }
+          songId
+          song {
+            id
+            movieId
+            title
+            artist
+            createdAt
+            updatedAt
+          }
+          visibility
+          accolade
+          createdAt
+          updatedAt
+        }
+        phase
+        ranking
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const v2CommunityPredictionByPredictionSetId = /* GraphQL */ `
+  query V2CommunityPredictionByPredictionSetId(
+    $communityPredictionSetId: ID!
+    $ranking: ModelIntKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelCommunityPredictionV2FilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    v2CommunityPredictionByPredictionSetId(
+      communityPredictionSetId: $communityPredictionSetId
+      ranking: $ranking
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        communityPredictionSetId
+        contenderId
+        contender {
+          id
+          categoryId
+          category {
+            id
+            eventId
+            name
+            type
+            phase
+            lockTime
+            createdAt
+            updatedAt
+          }
+          eventId
+          event {
+            id
+            awardsBody
+            year
+            nominationDateTime
+            winDateTime
+            status
+            liveAt
+            createdAt
+            updatedAt
+          }
+          movieId
+          movie {
+            id
+            tmdbId
+            studio
+            createdAt
+            updatedAt
+          }
+          personId
+          person {
+            id
+            tmdbId
+            createdAt
+            updatedAt
+          }
+          songId
+          song {
+            id
+            movieId
+            title
+            artist
+            createdAt
+            updatedAt
+          }
+          visibility
+          accolade
+          createdAt
+          updatedAt
+        }
+        phase
+        ranking
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
 export const getPredictionSet = /* GraphQL */ `
   query GetPredictionSet($id: ID!) {
     getPredictionSet(id: $id) {
@@ -2699,7 +4565,8 @@ export const getPredictionSet = /* GraphQL */ `
             eventId
             name
             type
-            isShortlisted
+            phase
+            lockTime
             createdAt
             updatedAt
           }
@@ -2766,7 +4633,8 @@ export const getPredictionSet = /* GraphQL */ `
         }
         name
         type
-        isShortlisted
+        phase
+        lockTime
         predictionSets {
           items {
             id
@@ -2906,7 +4774,8 @@ export const listPredictionSets = /* GraphQL */ `
           }
           name
           type
-          isShortlisted
+          phase
+          lockTime
           predictionSets {
             nextToken
           }
@@ -3018,7 +4887,8 @@ export const predictionSetByUserIdAndEventId = /* GraphQL */ `
           }
           name
           type
-          isShortlisted
+          phase
+          lockTime
           predictionSets {
             nextToken
           }
@@ -3130,7 +5000,8 @@ export const predictionSetByUserIdAndCategoryId = /* GraphQL */ `
           }
           name
           type
-          isShortlisted
+          phase
+          lockTime
           predictionSets {
             nextToken
           }
@@ -3242,7 +5113,8 @@ export const predictionSetByUserIdAndCreatedAt = /* GraphQL */ `
           }
           name
           type
-          isShortlisted
+          phase
+          lockTime
           predictionSets {
             nextToken
           }
@@ -3352,7 +5224,8 @@ export const predictionSetByEventId = /* GraphQL */ `
           }
           name
           type
-          isShortlisted
+          phase
+          lockTime
           predictionSets {
             nextToken
           }
@@ -3407,7 +5280,8 @@ export const getPrediction = /* GraphQL */ `
           }
           name
           type
-          isShortlisted
+          phase
+          lockTime
           predictionSets {
             nextToken
           }
@@ -3510,7 +5384,8 @@ export const listPredictions = /* GraphQL */ `
             eventId
             name
             type
-            isShortlisted
+            phase
+            lockTime
             createdAt
             updatedAt
           }
@@ -3592,7 +5467,8 @@ export const predictionByPredictionSetId = /* GraphQL */ `
             eventId
             name
             type
-            isShortlisted
+            phase
+            lockTime
             createdAt
             updatedAt
           }
@@ -3717,7 +5593,8 @@ export const getHistoryPredictionSet = /* GraphQL */ `
             eventId
             name
             type
-            isShortlisted
+            phase
+            lockTime
             createdAt
             updatedAt
           }
@@ -3784,7 +5661,8 @@ export const getHistoryPredictionSet = /* GraphQL */ `
         }
         name
         type
-        isShortlisted
+        phase
+        lockTime
         predictionSets {
           items {
             id
@@ -3837,7 +5715,8 @@ export const getHistoryPredictionSet = /* GraphQL */ `
             eventId
             name
             type
-            isShortlisted
+            phase
+            lockTime
             createdAt
             updatedAt
           }
@@ -3934,7 +5813,8 @@ export const listHistoryPredictionSets = /* GraphQL */ `
           }
           name
           type
-          isShortlisted
+          phase
+          lockTime
           predictionSets {
             nextToken
           }
@@ -4047,7 +5927,8 @@ export const historyPredictionSetByUserIdAndCreatedAt = /* GraphQL */ `
           }
           name
           type
-          isShortlisted
+          phase
+          lockTime
           predictionSets {
             nextToken
           }
@@ -4160,7 +6041,8 @@ export const historyPredictionSetByUserIdAndEventIdAndCreatedAt = /* GraphQL */ 
           }
           name
           type
-          isShortlisted
+          phase
+          lockTime
           predictionSets {
             nextToken
           }
@@ -4273,7 +6155,8 @@ export const historyPredictionSetByUserIdAndCategoryIdAndCreatedAt = /* GraphQL 
           }
           name
           type
-          isShortlisted
+          phase
+          lockTime
           predictionSets {
             nextToken
           }
@@ -4384,7 +6267,8 @@ export const historyPredictionSetByCategoryId = /* GraphQL */ `
           }
           name
           type
-          isShortlisted
+          phase
+          lockTime
           predictionSets {
             nextToken
           }
@@ -4440,7 +6324,8 @@ export const getHistoryPrediction = /* GraphQL */ `
           }
           name
           type
-          isShortlisted
+          phase
+          lockTime
           predictionSets {
             nextToken
           }
@@ -4536,7 +6421,8 @@ export const getHistoryPrediction = /* GraphQL */ `
         }
         name
         type
-        isShortlisted
+        phase
+        lockTime
         predictionSets {
           items {
             id
@@ -4599,7 +6485,8 @@ export const listHistoryPredictions = /* GraphQL */ `
             eventId
             name
             type
-            isShortlisted
+            phase
+            lockTime
             createdAt
             updatedAt
           }
@@ -4661,7 +6548,8 @@ export const listHistoryPredictions = /* GraphQL */ `
           }
           name
           type
-          isShortlisted
+          phase
+          lockTime
           predictionSets {
             nextToken
           }
@@ -4706,7 +6594,8 @@ export const historyPredictionByHistoryPredictionSetId = /* GraphQL */ `
             eventId
             name
             type
-            isShortlisted
+            phase
+            lockTime
             createdAt
             updatedAt
           }
@@ -4768,7 +6657,8 @@ export const historyPredictionByHistoryPredictionSetId = /* GraphQL */ `
           }
           name
           type
-          isShortlisted
+          phase
+          lockTime
           predictionSets {
             nextToken
           }
@@ -4813,7 +6703,8 @@ export const historyPredictionByCategoryId = /* GraphQL */ `
             eventId
             name
             type
-            isShortlisted
+            phase
+            lockTime
             createdAt
             updatedAt
           }
@@ -4875,7 +6766,8 @@ export const historyPredictionByCategoryId = /* GraphQL */ `
           }
           name
           type
-          isShortlisted
+          phase
+          lockTime
           predictionSets {
             nextToken
           }
@@ -4906,7 +6798,8 @@ export const getCommunityPredictionSet = /* GraphQL */ `
             eventId
             name
             type
-            isShortlisted
+            phase
+            lockTime
             createdAt
             updatedAt
           }
@@ -4973,7 +6866,8 @@ export const getCommunityPredictionSet = /* GraphQL */ `
         }
         name
         type
-        isShortlisted
+        phase
+        lockTime
         predictionSets {
           items {
             id
@@ -5088,7 +6982,8 @@ export const listCommunityPredictionSets = /* GraphQL */ `
           }
           name
           type
-          isShortlisted
+          phase
+          lockTime
           predictionSets {
             nextToken
           }
@@ -5173,7 +7068,8 @@ export const communityPredictionSetByEventId = /* GraphQL */ `
           }
           name
           type
-          isShortlisted
+          phase
+          lockTime
           predictionSets {
             nextToken
           }
@@ -5258,7 +7154,8 @@ export const communityPredictionSetByCategoryId = /* GraphQL */ `
           }
           name
           type
-          isShortlisted
+          phase
+          lockTime
           predictionSets {
             nextToken
           }
@@ -5313,7 +7210,8 @@ export const getCommunityPrediction = /* GraphQL */ `
           }
           name
           type
-          isShortlisted
+          phase
+          lockTime
           predictionSets {
             nextToken
           }
@@ -5417,7 +7315,8 @@ export const listCommunityPredictions = /* GraphQL */ `
             eventId
             name
             type
-            isShortlisted
+            phase
+            lockTime
             createdAt
             updatedAt
           }
@@ -5500,7 +7399,8 @@ export const communityPredictionByCommunityPredictionSetId = /* GraphQL */ `
             eventId
             name
             type
-            isShortlisted
+            phase
+            lockTime
             createdAt
             updatedAt
           }
@@ -5567,7 +7467,8 @@ export const getCommunityHistoryPredictionSet = /* GraphQL */ `
             eventId
             name
             type
-            isShortlisted
+            phase
+            lockTime
             createdAt
             updatedAt
           }
@@ -5634,7 +7535,8 @@ export const getCommunityHistoryPredictionSet = /* GraphQL */ `
         }
         name
         type
-        isShortlisted
+        phase
+        lockTime
         predictionSets {
           items {
             id
@@ -5687,7 +7589,8 @@ export const getCommunityHistoryPredictionSet = /* GraphQL */ `
             eventId
             name
             type
-            isShortlisted
+            phase
+            lockTime
             createdAt
             updatedAt
           }
@@ -5759,7 +7662,8 @@ export const listCommunityHistoryPredictionSets = /* GraphQL */ `
           }
           name
           type
-          isShortlisted
+          phase
+          lockTime
           predictionSets {
             nextToken
           }
@@ -5847,7 +7751,8 @@ export const communityHistoryPredictionSetsByEventIdAndCreatedAt = /* GraphQL */
           }
           name
           type
-          isShortlisted
+          phase
+          lockTime
           predictionSets {
             nextToken
           }
@@ -5903,7 +7808,8 @@ export const getCommunityHistoryPrediction = /* GraphQL */ `
           }
           name
           type
-          isShortlisted
+          phase
+          lockTime
           predictionSets {
             nextToken
           }
@@ -5999,7 +7905,8 @@ export const getCommunityHistoryPrediction = /* GraphQL */ `
         }
         name
         type
-        isShortlisted
+        phase
+        lockTime
         predictionSets {
           items {
             id
@@ -6063,7 +7970,8 @@ export const listCommunityHistoryPredictions = /* GraphQL */ `
             eventId
             name
             type
-            isShortlisted
+            phase
+            lockTime
             createdAt
             updatedAt
           }
@@ -6125,7 +8033,8 @@ export const listCommunityHistoryPredictions = /* GraphQL */ `
           }
           name
           type
-          isShortlisted
+          phase
+          lockTime
           predictionSets {
             nextToken
           }
@@ -6171,7 +8080,8 @@ export const communityHistoryPredictionByCommunityHistoryPredictionSetId = /* Gr
             eventId
             name
             type
-            isShortlisted
+            phase
+            lockTime
             createdAt
             updatedAt
           }
@@ -6233,7 +8143,8 @@ export const communityHistoryPredictionByCommunityHistoryPredictionSetId = /* Gr
           }
           name
           type
-          isShortlisted
+          phase
+          lockTime
           predictionSets {
             nextToken
           }
@@ -6279,7 +8190,8 @@ export const communityHistoryPredictionByCategoryId = /* GraphQL */ `
             eventId
             name
             type
-            isShortlisted
+            phase
+            lockTime
             createdAt
             updatedAt
           }
@@ -6341,7 +8253,8 @@ export const communityHistoryPredictionByCategoryId = /* GraphQL */ `
           }
           name
           type
-          isShortlisted
+          phase
+          lockTime
           predictionSets {
             nextToken
           }
