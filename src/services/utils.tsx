@@ -24,8 +24,7 @@ export const handleError = (
   const m = message || error?.message || 'something went wrong';
   // create special cases here for errors that we want to handle differently
   if (isInvalidToken) {
-    console.error('Invalid token:', error);
-    Snackbar.error('Invalid token; We signed you out');
+    Snackbar.error('Unauthorized request');
   } else if (isUnauthorized) {
     // TODO: Might make more sense to verify the refresh token HERE instead of before we send the request.
     // My problem is, how do I reattempt the request after the refresh token is verified?

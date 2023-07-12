@@ -144,6 +144,7 @@ export const UserProvider = (props: { children: React.ReactNode }) => {
     await KeychainStorage.remove();
     setUserInfo(undefined);
     setIsLoadingAuth(false);
+    navigation.navigate('Authenticator');
   };
 
   const generateVerificationCode = () => {
