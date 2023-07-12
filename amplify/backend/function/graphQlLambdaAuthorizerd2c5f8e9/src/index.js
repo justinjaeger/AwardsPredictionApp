@@ -19,14 +19,13 @@ const ADMIN_USER_IDS = [
   '420f68ea-03ec-4d67-8bb2-99fd1bfe5210', // dev
   'b16842a5-43d7-41a4-b544-1d32c2068247', // prod
 ];
-const DENIED_OPERATIONS = ['deleteUser']; // anything that the user can't do to their own data
-const VALID_TOKEN_QUERIES = ['tokenByToken'];
+const VALID_TOKEN_QUERIES = ['TokenByToken'];
 const RELATIONSHIP_MUTATIONS = [
-  'createRelationship',
-  'updateRelationship',
-  'deleteRelationship',
+  'CreateRelationship',
+  'UpdateRelationship',
+  'DeleteRelationship',
 ];
-const VALID_USER_MUTATIONS = ['updateUser'];
+const VALID_USER_MUTATIONS = ['UpdateUser'];
 
 function decodeBase64(str) {
   return Buffer.from(str, 'base64').toString('binary');
@@ -86,9 +85,11 @@ exports.handler = async (event) => {
       // accountId, // AWS Account ID
       queryString, // example: "mutation MyMutation {\n  updateUser(input: {id: \"xxx\", name: \"new name\"}) {\n    id\n    name\n  }\n}\n", # GraphQL query
       // operationName, // example: "MyQuery", # GraphQL operation name
-      // variables, // example: {} # any additional variables supplied to the operation
+      variables, // example: {} # any additional variables supplied to the operation
     },
   } = event;
+  const input = variables?.input || {};
+  const condition = variables?.condition || {};
 
   const unauthorizedResponse = {
     isAuthorized: false,
@@ -137,15 +138,6 @@ exports.handler = async (event) => {
     return authorizedResponse;
   }
 
-  // don't let any user do these even to their own data
-  const isDeniedOperation = DENIED_OPERATIONS.find((deniedOp) =>
-    queryString.includes(deniedOp),
-  );
-  if (isDeniedOperation) {
-    console.log('operation denied');
-    return unauthorizedResponse;
-  }
-
   /**
    * TOKEN OPERATIONS
    * Token queries will fail unless they pass the userId in the query string, as with "get all user's tokens" and "delete token by id" (where condition is passed)
@@ -171,17 +163,24 @@ exports.handler = async (event) => {
    * - isRelationship, in which case auth user is passed as followingUserId
    * - isUserMutation, in which case auth user is passed as id
    */
-  const isRelationship = RELATIONSHIP_MUTATIONS.find((m) => queryString.includes(m));
-  const isUserMutation = VALID_USER_MUTATIONS.find((m) => queryString.includes(m));
+  const isRelationship = RELATIONSHIP_MUTATIONS.find(
+    (m) => queryString.slice(9, m.length + 9) === m,
+  ); // strings start like "mutation CreatePredictionSet"
+  const isUserMutation = VALID_USER_MUTATIONS.find(
+    (m) => queryString.slice(9, m.length + 9) === m,
+  );
   let fieldWithAuthUserId = 'userId';
   if (isRelationship) {
     fieldWithAuthUserId = 'followingUserId';
   } else if (isUserMutation) {
     fieldWithAuthUserId = 'id';
   }
+  // the input must include the auth user's ID in the proper slot or else we don't let it pass
   const isModifyingSelf =
-    queryString.includes(`${fieldWithAuthUserId}: \"${userId}`) ||
-    queryString.includes(`(condition: {${fieldWithAuthUserId}: {eq: \"${userId}"}})`); // in the case of a delete, which otherwise only requires the id of the item being deleted
+    input[fieldWithAuthUserId] === userId || condition[fieldWithAuthUserId].eq === userId;
+  // const isModifyingSelf =
+  //   queryString.includes(`${fieldWithAuthUserId}: \"${userId}`) ||
+  //   queryString.includes(`(condition: {${fieldWithAuthUserId}: {eq: \"${userId}"}})`); // in the case of a delete, which otherwise only requires the id of the item being deleted
   console.log('isModifyingSelf', isModifyingSelf);
   if (!isModifyingSelf) {
     return unauthorizedResponse;
