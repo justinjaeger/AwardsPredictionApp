@@ -48,8 +48,6 @@ export const GraphqlAPIPublic = async <Query, Variables>(
   query: string,
   variables?: Variables,
 ) => {
-  // NOTE: If you do authMode = AWS_LAMBDA, you have to pass SOME STRING... even if it's garbage
-  // If you do authMode = API_KEY it doesn't matter what that field is
   return API.graphql<GraphQLQuery<Query>>({
     query,
     // @ts-ignore
