@@ -166,7 +166,7 @@ const deletePredictionSetById = async (
     }
     return { status: 'success', data };
   } catch (err) {
-    return handleError('error deleting prediction set', err);
+    return handleError('error deleting prediction set by id', err);
   }
 };
 
@@ -547,7 +547,7 @@ export const deleteCommunityHistoryPrediction = async (
   }
 };
 
-// Will fail unless you're the admin
+// Will only pass if you're the admin - otherwise users should use deletePredictionSetById
 export const deletePersonalPredictionSet = async (
   predictionSetId: string,
 ): Promise<iApiResponse<DeletePredictionSetMutation>> => {

@@ -78,12 +78,12 @@ export const UserProvider = (props: { children: React.ReactNode }) => {
   // attaches event listener that fires whenever KeychainStorage is modified
   useEffect(() => {
     const callback = async () => {
-      console.error('KEYCHAIN EVENT EMITTER FIRED');
+      console.log('keychain event emitter fired');
       const { data: payload } = await KeychainStorage.get();
       const { accessToken, refreshToken } = payload || {};
       // sign out the user if there's no payload / no tokens stored in keychain
       if (!accessToken || !refreshToken) {
-        console.error('no tokens in keychain');
+        console.log('no tokens in keychain');
         return signOutUser();
       }
       // else, read the token & set user info

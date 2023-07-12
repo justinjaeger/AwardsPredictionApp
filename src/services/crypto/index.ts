@@ -65,19 +65,19 @@ const decode = <T>(str: string): T | undefined => {
   const checkSum = checkSumGen(head, body);
 
   if (hash === checkSum) {
-    console.error('JWT authenticated!');
+    console.log('JWT authenticated!');
     const decoded = JSON.parse(decodeBase64(body)) as T;
     // verify if JWT is expired, if exp is a field on it
     // @ts-ignore
     const { exp } = decoded || {};
     const now = new Date().getTime();
     if (exp && now > exp) {
-      console.error('JWT expired');
+      console.log('JWT expired');
       return undefined;
     }
     return decoded;
   } else {
-    console.error('JWT NOT authenticated');
+    console.log('JWT NOT authenticated');
     return undefined;
   }
 };

@@ -137,7 +137,7 @@ export const deleteRelationshipById = async (
     }
     return { status: 'success', data: data };
   } catch (err) {
-    return handleError('error unfollowing user', err);
+    return handleError('error deleting relationship by id', err);
   }
 };
 

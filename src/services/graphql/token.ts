@@ -30,7 +30,7 @@ export const getToken = async (
     if (!data?.tokenByToken) {
       throw new Error(JSON.stringify(errors));
     }
-    return { status: 'success' };
+    return { status: 'success', data };
   } catch (err) {
     return handleError('error getting token', err);
   }
@@ -47,7 +47,7 @@ export const getAllUserTokens = async (
     if (!data?.tokenByUserId) {
       throw new Error(JSON.stringify(errors));
     }
-    return { status: 'success' };
+    return { status: 'success', data };
   } catch (err) {
     return handleError('error getting all user tokens', err);
   }
@@ -65,7 +65,7 @@ export const createRefreshToken = async (
     if (!data?.createToken) {
       throw new Error(JSON.stringify(errors));
     }
-    return { status: 'success' };
+    return { status: 'success', data };
   } catch (err) {
     return handleError('error creating refresh token', err);
   }
@@ -86,7 +86,7 @@ const deleteTokenById = async (
     if (!data?.deleteToken) {
       throw new Error(JSON.stringify(errors));
     }
-    return { status: 'success' };
+    return { status: 'success', data };
   } catch (err) {
     return handleError('error deleting token by id', err);
   }

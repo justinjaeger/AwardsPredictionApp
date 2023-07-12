@@ -18,10 +18,15 @@ export const handleError = (
   error?: any,
   hideFromUser?: boolean,
 ): iApiResponse<any> => {
-  // TODO: Catch unauthorized errors - log user out if unauthorized
+  const isInvalidToken =
+    error?.errors[0]?.message === 'Request failed with status code 401';
   const isUnauthorized = error?.errors?.[0]?.errorType === 'Unauthorized';
   const m = message || error?.message || 'something went wrong';
-  if (isUnauthorized) {
+  // create special cases here for errors that we want to handle differently
+  if (isInvalidToken) {
+    console.error('Invalid token:', error);
+    Snackbar.error('Invalid token; We signed you out');
+  } else if (isUnauthorized) {
     // TODO: Might make more sense to verify the refresh token HERE instead of before we send the request.
     // My problem is, how do I reattempt the request after the refresh token is verified?
     console.error('Unauthorized error:', error);
@@ -33,7 +38,9 @@ export const handleError = (
     }
   }
   const allInfo = `
-    Message: ${message}
+    Message: ${
+      isInvalidToken ? 'Invalid token' : isUnauthorized ? 'Unauthorized' : message
+    }
     Error: ${JSON.stringify(error)}
     m: ${m}
   `;
@@ -68,20 +75,18 @@ export const GraphqlAPIProtected = async <Query, Variables>(
 ) => {
   const { data: payload } = await KeychainStorage.get();
   const { accessToken, refreshToken } = payload || {};
-  console.log('accessToken', accessToken); // TODO: delete before deploying
-  console.log('refreshToken', refreshToken); // TODO: delete before deploying
 
   let verifiedAccessToken: string | undefined;
   if (accessToken && refreshToken) {
     const { data } = await JwtService.verifyOrRefresh(accessToken, refreshToken);
     verifiedAccessToken = data?.verifiedAccessToken;
     if (!verifiedAccessToken) {
-      console.error('verifyOrRefresh has failed');
       await KeychainStorage.remove();
       KeychainEventEmitter.emit(); // this will sign the user out since no longer in KeychainStorage
+      verifiedAccessToken = 'none'; // this is going to throw a 401 error which is what we want
     } else if (verifiedAccessToken !== accessToken) {
       // if there's a new token
-      console.error('setting new access token...'); // TODO: remove
+      console.log('setting new access token...');
       await KeychainStorage.set(verifiedAccessToken, refreshToken);
     }
   }

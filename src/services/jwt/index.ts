@@ -54,11 +54,11 @@ const verifyOrRefresh = async (
       };
     }
     // if not decoded, assume it's expired
-    console.error('token expired; attempting to refresh');
+    console.log('token expired; attempting to refresh');
     const { data } = await ApiServices.getToken(refreshToken);
     const dbRefreshToken = data?.tokenByToken?.items?.[0]?.token;
     if (!dbRefreshToken) {
-      return handleError('Error getting refresh token after token expired');
+      return { status: 'error', message: 'dbRefreshToken not found' };
     }
     // decode refresh token to get the payload
     const decodedRefresh = decode<iJwtPayload>(dbRefreshToken);
