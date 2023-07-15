@@ -301,6 +301,15 @@ type PredictionV2 @model @auth(rules: [
     user: User! @hasOne(fields: ["userId"])
     ranking: Int!
 }
+# Old way: Have 2 tables, one for history one for contemporary. When you create a prediction set:
+# 1. It deletes the old from Contemporary and writes a new one
+# 2. It potentially deletes a same-day from History and writes a new one
+# This is two operations we're doing instead of doing just one
+# But the reason we might need 2 is because we need a way to query for all the most current predictions per category
+# We could send out 24 requests and do a promise.all, but that would be bad for DynamoDB how it charges per transaction
+# But if it's cached it's not THAT bad, or not nearly as bad. We could just work on the caching. I mean, react query is supposed to do this right?
+# But we should investigate if React Query is actually set up right now to do a good job at this
+# Alternatively create a new table that's called EventPredictions and joins a PredictionSet field, and modify THAT whenever we make a new prediction
 
 type CommunityPredictionSetV2 @model @auth(rules: [
     { allow: public, operations: [read] },

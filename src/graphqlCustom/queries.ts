@@ -1924,6 +1924,128 @@ export const getUniquePredictionSet = /* GraphQL */ `
   }
 `;
 
+export const v2GetMostRecentPredictionSetByEvent = /* GraphQL */ `
+  query V2PredictionSetsByUserIdAndEventIdAndPhase(
+    $userId: ID!
+    $eventIdPhase: ModelPredictionSetV2V2PredictionSetsByUserIdAndEventIdAndPhaseCompositeKeyConditionInput
+    $filter: ModelPredictionSetV2FilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    # TODO: This is going to be impossible to return the 23 most recent categories bc it's just going to get the 23 most recent predictionSets,
+    # which could be part of the same category
+    v2PredictionSetsByUserIdAndEventIdAndPhase(
+      userId: $userId
+      eventIdPhase: $eventIdPhase
+      sortDirection: DESC
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        userId
+        categoryId
+        phase
+        eventId
+        predictions(ranking: { le: 10 }) {
+          items {
+            id
+            predictionSetId
+            contenderId
+            contender {
+              id
+              movieId
+              movie {
+                id
+                tmdbId
+                studio
+              }
+              personId
+              person {
+                id
+                tmdbId
+              }
+              songId
+              song {
+                id
+                title
+                artist
+              }
+              visibility
+              accolade
+            }
+            ranking
+          }
+        }
+        comment
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
+
+export const v2GetMostRecentPredictionSetByCategory = /* GraphQL */ `
+  query V2PredictionSetsByUserIdAndCategoryIdAndPhase(
+    $userId: ID!
+    $categoryIdPhase: ModelPredictionSetV2V2PredictionSetsByUserIdAndCategoryIdAndPhaseCompositeKeyConditionInput
+    $filter: ModelPredictionSetV2FilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    v2PredictionSetsByUserIdAndCategoryIdAndPhase(
+      userId: $userId
+      categoryIdPhase: $categoryIdPhase
+      sortDirection: DESC
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        userId
+        categoryId
+        phase
+        eventId
+        predictions {
+          items {
+            id
+            predictionSetId
+            contenderId
+            contender {
+              id
+              movieId
+              movie {
+                id
+                tmdbId
+                studio
+              }
+              personId
+              person {
+                id
+                tmdbId
+              }
+              songId
+              song {
+                id
+                title
+                artist
+              }
+              visibility
+              accolade
+            }
+            ranking
+          }
+        }
+        comment
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
+
 export const movieByTmdbId = /* GraphQL */ `
   query MovieByTmdbId(
     $tmdbId: Int!
