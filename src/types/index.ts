@@ -25,6 +25,10 @@ export enum QueryKeys {
   FRIENDS_PREDICTING_EVENT = 'friends-predicting-event',
 }
 
+export enum AsyncStorageKeys {
+  IS_NOT_FIRST_TIME = 'is-not-first-time',
+}
+
 // ex: { 1: 142 } (ranking, numberPredictingRanking)
 export type iIndexedRankings = {
   [ranking: number]: number;

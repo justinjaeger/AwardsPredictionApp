@@ -6,27 +6,29 @@ import * as eva from '@eva-design/eva';
 import Navigation from './navigation';
 import theme from './theme';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { UserProvider } from './context/UserContext';
 import { CategoryProvider } from './context/CategoryContext';
-// import useInitialURL from './hooks/useInitialUrl';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { GOOGLE_AUTH_CLIENT_ID } from './config';
 
 const queryClient = new QueryClient();
 
-const App = () => {
-  //   useInitialURL(); // For getting deep links when app is not open
+// https://github.com/react-native-google-signin/google-signin/blob/master/docs/ios-guide.md
+GoogleSignin.configure({
+  //   scopes: ['https://www.googleapis.com/auth/userinfo.email'], // default is email and profile so shouldn't need this
+  iosClientId: GOOGLE_AUTH_CLIENT_ID, // only for iOS
+});
 
+const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <IconRegistry icons={EvaIconsPack} />
       <ApplicationProvider {...eva} theme={{ ...theme }}>
-        <UserProvider>
-          <CategoryProvider>
-            <SafeAreaProvider>
-              <Navigation />
-            </SafeAreaProvider>
-          </CategoryProvider>
-        </UserProvider>
+        <CategoryProvider>
+          <SafeAreaProvider>
+            <Navigation />
+          </SafeAreaProvider>
+        </CategoryProvider>
       </ApplicationProvider>
     </QueryClientProvider>
   );

@@ -13,7 +13,7 @@ import {
 import theme from '../../constants/theme';
 import PredictionCarousel from '../../components/PredictionCarousel';
 import COLORS from '../../constants/colors';
-import { useTypedNavigation } from '../../util/hooks';
+import { useNavigateToEffect, useTypedNavigation } from '../../util/hooks';
 import ProfileImage from '../../components/ProfileImage';
 import FollowButton from '../../components/FollowButton';
 import FollowCountButton from '../../components/FollowCountButton';
@@ -28,7 +28,7 @@ import useProfileHeader from './useProfileHeader';
 const Profile = () => {
   // If we pass userId as params, it loads that user's profile. If not, it attemps to get logged in profile.
   const { params } = useRoute<RouteProp<PredictionsParamList, 'Profile'>>();
-  const { userId: authUserId, userEmail } = useAuth();
+  const { userId: authUserId, isNewUser } = useAuth();
   const userId = params?.userId || authUserId;
 
   const globalNavigation = useNavigation<MainScreenNavigationProp>();
@@ -51,6 +51,12 @@ const Profile = () => {
 
   const isAuthUser = user && userId && user?.id === authUserId;
 
+  useNavigateToEffect(() => {
+    if (isAuthUser && !user.username) {
+      navigation.navigate('UpdateProfileInfo');
+    }
+  }, [user?.username]);
+
   const predictionSets = user?.predictionSets || [];
 
   const logIn = () => {
@@ -64,13 +70,13 @@ const Profile = () => {
       <BackgroundWrapper>
         <>
           <SubHeader style={{ marginTop: '10%', fontWeight: '700' }}>
-            {userEmail
-              ? 'Log in to make predictions!'
-              : 'Create profile and make predictions!'}
+            {isNewUser
+              ? 'Create profile and make predictions!'
+              : 'Log in to make predictions!'}
           </SubHeader>
           <SubmitButton
-            style={{ marginTop: 20, maxWidth: 180 }}
-            text={userEmail ? 'Log in' : 'Create Account'}
+            style={{ marginTop: 20 }}
+            text={isNewUser ? 'Create Account' : 'Log in'}
             onPress={logIn}
           />
         </>

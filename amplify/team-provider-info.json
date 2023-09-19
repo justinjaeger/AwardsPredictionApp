@@ -33,6 +33,10 @@
         "updateCommunityHistory": {
           "deploymentBucketName": "amplify-awardsapp-prod-150001-deployment",
           "s3Key": "amplify-builds/updateCommunityHistory-4b2f7774347a676a7677-build.zip"
+        },
+        "sendEmail": {
+          "deploymentBucketName": "amplify-awardsapp-prod-150001-deployment",
+          "s3Key": "amplify-builds/sendEmail-35547443684a56765630-build.zip"
         }
       }
     }
@@ -70,6 +74,14 @@
         "updateCommunityHistory": {
           "deploymentBucketName": "amplify-awardsapp-dev-115717-deployment",
           "s3Key": "amplify-builds/updateCommunityHistory-4b2f7774347a676a7677-build.zip"
+        },
+        "sendEmail": {
+          "deploymentBucketName": "amplify-awardsapp-dev-115717-deployment",
+          "s3Key": "amplify-builds/sendEmail-5469616f2f58767a6a62-build.zip"
+        },
+        "graphQlLambdaAuthorizerd2c5f8e9": {
+          "deploymentBucketName": "amplify-awardsapp-dev-115717-deployment",
+          "s3Key": "amplify-builds/graphQlLambdaAuthorizerd2c5f8e9-572b6a4c753851564759-build.zip"
         }
       }
     }

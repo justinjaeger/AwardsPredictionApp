@@ -3,7 +3,7 @@ import {
   CommunityPredictionSetByCategoryIdQueryVariables,
   CommunityPredictionSetByEventIdQueryVariables,
 } from '../../API';
-import { GraphqlAPI, handleError, iApiResponse } from '../utils';
+import { GraphqlAPIPublic, handleError, iApiResponse } from '../utils';
 import * as customQueries from '../../graphqlCustom/queries';
 import { CommunityPredictionSetByEventIdQuery } from '../../graphqlCustom/types';
 
@@ -12,7 +12,7 @@ export const getCommunityPredictionsByCategory = async (
 ): Promise<iApiResponse<CommunityPredictionSetByCategoryIdQuery>> => {
   try {
     // Get all prediction sets matching params (should only be one)
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIPublic<
       CommunityPredictionSetByCategoryIdQuery,
       CommunityPredictionSetByCategoryIdQueryVariables
     >(customQueries.communityPredictionSetByCategoryId, {
@@ -32,7 +32,7 @@ export const getCommunityPredictionsByEvent = async (
   eventId: string,
 ): Promise<iApiResponse<CommunityPredictionSetByEventIdQuery>> => {
   try {
-    const { data: maybePreSets, errors } = await GraphqlAPI<
+    const { data: maybePreSets, errors } = await GraphqlAPIPublic<
       CommunityPredictionSetByEventIdQuery,
       CommunityPredictionSetByEventIdQueryVariables
     >(customQueries.communityPredictionSetByEventId, {

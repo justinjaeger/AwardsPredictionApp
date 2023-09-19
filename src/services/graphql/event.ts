@@ -18,13 +18,19 @@ import { getAwardsBodyCategories, iCategoryData } from '../../constants/categori
 import * as mutations from '../../graphql/mutations';
 import * as customQueries from '../../graphqlCustom/queries';
 import { ListEventsQuery } from '../../graphqlCustom/types';
-import { GraphqlAPI, handleError, iApiResponse } from '../utils';
+import {
+  GraphqlAPIProtected,
+  GraphqlAPIPublic,
+  handleError,
+  iApiResponse,
+} from '../utils';
 
 export const getAllEvents = async (): Promise<iApiResponse<ListEventsQuery>> => {
   try {
-    const { data, errors } = await GraphqlAPI<ListEventsQuery, ListEventsQueryVariables>(
-      customQueries.listEvents,
-    );
+    const { data, errors } = await GraphqlAPIPublic<
+      ListEventsQuery,
+      ListEventsQueryVariables
+    >(customQueries.listEvents);
     if (!data?.listEvents) {
       throw new Error(JSON.stringify(errors));
     }
@@ -36,16 +42,16 @@ export const getAllEvents = async (): Promise<iApiResponse<ListEventsQuery>> => 
 
 export const getEventById = async (id: string): Promise<iApiResponse<GetEventQuery>> => {
   try {
-    const { data, errors } = await GraphqlAPI<GetEventQuery, GetEventQueryVariables>(
-      customQueries.getEvent,
-      { id },
-    );
+    const { data, errors } = await GraphqlAPIPublic<
+      GetEventQuery,
+      GetEventQueryVariables
+    >(customQueries.getEvent, { id });
     if (!data?.getEvent) {
       throw new Error(JSON.stringify(errors));
     }
     return { status: 'success', data };
   } catch (err) {
-    return handleError('error getting all events', err);
+    return handleError('error getting event by id', err);
   }
 };
 
@@ -56,7 +62,7 @@ export const getUniqueEvents = async (
 ): Promise<iApiResponse<EventByAwardsBodyAndYearQuery>> => {
   try {
     // enforce uniqueness - don't allow duplicate events to be created
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIPublic<
       EventByAwardsBodyAndYearQuery,
       EventByAwardsBodyAndYearQueryVariables
     >(customQueries.eventByAwardsBodyAndYear, {
@@ -86,7 +92,7 @@ export const createEvent = async (
       return { status: 'error', message: 'This event has already been created' };
     }
     // Create event
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIProtected<
       CreateEventMutation,
       CreateEventMutationVariables
     >(mutations.createEvent, {
@@ -146,7 +152,7 @@ export const updateEvent = async (
   if (winDateTime !== undefined) input.winDateTime = winDateTime;
   try {
     // Update event
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIProtected<
       UpdateEventMutation,
       UpdateEventMutationVariables
     >(mutations.updateEvent, { input });

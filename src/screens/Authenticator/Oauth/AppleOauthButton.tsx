@@ -8,13 +8,9 @@ import Snackbar from '../../../components/Snackbar';
 import ApiServices from '../../../services/graphql';
 import { UserRole } from '../../../API';
 import { useAuth } from '../../../context/UserContext';
-import { useNavigation } from '@react-navigation/native';
-import { goToAccountSetup } from '../../../util/navigationActions';
-import { MainScreenNavigationProp } from '../../../navigation/types';
 
 const AppleOauthButton = () => {
   const { width } = useWindowDimensions();
-  const navigation = useNavigation<MainScreenNavigationProp>();
   const { signInUser } = useAuth();
 
   const onAppleButtonPress = async () => {
@@ -33,9 +29,8 @@ const AppleOauthButton = () => {
       const oauthId = appleAuthRequestResponse.user; // This is a SPECIAL APPLE ACCOUNT (SAA)
       const firstName = appleAuthRequestResponse.fullName?.givenName || '';
       const lastName = appleAuthRequestResponse.fullName?.familyName || '';
-      console.error('email', email);
-      console.error('oauthId', oauthId);
-      console.error('name', firstName, lastName);
+      const name = firstName + ' ' + lastName;
+
       if (!oauthId) {
         throw new Error('No oauthId found');
       }
@@ -57,22 +52,13 @@ const AppleOauthButton = () => {
       // Get user from DB based on oauthId
       // attempt to get user with the oauthId apple sent back
       const { data: getUserRes } = await ApiServices.getUserByOauthId(oauthId);
-      const dbUser = getUserRes?.userByOauthId?.items[0];
+      let dbUser = getUserRes?.userByOauthId?.items[0];
 
-      // DECLARE create / sign in functions
-      const logInExistingUser = () => {
-        if (dbUser) {
-          signInUser(dbUser.id, dbUser.email, dbUser.role);
-          navigation.navigate('BottomTabNavigator', {
-            screen: 'Profile',
-          });
-        }
-      };
-      const createNewUser = async () => {
+      // if user with this email doesn't exist, create the user
+      if (!dbUser) {
         if (!email) {
           throw new Error('No email found, cannot create user');
         }
-        const name = firstName + ' ' + lastName;
         const { status, data } = await ApiServices.createUser(
           email,
           UserRole.USER,
@@ -83,16 +69,10 @@ const AppleOauthButton = () => {
         if (status === 'error' || !newUser) {
           throw new Error('Error creating user');
         }
-        signInUser(newUser.id, newUser.email, newUser.role);
-        // Navigate to profile creation
-        navigation.dispatch(goToAccountSetup);
-      };
-
-      if (!dbUser) {
-        await createNewUser();
-      } else {
-        logInExistingUser();
+        dbUser = newUser;
       }
+      // dbUser shouldn't be undefined; sign in the user
+      signInUser(dbUser.id, dbUser.email, dbUser.role);
     } catch (e) {
       Snackbar.error(JSON.stringify(e) || 'Something went wrong');
       console.error(e);

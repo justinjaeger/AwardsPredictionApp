@@ -20,6 +20,13 @@
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
+        <intent-filter android:label="@string/filter_view_example_gizmos">
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <!-- Accepts URIs that begin with "oscar://signin -->
+            <data android:scheme="oscar" android:host="signin" />
+        </intent-filter>
       </activity>
     </application>
 </manifest>

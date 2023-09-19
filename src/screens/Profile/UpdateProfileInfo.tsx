@@ -44,7 +44,8 @@ const UpdateProfileInfo = () => {
   const enableSubmitName = nameBeforeEdit !== name && validName;
   const enableSubmitBio = bioBeforeEdit !== bio && validBio;
 
-  const submitEnabled = enableSubmitUsername || enableSubmitName || enableSubmitBio;
+  const submitEnabled =
+    username && name && (enableSubmitUsername || enableSubmitName || enableSubmitBio);
 
   useEffect(() => {
     setName(user?.name || '');

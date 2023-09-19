@@ -3,6 +3,7 @@ import React from 'react';
 // import RNBootSplash from 'react-native-bootsplash'; // splash screen (https://github.com/zoontek/react-native-bootsplash)
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import MainNavigator from './MainNavigator';
+import { UserProvider } from '../context/UserContext';
 
 // onReady={() => RNBootSplash.hide()} (could add to NavigationContainer)
 const Navigation = () => {
@@ -17,7 +18,9 @@ const Navigation = () => {
 
   return (
     <NavigationContainer theme={theme}>
-      <MainNavigator />
+      <UserProvider>
+        <MainNavigator />
+      </UserProvider>
     </NavigationContainer>
   );
 };

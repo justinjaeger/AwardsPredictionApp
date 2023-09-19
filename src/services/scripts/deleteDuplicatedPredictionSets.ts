@@ -95,7 +95,21 @@ const deleteDuplicatedPredictionSets = async () => {
       console.log('sortedSets', sortedSets);
       const ids = sortedSets.map((s) => s.id);
 
-      return { toKeepId: ids[0], toDeleteIds: ids.slice(1) };
+      let mostUsedIndex = 0;
+      let mostUsedCount = 0;
+      ids.forEach((id, i) => {
+        const numTimesUsedInPredictions = predictions.filter(
+          (p) => p.predictionSetId === id,
+        ).length;
+        if (numTimesUsedInPredictions > mostUsedCount) {
+          mostUsedIndex = i;
+          mostUsedCount = numTimesUsedInPredictions;
+        }
+      });
+      return {
+        toKeepId: ids[mostUsedIndex], // could be more stategic about this
+        toDeleteIds: ids.filter((id) => id !== ids[mostUsedIndex]),
+      };
     });
 
     const getPredictionsByPredictionSetId = (psId: string) => {

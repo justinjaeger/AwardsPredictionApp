@@ -13,13 +13,18 @@ import {
 import * as mutations from '../../graphql/mutations';
 import * as customMutations from '../../graphqlCustom/mutations';
 import * as customQueries from '../../graphqlCustom/queries';
-import { GraphqlAPI, handleError, iApiResponse } from '../utils';
+import {
+  GraphqlAPIProtected,
+  GraphqlAPIPublic,
+  handleError,
+  iApiResponse,
+} from '../utils';
 
 const getMoviesByTmdb = async (
   tmdbId: number,
 ): Promise<iApiResponse<MovieByTmdbIdQuery>> => {
   try {
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIPublic<
       MovieByTmdbIdQuery,
       MovieByTmdbIdQueryVariables
     >(customQueries.movieByTmdbId, { tmdbId });
@@ -36,7 +41,7 @@ export const createMovie = async (
   tmdbId: number,
 ): Promise<iApiResponse<CreateMovieMutation>> => {
   try {
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIPublic<
       CreateMovieMutation,
       CreateMovieMutationVariables
     >(customMutations.createMovie, { input: { tmdbId } });
@@ -82,7 +87,7 @@ export const updateStudio = async (
   studio: string,
 ): Promise<iApiResponse<UpdateMovieMutation>> => {
   try {
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIProtected<
       UpdateMovieMutation,
       UpdateMovieMutationVariables
     >(mutations.updateMovie, { input: { id, studio } });
@@ -99,7 +104,7 @@ export const deleteMovieById = async (
   id: string,
 ): Promise<iApiResponse<DeleteMovieMutation>> => {
   try {
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIProtected<
       DeleteMovieMutation,
       DeleteMovieMutationVariables
     >(customMutations.deleteMovie, { input: { id } });
@@ -115,9 +120,10 @@ export const deleteMovieById = async (
 // For duplicate script and manage studios thing
 export const getAllMovies = async (): Promise<iApiResponse<ListMoviesQuery>> => {
   try {
-    const { data, errors } = await GraphqlAPI<ListMoviesQuery, ListMoviesQueryVariables>(
-      customQueries.listMovies,
-    );
+    const { data, errors } = await GraphqlAPIPublic<
+      ListMoviesQuery,
+      ListMoviesQueryVariables
+    >(customQueries.listMovies);
     if (!data?.listMovies) {
       throw new Error(JSON.stringify(errors));
     }

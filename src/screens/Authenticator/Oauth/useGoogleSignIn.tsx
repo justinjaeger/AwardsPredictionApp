@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '../../../context/UserContext';
 import ApiServices from '../../../services/graphql';
 import { useNavigateAwayEffect } from '../../../util/hooks';
-import { goToAccountSetup } from '../../../util/navigationActions';
 import { MainScreenNavigationProp } from '../../../navigation/types';
+import { resetToProfile } from '../../../util/navigationActions';
 
 // Used for ALL Oauth providers (misnamed)
 const useGoogleSignIn = () => {
@@ -25,6 +25,10 @@ const useGoogleSignIn = () => {
     return unsubscribe;
   }, []);
 
+  const navigateToProfile = () => {
+    navigation.dispatch(resetToProfile);
+  };
+
   const signInDb = async (email: string) => {
     try {
       // First, attempt to get user from database using email
@@ -32,9 +36,7 @@ const useGoogleSignIn = () => {
       const dbUser = getUserRes?.userByEmail?.items[0];
       if (dbUser) {
         signInUser(dbUser.id, dbUser.email, dbUser.role);
-        navigation.navigate('BottomTabNavigator', {
-          screen: 'Profile',
-        });
+        navigateToProfile();
         // navigate somewhere
         return;
       }
@@ -45,7 +47,7 @@ const useGoogleSignIn = () => {
         throw new Error('Could not create user');
       }
       signInUser(newUser.id, newUser.email, newUser.role);
-      navigation.dispatch(goToAccountSetup);
+      navigateToProfile();
     } catch (err) {
       console.error(err);
       setIsError(true);

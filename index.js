@@ -4,6 +4,8 @@ import { name as appName } from './app.json';
 import { Amplify } from 'aws-amplify';
 import awsconfig from './src/aws-exports.js';
 
+global.Buffer = require('buffer').Buffer;
+
 // Amplify.Logger.LOG_LEVEL = 'DEBUG';
 Amplify.configure({
   ...awsconfig,

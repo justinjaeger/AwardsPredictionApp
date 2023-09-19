@@ -19,9 +19,15 @@ import {
 } from '../../API';
 import { PAGINATED_USER_RECOMMENDATION_LIMIT } from '../../constants';
 import * as mutations from '../../graphql/mutations';
+import * as customMutations from '../../graphqlCustom/mutations';
 import * as customQueries from '../../graphqlCustom/queries';
 import { GetUserQuery, SearchUsersQuery } from '../../graphqlCustom/types';
-import { GraphqlAPI, handleError, iApiResponse } from '../utils';
+import {
+  GraphqlAPIProtected,
+  GraphqlAPIPublic,
+  handleError,
+  iApiResponse,
+} from '../utils';
 
 /**
  * UNIQUE USER QUERIES
@@ -29,7 +35,7 @@ import { GraphqlAPI, handleError, iApiResponse } from '../utils';
 
 export const getUserById = async (id: string): Promise<iApiResponse<GetUserQuery>> => {
   try {
-    const { data, errors } = await GraphqlAPI<GetUserQuery, GetUserQueryVariables>(
+    const { data, errors } = await GraphqlAPIPublic<GetUserQuery, GetUserQueryVariables>(
       customQueries.getUserBasic,
       { id },
     );
@@ -46,7 +52,7 @@ export const getUserByEmail = async (
   email: string,
 ): Promise<iApiResponse<UserByEmailQuery>> => {
   try {
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIPublic<
       UserByEmailQuery,
       UserByEmailQueryVariables
     >(customQueries.userByEmailBasic, { email });
@@ -63,7 +69,7 @@ export const getUserByOauthId = async (
   oauthId: string,
 ): Promise<iApiResponse<UserByOauthIdQuery>> => {
   try {
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIPublic<
       UserByOauthIdQuery,
       UserByOauthIdQueryVariables
     >(customQueries.userByOauthIdBasic, { oauthId });
@@ -80,7 +86,7 @@ export const getUserByUsername = async (
   username: string,
 ): Promise<iApiResponse<UserByUsernameQuery>> => {
   try {
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIPublic<
       UserByUsernameQuery,
       UserByUsernameQueryVariables
     >(customQueries.userByUsernameBasic, { username });
@@ -100,7 +106,7 @@ export const getUserByUsername = async (
 // returns user with eventIds they're predicting (via getting their predictionSets)
 export const getUserEvents = async (id: string): Promise<iApiResponse<GetUserQuery>> => {
   try {
-    const { data, errors } = await GraphqlAPI<GetUserQuery, GetUserQueryVariables>(
+    const { data, errors } = await GraphqlAPIPublic<GetUserQuery, GetUserQueryVariables>(
       customQueries.getUserWithPredictedEventIds,
       { id },
     );
@@ -121,7 +127,7 @@ export const getUserProfile = async (
 ): Promise<iApiResponse<GetUserQuery>> => {
   try {
     if (authUserId) {
-      const { data, errors } = await GraphqlAPI<
+      const { data, errors } = await GraphqlAPIPublic<
         GetUserQuery,
         GetUserQueryVariablesCustom
       >(customQueries.getUserProfileQuery, { id, authUserId });
@@ -130,10 +136,10 @@ export const getUserProfile = async (
       }
       return { status: 'success', data: data };
     } else {
-      const { data, errors } = await GraphqlAPI<GetUserQuery, GetUserQueryVariables>(
-        customQueries.getUserProfileQuerySignedOut,
-        { id },
-      );
+      const { data, errors } = await GraphqlAPIPublic<
+        GetUserQuery,
+        GetUserQueryVariables
+      >(customQueries.getUserProfileQuerySignedOut, { id });
       if (!data?.getUser) {
         throw new Error(JSON.stringify(errors));
       }
@@ -148,7 +154,7 @@ export const getUserWithRelationships = async (
   id: string,
 ): Promise<iApiResponse<GetUserQuery>> => {
   try {
-    const { data, errors } = await GraphqlAPI<GetUserQuery, GetUserQueryVariables>(
+    const { data, errors } = await GraphqlAPIPublic<GetUserQuery, GetUserQueryVariables>(
       customQueries.getUserWithRelationshipsQuery,
       { id },
     );
@@ -169,12 +175,12 @@ export const getUsersPaginated = async (
   paginatedLimit?: number,
 ): Promise<iApiResponse<ListUsersQuery>> => {
   try {
-    const { data, errors } = await GraphqlAPI<ListUsersQuery, ListUsersQueryVariables>(
-      customQueries.listUsersPaginated,
-      {
-        limit: paginatedLimit || PAGINATED_USER_RECOMMENDATION_LIMIT,
-      },
-    );
+    const { data, errors } = await GraphqlAPIPublic<
+      ListUsersQuery,
+      ListUsersQueryVariables
+    >(customQueries.listUsersPaginated, {
+      limit: paginatedLimit || PAGINATED_USER_RECOMMENDATION_LIMIT,
+    });
     if (!data?.listUsers) {
       throw new Error(JSON.stringify(errors));
     }
@@ -190,7 +196,7 @@ export const getUsersPaginatedNotFollowing = async (
   paginatedLimit?: number,
 ): Promise<iApiResponse<ListUsersQuery>> => {
   try {
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIPublic<
       ListUsersQuery,
       ListUsersQueryVariables & { authUserId: string }
     >(customQueries.listUsersPaginatedWithIsFollowing, {
@@ -227,10 +233,10 @@ export const createUser = async (
       throw new Error('A user with this email already exists');
     }
     // Create user
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIPublic<
       CreateUserMutation,
       CreateUserMutationVariables
-    >(mutations.createUser, {
+    >(customMutations.createUser, {
       input: {
         email,
         role: role || UserRole.USER,
@@ -274,7 +280,7 @@ export const updateUsername = async (
     if (name !== undefined) input.name = name;
     if (bio !== undefined) input.bio = bio;
     // If not taken, create new username
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIProtected<
       UpdateUserMutation,
       UpdateUserMutationVariables
     >(mutations.updateUser, { input });
@@ -292,7 +298,7 @@ export const updateProfileImage = async (
   imageKey: string,
 ): Promise<iApiResponse<UpdateUserMutation>> => {
   try {
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIProtected<
       UpdateUserMutation,
       UpdateUserMutationVariables
     >(mutations.updateUser, { input: { id, image: imageKey } });
@@ -314,7 +320,7 @@ export const searchUsersSignedOut = async (
   search: string,
 ): Promise<iApiResponse<SearchUsersQuery>> => {
   try {
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIPublic<
       SearchUsersQuery,
       SearchUsersQueryVariables
     >(customQueries.searchUsersSignedOutQuery, {
@@ -350,7 +356,7 @@ export const searchUsersSignedIn = async (
       acc.push({ username: { wildcard: word + '*' } });
       return acc;
     }, []);
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIPublic<
       SearchUsersQuery,
       SearchUsersQueryVariablesCustom
     >(customQueries.searchUsersSignedInQuery, {
@@ -375,15 +381,16 @@ export const searchUsersSignedIn = async (
 
 export const getEveryUser = async (): Promise<iApiResponse<ListUsersQuery>> => {
   try {
-    const { data, errors } = await GraphqlAPI<ListUsersQuery, ListUsersQueryVariables>(
-      customQueries.listAllUsers,
-    );
+    const { data, errors } = await GraphqlAPIPublic<
+      ListUsersQuery,
+      ListUsersQueryVariables
+    >(customQueries.listAllUsers);
     if (!data?.listUsers) {
       throw new Error(JSON.stringify(errors));
     }
     return { status: 'success', data };
   } catch (err) {
-    return handleError('error getting all users', err);
+    return handleError('error getting every user', err);
   }
 };
 
@@ -419,7 +426,7 @@ export const createTestUser = async (
       };
     }
     // Create user
-    const { data, errors } = await GraphqlAPI<
+    const { data, errors } = await GraphqlAPIPublic<
       CreateUserMutation,
       CreateUserMutationVariables
     >(mutations.createUser, {

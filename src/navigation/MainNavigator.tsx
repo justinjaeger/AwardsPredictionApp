@@ -2,7 +2,6 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import BottomTabNavigator from './BottomTabNavigator';
 import AuthenticatorNavigator from './AuthenticatorNavigator';
-import { MainParamList } from './types';
 import WebView from '../screens/WebView';
 import { StatusBar } from 'expo-status-bar';
 

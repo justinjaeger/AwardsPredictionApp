@@ -7,7 +7,7 @@ import {
   HistoryPredictionSetByUserIdAndEventIdAndCreatedAtQuery,
   CommunityHistoryPredictionSetsByEventIdAndCreatedAtQuery,
 } from '../../graphqlCustom/types';
-import { GraphqlAPI, handleError, iApiResponse } from '../utils';
+import { GraphqlAPIPublic, handleError, iApiResponse } from '../utils';
 
 export const getPersonalHistory = async (
   eventId: string,
@@ -21,7 +21,7 @@ export const getPersonalHistory = async (
     startDate.setHours(0, 0, 0, 0);
     endDate.setHours(23, 59, 59, 999);
 
-    const { data: maybePreSets, errors } = await GraphqlAPI<
+    const { data: maybePreSets, errors } = await GraphqlAPIPublic<
       HistoryPredictionSetByUserIdAndEventIdAndCreatedAtQuery,
       HistoryPredictionSetByUserIdAndEventIdAndCreatedAtQueryVariables
     >(customQueries.historyPredictionSetByUserIdAndEventIdAndCreatedAt, {
@@ -53,7 +53,7 @@ export const getCommunityHistory = async (
     startDate.setHours(0, 0, 0, 0);
     endDate.setHours(23, 59, 59, 999);
 
-    const { data: maybePreSets, errors } = await GraphqlAPI<
+    const { data: maybePreSets, errors } = await GraphqlAPIPublic<
       CommunityHistoryPredictionSetsByEventIdAndCreatedAtQuery,
       CommunityHistoryPredictionSetsByEventIdAndCreatedAtQueryVariables
     >(customQueries.communityHistoryPredictionSetsByEventIdAndCreatedAt, {
