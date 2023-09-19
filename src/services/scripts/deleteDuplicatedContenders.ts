@@ -82,50 +82,50 @@ const deleteDuplicatedContenders = async () => {
     }
 
     // Get all PERSONAL HISTORY PREDICTIONS
-    const historyPredictions: {
-      id: string;
-      contenderId: string;
-    }[] = [];
-    let hpNextToken;
-    while (hpNextToken !== null) {
-      console.log('fetching history predictions', historyPredictions.length);
-      const { data: predictionData, status } =
-        await ApiServices.listEveryPersonalHistoryPrediction(hpNextToken);
-      if (status === 'error') throw new Error('listEveryPersonalHistoryPrediction');
-      const list = predictionData?.listHistoryPredictions?.items || [];
-      const formattedList = list.map((p) => ({
-        id: p!.id,
-        contenderId: p!.contenderId,
-      }));
-      historyPredictions.push(...formattedList);
-      hpNextToken = predictionData?.listHistoryPredictions?.nextToken;
-    }
-    console.log('historyPredictions', historyPredictions.length);
+    // const historyPredictions: {
+    //   id: string;
+    //   contenderId: string;
+    // }[] = [];
+    // let hpNextToken;
+    // while (hpNextToken !== null) {
+    //   console.log('fetching history predictions', historyPredictions.length);
+    //   const { data: predictionData, status } =
+    //     await ApiServices.listEveryPersonalHistoryPrediction(hpNextToken);
+    //   if (status === 'error') throw new Error('listEveryPersonalHistoryPrediction');
+    //   const list = predictionData?.listHistoryPredictions?.items || [];
+    //   const formattedList = list.map((p) => ({
+    //     id: p!.id,
+    //     contenderId: p!.contenderId,
+    //   }));
+    //   historyPredictions.push(...formattedList);
+    //   hpNextToken = predictionData?.listHistoryPredictions?.nextToken;
+    // }
+    // console.log('historyPredictions', historyPredictions.length);
 
     // PERSONAL HISTORY - get all instances where personal history predictions are referring to a contender that doesn't exist
-    const invalidPersonalHistoryPredictions = historyPredictions.filter(
-      (p) => !contenders.find((c) => c.id === p.contenderId),
-    );
-    console.log(
-      'invalidPersonalHistoryPredictions',
-      invalidPersonalHistoryPredictions.length,
-    );
-    // offer to delete them
-    if (invalidPersonalHistoryPredictions.length > 0) {
-      alertHelper(
-        `Found ${invalidPersonalHistoryPredictions.length} personal history predictions that point to now-deleted contenders. Delete?`,
-        async () => {
-          await Promise.all(
-            invalidPersonalHistoryPredictions.map((p) =>
-              ApiServices.deletePersonalHistoryPrediction(p.id),
-            ),
-          ).catch(() => {
-            throw new Error('deletePersonalHistoryPrediction');
-          });
-        },
-      );
-      return; // let it be the only thing that happens
-    }
+    // const invalidPersonalHistoryPredictions = historyPredictions.filter(
+    //   (p) => !contenders.find((c) => c.id === p.contenderId),
+    // );
+    // console.log(
+    //   'invalidPersonalHistoryPredictions',
+    //   invalidPersonalHistoryPredictions.length,
+    // );
+    // // offer to delete them
+    // if (invalidPersonalHistoryPredictions.length > 0) {
+    //   alertHelper(
+    //     `Found ${invalidPersonalHistoryPredictions.length} personal history predictions that point to now-deleted contenders. Delete?`,
+    //     async () => {
+    //       await Promise.all(
+    //         invalidPersonalHistoryPredictions.map((p) =>
+    //           ApiServices.deletePersonalHistoryPrediction(p.id),
+    //         ),
+    //       ).catch(() => {
+    //         throw new Error('deletePersonalHistoryPrediction');
+    //       });
+    //     },
+    //   );
+    //   return; // let it be the only thing that happens
+    // }
 
     // Get all COMMUNITY PREDICTIONS
     const communityPredictions: {
@@ -171,53 +171,53 @@ const deleteDuplicatedContenders = async () => {
     }
 
     // Get all COMMUNITY HISTORY PREDICTIONS
-    const communityHistoryPredictions: {
-      id: string;
-      contenderId: string;
-    }[] = [];
-    let chNextToken;
-    while (chNextToken !== null) {
-      console.log(
-        'fetching communityHistoryPredictions',
-        communityHistoryPredictions.length,
-      );
-      const { data: predictionData, status } =
-        await ApiServices.listEveryCommunityHistoryPrediction(chNextToken);
-      if (status === 'error') throw new Error('listEveryCommunityHistoryPrediction');
-      const list = predictionData?.listCommunityHistoryPredictions?.items || [];
-      const formattedList = list.map((p) => ({
-        id: p!.id,
-        contenderId: p!.contenderId,
-      }));
-      communityHistoryPredictions.push(...formattedList);
-      chNextToken = predictionData?.listCommunityHistoryPredictions?.nextToken;
-    }
-    console.log('communityHistoryPredictions', communityHistoryPredictions.length);
+    // const communityHistoryPredictions: {
+    //   id: string;
+    //   contenderId: string;
+    // }[] = [];
+    // let chNextToken;
+    // while (chNextToken !== null) {
+    //   console.log(
+    //     'fetching communityHistoryPredictions',
+    //     communityHistoryPredictions.length,
+    //   );
+    //   const { data: predictionData, status } =
+    //     await ApiServices.listEveryCommunityHistoryPrediction(chNextToken);
+    //   if (status === 'error') throw new Error('listEveryCommunityHistoryPrediction');
+    //   const list = predictionData?.listCommunityHistoryPredictions?.items || [];
+    //   const formattedList = list.map((p) => ({
+    //     id: p!.id,
+    //     contenderId: p!.contenderId,
+    //   }));
+    //   communityHistoryPredictions.push(...formattedList);
+    //   chNextToken = predictionData?.listCommunityHistoryPredictions?.nextToken;
+    // }
+    // console.log('communityHistoryPredictions', communityHistoryPredictions.length);
 
     // COMMUNITY HISTORY - get all instances where community history predictions are referring to a contender that doesn't exist
-    const invalidCommunityHistoryPredictions = communityHistoryPredictions.filter(
-      (p) => !contenders.find((c) => c.id === p.contenderId),
-    );
-    console.log(
-      'invalidCommunityHistoryPredictions',
-      invalidCommunityHistoryPredictions.length,
-    );
-    // offer to delete them
-    if (invalidCommunityHistoryPredictions.length > 0) {
-      alertHelper(
-        `Found ${invalidCommunityHistoryPredictions.length} community history predictions that point to now-deleted contenders. Delete?`,
-        async () => {
-          await Promise.all(
-            invalidCommunityHistoryPredictions.map((p) =>
-              ApiServices.deleteCommunityHistoryPrediction(p.id),
-            ),
-          ).catch(() => {
-            throw new Error('deleteCommunityHistoryPrediction');
-          });
-        },
-      );
-      return; // let it be the only thing that happens
-    }
+    // const invalidCommunityHistoryPredictions = communityHistoryPredictions.filter(
+    //   (p) => !contenders.find((c) => c.id === p.contenderId),
+    // );
+    // console.log(
+    //   'invalidCommunityHistoryPredictions',
+    //   invalidCommunityHistoryPredictions.length,
+    // );
+    // // offer to delete them
+    // if (invalidCommunityHistoryPredictions.length > 0) {
+    //   alertHelper(
+    //     `Found ${invalidCommunityHistoryPredictions.length} community history predictions that point to now-deleted contenders. Delete?`,
+    //     async () => {
+    //       await Promise.all(
+    //         invalidCommunityHistoryPredictions.map((p) =>
+    //           ApiServices.deleteCommunityHistoryPrediction(p.id),
+    //         ),
+    //       ).catch(() => {
+    //         throw new Error('deleteCommunityHistoryPrediction');
+    //       });
+    //     },
+    //   );
+    //   return; // let it be the only thing that happens
+    // }
 
     // [contendersThatShouldBeTheSame]: duplicatedContenderIds[]
     const groupedContenders = (contenders || []).reduce(
@@ -249,11 +249,24 @@ const deleteDuplicatedContenders = async () => {
     );
     console.log('groupsOfDuplicateContenderIds', groupsOfDuplicateContenderIds.length);
 
-    // assign toKeepId to the contender we're keeping (first in list); the rest we can "delete" and replace with "toKeepId" in all used instances
-    const contenderBatches = groupsOfDuplicateContenderIds.map((ids) => ({
-      toKeepId: ids[0],
-      toDeleteIds: ids.slice(1),
-    }));
+    // keep the most used one; delete the rest
+    const contenderBatches = groupsOfDuplicateContenderIds.map((groupOfIds) => {
+      let mostUsedIndex = 0;
+      let mostUsedCount = 0;
+      groupOfIds.forEach((id, i) => {
+        const numTimesUsedInPredictions = predictions.filter(
+          (p) => p.contenderId === id,
+        ).length;
+        if (numTimesUsedInPredictions > mostUsedCount) {
+          mostUsedIndex = i;
+          mostUsedCount = numTimesUsedInPredictions;
+        }
+      });
+      return {
+        toKeepId: groupOfIds[mostUsedIndex], // could be more stategic about this
+        toDeleteIds: groupOfIds.filter((id) => id !== groupOfIds[mostUsedIndex]),
+      };
+    });
 
     const getPredictionsByContenderId = (
       contenderId: string,
@@ -315,33 +328,33 @@ const deleteDuplicatedContenders = async () => {
             }
 
             // PERSONAL HISTORY PREDICTIONS
-            const historyPredictionsThatUseContender = getPredictionsByContenderId(
-              idToDelete,
-              historyPredictions,
-            );
-            console.log(
-              'historyPredictionsThatUseContender',
-              historyPredictionsThatUseContender.length,
-            );
-            // go through each contender that uses movie and replace it with the "keeper"
-            for (const prediction of historyPredictionsThatUseContender) {
-              const { id: predictionId } = prediction;
-              console.log(
-                'updating this prediction:',
-                predictionId,
-                'with this contender:',
-                toKeepId,
-              );
-              // THIS IS GOING TO SWITCH THE CONTENDER MOVIE FROM ONE TO ANOTHER (the keeper)
-              const res1 = await ApiServices.updateHistoryPredictionContender(
-                predictionId,
-                toKeepId,
-              );
-              if (res1.status === 'error')
-                throw new Error('updateHistoryPredictionContender');
-            }
+            // const historyPredictionsThatUseContender = getPredictionsByContenderId(
+            //   idToDelete,
+            //   historyPredictions,
+            // );
+            // console.log(
+            //   'historyPredictionsThatUseContender',
+            //   historyPredictionsThatUseContender.length,
+            // );
+            // // go through each contender that uses movie and replace it with the "keeper"
+            // for (const prediction of historyPredictionsThatUseContender) {
+            //   const { id: predictionId } = prediction;
+            //   console.log(
+            //     'updating this prediction:',
+            //     predictionId,
+            //     'with this contender:',
+            //     toKeepId,
+            //   );
+            //   // THIS IS GOING TO SWITCH THE CONTENDER MOVIE FROM ONE TO ANOTHER (the keeper)
+            //   const res1 = await ApiServices.updateHistoryPredictionContender(
+            //     predictionId,
+            //     toKeepId,
+            //   );
+            //   if (res1.status === 'error')
+            //     throw new Error('updateHistoryPredictionContender');
+            // }
 
-            // COMMUNITY PREDICTIONS
+            // // COMMUNITY PREDICTIONS
             const communityPredictionsThatUseContender = getPredictionsByContenderId(
               idToDelete,
               communityPredictions,
@@ -369,29 +382,29 @@ const deleteDuplicatedContenders = async () => {
             }
 
             // COMMUNITY HISTORY PREDICTIONS
-            const communityHistoryPredictionsThatUseContender =
-              getPredictionsByContenderId(idToDelete, communityHistoryPredictions);
-            console.log(
-              'communityHistoryPredictionsThatUseContender',
-              communityHistoryPredictionsThatUseContender.length,
-            );
-            // go through each contender that uses movie and replace it with the "keeper"
-            for (const prediction of communityHistoryPredictionsThatUseContender) {
-              const { id: predictionId } = prediction;
-              console.log(
-                'updating this prediction:',
-                predictionId,
-                'with this contender:',
-                toKeepId,
-              );
-              // THIS IS GOING TO SWITCH THE CONTENDER MOVIE FROM ONE TO ANOTHER (the keeper)
-              const res1 = await ApiServices.updateCommunityHistoryPredictionContender(
-                predictionId,
-                toKeepId,
-              );
-              if (res1.status === 'error')
-                throw new Error('communityHistoryPredictionsThatUseContender');
-            }
+            // const communityHistoryPredictionsThatUseContender =
+            //   getPredictionsByContenderId(idToDelete, communityHistoryPredictions);
+            // console.log(
+            //   'communityHistoryPredictionsThatUseContender',
+            //   communityHistoryPredictionsThatUseContender.length,
+            // );
+            // // go through each contender that uses movie and replace it with the "keeper"
+            // for (const prediction of communityHistoryPredictionsThatUseContender) {
+            //   const { id: predictionId } = prediction;
+            //   console.log(
+            //     'updating this prediction:',
+            //     predictionId,
+            //     'with this contender:',
+            //     toKeepId,
+            //   );
+            //   // THIS IS GOING TO SWITCH THE CONTENDER MOVIE FROM ONE TO ANOTHER (the keeper)
+            //   const res1 = await ApiServices.updateCommunityHistoryPredictionContender(
+            //     predictionId,
+            //     toKeepId,
+            //   );
+            //   if (res1.status === 'error')
+            //     throw new Error('communityHistoryPredictionsThatUseContender');
+            // }
 
             // VERY IMPORTANT: Deleting the contender comes LAST
 
