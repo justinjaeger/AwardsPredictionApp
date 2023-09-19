@@ -1,5 +1,4 @@
 /* eslint-disable camelcase */
-import { TMDB_API_KEY } from '../../config';
 import axios from 'axios';
 import { handleError, iApiResponse } from '../utils';
 import {
@@ -16,6 +15,8 @@ export type iSearchData = {
   image: string | null;
   description?: string;
 }[];
+
+const TMDB_API_KEY = 'hi'; // TODO: all tmdb requests will be made on backend
 
 export const searchMovies = async (
   searchText: string,

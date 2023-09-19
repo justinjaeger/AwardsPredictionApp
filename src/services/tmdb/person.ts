@@ -1,4 +1,3 @@
-import { TMDB_API_KEY } from '../../config';
 import axios from 'axios';
 import { handleError, iApiResponse } from '../utils';
 import { iTmdbPersonMovieCredits, iTmdbPersonResponse, iTmdbResponse } from './types';
@@ -8,6 +7,8 @@ import { iCachedTmdbPerson } from '../cache/types';
 import { iSearchData } from './search';
 
 type iTmdbPeopleStorage = { [tmdbId: number]: iCachedTmdbPerson };
+
+const TMDB_API_KEY = 'hi'; // TODO: all tmdb requests will be made on backend
 
 // Note: Not used
 export const getTmdbPeople = async (

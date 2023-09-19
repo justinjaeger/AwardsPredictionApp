@@ -1,6 +1,8 @@
 // @ts-ignore
 import crypto from '../../polyfill/crypto';
-import { JWT_SECRET } from '../../config';
+// import { JWT_SECRET } from '../../config';
+
+const JWT_SECRET = 'hi'; // TODO: we won't be using this eventually
 
 function encodeBase64(str: string) {
   return Buffer.from(str, 'binary').toString('base64');

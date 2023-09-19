@@ -1,4 +1,3 @@
-import { TMDB_API_KEY } from '../../config';
 import axios from 'axios';
 import { handleError, iApiResponse } from '../utils';
 import { iTmdbMovieCreditsResponse, iTmdbMovieResponse, iTmdbResponse } from './types';
@@ -7,6 +6,8 @@ import TmdbCache from '../cache/tmdb';
 import { iCachedTmdbMovie } from '../cache/types';
 import { ALL_CATEGORIES } from '../../constants/categories';
 import { CategoryName } from '../../API';
+
+const TMDB_API_KEY = 'hi'; // TODO: all tmdb requests will be made on backend
 
 const getCachedMovieData = (
   result: iTmdbResponse<iTmdbMovieResponse>,
