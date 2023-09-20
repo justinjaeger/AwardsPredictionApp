@@ -35,7 +35,7 @@ const useGoogleSignIn = () => {
       const { data: getUserRes } = await ApiServices.getUserByEmail(email);
       const dbUser = getUserRes?.userByEmail?.items[0];
       if (dbUser) {
-        signInUser(dbUser.id, dbUser.email, dbUser.role);
+        signInUser({ userId: dbUser.id, email: dbUser.email, role: dbUser.role });
         navigateToProfile();
         // navigate somewhere
         return;
@@ -46,7 +46,7 @@ const useGoogleSignIn = () => {
       if (!newUser) {
         throw new Error('Could not create user');
       }
-      signInUser(newUser.id, newUser.email, newUser.role);
+      signInUser({ userId: newUser.id, email: newUser.email, role: newUser.role });
       navigateToProfile();
     } catch (err) {
       console.error(err);

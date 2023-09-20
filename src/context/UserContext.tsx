@@ -1,9 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { UserRole } from '../API';
-import JwtService, { iJwtPayload } from '../services/jwt';
-import ApiServices from '../services/graphql';
 import KeychainStorage from '../services/keychain';
-import KeychainEventEmitter from '../util/keychainEventEmitter';
+import * as EndAllSessionsEventEmitter from '../util/endSessionsEventEmitter';
 import { useNavigation } from '@react-navigation/native';
 import { MainScreenNavigationProp } from '../navigation/types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -11,6 +9,7 @@ import { AsyncStorageKeys } from '../types';
 import { useAsyncEffect } from '../util/hooks';
 import { resetToProfile } from '../util/navigationActions';
 import AMPLIFY_CONFIG from '../../amplify/.config/local-env-info.json';
+import ApiService from '../services/api/requests';
 
 /** Async Storage Functions (to persist data when user closes app)
  * We're not exporting the async functions because we ONLY want to use them in here, or else syncing persisted state with this context is annoying
@@ -20,6 +19,12 @@ import AMPLIFY_CONFIG from '../../amplify/.config/local-env-info.json';
 /**
  * Lets us get the userId and userEmail synchronously
  */
+
+export type iUserInfo = {
+  userId: string;
+  email: string;
+  role: UserRole;
+};
 
 type iVerificationCode =
   | {
@@ -32,7 +37,7 @@ type iUserContext = {
   userId: string | undefined;
   userEmail: string | undefined;
   userRole: UserRole | undefined;
-  signInUser: (id: string, email: string, role: UserRole) => void;
+  signInUser: (userInfo: iUserInfo) => void;
   signOutUser: () => void;
   verificationCode: iVerificationCode;
   generateVerificationCode: () => string | undefined;
@@ -60,7 +65,7 @@ const UserContext = createContext<iUserContext>({
 export const UserProvider = (props: { children: React.ReactNode }) => {
   const navigation = useNavigation<MainScreenNavigationProp>();
 
-  const [userInfo, setUserInfo] = useState<iJwtPayload | undefined>(undefined);
+  const [userInfo, setUserInfo] = useState<iUserInfo | undefined>(undefined);
   const [verificationCode, setVerificationCode] = useState<iVerificationCode>(undefined);
   const [isLoadingAuth, setIsLoadingAuth] = useState<boolean>(true);
   const [isNewUser, setIsNewUser] = useState<boolean>(false);
@@ -74,77 +79,69 @@ export const UserProvider = (props: { children: React.ReactNode }) => {
     setIsNewUser(isNotFirstTime !== 'true');
   }, []);
 
-  // On initial load, OR when keychain/token is set, populates user info to context
-  // attaches event listener that fires whenever KeychainStorage is modified
+  // Attach event listener that can be emitted to end all user sessions if JWT appears to be invalid
   useEffect(() => {
-    const callback = async () => {
-      console.log('keychain event emitter fired');
-      const { data: payload } = await KeychainStorage.get();
-      const { accessToken, refreshToken } = payload || {};
-      // sign out the user if there's no payload / no tokens stored in keychain
-      if (!accessToken || !refreshToken) {
-        console.log('no tokens in keychain');
-        return signOutUser();
+    // ends all sessions from user with this userId
+    const endAllSessions = async () => {
+      console.error('ending all sessions...');
+      setIsLoadingAuth(true);
+      if (userInfo?.userId) {
+        await ApiService.removeToken({ userId: userInfo?.userId });
       }
-      // else, read the token & set user info
-      const { data } = await JwtService.verifyOrRefresh(accessToken, refreshToken);
-      if (!data) {
-        return signOutUser();
-      }
-      const userInfo = data.payload;
-      setUserInfo(userInfo);
+      resetAuth();
     };
 
     // attach event listener
-    KeychainEventEmitter.listen(callback);
-
-    // on initial load we want to get the user data from the keychain/token
-    KeychainEventEmitter.emit();
+    EndAllSessionsEventEmitter.listen(() => endAllSessions());
 
     return () => {
-      KeychainEventEmitter.remove();
+      EndAllSessionsEventEmitter.remove();
     };
   }, []);
 
   // creates the access+refresh tokens and stores them in keychain
-  const signInUser = async (userId: string, email: string, role: UserRole) => {
+  const signInUser = async (userInfo: iUserInfo) => {
     setIsLoadingAuth(true);
-    const payload: iJwtPayload = { userId, email, role };
-    // CREATE ACCESS TOKEN
-    const newAccessToken = JwtService.createAccessToken(payload);
-    // CREATE REFRESH TOKEN
-    const newRefreshToken = JwtService.createRefreshToken(payload);
-    if (newAccessToken && newRefreshToken) {
-      // SET USER INFO
-      setUserInfo(payload);
-      // SET IN KEYCHAIN
-      await KeychainStorage.set(newAccessToken, newRefreshToken);
-      // SET REFRESH TOKEN IN DB
-      if (newRefreshToken) {
-        await ApiServices.createRefreshToken(newRefreshToken, userId);
-      }
-      // NAVIGATE TO PROFILE
-      navigation.dispatch(resetToProfile);
-      // SET IN ASYNC STORAGE (lets us remember whether user has signed in or not)
-      AsyncStorage.setItem(AsyncStorageKeys.IS_NOT_FIRST_TIME, 'true');
+    const { userId } = userInfo;
+    // CREATE/SET ACCESS TOKEN
+    const { data: newAccessToken } = await ApiService.getAccessToken(userId);
+    if (!newAccessToken) {
+      return;
     }
+    await KeychainStorage.set(newAccessToken);
+    // CREATE/SET REFRESH TOKEN
+    const { data: newRefreshToken } = await ApiService.createRefreshToken();
+    if (!newRefreshToken) {
+      return;
+    }
+    await KeychainStorage.set(newAccessToken, newRefreshToken);
+    // SET USER INFO
+    setUserInfo(userInfo);
+    // NAVIGATE TO PROFILE
+    navigation.dispatch(resetToProfile);
+    // SET IN ASYNC STORAGE (lets us remember whether user has signed in or not)
+    AsyncStorage.setItem(AsyncStorageKeys.IS_NOT_FIRST_TIME, 'true');
     setIsLoadingAuth(false);
   };
 
+  const resetAuth = async () => {
+    await KeychainStorage.remove();
+    setUserInfo(undefined);
+    setIsLoadingAuth(false);
+    navigation.navigate('Authenticator');
+  };
+
+  // signs out user on a single device
   const signOutUser = async () => {
     console.error('signOutUser');
     setIsLoadingAuth(true);
     const { data: payload } = await KeychainStorage.get();
     const { refreshToken } = payload || {};
-    // DELETE REFRESH TOKEN FROM DB
-    // get the userId from the jwt
+    // delete refresh token from db
     if (refreshToken) {
-      await ApiServices.deleteToken(refreshToken);
+      await ApiService.removeToken({ token: refreshToken });
     }
-    await KeychainStorage.remove();
-    setUserInfo(undefined);
-    setIsLoadingAuth(false);
-    navigation.navigate('Authenticator');
+    resetAuth();
   };
 
   const generateVerificationCode = () => {
