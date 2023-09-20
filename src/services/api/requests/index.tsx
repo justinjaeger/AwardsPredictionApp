@@ -1,4 +1,4 @@
-import UserRequests from './user';
+import * as UserRequests from './user';
 
 const ApiService = {
   ...UserRequests,

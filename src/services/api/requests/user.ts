@@ -3,11 +3,11 @@ import api from '../api';
 
 const PAGINATED_LIMIT = 15;
 
-const test = async () => {
+export const test = async () => {
   return await api.get<{ data: string }>('/');
 };
 
-const getUser = async ({
+export const getUser = async ({
   userId,
   email,
   oauthId,
@@ -35,7 +35,7 @@ const getUser = async ({
   return await api.get<WithId<User>>(`user${queryString}`);
 };
 
-const listFollowingPaginated = async ({
+export const listFollowingPaginated = async ({
   userId,
   pageNumber,
   includeRecentPredictionSets, // pass for when we want friends' recent predictions
@@ -49,7 +49,7 @@ const listFollowingPaginated = async ({
   );
 };
 
-const listFollowersPaginated = async ({
+export const listFollowersPaginated = async ({
   userId,
   pageNumber,
 }: {
@@ -62,7 +62,7 @@ const listFollowersPaginated = async ({
 };
 
 // TODO: Be careful using this because it can be expensive. Don't debounce, just submit on blur or with a button
-const searchUsers = async ({
+export const searchUsers = async ({
   query,
   pageNumber,
 }: {
@@ -81,20 +81,10 @@ type iCreateUserPayload = {
   username?: string;
 };
 
-const createUser = async (payload: iCreateUserPayload) => {
+export const createUser = async (payload: iCreateUserPayload) => {
   return await api.post<string | undefined, iCreateUserPayload>('users', payload);
 };
 
-const updateUser = async (payload: Partial<User>) => {
+export const updateUser = async (payload: Partial<User>) => {
   return await api.put<undefined, Partial<User>>('users', payload);
-};
-
-export default {
-  test,
-  getUser,
-  listFollowingPaginated,
-  listFollowersPaginated,
-  searchUsers,
-  createUser,
-  updateUser,
 };
