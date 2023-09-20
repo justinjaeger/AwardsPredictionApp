@@ -3,10 +3,6 @@ import api from '../api';
 
 const PAGINATED_LIMIT = 15;
 
-export const test = async () => {
-  return await api.get<{ data: string }>('/');
-};
-
 export const getUser = async ({
   userId,
   email,
