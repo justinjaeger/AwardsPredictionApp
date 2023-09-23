@@ -1,20 +1,16 @@
 import React from 'react';
+import GoogleIcon from '../../../../assets/google.svg';
 import { TouchableOpacity, useWindowDimensions, View } from 'react-native';
-import COLORS from '../../../constants/colors';
-import { SubHeaderLight } from '../../../components/Text';
-import CustomIcon from '../../../components/CustomIcon';
-import { useNavigation } from '@react-navigation/native';
-import { AuthTabNavigationProp } from '../../../navigation/types';
+import COLORS from '../../../../constants/colors';
+import { SubHeaderLight } from '../../../../components/Text';
 
-const AppleOauthButton = () => {
+const GoogleOauthButton = ({ onPress }: { onPress: () => Promise<void> }) => {
   const { width } = useWindowDimensions();
-  const navigation = useNavigation<AuthTabNavigationProp>();
 
   return (
     <>
       <TouchableOpacity
         style={{
-          marginTop: 20,
           height: 60,
           alignSelf: 'center',
           width: Math.min(400, width * 0.8),
@@ -22,9 +18,7 @@ const AppleOauthButton = () => {
           borderRadius: 200,
           position: 'relative',
         }}
-        onPress={() => {
-          navigation.navigate('Email');
-        }}
+        onPress={() => onPress()}
         activeOpacity={0.9}
       >
         <View
@@ -37,11 +31,7 @@ const AppleOauthButton = () => {
           }}
         >
           <View style={{ width: '30%', alignItems: 'center' }}>
-            <CustomIcon
-              name={'email-outline'}
-              color={COLORS.primary}
-              styles={{ borderRadius: 100 }}
-            />
+            <GoogleIcon width={30} height={60} />
           </View>
           <SubHeaderLight
             style={{
@@ -49,7 +39,7 @@ const AppleOauthButton = () => {
               color: COLORS.primary,
             }}
           >
-            Sign in with Email
+            Sign in with Google
           </SubHeaderLight>
         </View>
       </TouchableOpacity>
@@ -57,4 +47,4 @@ const AppleOauthButton = () => {
   );
 };
 
-export default AppleOauthButton;
+export default GoogleOauthButton;

@@ -1,22 +1,19 @@
-import React, { useEffect } from 'react';
-import AppleIcon from '../../../assets/apple.svg';
-import { TouchableOpacity, useWindowDimensions, View } from 'react-native';
-import COLORS from '../../../constants/colors';
-import { SubHeaderLight } from '../../../components/Text';
+import { useEffect, useState } from 'react';
 import { appleAuth } from '@invertase/react-native-apple-authentication';
 import Snackbar from '../../../components/Snackbar';
-import ApiServices from '../../../services/graphql';
-import { UserRole } from '../../../API';
 import { useAuth } from '../../../context/UserContext';
+import MongoApi from '../../../services/api/requests';
 
-const AppleOauthButton = () => {
-  const { width } = useWindowDimensions();
+const useAppleOauth = () => {
   const { signInUser } = useAuth();
 
-  const onAppleButtonPress = async () => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const appleSignIn = async () => {
     // NOTE: AFTER FIRST LOGIN, THE USER'S INFORMATION MAY NOT BE RETURNED.
     // ON FIRST LOGIN, WILL RECEIVE EMAIL and NAME, THEN SUBSEQUENT LOGINS MAY JUST BE A UUID
     try {
+      setIsLoading(true);
       // performs login request
       const appleAuthRequestResponse = await appleAuth.performRequest({
         requestedOperation: appleAuth.Operation.LOGIN,
@@ -51,31 +48,31 @@ const AppleOauthButton = () => {
 
       // Get user from DB based on oauthId
       // attempt to get user with the oauthId apple sent back
-      const { data: getUserRes } = await ApiServices.getUserByOauthId(oauthId);
-      let dbUser = getUserRes?.userByOauthId?.items[0];
+      const { data: existingUser } = await MongoApi.getUser({ oauthId });
+      let dbUser = existingUser;
 
       // if user with this email doesn't exist, create the user
       if (!dbUser) {
         if (!email) {
           throw new Error('No email found, cannot create user');
         }
-        const { status, data } = await ApiServices.createUser(
+        const { status, data: newUser } = await MongoApi.createUser({
           email,
-          UserRole.USER,
           name,
           oauthId,
-        );
-        const newUser = data?.createUser;
+        });
         if (status === 'error' || !newUser) {
           throw new Error('Error creating user');
         }
         dbUser = newUser;
       }
       // dbUser shouldn't be undefined; sign in the user
-      signInUser({ userId: dbUser.id, email: dbUser.email, role: dbUser.role });
+      signInUser({ userId: dbUser._id, email: dbUser.email });
     } catch (e) {
       Snackbar.error(JSON.stringify(e) || 'Something went wrong');
       console.error(e);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -86,47 +83,7 @@ const AppleOauthButton = () => {
     });
   }, []); // passing in an empty array as the second argument ensures this is only ran once when component mounts initially.
 
-  return (
-    <>
-      <TouchableOpacity
-        style={{
-          marginTop: 20,
-          height: 60,
-          alignSelf: 'center',
-          width: Math.min(400, width * 0.8),
-          backgroundColor: COLORS.white,
-          borderRadius: 200,
-          position: 'relative',
-        }}
-        onPress={() => {
-          onAppleButtonPress();
-        }}
-        activeOpacity={0.9}
-      >
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            height: '100%',
-            marginTop: -1,
-            width: '100%',
-          }}
-        >
-          <View style={{ width: '30%', alignItems: 'center' }}>
-            <AppleIcon width={55} height={55} />
-          </View>
-          <SubHeaderLight
-            style={{
-              width: '70%',
-              color: COLORS.primary,
-            }}
-          >
-            Sign in with Apple
-          </SubHeaderLight>
-        </View>
-      </TouchableOpacity>
-    </>
-  );
+  return { appleSignIn, isLoading };
 };
 
-export default AppleOauthButton;
+export default useAppleOauth;
