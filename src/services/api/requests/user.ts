@@ -78,7 +78,7 @@ type iCreateUserPayload = {
 };
 
 export const createUser = async (payload: iCreateUserPayload) => {
-  return await api.post<string, iCreateUserPayload>('users', payload);
+  return await api.post<WithId<User>, iCreateUserPayload>('users', payload);
 };
 
 export const updateUser = async (payload: Partial<User>) => {
