@@ -72,7 +72,7 @@ const AppleOauthButton = () => {
         dbUser = newUser;
       }
       // dbUser shouldn't be undefined; sign in the user
-      signInUser(dbUser.id, dbUser.email, dbUser.role);
+      signInUser({ userId: dbUser.id, email: dbUser.email, role: dbUser.role });
     } catch (e) {
       Snackbar.error(JSON.stringify(e) || 'Something went wrong');
       console.error(e);

@@ -4,7 +4,6 @@ import Snackbar from '../components/Snackbar';
 import SlackApi, { SlackChannel } from './slack';
 import JwtService from './jwt';
 import KeychainStorage from './keychain';
-import KeychainEventEmitter from '../util/keychainEventEmitter';
 
 export interface iApiResponse<T> {
   status: 'success' | 'error';
@@ -81,7 +80,7 @@ export const GraphqlAPIProtected = async <Query, Variables>(
     verifiedAccessToken = data?.verifiedAccessToken;
     if (!verifiedAccessToken) {
       await KeychainStorage.remove();
-      KeychainEventEmitter.emit(); // this will sign the user out since no longer in KeychainStorage
+      //   EndAllSessionsEventEmitter.emit(); // this will sign the user out since no longer in KeychainStorage
       verifiedAccessToken = 'none'; // this is going to throw a 401 error which is what we want
     } else if (verifiedAccessToken !== accessToken) {
       // if there's a new token

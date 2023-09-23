@@ -38,7 +38,7 @@ const Auth = () => {
       console.error('something went wrong getting user by email during sign in');
       return;
     }
-    signInUser(user.id, user.email, user.role);
+    signInUser({ userId: user.id, email: user.email, role: user.role });
   };
   useDeepLink((u: string) => handleSignIn(u)); // listens for verification link
 

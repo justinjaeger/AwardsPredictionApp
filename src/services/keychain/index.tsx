@@ -1,19 +1,22 @@
 import * as Keychain from 'react-native-keychain';
 import { handleError, iApiResponse } from '../utils';
-import KeychainEventEmitter from '../../util/keychainEventEmitter';
 
-export type iKeychainPayload = { accessToken: string; refreshToken: string };
+export type iKeychainPayload = { accessToken: string; refreshToken?: string };
 
 const KEYCHAIN_KEY_NAME = 'awardExpertToken';
 
+/**
+ * Usually both are set at once, but at first,
+ * the access token is set without the refresh token,
+ * so we can make that request for the refresh token
+ */
 const set = async (
   accessToken: string,
-  refreshToken: string,
+  refreshToken?: string,
 ): Promise<iApiResponse<any>> => {
   const keychainPayload: iKeychainPayload = { accessToken, refreshToken };
   try {
     await Keychain.setGenericPassword(KEYCHAIN_KEY_NAME, JSON.stringify(keychainPayload));
-    KeychainEventEmitter.emit(); // important that this is AFTER it's set
     return { status: 'success' };
   } catch (error) {
     return handleError('Error storing keychain credentials', error);
