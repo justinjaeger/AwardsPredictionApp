@@ -13,11 +13,10 @@ export const getEvents = async ({
     queryString += `maxYear=${yearOfEvent}&minYear=${yearOfEvent}`;
   }
   if (awardsBody) {
-    if (yearOfEvent) {
-      queryString += `&awardsBody=${awardsBody}`;
-    } else {
-      queryString += `awardsBody=${awardsBody}`;
+    if (queryString !== '?') {
+      queryString += '&';
     }
+    queryString += `awardsBody=${awardsBody}`;
   }
 
   return await api.get<WithId<EventModel[]>>(
