@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import COLORS from '../../constants/colors';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import OauthPage from './Oauth';
-import AuthRoot from './Root';
+import EmailPage from './Email';
 import BackButton from '../../components/Buttons/BackButton';
 import SafeAreaViewFixed from '../../components/SafeAreaViewFixed';
 
@@ -31,7 +31,7 @@ const AuthTabs = () => {
         }}
       >
         <Tab.Screen name="Social" component={OauthPage} />
-        <Tab.Screen name="Email" component={AuthRoot} />
+        <Tab.Screen name="Email" component={EmailPage} />
       </Tab.Navigator>
     </SafeAreaViewFixed>
   );

@@ -1,44 +1,31 @@
 import React, { useState } from 'react';
 import { Keyboard, ScrollView, View } from 'react-native';
-import FormInput from '../../components/Inputs/FormInput';
-import { SubmitButton } from '../../components/Buttons';
-import Snackbar from '../../components/Snackbar';
-import { HeaderLight } from '../../components/Text';
-import COLORS from '../../constants/colors';
-import useDeepLink from '../../hooks/useDeepLink';
-import { useAuth } from '../../context/UserContext';
-import LoadingStatueModal from '../../components/LoadingStatueModal';
-import MongoApi from '../../services/api/requests';
+import FormInput from '../../../components/Inputs/FormInput';
+import { SubmitButton } from '../../../components/Buttons';
+import Snackbar from '../../../components/Snackbar';
+import { HeaderLight } from '../../../components/Text';
+import COLORS from '../../../constants/colors';
+import { useAuth } from '../../../context/UserContext';
+import LoadingStatueModal from '../../../components/LoadingStatueModal';
+import MongoApi from '../../../services/api/requests';
+import useMagicLinkListener from './useMagicLinkListener';
 
 type iAuthScreen = 'signIn' | 'confirmCode';
 
 const Auth = () => {
-  const { signInUser, isLoadingAuth, isNewUser } = useAuth();
+  const { isLoadingAuth, isNewUser } = useAuth();
+
+  const { isLoading: isLoadingVerification } = useMagicLinkListener((message: string) => {
+    // onFail callback:
+    console.error(message);
+    Snackbar.error(message);
+    setAuthScreen('signIn');
+  });
 
   const [email, setEmail] = useState<string>('');
   const validEmail = email.length > 0 && email.includes('.') && email.includes('@');
   const [loading, setLoading] = useState<boolean>(false);
   const [authScreen, setAuthScreen] = useState<iAuthScreen>('signIn');
-
-  // when verification link is clicked, this callback fires
-  const handleSignIn = async (url: string) => {
-    const { data: email } = await MongoApi.verifyEmailMagicLink(url); // handles snackbar error messages already
-    if (!email) {
-      console.error('error: confirmation code not confirmed');
-      setAuthScreen('signIn');
-      return;
-    }
-    const { data: user } = await MongoApi.getUser({ email });
-    if (!user) {
-      console.error('something went wrong getting user by email during sign in');
-      return;
-    }
-    signInUser({ userId: user._id, email: user.email, role: user.role });
-  };
-
-  // listen for verification link
-  // looks like oscar://signin/?token={jwt}&email={email")
-  useDeepLink((u: string) => handleSignIn(u));
 
   const submitEmail = async () => {
     setLoading(true);
@@ -61,7 +48,7 @@ const Auth = () => {
 
   return (
     <>
-      <LoadingStatueModal visible={isLoadingAuth} />
+      <LoadingStatueModal visible={isLoadingAuth || isLoadingVerification} />
       <ScrollView
         style={{ width: '100%', backgroundColor: COLORS.primary }}
         contentContainerStyle={{
