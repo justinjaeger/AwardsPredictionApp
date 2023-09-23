@@ -9,7 +9,7 @@ import { AsyncStorageKeys } from '../types';
 import { useAsyncEffect } from '../util/hooks';
 import { resetToProfile } from '../util/navigationActions';
 import AMPLIFY_CONFIG from '../../amplify/.config/local-env-info.json';
-import ApiService from '../services/api/requests';
+import MongoApi from '../services/api/requests';
 
 /** Async Storage Functions (to persist data when user closes app)
  * We're not exporting the async functions because we ONLY want to use them in here, or else syncing persisted state with this context is annoying
@@ -86,7 +86,7 @@ export const UserProvider = (props: { children: React.ReactNode }) => {
       console.error('ending all sessions...');
       setIsLoadingAuth(true);
       if (userInfo?.userId) {
-        await ApiService.removeToken({ userId: userInfo?.userId });
+        await MongoApi.removeToken({ userId: userInfo?.userId });
       }
       resetAuth();
     };
@@ -104,13 +104,13 @@ export const UserProvider = (props: { children: React.ReactNode }) => {
     setIsLoadingAuth(true);
     const { userId } = userInfo;
     // CREATE/SET ACCESS TOKEN
-    const { data: newAccessToken } = await ApiService.getAccessToken(userId);
+    const { data: newAccessToken } = await MongoApi.getAccessToken(userId);
     if (!newAccessToken) {
       return;
     }
     await KeychainStorage.set(newAccessToken);
     // CREATE/SET REFRESH TOKEN
-    const { data: newRefreshToken } = await ApiService.createRefreshToken();
+    const { data: newRefreshToken } = await MongoApi.createRefreshToken();
     if (!newRefreshToken) {
       return;
     }
@@ -139,7 +139,7 @@ export const UserProvider = (props: { children: React.ReactNode }) => {
     const { refreshToken } = payload || {};
     // delete refresh token from db
     if (refreshToken) {
-      await ApiService.removeToken({ token: refreshToken });
+      await MongoApi.removeToken({ token: refreshToken });
     }
     resetAuth();
   };

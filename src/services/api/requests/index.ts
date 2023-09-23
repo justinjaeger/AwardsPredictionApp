@@ -1,9 +1,9 @@
 import * as UserRequests from './user';
 import * as TokenRequests from './token';
 
-const ApiService = {
+const MongoApi = {
   ...UserRequests,
   ...TokenRequests,
 };
 
-export default ApiService;
+export default MongoApi;
