@@ -4,6 +4,7 @@ import React from 'react';
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import MainNavigator from './MainNavigator';
 import { UserProvider } from '../context/UserContext';
+import { CategoryProvider } from '../context/CategoryContext';
 
 // onReady={() => RNBootSplash.hide()} (could add to NavigationContainer)
 const Navigation = () => {
@@ -19,7 +20,9 @@ const Navigation = () => {
   return (
     <NavigationContainer theme={theme}>
       <UserProvider>
-        <MainNavigator />
+        <CategoryProvider>
+          <MainNavigator />
+        </CategoryProvider>
       </UserProvider>
     </NavigationContainer>
   );
