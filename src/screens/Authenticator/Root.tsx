@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { AuthProvider } from './context';
 import { Keyboard, ScrollView, View } from 'react-native';
 import FormInput from '../../components/Inputs/FormInput';
 import { SubmitButton } from '../../components/Buttons';
@@ -61,7 +60,7 @@ const Auth = () => {
   };
 
   return (
-    <AuthProvider>
+    <>
       <LoadingStatueModal visible={isLoadingAuth} />
       <ScrollView
         style={{ width: '100%', backgroundColor: COLORS.primary }}
@@ -104,7 +103,7 @@ const Auth = () => {
           </View>
         )}
       </ScrollView>
-    </AuthProvider>
+    </>
   );
 };
 
