@@ -1,23 +1,20 @@
 import React, { useState } from 'react';
-// @ts-ignore - doesn't have typescript package
 import { AuthProvider } from './context';
 import { Keyboard, ScrollView, View } from 'react-native';
 import FormInput from '../../components/Inputs/FormInput';
 import { SubmitButton } from '../../components/Buttons';
 import Snackbar from '../../components/Snackbar';
 import { HeaderLight } from '../../components/Text';
-import ApiServices from '../../services/graphql';
 import COLORS from '../../constants/colors';
-import { UserRole } from '../../API';
-import EmailService from '../../services/email';
 import useDeepLink from '../../hooks/useDeepLink';
 import { useAuth } from '../../context/UserContext';
 import LoadingStatueModal from '../../components/LoadingStatueModal';
+import MongoApi from '../../services/api/requests';
 
 type iAuthScreen = 'signIn' | 'confirmCode';
 
 const Auth = () => {
-  const { signInUser, isLoadingAuth, isNewUser, amplifyEnv } = useAuth();
+  const { signInUser, isLoadingAuth, isNewUser } = useAuth();
 
   const [email, setEmail] = useState<string>('');
   const validEmail = email.length > 0 && email.includes('.') && email.includes('@');
@@ -26,36 +23,39 @@ const Auth = () => {
 
   // when verification link is clicked, this callback fires
   const handleSignIn = async (url: string) => {
-    const maybeEmail = await EmailService.confirmCode(url); // handles snackbar error messages already
-    if (!maybeEmail) {
+    const { data: email } = await MongoApi.verifyEmailMagicLink(url); // handles snackbar error messages already
+    if (!email) {
       console.error('error: confirmation code not confirmed');
       setAuthScreen('signIn');
       return;
     }
-    const { data } = await ApiServices.getUserByEmail(maybeEmail);
-    const user = data?.userByEmail?.items?.[0];
+    const { data: user } = await MongoApi.getUser({ email });
     if (!user) {
       console.error('something went wrong getting user by email during sign in');
       return;
     }
-    signInUser({ userId: user.id, email: user.email, role: user.role });
+    signInUser({ userId: user._id, email: user.email, role: user.role });
   };
-  useDeepLink((u: string) => handleSignIn(u)); // listens for verification link
+
+  // listen for verification link
+  // looks like oscar://signin/?token={jwt}&email={email")
+  useDeepLink((u: string) => handleSignIn(u));
 
   const submitEmail = async () => {
     setLoading(true);
-    const { data } = await ApiServices.getUserByEmail(email);
-    let user = data?.userByEmail?.items?.[0];
+    const getUserRes = await MongoApi.getUser({ email });
+    let user = getUserRes.data;
     // if no user exists, create one
     if (!user) {
-      const { data: createUserData } = await ApiServices.createUser(email, UserRole.USER);
-      user = createUserData?.createUser;
+      const createUserRes = await MongoApi.createUser({ email });
+      user = createUserRes.data;
     }
     if (!user) {
       Snackbar.error('error signing in with email');
     } else {
+      // whether user is new or not, send email to log in
       setAuthScreen('confirmCode');
-      await EmailService.sendCode(email, amplifyEnv);
+      await MongoApi.sendVerificationEmail(email);
     }
     setLoading(false);
   };
