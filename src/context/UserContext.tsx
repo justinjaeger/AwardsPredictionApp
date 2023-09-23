@@ -22,7 +22,7 @@ import { UserRole } from '../types/api';
 export type iUserInfo = {
   userId: string;
   email: string;
-  role: UserRole;
+  role?: UserRole;
 };
 
 type iVerificationCode =
