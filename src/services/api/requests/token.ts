@@ -12,13 +12,15 @@ export const createRefreshToken = async () => {
 };
 
 /**
- * If you pass a token, it deletes that token
- * If you don't pass a token, it deletes all tokens associated with the authorized user
+ * Remove single refresh token
  */
-type iRemoveTokenPayload = {
-  token?: string;
-  userId?: string;
+export const removeToken = async (token: string) => {
+  return await api.delete<undefined>(`token/${token}`);
 };
-export const removeToken = async (payload: iRemoveTokenPayload) => {
-  return await api.put<undefined, iRemoveTokenPayload>('tokens', payload);
+
+/**
+ * Remove all refresh tokens associated with user
+ */
+export const removeUserTokens = async () => {
+  return await api.delete<undefined>('tokens/user');
 };

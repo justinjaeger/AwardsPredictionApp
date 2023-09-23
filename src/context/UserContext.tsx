@@ -86,7 +86,7 @@ export const UserProvider = (props: { children: React.ReactNode }) => {
       console.error('ending all sessions...');
       setIsLoadingAuth(true);
       if (userInfo?.userId) {
-        await MongoApi.removeToken({ userId: userInfo?.userId });
+        await MongoApi.removeUserTokens();
       }
       resetAuth();
     };
@@ -139,7 +139,7 @@ export const UserProvider = (props: { children: React.ReactNode }) => {
     const { refreshToken } = payload || {};
     // delete refresh token from db
     if (refreshToken) {
-      await MongoApi.removeToken({ token: refreshToken });
+      await MongoApi.removeToken(refreshToken);
     }
     resetAuth();
   };
