@@ -3,7 +3,7 @@ import { useAuth } from './UserContext';
 import { CategoryName, EventModel, WithId } from '../types/api';
 
 /**
- * Context that wraps the "read only" screens shared by global and personal
+ * Context that wraps the "read only" screens shared by community and personal
  */
 
 type iPersonalCommunityTab = 'personal' | 'community';
