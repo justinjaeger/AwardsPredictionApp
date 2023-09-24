@@ -115,20 +115,17 @@ export type Contender = {
   amplify_id?: string;
 };
 
-export type iCategories = Record<
-  CategoryName,
-  {
-    type: CategoryType;
-    name: string;
-    slots?: number; // 5 by default
-    phase?: Phase;
-    shortlistDateTime?: Date;
-    hideUntilShortlisted?: boolean;
-  }
->;
+export type iCategory = {
+  type: CategoryType;
+  name: string;
+  slots?: number; // 5 by default
+  phase?: Phase;
+  shortlistDateTime?: Date;
+  hideUntilShortlisted?: boolean;
+};
 
 export type EventModel = {
-  categories: iCategories;
+  categories: Record<CategoryName, iCategory>;
   awardsBody: AwardsBody;
   year: number;
   status: EventStatus;
@@ -170,20 +167,18 @@ export type Person = {
   amplify_id?: string;
 };
 
-export type iPredictions = Array<{
+export type iPrediction = {
   contenderId: ObjectId;
   ranking: number;
   movieId: ObjectId;
   personId?: ObjectId;
   songId?: ObjectId;
   numPredicting?: Record<number, number>; // only applies to community predictions
-}>;
+};
 
 export type iCategoryPrediction = {
-  type: CategoryType;
   createdAt: Date;
-  predictions: iPredictions;
-  phase?: Phase | undefined;
+  predictions: Array<iPrediction>;
 };
 
 export type PredictionSet = {
@@ -219,14 +214,14 @@ export type Token = {
   token: string;
 };
 
-export type iRecentPredictions = Array<{
+export type iRecentPrediction = {
   awardsBody: string;
   category: string;
   year: number;
   predictionSetId: ObjectId;
   createdAt: Date;
-  topPredictions: iPredictions;
-}>;
+  topPredictions: iPrediction[];
+};
 
 export type User = {
   email: string;
@@ -239,6 +234,6 @@ export type User = {
   followingCount?: number;
   followerCount?: number;
   eventsPredicting?: ObjectId[];
-  recentPredictionSets?: iRecentPredictions;
+  recentPredictionSets?: iRecentPrediction[];
   amplify_id?: string;
 };
