@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useAuth } from './UserContext';
-import { CategoryName, EventModel } from '../types/api';
+import { CategoryName, EventModel, WithId } from '../types/api';
 
 /**
  * Context that wraps the "read only" screens shared by global and personal
@@ -9,8 +9,8 @@ import { CategoryName, EventModel } from '../types/api';
 type iPersonalCommunityTab = 'personal' | 'community';
 
 type CategoryNameContext = {
-  event: EventModel | undefined;
-  setEvent: (event: EventModel) => void;
+  event: WithId<EventModel> | undefined;
+  setEvent: (event: WithId<EventModel>) => void;
   category: CategoryName | undefined;
   setCategory: (category: CategoryName) => void;
   personalCommunityTab: iPersonalCommunityTab;
@@ -35,7 +35,7 @@ const CategoryContext = createContext<CategoryNameContext>({
 export const CategoryProvider = (props: { children: React.ReactNode }) => {
   const { userId } = useAuth();
 
-  const [event, setEvent] = useState<EventModel>();
+  const [event, setEvent] = useState<WithId<EventModel>>();
   const [category, setCategory] = useState<CategoryName>();
   const [personalCommunityTab, setPersonalCommunityTab] = useState<iPersonalCommunityTab>(
     userId === undefined ? 'community' : 'personal',
