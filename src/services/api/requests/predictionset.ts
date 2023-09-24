@@ -27,7 +27,7 @@ export const getPredictionSet = async ({
     queryString += `yyyymmdd=${yyyymmdd}`;
   }
 
-  return await api.get<WithId<PredictionSet[]>>(
+  return await api.get<WithId<PredictionSet>>(
     `predictionsets/${userId}/${eventId}${queryString === '?' ? '' : queryString}`,
   );
 };
