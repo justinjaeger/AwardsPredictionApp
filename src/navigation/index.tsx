@@ -5,6 +5,7 @@ import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import MainNavigator from './MainNavigator';
 import { UserProvider } from '../context/UserContext';
 import { CategoryProvider } from '../context/CategoryContext';
+import { AsyncStorePrefetchProvider } from '../context/AsyncStorePrefetch';
 
 // onReady={() => RNBootSplash.hide()} (could add to NavigationContainer)
 const Navigation = () => {
@@ -19,11 +20,13 @@ const Navigation = () => {
 
   return (
     <NavigationContainer theme={theme}>
-      <UserProvider>
-        <CategoryProvider>
-          <MainNavigator />
-        </CategoryProvider>
-      </UserProvider>
+      <AsyncStorePrefetchProvider>
+        <UserProvider>
+          <CategoryProvider>
+            <MainNavigator />
+          </CategoryProvider>
+        </UserProvider>
+      </AsyncStorePrefetchProvider>
     </NavigationContainer>
   );
 };

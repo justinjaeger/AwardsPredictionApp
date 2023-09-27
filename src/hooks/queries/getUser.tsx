@@ -1,11 +1,15 @@
 import { useQuery } from '@tanstack/react-query';
-import getUser from '../../services/queryFuncs/getUser';
 import { QueryKeys } from '../../types';
+import MongoApi from '../../services/api/requests';
 
-const useQueryGetUser = (id: string | undefined) => {
+const useQueryGetUser = (userId: string | undefined) => {
   const { isLoading, data, refetch } = useQuery({
-    queryKey: [QueryKeys.USER + id],
-    queryFn: () => getUser(id),
+    queryKey: [QueryKeys.USER + userId],
+    queryFn: async () => {
+      if (!userId) return undefined;
+      const { data: user } = await MongoApi.getUser({ userId });
+      return user;
+    },
   });
 
   return { data, isLoading, refetch };

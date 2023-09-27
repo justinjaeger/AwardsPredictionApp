@@ -3,7 +3,6 @@ import { Animated } from 'react-native';
 import { PredictionsParamList } from '../../../navigation/types';
 import { useTypedNavigation } from '../../../util/hooks';
 import { useCategory } from '../../../context/CategoryContext';
-import { iCategory, iEvent, iIndexedPredictionsByCategory } from '../../../types';
 import { eventToString } from '../../../util/stringConversions';
 import LoadingStatue from '../../../components/LoadingStatue';
 import SignedOutState from '../../../components/SignedOutState';
@@ -16,6 +15,7 @@ import { useAuth } from '../../../context/UserContext';
 import { StackActions } from '@react-navigation/native';
 import { useLoading } from '../../../hooks/animatedState/useLoading';
 import { iEventDisplayState } from '../../../context/DisplayStateContext';
+import { CategoryName, PredictionSet, WithId } from '../../../types/api';
 
 // This is shared by EventPersonalCommunity AND EventFromProfile
 const Event = ({
@@ -32,17 +32,16 @@ const Event = ({
   expandedOpacity: Animated.Value;
   delayedDisplay: iEventDisplayState;
   userId: string | undefined; // if undefined means user is logged out
-  predictionData: iIndexedPredictionsByCategory | undefined;
+  predictionData: WithId<PredictionSet> | undefined;
   isLoading: boolean;
 }) => {
   const { userId: authUserId } = useAuth();
-  const { event: _event, setCategory, date } = useCategory();
+  const { event: _event, setCategory } = useCategory();
+  const event = _event!;
   const navigation = useTypedNavigation<PredictionsParamList>();
 
   const { loadingOpacity, bodyOpacity } = useLoading(isLoading);
 
-  const isHistory = !!date;
-  const event = _event as iEvent;
   const isAuthUserProfile = userId === authUserId;
 
   // define the header
@@ -57,7 +56,7 @@ const Event = ({
     return <SignedOutState />;
   }
 
-  const onSelectCategory = async (category: iCategory) => {
+  const onSelectCategory = async (category: CategoryName) => {
     setCategory(category);
     if (isAuthUserProfile) {
       navigation.navigate('Category', { userId });
@@ -66,21 +65,21 @@ const Event = ({
     }
   };
 
-  const iterablePredictionData = _.values(predictionData || {});
+  const iterablePredictionData = _.values(predictionData?.categories || {});
 
   // only applies to community since all categories are updated at once
   const lastUpdated =
     tab === 'community'
       ? // if community, all categories were last updated at same time
-        iterablePredictionData[0]?.updatedAt || ''
+        iterablePredictionData[0]?.createdAt || ''
       : // if personal, find the most recent updatedAt on category (bc this is for entire event)
-        iterablePredictionData.reduce((acc, prediction) => {
-          const curUpdatedAt = prediction.updatedAt;
-          if (acc === '' || curUpdatedAt > acc) {
+        iterablePredictionData.reduce((acc: Date, prediction) => {
+          const curUpdatedAt = prediction.createdAt;
+          if (curUpdatedAt > acc) {
             acc = curUpdatedAt;
           }
           return acc;
-        }, '');
+        }, new Date('1970-01-01'));
   const lastUpdatedString = formatLastUpdated(new Date(lastUpdated || ''));
 
   return (
@@ -112,10 +111,10 @@ const Event = ({
             display: delayedDisplay === 'collapsed' ? 'flex' : 'none',
           }}
         >
-          <LastUpdatedText lastUpdated={lastUpdatedString} isDisabled={isHistory} />
+          <LastUpdatedText lastUpdated={lastUpdatedString} />
           <CategoryList
             isCollapsed={true}
-            onSelectCategory={(category: iCategory) => onSelectCategory(category)}
+            onSelectCategory={(category: CategoryName) => onSelectCategory(category)}
             predictionData={predictionData}
             isAuthUserProfile={isAuthUserProfile}
           />
@@ -127,10 +126,10 @@ const Event = ({
             display: delayedDisplay === 'default' ? 'flex' : 'none',
           }}
         >
-          <LastUpdatedText lastUpdated={lastUpdatedString} isDisabled={isHistory} />
+          <LastUpdatedText lastUpdated={lastUpdatedString} />
           <CategoryList
             isCollapsed={false}
-            onSelectCategory={(category: iCategory) => onSelectCategory(category)}
+            onSelectCategory={(category: CategoryName) => onSelectCategory(category)}
             predictionData={predictionData}
             isAuthUserProfile={isAuthUserProfile && tab === 'personal'}
           />

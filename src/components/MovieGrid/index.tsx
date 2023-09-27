@@ -1,35 +1,32 @@
 import { Divider } from '@ui-kitten/components';
 import React from 'react';
 import { StyleProp, useWindowDimensions, View, ViewStyle } from 'react-native';
-import { PredictionType } from '../../API';
-import { getCategorySlots } from '../../constants/categories';
 import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
-import { useCategory } from '../../context/CategoryContext';
-import { iPrediction } from '../../types';
 import PosterFromTmdbId from '../Images/PosterFromTmdbId';
+import { iCategory, iPrediction, Movie, Person } from '../../types/api';
+import { useAsyncStorePrefetch } from '../../context/AsyncStorePrefetch';
 
-const MovieGrid = (props: {
+const MovieGrid = ({
+  predictions,
+  categoryInfo,
+  isCollapsed,
+  totalWidth: _totalWidth,
+  noLine,
+  style,
+}: {
   predictions: iPrediction[];
+  categoryInfo: iCategory;
   isCollapsed?: boolean;
   noLine?: boolean;
   totalWidth?: number;
   style?: StyleProp<ViewStyle>;
 }) => {
-  const { predictions, isCollapsed, totalWidth: _totalWidth, style } = props;
-  let noLine = props.noLine;
+  const { store } = useAsyncStorePrefetch();
   const { width } = useWindowDimensions();
   const totalWidth = _totalWidth || width;
-  const { event, category } = useCategory();
 
-  const predictionType = predictions[0]?.predictionType || PredictionType.NOMINATION;
-
-  // don't want to show divider after noms have happened
-  const slots =
-    event && category ? getCategorySlots(event, category.name, predictionType) : 1;
-  if (slots === 1) {
-    noLine = true;
-  }
+  const slots = categoryInfo.slots || 5;
 
   return (
     <View
@@ -45,41 +42,43 @@ const MovieGrid = (props: {
         style,
       ]}
     >
-      {predictions.map((p, i) => (
-        <View key={p.contenderId}>
-          {!noLine && i === slots ? (
-            <Divider
-              style={{
-                position: 'absolute',
-                width: totalWidth - theme.windowMargin * 2,
-                marginTop: 10,
-                marginBottom: 10,
-                borderBottomWidth: 1,
-                borderColor: COLORS.secondary,
-              }}
-            />
-          ) : null}
-          {p.contenderMovie ? (
-            <>
-              {!noLine && i >= slots && i < slots + 5 ? (
-                // we want to give a margin on top if this is the row beneath the divider (since divider is absolute pos)
-                <View style={{ marginTop: 20 }} />
-              ) : null}
-              <PosterFromTmdbId
-                movieTmdbId={p.contenderMovie.tmdbId}
-                personTmdbId={p.contenderPerson?.tmdbId}
-                width={
-                  (totalWidth - theme.windowMargin * 2 + theme.posterMargin) /
-                  (isCollapsed ? 10 : 5)
-                }
-                ranking={isCollapsed ? undefined : i + 1}
-                accolade={p.accolade}
-                predictionType={p.predictionType}
+      {predictions.map((p, i) => {
+        const movie = store.get(p.movieId) as Movie;
+        const person = store.get(p.movieId) as Person | undefined;
+        return (
+          <View key={p.contenderId}>
+            {!noLine && i === slots ? (
+              <Divider
+                style={{
+                  position: 'absolute',
+                  width: totalWidth - theme.windowMargin * 2,
+                  marginTop: 10,
+                  marginBottom: 10,
+                  borderBottomWidth: 1,
+                  borderColor: COLORS.secondary,
+                }}
               />
-            </>
-          ) : null}
-        </View>
-      ))}
+            ) : null}
+            {movie ? (
+              <>
+                {!noLine && i >= slots && i < slots + 5 ? (
+                  // we want to give a margin on top if this is the row beneath the divider (since divider is absolute pos)
+                  <View style={{ marginTop: 20 }} />
+                ) : null}
+                <PosterFromTmdbId
+                  movieTmdbId={movie.tmdbId}
+                  personTmdbId={person?.tmdbId}
+                  width={
+                    (totalWidth - theme.windowMargin * 2 + theme.posterMargin) /
+                    (isCollapsed ? 10 : 5)
+                  }
+                  ranking={isCollapsed ? undefined : i + 1}
+                />
+              </>
+            ) : null}
+          </View>
+        );
+      })}
     </View>
   );
 };

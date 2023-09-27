@@ -3,6 +3,7 @@ import { useCategory } from '../context/CategoryContext';
 import { useAsyncEffect } from '../util/hooks';
 import MongoApi from '../services/api/requests';
 import { PredictionSet, User, WithId } from '../types/api';
+import { useAsyncStorePrefetch } from './AsyncStorePrefetch';
 
 /**
  * Lets us get the userId and userEmail synchronously
@@ -26,13 +27,14 @@ const ProfilePredictionContext = createContext<iProfilePredictionContext>({
 
 export const ProfilePredictionProvider = (props: { children: React.ReactNode }) => {
   const { event } = useCategory();
+  const { storeTmdbDataFromPredictionSet } = useAsyncStorePrefetch();
 
   const [userId, setUserId] = useState<string | undefined>(undefined);
 
   const [user, setUser] = useState<WithId<User> | undefined>(undefined);
-  const [contemporaryData, setContemporaryData] = useState<
-    WithId<PredictionSet> | undefined
-  >(undefined);
+  const [predictionData, setPredictionData] = useState<WithId<PredictionSet> | undefined>(
+    undefined,
+  );
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   // can't use react-query because data must be re-fetched for each userId (it's not a pure component)
@@ -43,16 +45,20 @@ export const ProfilePredictionProvider = (props: { children: React.ReactNode }) 
         eventId: event._id,
         userId,
       });
-      setContemporaryData(ps);
+      setPredictionData(ps);
       const { data: u } = await MongoApi.getUser({ userId, excludeNestedFields: true });
       setUser(u);
+      // cache all movies (await it so it doesn't load with bad data)
+      if (ps) {
+        await storeTmdbDataFromPredictionSet(ps);
+      }
       setIsLoading(false);
     }
   }, [event?._id, userId]);
 
   const resetProfileUser = () => {
     setUser(undefined);
-    setContemporaryData(undefined);
+    setPredictionData(undefined);
     setUserId(undefined);
   };
 
@@ -60,7 +66,7 @@ export const ProfilePredictionProvider = (props: { children: React.ReactNode }) 
     <ProfilePredictionContext.Provider
       value={{
         user,
-        predictionData: contemporaryData,
+        predictionData,
         isLoading,
         setUserId,
         resetProfileUser,

@@ -19,7 +19,7 @@ export const getEvents = async ({
     queryString += `awardsBody=${awardsBody}`;
   }
 
-  return await api.get<WithId<EventModel[]>>(
+  return await api.get<WithId<EventModel>[]>(
     `events${queryString === '?' ? '' : queryString}`,
   );
 };

@@ -20,7 +20,7 @@ const EventSelect = () => {
   const { data: events, isLoading, refetch: refetchEvents } = useQueryAllEvents();
   const { data: user, refetch: refetchUser } = useQueryGetUser(authUserId);
   const { data: usersWithRecentPredictionSets, refetch: refetchFollowingPredictions } =
-    useQueryGetFollowingRecentPredictions(authUserId);
+    useQueryGetFollowingRecentPredictions(user);
 
   const { loadingOpacity, bodyOpacity } = useLoading(isLoading);
 
@@ -75,8 +75,8 @@ const EventSelect = () => {
           </HeaderLight>
           {events ? (
             <EventList
-              user={authUserId ? user : undefined} // so if the user is signed out they don't see their old predictions
-              events={Object.values(events)}
+              user={user} // so if the user is signed out they don't see their old predictions
+              events={events}
             />
           ) : null}
           {!authUserId ? (

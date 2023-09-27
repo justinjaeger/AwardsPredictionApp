@@ -31,6 +31,18 @@ export const getUser = async ({
   return await api.get<WithId<User>>(`user${queryString}`);
 };
 
+export const listFollowersPaginated = async ({
+  userId,
+  pageNumber,
+}: {
+  userId: string;
+  pageNumber: number;
+}) => {
+  return await api.get<WithId<User>[]>(
+    `users/${userId}/followers?pageNumber=${pageNumber}&limit=${PAGINATED_LIMIT}`,
+  );
+};
+
 export const listFollowingPaginated = async ({
   userId,
   pageNumber,
@@ -40,20 +52,15 @@ export const listFollowingPaginated = async ({
   pageNumber: number;
   includeRecentPredictionSets?: boolean;
 }) => {
-  return await api.get<WithId<User>>(
+  return await api.get<WithId<User>[]>(
     `users/${userId}/following?pageNumber=${pageNumber}&limit=${PAGINATED_LIMIT}&includeRecentPredictionSets=${!!includeRecentPredictionSets}`,
   );
 };
 
-export const listFollowersPaginated = async ({
-  userId,
-  pageNumber,
-}: {
-  userId: string;
-  pageNumber: number;
-}) => {
-  return await api.get<WithId<User>>(
-    `users/${userId}/followers?pageNumber=${pageNumber}&limit=${PAGINATED_LIMIT}`,
+// NOTE: expensive because unpaginated - we def want to cache this response
+export const listFollowingWithRecentPredictions = async (userId: string) => {
+  return await api.get<WithId<User>[]>(
+    `users/${userId}/followers?includeRecentPredictionSets=true&limit=1000`,
   );
 };
 
@@ -65,7 +72,7 @@ export const searchUsers = async ({
   query: string;
   pageNumber: number;
 }) => {
-  return await api.get<WithId<User>>(
+  return await api.get<WithId<User>[]>(
     `users/search?query=${query}&pageNumber=${pageNumber}&limit=${PAGINATED_LIMIT}`,
   );
 };

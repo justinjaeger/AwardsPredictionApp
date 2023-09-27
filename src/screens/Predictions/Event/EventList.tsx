@@ -24,6 +24,7 @@ import { Divider } from '@ui-kitten/components';
 import { useAuth } from '../../../context/UserContext';
 import { hexToRgb } from '../../../util/hexToRgb';
 import useDevice from '../../../util/device';
+import { EventModel, User, WithId } from '../../../types/api';
 
 const EVENT_ITEM_HEIGHT = 110;
 
@@ -32,8 +33,8 @@ const EventList = ({
   user,
   isProfile,
 }: {
-  events: iEvent[];
-  user: iUser | undefined;
+  events: WithId<EventModel>[];
+  user: WithId<User> | undefined;
   isProfile?: boolean;
 }) => {
   const { userId: authUserId } = useAuth();
@@ -46,7 +47,7 @@ const EventList = ({
 
   const [highlightedEvent, setHighlightedEvent] = useState<string>('');
 
-  const onSelectEvent = async (event: iEvent) => {
+  const onSelectEvent = async (event: EventModel) => {
     setEvent(event);
     const noProfileSelected = !user?.id; // happens when signed out and click from home screen
     if ((authUserId && authUserId === user?.id) || noProfileSelected) {

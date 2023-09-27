@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { ImageStyle, StyleProp } from 'react-native';
-import { ContenderAccolade, PredictionType } from '../../API';
 import { iCachedTmdbMovie, iCachedTmdbPerson } from '../../services/cache/types';
 import TmdbServices from '../../services/tmdb';
 import { useAsyncEffect } from '../../util/hooks';
@@ -10,14 +9,11 @@ type iPosterFromTmdbProps = {
   width?: number;
   ranking?: number;
   onPress?: () => void;
-  accolade?: ContenderAccolade | undefined;
-  predictionType?: PredictionType;
   styles?: StyleProp<ImageStyle>;
 };
 
 const PosterFromMovieTmdbId = (props: iPosterFromTmdbProps & { movieTmdbId: number }) => {
-  const { movieTmdbId, width, onPress, ranking, accolade, predictionType, styles } =
-    props;
+  const { movieTmdbId, width, onPress, ranking, styles } = props;
 
   const [movieDetails, setMovieDetails] = useState<iCachedTmdbMovie>();
 
@@ -36,18 +32,17 @@ const PosterFromMovieTmdbId = (props: iPosterFromTmdbProps & { movieTmdbId: numb
       ranking={ranking}
       onPress={onPress}
       styles={styles}
-      accolade={accolade}
-      predictionType={predictionType}
     />
   );
 };
 
-const PosterFromPersonTmdbId = (
-  props: iPosterFromTmdbProps & { personTmdbId: number },
-) => {
-  const { personTmdbId, onPress, width, ranking, accolade, predictionType, styles } =
-    props;
-
+const PosterFromPersonTmdbId = ({
+  personTmdbId,
+  onPress,
+  width,
+  ranking,
+  styles,
+}: iPosterFromTmdbProps & { personTmdbId: number }) => {
   const [personDetails, setPersonDetails] = useState<iCachedTmdbPerson>();
 
   useAsyncEffect(async () => {
@@ -66,8 +61,6 @@ const PosterFromPersonTmdbId = (
       ranking={ranking}
       onPress={onPress}
       styles={styles}
-      accolade={accolade}
-      predictionType={predictionType}
     />
   );
 };
