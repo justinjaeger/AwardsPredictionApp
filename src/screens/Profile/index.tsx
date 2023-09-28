@@ -36,7 +36,7 @@ const Profile = () => {
 
   const { data: events, isLoading: isLoadingAllEvents } = useQueryAllEvents();
 
-  const { isLoading, setIsLoading, user, followingCount, followerCount, userEventIds } =
+  const { isLoading, setIsLoading, user, authUserIsFollowing, isFollowingAuthUser } =
     useProfileUser(userId);
 
   // handles the header (and logout button)
@@ -46,18 +46,16 @@ const Profile = () => {
 
   const iterableEvents = events ? Object.values(events) || [] : [];
   const userEvents = Object.values(iterableEvents)?.filter((event) =>
-    userEventIds.includes(event.id),
+    user?.eventsPredicting?.includes(event._id),
   );
-
-  const isAuthUser = user && userId && user?.id === authUserId;
+  const predictionSets = user?.recentPredictionSets || [];
+  const isAuthUser = user && userId && user?._id === authUserId;
 
   useNavigateToEffect(() => {
     if (isAuthUser && !user.username) {
       navigation.navigate('UpdateProfileInfo');
     }
   }, [user?.username]);
-
-  const predictionSets = user?.predictionSets || [];
 
   const logIn = () => {
     globalNavigation.navigate('Authenticator');
@@ -179,23 +177,23 @@ const Profile = () => {
           >
             <FollowCountButton
               onPress={() => {
-                if (followerCount === 0) return;
+                if (user?.followerCount === 0) return;
                 navigation.dispatch(
                   StackActions.push('Followers', { userId, type: 'followers' }),
                 );
               }}
-              text={`${followerCount} Followers`}
-              loading={followerCount === undefined}
+              text={`${user?.followerCount || 0} Followers`}
+              loading={user?.followerCount === undefined}
             />
             <FollowCountButton
               onPress={() => {
-                if (followingCount === 0) return;
+                if (user?.followingCount === 0) return;
                 navigation.dispatch(
                   StackActions.push('Followers', { userId, type: 'following' }),
                 );
               }}
-              text={`${followingCount} Following`}
-              loading={followingCount === undefined}
+              text={`${user?.followingCount} Following`}
+              loading={user?.followingCount === undefined}
             />
           </View>
           <View
@@ -210,11 +208,11 @@ const Profile = () => {
           >
             {user ? (
               <FollowButton
-                authUserIsFollowing={user.authUserIsFollowing || false}
-                profileUserId={user.id}
+                authUserIsFollowing={authUserIsFollowing || false}
+                profileUserId={user._id}
               />
             ) : null}
-            {user?.isFollowingAuthUser ? (
+            {isFollowingAuthUser ? (
               <BodyBold style={{ marginLeft: 10, color: 'rgba(255,255,255,0.8)' }}>
                 Follows You
               </BodyBold>

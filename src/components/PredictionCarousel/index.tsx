@@ -13,13 +13,13 @@ import {
 import COLORS from '../../constants/colors';
 import { getPosterDimensionsByWidth } from '../../constants/posterDimensions';
 import theme from '../../constants/theme';
-import { iPredictionSet } from '../../types';
 import useDevice from '../../util/device';
 import { hexToRgb } from '../../util/hexToRgb';
 import ProfileImage from '../ProfileImage';
 import { SubHeader } from '../Text';
 import UserPredictionList from '../UserPredictionList';
 import CarouselArrow from './CarouselArrow';
+import { iRecentPrediction } from '../../types/api';
 
 const PredictionCarousel = ({
   predictionSets,
@@ -28,7 +28,7 @@ const PredictionCarousel = ({
   enableArrows,
   style,
 }: {
-  predictionSets: iPredictionSet[];
+  predictionSets: iRecentPrediction[];
   userId: string;
   userInfo?: {
     name: string;

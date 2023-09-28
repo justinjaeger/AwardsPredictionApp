@@ -1,5 +1,4 @@
-import { ContenderAccolade, EventStatus, PredictionType } from '../API';
-import { iEvent } from '../types';
+import { EventModel, EventStatus, Phase } from '../types/api';
 import { formatDateTime } from '../util/formatDateTime';
 
 export const EVENT_STATUS_TO_STRING: {
@@ -23,41 +22,45 @@ export const EVENT_STATUS_TO_STRING_SHORT: {
 };
 
 export const ACCOLADE_TO_STRING: {
-  [key in ContenderAccolade]: string;
+  [key in Phase]: string;
 } = {
-  [ContenderAccolade.SHORTLISTED]: 'Shortlisted',
-  [ContenderAccolade.NOMINEE]: 'Nominated',
-  [ContenderAccolade.WINNER]: 'Winner',
+  [Phase.SHORTLIST]: 'Shortlisted',
+  [Phase.NOMINATION]: 'Nominated',
+  [Phase.WINNER]: 'Winner',
+  [Phase.CLOSED]: '',
 };
 
 export const ACCOLADE_TO_SHORTSTRING: {
-  [key in ContenderAccolade]: string;
+  [key in Phase]: string;
 } = {
-  [ContenderAccolade.SHORTLISTED]: 'SHL',
-  [ContenderAccolade.NOMINEE]: 'NOM',
-  [ContenderAccolade.WINNER]: 'WIN',
+  [Phase.SHORTLIST]: 'SHL',
+  [Phase.NOMINATION]: 'NOM',
+  [Phase.WINNER]: 'WIN',
+  [Phase.CLOSED]: '',
 };
 
 export const ACCOLADE_TO_LETTER: {
-  [key in ContenderAccolade]: string;
+  [key in Phase]: string;
 } = {
-  [ContenderAccolade.SHORTLISTED]: 'S',
-  [ContenderAccolade.NOMINEE]: 'N',
-  [ContenderAccolade.WINNER]: 'W',
+  [Phase.SHORTLIST]: 'S',
+  [Phase.NOMINATION]: 'N',
+  [Phase.WINNER]: 'W',
+  [Phase.CLOSED]: '',
 };
 
 /**
  * PredictionType = NOMINATION if event is in NOMS_LIVE or NOMS_STAGING
  * else, we're predicting for the win, so PredictionType = WIN
  */
-export const eventStatusToPredictionType = (eventStatus: EventStatus): PredictionType =>
+export const eventStatusToPredictionType = (eventStatus: EventStatus): Phase =>
   [EventStatus.NOMS_LIVE, EventStatus.NOMS_STAGING].includes(eventStatus)
-    ? PredictionType.NOMINATION
-    : PredictionType.WIN;
+    ? Phase.NOMINATION
+    : Phase.WINNER;
 
-export const getEventTime = (event: iEvent) => {
-  const nomDateTime = new Date(event?.nominationDateTime || '');
-  const winDateTime = new Date(event?.winDateTime || '');
+export const getEventTime = (event: EventModel) => {
+  const longAgo = new Date('1970-01-01');
+  const nomDateTime = event.nomDateTime ? new Date(event.nomDateTime) : longAgo;
+  const winDateTime = event.winDateTime ? new Date(event.winDateTime) : longAgo;
 
   const now = new Date();
   // set showTimeNom to true if is within one week of event
@@ -67,8 +70,8 @@ export const getEventTime = (event: iEvent) => {
 
   return EventStatus.ARCHIVED === event.status
     ? ''
-    : eventStatusToPredictionType(event.status) === PredictionType.NOMINATION
-    ? event.nominationDateTime
+    : eventStatusToPredictionType(event.status) === Phase.NOMINATION
+    ? event.nomDateTime
       ? formatDateTime(nomDateTime, showTimeNom)
       : ''
     : event.winDateTime

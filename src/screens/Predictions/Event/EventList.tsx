@@ -1,18 +1,13 @@
 import _ from 'lodash';
 import React, { useState } from 'react';
 import { TouchableHighlight, useWindowDimensions, View } from 'react-native';
-import { AwardsBody, EventStatus, UserRole } from '../../../API';
 import { Body, HeaderLight, SubHeader } from '../../../components/Text';
-import {
-  AWARDS_BODY_TO_PLURAL_STRING,
-  AWARDS_BODY_TO_STRING,
-} from '../../../constants/awardsBodies';
+import { AWARDS_BODY_TO_PLURAL_STRING } from '../../../constants/awardsBodies';
 import COLORS from '../../../constants/colors';
 import { PredictionsParamList } from '../../../navigation/types';
 import { useTypedNavigation } from '../../../util/hooks';
-import sortByObjectOrder from '../../../util/sortByObjectOrder';
+import { getOrderedEvents } from '../../../util/sortByObjectOrder';
 import { useCategory } from '../../../context/CategoryContext';
-import { iEvent, iUser } from '../../../types';
 import theme from '../../../constants/theme';
 import AwardsBodyImage from '../../../components/AwardsBodyImage';
 import {
@@ -24,7 +19,7 @@ import { Divider } from '@ui-kitten/components';
 import { useAuth } from '../../../context/UserContext';
 import { hexToRgb } from '../../../util/hexToRgb';
 import useDevice from '../../../util/device';
-import { EventModel, User, WithId } from '../../../types/api';
+import { EventModel, EventStatus, User, UserRole, WithId } from '../../../types/api';
 
 const EVENT_ITEM_HEIGHT = 110;
 
@@ -47,22 +42,20 @@ const EventList = ({
 
   const [highlightedEvent, setHighlightedEvent] = useState<string>('');
 
-  const onSelectEvent = async (event: EventModel) => {
+  const userId = user?._id;
+
+  const onSelectEvent = async (event: WithId<EventModel>) => {
     setEvent(event);
-    const noProfileSelected = !user?.id; // happens when signed out and click from home screen
-    if ((authUserId && authUserId === user?.id) || noProfileSelected) {
-      navigation.navigate('Event', { userId: user?.id });
+    const noProfileSelected = !userId; // happens when signed out and click from home screen
+    if ((authUserId && authUserId === userId) || noProfileSelected) {
+      navigation.navigate('Event', { userId });
     } else {
-      navigation.navigate('EventFromProfile', { userId: user?.id });
+      navigation.navigate('EventFromProfile', { userId });
     }
   };
 
-  const orderedEvents = sortByObjectOrder<AwardsBody, iEvent>(
-    AWARDS_BODY_TO_STRING,
-    _.values(events),
-    events.map((e) => AwardsBody[e.awardsBody]),
-  );
-  const groupedByYear = _.groupBy(orderedEvents, (e) => e.year);
+  const orderedEvents = getOrderedEvents(events);
+  const groupedByYear = _.groupBy(orderedEvents, (e: EventModel) => e.year);
 
   const userIsAdminOrTester = user
     ? user.role === UserRole.ADMIN || user.role === UserRole.TESTER
@@ -123,7 +116,7 @@ const EventList = ({
                     }}
                     underlayColor={isProfile ? COLORS.secondaryDark : COLORS.secondary}
                     onPress={() => onSelectEvent(event)}
-                    onPressIn={() => setHighlightedEvent(event.id)}
+                    onPressIn={() => setHighlightedEvent(event._id)}
                     onPressOut={() => setHighlightedEvent('')}
                   >
                     <>
@@ -137,7 +130,7 @@ const EventList = ({
                       >
                         <AwardsBodyImage
                           awardsBody={awardsBody}
-                          white={isProfile ? highlightedEvent === event.id : true}
+                          white={isProfile ? highlightedEvent === event._id : true}
                           size={EVENT_ITEM_HEIGHT - 20} // Important that this DOES NOT scale with iPad, because AwardsBodyImage already does
                         />
                       </View>

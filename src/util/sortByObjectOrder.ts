@@ -1,6 +1,13 @@
 import _ from 'lodash';
 import { getAwardsBodyCategories } from '../constants/categories';
-import { AwardsBody, CategoryName, iCategoryPrediction } from '../types/api';
+import {
+  AwardsBody,
+  CategoryName,
+  EventModel,
+  WithId,
+  iCategoryPrediction,
+} from '../types/api';
+import { AWARDS_BODY_TO_STRING } from '../constants/awardsBodies';
 
 /**
  * Sorts an array based on the insert order of an object (with keys of type Enum)
@@ -18,6 +25,18 @@ const sortByObjectOrder = <T extends string, U>(
     acc.set(key, valuesForGivenKey);
     return acc;
   }, new Map());
+};
+
+export const getOrderedEvents = (unorderedEvents: WithId<EventModel>[]) => {
+  const orderedAwardsBodyKeys = _.keys(AWARDS_BODY_TO_STRING);
+  const orderedEvents = unorderedEvents.sort((e1, e2) => {
+    const i1 = orderedAwardsBodyKeys.indexOf(e1.awardsBody);
+    const i2 = orderedAwardsBodyKeys.indexOf(e2.awardsBody);
+    if (i1 > i2) return 1;
+    if (i2 < i1) return -1;
+    return 0;
+  });
+  return orderedEvents;
 };
 
 export const getOrderedPredictions = (

@@ -1,9 +1,9 @@
 import React from 'react';
-import { AwardsBody } from '../../API';
 import useDevice from '../../util/device';
 import Trophy from '../../assets/awardsBodies/trophy_color.png';
 import TrophyWhite from '../../assets/awardsBodies/trophy.png';
 import { Image } from 'react-native';
+import { AwardsBody } from '../../types/api';
 
 const DEFAULT_SIZE = 60;
 
