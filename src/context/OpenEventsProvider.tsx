@@ -3,8 +3,8 @@ import { useAsyncEffect } from '../util/hooks';
 import MongoApi from '../services/api/requests';
 import { AwardsBody, CategoryName, EventModel, WithId, iCategory } from '../types/api';
 
-type iEventsContext = {
-  events: WithId<EventModel>[];
+type iOpenEventsContext = {
+  openEvents: WithId<EventModel>[];
   getEvent: (awardsBody: AwardsBody, year: number) => WithId<EventModel> | undefined;
   getCategory: (
     awardsBody: AwardsBody,
@@ -17,8 +17,8 @@ type iEventsContext = {
   ) => iCategory | undefined;
 };
 
-const EventsContext = createContext<iEventsContext>({
-  events: [],
+const OpenEventsContext = createContext<iOpenEventsContext>({
+  openEvents: [],
   getEvent: () => undefined,
   getCategory: () => undefined,
   getCategoryByEventId: () => undefined,
@@ -28,19 +28,21 @@ const EventsContext = createContext<iEventsContext>({
  * This top-level provider fetches all open events for ease of access throughout app
  */
 
-export const EventsProvider = (props: { children: React.ReactNode }) => {
-  const [events, setEvents] = useState<WithId<EventModel>[]>([]);
+export const OpenEventsProvider = (props: { children: React.ReactNode }) => {
+  const [openEvents, setOpenEvents] = useState<WithId<EventModel>[]>([]);
 
   useAsyncEffect(async () => {
     // we want events from this calendar year AND NEXT
     const { data: events } = await MongoApi.getEvents({ isOpen: true });
     if (events) {
-      setEvents(events);
+      setOpenEvents(events);
     }
   }, []);
 
   const getEvent = (awardsBody: AwardsBody, year: number) => {
-    return events.find((event) => event.awardsBody === awardsBody && event.year === year);
+    return openEvents.find(
+      (event) => event.awardsBody === awardsBody && event.year === year,
+    );
   };
 
   const getCategory = (
@@ -54,18 +56,18 @@ export const EventsProvider = (props: { children: React.ReactNode }) => {
   };
 
   const getCategoryByEventId = (eventId: string, categoryName: CategoryName) => {
-    const event = events.find((event) => event._id === eventId);
+    const event = openEvents.find((event) => event._id === eventId);
     if (!event) return undefined;
     return event.categories[categoryName];
   };
 
   return (
-    <EventsContext.Provider
-      value={{ events, getEvent, getCategory, getCategoryByEventId }}
+    <OpenEventsContext.Provider
+      value={{ openEvents, getEvent, getCategory, getCategoryByEventId }}
     >
       {props.children}
-    </EventsContext.Provider>
+    </OpenEventsContext.Provider>
   );
 };
 
-export const useOpenEvents = () => useContext(EventsContext);
+export const useOpenEvents = () => useContext(OpenEventsContext);

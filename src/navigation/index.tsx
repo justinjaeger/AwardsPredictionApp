@@ -6,7 +6,7 @@ import MainNavigator from './MainNavigator';
 import { UserProvider } from '../context/UserContext';
 import { CategoryProvider } from '../context/CategoryContext';
 import { AsyncStorePrefetchProvider } from '../context/AsyncStorePrefetch';
-import { EventsProvider } from '../context/EventsProvider';
+import { OpenEventsProvider } from '../context/OpenEventsProvider';
 
 // onReady={() => RNBootSplash.hide()} (could add to NavigationContainer)
 const Navigation = () => {
@@ -23,11 +23,11 @@ const Navigation = () => {
     <NavigationContainer theme={theme}>
       <AsyncStorePrefetchProvider>
         <UserProvider>
-          <EventsProvider>
+          <OpenEventsProvider>
             <CategoryProvider>
               <MainNavigator />
             </CategoryProvider>
-          </EventsProvider>
+          </OpenEventsProvider>
         </UserProvider>
       </AsyncStorePrefetchProvider>
     </NavigationContainer>
