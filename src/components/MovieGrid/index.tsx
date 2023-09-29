@@ -16,7 +16,7 @@ const MovieGrid = ({
   style,
 }: {
   predictions: iPrediction[];
-  categoryInfo: iCategory;
+  categoryInfo?: iCategory;
   isCollapsed?: boolean;
   noLine?: boolean;
   totalWidth?: number;
@@ -26,7 +26,7 @@ const MovieGrid = ({
   const { width } = useWindowDimensions();
   const totalWidth = _totalWidth || width;
 
-  const slots = categoryInfo.slots || 5;
+  const slots = categoryInfo?.slots || 5;
 
   return (
     <View
@@ -42,11 +42,11 @@ const MovieGrid = ({
         style,
       ]}
     >
-      {predictions.map((p, i) => {
-        const movie = store.get(p.movieId) as Movie;
-        const person = store.get(p.movieId) as Person | undefined;
+      {predictions.map(({ movieId, personId, contenderId }, i) => {
+        const movie = store.get(movieId) as Movie;
+        const person = store.get(personId) as Person | undefined;
         return (
-          <View key={p.contenderId}>
+          <View key={contenderId}>
             {!noLine && i === slots ? (
               <Divider
                 style={{
