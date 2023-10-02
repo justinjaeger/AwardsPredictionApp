@@ -1,41 +1,48 @@
 import React, { useEffect, useState } from 'react';
-import TmdbServices from '../../../services/tmdb';
-import { iSearchData } from '../../../services/tmdb/search';
 import Snackbar from '../../../components/Snackbar';
 import { Body } from '../../../components/Text';
 import { View } from 'react-native';
-import { useCategory } from '../../../context/CategoryContext';
-import { iCategory, iEvent, iPrediction } from '../../../types';
+import { useEvent } from '../../../context/EventContext';
 import COLORS from '../../../constants/colors';
 import MovieListSearch from '../../../components/MovieList/MovieListSearch';
 import LoadingStatueModal from '../../../components/LoadingStatueModal';
-import useQueryCommunityEvent from '../../../hooks/queries/getCommunityEvent';
 import { FAB } from '../../../components/Buttons/FAB';
-import useMutationCreateActingContender from '../../../hooks/mutations/createActingContender';
+import useMutationCreateActingContender from '../../../hooks/mutations/useMutationCreateActingContender';
 import BasicModal from '../../../components/BasicModal';
 import { iCreateContenderProps } from '.';
-import { CategoryType, ContenderVisibility, PredictionType } from '../../../API';
 import { SubmitButton } from '../../../components/Buttons';
 import PerformanceListSelectable from '../../../components/MovieList/PerformanceListSelectable';
 import { useSearch } from '../../../context/ContenderSearchContext';
+import useQueryGetCommunityPredictions from '../../../hooks/queries/useQueryGetCommunityPredictions';
+import { CategoryType, Movie, Person, WithId, iPrediction } from '../../../types/api';
+import TmdbServices, { iSearchData } from '../../../services/tmdb';
+import { useTmdbDataStore } from '../../../context/TmdbDataStore';
 
-// TODO: should only be able to do this if logged in
-const CreatePerformance = (props: iCreateContenderProps) => {
-  const { onSelectPrediction } = props;
+/**
+ * TODO: this file is sort of a mess
+ * Because we force format everything to be an iPrediction
+ * So we can display it in the conventional list
+ */
+const CreatePerformance = ({ onSelectPrediction }: iCreateContenderProps) => {
+  const { itemsKeyedByTmdbId } = useTmdbDataStore();
 
   const { setIsLoadingSearch } = useSearch();
-  const { category: _category, event: _event } = useCategory();
+  const { category: _category, event: _event } = useEvent();
 
-  const category = _category as iCategory;
-  const event = _event as iEvent;
+  const category = _category!;
+  const event = _event!;
 
   // when adding a contender to the list of overall contenders
-  const { mutate, isComplete, response } = useMutationCreateActingContender();
+  const {
+    mutate: createActingContender,
+    isComplete,
+    response,
+  } = useMutationCreateActingContender();
 
   const { searchInput, debouncedSearch, resetSearchHack, setResetSearchHack } =
     useSearch();
-  const { data: communityData } = useQueryCommunityEvent({ event, includeHidden: true }); // because we use this to see if contender exists, we want to includes hidden contenders
-  const communityPredictions = communityData?.[category.id]?.predictions || [];
+  const { data: communityData } = useQueryGetCommunityPredictions();
+  const communityPredictions = communityData?.categories[category].predictions || [];
 
   const [personSearchResults, setPersonSearchResults] = useState<iSearchData>([]);
   const [movieSearchResults, setMovieSearchResults] = useState<iSearchData>([]);
@@ -56,12 +63,21 @@ const CreatePerformance = (props: iCreateContenderProps) => {
     setResetSearchHack(!resetSearchHack); // resets searchbar
   };
 
-  const getPerformancePrediction = (personTmdbId: number, movieTmdbId: number) => {
-    return communityPredictions.find(
-      (p) =>
-        p.contenderPerson?.tmdbId === personTmdbId &&
-        p.contenderMovie?.tmdbId === movieTmdbId,
-    );
+  const getPerformancePrediction = (movieTmdbId: number, personTmdbId: number) => {
+    const maybePerson = personTmdbId
+      ? (itemsKeyedByTmdbId[personTmdbId] as WithId<Person>)
+      : undefined;
+    // get performances associated with movie.
+    const maybeMovie = movieTmdbId
+      ? (itemsKeyedByTmdbId[movieTmdbId] as WithId<Movie>)
+      : undefined;
+    const maybePerformance =
+      maybeMovie &&
+      maybePerson &&
+      communityPredictions.find(
+        (p) => p.movieId === maybeMovie._id && p.personId === maybePerson._id,
+      );
+    return maybePerformance;
   };
 
   // handles the search
@@ -72,7 +88,13 @@ const CreatePerformance = (props: iCreateContenderProps) => {
   // block runs after createContender mutation succeeds
   useEffect(() => {
     if (response && selectedPersonTmdbId && selectedMovieTmdbId) {
-      onSelectPrediction(response);
+      onSelectPrediction({
+        contenderId: response._id,
+        movieId: response.movieId,
+        personId: response.personId,
+        songId: response.songId,
+        ranking: 0,
+      });
       resetSearch();
     }
   }, [response]);
@@ -111,14 +133,13 @@ const CreatePerformance = (props: iCreateContenderProps) => {
     }
   };
 
+  const communityMoviesWithPerson = communityPredictions.filter(
+    (p) => p.movieId === itemsKeyedByTmdbId[selectedMovieTmdbId!]?._id,
+  );
+
   const onSelectPerson = async () => {
-    console.log('selectedPersonTmdbId', selectedPersonTmdbId);
     if (!selectedPersonTmdbId) return;
-    // get performances associated with movie. if songs associated, show modal to select song. if no songs associated, show modal to create song
-    const movies = communityPredictions.filter(
-      (p) => p.contenderMovie?.tmdbId === selectedMovieTmdbId,
-    );
-    setModalState(movies.length === 0 ? 'create' : 'select');
+    setModalState(communityMoviesWithPerson.length > 0 ? 'select' : 'create');
     getPersonRecentMovies(selectedPersonTmdbId);
   };
 
@@ -126,48 +147,33 @@ const CreatePerformance = (props: iCreateContenderProps) => {
     if (!selectedMovieTmdbId || !selectedPersonTmdbId) return;
     // can check that selectedTmdbId is not already associated with a contender in our category list
     const maybeAlreadyExistingPrediction = getPerformancePrediction(
-      selectedPersonTmdbId,
       selectedMovieTmdbId,
+      selectedPersonTmdbId,
     );
     if (maybeAlreadyExistingPrediction) {
       // this performance has already been added
       onSelectPrediction(maybeAlreadyExistingPrediction);
       return;
     }
-    await mutate({
-      eventId: event.id,
-      categoryId: category.id,
+    await createActingContender({
+      eventId: event._id,
+      category,
       movieTmdbId: selectedMovieTmdbId,
       personTmdbId: selectedPersonTmdbId,
     });
   };
 
-  // these are sort of "fake" values
-  const movieData: iPrediction[] = movieSearchResults.map((m) => ({
-    id: m.tmdbId.toString(),
+  // Format is iPrediction to display in the list
+  const movieSearchResultsFormatted: iPrediction[] = movieSearchResults.map((m) => ({
     ranking: 0,
-    accolade: undefined,
-    visibility: ContenderVisibility.VISIBLE,
-    predictionType: PredictionType.NOMINATION, // they only add predictions for nominations
     contenderId: m.tmdbId.toString(),
-    contenderMovie: {
-      id: m.tmdbId.toString(),
-      tmdbId: m.tmdbId,
-    },
+    movieId: m.tmdbId.toString(),
   }));
-
-  // these are sort of "fake" values
-  const personData: iPrediction[] = personSearchResults.map((p) => ({
-    id: p.tmdbId.toString(),
+  const personSearchResultsFormatted: iPrediction[] = personSearchResults.map((p) => ({
     ranking: 0,
-    accolade: undefined,
-    visibility: ContenderVisibility.VISIBLE,
-    predictionType: PredictionType.NOMINATION, // they only add predictions for nominations
     contenderId: p.tmdbId.toString(),
-    contenderPerson: {
-      id: p.tmdbId.toString(),
-      tmdbId: p.tmdbId,
-    },
+    movieId: p.tmdbId.toString(),
+    personId: p.tmdbId.toString(),
   }));
 
   return (
@@ -188,7 +194,7 @@ const CreatePerformance = (props: iCreateContenderProps) => {
           <>
             {movieSearchResults.length > 0 ? (
               <MovieListSearch
-                predictions={movieData}
+                predictions={movieSearchResultsFormatted}
                 onSelect={(tmdbId) => {
                   if (selectedMovieTmdbId === tmdbId) {
                     setSelectedMovieTmdbId(undefined);
@@ -212,9 +218,7 @@ const CreatePerformance = (props: iCreateContenderProps) => {
           </>
         ) : (
           <SelectExistingPerformance
-            data={communityPredictions.filter(
-              (p) => p.contenderMovie?.tmdbId === selectedMovieTmdbId,
-            )}
+            data={communityMoviesWithPerson}
             getPerformancePrediction={getPerformancePrediction}
             onCreateNew={() => setModalState('create')}
             onSelectPrediction={onSelectPrediction}
@@ -230,7 +234,7 @@ const CreatePerformance = (props: iCreateContenderProps) => {
         }}
       >
         <View style={{ width: '100%', alignItems: 'center', height: '100%' }}>
-          {personData.length === 0 ? (
+          {personSearchResultsFormatted.length === 0 ? (
             <Body style={{ marginTop: 40, color: COLORS.white }}>{searchMessage}</Body>
           ) : null}
           <View
@@ -243,7 +247,7 @@ const CreatePerformance = (props: iCreateContenderProps) => {
             {personSearchResults.length > 0 ? (
               <View style={{ flex: 10 }}>
                 <MovieListSearch
-                  predictions={personData}
+                  predictions={personSearchResultsFormatted}
                   onSelect={(tmdbId) => {
                     console.log('tmdbId', tmdbId);
                     if (selectedPersonTmdbId === tmdbId) {
@@ -270,7 +274,12 @@ const CreatePerformance = (props: iCreateContenderProps) => {
   );
 };
 
-const SelectExistingPerformance = (props: {
+const SelectExistingPerformance = ({
+  data,
+  getPerformancePrediction,
+  onCreateNew,
+  onSelectPrediction,
+}: {
   data: iPrediction[];
   getPerformancePrediction: (
     personTmdbId: number,
@@ -279,8 +288,6 @@ const SelectExistingPerformance = (props: {
   onCreateNew: () => void;
   onSelectPrediction: (p: iPrediction) => void;
 }) => {
-  const { data, getPerformancePrediction, onCreateNew, onSelectPrediction } = props;
-
   const [selectedPerformance, setSelectedPerformance] = useState<
     { personTmdbId: number; movieTmdbId: number } | undefined
   >(undefined);

@@ -2,28 +2,27 @@ import React, { useEffect, useRef } from 'react';
 import { Animated, ScrollView, View } from 'react-native';
 import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
-import { useCategory } from '../../context/CategoryContext';
+import { useEvent } from '../../context/EventContext';
 import { useFollowingBar } from '../../context/FollowingBarContext';
-import useFriendsPredictingEvent from '../../hooks/useFriendsPredictingEvent';
 import useDevice from '../../util/device';
 import { IconButton } from '../Buttons/IconButton';
 import ProfileImage, { IPAD_PROFILE_IMAGE_SCALE } from '../ProfileImage';
+import useQueryGetFollowingUsers from '../../hooks/queries/useQueryGetFollowingUsers';
 
 const IMAGE_WIDTH = 50;
 const IMAGE_MARGIN = 5;
 
-const FollowingBottomScroll = ({
-  userId,
-  onPress,
-}: {
-  userId: string;
-  onPress: (userId: string) => void;
-}) => {
+// always the auth user
+const FollowingBottomScroll = ({ onPress }: { onPress: (userId: string) => void }) => {
   const friendsYPos = useRef(new Animated.Value(0)).current;
-  const { event } = useCategory();
+  const { event } = useEvent();
   const { isHidden, setIsHidden } = useFollowingBar();
-  const { data: users } = useFriendsPredictingEvent(userId, event?.id);
+  const { data: followingUsers } = useQueryGetFollowingUsers();
   const { isPad } = useDevice();
+
+  const usersPredictingEvent = (followingUsers ?? []).filter((user) =>
+    (user.eventsPredicting ?? []).some((e) => e === event?._id),
+  );
 
   useEffect(() => {
     Animated.timing(friendsYPos, {
@@ -33,7 +32,7 @@ const FollowingBottomScroll = ({
     }).start();
   }, [isHidden]);
 
-  if (!users || users.length === 0) return null;
+  if (usersPredictingEvent.length === 0) return null;
 
   return (
     <>
@@ -78,12 +77,12 @@ const FollowingBottomScroll = ({
             paddingLeft: 80,
           }}
         >
-          {users.map((user) => (
+          {usersPredictingEvent.map((user) => (
             <ProfileImage
-              key={user.id}
+              key={user._id}
               image={user.image}
               imageSize={IMAGE_WIDTH}
-              onPress={() => onPress(user.id)}
+              onPress={() => onPress(user._id)}
               style={{
                 width: (IMAGE_WIDTH + 6) * (isPad ? IPAD_PROFILE_IMAGE_SCALE : 1), // this only makes sense because the profile image is equally scaled
                 margin: IMAGE_MARGIN,

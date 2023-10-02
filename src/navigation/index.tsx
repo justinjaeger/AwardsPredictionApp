@@ -3,9 +3,9 @@ import React from 'react';
 // import RNBootSplash from 'react-native-bootsplash'; // splash screen (https://github.com/zoontek/react-native-bootsplash)
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import MainNavigator from './MainNavigator';
-import { UserProvider } from '../context/UserContext';
-import { CategoryProvider } from '../context/CategoryContext';
-import { AsyncStorePrefetchProvider } from '../context/AsyncStorePrefetch';
+import { AuthProvider } from '../context/AuthContext';
+import { EventProvider } from '../context/EventContext';
+import { TmdbDataStoreProvider } from '../context/TmdbDataStore';
 import { OpenEventsProvider } from '../context/OpenEventsProvider';
 
 // onReady={() => RNBootSplash.hide()} (could add to NavigationContainer)
@@ -21,15 +21,15 @@ const Navigation = () => {
 
   return (
     <NavigationContainer theme={theme}>
-      <AsyncStorePrefetchProvider>
-        <UserProvider>
+      <TmdbDataStoreProvider>
+        <AuthProvider>
           <OpenEventsProvider>
-            <CategoryProvider>
+            <EventProvider>
               <MainNavigator />
-            </CategoryProvider>
+            </EventProvider>
           </OpenEventsProvider>
-        </UserProvider>
-      </AsyncStorePrefetchProvider>
+        </AuthProvider>
+      </TmdbDataStoreProvider>
     </NavigationContainer>
   );
 };

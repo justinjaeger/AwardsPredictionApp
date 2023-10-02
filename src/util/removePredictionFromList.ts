@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { iPrediction } from '../types';
+import { iPrediction } from '../types/keys';
 
 export const removePredictionFromList = (
   arr: iPrediction[],

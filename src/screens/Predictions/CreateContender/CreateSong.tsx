@@ -1,34 +1,31 @@
 import React, { useEffect, useState } from 'react';
-import TmdbServices from '../../../services/tmdb';
-import { iSearchData } from '../../../services/tmdb/search';
+import TmdbServices, { iSearchData } from '../../../services/tmdb';
 import { Body } from '../../../components/Text';
 import { View } from 'react-native';
-import { useCategory } from '../../../context/CategoryContext';
-import { iCategory, iEvent, iPrediction } from '../../../types';
+import { useEvent } from '../../../context/EventContext';
 import COLORS from '../../../constants/colors';
 import MovieListSearch from '../../../components/MovieList/MovieListSearch';
 import LoadingStatueModal from '../../../components/LoadingStatueModal';
-import useQueryCommunityEvent from '../../../hooks/queries/getCommunityEvent';
 import { FAB } from '../../../components/Buttons/FAB';
-import { CategoryType, ContenderVisibility, PredictionType } from '../../../API';
 import BasicModal from '../../../components/BasicModal';
-import useMutationCreateSongContender from '../../../hooks/mutations/createSongContender';
-import { compareSongKeys, getSongKey } from '../../../util/songKeys';
+import useMutationCreateSongContender from '../../../hooks/mutations/useMutationCreateSongContender';
 import FormInput from '../../../components/Inputs/FormInput';
 import { iCreateContenderProps } from '.';
 import { SubmitButton } from '../../../components/Buttons';
 import SongListSelectable from '../../../components/MovieList/SongListSelectable';
 import { useSearch } from '../../../context/ContenderSearchContext';
+import useQueryGetCommunityPredictions from '../../../hooks/queries/useQueryGetCommunityPredictions';
+import { useTmdbDataStore } from '../../../context/TmdbDataStore';
+import { CategoryType, iPrediction } from '../../../types/api';
 
-// TODO: should only be able to do this if logged in
-const CreateSong = (props: iCreateContenderProps) => {
-  const { onSelectPrediction } = props;
+// TODO: should this func ACTUALLY accept a Contender??
+const CreateSong = ({ onSelectPrediction }: iCreateContenderProps) => {
+  const { itemsKeyedByTmdbId, getSongByTitleAndMovieTmdbId } = useTmdbDataStore();
 
   const { setIsLoadingSearch } = useSearch();
-  const { category: _category, event: _event } = useCategory();
-
-  const category = _category as iCategory;
-  const event = _event as iEvent;
+  const { category: _category, event: _event } = useEvent();
+  const category = _category!;
+  const event = _event!;
 
   // when adding a contender to the list of overall contenders
   const {
@@ -39,8 +36,8 @@ const CreateSong = (props: iCreateContenderProps) => {
 
   const { searchInput, debouncedSearch, resetSearchHack, setResetSearchHack } =
     useSearch();
-  const { data: communityData } = useQueryCommunityEvent({ event, includeHidden: true }); // because we use this to see if contender exists, we want to includes hidden contenders
-  const communityPredictions = communityData?.[category.id]?.predictions || [];
+  const { data: communityData } = useQueryGetCommunityPredictions();
+  const communityPredictions = communityData?.categories[category].predictions || [];
 
   const [movieSearchResults, setMovieSearchResults] = useState<iSearchData>([]);
   const [searchMessage, setSearchMessage] = useState<string>('');
@@ -62,12 +59,11 @@ const CreateSong = (props: iCreateContenderProps) => {
     setArtist('');
   };
 
-  const getSongPrediction = (tmdbId: number, title: string) => {
-    return communityPredictions.find((p) => {
-      const storedSongKey = getSongKey(p.contenderSong?.title || '', tmdbId);
-      const newSongKey = getSongKey(title, tmdbId);
-      return compareSongKeys(storedSongKey, newSongKey);
-    });
+  const getSongPrediction = (movieTmdbId: number, title: string) => {
+    const song = getSongByTitleAndMovieTmdbId(title, movieTmdbId);
+    const maybeSongPrediction =
+      song && communityPredictions.find((p) => p.songId === song._id);
+    return maybeSongPrediction;
   };
 
   // handles the search
@@ -78,7 +74,13 @@ const CreateSong = (props: iCreateContenderProps) => {
   // block runs after createContender mutation succeeds
   useEffect(() => {
     if (response) {
-      onSelectPrediction(response);
+      onSelectPrediction({
+        contenderId: response._id,
+        movieId: response.movieId,
+        personId: response.personId,
+        songId: response.songId,
+        ranking: 0,
+      });
       resetSearch();
     }
   }, [response]);
@@ -101,13 +103,13 @@ const CreateSong = (props: iCreateContenderProps) => {
       .finally(() => setIsLoadingSearch(false));
   };
 
+  const commuintyMoviesWithSong = communityPredictions.filter(
+    (p) => p.movieId === itemsKeyedByTmdbId[selectedMovieTmdbId!]?._id,
+  );
+
   const onSelectMovie = async () => {
     if (!selectedMovieTmdbId) return;
-    // get songs associated with movie. if songs associated, show modal to select song. if no songs associated, show modal to create song
-    const movies = communityPredictions.filter(
-      (p) => p.contenderMovie?.tmdbId === selectedMovieTmdbId,
-    );
-    setModalState(movies.length === 0 ? 'create' : 'select');
+    setModalState(commuintyMoviesWithSong.length > 0 ? 'create' : 'select');
     setShowSongModal(true);
   };
 
@@ -124,8 +126,8 @@ const CreateSong = (props: iCreateContenderProps) => {
       return;
     }
     await createSongContender({
-      eventId: event.id,
-      categoryId: category.id,
+      eventId: event._id,
+      category,
       movieTmdbId: selectedMovieTmdbId,
       artist: artist,
       title: songTitle,
@@ -133,17 +135,11 @@ const CreateSong = (props: iCreateContenderProps) => {
   };
 
   // these are sort of "fake" values
-  const movieData: iPrediction[] = movieSearchResults.map((m) => ({
+  const movieSearchResultsFormatted: iPrediction[] = movieSearchResults.map((m) => ({
     id: m.tmdbId.toString(),
     ranking: 0,
-    accolade: undefined,
-    visibility: ContenderVisibility.VISIBLE,
-    predictionType: PredictionType.NOMINATION, // they only add predictions for nominations
     contenderId: m.tmdbId.toString(),
-    contenderMovie: {
-      id: m.tmdbId.toString(),
-      tmdbId: m.tmdbId,
-    },
+    movieId: m.tmdbId.toString(),
   }));
 
   return (
@@ -158,7 +154,7 @@ const CreateSong = (props: iCreateContenderProps) => {
         }}
       >
         <View style={{ width: '100%', alignItems: 'center', height: '100%' }}>
-          {movieData.length === 0 ? (
+          {movieSearchResultsFormatted.length === 0 ? (
             <Body style={{ marginTop: 40, color: COLORS.white }}>{searchMessage}</Body>
           ) : null}
           <View
@@ -171,7 +167,7 @@ const CreateSong = (props: iCreateContenderProps) => {
             {movieSearchResults.length > 0 ? (
               <View style={{ flex: 10 }}>
                 <MovieListSearch
-                  predictions={movieData}
+                  predictions={movieSearchResultsFormatted}
                   onSelect={(tmdbId) => {
                     if (selectedMovieTmdbId === tmdbId) {
                       setSelectedMovieTmdbId(undefined);
@@ -226,9 +222,7 @@ const CreateSong = (props: iCreateContenderProps) => {
             </>
           ) : (
             <SelectSongList
-              data={communityPredictions.filter(
-                (p) => p.contenderMovie?.tmdbId === selectedMovieTmdbId,
-              )}
+              data={commuintyMoviesWithSong}
               getSongPrediction={getSongPrediction}
               onCreateNew={() => setModalState('create')}
               onSelectPrediction={onSelectPrediction}
@@ -246,14 +240,17 @@ const CreateSong = (props: iCreateContenderProps) => {
   );
 };
 
-const SelectSongList = (props: {
+const SelectSongList = ({
+  data,
+  getSongPrediction,
+  onCreateNew,
+  onSelectPrediction,
+}: {
   data: iPrediction[];
   getSongPrediction: (tmdbId: number, title: string) => iPrediction | undefined;
   onCreateNew: () => void;
   onSelectPrediction: (p: iPrediction) => void;
 }) => {
-  const { data, getSongPrediction, onCreateNew, onSelectPrediction } = props;
-
   const [selectedSong, setSelectedSong] = useState<
     { tmdbId: number; songTitle: string } | undefined
   >(undefined);

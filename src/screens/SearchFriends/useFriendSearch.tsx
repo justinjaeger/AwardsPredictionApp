@@ -1,15 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useSearch } from '../../context/ContenderSearchContext';
-import { useAuth } from '../../context/UserContext';
-import searchUsers from '../../services/queryFuncs/searchUsers';
-import { iUser } from '../../types';
+import MongoApi from '../../services/api/requests';
+import { User, WithId } from '../../types/api';
 
 const useFriendSearch = () => {
   const { searchInput, debouncedSearch, setIsLoadingSearch } = useSearch();
-  const { userId: authUserId } = useAuth();
 
   // have this expire - make it part of useQuery
-  const [searchResults, setSearchResults] = useState<iUser[]>([]);
+  const [searchResults, setSearchResults] = useState<WithId<User>[]>([]);
 
   const resetSearch = () => {
     setSearchResults([]);
@@ -21,9 +19,9 @@ const useFriendSearch = () => {
       return;
     }
     setIsLoadingSearch(true);
-    const result = await searchUsers(s, authUserId);
+    const { data } = await MongoApi.searchUsers({ query: s, pageNumber: 0 });
     setIsLoadingSearch(false);
-    setSearchResults(result);
+    setSearchResults(data ?? []);
   };
 
   useEffect(() => {

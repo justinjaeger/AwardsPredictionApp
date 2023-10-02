@@ -5,8 +5,8 @@ import { Body, Label, SubHeader } from '../../components/Text';
 import { AWARDS_BODY_TO_PLURAL_STRING } from '../../constants/awardsBodies';
 import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
-import { useCategory } from '../../context/CategoryContext';
-import { useAuth } from '../../context/UserContext';
+import { useEvent } from '../../context/EventContext';
+import { useAuth } from '../../context/AuthContext';
 import { PredictionsParamList } from '../../navigation/types';
 import { formatLastUpdated } from '../../util/formatDateTime';
 import { useTypedNavigation } from '../../util/hooks';
@@ -24,7 +24,7 @@ const UserPredictionList = ({
   const { userId: authUserId } = useAuth();
   const navigation = useTypedNavigation<PredictionsParamList>();
   const { getEvent } = useOpenEvents();
-  const { setEvent, setCategory } = useCategory();
+  const { setEvent, setCategory } = useEvent();
   const { width } = useWindowDimensions();
   const isAuthUserProfile = userId === authUserId;
 

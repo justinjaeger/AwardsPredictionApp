@@ -7,7 +7,7 @@ import COLORS from '../../../constants/colors';
 import { PredictionsParamList } from '../../../navigation/types';
 import { useTypedNavigation } from '../../../util/hooks';
 import { getOrderedEvents } from '../../../util/sortByObjectOrder';
-import { useCategory } from '../../../context/CategoryContext';
+import { useEvent } from '../../../context/EventContext';
 import theme from '../../../constants/theme';
 import AwardsBodyImage from '../../../components/AwardsBodyImage';
 import {
@@ -16,7 +16,7 @@ import {
   getEventTime,
 } from '../../../constants/events';
 import { Divider } from '@ui-kitten/components';
-import { useAuth } from '../../../context/UserContext';
+import { useAuth } from '../../../context/AuthContext';
 import { hexToRgb } from '../../../util/hexToRgb';
 import useDevice from '../../../util/device';
 import { EventModel, EventStatus, User, UserRole, WithId } from '../../../types/api';
@@ -34,7 +34,7 @@ const EventList = ({
 }) => {
   const { userId: authUserId } = useAuth();
   const { width } = useWindowDimensions();
-  const { setEvent } = useCategory();
+  const { setEvent } = useEvent();
   const navigation = useTypedNavigation<PredictionsParamList>();
   const { isPad } = useDevice();
 

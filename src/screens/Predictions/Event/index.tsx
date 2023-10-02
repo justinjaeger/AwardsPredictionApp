@@ -2,7 +2,7 @@ import React, { useLayoutEffect } from 'react';
 import { Animated } from 'react-native';
 import { PredictionsParamList } from '../../../navigation/types';
 import { useTypedNavigation } from '../../../util/hooks';
-import { useCategory } from '../../../context/CategoryContext';
+import { useEvent } from '../../../context/EventContext';
 import { eventToString } from '../../../util/stringConversions';
 import LoadingStatue from '../../../components/LoadingStatue';
 import SignedOutState from '../../../components/SignedOutState';
@@ -11,7 +11,7 @@ import CategoryList from './CategoryList';
 import _ from 'lodash';
 import { formatLastUpdated } from '../../../util/formatDateTime';
 import LastUpdatedText from '../../../components/LastUpdatedText';
-import { useAuth } from '../../../context/UserContext';
+import { useAuth } from '../../../context/AuthContext';
 import { StackActions } from '@react-navigation/native';
 import { useLoading } from '../../../hooks/animatedState/useLoading';
 import { iEventDisplayState } from '../../../context/DisplayStateContext';
@@ -36,7 +36,7 @@ const Event = ({
   isLoading: boolean;
 }) => {
   const { userId: authUserId } = useAuth();
-  const { event: _event, setCategory } = useCategory();
+  const { event: _event, setCategory } = useEvent();
   const event = _event!;
   const navigation = useTypedNavigation<PredictionsParamList>();
 

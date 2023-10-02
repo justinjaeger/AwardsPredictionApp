@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
-import { useCategory } from '../../../context/CategoryContext';
-import { iCategory, iEvent, iPrediction } from '../../../types';
+import { useEvent } from '../../../context/EventContext';
 import { CATEGORY_TYPE_TO_STRING } from '../../../constants/categories';
 import Snackbar from '../../../components/Snackbar';
 import { PredictionsParamList } from '../../../navigation/types';
@@ -10,31 +9,28 @@ import { SearchProvider, useSearch } from '../../../context/ContenderSearchConte
 import CreateContender from '../CreateContender';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import BackButton from '../../../components/Buttons/BackButton';
-import { CategoryIsShortlisted, CategoryType, EventStatus } from '../../../API';
 import { useTypedNavigation } from '../../../util/hooks';
 import { usePredictions } from './usePredictions';
 import { FAB } from '../../../components/Buttons/FAB';
 import { Animated } from 'react-native';
 import { useCategoryDisplay } from '../../../hooks/animatedState/useDisplay';
 import { CategoryDisplayFab } from '../../../components/Buttons/DisplayFAB';
-
-export type iCreateContenderProps = {
-  onSelectPrediction: (p: iPrediction) => void;
-};
+import { CategoryType, iPrediction } from '../../../types/api';
+import { getPhaseUserIsPredicting } from '../../../util/getPhaseUserIsPredicting';
 
 const AddPredictions = () => {
   const navigation = useTypedNavigation<PredictionsParamList>();
-  const { category: _category, event: _event } = useCategory();
+  const { category: _category, event: _event } = useEvent();
+  const category = _category!;
+  const event = _event!;
 
-  const category = _category as iCategory;
-  const event = _event as iEvent;
+  const { shortlistDateTime, isHidden, type } = event.categories[category];
 
-  const letUserCreateContenders =
-    category.isShortlisted === CategoryIsShortlisted.FALSE &&
-    ![EventStatus.WINS_LIVE, EventStatus.ARCHIVED].includes(event.status);
+  const phaseUserIsPredicting = getPhaseUserIsPredicting(event, shortlistDateTime);
+  const letUserCreateContenders = !isHidden && phaseUserIsPredicting === undefined;
 
   const {
-    predictionsInList,
+    communityPredictions,
     selectedPredictions,
     setSelectedPredictions,
     onSave,
@@ -59,7 +55,7 @@ const AddPredictions = () => {
       // alert user that contender is already selected
       Snackbar.success(
         `This ${CATEGORY_TYPE_TO_STRING[
-          category.type
+          type
         ].toLowerCase()} is already in your predictions`,
       );
     } else {
@@ -74,7 +70,7 @@ const AddPredictions = () => {
       {letUserCreateContenders ? (
         <SearchInput
           placeholder={
-            category.type === CategoryType.PERFORMANCE ? 'Search Actors' : 'Search Movies'
+            type === CategoryType.PERFORMANCE ? 'Search Actors' : 'Search Movies'
           }
         />
       ) : null}
@@ -89,7 +85,7 @@ const AddPredictions = () => {
             }}
           >
             <MovieListSelectable
-              predictions={predictionsInList}
+              predictions={communityPredictions}
               selectedPredictions={selectedPredictions}
               setSelectedPredictions={(ps) => setSelectedPredictions(ps)}
             />
@@ -101,10 +97,9 @@ const AddPredictions = () => {
             }}
           >
             <MovieListSelectable
-              predictions={predictionsInList}
+              predictions={communityPredictions}
               selectedPredictions={selectedPredictions}
               setSelectedPredictions={(ps) => setSelectedPredictions(ps)}
-              isCollapsed
             />
           </Animated.View>
         </>

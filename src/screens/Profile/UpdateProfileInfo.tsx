@@ -5,14 +5,14 @@ import { useNavigation } from '@react-navigation/native';
 import FormInput from '../../components/Inputs/FormInput';
 import { EvaStatus } from '@ui-kitten/components/devsupport/typings';
 import { SubmitButton } from '../../components/Buttons';
-import { useAuth } from '../../context/UserContext';
+import { useAuth } from '../../context/AuthContext';
 import { getHeaderTitle } from '../../constants';
 import BackgroundWrapper from '../../components/BackgroundWrapper';
 import { Body, BodyBold } from '../../components/Text';
-import useUpdateUser from '../../hooks/mutations/updateUser';
-import useQueryGetUser from '../../hooks/queries/getUser';
+import useMutationUpdateUser from '../../hooks/mutations/useMutationUpdateUser';
+import useQueryGetUser from '../../hooks/queries/useQueryGetUser';
 import ProfileImage from '../../components/ProfileImage';
-import useUpdateProfileImage from '../../hooks/mutations/updateProfileImage';
+import useMutationUpdateProfileImage from '../../hooks/mutations/useMutationUpdateProfileImage';
 import BackButton from '../../components/Buttons/BackButton';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
@@ -23,11 +23,11 @@ const UpdateProfileInfo = () => {
   const navigation = useNavigation();
 
   const { data: user } = useQueryGetUser(authUserId);
-  const { mutate: updateUser, isComplete } = useUpdateUser(() => {
+  const { mutate: updateUser, isComplete } = useMutationUpdateUser(() => {
     Snackbar.success('Profile updated');
     navigation.goBack();
   });
-  const { mutate: updateProfileImage } = useUpdateProfileImage();
+  const { mutate: updateProfileImage } = useMutationUpdateProfileImage();
 
   const [name, setName] = useState<string>(user?.name || '');
   const [bio, setBio] = useState<string>(user?.bio || '');
@@ -90,8 +90,8 @@ const UpdateProfileInfo = () => {
     const un = enableSubmitUsername ? username : undefined;
     const n = enableSubmitName ? name : undefined;
     const b = enableSubmitBio ? bio : undefined;
-    if (!user?.id) return;
-    updateUser({ id: user?.id, username: un, name: n, bio: b });
+    if (!user?._id) return;
+    updateUser({ id: user?._id, username: un, name: n, bio: b });
   };
 
   const onUploadProfileImage = async () => {

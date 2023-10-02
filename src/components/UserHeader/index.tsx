@@ -2,17 +2,17 @@ import { StackActions } from '@react-navigation/native';
 import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { PredictionsParamList } from '../../navigation/types';
-import { iUser } from '../../types';
 import { useTypedNavigation } from '../../util/hooks';
 import CustomIcon from '../CustomIcon';
 import ProfileImage from '../ProfileImage';
 import { SubHeader } from '../Text';
+import { User, WithId } from '../../types/api';
 
 const UserHeader = ({
   user,
   showEventLink,
 }: {
-  user: iUser;
+  user: WithId<User>;
   showEventLink?: boolean;
 }) => {
   const navigation = useTypedNavigation<PredictionsParamList>();
@@ -37,7 +37,7 @@ const UserHeader = ({
         imageSize={50}
         image={user?.image}
         onPress={() => {
-          navigation.dispatch(StackActions.push('Profile', { userId: user.id }));
+          navigation.dispatch(StackActions.push('Profile', { userId: user._id }));
         }}
         style={{ marginLeft: 10, marginRight: 15 }}
       />
@@ -45,7 +45,7 @@ const UserHeader = ({
         <TouchableOpacity
           onPress={() => {
             navigation.dispatch(
-              StackActions.replace('EventFromProfile', { userId: user.id }),
+              StackActions.replace('EventFromProfile', { userId: user._id }),
             );
           }}
           style={{ flexDirection: 'row', alignItems: 'center' }}

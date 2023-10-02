@@ -1,18 +1,15 @@
 import { Divider } from '@ui-kitten/components';
 import React, { useState } from 'react';
 import { Animated, FlatList, View } from 'react-native';
-import { PredictionType } from '../../API';
-import { getCategorySlots } from '../../constants/categories';
 import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
-import { useCategory } from '../../context/CategoryContext';
-import { iCategory, iEvent, iPrediction } from '../../types';
+import { useEvent } from '../../context/EventContext';
 import LastUpdatedText from '../LastUpdatedText';
 import ContenderListItem, {
   iContenderListItemProps,
 } from '../List/ContenderList/ContenderListItem';
-import ContenderListItemCondensed from '../List/ContenderList/ContenderListItemCondensed';
 import { BodyBold } from '../Text';
+import { EventStatus, iPrediction } from '../../types/api';
 
 type iMovieListProps = {
   predictions: iPrediction[];
@@ -27,16 +24,17 @@ const MovieListCommunity = ({
   lastUpdatedString,
   disableHeader,
 }: iMovieListProps) => {
-  const { event: _event, category: _category, date } = useCategory();
-  const isHistory = !!date;
-
-  const event = _event as iEvent;
-  const category = _category as iCategory;
+  const { event: _event, category: _category } = useEvent();
+  const event = _event!;
+  const category = _category!;
+  const { nomDateTime, status } = event;
+  const { slots: _slots, type } = event.categories[category];
+  const slots = _slots ?? 5;
 
   const [selectedContenderId, setSelectedContenderId] = useState<string | undefined>(); // this selection is whether the film is big or not
 
-  const predictionType = predictions[0]?.predictionType || PredictionType.NOMINATION;
-  const slots = getCategorySlots(event, category.name, predictionType);
+  const nominationsHaveHappened =
+    (nomDateTime && nomDateTime < new Date()) || status === EventStatus.WINS_LIVE;
 
   return (
     <FlatList
@@ -46,7 +44,7 @@ const MovieListCommunity = ({
       contentContainerStyle={{ paddingBottom: 100 }}
       ListHeaderComponent={
         <>
-          <LastUpdatedText lastUpdated={lastUpdatedString} isDisabled={isHistory} />
+          <LastUpdatedText lastUpdated={lastUpdatedString} />
           {predictions.length > 0 ? (
             <View
               style={{
@@ -66,7 +64,7 @@ const MovieListCommunity = ({
                     alignItems: 'center',
                   }}
                 >
-                  {predictionType === PredictionType.WIN ? (
+                  {nominationsHaveHappened ? (
                     <View />
                   ) : (
                     <View>
@@ -102,7 +100,7 @@ const MovieListCommunity = ({
           isSelected: selectedContenderId === prediction.contenderId,
           onPressItem,
           onPressThumbnail: onPressItem,
-          categoryType: category.type,
+          categoryType: type,
         };
         return (
           <>
@@ -115,11 +113,7 @@ const MovieListCommunity = ({
                 }}
               />
             ) : null}
-            {!isCollapsed ? (
-              <ContenderListItem {...listItemProps} />
-            ) : (
-              <ContenderListItemCondensed {...listItemProps} />
-            )}
+            <ContenderListItem {...listItemProps} />
           </>
         );
       }}

@@ -1,7 +1,7 @@
 import api from '../api';
 
 export const sendVerificationEmail = async (email: string) => {
-  return await api.get<undefined>(`email/send/?email=${email}`);
+  return await api.get<void>(`email/send/?email=${email}`);
 };
 
 // returns the email parsed from the link

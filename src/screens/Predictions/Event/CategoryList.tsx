@@ -4,11 +4,10 @@ import MovieGrid from '../../../components/MovieGrid';
 import { HeaderLight, SubHeader } from '../../../components/Text';
 import COLORS from '../../../constants/colors';
 import theme from '../../../constants/theme';
-import { useCategory } from '../../../context/CategoryContext';
+import { useEvent } from '../../../context/EventContext';
 import { getOrderedPredictions } from '../../../util/sortByObjectOrder';
 import {
   CategoryName,
-  Phase,
   PredictionSet,
   WithId,
   iCategoryPrediction,
@@ -29,7 +28,7 @@ const CategoryList = ({
   predictionData,
   isAuthUserProfile,
 }: iCategoryListProps) => {
-  const { event: _event, reset } = useCategory();
+  const { event: _event, reset } = useEvent();
   const event = _event!;
   const unorderedCategories = (predictionData?.categories || {}) as Record<
     CategoryName,
@@ -51,10 +50,8 @@ const CategoryList = ({
   const predictions: JSX.Element[] = [];
   for (const [categoryName, catPredictions] of orderedPredictions) {
     // get category info
-    const { hideUntilShortlisted, phase, name, slots } =
-      awardsBodyCategories[categoryName];
+    const { isHidden, name, slots } = awardsBodyCategories[categoryName];
     // hide hidden categories (like shorts)
-    const isHidden = hideUntilShortlisted && phase === Phase.SHORTLIST;
     if (isHidden) continue;
     const { predictions } = catPredictions;
     // once nominations happen, you want "slots" to be however many films are nominated

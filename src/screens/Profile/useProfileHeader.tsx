@@ -1,8 +1,7 @@
 import React, { useLayoutEffect } from 'react';
 import { Alert, TouchableOpacity } from 'react-native';
-import AuthServices from '../../services/auth';
 import Snackbar from '../../components/Snackbar';
-import { useAuth } from '../../context/UserContext';
+import { useAuth } from '../../context/AuthContext';
 import { useNavigation } from '@react-navigation/native';
 import { useTypedNavigation } from '../../util/hooks';
 import BackButton from '../../components/Buttons/BackButton';
@@ -28,15 +27,6 @@ const useProfileHeader = (
     resetProfileUser();
     Snackbar.success('You were signed out');
     setIsLoading(false);
-    // AuthServices.signOut().then((res) => {
-    //   // sign out in context as well
-    //   if (res.status === 'success') {
-    //     signOutUser();
-    //     resetProfileUser();
-    //     Snackbar.success('You were signed out');
-    //   }
-    //   setIsLoading(false);
-    // });
   };
 
   // put the logout button in the top right corner

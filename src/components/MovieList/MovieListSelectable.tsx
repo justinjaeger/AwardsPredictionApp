@@ -1,28 +1,27 @@
 import React, { useState } from 'react';
 import { FlatList, Keyboard } from 'react-native';
-import { useCategory } from '../../context/CategoryContext';
-import { iCategory, iPrediction } from '../../types';
+import { useEvent } from '../../context/EventContext';
 import { removePredictionFromList } from '../../util/removePredictionFromList';
 import ContenderListItem, {
   iContenderListItemProps,
 } from '../List/ContenderList/ContenderListItem';
-import ContenderListItemCondensed from '../List/ContenderList/ContenderListItemCondensed';
+import { iPrediction } from '../../types/api';
 
 type iMovieListProps = {
   predictions: iPrediction[];
   selectedPredictions: iPrediction[]; // for "add predictions"
   setSelectedPredictions: (ps: iPrediction[]) => void; // for "add predictions"
-  isCollapsed?: boolean;
 };
 
 const MovieListSelectable = ({
   predictions,
   selectedPredictions,
   setSelectedPredictions,
-  isCollapsed,
 }: iMovieListProps) => {
-  const { category: _category } = useCategory();
-  const category = _category as iCategory;
+  const { event: _event, category: _category } = useEvent();
+  const category = _category!;
+  const event = _event!;
+  const { type } = event.categories[category];
 
   const [selectedContenderId, setSelectedContenderId] = useState<string | undefined>(); // this selection is whether the film is big or not
 
@@ -68,14 +67,10 @@ const MovieListSelectable = ({
           isSelected: selectedContenderId === prediction.contenderId,
           onPressItem,
           onPressThumbnail,
-          categoryType: category.type,
+          categoryType: type,
           highlighted,
         };
-        return isCollapsed ? (
-          <ContenderListItemCondensed {...listItemProps} />
-        ) : (
-          <ContenderListItem {...listItemProps} />
-        );
+        return <ContenderListItem {...listItemProps} />;
       }}
     />
   );

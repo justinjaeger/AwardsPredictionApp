@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useState } from 'react';
-import { useCategory } from '../context/CategoryContext';
+import { useEvent } from './EventContext';
 import { useAsyncEffect } from '../util/hooks';
 import MongoApi from '../services/api/requests';
 import { PredictionSet, User, WithId } from '../types/api';
-import { useAsyncStorePrefetch } from './AsyncStorePrefetch';
+import { useTmdbDataStore } from './TmdbDataStore';
 
 /**
  * Lets us get the userId and userEmail synchronously
@@ -26,8 +26,8 @@ const ProfilePredictionContext = createContext<iProfilePredictionContext>({
 });
 
 export const ProfilePredictionProvider = (props: { children: React.ReactNode }) => {
-  const { event } = useCategory();
-  const { storeTmdbDataFromPredictionSet } = useAsyncStorePrefetch();
+  const { event } = useEvent();
+  const { storeTmdbDataFromPredictionSet } = useTmdbDataStore();
 
   const [userId, setUserId] = useState<string | undefined>(undefined);
 
@@ -37,7 +37,7 @@ export const ProfilePredictionProvider = (props: { children: React.ReactNode }) 
   );
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  // can't use react-query because data must be re-fetched for each userId (it's not a pure component)
+  // can't use react-query because other user data cannot be manually expired?
   useAsyncEffect(async () => {
     if (event?._id && userId) {
       setIsLoading(true);

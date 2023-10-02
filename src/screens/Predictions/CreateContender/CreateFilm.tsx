@@ -1,37 +1,36 @@
 import React, { useEffect, useState } from 'react';
-import TmdbServices from '../../../services/tmdb';
-import { iSearchData } from '../../../services/tmdb/search';
 import { Body } from '../../../components/Text';
 import { View } from 'react-native';
-import { useCategory } from '../../../context/CategoryContext';
-import { iCategory, iEvent, iPrediction } from '../../../types';
+import { useEvent } from '../../../context/EventContext';
 import COLORS from '../../../constants/colors';
 import MovieListSearch from '../../../components/MovieList/MovieListSearch';
 import LoadingStatueModal from '../../../components/LoadingStatueModal';
-import useMutationCreateContender from '../../../hooks/mutations/createContender';
-import useQueryCommunityEvent from '../../../hooks/queries/getCommunityEvent';
+import useMutationCreateFilmContender from '../../../hooks/mutations/useMutationCreateFilmContender';
 import { FAB } from '../../../components/Buttons/FAB';
-import { CategoryType, ContenderVisibility, PredictionType } from '../../../API';
 import { useSearch } from '../../../context/ContenderSearchContext';
-import { iCreateContenderProps } from '../AddPredictions.tsx';
+import { iCreateContenderProps } from '.';
+import useQueryGetCommunityPredictions from '../../../hooks/queries/useQueryGetCommunityPredictions';
+import { useTmdbDataStore } from '../../../context/TmdbDataStore';
+import { CategoryType, Movie, WithId, iPrediction } from '../../../types/api';
+import TmdbServices, { iSearchData } from '../../../services/tmdb';
 
 // TODO: should only be able to do this if logged in
-const CreateFilm = (props: iCreateContenderProps) => {
-  const { onSelectPrediction } = props;
+const CreateFilm = ({ onSelectPrediction }: iCreateContenderProps) => {
+  const { itemsKeyedByTmdbId } = useTmdbDataStore();
 
   const { setIsLoadingSearch } = useSearch();
-  const { category: _category, event: _event } = useCategory();
+  const { category: _category, event: _event } = useEvent();
 
-  const category = _category as iCategory;
-  const event = _event as iEvent;
+  const category = _category!;
+  const event = _event!;
 
   // when adding a contender to the list of overall contenders
-  const { mutate, isComplete, response } = useMutationCreateContender();
+  const { mutate, isComplete, response } = useMutationCreateFilmContender();
 
   const { searchInput, debouncedSearch, resetSearchHack, setResetSearchHack } =
     useSearch();
-  const { data: communityData } = useQueryCommunityEvent({ event, includeHidden: true }); // because we use this to see if contender exists, we want to includes hidden contenders
-  const communityPredictions = communityData?.[category.id]?.predictions || [];
+  const { data: communityData } = useQueryGetCommunityPredictions(); // because we use this to see if contender exists, we want to includes hidden contenders
+  const communityPredictions = communityData?.categories[category].predictions || [];
 
   const [searchResults, setSearchResults] = useState<iSearchData>([]);
   const [searchMessage, setSearchMessage] = useState<string>('');
@@ -46,8 +45,16 @@ const CreateFilm = (props: iCreateContenderProps) => {
     setResetSearchHack(!resetSearchHack); // resets searchbar
   };
 
-  const getPredictionFromTmdbId = (tmdbId: number) => {
-    return communityPredictions.find((p) => p.contenderMovie?.tmdbId === tmdbId);
+  const getFilmPrediction = (movieTmdbId: number) => {
+    const maybeMovie = movieTmdbId
+      ? (itemsKeyedByTmdbId[movieTmdbId] as WithId<Movie>)
+      : undefined;
+    const maybeExistingPrediction =
+      maybeMovie &&
+      communityPredictions.find(
+        (p) => p.movieId === maybeMovie._id && p.personId === maybeMovie._id,
+      );
+    return maybeExistingPrediction;
   };
 
   // handles the search
@@ -58,7 +65,13 @@ const CreateFilm = (props: iCreateContenderProps) => {
   // block runs after createContender mutation succeeds
   useEffect(() => {
     if (response) {
-      onSelectPrediction(response);
+      onSelectPrediction({
+        contenderId: response._id,
+        movieId: response.movieId,
+        personId: response.personId,
+        songId: response.songId,
+        ranking: 0,
+      });
       resetSearch();
     }
   }, [response]);
@@ -89,32 +102,25 @@ const CreateFilm = (props: iCreateContenderProps) => {
   const onConfirmContender = async () => {
     if (!selectedTmdbId) return;
     // can check that selectedTmdbId is not already associated with a contender in our category list
-    const maybeAlreadyExistingPrediction = getPredictionFromTmdbId(selectedTmdbId);
+    const maybeAlreadyExistingPrediction = getFilmPrediction(selectedTmdbId);
     if (maybeAlreadyExistingPrediction) {
       // this film has already been added to community predictions
       onSelectPrediction(maybeAlreadyExistingPrediction);
       return;
     }
     await mutate({
-      eventId: event.id,
-      categoryId: category.id,
+      eventId: event._id,
+      category,
       movieTmdbId: selectedTmdbId,
     });
   };
 
   // these are sort of "fake" values
-  const movieData: iPrediction[] = searchResults.map((m) => ({
+  const movieSearchResultsFormatted: iPrediction[] = searchResults.map((m) => ({
     id: m.tmdbId.toString(),
     ranking: 0,
-    accolade: undefined,
-    visibility: ContenderVisibility.VISIBLE,
-    predictionType: PredictionType.NOMINATION, // they only add predictions for nominations
     contenderId: m.tmdbId.toString(),
-    contenderMovie: {
-      id: m.tmdbId.toString(),
-      tmdbId: m.tmdbId,
-      studio: m.description,
-    },
+    movieId: m.tmdbId.toString(),
   }));
 
   return (
@@ -140,7 +146,7 @@ const CreateFilm = (props: iCreateContenderProps) => {
             }}
           >
             <MovieListSearch
-              predictions={movieData}
+              predictions={movieSearchResultsFormatted}
               onSelect={(tmdbId) => {
                 if (selectedTmdbId === tmdbId) {
                   setSelectedTmdbId(undefined);

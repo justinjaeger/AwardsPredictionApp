@@ -2,24 +2,21 @@ import { Divider } from '@ui-kitten/components';
 import React, { useState } from 'react';
 import { TouchableHighlight, View } from 'react-native';
 import DraggableFlatList, { ScaleDecorator } from 'react-native-draggable-flatlist';
-import { PredictionType } from '../../API';
-import { CATEGORY_TYPE_TO_STRING, getCategorySlots } from '../../constants/categories';
+import { CATEGORY_TYPE_TO_STRING } from '../../constants/categories';
 import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
-import { useCategory } from '../../context/CategoryContext';
-import { iCategory, iEvent, iPrediction } from '../../types';
+import { useEvent } from '../../context/EventContext';
 import LastUpdatedText from '../LastUpdatedText';
 import ContenderListItem, {
   iContenderListItemProps,
 } from '../List/ContenderList/ContenderListItem';
-import ContenderListItemCondensed from '../List/ContenderList/ContenderListItemCondensed';
 import { SubHeader } from '../Text';
+import { iPrediction } from '../../types/api';
 
 type iMovieListProps = {
   predictions: iPrediction[];
   setPredictions: (ps: iPrediction[]) => void;
   lastUpdatedString: string;
-  isCollapsed?: boolean;
   isAuthProfile?: boolean;
   onPressAdd: () => void;
 };
@@ -27,22 +24,17 @@ type iMovieListProps = {
 const MovieListDraggable = ({
   predictions,
   setPredictions,
-  isCollapsed,
   lastUpdatedString,
   isAuthProfile,
   onPressAdd,
 }: iMovieListProps) => {
-  const { event: _event, category: _category, date } = useCategory();
-  const isHistory = !!date;
-
-  const event = _event as iEvent;
-  const category = _category as iCategory;
+  const { event: _event, category: _category } = useEvent();
+  const event = _event!;
+  const category = _category!;
 
   const [selectedContenderId, setSelectedContenderId] = useState<string | undefined>(); // this selection is whether the film is big or not
 
-  const predictionType = predictions[0]?.predictionType || PredictionType.NOMINATION;
-
-  const slots = getCategorySlots(event, category.name, predictionType);
+  const { slots, type } = event.categories[category];
 
   return (
     <DraggableFlatList
@@ -54,14 +46,10 @@ const MovieListDraggable = ({
         paddingTop: theme.windowMargin,
       }}
       ListHeaderComponent={
-        <LastUpdatedText
-          lastUpdated={lastUpdatedString}
-          isDisabled={isHistory}
-          style={{ top: -35 }}
-        />
+        <LastUpdatedText lastUpdated={lastUpdatedString} style={{ top: -35 }} />
       }
       ListFooterComponent={
-        isAuthProfile && !isHistory ? (
+        isAuthProfile ? (
           <View style={{ width: '100%', alignItems: 'center', marginTop: 40 }}>
             <TouchableHighlight
               style={{
@@ -79,8 +67,8 @@ const MovieListDraggable = ({
             >
               <SubHeader>
                 {predictions.length === 0
-                  ? `+ Add ${CATEGORY_TYPE_TO_STRING[category.type]}s`
-                  : `Add/Delete ${CATEGORY_TYPE_TO_STRING[category.type]}s`}
+                  ? `+ Add ${CATEGORY_TYPE_TO_STRING[type]}s`
+                  : `Add/Delete ${CATEGORY_TYPE_TO_STRING[type]}s`}
               </SubHeader>
             </TouchableHighlight>
           </View>
@@ -110,7 +98,7 @@ const MovieListDraggable = ({
             drag,
             isActive,
           },
-          categoryType: category.type,
+          categoryType: type,
           isAuthProfile,
         };
         return (
@@ -124,11 +112,7 @@ const MovieListDraggable = ({
               />
             ) : null}
             <ScaleDecorator activeScale={0.9}>
-              {!isCollapsed ? (
-                <ContenderListItem {...listItemProps} />
-              ) : (
-                <ContenderListItemCondensed {...listItemProps} />
-              )}
+              <ContenderListItem {...listItemProps} />
             </ScaleDecorator>
           </>
         );

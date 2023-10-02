@@ -6,11 +6,10 @@ import MovieGrid from '../../../components/MovieGrid';
 import MovieListCommunity from '../../../components/MovieList/MovieListCommunity';
 import { BodyBold } from '../../../components/Text';
 import theme from '../../../constants/theme';
-import { useCategory } from '../../../context/CategoryContext';
-import { iCategory } from '../../../types';
+import { useEvent } from '../../../context/EventContext';
 import { formatLastUpdated } from '../../../util/formatDateTime';
 import EventLink from './EventLink';
-import useCategoryCommunityPredictions from './useCategoryCommunityPredictions';
+import useQueryGetCommunityPredictions from '../../../hooks/queries/useQueryGetCommunityPredictions';
 
 // Note: We ALSO use this for non-authenticated user profiles
 const CategoryCommunity = ({
@@ -18,21 +17,16 @@ const CategoryCommunity = ({
   expandedOpacity,
   delayedDisplay,
   gridOpacity,
-  predictionData,
   isIndividualProfile,
   showEventLink,
 }: iCategoryProps & { isIndividualProfile?: boolean }) => {
-  const { category: _category, date } = useCategory();
+  const { category: _category } = useEvent();
+  const category = _category!;
 
-  const isHistory = !!date;
-  const category = _category as iCategory;
+  const { data: predictionSet } = useQueryGetCommunityPredictions();
 
-  const { predictions } = useCategoryCommunityPredictions({
-    predictionData: predictionData || {},
-  });
-
-  const lastUpdated = predictionData?.[category.id]?.updatedAt;
-  const lastUpdatedString = formatLastUpdated(new Date(lastUpdated || ''));
+  const { createdAt, predictions } = predictionSet?.categories[category] || {};
+  const lastUpdatedString = formatLastUpdated(new Date(createdAt || ''));
 
   if (!predictions) {
     return null;
@@ -50,7 +44,7 @@ const CategoryCommunity = ({
           }}
         >
           <BodyBold>
-            {!isHistory && !isIndividualProfile
+            {!isIndividualProfile
               ? 'Community predictions not yet tallied'
               : 'No predictions for this date'}
           </BodyBold>
@@ -70,11 +64,7 @@ const CategoryCommunity = ({
         showsVerticalScrollIndicator={false}
       >
         <Animated.View style={{ opacity: gridOpacity }}>
-          <LastUpdatedText
-            lastUpdated={lastUpdatedString}
-            isDisabled={isHistory}
-            style={{ top: -35 }}
-          />
+          <LastUpdatedText lastUpdated={lastUpdatedString} style={{ top: -35 }} />
           <MovieGrid predictions={predictions} />
         </Animated.View>
       </Animated.ScrollView>

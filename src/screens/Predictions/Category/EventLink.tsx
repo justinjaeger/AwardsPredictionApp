@@ -4,13 +4,13 @@ import { TouchableHighlight } from 'react-native';
 import CustomIcon from '../../../components/CustomIcon';
 import COLORS from '../../../constants/colors';
 import theme from '../../../constants/theme';
-import { useCategory } from '../../../context/CategoryContext';
+import { useEvent } from '../../../context/EventContext';
 import { BodyBold } from '../../../components/Text';
 import { hexToRgb } from '../../../util/hexToRgb';
 
 const EventLink = ({ userId }: { userId: string | undefined }) => {
   const navigation = useNavigation();
-  const { event } = useCategory();
+  const { event } = useEvent();
 
   if (!event) return null;
 

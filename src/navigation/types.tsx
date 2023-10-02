@@ -1,7 +1,6 @@
 import { StackNavigationProp } from '@react-navigation/stack';
-import { CategoryType } from '../API';
-import { iPrediction } from '../types';
 import { MaterialTopTabNavigationProp } from '@react-navigation/material-top-tabs';
+import { iPrediction } from '../types/api';
 
 export type MainScreenNavigationProp = StackNavigationProp<MainParamList>;
 export type MainParamList = {
@@ -58,12 +57,6 @@ export type PredictionsParamList = {
     type: 'followers' | 'following';
   };
   UpdateProfileInfo: undefined;
-  // UNFINISHED SCREENS
-  ContenderDetails: {
-    categoryType: CategoryType;
-    contenderId: string;
-    personTmdb?: number | undefined;
-  };
   // FRIEND SCREENS
   SearchFriends: undefined;
 };

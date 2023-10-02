@@ -3,22 +3,24 @@ import React from 'react';
 import { FlatList } from 'react-native';
 import theme from '../../constants/theme';
 import { useSearch } from '../../context/ContenderSearchContext';
-import { useAuth } from '../../context/UserContext';
-import { iUser } from '../../types';
+import { useAuth } from '../../context/AuthContext';
 import { HeaderLight, SubHeader } from '../Text';
 import UserListSkeleton from '../Skeletons/UserListSkeleton';
 import UserSearchResultItem from './UserSearchResultItem';
+import { User, WithId } from '../../types/api';
 
 export const IMAGE_SIZE = 50;
 
 const UserSearchResult = ({
   users,
+  usersIdsAuthUserIsFollowing,
   isLoading,
   onEndReached,
   header,
   noHeader,
 }: {
-  users: iUser[];
+  users: WithId<User>[];
+  usersIdsAuthUserIsFollowing: string[];
   isLoading?: boolean;
   onEndReached?: () => void;
   header?: string;
@@ -51,7 +53,7 @@ const UserSearchResult = ({
       contentContainerStyle={{
         alignItems: 'flex-start',
       }}
-      keyExtractor={(item) => item.id}
+      keyExtractor={(item) => item._id}
       onScrollEndDrag={(e) => {
         // Fetches more at bottom of scroll. Note the high event throttle to prevent too many requests
         // get position of current scroll
@@ -86,6 +88,7 @@ const UserSearchResult = ({
         <UserSearchResultItem
           item={item}
           authUserId={authUserId}
+          authUserIsFollowing={usersIdsAuthUserIsFollowing.includes(item._id)}
           onPress={navigateToProfile}
         />
       )}

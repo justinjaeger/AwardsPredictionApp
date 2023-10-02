@@ -4,29 +4,21 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { Animated, TouchableHighlight, useWindowDimensions, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import {
-  CategoryIsShortlisted,
-  CategoryType,
-  ContenderAccolade,
-  EventStatus,
-  PredictionType,
-} from '../../../API';
-import { getCategorySlots } from '../../../constants/categories';
 import COLORS from '../../../constants/colors';
 import { getPosterDimensionsByWidth } from '../../../constants/posterDimensions';
 import theme from '../../../constants/theme';
-import { useCategory } from '../../../context/CategoryContext';
-import { iCategory, iEvent, iPrediction } from '../../../types';
+import { useEvent } from '../../../context/EventContext';
 import { getNumPredicting } from '../../../util/getNumPredicting';
 import { IconButton } from '../../Buttons/IconButton';
 import AnimatedPoster from '../../Images/AnimatedPoster';
 import { Body, SubHeader } from '../../Text';
-import AccoladeTag from './AccoladeTag';
 import CustomIcon from '../../CustomIcon';
 import { hexToRgb } from '../../../util/hexToRgb';
 import { MainScreenNavigationProp } from '../../../navigation/types';
-import useTmdb from './useTmdb';
 import useListItemAnimation from './useListItemAnimation';
+import { CategoryName, CategoryType, EventStatus, iPrediction } from '../../../types/api';
+import { useTmdbDataStore } from '../../../context/TmdbDataStore';
+import { categoryNameToTmdbCredit } from '../../../util/categoryNameToTmdbCredit';
 
 export type iContenderListItemProps = {
   variant: 'community' | 'personal' | 'selectable' | 'search';
@@ -71,11 +63,13 @@ const ContenderListItem = (props: iContenderListItemProps) => {
   const RIGHT_COL_WIDTH =
     variant === 'personal' ? 45 : variant === 'community' ? 100 : 10;
 
-  const { category: _category, event: _event, date } = useCategory();
-  const isHistory = !!date;
-  const disableEditing = isHistory || !isAuthProfile;
-  const category = _category as iCategory;
-  const event = _event as iEvent;
+  const { category: _category, event: _event } = useEvent();
+  const disableEditing = !isAuthProfile;
+  const category = _category!;
+  const event = _event!;
+  const { name, slots: _slots } = event.categories[category];
+  const slots = _slots || 5;
+  const categoryName = name as CategoryName;
 
   const width = isSelected ? LARGE_POSTER : SMALL_POSTER;
   const { height } = getPosterDimensionsByWidth(width);
@@ -90,78 +84,46 @@ const ContenderListItem = (props: iContenderListItemProps) => {
     windowWidth,
   );
 
-  const { tmdbMovie, tmdbPerson } = useTmdb(prediction);
+  // note: numPredicting is only commnuity
+  const { numPredicting } = prediction;
 
-  const tmdbMovieId = prediction.contenderMovie?.tmdbId;
-  const tmdbPersonId = prediction.contenderPerson?.tmdbId;
-  const movieStudio = prediction.contenderMovie?.studio;
+  const { getTmdbDataFromPrediction } = useTmdbDataStore();
+  const { movie, person, song } = getTmdbDataFromPrediction(prediction)!;
 
-  const eventIsArchived = event.status === EventStatus.ARCHIVED;
+  const { status, nomDateTime } = event;
+  const nominationsHaveHappened =
+    (nomDateTime && nomDateTime < new Date()) || status === EventStatus.WINS_LIVE;
 
   const onPressPoster = () => {
     if (disabled) return;
     onPressThumbnail && onPressThumbnail(prediction);
   };
 
-  const categoryName = category.name;
-  const catInfo = tmdbMovie?.categoryInfo?.[categoryName];
-  const categoryInfo = catInfo ? catInfo?.join(', ') : undefined;
-  const indexedRankings =
-    variant === 'community' ? prediction.indexedRankings : undefined;
+  const categoryInfo = categoryNameToTmdbCredit(categoryName, movie.categoryCredits);
 
-  const showBotomButtons = isSelected && tmdbMovie;
+  const showBotomButtons = isSelected && movie;
 
   const fadeBottom = isSelected !== true && variant === 'search';
-
-  const nominationsHaveHappened = prediction.predictionType === PredictionType.WIN;
-
-  const predictionIsNotNominated =
-    ['personal', 'selectable'].includes(variant) &&
-    nominationsHaveHappened &&
-    prediction.accolade !== ContenderAccolade.NOMINEE &&
-    prediction.accolade !== ContenderAccolade.WINNER;
-
-  const predictionIsNotShortlisted =
-    ['personal', 'selectable'].includes(variant) &&
-    category.isShortlisted === CategoryIsShortlisted.TRUE &&
-    !prediction.accolade;
-
-  const isUnqualified =
-    !eventIsArchived && (predictionIsNotNominated || predictionIsNotShortlisted);
 
   let title = '';
   let subtitle = '';
   switch (categoryType) {
     case CategoryType.FILM:
-      title = tmdbMovie?.title || '';
-      subtitle = categoryInfo || movieStudio || '';
+      title = movie?.title || '';
+      subtitle = categoryInfo ? categoryInfo.join(',') : movie.studio || '';
       break;
     case CategoryType.PERFORMANCE:
-      if (!tmdbPerson) break;
-      title = tmdbPerson?.name || '';
-      subtitle = tmdbMovie?.title || '';
+      if (!person) break;
+      title = person?.name || '';
+      subtitle = movie?.title || '';
       break;
     case CategoryType.SONG:
-      title = prediction.contenderSong?.title || '';
-      subtitle = tmdbMovie?.title || '';
+      title = song?.title || '';
+      subtitle = song?.title || '';
       break;
   }
-  if (!eventIsArchived) {
-    if (predictionIsNotNominated) {
-      subtitle =
-        variant === 'selectable' ? 'Not nominated' : 'Not nominated. Tap +/- to remove';
-    } else if (predictionIsNotShortlisted) {
-      subtitle =
-        variant === 'selectable'
-          ? 'Not shortlisted'
-          : 'Not shortlisted. Tap +/- to remove';
-    }
-  }
 
-  const { win, nom } = getNumPredicting(
-    indexedRankings || {},
-    getCategorySlots(event, category.name, prediction.predictionType),
-  );
+  const { win, nom } = getNumPredicting(numPredicting || {}, slots);
 
   return (
     <TouchableHighlight
@@ -169,14 +131,11 @@ const ContenderListItem = (props: iContenderListItemProps) => {
         onPressItem(prediction);
       }}
       style={{
-        backgroundColor:
-          isUnqualified && (variant !== 'selectable' || highlighted) // if variant IS selectable (false), must be selected
-            ? COLORS.error
-            : isActive
-            ? COLORS.secondaryDark
-            : highlighted
-            ? hexToRgb(COLORS.secondaryLight, 0.15)
-            : 'transparent',
+        backgroundColor: isActive
+          ? COLORS.secondaryDark
+          : highlighted
+          ? hexToRgb(COLORS.secondaryLight, 0.15)
+          : 'transparent',
         width: '100%',
         paddingTop: theme.windowMargin / 8,
         paddingBottom: theme.windowMargin / 8,
@@ -191,10 +150,10 @@ const ContenderListItem = (props: iContenderListItemProps) => {
         <AnimatedPoster
           path={
             categoryType === CategoryType.PERFORMANCE
-              ? tmdbPerson?.profilePath || null
-              : tmdbMovie?.posterPath || null
+              ? person?.posterPath || null
+              : movie?.posterPath || null
           }
-          title={tmdbMovie?.title || ''}
+          title={movie?.title || ''}
           animatedWidth={imageWidth}
           animatedHeight={imageHeight}
           ranking={['selectable', 'search'].includes(variant) ? undefined : ranking}
@@ -246,12 +205,6 @@ const ContenderListItem = (props: iContenderListItemProps) => {
                   <SubHeader style={{ marginLeft: 10, marginRight: 5 }}>
                     {title}
                   </SubHeader>
-                  {isHistory && prediction.accolade ? (
-                    <AccoladeTag
-                      accolade={prediction.accolade}
-                      type={prediction.predictionType}
-                    />
-                  ) : null}
                 </View>
                 <Body
                   style={{
@@ -263,7 +216,7 @@ const ContenderListItem = (props: iContenderListItemProps) => {
                 </Body>
               </Animated.View>
             </MaskedView>
-            {indexedRankings ? (
+            {numPredicting ? (
               <View
                 style={{
                   width: RIGHT_COL_WIDTH,
@@ -317,7 +270,7 @@ const ContenderListItem = (props: iContenderListItemProps) => {
             ) : null}
           </View>
           {/* TODO: Instead of linking to IMDB, display a bunch of info from TMDB */}
-          {showBotomButtons && tmdbMovie ? (
+          {showBotomButtons && movie ? (
             <Animated.View
               style={{
                 position: 'absolute',
@@ -330,14 +283,14 @@ const ContenderListItem = (props: iContenderListItemProps) => {
                 marginLeft: theme.windowMargin,
               }}
             >
-              {tmdbPersonId ? (
+              {person ? (
                 <>
                   <ExternalLinkButton
                     text={'More Info'}
                     onPress={() => {
                       navigation.navigate('WebView', {
-                        uri: `https://www.themoviedb.org/person/${tmdbPersonId}/`,
-                        title: tmdbPerson?.name || '',
+                        uri: `https://www.themoviedb.org/person/${person.tmdbId}/`,
+                        title: person.name || '',
                       });
                     }}
                   />
@@ -345,8 +298,8 @@ const ContenderListItem = (props: iContenderListItemProps) => {
                     text={'Film'}
                     onPress={() => {
                       navigation.navigate('WebView', {
-                        uri: `https://www.themoviedb.org/movie/${tmdbMovieId}/`,
-                        title: tmdbMovie?.title || '',
+                        uri: `https://www.themoviedb.org/movie/${movie.tmdbId}/`,
+                        title: movie?.title || '',
                       });
                     }}
                   />
@@ -358,8 +311,8 @@ const ContenderListItem = (props: iContenderListItemProps) => {
                     // eslint-disable-next-line sonarjs/no-identical-functions
                     onPress={() => {
                       navigation.navigate('WebView', {
-                        uri: `https://www.themoviedb.org/movie/${tmdbMovieId}/`,
-                        title: tmdbMovie?.title || '',
+                        uri: `https://www.themoviedb.org/movie/${movie.tmdbId}/`,
+                        title: movie?.title || '',
                       });
                     }}
                   />
@@ -367,8 +320,8 @@ const ContenderListItem = (props: iContenderListItemProps) => {
                     text={'Cast'}
                     onPress={() => {
                       navigation.navigate('WebView', {
-                        uri: `https://www.themoviedb.org/movie/${tmdbMovieId}/cast/`,
-                        title: tmdbMovie?.title || '',
+                        uri: `https://www.themoviedb.org/movie/${movie.tmdbId}/cast/`,
+                        title: movie?.title || '',
                       });
                     }}
                   />

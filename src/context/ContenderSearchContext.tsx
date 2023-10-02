@@ -5,7 +5,7 @@ import { useDebounce } from '../util/hooks';
  * Context that wraps the "read only" screens shared by global and personal
  */
 
-type iCategoryContext = {
+type iSearchContext = {
   isSearching: boolean;
   setIsSearching: (isSearching: boolean) => void;
   searchInput: string;
@@ -18,7 +18,7 @@ type iCategoryContext = {
   resetSearch: () => void;
 };
 
-const CategoryContext = createContext<iCategoryContext>({
+const SearchContext = createContext<iSearchContext>({
   isSearching: false,
   setIsSearching: () => {},
   searchInput: '',
@@ -62,7 +62,7 @@ export const SearchProvider = (props: { children: React.ReactNode }) => {
   }, [searchInput]);
 
   return (
-    <CategoryContext.Provider
+    <SearchContext.Provider
       value={{
         isSearching,
         setIsSearching,
@@ -77,8 +77,8 @@ export const SearchProvider = (props: { children: React.ReactNode }) => {
       }}
     >
       {props.children}
-    </CategoryContext.Provider>
+    </SearchContext.Provider>
   );
 };
 
-export const useSearch = () => useContext(CategoryContext);
+export const useSearch = () => useContext(SearchContext);

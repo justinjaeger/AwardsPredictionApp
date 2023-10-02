@@ -1,4 +1,3 @@
-import { AwardsBody } from '../API';
 import academyAward from '../assets/awardsBodies/academyAwards.png';
 import bafta from '../assets/awardsBodies/bafta.png';
 import criticsChoice from '../assets/awardsBodies/criticsChoice.png';
@@ -11,6 +10,7 @@ import criticsChoiceWhite from '../assets/awardsBodies/criticsChoiceWhite.png';
 import goldenGlobesWhite from '../assets/awardsBodies/goldenGlobesWhite.png';
 import pgaWhite from '../assets/awardsBodies/pgaWhite.png';
 import sagWhite from '../assets/awardsBodies/sagWhite.png';
+import { AwardsBody } from '../types/api';
 
 export const AWARDS_BODY_TO_STRING: {
   [key in AwardsBody]: string;

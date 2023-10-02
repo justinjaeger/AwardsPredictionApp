@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Alert, FlatList, Keyboard, Linking, TouchableOpacity } from 'react-native';
-import { CategoryType } from '../../API';
 import COLORS from '../../constants/colors';
-import { iPrediction } from '../../types';
 import ContenderListItem from '../List/ContenderList/ContenderListItem';
 import { BodyBold } from '../Text';
+import { CategoryType, iPrediction } from '../../types/api';
+import { useTmdbDataStore } from '../../context/TmdbDataStore';
 
 type iMovieListProps = {
   predictions: iPrediction[];
@@ -19,6 +19,7 @@ const MovieListSearch = ({
   disablePaddingBottom,
   onSelect,
 }: iMovieListProps) => {
+  const { getTmdbDataFromPrediction } = useTmdbDataStore();
   const [selectedTmdbId, setSelectedTmdbId] = useState<number | undefined>(undefined);
 
   // reset whenever list data changes
@@ -27,10 +28,11 @@ const MovieListSearch = ({
   }, [predictions.length]);
 
   const getTmdbId = (prediction: iPrediction) => {
+    const { movie, person } = getTmdbDataFromPrediction(prediction)!;
     if (categoryType === CategoryType.PERFORMANCE) {
-      return prediction.contenderPerson?.tmdbId || 0;
+      return person?.tmdbId || 0;
     } else {
-      return prediction.contenderMovie?.tmdbId || 0;
+      return movie?.tmdbId || 0;
     }
   };
 

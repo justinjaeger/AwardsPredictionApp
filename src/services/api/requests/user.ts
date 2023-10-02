@@ -53,15 +53,19 @@ export const listFollowingPaginated = async ({
   includeRecentPredictionSets?: boolean;
 }) => {
   return await api.get<WithId<User>[]>(
-    `users/${userId}/following?pageNumber=${pageNumber}&limit=${PAGINATED_LIMIT}&includeRecentPredictionSets=${!!includeRecentPredictionSets}`,
+    `users/${userId}/following?pageNumber=${pageNumber}&limit=${PAGINATED_LIMIT}&includeNestedFields=${!!includeRecentPredictionSets}`,
   );
 };
 
 // NOTE: expensive because unpaginated - we def want to cache this response
-export const listFollowingWithRecentPredictions = async (userId: string) => {
+export const listFollowingWithNestedFields = async (userId: string) => {
   return await api.get<WithId<User>[]>(
-    `users/${userId}/followers?includeRecentPredictionSets=true&limit=1000`,
+    `users/${userId}/followers?includeNestedFields=true&limit=1000`,
   );
+};
+
+export const listMostFollowedPaginated = async (pageNumber: number) => {
+  return await api.get<WithId<User>[]>(`users/mostFollowed?pageNumber=${pageNumber}`);
 };
 
 // TODO: Be careful using this because it can be expensive. Don't debounce, just submit on blur or with a button
@@ -90,4 +94,8 @@ export const createUser = async (payload: iCreateUserPayload) => {
 
 export const updateUser = async (payload: Partial<User>) => {
   return await api.put<undefined, Partial<User>>('users', payload);
+};
+
+export const deleteUser = async () => {
+  return await api.delete<undefined>('users');
 };

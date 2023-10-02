@@ -2,24 +2,22 @@ import React from 'react';
 import CreateFilm from './CreateFilm';
 import CreatePerformance from './CreatePerformance';
 import CreateSong from './CreateSong';
-import { CategoryType } from '../../../API';
-import { useCategory } from '../../../context/CategoryContext';
-import { iCategory, iPrediction } from '../../../types';
+import { useEvent } from '../../../context/EventContext';
+import { CategoryType, iPrediction } from '../../../types/api';
 
 export type iCreateContenderProps = {
-  onSelectPrediction: (p: iPrediction) => void;
+  onSelectPrediction: (prediction: iPrediction) => void;
 };
 
 // TODO: should only be able to do this if logged in
-const CreateContender = (props: iCreateContenderProps) => {
-  const { onSelectPrediction } = props;
-
-  const { category: _category } = useCategory();
-
-  const category = _category as iCategory;
+const CreateContender = ({ onSelectPrediction }: iCreateContenderProps) => {
+  const { category: _category, event: _event } = useEvent();
+  const category = _category!;
+  const event = _event!;
+  const { type } = event.categories[category];
 
   const CreateComponent = (() => {
-    switch (category.type) {
+    switch (type) {
       case CategoryType.FILM:
         return <CreateFilm onSelectPrediction={onSelectPrediction} />;
       case CategoryType.PERFORMANCE:

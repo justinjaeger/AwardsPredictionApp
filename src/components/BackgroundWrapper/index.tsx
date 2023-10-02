@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, useWindowDimensions } from 'react-native';
-import { ReactChildren } from '../../types';
+import { ReactChildren } from '../../types/keys';
 import LinearGradient from 'react-native-linear-gradient';
 
 const BackgroundWrapper = (props: { children: ReactChildren }) => {

@@ -6,6 +6,7 @@ import { useTypedNavigation } from '../../../util/hooks';
 import UserSearchResult from '../../../components/UserSearchResult';
 import usePaginatedFriends from '../../../hooks/usePaginatedFriends';
 import { PredictionsParamList } from '../../../navigation/types';
+import useQueryGetFollowingUsers from '../../../hooks/queries/useQueryGetFollowingUsers';
 
 const Followers = () => {
   const navigation = useTypedNavigation<PredictionsParamList>();
@@ -13,6 +14,7 @@ const Followers = () => {
     params: { userId, type },
   } = useRoute<RouteProp<PredictionsParamList, 'Followers'>>();
 
+  const { usersIdsAuthUserIsFollowing } = useQueryGetFollowingUsers();
   const { users, fetchPage, isLoading } = usePaginatedFriends({ userId, type });
 
   useLayoutEffect(() => {
@@ -26,6 +28,7 @@ const Followers = () => {
     <BackgroundWrapper>
       <UserSearchResult
         users={users}
+        usersIdsAuthUserIsFollowing={usersIdsAuthUserIsFollowing}
         onEndReached={fetchPage}
         isLoading={isLoading}
         noHeader

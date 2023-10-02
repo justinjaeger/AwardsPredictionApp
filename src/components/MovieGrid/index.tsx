@@ -3,9 +3,9 @@ import React from 'react';
 import { StyleProp, useWindowDimensions, View, ViewStyle } from 'react-native';
 import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
-import PosterFromTmdbId from '../Images/PosterFromTmdbId';
-import { iCategory, iPrediction, Movie, Person } from '../../types/api';
-import { useAsyncStorePrefetch } from '../../context/AsyncStorePrefetch';
+import { iCategory, iPrediction } from '../../types/api';
+import { useTmdbDataStore } from '../../context/TmdbDataStore';
+import PosterFromTmdb from '../Images/PosterFromTmdb';
 
 const MovieGrid = ({
   predictions,
@@ -22,7 +22,7 @@ const MovieGrid = ({
   totalWidth?: number;
   style?: StyleProp<ViewStyle>;
 }) => {
-  const { store } = useAsyncStorePrefetch();
+  const { getTmdbDataFromPrediction } = useTmdbDataStore();
   const { width } = useWindowDimensions();
   const totalWidth = _totalWidth || width;
 
@@ -42,9 +42,9 @@ const MovieGrid = ({
         style,
       ]}
     >
-      {predictions.map(({ movieId, personId, contenderId }, i) => {
-        const movie = store.get(movieId) as Movie;
-        const person = store.get(personId) as Person | undefined;
+      {predictions.map((prediction, i) => {
+        const { contenderId } = prediction;
+        const { movie, person } = getTmdbDataFromPrediction(prediction)!;
         return (
           <View key={contenderId}>
             {!noLine && i === slots ? (
@@ -65,9 +65,9 @@ const MovieGrid = ({
                   // we want to give a margin on top if this is the row beneath the divider (since divider is absolute pos)
                   <View style={{ marginTop: 20 }} />
                 ) : null}
-                <PosterFromTmdbId
-                  movieTmdbId={movie.tmdbId}
-                  personTmdbId={person?.tmdbId}
+                <PosterFromTmdb
+                  movie={movie}
+                  person={person}
                   width={
                     (totalWidth - theme.windowMargin * 2 + theme.posterMargin) /
                     (isCollapsed ? 10 : 5)

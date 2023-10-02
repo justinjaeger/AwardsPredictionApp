@@ -5,19 +5,19 @@ import CategoryPersonal from './CategoryPersonal';
 import { useTypedNavigation } from '../../../util/hooks';
 import { PredictionsParamList } from '../../../navigation/types';
 import { getAwardsBodyCategories } from '../../../constants/categories';
-import { CategoryName } from '../../../API';
-import { useCategory } from '../../../context/CategoryContext';
+import { useEvent } from '../../../context/EventContext';
 import { eventToString } from '../../../util/stringConversions';
 import { getHeaderTitleWithTrophy } from '../../../constants';
 import { useCategoryDisplay } from '../../../hooks/animatedState/useDisplay';
 import { Animated } from 'react-native';
 import { CategoryDisplayFab } from '../../../components/Buttons/DisplayFAB';
-import { iEvent, iIndexedPredictionsByCategory } from '../../../types';
-import { useAuth } from '../../../context/UserContext';
+import { useAuth } from '../../../context/AuthContext';
 import { RouteProp, StackActions, useRoute } from '@react-navigation/native';
-import usePredictionData from '../../../hooks/queries/usePredictionData';
 import FollowingBottomScroll from '../../../components/FollowingBottomScroll';
 import { iCategoryDisplayState } from '../../../context/DisplayStateContext';
+import { CategoryName, PredictionSet, WithId } from '../../../types/api';
+import useQueryGetCommunityPredictions from '../../../hooks/queries/useQueryGetCommunityPredictions';
+import useQueryGetUserPredictions from '../../../hooks/queries/useQueryGetUserPredictions';
 
 export type iCategoryProps = {
   collapsedOpacity: Animated.Value;
@@ -25,7 +25,7 @@ export type iCategoryProps = {
   gridOpacity: Animated.Value;
   delayedDisplay: iCategoryDisplayState;
   userId: string | undefined;
-  predictionData: iIndexedPredictionsByCategory | undefined;
+  predictionData: WithId<PredictionSet> | undefined;
   isLoading: boolean;
   showEventLink?: boolean;
 };
@@ -37,18 +37,16 @@ const Category = () => {
   const userId = params?.userId || authUserId;
   const showEventLink = params?.showEventLink || false;
 
-  const { category, event: _event, date, isEditing } = useCategory();
-  const isHistory = !!date;
+  const { category, event: _event, isEditing } = useEvent();
+  const event = _event!;
   const navigation = useTypedNavigation<PredictionsParamList>();
   const { delayedDisplay, gridOpacity, collapsedOpacity, expandedOpacity } =
     useCategoryDisplay();
 
-  const { predictionData: personalPredictionData, isLoading: personalIsLoading } =
-    usePredictionData('personal', userId);
-  const { predictionData: communityPredictionData, isLoading: communityIsLoading } =
-    usePredictionData('community', userId);
-
-  const event = _event as iEvent;
+  const { data: personalPredictionData, isLoading: personalIsLoading } =
+    useQueryGetUserPredictions(userId);
+  const { data: communityPredictionData, isLoading: communityIsLoading } =
+    useQueryGetCommunityPredictions();
 
   const props = {
     delayedDisplay,
@@ -63,14 +61,13 @@ const Category = () => {
     if (!category || !event) return;
     const awardsBodyCategories = getAwardsBodyCategories(event.awardsBody, event.year);
     const eventName = eventToString(event.awardsBody, event.year);
-    const categoryName = awardsBodyCategories[CategoryName[category.name]]?.name || '';
+    const categoryName = awardsBodyCategories[CategoryName[category]]?.name || '';
     const headerTitle = eventName + '\n' + 'Best ' + categoryName;
     navigation.setOptions({
       headerTitle: getHeaderTitleWithTrophy(headerTitle, event.awardsBody),
     });
   }, [navigation]);
 
-  // TODO: History is always open in archived state
   return (
     <>
       <CategoryDisplayFab />
@@ -88,9 +85,8 @@ const Category = () => {
           {...props}
         />,
       )}
-      {userId && !isHistory && !isEditing ? (
+      {userId && !isEditing ? (
         <FollowingBottomScroll
-          userId={userId}
           onPress={(id) => {
             navigation.dispatch(StackActions.push('CategoryFromProfile', { userId: id }));
           }}

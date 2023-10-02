@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useAuth } from '../../../context/UserContext';
+import { useAuth } from '../../../context/AuthContext';
 import useDeepLink from '../../../hooks/useDeepLink';
 import MongoApi from '../../../services/api/requests';
 

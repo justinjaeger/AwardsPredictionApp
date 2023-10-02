@@ -2,12 +2,12 @@ import React, { useEffect } from 'react';
 import { Animated, useWindowDimensions } from 'react-native';
 import LoadingStatue from '../../../components/LoadingStatue';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
-import useQueryAllEvents from '../../../hooks/queries/getAllEvents';
-import { useAuth } from '../../../context/UserContext';
-import useQueryGetUser from '../../../hooks/queries/getUser';
+import useQueryGetAllEvents from '../../../hooks/queries/useQueryGetAllEvents';
+import { useAuth } from '../../../context/AuthContext';
+import useQueryGetUser from '../../../hooks/queries/useQueryGetUser';
 import EventList from '../Event/EventList';
 import { HeaderLight } from '../../../components/Text';
-import useQueryGetFollowingRecentPredictions from '../../../hooks/queries/useQueryGetFollowingRecentPredictions';
+import useQueryGetFollowingUsers from '../../../hooks/queries/useQueryGetFollowingUsers';
 import PredictionCarousel from '../../../components/PredictionCarousel';
 import { useLoading } from '../../../hooks/animatedState/useLoading';
 import theme from '../../../constants/theme';
@@ -17,10 +17,10 @@ const EventSelect = () => {
   const { width } = useWindowDimensions();
   const { userId: authUserId } = useAuth();
 
-  const { data: events, isLoading, refetch: refetchEvents } = useQueryAllEvents();
+  const { data: events, isLoading, refetch: refetchEvents } = useQueryGetAllEvents();
   const { data: user, refetch: refetchUser } = useQueryGetUser(authUserId);
-  const { data: usersWithRecentPredictionSets, refetch: refetchFollowingPredictions } =
-    useQueryGetFollowingRecentPredictions(user);
+  const { data: usersWithNestedData, refetch: refetchFollowingPredictions } =
+    useQueryGetFollowingUsers();
 
   const { loadingOpacity, bodyOpacity } = useLoading(isLoading);
 
@@ -82,7 +82,7 @@ const EventSelect = () => {
           {!authUserId ? (
             // users not signed in can see recommended users
             <RecommendedUsers header={'Follow Users'} />
-          ) : usersWithRecentPredictionSets ? (
+          ) : usersWithNestedData ? (
             <>
               <HeaderLight
                 style={{
@@ -94,11 +94,11 @@ const EventSelect = () => {
               >
                 New From Friends
               </HeaderLight>
-              {usersWithRecentPredictionSets.map((u) => (
+              {usersWithNestedData.map((u) => (
                 <PredictionCarousel
-                  key={u.id}
-                  predictionSets={u.predictionSets || []}
-                  userId={u.id}
+                  key={u._id}
+                  predictionSets={u.recentPredictionSets || []}
+                  userId={u._id}
                   userInfo={{
                     name: u.name || u.username || '',
                     image: u.image,

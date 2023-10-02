@@ -11,20 +11,24 @@ const client = new S3Client({
 });
 
 // Get file from AWS storage
-export const getProfileImage = async (key: string) => {
+const getProfileImage = async (key: string) => {
   try {
     const command = new GetObjectCommand({
       Bucket: BUCKET,
       Key: key,
     });
-    return await client.send(command);
+    const response = await client.send(command);
+    // @ts-ignore
+    const str = (await response.Body.transformToString()) as string;
+    console.error('GET OBJECT STRING:', str);
+    return str;
   } catch (err) {
     console.log('Error uploading file:', err);
   }
 };
 
 // Upload file to AWS Storage
-export const uploadProfilePicture = async (uri: string, email: string) => {
+const uploadProfilePicture = async (uri: string, email: string) => {
   // create the file name
   const format = uri.split('.').pop();
   const random = Math.floor(100000 + Math.random() * 900000); // 6 digit random number
@@ -46,9 +50,9 @@ export const uploadProfilePicture = async (uri: string, email: string) => {
   }
 };
 
-const AWSStorage = {
+const ImageStorage = {
   getProfileImage,
   uploadProfilePicture,
 };
 
-export default AWSStorage;
+export default ImageStorage;

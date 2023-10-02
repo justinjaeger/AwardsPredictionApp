@@ -1,8 +1,8 @@
 import React from 'react';
 import { View } from 'react-native';
-import { AwardsBody } from '../API';
 import AwardsBodyImage from '../components/AwardsBodyImage';
 import { SubHeader } from '../components/Text';
+import { AwardsBody } from '../types/api';
 
 /**
  * Misc constants

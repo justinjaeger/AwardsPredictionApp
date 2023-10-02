@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import React, { useLayoutEffect } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { Alert, Animated, View } from 'react-native';
 import BackButton from '../../../components/Buttons/BackButton';
 import LoadingStatueModal from '../../../components/LoadingStatueModal';
@@ -9,23 +9,21 @@ import SignedOutState from '../../../components/SignedOutState';
 import Snackbar from '../../../components/Snackbar';
 import { BodyBold } from '../../../components/Text';
 import theme from '../../../constants/theme';
-import { useCategory } from '../../../context/CategoryContext';
-import useMutationUpdatePredictions from '../../../hooks/mutations/updatePredictions';
+import { useEvent } from '../../../context/EventContext';
+import useMutationUpdatePredictions from '../../../hooks/mutations/useMutationUpdatePredictions';
 import { PredictionsParamList } from '../../../navigation/types';
-import { iCategory, iEvent, iPrediction } from '../../../types';
 import { useAsyncReference, useTypedNavigation } from '../../../util/hooks';
 import { formatLastUpdated } from '../../../util/formatDateTime';
-import { eventStatusToPredictionType } from '../../../constants/events';
 import { iCategoryProps } from '.';
 import LastUpdatedText from '../../../components/LastUpdatedText';
-import HistoryHeaderButton from '../../../components/Buttons/HistoryHeaderButton';
-import { useAuth } from '../../../context/UserContext';
+import { useAuth } from '../../../context/AuthContext';
 import useDevice from '../../../util/device';
 import { AddPredictionsFab } from '../../../components/Buttons/DisplayFAB';
 import useShowAddTab from '../../../hooks/useShowAddTab';
 import EventLink from './EventLink';
 import EditToolbar from '../../../components/Buttons/EditToolbar';
-import useCategoryPersonalPredictions from './useCategoryPersonalPredictions';
+import { iPrediction } from '../../../types/api';
+import useQueryGetUserPredictions from '../../../hooks/queries/useQueryGetUserPredictions';
 
 // used in both FromProfile and from event
 const CategoryPersonal = ({
@@ -38,22 +36,15 @@ const CategoryPersonal = ({
   isLoading,
   showEventLink,
 }: iCategoryProps) => {
-  const {
-    category: _category,
-    event: _event,
-    date,
-    isEditing,
-    setIsEditing,
-  } = useCategory();
+  const { category: _category, event: _event, isEditing, setIsEditing } = useEvent();
+  const category = _category!;
+  const event = _event!;
   const navigation = useTypedNavigation<PredictionsParamList>();
   const { userId: authUserId } = useAuth();
   const { isPad } = useDevice();
   const { animatedOpacity } = useShowAddTab();
 
   const isAuthUserProfile = userId === authUserId;
-  const isHistory = !!date;
-  const category = _category as iCategory;
-  const event = _event as iEvent;
 
   const [goBackOnComplete, setGoBackOnComplete] = useAsyncReference<boolean>(false);
 
@@ -65,26 +56,23 @@ const CategoryPersonal = ({
       navigation.goBack();
     }
   };
-  const { mutate: updatePredictions, isComplete } = useMutationUpdatePredictions(
-    onComplete,
-    isAuthUserProfile,
-  );
+  const { mutate: updatePredictions, isComplete } =
+    useMutationUpdatePredictions(onComplete);
 
   // get the initialPredictions and updatedPredictions
-  const {
-    initialPredictions,
-    updatedPredictions: predictions,
-    setUpdatedPredictions: setPredictions,
-  } = useCategoryPersonalPredictions({
-    predictionData: predictionData || {},
-    userId,
-  });
+  const { data: predictionSet } = useQueryGetUserPredictions(userId);
+  const { createdAt } = predictionSet?.categories[category] || {};
+  const initialPredictions = predictionData?.categories[category]?.predictions ?? [];
+
+  const [predictions, setPredictions] = useState<iPrediction[]>(initialPredictions);
+
+  useEffect(() => {
+    setPredictions(initialPredictions);
+  }, [userId]);
 
   // set custom back arrow functionality & hide history button when editing
   useLayoutEffect(() => {
     navigation.setOptions({
-      // eslint-disable-next-line react/no-unstable-nested-components
-      headerRight: () => <HistoryHeaderButton isDisabled={!!isEditing} />,
       // eslint-disable-next-line react/no-unstable-nested-components
       headerLeft: () => (
         <BackButton
@@ -111,19 +99,10 @@ const CategoryPersonal = ({
       setIsEditing(false);
       return;
     }
-    const newPredictionData = predictionsToSave.map((p, i) => ({
-      contenderId: p.contenderId,
-      ranking: i + 1,
-    }));
-    const predictionType = eventStatusToPredictionType(event.status);
     updatePredictions({
-      predictionSetParams: {
-        userId,
-        categoryId: category.id,
-        eventId: event.id,
-        type: predictionType,
-      },
-      predictionData: newPredictionData,
+      categoryName: category,
+      eventId: event._id,
+      predictions: predictionsToSave,
     });
   };
 
@@ -138,8 +117,7 @@ const CategoryPersonal = ({
   };
 
   // get last updated time
-  const lastUpdated = predictionData?.[category.id]?.updatedAt;
-  const lastUpdatedString = formatLastUpdated(new Date(lastUpdated || ''));
+  const lastUpdatedString = formatLastUpdated(new Date(createdAt || ''));
 
   if (!userId) {
     return <SignedOutState />;
@@ -161,7 +139,7 @@ const CategoryPersonal = ({
           }}
         >
           <BodyBold style={{ textAlign: 'center', lineHeight: 30 }}>
-            {isHistory ? 'No predictions for this date' : 'No predictions'}
+            {'No predictions'}
           </BodyBold>
         </View>
       ) : null}
@@ -178,11 +156,7 @@ const CategoryPersonal = ({
         showsVerticalScrollIndicator={false}
       >
         <Animated.View style={{ opacity: gridOpacity }}>
-          <LastUpdatedText
-            lastUpdated={lastUpdatedString}
-            isDisabled={isHistory}
-            style={{ top: -35 }}
-          />
+          <LastUpdatedText lastUpdated={lastUpdatedString} style={{ top: -35 }} />
           <MovieGrid predictions={predictions} />
         </Animated.View>
       </Animated.ScrollView>
@@ -210,7 +184,6 @@ const CategoryPersonal = ({
           predictions={predictions}
           setPredictions={(ps) => setPredictions(ps)}
           lastUpdatedString={lastUpdatedString}
-          isCollapsed
           isAuthProfile={isAuthUserProfile}
           onPressAdd={onPressAdd}
         />
@@ -228,7 +201,7 @@ const CategoryPersonal = ({
         </Animated.View>
       ) : null}
       <EditToolbar
-        visible={isEditing && !isHistory}
+        visible={isEditing}
         buttons={[
           {
             text: 'Undo',

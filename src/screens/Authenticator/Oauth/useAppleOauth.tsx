@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { appleAuth } from '@invertase/react-native-apple-authentication';
 import Snackbar from '../../../components/Snackbar';
-import { useAuth } from '../../../context/UserContext';
+import { useAuth } from '../../../context/AuthContext';
 import MongoApi from '../../../services/api/requests';
 
 const useAppleOauth = () => {

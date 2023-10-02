@@ -2,7 +2,7 @@ import React from 'react';
 import { View, TouchableHighlight, Animated } from 'react-native';
 import { SubmitButton } from '../../components/Buttons';
 import { Body, BodyBold, HeaderLight, SubHeader } from '../../components/Text';
-import { useAuth } from '../../context/UserContext';
+import { useAuth } from '../../context/AuthContext';
 import BackgroundWrapper from '../../components/BackgroundWrapper';
 import {
   RouteProp,
@@ -17,7 +17,7 @@ import { useNavigateToEffect, useTypedNavigation } from '../../util/hooks';
 import ProfileImage from '../../components/ProfileImage';
 import FollowButton from '../../components/FollowButton';
 import FollowCountButton from '../../components/FollowCountButton';
-import useQueryAllEvents from '../../hooks/queries/getAllEvents';
+import useQueryGetAllEvents from '../../hooks/queries/useQueryGetAllEvents';
 import EventList from '../Predictions/Event/EventList';
 import { MainScreenNavigationProp, PredictionsParamList } from '../../navigation/types';
 import LoadingStatue from '../../components/LoadingStatue';
@@ -34,7 +34,7 @@ const Profile = () => {
   const globalNavigation = useNavigation<MainScreenNavigationProp>();
   const navigation = useTypedNavigation<PredictionsParamList>();
 
-  const { data: events, isLoading: isLoadingAllEvents } = useQueryAllEvents();
+  const { data: events, isLoading: isLoadingAllEvents } = useQueryGetAllEvents();
 
   const { isLoading, setIsLoading, user, authUserIsFollowing, isFollowingAuthUser } =
     useProfileUser(userId);

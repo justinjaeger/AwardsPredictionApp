@@ -1,9 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Animated, ScrollView, useWindowDimensions, View } from 'react-native';
 import BackgroundWrapper from '../../components/BackgroundWrapper';
-import HistoryTab from '../../components/HistoryTab';
 import COLORS from '../../constants/colors';
-import { useCategory } from '../../context/CategoryContext';
+import { useEvent } from '../../context/EventContext';
 import PredictionTab from './PredictionTab';
 
 const PredictionTabsNavigator = (
@@ -12,7 +11,7 @@ const PredictionTabsNavigator = (
   personalText?: string,
 ) => {
   const { width } = useWindowDimensions();
-  const { personalCommunityTab, setPersonalCommunityTab } = useCategory();
+  const { personalCommunityTab, setPersonalCommunityTab } = useEvent();
   const scrollBarPositionTwo = width / 2;
 
   // This seems unnecessary but without, it breaks the animation
@@ -85,7 +84,6 @@ const PredictionTabsNavigator = (
               selected={personalCommunityTab === 'community'}
             />
           </View>
-          <HistoryTab />
           <ScrollView
             horizontal
             pagingEnabled

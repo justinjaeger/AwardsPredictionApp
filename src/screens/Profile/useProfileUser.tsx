@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { useAuth } from '../../context/UserContext';
-import useQueryGetUserProfile from '../../hooks/queries/useQueryGetUserProfile';
+import { useAuth } from '../../context/AuthContext';
 import { User, WithId } from '../../types/api';
 import MongoApi from '../../services/api/requests';
-import { useAsyncStorePrefetch } from '../../context/AsyncStorePrefetch';
+import { useTmdbDataStore } from '../../context/TmdbDataStore';
+import useQueryGetUser from '../../hooks/queries/useQueryGetUser';
 
 /**
  * We fetch the Auth user differently than a non-auth user
@@ -12,7 +12,7 @@ import { useAsyncStorePrefetch } from '../../context/AsyncStorePrefetch';
  */
 const useProfileUser = (userId: string | undefined) => {
   const { userId: authUserId } = useAuth();
-  const { storeTmdbDataFromRecentPredictions } = useAsyncStorePrefetch();
+  const { storeTmdbDataFromRecentPredictions } = useTmdbDataStore();
 
   const [isLoadingProfileUser, setIsLoading] = useState<boolean>(true);
   const [profileUser, setProfileUser] = useState<WithId<User> | undefined>(undefined);
@@ -24,7 +24,7 @@ const useProfileUser = (userId: string | undefined) => {
     data: authUser,
     isLoading: isLoadingAuthUser,
     refetch: refetchAuthUserProfile,
-  } = useQueryGetUserProfile(authUserId);
+  } = useQueryGetUser(authUserId);
 
   // refetch auth user profile when a new user is logged in (else it's stale)
   useEffect(() => {

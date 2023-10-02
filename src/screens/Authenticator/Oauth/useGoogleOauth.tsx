@@ -1,5 +1,5 @@
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import { useAuth } from '../../../context/UserContext';
+import { useAuth } from '../../../context/AuthContext';
 import Snackbar from '../../../components/Snackbar';
 import MongoApi from '../../../services/api/requests';
 import { useState } from 'react';

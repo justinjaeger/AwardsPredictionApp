@@ -1,4 +1,4 @@
-import { CategoryName } from '../../../types/api';
+import { CategoryName, Contender, WithId } from '../../../types/api';
 import api from '../api';
 
 /**
@@ -10,7 +10,11 @@ type iCreateContenderPayload = {
   categoryName: CategoryName;
   personTmdbId?: number;
   songTitle?: string;
+  songArtist?: string;
 };
 export const createContender = async (payload: iCreateContenderPayload) => {
-  return await api.post<string, iCreateContenderPayload>('contenders', payload);
+  return await api.post<WithId<Contender> | null, iCreateContenderPayload>(
+    'contenders',
+    payload,
+  );
 };

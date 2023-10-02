@@ -6,10 +6,13 @@ import RecommendedUsers from '../../components/RecommendedUsers';
 import UserSearchResult from '../../components/UserSearchResult';
 import { SearchProvider, useSearch } from '../../context/ContenderSearchContext';
 import useFriendSearch from './useFriendSearch';
+import useQueryGetFollowingUsers from '../../hooks/queries/useQueryGetFollowingUsers';
 
 const SearchFriends = () => {
   const { isSearching } = useSearch();
   const { searchResults } = useFriendSearch();
+
+  const { usersIdsAuthUserIsFollowing } = useQueryGetFollowingUsers();
 
   return (
     <BackgroundWrapper>
@@ -25,7 +28,10 @@ const SearchFriends = () => {
           {!isSearching && searchResults.length === 0 ? (
             <RecommendedUsers />
           ) : (
-            <UserSearchResult users={searchResults} />
+            <UserSearchResult
+              users={searchResults}
+              usersIdsAuthUserIsFollowing={usersIdsAuthUserIsFollowing}
+            />
           )}
         </View>
       </TouchableWithoutFeedback>

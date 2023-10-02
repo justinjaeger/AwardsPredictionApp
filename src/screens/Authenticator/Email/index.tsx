@@ -5,7 +5,7 @@ import { SubmitButton } from '../../../components/Buttons';
 import Snackbar from '../../../components/Snackbar';
 import { HeaderLight } from '../../../components/Text';
 import COLORS from '../../../constants/colors';
-import { useAuth } from '../../../context/UserContext';
+import { useAuth } from '../../../context/AuthContext';
 import LoadingStatueModal from '../../../components/LoadingStatueModal';
 import MongoApi from '../../../services/api/requests';
 import useMagicLinkListener from './useMagicLinkListener';

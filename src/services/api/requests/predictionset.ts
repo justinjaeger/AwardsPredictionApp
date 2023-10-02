@@ -1,4 +1,4 @@
-import { CategoryName, PredictionSet, WithId, iPredictions } from '../../../types/api';
+import { CategoryName, PredictionSet, WithId, iPrediction } from '../../../types/api';
 import api from '../api';
 
 /**
@@ -35,13 +35,13 @@ export const getPredictionSet = async ({
 /**
  * Updates a single category that the user is predicting with new array of predictions
  */
-type iUpdatePredictionSetPayload = {
+export type iUpdatePredictionSetPayload = {
   eventId: string;
   categoryName: CategoryName;
-  predictions: iPredictions; // user passes all predictions with request
+  predictions: iPrediction[]; // user passes all predictions with request
 };
 export const updatePredictionSet = async (payload: iUpdatePredictionSetPayload) => {
-  return await api.post<undefined, iUpdatePredictionSetPayload>(
+  return await api.post<{ string: '' }, iUpdatePredictionSetPayload>(
     'predictionsets',
     payload,
   );

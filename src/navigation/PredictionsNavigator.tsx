@@ -1,14 +1,12 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import BackButton from '../components/Buttons/BackButton';
-import ContenderDetailsScreen from '../screens/Predictions/ContenderDetailsScreen';
 import { BottomTabParamList, PredictionsParamList } from './types';
 import Category from '../screens/Predictions/Category';
 import EventSelect from '../screens/Predictions/EventSelect';
 import theme from '../constants/theme';
 import { getHeaderTitle } from '../constants';
 import AddPredictions from '../screens/Predictions/AddPredictions.tsx';
-import HistoryHeaderButton from '../components/Buttons/HistoryHeaderButton';
 import EventPersonalCommunity from '../screens/Predictions/Event/EventPersonalCommunity';
 import EventFromProfile from '../screens/Predictions/Event/EventFromProfile';
 import CategoryFromProfile from '../screens/Predictions/Category/CategoryFromProfile';
@@ -48,7 +46,6 @@ const PredictionsNavigator = () => {
         options={{
           headerTitle: getHeaderTitle('Event Predictions'),
           headerLeft: BackButton,
-          headerRight: HistoryHeaderButton,
           ...large,
         }}
       />
@@ -58,7 +55,6 @@ const PredictionsNavigator = () => {
         options={{
           headerTitle: getHeaderTitle('Event Predictions'),
           headerLeft: BackButton,
-          headerRight: HistoryHeaderButton,
           ...large,
         }}
       />
@@ -68,7 +64,6 @@ const PredictionsNavigator = () => {
         options={{
           headerTitle: getHeaderTitle('Category'),
           headerLeft: BackButton,
-          headerRight: HistoryHeaderButton,
           cardStyle: theme.cardStyle,
           ...large,
         }}
@@ -79,7 +74,6 @@ const PredictionsNavigator = () => {
         options={{
           headerTitle: getHeaderTitle('Category'),
           headerLeft: BackButton,
-          headerRight: HistoryHeaderButton,
           cardStyle: theme.cardStyle,
           ...large,
         }}
@@ -126,17 +120,6 @@ const PredictionsNavigator = () => {
         component={SearchFriends}
         options={{
           ...toolbarOnly,
-        }}
-      />
-      {/* Unused Screen */}
-      <Screen
-        name="ContenderDetails"
-        component={ContenderDetailsScreen}
-        options={{
-          headerTitle: getHeaderTitle('Contender Details'),
-          headerLeft: BackButton,
-          cardStyle: theme.cardStyle,
-          ...medium,
         }}
       />
     </Navigator>
