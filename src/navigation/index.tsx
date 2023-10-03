@@ -6,7 +6,6 @@ import MainNavigator from './MainNavigator';
 import { AuthProvider } from '../context/AuthContext';
 import { EventProvider } from '../context/EventContext';
 import { TmdbDataStoreProvider } from '../context/TmdbDataStore';
-import { OpenEventsProvider } from '../context/OpenEventsProvider';
 
 // onReady={() => RNBootSplash.hide()} (could add to NavigationContainer)
 const Navigation = () => {
@@ -23,11 +22,9 @@ const Navigation = () => {
     <NavigationContainer theme={theme}>
       <TmdbDataStoreProvider>
         <AuthProvider>
-          <OpenEventsProvider>
-            <EventProvider>
-              <MainNavigator />
-            </EventProvider>
-          </OpenEventsProvider>
+          <EventProvider>
+            <MainNavigator />
+          </EventProvider>
         </AuthProvider>
       </TmdbDataStoreProvider>
     </NavigationContainer>

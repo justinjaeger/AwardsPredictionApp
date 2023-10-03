@@ -11,7 +11,7 @@ import { PredictionsParamList } from '../../navigation/types';
 import { formatLastUpdated } from '../../util/formatDateTime';
 import { useTypedNavigation } from '../../util/hooks';
 import { AwardsBody, CategoryName, iRecentPrediction } from '../../types/api';
-import { useOpenEvents } from '../../context/OpenEventsProvider';
+import useQueryGetAllEvents from '../../hooks/queries/useQueryGetAllEvents';
 
 const UserPredictionList = ({
   predictionSets,
@@ -23,7 +23,7 @@ const UserPredictionList = ({
 }) => {
   const { userId: authUserId } = useAuth();
   const navigation = useTypedNavigation<PredictionsParamList>();
-  const { getEvent } = useOpenEvents();
+  const { data: events } = useQueryGetAllEvents();
   const { setEvent, setCategory } = useEvent();
   const { width } = useWindowDimensions();
   const isAuthUserProfile = userId === authUserId;
@@ -34,6 +34,9 @@ const UserPredictionList = ({
         if (!ps) return null;
         const awardsBodyName = AWARDS_BODY_TO_PLURAL_STRING[ps.awardsBody as AwardsBody];
         const lastUpdatedText = formatLastUpdated(new Date(ps.createdAt));
+        const event = events?.find(
+          (e) => e.awardsBody === ps.awardsBody && e.year === ps.year,
+        );
         return (
           <TouchableHighlight
             key={ps.awardsBody + ps.year + ps.category}
@@ -43,9 +46,8 @@ const UserPredictionList = ({
             }}
             underlayColor={COLORS.secondaryDark}
             onPress={() => {
-              const event = getEvent(ps.awardsBody as AwardsBody, ps.year);
               if (!event) {
-                console.error('could not find event in open events context');
+                console.error('could not find event');
                 return;
               }
               // navigate to user's predictions
