@@ -116,7 +116,9 @@ export const TmdbDataStoreProvider = (props: { children: React.ReactNode }) => {
   };
 
   const storeTmdbDataFromPredictionSet = async (predictionSet: PredictionSet) => {
-    const predictions = _.values(predictionSet?.categories).flatMap((c) => c.predictions);
+    const predictions = _.values(predictionSet?.categories ?? []).flatMap(
+      (c) => c.predictions,
+    );
     await storeTmdbDataFromPredictions(predictions);
   };
 
