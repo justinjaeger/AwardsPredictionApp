@@ -7,7 +7,7 @@ const useQueryGetUser = (userId: string | undefined) => {
   const { storeTmdbDataFromRecentPredictions } = useTmdbDataStore();
 
   const { isLoading, data, refetch } = useQuery({
-    queryKey: [QueryKeys.USER + userId],
+    queryKey: [QueryKeys.USER + (userId || '')],
     queryFn: async () => {
       if (!userId) return undefined;
       const { data: user } = await MongoApi.getUser({ userId });
