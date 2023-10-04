@@ -23,42 +23,49 @@ const apiWrapper = async <D>(
     return { status: 'error', message: 'Invalid credentials' };
   };
 
-  const { data } = await promise;
-  if (data.error) {
-    if (data.error === 'TokenExpiredError') {
-      const res = await KeychainStorage.get();
-      const refreshToken = res?.data?.refreshToken;
-      if (!refreshToken) {
-        return endAllSessions();
+  try {
+    const {
+      data: { data, error, message },
+    } = await promise;
+    if (error) {
+      if (error === 'TokenExpiredError') {
+        const res = await KeychainStorage.get();
+        const refreshToken = res?.data?.refreshToken;
+        if (!refreshToken) {
+          return endAllSessions();
+        }
+        // request new access token with refresh token
+        const { data } = await axios.get<
+          ApiResponse<{
+            accessToken: string;
+            refreshToken: string;
+          }>
+        >(`${API_ENDPOINT}/tokens`, {
+          headers: {
+            Authorization: `Bearer ${refreshToken}`,
+          },
+        });
+        const tokens = data.data;
+        if (tokens) {
+          // set the new access token and new refresh token in keychain
+          await KeychainStorage.set(tokens.accessToken, tokens.refreshToken);
+          // retry the original request (it should catch the new token now)
+          return await apiWrapper(promise);
+        } else {
+          return endAllSessions();
+        }
       }
-      // request new access token with refresh token
-      const { data } = await axios.get<
-        ApiResponse<{
-          accessToken: string;
-          refreshToken: string;
-        }>
-      >(`${API_ENDPOINT}/tokens`, {
-        headers: {
-          Authorization: `Bearer ${refreshToken}`,
-        },
-      });
-      const tokens = data.data;
-      if (tokens) {
-        // set the new access token and new refresh token in keychain
-        await KeychainStorage.set(tokens.accessToken, tokens.refreshToken);
-        // retry the original request (it should catch the new token now)
-        return await apiWrapper(promise);
-      } else {
-        return endAllSessions();
-      }
+      Snackbar.error(message || 'An error occurred');
+      return {
+        status: 'error',
+        message: message || 'An error occurred',
+      };
+    } else {
+      return { status: 'success', data: data };
     }
-    Snackbar.error(data.message || 'An error occurred');
-    return {
-      status: 'error',
-      message: data.message || 'An error occurred',
-    };
-  } else {
-    return { status: 'success', data: data.data };
+  } catch (err) {
+    console.error('axios error:', err);
+    return { status: 'error', message: 'A request error has occured' };
   }
 };
 
