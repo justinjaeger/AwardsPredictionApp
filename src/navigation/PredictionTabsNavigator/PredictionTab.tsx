@@ -5,12 +5,15 @@ import COLORS from '../../constants/colors';
 
 export const HIGHLIGHT_COLOR = COLORS.white;
 
-const PredictionTab = (props: {
+const PredictionTab = ({
+  text,
+  selected,
+  onPress,
+}: {
   text: string;
   selected: boolean;
   onPress: () => void;
 }) => {
-  const { text, selected, onPress } = props;
   return (
     <TouchableHighlight
       style={{
