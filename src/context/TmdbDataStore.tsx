@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState } from 'react';
 import {
+  CategoryType,
   Contender,
   Movie,
   Person,
@@ -96,9 +97,9 @@ export const TmdbDataStoreProvider = (props: { children: React.ReactNode }) => {
     songIds: string[],
   ) => {
     const results = await Promise.all([
-      TmdbCache.getOrSetMovies(movieIds),
-      TmdbCache.getOrSetPersons(personIds),
-      TmdbCache.getOrSetSongs(songIds),
+      TmdbCache.setItemsInCache(movieIds, CategoryType.FILM),
+      TmdbCache.setItemsInCache(personIds, CategoryType.PERFORMANCE),
+      TmdbCache.setItemsInCache(songIds, CategoryType.SONG),
     ]);
     results.forEach((items) => addItemsToStore(items));
   };
