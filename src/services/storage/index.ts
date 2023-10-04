@@ -1,6 +1,6 @@
 import { GetObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 
-const BUCKET = 'awardsapp873e5f6cbb714623a1108c8be7ab2680150001-prod/public/';
+const BUCKET = 'awardsapp873e5f6cbb714623a1108c8be7ab2680150001-prod';
 
 const client = new S3Client({
   region: 'us-east-1',
@@ -23,7 +23,7 @@ const getProfileImage = async (key: string) => {
     console.error('GET OBJECT STRING:', str);
     return str;
   } catch (err) {
-    console.log('Error uploading file:', err);
+    console.log('Error getting s3 file:', err);
   }
 };
 
@@ -46,7 +46,7 @@ const uploadProfilePicture = async (uri: string, email: string) => {
     await client.send(command);
     return key;
   } catch (err) {
-    console.log('Error uploading file:', err);
+    console.log('Error uploading s3file:', err);
   }
 };
 
