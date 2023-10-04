@@ -6,13 +6,13 @@ import { useTmdbDataStore } from '../../context/TmdbDataStore';
 
 const useQueryGetUserPredictions = (userId?: string) => {
   const { storeTmdbDataFromPredictionSet } = useTmdbDataStore();
-  const { event: _event } = useEvent();
-  const eventId = _event!._id;
+  const { event } = useEvent();
+  const eventId = event?._id;
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: [QueryKeys.USER_PREDICTIONS + userId + eventId],
     queryFn: async () => {
-      if (!userId) return undefined;
+      if (!userId || !eventId) return undefined;
       const { data: predictionSet } = await MongoApi.getPredictionSet({
         userId,
         eventId,
