@@ -28,7 +28,7 @@ export const getPredictionSet = async ({
   }
 
   return await api.get<WithId<PredictionSet>>(
-    `predictionsets/${userId}/${eventId}${queryString === '?' ? '' : queryString}`,
+    `predictionsets/${userId}/event/${eventId}${queryString === '?' ? '' : queryString}`,
   );
 };
 
