@@ -28,18 +28,15 @@ const CategoryList = ({
   predictionData,
   isAuthUserProfile,
 }: iCategoryListProps) => {
-  const { event: _event, reset } = useEvent();
-  const event = _event!;
+  const { event, reset } = useEvent();
   const unorderedCategories = (predictionData?.categories || {}) as Record<
     CategoryName,
     iCategoryPrediction
   >;
-  const awardsBodyCategories = event.categories;
-  const orderedPredictions = getOrderedPredictions(
-    event.awardsBody,
-    event.year,
-    unorderedCategories,
-  );
+  const awardsBodyCategories = event?.categories;
+  const orderedPredictions = event
+    ? getOrderedPredictions(event.awardsBody, event.year, unorderedCategories)
+    : [];
 
   // reset category context when changing events
   useEffect(() => {
@@ -49,6 +46,7 @@ const CategoryList = ({
   // filter out categories that are hidden until shortlisted
   const predictions: JSX.Element[] = [];
   for (const [categoryName, catPredictions] of orderedPredictions) {
+    if (!awardsBodyCategories) return;
     // get category info
     const { isHidden, name, slots } = awardsBodyCategories[categoryName];
     // hide hidden categories (like shorts)

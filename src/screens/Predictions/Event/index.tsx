@@ -36,8 +36,7 @@ const Event = ({
   isLoading: boolean;
 }) => {
   const { userId: authUserId } = useAuth();
-  const { event: _event, setCategory } = useEvent();
-  const event = _event!;
+  const { event, setCategory } = useEvent();
   const navigation = useTypedNavigation<PredictionsParamList>();
 
   const { loadingOpacity, bodyOpacity } = useLoading(isLoading);
@@ -46,6 +45,7 @@ const Event = ({
 
   // define the header
   useLayoutEffect(() => {
+    if (!event) return;
     const headerTitle = eventToString(event.awardsBody, event.year);
     navigation.setOptions({
       headerTitle: getHeaderTitleWithTrophy(headerTitle, event.awardsBody),
