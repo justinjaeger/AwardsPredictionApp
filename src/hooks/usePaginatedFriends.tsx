@@ -11,7 +11,7 @@ const usePaginatedFriends = ({
   type: 'followers' | 'following';
 }) => {
   const [stopFetching, setStopFetching] = useState<boolean>(false);
-  const [pageNumber, setPageNumber] = useState<number>(0);
+  const [pageNumber, setPageNumber] = useState<number>(1);
   const [users, setUsers] = useState<WithId<User>[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   // we need this to see if WE are following the user:

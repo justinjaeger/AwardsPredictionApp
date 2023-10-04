@@ -15,7 +15,7 @@ const useRecommendedUsers = () => {
   const authFollowingUserIds = allFollowingUsers?.map((u) => u._id) ?? [];
 
   const [stopFetching, setStopFetching] = useState<boolean>(false);
-  const [pageNumber, setPageNumber] = useState<number>(0);
+  const [pageNumber, setPageNumber] = useState<number>(1);
   const [users, setUsers] = useState<WithId<User>[]>([]);
   const [isFetching, setIsFetching] = useState<boolean>(false);
 
