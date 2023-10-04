@@ -23,7 +23,7 @@ async function getItem<T>(key: string): Promise<T | undefined> {
     }
     return value;
   } catch (err) {
-    console.error('error setting item in cache', err);
+    console.error('error getting item in cache', err);
   }
 }
 
