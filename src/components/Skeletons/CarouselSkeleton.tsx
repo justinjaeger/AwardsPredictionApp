@@ -17,15 +17,17 @@ const CarouselSkeleton = () => {
         highlightColor={COLORS.primaryLight}
       >
         <View style={{ flexDirection: 'row' }}>
-          {['', '', '', '', ''].map(() => (
-            <View
-              style={{
-                width: dimensions.width,
-                height: dimensions.height,
-                margin: theme.posterMargin,
-              }}
-            />
-          ))}
+          {Array(5)
+            .fill(null)
+            .map(() => (
+              <View
+                style={{
+                  width: dimensions.width,
+                  height: dimensions.height,
+                  margin: theme.posterMargin,
+                }}
+              />
+            ))}
         </View>
       </SkeletonPlaceholder>
     </View>
