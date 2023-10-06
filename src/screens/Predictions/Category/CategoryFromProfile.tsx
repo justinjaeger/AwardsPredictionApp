@@ -63,24 +63,24 @@ const Category = () => {
     });
   }, [navigation]);
 
+  // TODO: Loading skeleton
+
   return (
     <>
       <CategoryDisplayFab />
       <BackgroundWrapper>
         <>
-          <LoadingStatueModal visible={isLoading} text={'Loading Predictions...'} />
-          {!isLoading ? (
-            <>
-              {user ? <UserHeader user={user} showEventLink={showEventLink} /> : null}
-              <View style={{ width: '100%' }}>
-                <CategoryPersonal
-                  predictionData={predictionData}
-                  isLoading={isLoading}
-                  {...props}
-                />
-              </View>
-            </>
-          ) : null}
+          {/* <LoadingStatueModal visible={isLoading} text={'Loading Predictions...'} /> */}
+          <>
+            {user ? <UserHeader user={user} showEventLink={showEventLink} /> : null}
+            <View style={{ width: '100%' }}>
+              <CategoryPersonal
+                predictionData={predictionData}
+                isLoading={isLoading}
+                {...props}
+              />
+            </View>
+          </>
         </>
       </BackgroundWrapper>
     </>

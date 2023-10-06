@@ -27,8 +27,6 @@ import useQueryGetUserPredictions from '../../../hooks/queries/useQueryGetUserPr
 
 // used in both FromProfile and from event
 const CategoryPersonal = ({
-  collapsedOpacity,
-  expandedOpacity,
   delayedDisplay,
   gridOpacity,
   userId,
@@ -123,13 +121,12 @@ const CategoryPersonal = ({
     return <SignedOutState />;
   }
 
+  // TODO: loading skeleton when loading=true
+
   return (
     <>
-      <LoadingStatueModal
-        visible={isLoading || !isComplete}
-        text={isLoading ? 'Loading Predictions...' : 'Saving changes...'}
-      />
-      {!isLoading && predictions && predictions.length === 0 ? (
+      <LoadingStatueModal visible={!isComplete} text={'Saving changes...'} />
+      {predictions && predictions.length === 0 ? (
         <View
           style={{
             width: '100%',
@@ -160,34 +157,13 @@ const CategoryPersonal = ({
           <MovieGrid predictions={predictions} />
         </Animated.View>
       </Animated.ScrollView>
-      <Animated.View
-        style={{
-          display: delayedDisplay === 'list' ? 'flex' : 'none',
-          opacity: expandedOpacity,
-        }}
-      >
-        <MovieListDraggable
-          predictions={predictions}
-          setPredictions={(ps) => setPredictions(ps)}
-          lastUpdatedString={lastUpdatedString}
-          isAuthProfile={isAuthUserProfile}
-          onPressAdd={onPressAdd}
-        />
-      </Animated.View>
-      <Animated.View
-        style={{
-          display: delayedDisplay === 'list-collapsed' ? 'flex' : 'none',
-          opacity: collapsedOpacity,
-        }}
-      >
-        <MovieListDraggable
-          predictions={predictions}
-          setPredictions={(ps) => setPredictions(ps)}
-          lastUpdatedString={lastUpdatedString}
-          isAuthProfile={isAuthUserProfile}
-          onPressAdd={onPressAdd}
-        />
-      </Animated.View>
+      <MovieListDraggable
+        predictions={predictions}
+        setPredictions={(ps) => setPredictions(ps)}
+        lastUpdatedString={lastUpdatedString}
+        isAuthProfile={isAuthUserProfile}
+        onPressAdd={onPressAdd}
+      />
       {isPad ? (
         <Animated.View
           style={{
