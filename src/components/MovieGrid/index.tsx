@@ -10,14 +10,12 @@ import PosterFromTmdb from '../Images/PosterFromTmdb';
 const MovieGrid = ({
   predictions,
   categoryInfo,
-  isCollapsed,
   totalWidth: _totalWidth,
   noLine,
   style,
 }: {
   predictions: iPrediction[];
   categoryInfo?: iCategory;
-  isCollapsed?: boolean;
   noLine?: boolean;
   totalWidth?: number;
   style?: StyleProp<ViewStyle>;
@@ -36,7 +34,7 @@ const MovieGrid = ({
           flexWrap: 'wrap',
           marginLeft: theme.windowMargin - theme.posterMargin / 2,
           marginRight: theme.windowMargin - theme.posterMargin / 2,
-          marginBottom: isCollapsed ? 0 : theme.windowMargin,
+          marginBottom: theme.windowMargin,
           width: totalWidth,
         },
         style,
@@ -68,11 +66,8 @@ const MovieGrid = ({
                 <PosterFromTmdb
                   movie={movie}
                   person={person}
-                  width={
-                    (totalWidth - theme.windowMargin * 2 + theme.posterMargin) /
-                    (isCollapsed ? 10 : 5)
-                  }
-                  ranking={isCollapsed ? undefined : i + 1}
+                  width={(totalWidth - theme.windowMargin * 2 + theme.posterMargin) / 5}
+                  ranking={i + 1}
                 />
               </>
             ) : null}
