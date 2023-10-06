@@ -51,9 +51,9 @@ async function getItems<T>(keys: string[]) {
 
 // key would be TMDB_ID for example
 // pointing to an object that holds the movie's data
-async function setItem<T>(key: string, value: T) {
+async function setItem<T>(key: string, value: T, ttl?: number) {
   const cacheValue: iCachedItem<T> = {
-    expiryTime: Date.now() + TIME_TO_LIVE,
+    expiryTime: Date.now() + (ttl ?? TIME_TO_LIVE),
     value,
   };
   const stringifiedValue = JSON.stringify(cacheValue);
@@ -64,10 +64,10 @@ async function setItem<T>(key: string, value: T) {
   }
 }
 
-async function setItems<T>(items: { key: string; value: T }[]) {
+async function setItems<T>(items: { key: string; value: T }[], ttl?: number) {
   const stringifiedValues: [string, string][] = items.map(({ key, value }) => {
     const cacheValue: iCachedItem<T> = {
-      expiryTime: Date.now() + TIME_TO_LIVE,
+      expiryTime: Date.now() + (ttl ?? TIME_TO_LIVE),
       value,
     };
     return [key, JSON.stringify(cacheValue)];
