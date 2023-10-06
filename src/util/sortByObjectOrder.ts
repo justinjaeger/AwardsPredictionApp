@@ -39,7 +39,7 @@ export const getOrderedEvents = (unorderedEvents: WithId<EventModel>[]) => {
   return orderedEvents;
 };
 
-export const getOrderedPredictions = (
+export const getOrderedCategories = (
   awardsBody: AwardsBody,
   year: number,
   unorderedCategories: Record<CategoryName, iCategoryPrediction>,

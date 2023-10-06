@@ -12,6 +12,7 @@ import {
 } from '../types/api';
 import TmdbCache from '../services/cache/tmdb';
 import _ from 'lodash';
+import { filterDuplicates } from '../util/filterDuplicates';
 
 /**
  * Since AsyncStore is asynchronous, we can cache those responses in a context
@@ -84,24 +85,37 @@ export const TmdbDataStoreProvider = (props: { children: React.ReactNode }) => {
   };
 
   const addItemsToStore = (items: Record<string, any>) => {
-    Object.entries(items).forEach(([key, value]) => {
-      setStore((s) => ({ ...s, [key]: value }));
-    });
+    setStore((s) => ({ ...s, ...items }));
   };
 
-  // Extracts all movie, person, and song ids from prediction
-  // Sets all movie/person/song data in async storage, then set it here
+  // Finds what isn't already in the cache and fetches it from async storage, OR from the API
+  // All other funcs should invoke this at the end
   const storeTmdbData = async (
     movieIds: string[],
     personIds: string[],
     songIds: string[],
   ) => {
+    const nonDupMovieIds = filterDuplicates(movieIds);
+    const nonDupPersonIds = filterDuplicates(personIds);
+    const nonDupSongIds = filterDuplicates(songIds);
+
+    // if it's already in the store, don't fetch from async storage
+    const movieIdsNotInStore = nonDupMovieIds.filter((id) => !store[id]);
+    const personIdsNotInStore = nonDupPersonIds.filter((id) => !store[id]);
+    const songIdsNotInStore = nonDupSongIds.filter((id) => !store[id]);
+
+    // TODO: remove performance monitoring
+    const startTime = performance.now();
     const results = await Promise.all([
-      TmdbCache.setItemsInCache(movieIds, CategoryType.FILM),
-      TmdbCache.setItemsInCache(personIds, CategoryType.PERFORMANCE),
-      TmdbCache.setItemsInCache(songIds, CategoryType.SONG),
+      TmdbCache.setItemsInCache(movieIdsNotInStore, CategoryType.FILM),
+      TmdbCache.setItemsInCache(personIdsNotInStore, CategoryType.PERFORMANCE),
+      TmdbCache.setItemsInCache(songIdsNotInStore, CategoryType.SONG),
     ]);
-    results.forEach((items) => addItemsToStore(items));
+    const endTime = performance.now();
+    console.log('setItemsInCache.all took ' + (endTime - startTime) + ' milliseconds.');
+
+    const allItems = results.reduce((acc, r) => ({ ...acc, ...r }), {});
+    addItemsToStore(allItems);
   };
 
   const storeTmdbDataFromPredictions = async (predictions: iPrediction[]) => {

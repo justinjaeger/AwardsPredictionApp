@@ -6,6 +6,7 @@ import theme from '../../constants/theme';
 import { iCategory, iPrediction } from '../../types/api';
 import { useTmdbDataStore } from '../../context/TmdbDataStore';
 import PosterFromTmdb from '../Images/PosterFromTmdb';
+import MoviePosterSkeleton from '../Skeletons/MoviePosterSkeleton';
 
 const MovieGrid = ({
   predictions,
@@ -42,7 +43,7 @@ const MovieGrid = ({
     >
       {predictions.map((prediction, i) => {
         const { contenderId } = prediction;
-        const { movie, person } = getTmdbDataFromPrediction(prediction)!;
+        const { movie, person } = getTmdbDataFromPrediction(prediction) || {};
         return (
           <View key={contenderId}>
             {!noLine && i === slots ? (
@@ -57,20 +58,20 @@ const MovieGrid = ({
                 }}
               />
             ) : null}
-            {movie ? (
-              <>
-                {!noLine && i >= slots && i < slots + 5 ? (
-                  // we want to give a margin on top if this is the row beneath the divider (since divider is absolute pos)
-                  <View style={{ marginTop: 20 }} />
-                ) : null}
-                <PosterFromTmdb
-                  movie={movie}
-                  person={person}
-                  width={(totalWidth - theme.windowMargin * 2 + theme.posterMargin) / 5}
-                  ranking={i + 1}
-                />
-              </>
+            {!noLine && i >= slots && i < slots + 5 ? (
+              // we want to give a margin on top if this is the row beneath the divider (since divider is absolute pos)
+              <View style={{ marginTop: 20 }} />
             ) : null}
+            {movie ? (
+              <PosterFromTmdb
+                movie={movie}
+                person={person}
+                width={(totalWidth - theme.windowMargin * 2 + theme.posterMargin) / 5}
+                ranking={i + 1}
+              />
+            ) : (
+              <MoviePosterSkeleton />
+            )}
           </View>
         );
       })}

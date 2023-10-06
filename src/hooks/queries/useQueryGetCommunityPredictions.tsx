@@ -13,10 +13,14 @@ const useQueryGetCommunityPredictions = () => {
     queryKey: [QueryKeys.COMMUNITY_PREDICTIONS + eventId],
     queryFn: async () => {
       if (!eventId) return undefined;
+      // TODO: remove performance monitoring
+      const startTime = performance.now();
       const { data: predictionSet } = await MongoApi.getPredictionSet({
         userId: 'community',
         eventId,
       });
+      const endTime = performance.now();
+      console.log('getPredictionSet took ' + (endTime - startTime) + ' milliseconds.');
       if (predictionSet) {
         // set movies in cache
         storeTmdbDataFromPredictionSet(predictionSet);

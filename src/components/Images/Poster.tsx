@@ -7,14 +7,14 @@ import {
   PosterSize,
   POSTER_SIZE,
 } from '../../constants/posterDimensions';
-import { TMDB_IMAGE_URL } from '../../constants';
+import { TMDB_IMAGE_URL_MED } from '../../constants';
 import { Body, Label } from '../Text';
 import theme from '../../constants/theme';
 import useDevice from '../../util/device';
 
 type iPosterProps = {
   title: string;
-  path: string | null; // comes after TMDB_IMAGE_URL/
+  path: string | null; // comes after TMDB_IMAGE_URL_MED/
   width?: number; // 1 is 27*40px, defualt is 5
   ranking?: number;
   onPress?: () => void;
@@ -91,7 +91,7 @@ const Poster = ({
           <FastImage
             style={style as Record<string, unknown>}
             source={{
-              uri: `${TMDB_IMAGE_URL}/${path}`,
+              uri: `${TMDB_IMAGE_URL_MED}/${path}`,
             }}
           />
         ) : (

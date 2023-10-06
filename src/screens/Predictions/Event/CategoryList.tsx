@@ -5,7 +5,7 @@ import { HeaderLight, SubHeader } from '../../../components/Text';
 import COLORS from '../../../constants/colors';
 import theme from '../../../constants/theme';
 import { useEvent } from '../../../context/EventContext';
-import { getOrderedPredictions } from '../../../util/sortByObjectOrder';
+import { getOrderedCategories } from '../../../util/sortByObjectOrder';
 import {
   CategoryName,
   PredictionSet,
@@ -23,7 +23,6 @@ type iCategoryListProps = {
 
 // Lists all categories in order, and displays predictionData
 const CategoryList = ({
-  isCollapsed,
   onSelectCategory,
   predictionData,
   isAuthUserProfile,
@@ -35,7 +34,7 @@ const CategoryList = ({
   >;
   const awardsBodyCategories = event?.categories;
   const orderedPredictions = event
-    ? getOrderedPredictions(event.awardsBody, event.year, unorderedCategories)
+    ? getOrderedCategories(event.awardsBody, event.year, unorderedCategories)
     : [];
 
   // reset category context when changing events
@@ -44,17 +43,20 @@ const CategoryList = ({
   }, []);
 
   // filter out categories that are hidden until shortlisted
-  const predictions: JSX.Element[] = [];
+  const categoryRows: React.JSX.Element[] = [];
   for (const [categoryName, catPredictions] of orderedPredictions) {
-    if (!awardsBodyCategories) return;
+    if (!awardsBodyCategories) continue;
     // get category info
     const { isHidden, name, slots } = awardsBodyCategories[categoryName];
     // hide hidden categories (like shorts)
     if (isHidden) continue;
-    const { predictions } = catPredictions;
+    const predictions = catPredictions.predictions.sort((p1, p2) =>
+      p1.ranking > p2.ranking ? 1 : -1,
+    );
     // once nominations happen, you want "slots" to be however many films are nominated
     const truncatedPredictions: iPrediction[] = predictions.slice(0, slots || 5);
-    return (
+
+    const CategoryRow = (
       <TouchableHighlight
         key={categoryName}
         style={{
@@ -69,7 +71,7 @@ const CategoryList = ({
             style={{
               color: COLORS.lightest,
               marginLeft: theme.windowMargin,
-              marginBottom: isCollapsed ? 0 : 5,
+              marginBottom: 5,
               marginTop: 5,
             }}
           >
@@ -83,15 +85,15 @@ const CategoryList = ({
           <MovieGrid
             predictions={truncatedPredictions}
             categoryInfo={awardsBodyCategories[categoryName]}
-            isCollapsed={isCollapsed}
             noLine
           />
         </View>
       </TouchableHighlight>
     );
+    categoryRows.push(CategoryRow);
   }
 
-  return predictions;
+  return categoryRows;
 };
 
 export default CategoryList;

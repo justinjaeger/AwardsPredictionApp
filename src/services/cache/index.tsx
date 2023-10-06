@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const TIME_TO_LIVE = 60 * 60 * 24 * 1 * 1000; // in ms - currently 1 day
+const TIME_TO_LIVE = 60 * 60 * 24 * 7 * 1000; // in ms - currently 7 days
 
 type iCachedItem<T> = {
   value: T;

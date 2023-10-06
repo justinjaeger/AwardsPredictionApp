@@ -12,6 +12,7 @@ axiosInstance.interceptors.request.use(async (config) => {
   const startTime = performance.now();
   const res = await KeychainStorage.get();
   const endTime = performance.now();
+  // takes from 70-200ms
   console.log('KeychainStorage.get() took ' + (endTime - startTime) + ' milliseconds.');
 
   const accessToken = res.data?.accessToken;
