@@ -21,12 +21,14 @@ type iPosterProps = {
   styles?: StyleProp<ImageStyle>;
 };
 
-/**
- * TODO: add a blank image and blank movie poster for when poster is small
- */
-
-const Poster = (props: iPosterProps) => {
-  const { path, title, width: _width, ranking, onPress, styles } = props;
+const Poster = ({
+  path,
+  title,
+  width: _width,
+  ranking,
+  onPress,
+  styles,
+}: iPosterProps) => {
   const { isPad } = useDevice();
 
   const width = _width || PosterSize.MEDIUM;
