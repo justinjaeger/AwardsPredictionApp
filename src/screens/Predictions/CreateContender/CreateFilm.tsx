@@ -11,12 +11,12 @@ import { useSearch } from '../../../context/ContenderSearchContext';
 import { iCreateContenderProps } from '.';
 import useQueryGetCommunityPredictions from '../../../hooks/queries/useQueryGetCommunityPredictions';
 import { useTmdbDataStore } from '../../../context/TmdbDataStore';
-import { CategoryType, Movie, WithId, iPrediction } from '../../../types/api';
+import { CategoryType, Movie, iPrediction } from '../../../types/api';
 import TmdbServices, { iSearchData } from '../../../services/tmdb';
 
 // TODO: should only be able to do this if logged in
 const CreateFilm = ({ onSelectPrediction }: iCreateContenderProps) => {
-  const { itemsKeyedByTmdbId } = useTmdbDataStore();
+  const { store } = useTmdbDataStore();
 
   const { setIsLoadingSearch } = useSearch();
   const { category: _category, event: _event } = useEvent();
@@ -46,14 +46,9 @@ const CreateFilm = ({ onSelectPrediction }: iCreateContenderProps) => {
   };
 
   const getFilmPrediction = (movieTmdbId: number) => {
-    const maybeMovie = movieTmdbId
-      ? (itemsKeyedByTmdbId[movieTmdbId] as WithId<Movie>)
-      : undefined;
+    const maybeMovie = movieTmdbId ? (store[movieTmdbId] as Movie) : undefined;
     const maybeExistingPrediction =
-      maybeMovie &&
-      communityPredictions.find(
-        (p) => p.movieId === maybeMovie._id && p.personId === maybeMovie._id,
-      );
+      maybeMovie && communityPredictions.find((p) => p.movieTmdbId === maybeMovie.tmdbId);
     return maybeExistingPrediction;
   };
 
@@ -67,8 +62,8 @@ const CreateFilm = ({ onSelectPrediction }: iCreateContenderProps) => {
     if (response) {
       onSelectPrediction({
         contenderId: response._id,
-        movieId: response.movieId,
-        personId: response.personId,
+        movieTmdbId: response.movieTmdbId,
+        personTmdbId: response.personTmdbId,
         songId: response.songId,
         ranking: 0,
       });
@@ -120,7 +115,7 @@ const CreateFilm = ({ onSelectPrediction }: iCreateContenderProps) => {
     id: m.tmdbId.toString(),
     ranking: 0,
     contenderId: m.tmdbId.toString(),
-    movieId: m.tmdbId.toString(),
+    movieTmdbId: m.tmdbId,
   }));
 
   return (

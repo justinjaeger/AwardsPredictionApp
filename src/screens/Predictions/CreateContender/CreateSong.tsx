@@ -16,11 +16,12 @@ import SongListSelectable from '../../../components/MovieList/SongListSelectable
 import { useSearch } from '../../../context/ContenderSearchContext';
 import useQueryGetCommunityPredictions from '../../../hooks/queries/useQueryGetCommunityPredictions';
 import { useTmdbDataStore } from '../../../context/TmdbDataStore';
-import { CategoryType, iPrediction } from '../../../types/api';
+import { CategoryType, Movie, iPrediction } from '../../../types/api';
+import { getSongKey } from '../../../util/getSongKey';
 
 // TODO: should this func ACTUALLY accept a Contender??
 const CreateSong = ({ onSelectPrediction }: iCreateContenderProps) => {
-  const { itemsKeyedByTmdbId, getSongByTitleAndMovieTmdbId } = useTmdbDataStore();
+  const { store } = useTmdbDataStore();
 
   const { setIsLoadingSearch } = useSearch();
   const { category: _category, event: _event } = useEvent();
@@ -60,9 +61,8 @@ const CreateSong = ({ onSelectPrediction }: iCreateContenderProps) => {
   };
 
   const getSongPrediction = (movieTmdbId: number, title: string) => {
-    const song = getSongByTitleAndMovieTmdbId(title, movieTmdbId);
-    const maybeSongPrediction =
-      song && communityPredictions.find((p) => p.songId === song._id);
+    const songKey = getSongKey(movieTmdbId, title);
+    const maybeSongPrediction = communityPredictions.find((p) => p.songId === songKey);
     return maybeSongPrediction;
   };
 
@@ -76,8 +76,8 @@ const CreateSong = ({ onSelectPrediction }: iCreateContenderProps) => {
     if (response) {
       onSelectPrediction({
         contenderId: response._id,
-        movieId: response.movieId,
-        personId: response.personId,
+        movieTmdbId: response.movieTmdbId,
+        personTmdbId: response.personTmdbId,
         songId: response.songId,
         ranking: 0,
       });
@@ -104,7 +104,7 @@ const CreateSong = ({ onSelectPrediction }: iCreateContenderProps) => {
   };
 
   const commuintyMoviesWithSong = communityPredictions.filter(
-    (p) => p.movieId === itemsKeyedByTmdbId[selectedMovieTmdbId!]?._id,
+    (p) => p.movieTmdbId === (store[selectedMovieTmdbId!] as Movie).tmdbId,
   );
 
   const onSelectMovie = async () => {
@@ -139,7 +139,7 @@ const CreateSong = ({ onSelectPrediction }: iCreateContenderProps) => {
     id: m.tmdbId.toString(),
     ranking: 0,
     contenderId: m.tmdbId.toString(),
-    movieId: m.tmdbId.toString(),
+    movieTmdbId: m.tmdbId,
   }));
 
   return (

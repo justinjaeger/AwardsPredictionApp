@@ -14,7 +14,7 @@ import { SubmitButton } from '../../../components/Buttons';
 import PerformanceListSelectable from '../../../components/MovieList/PerformanceListSelectable';
 import { useSearch } from '../../../context/ContenderSearchContext';
 import useQueryGetCommunityPredictions from '../../../hooks/queries/useQueryGetCommunityPredictions';
-import { CategoryType, Movie, Person, WithId, iPrediction } from '../../../types/api';
+import { CategoryType, Movie, Person, iPrediction } from '../../../types/api';
 import TmdbServices, { iSearchData } from '../../../services/tmdb';
 import { useTmdbDataStore } from '../../../context/TmdbDataStore';
 
@@ -24,7 +24,7 @@ import { useTmdbDataStore } from '../../../context/TmdbDataStore';
  * So we can display it in the conventional list
  */
 const CreatePerformance = ({ onSelectPrediction }: iCreateContenderProps) => {
-  const { itemsKeyedByTmdbId } = useTmdbDataStore();
+  const { store } = useTmdbDataStore();
 
   const { setIsLoadingSearch } = useSearch();
   const { category: _category, event: _event } = useEvent();
@@ -64,18 +64,15 @@ const CreatePerformance = ({ onSelectPrediction }: iCreateContenderProps) => {
   };
 
   const getPerformancePrediction = (movieTmdbId: number, personTmdbId: number) => {
-    const maybePerson = personTmdbId
-      ? (itemsKeyedByTmdbId[personTmdbId] as WithId<Person>)
-      : undefined;
+    const maybePerson = personTmdbId ? (store[personTmdbId] as Person) : undefined;
     // get performances associated with movie.
-    const maybeMovie = movieTmdbId
-      ? (itemsKeyedByTmdbId[movieTmdbId] as WithId<Movie>)
-      : undefined;
+    const maybeMovie = movieTmdbId ? (store[movieTmdbId] as Movie) : undefined;
     const maybePerformance =
       maybeMovie &&
       maybePerson &&
       communityPredictions.find(
-        (p) => p.movieId === maybeMovie._id && p.personId === maybePerson._id,
+        (p) =>
+          p.movieTmdbId === maybeMovie.tmdbId && p.personTmdbId === maybePerson.tmdbId,
       );
     return maybePerformance;
   };
@@ -90,8 +87,8 @@ const CreatePerformance = ({ onSelectPrediction }: iCreateContenderProps) => {
     if (response && selectedPersonTmdbId && selectedMovieTmdbId) {
       onSelectPrediction({
         contenderId: response._id,
-        movieId: response.movieId,
-        personId: response.personId,
+        movieTmdbId: response.movieTmdbId,
+        personTmdbId: response.personTmdbId,
         songId: response.songId,
         ranking: 0,
       });
@@ -134,7 +131,7 @@ const CreatePerformance = ({ onSelectPrediction }: iCreateContenderProps) => {
   };
 
   const communityMoviesWithPerson = communityPredictions.filter(
-    (p) => p.movieId === itemsKeyedByTmdbId[selectedMovieTmdbId!]?._id,
+    (p) => p.movieTmdbId === (store[selectedMovieTmdbId!] as Movie)?.tmdbId,
   );
 
   const onSelectPerson = async () => {
@@ -167,13 +164,13 @@ const CreatePerformance = ({ onSelectPrediction }: iCreateContenderProps) => {
   const movieSearchResultsFormatted: iPrediction[] = movieSearchResults.map((m) => ({
     ranking: 0,
     contenderId: m.tmdbId.toString(),
-    movieId: m.tmdbId.toString(),
+    movieTmdbId: m.tmdbId,
   }));
   const personSearchResultsFormatted: iPrediction[] = personSearchResults.map((p) => ({
     ranking: 0,
     contenderId: p.tmdbId.toString(),
-    movieId: p.tmdbId.toString(),
-    personId: p.tmdbId.toString(),
+    movieTmdbId: p.tmdbId,
+    personTmdbId: p.tmdbId,
   }));
 
   return (

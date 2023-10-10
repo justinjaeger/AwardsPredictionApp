@@ -105,12 +105,12 @@ export type CategoryUpdateLog = {
 
 export type Contender = {
   eventId: ObjectId;
-  movieId: ObjectId;
   category: CategoryName;
+  movieTmdbId: number;
+  personTmdbId?: number;
+  songId?: string;
   isHidden?: boolean;
   accolade?: Phase;
-  songId?: ObjectId;
-  personId?: ObjectId;
   numPredicting?: Record<number, number>; // for community predictions only
   amplify_id?: string;
 };
@@ -169,15 +169,15 @@ export type Person = {
 export type iPrediction = {
   contenderId: ObjectId;
   ranking: number;
-  movieId: ObjectId;
-  personId?: ObjectId;
-  songId?: ObjectId;
+  movieTmdbId: number;
+  personTmdbId?: number;
+  songId?: string;
   numPredicting?: Record<number, number>; // only applies to community predictions
 };
 
 export type iCategoryPrediction = {
   createdAt: Date;
-  predictions: Array<iPrediction>;
+  predictions: iPrediction[];
 };
 
 export type PredictionSet = {
@@ -202,7 +202,7 @@ export type RelationshipWithUser = Relationship & {
 };
 
 export type Song = {
-  movieId: ObjectId;
+  movieTmdbId: number;
   title: string;
   artist?: string;
   amplify_id?: string;
@@ -236,3 +236,7 @@ export type User = {
   recentPredictionSets?: iRecentPrediction[];
   amplify_id?: string;
 };
+
+export type ApiData = {
+  eventYear: number;
+} & Record<string, ((Movie | Person | Song) & { type: CategoryType }) | number>;

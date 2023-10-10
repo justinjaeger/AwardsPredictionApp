@@ -1,7 +1,7 @@
 import React from 'react';
 import { ImageStyle, StyleProp } from 'react-native';
 import Poster from './Poster';
-import { Movie, Person, WithId } from '../../types/api';
+import { Movie, Person } from '../../types/api';
 
 type iPosterFromTmdbProps = {
   width?: number;
@@ -16,7 +16,7 @@ const PosterFromMovie = ({
   onPress,
   ranking,
   styles,
-}: iPosterFromTmdbProps & { movie: WithId<Movie> }) => (
+}: iPosterFromTmdbProps & { movie: Movie }) => (
   <Poster
     path={movie.posterPath || null} // this will render the loading state if null
     title={movie.title || ''}
@@ -46,8 +46,8 @@ const PosterFromPerson = ({
 
 const PosterFromTmdb = (
   props: iPosterFromTmdbProps & {
-    movie?: WithId<Movie>;
-    person?: WithId<Person>;
+    movie?: Movie;
+    person?: Person;
   },
 ) =>
   props.person ? (

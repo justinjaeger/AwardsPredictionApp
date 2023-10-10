@@ -90,7 +90,6 @@ const UserPredictionList = ({
               </View>
               <MovieGrid
                 predictions={ps.topPredictions}
-                isCollapsed={false} // TODO
                 noLine
                 style={{ marginBottom: 0 }}
               />

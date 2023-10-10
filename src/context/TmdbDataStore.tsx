@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useState } from 'react';
 import {
-  CategoryType,
   Contender,
   Movie,
   Person,
@@ -18,154 +17,119 @@ import { filterDuplicates } from '../util/filterDuplicates';
  * Since AsyncStore is asynchronous, we can cache those responses in a context
  */
 
+export type iTmdbDataStoreRecords = Record<string, Movie | Person | Song>;
+
 const TmdbDataStoreContext = createContext<{
-  store: Record<string, any>;
-  itemsKeyedByTmdbId: Record<number, any>;
-  storeTmdbDataFromPredictionSet: (ps: PredictionSet) => Promise<void>;
+  store: iTmdbDataStoreRecords;
+  storeTmdbDataFromPredictionSet: (ps: PredictionSet, eventYear: number) => Promise<void>;
   storeTmdbDataFromRecentPredictions: (ps: iRecentPrediction[]) => Promise<void>;
-  storeTmdbDataFromContender: (c: WithId<Contender>) => Promise<void>;
+  storeTmdbDataFromContender: (c: WithId<Contender>, eventYear: number) => Promise<void>;
   getTmdbDataFromPrediction: (prediction: iPrediction) =>
     | {
-        movie: WithId<Movie>;
-        person: WithId<Person> | undefined;
-        song: WithId<Song> | undefined;
+        movie: Movie;
+        person: Person | undefined;
+        song: Song | undefined;
       }
     | undefined;
-  getSongByTitleAndMovieTmdbId: (
-    title: string,
-    movieTmdbId: number,
-  ) => WithId<Song> | undefined;
 }>({
   store: {},
-  itemsKeyedByTmdbId: {},
   storeTmdbDataFromPredictionSet: () => Promise.resolve(),
   storeTmdbDataFromRecentPredictions: () => Promise.resolve(),
   storeTmdbDataFromContender: () => Promise.resolve(),
   getTmdbDataFromPrediction: () => undefined,
-  getSongByTitleAndMovieTmdbId: () => undefined,
 });
 
 /**
  * All GET operations from async store can be used here
  */
 export const TmdbDataStoreProvider = (props: { children: React.ReactNode }) => {
-  const [store, setStore] = useState<Record<string, any>>({});
-
-  // This won't work for songs. We need to key the songs by movieId+title
-  const itemsKeyedByTmdbId = _.values(store).reduce((acc: Record<number, any>, item) => {
-    if (item.tmdbId) {
-      acc[item.tmdbId] = item;
-    }
-    return acc;
-  }, {});
-
-  const itemsKeyedBySongTitleAndMovieId = _.values(store).reduce(
-    (acc: Record<string, WithId<Song>>, item) => {
-      // only Songs have field movieId
-      if (item.movieId && item.title) {
-        acc[item.title] = item + item.movieId;
-      }
-      return acc;
-    },
-    {},
-  );
+  const [store, setStore] = useState<iTmdbDataStoreRecords>({});
 
   const getTmdbDataFromPrediction = (prediction: iPrediction) => {
-    const { movieId, personId, songId } = prediction;
-    const movie = store[movieId] as WithId<Movie>;
-    const person = personId ? (store[personId] as WithId<Person>) : undefined;
-    const song = songId ? (store[songId] as WithId<Song>) : undefined;
+    const { movieTmdbId, personTmdbId, songId } = prediction;
+    const movie = store[movieTmdbId] as Movie;
+    const person = personTmdbId ? (store[personTmdbId] as Person) : undefined;
+    const song = songId ? (store[songId] as Song) : undefined;
     return { movie, person, song };
   };
 
-  const getSongByTitleAndMovieTmdbId = (title: string, movieTmdbId: number) => {
-    const movie = itemsKeyedByTmdbId[movieTmdbId] as WithId<Movie>;
-    const key = title + movie._id;
-    return itemsKeyedBySongTitleAndMovieId[key] as WithId<Song> | undefined;
-  };
-
-  const addItemsToStore = (items: Record<string, any>) => {
+  const addItemsToStore = (items: iTmdbDataStoreRecords) => {
     setStore((s) => ({ ...s, ...items }));
   };
 
   // Finds what isn't already in the cache and fetches it from async storage, OR from the API
   // All other funcs should invoke this at the end
-  const storeTmdbData = async (
-    movieIds: string[],
-    personIds: string[],
-    songIds: string[],
-  ) => {
-    const nonDupMovieIds = filterDuplicates(movieIds);
-    const nonDupPersonIds = filterDuplicates(personIds);
-    const nonDupSongIds = filterDuplicates(songIds);
-
+  const storeTmdbData = async (ids: string[], eventYear: number) => {
+    const nonDupIds = filterDuplicates(ids);
     // if it's already in the store, don't fetch from async storage
-    const movieIdsNotInStore = nonDupMovieIds.filter((id) => !store[id]);
-    const personIdsNotInStore = nonDupPersonIds.filter((id) => !store[id]);
-    const songIdsNotInStore = nonDupSongIds.filter((id) => !store[id]);
+    const idsNotInStore = nonDupIds.filter((id) => !store[id]);
 
     // TODO: remove performance monitoring
     const startTime = performance.now();
-    const results = await Promise.all([
-      TmdbCache.setItemsInCache(movieIdsNotInStore, CategoryType.FILM),
-      TmdbCache.setItemsInCache(personIdsNotInStore, CategoryType.PERFORMANCE),
-      TmdbCache.setItemsInCache(songIdsNotInStore, CategoryType.SONG),
-    ]);
+    const results = await TmdbCache.setItemsInCache(idsNotInStore, eventYear);
     const endTime = performance.now();
     console.log('setItemsInCache.all took ' + (endTime - startTime) + ' milliseconds.');
 
-    const allItems = results.reduce((acc, r) => ({ ...acc, ...r }), {});
-    addItemsToStore(allItems);
+    // const allItems = results.reduce((acc, r) => ({ ...acc, ...r }), {});
+    addItemsToStore(results);
   };
 
-  const storeTmdbDataFromPredictions = async (predictions: iPrediction[]) => {
-    const movieIds: string[] = [];
-    const personIds: string[] = [];
-    const songIds: string[] = [];
+  const storeTmdbDataFromPredictions = async (
+    predictions: iPrediction[],
+    eventYear: number,
+  ) => {
+    const allIds: string[] = [];
     predictions.forEach((p) => {
-      p.movieId && movieIds.push(p.movieId);
-      p.personId && personIds.push(p.personId);
-      p.songId && songIds.push(p.songId);
+      p.movieTmdbId && allIds.push(p.movieTmdbId.toString());
+      p.personTmdbId && allIds.push(p.personTmdbId.toString());
+      p.songId && allIds.push(p.songId);
     });
-    await storeTmdbData(movieIds, personIds, songIds);
+    await storeTmdbData(allIds, eventYear);
   };
 
-  const storeTmdbDataFromPredictionSet = async (predictionSet: PredictionSet) => {
+  const storeTmdbDataFromPredictionSet = async (
+    predictionSet: PredictionSet,
+    eventYear: number,
+  ) => {
     const predictions = _.values(predictionSet?.categories ?? []).flatMap(
       (c) => c.predictions,
     );
-    await storeTmdbDataFromPredictions(predictions);
+    await storeTmdbDataFromPredictions(predictions, eventYear);
   };
 
   // same as above but accepts list of recent predictions
   const storeTmdbDataFromRecentPredictions = async (
     recentPredictions: iRecentPrediction[],
   ) => {
-    const predictions = recentPredictions.flatMap((c) => c.topPredictions);
-    await storeTmdbDataFromPredictions(predictions);
+    const eventYearToRecentPredictions = _.groupBy(recentPredictions, (p) => p.year);
+    const promises = Object.entries(eventYearToRecentPredictions).map(
+      ([year, recent]) => {
+        const eventYear = parseInt(year, 8);
+        const predictions = recent.flatMap((c) => c.topPredictions);
+        return storeTmdbDataFromPredictions(predictions, eventYear);
+      },
+    );
+    await Promise.all(promises);
   };
 
-  const storeTmdbDataFromContender = async ({
-    movieId,
-    personId,
-    songId,
-  }: WithId<Contender>) => {
-    const movieIds = [movieId];
-    const personIds = personId ? [personId] : [];
+  const storeTmdbDataFromContender = async (
+    { movieTmdbId, personTmdbId, songId }: WithId<Contender>,
+    eventYear: number,
+  ) => {
+    const movieIds = [movieTmdbId.toString()];
+    const personIds = personTmdbId ? [personTmdbId.toString()] : [];
     const songIds = songId ? [songId] : [];
-    await storeTmdbData(movieIds, personIds, songIds);
+    await storeTmdbData([...movieIds, ...personIds, ...songIds], eventYear);
   };
 
   return (
     <TmdbDataStoreContext.Provider
       value={{
         store,
-        itemsKeyedByTmdbId,
         storeTmdbDataFromPredictionSet,
         storeTmdbDataFromRecentPredictions,
         storeTmdbDataFromContender,
         getTmdbDataFromPrediction,
-        getSongByTitleAndMovieTmdbId,
       }}
     >
       {props.children}

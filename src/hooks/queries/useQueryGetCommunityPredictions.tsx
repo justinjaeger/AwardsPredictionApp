@@ -34,7 +34,7 @@ const useQueryGetCommunityPredictions = () => {
 
       let data = await getFromAsyncStorage();
       if (data) {
-        storeTmdbDataFromPredictionSet(data);
+        storeTmdbDataFromPredictionSet(data, event.year);
       } else {
         const { data: predictionSet } = await MongoApi.getPredictionSet({
           userId: 'community',
@@ -48,7 +48,7 @@ const useQueryGetCommunityPredictions = () => {
 
       if (data) {
         setInAsyncStorage(data);
-        storeTmdbDataFromPredictionSet(data);
+        storeTmdbDataFromPredictionSet(data, event.year);
       }
       return data;
     },

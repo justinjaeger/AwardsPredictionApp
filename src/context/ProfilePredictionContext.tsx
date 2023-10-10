@@ -50,7 +50,7 @@ export const ProfilePredictionProvider = (props: { children: React.ReactNode }) 
       setUser(u);
       // cache all movies (await it so it doesn't load with bad data)
       if (ps) {
-        await storeTmdbDataFromPredictionSet(ps);
+        await storeTmdbDataFromPredictionSet(ps, event.year);
       }
       setIsLoading(false);
     }

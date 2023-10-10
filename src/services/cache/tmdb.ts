@@ -1,9 +1,7 @@
 import _ from 'lodash';
 import AsyncStorageCache from '.';
 import MongoApi from '../api/requests';
-import { CategoryType } from '../../types/api';
-
-type iGetManyResult<T> = Record<string, T>;
+import { iTmdbDataStoreRecords } from '../../context/TmdbDataStore';
 
 /**
  * Caches movie, person, and song data stored in Mongo
@@ -12,9 +10,9 @@ type iGetManyResult<T> = Record<string, T>;
  */
 const setItemsInCache = async (
   ids: string[],
-  type: CategoryType,
-): Promise<iGetManyResult<any>> => {
-  const result: iGetManyResult<any> = {};
+  eventYear: number,
+): Promise<iTmdbDataStoreRecords> => {
+  const result: iTmdbDataStoreRecords = {};
   console.log('ids.length', ids.length);
   if (ids.length === 0) return result;
 
@@ -40,11 +38,7 @@ const setItemsInCache = async (
 
   // TODO: remove performance monitoring
   const startTime2 = performance.now();
-  const { data } = await (type === CategoryType.FILM
-    ? MongoApi.getMovies(notFoundIds)
-    : type === CategoryType.PERFORMANCE
-    ? MongoApi.getPersons(notFoundIds)
-    : MongoApi.getSongs(notFoundIds));
+  const { data } = await MongoApi.getApiData({ eventYear });
   const endTime2 = performance.now();
   console.log('MongoApiGetTmdbData took ' + (endTime2 - startTime2) + ' milliseconds.');
 
@@ -58,7 +52,9 @@ const setItemsInCache = async (
   }
   // set all new values in result
   toBeCachedItems.forEach(({ key, value }) => {
-    result[key] = value;
+    if (typeof value === 'object') {
+      result[key] = value;
+    }
   });
   return result;
 };

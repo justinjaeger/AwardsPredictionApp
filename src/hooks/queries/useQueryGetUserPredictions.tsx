@@ -19,7 +19,7 @@ const useQueryGetUserPredictions = (userId?: string) => {
       });
       if (predictionSet) {
         // set movies in cache
-        storeTmdbDataFromPredictionSet(predictionSet);
+        storeTmdbDataFromPredictionSet(predictionSet, event.year);
       }
       return predictionSet;
     },

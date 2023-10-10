@@ -3,9 +3,11 @@ import { useState } from 'react';
 import { CategoryName, Contender, WithId } from '../../types/api';
 import MongoApi from '../../services/api/requests';
 import { useTmdbDataStore } from '../../context/TmdbDataStore';
+import { useEvent } from '../../context/EventContext';
 
 const useMutationCreateActingContender = () => {
   const { storeTmdbDataFromContender } = useTmdbDataStore();
+  const { event } = useEvent();
 
   const [isComplete, setIsComplete] = useState<boolean>(true);
   const [response, setResponse] = useState<WithId<Contender> | undefined>(undefined);
@@ -27,8 +29,8 @@ const useMutationCreateActingContender = () => {
     },
     onSuccess: ({ data }) => {
       // put the movie data in the cache
-      if (data) {
-        storeTmdbDataFromContender(data);
+      if (data && event) {
+        storeTmdbDataFromContender(data, event.year);
       }
       setResponse(data || undefined);
       setIsComplete(true);
