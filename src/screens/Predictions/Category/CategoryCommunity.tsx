@@ -53,7 +53,6 @@ const CategoryCommunity = ({
         <MovieListCommunity
           predictions={predictions}
           lastUpdatedString={lastUpdatedString}
-          disableHeader={isIndividualProfile}
         />
       </View>
     </>

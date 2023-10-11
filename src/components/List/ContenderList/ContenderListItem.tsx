@@ -18,7 +18,6 @@ import { CategoryType, EventStatus, iPrediction } from '../../../types/api';
 import { useTmdbDataStore } from '../../../context/TmdbDataStore';
 import { categoryNameToTmdbCredit } from '../../../util/categoryNameToTmdbCredit';
 import Poster from '../../Images/Poster';
-import { PREDICT_STAT_WIDTH } from '../../MovieList/MovieListCommunity';
 
 export type iContenderListItemProps = {
   variant: 'community' | 'personal' | 'selectable' | 'search';
@@ -104,6 +103,7 @@ const ContenderListItem = ({
 
   const thumbnailContainerWidth = posterWidth * 1.5;
   const thumbnailContainerHeight = posterHeight;
+  const barsToShow = slots * 2;
 
   return (
     <TouchableHighlight
@@ -154,9 +154,10 @@ const ContenderListItem = ({
         >
           <View
             style={{
+              position: 'absolute',
               flexDirection: 'column',
-              width: windowWidth - thumbnailContainerWidth - PREDICT_STAT_WIDTH,
               paddingLeft: 5,
+              zIndex: 2,
             }}
           >
             <MaskedView
@@ -190,28 +191,40 @@ const ContenderListItem = ({
               flexDirection: 'row',
               alignItems: 'flex-end',
               justifyContent: 'space-between',
-              height: '100%',
-              width: PREDICT_STAT_WIDTH,
+              height: thumbnailContainerHeight * 1.1,
               flex: 1,
               paddingRight: 10,
-              backgroundColor: hexToRgb(COLORS.secondary, 0.05),
+              zIndex: 1,
+              borderBottomWidth: 1,
+              borderBottomColor: hexToRgb(COLORS.secondary, 0.1),
             }}
           >
-            {new Array(slots).fill(null).map((x, i) => {
-              const place = slots - i;
+            {new Array(barsToShow).fill(null).map((x, i) => {
+              const place = barsToShow - i;
               const numPredictingPlace = numPredicting?.[place] || 0;
               const h =
                 posterHeight *
                 ((numPredictingPlace || 1) / (totalNumPredicting || 1)) *
                 (totalNumPredictingTop ? totalNumPredicting / totalNumPredictingTop : 1);
               return (
-                <View
-                  style={{
-                    width: PREDICT_STAT_WIDTH / slots - 5,
-                    height: h,
-                    backgroundColor: COLORS.secondary,
-                  }}
-                />
+                <>
+                  {place === slots ? (
+                    <View
+                      style={{
+                        height: '60%',
+                        width: 1,
+                        backgroundColor: hexToRgb(COLORS.white, 0.2),
+                      }}
+                    />
+                  ) : null}
+                  <View
+                    style={{
+                      width: (windowWidth - thumbnailContainerWidth) / barsToShow - 5,
+                      height: numPredictingPlace > 0 ? h : 0,
+                      backgroundColor: COLORS.secondary,
+                    }}
+                  />
+                </>
               );
             })}
             <View style={{ position: 'absolute', top: 0, right: 10 }}>

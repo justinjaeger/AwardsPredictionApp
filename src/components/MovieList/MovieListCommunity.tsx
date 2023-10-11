@@ -15,14 +15,9 @@ export const PREDICT_STAT_WIDTH = 120;
 type iMovieListProps = {
   predictions: iPrediction[];
   lastUpdatedString: string;
-  disableHeader?: boolean;
 };
 
-const MovieListCommunity = ({
-  predictions,
-  lastUpdatedString,
-  disableHeader,
-}: iMovieListProps) => {
+const MovieListCommunity = ({ predictions, lastUpdatedString }: iMovieListProps) => {
   const { event: _event, category: _category } = useEvent();
   const event = _event!;
   const category = _category!;
