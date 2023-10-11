@@ -15,7 +15,7 @@ import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import UserHeader from '../../../components/UserHeader';
 import { useProfilePrediction } from '../../../context/ProfilePredictionContext';
 import { iCategoryDisplayState } from '../../../context/DisplayStateContext';
-import LoadingStatueModal from '../../../components/LoadingStatueModal';
+import CategorySkeleton from '../../../components/Skeletons/CategorySkeleton';
 
 export type iCategoryProps = {
   collapsedOpacity: Animated.Value;
@@ -63,25 +63,22 @@ const Category = () => {
     });
   }, [navigation]);
 
-  // TODO: Loading skeleton
+  if (isLoading) {
+    <CategorySkeleton />;
+  }
 
   return (
     <>
       <CategoryDisplayFab />
       <BackgroundWrapper>
-        <>
-          {/* <LoadingStatueModal visible={isLoading} text={'Loading Predictions...'} /> */}
-          <>
-            {user ? <UserHeader user={user} showEventLink={showEventLink} /> : null}
-            <View style={{ width: '100%' }}>
-              <CategoryPersonal
-                predictionData={predictionData}
-                isLoading={isLoading}
-                {...props}
-              />
-            </View>
-          </>
-        </>
+        {user ? <UserHeader user={user} showEventLink={showEventLink} /> : null}
+        <View style={{ width: '100%' }}>
+          <CategoryPersonal
+            predictionData={predictionData}
+            isLoading={isLoading}
+            {...props}
+          />
+        </View>
       </BackgroundWrapper>
     </>
   );
