@@ -48,7 +48,7 @@ const Event = ({
 
   const onSelectCategory = async (category: CategoryName) => {
     setCategory(category);
-    if (isAuthUserProfile) {
+    if (isAuthUserProfile || tab === 'community') {
       navigation.navigate('Category', { userId });
     } else {
       navigation.dispatch(StackActions.push('CategoryFromProfile', { userId }));
