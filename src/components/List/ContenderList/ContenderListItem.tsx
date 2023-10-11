@@ -1,34 +1,32 @@
 /* eslint-disable sonarjs/no-duplicate-string */
 import MaskedView from '@react-native-masked-view/masked-view';
-import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { Animated, TouchableHighlight, useWindowDimensions, View } from 'react-native';
+import { TouchableHighlight, useWindowDimensions, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import COLORS from '../../../constants/colors';
-import { getPosterDimensionsByWidth } from '../../../constants/posterDimensions';
-import theme from '../../../constants/theme';
+import {
+  getPosterDimensionsByWidth,
+  PosterSize,
+} from '../../../constants/posterDimensions';
 import { useEvent } from '../../../context/EventContext';
-import { getNumPredicting } from '../../../util/getNumPredicting';
+import { getNumPredicting, getTotalNumPredicting } from '../../../util/getNumPredicting';
 import { IconButton } from '../../Buttons/IconButton';
-import AnimatedPoster from '../../Images/AnimatedPoster';
 import { Body, SubHeader } from '../../Text';
 import CustomIcon from '../../CustomIcon';
 import { hexToRgb } from '../../../util/hexToRgb';
-import { MainScreenNavigationProp } from '../../../navigation/types';
-import useListItemAnimation from './useListItemAnimation';
-import { CategoryName, CategoryType, EventStatus, iPrediction } from '../../../types/api';
+import { CategoryType, EventStatus, iPrediction } from '../../../types/api';
 import { useTmdbDataStore } from '../../../context/TmdbDataStore';
 import { categoryNameToTmdbCredit } from '../../../util/categoryNameToTmdbCredit';
+import Poster from '../../Images/Poster';
+import { PREDICT_STAT_WIDTH } from '../../MovieList/MovieListCommunity';
 
 export type iContenderListItemProps = {
   variant: 'community' | 'personal' | 'selectable' | 'search';
   prediction: iPrediction;
   categoryType: CategoryType;
   ranking: number;
-  isSelected: boolean;
   disabled?: boolean;
   highlighted?: boolean;
-  posterWidth?: number;
   draggable?: {
     isActive: boolean;
     drag: () => void;
@@ -37,52 +35,37 @@ export type iContenderListItemProps = {
   onPressItem: (prediction: iPrediction) => void;
   onPressThumbnail?: (prediction: iPrediction) => void;
   isAuthProfile?: boolean;
+  totalNumPredictingTop?: number;
 };
 
-const ContenderListItem = (props: iContenderListItemProps) => {
-  const {
-    variant,
-    prediction,
-    isSelected,
-    ranking,
-    disabled,
-    draggable,
-    highlighted,
-    categoryType,
-    subtitle: _subtitle,
-    onPressThumbnail,
-    onPressItem,
-    isAuthProfile,
-  } = props;
+const IMAGE_SIZE = PosterSize.SMALL;
+
+const ContenderListItem = ({
+  variant,
+  prediction,
+  ranking,
+  draggable,
+  highlighted,
+  categoryType,
+  subtitle: _subtitle,
+  onPressItem,
+  isAuthProfile,
+  totalNumPredictingTop,
+}: iContenderListItemProps) => {
   const { isActive, drag } = draggable || {};
-  const navigation = useNavigation<MainScreenNavigationProp>();
   const { width: windowWidth } = useWindowDimensions();
 
-  const LARGE_POSTER = windowWidth / 3;
   const SMALL_POSTER = windowWidth / 10;
-  const RIGHT_COL_WIDTH =
-    variant === 'personal' ? 45 : variant === 'community' ? 100 : 10;
 
   const { category: _category, event: _event } = useEvent();
   const disableEditing = !isAuthProfile;
   const category = _category!;
   const event = _event!;
-  const { name, slots: _slots } = event.categories[category];
+  const { slots: _slots } = event.categories[category];
   const slots = _slots || 5;
-  const categoryName = name as CategoryName;
 
-  const width = isSelected ? LARGE_POSTER : SMALL_POSTER;
-  const { height } = getPosterDimensionsByWidth(width);
-
-  const { imageWidth, imageHeight, hiddenOpacity, bodyWidth } = useListItemAnimation(
-    isSelected,
-    RIGHT_COL_WIDTH,
-    width,
-    height,
-    LARGE_POSTER,
-    SMALL_POSTER,
-    windowWidth,
-  );
+  const { width: posterWidth, height: posterHeight } =
+    getPosterDimensionsByWidth(SMALL_POSTER);
 
   // note: numPredicting is only commnuity
   const { numPredicting } = prediction;
@@ -94,16 +77,7 @@ const ContenderListItem = (props: iContenderListItemProps) => {
   const nominationsHaveHappened =
     (nomDateTime && nomDateTime < new Date()) || status === EventStatus.WINS_LIVE;
 
-  const onPressPoster = () => {
-    if (disabled) return;
-    onPressThumbnail && onPressThumbnail(prediction);
-  };
-
-  const categoryInfo = categoryNameToTmdbCredit(categoryName, movie.categoryCredits);
-
-  const showBotomButtons = isSelected && movie;
-
-  const fadeBottom = isSelected !== true && variant === 'search';
+  const categoryInfo = categoryNameToTmdbCredit(category, movie.categoryCredits);
 
   let title = '';
   let subtitle = '';
@@ -124,6 +98,12 @@ const ContenderListItem = (props: iContenderListItemProps) => {
   }
 
   const { win, nom } = getNumPredicting(numPredicting || {}, slots);
+  const totalNumPredicting = getTotalNumPredicting(numPredicting || {});
+  // The bar should be at 100% if everybody is predicting a nomination.
+  // So like, every bar is out of 100% of all users
+
+  const thumbnailContainerWidth = posterWidth * 1.5;
+  const thumbnailContainerHeight = posterHeight;
 
   return (
     <TouchableHighlight
@@ -136,41 +116,47 @@ const ContenderListItem = (props: iContenderListItemProps) => {
           : highlighted
           ? hexToRgb(COLORS.secondaryLight, 0.15)
           : 'transparent',
-        width: '100%',
-        paddingTop: theme.windowMargin / 8,
-        paddingBottom: theme.windowMargin / 8,
         flexDirection: 'row',
-        paddingLeft: theme.windowMargin,
+        height: posterHeight * 1.2,
       }}
       underlayColor={COLORS.secondaryDark}
       onLongPress={disableEditing ? undefined : drag}
       disabled={isActive}
     >
       <>
-        <AnimatedPoster
-          path={
-            categoryType === CategoryType.PERFORMANCE
-              ? person?.posterPath || null
-              : movie?.posterPath || null
-          }
-          title={movie?.title || ''}
-          animatedWidth={imageWidth}
-          animatedHeight={imageHeight}
-          ranking={['selectable', 'search'].includes(variant) ? undefined : ranking}
-          onPress={onPressPoster}
-        />
-        <Animated.View
+        <View
           style={{
-            flexDirection: 'column',
+            width: thumbnailContainerWidth,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <Poster
+            path={
+              categoryType === CategoryType.PERFORMANCE
+                ? person?.posterPath || null
+                : movie?.posterPath || null
+            }
+            title={movie?.title || ''}
+            ranking={['selectable', 'search'].includes(variant) ? undefined : ranking}
+            onPress={undefined}
+            width={IMAGE_SIZE}
+          />
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            width: windowWidth - thumbnailContainerWidth,
             justifyContent: 'space-between',
-            height: imageHeight,
+            height: thumbnailContainerHeight,
+            alignItems: 'flex-start',
           }}
         >
           <View
             style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              height: '100%',
+              flexDirection: 'column',
+              width: windowWidth - thumbnailContainerWidth - PREDICT_STAT_WIDTH,
+              paddingLeft: 5,
             }}
           >
             <MaskedView
@@ -180,102 +166,92 @@ const ContenderListItem = (props: iContenderListItemProps) => {
                     'rgba(0,0,0,1)',
                     'rgba(0,0,0,1)',
                     'rgba(0,0,0,1)',
-                    fadeBottom ? 'rgba(0,0,0,0.1)' : 'rgba(0,0,0,1)',
-                    fadeBottom ? 'transparent' : 'rgba(0,0,0,1)',
+                    'rgba(0,0,0,1)',
+                    'transparent',
                   ]}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 0, y: 1 }}
                   style={{
                     flex: 1,
-                    maxHeight: fadeBottom ? height + 15 : height,
-                    minHeight: height,
+                    maxHeight: posterHeight,
+                    minHeight: posterHeight,
                     overflow: 'hidden',
                     height: '100%',
                   }}
                 />
               }
             >
-              <Animated.View
-                style={{
-                  width: bodyWidth,
-                  paddingBottom: showBotomButtons ? 70 : 0, // For not conflicting with the bottom buttons
-                }}
-              >
-                <View style={{ flexDirection: 'row' }}>
-                  <SubHeader style={{ marginLeft: 10, marginRight: 5 }}>
-                    {title}
-                  </SubHeader>
-                </View>
-                <Body
-                  style={{
-                    marginTop: 0,
-                    marginLeft: 10,
-                  }}
-                >
-                  {_subtitle || subtitle}
-                </Body>
-              </Animated.View>
+              <SubHeader>{title}</SubHeader>
+              <Body>{subtitle}</Body>
             </MaskedView>
-            {numPredicting ? (
-              <View
-                style={{
-                  width: RIGHT_COL_WIDTH,
-                  flexDirection: 'row',
-                  paddingRight: theme.windowMargin,
-                }}
-              >
-                {nominationsHaveHappened ? (
-                  <View />
-                ) : (
-                  <View style={{ width: RIGHT_COL_WIDTH / 2 }}>
-                    <Body
-                      style={{
-                        textAlign: 'right',
-                        marginRight: 10,
-                      }}
-                    >
-                      {nom.toString()}
-                    </Body>
-                  </View>
-                )}
-                <Body style={{ textAlign: 'right', width: RIGHT_COL_WIDTH / 2 }}>
-                  {win.toString()}
-                </Body>
-              </View>
-            ) : null}
-            {variant === 'personal' && !disableEditing ? (
-              <IconButton
-                iconProps={{ name: 'menu', size: 24 }}
-                color={COLORS.white}
-                enableOnPressIn
-                onPress={drag || (() => {})}
-                styles={{
-                  height: SMALL_POSTER,
-                  width: 40,
-                  justifyContent: 'center',
-                  marginRight: 13,
-                  alignSelf: 'center',
-                  alignItems: 'center',
-                }}
-              />
-            ) : highlighted ? (
-              <View style={{ justifyContent: 'center' }}>
-                <CustomIcon
-                  name="checkmark-circle-2"
-                  size={24}
-                  color={COLORS.secondary}
-                  styles={{ right: 15 }}
-                />
-              </View>
-            ) : null}
           </View>
-          {/* TODO: Instead of linking to IMDB, display a bunch of info from TMDB */}
-          {showBotomButtons && movie ? (
-            <Animated.View
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'flex-end',
+              justifyContent: 'space-between',
+              height: '100%',
+              width: PREDICT_STAT_WIDTH,
+              flex: 1,
+              paddingRight: 10,
+              backgroundColor: hexToRgb(COLORS.secondary, 0.05),
+            }}
+          >
+            {new Array(slots).fill(null).map((x, i) => {
+              const place = slots - i;
+              const numPredictingPlace = numPredicting?.[place] || 0;
+              const h =
+                posterHeight *
+                ((numPredictingPlace || 1) / (totalNumPredicting || 1)) *
+                (totalNumPredictingTop ? totalNumPredicting / totalNumPredictingTop : 1);
+              return (
+                <View
+                  style={{
+                    width: PREDICT_STAT_WIDTH / slots - 5,
+                    height: h,
+                    backgroundColor: COLORS.secondary,
+                  }}
+                />
+              );
+            })}
+            <View style={{ position: 'absolute', top: 0, right: 10 }}>
+              <SubHeader style={{ fontWeight: '600' }}>
+                {nominationsHaveHappened ? win.toString() : nom.toString()}
+              </SubHeader>
+            </View>
+          </View>
+          {variant === 'personal' && !disableEditing ? (
+            <IconButton
+              iconProps={{ name: 'menu', size: 24 }}
+              color={COLORS.white}
+              enableOnPressIn
+              onPress={drag || (() => {})}
+              styles={{
+                height: SMALL_POSTER,
+                width: 40,
+                justifyContent: 'center',
+                marginRight: 13,
+                alignSelf: 'center',
+                alignItems: 'center',
+              }}
+            />
+          ) : highlighted ? (
+            <View style={{ justifyContent: 'center' }}>
+              <CustomIcon
+                name="checkmark-circle-2"
+                size={24}
+                color={COLORS.secondary}
+                styles={{ right: 15 }}
+              />
+            </View>
+          ) : null}
+          {/* TODO: Put this info in its own modal */}
+          {/* {showBotomButtons && movie ? (
+            <View
               style={{
                 position: 'absolute',
                 bottom: 0,
-                opacity: hiddenOpacity,
+                // opacity: hiddenOpacity,
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 marginTop: theme.windowMargin,
@@ -327,38 +303,38 @@ const ContenderListItem = (props: iContenderListItemProps) => {
                   />
                 </>
               )}
-            </Animated.View>
-          ) : null}
-        </Animated.View>
+            </View>
+          ) : null} */}
+        </View>
       </>
     </TouchableHighlight>
   );
 };
 
-const ExternalLinkButton = (props: { text: string; onPress: () => void }) => {
-  const { text, onPress } = props;
-  return (
-    <TouchableHighlight
-      onPress={onPress}
-      style={{
-        alignItems: 'center',
-        padding: 5,
-        paddingHorizontal: 10,
-        borderRadius: theme.borderRadius,
-        backgroundColor: COLORS.secondary,
-      }}
-      underlayColor={COLORS.secondaryDark}
-    >
-      <Body
-        style={{
-          fontWeight: '700',
-          color: COLORS.white,
-        }}
-      >
-        {text}
-      </Body>
-    </TouchableHighlight>
-  );
-};
+// const ExternalLinkButton = (props: { text: string; onPress: () => void }) => {
+//   const { text, onPress } = props;
+//   return (
+//     <TouchableHighlight
+//       onPress={onPress}
+//       style={{
+//         alignItems: 'center',
+//         padding: 5,
+//         paddingHorizontal: 10,
+//         borderRadius: theme.borderRadius,
+//         backgroundColor: COLORS.secondary,
+//       }}
+//       underlayColor={COLORS.secondaryDark}
+//     >
+//       <Body
+//         style={{
+//           fontWeight: '700',
+//           color: COLORS.white,
+//         }}
+//       >
+//         {text}
+//       </Body>
+//     </TouchableHighlight>
+//   );
+// };
 
 export default ContenderListItem;

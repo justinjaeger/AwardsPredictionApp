@@ -9,21 +9,14 @@ import { useEvent } from '../../../context/EventContext';
 import { eventToString } from '../../../util/stringConversions';
 import { getHeaderTitleWithTrophy } from '../../../constants';
 import { useCategoryDisplay } from '../../../hooks/animatedState/useDisplay';
-import { Animated } from 'react-native';
-import { CategoryDisplayFab } from '../../../components/Buttons/DisplayFAB';
 import { useAuth } from '../../../context/AuthContext';
 import { RouteProp, StackActions, useRoute } from '@react-navigation/native';
 import FollowingBottomScroll from '../../../components/FollowingBottomScroll';
-import { iCategoryDisplayState } from '../../../context/DisplayStateContext';
 import { CategoryName, PredictionSet, WithId } from '../../../types/api';
 import useQueryGetCommunityPredictions from '../../../hooks/queries/useQueryGetCommunityPredictions';
 import useQueryGetUserPredictions from '../../../hooks/queries/useQueryGetUserPredictions';
 
 export type iCategoryProps = {
-  collapsedOpacity: Animated.Value;
-  expandedOpacity: Animated.Value;
-  gridOpacity: Animated.Value;
-  delayedDisplay: iCategoryDisplayState;
   userId: string | undefined;
   predictionData: WithId<PredictionSet> | undefined;
   isLoading: boolean;
@@ -70,7 +63,7 @@ const Category = () => {
 
   return (
     <>
-      <CategoryDisplayFab />
+      {/* <CategoryDisplayFab /> */}
       {PredictionTabsNavigator(
         <CategoryPersonal
           predictionData={personalPredictionData}

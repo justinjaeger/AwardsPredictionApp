@@ -10,7 +10,7 @@ export const getPosterDimensionsByWidth = (width: number) => ({
 
 export enum PosterSize {
   XSMALL = 40,
-  SMALL = 60,
+  SMALL = 45,
   MEDIUM = 120,
   LARGE = 240,
 }

@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import React, { useEffect, useLayoutEffect, useState } from 'react';
-import { Alert, Animated, View } from 'react-native';
+import { Alert, Animated, ScrollView, View } from 'react-native';
 import BackButton from '../../../components/Buttons/BackButton';
 import LoadingStatueModal from '../../../components/LoadingStatueModal';
 import MovieGrid from '../../../components/MovieGrid';
@@ -24,11 +24,10 @@ import EventLink from './EventLink';
 import EditToolbar from '../../../components/Buttons/EditToolbar';
 import { iPrediction } from '../../../types/api';
 import useQueryGetUserPredictions from '../../../hooks/queries/useQueryGetUserPredictions';
+import CategorySkeleton from '../../../components/Skeletons/CategorySkeleton';
 
 // used in both FromProfile and from event
 const CategoryPersonal = ({
-  delayedDisplay,
-  gridOpacity,
   userId,
   predictionData,
   isLoading,
@@ -40,7 +39,7 @@ const CategoryPersonal = ({
   const navigation = useTypedNavigation<PredictionsParamList>();
   const { userId: authUserId } = useAuth();
   const { isPad } = useDevice();
-  const { animatedOpacity } = useShowAddTab();
+  const { animatedOpacity: showAddTabOpacity } = useShowAddTab();
 
   const isAuthUserProfile = userId === authUserId;
 
@@ -121,8 +120,9 @@ const CategoryPersonal = ({
     return <SignedOutState />;
   }
 
-  // TODO: loading skeleton when loading=true
-
+  if (isLoading) {
+    return <CategorySkeleton />;
+  }
   return (
     <>
       <LoadingStatueModal visible={!isComplete} text={'Saving changes...'} />
@@ -141,22 +141,16 @@ const CategoryPersonal = ({
         </View>
       ) : null}
       {showEventLink ? <EventLink userId={userId} /> : null}
-      <Animated.ScrollView
-        style={{
-          display: delayedDisplay === 'grid' ? 'flex' : 'none',
-          opacity: gridOpacity,
-        }}
+      <ScrollView
         contentContainerStyle={{
           paddingBottom: 100,
           marginTop: theme.windowMargin,
         }}
         showsVerticalScrollIndicator={false}
       >
-        <Animated.View style={{ opacity: gridOpacity }}>
-          <LastUpdatedText lastUpdated={lastUpdatedString} style={{ top: -35 }} />
-          <MovieGrid predictions={predictions} />
-        </Animated.View>
-      </Animated.ScrollView>
+        <LastUpdatedText lastUpdated={lastUpdatedString} style={{ top: -35 }} />
+        <MovieGrid predictions={predictions} />
+      </ScrollView>
       <MovieListDraggable
         predictions={predictions}
         setPredictions={(ps) => setPredictions(ps)}
@@ -167,7 +161,7 @@ const CategoryPersonal = ({
       {isPad ? (
         <Animated.View
           style={{
-            opacity: animatedOpacity,
+            opacity: showAddTabOpacity,
             position: 'absolute',
             bottom: '1%',
             alignSelf: 'flex-end',

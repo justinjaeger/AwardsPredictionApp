@@ -7,7 +7,11 @@ import {
   PosterSize,
   POSTER_SIZE,
 } from '../../constants/posterDimensions';
-import { TMDB_IMAGE_URL_MED } from '../../constants';
+import {
+  TMDB_IMAGE_URL_LARGE,
+  TMDB_IMAGE_URL_MED,
+  TMDB_IMAGE_URL_SMALL,
+} from '../../constants';
 import { Body, Label } from '../Text';
 import theme from '../../constants/theme';
 import useDevice from '../../util/device';
@@ -91,7 +95,13 @@ const Poster = ({
           <FastImage
             style={style as Record<string, unknown>}
             source={{
-              uri: `${TMDB_IMAGE_URL_MED}/${path}`,
+              uri: `${
+                width >= PosterSize.LARGE
+                  ? TMDB_IMAGE_URL_LARGE
+                  : width >= PosterSize.MEDIUM
+                  ? TMDB_IMAGE_URL_MED
+                  : TMDB_IMAGE_URL_SMALL
+              }/${path}`,
             }}
           />
         ) : (
