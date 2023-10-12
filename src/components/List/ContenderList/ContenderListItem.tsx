@@ -92,7 +92,7 @@ const ContenderListItem = ({
       break;
     case CategoryType.SONG:
       title = song?.title || '';
-      subtitle = song?.title || '';
+      subtitle = movie?.title || '';
       break;
   }
 
