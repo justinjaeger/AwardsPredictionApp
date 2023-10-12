@@ -30,7 +30,7 @@ const EventPersonalCommunity = () => {
       {PredictionTabsNavigator(
         <Event
           tab={'personal'}
-          predictionData={personalPredictionData}
+          predictionData={personalPredictionData ?? undefined}
           isLoading={isLoadingPersonal}
           userId={userId}
         />,

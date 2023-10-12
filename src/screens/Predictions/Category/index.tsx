@@ -8,12 +8,10 @@ import { getAwardsBodyCategories } from '../../../constants/categories';
 import { useEvent } from '../../../context/EventContext';
 import { eventToString } from '../../../util/stringConversions';
 import { getHeaderTitleWithTrophy } from '../../../constants';
-import { useCategoryDisplay } from '../../../hooks/animatedState/useDisplay';
 import { useAuth } from '../../../context/AuthContext';
 import { RouteProp, StackActions, useRoute } from '@react-navigation/native';
 import FollowingBottomScroll from '../../../components/FollowingBottomScroll';
 import { CategoryName, PredictionSet, WithId } from '../../../types/api';
-import useQueryGetCommunityPredictions from '../../../hooks/queries/useQueryGetCommunityPredictions';
 import useQueryGetUserPredictions from '../../../hooks/queries/useQueryGetUserPredictions';
 
 export type iCategoryProps = {
@@ -33,21 +31,9 @@ const Category = () => {
   const { category, event: _event, isEditing } = useEvent();
   const event = _event!;
   const navigation = useTypedNavigation<PredictionsParamList>();
-  const { delayedDisplay, gridOpacity, collapsedOpacity, expandedOpacity } =
-    useCategoryDisplay();
 
   const { data: personalPredictionData, isLoading: personalIsLoading } =
     useQueryGetUserPredictions(userId);
-  const { data: communityPredictionData, isLoading: communityIsLoading } =
-    useQueryGetCommunityPredictions();
-
-  const props = {
-    delayedDisplay,
-    gridOpacity,
-    collapsedOpacity,
-    expandedOpacity,
-    userId,
-  };
 
   // Set the header
   useLayoutEffect(() => {
@@ -66,17 +52,12 @@ const Category = () => {
       {/* <CategoryDisplayFab /> */}
       {PredictionTabsNavigator(
         <CategoryPersonal
-          predictionData={personalPredictionData}
+          predictionData={personalPredictionData ?? undefined}
           isLoading={personalIsLoading}
           showEventLink={showEventLink && !isEditing}
-          {...props}
+          userId={userId}
         />,
-        <CategoryCommunity
-          predictionData={communityPredictionData}
-          isLoading={communityIsLoading}
-          showEventLink={showEventLink && !isEditing}
-          {...props}
-        />,
+        <CategoryCommunity showEventLink={showEventLink && !isEditing} />,
       )}
       {userId && !isEditing ? (
         <FollowingBottomScroll

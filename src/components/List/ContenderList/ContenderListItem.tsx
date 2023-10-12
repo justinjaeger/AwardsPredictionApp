@@ -207,7 +207,7 @@ const ContenderListItem = ({
                 ((numPredictingPlace || 1) / (totalNumPredicting || 1)) *
                 (totalNumPredictingTop ? totalNumPredicting / totalNumPredictingTop : 1);
               return (
-                <>
+                <View key={i}>
                   {place === slots ? (
                     <View
                       style={{
@@ -224,7 +224,7 @@ const ContenderListItem = ({
                       backgroundColor: COLORS.secondary,
                     }}
                   />
-                </>
+                </View>
               );
             })}
             <View style={{ position: 'absolute', top: 0, right: 10 }}>

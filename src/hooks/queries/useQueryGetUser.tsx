@@ -9,11 +9,11 @@ const useQueryGetUser = (userId: string | undefined) => {
   const { isLoading, data, refetch } = useQuery({
     queryKey: [QueryKeys.USER + (userId || '')],
     queryFn: async () => {
-      if (!userId) return undefined;
+      if (!userId) return null;
       const { data: user } = await MongoApi.getUser({ userId });
       // set movies in cache
       storeTmdbDataFromRecentPredictions(user?.recentPredictionSets || []);
-      return user;
+      return user ?? null;
     },
   });
 

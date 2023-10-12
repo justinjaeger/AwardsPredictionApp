@@ -1,6 +1,5 @@
 import React from 'react';
 import { View } from 'react-native';
-import { iCategoryProps } from '.';
 import MovieListCommunity from '../../../components/MovieList/MovieListCommunity';
 import { BodyBold } from '../../../components/Text';
 import { useEvent } from '../../../context/EventContext';
@@ -10,10 +9,7 @@ import useQueryGetCommunityPredictions from '../../../hooks/queries/useQueryGetC
 import CategorySkeleton from '../../../components/Skeletons/CategorySkeleton';
 
 // Note: We ALSO use this for non-authenticated user profiles
-const CategoryCommunity = ({
-  isIndividualProfile,
-  showEventLink,
-}: iCategoryProps & { isIndividualProfile?: boolean }) => {
+const CategoryCommunity = ({ showEventLink }: { showEventLink?: boolean }) => {
   const { category: _category } = useEvent();
   const category = _category!;
 
@@ -22,17 +18,13 @@ const CategoryCommunity = ({
   const { createdAt, predictions } = predictionSet?.categories[category] || {};
   const lastUpdatedString = formatLastUpdated(new Date(createdAt || ''));
 
-  if (!predictions) {
-    return null;
-  }
-
   if (isLoading) {
     return <CategorySkeleton />;
   }
 
   return (
     <>
-      {predictions && predictions.length === 0 ? (
+      {predictions?.length === 0 ? (
         <View
           style={{
             width: '100%',
@@ -41,17 +33,13 @@ const CategoryCommunity = ({
             justifyContent: 'center',
           }}
         >
-          <BodyBold>
-            {!isIndividualProfile
-              ? 'Community predictions not yet tallied'
-              : 'No predictions for this date'}
-          </BodyBold>
+          <BodyBold>{'Community predictions not yet tallied'}</BodyBold>
         </View>
       ) : null}
       {showEventLink ? <EventLink userId={undefined} /> : null}
       <View style={{ width: '100%' }}>
         <MovieListCommunity
-          predictions={predictions}
+          predictions={predictions ?? []}
           lastUpdatedString={lastUpdatedString}
         />
       </View>

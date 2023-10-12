@@ -4,9 +4,7 @@ import { FlatList, View } from 'react-native';
 import COLORS from '../../constants/colors';
 import { useEvent } from '../../context/EventContext';
 import LastUpdatedText from '../LastUpdatedText';
-import ContenderListItem, {
-  iContenderListItemProps,
-} from '../List/ContenderList/ContenderListItem';
+import ContenderListItem from '../List/ContenderList/ContenderListItem';
 import { iPrediction } from '../../types/api';
 import { getTotalNumPredicting } from '../../util/getNumPredicting';
 
@@ -40,35 +38,31 @@ const MovieListCommunity = ({ predictions, lastUpdatedString }: iMovieListProps)
           <View style={{ height: 10 }} />
         </>
       }
-      renderItem={({ item: prediction, index }) => {
-        const ranking = index + 1;
-        const onPressItem = async (prediction: iPrediction) => {
-          // TODO: Pull up a modal with more info
-        };
-        const listItemProps: iContenderListItemProps = {
-          variant: 'community',
-          prediction,
-          ranking,
-          onPressItem,
-          onPressThumbnail: onPressItem,
-          categoryType: type,
-          totalNumPredictingTop,
-        };
-        return (
-          <>
-            {index === slots ? (
-              <Divider
-                style={{
-                  margin: 10,
-                  borderWidth: 0.5,
-                  borderColor: COLORS.secondary,
-                }}
-              />
-            ) : null}
-            <ContenderListItem {...listItemProps} />
-          </>
-        );
-      }}
+      renderItem={({ item: prediction, index }) => (
+        <>
+          {index === slots ? (
+            <Divider
+              style={{
+                margin: 10,
+                borderWidth: 0.5,
+                borderColor: COLORS.secondary,
+              }}
+            />
+          ) : null}
+          <ContenderListItem
+            key={prediction.contenderId}
+            variant={'community'}
+            prediction={prediction}
+            ranking={index + 1}
+            onPressItem={(prediction: iPrediction) => {
+              // TODO: Pull up a modal with more info
+            }}
+            onPressThumbnail={undefined}
+            categoryType={type}
+            totalNumPredictingTop={totalNumPredictingTop}
+          />
+        </>
+      )}
     />
   );
 };
