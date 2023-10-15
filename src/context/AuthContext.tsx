@@ -63,7 +63,7 @@ export const AuthProvider = (props: { children: React.ReactNode }) => {
 
   const [userInfo, setUserInfo] = useState<iUserInfo | undefined>(undefined);
   const [verificationCode, setVerificationCode] = useState<iVerificationCode>(undefined);
-  const [isLoadingAuth, setIsLoadingAuth] = useState<boolean>(true);
+  const [isLoadingAuth, setIsLoadingAuth] = useState<boolean>(false);
   const [isNewUser, setIsNewUser] = useState<boolean>(false);
 
   // On initial load, checks if user is new

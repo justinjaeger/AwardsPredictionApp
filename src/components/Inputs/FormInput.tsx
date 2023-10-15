@@ -74,7 +74,6 @@ const FormInput = ({
       caption={
         <Body
           style={{
-            marginTop: 5,
             color: ['warning', 'danger'].includes(_status)
               ? COLORS.warning
               : COLORS.white,

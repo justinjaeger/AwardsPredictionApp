@@ -13,7 +13,7 @@ import useMagicLinkListener from './useMagicLinkListener';
 type iAuthScreen = 'signIn' | 'confirmCode';
 
 const Auth = () => {
-  const { isLoadingAuth, isNewUser } = useAuth();
+  const { isLoadingAuth } = useAuth();
 
   const { isLoading: isLoadingVerification } = useMagicLinkListener((message: string) => {
     // onFail callback:
@@ -70,7 +70,7 @@ const Auth = () => {
               textContentType="emailAddress"
             />
             <SubmitButton
-              text={isNewUser ? 'Create account' : 'Sign in'}
+              text={'Submit'}
               onPress={() => submitEmail()}
               disabled={!validEmail}
               loading={loading}

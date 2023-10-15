@@ -28,7 +28,8 @@ export const getUser = async ({
   if (excludeNestedFields) {
     queryString += `&excludeNestedFields=${excludeNestedFields}`;
   }
-  return await api.get<WithId<User>>(`user${queryString}`);
+  const url = `users${queryString}`;
+  return await api.get<WithId<User>>(url);
 };
 
 export const listFollowersPaginated = async ({
