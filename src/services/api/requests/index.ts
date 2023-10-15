@@ -7,6 +7,7 @@ import * as PredictionSetRequests from './predictionset';
 import * as EmailRequests from './email';
 import * as CategoryUpdateLogRequests from './categoryupdatelogs';
 import * as ContenderRequests from './contender';
+import * as StorageRequests from './storage';
 
 const MongoApi = {
   ...UserRequests,
@@ -18,6 +19,7 @@ const MongoApi = {
   ...EmailRequests,
   ...CategoryUpdateLogRequests,
   ...ContenderRequests,
+  ...StorageRequests,
 };
 
 export default MongoApi;

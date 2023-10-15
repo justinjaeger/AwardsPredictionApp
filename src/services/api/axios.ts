@@ -7,7 +7,6 @@ const axiosInstance = axios.create({
 });
 
 // Attaches access token to every request
-// TODO: is this bad that it's async? Monitor performance
 axiosInstance.interceptors.request.use(async (config) => {
   const startTime = performance.now();
   const res = await KeychainStorage.get();

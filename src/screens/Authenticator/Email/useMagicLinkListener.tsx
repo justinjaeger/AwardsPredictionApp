@@ -15,8 +15,9 @@ const useMagicLinkListener = (onFailure: (m: string) => void) => {
 
   // when verification link is clicked, this callback fires
   const handleSignIn = async (url: string) => {
+    console.error('handleSignIn'); // because this seems to be getting invoked like 3 times
     setIsLoading(true);
-    const { data: email } = await MongoApi.verifyEmailMagicLink(url); // handles snackbar error messages already
+    const { data: email } = await MongoApi.verifyEmailMagicLink(url);
     if (!email) {
       return onError('error: invalid link');
     }

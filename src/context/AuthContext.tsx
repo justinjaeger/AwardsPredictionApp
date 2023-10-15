@@ -68,6 +68,14 @@ export const AuthProvider = (props: { children: React.ReactNode }) => {
 
   // On initial load, checks if user is new
   useAsyncEffect(async () => {
+    // Load user info
+    const userInfoStr = await AsyncStorage.getItem(AsyncStorageKeys.USER_INFO);
+    const authUserInfo = userInfoStr ? JSON.parse(userInfoStr) : undefined;
+    if (authUserInfo) {
+      setUserInfo(authUserInfo);
+    }
+
+    // Load other info
     const isNotFirstTime = await AsyncStorage.getItem(AsyncStorageKeys.IS_NOT_FIRST_TIME);
     setIsNewUser(isNotFirstTime !== 'true');
   }, []);
@@ -92,6 +100,11 @@ export const AuthProvider = (props: { children: React.ReactNode }) => {
     };
   }, []);
 
+  const onSignInError = (e: string) => {
+    resetAuth();
+    console.error(e);
+  };
+
   // creates the access+refresh tokens and stores them in keychain
   const signInUser = async (userInfo: iUserInfo) => {
     setIsLoadingAuth(true);
@@ -99,21 +112,21 @@ export const AuthProvider = (props: { children: React.ReactNode }) => {
     // CREATE/SET ACCESS TOKEN
     const { data: newAccessToken } = await MongoApi.getAccessToken(userId);
     if (!newAccessToken) {
-      return;
+      return onSignInError('error: getAccessToken failed');
     }
     await KeychainStorage.set(newAccessToken);
     // CREATE/SET REFRESH TOKEN
     const { data: newRefreshToken } = await MongoApi.createRefreshToken();
     if (!newRefreshToken) {
-      return;
+      return onSignInError('error: createRefreshToken failed');
     }
-    await KeychainStorage.set(newAccessToken, newRefreshToken);
     // SET USER INFO
     setUserInfo(userInfo);
     // NAVIGATE TO PROFILE
     navigation.dispatch(resetToProfile);
     // SET IN ASYNC STORAGE (lets us remember whether user has signed in or not)
     AsyncStorage.setItem(AsyncStorageKeys.IS_NOT_FIRST_TIME, 'true');
+    AsyncStorage.setItem(AsyncStorageKeys.USER_INFO, JSON.stringify(userInfo));
     setIsLoadingAuth(false);
   };
 
@@ -121,6 +134,7 @@ export const AuthProvider = (props: { children: React.ReactNode }) => {
     await KeychainStorage.remove();
     setUserInfo(undefined);
     setIsLoadingAuth(false);
+    await AsyncStorage.removeItem(AsyncStorageKeys.USER_INFO);
     navigation.navigate('Authenticator');
   };
 

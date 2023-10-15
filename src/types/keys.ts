@@ -10,4 +10,5 @@ export enum QueryKeys {
 
 export enum AsyncStorageKeys {
   IS_NOT_FIRST_TIME = 'is-not-first-time',
+  USER_INFO = 'user-info',
 }

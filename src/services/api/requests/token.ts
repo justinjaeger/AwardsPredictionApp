@@ -8,14 +8,14 @@ export const getAccessToken = async (userId: string) => {
  * Notably, must be still use the access token set in keychain to create
  */
 export const createRefreshToken = async () => {
-  return await api.post<string, Record<string, unknown>>('tokens', {});
+  return await api.post<string, void>('tokens', undefined);
 };
 
 /**
  * Remove single refresh token
  */
 export const removeToken = async (token: string) => {
-  return await api.delete<undefined>(`token/${token}`);
+  return await api.delete<undefined>(`tokens/${token}`);
 };
 
 /**
