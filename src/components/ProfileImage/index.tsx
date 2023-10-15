@@ -1,8 +1,8 @@
 import React from 'react';
 import { TouchableHighlight, View, StyleProp, ViewStyle } from 'react-native';
 import FastImage from 'react-native-fast-image';
-import useProfileImage from '../../hooks/useProfileImage';
 import useDevice from '../../util/device';
+import { getImageUri } from '../../util/getImageUri';
 
 export const IPAD_PROFILE_IMAGE_SCALE = 1.5;
 
@@ -20,7 +20,7 @@ const ProfileImage = ({
   isDisabled?: boolean;
 }) => {
   const { isPad } = useDevice();
-  const { uri } = useProfileImage(image);
+  const uri = image ? getImageUri(image) : undefined;
 
   const size = (imageSize || 100) * (isPad ? IPAD_PROFILE_IMAGE_SCALE : 1);
 
