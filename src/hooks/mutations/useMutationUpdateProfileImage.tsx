@@ -10,11 +10,14 @@ const useMutationUpdateProfileImage = (onComplete?: () => void) => {
   const { userId: authUserId } = useAuth();
 
   const [isComplete, setIsComplete] = useState<boolean>(true);
+  const [isSuccessful, setIsSuccessful] = useState<boolean>(false);
+  const [isChoosingImage, setIsChoosingImage] = useState<boolean>(false);
 
   const { mutate, isLoading } = useMutation({
     mutationFn: async () => {
       setIsComplete(false);
       try {
+        setIsChoosingImage(true);
         const result = await launchImageLibrary({
           maxWidth: 200,
           maxHeight: 200,
@@ -23,11 +26,15 @@ const useMutationUpdateProfileImage = (onComplete?: () => void) => {
         if (result && result.assets) {
           const { uri } = result.assets[0];
           if (uri) {
+            setIsSuccessful(true);
             await MongoApi.uploadProfilePicture(uri);
           }
         }
+        setIsChoosingImage(false);
       } catch {
         console.error('error in useUpdateProfileImage');
+        setIsSuccessful(false);
+        setIsChoosingImage(false);
       }
     },
     onSuccess: async () => {
@@ -40,7 +47,7 @@ const useMutationUpdateProfileImage = (onComplete?: () => void) => {
     },
   });
 
-  return { mutate, isLoading, isComplete };
+  return { mutate, isLoading, isComplete, isSuccessful, isChoosingImage };
 };
 
 export default useMutationUpdateProfileImage;

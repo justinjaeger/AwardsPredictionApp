@@ -27,12 +27,17 @@ const UpdateProfileInfo = () => {
     Snackbar.success('Profile updated');
     navigation.goBack();
   });
-  const { mutate: updateProfileImage } = useMutationUpdateProfileImage();
+  const {
+    mutate: updateProfileImage,
+    isSuccessful,
+    isChoosingImage,
+  } = useMutationUpdateProfileImage();
 
   const [name, setName] = useState<string>(user?.name || '');
   const [bio, setBio] = useState<string>(user?.bio || '');
   const [username, setUsername] = useState<string>(user?.username || '');
   const [usernameStatus, setUsernameStatus] = useState<EvaStatus | undefined>(undefined);
+  const [imageIsUploading, setImageIsUploading] = useState<boolean>(false);
 
   const validName = name.length >= 0;
   const validUsername = username.length >= 8;
@@ -46,6 +51,18 @@ const UpdateProfileInfo = () => {
 
   const submitEnabled =
     username && name && (enableSubmitUsername || enableSubmitName || enableSubmitBio);
+
+  // when user.image changes, set to false. sets to true when upload finishes
+  useEffect(() => {
+    setImageIsUploading(false);
+  }, [user?.image]);
+  useEffect(() => {
+    if (isSuccessful) {
+      setImageIsUploading(true);
+    } else {
+      setImageIsUploading(!!isChoosingImage);
+    }
+  }, [isSuccessful, isChoosingImage]);
 
   useEffect(() => {
     setName(user?.name || '');
@@ -108,7 +125,10 @@ const UpdateProfileInfo = () => {
           <ProfileImage
             image={user?.image}
             imageSize={140}
-            onPress={() => updateProfileImage()}
+            onPress={() => {
+              updateProfileImage();
+            }}
+            isLoading={imageIsUploading}
             style={{ marginBottom: 10 }}
           />
           <Body style={{ marginBottom: 10 }}>{`Tap to ${
