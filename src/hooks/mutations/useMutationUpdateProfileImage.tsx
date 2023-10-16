@@ -4,7 +4,6 @@ import { launchImageLibrary } from 'react-native-image-picker';
 import { QueryKeys } from '../../types/keys';
 import { useAuth } from '../../context/AuthContext';
 import MongoApi from '../../services/api/requests';
-import ImageStorage from '../../services/storage';
 
 const useMutationUpdateProfileImage = (onComplete?: () => void) => {
   const queryClient = useQueryClient();
@@ -13,7 +12,7 @@ const useMutationUpdateProfileImage = (onComplete?: () => void) => {
   const [isComplete, setIsComplete] = useState<boolean>(true);
 
   const { mutate, isLoading } = useMutation({
-    mutationFn: async ({ userEmail }: { userId: string; userEmail: string }) => {
+    mutationFn: async () => {
       setIsComplete(false);
       try {
         const result = await launchImageLibrary({
@@ -24,10 +23,7 @@ const useMutationUpdateProfileImage = (onComplete?: () => void) => {
         if (result && result.assets) {
           const { uri } = result.assets[0];
           if (uri) {
-            const key = await ImageStorage.uploadProfilePicture(uri, userEmail || '');
-            if (key) {
-              await MongoApi.updateUser({ image: key });
-            }
+            await MongoApi.uploadProfilePicture(uri);
           }
         }
       } catch {

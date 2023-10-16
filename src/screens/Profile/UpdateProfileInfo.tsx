@@ -19,7 +19,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 const BIO_CHAR_LIMIT = 150;
 
 const UpdateProfileInfo = () => {
-  const { userId: authUserId, userEmail } = useAuth();
+  const { userId: authUserId } = useAuth();
   const navigation = useNavigation();
 
   const { data: user } = useQueryGetUser(authUserId);
@@ -94,18 +94,13 @@ const UpdateProfileInfo = () => {
     updateUser({ id: user?._id, username: un, name: n, bio: b });
   };
 
-  const onUploadProfileImage = async () => {
-    if (!authUserId || !userEmail) return; // don't execute if not signed in
-    updateProfileImage({ userId: authUserId, userEmail });
-  };
-
   return (
     <BackgroundWrapper>
       <KeyboardAwareScrollView
         style={{ width: '100%' }}
         contentContainerStyle={{
           alignItems: 'center',
-          marginTop: 40,
+          marginTop: 20,
           paddingBottom: 200,
         }}
       >
@@ -113,7 +108,7 @@ const UpdateProfileInfo = () => {
           <ProfileImage
             image={user?.image}
             imageSize={140}
-            onPress={onUploadProfileImage}
+            onPress={() => updateProfileImage()}
             style={{ marginBottom: 10 }}
           />
           <Body style={{ marginBottom: 10 }}>{`Tap to ${
