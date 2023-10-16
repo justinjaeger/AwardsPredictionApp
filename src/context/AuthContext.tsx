@@ -120,6 +120,7 @@ export const AuthProvider = (props: { children: React.ReactNode }) => {
     if (!newRefreshToken) {
       return onSignInError('error: createRefreshToken failed');
     }
+    await KeychainStorage.set(newAccessToken, newRefreshToken);
     // SET USER INFO
     setUserInfo(userInfo);
     // NAVIGATE TO PROFILE
