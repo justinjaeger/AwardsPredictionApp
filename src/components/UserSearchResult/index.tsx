@@ -19,6 +19,7 @@ const UserSearchResult = ({
   header,
   noHeader,
   numResults,
+  allUsersAreFetched,
 }: {
   users: WithId<User>[];
   usersIdsAuthUserIsFollowing: string[];
@@ -27,6 +28,7 @@ const UserSearchResult = ({
   header?: string;
   noHeader?: boolean;
   numResults?: number;
+  allUsersAreFetched?: boolean;
 }) => {
   const { userId: authUserId } = useAuth();
   const navigation = useNavigation();
@@ -64,7 +66,7 @@ const UserSearchResult = ({
         const maxOffset =
           e.nativeEvent.contentSize.height - e.nativeEvent.layoutMeasurement.height;
         // if we're close to the bottom fetch more
-        if (currentOffset > maxOffset - 50) {
+        if (currentOffset > maxOffset - 200) {
           onEndReached && onEndReached();
         }
       }}
@@ -86,7 +88,7 @@ const UserSearchResult = ({
         )
       }
       ListFooterComponent={
-        isLoading ? (
+        isLoading || !allUsersAreFetched ? (
           <UserListSkeleton imageSize={IMAGE_SIZE} numResults={numResults} />
         ) : null
       }

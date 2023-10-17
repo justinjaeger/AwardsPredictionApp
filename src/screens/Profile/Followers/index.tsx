@@ -14,8 +14,11 @@ const Followers = () => {
     params: { userId, type },
   } = useRoute<RouteProp<PredictionsParamList, 'Followers'>>();
 
-  const { usersIdsAuthUserIsFollowing } = useQueryGetFollowingUsers();
-  const { users, fetchPage, isLoading } = usePaginatedFriends({ userId, type });
+  const { usersIdsAuthUserIsFollowing } = useQueryGetFollowingUsers(); // just to get the ids of users auth user is following
+  const { users, fetchPage, isLoading, allUsersAreFetched } = usePaginatedFriends({
+    userId,
+    type,
+  });
 
   useLayoutEffect(() => {
     // Render Header
@@ -29,8 +32,11 @@ const Followers = () => {
       <UserSearchResult
         users={users}
         usersIdsAuthUserIsFollowing={usersIdsAuthUserIsFollowing}
-        onEndReached={fetchPage}
+        onEndReached={() => {
+          fetchPage();
+        }}
         isLoading={isLoading}
+        allUsersAreFetched={allUsersAreFetched}
         noHeader
       />
     </BackgroundWrapper>

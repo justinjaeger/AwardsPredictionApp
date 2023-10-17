@@ -1,7 +1,7 @@
 import { User, WithId } from '../../../types/api';
 import api from '../api';
 
-const PAGINATED_LIMIT = 15;
+export const PAGINATED_LIMIT = 15;
 
 export const getUser = async ({
   userId,
