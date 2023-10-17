@@ -18,6 +18,7 @@ const UserSearchResult = ({
   onEndReached,
   header,
   noHeader,
+  numResults,
 }: {
   users: WithId<User>[];
   usersIdsAuthUserIsFollowing: string[];
@@ -25,6 +26,7 @@ const UserSearchResult = ({
   onEndReached?: () => void;
   header?: string;
   noHeader?: boolean;
+  numResults?: number;
 }) => {
   const { userId: authUserId } = useAuth();
   const navigation = useNavigation();
@@ -83,7 +85,11 @@ const UserSearchResult = ({
           </HeaderLight>
         )
       }
-      ListFooterComponent={isLoading ? <UserListSkeleton imageSize={IMAGE_SIZE} /> : null}
+      ListFooterComponent={
+        isLoading ? (
+          <UserListSkeleton imageSize={IMAGE_SIZE} numResults={numResults} />
+        ) : null
+      }
       renderItem={({ item }) => (
         <UserSearchResultItem
           item={item}

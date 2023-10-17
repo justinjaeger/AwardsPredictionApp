@@ -4,7 +4,13 @@ import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
 
-const UserListSkeleton = ({ imageSize }: { imageSize: number }) => (
+const UserListSkeleton = ({
+  imageSize,
+  numResults = 5,
+}: {
+  imageSize: number;
+  numResults?: number;
+}) => (
   <View style={{ height: '100%' }}>
     <SkeletonPlaceholder
       speed={1200}
@@ -12,14 +18,14 @@ const UserListSkeleton = ({ imageSize }: { imageSize: number }) => (
       highlightColor={COLORS.primaryLight}
     >
       <View style={{ flexDirection: 'column' }}>
-        {Array(5)
+        {Array(numResults)
           .fill(null)
           .map((x, i) => (
             <View
               key={i}
               style={{
                 marginLeft: 10,
-                marginTop: 10,
+                marginTop: 20,
                 flexDirection: 'row',
                 alignItems: 'center',
               }}
