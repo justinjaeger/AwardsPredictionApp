@@ -61,7 +61,7 @@ export const listFollowingPaginated = async ({
 // NOTE: expensive because unpaginated - we def want to cache this response
 export const listFollowingWithNestedFields = async (userId: string) => {
   return await api.get<WithId<User>[]>(
-    `users/${userId}/followers?includeNestedFields=true&limit=1000`,
+    `users/${userId}/following?includeNestedFields=true&limit=1000`,
   );
 };
 

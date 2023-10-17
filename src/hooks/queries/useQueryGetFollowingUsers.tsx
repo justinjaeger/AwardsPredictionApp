@@ -8,8 +8,6 @@ import { useAuth } from '../../context/AuthContext';
 /**
  * returns list of users who current user is following with nested fields
  * MAYBE we can do this paginatedly... but we have to sort by the createdAt, so probably not
- *
- * TODO: It would be great if this was TOP LEVEL.
  */
 const useQueryGetFollowingUsers = () => {
   const { userId: authUserId } = useAuth();
