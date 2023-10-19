@@ -61,7 +61,7 @@ const useRecommendedUsers = () => {
         const whoTheseUsersFollowRequests = whoAuthUserIsFollowing.map((user) =>
           MongoApi.listFollowingPaginated({
             userId: user._id,
-            pageNumber: 0,
+            pageNumber,
           }),
         );
         const res = await Promise.all(whoTheseUsersFollowRequests);
