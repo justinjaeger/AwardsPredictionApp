@@ -4,7 +4,7 @@ import BackgroundWrapper from '../../components/BackgroundWrapper';
 import SearchInput from '../../components/Inputs/SearchInput';
 import RecommendedUsers from '../../components/RecommendedUsers';
 import UserSearchResult from '../../components/UserSearchResult';
-import { SearchProvider } from '../../context/ContenderSearchContext';
+import { SearchProvider } from '../../context/SearchContext';
 import useUserSearch from './useUserSearch';
 
 const SearchUsers = () => {

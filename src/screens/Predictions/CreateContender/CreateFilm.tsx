@@ -7,7 +7,7 @@ import MovieListSearch from '../../../components/MovieList/MovieListSearch';
 import LoadingStatueModal from '../../../components/LoadingStatueModal';
 import useMutationCreateFilmContender from '../../../hooks/mutations/useMutationCreateFilmContender';
 import { FAB } from '../../../components/Buttons/FAB';
-import { useSearch } from '../../../context/ContenderSearchContext';
+import { useSearch } from '../../../context/SearchContext';
 import { iCreateContenderProps } from '.';
 import useQueryGetCommunityPredictions from '../../../hooks/queries/useQueryGetCommunityPredictions';
 import { useTmdbDataStore } from '../../../context/TmdbDataStore';

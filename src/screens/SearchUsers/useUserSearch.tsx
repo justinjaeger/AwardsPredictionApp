@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useSearch } from '../../context/ContenderSearchContext';
+import { useSearch } from '../../context/SearchContext';
 import MongoApi from '../../services/api/requests';
 import { User, WithId } from '../../types/api';
 import { PAGINATED_LIMIT } from '../../services/api/requests/user';

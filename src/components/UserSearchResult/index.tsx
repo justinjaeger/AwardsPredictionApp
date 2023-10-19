@@ -2,7 +2,7 @@ import { StackActions, useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { FlatList } from 'react-native';
 import theme from '../../constants/theme';
-import { useSearch } from '../../context/ContenderSearchContext';
+import { useSearch } from '../../context/SearchContext';
 import { useAuth } from '../../context/AuthContext';
 import { HeaderLight, SubHeader } from '../Text';
 import UserListSkeleton from '../Skeletons/UserListSkeleton';

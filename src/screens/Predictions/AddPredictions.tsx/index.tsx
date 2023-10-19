@@ -5,7 +5,7 @@ import Snackbar from '../../../components/Snackbar';
 import { PredictionsParamList } from '../../../navigation/types';
 import MovieListSelectable from '../../../components/MovieList/MovieListSelectable';
 import SearchInput from '../../../components/Inputs/SearchInput';
-import { SearchProvider, useSearch } from '../../../context/ContenderSearchContext';
+import { SearchProvider, useSearch } from '../../../context/SearchContext';
 import CreateContender from '../CreateContender';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import BackButton from '../../../components/Buttons/BackButton';

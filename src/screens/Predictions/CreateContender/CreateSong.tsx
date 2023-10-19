@@ -13,7 +13,7 @@ import FormInput from '../../../components/Inputs/FormInput';
 import { iCreateContenderProps } from '.';
 import { SubmitButton } from '../../../components/Buttons';
 import SongListSelectable from '../../../components/MovieList/SongListSelectable';
-import { useSearch } from '../../../context/ContenderSearchContext';
+import { useSearch } from '../../../context/SearchContext';
 import useQueryGetCommunityPredictions from '../../../hooks/queries/useQueryGetCommunityPredictions';
 import { useTmdbDataStore } from '../../../context/TmdbDataStore';
 import { CategoryType, Movie, iPrediction } from '../../../types/api';

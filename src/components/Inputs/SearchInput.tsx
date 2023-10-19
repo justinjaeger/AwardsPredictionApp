@@ -5,7 +5,7 @@ import CustomIcon from '../CustomIcon';
 import COLORS from '../../constants/colors';
 import { TouchableOpacity, useWindowDimensions, View } from 'react-native';
 import { HEADER_HEIGHT } from '../../constants';
-import { useSearch } from '../../context/ContenderSearchContext';
+import { useSearch } from '../../context/SearchContext';
 import theme from '../../constants/theme';
 
 // MUST WRAP IN SearchProvider

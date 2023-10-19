@@ -12,7 +12,7 @@ import BasicModal from '../../../components/BasicModal';
 import { iCreateContenderProps } from '.';
 import { SubmitButton } from '../../../components/Buttons';
 import PerformanceListSelectable from '../../../components/MovieList/PerformanceListSelectable';
-import { useSearch } from '../../../context/ContenderSearchContext';
+import { useSearch } from '../../../context/SearchContext';
 import useQueryGetCommunityPredictions from '../../../hooks/queries/useQueryGetCommunityPredictions';
 import { CategoryType, Movie, Person, iPrediction } from '../../../types/api';
 import TmdbServices, { iSearchData } from '../../../services/tmdb';
