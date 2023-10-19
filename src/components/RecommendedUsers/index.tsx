@@ -9,7 +9,6 @@ const RecommendedUsers = ({ header }: { header?: string }) => {
   return (
     <UserSearchResult
       users={isLoading ? [] : recommendedUsers}
-      usersIdsAuthUserIsFollowing={[]} // we know for a fact we're not following them
       isLoading={isLoading}
       header={header}
     />

@@ -6,7 +6,6 @@ import { useTypedNavigation } from '../../../util/hooks';
 import UserSearchResult from '../../../components/UserSearchResult';
 import usePaginatedFriends from '../../../hooks/usePaginatedFriends';
 import { PredictionsParamList } from '../../../navigation/types';
-import useQueryGetFollowingUsers from '../../../hooks/queries/useQueryGetFollowingUsers';
 
 const Followers = () => {
   const navigation = useTypedNavigation<PredictionsParamList>();
@@ -14,7 +13,6 @@ const Followers = () => {
     params: { userId, type },
   } = useRoute<RouteProp<PredictionsParamList, 'Followers'>>();
 
-  const { usersIdsAuthUserIsFollowing } = useQueryGetFollowingUsers(); // just to get the ids of users auth user is following
   const { users, fetchPage, isLoading, allUsersAreFetched } = usePaginatedFriends({
     userId,
     type,
@@ -31,7 +29,6 @@ const Followers = () => {
     <BackgroundWrapper>
       <UserSearchResult
         users={users}
-        usersIdsAuthUserIsFollowing={usersIdsAuthUserIsFollowing}
         onEndReached={() => {
           fetchPage();
         }}
