@@ -9,12 +9,12 @@ import {
   PosterSize,
 } from '../../../constants/posterDimensions';
 import { useEvent } from '../../../context/EventContext';
-import { getNumPredicting, getTotalNumPredicting } from '../../../util/getNumPredicting';
+import { getTotalNumPredicting } from '../../../util/getNumPredicting';
 import { IconButton } from '../../Buttons/IconButton';
 import { Body, SubHeader } from '../../Text';
 import CustomIcon from '../../CustomIcon';
 import { hexToRgb } from '../../../util/hexToRgb';
-import { CategoryType, EventStatus, iPrediction } from '../../../types/api';
+import { CategoryType, iPrediction } from '../../../types/api';
 import { useTmdbDataStore } from '../../../context/TmdbDataStore';
 import { categoryNameToTmdbCredit } from '../../../util/categoryNameToTmdbCredit';
 import Poster from '../../Images/Poster';
@@ -72,10 +72,6 @@ const ContenderListItem = ({
   const { getTmdbDataFromPrediction } = useTmdbDataStore();
   const { movie, person, song } = getTmdbDataFromPrediction(prediction)!;
 
-  const { status, nomDateTime } = event;
-  const nominationsHaveHappened =
-    (nomDateTime && nomDateTime < new Date()) || status === EventStatus.WINS_LIVE;
-
   const categoryInfo = categoryNameToTmdbCredit(category, movie.categoryCredits);
 
   let title = '';
@@ -96,7 +92,6 @@ const ContenderListItem = ({
       break;
   }
 
-  const { win, nom } = getNumPredicting(numPredicting || {}, slots);
   const totalNumPredicting = getTotalNumPredicting(numPredicting || {});
   // The bar should be at 100% if everybody is predicting a nomination.
   // So like, every bar is out of 100% of all users
@@ -193,7 +188,6 @@ const ContenderListItem = ({
               justifyContent: 'space-between',
               height: thumbnailContainerHeight * 1.1,
               flex: 1,
-              paddingRight: 10,
               zIndex: 1,
               borderBottomWidth: 1,
               borderBottomColor: hexToRgb(COLORS.secondary, 0.1),
@@ -207,32 +201,17 @@ const ContenderListItem = ({
                 ((numPredictingPlace || 1) / (totalNumPredicting || 1)) *
                 (totalNumPredictingTop ? totalNumPredicting / totalNumPredictingTop : 1);
               return (
-                <View key={i}>
-                  {/* {place === slots ? (
-                    <View
-                      style={{
-                        height: '60%',
-                        width: 1,
-                        backgroundColor: hexToRgb(COLORS.white, 0.2),
-                      }}
-                    />
-                  ) : null} */}
-                  <View
-                    style={{
-                      width: (windowWidth - thumbnailContainerWidth) / barsToShow - 5,
-                      height: numPredictingPlace > 0 ? h : 0,
-                      backgroundColor:
-                        place <= slots ? COLORS.secondaryLight : COLORS.secondaryMiddle,
-                    }}
-                  />
-                </View>
+                <View
+                  key={i}
+                  style={{
+                    width: (windowWidth - thumbnailContainerWidth) / barsToShow - 5,
+                    height: numPredictingPlace > 0 ? h : 0,
+                    backgroundColor:
+                      place <= slots ? COLORS.secondaryLight : COLORS.secondaryMiddle,
+                  }}
+                />
               );
             })}
-            <View style={{ position: 'absolute', top: 0, right: 10 }}>
-              <SubHeader style={{ fontWeight: '600' }}>
-                {nominationsHaveHappened ? win.toString() : nom.toString()}
-              </SubHeader>
-            </View>
           </View>
           {variant === 'personal' && !disableEditing ? (
             <IconButton
