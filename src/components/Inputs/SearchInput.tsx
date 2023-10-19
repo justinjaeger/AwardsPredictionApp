@@ -9,7 +9,16 @@ import { useSearch } from '../../context/ContenderSearchContext';
 import theme from '../../constants/theme';
 
 // MUST WRAP IN SearchProvider
-const SearchInput = (props: {
+const SearchInput = ({
+  handleSearch,
+  label,
+  placeholder,
+  caption,
+  onBlur,
+  status,
+  style,
+}: {
+  handleSearch: () => void;
   label?: string;
   placeholder?: string;
   caption?: string;
@@ -17,12 +26,9 @@ const SearchInput = (props: {
   status?: EvaStatus;
   style?: any;
 }) => {
-  const { label, placeholder, caption, onBlur, status, style } = props;
-
   const { width } = useWindowDimensions();
 
-  const { searchInput, setSearchInput, isLoadingSearch, isSearching, resetSearch } =
-    useSearch();
+  const { searchInput, setSearchInput, isLoadingSearch, resetSearch } = useSearch();
 
   const searchHeight = HEADER_HEIGHT;
 
@@ -39,6 +45,8 @@ const SearchInput = (props: {
         onBlur={() => {
           onBlur && onBlur();
         }}
+        onSubmitEditing={() => handleSearch()}
+        returnKeyType="search"
         status={status || 'basic'}
         style={{
           borderRadius: 100,
@@ -64,7 +72,7 @@ const SearchInput = (props: {
           />
         }
         accessoryRight={
-          !isLoadingSearch && isSearching ? (
+          searchInput.length && !isLoadingSearch ? (
             <TouchableOpacity
               onPress={() => {
                 resetSearch();

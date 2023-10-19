@@ -8,31 +8,31 @@ import { HeaderLight, SubHeader } from '../Text';
 import UserListSkeleton from '../Skeletons/UserListSkeleton';
 import UserSearchResultItem from './UserSearchResultItem';
 import { User, WithId } from '../../types/api';
+import useQueryGetFollowingUsers from '../../hooks/queries/useQueryGetFollowingUsers';
 
 export const IMAGE_SIZE = 50;
 
 const UserSearchResult = ({
   users,
-  usersIdsAuthUserIsFollowing,
+  allUsersAreFetched,
   isLoading,
   onEndReached,
   header,
   noHeader,
   numResults,
-  allUsersAreFetched,
 }: {
   users: WithId<User>[];
-  usersIdsAuthUserIsFollowing: string[];
+  allUsersAreFetched?: boolean;
   isLoading?: boolean;
   onEndReached?: () => void;
   header?: string;
   noHeader?: boolean;
   numResults?: number;
-  allUsersAreFetched?: boolean;
 }) => {
   const { userId: authUserId } = useAuth();
   const navigation = useNavigation();
-  const { isSearching, isLoadingSearch } = useSearch();
+  const { isLoadingSearch } = useSearch();
+  const { usersIdsAuthUserIsFollowing } = useQueryGetFollowingUsers();
 
   const navigateToProfile = (userId: string) => {
     // important to push so we can have multiple profiles in same stack
@@ -41,7 +41,7 @@ const UserSearchResult = ({
 
   const noResults = users.length === 0 && !isLoading;
 
-  if (users.length === 0 && isSearching && !isLoadingSearch) {
+  if (users.length === 0 && !isLoadingSearch) {
     return (
       <SubHeader style={{ marginTop: '5%', fontWeight: '700' }}>
         {'No Users Found'}

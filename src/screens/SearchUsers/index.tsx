@@ -4,15 +4,11 @@ import BackgroundWrapper from '../../components/BackgroundWrapper';
 import SearchInput from '../../components/Inputs/SearchInput';
 import RecommendedUsers from '../../components/RecommendedUsers';
 import UserSearchResult from '../../components/UserSearchResult';
-import { SearchProvider, useSearch } from '../../context/ContenderSearchContext';
+import { SearchProvider } from '../../context/ContenderSearchContext';
 import useUserSearch from './useUserSearch';
-import useQueryGetFollowingUsers from '../../hooks/queries/useQueryGetFollowingUsers';
 
-const SearchFriends = () => {
-  const { isSearching } = useSearch();
-  const { searchResults } = useUserSearch();
-
-  const { usersIdsAuthUserIsFollowing } = useQueryGetFollowingUsers();
+const SearchUsers = () => {
+  const { searchResults, handleSearch, fetchMore, allUsersAreFetched } = useUserSearch();
 
   return (
     <BackgroundWrapper>
@@ -24,13 +20,14 @@ const SearchFriends = () => {
             alignItems: 'center',
           }}
         >
-          <SearchInput placeholder={'Search users'} />
-          {!isSearching && searchResults.length === 0 ? (
+          <SearchInput placeholder={'Search users'} handleSearch={handleSearch} />
+          {searchResults.length === 0 ? (
             <RecommendedUsers />
           ) : (
             <UserSearchResult
               users={searchResults}
-              usersIdsAuthUserIsFollowing={usersIdsAuthUserIsFollowing}
+              allUsersAreFetched={allUsersAreFetched}
+              onEndReached={fetchMore}
             />
           )}
         </View>
@@ -41,7 +38,7 @@ const SearchFriends = () => {
 
 const WithProvider = () => (
   <SearchProvider>
-    <SearchFriends />
+    <SearchUsers />
   </SearchProvider>
 );
 

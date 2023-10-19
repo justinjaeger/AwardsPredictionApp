@@ -57,7 +57,6 @@ export const SearchProvider = (props: { children: React.ReactNode }) => {
       setIsLoadingSearch(false);
     } else {
       setIsSearching(true);
-      setIsLoadingSearch(true);
     }
   }, [searchInput]);
 
