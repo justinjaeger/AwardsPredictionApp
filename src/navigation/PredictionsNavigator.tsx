@@ -12,7 +12,7 @@ import EventFromProfile from '../screens/Predictions/Event/EventFromProfile';
 import CategoryFromProfile from '../screens/Predictions/Category/CategoryFromProfile';
 import Profile from '../screens/Profile';
 import UpdateProfileInfo from '../screens/Profile/UpdateProfileInfo';
-import SearchFriends from '../screens/SearchFriends';
+import SearchFriends from '../screens/SearchUsers';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import Followers from '../screens/Profile/Followers';
 import { ProfilePredictionProvider } from '../context/ProfilePredictionContext';

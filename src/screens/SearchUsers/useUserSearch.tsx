@@ -3,7 +3,7 @@ import { useSearch } from '../../context/ContenderSearchContext';
 import MongoApi from '../../services/api/requests';
 import { User, WithId } from '../../types/api';
 
-const useFriendSearch = () => {
+const useUserSearch = () => {
   const { searchInput, debouncedSearch, setIsLoadingSearch } = useSearch();
 
   // have this expire - make it part of useQuery
@@ -31,4 +31,4 @@ const useFriendSearch = () => {
   return { searchResults };
 };
 
-export default useFriendSearch;
+export default useUserSearch;

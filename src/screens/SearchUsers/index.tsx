@@ -5,12 +5,12 @@ import SearchInput from '../../components/Inputs/SearchInput';
 import RecommendedUsers from '../../components/RecommendedUsers';
 import UserSearchResult from '../../components/UserSearchResult';
 import { SearchProvider, useSearch } from '../../context/ContenderSearchContext';
-import useFriendSearch from './useFriendSearch';
+import useUserSearch from './useUserSearch';
 import useQueryGetFollowingUsers from '../../hooks/queries/useQueryGetFollowingUsers';
 
 const SearchFriends = () => {
   const { isSearching } = useSearch();
-  const { searchResults } = useFriendSearch();
+  const { searchResults } = useUserSearch();
 
   const { usersIdsAuthUserIsFollowing } = useQueryGetFollowingUsers();
 
