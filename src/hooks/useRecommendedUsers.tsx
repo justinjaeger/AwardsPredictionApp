@@ -99,7 +99,7 @@ const useRecommendedUsers = () => {
   useNavigateAwayEffect(() => {
     // delay until after transition
     const newStopFetching = false;
-    setPageNumber(0);
+    setPageNumber(1);
     setStopFetching(newStopFetching);
     fetchPage(newStopFetching, true);
   }, []);
