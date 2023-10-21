@@ -9,16 +9,20 @@ import useMutationCreateFilmContender from '../../../hooks/mutations/useMutation
 import { FAB } from '../../../components/Buttons/FAB';
 import { useSearch } from '../../../context/SearchContext';
 import { iCreateContenderProps } from '.';
-import useQueryGetCommunityPredictions from '../../../hooks/queries/useQueryGetCommunityPredictions';
 import { useTmdbDataStore } from '../../../context/TmdbDataStore';
-import { CategoryType, Movie, iPrediction } from '../../../types/api';
+import { CategoryType, Movie } from '../../../types/api';
 import TmdbServices, { iSearchData } from '../../../services/tmdb';
+import SearchInput from '../../../components/Inputs/SearchInput';
+import MovieListSelectable from '../../../components/MovieList/MovieListSelectable';
+import { usePredictions } from '../AddPredictions.tsx/usePredictions';
 
 // TODO: should only be able to do this if logged in
-const CreateFilm = ({ onSelectPrediction }: iCreateContenderProps) => {
+const CreateFilm = ({
+  letUserCreateContenders,
+  onSelectPrediction,
+}: iCreateContenderProps) => {
   const { store } = useTmdbDataStore();
 
-  const { setIsLoadingSearch } = useSearch();
   const { category: _category, event: _event } = useEvent();
 
   const category = _category!;
@@ -27,12 +31,12 @@ const CreateFilm = ({ onSelectPrediction }: iCreateContenderProps) => {
   // when adding a contender to the list of overall contenders
   const { mutate, isComplete, response } = useMutationCreateFilmContender();
 
-  const { searchInput, debouncedSearch, resetSearchHack, setResetSearchHack } =
+  const { searchInput, resetSearchHack, setResetSearchHack, setIsLoadingSearch } =
     useSearch();
-  const { data: communityData } = useQueryGetCommunityPredictions(); // because we use this to see if contender exists, we want to includes hidden contenders
-  const communityPredictions = communityData?.categories[category].predictions || [];
+  const { communityPredictions, selectedPredictions, setSelectedPredictions } =
+    usePredictions();
 
-  const [searchResults, setSearchResults] = useState<iSearchData>([]);
+  const [searchResults, setSearchResults] = useState<iSearchData[]>([]);
   const [searchMessage, setSearchMessage] = useState<string>('');
   const [selectedTmdbId, setSelectedTmdbId] = useState<number | undefined>();
 
@@ -52,11 +56,6 @@ const CreateFilm = ({ onSelectPrediction }: iCreateContenderProps) => {
     return maybeExistingPrediction;
   };
 
-  // handles the search
-  useEffect(() => {
-    handleSearch(searchInput);
-  }, [debouncedSearch]);
-
   // block runs after createContender mutation succeeds
   useEffect(() => {
     if (response) {
@@ -71,18 +70,20 @@ const CreateFilm = ({ onSelectPrediction }: iCreateContenderProps) => {
     }
   }, [response]);
 
-  const handleSearch = (s: string) => {
-    if (s === '') {
+  useEffect(() => {
+    if (searchInput === '') {
       resetSearch();
-      return;
     }
+  }, [searchInput]);
+
+  const handleSearch = () => {
     setIsLoadingSearch(true);
-    let Request = TmdbServices.searchMovies(s, minReleaseYear);
+    let Request = TmdbServices.searchMovies(searchInput, minReleaseYear);
     // number of digits in search (trying to identify an id)
-    const digitCount = parseInt(s, 10).toString().length;
+    const digitCount = parseInt(searchInput, 10).toString().length;
     if ([5, 6, 7, 8].includes(digitCount)) {
       // search by id instead if they put in a 6 digit number
-      Request = TmdbServices.searchMovieById(s);
+      Request = TmdbServices.searchMovieById(searchInput);
     }
     Request.then((res) => {
       setSelectedTmdbId(undefined);
@@ -94,6 +95,7 @@ const CreateFilm = ({ onSelectPrediction }: iCreateContenderProps) => {
     }).finally(() => setIsLoadingSearch(false));
   };
 
+  // TODO: we might want to modify this func
   const onConfirmContender = async () => {
     if (!selectedTmdbId) return;
     // can check that selectedTmdbId is not already associated with a contender in our category list
@@ -110,56 +112,59 @@ const CreateFilm = ({ onSelectPrediction }: iCreateContenderProps) => {
     });
   };
 
-  // these are sort of "fake" values
-  const movieSearchResultsFormatted: iPrediction[] = searchResults.map((m) => ({
-    id: m.tmdbId.toString(),
-    ranking: 0,
-    contenderId: m.tmdbId.toString(),
-    movieTmdbId: m.tmdbId,
-  }));
-
   return (
     <>
+      {letUserCreateContenders ? (
+        <SearchInput placeholder={'Search Movies'} handleSearch={handleSearch} />
+      ) : null}
       <LoadingStatueModal visible={!isComplete} text={'Saving film...'} />
-      <View
-        style={{
-          height: '100%',
-          width: '100%',
-          alignItems: 'center',
-          flex: 1,
-        }}
-      >
-        <View style={{ width: '100%', alignItems: 'center', height: '100%' }}>
-          {searchResults.length === 0 ? (
-            <Body style={{ marginTop: 40, color: COLORS.white }}>{searchMessage}</Body>
-          ) : null}
-          <View
-            style={{
-              height: '100%',
-              width: '100%',
-              alignItems: 'center',
-            }}
-          >
-            <MovieListSearch
-              predictions={movieSearchResultsFormatted}
-              onSelect={(tmdbId) => {
-                if (selectedTmdbId === tmdbId) {
-                  setSelectedTmdbId(undefined);
-                } else {
-                  setSelectedTmdbId(tmdbId);
-                }
+      {searchResults.length ? (
+        <View
+          style={{
+            height: '100%',
+            width: '100%',
+            alignItems: 'center',
+            flex: 1,
+          }}
+        >
+          <View style={{ width: '100%', alignItems: 'center', height: '100%' }}>
+            {searchResults.length === 0 ? (
+              <Body style={{ marginTop: 40, color: COLORS.white }}>{searchMessage}</Body>
+            ) : null}
+            <View
+              style={{
+                height: '100%',
+                width: '100%',
+                alignItems: 'center',
               }}
-              categoryType={CategoryType.FILM}
-            />
+            >
+              <MovieListSearch
+                data={searchResults}
+                onSelect={(tmdbId) => {
+                  if (selectedTmdbId === tmdbId) {
+                    setSelectedTmdbId(undefined);
+                  } else {
+                    setSelectedTmdbId(tmdbId);
+                  }
+                }}
+                categoryType={CategoryType.FILM}
+              />
+            </View>
           </View>
+          <FAB
+            iconName="checkmark"
+            text="Add"
+            onPress={onConfirmContender}
+            visible={selectedTmdbId !== undefined}
+          />
         </View>
-        <FAB
-          iconName="checkmark"
-          text="Add"
-          onPress={onConfirmContender}
-          visible={selectedTmdbId !== undefined}
+      ) : (
+        <MovieListSelectable
+          predictions={communityPredictions}
+          selectedPredictions={selectedPredictions}
+          setSelectedPredictions={(ps) => setSelectedPredictions(ps)}
         />
-      </View>
+      )}
     </>
   );
 };

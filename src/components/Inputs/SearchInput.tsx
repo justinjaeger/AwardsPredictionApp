@@ -16,6 +16,7 @@ const SearchInput = ({
   caption,
   onBlur,
   status,
+  autoFocus,
   style,
 }: {
   handleSearch: () => void;
@@ -24,6 +25,7 @@ const SearchInput = ({
   caption?: string;
   onBlur?: () => void;
   status?: EvaStatus;
+  autoFocus?: boolean;
   style?: any;
 }) => {
   const { width } = useWindowDimensions();
@@ -45,6 +47,7 @@ const SearchInput = ({
         onBlur={() => {
           onBlur && onBlur();
         }}
+        autoFocus={autoFocus}
         onSubmitEditing={() => handleSearch()}
         returnKeyType="search"
         status={status || 'basic'}

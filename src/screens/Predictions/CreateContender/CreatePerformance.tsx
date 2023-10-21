@@ -17,13 +17,17 @@ import useQueryGetCommunityPredictions from '../../../hooks/queries/useQueryGetC
 import { CategoryType, Movie, Person, iPrediction } from '../../../types/api';
 import TmdbServices, { iSearchData } from '../../../services/tmdb';
 import { useTmdbDataStore } from '../../../context/TmdbDataStore';
+import SearchInput from '../../../components/Inputs/SearchInput';
 
 /**
  * TODO: this file is sort of a mess
  * Because we force format everything to be an iPrediction
  * So we can display it in the conventional list
  */
-const CreatePerformance = ({ onSelectPrediction }: iCreateContenderProps) => {
+const CreatePerformance = ({
+  letUserCreateContenders,
+  onSelectPrediction,
+}: iCreateContenderProps) => {
   const { store } = useTmdbDataStore();
 
   const { setIsLoadingSearch } = useSearch();
@@ -39,13 +43,12 @@ const CreatePerformance = ({ onSelectPrediction }: iCreateContenderProps) => {
     response,
   } = useMutationCreateActingContender();
 
-  const { searchInput, debouncedSearch, resetSearchHack, setResetSearchHack } =
-    useSearch();
+  const { searchInput, resetSearchHack, setResetSearchHack } = useSearch();
   const { data: communityData } = useQueryGetCommunityPredictions();
   const communityPredictions = communityData?.categories[category].predictions || [];
 
-  const [personSearchResults, setPersonSearchResults] = useState<iSearchData>([]);
-  const [movieSearchResults, setMovieSearchResults] = useState<iSearchData>([]);
+  const [personSearchResults, setPersonSearchResults] = useState<iSearchData[]>([]);
+  const [movieSearchResults, setMovieSearchResults] = useState<iSearchData[]>([]);
   const [searchMessage, setSearchMessage] = useState<string>('');
   const [selectedMovieTmdbId, setSelectedMovieTmdbId] = useState<number | undefined>();
   const [selectedPersonTmdbId, setSelectedPersonTmdbId] = useState<number | undefined>();
@@ -77,11 +80,6 @@ const CreatePerformance = ({ onSelectPrediction }: iCreateContenderProps) => {
     return maybePerformance;
   };
 
-  // handles the search
-  useEffect(() => {
-    handleSearch(searchInput);
-  }, [debouncedSearch]);
-
   // block runs after createContender mutation succeeds
   useEffect(() => {
     if (response && selectedPersonTmdbId && selectedMovieTmdbId) {
@@ -96,13 +94,12 @@ const CreatePerformance = ({ onSelectPrediction }: iCreateContenderProps) => {
     }
   }, [response]);
 
-  const handleSearch = (s: string) => {
-    if (s === '') {
-      resetSearch();
-      return;
+  const handleSearch = () => {
+    if (searchInput === '') {
+      return resetSearch();
     }
     setIsLoadingSearch(true);
-    TmdbServices.searchPeople(s)
+    TmdbServices.searchPeople(searchInput)
       .then((res) => {
         setSelectedMovieTmdbId(undefined);
         setSelectedPersonTmdbId(undefined);
@@ -160,19 +157,6 @@ const CreatePerformance = ({ onSelectPrediction }: iCreateContenderProps) => {
     });
   };
 
-  // Format is iPrediction to display in the list
-  const movieSearchResultsFormatted: iPrediction[] = movieSearchResults.map((m) => ({
-    ranking: 0,
-    contenderId: m.tmdbId.toString(),
-    movieTmdbId: m.tmdbId,
-  }));
-  const personSearchResultsFormatted: iPrediction[] = personSearchResults.map((p) => ({
-    ranking: 0,
-    contenderId: p.tmdbId.toString(),
-    movieTmdbId: p.tmdbId,
-    personTmdbId: p.tmdbId,
-  }));
-
   return (
     <>
       <LoadingStatueModal visible={!isComplete} text={'Saving performance...'} />
@@ -191,7 +175,7 @@ const CreatePerformance = ({ onSelectPrediction }: iCreateContenderProps) => {
           <>
             {movieSearchResults.length > 0 ? (
               <MovieListSearch
-                predictions={movieSearchResultsFormatted}
+                data={movieSearchResults}
                 onSelect={(tmdbId) => {
                   if (selectedMovieTmdbId === tmdbId) {
                     setSelectedMovieTmdbId(undefined);
@@ -230,8 +214,11 @@ const CreatePerformance = ({ onSelectPrediction }: iCreateContenderProps) => {
           flex: 1,
         }}
       >
+        {letUserCreateContenders ? (
+          <SearchInput placeholder={'Search Actors'} handleSearch={handleSearch} />
+        ) : null}
         <View style={{ width: '100%', alignItems: 'center', height: '100%' }}>
-          {personSearchResultsFormatted.length === 0 ? (
+          {personSearchResults.length === 0 ? (
             <Body style={{ marginTop: 40, color: COLORS.white }}>{searchMessage}</Body>
           ) : null}
           <View
@@ -244,7 +231,7 @@ const CreatePerformance = ({ onSelectPrediction }: iCreateContenderProps) => {
             {personSearchResults.length > 0 ? (
               <View style={{ flex: 10 }}>
                 <MovieListSearch
-                  predictions={personSearchResultsFormatted}
+                  data={personSearchResults}
                   onSelect={(tmdbId) => {
                     console.log('tmdbId', tmdbId);
                     if (selectedPersonTmdbId === tmdbId) {

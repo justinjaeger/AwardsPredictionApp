@@ -1,56 +1,46 @@
 import React, { useEffect, useState } from 'react';
 import { Alert, FlatList, Keyboard, Linking, TouchableOpacity } from 'react-native';
 import COLORS from '../../constants/colors';
-import ContenderListItem from '../List/ContenderList/ContenderListItem';
 import { BodyBold } from '../Text';
-import { CategoryType, iPrediction } from '../../types/api';
-import { useTmdbDataStore } from '../../context/TmdbDataStore';
+import { CategoryType } from '../../types/api';
+import { iSearchData } from '../../services/tmdb';
+import SearchListItem from '../SearchListItem';
 
 type iMovieListProps = {
-  predictions: iPrediction[];
+  data: iSearchData[];
   categoryType: CategoryType; // Don't do SONG though, use SongListSearch
   disablePaddingBottom?: boolean;
   onSelect: (id: number) => void;
 };
 
 const MovieListSearch = ({
-  predictions,
+  data,
   categoryType,
   disablePaddingBottom,
   onSelect,
 }: iMovieListProps) => {
-  const { getTmdbDataFromPrediction } = useTmdbDataStore();
   const [selectedTmdbId, setSelectedTmdbId] = useState<number | undefined>(undefined);
 
   // reset whenever list data changes
   useEffect(() => {
     setSelectedTmdbId(undefined);
-  }, [predictions.length]);
+  }, [data.length]);
 
-  const getTmdbId = (prediction: iPrediction) => {
-    const { movie, person } = getTmdbDataFromPrediction(prediction)!;
-    if (categoryType === CategoryType.PERFORMANCE) {
-      return person?.tmdbId || 0;
-    } else {
-      return movie?.tmdbId || 0;
-    }
-  };
-
-  const onPressItem = (prediction: iPrediction) => {
+  const onPressItem = (item: iSearchData) => {
     Keyboard.dismiss();
-    const tmdbId = getTmdbId(prediction);
+    const tmdbId = item.tmdbId;
     if (tmdbId === selectedTmdbId) {
       setSelectedTmdbId(undefined);
     } else {
       setSelectedTmdbId(tmdbId);
     }
-    onSelect(getTmdbId(prediction));
+    onSelect(item.tmdbId);
   };
 
   return (
     <FlatList
-      data={predictions}
-      keyExtractor={(item) => item.contenderId}
+      data={data}
+      keyExtractor={(item) => item.tmdbId.toString()}
       style={{ width: '100%' }}
       onScroll={() => {
         Keyboard.dismiss();
@@ -89,20 +79,18 @@ const MovieListSearch = ({
           </BodyBold>
         </TouchableOpacity>
       }
-      renderItem={({ item: prediction, index: i }) => {
-        const tmdbId = getTmdbId(prediction);
+      renderItem={({ item, index: i }) => {
+        const { tmdbId } = item;
         const selected = tmdbId === selectedTmdbId;
 
         return (
-          <ContenderListItem
-            prediction={prediction}
+          <SearchListItem
+            item={item}
             ranking={i + 1}
             onPressItem={onPressItem}
             onPressThumbnail={onPressItem}
             isSelected={selected}
-            highlighted={selected}
-            variant={'search'}
-            categoryType={categoryType}
+            type={categoryType}
           />
         );
       }}

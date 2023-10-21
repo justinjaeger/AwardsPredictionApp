@@ -3,8 +3,6 @@ import { useEvent } from '../../../context/EventContext';
 import { CATEGORY_TYPE_TO_STRING } from '../../../constants/categories';
 import Snackbar from '../../../components/Snackbar';
 import { PredictionsParamList } from '../../../navigation/types';
-import MovieListSelectable from '../../../components/MovieList/MovieListSelectable';
-import SearchInput from '../../../components/Inputs/SearchInput';
 import { SearchProvider, useSearch } from '../../../context/SearchContext';
 import CreateContender from '../CreateContender';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
@@ -12,10 +10,7 @@ import BackButton from '../../../components/Buttons/BackButton';
 import { useTypedNavigation } from '../../../util/hooks';
 import { usePredictions } from './usePredictions';
 import { FAB } from '../../../components/Buttons/FAB';
-import { Animated } from 'react-native';
-import { useCategoryDisplay } from '../../../hooks/animatedState/useDisplay';
-import { CategoryDisplayFab } from '../../../components/Buttons/DisplayFAB';
-import { CategoryType, iPrediction } from '../../../types/api';
+import { iPrediction } from '../../../types/api';
 import { getPhaseUserIsPredicting } from '../../../util/getPhaseUserIsPredicting';
 
 const AddPredictions = () => {
@@ -29,14 +24,8 @@ const AddPredictions = () => {
   const phaseUserIsPredicting = getPhaseUserIsPredicting(event, shortlistDateTime);
   const letUserCreateContenders = !isHidden && phaseUserIsPredicting === undefined;
 
-  const {
-    communityPredictions,
-    selectedPredictions,
-    setSelectedPredictions,
-    onSave,
-    selectedContenderIds,
-  } = usePredictions();
-  const { delayedDisplay, expandedOpacity, collapsedOpacity } = useCategoryDisplay();
+  const { selectedPredictions, setSelectedPredictions, onSave, selectedContenderIds } =
+    usePredictions();
 
   const { isSearching } = useSearch();
 
@@ -67,44 +56,10 @@ const AddPredictions = () => {
 
   return (
     <>
-      {letUserCreateContenders ? (
-        <SearchInput
-          placeholder={
-            type === CategoryType.PERFORMANCE ? 'Search Actors' : 'Search Movies'
-          }
-        />
-      ) : null}
-      {isSearching ? (
-        <CreateContender onSelectPrediction={onSelectPredictionFromSearch} />
-      ) : (
-        <>
-          <Animated.View
-            style={{
-              display: delayedDisplay === 'list' ? 'flex' : 'none',
-              opacity: expandedOpacity,
-            }}
-          >
-            <MovieListSelectable
-              predictions={communityPredictions}
-              selectedPredictions={selectedPredictions}
-              setSelectedPredictions={(ps) => setSelectedPredictions(ps)}
-            />
-          </Animated.View>
-          <Animated.View
-            style={{
-              display: delayedDisplay === 'list-collapsed' ? 'flex' : 'none',
-              opacity: collapsedOpacity,
-            }}
-          >
-            <MovieListSelectable
-              predictions={communityPredictions}
-              selectedPredictions={selectedPredictions}
-              setSelectedPredictions={(ps) => setSelectedPredictions(ps)}
-            />
-          </Animated.View>
-        </>
-      )}
-      <CategoryDisplayFab skipGrid />
+      <CreateContender
+        onSelectPrediction={onSelectPredictionFromSearch}
+        letUserCreateContenders={letUserCreateContenders}
+      />
       <FAB
         iconName="checkmark-outline"
         text="Done"

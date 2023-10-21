@@ -10,7 +10,7 @@ import { AwardsBody } from '../types/api';
 
 // https://developer.themoviedb.org/reference/configuration-details
 export const TMDB_IMAGE_URL_SMALL = 'https://image.tmdb.org/t/p/w92';
-export const TMDB_IMAGE_URL_MED = 'https://image.tmdb.org/t/p/w154';
+export const TMDB_IMAGE_URL_MED = 'https://image.tmdb.org/t/p/w185';
 export const TMDB_IMAGE_URL_LARGE = 'https://image.tmdb.org/t/p/w500';
 
 export const TOP_TAB_HEIGHT = 50;

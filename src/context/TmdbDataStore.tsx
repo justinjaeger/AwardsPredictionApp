@@ -12,6 +12,7 @@ import {
 import TmdbCache from '../services/cache/tmdb';
 import _ from 'lodash';
 import { filterDuplicates } from '../util/filterDuplicates';
+import { iSearchData } from '../services/tmdb';
 
 /**
  * Since AsyncStore is asynchronous, we can cache those responses in a context
@@ -31,12 +32,14 @@ const TmdbDataStoreContext = createContext<{
         song: Song | undefined;
       }
     | undefined;
+  getTmdbDataFromItem: (item: iSearchData) => Movie | Person | Song | undefined;
 }>({
   store: {},
   storeTmdbDataFromPredictionSet: () => Promise.resolve(),
   storeTmdbDataFromRecentPredictions: () => Promise.resolve(),
   storeTmdbDataFromContender: () => Promise.resolve(),
   getTmdbDataFromPrediction: () => undefined,
+  getTmdbDataFromItem: () => undefined,
 });
 
 /**
@@ -51,6 +54,10 @@ export const TmdbDataStoreProvider = (props: { children: React.ReactNode }) => {
     const person = personTmdbId ? (store[personTmdbId] as Person) : undefined;
     const song = songId ? (store[songId] as Song) : undefined;
     return { movie, person, song };
+  };
+
+  const getTmdbDataFromItem = (item: iSearchData): Movie | Person | Song | undefined => {
+    return store[item.tmdbId.toString()];
   };
 
   const addItemsToStore = (items: iTmdbDataStoreRecords) => {
@@ -136,6 +143,7 @@ export const TmdbDataStoreProvider = (props: { children: React.ReactNode }) => {
         storeTmdbDataFromRecentPredictions,
         storeTmdbDataFromContender,
         getTmdbDataFromPrediction,
+        getTmdbDataFromItem,
       }}
     >
       {props.children}

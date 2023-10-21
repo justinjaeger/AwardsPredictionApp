@@ -13,16 +13,17 @@ import { TMDB_API_KEY } from '../../config';
 const TMDB_URL = 'https://api.themoviedb.org/3';
 
 export type iSearchData = {
+  name: string;
   tmdbId: number;
   title: string;
   image: string | null;
   description?: string;
-}[];
+};
 
 const searchMovies = async (
   searchText: string,
   minReleaseYear: number,
-): Promise<iApiResponse<iSearchData>> => {
+): Promise<iApiResponse<iSearchData[]>> => {
   const url = `${TMDB_URL}/search/movie?query=${searchText.toLowerCase()}&api_key=${TMDB_API_KEY}`;
   try {
     const result = (await axios(url)) as iTmdbResponse<iTmdbSearchMoviesResponse>;
@@ -65,7 +66,7 @@ const searchMovies = async (
 
 const searchMovieById = async (
   searchText: string,
-): Promise<iApiResponse<iSearchData>> => {
+): Promise<iApiResponse<iSearchData[]>> => {
   const url = `${TMDB_URL}/movie/${searchText}?api_key=${TMDB_API_KEY}`;
   try {
     const result = (await axios(url)) as iTmdbResponse<iTmdbSearchMovieIdResponse>;
@@ -90,7 +91,7 @@ const searchMovieById = async (
   }
 };
 
-const searchPeople = async (searchText: string): Promise<iApiResponse<iSearchData>> => {
+const searchPeople = async (searchText: string): Promise<iApiResponse<iSearchData[]>> => {
   const url = `${TMDB_URL}/search/person?query=${searchText.toLowerCase()}&api_key=${TMDB_API_KEY}`;
   try {
     const result = (await axios(url)) as iTmdbResponse<iTmdbSearchPeopleResponse>;
@@ -121,7 +122,7 @@ const searchPeople = async (searchText: string): Promise<iApiResponse<iSearchDat
 const getTmdbPersonMovieCredits = async (
   tmdbId: number,
   minReleaseYear: number,
-): Promise<iApiResponse<iSearchData>> => {
+): Promise<iApiResponse<iSearchData[]>> => {
   try {
     const url = `${TMDB_URL}/person/${tmdbId}/movie_credits?api_key=${TMDB_API_KEY}`;
     const result = (await axios(url)) as iTmdbResponse<iTmdbPersonMovieCredits>;

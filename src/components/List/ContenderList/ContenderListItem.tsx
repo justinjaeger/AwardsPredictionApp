@@ -72,7 +72,7 @@ const ContenderListItem = ({
   const { getTmdbDataFromPrediction } = useTmdbDataStore();
   const { movie, person, song } = getTmdbDataFromPrediction(prediction)!;
 
-  const categoryInfo = categoryNameToTmdbCredit(category, movie.categoryCredits);
+  const categoryInfo = categoryNameToTmdbCredit(category, movie?.categoryCredits);
 
   let title = '';
   let subtitle = '';
@@ -303,31 +303,5 @@ const ContenderListItem = ({
     </TouchableHighlight>
   );
 };
-
-// const ExternalLinkButton = (props: { text: string; onPress: () => void }) => {
-//   const { text, onPress } = props;
-//   return (
-//     <TouchableHighlight
-//       onPress={onPress}
-//       style={{
-//         alignItems: 'center',
-//         padding: 5,
-//         paddingHorizontal: 10,
-//         borderRadius: theme.borderRadius,
-//         backgroundColor: COLORS.secondary,
-//       }}
-//       underlayColor={COLORS.secondaryDark}
-//     >
-//       <Body
-//         style={{
-//           fontWeight: '700',
-//           color: COLORS.white,
-//         }}
-//       >
-//         {text}
-//       </Body>
-//     </TouchableHighlight>
-//   );
-// };
 
 export default ContenderListItem;

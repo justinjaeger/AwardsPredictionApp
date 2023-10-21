@@ -64,7 +64,6 @@ const MovieListSelectable = ({
           variant: 'selectable',
           prediction,
           ranking: i + 1,
-          isSelected: selectedContenderId === prediction.contenderId,
           onPressItem,
           onPressThumbnail,
           categoryType: type,

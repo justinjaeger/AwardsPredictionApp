@@ -18,9 +18,13 @@ import useQueryGetCommunityPredictions from '../../../hooks/queries/useQueryGetC
 import { useTmdbDataStore } from '../../../context/TmdbDataStore';
 import { CategoryType, Movie, iPrediction } from '../../../types/api';
 import { getSongKey } from '../../../util/getSongKey';
+import SearchInput from '../../../components/Inputs/SearchInput';
 
 // TODO: should this func ACTUALLY accept a Contender??
-const CreateSong = ({ onSelectPrediction }: iCreateContenderProps) => {
+const CreateSong = ({
+  letUserCreateContenders,
+  onSelectPrediction,
+}: iCreateContenderProps) => {
   const { store } = useTmdbDataStore();
 
   const { setIsLoadingSearch } = useSearch();
@@ -35,12 +39,11 @@ const CreateSong = ({ onSelectPrediction }: iCreateContenderProps) => {
     response,
   } = useMutationCreateSongContender();
 
-  const { searchInput, debouncedSearch, resetSearchHack, setResetSearchHack } =
-    useSearch();
+  const { searchInput, resetSearchHack, setResetSearchHack } = useSearch();
   const { data: communityData } = useQueryGetCommunityPredictions();
   const communityPredictions = communityData?.categories[category].predictions || [];
 
-  const [movieSearchResults, setMovieSearchResults] = useState<iSearchData>([]);
+  const [movieSearchResults, setMovieSearchResults] = useState<iSearchData[]>([]);
   const [searchMessage, setSearchMessage] = useState<string>('');
   const [selectedMovieTmdbId, setSelectedMovieTmdbId] = useState<number | undefined>();
   const [showSongModal, setShowSongModal] = useState<boolean>(false);
@@ -66,11 +69,6 @@ const CreateSong = ({ onSelectPrediction }: iCreateContenderProps) => {
     return maybeSongPrediction;
   };
 
-  // handles the search
-  useEffect(() => {
-    handleSearch(searchInput);
-  }, [debouncedSearch]);
-
   // block runs after createContender mutation succeeds
   useEffect(() => {
     if (response) {
@@ -85,13 +83,12 @@ const CreateSong = ({ onSelectPrediction }: iCreateContenderProps) => {
     }
   }, [response]);
 
-  const handleSearch = (s: string) => {
-    if (s === '') {
-      resetSearch();
-      return;
+  const handleSearch = () => {
+    if (searchInput) {
+      return resetSearch();
     }
     setIsLoadingSearch(true);
-    TmdbServices.searchMovies(s, minReleaseYear)
+    TmdbServices.searchMovies(searchInput, minReleaseYear)
       .then((res) => {
         setSelectedMovieTmdbId(undefined);
         const r = res.data || [];
@@ -134,16 +131,11 @@ const CreateSong = ({ onSelectPrediction }: iCreateContenderProps) => {
     });
   };
 
-  // these are sort of "fake" values
-  const movieSearchResultsFormatted: iPrediction[] = movieSearchResults.map((m) => ({
-    id: m.tmdbId.toString(),
-    ranking: 0,
-    contenderId: m.tmdbId.toString(),
-    movieTmdbId: m.tmdbId,
-  }));
-
   return (
     <>
+      {letUserCreateContenders ? (
+        <SearchInput placeholder={'Search Movies'} handleSearch={handleSearch} />
+      ) : null}
       <LoadingStatueModal visible={!isComplete} text={'Saving song...'} />
       <View
         style={{
@@ -154,7 +146,7 @@ const CreateSong = ({ onSelectPrediction }: iCreateContenderProps) => {
         }}
       >
         <View style={{ width: '100%', alignItems: 'center', height: '100%' }}>
-          {movieSearchResultsFormatted.length === 0 ? (
+          {movieSearchResults.length === 0 ? (
             <Body style={{ marginTop: 40, color: COLORS.white }}>{searchMessage}</Body>
           ) : null}
           <View
@@ -167,7 +159,7 @@ const CreateSong = ({ onSelectPrediction }: iCreateContenderProps) => {
             {movieSearchResults.length > 0 ? (
               <View style={{ flex: 10 }}>
                 <MovieListSearch
-                  predictions={movieSearchResultsFormatted}
+                  data={movieSearchResults}
                   onSelect={(tmdbId) => {
                     if (selectedMovieTmdbId === tmdbId) {
                       setSelectedMovieTmdbId(undefined);

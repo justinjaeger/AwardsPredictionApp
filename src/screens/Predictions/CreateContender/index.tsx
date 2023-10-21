@@ -6,11 +6,12 @@ import { useEvent } from '../../../context/EventContext';
 import { CategoryType, iPrediction } from '../../../types/api';
 
 export type iCreateContenderProps = {
+  letUserCreateContenders: boolean;
   onSelectPrediction: (prediction: iPrediction) => void;
 };
 
 // TODO: should only be able to do this if logged in
-const CreateContender = ({ onSelectPrediction }: iCreateContenderProps) => {
+const CreateContender = (props: iCreateContenderProps) => {
   const { category: _category, event: _event } = useEvent();
   const category = _category!;
   const event = _event!;
@@ -19,11 +20,11 @@ const CreateContender = ({ onSelectPrediction }: iCreateContenderProps) => {
   const CreateComponent = (() => {
     switch (type) {
       case CategoryType.FILM:
-        return <CreateFilm onSelectPrediction={onSelectPrediction} />;
+        return <CreateFilm {...props} />;
       case CategoryType.PERFORMANCE:
-        return <CreatePerformance onSelectPrediction={onSelectPrediction} />;
+        return <CreatePerformance {...props} />;
       case CategoryType.SONG:
-        return <CreateSong onSelectPrediction={onSelectPrediction} />;
+        return <CreateSong {...props} />;
     }
   })();
 

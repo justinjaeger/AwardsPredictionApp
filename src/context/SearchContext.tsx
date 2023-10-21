@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { useDebounce } from '../util/hooks';
 
 /**
  * Context that wraps the "read only" screens shared by global and personal
@@ -10,7 +9,6 @@ type iSearchContext = {
   setIsSearching: (isSearching: boolean) => void;
   searchInput: string;
   setSearchInput: (searchInput: string) => void;
-  debouncedSearch: string;
   resetSearchHack: boolean;
   setResetSearchHack: (resetSearchHack: boolean) => void;
   isLoadingSearch: boolean;
@@ -23,7 +21,6 @@ const SearchContext = createContext<iSearchContext>({
   setIsSearching: () => {},
   searchInput: '',
   setSearchInput: () => {},
-  debouncedSearch: '',
   resetSearchHack: false,
   setResetSearchHack: () => {},
   isLoadingSearch: false,
@@ -37,8 +34,6 @@ export const SearchProvider = (props: { children: React.ReactNode }) => {
   // isLoadingSearch: Must set from component making the api call - true before the call, false when finished
   const [isLoadingSearch, setIsLoadingSearch] = useState<boolean>(false); // when search is loading (shows spinner)
   const [resetSearchHack, setResetSearchHack] = useState<boolean>(false);
-
-  const debouncedSearch = useDebounce(searchInput, 500, { trailing: true });
 
   const resetSearch = () => {
     setSearchInput('');
@@ -67,7 +62,6 @@ export const SearchProvider = (props: { children: React.ReactNode }) => {
         setIsSearching,
         searchInput,
         setSearchInput,
-        debouncedSearch,
         resetSearchHack,
         setResetSearchHack,
         isLoadingSearch,
