@@ -92,7 +92,6 @@ const Event = ({
       >
         <LastUpdatedText lastUpdated={lastUpdatedString} />
         <CategoryList
-          isCollapsed={false}
           onSelectCategory={(category: CategoryName) => onSelectCategory(category)}
           predictionData={predictionData}
           isAuthUserProfile={isAuthUserProfile}

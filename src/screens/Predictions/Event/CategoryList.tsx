@@ -15,7 +15,6 @@ import {
 } from '../../../types/api';
 
 type iCategoryListProps = {
-  isCollapsed: boolean;
   onSelectCategory: (category: CategoryName) => void;
   predictionData: WithId<PredictionSet> | undefined;
   isAuthUserProfile?: boolean;
