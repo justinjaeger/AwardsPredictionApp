@@ -103,6 +103,12 @@ export type CategoryUpdateLog = {
   yyyymmddUpdates: Record<number, boolean>;
 };
 
+export type EventUpdateLog = {
+  userId: ObjectId;
+  eventId: ObjectId;
+  yyyymmddUpdates: Record<number, boolean>;
+};
+
 export type Contender = {
   eventId: ObjectId;
   category: CategoryName;
