@@ -25,25 +25,36 @@ import EditToolbar from '../../../components/Buttons/EditToolbar';
 import { iPrediction } from '../../../types/api';
 import useQueryGetUserPredictions from '../../../hooks/queries/useQueryGetUserPredictions';
 import CategorySkeleton from '../../../components/Skeletons/CategorySkeleton';
+import { sortPersonalPredictions } from '../../../util/sortPredictions';
 
 // used in both FromProfile and from event
-const CategoryPersonal = ({
-  userId,
-  predictionData,
-  isLoading,
-  showEventLink,
-}: iCategoryProps) => {
+const CategoryPersonal = ({ userId, showEventLink }: iCategoryProps) => {
   const { category: _category, event: _event, isEditing, setIsEditing } = useEvent();
   const category = _category!;
   const event = _event!;
+
   const navigation = useTypedNavigation<PredictionsParamList>();
   const { userId: authUserId } = useAuth();
   const { isPad } = useDevice();
   const { animatedOpacity: showAddTabOpacity } = useShowAddTab();
-
   const isAuthUserProfile = userId === authUserId;
 
+  const { data: predictionData, isLoading } = useQueryGetUserPredictions(userId);
+  const { createdAt } = predictionData?.categories[category] || {};
+  const initialPredictions = sortPersonalPredictions(
+    predictionData?.categories[category]?.predictions ?? [],
+  );
+
+  const [predictions, setPredictions] = useState<iPrediction[]>(initialPredictions);
   const [goBackOnComplete, setGoBackOnComplete] = useAsyncReference<boolean>(false);
+
+  //   const setPredictions = (ps: iPrediction[]) => {
+  //     _setPredictions(sortPersonalPredictions(ps));
+  //   };
+
+  useEffect(() => {
+    setPredictions(initialPredictions);
+  }, [userId]);
 
   // func to fire after we update predictions on db
   const onComplete = () => {
@@ -56,16 +67,10 @@ const CategoryPersonal = ({
   const { mutate: updatePredictions, isComplete } =
     useMutationUpdatePredictions(onComplete);
 
-  // get the initialPredictions and updatedPredictions
-  const { data: predictionSet } = useQueryGetUserPredictions(userId);
-  const { createdAt } = predictionSet?.categories[category] || {};
-  const initialPredictions = predictionData?.categories[category]?.predictions ?? [];
-
-  const [predictions, setPredictions] = useState<iPrediction[]>(initialPredictions);
-
+  const predictionsHaveNotChanged = _.isEqual(predictions, initialPredictions);
   useEffect(() => {
-    setPredictions(initialPredictions);
-  }, [userId]);
+    setIsEditing(!predictionsHaveNotChanged);
+  }, [predictionsHaveNotChanged]);
 
   // set custom back arrow functionality & hide history button when editing
   useLayoutEffect(() => {
@@ -96,10 +101,15 @@ const CategoryPersonal = ({
       setIsEditing(false);
       return;
     }
-    updatePredictions({
+    // set then rankings according to INSERTION ORDER
+    const orderedPredictions: iPrediction[] = predictionsToSave.map((p, i) => ({
+      ...p,
+      ranking: i + 1,
+    }));
+    await updatePredictions({
       categoryName: category,
       eventId: event._id,
-      predictions: predictionsToSave,
+      predictions: orderedPredictions,
     });
   };
 

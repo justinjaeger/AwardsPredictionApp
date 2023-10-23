@@ -4,15 +4,16 @@ import api from '../api';
 /**
  * Creates movie/person/song if not exists, then creates contender
  */
-type iCreateContenderPayload = {
+export type iCreateContenderPayload = {
   eventId: string;
+  eventYear: number;
   movieTmdbId: number;
   categoryName: CategoryName;
   personTmdbId?: number;
   songTitle?: string;
   songArtist?: string;
 };
-export const createContender = async (payload: iCreateContenderPayload) => {
+export const getOrCreateContender = async (payload: iCreateContenderPayload) => {
   return await api.post<WithId<Contender> | null, iCreateContenderPayload>(
     'contenders',
     payload,

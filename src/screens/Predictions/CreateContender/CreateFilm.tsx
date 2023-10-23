@@ -5,31 +5,31 @@ import { useEvent } from '../../../context/EventContext';
 import COLORS from '../../../constants/colors';
 import MovieListSearch from '../../../components/MovieList/MovieListSearch';
 import LoadingStatueModal from '../../../components/LoadingStatueModal';
-import useMutationCreateFilmContender from '../../../hooks/mutations/useMutationCreateFilmContender';
 import { FAB } from '../../../components/Buttons/FAB';
 import { useSearch } from '../../../context/SearchContext';
 import { iCreateContenderProps } from '.';
-import { useTmdbDataStore } from '../../../context/TmdbDataStore';
-import { CategoryType, Movie } from '../../../types/api';
+import { CategoryType } from '../../../types/api';
 import TmdbServices, { iSearchData } from '../../../services/tmdb';
 import SearchInput from '../../../components/Inputs/SearchInput';
 import MovieListSelectable from '../../../components/MovieList/MovieListSelectable';
 import { usePredictions } from '../AddPredictions.tsx/usePredictions';
+import useMutationCreateContender from '../../../hooks/mutations/useMutationCreateContender';
 
-// TODO: should only be able to do this if logged in
 const CreateFilm = ({
   letUserCreateContenders,
   onSelectPrediction,
 }: iCreateContenderProps) => {
-  const { store } = useTmdbDataStore();
-
   const { category: _category, event: _event } = useEvent();
 
   const category = _category!;
   const event = _event!;
 
   // when adding a contender to the list of overall contenders
-  const { mutate, isComplete, response } = useMutationCreateFilmContender();
+  const {
+    mutate: getOrCreateContender,
+    isComplete,
+    response,
+  } = useMutationCreateContender();
 
   const { searchInput, resetSearchHack, setResetSearchHack, setIsLoadingSearch } =
     useSearch();
@@ -49,13 +49,6 @@ const CreateFilm = ({
     setResetSearchHack(!resetSearchHack); // resets searchbar
   };
 
-  const getFilmPrediction = (movieTmdbId: number) => {
-    const maybeMovie = movieTmdbId ? (store[movieTmdbId] as Movie) : undefined;
-    const maybeExistingPrediction =
-      maybeMovie && communityPredictions.find((p) => p.movieTmdbId === maybeMovie.tmdbId);
-    return maybeExistingPrediction;
-  };
-
   // block runs after createContender mutation succeeds
   useEffect(() => {
     if (response) {
@@ -64,7 +57,7 @@ const CreateFilm = ({
         movieTmdbId: response.movieTmdbId,
         personTmdbId: response.personTmdbId,
         songId: response.songId,
-        ranking: 0,
+        ranking: 0, // whatever
       });
       resetSearch();
     }
@@ -99,15 +92,19 @@ const CreateFilm = ({
   const onConfirmContender = async () => {
     if (!selectedTmdbId) return;
     // can check that selectedTmdbId is not already associated with a contender in our category list
-    const maybeAlreadyExistingPrediction = getFilmPrediction(selectedTmdbId);
+    const maybeAlreadyExistingPrediction = communityPredictions.find(
+      (p) => p.movieTmdbId === selectedTmdbId,
+    );
     if (maybeAlreadyExistingPrediction) {
       // this film has already been added to community predictions
       onSelectPrediction(maybeAlreadyExistingPrediction);
       return;
     }
-    await mutate({
+    // if it doesn't exist in our category list, it MIGHT still exist in our db.
+    await getOrCreateContender({
       eventId: event._id,
-      category,
+      eventYear: event.year,
+      categoryName: category,
       movieTmdbId: selectedTmdbId,
     });
   };

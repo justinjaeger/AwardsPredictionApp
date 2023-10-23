@@ -55,8 +55,23 @@ export const usePredictions = () => {
     navigation.goBack();
   };
 
+  // TODO: what happens to movies we just added?
+  // It gets put at the bottom of "selectedPredictions"
+  const totallyNewContenders = selectedPredictions.filter(
+    (sp) =>
+      !initiallySelectedContenderIds.find((id) => id === sp.contenderId) &&
+      !communityPredictions.find((p) => p.contenderId === sp.contenderId),
+  );
+  // put totally new contenders at the top
+  const communityPredictionsWithJustAddedAtTop = [
+    ...totallyNewContenders,
+    ...communityPredictions.filter(
+      (p) => !totallyNewContenders.find((newP) => newP.contenderId === p.contenderId),
+    ),
+  ];
+
   return {
-    communityPredictions,
+    communityPredictions: communityPredictionsWithJustAddedAtTop,
     selectedPredictions,
     setSelectedPredictions,
     selectedContenderIds,

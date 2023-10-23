@@ -36,7 +36,7 @@ const EventPersonalCommunity = () => {
         />,
         <Event
           tab={'community'}
-          predictionData={communityPredictionData}
+          predictionData={communityPredictionData ?? undefined}
           isLoading={isLoadingCommunity}
           userId={userId}
         />,

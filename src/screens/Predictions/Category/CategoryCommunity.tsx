@@ -7,6 +7,7 @@ import { formatLastUpdated } from '../../../util/formatDateTime';
 import EventLink from './EventLink';
 import useQueryGetCommunityPredictions from '../../../hooks/queries/useQueryGetCommunityPredictions';
 import CategorySkeleton from '../../../components/Skeletons/CategorySkeleton';
+import { sortPersonalPredictions } from '../../../util/sortPredictions';
 
 // Note: We ALSO use this for non-authenticated user profiles
 const CategoryCommunity = ({ showEventLink }: { showEventLink?: boolean }) => {
@@ -15,7 +16,10 @@ const CategoryCommunity = ({ showEventLink }: { showEventLink?: boolean }) => {
 
   const { data: predictionSet, isLoading } = useQueryGetCommunityPredictions();
 
-  const { createdAt, predictions } = predictionSet?.categories[category] || {};
+  const { createdAt } = predictionSet?.categories[category] || {};
+  const predictions = sortPersonalPredictions(
+    predictionSet?.categories[category]?.predictions ?? [],
+  );
   const lastUpdatedString = formatLastUpdated(new Date(createdAt || ''));
 
   if (isLoading) {

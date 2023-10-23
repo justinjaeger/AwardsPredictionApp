@@ -8,7 +8,6 @@ import MovieListSearch from '../../../components/MovieList/MovieListSearch';
 import LoadingStatueModal from '../../../components/LoadingStatueModal';
 import { FAB } from '../../../components/Buttons/FAB';
 import BasicModal from '../../../components/BasicModal';
-import useMutationCreateSongContender from '../../../hooks/mutations/useMutationCreateSongContender';
 import FormInput from '../../../components/Inputs/FormInput';
 import { iCreateContenderProps } from '.';
 import { SubmitButton } from '../../../components/Buttons';
@@ -19,6 +18,7 @@ import { useTmdbDataStore } from '../../../context/TmdbDataStore';
 import { CategoryType, Movie, iPrediction } from '../../../types/api';
 import { getSongKey } from '../../../util/getSongKey';
 import SearchInput from '../../../components/Inputs/SearchInput';
+import useMutationCreateContender from '../../../hooks/mutations/useMutationCreateContender';
 
 // TODO: should this func ACTUALLY accept a Contender??
 const CreateSong = ({
@@ -33,11 +33,7 @@ const CreateSong = ({
   const event = _event!;
 
   // when adding a contender to the list of overall contenders
-  const {
-    mutate: createSongContender,
-    isComplete,
-    response,
-  } = useMutationCreateSongContender();
+  const { mutate: createContender, isComplete, response } = useMutationCreateContender();
 
   const { searchInput, resetSearchHack, setResetSearchHack } = useSearch();
   const { data: communityData } = useQueryGetCommunityPredictions();
@@ -122,12 +118,13 @@ const CreateSong = ({
       onSelectPrediction(maybeAlreadyExistingPrediction);
       return;
     }
-    await createSongContender({
+    await createContender({
       eventId: event._id,
-      category,
+      eventYear: event.year,
+      categoryName: category,
       movieTmdbId: selectedMovieTmdbId,
-      artist: artist,
-      title: songTitle,
+      songTitle,
+      songArtist: artist,
     });
   };
 

@@ -1,11 +1,12 @@
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
+import { Contender, WithId } from '../../types/api';
 import MongoApi from '../../services/api/requests';
-import { CategoryName, Contender, WithId } from '../../types/api';
 import { useTmdbDataStore } from '../../context/TmdbDataStore';
 import { useEvent } from '../../context/EventContext';
+import { iCreateContenderPayload } from '../../services/api/requests/contender';
 
-const useMutationCreateSongContender = () => {
+const useMutationCreateFilmContender = () => {
   const { storeTmdbDataFromContender } = useTmdbDataStore();
   const { event } = useEvent();
 
@@ -13,21 +14,9 @@ const useMutationCreateSongContender = () => {
   const [response, setResponse] = useState<WithId<Contender> | undefined>(undefined);
 
   const { mutate, isLoading } = useMutation({
-    mutationFn: async (params: {
-      eventId: string;
-      category: CategoryName;
-      movieTmdbId: number;
-      artist: string;
-      title: string;
-    }) => {
+    mutationFn: async (params: iCreateContenderPayload) => {
       setIsComplete(false);
-      return MongoApi.createContender({
-        eventId: params.eventId,
-        categoryName: params.category,
-        movieTmdbId: params.movieTmdbId,
-        songTitle: params.title,
-        songArtist: params.artist,
-      });
+      return MongoApi.getOrCreateContender(params);
     },
     onSuccess: ({ data }) => {
       // put the movie data in the cache
@@ -42,4 +31,4 @@ const useMutationCreateSongContender = () => {
   return { mutate, isLoading, isComplete, response };
 };
 
-export default useMutationCreateSongContender;
+export default useMutationCreateFilmContender;

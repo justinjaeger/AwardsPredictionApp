@@ -13,6 +13,7 @@ import {
   iCategoryPrediction,
   iPrediction,
 } from '../../../types/api';
+import { sortPersonalPredictions } from '../../../util/sortPredictions';
 
 type iCategoryListProps = {
   onSelectCategory: (category: CategoryName) => void;
@@ -20,7 +21,7 @@ type iCategoryListProps = {
   isAuthUserProfile?: boolean;
 };
 
-// Lists all categories in order, and displays predictionData
+// Lists all categories in order, and displays predictionData, also in order
 const CategoryList = ({
   onSelectCategory,
   predictionData,
@@ -49,9 +50,7 @@ const CategoryList = ({
     const { isHidden, name, slots } = awardsBodyCategories[categoryName];
     // hide hidden categories (like shorts)
     if (isHidden) continue;
-    const predictions = catPredictions.predictions.sort((p1, p2) =>
-      p1.ranking > p2.ranking ? 1 : -1,
-    );
+    const predictions = sortPersonalPredictions(catPredictions.predictions);
     // once nominations happen, you want "slots" to be however many films are nominated
     const truncatedPredictions: iPrediction[] = predictions.slice(0, slots || 5);
 

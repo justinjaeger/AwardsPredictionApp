@@ -11,13 +11,10 @@ import { getHeaderTitleWithTrophy } from '../../../constants';
 import { useAuth } from '../../../context/AuthContext';
 import { RouteProp, StackActions, useRoute } from '@react-navigation/native';
 import FollowingBottomScroll from '../../../components/FollowingBottomScroll';
-import { CategoryName, PredictionSet, WithId } from '../../../types/api';
-import useQueryGetUserPredictions from '../../../hooks/queries/useQueryGetUserPredictions';
+import { CategoryName } from '../../../types/api';
 
 export type iCategoryProps = {
   userId: string | undefined;
-  predictionData: WithId<PredictionSet> | undefined;
-  isLoading: boolean;
   showEventLink?: boolean;
 };
 
@@ -31,9 +28,6 @@ const Category = () => {
   const { category, event: _event, isEditing } = useEvent();
   const event = _event!;
   const navigation = useTypedNavigation<PredictionsParamList>();
-
-  const { data: personalPredictionData, isLoading: personalIsLoading } =
-    useQueryGetUserPredictions(userId);
 
   // Set the header
   useLayoutEffect(() => {
@@ -51,12 +45,7 @@ const Category = () => {
     <>
       {/* <CategoryDisplayFab /> */}
       {PredictionTabsNavigator(
-        <CategoryPersonal
-          predictionData={personalPredictionData ?? undefined}
-          isLoading={personalIsLoading}
-          showEventLink={showEventLink && !isEditing}
-          userId={userId}
-        />,
+        <CategoryPersonal showEventLink={showEventLink && !isEditing} userId={userId} />,
         <CategoryCommunity showEventLink={showEventLink && !isEditing} />,
       )}
       {userId && !isEditing ? (

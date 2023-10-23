@@ -7,7 +7,6 @@ import COLORS from '../../../constants/colors';
 import MovieListSearch from '../../../components/MovieList/MovieListSearch';
 import LoadingStatueModal from '../../../components/LoadingStatueModal';
 import { FAB } from '../../../components/Buttons/FAB';
-import useMutationCreateActingContender from '../../../hooks/mutations/useMutationCreateActingContender';
 import BasicModal from '../../../components/BasicModal';
 import { iCreateContenderProps } from '.';
 import { SubmitButton } from '../../../components/Buttons';
@@ -18,6 +17,7 @@ import { CategoryType, Movie, Person, iPrediction } from '../../../types/api';
 import TmdbServices, { iSearchData } from '../../../services/tmdb';
 import { useTmdbDataStore } from '../../../context/TmdbDataStore';
 import SearchInput from '../../../components/Inputs/SearchInput';
+import useMutationCreateContender from '../../../hooks/mutations/useMutationCreateContender';
 
 /**
  * TODO: this file is sort of a mess
@@ -41,7 +41,7 @@ const CreatePerformance = ({
     mutate: createActingContender,
     isComplete,
     response,
-  } = useMutationCreateActingContender();
+  } = useMutationCreateContender();
 
   const { searchInput, resetSearchHack, setResetSearchHack } = useSearch();
   const { data: communityData } = useQueryGetCommunityPredictions();
@@ -151,7 +151,8 @@ const CreatePerformance = ({
     }
     await createActingContender({
       eventId: event._id,
-      category,
+      eventYear: event.year,
+      categoryName: category,
       movieTmdbId: selectedMovieTmdbId,
       personTmdbId: selectedPersonTmdbId,
     });

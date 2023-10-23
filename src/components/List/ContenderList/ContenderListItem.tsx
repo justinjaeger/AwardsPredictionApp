@@ -79,7 +79,7 @@ const ContenderListItem = ({
   switch (categoryType) {
     case CategoryType.FILM:
       title = movie?.title || '';
-      subtitle = categoryInfo ? categoryInfo.join(',') : movie.studio || '';
+      subtitle = categoryInfo ? categoryInfo.join(',') : movie?.studio ?? '';
       break;
     case CategoryType.PERFORMANCE:
       if (!person) break;
