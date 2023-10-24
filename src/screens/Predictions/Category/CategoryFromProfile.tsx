@@ -6,7 +6,6 @@ import { getAwardsBodyCategories } from '../../../constants/categories';
 import { useEvent } from '../../../context/EventContext';
 import { eventToString } from '../../../util/stringConversions';
 import { getHeaderTitleWithTrophy } from '../../../constants';
-import { useCategoryDisplay } from '../../../hooks/animatedState/useDisplay';
 import { Animated, View } from 'react-native';
 import { CategoryDisplayFab } from '../../../components/Buttons/DisplayFAB';
 import { useAuth } from '../../../context/AuthContext';
@@ -35,21 +34,11 @@ const Category = () => {
 
   const { category, event: _event } = useEvent();
   const navigation = useTypedNavigation<PredictionsParamList>();
-  const { delayedDisplay, gridOpacity, expandedOpacity, collapsedOpacity } =
-    useCategoryDisplay();
 
-  const { user, predictionData, isLoading, setUserId } = useProfilePrediction();
+  const { user, isLoading, setUserId } = useProfilePrediction();
   useEffect(() => setUserId(userId), [userId]);
 
   const event = _event!;
-
-  const props = {
-    delayedDisplay,
-    gridOpacity,
-    expandedOpacity,
-    collapsedOpacity,
-    userId,
-  };
 
   // Set the header
   useLayoutEffect(() => {
@@ -73,11 +62,7 @@ const Category = () => {
       <BackgroundWrapper>
         {user ? <UserHeader user={user} showEventLink={showEventLink} /> : null}
         <View style={{ width: '100%' }}>
-          <CategoryPersonal
-            predictionData={predictionData}
-            isLoading={isLoading}
-            {...props}
-          />
+          <CategoryPersonal userId={userId} showEventLink={showEventLink} />
         </View>
       </BackgroundWrapper>
     </>

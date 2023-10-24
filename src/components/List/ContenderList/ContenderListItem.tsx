@@ -18,6 +18,8 @@ import { CategoryType, iPrediction } from '../../../types/api';
 import { useTmdbDataStore } from '../../../context/TmdbDataStore';
 import { categoryNameToTmdbCredit } from '../../../util/categoryNameToTmdbCredit';
 import Poster from '../../Images/Poster';
+import ListItemSkeleton from '../../Skeletons/ListItemSkeleton';
+import theme from '../../../constants/theme';
 
 export type iContenderListItemProps = {
   variant: 'community' | 'personal' | 'selectable' | 'search';
@@ -70,9 +72,13 @@ const ContenderListItem = ({
   const { numPredicting } = prediction;
 
   const { getTmdbDataFromPrediction } = useTmdbDataStore();
-  const { movie, person, song } = getTmdbDataFromPrediction(prediction)!;
+  const { movie, person, song } = getTmdbDataFromPrediction(prediction) ?? {};
 
-  const categoryInfo = categoryNameToTmdbCredit(category, movie?.categoryCredits);
+  const dataHasNotLoaded = !movie && !person && !song;
+
+  const categoryInfo = movie?.categoryCredits
+    ? categoryNameToTmdbCredit(category, movie?.categoryCredits)
+    : undefined;
 
   let title = '';
   let subtitle = '';
@@ -99,6 +105,14 @@ const ContenderListItem = ({
   const thumbnailContainerWidth = posterWidth * 1.5;
   const thumbnailContainerHeight = posterHeight;
   const barsToShow = slots * 2;
+
+  if (dataHasNotLoaded) {
+    return (
+      <View style={{ marginLeft: theme.windowMargin / 2 }}>
+        <ListItemSkeleton posterWidth={IMAGE_SIZE} />
+      </View>
+    );
+  }
 
   return (
     <TouchableHighlight

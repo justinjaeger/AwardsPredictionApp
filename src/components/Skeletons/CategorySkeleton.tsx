@@ -17,7 +17,7 @@ const CategorySkeleton = () => {
     <View
       style={{
         height: '100%',
-        marginLeft: theme.windowMargin,
+        marginLeft: theme.windowMargin / 2,
         marginRight: theme.windowMargin,
       }}
     >
@@ -34,7 +34,7 @@ const CategorySkeleton = () => {
                 key={i}
                 style={{
                   width: '100%',
-                  marginTop: theme.posterMargin * 4,
+                  marginBottom: theme.posterMargin * 4,
                   flexDirection: 'row',
                 }}
               >
