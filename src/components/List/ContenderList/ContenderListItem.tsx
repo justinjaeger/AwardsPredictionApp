@@ -167,6 +167,7 @@ const ContenderListItem = ({
               flexDirection: 'column',
               paddingLeft: 5,
               zIndex: 2,
+              width: '80%',
             }}
           >
             <MaskedView
