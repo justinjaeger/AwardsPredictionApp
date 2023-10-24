@@ -6,7 +6,7 @@ import { useTmdbDataStore } from '../../context/TmdbDataStore';
 import { useEvent } from '../../context/EventContext';
 import { iCreateContenderPayload } from '../../services/api/requests/contender';
 
-const useMutationCreateFilmContender = () => {
+const useMutationCreateContender = () => {
   const { storeTmdbDataFromContender } = useTmdbDataStore();
   const { event } = useEvent();
 
@@ -31,4 +31,4 @@ const useMutationCreateFilmContender = () => {
   return { mutate, isLoading, isComplete, response };
 };
 
-export default useMutationCreateFilmContender;
+export default useMutationCreateContender;
