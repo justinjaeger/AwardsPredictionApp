@@ -6,25 +6,30 @@ import COLORS from '../../../constants/colors';
 import MovieListSearch from '../../../components/MovieList/MovieListSearch';
 import LoadingStatueModal from '../../../components/LoadingStatueModal';
 import { FAB } from '../../../components/Buttons/FAB';
-import { iCreateContenderProps } from '.';
-import { CategoryType } from '../../../types/api';
+import { CategoryType, iPrediction } from '../../../types/api';
 import TmdbServices, { iSearchData } from '../../../services/tmdb';
 import SearchInput from '../../../components/Inputs/SearchInput';
 import MovieListSelectable from '../../../components/MovieList/MovieListSelectable';
 import useMutationCreateContender from '../../../hooks/mutations/useMutationCreateContender';
+import Snackbar from '../../../components/Snackbar';
+import { CATEGORY_TYPE_TO_STRING } from '../../../constants/categories';
+import { useTypedNavigation } from '../../../util/hooks';
+import { PredictionsParamList } from '../../../navigation/types';
+import { getPhaseUserIsPredicting } from '../../../util/getPhaseUserIsPredicting';
+import { usePredictions } from '../AddPredictions.tsx/usePredictions';
+import BackButton from '../../../components/Buttons/BackButton';
 
-const CreateFilm = ({
-  letUserCreateContenders,
-  onSelectPrediction,
-  communityPredictions,
-  selectedPredictions,
-  onSave,
-  setSelectedPredictions,
-}: iCreateContenderProps) => {
+const CreateFilm = () => {
+  const navigation = useTypedNavigation<PredictionsParamList>();
+
   const { category: _category, event: _event } = useEvent();
-
   const category = _category!;
   const event = _event!;
+
+  const { shortlistDateTime, isHidden, type } = event.categories[category];
+
+  const phaseUserIsPredicting = getPhaseUserIsPredicting(event, shortlistDateTime);
+  const letUserCreateContenders = !isHidden && phaseUserIsPredicting === undefined;
 
   // when adding a contender to the list of overall contenders
   const {
@@ -33,11 +38,43 @@ const CreateFilm = ({
     response,
   } = useMutationCreateContender();
 
+  const {
+    selectedPredictions,
+    setSelectedPredictions,
+    communityPredictions,
+    selectedContenderIds,
+    onSave,
+  } = usePredictions();
+
   const [searchResults, setSearchResults] = useState<iSearchData[]>([]);
   const [searchMessage, setSearchMessage] = useState<string>('');
   const [selectedTmdbId, setSelectedTmdbId] = useState<number | undefined>();
 
   const minReleaseYear = event.year - 1;
+
+  // set custom back arrow functionality
+  useEffect(() => {
+    navigation.setOptions({
+      // eslint-disable-next-line react/no-unstable-nested-components
+      headerLeft: () => <BackButton onPress={onSave} />,
+    });
+  }, [navigation]);
+
+  const onSelectPredictionFromSearch = (prediction: iPrediction) => {
+    const contenderId = prediction.contenderId;
+    const isAlreadySelected = selectedContenderIds.includes(contenderId);
+    if (isAlreadySelected) {
+      // alert user that contender is already selected
+      Snackbar.success(
+        `This ${CATEGORY_TYPE_TO_STRING[
+          type
+        ].toLowerCase()} is already in your predictions`,
+      );
+    } else {
+      Snackbar.success('Added to list');
+      setSelectedPredictions((ps) => [...ps, prediction]);
+    }
+  };
 
   const resetSearch = () => {
     setSelectedTmdbId(undefined);
@@ -48,7 +85,7 @@ const CreateFilm = ({
   // block runs after createContender mutation succeeds
   useEffect(() => {
     if (response) {
-      onSelectPrediction({
+      onSelectPredictionFromSearch({
         contenderId: response._id,
         movieTmdbId: response.movieTmdbId,
         personTmdbId: response.personTmdbId,
@@ -85,7 +122,7 @@ const CreateFilm = ({
     );
     if (maybeAlreadyExistingPrediction) {
       // this film has already been added to community predictions
-      onSelectPrediction(maybeAlreadyExistingPrediction);
+      onSelectPredictionFromSearch(maybeAlreadyExistingPrediction);
       return;
     }
     // if it doesn't exist in our category list, it MIGHT still exist in our db.
@@ -103,10 +140,7 @@ const CreateFilm = ({
         <SearchInput
           placeholder={'Search Movies'}
           handleSearch={handleSearch}
-          onReset={() => {
-            resetSearch();
-            setSelectedPredictions([]);
-          }}
+          onReset={() => resetSearch()}
         />
       ) : null}
       <LoadingStatueModal visible={!isComplete} text={'Saving film...'} />
