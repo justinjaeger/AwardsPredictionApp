@@ -1,21 +1,18 @@
 import _ from 'lodash';
 import React, { useEffect, useLayoutEffect, useState } from 'react';
-import { Alert, Animated, ScrollView, View } from 'react-native';
+import { Alert, Animated, View } from 'react-native';
 import BackButton from '../../../components/Buttons/BackButton';
 import LoadingStatueModal from '../../../components/LoadingStatueModal';
-import MovieGrid from '../../../components/MovieGrid';
 import MovieListDraggable from '../../../components/MovieList/MovieListDraggable';
 import SignedOutState from '../../../components/SignedOutState';
 import Snackbar from '../../../components/Snackbar';
 import { BodyBold } from '../../../components/Text';
-import theme from '../../../constants/theme';
 import { useEvent } from '../../../context/EventContext';
 import useMutationUpdatePredictions from '../../../hooks/mutations/useMutationUpdatePredictions';
 import { PredictionsParamList } from '../../../navigation/types';
 import { useAsyncReference, useTypedNavigation } from '../../../util/hooks';
 import { formatLastUpdated } from '../../../util/formatDateTime';
 import { iCategoryProps } from '.';
-import LastUpdatedText from '../../../components/LastUpdatedText';
 import { useAuth } from '../../../context/AuthContext';
 import useDevice from '../../../util/device';
 import { AddPredictionsFab } from '../../../components/Buttons/DisplayFAB';
@@ -25,7 +22,7 @@ import EditToolbar from '../../../components/Buttons/EditToolbar';
 import { iPrediction } from '../../../types/api';
 import useQueryGetUserPredictions from '../../../hooks/queries/useQueryGetUserPredictions';
 import CategorySkeleton from '../../../components/Skeletons/CategorySkeleton';
-import { sortPersonalPredictions } from '../../../util/sortPredictions';
+import { sortPredictions } from '../../../util/sortPredictions';
 
 // used in both FromProfile and from event
 const CategoryPersonal = ({ userId, showEventLink }: iCategoryProps) => {
@@ -41,16 +38,12 @@ const CategoryPersonal = ({ userId, showEventLink }: iCategoryProps) => {
 
   const { data: predictionData, isLoading } = useQueryGetUserPredictions(userId);
   const { createdAt } = predictionData?.categories[category] || {};
-  const initialPredictions = sortPersonalPredictions(
+  const initialPredictions = sortPredictions(
     predictionData?.categories[category]?.predictions ?? [],
   );
 
   const [predictions, setPredictions] = useState<iPrediction[]>(initialPredictions);
   const [goBackOnComplete, setGoBackOnComplete] = useAsyncReference<boolean>(false);
-
-  //   const setPredictions = (ps: iPrediction[]) => {
-  //     _setPredictions(sortPersonalPredictions(ps));
-  //   };
 
   useEffect(() => {
     setPredictions(initialPredictions);
@@ -151,16 +144,6 @@ const CategoryPersonal = ({ userId, showEventLink }: iCategoryProps) => {
         </View>
       ) : null}
       {showEventLink ? <EventLink userId={userId} /> : null}
-      <ScrollView
-        contentContainerStyle={{
-          paddingBottom: 100,
-          marginTop: theme.windowMargin,
-        }}
-        showsVerticalScrollIndicator={false}
-      >
-        <LastUpdatedText lastUpdated={lastUpdatedString} style={{ top: -35 }} />
-        <MovieGrid predictions={predictions} />
-      </ScrollView>
       <MovieListDraggable
         predictions={predictions}
         setPredictions={(ps) => setPredictions(ps)}

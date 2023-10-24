@@ -7,9 +7,7 @@ import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
 import { useEvent } from '../../context/EventContext';
 import LastUpdatedText from '../LastUpdatedText';
-import ContenderListItem, {
-  iContenderListItemProps,
-} from '../List/ContenderList/ContenderListItem';
+import ContenderListItem from '../List/ContenderList/ContenderListItem';
 import { SubHeader } from '../Text';
 import { iPrediction } from '../../types/api';
 
@@ -87,19 +85,6 @@ const MovieListDraggable = ({
           }
         };
 
-        const listItemProps: iContenderListItemProps = {
-          variant: 'personal',
-          prediction,
-          ranking,
-          onPressItem,
-          onPressThumbnail: onPressItem,
-          draggable: {
-            drag,
-            isActive,
-          },
-          categoryType: type,
-          isAuthProfile,
-        };
         return (
           <>
             {index === slots ? (
@@ -111,7 +96,19 @@ const MovieListDraggable = ({
               />
             ) : null}
             <ScaleDecorator activeScale={0.9}>
-              <ContenderListItem {...listItemProps} />
+              <ContenderListItem
+                variant="personal"
+                prediction={prediction}
+                ranking={ranking}
+                onPressItem={onPressItem}
+                onPressThumbnail={onPressItem}
+                draggable={{
+                  drag,
+                  isActive,
+                }}
+                categoryType={type}
+                isAuthProfile={isAuthProfile}
+              />
             </ScaleDecorator>
           </>
         );

@@ -11,7 +11,6 @@ import BasicModal from '../../../components/BasicModal';
 import { iCreateContenderProps } from '.';
 import { SubmitButton } from '../../../components/Buttons';
 import PerformanceListSelectable from '../../../components/MovieList/PerformanceListSelectable';
-import { useSearch } from '../../../context/SearchContext';
 import useQueryGetCommunityPredictions from '../../../hooks/queries/useQueryGetCommunityPredictions';
 import { CategoryType, Movie, Person, iPrediction } from '../../../types/api';
 import TmdbServices, { iSearchData } from '../../../services/tmdb';
@@ -30,7 +29,6 @@ const CreatePerformance = ({
 }: iCreateContenderProps) => {
   const { store } = useTmdbDataStore();
 
-  const { setIsLoadingSearch } = useSearch();
   const { category: _category, event: _event } = useEvent();
 
   const category = _category!;
@@ -43,7 +41,7 @@ const CreatePerformance = ({
     response,
   } = useMutationCreateContender();
 
-  const { searchInput, resetSearchHack, setResetSearchHack } = useSearch();
+  const { searchInput, resetSearchHack, setResetSearchHack } = {};
   const { data: communityData } = useQueryGetCommunityPredictions();
   const communityPredictions = communityData?.categories[category].predictions || [];
 

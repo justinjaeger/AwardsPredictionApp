@@ -12,7 +12,6 @@ import FormInput from '../../../components/Inputs/FormInput';
 import { iCreateContenderProps } from '.';
 import { SubmitButton } from '../../../components/Buttons';
 import SongListSelectable from '../../../components/MovieList/SongListSelectable';
-import { useSearch } from '../../../context/SearchContext';
 import useQueryGetCommunityPredictions from '../../../hooks/queries/useQueryGetCommunityPredictions';
 import { useTmdbDataStore } from '../../../context/TmdbDataStore';
 import { CategoryType, Movie, iPrediction } from '../../../types/api';
@@ -27,7 +26,6 @@ const CreateSong = ({
 }: iCreateContenderProps) => {
   const { store } = useTmdbDataStore();
 
-  const { setIsLoadingSearch } = useSearch();
   const { category: _category, event: _event } = useEvent();
   const category = _category!;
   const event = _event!;
@@ -35,7 +33,6 @@ const CreateSong = ({
   // when adding a contender to the list of overall contenders
   const { mutate: createContender, isComplete, response } = useMutationCreateContender();
 
-  const { searchInput, resetSearchHack, setResetSearchHack } = useSearch();
   const { data: communityData } = useQueryGetCommunityPredictions();
   const communityPredictions = communityData?.categories[category].predictions || [];
 

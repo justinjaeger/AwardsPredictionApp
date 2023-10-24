@@ -4,6 +4,7 @@ import { useEvent } from '../../../context/EventContext';
 import { PredictionsParamList } from '../../../navigation/types';
 import { iPrediction } from '../../../types/api';
 import useQueryGetCommunityPredictions from '../../../hooks/queries/useQueryGetCommunityPredictions';
+import { sortPredictions } from '../../../util/sortPredictions';
 
 /**
  * Lists all community predictions with the ones you've selected
@@ -18,8 +19,9 @@ export const usePredictions = () => {
 
   // We use the SAME KEY as the previous screen, because it avoids a re-fetch of the data which was available previously
   const { data: communityPredictionData } = useQueryGetCommunityPredictions();
-  const communityPredictions =
-    communityPredictionData?.categories[category].predictions ?? [];
+  const communityPredictions = sortPredictions(
+    communityPredictionData?.categories[category].predictions ?? [],
+  );
 
   const [selectedPredictions, setSelectedPredictions] =
     useState<iPrediction[]>(initialPredictions);

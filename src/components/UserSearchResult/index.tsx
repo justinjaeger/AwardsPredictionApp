@@ -2,9 +2,8 @@ import { StackActions, useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { FlatList } from 'react-native';
 import theme from '../../constants/theme';
-import { useSearch } from '../../context/SearchContext';
 import { useAuth } from '../../context/AuthContext';
-import { HeaderLight, SubHeader } from '../Text';
+import { HeaderLight } from '../Text';
 import UserListSkeleton from '../Skeletons/UserListSkeleton';
 import UserSearchResultItem from './UserSearchResultItem';
 import { User, WithId } from '../../types/api';
@@ -31,7 +30,6 @@ const UserSearchResult = ({
 }) => {
   const { userId: authUserId } = useAuth();
   const navigation = useNavigation();
-  const { isLoadingSearch } = useSearch();
   const { usersIdsAuthUserIsFollowing } = useQueryGetFollowingUsers();
 
   const navigateToProfile = (userId: string) => {
@@ -40,14 +38,6 @@ const UserSearchResult = ({
   };
 
   const noResults = users.length === 0 && !isLoading;
-
-  if (users.length === 0 && !isLoadingSearch) {
-    return (
-      <SubHeader style={{ marginTop: '5%', fontWeight: '700' }}>
-        {'No Users Found'}
-      </SubHeader>
-    );
-  }
 
   return (
     <FlatList

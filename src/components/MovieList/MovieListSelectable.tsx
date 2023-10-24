@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { FlatList, Keyboard } from 'react-native';
 import { useEvent } from '../../context/EventContext';
 import { removePredictionFromList } from '../../util/removePredictionFromList';
-import ContenderListItem, {
-  iContenderListItemProps,
-} from '../List/ContenderList/ContenderListItem';
+import ContenderListItem from '../List/ContenderList/ContenderListItem';
 import { iPrediction } from '../../types/api';
 
 type iMovieListProps = {
@@ -23,8 +21,6 @@ const MovieListSelectable = ({
   const event = _event!;
   const { type } = event.categories[category];
 
-  const [selectedContenderId, setSelectedContenderId] = useState<string | undefined>(); // this selection is whether the film is big or not
-
   const onPressItem = async (prediction: iPrediction) => {
     Keyboard.dismiss();
     const selectedContenderIds = selectedPredictions.map((p) => p.contenderId);
@@ -34,15 +30,6 @@ const MovieListSelectable = ({
       ? removePredictionFromList(selectedPredictions, prediction)
       : [...selectedPredictions, prediction];
     setSelectedPredictions(newSelected);
-  };
-
-  const onPressThumbnail = (prediction: iPrediction) => {
-    const id = prediction.contenderId;
-    if (selectedContenderId === id) {
-      setSelectedContenderId(undefined);
-    } else {
-      setSelectedContenderId(id);
-    }
   };
 
   return (
@@ -60,16 +47,17 @@ const MovieListSelectable = ({
           .map((sp) => sp.contenderId)
           .includes(prediction.contenderId);
 
-        const listItemProps: iContenderListItemProps = {
-          variant: 'selectable',
-          prediction,
-          ranking: i + 1,
-          onPressItem,
-          onPressThumbnail,
-          categoryType: type,
-          highlighted,
-        };
-        return <ContenderListItem {...listItemProps} />;
+        return (
+          <ContenderListItem
+            variant="selectable"
+            prediction={prediction}
+            ranking={i + 1}
+            onPressItem={onPressItem}
+            onPressThumbnail={onPressItem}
+            categoryType={type}
+            highlighted={highlighted}
+          />
+        );
       }}
     />
   );

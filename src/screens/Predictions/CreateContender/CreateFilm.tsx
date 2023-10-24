@@ -6,18 +6,20 @@ import COLORS from '../../../constants/colors';
 import MovieListSearch from '../../../components/MovieList/MovieListSearch';
 import LoadingStatueModal from '../../../components/LoadingStatueModal';
 import { FAB } from '../../../components/Buttons/FAB';
-import { useSearch } from '../../../context/SearchContext';
 import { iCreateContenderProps } from '.';
 import { CategoryType } from '../../../types/api';
 import TmdbServices, { iSearchData } from '../../../services/tmdb';
 import SearchInput from '../../../components/Inputs/SearchInput';
 import MovieListSelectable from '../../../components/MovieList/MovieListSelectable';
-import { usePredictions } from '../AddPredictions.tsx/usePredictions';
 import useMutationCreateContender from '../../../hooks/mutations/useMutationCreateContender';
 
 const CreateFilm = ({
   letUserCreateContenders,
   onSelectPrediction,
+  communityPredictions,
+  selectedPredictions,
+  onSave,
+  setSelectedPredictions,
 }: iCreateContenderProps) => {
   const { category: _category, event: _event } = useEvent();
 
@@ -31,11 +33,6 @@ const CreateFilm = ({
     response,
   } = useMutationCreateContender();
 
-  const { searchInput, resetSearchHack, setResetSearchHack, setIsLoadingSearch } =
-    useSearch();
-  const { communityPredictions, selectedPredictions, setSelectedPredictions } =
-    usePredictions();
-
   const [searchResults, setSearchResults] = useState<iSearchData[]>([]);
   const [searchMessage, setSearchMessage] = useState<string>('');
   const [selectedTmdbId, setSelectedTmdbId] = useState<number | undefined>();
@@ -46,7 +43,6 @@ const CreateFilm = ({
     setSelectedTmdbId(undefined);
     setSearchMessage('');
     setSearchResults([]);
-    setResetSearchHack(!resetSearchHack); // resets searchbar
   };
 
   // block runs after createContender mutation succeeds
@@ -63,14 +59,7 @@ const CreateFilm = ({
     }
   }, [response]);
 
-  useEffect(() => {
-    if (searchInput === '') {
-      resetSearch();
-    }
-  }, [searchInput]);
-
-  const handleSearch = () => {
-    setIsLoadingSearch(true);
+  const handleSearch = async (searchInput: string) => {
     let Request = TmdbServices.searchMovies(searchInput, minReleaseYear);
     // number of digits in search (trying to identify an id)
     const digitCount = parseInt(searchInput, 10).toString().length;
@@ -78,14 +67,13 @@ const CreateFilm = ({
       // search by id instead if they put in a 6 digit number
       Request = TmdbServices.searchMovieById(searchInput);
     }
-    Request.then((res) => {
-      setSelectedTmdbId(undefined);
-      const r = res.data || [];
-      setSearchResults(r);
-      if (r.length === 0) {
-        setSearchMessage('No Results');
-      }
-    }).finally(() => setIsLoadingSearch(false));
+    const res = await Request;
+    setSelectedTmdbId(undefined);
+    const r = res.data || [];
+    setSearchResults(r);
+    if (r.length === 0) {
+      setSearchMessage('No Results');
+    }
   };
 
   // TODO: we might want to modify this func
@@ -112,7 +100,14 @@ const CreateFilm = ({
   return (
     <>
       {letUserCreateContenders ? (
-        <SearchInput placeholder={'Search Movies'} handleSearch={handleSearch} />
+        <SearchInput
+          placeholder={'Search Movies'}
+          handleSearch={handleSearch}
+          onReset={() => {
+            resetSearch();
+            setSelectedPredictions([]);
+          }}
+        />
       ) : null}
       <LoadingStatueModal visible={!isComplete} text={'Saving film...'} />
       {searchResults.length ? (
@@ -156,11 +151,19 @@ const CreateFilm = ({
           />
         </View>
       ) : (
-        <MovieListSelectable
-          predictions={communityPredictions}
-          selectedPredictions={selectedPredictions}
-          setSelectedPredictions={(ps) => setSelectedPredictions(ps)}
-        />
+        <>
+          <MovieListSelectable
+            predictions={communityPredictions}
+            selectedPredictions={selectedPredictions}
+            setSelectedPredictions={(ps) => setSelectedPredictions(ps)}
+          />
+          <FAB
+            iconName="checkmark-outline"
+            text="Done"
+            onPress={onSave}
+            visible={!searchResults.length}
+          />
+        </>
       )}
     </>
   );

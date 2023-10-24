@@ -43,7 +43,6 @@ const Category = () => {
 
   return (
     <>
-      {/* <CategoryDisplayFab /> */}
       {PredictionTabsNavigator(
         <CategoryPersonal showEventLink={showEventLink && !isEditing} userId={userId} />,
         <CategoryCommunity showEventLink={showEventLink && !isEditing} />,

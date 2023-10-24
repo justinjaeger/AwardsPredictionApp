@@ -3,18 +3,17 @@ import { useEvent } from '../../../context/EventContext';
 import { CATEGORY_TYPE_TO_STRING } from '../../../constants/categories';
 import Snackbar from '../../../components/Snackbar';
 import { PredictionsParamList } from '../../../navigation/types';
-import { SearchProvider, useSearch } from '../../../context/SearchContext';
 import CreateContender from '../CreateContender';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import BackButton from '../../../components/Buttons/BackButton';
 import { useTypedNavigation } from '../../../util/hooks';
 import { usePredictions } from './usePredictions';
-import { FAB } from '../../../components/Buttons/FAB';
 import { iPrediction } from '../../../types/api';
 import { getPhaseUserIsPredicting } from '../../../util/getPhaseUserIsPredicting';
 
 const AddPredictions = () => {
   const navigation = useTypedNavigation<PredictionsParamList>();
+
   const { category: _category, event: _event } = useEvent();
   const category = _category!;
   const event = _event!;
@@ -24,10 +23,13 @@ const AddPredictions = () => {
   const phaseUserIsPredicting = getPhaseUserIsPredicting(event, shortlistDateTime);
   const letUserCreateContenders = !isHidden && phaseUserIsPredicting === undefined;
 
-  const { selectedPredictions, setSelectedPredictions, onSave, selectedContenderIds } =
-    usePredictions();
-
-  const { isSearching } = useSearch();
+  const {
+    selectedPredictions,
+    setSelectedPredictions,
+    communityPredictions,
+    onSave,
+    selectedContenderIds,
+  } = usePredictions();
 
   // set custom back arrow functionality
   useEffect(() => {
@@ -55,27 +57,17 @@ const AddPredictions = () => {
   };
 
   return (
-    <>
+    <BackgroundWrapper>
       <CreateContender
         onSelectPrediction={onSelectPredictionFromSearch}
         letUserCreateContenders={letUserCreateContenders}
+        selectedPredictions={selectedPredictions}
+        setSelectedPredictions={setSelectedPredictions}
+        communityPredictions={communityPredictions}
+        onSave={onSave}
       />
-      <FAB
-        iconName="checkmark-outline"
-        text="Done"
-        onPress={onSave}
-        visible={!isSearching} // crutial!! Or else it will overlap the search add button
-      />
-    </>
+    </BackgroundWrapper>
   );
 };
 
-const AddPredictionsWithProvider = () => (
-  <SearchProvider>
-    <BackgroundWrapper>
-      <AddPredictions />
-    </BackgroundWrapper>
-  </SearchProvider>
-);
-
-export default AddPredictionsWithProvider;
+export default AddPredictions;

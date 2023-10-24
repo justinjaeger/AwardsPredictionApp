@@ -7,6 +7,10 @@ import { CategoryType, iPrediction } from '../../../types/api';
 
 export type iCreateContenderProps = {
   letUserCreateContenders: boolean;
+  communityPredictions: iPrediction[];
+  selectedPredictions: iPrediction[];
+  onSave: () => void;
+  setSelectedPredictions: (predictions: iPrediction[]) => void;
   onSelectPrediction: (prediction: iPrediction) => void;
 };
 

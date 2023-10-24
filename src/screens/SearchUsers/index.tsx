@@ -4,11 +4,11 @@ import BackgroundWrapper from '../../components/BackgroundWrapper';
 import SearchInput from '../../components/Inputs/SearchInput';
 import RecommendedUsers from '../../components/RecommendedUsers';
 import UserSearchResult from '../../components/UserSearchResult';
-import { SearchProvider } from '../../context/SearchContext';
 import useUserSearch from './useUserSearch';
 
 const SearchUsers = () => {
-  const { searchResults, handleSearch, fetchMore, allUsersAreFetched } = useUserSearch();
+  const { searchResults, handleSearch, fetchMore, allUsersAreFetched, reset } =
+    useUserSearch();
 
   return (
     <BackgroundWrapper>
@@ -20,7 +20,13 @@ const SearchUsers = () => {
             alignItems: 'center',
           }}
         >
-          <SearchInput placeholder={'Search users'} handleSearch={handleSearch} />
+          <SearchInput
+            placeholder={'Search users'}
+            handleSearch={handleSearch}
+            onReset={() => {
+              reset();
+            }}
+          />
           {searchResults.length === 0 ? (
             <RecommendedUsers />
           ) : (
@@ -36,10 +42,4 @@ const SearchUsers = () => {
   );
 };
 
-const WithProvider = () => (
-  <SearchProvider>
-    <SearchUsers />
-  </SearchProvider>
-);
-
-export default WithProvider;
+export default SearchUsers;

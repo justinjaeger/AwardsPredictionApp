@@ -191,27 +191,32 @@ const ContenderListItem = ({
               zIndex: 1,
               borderBottomWidth: 1,
               borderBottomColor: hexToRgb(COLORS.secondary, 0.1),
+              marginRight: 10,
             }}
           >
-            {new Array(barsToShow).fill(null).map((x, i) => {
-              const place = barsToShow - i;
-              const numPredictingPlace = numPredicting?.[place] || 0;
-              const h =
-                posterHeight *
-                ((numPredictingPlace || 1) / (totalNumPredicting || 1)) *
-                (totalNumPredictingTop ? totalNumPredicting / totalNumPredictingTop : 1);
-              return (
-                <View
-                  key={i}
-                  style={{
-                    width: (windowWidth - thumbnailContainerWidth) / barsToShow - 5,
-                    height: numPredictingPlace > 0 ? h : 0,
-                    backgroundColor:
-                      place <= slots ? COLORS.secondaryLight : COLORS.secondaryMiddle,
-                  }}
-                />
-              );
-            })}
+            {variant === 'community' || variant === 'selectable'
+              ? new Array(barsToShow).fill(null).map((x, i) => {
+                  const place = barsToShow - i;
+                  const numPredictingPlace = numPredicting?.[place] || 0;
+                  const h =
+                    posterHeight *
+                    ((numPredictingPlace || 1) / (totalNumPredicting || 1)) *
+                    (totalNumPredictingTop
+                      ? totalNumPredicting / totalNumPredictingTop
+                      : 1);
+                  return (
+                    <View
+                      key={i}
+                      style={{
+                        width: (windowWidth - thumbnailContainerWidth) / barsToShow - 5,
+                        height: numPredictingPlace > 0 ? h : 0,
+                        backgroundColor:
+                          place <= slots ? COLORS.secondaryLight : COLORS.secondaryMiddle,
+                      }}
+                    />
+                  );
+                })
+              : null}
           </View>
           {variant === 'personal' && !disableEditing ? (
             <IconButton
@@ -228,14 +233,28 @@ const ContenderListItem = ({
                 alignItems: 'center',
               }}
             />
-          ) : highlighted ? (
-            <View style={{ justifyContent: 'center' }}>
-              <CustomIcon
-                name="checkmark-circle-2"
-                size={24}
-                color={COLORS.secondary}
-                styles={{ right: 15 }}
-              />
+          ) : variant === 'selectable' ? (
+            <View style={{ top: SMALL_POSTER / 2, marginLeft: 5, marginRight: 5 }}>
+              {highlighted ? (
+                <CustomIcon
+                  name="checkmark-circle-2"
+                  size={24}
+                  color={COLORS.secondaryLight}
+                  styles={{
+                    display: highlighted ? 'flex' : 'none',
+                  }}
+                />
+              ) : (
+                <View
+                  style={{
+                    width: 24,
+                    height: 24,
+                    borderRadius: 24,
+                    borderColor: COLORS.secondaryDark,
+                    borderWidth: 1,
+                  }}
+                />
+              )}
             </View>
           ) : null}
           {/* TODO: Put this info in its own modal */}
