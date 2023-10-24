@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Body } from '../../../components/Text';
+import { SubHeader } from '../../../components/Text';
 import { View } from 'react-native';
 import { useEvent } from '../../../context/EventContext';
 import COLORS from '../../../constants/colors';
@@ -114,7 +114,7 @@ const CreateFilm = () => {
   };
 
   // TODO: we might want to modify this func
-  const onConfirmContender = async () => {
+  const onAddNewContender = async () => {
     if (!selectedTmdbId) return;
     // can check that selectedTmdbId is not already associated with a contender in our category list
     const maybeAlreadyExistingPrediction = communityPredictions.find(
@@ -125,7 +125,7 @@ const CreateFilm = () => {
       onSelectPredictionFromSearch(maybeAlreadyExistingPrediction);
       return;
     }
-    // if it doesn't exist in our category list, it MIGHT still exist in our db.
+    // if it doesn't exist in our community list, get/create the contender in db
     await getOrCreateContender({
       eventId: event._id,
       eventYear: event.year,
@@ -144,7 +144,11 @@ const CreateFilm = () => {
         />
       ) : null}
       <LoadingStatueModal visible={!isComplete} text={'Saving film...'} />
-      {searchResults.length ? (
+      {searchMessage ? (
+        <SubHeader style={{ marginTop: 40, color: COLORS.white }}>
+          {searchMessage}
+        </SubHeader>
+      ) : searchResults.length ? (
         <View
           style={{
             height: '100%',
@@ -153,34 +157,29 @@ const CreateFilm = () => {
             flex: 1,
           }}
         >
-          <View style={{ width: '100%', alignItems: 'center', height: '100%' }}>
-            {searchResults.length === 0 ? (
-              <Body style={{ marginTop: 40, color: COLORS.white }}>{searchMessage}</Body>
-            ) : null}
-            <View
-              style={{
-                height: '100%',
-                width: '100%',
-                alignItems: 'center',
+          <View
+            style={{
+              height: '100%',
+              width: '100%',
+              alignItems: 'center',
+            }}
+          >
+            <MovieListSearch
+              data={searchResults}
+              onSelect={(tmdbId) => {
+                if (selectedTmdbId === tmdbId) {
+                  setSelectedTmdbId(undefined);
+                } else {
+                  setSelectedTmdbId(tmdbId);
+                }
               }}
-            >
-              <MovieListSearch
-                data={searchResults}
-                onSelect={(tmdbId) => {
-                  if (selectedTmdbId === tmdbId) {
-                    setSelectedTmdbId(undefined);
-                  } else {
-                    setSelectedTmdbId(tmdbId);
-                  }
-                }}
-                categoryType={CategoryType.FILM}
-              />
-            </View>
+              categoryType={CategoryType.FILM}
+            />
           </View>
           <FAB
             iconName="checkmark"
             text="Add"
-            onPress={onConfirmContender}
+            onPress={onAddNewContender}
             visible={selectedTmdbId !== undefined}
           />
         </View>
