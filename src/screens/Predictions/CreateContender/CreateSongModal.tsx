@@ -54,7 +54,7 @@ const CreateSongModal = ({
       visible={visible}
       onClose={onCloseModal}
       width={'100%'}
-      height={'50%'}
+      height={'80%'}
       header={{
         title: modalState === 'create' ? 'Enter song details' : 'Select song',
       }}
