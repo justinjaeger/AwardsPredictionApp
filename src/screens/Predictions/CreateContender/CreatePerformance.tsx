@@ -85,7 +85,6 @@ const CreatePerformance = ({
         contenderId: response._id,
         movieTmdbId: response.movieTmdbId,
         personTmdbId: response.personTmdbId,
-        songId: response.songId,
         ranking: 0,
       });
       resetSearch();
@@ -282,10 +281,13 @@ const SelectExistingPerformance = ({
           predictions={data}
           onSelect={(personTmdbId: number, movieTmdbId: number) => {
             if (!personTmdbId) return;
-            const songPrediction = getPerformancePrediction(personTmdbId, movieTmdbId);
+            const performancePrediction = getPerformancePrediction(
+              personTmdbId,
+              movieTmdbId,
+            );
             if (selectedPerformance?.personTmdbId === personTmdbId) {
               setSelectedPerformance(undefined);
-            } else if (songPrediction) {
+            } else if (performancePrediction) {
               setSelectedPerformance({ personTmdbId, movieTmdbId });
             }
           }}
@@ -294,7 +296,7 @@ const SelectExistingPerformance = ({
       </View>
       <View style={{ height: '10%' }}>
         {selectedPerformance === undefined ? (
-          <SubmitButton text={'Create New Song'} onPress={onCreateNew} />
+          <SubmitButton text={'Create New Performance'} onPress={onCreateNew} />
         ) : null}
       </View>
       <FAB

@@ -2,9 +2,11 @@ import React, { useEffect, useRef } from 'react';
 import {
   Animated,
   Modal,
+  StyleProp,
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
+  ViewStyle,
 } from 'react-native';
 import theme from '../../constants/theme';
 import COLORS from '../../constants/colors';
@@ -22,11 +24,18 @@ type iBasicModalProps = {
     title?: string;
     showClose?: boolean;
   };
+  style?: StyleProp<ViewStyle>;
 };
 
-const BasicModal = (props: iBasicModalProps) => {
-  const { visible, onClose, children, width, height, header } = props;
-
+const BasicModal = ({
+  visible,
+  onClose,
+  children,
+  width,
+  height,
+  header,
+  style,
+}: iBasicModalProps) => {
   const opacity = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -38,7 +47,7 @@ const BasicModal = (props: iBasicModalProps) => {
   }, [visible]);
 
   return (
-    <Animated.View style={{ opacity }}>
+    <Animated.View style={[{ opacity }, style]}>
       <Modal visible={visible} transparent onDismiss={onClose} onRequestClose={onClose}>
         <TouchableOpacity
           style={{

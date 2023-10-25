@@ -58,7 +58,6 @@ const SearchInput = ({
         onBlur={() => onBlur && onBlur()}
         autoFocus={autoFocus}
         onSubmitEditing={async () => {
-          console.error('onSubmitEditing');
           setIsLoading(true);
           await handleSearch(search);
           setIsLoading(false);

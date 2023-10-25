@@ -6,12 +6,15 @@ import { useTmdbDataStore } from '../../context/TmdbDataStore';
 import { useEvent } from '../../context/EventContext';
 import { iCreateContenderPayload } from '../../services/api/requests/contender';
 
-const useMutationCreateContender = () => {
+const useMutationCreateContender = ({
+  onSuccess,
+}: {
+  onSuccess: (response: WithId<Contender>) => void;
+}) => {
   const { storeTmdbDataFromContender } = useTmdbDataStore();
   const { event } = useEvent();
 
   const [isComplete, setIsComplete] = useState<boolean>(true);
-  const [response, setResponse] = useState<WithId<Contender> | undefined>(undefined);
 
   const { mutate, isLoading } = useMutation({
     mutationFn: async (params: iCreateContenderPayload) => {
@@ -22,13 +25,13 @@ const useMutationCreateContender = () => {
       // put the movie data in the cache
       if (data && event) {
         storeTmdbDataFromContender(data, event.year);
+        onSuccess(data);
       }
-      setResponse(data ?? undefined);
       setIsComplete(true);
     },
   });
 
-  return { mutate, isLoading, isComplete, response };
+  return { mutate, isLoading, isComplete };
 };
 
 export default useMutationCreateContender;

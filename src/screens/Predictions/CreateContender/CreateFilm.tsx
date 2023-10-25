@@ -6,18 +6,17 @@ import COLORS from '../../../constants/colors';
 import MovieListSearch from '../../../components/MovieList/MovieListSearch';
 import LoadingStatueModal from '../../../components/LoadingStatueModal';
 import { FAB } from '../../../components/Buttons/FAB';
-import { CategoryType, iPrediction } from '../../../types/api';
-import TmdbServices, { iSearchData } from '../../../services/tmdb';
+import { CategoryType } from '../../../types/api';
 import SearchInput from '../../../components/Inputs/SearchInput';
 import MovieListSelectable from '../../../components/MovieList/MovieListSelectable';
-import useMutationCreateContender from '../../../hooks/mutations/useMutationCreateContender';
-import Snackbar from '../../../components/Snackbar';
-import { CATEGORY_TYPE_TO_STRING } from '../../../constants/categories';
 import { useTypedNavigation } from '../../../util/hooks';
 import { PredictionsParamList } from '../../../navigation/types';
 import { getPhaseUserIsPredicting } from '../../../util/getPhaseUserIsPredicting';
 import { usePredictions } from '../AddPredictions.tsx/usePredictions';
 import BackButton from '../../../components/Buttons/BackButton';
+import useFilmSearch from './useContenderSearch';
+import CreatePerformanceModal from './CreatePerformanceModal';
+import CreateSongModal from './CreateSongModal';
 
 const CreateFilm = () => {
   const navigation = useTypedNavigation<PredictionsParamList>();
@@ -31,13 +30,6 @@ const CreateFilm = () => {
   const phaseUserIsPredicting = getPhaseUserIsPredicting(event, shortlistDateTime);
   const letUserCreateContenders = !isHidden && phaseUserIsPredicting === undefined;
 
-  // when adding a contender to the list of overall contenders
-  const {
-    mutate: getOrCreateContender,
-    isComplete,
-    response,
-  } = useMutationCreateContender();
-
   const {
     selectedPredictions,
     setSelectedPredictions,
@@ -46,12 +38,29 @@ const CreateFilm = () => {
     onSave,
   } = usePredictions();
 
-  const [searchResults, setSearchResults] = useState<iSearchData[]>([]);
-  const [searchMessage, setSearchMessage] = useState<string>('');
-  const [selectedTmdbId, setSelectedTmdbId] = useState<number | undefined>();
+  const {
+    searchResults,
+    searchMessage,
+    isSavingFilm,
+    selectedSearchTmdbId,
+    setSelectedSearchTmdbId,
+    handleSearch,
+    resetSearch,
+    onAddContender,
+    addItemToPredictions,
+  } = useFilmSearch({
+    categoryType: type,
+    communityPredictions,
+    selectedContenderIds,
+    setSelectedPredictions,
+  });
 
-  const minReleaseYear = event.year - 1;
-
+  const [selectedPersonTmdbId, setSelectedPersonTmdbId] = useState<number | undefined>(
+    undefined,
+  );
+  const [selectedMovieTmdbIdForSong, setSelectedMovieTmdbIdForSong] = useState<
+    number | undefined
+  >(undefined);
   // set custom back arrow functionality
   useEffect(() => {
     navigation.setOptions({
@@ -60,90 +69,36 @@ const CreateFilm = () => {
     });
   }, [navigation]);
 
-  const onSelectPredictionFromSearch = (prediction: iPrediction) => {
-    const contenderId = prediction.contenderId;
-    const isAlreadySelected = selectedContenderIds.includes(contenderId);
-    if (isAlreadySelected) {
-      // alert user that contender is already selected
-      Snackbar.success(
-        `This ${CATEGORY_TYPE_TO_STRING[
-          type
-        ].toLowerCase()} is already in your predictions`,
-      );
-    } else {
-      Snackbar.success('Added to list');
-      setSelectedPredictions((ps) => [...ps, prediction]);
-    }
-  };
-
-  const resetSearch = () => {
-    setSelectedTmdbId(undefined);
-    setSearchMessage('');
-    setSearchResults([]);
-  };
-
-  // block runs after createContender mutation succeeds
-  useEffect(() => {
-    if (response) {
-      onSelectPredictionFromSearch({
-        contenderId: response._id,
-        movieTmdbId: response.movieTmdbId,
-        personTmdbId: response.personTmdbId,
-        songId: response.songId,
-        ranking: 0, // whatever
-      });
-      resetSearch();
-    }
-  }, [response]);
-
-  const handleSearch = async (searchInput: string) => {
-    let Request = TmdbServices.searchMovies(searchInput, minReleaseYear);
-    // number of digits in search (trying to identify an id)
-    const digitCount = parseInt(searchInput, 10).toString().length;
-    if ([5, 6, 7, 8].includes(digitCount)) {
-      // search by id instead if they put in a 6 digit number
-      Request = TmdbServices.searchMovieById(searchInput);
-    }
-    const res = await Request;
-    setSelectedTmdbId(undefined);
-    const r = res.data || [];
-    setSearchResults(r);
-    if (r.length === 0) {
-      setSearchMessage('No Results');
-    }
-  };
-
-  // TODO: we might want to modify this func
-  const onAddNewContender = async () => {
-    if (!selectedTmdbId) return;
-    // can check that selectedTmdbId is not already associated with a contender in our category list
-    const maybeAlreadyExistingPrediction = communityPredictions.find(
-      (p) => p.movieTmdbId === selectedTmdbId,
-    );
-    if (maybeAlreadyExistingPrediction) {
-      // this film has already been added to community predictions
-      onSelectPredictionFromSearch(maybeAlreadyExistingPrediction);
-      return;
-    }
-    // if it doesn't exist in our community list, get/create the contender in db
-    await getOrCreateContender({
-      eventId: event._id,
-      eventYear: event.year,
-      categoryName: category,
-      movieTmdbId: selectedTmdbId,
-    });
-  };
-
   return (
     <>
+      <LoadingStatueModal visible={isSavingFilm} text={'Saving film...'} />
+      {selectedPersonTmdbId !== undefined ? (
+        <CreatePerformanceModal
+          visible={selectedPersonTmdbId !== undefined}
+          onClose={() => setSelectedPersonTmdbId(undefined)}
+          selectedPersonTmdbId={selectedPersonTmdbId}
+          communityPredictions={communityPredictions}
+          onAddContender={onAddContender}
+          addItemToPredictions={addItemToPredictions}
+        />
+      ) : null}
+      {selectedMovieTmdbIdForSong !== undefined ? (
+        <CreateSongModal
+          visible={selectedMovieTmdbIdForSong !== undefined}
+          onClose={() => setSelectedMovieTmdbIdForSong(undefined)}
+          selectedMovieTmdbId={selectedMovieTmdbIdForSong}
+          communityPredictions={communityPredictions}
+          onAddContender={onAddContender}
+          addItemToPredictions={addItemToPredictions}
+        />
+      ) : null}
       {letUserCreateContenders ? (
         <SearchInput
-          placeholder={'Search Movies'}
+          placeholder={`Search ${type === CategoryType.PERFORMANCE ? 'actors' : 'films'}`}
           handleSearch={handleSearch}
           onReset={() => resetSearch()}
         />
       ) : null}
-      <LoadingStatueModal visible={!isComplete} text={'Saving film...'} />
       {searchMessage ? (
         <SubHeader style={{ marginTop: 40, color: COLORS.white }}>
           {searchMessage}
@@ -167,10 +122,10 @@ const CreateFilm = () => {
             <MovieListSearch
               data={searchResults}
               onSelect={(tmdbId) => {
-                if (selectedTmdbId === tmdbId) {
-                  setSelectedTmdbId(undefined);
+                if (selectedSearchTmdbId === tmdbId) {
+                  setSelectedSearchTmdbId(undefined);
                 } else {
-                  setSelectedTmdbId(tmdbId);
+                  setSelectedSearchTmdbId(tmdbId);
                 }
               }}
               categoryType={CategoryType.FILM}
@@ -179,8 +134,16 @@ const CreateFilm = () => {
           <FAB
             iconName="checkmark"
             text="Add"
-            onPress={onAddNewContender}
-            visible={selectedTmdbId !== undefined}
+            onPress={() => {
+              if (type === CategoryType.PERFORMANCE && selectedSearchTmdbId) {
+                setSelectedPersonTmdbId(selectedSearchTmdbId);
+              } else if (type === CategoryType.SONG) {
+                setSelectedMovieTmdbIdForSong(selectedSearchTmdbId);
+              } else if (type === CategoryType.FILM && selectedSearchTmdbId) {
+                onAddContender(selectedSearchTmdbId);
+              }
+            }}
+            visible={selectedSearchTmdbId !== undefined}
           />
         </View>
       ) : (

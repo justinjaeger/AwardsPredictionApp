@@ -110,10 +110,6 @@ const CategoryPersonal = ({ userId, showEventLink }: iCategoryProps) => {
     navigation.navigate('AddPredictions', {
       initialPredictions: predictions,
       onFinish: (ps: iPrediction[]) => {
-        console.error(
-          'onFinish',
-          ps.map((p) => p.ranking),
-        );
         setPredictions(ps);
         onSaveContenders(ps); // save when you finish adding predictions
       },
