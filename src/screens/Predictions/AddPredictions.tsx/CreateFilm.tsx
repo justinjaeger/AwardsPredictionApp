@@ -12,7 +12,7 @@ import MovieListSelectable from '../../../components/MovieList/MovieListSelectab
 import { useTypedNavigation } from '../../../util/hooks';
 import { PredictionsParamList } from '../../../navigation/types';
 import { getPhaseUserIsPredicting } from '../../../util/getPhaseUserIsPredicting';
-import { usePredictions } from '../AddPredictions.tsx/usePredictions';
+import { usePredictions } from './usePredictions';
 import BackButton from '../../../components/Buttons/BackButton';
 import useFilmSearch from './useContenderSearch';
 import CreatePerformanceModal from './CreatePerformanceModal';
