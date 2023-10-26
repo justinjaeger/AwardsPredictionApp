@@ -44,6 +44,7 @@ const MovieGrid = ({
       {predictions.map((prediction, i) => {
         const { contenderId } = prediction;
         const { movie, person } = getTmdbDataFromPrediction(prediction) || {};
+        console.log(Math.random());
         return (
           <View key={contenderId}>
             {!noLine && i === slots ? (

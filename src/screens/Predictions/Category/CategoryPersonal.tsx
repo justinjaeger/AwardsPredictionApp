@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import React, { memo, useEffect, useLayoutEffect, useState } from 'react';
 import { Alert, Animated, View } from 'react-native';
 import BackButton from '../../../components/Buttons/BackButton';
 import LoadingStatueModal from '../../../components/LoadingStatueModal';
@@ -12,7 +12,6 @@ import useMutationUpdatePredictions from '../../../hooks/mutations/useMutationUp
 import { PredictionsParamList } from '../../../navigation/types';
 import { useAsyncReference, useTypedNavigation } from '../../../util/hooks';
 import { formatLastUpdated } from '../../../util/formatDateTime';
-import { iCategoryProps } from '.';
 import { useAuth } from '../../../context/AuthContext';
 import useDevice from '../../../util/device';
 import { AddPredictionsFab } from '../../../components/Buttons/DisplayFAB';
@@ -25,7 +24,15 @@ import CategorySkeleton from '../../../components/Skeletons/CategorySkeleton';
 import { sortPredictions } from '../../../util/sortPredictions';
 
 // used in both FromProfile and from event
-const CategoryPersonal = ({ userId, showEventLink }: iCategoryProps) => {
+const CategoryPersonal = ({
+  userId,
+  showEventLink,
+  onBack,
+}: {
+  userId: string | undefined;
+  showEventLink?: boolean;
+  onBack?: () => void;
+}) => {
   const { category: _category, event: _event, isEditing, setIsEditing } = useEvent();
   const category = _category!;
   const event = _event!;
@@ -45,6 +52,12 @@ const CategoryPersonal = ({ userId, showEventLink }: iCategoryProps) => {
   const [predictions, setPredictions] = useState<iPrediction[]>(initialPredictions);
   const [goBackOnComplete, setGoBackOnComplete] = useAsyncReference<boolean>(false);
 
+  // TODO: this isn't working because we can't set useLayoutEffect here AND in CategoryCommunity
+  const goBack = () => {
+    onBack && onBack();
+    navigation.goBack();
+  };
+
   useEffect(() => {
     setPredictions(initialPredictions);
   }, [userId]);
@@ -54,7 +67,7 @@ const CategoryPersonal = ({ userId, showEventLink }: iCategoryProps) => {
     setIsEditing(false);
     Snackbar.success('Changes saved!');
     if (goBackOnComplete.current) {
-      navigation.goBack();
+      goBack();
     }
   };
   const { mutate: updatePredictions, isComplete } =
@@ -72,14 +85,11 @@ const CategoryPersonal = ({ userId, showEventLink }: iCategoryProps) => {
       headerLeft: () => (
         <BackButton
           onPress={async () => {
-            const onGoBack = () => {
-              navigation.goBack();
-            };
             if (isEditing) {
               setGoBackOnComplete(true);
               onSaveContenders();
             } else {
-              onGoBack();
+              goBack();
             }
           }}
         />
@@ -199,4 +209,4 @@ const CategoryPersonal = ({ userId, showEventLink }: iCategoryProps) => {
   );
 };
 
-export default CategoryPersonal;
+export default memo(CategoryPersonal);

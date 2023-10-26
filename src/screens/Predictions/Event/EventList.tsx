@@ -34,7 +34,7 @@ const EventList = ({
 }) => {
   const { userId: authUserId } = useAuth();
   const { width } = useWindowDimensions();
-  const { setEvent } = useEvent();
+  const { setEvent, setPersonalCommunityTab } = useEvent();
   const navigation = useTypedNavigation<PredictionsParamList>();
   const { isPad } = useDevice();
 
@@ -47,6 +47,7 @@ const EventList = ({
   const onSelectEvent = async (event: WithId<EventModel>) => {
     setEvent(event);
     const noProfileSelected = !userId; // happens when signed out and click from home screen
+    setPersonalCommunityTab(userId ? 'personal' : 'community');
     if ((authUserId && authUserId === userId) || noProfileSelected) {
       navigation.navigate('Event', { userId });
     } else {

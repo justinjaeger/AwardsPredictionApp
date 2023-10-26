@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { View } from 'react-native';
 import MovieListCommunity from '../../../components/MovieList/MovieListCommunity';
 import { BodyBold } from '../../../components/Text';
@@ -51,4 +51,4 @@ const CategoryCommunity = ({ showEventLink }: { showEventLink?: boolean }) => {
   );
 };
 
-export default CategoryCommunity;
+export default memo(CategoryCommunity);

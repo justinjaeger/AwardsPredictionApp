@@ -5,17 +5,22 @@ import COLORS from '../../constants/colors';
 import { useEvent } from '../../context/EventContext';
 import PredictionTab from './PredictionTab';
 
+/**
+ * Note: This component is a bit whack but it's done in this way to prevent re-renders of lists
+ */
 const PredictionTabsNavigator = ({
   personal,
   community,
   personalText,
+  onChangeTab,
 }: {
   personal: JSX.Element;
   community: JSX.Element;
   personalText?: string;
+  onChangeTab?: (tab: 'personal' | 'community') => void;
 }) => {
   const { width } = useWindowDimensions();
-  const { personalCommunityTab, setPersonalCommunityTab } = useEvent();
+  const { personalCommunityTab } = useEvent();
   const scrollBarPositionTwo = width / 2;
 
   // This seems unnecessary but without, it breaks the animation
@@ -32,24 +37,27 @@ const PredictionTabsNavigator = ({
 
   useEffect(() => {
     personalCommunityTab === 'community' ? openCommunityTab() : openPersonalTab();
-  }); // we WANT no dependencies, or else the last scrollViewRef state will persist, depite possibly having changed it
+    setTab(personalCommunityTab || 'personal');
+  }, [personalCommunityTab]);
 
-  const openPersonalTab = (instant?: boolean) => {
-    setPersonalCommunityTab('personal');
-    scrollViewRef.current?.scrollTo({ x: 0, animated: !instant });
+  const [tab, setTab] = useState<'personal' | 'community'>(
+    personalCommunityTab || 'personal',
+  );
+
+  const openPersonalTab = () => {
+    scrollViewRef.current?.scrollTo({ x: 0, animated: true });
     Animated.timing(scrollBarAnim, {
       toValue: 0,
-      duration: instant ? 0 : 250,
+      duration: 250,
       useNativeDriver: true,
     }).start();
   };
 
-  const openCommunityTab = (instant?: boolean) => {
-    setPersonalCommunityTab('community');
-    scrollViewRef.current?.scrollTo({ x: width, animated: !instant });
+  const openCommunityTab = () => {
+    scrollViewRef.current?.scrollTo({ x: width, animated: true });
     Animated.timing(scrollBarAnim, {
       toValue: scrollBarPositionTwo,
-      duration: instant ? 0 : 250,
+      duration: 250,
       useNativeDriver: true,
     }).start();
   };
@@ -79,13 +87,21 @@ const PredictionTabsNavigator = ({
             />
             <PredictionTab
               text={personalText || 'My Predictions'}
-              onPress={() => openPersonalTab()}
-              selected={personalCommunityTab === 'personal'}
+              onPress={() => {
+                openPersonalTab();
+                onChangeTab && onChangeTab('personal');
+                setTab('personal');
+              }}
+              selected={tab === 'personal'}
             />
             <PredictionTab
               text={'Community'}
-              onPress={() => openCommunityTab()}
-              selected={personalCommunityTab === 'community'}
+              onPress={() => {
+                openCommunityTab();
+                onChangeTab && onChangeTab('community');
+                setTab('community');
+              }}
+              selected={tab === 'community'}
             />
           </View>
           <ScrollView

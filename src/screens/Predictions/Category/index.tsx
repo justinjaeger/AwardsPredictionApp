@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from 'react';
+import React, { useCallback, useLayoutEffect, useRef } from 'react';
 import PredictionTabsNavigator from '../../../navigation/PredictionTabsNavigator';
 import CategoryCommunity from './CategoryCommunity';
 import CategoryPersonal from './CategoryPersonal';
@@ -13,11 +13,6 @@ import { RouteProp, StackActions, useRoute } from '@react-navigation/native';
 import FollowingBottomScroll from '../../../components/FollowingBottomScroll';
 import { CategoryName } from '../../../types/api';
 
-export type iCategoryProps = {
-  userId: string | undefined;
-  showEventLink?: boolean;
-};
-
 // Essentially "Category with personal/community tabs" (uses usePredictionData)
 const Category = () => {
   const { params } = useRoute<RouteProp<PredictionsParamList, 'Category'>>();
@@ -25,7 +20,13 @@ const Category = () => {
   const userId = params?.userId || authUserId;
   const showEventLink = params?.showEventLink || false;
 
-  const { category, event: _event, isEditing } = useEvent();
+  const {
+    category,
+    event: _event,
+    isEditing,
+    personalCommunityTab,
+    setPersonalCommunityTab,
+  } = useEvent();
   const event = _event!;
   const navigation = useTypedNavigation<PredictionsParamList>();
 
@@ -41,11 +42,27 @@ const Category = () => {
     });
   }, [navigation]);
 
+  const initialTab = useRef<'personal' | 'community'>(personalCommunityTab);
+
+  const [, setCurrentTab] = React.useState<'personal' | 'community'>(initialTab.current);
+
+  const onBack = useCallback(() => {
+    setCurrentTab((curr) => {
+      setPersonalCommunityTab(curr);
+      return curr;
+    });
+  }, []);
+
   return (
     <>
       <PredictionTabsNavigator
+        onChangeTab={setCurrentTab}
         personal={
-          <CategoryPersonal showEventLink={showEventLink && !isEditing} userId={userId} />
+          <CategoryPersonal
+            showEventLink={showEventLink && !isEditing}
+            userId={userId}
+            onBack={onBack}
+          />
         }
         community={<CategoryCommunity showEventLink={showEventLink && !isEditing} />}
       />

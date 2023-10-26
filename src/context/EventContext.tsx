@@ -35,6 +35,7 @@ export const EventProvider = (props: { children: React.ReactNode }) => {
 
   const [event, setEvent] = useState<WithId<EventModel>>();
   const [category, setCategory] = useState<CategoryName>();
+  // it's strange but we have to use setPersonalCommunityTab manually when we navigate
   const [personalCommunityTab, setPersonalCommunityTab] = useState<iPersonalCommunityTab>(
     userId === undefined ? 'community' : 'personal',
   );

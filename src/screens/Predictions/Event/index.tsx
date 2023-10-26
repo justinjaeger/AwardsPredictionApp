@@ -28,7 +28,7 @@ const Event = ({
   isLoading: boolean;
 }) => {
   const { userId: authUserId } = useAuth();
-  const { event, setCategory } = useEvent();
+  const { event, setCategory, setPersonalCommunityTab } = useEvent();
   const navigation = useTypedNavigation<PredictionsParamList>();
 
   const isAuthUserProfile = userId === authUserId;
@@ -48,6 +48,7 @@ const Event = ({
 
   const onSelectCategory = async (category: CategoryName) => {
     setCategory(category);
+    setPersonalCommunityTab(tab);
     if (isAuthUserProfile || tab === 'community') {
       navigation.navigate('Category', { userId });
     } else {

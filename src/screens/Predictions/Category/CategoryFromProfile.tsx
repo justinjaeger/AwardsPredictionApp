@@ -6,25 +6,14 @@ import { getAwardsBodyCategories } from '../../../constants/categories';
 import { useEvent } from '../../../context/EventContext';
 import { eventToString } from '../../../util/stringConversions';
 import { getHeaderTitleWithTrophy } from '../../../constants';
-import { Animated, View } from 'react-native';
+import { View } from 'react-native';
 import { CategoryDisplayFab } from '../../../components/Buttons/DisplayFAB';
 import { useAuth } from '../../../context/AuthContext';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import UserHeader from '../../../components/UserHeader';
 import { useProfilePrediction } from '../../../context/ProfilePredictionContext';
-import { iCategoryDisplayState } from '../../../context/DisplayStateContext';
 import CategorySkeleton from '../../../components/Skeletons/CategorySkeleton';
-
-export type iCategoryProps = {
-  collapsedOpacity: Animated.Value;
-  expandedOpacity: Animated.Value;
-  isCollapsed: boolean;
-  delayedDisplay: iCategoryDisplayState;
-  listOpacity: Animated.Value;
-  gridOpacity: Animated.Value;
-  userId: string | undefined;
-};
 
 const Category = () => {
   const { params } = useRoute<RouteProp<PredictionsParamList, 'Category'>>();
