@@ -60,8 +60,8 @@ const UserSearchResult = ({
           onEndReached && onEndReached();
         }
       }}
-      scrollEventThrottle={1000}
       onEndReachedThreshold={0.5} // triggers onEndReached at (X*100)% of list, for example 0.9 = 90% down
+      scrollEventThrottle={1000}
       keyboardShouldPersistTaps={'always'} // so keyboard doesn't dismiss when tapping on list
       ListHeaderComponent={
         noHeader || noResults ? null : (

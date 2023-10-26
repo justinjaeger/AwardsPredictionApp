@@ -1,6 +1,6 @@
 /* eslint-disable sonarjs/no-duplicate-string */
 import MaskedView from '@react-native-masked-view/masked-view';
-import React from 'react';
+import React, { memo } from 'react';
 import { TouchableHighlight, useWindowDimensions, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import COLORS from '../../../constants/colors';
@@ -36,7 +36,7 @@ export type iContenderListItemProps = {
   onPressItem: (prediction: iPrediction) => void;
   onPressThumbnail?: (prediction: iPrediction) => void;
   isAuthProfile?: boolean;
-  totalNumPredictingTop?: number;
+  totalNumPredictingTop?: number; // important when rendering histogram
 };
 
 const IMAGE_SIZE = PosterSize.SMALL;
@@ -98,9 +98,9 @@ const ContenderListItem = ({
       break;
   }
 
-  const totalNumPredicting = getTotalNumPredicting(numPredicting || {});
   // The bar should be at 100% if everybody is predicting a nomination.
   // So like, every bar is out of 100% of all users
+  const totalNumPredicting = getTotalNumPredicting(numPredicting || {});
 
   const thumbnailContainerWidth = posterWidth * 1.5;
   const thumbnailContainerHeight = posterHeight;
@@ -338,4 +338,4 @@ const ContenderListItem = ({
   );
 };
 
-export default ContenderListItem;
+export default memo(ContenderListItem);
