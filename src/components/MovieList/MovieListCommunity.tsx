@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Divider } from '@ui-kitten/components';
 import { FlatList, View } from 'react-native';
 import COLORS from '../../constants/colors';
@@ -26,9 +26,15 @@ const MovieListCommunity = ({ predictions, lastUpdatedString }: iMovieListProps)
     predictions?.[0]?.numPredicting ?? {},
   );
 
+  const [numToShow, setNumToShow] = useState<number>(20);
+
+  const onEndReached = () => {
+    setNumToShow(numToShow + 10);
+  };
+
   return (
     <FlatList
-      data={predictions}
+      data={predictions.slice(0, numToShow)}
       keyExtractor={(item) => item.contenderId}
       style={{ width: '100%' }}
       contentContainerStyle={{ paddingBottom: 100 }}
@@ -38,6 +44,19 @@ const MovieListCommunity = ({ predictions, lastUpdatedString }: iMovieListProps)
           <View style={{ height: 10 }} />
         </>
       }
+      onScrollEndDrag={(e) => {
+        // Fetches more at bottom of scroll. Note the high event throttle to prevent too many requests
+        // get position of current scroll
+        const currentOffset = e.nativeEvent.contentOffset.y;
+        // get max bottom of scroll
+        const maxOffset =
+          e.nativeEvent.contentSize.height - e.nativeEvent.layoutMeasurement.height;
+        // if we're close to the bottom fetch more
+        if (currentOffset > maxOffset - 200) {
+          onEndReached();
+        }
+      }}
+      onEndReachedThreshold={0.5} // triggers onEndReached at (X*100)% of list, for example 0.9 = 90% down
       renderItem={({ item: prediction, index }) => (
         <>
           {index === slots ? (
