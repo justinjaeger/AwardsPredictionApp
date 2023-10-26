@@ -46,6 +46,7 @@ const Category = () => {
 
   const [, setCurrentTab] = React.useState<'personal' | 'community'>(initialTab.current);
 
+  // Allows us to track the current tab so we can set it onBack
   const onBack = useCallback(() => {
     setCurrentTab((curr) => {
       setPersonalCommunityTab(curr);

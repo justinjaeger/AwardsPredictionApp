@@ -7,6 +7,7 @@ import PredictionTab from './PredictionTab';
 
 /**
  * Note: This component is a bit whack but it's done in this way to prevent re-renders of lists
+ * We call the setPersonalCommunityTab function manually WHEN we navigate, instead of calling it inside here
  */
 const PredictionTabsNavigator = ({
   personal,
@@ -36,7 +37,7 @@ const PredictionTabsNavigator = ({
   const SCROLL_BAR_WIDTH = width / 2;
 
   useEffect(() => {
-    personalCommunityTab === 'community' ? openCommunityTab() : openPersonalTab();
+    personalCommunityTab === 'community' ? openCommunityTab(true) : openPersonalTab(true);
     setTab(personalCommunityTab || 'personal');
   }, [personalCommunityTab]);
 
@@ -44,20 +45,20 @@ const PredictionTabsNavigator = ({
     personalCommunityTab || 'personal',
   );
 
-  const openPersonalTab = () => {
-    scrollViewRef.current?.scrollTo({ x: 0, animated: true });
+  const openPersonalTab = (instant?: boolean) => {
+    scrollViewRef.current?.scrollTo({ x: 0, animated: !instant });
     Animated.timing(scrollBarAnim, {
       toValue: 0,
-      duration: 250,
+      duration: instant ? 0 : 250,
       useNativeDriver: true,
     }).start();
   };
 
-  const openCommunityTab = () => {
-    scrollViewRef.current?.scrollTo({ x: width, animated: true });
+  const openCommunityTab = (instant?: boolean) => {
+    scrollViewRef.current?.scrollTo({ x: width, animated: !instant });
     Animated.timing(scrollBarAnim, {
       toValue: scrollBarPositionTwo,
-      duration: 250,
+      duration: instant ? 0 : 250,
       useNativeDriver: true,
     }).start();
   };
