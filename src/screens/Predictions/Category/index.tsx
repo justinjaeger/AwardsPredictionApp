@@ -43,10 +43,12 @@ const Category = () => {
 
   return (
     <>
-      {PredictionTabsNavigator(
-        <CategoryPersonal showEventLink={showEventLink && !isEditing} userId={userId} />,
-        <CategoryCommunity showEventLink={showEventLink && !isEditing} />,
-      )}
+      <PredictionTabsNavigator
+        personal={
+          <CategoryPersonal showEventLink={showEventLink && !isEditing} userId={userId} />
+        }
+        community={<CategoryCommunity showEventLink={showEventLink && !isEditing} />}
+      />
       {userId && !isEditing ? (
         <FollowingBottomScroll
           onPress={(id) => {

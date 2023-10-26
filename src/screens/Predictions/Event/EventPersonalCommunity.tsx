@@ -27,20 +27,24 @@ const EventPersonalCommunity = () => {
 
   return (
     <>
-      {PredictionTabsNavigator(
-        <Event
-          tab={'personal'}
-          predictionData={personalPredictionData ?? undefined}
-          isLoading={isLoadingPersonal}
-          userId={userId}
-        />,
-        <Event
-          tab={'community'}
-          predictionData={communityPredictionData ?? undefined}
-          isLoading={isLoadingCommunity}
-          userId={userId}
-        />,
-      )}
+      <PredictionTabsNavigator
+        personal={
+          <Event
+            tab={'personal'}
+            predictionData={personalPredictionData ?? undefined}
+            isLoading={isLoadingPersonal}
+            userId={userId}
+          />
+        }
+        community={
+          <Event
+            tab={'community'}
+            predictionData={communityPredictionData ?? undefined}
+            isLoading={isLoadingCommunity}
+            userId={userId}
+          />
+        }
+      />
       {authUserId ? (
         <FollowingBottomScroll
           onPress={(id) => {

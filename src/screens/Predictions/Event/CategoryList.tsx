@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { TouchableHighlight, View } from 'react-native';
 import MovieGrid from '../../../components/MovieGrid';
 import { HeaderLight, SubHeader } from '../../../components/Text';
@@ -27,7 +27,7 @@ const CategoryList = ({
   predictionData,
   isAuthUserProfile,
 }: iCategoryListProps) => {
-  const { event, reset } = useEvent();
+  const { event } = useEvent();
   const unorderedCategories = (predictionData?.categories || {}) as Record<
     CategoryName,
     iCategoryPrediction
@@ -36,11 +36,6 @@ const CategoryList = ({
   const orderedPredictions = event
     ? getOrderedCategories(event.awardsBody, event.year, unorderedCategories)
     : [];
-
-  // reset category context when changing events
-  useEffect(() => {
-    reset();
-  }, []);
 
   // filter out categories that are hidden until shortlisted
   const categoryRows: React.JSX.Element[] = [];

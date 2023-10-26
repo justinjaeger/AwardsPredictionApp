@@ -5,11 +5,15 @@ import COLORS from '../../constants/colors';
 import { useEvent } from '../../context/EventContext';
 import PredictionTab from './PredictionTab';
 
-const PredictionTabsNavigator = (
-  personal: JSX.Element,
-  community: JSX.Element,
-  personalText?: string,
-) => {
+const PredictionTabsNavigator = ({
+  personal,
+  community,
+  personalText,
+}: {
+  personal: JSX.Element;
+  community: JSX.Element;
+  personalText?: string;
+}) => {
   const { width } = useWindowDimensions();
   const { personalCommunityTab, setPersonalCommunityTab } = useEvent();
   const scrollBarPositionTwo = width / 2;

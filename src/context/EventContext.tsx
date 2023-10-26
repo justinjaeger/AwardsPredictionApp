@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import { useAuth } from './AuthContext';
 import { CategoryName, EventModel, WithId } from '../types/api';
 
@@ -17,7 +17,6 @@ type iEventContext = {
   setPersonalCommunityTab: (d: iPersonalCommunityTab) => void;
   isEditing: boolean;
   setIsEditing: (v: boolean) => void;
-  reset: () => void;
 };
 
 const EventContext = createContext<iEventContext>({
@@ -29,7 +28,6 @@ const EventContext = createContext<iEventContext>({
   setPersonalCommunityTab: () => {},
   isEditing: false,
   setIsEditing: () => {},
-  reset: () => {},
 });
 
 export const EventProvider = (props: { children: React.ReactNode }) => {
@@ -42,15 +40,6 @@ export const EventProvider = (props: { children: React.ReactNode }) => {
   );
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
-  // if user is logged out, show community predictions by default
-  useEffect(() => {
-    setPersonalCommunityTab(userId === undefined ? 'community' : 'personal');
-  }, [userId === undefined]);
-
-  const reset = () => {
-    setPersonalCommunityTab('personal');
-  };
-
   return (
     <EventContext.Provider
       value={{
@@ -62,7 +51,6 @@ export const EventProvider = (props: { children: React.ReactNode }) => {
         setPersonalCommunityTab,
         isEditing,
         setIsEditing,
-        reset,
       }}
     >
       {props.children}
