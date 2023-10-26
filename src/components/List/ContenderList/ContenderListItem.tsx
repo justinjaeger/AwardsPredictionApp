@@ -114,8 +114,6 @@ const ContenderListItem = ({
     );
   }
 
-  console.log('rendering...', Math.random());
-
   return (
     <TouchableHighlight
       onPress={() => {
