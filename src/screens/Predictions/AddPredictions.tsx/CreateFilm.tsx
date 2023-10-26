@@ -151,7 +151,7 @@ const CreateFilm = () => {
           <MovieListSelectable
             predictions={communityPredictions}
             selectedPredictions={selectedPredictions}
-            setSelectedPredictions={(ps) => setSelectedPredictions(ps)}
+            setSelectedPredictions={setSelectedPredictions}
           />
           <FAB
             iconName="checkmark-outline"

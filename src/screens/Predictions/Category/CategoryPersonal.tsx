@@ -60,7 +60,7 @@ const CategoryPersonal = ({
 
   useEffect(() => {
     setPredictions(initialPredictions);
-  }, [userId]);
+  }, [userId, predictionData !== undefined]);
 
   // func to fire after we update predictions on db
   const onComplete = () => {
@@ -85,6 +85,9 @@ const CategoryPersonal = ({
       headerLeft: () => (
         <BackButton
           onPress={async () => {
+            if (!isAuthUserProfile) {
+              goBack();
+            }
             if (isEditing) {
               setGoBackOnComplete(true);
               onSaveContenders();
@@ -98,8 +101,8 @@ const CategoryPersonal = ({
   }, [navigation, isEditing]);
 
   const onSaveContenders = async (ps?: iPrediction[]) => {
+    if (!userId || !isAuthUserProfile) return;
     const predictionsToSave = ps || predictions;
-    if (!userId) return;
     if (_.isEqual(initialPredictions, predictionsToSave)) {
       setIsEditing(false);
       return;
@@ -173,38 +176,40 @@ const CategoryPersonal = ({
           <AddPredictionsFab onPress={onPressAdd} />
         </Animated.View>
       ) : null}
-      <EditToolbar
-        visible={isEditing}
-        buttons={[
-          {
-            text: 'Undo',
-            iconName: 'undo',
-            onPress: () => {
-              Alert.alert('Undo Changes?', 'Reverts all changes since last saved', [
-                {
-                  text: 'Cancel',
-                  onPress: () => {},
-                  style: 'cancel',
-                },
-                {
-                  text: 'Yes',
-                  onPress: () => setPredictions(initialPredictions),
-                },
-              ]);
+      {isAuthUserProfile ? (
+        <EditToolbar
+          visible={isEditing}
+          buttons={[
+            {
+              text: 'Undo',
+              iconName: 'undo',
+              onPress: () => {
+                Alert.alert('Undo Changes?', 'Reverts all changes since last saved', [
+                  {
+                    text: 'Cancel',
+                    onPress: () => {},
+                    style: 'cancel',
+                  },
+                  {
+                    text: 'Yes',
+                    onPress: () => setPredictions(initialPredictions),
+                  },
+                ]);
+              },
             },
-          },
-          {
-            text: 'Add',
-            iconName: 'plus',
-            onPress: () => onPressAdd(),
-          },
-          {
-            text: 'Save',
-            iconName: 'save-outline',
-            onPress: () => onSaveContenders(),
-          },
-        ]}
-      />
+            {
+              text: 'Add',
+              iconName: 'plus',
+              onPress: () => onPressAdd(),
+            },
+            {
+              text: 'Save',
+              iconName: 'save-outline',
+              onPress: () => onSaveContenders(),
+            },
+          ]}
+        />
+      ) : null}
     </>
   );
 };

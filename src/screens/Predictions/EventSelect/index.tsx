@@ -75,7 +75,7 @@ const EventSelect = () => {
           </HeaderLight>
           {events ? (
             <EventList
-              user={user} // so if the user is signed out they don't see their old predictions
+              user={user ?? undefined} // so if the user is signed out they don't see their old predictions
               events={events}
             />
           ) : null}

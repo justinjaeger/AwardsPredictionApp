@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect } from 'react';
+import React, { useLayoutEffect } from 'react';
 import CategoryPersonal from './CategoryPersonal';
 import { useTypedNavigation } from '../../../util/hooks';
 import { PredictionsParamList } from '../../../navigation/types';
@@ -8,24 +8,17 @@ import { eventToString } from '../../../util/stringConversions';
 import { getHeaderTitleWithTrophy } from '../../../constants';
 import { View } from 'react-native';
 import { CategoryDisplayFab } from '../../../components/Buttons/DisplayFAB';
-import { useAuth } from '../../../context/AuthContext';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import UserHeader from '../../../components/UserHeader';
-import { useProfilePrediction } from '../../../context/ProfilePredictionContext';
-import CategorySkeleton from '../../../components/Skeletons/CategorySkeleton';
 
-const Category = () => {
-  const { params } = useRoute<RouteProp<PredictionsParamList, 'Category'>>();
-  const { userId: authUserId } = useAuth();
-  const userId = params?.userId || authUserId;
+const CategoryFromProfile = () => {
+  const { params } = useRoute<RouteProp<PredictionsParamList, 'CategoryFromProfile'>>();
+  const { userId, userName, userImage } = params;
   const showEventLink = params?.showEventLink || false;
 
   const { category, event: _event } = useEvent();
   const navigation = useTypedNavigation<PredictionsParamList>();
-
-  const { user, isLoading, setUserId } = useProfilePrediction();
-  useEffect(() => setUserId(userId), [userId]);
 
   const event = _event!;
 
@@ -41,15 +34,18 @@ const Category = () => {
     });
   }, [navigation]);
 
-  if (isLoading) {
-    <CategorySkeleton />;
-  }
-
   return (
     <>
       <CategoryDisplayFab />
       <BackgroundWrapper>
-        {user ? <UserHeader user={user} showEventLink={showEventLink} /> : null}
+        {userId ? (
+          <UserHeader
+            userId={userId}
+            userName={userName}
+            userImage={userImage}
+            showEventLink={showEventLink}
+          />
+        ) : null}
         <View style={{ width: '100%' }}>
           <CategoryPersonal userId={userId} showEventLink={showEventLink} />
         </View>
@@ -58,4 +54,4 @@ const Category = () => {
   );
 };
 
-export default Category;
+export default CategoryFromProfile;

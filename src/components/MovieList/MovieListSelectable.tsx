@@ -9,12 +9,15 @@ import { getTotalNumPredicting } from '../../util/getNumPredicting';
 type iMovieListProps = {
   predictions: iPrediction[];
   selectedPredictions: iPrediction[]; // for "add predictions"
-  setSelectedPredictions: React.Dispatch<React.SetStateAction<iPrediction[]>>; // for "add predictions"
+  // Do either/or for the below. "setSelectedPrediction" is more of a hack for the "add performance/song" modal
+  setSelectedPrediction?: (p: iPrediction) => void;
+  setSelectedPredictions?: React.Dispatch<React.SetStateAction<iPrediction[]>>; // for "add predictions"
 };
 
 const MovieListSelectable = ({
   predictions,
   selectedPredictions,
+  setSelectedPrediction,
   setSelectedPredictions,
 }: iMovieListProps) => {
   const { event: _event, category: _category } = useEvent();
@@ -24,15 +27,17 @@ const MovieListSelectable = ({
 
   const onPressItem = useCallback(async (prediction: iPrediction) => {
     Keyboard.dismiss();
-    setSelectedPredictions((sp) => {
-      const selectedContenderIds = sp.map((p) => p.contenderId);
-      const contenderId = prediction.contenderId;
-      const isAlreadySelected = selectedContenderIds.includes(contenderId);
-      const newSelected = isAlreadySelected
-        ? removePredictionFromList(sp, prediction)
-        : [...sp, prediction];
-      return newSelected;
-    });
+    setSelectedPrediction && setSelectedPrediction(prediction);
+    setSelectedPredictions &&
+      setSelectedPredictions((sp) => {
+        const selectedContenderIds = sp.map((p) => p.contenderId);
+        const contenderId = prediction.contenderId;
+        const isAlreadySelected = selectedContenderIds.includes(contenderId);
+        const newSelected = isAlreadySelected
+          ? removePredictionFromList(sp, prediction)
+          : [...sp, prediction];
+        return newSelected;
+      });
   }, []);
 
   const totalNumPredictingTop = getTotalNumPredicting(

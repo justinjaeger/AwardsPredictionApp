@@ -31,7 +31,11 @@ export type PredictionsParamList = {
   EventSelect: undefined;
   // PREDICTION SCREENS
   Event: { userId: string | undefined };
-  EventFromProfile: { userId: string | undefined };
+  EventFromProfile: {
+    userId: string | undefined;
+    userName: string | undefined;
+    userImage: string | undefined;
+  };
   Category: {
     userId: string | undefined;
     isSelectable?: boolean;
@@ -40,6 +44,8 @@ export type PredictionsParamList = {
   };
   CategoryFromProfile: {
     userId: string | undefined;
+    userName: string | undefined;
+    userImage: string | undefined;
     isSelectable?: boolean;
     showEventLink?: boolean;
     onPressItem?: (contenderId: string) => void;

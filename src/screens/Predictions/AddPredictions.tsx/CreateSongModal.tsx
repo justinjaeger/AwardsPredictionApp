@@ -94,10 +94,8 @@ const CreateSongModal = ({
               selectedPredictions={
                 selectedExistingPrediction ? [selectedExistingPrediction] : []
               }
-              setSelectedPredictions={(ps) => {
-                setSelectedExistingPrediction(
-                  ps.length === 0 ? undefined : ps[ps.length - 1],
-                );
+              setSelectedPrediction={(p) => {
+                setSelectedExistingPrediction((curr) => (curr === p ? undefined : p));
               }}
             />
             {!selectedExistingPrediction ? (

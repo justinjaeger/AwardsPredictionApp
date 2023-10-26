@@ -13,10 +13,10 @@ import { TMDB_API_KEY } from '../../config';
 const TMDB_URL = 'https://api.themoviedb.org/3';
 
 export type iSearchData = {
-  name: string;
   tmdbId: number;
   title: string;
   image: string | null;
+  name?: string;
   description?: string;
 };
 
@@ -110,6 +110,7 @@ const searchPeople = async (searchText: string): Promise<iApiResponse<iSearchDat
       status: 'success',
       data: sortedPeople.map((p) => ({
         title: p.name,
+        name: p.name,
         tmdbId: p.id,
         image: p.profile_path,
       })),

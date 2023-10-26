@@ -6,18 +6,23 @@ import { useTypedNavigation } from '../../util/hooks';
 import CustomIcon from '../CustomIcon';
 import ProfileImage from '../ProfileImage';
 import { SubHeader } from '../Text';
-import { User, WithId } from '../../types/api';
 
 const UserHeader = ({
-  user,
+  userId,
+  userName,
+  userImage,
   showEventLink,
+  isLoading,
 }: {
-  user: WithId<User>;
+  userId: string;
+  userName?: string;
+  userImage?: string;
   showEventLink?: boolean;
+  isLoading?: boolean;
 }) => {
   const navigation = useTypedNavigation<PredictionsParamList>();
 
-  const name = user?.name || user?.username || 'user';
+  const name = userName || 'user';
 
   return (
     <View
@@ -35,17 +40,22 @@ const UserHeader = ({
     >
       <ProfileImage
         imageSize={50}
-        image={user?.image}
+        image={userImage}
         onPress={() => {
-          navigation.dispatch(StackActions.push('Profile', { userId: user._id }));
+          navigation.dispatch(StackActions.push('Profile', { userId }));
         }}
+        isLoading={isLoading}
         style={{ marginLeft: 10, marginRight: 15 }}
       />
       {showEventLink ? (
         <TouchableOpacity
           onPress={() => {
             navigation.dispatch(
-              StackActions.replace('EventFromProfile', { userId: user._id }),
+              StackActions.replace('EventFromProfile', {
+                userId,
+                userName: name,
+                userImage: userImage,
+              }),
             );
           }}
           style={{ flexDirection: 'row', alignItems: 'center' }}

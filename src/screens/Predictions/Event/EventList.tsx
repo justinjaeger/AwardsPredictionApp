@@ -51,7 +51,11 @@ const EventList = ({
     if ((authUserId && authUserId === userId) || noProfileSelected) {
       navigation.navigate('Event', { userId });
     } else {
-      navigation.navigate('EventFromProfile', { userId });
+      navigation.navigate('EventFromProfile', {
+        userId,
+        userName: user?.name,
+        userImage: user?.image,
+      });
     }
   };
 

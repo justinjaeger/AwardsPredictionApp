@@ -60,7 +60,6 @@ const SongListSelectable = ({
             ranking={i + 1}
             onPressItem={onPressItem}
             onPressThumbnail={onPressItem}
-            isSelected={false}
             highlighted={selected}
             variant={'search'}
             categoryType={CategoryType.SONG}
