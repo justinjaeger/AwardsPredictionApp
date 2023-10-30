@@ -3,10 +3,12 @@ import { QueryKeys } from '../../types/keys';
 import MongoApi from '../../services/api/requests';
 import { useEvent } from '../../context/EventContext';
 import { useTmdbDataStore } from '../../context/TmdbDataStore';
+import { EventModel, WithId } from '../../types/api';
 
-const useQueryGetCommunityPredictions = () => {
+const useQueryGetCommunityPredictions = (propsEvent?: WithId<EventModel>) => {
   const { storeTmdbDataFromPredictionSet } = useTmdbDataStore();
-  const { event } = useEvent();
+  const { event: contextEvent } = useEvent();
+  const event = propsEvent ?? contextEvent;
   const eventId = event?._id;
 
   const key = QueryKeys.COMMUNITY_PREDICTIONS + eventId;

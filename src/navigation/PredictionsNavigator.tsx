@@ -17,6 +17,7 @@ import { RouteProp, useRoute } from '@react-navigation/native';
 import Followers from '../screens/Profile/Followers';
 import { ProfilePredictionProvider } from '../context/ProfilePredictionContext';
 import { useHeaderSettings } from '../hooks/useHeaderSettings';
+import ContenderStats from '../screens/ContenderStats';
 
 const { Navigator, Screen } = createStackNavigator<PredictionsParamList>();
 
@@ -85,6 +86,15 @@ const PredictionsNavigator = () => {
           headerTitle: getHeaderTitle('Add / Remove Predictions'),
           headerLeft: BackButton,
           ...medium,
+        }}
+      />
+      <Screen
+        name="ContenderStats"
+        component={ContenderStats}
+        options={{
+          headerTitle: getHeaderTitle('Stats'),
+          headerLeft: BackButton,
+          ...large,
         }}
       />
       {/* Profile Screens */}

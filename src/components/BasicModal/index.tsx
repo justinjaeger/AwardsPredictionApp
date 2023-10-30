@@ -25,6 +25,7 @@ type iBasicModalProps = {
     showClose?: boolean;
   };
   style?: StyleProp<ViewStyle>;
+  childStyle?: StyleProp<ViewStyle>;
 };
 
 const BasicModal = ({
@@ -35,6 +36,7 @@ const BasicModal = ({
   height,
   header,
   style,
+  childStyle,
 }: iBasicModalProps) => {
   const opacity = useRef(new Animated.Value(0)).current;
 
@@ -104,7 +106,7 @@ const BasicModal = ({
                   </View>
                 </View>
               ) : null}
-              <View style={{ paddingTop: 10 }}>{children}</View>
+              <View style={childStyle}>{children}</View>
             </View>
           </TouchableWithoutFeedback>
         </TouchableOpacity>

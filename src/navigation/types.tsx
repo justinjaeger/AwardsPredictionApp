@@ -1,6 +1,6 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import { MaterialTopTabNavigationProp } from '@react-navigation/material-top-tabs';
-import { iPrediction } from '../types/api';
+import { EventModel, WithId, iPrediction } from '../types/api';
 
 export type MainScreenNavigationProp = StackNavigationProp<MainParamList>;
 export type MainParamList = {
@@ -53,6 +53,10 @@ export type PredictionsParamList = {
   AddPredictions: {
     initialPredictions: iPrediction[];
     onFinish: (predictions: iPrediction[]) => void;
+  };
+  ContenderStats: {
+    movieTmdbId: number;
+    event: WithId<EventModel>;
   };
   // PROFILE SCREENS
   Profile: {

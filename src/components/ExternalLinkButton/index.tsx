@@ -1,31 +1,42 @@
 import { TouchableHighlight } from 'react-native-gesture-handler';
-import { Body } from '../Text';
+import { BodyBold } from '../Text';
 import COLORS from '../../constants/colors';
 import React from 'react';
 import theme from '../../constants/theme';
+import { StyleProp, ViewStyle } from 'react-native';
 
-const ExternalLinkButton = (props: { text: string; onPress: () => void }) => {
-  const { text, onPress } = props;
+const ExternalLinkButton = ({
+  text,
+  onPress,
+  style,
+}: {
+  text: string;
+  onPress: () => void;
+  style?: StyleProp<ViewStyle>;
+}) => {
   return (
     <TouchableHighlight
       onPress={onPress}
-      style={{
-        alignItems: 'center',
-        padding: 5,
-        paddingHorizontal: 10,
-        borderRadius: theme.borderRadius,
-        backgroundColor: COLORS.secondary,
-      }}
+      style={[
+        {
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: 5,
+          paddingHorizontal: 10,
+          borderRadius: theme.borderRadius,
+          backgroundColor: COLORS.secondaryDark,
+        },
+        style,
+      ]}
       underlayColor={COLORS.secondaryDark}
     >
-      <Body
+      <BodyBold
         style={{
-          fontWeight: '700',
           color: COLORS.white,
         }}
       >
         {text}
-      </Body>
+      </BodyBold>
     </TouchableHighlight>
   );
 };

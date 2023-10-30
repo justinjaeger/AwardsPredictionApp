@@ -1,9 +1,6 @@
 import React, { useEffect, useRef } from 'react';
-import { Animated, TouchableHighlight, View } from 'react-native';
-import COLORS from '../../constants/colors';
-import useDevice from '../../util/device';
-import CustomIcon from '../CustomIcon';
-import { SubHeader } from '../Text';
+import { Animated } from 'react-native';
+import ActionButton from './ActionButton';
 
 type iFABProps = {
   iconName?: string;
@@ -14,10 +11,14 @@ type iFABProps = {
   horizontalOffset?: number;
 };
 
-export const FAB = (props: iFABProps) => {
-  const { iconName, text, onPress, visible, bottomPercentage, horizontalOffset } = props;
-  const { isPad } = useDevice();
-
+export const FAB = ({
+  iconName,
+  text,
+  onPress,
+  visible,
+  bottomPercentage,
+  horizontalOffset,
+}: iFABProps) => {
   const buttonX = useRef(new Animated.Value(0)).current;
   const buttonOpacity = useRef(new Animated.Value(0)).current;
 
@@ -46,28 +47,7 @@ export const FAB = (props: iFABProps) => {
         opacity: buttonOpacity,
       }}
     >
-      <TouchableHighlight
-        style={{
-          backgroundColor: COLORS.primary,
-          borderColor: COLORS.white,
-          borderWidth: 1,
-          borderRadius: 100,
-          alignItems: 'center',
-          padding: 15 * (isPad ? 2 : 1),
-          margin: 10,
-        }}
-        onPress={onPress}
-        underlayColor={COLORS.secondaryDark}
-      >
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          {iconName ? (
-            <CustomIcon name={iconName} color={COLORS.white} size={24} />
-          ) : null}
-          {text ? (
-            <SubHeader style={{ marginLeft: 5, marginRight: 5 }}>{text}</SubHeader>
-          ) : null}
-        </View>
-      </TouchableHighlight>
+      <ActionButton iconName={iconName} text={text} onPress={onPress} />
     </Animated.View>
   );
 };

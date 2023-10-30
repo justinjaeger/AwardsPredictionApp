@@ -20,6 +20,7 @@ import { categoryNameToTmdbCredit } from '../../../util/categoryNameToTmdbCredit
 import Poster from '../../Images/Poster';
 import ListItemSkeleton from '../../Skeletons/ListItemSkeleton';
 import theme from '../../../constants/theme';
+import Histogram from '../../Histogram';
 
 export type iContenderListItemProps = {
   variant: 'community' | 'personal' | 'selectable' | 'search';
@@ -104,7 +105,6 @@ const ContenderListItem = ({
 
   const thumbnailContainerWidth = posterWidth * 1.5;
   const thumbnailContainerHeight = posterHeight;
-  const barsToShow = slots * 2;
 
   if (dataHasNotLoaded) {
     return (
@@ -113,6 +113,8 @@ const ContenderListItem = ({
       </View>
     );
   }
+
+  console.log('rendering...', Math.random());
 
   return (
     <TouchableHighlight
@@ -196,42 +198,19 @@ const ContenderListItem = ({
               <Body>{subtitle}</Body>
             </MaskedView>
           </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'flex-end',
-              justifyContent: 'space-between',
-              height: thumbnailContainerHeight * 1.1,
-              flex: 1,
-              zIndex: 1,
-              borderBottomWidth: 1,
-              borderBottomColor: hexToRgb(COLORS.secondary, 0.1),
-              marginRight: 10,
-            }}
-          >
-            {variant === 'community' || variant === 'selectable'
-              ? new Array(barsToShow).fill(null).map((x, i) => {
-                  const place = barsToShow - i;
-                  const numPredictingPlace = numPredicting?.[place] || 0;
-                  const h =
-                    posterHeight *
-                    ((numPredictingPlace || 1) / (totalNumPredicting || 1)) *
-                    (totalNumPredictingTop
-                      ? totalNumPredicting / totalNumPredictingTop
-                      : 1);
-                  return (
-                    <View
-                      key={i}
-                      style={{
-                        width: (windowWidth - thumbnailContainerWidth) / barsToShow - 5,
-                        height: numPredictingPlace > 0 ? h : 0,
-                        backgroundColor:
-                          place <= slots ? COLORS.secondaryLight : COLORS.secondaryMiddle,
-                      }}
-                    />
-                  );
-                })
-              : null}
+          <View>
+            {numPredicting &&
+            totalNumPredictingTop !== undefined &&
+            (variant === 'community' || variant === 'selectable') ? (
+              <Histogram
+                numPredicting={numPredicting}
+                totalNumPredicting={totalNumPredicting}
+                totalNumPredictingTop={totalNumPredictingTop}
+                slots={slots}
+                totalWidth={windowWidth - thumbnailContainerWidth}
+                posterHeight={posterHeight}
+              />
+            ) : null}
           </View>
           {variant === 'personal' && !disableEditing ? (
             <IconButton
@@ -272,66 +251,6 @@ const ContenderListItem = ({
               )}
             </View>
           ) : null}
-          {/* TODO: Put this info in its own modal */}
-          {/* {showBotomButtons && movie ? (
-            <View
-              style={{
-                position: 'absolute',
-                bottom: 0,
-                // opacity: hiddenOpacity,
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                marginTop: theme.windowMargin,
-                width: '94%',
-                marginLeft: theme.windowMargin,
-              }}
-            >
-              {person ? (
-                <>
-                  <ExternalLinkButton
-                    text={'More Info'}
-                    onPress={() => {
-                      navigation.navigate('WebView', {
-                        uri: `https://www.themoviedb.org/person/${person.tmdbId}/`,
-                        title: person.name || '',
-                      });
-                    }}
-                  />
-                  <ExternalLinkButton
-                    text={'Film'}
-                    onPress={() => {
-                      navigation.navigate('WebView', {
-                        uri: `https://www.themoviedb.org/movie/${movie.tmdbId}/`,
-                        title: movie?.title || '',
-                      });
-                    }}
-                  />
-                </>
-              ) : (
-                <>
-                  <ExternalLinkButton
-                    text={'More Info'}
-                    // eslint-disable-next-line sonarjs/no-identical-functions
-                    onPress={() => {
-                      navigation.navigate('WebView', {
-                        uri: `https://www.themoviedb.org/movie/${movie.tmdbId}/`,
-                        title: movie?.title || '',
-                      });
-                    }}
-                  />
-                  <ExternalLinkButton
-                    text={'Cast'}
-                    onPress={() => {
-                      navigation.navigate('WebView', {
-                        uri: `https://www.themoviedb.org/movie/${movie.tmdbId}/cast/`,
-                        title: movie?.title || '',
-                      });
-                    }}
-                  />
-                </>
-              )}
-            </View>
-          ) : null} */}
         </View>
       </>
     </TouchableHighlight>
