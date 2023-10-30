@@ -184,6 +184,7 @@ export type iPrediction = {
 export type iCategoryPrediction = {
   createdAt: Date;
   predictions: iPrediction[];
+  totalUsersPredicting?: number; // only applies to community predictions
 };
 
 export type PredictionSet = {

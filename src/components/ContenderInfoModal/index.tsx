@@ -46,6 +46,10 @@ const ContenderInfoModal = ({
     communityPrediction?.numPredicting ?? {},
   );
 
+  const totalNumPredictingCategory =
+    communityPredictions.categories[category].totalUsersPredicting ??
+    totalNumPredictingTop;
+
   const close = () => {
     onClose();
   };
@@ -86,6 +90,7 @@ const ContenderInfoModal = ({
               category={category}
               event={event}
               totalNumPredictingTop={totalNumPredictingTop}
+              totalNumPredictingCategory={totalNumPredictingCategory}
             />
           ) : null}
         </View>
@@ -104,7 +109,7 @@ const ContenderInfoModal = ({
                 movieTmdbId: prediction.movieTmdbId,
               });
             }}
-            text={`More${person ? 'Movie' : ''} stats`}
+            text={`More${person ? ' movie' : ''} stats`}
             style={{ marginTop: 10, marginBottom: 10, height: 50 }}
           />
         </View>

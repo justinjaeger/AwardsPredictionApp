@@ -27,6 +27,7 @@ export type BottomTabParamList = {
   Help: undefined;
 };
 
+export type PredictionsNavigationProp = StackNavigationProp<PredictionsParamList>;
 export type PredictionsParamList = {
   EventSelect: undefined;
   // PREDICTION SCREENS

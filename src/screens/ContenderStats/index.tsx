@@ -19,6 +19,7 @@ import { getPredictedOutcomes } from '../../util/getPredictedOutcomes';
 export type iContenderStatsData = iPrediction & {
   category: CategoryName;
   totalNumPredictingTop: number;
+  totalNumPredictingCategory: number;
 };
 
 const ContenderStats = () => {
@@ -54,11 +55,16 @@ const ContenderStats = () => {
       const totalNumPredictingTop = getTotalNumPredicting(
         predictions[0]?.numPredicting ?? {},
       );
+      const totalNumPredictingCategory =
+        communityPredictions.categories[category as CategoryName].totalUsersPredicting ??
+        totalNumPredictingTop;
+
       predictions.forEach((p) => {
         allPredictionsWithContender.push({
           ...p,
           category: category as CategoryName,
           totalNumPredictingTop,
+          totalNumPredictingCategory,
         });
       });
     },
@@ -115,6 +121,7 @@ const ContenderStats = () => {
                 event={event}
                 category={prediction.category}
                 totalNumPredictingTop={prediction.totalNumPredictingTop}
+                totalNumPredictingCategory={prediction.totalNumPredictingCategory}
               />
             </View>
           )}

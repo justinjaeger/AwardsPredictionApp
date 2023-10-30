@@ -3,7 +3,7 @@ import { PosterSize, getPosterDimensionsByWidth } from '../../constants/posterDi
 import { GestureResponderEvent, View, useWindowDimensions } from 'react-native';
 import COLORS from '../../constants/colors';
 import { hexToRgb } from '../../util/hexToRgb';
-import { Body, Header, SubHeader } from '../Text';
+import { Body, Header, SubHeader, SubHeaderLight } from '../Text';
 import theme from '../../constants/theme';
 import { formatPercentage } from '../../util/formatPercentage';
 
@@ -137,8 +137,9 @@ const Histogram = ({
           >
             <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
               <Header>{numPredictingInSelectedSlot.toString()}</Header>
+              <SubHeaderLight style={{ marginLeft: 5 }}>{'predicting'}</SubHeaderLight>
             </View>
-            <SubHeader style={{ marginLeft: 10 }}>
+            <SubHeader style={{ marginLeft: 10, marginTop: 10 }}>
               {formatPercentage(numPredictingInSelectedSlot / totalNumPredicting)}
             </SubHeader>
           </View>

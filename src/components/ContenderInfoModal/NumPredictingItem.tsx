@@ -1,7 +1,7 @@
 import React from 'react';
-import { View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import { Header, SubHeader, SubHeaderLight } from '../Text';
-import { CategoryName, EventModel, Phase, iPrediction } from '../../types/api';
+import { CategoryName, EventModel, Phase, WithId, iPrediction } from '../../types/api';
 import { getNumPredicting, getTotalNumPredicting } from '../../util/getNumPredicting';
 import Histogram from '../Histogram';
 import { useTmdbDataStore } from '../../context/TmdbDataStore';
@@ -11,20 +11,29 @@ import { formatPercentage } from '../../util/formatPercentage';
 import { hexToRgb } from '../../util/hexToRgb';
 import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
+import { StackActions, useNavigation } from '@react-navigation/native';
+import { PredictionsNavigationProp } from '../../navigation/types';
+import { useAuth } from '../../context/AuthContext';
+import { useEvent } from '../../context/EventContext';
 
 const NumPredictingItem = ({
   category,
   event,
   prediction,
   totalNumPredictingTop,
+  totalNumPredictingCategory,
 }: {
   category: CategoryName;
-  event: EventModel;
-  totalNumPredictingTop: number;
+  event: WithId<EventModel>;
   prediction: iPrediction;
+  totalNumPredictingTop: number;
+  totalNumPredictingCategory: number;
 }) => {
+  const navigation = useNavigation<PredictionsNavigationProp>();
+  const { userId: authUserId } = useAuth();
+  const { setCategory, setEvent } = useEvent();
+
   const numPredicting = prediction?.numPredicting;
-  console.log('numPredicting', numPredicting);
   const totalNumPredicting = getTotalNumPredicting(numPredicting || {});
   const { getTmdbDataFromPrediction } = useTmdbDataStore();
 
@@ -32,9 +41,11 @@ const NumPredictingItem = ({
   const categoryString = event.categories[category].name;
 
   const catCredits = getTmdbDataFromPrediction(prediction)?.movie.categoryCredits;
-  const performerName = getTmdbDataFromPrediction(prediction)?.person?.name;
   const credit = catCredits && categoryNameToTmdbCredit(category, catCredits);
-  const creditString = performerName ?? (credit ? credit.join(', ') : undefined);
+  const performerName = getTmdbDataFromPrediction(prediction)?.person?.name;
+  const songName = getTmdbDataFromPrediction(prediction)?.song?.title;
+  const creditString =
+    songName ?? performerName ?? (credit ? credit.join(', ') : undefined);
 
   const phaseUserIsPredicting = getPhaseUserIsPredicting(event, shortlistDateTime);
   const { win, nom, listed } = getNumPredicting(
@@ -52,16 +63,27 @@ const NumPredictingItem = ({
         borderRadius: theme.borderRadius,
       }}
     >
-      <View
+      <TouchableOpacity
         style={{
           paddingLeft: 10,
           flexDirection: 'row',
           alignItems: 'baseline',
         }}
+        onPress={() => {
+          setCategory(category);
+          setEvent(event);
+          navigation.dispatch(
+            StackActions.push('Category', {
+              userId: authUserId ?? undefined,
+            }),
+          );
+        }}
       >
-        <Header>{`#${prediction?.ranking}`}</Header>
-        <SubHeader style={{ marginLeft: 10 }}>{categoryString}</SubHeader>
-      </View>
+        <>
+          <Header>{`#${prediction?.ranking}`}</Header>
+          <SubHeader style={{ marginLeft: 10 }}>{categoryString}</SubHeader>
+        </>
+      </TouchableOpacity>
       {creditString ? (
         <SubHeader style={{ marginLeft: 10 }}>{creditString}</SubHeader>
       ) : null}
@@ -89,7 +111,9 @@ const NumPredictingItem = ({
               <Header>{listed.toString()}</Header>
               <SubHeaderLight style={{ marginLeft: 5 }}>{'list'}</SubHeaderLight>
             </View>
-            <SubHeader>{`${formatPercentage(listed / totalNumPredicting)}`}</SubHeader>
+            <SubHeader>{`${formatPercentage(
+              listed / totalNumPredictingCategory,
+            )}`}</SubHeader>
           </View>
         ) : null}
         {[undefined, Phase.NOMINATION].includes(phaseUserIsPredicting) ? (
@@ -98,7 +122,9 @@ const NumPredictingItem = ({
               <Header>{nom.toString()}</Header>
               <SubHeaderLight style={{ marginLeft: 5 }}>{'nom'}</SubHeaderLight>
             </View>
-            <SubHeader>{`${formatPercentage(nom / totalNumPredicting)}`}</SubHeader>
+            <SubHeader>{`${formatPercentage(
+              nom / totalNumPredictingCategory,
+            )}`}</SubHeader>
           </View>
         ) : null}
         <View style={{ alignItems: 'center', width: '33%' }}>
@@ -106,7 +132,7 @@ const NumPredictingItem = ({
             <Header>{win.toString()}</Header>
             <SubHeaderLight style={{ marginLeft: 5 }}>{'win'}</SubHeaderLight>
           </View>
-          <SubHeader>{`${formatPercentage(win / totalNumPredicting)}`}</SubHeader>
+          <SubHeader>{`${formatPercentage(win / totalNumPredictingCategory)}`}</SubHeader>
         </View>
       </View>
     </View>
