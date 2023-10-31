@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { User, WithId } from '../../types/api';
 import MongoApi from '../../services/api/requests';
-import { useTmdbDataStore } from '../../context/TmdbDataStore';
 import useQueryGetUser from '../../hooks/queries/useQueryGetUser';
 
 /**
@@ -12,10 +10,8 @@ import useQueryGetUser from '../../hooks/queries/useQueryGetUser';
  */
 const useProfileUser = (userId: string | undefined) => {
   const { userId: authUserId } = useAuth();
-  const { storeTmdbDataFromRecentPredictions } = useTmdbDataStore();
 
-  const [isLoadingProfileUser, setIsLoading] = useState<boolean>(true);
-  const [profileUser, setProfileUser] = useState<WithId<User> | undefined>(undefined);
+  const [isLoadingSomething, setIsLoading] = useState<boolean>(false);
   const [authUserIsFollowing, setAuthUserIsFollowing] = useState<boolean>(false);
   const [isFollowingAuthUser, setIsFollowingAuthUser] = useState<boolean>(false);
 
@@ -26,26 +22,19 @@ const useProfileUser = (userId: string | undefined) => {
     refetch: refetchAuthUserProfile,
   } = useQueryGetUser(authUserId);
 
+  // fetch non-auth-user data
+  const { data: profileUser, isLoading: isLoadingProfileUser } = useQueryGetUser(userId);
+
   // refetch auth user profile when a new user is logged in (else it's stale)
   useEffect(() => {
     refetchAuthUserProfile();
   }, [authUserId]);
 
-  // fetch non-auth-user data
   useEffect(() => {
     if (!userId) {
       setIsLoading(false);
       return;
     }
-    setIsLoading(true);
-    MongoApi.getUser({ userId })
-      .then(({ data: user }) => {
-        setProfileUser(user);
-        // store tmdb data from recent predictions
-        const predictionSets = user?.recentPredictionSets;
-        storeTmdbDataFromRecentPredictions(predictionSets || []);
-      })
-      .finally(() => setIsLoading(false));
     if (authUserId) {
       MongoApi.getRelationship(userId, authUserId).then(({ data: relationship }) => {
         const userIsFollowingAuthUser = !!relationship;
@@ -58,7 +47,7 @@ const useProfileUser = (userId: string | undefined) => {
     }
   }, [authUserId, userId]);
 
-  const isLoading = isLoadingAuthUser || isLoadingProfileUser;
+  const isLoading = isLoadingSomething || isLoadingAuthUser || isLoadingProfileUser;
   const isDeviceProfile = !!profileUser && !!userId && profileUser?._id === authUserId;
   const user = isDeviceProfile ? authUser : profileUser;
 
