@@ -1,5 +1,5 @@
 import React, { useCallback, useLayoutEffect, useState } from 'react';
-import { FlatList, View } from 'react-native';
+import { FlatList } from 'react-native';
 import { PredictionsParamList } from '../../../navigation/types';
 import { useTypedNavigation } from '../../../util/hooks';
 import { useEvent } from '../../../context/EventContext';
@@ -20,8 +20,7 @@ import {
 import EventSkeleton from '../../../components/Skeletons/EventSkeleton';
 import { getOrderedCategories } from '../../../util/sortByObjectOrder';
 import EventItem from './EventItem';
-import { Spinner } from '@ui-kitten/components';
-import COLORS from '../../../constants/colors';
+import CarouselSkeleton from '../../../components/Skeletons/CarouselSkeleton';
 
 // This is shared by EventPersonalCommunity AND EventFromProfile
 const Event = ({
@@ -127,11 +126,7 @@ const Event = ({
       data={orderedPredictions.slice(0, numToShow)}
       ListHeaderComponent={<LastUpdatedText lastUpdated={lastUpdatedString} />}
       ListFooterComponent={
-        numToShow < orderedPredictions.length ? (
-          <View style={{ marginTop: 20, width: '100%', alignItems: 'center' }}>
-            <Spinner size="medium" style={{ borderColor: COLORS.white }} />
-          </View>
-        ) : null
+        numToShow < orderedPredictions.length ? <CarouselSkeleton renderLabel /> : null
       }
       renderItem={({ item }) => (
         <EventItem item={item} onPress={onPress} isAuthUserProfile={isAuthUserProfile} />
@@ -144,7 +139,7 @@ const Event = ({
         const maxOffset =
           e.nativeEvent.contentSize.height - e.nativeEvent.layoutMeasurement.height;
         // if we're close to the bottom fetch more
-        if (currentOffset > maxOffset - 400) {
+        if (currentOffset > maxOffset - 200) {
           onEndReached();
         }
       }}
