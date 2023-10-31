@@ -56,15 +56,14 @@ const CategoryPersonal = ({
   const [predictions, setPredictions] = useState<iPrediction[]>(initialPredictions);
   const [goBackOnComplete, setGoBackOnComplete] = useAsyncReference<boolean>(false);
 
-  // TODO: this isn't working because we can't set useLayoutEffect here AND in CategoryCommunity
+  useEffect(() => {
+    setPredictions(initialPredictions);
+  }, [userId, predictionData !== undefined]);
+
   const goBack = () => {
     onBack && onBack();
     navigation.goBack();
   };
-
-  useEffect(() => {
-    setPredictions(initialPredictions);
-  }, [userId, predictionData !== undefined]);
 
   // func to fire after we update predictions on db
   const onComplete = () => {
