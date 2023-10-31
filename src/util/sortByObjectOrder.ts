@@ -47,13 +47,13 @@ export const getOrderedCategories = (
   const awardsBodyCategories = getAwardsBodyCategories(awardsBody, year);
   const orderedCategoryKeys = _.keys(awardsBodyCategories) as CategoryName[];
   return orderedCategoryKeys.reduce(
-    (acc: Map<CategoryName, iCategoryPrediction>, key) => {
+    (acc: Array<[CategoryName, iCategoryPrediction]>, key) => {
       const valuesForGivenKey = unorderedCategories[key];
       if (!valuesForGivenKey) return acc;
-      acc.set(key, valuesForGivenKey);
+      acc.push([key, valuesForGivenKey]);
       return acc;
     },
-    new Map(),
+    [],
   );
 };
 

@@ -1,19 +1,27 @@
-import React, { useLayoutEffect } from 'react';
-import { ScrollView, View } from 'react-native';
+import React, { useCallback, useLayoutEffect, useState } from 'react';
+import { FlatList, View } from 'react-native';
 import { PredictionsParamList } from '../../../navigation/types';
 import { useTypedNavigation } from '../../../util/hooks';
 import { useEvent } from '../../../context/EventContext';
 import { eventToString } from '../../../util/stringConversions';
 import SignedOutState from '../../../components/SignedOutState';
 import { getHeaderTitleWithProfile, getHeaderTitleWithTrophy } from '../../../constants';
-import CategoryList from './CategoryList';
 import _ from 'lodash';
 import { formatLastUpdated } from '../../../util/formatDateTime';
 import LastUpdatedText from '../../../components/LastUpdatedText';
 import { useAuth } from '../../../context/AuthContext';
 import { StackActions } from '@react-navigation/native';
-import { CategoryName, PredictionSet, WithId } from '../../../types/api';
+import {
+  CategoryName,
+  PredictionSet,
+  WithId,
+  iCategoryPrediction,
+} from '../../../types/api';
 import EventSkeleton from '../../../components/Skeletons/EventSkeleton';
+import { getOrderedCategories } from '../../../util/sortByObjectOrder';
+import EventItem from './EventItem';
+import { Spinner } from '@ui-kitten/components';
+import COLORS from '../../../constants/colors';
 
 // This is shared by EventPersonalCommunity AND EventFromProfile
 const Event = ({
@@ -37,11 +45,12 @@ const Event = ({
 
   const isAuthUserProfile = userId === authUserId;
 
+  const [numToShow, setNumToShow] = useState<number>(5);
+
   // define the header
   useLayoutEffect(() => {
     if (!event) return;
     const headerTitle = eventToString(event.awardsBody, event.year);
-    console.log('isAuthUserProfile', isAuthUserProfile);
     if (isAuthUserProfile) {
       navigation.setOptions({
         headerTitle: getHeaderTitleWithTrophy(headerTitle, event.awardsBody),
@@ -60,10 +69,6 @@ const Event = ({
     }
   }, [navigation]);
 
-  if (!userId && tab === 'personal') {
-    return <SignedOutState />;
-  }
-
   const onSelectCategory = async (category: CategoryName) => {
     setCategory(category);
     setPersonalCommunityTab(tab);
@@ -75,6 +80,14 @@ const Event = ({
       );
     }
   };
+
+  const onPress = useCallback(async (category: CategoryName) => {
+    onSelectCategory(category);
+  }, []);
+
+  if (!userId && tab === 'personal') {
+    return <SignedOutState />;
+  }
 
   const iterablePredictionData = _.values(predictionData?.categories || {});
 
@@ -93,32 +106,51 @@ const Event = ({
         }, new Date('1970-01-01'));
   const lastUpdatedString = formatLastUpdated(new Date(lastUpdated || ''));
 
-  if (isLoading) {
+  if (isLoading ?? !predictionData) {
     return <EventSkeleton />;
   }
 
+  const unorderedCategories = (predictionData?.categories || {}) as Record<
+    CategoryName,
+    iCategoryPrediction
+  >;
+  const orderedPredictions = event
+    ? getOrderedCategories(event.awardsBody, event.year, unorderedCategories)
+    : [];
+
+  const onEndReached = () => {
+    setNumToShow(numToShow + 5);
+  };
+
   return (
-    <ScrollView
-      style={{ width: '100%' }}
-      contentContainerStyle={{
-        alignItems: 'flex-start',
-        paddingBottom: 100,
+    <FlatList
+      data={orderedPredictions.slice(0, numToShow)}
+      ListHeaderComponent={<LastUpdatedText lastUpdated={lastUpdatedString} />}
+      ListFooterComponent={
+        numToShow < orderedPredictions.length ? (
+          <View style={{ marginTop: 20, width: '100%', alignItems: 'center' }}>
+            <Spinner size="medium" style={{ borderColor: COLORS.white }} />
+          </View>
+        ) : null
+      }
+      renderItem={({ item }) => (
+        <EventItem item={item} onPress={onPress} isAuthUserProfile={isAuthUserProfile} />
+      )}
+      onScrollEndDrag={(e) => {
+        // Fetches more at bottom of scroll. Note the high event throttle to prevent too many requests
+        // get position of current scroll
+        const currentOffset = e.nativeEvent.contentOffset.y;
+        // get max bottom of scroll
+        const maxOffset =
+          e.nativeEvent.contentSize.height - e.nativeEvent.layoutMeasurement.height;
+        // if we're close to the bottom fetch more
+        if (currentOffset > maxOffset - 400) {
+          onEndReached();
+        }
       }}
       showsVerticalScrollIndicator={false}
-    >
-      <View
-        style={{
-          width: '100%',
-        }}
-      >
-        <LastUpdatedText lastUpdated={lastUpdatedString} />
-        <CategoryList
-          onSelectCategory={(category: CategoryName) => onSelectCategory(category)}
-          predictionData={predictionData}
-          isAuthUserProfile={isAuthUserProfile}
-        />
-      </View>
-    </ScrollView>
+      onEndReachedThreshold={0.5} // triggers onEndReached at (X*100)% of list, for example 0.9 = 90% down
+    />
   );
 };
 
