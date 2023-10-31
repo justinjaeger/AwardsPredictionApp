@@ -4,21 +4,17 @@ import { TouchableOpacity, View } from 'react-native';
 import { PredictionsParamList } from '../../navigation/types';
 import { useTypedNavigation } from '../../util/hooks';
 import CustomIcon from '../CustomIcon';
-import ProfileImage from '../ProfileImage';
 import { SubHeader } from '../Text';
 
+// Was used to display user info above categories
 const UserHeader = ({
   userId,
   userName,
   userImage,
-  showEventLink,
-  isLoading,
 }: {
   userId: string;
   userName?: string;
   userImage?: string;
-  showEventLink?: boolean;
-  isLoading?: boolean;
 }) => {
   const navigation = useTypedNavigation<PredictionsParamList>();
 
@@ -31,43 +27,30 @@ const UserHeader = ({
         flexDirection: 'row',
         alignItems: 'center',
         marginTop: 10,
-        marginLeft: 10,
+        paddingLeft: 15,
         paddingBottom: 10,
         zIndex: 10,
         borderBottomWidth: 1,
         borderBottomColor: 'rgba(255,255,255,0.3)',
       }}
     >
-      <ProfileImage
-        imageSize={50}
-        image={userImage}
+      <TouchableOpacity
         onPress={() => {
-          navigation.dispatch(StackActions.push('Profile', { userId }));
+          navigation.dispatch(
+            StackActions.replace('EventFromProfile', {
+              userId,
+              userName: name,
+              userImage: userImage,
+            }),
+          );
         }}
-        isLoading={isLoading}
-        style={{ marginLeft: 10, marginRight: 15 }}
-      />
-      {showEventLink ? (
-        <TouchableOpacity
-          onPress={() => {
-            navigation.dispatch(
-              StackActions.replace('EventFromProfile', {
-                userId,
-                userName: name,
-                userImage: userImage,
-              }),
-            );
-          }}
-          style={{ flexDirection: 'row', alignItems: 'center' }}
-        >
-          <>
-            <SubHeader>See Event Predictions</SubHeader>
-            <CustomIcon name={'chevron-right'} />
-          </>
-        </TouchableOpacity>
-      ) : (
-        <SubHeader>{`${name}'s predictions`}</SubHeader>
-      )}
+        style={{ flexDirection: 'row', alignItems: 'center' }}
+      >
+        <>
+          <SubHeader>See Event Predictions</SubHeader>
+          <CustomIcon name={'chevron-right'} />
+        </>
+      </TouchableOpacity>
     </View>
   );
 };

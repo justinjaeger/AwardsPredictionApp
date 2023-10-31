@@ -5,16 +5,14 @@ import { PredictionsParamList } from '../../../navigation/types';
 import { getAwardsBodyCategories } from '../../../constants/categories';
 import { useEvent } from '../../../context/EventContext';
 import { eventToString } from '../../../util/stringConversions';
-import { getHeaderTitleWithTrophy } from '../../../constants';
+import { getHeaderTitleWithProfile } from '../../../constants';
 import { View } from 'react-native';
-import { CategoryDisplayFab } from '../../../components/Buttons/DisplayFAB';
-import { RouteProp, useRoute } from '@react-navigation/native';
+import { RouteProp, StackActions, useRoute } from '@react-navigation/native';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
-import UserHeader from '../../../components/UserHeader';
 
 const CategoryFromProfile = () => {
   const { params } = useRoute<RouteProp<PredictionsParamList, 'CategoryFromProfile'>>();
-  const { userId, userName, userImage } = params;
+  const { userId, userImage, userName } = params;
   const showEventLink = params?.showEventLink || false;
 
   const { category, event: _event } = useEvent();
@@ -29,28 +27,25 @@ const CategoryFromProfile = () => {
     const eventName = eventToString(event.awardsBody, event.year);
     const categoryName = awardsBodyCategories[category]?.name || '';
     const headerTitle = eventName + '\n' + 'Best ' + categoryName;
+    const onPressProfileImage = () => {
+      navigation.dispatch(StackActions.push('Profile', { userId }));
+    };
     navigation.setOptions({
-      headerTitle: getHeaderTitleWithTrophy(headerTitle, event.awardsBody),
+      headerTitle: getHeaderTitleWithProfile(headerTitle, userImage, onPressProfileImage),
     });
   }, [navigation]);
 
   return (
-    <>
-      <CategoryDisplayFab />
-      <BackgroundWrapper>
-        {userId ? (
-          <UserHeader
-            userId={userId}
-            userName={userName}
-            userImage={userImage}
-            showEventLink={showEventLink}
-          />
-        ) : null}
-        <View style={{ width: '100%' }}>
-          <CategoryPersonal userId={userId} showEventLink={showEventLink} />
-        </View>
-      </BackgroundWrapper>
-    </>
+    <BackgroundWrapper>
+      <View style={{ width: '100%' }}>
+        <CategoryPersonal
+          userId={userId}
+          userImage={userImage}
+          userName={userName}
+          showEventLink={showEventLink}
+        />
+      </View>
+    </BackgroundWrapper>
   );
 };
 

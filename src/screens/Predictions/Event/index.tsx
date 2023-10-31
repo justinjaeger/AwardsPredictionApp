@@ -5,7 +5,7 @@ import { useTypedNavigation } from '../../../util/hooks';
 import { useEvent } from '../../../context/EventContext';
 import { eventToString } from '../../../util/stringConversions';
 import SignedOutState from '../../../components/SignedOutState';
-import { getHeaderTitleWithTrophy } from '../../../constants';
+import { getHeaderTitleWithProfile, getHeaderTitleWithTrophy } from '../../../constants';
 import CategoryList from './CategoryList';
 import _ from 'lodash';
 import { formatLastUpdated } from '../../../util/formatDateTime';
@@ -41,9 +41,23 @@ const Event = ({
   useLayoutEffect(() => {
     if (!event) return;
     const headerTitle = eventToString(event.awardsBody, event.year);
-    navigation.setOptions({
-      headerTitle: getHeaderTitleWithTrophy(headerTitle, event.awardsBody),
-    });
+    console.log('isAuthUserProfile', isAuthUserProfile);
+    if (isAuthUserProfile) {
+      navigation.setOptions({
+        headerTitle: getHeaderTitleWithTrophy(headerTitle, event.awardsBody),
+      });
+    } else {
+      const onPressProfileImage = () => {
+        navigation.dispatch(StackActions.push('Profile', { userId }));
+      };
+      navigation.setOptions({
+        headerTitle: getHeaderTitleWithProfile(
+          headerTitle,
+          userImage,
+          onPressProfileImage,
+        ),
+      });
+    }
   }, [navigation]);
 
   if (!userId && tab === 'personal') {

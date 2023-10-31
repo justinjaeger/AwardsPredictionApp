@@ -4,7 +4,6 @@ import { EventDisplayFab } from '../../../components/Buttons/DisplayFAB';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import Event from './index';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
-import UserHeader from '../../../components/UserHeader';
 import { useProfilePrediction } from '../../../context/ProfilePredictionContext';
 
 const EventFromProfile = () => {
@@ -18,19 +17,14 @@ const EventFromProfile = () => {
     <>
       <EventDisplayFab />
       <BackgroundWrapper>
-        <>
-          {userId ? (
-            <UserHeader userId={userId} userName={userName} userImage={userImage} />
-          ) : null}
-          <Event
-            tab={'personal'}
-            predictionData={predictionData}
-            isLoading={isLoading}
-            userId={userId}
-            userImage={userImage}
-            userName={userName}
-          />
-        </>
+        <Event
+          tab={'personal'}
+          predictionData={predictionData}
+          isLoading={isLoading}
+          userId={userId}
+          userImage={userImage}
+          userName={userName}
+        />
       </BackgroundWrapper>
     </>
   );

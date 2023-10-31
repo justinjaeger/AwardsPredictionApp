@@ -26,10 +26,14 @@ import { sortPredictions } from '../../../util/sortPredictions';
 // used in both FromProfile and from event
 const CategoryPersonal = ({
   userId,
+  userImage,
+  userName,
   showEventLink,
   onBack,
 }: {
   userId: string | undefined;
+  userImage?: string | undefined;
+  userName?: string | undefined;
   showEventLink?: boolean;
   onBack?: () => void;
 }) => {
@@ -156,7 +160,9 @@ const CategoryPersonal = ({
           </BodyBold>
         </View>
       ) : null}
-      {showEventLink ? <EventLink userId={userId} /> : null}
+      {showEventLink ? (
+        <EventLink userId={userId} userImage={userImage} userName={userName} />
+      ) : null}
       <MovieListDraggable
         predictions={predictions}
         setPredictions={(ps) => setPredictions(ps)}
