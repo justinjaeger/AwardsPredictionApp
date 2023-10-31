@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react';
-import { Animated, useWindowDimensions } from 'react-native';
-import LoadingStatue from '../../../components/LoadingStatue';
+import React, { useEffect, useState } from 'react';
+import { FlatList, View, useWindowDimensions } from 'react-native';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import useQueryGetAllEvents from '../../../hooks/queries/useQueryGetAllEvents';
 import { useAuth } from '../../../context/AuthContext';
@@ -9,20 +8,26 @@ import EventList from '../Event/EventList';
 import { HeaderLight } from '../../../components/Text';
 import useQueryGetFollowingUsers from '../../../hooks/queries/useQueryGetFollowingUsers';
 import PredictionCarousel from '../../../components/PredictionCarousel';
-import { useLoading } from '../../../hooks/animatedState/useLoading';
 import theme from '../../../constants/theme';
 import RecommendedUsers from '../../../components/RecommendedUsers';
+import CarouselSkeleton from '../../../components/Skeletons/CarouselSkeleton';
+import EventBoxSkeleton from '../../../components/Skeletons/EventBoxSkeleton';
 
 const EventSelect = () => {
   const { width } = useWindowDimensions();
   const { userId: authUserId } = useAuth();
 
-  const { data: events, isLoading, refetch: refetchEvents } = useQueryGetAllEvents();
+  const {
+    data: events,
+    isLoading: isLoadingEvents,
+    refetch: refetchEvents,
+  } = useQueryGetAllEvents();
   const { data: user, refetch: refetchUser } = useQueryGetUser(authUserId);
-  const { data: usersWithNestedData, refetch: refetchFollowingPredictions } =
-    useQueryGetFollowingUsers();
-
-  const { loadingOpacity, bodyOpacity } = useLoading(isLoading);
+  const {
+    data: usersWithNestedData,
+    isLoading: isLoadingUsers,
+    refetch: refetchFollowingPredictions,
+  } = useQueryGetFollowingUsers();
 
   useEffect(() => {
     if (authUserId && user === undefined) {
@@ -41,74 +46,104 @@ const EventSelect = () => {
     }
   }, [events]);
 
+  const [numToShow, setNumToShow] = useState<number>(3);
+
+  const onEndReached = () => {
+    setNumToShow((n) => n + 5);
+  };
+
+  const data = usersWithNestedData ?? [];
+
   return (
     <BackgroundWrapper>
-      <>
-        <Animated.View
-          style={{
-            position: 'absolute',
-            height: '80%',
-            alignItems: 'center',
-            justifyContent: 'center',
-            opacity: loadingOpacity,
-          }}
-        >
-          <LoadingStatue />
-        </Animated.View>
-        <Animated.ScrollView
-          style={{ opacity: bodyOpacity }}
+      <View
+        style={{
+          width: '100%',
+          flex: 1,
+          justifyContent: 'center',
+        }}
+      >
+        <FlatList
+          data={data.slice(0, numToShow)}
+          style={{ width: '100%' }}
           contentContainerStyle={{
-            alignItems: 'center',
-            width,
             paddingBottom: 100,
           }}
-          showsVerticalScrollIndicator={false}
-        >
-          <HeaderLight
-            style={{
-              alignSelf: 'flex-start',
-              marginTop: 20,
-              marginLeft: theme.windowMargin,
-            }}
-          >
-            Make Predictions
-          </HeaderLight>
-          {events ? (
-            <EventList
-              user={user ?? undefined} // so if the user is signed out they don't see their old predictions
-              events={events}
-            />
-          ) : null}
-          {!authUserId ? (
-            // users not signed in can see recommended users
-            <RecommendedUsers header={'Follow Users'} />
-          ) : usersWithNestedData ? (
-            <>
+          ListHeaderComponent={
+            <View style={{ width: '100%', alignItems: 'center' }}>
               <HeaderLight
                 style={{
                   alignSelf: 'flex-start',
                   marginTop: 20,
                   marginLeft: theme.windowMargin,
-                  marginBottom: 10,
                 }}
               >
-                New From Friends
+                Make Predictions
               </HeaderLight>
-              {usersWithNestedData.map((u) => (
-                <PredictionCarousel
-                  key={u._id}
-                  predictionSets={u.recentPredictionSets || []}
-                  userId={u._id}
-                  userInfo={{
-                    name: u.name || u.username || '',
-                    image: u.image,
-                  }}
+              {isLoadingEvents || !events ? (
+                <EventBoxSkeleton />
+              ) : (
+                <EventList
+                  user={user ?? undefined} // so if the user is signed out they don't see their old predictions
+                  events={events}
                 />
-              ))}
-            </>
-          ) : null}
-        </Animated.ScrollView>
-      </>
+              )}
+              {!authUserId ? (
+                // users not signed in can see recommended users
+                <RecommendedUsers header={'Follow Users'} />
+              ) : (
+                <HeaderLight
+                  style={{
+                    alignSelf: 'flex-start',
+                    marginTop: 20,
+                    marginLeft: theme.windowMargin,
+                    marginBottom: 10,
+                  }}
+                >
+                  New From Friends
+                </HeaderLight>
+              )}
+              {isLoadingUsers ? (
+                <View style={{ marginLeft: -10 }}>
+                  {new Array(2).fill(null).map(() => (
+                    <CarouselSkeleton renderProfile renderLabel />
+                  ))}
+                </View>
+              ) : null}
+            </View>
+          }
+          ListFooterComponent={
+            numToShow < data.length ? <CarouselSkeleton renderLabel /> : null
+          }
+          renderItem={({ item }) => (
+            <View style={{ width }}>
+              <PredictionCarousel
+                key={item._id}
+                predictionSets={item.recentPredictionSets || []}
+                userId={item._id}
+                userInfo={{
+                  name: item.name || item.username || '',
+                  image: item.image,
+                }}
+              />
+            </View>
+          )}
+          onScrollEndDrag={(e) => {
+            // Fetches more at bottom of scroll. Note the high event throttle to prevent too many requests
+            // get position of current scroll
+            const currentOffset = e.nativeEvent.contentOffset.y;
+            // get max bottom of scroll
+            const maxOffset =
+              e.nativeEvent.contentSize.height - e.nativeEvent.layoutMeasurement.height;
+            // if we're close to the bottom fetch more
+            if (currentOffset > maxOffset - 200) {
+              onEndReached();
+            }
+          }}
+          showsVerticalScrollIndicator={false}
+          onEndReachedThreshold={0.5} // triggers onEndReached at (X*100)% of list, for example 0.9 = 90% down
+        />
+      </View>
     </BackgroundWrapper>
   );
 };

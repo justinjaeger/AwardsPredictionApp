@@ -13,7 +13,7 @@ const useQueryGetFollowingUsers = () => {
   const { userId: authUserId } = useAuth();
   const { storeTmdbDataFromRecentPredictions } = useTmdbDataStore();
 
-  const { isLoading, data, refetch } = useQuery({
+  const { isFetching, data, refetch } = useQuery({
     queryKey: [QueryKeys.FOLLOWING_USERS_NESTED_FIELDS],
     queryFn: async () => {
       if (!authUserId) return [];
@@ -44,7 +44,7 @@ const useQueryGetFollowingUsers = () => {
 
   return {
     data,
-    isLoading,
+    isLoading: isFetching,
     refetch,
     usersIdsAuthUserIsFollowing: data?.map((u) => u._id) ?? [],
   };

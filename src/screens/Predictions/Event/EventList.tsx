@@ -21,7 +21,7 @@ import { hexToRgb } from '../../../util/hexToRgb';
 import useDevice from '../../../util/device';
 import { EventModel, EventStatus, User, UserRole, WithId } from '../../../types/api';
 
-const EVENT_ITEM_HEIGHT = 110;
+export const EVENT_ITEM_HEIGHT = 110;
 
 const EventList = ({
   events,
