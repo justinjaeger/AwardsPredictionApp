@@ -98,7 +98,16 @@ const PredictionCarousel = ({
   }
 
   return (
-    <>
+    <View
+      style={{
+        borderWidth: 1,
+        borderColor: hexToRgb(COLORS.white, 0.2),
+        backgroundColor: hexToRgb(COLORS.white, 0.02),
+        borderRadius: theme.borderRadius,
+        marginTop: 10,
+        marginBottom: 10,
+      }}
+    >
       {userInfo ? (
         <TouchableOpacity
           style={{
@@ -200,7 +209,7 @@ const PredictionCarousel = ({
           }}
         />
       </View>
-    </>
+    </View>
   );
 };
 
