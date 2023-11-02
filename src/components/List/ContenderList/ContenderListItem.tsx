@@ -1,8 +1,6 @@
 /* eslint-disable sonarjs/no-duplicate-string */
-import MaskedView from '@react-native-masked-view/masked-view';
 import React, { memo } from 'react';
 import { TouchableHighlight, useWindowDimensions, View } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
 import COLORS from '../../../constants/colors';
 import {
   getPosterDimensionsByWidth,
@@ -158,7 +156,7 @@ const ContenderListItem = ({
           style={{
             flexDirection: 'row',
             width: windowWidth - thumbnailContainerWidth,
-            justifyContent: 'space-between',
+            justifyContent: 'flex-end',
             alignItems: 'flex-start',
             height: '100%',
           }}
@@ -172,38 +170,16 @@ const ContenderListItem = ({
               width: '100%',
             }}
           >
-            <MaskedView
-              maskElement={
-                <LinearGradient
-                  colors={[
-                    'rgba(0,0,0,1)',
-                    'rgba(0,0,0,1)',
-                    'rgba(0,0,0,1)',
-                    'rgba(0,0,0,1)',
-                    'transparent',
-                  ]}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 0, y: 1 }}
-                  style={{
-                    flex: 1,
-                    maxHeight: posterHeight,
-                    minHeight: posterHeight,
-                    overflow: 'hidden',
-                    height: '100%',
-                  }}
-                />
-              }
+            <SubHeader
+              style={{
+                shadowColor: 'black',
+                shadowOpacity: 1,
+                shadowRadius: 5,
+              }}
             >
-              <SubHeader
-                style={{
-                  shadowColor: 'black',
-                  shadowOpacity: 1,
-                  shadowRadius: 5,
-                }}
-              >
-                {title}
-              </SubHeader>
-              {/* <Body
+              {title}
+            </SubHeader>
+            {/* <Body
                 style={{
                   shadowColor: 'black',
                   shadowOpacity: 1,
@@ -212,7 +188,6 @@ const ContenderListItem = ({
               >
                 {subtitle}
               </Body> */}
-            </MaskedView>
           </View>
           {numPredicting &&
           totalNumPredictingTop !== undefined &&
