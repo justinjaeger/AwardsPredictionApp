@@ -22,12 +22,14 @@ const NumPredictingItem = ({
   prediction,
   totalNumPredictingTop,
   totalNumPredictingCategory,
+  disableCategoryLink,
 }: {
   category: CategoryName;
   event: WithId<EventModel>;
   prediction: iPrediction;
   totalNumPredictingTop: number;
   totalNumPredictingCategory: number;
+  disableCategoryLink?: boolean;
 }) => {
   const navigation = useNavigation<PredictionsNavigationProp>();
   const { userId: authUserId } = useAuth();
@@ -69,15 +71,19 @@ const NumPredictingItem = ({
           flexDirection: 'row',
           alignItems: 'baseline',
         }}
-        onPress={() => {
-          setCategory(category);
-          setEvent(event);
-          navigation.dispatch(
-            StackActions.push('Category', {
-              userId: authUserId ?? undefined,
-            }),
-          );
-        }}
+        onPress={
+          disableCategoryLink
+            ? undefined
+            : () => {
+                setCategory(category);
+                setEvent(event);
+                navigation.dispatch(
+                  StackActions.push('Category', {
+                    userId: authUserId ?? undefined,
+                  }),
+                );
+              }
+        }
       >
         <>
           <Header>{`#${prediction?.ranking}`}</Header>

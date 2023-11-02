@@ -4,7 +4,7 @@ import BasicModal from '../BasicModal';
 import { CategoryName, EventModel, WithId, iPrediction } from '../../types/api';
 import NumPredictingItem from './NumPredictingItem';
 import { getTotalNumPredicting } from '../../util/getNumPredicting';
-import { useNavigation } from '@react-navigation/native';
+import { StackActions, useNavigation } from '@react-navigation/native';
 import { useTmdbDataStore } from '../../context/TmdbDataStore';
 import { PredictionsParamList } from '../../navigation/types';
 import useQueryGetCommunityPredictions from '../../hooks/queries/useQueryGetCommunityPredictions';
@@ -93,6 +93,7 @@ const ContenderInfoModal = ({
               event={event}
               totalNumPredictingTop={totalNumPredictingTop}
               totalNumPredictingCategory={totalNumPredictingCategory}
+              disableCategoryLink
             />
           ) : null}
         </View>
@@ -106,10 +107,12 @@ const ContenderInfoModal = ({
           <SubmitButton
             onPress={() => {
               close();
-              navigation.navigate('ContenderStats', {
-                event,
-                movieTmdbId: prediction.movieTmdbId,
-              });
+              navigation.dispatch(
+                StackActions.push('ContenderStats', {
+                  event,
+                  movieTmdbId: prediction.movieTmdbId,
+                }),
+              );
             }}
             text={`More${person ? ' movie' : ''} stats`}
             style={{ marginTop: 10, marginBottom: 10, height: 50, width: '80%' }}
