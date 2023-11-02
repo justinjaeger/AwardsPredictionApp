@@ -14,7 +14,7 @@ import { useAsyncReference, useTypedNavigation } from '../../../util/hooks';
 import { formatLastUpdated } from '../../../util/formatDateTime';
 import { useAuth } from '../../../context/AuthContext';
 import useDevice from '../../../util/device';
-import { AddPredictionsFab } from '../../../components/Buttons/DisplayFAB';
+import { AddPredictionsFab, ScreenshotFab } from '../../../components/Buttons/DisplayFAB';
 import useShowAddTab from '../../../hooks/useShowAddTab';
 import EventLink from './EventLink';
 import EditToolbar from '../../../components/Buttons/EditToolbar';
@@ -48,7 +48,7 @@ const CategoryPersonal = ({
   const isAuthUserProfile = userId === authUserId;
 
   const { data: predictionData, isLoading } = useQueryGetUserPredictions(userId);
-  const { createdAt } = predictionData?.categories[category] || {};
+  const { createdAt } = predictionData?.categories[category] ?? {};
   const initialPredictions = sortPredictions(
     predictionData?.categories[category]?.predictions ?? [],
   );
@@ -144,6 +144,7 @@ const CategoryPersonal = ({
   }
   return (
     <>
+      <ScreenshotFab predictions={predictions} userId={userId} />
       <LoadingStatueModal visible={!isComplete} text={'Saving changes...'} />
       {predictions && predictions.length === 0 ? (
         <View

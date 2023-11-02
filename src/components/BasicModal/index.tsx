@@ -26,6 +26,8 @@ type iBasicModalProps = {
   };
   style?: StyleProp<ViewStyle>;
   childStyle?: StyleProp<ViewStyle>;
+  backgroundColor?: string;
+  innerContainerStyle?: StyleProp<ViewStyle>;
 };
 
 const BasicModal = ({
@@ -37,6 +39,7 @@ const BasicModal = ({
   header,
   style,
   childStyle,
+  innerContainerStyle,
 }: iBasicModalProps) => {
   const opacity = useRef(new Animated.Value(0)).current;
 
@@ -57,7 +60,6 @@ const BasicModal = ({
             width: '100%',
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: 'rgba(0,0,0,0.8)',
           }}
           activeOpacity={1}
           onPressOut={(e) => {
@@ -71,13 +73,16 @@ const BasicModal = ({
             }}
           >
             <View
-              style={{
-                width: width || '85%',
-                height: height || '50%',
-                position: 'relative',
-                backgroundColor: COLORS.primary,
-                borderRadius: 10,
-              }}
+              style={[
+                {
+                  width: width || '85%',
+                  height: height || '50%',
+                  position: 'relative',
+                  backgroundColor: COLORS.primary,
+                  borderRadius: 10,
+                },
+                innerContainerStyle,
+              ]}
             >
               {header ? (
                 <View
