@@ -43,6 +43,13 @@ const ContenderInfoModal = ({
 
   const { height: bgHeight, width: bgWidth } = getPosterDimensionsByWidth(width);
 
+  const subheader =
+    song || person
+      ? movie?.title ?? ''
+      : movie?.categoryCredits.directing.join(',') ?? '';
+
+  const bodyText = song || person ? '' : movie?.cast ?? '';
+
   return (
     <>
       {showFullPoster ? (
@@ -93,10 +100,8 @@ const ContenderInfoModal = ({
             ) : (
               <Header>{itemTitle ?? ''}</Header>
             )}
-            <SubHeader style={{ paddingTop: 5 }}>
-              {movie ? movie.categoryCredits.directing.join(',') : ''}
-            </SubHeader>
-            <Body style={{ paddingTop: 10 }}>{(movie && movie.cast) ?? ''}</Body>
+            <SubHeader style={{ paddingTop: 5 }}>{subheader}</SubHeader>
+            <Body style={{ paddingTop: 10 }}>{bodyText}</Body>
           </View>
           <View
             style={{
@@ -122,7 +127,7 @@ const ContenderInfoModal = ({
             )}
             {movie ? (
               <ExternalLinkButton
-                text={person ? 'Movie Info' : 'More Info'}
+                text={person || song ? 'Movie Info' : 'More Info'}
                 // eslint-disable-next-line sonarjs/no-identical-functions
                 onPress={() => {
                   close();

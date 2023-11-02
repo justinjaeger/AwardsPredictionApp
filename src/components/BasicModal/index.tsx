@@ -26,7 +26,7 @@ type iBasicModalProps = {
   };
   style?: StyleProp<ViewStyle>;
   childStyle?: StyleProp<ViewStyle>;
-  backgroundColor?: string;
+  backgroundStyle?: StyleProp<ViewStyle>;
   innerContainerStyle?: StyleProp<ViewStyle>;
 };
 
@@ -39,6 +39,7 @@ const BasicModal = ({
   header,
   style,
   childStyle,
+  backgroundStyle,
   innerContainerStyle,
 }: iBasicModalProps) => {
   const opacity = useRef(new Animated.Value(0)).current;
@@ -55,12 +56,15 @@ const BasicModal = ({
     <Animated.View style={[{ opacity }, style]}>
       <Modal visible={visible} transparent onDismiss={onClose} onRequestClose={onClose}>
         <TouchableOpacity
-          style={{
-            height: '100%',
-            width: '100%',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
+          style={[
+            {
+              height: '100%',
+              width: '100%',
+              alignItems: 'center',
+              justifyContent: 'center',
+            },
+            backgroundStyle,
+          ]}
           activeOpacity={1}
           onPressOut={(e) => {
             e.stopPropagation();

@@ -32,13 +32,12 @@ const ContenderInfoModal = ({
   const { getTmdbDataFromPrediction } = useTmdbDataStore();
 
   const { data: communityPredictions } = useQueryGetCommunityPredictions();
-  const { person } = getTmdbDataFromPrediction(prediction) ?? {};
+  const { person, song } = getTmdbDataFromPrediction(prediction) ?? {};
 
   if (!communityPredictions) return null;
 
   const predictions = communityPredictions.categories[category].predictions;
 
-  // TODO: DO this for performance, song
   const communityPrediction = predictions.find(
     (p) => p.contenderId === prediction.contenderId,
   );
@@ -64,6 +63,9 @@ const ContenderInfoModal = ({
       childStyle={{
         height: '100%',
         justifyContent: 'space-between',
+      }}
+      backgroundStyle={{
+        backgroundColor: 'rgba(0,0,0,0.8)',
       }}
     >
       <>
@@ -118,7 +120,7 @@ const ContenderInfoModal = ({
                 }),
               );
             }}
-            text={`More${person ? ' movie' : ''} stats`}
+            text={`More${person || song ? ' movie' : ''} stats`}
             style={{ marginTop: 10, marginBottom: 10, height: 50, width: '80%' }}
           />
         </View>
