@@ -14,7 +14,7 @@ import { useAsyncReference, useTypedNavigation } from '../../../util/hooks';
 import { formatLastUpdated } from '../../../util/formatDateTime';
 import { useAuth } from '../../../context/AuthContext';
 import useDevice from '../../../util/device';
-import { AddPredictionsFab, ScreenshotFab } from '../../../components/Buttons/DisplayFAB';
+import { AddPredictionsFab } from '../../../components/Buttons/DisplayFAB';
 import useShowAddTab from '../../../hooks/useShowAddTab';
 import EventLink from './EventLink';
 import EditToolbar from '../../../components/Buttons/EditToolbar';
@@ -22,6 +22,7 @@ import { iPrediction } from '../../../types/api';
 import useQueryGetUserPredictions from '../../../hooks/queries/useQueryGetUserPredictions';
 import CategorySkeleton from '../../../components/Skeletons/CategorySkeleton';
 import { sortPredictions } from '../../../util/sortPredictions';
+import ScreenshotMode from '../../../components/Buttons/ScreenshotMode';
 
 // used in both FromProfile and from event
 const CategoryPersonal = ({
@@ -144,7 +145,7 @@ const CategoryPersonal = ({
   }
   return (
     <>
-      <ScreenshotFab predictions={predictions} userId={userId} />
+      <ScreenshotMode predictions={predictions} userId={userId} />
       <LoadingStatueModal visible={!isComplete} text={'Saving changes...'} />
       {predictions && predictions.length === 0 ? (
         <View

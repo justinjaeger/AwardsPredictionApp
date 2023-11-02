@@ -8,7 +8,7 @@ import EventLink from './EventLink';
 import useQueryGetCommunityPredictions from '../../../hooks/queries/useQueryGetCommunityPredictions';
 import CategorySkeleton from '../../../components/Skeletons/CategorySkeleton';
 import { sortPredictions } from '../../../util/sortPredictions';
-import { ScreenshotFab } from '../../../components/Buttons/DisplayFAB';
+import ScreenshotMode from '../../../components/Buttons/ScreenshotMode';
 
 // Note: We ALSO use this for non-authenticated user profiles
 const CategoryCommunity = ({ showEventLink }: { showEventLink?: boolean }) => {
@@ -29,7 +29,7 @@ const CategoryCommunity = ({ showEventLink }: { showEventLink?: boolean }) => {
 
   return (
     <>
-      <ScreenshotFab predictions={predictions} />
+      <ScreenshotMode predictions={predictions} />
       {predictions?.length === 0 ? (
         <View
           style={{
