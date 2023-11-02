@@ -1,7 +1,7 @@
 import React, { useLayoutEffect } from 'react';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { PredictionsParamList } from '../../navigation/types';
-import NumPredictingItem from '../../components/ContenderInfoModal/NumPredictingItem';
+import NumPredictingItem from '../../components/ItemStatBox.tsx';
 import useQueryGetCommunityPredictions from '../../hooks/queries/useQueryGetCommunityPredictions';
 import { CategoryName, Movie, iPrediction } from '../../types/api';
 import { getTotalNumPredicting } from '../../util/getNumPredicting';

@@ -2,7 +2,7 @@ import React from 'react';
 import { View, useWindowDimensions } from 'react-native';
 import BasicModal from '../BasicModal';
 import { CategoryName, EventModel, WithId, iPrediction } from '../../types/api';
-import NumPredictingItem from './NumPredictingItem';
+import NumPredictingItem from '../ItemStatBox.tsx';
 import { getTotalNumPredicting } from '../../util/getNumPredicting';
 import { StackActions, useNavigation } from '@react-navigation/native';
 import { useTmdbDataStore } from '../../context/TmdbDataStore';
