@@ -46,7 +46,7 @@ const Histogram = ({
   const widthOfEachBar = totalWidth / barsToShow;
 
   const slotThatTouchIsIn =
-    gesturePos && barsToShow - Math.floor((gesturePos.x / totalWidth) * barsToShow);
+    gesturePos && Math.floor((gesturePos.x / totalWidth) * barsToShow) + 1;
   const numPredictingInSelectedSlot =
     (slotThatTouchIsIn && numPredicting?.[slotThatTouchIsIn]) || 0;
 
@@ -71,7 +71,7 @@ const Histogram = ({
         onTouchEnd={() => setGesturePos(undefined)}
       >
         {new Array(barsToShow).fill(null).map((x, i) => {
-          const place = barsToShow - i;
+          const place = i + 1;
           const isHighlighted = place === slotThatTouchIsIn;
 
           const numPredictingPlace = numPredicting?.[place] || 0;
