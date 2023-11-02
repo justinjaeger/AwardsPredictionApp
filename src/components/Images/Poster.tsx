@@ -49,7 +49,6 @@ const Poster = ({
     borderWidth: 1,
     borderColor: COLORS.secondary,
     borderRadius: 5,
-    margin: theme.posterMargin,
     opacity: isPressed ? 0.8 : 1,
   };
 

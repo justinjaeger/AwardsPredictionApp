@@ -30,7 +30,7 @@ const Histogram = ({
   const totalWidth = (_totalWidth ?? windowWidth) - 20;
 
   const barsToShow = slots * 2;
-  const barMaxHeight = posterHeight * 1.1;
+  const barMaxHeight = posterHeight * 1;
 
   const [gesturePos, setGesturePos] = useState<{ x: number; y: number } | undefined>(
     undefined,
@@ -55,6 +55,7 @@ const Histogram = ({
       <View
         style={{
           flexDirection: 'row',
+          alignSelf: 'flex-end',
           alignItems: 'flex-end',
           justifyContent: 'space-between',
           height: barMaxHeight,
@@ -76,7 +77,7 @@ const Histogram = ({
 
           const numPredictingPlace = numPredicting?.[place] || 0;
           const h =
-            posterHeight *
+            barMaxHeight *
             ((numPredictingPlace || 1) / (totalNumPredicting || 1)) *
             (totalNumPredictingTop ? totalNumPredicting / totalNumPredictingTop : 1);
           const w = totalWidth / barsToShow - 5;
@@ -88,8 +89,6 @@ const Histogram = ({
                   : undefined,
                 height: '100%',
                 justifyContent: 'flex-end',
-                borderTopRightRadius: theme.borderRadius,
-                borderTopLeftRadius: theme.borderRadius,
               }}
               pointerEvents="none"
             >

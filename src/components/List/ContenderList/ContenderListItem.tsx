@@ -105,7 +105,6 @@ const ContenderListItem = ({
   const totalNumPredicting = getTotalNumPredicting(numPredicting || {});
 
   const thumbnailContainerWidth = posterWidth * 1.5;
-  const thumbnailContainerHeight = posterHeight;
 
   if (dataHasNotLoaded) {
     return (
@@ -127,7 +126,9 @@ const ContenderListItem = ({
           ? hexToRgb(COLORS.secondaryLight, 0.15)
           : 'transparent',
         flexDirection: 'row',
-        height: posterHeight * 1.2,
+        alignItems: 'flex-end',
+        paddingBottom: 3,
+        paddingTop: 3,
       }}
       underlayColor={COLORS.secondaryDark}
       onLongPress={disableEditing ? undefined : drag}
@@ -158,8 +159,8 @@ const ContenderListItem = ({
             flexDirection: 'row',
             width: windowWidth - thumbnailContainerWidth,
             justifyContent: 'space-between',
-            height: thumbnailContainerHeight,
             alignItems: 'flex-start',
+            height: '100%',
           }}
         >
           <View
@@ -213,20 +214,18 @@ const ContenderListItem = ({
               </Body> */}
             </MaskedView>
           </View>
-          <View>
-            {numPredicting &&
-            totalNumPredictingTop !== undefined &&
-            (variant === 'community' || variant === 'selectable') ? (
-              <Histogram
-                numPredicting={numPredicting}
-                totalNumPredicting={totalNumPredicting}
-                totalNumPredictingTop={totalNumPredictingTop}
-                slots={slots}
-                totalWidth={windowWidth - thumbnailContainerWidth}
-                posterHeight={posterHeight}
-              />
-            ) : null}
-          </View>
+          {numPredicting &&
+          totalNumPredictingTop !== undefined &&
+          (variant === 'community' || variant === 'selectable') ? (
+            <Histogram
+              numPredicting={numPredicting}
+              totalNumPredicting={totalNumPredicting}
+              totalNumPredictingTop={totalNumPredictingTop}
+              slots={slots}
+              totalWidth={windowWidth - thumbnailContainerWidth}
+              posterHeight={posterHeight}
+            />
+          ) : null}
           {variant === 'personal' && !disableEditing ? (
             <IconButton
               iconProps={{ name: 'menu', size: 24 }}
