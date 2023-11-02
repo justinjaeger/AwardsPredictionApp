@@ -56,4 +56,5 @@ const PosterFromTmdb = (
     <PosterFromMovie {...props} movie={props.movie} />
   ) : null;
 
+// maybe it's the memoization?
 export default React.memo(PosterFromTmdb);

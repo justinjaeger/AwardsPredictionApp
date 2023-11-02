@@ -44,7 +44,7 @@ const Event = ({
 
   const isAuthUserProfile = userId === authUserId;
 
-  const [numToShow, setNumToShow] = useState<number>(5);
+  const [numToShow, setNumToShow] = useState<number>(30); // essentially making this useless cause it's annoying
 
   // define the header
   useLayoutEffect(() => {

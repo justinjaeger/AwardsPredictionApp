@@ -43,6 +43,8 @@ const MovieGrid = ({
     >
       {predictions.map((prediction, i) => {
         const { contenderId } = prediction;
+        // HERE is where it gets the movie data, including poster
+        // BUT ALSO it comes back here from event predictions
         const { movie, person } = getTmdbDataFromPrediction(prediction) || {};
         return (
           <View key={contenderId}>
