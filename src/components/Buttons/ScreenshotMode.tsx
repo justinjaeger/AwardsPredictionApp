@@ -132,7 +132,10 @@ const ScreenshotMode = ({
                   {'@' + user?.username ?? ''}
                 </BodyBold> */}
               </View>
-              <MovieGrid predictions={predictions} categoryInfo={categoryData} />
+              <MovieGrid
+                predictions={predictions.slice(0, 20)}
+                categoryInfo={categoryData}
+              />
               {user ? (
                 <>
                   <SubHeader style={{ marginLeft: marginSize }}>
