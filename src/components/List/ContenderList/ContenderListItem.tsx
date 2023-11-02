@@ -11,7 +11,7 @@ import {
 import { useEvent } from '../../../context/EventContext';
 import { getTotalNumPredicting } from '../../../util/getNumPredicting';
 import { IconButton } from '../../Buttons/IconButton';
-import { Body, SubHeader } from '../../Text';
+import { SubHeader } from '../../Text';
 import CustomIcon from '../../CustomIcon';
 import { hexToRgb } from '../../../util/hexToRgb';
 import { CategoryType, iPrediction } from '../../../types/api';
@@ -95,6 +95,7 @@ const ContenderListItem = ({
       break;
     case CategoryType.SONG:
       title = song?.title || '';
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       subtitle = movie?.title || '';
       break;
   }
@@ -113,8 +114,6 @@ const ContenderListItem = ({
       </View>
     );
   }
-
-  console.log('rendering...', Math.random());
 
   return (
     <TouchableHighlight
@@ -169,7 +168,7 @@ const ContenderListItem = ({
               flexDirection: 'column',
               paddingLeft: 5,
               zIndex: 2,
-              width: '80%',
+              width: '100%',
             }}
           >
             <MaskedView
@@ -194,8 +193,24 @@ const ContenderListItem = ({
                 />
               }
             >
-              <SubHeader>{title}</SubHeader>
-              <Body>{subtitle}</Body>
+              <SubHeader
+                style={{
+                  shadowColor: 'black',
+                  shadowOpacity: 1,
+                  shadowRadius: 5,
+                }}
+              >
+                {title}
+              </SubHeader>
+              {/* <Body
+                style={{
+                  shadowColor: 'black',
+                  shadowOpacity: 1,
+                  shadowRadius: 5,
+                }}
+              >
+                {subtitle}
+              </Body> */}
             </MaskedView>
           </View>
           <View>
