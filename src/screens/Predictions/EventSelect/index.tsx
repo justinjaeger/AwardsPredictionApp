@@ -115,6 +115,7 @@ const EventSelect = () => {
           ListFooterComponent={
             numToShow < data.length ? <CarouselSkeleton renderLabel /> : null
           }
+          keyExtractor={(item) => item._id}
           renderItem={({ item }) => (
             <View style={{ width }}>
               <PredictionCarousel

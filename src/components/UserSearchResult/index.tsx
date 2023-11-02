@@ -18,7 +18,6 @@ const UserSearchResult = ({
   onEndReached,
   header,
   noHeader,
-  numResults,
 }: {
   users: WithId<User>[];
   allUsersAreFetched?: boolean;
@@ -26,7 +25,6 @@ const UserSearchResult = ({
   onEndReached?: () => void;
   header?: string;
   noHeader?: boolean;
-  numResults?: number;
 }) => {
   const { userId: authUserId } = useAuth();
   const navigation = useNavigation();
@@ -38,6 +36,9 @@ const UserSearchResult = ({
   };
 
   const noResults = users.length === 0 && !isLoading;
+
+  console.log('isLoading', isLoading);
+  console.log('allUsersAreFetched', allUsersAreFetched);
 
   return (
     <FlatList
@@ -79,7 +80,7 @@ const UserSearchResult = ({
       }
       ListFooterComponent={
         isLoading || !allUsersAreFetched ? (
-          <UserListSkeleton imageSize={IMAGE_SIZE} numResults={numResults} />
+          <UserListSkeleton imageSize={IMAGE_SIZE} numResults={3} />
         ) : null
       }
       renderItem={({ item }) => (

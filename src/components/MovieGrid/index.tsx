@@ -8,6 +8,8 @@ import { useTmdbDataStore } from '../../context/TmdbDataStore';
 import PosterFromTmdb from '../Images/PosterFromTmdb';
 import MoviePosterSkeleton from '../Skeletons/MoviePosterSkeleton';
 
+const MOVIES_IN_ROW = 5;
+
 const MovieGrid = ({
   predictions,
   categoryInfo,
@@ -60,7 +62,7 @@ const MovieGrid = ({
                 }}
               />
             ) : null}
-            {!noLine && i >= slots && i < slots + 5 ? (
+            {!noLine && i >= slots && i < slots + MOVIES_IN_ROW ? (
               // we want to give a margin on top if this is the row beneath the divider (since divider is absolute pos)
               <View style={{ marginTop: 20 }} />
             ) : null}
@@ -68,7 +70,12 @@ const MovieGrid = ({
               <PosterFromTmdb
                 movie={movie}
                 person={person}
-                width={(totalWidth - theme.posterMargin * 5 - theme.windowMargin) / 5}
+                width={
+                  (totalWidth -
+                    theme.posterMargin * (MOVIES_IN_ROW - 1) -
+                    theme.windowMargin) /
+                  MOVIES_IN_ROW
+                }
                 ranking={i + 1}
               />
             ) : (

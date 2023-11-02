@@ -113,6 +113,7 @@ const ContenderStats = () => {
               </View>
             </>
           }
+          keyExtractor={(item) => item.contenderId}
           renderItem={({ item: prediction }) => (
             <View style={{ flex: 1, paddingBottom: 25 }}>
               <NumPredictingItem

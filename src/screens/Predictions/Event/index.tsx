@@ -1,11 +1,9 @@
-import React, { useCallback, useLayoutEffect, useState } from 'react';
-import { FlatList } from 'react-native';
+import React, { useCallback, useState } from 'react';
+import { FlatList, View } from 'react-native';
 import { PredictionsParamList } from '../../../navigation/types';
 import { useTypedNavigation } from '../../../util/hooks';
 import { useEvent } from '../../../context/EventContext';
-import { eventToString } from '../../../util/stringConversions';
 import SignedOutState from '../../../components/SignedOutState';
-import { getHeaderTitleWithProfile, getHeaderTitleWithTrophy } from '../../../constants';
 import _ from 'lodash';
 import { formatLastUpdated } from '../../../util/formatDateTime';
 import LastUpdatedText from '../../../components/LastUpdatedText';
@@ -45,28 +43,6 @@ const Event = ({
   const isAuthUserProfile = userId === authUserId;
 
   const [numToShow, setNumToShow] = useState<number>(30); // essentially making this useless cause it's annoying
-
-  // define the header
-  useLayoutEffect(() => {
-    if (!event) return;
-    const headerTitle = eventToString(event.awardsBody, event.year);
-    if (isAuthUserProfile) {
-      navigation.setOptions({
-        headerTitle: getHeaderTitleWithTrophy(headerTitle, event.awardsBody),
-      });
-    } else {
-      const onPressProfileImage = () => {
-        navigation.dispatch(StackActions.push('Profile', { userId }));
-      };
-      navigation.setOptions({
-        headerTitle: getHeaderTitleWithProfile(
-          headerTitle,
-          userImage,
-          onPressProfileImage,
-        ),
-      });
-    }
-  }, [navigation]);
 
   const onSelectCategory = async (category: CategoryName) => {
     setCategory(category);
@@ -122,30 +98,37 @@ const Event = ({
   };
 
   return (
-    <FlatList
-      data={orderedPredictions.slice(0, numToShow)}
-      ListHeaderComponent={<LastUpdatedText lastUpdated={lastUpdatedString} />}
-      ListFooterComponent={
-        numToShow < orderedPredictions.length ? <CarouselSkeleton renderLabel /> : null
-      }
-      renderItem={({ item }) => (
-        <EventItem item={item} onPress={onPress} isAuthUserProfile={isAuthUserProfile} />
-      )}
-      onScrollEndDrag={(e) => {
-        // Fetches more at bottom of scroll. Note the high event throttle to prevent too many requests
-        // get position of current scroll
-        const currentOffset = e.nativeEvent.contentOffset.y;
-        // get max bottom of scroll
-        const maxOffset =
-          e.nativeEvent.contentSize.height - e.nativeEvent.layoutMeasurement.height;
-        // if we're close to the bottom fetch more
-        if (currentOffset > maxOffset - 200) {
-          onEndReached();
+    <View style={{ flex: 1, width: '100%' }}>
+      <FlatList
+        data={orderedPredictions.slice(0, numToShow)}
+        ListHeaderComponent={<LastUpdatedText lastUpdated={lastUpdatedString} />}
+        ListFooterComponent={
+          numToShow < orderedPredictions.length ? <CarouselSkeleton renderLabel /> : null
         }
-      }}
-      showsVerticalScrollIndicator={false}
-      onEndReachedThreshold={0.5} // triggers onEndReached at (X*100)% of list, for example 0.9 = 90% down
-    />
+        keyExtractor={([catName]) => catName}
+        renderItem={({ item }) => (
+          <EventItem
+            item={item}
+            onPress={onPress}
+            isAuthUserProfile={isAuthUserProfile}
+          />
+        )}
+        onScrollEndDrag={(e) => {
+          // Fetches more at bottom of scroll. Note the high event throttle to prevent too many requests
+          // get position of current scroll
+          const currentOffset = e.nativeEvent.contentOffset.y;
+          // get max bottom of scroll
+          const maxOffset =
+            e.nativeEvent.contentSize.height - e.nativeEvent.layoutMeasurement.height;
+          // if we're close to the bottom fetch more
+          if (currentOffset > maxOffset - 200) {
+            onEndReached();
+          }
+        }}
+        showsVerticalScrollIndicator={false}
+        onEndReachedThreshold={0.5} // triggers onEndReached at (X*100)% of list, for example 0.9 = 90% down
+      />
+    </View>
   );
 };
 
