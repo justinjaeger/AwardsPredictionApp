@@ -6,7 +6,7 @@ import FloatingButton from './FloatingButton';
 
 const BOTTOM = 80;
 
-export const displayStyle: StyleProp<ViewStyle> = {
+const displayStyle: StyleProp<ViewStyle> = {
   position: 'absolute',
   zIndex: 10,
   bottom: BOTTOM,
@@ -14,10 +14,8 @@ export const displayStyle: StyleProp<ViewStyle> = {
 };
 
 export const ScreenshotFab = ({ onPress }: { onPress: () => void }) => {
-  const { isPad } = useDevice();
-
   return (
-    <View style={[displayStyle, { bottom: BOTTOM * 1.7 * (isPad ? 1.5 : 1) }]}>
+    <View style={[displayStyle, { bottom: 50 }]}>
       <FloatingButton onPress={() => onPress()} icon={'grid'} />
     </View>
   );

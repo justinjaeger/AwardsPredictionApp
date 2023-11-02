@@ -29,7 +29,7 @@ const CategoryCommunity = ({ showEventLink }: { showEventLink?: boolean }) => {
 
   return (
     <>
-      <ScreenshotMode predictions={predictions} />
+      <ScreenshotMode predictions={predictions.slice(0, 20)} />
       {predictions?.length === 0 ? (
         <View
           style={{

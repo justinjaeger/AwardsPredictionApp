@@ -17,6 +17,7 @@ import theme from '../../constants/theme';
 import ProfileImage from '../ProfileImage';
 import useProfileUser from '../../screens/Profile/useProfileUser';
 import { ScreenshotFab } from './DisplayFAB';
+import AwardsBodyImage from '../AwardsBodyImage';
 
 const ScreenshotMode = ({
   predictions,
@@ -106,11 +107,15 @@ const ScreenshotMode = ({
                 }}
               >
                 <View style={{ flexDirection: 'row', marginTop: 10 }}>
-                  <ProfileImage
-                    imageSize={80}
-                    image={user?.image}
-                    style={{ marginRight: marginSize }}
-                  />
+                  {!user ? (
+                    <AwardsBodyImage awardsBody={event.awardsBody} size={100} />
+                  ) : (
+                    <ProfileImage
+                      imageSize={80}
+                      image={user.image}
+                      style={{ marginRight: marginSize }}
+                    />
+                  )}
                   <View
                     style={{
                       width: width - 80 - marginSize * 2 - 10,
@@ -118,14 +123,8 @@ const ScreenshotMode = ({
                     }}
                   >
                     <SmallHeader>{categoryData.name}</SmallHeader>
-                    <SubHeader style={{ marginTop: 5 }}>
-                      {eventToString(event.awardsBody, event.year)}
-                    </SubHeader>
-                    {!userId ? (
-                      <BodyBold style={{ marginTop: 10 }}>
-                        {'Award Expert Community'}
-                      </BodyBold>
-                    ) : null}
+                    <SubHeader>{eventToString(event.awardsBody, event.year)}</SubHeader>
+                    {!user ? <BodyBold>{'Award Expert Community'}</BodyBold> : null}
                     <BodyBold style={{ marginTop: 5 }}>{dateString}</BodyBold>
                   </View>
                 </View>
@@ -134,18 +133,22 @@ const ScreenshotMode = ({
                 </BodyBold> */}
               </View>
               <MovieGrid predictions={predictions} categoryInfo={categoryData} />
-              <SubHeader style={{ marginLeft: marginSize }}>
-                {'@' + user?.username ?? ''}
-              </SubHeader>
-              <BodyBold
-                style={{
-                  marginLeft: marginSize,
-                  marginTop: 5,
-                  color: COLORS.secondaryDark,
-                }}
-              >
-                {'follow on Award Expert'}
-              </BodyBold>
+              {user ? (
+                <>
+                  <SubHeader style={{ marginLeft: marginSize }}>
+                    {'@' + user.username ?? ''}
+                  </SubHeader>
+                  <BodyBold
+                    style={{
+                      marginLeft: marginSize,
+                      marginTop: 5,
+                      color: COLORS.secondaryDark,
+                    }}
+                  >
+                    {'follow on Award Expert'}
+                  </BodyBold>
+                </>
+              ) : null}
             </View>
           </TouchableWithoutFeedback>
         </BasicModal>

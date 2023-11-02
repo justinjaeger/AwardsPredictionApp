@@ -76,7 +76,11 @@ const ContenderInfoModal = ({
                 size: 30,
                 name: 'close-outline',
               }}
-              styles={{ backgroundColor: COLORS.secondaryDark }}
+              styles={{
+                backgroundColor: COLORS.secondaryDark,
+                borderWidth: 1,
+                borderColor: COLORS.white,
+              }}
             />
           </View>
           {communityPrediction ? (

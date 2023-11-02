@@ -49,14 +49,19 @@ const MovieGrid = ({
         // BUT ALSO it comes back here from event predictions
         const { movie, person } = getTmdbDataFromPrediction(prediction) || {};
         return (
-          <View key={contenderId} style={{ marginRight: theme.posterMargin * 2 }}>
+          <View
+            key={contenderId}
+            style={{
+              marginRight: theme.posterMargin * 2,
+              marginBottom: theme.posterMargin * 2,
+            }}
+          >
             {!noLine && i === slots ? (
               <Divider
                 style={{
                   position: 'absolute',
                   width: totalWidth - theme.windowMargin * 2,
-                  marginTop: 10,
-                  marginBottom: 10,
+                  marginTop: theme.windowMargin / 2,
                   borderBottomWidth: 1,
                   borderColor: COLORS.secondary,
                 }}
