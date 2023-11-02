@@ -77,7 +77,6 @@ const BasicModal = ({
                 position: 'relative',
                 backgroundColor: COLORS.primary,
                 borderRadius: 10,
-                overflow: 'hidden',
               }}
             >
               {header ? (

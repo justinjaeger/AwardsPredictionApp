@@ -12,6 +12,7 @@ import { SubmitButton } from '../Buttons';
 import { StackNavigationProp } from '@react-navigation/stack';
 import ContenderInfoHeader from '../ContenderInfoHeader';
 import { IconButton } from '../Buttons/IconButton';
+import COLORS from '../../constants/colors';
 
 const ContenderInfoModal = ({
   visible,
@@ -67,7 +68,7 @@ const ContenderInfoModal = ({
     >
       <>
         <View>
-          <View style={{ position: 'absolute', right: 10, top: 10, zIndex: 100 }}>
+          <View style={{ position: 'absolute', right: 10, top: -20, zIndex: 100 }}>
             <IconButton
               onPress={() => close()}
               iconProps={{
@@ -75,6 +76,7 @@ const ContenderInfoModal = ({
                 size: 30,
                 name: 'close-outline',
               }}
+              styles={{ backgroundColor: COLORS.secondaryDark }}
             />
           </View>
           {communityPrediction ? (
@@ -110,7 +112,7 @@ const ContenderInfoModal = ({
               });
             }}
             text={`More${person ? ' movie' : ''} stats`}
-            style={{ marginTop: 10, marginBottom: 10, height: 50 }}
+            style={{ marginTop: 10, marginBottom: 10, height: 50, width: '80%' }}
           />
         </View>
       </>
