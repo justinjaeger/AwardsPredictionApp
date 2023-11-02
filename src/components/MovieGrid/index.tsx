@@ -33,8 +33,8 @@ const MovieGrid = ({
         {
           flexDirection: 'row',
           flexWrap: 'wrap',
-          marginLeft: theme.windowMargin - theme.posterMargin / 2,
-          marginRight: theme.windowMargin - theme.posterMargin / 2,
+          marginLeft: theme.windowMargin,
+          marginRight: theme.windowMargin,
           marginBottom: theme.windowMargin,
           width: totalWidth,
         },
@@ -47,7 +47,7 @@ const MovieGrid = ({
         // BUT ALSO it comes back here from event predictions
         const { movie, person } = getTmdbDataFromPrediction(prediction) || {};
         return (
-          <View key={contenderId}>
+          <View key={contenderId} style={{ marginRight: theme.posterMargin * 2 }}>
             {!noLine && i === slots ? (
               <Divider
                 style={{
@@ -68,7 +68,7 @@ const MovieGrid = ({
               <PosterFromTmdb
                 movie={movie}
                 person={person}
-                width={(totalWidth - theme.windowMargin * 2 + theme.posterMargin) / 5}
+                width={(totalWidth - theme.posterMargin * 5 - theme.windowMargin) / 5}
                 ranking={i + 1}
               />
             ) : (
