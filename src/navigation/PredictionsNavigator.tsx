@@ -94,6 +94,7 @@ const PredictionsNavigator = () => {
         options={{
           headerTitle: getHeaderTitle('Stats'),
           headerLeft: BackButton,
+          gestureEnabled: false,
           ...large,
         }}
       />
