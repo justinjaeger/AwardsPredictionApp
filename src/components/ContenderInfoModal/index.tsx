@@ -40,7 +40,7 @@ const ContenderInfoModal = ({
 
   // TODO: DO this for performance, song
   const communityPrediction = predictions.find(
-    (p) => p.movieTmdbId === prediction.movieTmdbId,
+    (p) => p.contenderId === prediction.contenderId,
   );
 
   const totalNumPredictingTop = getTotalNumPredicting(
