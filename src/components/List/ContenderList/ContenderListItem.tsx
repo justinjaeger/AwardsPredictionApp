@@ -9,7 +9,7 @@ import {
 import { useEvent } from '../../../context/EventContext';
 import { getTotalNumPredicting } from '../../../util/getNumPredicting';
 import { IconButton } from '../../Buttons/IconButton';
-import { SubHeader } from '../../Text';
+import { Body, SubHeader } from '../../Text';
 import CustomIcon from '../../CustomIcon';
 import { hexToRgb } from '../../../util/hexToRgb';
 import { CategoryType, iPrediction } from '../../../types/api';
@@ -61,7 +61,7 @@ const ContenderListItem = ({
   const disableEditing = !isAuthProfile;
   const category = _category!;
   const event = _event!;
-  const { slots: _slots } = event.categories[category];
+  const { slots: _slots, type } = event.categories[category];
   const slots = _slots || 5;
 
   const { width: posterWidth, height: posterHeight } =
@@ -93,7 +93,6 @@ const ContenderListItem = ({
       break;
     case CategoryType.SONG:
       title = song?.title || '';
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       subtitle = movie?.title || '';
       break;
   }
@@ -164,7 +163,8 @@ const ContenderListItem = ({
           <View
             style={{
               position: 'absolute',
-              flexDirection: 'column',
+              flexDirection: 'row',
+              alignItems: 'baseline',
               paddingLeft: 5,
               zIndex: 2,
               width: '100%',
@@ -179,15 +179,17 @@ const ContenderListItem = ({
             >
               {title}
             </SubHeader>
-            {/* <Body
+            {type !== CategoryType.FILM ? (
+              <Body
                 style={{
                   shadowColor: 'black',
                   shadowOpacity: 1,
                   shadowRadius: 5,
                 }}
               >
-                {subtitle}
-              </Body> */}
+                {` • ${subtitle}`}
+              </Body>
+            ) : null}
           </View>
           {numPredicting &&
           totalNumPredictingTop !== undefined &&
