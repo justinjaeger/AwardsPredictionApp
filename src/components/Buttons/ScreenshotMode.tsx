@@ -108,7 +108,7 @@ const ScreenshotMode = ({
               >
                 <View style={{ flexDirection: 'row', marginTop: 10 }}>
                   {!user ? (
-                    <AwardsBodyImage awardsBody={event.awardsBody} size={100} />
+                    <AwardsBodyImage awardsBody={event.awardsBody} size={90} />
                   ) : (
                     <ProfileImage
                       imageSize={80}
@@ -124,7 +124,11 @@ const ScreenshotMode = ({
                   >
                     <SmallHeader>{categoryData.name}</SmallHeader>
                     <SubHeader>{eventToString(event.awardsBody, event.year)}</SubHeader>
-                    {!user ? <BodyBold>{'Award Expert Community'}</BodyBold> : null}
+                    {!user ? (
+                      <BodyBold style={{ marginTop: 5 }}>
+                        {'Award Expert Community'}
+                      </BodyBold>
+                    ) : null}
                     <BodyBold style={{ marginTop: 5 }}>{dateString}</BodyBold>
                   </View>
                 </View>

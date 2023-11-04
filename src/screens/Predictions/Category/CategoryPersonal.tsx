@@ -143,6 +143,7 @@ const CategoryPersonal = ({
   if (isLoading) {
     return <CategorySkeleton />;
   }
+
   return (
     <>
       <ScreenshotMode predictions={predictions} userId={userId} />
