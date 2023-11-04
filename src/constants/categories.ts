@@ -17,6 +17,7 @@ export const CATEGORY_TYPE_TO_STRING: { [key in CategoryType]: string } = {
   [CategoryType.SONG]: 'Song',
 };
 
+// TODO: Obsolete
 export const getCategorySlots = (
   event: {
     awardsBody: AwardsBody;
@@ -32,7 +33,6 @@ export const getCategorySlots = (
   return awardsBodyCategory[categoryName]?.slots || 5;
 };
 
-// TODO: Obsolete
 export const getAwardsBodyCategories = (
   awardsBody: AwardsBody,
   year: number,

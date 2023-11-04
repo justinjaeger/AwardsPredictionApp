@@ -51,100 +51,96 @@ const Histogram = ({
     (slotThatTouchIsIn && numPredicting?.[slotThatTouchIsIn]) || 0;
 
   return (
-    <>
-      <View
-        style={{
-          flexDirection: 'row',
-          alignSelf: 'flex-end',
-          alignItems: 'flex-end',
-          justifyContent: 'space-between',
-          height: barMaxHeight,
-          width: totalWidth,
-          zIndex: 1,
-          borderBottomWidth: 1,
-          borderBottomColor: hexToRgb(COLORS.secondary, 0.1),
-          marginRight: 10,
-          marginLeft: 10,
-          borderRadius: theme.borderRadius,
-        }}
-        onTouchStart={handleGesture}
-        onTouchMove={handleGesture}
-        onTouchEnd={() => setGesturePos(undefined)}
-      >
-        {new Array(barsToShow).fill(null).map((x, i) => {
-          const place = i + 1;
-          const isHighlighted = place === slotThatTouchIsIn;
+    <View
+      style={{
+        flexDirection: 'row',
+        alignSelf: 'flex-end',
+        alignItems: 'flex-end',
+        justifyContent: 'space-between',
+        height: barMaxHeight,
+        width: totalWidth,
+        zIndex: 1,
+        borderBottomWidth: 1,
+        borderBottomColor: hexToRgb(COLORS.secondary, 0.1),
+        marginRight: 10,
+        marginLeft: 10,
+        borderRadius: theme.borderRadius,
+      }}
+      onTouchStart={handleGesture}
+      onTouchMove={handleGesture}
+      onTouchEnd={() => setGesturePos(undefined)}
+    >
+      {new Array(barsToShow).fill(null).map((x, i) => {
+        const place = i + 1;
+        const isHighlighted = place === slotThatTouchIsIn;
 
-          const numPredictingPlace = numPredicting?.[place] || 0;
-          const h =
-            barMaxHeight *
-            ((numPredictingPlace || 1) / (totalNumPredicting || 1)) *
-            (totalNumPredictingTop ? totalNumPredicting / totalNumPredictingTop : 1);
-          const w = totalWidth / barsToShow - 5;
-          return (
+        const numPredictingPlace = numPredicting?.[place] || 0;
+        const h =
+          barMaxHeight *
+          ((numPredictingPlace || 1) / (totalNumPredicting || 1)) *
+          (totalNumPredictingTop ? totalNumPredicting / totalNumPredictingTop : 1);
+        const w = totalWidth / barsToShow - 5;
+        return (
+          <View
+            key={i}
+            style={{
+              backgroundColor: isHighlighted
+                ? hexToRgb(COLORS.secondaryLight, 0.3)
+                : undefined,
+              height: '100%',
+              justifyContent: 'flex-end',
+            }}
+            pointerEvents="none"
+          >
             <View
               style={{
-                backgroundColor: isHighlighted
-                  ? hexToRgb(COLORS.secondaryLight, 0.3)
-                  : undefined,
-                height: '100%',
-                justifyContent: 'flex-end',
+                width: widthOfEachBar - 5,
+                height: numPredictingPlace > 0 ? h : 0,
+                backgroundColor:
+                  place <= slots ? COLORS.secondaryLight : COLORS.secondaryMiddle,
+                zIndex: 100,
               }}
               pointerEvents="none"
-            >
-              <>
-                <View
-                  key={i}
-                  style={{
-                    width: widthOfEachBar - 5,
-                    height: numPredictingPlace > 0 ? h : 0,
-                    backgroundColor:
-                      place <= slots ? COLORS.secondaryLight : COLORS.secondaryMiddle,
-                    zIndex: 100,
-                  }}
-                  pointerEvents="none"
-                />
-                {gesturePos !== undefined ? (
-                  <Body
-                    style={{
-                      position: 'absolute',
-                      right: w / 4,
-                      bottom: -20,
-                    }}
-                  >
-                    {place.toString()}
-                  </Body>
-                ) : null}
-              </>
-            </View>
-          );
-        })}
-        {gesturePos !== undefined ? (
-          <View
-            style={{
-              position: 'absolute',
-              right: 0,
-              top: -barMaxHeight,
-              padding: 5,
-              backgroundColor: COLORS.primary,
-              borderRadius: theme.borderRadius,
-              alignItems: 'flex-end',
-              flexDirection: 'column',
-              borderWidth: 1,
-              borderColor: hexToRgb(COLORS.white, 0.2),
-            }}
-          >
-            <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
-              <Header>{numPredictingInSelectedSlot.toString()}</Header>
-              <SubHeaderLight style={{ marginLeft: 5 }}>{'predicting'}</SubHeaderLight>
-            </View>
-            <SubHeader style={{ marginLeft: 10, marginTop: 10 }}>
-              {formatPercentage(numPredictingInSelectedSlot / totalNumPredicting)}
-            </SubHeader>
+            />
+            {gesturePos !== undefined ? (
+              <Body
+                style={{
+                  position: 'absolute',
+                  right: w / 4,
+                  bottom: -20,
+                }}
+              >
+                {place.toString()}
+              </Body>
+            ) : null}
           </View>
-        ) : null}
-      </View>
-    </>
+        );
+      })}
+      {gesturePos !== undefined ? (
+        <View
+          style={{
+            position: 'absolute',
+            right: 0,
+            top: -barMaxHeight,
+            padding: 5,
+            backgroundColor: COLORS.primary,
+            borderRadius: theme.borderRadius,
+            alignItems: 'flex-end',
+            flexDirection: 'column',
+            borderWidth: 1,
+            borderColor: hexToRgb(COLORS.white, 0.2),
+          }}
+        >
+          <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
+            <Header>{numPredictingInSelectedSlot.toString()}</Header>
+            <SubHeaderLight style={{ marginLeft: 5 }}>{'predicting'}</SubHeaderLight>
+          </View>
+          <SubHeader style={{ marginLeft: 10, marginTop: 10 }}>
+            {formatPercentage(numPredictingInSelectedSlot / totalNumPredicting)}
+          </SubHeader>
+        </View>
+      ) : null}
+    </View>
   );
 };
 

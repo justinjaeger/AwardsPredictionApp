@@ -5,6 +5,7 @@ export const getPredictedOutcomes = (
   predictions: iContenderStatsData[],
   event: EventModel,
 ) => {
+  const allSignificantPredictions: iContenderStatsData[] = [];
   const potentialPredictions: iContenderStatsData[] = [];
   const nomPredictions: iContenderStatsData[] = [];
   const winPredictions: iContenderStatsData[] = [];
@@ -20,6 +21,9 @@ export const getPredictedOutcomes = (
     }
     if (p.ranking <= slots * 2) {
       potentialPredictions.push(p);
+    }
+    if (p.ranking <= slots * 4) {
+      allSignificantPredictions.push(p);
     }
   });
 
@@ -76,6 +80,7 @@ export const getPredictedOutcomes = (
 
   return {
     potentialPredictions,
+    allSignificantPredictions,
     numWins: winPredictions.length,
     numNoms: nomCount,
     numPoential: potentialCount,

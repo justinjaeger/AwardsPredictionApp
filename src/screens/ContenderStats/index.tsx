@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { PredictionsParamList } from '../../navigation/types';
 import ItemStatBox from '../../components/ItemStatBox.tsx';
@@ -14,6 +14,8 @@ import { getHeaderTitleWithTrophy } from '../../constants';
 import { useTmdbDataStore } from '../../context/TmdbDataStore';
 import { truncateText } from '../../util/truncateText';
 import { Header, SubHeader } from '../../components/Text';
+import { getAwardsBodyCategories } from '../../constants/categories';
+import PredictionTab from '../../navigation/PredictionTabsNavigator/PredictionTab';
 import { getPredictedOutcomes } from '../../util/getPredictedOutcomes';
 
 export type iContenderStatsData = iPrediction & {
@@ -44,52 +46,92 @@ const ContenderStats = () => {
     });
   }, [navigation]);
 
-  if (!communityPredictions) return null;
+  const [sortSetting, setSortSetting] = useState<'likelihood' | 'cat-order'>(
+    'likelihood',
+  );
 
-  const allPredictionsWithContender: iContenderStatsData[] = [];
-  Object.entries(communityPredictions.categories).forEach(
-    ([category, categoryPrediction]) => {
-      const categoryPredictions = categoryPrediction.predictions;
-      const predictions = categoryPredictions.filter(
-        (p) => p.movieTmdbId === movieTmdbId,
-      );
-      const totalNumPredictingTop = getTotalNumPredicting(
-        predictions[0]?.numPredicting ?? {},
-      );
-      const totalNumPredictingCategory =
-        communityPredictions.categories[category as CategoryName].totalUsersPredicting ??
-        totalNumPredictingTop;
+  const [dataInCategoryOrder, setDataInCategoryOrder] = useState<iContenderStatsData[]>(
+    [],
+  );
+  const [dataInLikelihoodOrder, setDataInLikelihoodOrder] = useState<
+    iContenderStatsData[]
+  >([]);
+  const [potential, setPotential] = useState<
+    | {
+        noms: number;
+        wins: number;
+        potential: number;
+      }
+    | undefined
+  >(undefined);
 
-      predictions.forEach((p) => {
-        const { slots } = event.categories[category as CategoryName];
-        const { win, nom, listed } = getNumPredicting(p?.numPredicting ?? {}, slots ?? 5);
+  useEffect(() => {
+    if (!communityPredictions) return;
+    const allPredictionsWithContender: iContenderStatsData[] = [];
+    Object.entries(communityPredictions.categories).forEach(
+      ([category, categoryPrediction]) => {
+        const categoryPredictions = categoryPrediction.predictions;
+        const predictions = categoryPredictions.filter(
+          (p) => p.movieTmdbId === movieTmdbId,
+        );
+        const totalNumPredictingTop = getTotalNumPredicting(
+          predictions[0]?.numPredicting ?? {},
+        );
+        const totalNumPredictingCategory =
+          communityPredictions.categories[category as CategoryName]
+            .totalUsersPredicting ?? totalNumPredictingTop;
 
-        const likelihood =
-          listed / totalNumPredictingCategory +
-          nom / totalNumPredictingCategory +
-          win / totalNumPredictingCategory;
+        predictions.forEach((p) => {
+          const { slots } = event.categories[category as CategoryName];
+          const { win, nom, listed } = getNumPredicting(
+            p?.numPredicting ?? {},
+            slots ?? 5,
+          );
 
-        allPredictionsWithContender.push({
-          ...p,
-          category: category as CategoryName,
-          totalNumPredictingTop,
-          totalNumPredictingCategory,
-          likelihood,
+          const likelihood =
+            listed / totalNumPredictingCategory +
+            nom / totalNumPredictingCategory +
+            win / totalNumPredictingCategory;
+
+          allPredictionsWithContender.push({
+            ...p,
+            category: category as CategoryName,
+            totalNumPredictingTop,
+            totalNumPredictingCategory,
+            likelihood,
+          });
         });
-      });
-    },
-  );
+      },
+    );
+    const { numNoms, numWins, numPoential, allSignificantPredictions } =
+      getPredictedOutcomes(allPredictionsWithContender, event);
+    setPotential({
+      noms: numNoms,
+      wins: numWins,
+      potential: numPoential,
+    });
 
-  const { numNoms, numWins, numPoential, potentialPredictions } = getPredictedOutcomes(
-    allPredictionsWithContender,
-    event,
-  );
+    const awardsBodyCategories = getAwardsBodyCategories(event.awardsBody, event.year);
+    const orderedCategoryKeys = Object.keys(awardsBodyCategories) as CategoryName[];
+
+    const sortedByCategoryOrder = orderedCategoryKeys.reduce(
+      (acc: iContenderStatsData[], catName) => {
+        const predictions = allSignificantPredictions.filter(
+          (p) => p.category === catName,
+        );
+        return [...acc, ...predictions];
+      },
+      [],
+    );
+    setDataInCategoryOrder(sortedByCategoryOrder);
+    setDataInLikelihoodOrder(sortByLikelihood(allSignificantPredictions));
+  }, []);
 
   return (
     <BackgroundWrapper>
       <View style={{ flex: 1 }}>
         <FlatList
-          data={sortByLikelihood(potentialPredictions) as iContenderStatsData[]}
+          data={sortSetting === 'cat-order' ? dataInCategoryOrder : dataInLikelihoodOrder}
           ListHeaderComponent={
             <>
               <ContenderInfoHeader
@@ -99,31 +141,45 @@ const ContenderStats = () => {
                   movieTmdbId,
                 }}
               />
-              <View
-                style={{
-                  padding: 10,
-                  paddingBottom: 20,
-                  width: '100%',
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                }}
-              >
-                <View>
-                  <Header>{numWins.toString()}</Header>
-                  <SubHeader>wins predicted</SubHeader>
+              {potential ? (
+                <View
+                  style={{
+                    padding: 10,
+                    paddingBottom: 20,
+                    width: '100%',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                  }}
+                >
+                  <View>
+                    <Header>{potential.wins.toString()}</Header>
+                    <SubHeader>wins predicted</SubHeader>
+                  </View>
+                  <View>
+                    <Header>{potential.noms.toString()}</Header>
+                    <SubHeader>noms predicted</SubHeader>
+                  </View>
+                  <View>
+                    <Header>{potential.potential.toString()}</Header>
+                    <SubHeader>potential</SubHeader>
+                  </View>
                 </View>
-                <View>
-                  <Header>{numNoms.toString()}</Header>
-                  <SubHeader>noms predicted</SubHeader>
-                </View>
-                <View>
-                  <Header>{numPoential.toString()}</Header>
-                  <SubHeader>potential</SubHeader>
-                </View>
+              ) : null}
+              <View style={{ flexDirection: 'row', width: '100%' }}>
+                <PredictionTab
+                  text="Likelihood"
+                  selected={sortSetting === 'likelihood'}
+                  onPress={() => setSortSetting('likelihood')}
+                />
+                <PredictionTab
+                  text="Category Order"
+                  selected={sortSetting === 'cat-order'}
+                  onPress={() => setSortSetting('cat-order')}
+                />
               </View>
             </>
           }
-          keyExtractor={(item) => item.contenderId}
+          keyExtractor={(item) => item.category + item.songId + item.personTmdbId}
           renderItem={({ item: prediction }) => (
             <View style={{ flex: 1, paddingBottom: 25 }}>
               <ItemStatBox
