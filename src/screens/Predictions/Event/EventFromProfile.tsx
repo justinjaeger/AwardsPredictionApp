@@ -1,50 +1,51 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useLayoutEffect } from 'react';
 import { PredictionsParamList } from '../../../navigation/types';
-import { useAuth } from '../../../context/UserContext';
-import { EventDisplayFab } from '../../../components/Buttons/DisplayFAB';
-import { RouteProp, useRoute } from '@react-navigation/native';
+import {
+  RouteProp,
+  StackActions,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import Event from './index';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
-import HistoryTab from '../../../components/HistoryTab';
-import { View } from 'react-native';
-import UserHeader from '../../../components/UserHeader';
 import { useProfilePrediction } from '../../../context/ProfilePredictionContext';
-import { useEventDisplay } from '../../../hooks/animatedState/useDisplay';
+import { eventToString } from '../../../util/stringConversions';
+import { getHeaderTitleWithProfile } from '../../../constants';
+import { useEvent } from '../../../context/EventContext';
 
 const EventFromProfile = () => {
-  const { params } = useRoute<RouteProp<PredictionsParamList, 'Event'>>();
+  const navigation = useNavigation();
+  const { params } = useRoute<RouteProp<PredictionsParamList, 'EventFromProfile'>>();
+  const { userId, userName, userImage } = params;
 
-  const { userId: authUserId } = useAuth();
-  const userId = params?.userId || authUserId;
+  const { event } = useEvent();
 
-  const { user, predictionData, isLoading, setUserId } = useProfilePrediction();
+  const { predictionData, isLoading, setUserId } = useProfilePrediction();
   useEffect(() => setUserId(userId), [userId]);
 
-  const { collapsedOpacity, expandedOpacity, delayedDisplay } = useEventDisplay();
-
-  const props = {
-    collapsedOpacity,
-    expandedOpacity,
-    delayedDisplay,
-    userId,
-  };
+  // define the header
+  useLayoutEffect(() => {
+    if (!event) return;
+    const headerTitle = eventToString(event.awardsBody, event.year);
+    const onPressProfileImage = () => {
+      navigation.dispatch(StackActions.push('Profile', { userId }));
+    };
+    navigation.setOptions({
+      headerTitle: getHeaderTitleWithProfile(headerTitle, userImage, onPressProfileImage),
+    });
+  }, [navigation]);
 
   return (
     <>
-      <EventDisplayFab />
       <BackgroundWrapper>
-        <>
-          {user ? <UserHeader user={user} /> : null}
-          <View style={{ zIndex: 2, width: '100%' }}>
-            <HistoryTab />
-          </View>
-          <Event
-            tab={'personal'}
-            predictionData={predictionData}
-            isLoading={isLoading}
-            {...props}
-          />
-        </>
+        <Event
+          tab={'personal'}
+          predictionData={predictionData}
+          isLoading={isLoading}
+          userId={userId}
+          userImage={userImage}
+          userName={userName}
+        />
       </BackgroundWrapper>
     </>
   );

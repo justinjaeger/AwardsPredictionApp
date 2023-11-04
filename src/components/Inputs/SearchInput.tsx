@@ -1,28 +1,42 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Input, Spinner } from '@ui-kitten/components';
 import { EvaStatus } from '@ui-kitten/components/devsupport';
 import CustomIcon from '../CustomIcon';
 import COLORS from '../../constants/colors';
-import { TouchableOpacity, useWindowDimensions, View } from 'react-native';
+import { Keyboard, TouchableOpacity, useWindowDimensions, View } from 'react-native';
 import { HEADER_HEIGHT } from '../../constants';
-import { useSearch } from '../../context/ContenderSearchContext';
 import theme from '../../constants/theme';
 
-// MUST WRAP IN SearchProvider
-const SearchInput = (props: {
+const SearchInput = ({
+  handleSearch,
+  onReset,
+  label,
+  placeholder,
+  caption,
+  onBlur,
+  status,
+  autoFocus,
+  style,
+}: {
+  handleSearch: (s: string) => void;
+  onReset?: () => void;
   label?: string;
   placeholder?: string;
   caption?: string;
   onBlur?: () => void;
   status?: EvaStatus;
+  autoFocus?: boolean;
   style?: any;
 }) => {
-  const { label, placeholder, caption, onBlur, status, style } = props;
-
   const { width } = useWindowDimensions();
 
-  const { searchInput, setSearchInput, isLoadingSearch, isSearching, resetSearch } =
-    useSearch();
+  const [search, setSearch] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const resetSearch = () => {
+    onReset && onReset();
+    setSearch('');
+  };
 
   const searchHeight = HEADER_HEIGHT;
 
@@ -30,15 +44,25 @@ const SearchInput = (props: {
     <View style={{ position: 'relative', width, padding: theme.windowMargin }}>
       <Input
         label={label}
-        value={searchInput}
+        value={search}
         placeholder={placeholder}
         placeholderTextColor={COLORS.gray}
-        onChangeText={setSearchInput}
+        onChangeText={(s) => {
+          if (s === '') {
+            resetSearch();
+          }
+          setSearch(s);
+        }}
         caption={caption}
         onFocus={() => {}}
-        onBlur={() => {
-          onBlur && onBlur();
+        onBlur={() => onBlur && onBlur()}
+        autoFocus={autoFocus}
+        onSubmitEditing={async () => {
+          setIsLoading(true);
+          await handleSearch(search);
+          setIsLoading(false);
         }}
+        returnKeyType="search"
         status={status || 'basic'}
         style={{
           borderRadius: 100,
@@ -64,10 +88,23 @@ const SearchInput = (props: {
           />
         }
         accessoryRight={
-          !isLoadingSearch && isSearching ? (
+          isLoading ? (
+            <View
+              style={{
+                position: 'absolute',
+                right: theme.windowMargin + 15,
+                top: searchHeight / 2 + 2,
+                justifyContent: 'center',
+                height: searchHeight,
+              }}
+            >
+              <Spinner size="medium" style={{ borderColor: COLORS.gray }} />
+            </View>
+          ) : search.length ? (
             <TouchableOpacity
               onPress={() => {
                 resetSearch();
+                Keyboard.dismiss();
               }}
             >
               <CustomIcon
@@ -81,19 +118,6 @@ const SearchInput = (props: {
         }
         keyboardAppearance={'dark'}
       />
-      {isLoadingSearch ? (
-        <View
-          style={{
-            position: 'absolute',
-            right: theme.windowMargin + 15,
-            top: searchHeight / 2 + 2,
-            justifyContent: 'center',
-            height: searchHeight,
-          }}
-        >
-          <Spinner size="medium" style={{ borderColor: COLORS.gray }} />
-        </View>
-      ) : null}
     </View>
   );
 };

@@ -13,13 +13,13 @@ import {
 import COLORS from '../../constants/colors';
 import { getPosterDimensionsByWidth } from '../../constants/posterDimensions';
 import theme from '../../constants/theme';
-import { iPredictionSet } from '../../types';
 import useDevice from '../../util/device';
 import { hexToRgb } from '../../util/hexToRgb';
 import ProfileImage from '../ProfileImage';
 import { SubHeader } from '../Text';
 import UserPredictionList from '../UserPredictionList';
 import CarouselArrow from './CarouselArrow';
+import { iRecentPrediction } from '../../types/api';
 
 const PredictionCarousel = ({
   predictionSets,
@@ -28,7 +28,7 @@ const PredictionCarousel = ({
   enableArrows,
   style,
 }: {
-  predictionSets: iPredictionSet[];
+  predictionSets: iRecentPrediction[];
   userId: string;
   userInfo?: {
     name: string;
@@ -98,7 +98,16 @@ const PredictionCarousel = ({
   }
 
   return (
-    <>
+    <View
+      style={{
+        borderWidth: 1,
+        borderColor: hexToRgb(COLORS.white, 0.2),
+        backgroundColor: hexToRgb(COLORS.white, 0.02),
+        borderRadius: theme.borderRadius,
+        marginTop: 10,
+        marginBottom: 10,
+      }}
+    >
       {userInfo ? (
         <TouchableOpacity
           style={{
@@ -173,8 +182,9 @@ const PredictionCarousel = ({
         >
           <UserPredictionList
             predictionSets={predictionSets}
-            fixedSlots={10}
             userId={userId}
+            userName={userInfo?.name}
+            userImage={userInfo?.image}
           />
         </ScrollView>
         {/* SCROLL BAR */}
@@ -199,7 +209,7 @@ const PredictionCarousel = ({
           }}
         />
       </View>
-    </>
+    </View>
   );
 };
 

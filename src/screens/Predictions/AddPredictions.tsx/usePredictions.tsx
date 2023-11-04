@@ -1,47 +1,33 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { useEffect, useState } from 'react';
-import { useCategory } from '../../../context/CategoryContext';
-import useQueryCommunityEvent from '../../../hooks/queries/getCommunityEvent';
+import { useState } from 'react';
+import { useEvent } from '../../../context/EventContext';
 import { PredictionsParamList } from '../../../navigation/types';
-import { iCategory, iEvent, iPrediction } from '../../../types';
+import { iPrediction } from '../../../types/api';
+import useQueryGetCommunityPredictions from '../../../hooks/queries/useQueryGetCommunityPredictions';
+import { sortPredictions } from '../../../util/sortPredictions';
 
+/**
+ * Lists all community predictions with the ones you've selected
+ */
 export const usePredictions = () => {
   const {
     params: { initialPredictions, onFinish },
   } = useRoute<RouteProp<PredictionsParamList, 'AddPredictions'>>();
   const navigation = useNavigation();
-  const { category: _category, event: _event } = useCategory();
-
-  const category = _category as iCategory;
-  const event = _event as iEvent;
+  const { category: _category } = useEvent();
+  const category = _category!;
 
   // We use the SAME KEY as the previous screen, because it avoids a re-fetch of the data which was available previously
-  const { data: communityData } = useQueryCommunityEvent({ event });
-  const communityDataPredictions = communityData?.[category.id]?.predictions || [];
+  const { data: communityPredictionData } = useQueryGetCommunityPredictions();
+  const communityPredictions = sortPredictions(
+    communityPredictionData?.categories[category].predictions ?? [],
+  );
 
   const [selectedPredictions, setSelectedPredictions] =
     useState<iPrediction[]>(initialPredictions);
 
-  const [hiddenPredictions, setHiddenPredictions] = useState<iPrediction[]>([]); // for predictions that communityPredictions isn't aware of
-
   const selectedContenderIds = selectedPredictions.map((sp) => sp.contenderId);
   const initiallySelectedContenderIds = initialPredictions.map((p) => p.contenderId);
-  const communityPredictions = communityData
-    ? [...communityDataPredictions, ...hiddenPredictions]
-    : [];
-
-  useEffect(() => {
-    // get all selectedPredictions that communityData doesn't include so we can include them in list
-    // want to only add new ones to hiddenPredictions if we unselect, we don't want it to go away
-    const communityDataContenderIds = communityDataPredictions.map((p) => p.contenderId);
-    const hiddenPredictionContenderIds = hiddenPredictions.map((p) => p.contenderId);
-    const newHiddenPredictions = selectedPredictions.filter(
-      (p) =>
-        !communityDataContenderIds.includes(p.contenderId) &&
-        !hiddenPredictionContenderIds.includes(p.contenderId),
-    );
-    setHiddenPredictions([...hiddenPredictions, ...newHiddenPredictions]);
-  }, [selectedPredictions.length]);
 
   const onSave = async () => {
     // Below: we have to re-order the predictions so that the NEW films are at the bottom, so it doesn't change the previous order
@@ -71,8 +57,23 @@ export const usePredictions = () => {
     navigation.goBack();
   };
 
+  // TODO: what happens to movies we just added?
+  // It gets put at the bottom of "selectedPredictions"
+  const totallyNewContenders = selectedPredictions.filter(
+    (sp) =>
+      !initiallySelectedContenderIds.find((id) => id === sp.contenderId) &&
+      !communityPredictions.find((p) => p.contenderId === sp.contenderId),
+  );
+  // put totally new contenders at the top
+  const communityPredictionsWithJustAddedAtTop = [
+    ...totallyNewContenders,
+    ...communityPredictions.filter(
+      (p) => !totallyNewContenders.find((newP) => newP.contenderId === p.contenderId),
+    ),
+  ];
+
   return {
-    predictionsInList: communityPredictions,
+    communityPredictions: communityPredictionsWithJustAddedAtTop,
     selectedPredictions,
     setSelectedPredictions,
     selectedContenderIds,

@@ -5,12 +5,11 @@ import { SubmitButton } from '../../components/Buttons';
 import LoadingStatue from '../../components/LoadingStatue';
 import { Body } from '../../components/Text';
 import COLORS from '../../constants/colors';
-import { useAuth } from '../../context/UserContext';
-import AuthServices from '../../services/auth';
-import ApiServices from '../../services/graphql';
+import { useAuth } from '../../context/AuthContext';
 import { useNavigateAwayEffect } from '../../util/hooks';
 import { useProfilePrediction } from '../../context/ProfilePredictionContext';
 import Snackbar from '../../components/Snackbar';
+import MongoApi from '../../services/api/requests';
 
 const Settings = () => {
   const { userId, signOutUser } = useAuth();
@@ -33,24 +32,15 @@ const Settings = () => {
     const handleError = () => {
       setDeletionStatus('error');
     };
-    const res = await ApiServices.permanentlyDeleteUser(userId);
-    if (res.status !== 'success') {
+    const { status } = await MongoApi.deleteUser(); // deletes the signed in user
+    if (status !== 'success') {
       return handleError();
-    }
-    const authRes = await AuthServices.deleteUser();
-    if (authRes.status !== 'success') {
-      handleError();
     }
     setDeletionStatus('success');
     // then log the user out
-    AuthServices.signOut().then((res) => {
-      // sign out in context as well
-      if (res.status === 'success') {
-        signOutUser();
-        resetProfileUser();
-        Snackbar.success('You were signed out');
-      }
-    });
+    signOutUser();
+    resetProfileUser();
+    Snackbar.success('You were signed out');
   };
 
   const onPressDelete = () => {

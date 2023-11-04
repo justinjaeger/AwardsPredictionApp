@@ -1,46 +1,36 @@
-import React from 'react';
-import { Animated, View } from 'react-native';
-import { iCategoryProps } from '.';
-import LastUpdatedText from '../../../components/LastUpdatedText';
-import MovieGrid from '../../../components/MovieGrid';
+import React, { memo } from 'react';
+import { View } from 'react-native';
 import MovieListCommunity from '../../../components/MovieList/MovieListCommunity';
 import { BodyBold } from '../../../components/Text';
-import theme from '../../../constants/theme';
-import { useCategory } from '../../../context/CategoryContext';
-import { iCategory } from '../../../types';
+import { useEvent } from '../../../context/EventContext';
 import { formatLastUpdated } from '../../../util/formatDateTime';
 import EventLink from './EventLink';
-import useCategoryCommunityPredictions from './useCategoryCommunityPredictions';
+import useQueryGetCommunityPredictions from '../../../hooks/queries/useQueryGetCommunityPredictions';
+import CategorySkeleton from '../../../components/Skeletons/CategorySkeleton';
+import { sortPredictions } from '../../../util/sortPredictions';
+import ScreenshotMode from '../../../components/Buttons/ScreenshotMode';
 
 // Note: We ALSO use this for non-authenticated user profiles
-const CategoryCommunity = ({
-  collapsedOpacity,
-  expandedOpacity,
-  delayedDisplay,
-  gridOpacity,
-  predictionData,
-  isIndividualProfile,
-  showEventLink,
-}: iCategoryProps & { isIndividualProfile?: boolean }) => {
-  const { category: _category, date } = useCategory();
+const CategoryCommunity = ({ showEventLink }: { showEventLink?: boolean }) => {
+  const { category: _category } = useEvent();
+  const category = _category!;
 
-  const isHistory = !!date;
-  const category = _category as iCategory;
+  const { data: predictionSet, isLoading } = useQueryGetCommunityPredictions();
 
-  const { predictions } = useCategoryCommunityPredictions({
-    predictionData: predictionData || {},
-  });
+  const { createdAt } = predictionSet?.categories[category] || {};
+  const predictions = sortPredictions(
+    predictionSet?.categories[category]?.predictions ?? [],
+  );
+  const lastUpdatedString = formatLastUpdated(new Date(createdAt || ''));
 
-  const lastUpdated = predictionData?.[category.id]?.updatedAt;
-  const lastUpdatedString = formatLastUpdated(new Date(lastUpdated || ''));
-
-  if (!predictions) {
-    return null;
+  if (isLoading) {
+    return <CategorySkeleton />;
   }
 
   return (
     <>
-      {predictions && predictions.length === 0 ? (
+      <ScreenshotMode predictions={predictions.slice(0, 20)} />
+      {predictions?.length === 0 ? (
         <View
           style={{
             width: '100%',
@@ -49,63 +39,18 @@ const CategoryCommunity = ({
             justifyContent: 'center',
           }}
         >
-          <BodyBold>
-            {!isHistory && !isIndividualProfile
-              ? 'Community predictions not yet tallied'
-              : 'No predictions for this date'}
-          </BodyBold>
+          <BodyBold>{'Community predictions not yet tallied'}</BodyBold>
         </View>
       ) : null}
       {showEventLink ? <EventLink userId={undefined} /> : null}
-      <Animated.ScrollView
-        style={{
-          display: delayedDisplay === 'grid' ? 'flex' : 'none',
-          opacity: gridOpacity,
-          width: '100%',
-        }}
-        contentContainerStyle={{
-          paddingBottom: 100,
-          marginTop: theme.windowMargin,
-        }}
-        showsVerticalScrollIndicator={false}
-      >
-        <Animated.View style={{ opacity: gridOpacity }}>
-          <LastUpdatedText
-            lastUpdated={lastUpdatedString}
-            isDisabled={isHistory}
-            style={{ top: -35 }}
-          />
-          <MovieGrid predictions={predictions} />
-        </Animated.View>
-      </Animated.ScrollView>
-      <Animated.View
-        style={{
-          display: delayedDisplay === 'list' ? 'flex' : 'none',
-          opacity: expandedOpacity,
-          width: '100%',
-        }}
-      >
+      <View style={{ width: '100%' }}>
         <MovieListCommunity
           predictions={predictions}
           lastUpdatedString={lastUpdatedString}
-          disableHeader={isIndividualProfile}
         />
-      </Animated.View>
-      <Animated.View
-        style={{
-          display: delayedDisplay === 'list-collapsed' ? 'flex' : 'none',
-          opacity: collapsedOpacity,
-        }}
-      >
-        <MovieListCommunity
-          predictions={predictions}
-          lastUpdatedString={lastUpdatedString}
-          isCollapsed
-          disableHeader={isIndividualProfile}
-        />
-      </Animated.View>
+      </View>
     </>
   );
 };
 
-export default CategoryCommunity;
+export default memo(CategoryCommunity);

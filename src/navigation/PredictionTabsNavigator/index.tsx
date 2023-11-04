@@ -1,18 +1,27 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Animated, ScrollView, useWindowDimensions, View } from 'react-native';
 import BackgroundWrapper from '../../components/BackgroundWrapper';
-import HistoryTab from '../../components/HistoryTab';
 import COLORS from '../../constants/colors';
-import { useCategory } from '../../context/CategoryContext';
+import { useEvent } from '../../context/EventContext';
 import PredictionTab from './PredictionTab';
 
-const PredictionTabsNavigator = (
-  personal: JSX.Element,
-  community: JSX.Element,
-  personalText?: string,
-) => {
+/**
+ * Note: This component is a bit whack but it's done in this way to prevent re-renders of lists
+ * We call the setPersonalCommunityTab function manually WHEN we navigate, instead of calling it inside here
+ */
+const PredictionTabsNavigator = ({
+  personal,
+  community,
+  personalText,
+  onChangeTab,
+}: {
+  personal: JSX.Element;
+  community: JSX.Element;
+  personalText?: string;
+  onChangeTab?: (tab: 'personal' | 'community') => void;
+}) => {
   const { width } = useWindowDimensions();
-  const { personalCommunityTab, setPersonalCommunityTab } = useCategory();
+  const { personalCommunityTab } = useEvent();
   const scrollBarPositionTwo = width / 2;
 
   // This seems unnecessary but without, it breaks the animation
@@ -28,11 +37,15 @@ const PredictionTabsNavigator = (
   const SCROLL_BAR_WIDTH = width / 2;
 
   useEffect(() => {
-    personalCommunityTab === 'community' ? openCommunityTab() : openPersonalTab();
-  }); // we WANT no dependencies, or else the last scrollViewRef state will persist, depite possibly having changed it
+    personalCommunityTab === 'community' ? openCommunityTab(true) : openPersonalTab(true);
+    setTab(personalCommunityTab || 'personal');
+  }, [personalCommunityTab]);
+
+  const [tab, setTab] = useState<'personal' | 'community'>(
+    personalCommunityTab || 'personal',
+  );
 
   const openPersonalTab = (instant?: boolean) => {
-    setPersonalCommunityTab('personal');
     scrollViewRef.current?.scrollTo({ x: 0, animated: !instant });
     Animated.timing(scrollBarAnim, {
       toValue: 0,
@@ -42,7 +55,6 @@ const PredictionTabsNavigator = (
   };
 
   const openCommunityTab = (instant?: boolean) => {
-    setPersonalCommunityTab('community');
     scrollViewRef.current?.scrollTo({ x: width, animated: !instant });
     Animated.timing(scrollBarAnim, {
       toValue: scrollBarPositionTwo,
@@ -76,16 +88,23 @@ const PredictionTabsNavigator = (
             />
             <PredictionTab
               text={personalText || 'My Predictions'}
-              onPress={() => openPersonalTab()}
-              selected={personalCommunityTab === 'personal'}
+              onPress={() => {
+                openPersonalTab();
+                onChangeTab && onChangeTab('personal');
+                setTab('personal');
+              }}
+              selected={tab === 'personal'}
             />
             <PredictionTab
               text={'Community'}
-              onPress={() => openCommunityTab()}
-              selected={personalCommunityTab === 'community'}
+              onPress={() => {
+                openCommunityTab();
+                onChangeTab && onChangeTab('community');
+                setTab('community');
+              }}
+              selected={tab === 'community'}
             />
           </View>
-          <HistoryTab />
           <ScrollView
             horizontal
             pagingEnabled

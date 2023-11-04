@@ -5,34 +5,39 @@ import { useNavigation } from '@react-navigation/native';
 import FormInput from '../../components/Inputs/FormInput';
 import { EvaStatus } from '@ui-kitten/components/devsupport/typings';
 import { SubmitButton } from '../../components/Buttons';
-import { useAuth } from '../../context/UserContext';
+import { useAuth } from '../../context/AuthContext';
 import { getHeaderTitle } from '../../constants';
 import BackgroundWrapper from '../../components/BackgroundWrapper';
 import { Body, BodyBold } from '../../components/Text';
-import useUpdateUser from '../../hooks/mutations/updateUser';
-import useQueryGetUser from '../../hooks/queries/getUser';
+import useMutationUpdateUser from '../../hooks/mutations/useMutationUpdateUser';
+import useQueryGetUser from '../../hooks/queries/useQueryGetUser';
 import ProfileImage from '../../components/ProfileImage';
-import useUpdateProfileImage from '../../hooks/mutations/updateProfileImage';
+import useMutationUpdateProfileImage from '../../hooks/mutations/useMutationUpdateProfileImage';
 import BackButton from '../../components/Buttons/BackButton';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const BIO_CHAR_LIMIT = 150;
 
 const UpdateProfileInfo = () => {
-  const { userId: authUserId, userEmail } = useAuth();
+  const { userId: authUserId } = useAuth();
   const navigation = useNavigation();
 
   const { data: user } = useQueryGetUser(authUserId);
-  const { mutate: updateUser, isComplete } = useUpdateUser(() => {
+  const { mutate: updateUser, isComplete } = useMutationUpdateUser(() => {
     Snackbar.success('Profile updated');
     navigation.goBack();
   });
-  const { mutate: updateProfileImage } = useUpdateProfileImage();
+  const {
+    mutate: updateProfileImage,
+    isSuccessful,
+    isChoosingImage,
+  } = useMutationUpdateProfileImage();
 
   const [name, setName] = useState<string>(user?.name || '');
   const [bio, setBio] = useState<string>(user?.bio || '');
   const [username, setUsername] = useState<string>(user?.username || '');
   const [usernameStatus, setUsernameStatus] = useState<EvaStatus | undefined>(undefined);
+  const [imageIsUploading, setImageIsUploading] = useState<boolean>(false);
 
   const validName = name.length >= 0;
   const validUsername = username.length >= 8;
@@ -46,6 +51,18 @@ const UpdateProfileInfo = () => {
 
   const submitEnabled =
     username && name && (enableSubmitUsername || enableSubmitName || enableSubmitBio);
+
+  // when user.image changes, set to false. sets to true when upload finishes
+  useEffect(() => {
+    setImageIsUploading(false);
+  }, [user?.image]);
+  useEffect(() => {
+    if (isSuccessful) {
+      setImageIsUploading(true);
+    } else {
+      setImageIsUploading(!!isChoosingImage);
+    }
+  }, [isSuccessful, isChoosingImage]);
 
   useEffect(() => {
     setName(user?.name || '');
@@ -90,13 +107,8 @@ const UpdateProfileInfo = () => {
     const un = enableSubmitUsername ? username : undefined;
     const n = enableSubmitName ? name : undefined;
     const b = enableSubmitBio ? bio : undefined;
-    if (!user?.id) return;
-    updateUser({ id: user?.id, username: un, name: n, bio: b });
-  };
-
-  const onUploadProfileImage = async () => {
-    if (!authUserId || !userEmail) return; // don't execute if not signed in
-    updateProfileImage({ userId: authUserId, userEmail });
+    if (!user?._id) return;
+    updateUser({ id: user?._id, username: un, name: n, bio: b });
   };
 
   return (
@@ -105,7 +117,7 @@ const UpdateProfileInfo = () => {
         style={{ width: '100%' }}
         contentContainerStyle={{
           alignItems: 'center',
-          marginTop: 40,
+          marginTop: 20,
           paddingBottom: 200,
         }}
       >
@@ -113,7 +125,10 @@ const UpdateProfileInfo = () => {
           <ProfileImage
             image={user?.image}
             imageSize={140}
-            onPress={onUploadProfileImage}
+            onPress={() => {
+              updateProfileImage();
+            }}
+            isLoading={imageIsUploading}
             style={{ marginBottom: 10 }}
           />
           <Body style={{ marginBottom: 10 }}>{`Tap to ${

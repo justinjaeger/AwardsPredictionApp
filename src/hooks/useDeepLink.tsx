@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 import { Linking } from 'react-native';
 
 // NOTE: This prefix "oscar", if changed, must also change in Info.plist AND AndroidManifeset
-// It is also part of the amplify auth configuration, and if changed, also needs to update there "amplify update auth"
 export const SIGN_IN_PREFIX = 'oscar://signin/';
 
 // urls will look like this:

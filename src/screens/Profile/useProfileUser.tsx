@@ -1,81 +1,63 @@
 import { useEffect, useState } from 'react';
-import { useAuth } from '../../context/UserContext';
-import useQueryGetRelationshipCount from '../../hooks/queries/useQueryGetRelationshipCount';
-import useQueryGetUserProfile from '../../hooks/queries/useQueryGetUserProfile';
-import getRelationshipCount from '../../services/queryFuncs/getRelationshipCount';
-import getUserEvents from '../../services/queryFuncs/getUserEvents';
-import getUserProfile from '../../services/queryFuncs/getUserProfile';
-import { iUser } from '../../types';
+import { useAuth } from '../../context/AuthContext';
+import MongoApi from '../../services/api/requests';
+import useQueryGetUser from '../../hooks/queries/useQueryGetUser';
 
+/**
+ * We fetch the Auth user differently than a non-auth user
+ * This is because query keys can't expire their data because Profile component is re-used
+ * Must refresh component whenever a new user profile is loaded
+ */
 const useProfileUser = (userId: string | undefined) => {
   const { userId: authUserId } = useAuth();
 
-  const [isLoadingProfileUser, setIsLoading] = useState<boolean>(true);
-  const [profileUser, setProfileUser] = useState<iUser | undefined>(undefined);
-  const [followingCount, setFollowingCount] = useState<number | undefined>(undefined);
-  const [followerCount, setFollowerCount] = useState<number | undefined>(undefined);
-  const [userEventIds, setUserEventIds] = useState<string[]>([]);
+  const [isLoadingSomething, setIsLoading] = useState<boolean>(false);
+  const [authUserIsFollowing, setAuthUserIsFollowing] = useState<boolean>(false);
+  const [isFollowingAuthUser, setIsFollowingAuthUser] = useState<boolean>(false);
 
-  // The following queries fetch auth profile separately
-  // allows avoiding refetch every time it's focused, instead updating from query keys
-  // We shouldn't do this for other users' profiles though bc query keys can't expire their data, has to be fetched onFocus every time
+  // fetch auth-user data
   const {
     data: authUser,
     isLoading: isLoadingAuthUser,
     refetch: refetchAuthUserProfile,
-  } = useQueryGetUserProfile(authUserId, authUserId);
+  } = useQueryGetUser(authUserId);
 
-  const { data: authRelationshipCountData, refetch: refetchAuthRelationshipCount } =
-    useQueryGetRelationshipCount(authUserId);
+  // fetch non-auth-user data
+  const { data: profileUser, isLoading: isLoadingProfileUser } = useQueryGetUser(userId);
 
   // refetch auth user profile when a new user is logged in (else it's stale)
   useEffect(() => {
     refetchAuthUserProfile();
-    refetchAuthRelationshipCount();
   }, [authUserId]);
 
-  const isLoading = isLoadingAuthUser || isLoadingProfileUser;
-
-  const isDeviceProfile = profileUser && userId && profileUser?.id === authUserId;
-
-  // we have to do this and NOT useQuery because Profile component is re-used
-  // and we have to refresh component whenever a new user profile is loaded
   useEffect(() => {
     if (!userId) {
       setIsLoading(false);
       return;
     }
-    setIsLoading(true);
-    // get user profile info
-    getUserProfile(userId, authUserId)
-      .then((res) => setProfileUser(res))
-      .finally(() => setIsLoading(false));
-    // get follower / following count
-    getRelationshipCount(userId).then(({ followingCount, followerCount }) => {
-      setFollowingCount(followingCount);
-      setFollowerCount(followerCount);
-    });
-    // get events user has predicted
-    getUserEvents(userId).then((eventIds) => setUserEventIds(eventIds));
+    if (authUserId) {
+      MongoApi.getRelationship(userId, authUserId).then(({ data: relationship }) => {
+        const userIsFollowingAuthUser = !!relationship;
+        setIsFollowingAuthUser(userIsFollowingAuthUser);
+      });
+      MongoApi.getRelationship(authUserId, userId).then(({ data: relationship }) => {
+        const authUserIsFollowing = !!relationship;
+        setAuthUserIsFollowing(authUserIsFollowing);
+      });
+    }
   }, [authUserId, userId]);
 
-  const _followingCount = isDeviceProfile
-    ? authRelationshipCountData?.followingCount || 0
-    : followingCount || 0;
-  const _followerCount = isDeviceProfile
-    ? authRelationshipCountData?.followerCount || 0
-    : followerCount || 0;
-
+  const isLoading = isLoadingSomething || isLoadingAuthUser || isLoadingProfileUser;
+  const isDeviceProfile = !!profileUser && !!userId && profileUser?._id === authUserId;
   const user = isDeviceProfile ? authUser : profileUser;
 
   return {
     isLoading,
     setIsLoading,
     user,
-    followingCount: _followingCount,
-    followerCount: _followerCount,
-    userEventIds,
     authUser,
+    authUserIsFollowing,
+    isFollowingAuthUser,
   };
 };
 

@@ -3,7 +3,9 @@ import React from 'react';
 // import RNBootSplash from 'react-native-bootsplash'; // splash screen (https://github.com/zoontek/react-native-bootsplash)
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import MainNavigator from './MainNavigator';
-import { UserProvider } from '../context/UserContext';
+import { AuthProvider } from '../context/AuthContext';
+import { EventProvider } from '../context/EventContext';
+import { TmdbDataStoreProvider } from '../context/TmdbDataStore';
 
 // onReady={() => RNBootSplash.hide()} (could add to NavigationContainer)
 const Navigation = () => {
@@ -18,9 +20,13 @@ const Navigation = () => {
 
   return (
     <NavigationContainer theme={theme}>
-      <UserProvider>
-        <MainNavigator />
-      </UserProvider>
+      <TmdbDataStoreProvider>
+        <AuthProvider>
+          <EventProvider>
+            <MainNavigator />
+          </EventProvider>
+        </AuthProvider>
+      </TmdbDataStoreProvider>
     </NavigationContainer>
   );
 };

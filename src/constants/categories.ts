@@ -1,10 +1,4 @@
-import {
-  AwardsBody,
-  CategoryIsShortlisted,
-  CategoryName,
-  CategoryType,
-  PredictionType,
-} from '../API';
+import { AwardsBody, CategoryName, CategoryType, Phase } from '../types/api';
 
 export type iCategoryData = {
   name: string;
@@ -23,23 +17,17 @@ export const CATEGORY_TYPE_TO_STRING: { [key in CategoryType]: string } = {
   [CategoryType.SONG]: 'Song',
 };
 
-export const IS_SHORTLISTED_TO_STRING: {
-  [key in CategoryIsShortlisted]: string;
-} = {
-  [CategoryIsShortlisted.TRUE]: 'Is Shortlisted',
-  [CategoryIsShortlisted.FALSE]: 'NOT Shortlisted',
-};
-
+// TODO: Obsolete
 export const getCategorySlots = (
   event: {
     awardsBody: AwardsBody;
     year: number;
   },
   categoryName: CategoryName,
-  predictionType: PredictionType,
+  phase: Phase | undefined,
 ) => {
   // this could be history, so we need to check the prediction type specific to PredictionSet to see if predicting noms or wins
-  if (predictionType === PredictionType.WIN) return 1;
+  if (phase === Phase.WINNER) return 1;
   const awardsBodyCategory = getAwardsBodyCategories(event.awardsBody, event.year);
   // Get number of slots in category (5 by default)
   return awardsBodyCategory[categoryName]?.slots || 5;

@@ -1,13 +1,13 @@
 import React from 'react';
 import { Animated, ImageStyle, StyleProp, TouchableOpacity, View } from 'react-native';
 import COLORS from '../../constants/colors';
-import { TMDB_IMAGE_URL } from '../../constants';
+import { TMDB_IMAGE_URL_MED } from '../../constants';
 import { Body, Label } from '../Text';
 import theme from '../../constants/theme';
 
 type iAnimatedPosterProps = {
   title: string;
-  path: string | null; // comes after TMDB_IMAGE_URL/
+  path: string | null; // comes after TMDB_IMAGE_URL_MED/
   animatedWidth: Animated.Value;
   animatedHeight: Animated.Value;
   ranking?: number;
@@ -71,7 +71,7 @@ const AnimatedPoster = (props: iAnimatedPosterProps) => {
             <Animated.Image
               style={style as Record<string, unknown>}
               source={{
-                uri: `${TMDB_IMAGE_URL}/${path}`,
+                uri: `${TMDB_IMAGE_URL_MED}/${path}`,
               }}
             />
           </TouchableOpacity>

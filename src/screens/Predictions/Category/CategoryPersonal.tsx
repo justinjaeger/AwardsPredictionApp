@@ -1,129 +1,120 @@
 import _ from 'lodash';
-import React, { useLayoutEffect } from 'react';
-import { Alert, Animated, View } from 'react-native';
-import BackButton from '../../../components/Buttons/BackButton';
-import LoadingStatueModal from '../../../components/LoadingStatueModal';
-import MovieGrid from '../../../components/MovieGrid';
+import React, { memo, useEffect, useRef, useState } from 'react';
+import { Animated, View } from 'react-native';
 import MovieListDraggable from '../../../components/MovieList/MovieListDraggable';
 import SignedOutState from '../../../components/SignedOutState';
-import Snackbar from '../../../components/Snackbar';
+// import Snackbar from '../../../components/Snackbar';
 import { BodyBold } from '../../../components/Text';
-import theme from '../../../constants/theme';
-import { useCategory } from '../../../context/CategoryContext';
-import useMutationUpdatePredictions from '../../../hooks/mutations/updatePredictions';
+import { useEvent } from '../../../context/EventContext';
+import useMutationUpdatePredictions from '../../../hooks/mutations/useMutationUpdatePredictions';
 import { PredictionsParamList } from '../../../navigation/types';
-import { iCategory, iEvent, iPrediction } from '../../../types';
-import { useAsyncReference, useTypedNavigation } from '../../../util/hooks';
+import {
+  useNavigateAwayEffect,
+  useNavigateToEffect,
+  useTypedNavigation,
+} from '../../../util/hooks';
 import { formatLastUpdated } from '../../../util/formatDateTime';
-import { eventStatusToPredictionType } from '../../../constants/events';
-import { iCategoryProps } from '.';
-import LastUpdatedText from '../../../components/LastUpdatedText';
-import HistoryHeaderButton from '../../../components/Buttons/HistoryHeaderButton';
-import { useAuth } from '../../../context/UserContext';
-import useDevice from '../../../util/device';
+import { useAuth } from '../../../context/AuthContext';
 import { AddPredictionsFab } from '../../../components/Buttons/DisplayFAB';
-import useShowAddTab from '../../../hooks/useShowAddTab';
 import EventLink from './EventLink';
-import EditToolbar from '../../../components/Buttons/EditToolbar';
-import useCategoryPersonalPredictions from './useCategoryPersonalPredictions';
+import { iPrediction } from '../../../types/api';
+import useQueryGetUserPredictions from '../../../hooks/queries/useQueryGetUserPredictions';
+import CategorySkeleton from '../../../components/Skeletons/CategorySkeleton';
+import { sortPredictions } from '../../../util/sortPredictions';
+import ScreenshotMode from '../../../components/Buttons/ScreenshotMode';
+import { FAB } from '../../../components/Buttons/FAB';
+import { useFollowingBar } from '../../../context/FollowingBarContext';
+
+const EXTRA_BOTTOM_HEIGHT = 70;
 
 // used in both FromProfile and from event
 const CategoryPersonal = ({
-  collapsedOpacity,
-  expandedOpacity,
-  delayedDisplay,
-  gridOpacity,
   userId,
-  predictionData,
-  isLoading,
+  userImage,
+  userName,
   showEventLink,
-}: iCategoryProps) => {
-  const {
-    category: _category,
-    event: _event,
-    date,
-    isEditing,
-    setIsEditing,
-  } = useCategory();
+  onBack,
+}: {
+  userId: string | undefined;
+  userImage?: string | undefined;
+  userName?: string | undefined;
+  showEventLink?: boolean;
+  onBack?: () => void;
+}) => {
+  const animatedBottomButtons = useRef(new Animated.Value(0)).current;
+  const { isHidden, setHideAbsolutely } = useFollowingBar();
+  useEffect(() => {
+    Animated.timing(animatedBottomButtons, {
+      toValue: isHidden ? 0 : EXTRA_BOTTOM_HEIGHT,
+      duration: 250,
+      useNativeDriver: true,
+    }).start();
+  }, [isHidden]);
+
+  const { category: _category, event: _event } = useEvent();
+  const category = _category!;
+  const event = _event!;
+
   const navigation = useTypedNavigation<PredictionsParamList>();
   const { userId: authUserId } = useAuth();
-  const { isPad } = useDevice();
-  const { animatedOpacity } = useShowAddTab();
-
   const isAuthUserProfile = userId === authUserId;
-  const isHistory = !!date;
-  const category = _category as iCategory;
-  const event = _event as iEvent;
 
-  const [goBackOnComplete, setGoBackOnComplete] = useAsyncReference<boolean>(false);
-
-  // func to fire after we update predictions on db
-  const onComplete = () => {
-    setIsEditing(false);
-    Snackbar.success('Changes saved!');
-    if (goBackOnComplete.current) {
-      navigation.goBack();
-    }
-  };
-  const { mutate: updatePredictions, isComplete } = useMutationUpdatePredictions(
-    onComplete,
-    isAuthUserProfile,
+  const { data: predictionData, isLoading } = useQueryGetUserPredictions(userId);
+  const { createdAt } = predictionData?.categories[category] ?? {};
+  const initialPredictions = sortPredictions(
+    predictionData?.categories[category]?.predictions ?? [],
   );
 
-  // get the initialPredictions and updatedPredictions
-  const {
-    initialPredictions,
-    updatedPredictions: predictions,
-    setUpdatedPredictions: setPredictions,
-  } = useCategoryPersonalPredictions({
-    predictionData: predictionData || {},
-    userId,
-  });
+  const [predictions, setPredictions] = useState<iPrediction[]>(initialPredictions);
+  const [showSave, setShowSave] = useState(false);
 
-  // set custom back arrow functionality & hide history button when editing
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      // eslint-disable-next-line react/no-unstable-nested-components
-      headerRight: () => <HistoryHeaderButton isDisabled={!!isEditing} />,
-      // eslint-disable-next-line react/no-unstable-nested-components
-      headerLeft: () => (
-        <BackButton
-          onPress={async () => {
-            const onGoBack = () => {
-              navigation.goBack();
-            };
-            if (isEditing) {
-              setGoBackOnComplete(true);
-              onSaveContenders();
-            } else {
-              onGoBack();
-            }
-          }}
-        />
-      ),
-    });
-  }, [navigation, isEditing]);
+  useEffect(() => {
+    setHideAbsolutely(showSave);
+  }, [showSave]);
+
+  useEffect(() => {
+    setPredictions(initialPredictions);
+  }, [userId, predictionData !== undefined]);
+
+  useNavigateAwayEffect(() => {
+    onBack && onBack();
+    onSaveContenders();
+  }, []);
+  useNavigateToEffect(() => {
+    onSaveContenders();
+  }, []);
+
+  const [isSaving, setIsSaving] = useState(false);
+  // func to fire after we update predictions on db
+  const onComplete = () => {
+    setIsSaving(false);
+    setShowSave(false);
+  };
+  const onIsSaving = () => {
+    setIsSaving(true);
+  };
+  const { mutate: updatePredictions } = useMutationUpdatePredictions(
+    onComplete,
+    onIsSaving,
+  );
 
   const onSaveContenders = async (ps?: iPrediction[]) => {
+    if (!userId || !isAuthUserProfile) return;
     const predictionsToSave = ps || predictions;
-    if (!userId) return;
-    if (_.isEqual(initialPredictions, predictionsToSave)) {
-      setIsEditing(false);
-      return;
-    }
-    const newPredictionData = predictionsToSave.map((p, i) => ({
-      contenderId: p.contenderId,
+    const predictionsHaveNotChanged = _.isEqual(
+      predictionsToSave.map((p) => p.contenderId),
+      initialPredictions.map((p) => p.contenderId),
+    );
+    if (predictionsHaveNotChanged) return;
+    // set then rankings according to INSERTION ORDER
+    const orderedPredictions: iPrediction[] = predictionsToSave.map((p, i) => ({
+      ...p,
       ranking: i + 1,
     }));
-    const predictionType = eventStatusToPredictionType(event.status);
-    updatePredictions({
-      predictionSetParams: {
-        userId,
-        categoryId: category.id,
-        eventId: event.id,
-        type: predictionType,
-      },
-      predictionData: newPredictionData,
+    await updatePredictions({
+      categoryName: category,
+      eventId: event._id,
+      predictions: orderedPredictions,
     });
   };
 
@@ -138,20 +129,19 @@ const CategoryPersonal = ({
   };
 
   // get last updated time
-  const lastUpdated = predictionData?.[category.id]?.updatedAt;
-  const lastUpdatedString = formatLastUpdated(new Date(lastUpdated || ''));
+  const lastUpdatedString = formatLastUpdated(new Date(createdAt || ''));
 
   if (!userId) {
     return <SignedOutState />;
   }
 
+  if (isLoading) {
+    return <CategorySkeleton />;
+  }
+
   return (
     <>
-      <LoadingStatueModal
-        visible={isLoading || !isComplete}
-        text={isLoading ? 'Loading Predictions...' : 'Saving changes...'}
-      />
-      {!isLoading && predictions && predictions.length === 0 ? (
+      {predictions && predictions.length === 0 ? (
         <View
           style={{
             width: '100%',
@@ -161,106 +151,58 @@ const CategoryPersonal = ({
           }}
         >
           <BodyBold style={{ textAlign: 'center', lineHeight: 30 }}>
-            {isHistory ? 'No predictions for this date' : 'No predictions'}
+            {'No predictions'}
           </BodyBold>
         </View>
       ) : null}
-      {showEventLink ? <EventLink userId={userId} /> : null}
-      <Animated.ScrollView
-        style={{
-          display: delayedDisplay === 'grid' ? 'flex' : 'none',
-          opacity: gridOpacity,
-        }}
-        contentContainerStyle={{
-          paddingBottom: 100,
-          marginTop: theme.windowMargin,
-        }}
-        showsVerticalScrollIndicator={false}
-      >
-        <Animated.View style={{ opacity: gridOpacity }}>
-          <LastUpdatedText
-            lastUpdated={lastUpdatedString}
-            isDisabled={isHistory}
-            style={{ top: -35 }}
-          />
-          <MovieGrid predictions={predictions} />
-        </Animated.View>
-      </Animated.ScrollView>
-      <Animated.View
-        style={{
-          display: delayedDisplay === 'list' ? 'flex' : 'none',
-          opacity: expandedOpacity,
-        }}
-      >
-        <MovieListDraggable
-          predictions={predictions}
-          setPredictions={(ps) => setPredictions(ps)}
-          lastUpdatedString={lastUpdatedString}
-          isAuthProfile={isAuthUserProfile}
-          onPressAdd={onPressAdd}
-        />
-      </Animated.View>
-      <Animated.View
-        style={{
-          display: delayedDisplay === 'list-collapsed' ? 'flex' : 'none',
-          opacity: collapsedOpacity,
-        }}
-      >
-        <MovieListDraggable
-          predictions={predictions}
-          setPredictions={(ps) => setPredictions(ps)}
-          lastUpdatedString={lastUpdatedString}
-          isCollapsed
-          isAuthProfile={isAuthUserProfile}
-          onPressAdd={onPressAdd}
-        />
-      </Animated.View>
-      {isPad ? (
-        <Animated.View
-          style={{
-            opacity: animatedOpacity,
-            position: 'absolute',
-            bottom: '1%',
-            alignSelf: 'flex-end',
-          }}
-        >
-          <AddPredictionsFab onPress={onPressAdd} />
-        </Animated.View>
+      {showEventLink ? (
+        <EventLink userId={userId} userImage={userImage} userName={userName} />
       ) : null}
-      <EditToolbar
-        visible={isEditing && !isHistory}
-        buttons={[
-          {
-            text: 'Undo',
-            iconName: 'undo',
-            onPress: () => {
-              Alert.alert('Undo Changes?', 'Reverts all changes since last saved', [
-                {
-                  text: 'Cancel',
-                  onPress: () => {},
-                  style: 'cancel',
-                },
-                {
-                  text: 'Yes',
-                  onPress: () => setPredictions(initialPredictions),
-                },
-              ]);
-            },
-          },
-          {
-            text: 'Add',
-            iconName: 'plus',
-            onPress: () => onPressAdd(),
-          },
-          {
-            text: 'Save',
-            iconName: 'save-outline',
-            onPress: () => onSaveContenders(),
-          },
-        ]}
+      <MovieListDraggable
+        predictions={predictions}
+        setPredictions={(ps) => {
+          setShowSave(
+            !_.isEqual(
+              ps.map((p) => p.contenderId),
+              initialPredictions.map((p) => p.contenderId),
+            ),
+          );
+          setPredictions(ps);
+        }}
+        lastUpdatedString={lastUpdatedString}
+        isAuthProfile={isAuthUserProfile}
+        onPressAdd={onPressAdd}
       />
+      <Animated.View
+        style={{
+          transform: [{ translateY: animatedBottomButtons }],
+        }}
+      >
+        <ScreenshotMode
+          predictions={predictions}
+          userId={userId}
+          positionFromBottom={EXTRA_BOTTOM_HEIGHT + 10}
+        />
+        <AddPredictionsFab
+          onPress={onPressAdd}
+          positionFromBottom={EXTRA_BOTTOM_HEIGHT + 10}
+          positionFromRight={80}
+        />
+      </Animated.View>
+      {isAuthUserProfile && showSave ? (
+        <FAB
+          iconName="save-outline"
+          text="Save"
+          onPress={() => {
+            onSaveContenders();
+          }}
+          visible={showSave}
+          left
+          isLoading={isSaving}
+        />
+      ) : null}
     </>
   );
 };
 
-export default CategoryPersonal;
+export default memo(CategoryPersonal);

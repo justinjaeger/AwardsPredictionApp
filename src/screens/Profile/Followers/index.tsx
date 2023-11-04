@@ -13,7 +13,10 @@ const Followers = () => {
     params: { userId, type },
   } = useRoute<RouteProp<PredictionsParamList, 'Followers'>>();
 
-  const { users, fetchPage, isLoading } = usePaginatedFriends({ userId, type });
+  const { users, fetchPage, isLoading, allUsersAreFetched } = usePaginatedFriends({
+    userId,
+    type,
+  });
 
   useLayoutEffect(() => {
     // Render Header
@@ -26,8 +29,11 @@ const Followers = () => {
     <BackgroundWrapper>
       <UserSearchResult
         users={users}
-        onEndReached={fetchPage}
+        onEndReached={() => {
+          fetchPage();
+        }}
         isLoading={isLoading}
+        allUsersAreFetched={allUsersAreFetched}
         noHeader
       />
     </BackgroundWrapper>

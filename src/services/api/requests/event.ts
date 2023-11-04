@@ -2,15 +2,25 @@ import { EventModel, WithId } from '../../../types/api';
 import api from '../api';
 
 export const getEvents = async ({
-  yearOfEvent,
+  maxYear,
+  minYear,
   awardsBody,
+  isOpen,
 }: {
-  yearOfEvent?: number;
+  maxYear?: number;
+  minYear?: number;
   awardsBody?: string;
+  isOpen?: boolean;
 }) => {
   let queryString = '?';
-  if (yearOfEvent) {
-    queryString += `maxYear=${yearOfEvent}&minYear=${yearOfEvent}`;
+  if (maxYear) {
+    queryString += `maxYear=${maxYear}`;
+  }
+  if (minYear) {
+    if (queryString !== '?') {
+      queryString += '&';
+    }
+    queryString += `minYear=${minYear}`;
   }
   if (awardsBody) {
     if (queryString !== '?') {
@@ -18,8 +28,14 @@ export const getEvents = async ({
     }
     queryString += `awardsBody=${awardsBody}`;
   }
+  if (isOpen) {
+    if (queryString !== '?') {
+      queryString += '&';
+    }
+    queryString += `isOpen=${isOpen}`;
+  }
 
-  return await api.get<WithId<EventModel[]>>(
+  return await api.get<WithId<EventModel>[]>(
     `events${queryString === '?' ? '' : queryString}`,
   );
 };

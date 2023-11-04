@@ -1,27 +1,25 @@
 import * as UserRequests from './user';
 import * as TokenRequests from './token';
-import * as SongRequests from './song';
-import * as MovieRequests from './movie';
-import * as PersonRequests from './person';
+import * as ApiDataRequests from './apidata';
 import * as RelationshipRequests from './relationship';
 import * as EventRequests from './event';
 import * as PredictionSetRequests from './predictionset';
 import * as EmailRequests from './email';
 import * as CategoryUpdateLogRequests from './categoryupdatelogs';
 import * as ContenderRequests from './contender';
+import * as UploadRequests from './upload';
 
 const MongoApi = {
   ...UserRequests,
   ...TokenRequests,
-  ...SongRequests,
-  ...MovieRequests,
-  ...PersonRequests,
+  ...ApiDataRequests,
   ...RelationshipRequests,
   ...EventRequests,
   ...PredictionSetRequests,
   ...EmailRequests,
   ...CategoryUpdateLogRequests,
   ...ContenderRequests,
+  ...UploadRequests,
 };
 
 export default MongoApi;

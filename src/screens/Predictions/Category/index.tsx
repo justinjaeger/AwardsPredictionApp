@@ -1,34 +1,17 @@
-import React, { useLayoutEffect } from 'react';
+import React, { useCallback, useLayoutEffect, useRef } from 'react';
 import PredictionTabsNavigator from '../../../navigation/PredictionTabsNavigator';
 import CategoryCommunity from './CategoryCommunity';
 import CategoryPersonal from './CategoryPersonal';
 import { useTypedNavigation } from '../../../util/hooks';
 import { PredictionsParamList } from '../../../navigation/types';
 import { getAwardsBodyCategories } from '../../../constants/categories';
-import { CategoryName } from '../../../API';
-import { useCategory } from '../../../context/CategoryContext';
+import { useEvent } from '../../../context/EventContext';
 import { eventToString } from '../../../util/stringConversions';
 import { getHeaderTitleWithTrophy } from '../../../constants';
-import { useCategoryDisplay } from '../../../hooks/animatedState/useDisplay';
-import { Animated } from 'react-native';
-import { CategoryDisplayFab } from '../../../components/Buttons/DisplayFAB';
-import { iEvent, iIndexedPredictionsByCategory } from '../../../types';
-import { useAuth } from '../../../context/UserContext';
+import { useAuth } from '../../../context/AuthContext';
 import { RouteProp, StackActions, useRoute } from '@react-navigation/native';
-import usePredictionData from '../../../hooks/queries/usePredictionData';
 import FollowingBottomScroll from '../../../components/FollowingBottomScroll';
-import { iCategoryDisplayState } from '../../../context/DisplayStateContext';
-
-export type iCategoryProps = {
-  collapsedOpacity: Animated.Value;
-  expandedOpacity: Animated.Value;
-  gridOpacity: Animated.Value;
-  delayedDisplay: iCategoryDisplayState;
-  userId: string | undefined;
-  predictionData: iIndexedPredictionsByCategory | undefined;
-  isLoading: boolean;
-  showEventLink?: boolean;
-};
+import { CategoryName } from '../../../types/api';
 
 // Essentially "Category with personal/community tabs" (uses usePredictionData)
 const Category = () => {
@@ -37,62 +20,59 @@ const Category = () => {
   const userId = params?.userId || authUserId;
   const showEventLink = params?.showEventLink || false;
 
-  const { category, event: _event, date, isEditing } = useCategory();
-  const isHistory = !!date;
+  const {
+    category,
+    event: _event,
+    isEditing,
+    personalCommunityTab,
+    setPersonalCommunityTab,
+  } = useEvent();
+  const event = _event!;
   const navigation = useTypedNavigation<PredictionsParamList>();
-  const { delayedDisplay, gridOpacity, collapsedOpacity, expandedOpacity } =
-    useCategoryDisplay();
-
-  const { predictionData: personalPredictionData, isLoading: personalIsLoading } =
-    usePredictionData('personal', userId);
-  const { predictionData: communityPredictionData, isLoading: communityIsLoading } =
-    usePredictionData('community', userId);
-
-  const event = _event as iEvent;
-
-  const props = {
-    delayedDisplay,
-    gridOpacity,
-    collapsedOpacity,
-    expandedOpacity,
-    userId,
-  };
 
   // Set the header
   useLayoutEffect(() => {
     if (!category || !event) return;
     const awardsBodyCategories = getAwardsBodyCategories(event.awardsBody, event.year);
     const eventName = eventToString(event.awardsBody, event.year);
-    const categoryName = awardsBodyCategories[CategoryName[category.name]]?.name || '';
+    const categoryName = awardsBodyCategories[CategoryName[category]]?.name || '';
     const headerTitle = eventName + '\n' + 'Best ' + categoryName;
     navigation.setOptions({
       headerTitle: getHeaderTitleWithTrophy(headerTitle, event.awardsBody),
     });
   }, [navigation]);
 
-  // TODO: History is always open in archived state
+  const initialTab = useRef<'personal' | 'community'>(personalCommunityTab);
+
+  const [, setCurrentTab] = React.useState<'personal' | 'community'>(initialTab.current);
+
+  // Allows us to track the current tab so we can set it onBack
+  const onBack = useCallback(() => {
+    setCurrentTab((curr) => {
+      setPersonalCommunityTab(curr);
+      return curr;
+    });
+  }, []);
+
   return (
     <>
-      <CategoryDisplayFab />
-      {PredictionTabsNavigator(
-        <CategoryPersonal
-          predictionData={personalPredictionData}
-          isLoading={personalIsLoading}
-          showEventLink={showEventLink && !isEditing}
-          {...props}
-        />,
-        <CategoryCommunity
-          predictionData={communityPredictionData}
-          isLoading={communityIsLoading}
-          showEventLink={showEventLink && !isEditing}
-          {...props}
-        />,
-      )}
-      {userId && !isHistory && !isEditing ? (
+      <PredictionTabsNavigator
+        onChangeTab={setCurrentTab}
+        personal={
+          <CategoryPersonal
+            showEventLink={showEventLink && !isEditing}
+            userId={userId}
+            onBack={onBack}
+          />
+        }
+        community={<CategoryCommunity showEventLink={showEventLink && !isEditing} />}
+      />
+      {userId && !isEditing ? (
         <FollowingBottomScroll
-          userId={userId}
-          onPress={(id) => {
-            navigation.dispatch(StackActions.push('CategoryFromProfile', { userId: id }));
+          onPress={(userId, userName, userImage) => {
+            navigation.dispatch(
+              StackActions.push('CategoryFromProfile', { userId, userName, userImage }),
+            );
           }}
         />
       ) : null}

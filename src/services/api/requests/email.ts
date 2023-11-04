@@ -1,9 +1,11 @@
 import api from '../api';
 
-export const sendEmail = async ({ email }: { email: string }) => {
-  return await api.get<undefined>(`email/send/?email=${email}`);
+export const sendVerificationEmail = async (email: string) => {
+  return await api.get<void>(`email/send?email=${email}`);
 };
 
-export const verifyEmail = async ({ link }: { link: string }) => {
-  return await api.get<undefined>(`email/verify/?link=${link}`);
+// returns the email parsed from the link
+// What if we pass the token as a token instead of in params?
+export const verifyEmailMagicLink = async (link: string) => {
+  return await api.get<string>(`email/verify?link=${link}`);
 };

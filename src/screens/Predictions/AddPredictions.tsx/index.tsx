@@ -1,49 +1,67 @@
-import React, { useEffect } from 'react';
-import { useCategory } from '../../../context/CategoryContext';
-import { iCategory, iEvent, iPrediction } from '../../../types';
-import { CATEGORY_TYPE_TO_STRING } from '../../../constants/categories';
-import Snackbar from '../../../components/Snackbar';
-import { PredictionsParamList } from '../../../navigation/types';
-import MovieListSelectable from '../../../components/MovieList/MovieListSelectable';
-import SearchInput from '../../../components/Inputs/SearchInput';
-import { SearchProvider, useSearch } from '../../../context/ContenderSearchContext';
-import CreateContender from '../CreateContender';
-import BackgroundWrapper from '../../../components/BackgroundWrapper';
-import BackButton from '../../../components/Buttons/BackButton';
-import { CategoryIsShortlisted, CategoryType, EventStatus } from '../../../API';
-import { useTypedNavigation } from '../../../util/hooks';
-import { usePredictions } from './usePredictions';
+import React, { useEffect, useState } from 'react';
+import { SubHeader } from '../../../components/Text';
+import { View } from 'react-native';
+import { useEvent } from '../../../context/EventContext';
+import COLORS from '../../../constants/colors';
+import MovieListSearch from '../../../components/MovieList/MovieListSearch';
+import LoadingStatueModal from '../../../components/LoadingStatueModal';
 import { FAB } from '../../../components/Buttons/FAB';
-import { Animated } from 'react-native';
-import { useCategoryDisplay } from '../../../hooks/animatedState/useDisplay';
-import { CategoryDisplayFab } from '../../../components/Buttons/DisplayFAB';
-
-export type iCreateContenderProps = {
-  onSelectPrediction: (p: iPrediction) => void;
-};
+import { CategoryType } from '../../../types/api';
+import SearchInput from '../../../components/Inputs/SearchInput';
+import MovieListSelectable from '../../../components/MovieList/MovieListSelectable';
+import { useTypedNavigation } from '../../../util/hooks';
+import { PredictionsParamList } from '../../../navigation/types';
+import { getPhaseUserIsPredicting } from '../../../util/getPhaseUserIsPredicting';
+import { usePredictions } from '../AddPredictions.tsx/usePredictions';
+import BackButton from '../../../components/Buttons/BackButton';
+import BackgroundWrapper from '../../../components/BackgroundWrapper';
+import CreatePerformanceModal from './CreatePerformanceModal';
+import CreateSongModal from './CreateSongModal';
+import useContenderSearch from './useContenderSearch';
 
 const AddPredictions = () => {
   const navigation = useTypedNavigation<PredictionsParamList>();
-  const { category: _category, event: _event } = useCategory();
 
-  const category = _category as iCategory;
-  const event = _event as iEvent;
+  const { category: _category, event: _event } = useEvent();
+  const category = _category!;
+  const event = _event!;
 
-  const letUserCreateContenders =
-    category.isShortlisted === CategoryIsShortlisted.FALSE &&
-    ![EventStatus.WINS_LIVE, EventStatus.ARCHIVED].includes(event.status);
+  const { shortlistDateTime, isHidden, type } = event.categories[category];
+
+  const phaseUserIsPredicting = getPhaseUserIsPredicting(event, shortlistDateTime);
+  const letUserCreateContenders = !isHidden && phaseUserIsPredicting === undefined;
 
   const {
-    predictionsInList,
     selectedPredictions,
     setSelectedPredictions,
-    onSave,
+    communityPredictions,
     selectedContenderIds,
+    onSave,
   } = usePredictions();
-  const { delayedDisplay, expandedOpacity, collapsedOpacity } = useCategoryDisplay();
 
-  const { isSearching } = useSearch();
+  const {
+    searchResults,
+    searchMessage,
+    isSavingFilm,
+    selectedSearchTmdbId,
+    setSelectedSearchTmdbId,
+    handleSearch,
+    resetSearch,
+    onAddContender,
+    addItemToPredictions,
+  } = useContenderSearch({
+    categoryType: type,
+    communityPredictions,
+    selectedContenderIds,
+    setSelectedPredictions,
+  });
 
+  const [selectedPersonTmdbId, setSelectedPersonTmdbId] = useState<number | undefined>(
+    undefined,
+  );
+  const [selectedMovieTmdbIdForSong, setSelectedMovieTmdbIdForSong] = useState<
+    number | undefined
+  >(undefined);
   // set custom back arrow functionality
   useEffect(() => {
     navigation.setOptions({
@@ -52,80 +70,100 @@ const AddPredictions = () => {
     });
   }, [navigation]);
 
-  const onSelectPredictionFromSearch = (prediction: iPrediction) => {
-    const contenderId = prediction.contenderId;
-    const isAlreadySelected = selectedContenderIds.includes(contenderId);
-    if (isAlreadySelected) {
-      // alert user that contender is already selected
-      Snackbar.success(
-        `This ${CATEGORY_TYPE_TO_STRING[
-          category.type
-        ].toLowerCase()} is already in your predictions`,
-      );
-    } else {
-      Snackbar.success('Added to list');
-      const newSelected = [...selectedPredictions, prediction];
-      setSelectedPredictions(newSelected);
-    }
-  };
-
   return (
-    <>
-      {letUserCreateContenders ? (
-        <SearchInput
-          placeholder={
-            category.type === CategoryType.PERFORMANCE ? 'Search Actors' : 'Search Movies'
-          }
+    <BackgroundWrapper>
+      <LoadingStatueModal visible={isSavingFilm} text={'Saving film...'} />
+      {selectedPersonTmdbId !== undefined ? (
+        <CreatePerformanceModal
+          visible={selectedPersonTmdbId !== undefined}
+          onClose={() => setSelectedPersonTmdbId(undefined)}
+          selectedPersonTmdbId={selectedPersonTmdbId}
+          communityPredictions={communityPredictions}
+          onAddContender={onAddContender}
+          addItemToPredictions={addItemToPredictions}
         />
       ) : null}
-      {isSearching ? (
-        <CreateContender onSelectPrediction={onSelectPredictionFromSearch} />
+      {selectedMovieTmdbIdForSong !== undefined ? (
+        <CreateSongModal
+          visible={selectedMovieTmdbIdForSong !== undefined}
+          onClose={() => setSelectedMovieTmdbIdForSong(undefined)}
+          selectedMovieTmdbId={selectedMovieTmdbIdForSong}
+          communityPredictions={communityPredictions}
+          onAddContender={onAddContender}
+          addItemToPredictions={addItemToPredictions}
+        />
+      ) : null}
+      {letUserCreateContenders ? (
+        <SearchInput
+          placeholder={`Search ${type === CategoryType.PERFORMANCE ? 'actors' : 'films'}`}
+          handleSearch={handleSearch}
+          onReset={() => resetSearch()}
+        />
+      ) : null}
+      {searchMessage ? (
+        <SubHeader style={{ marginTop: 40, color: COLORS.white }}>
+          {searchMessage}
+        </SubHeader>
+      ) : searchResults.length ? (
+        <View
+          style={{
+            height: '100%',
+            width: '100%',
+            alignItems: 'center',
+            flex: 1,
+          }}
+        >
+          <View
+            style={{
+              height: '100%',
+              width: '100%',
+              alignItems: 'center',
+            }}
+          >
+            <MovieListSearch
+              data={searchResults}
+              onSelect={(tmdbId) => {
+                if (selectedSearchTmdbId === tmdbId) {
+                  setSelectedSearchTmdbId(undefined);
+                } else {
+                  setSelectedSearchTmdbId(tmdbId);
+                }
+              }}
+              categoryType={CategoryType.FILM}
+            />
+          </View>
+          <FAB
+            iconName="checkmark"
+            text="Add"
+            onPress={() => {
+              if (type === CategoryType.PERFORMANCE && selectedSearchTmdbId) {
+                setSelectedPersonTmdbId(selectedSearchTmdbId);
+              } else if (type === CategoryType.SONG) {
+                setSelectedMovieTmdbIdForSong(selectedSearchTmdbId);
+              } else if (type === CategoryType.FILM && selectedSearchTmdbId) {
+                onAddContender(selectedSearchTmdbId);
+              }
+            }}
+            visible={selectedSearchTmdbId !== undefined}
+          />
+        </View>
       ) : (
         <>
-          <Animated.View
-            style={{
-              display: delayedDisplay === 'list' ? 'flex' : 'none',
-              opacity: expandedOpacity,
-            }}
-          >
-            <MovieListSelectable
-              predictions={predictionsInList}
-              selectedPredictions={selectedPredictions}
-              setSelectedPredictions={(ps) => setSelectedPredictions(ps)}
-            />
-          </Animated.View>
-          <Animated.View
-            style={{
-              display: delayedDisplay === 'list-collapsed' ? 'flex' : 'none',
-              opacity: collapsedOpacity,
-            }}
-          >
-            <MovieListSelectable
-              predictions={predictionsInList}
-              selectedPredictions={selectedPredictions}
-              setSelectedPredictions={(ps) => setSelectedPredictions(ps)}
-              isCollapsed
-            />
-          </Animated.View>
+          <MovieListSelectable
+            predictions={communityPredictions}
+            selectedPredictions={selectedPredictions}
+            setSelectedPredictions={(ps) => setSelectedPredictions(ps)}
+          />
+          <FAB
+            iconName="checkmark-outline"
+            text="Done"
+            onPress={onSave}
+            visible={!searchResults.length}
+          />
         </>
       )}
-      <CategoryDisplayFab skipGrid />
-      <FAB
-        iconName="checkmark-outline"
-        text="Done"
-        onPress={onSave}
-        visible={!isSearching} // crutial!! Or else it will overlap the search add button
-      />
-    </>
+    </BackgroundWrapper>
   );
 };
 
-const AddPredictionsWithProvider = () => (
-  <SearchProvider>
-    <BackgroundWrapper>
-      <AddPredictions />
-    </BackgroundWrapper>
-  </SearchProvider>
-);
-
-export default AddPredictionsWithProvider;
+export default AddPredictions;

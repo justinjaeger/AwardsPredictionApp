@@ -19,7 +19,7 @@ export const SubmitButton = (props: iButtonProps) => (
     onPress={props.onPress}
     disabled={props.disabled || props.loading}
     style={{
-      minWidth: 150,
+      minWidth: 100,
       alignSelf: 'center',
       backgroundColor: props.disabled ? COLORS.disabled : COLORS.secondaryDark,
       borderRadius: theme.borderRadius,

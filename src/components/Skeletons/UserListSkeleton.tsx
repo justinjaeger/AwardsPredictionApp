@@ -4,7 +4,13 @@ import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
 
-const UserListSkeleton = ({ imageSize }: { imageSize: number }) => (
+const UserListSkeleton = ({
+  imageSize,
+  numResults = 5,
+}: {
+  imageSize: number;
+  numResults?: number;
+}) => (
   <View style={{ height: '100%' }}>
     <SkeletonPlaceholder
       speed={1200}
@@ -12,48 +18,50 @@ const UserListSkeleton = ({ imageSize }: { imageSize: number }) => (
       highlightColor={COLORS.primaryLight}
     >
       <View style={{ flexDirection: 'column' }}>
-        {['', '', ''].map((x, i) => (
-          <View
-            key={i}
-            style={{
-              marginLeft: 10,
-              marginTop: 10,
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}
-          >
+        {Array(numResults)
+          .fill(null)
+          .map((x, i) => (
             <View
+              key={i}
               style={{
-                width: imageSize,
-                height: imageSize,
-                borderRadius: imageSize,
-              }}
-            />
-            <View
-              style={{
-                flexDirection: 'column',
-                justifyContent: 'center',
                 marginLeft: 10,
+                marginTop: 20,
+                flexDirection: 'row',
+                alignItems: 'center',
               }}
             >
               <View
                 style={{
-                  width: 50,
-                  height: 20,
-                  borderRadius: theme.borderRadius,
+                  width: imageSize,
+                  height: imageSize,
+                  borderRadius: imageSize,
                 }}
               />
               <View
                 style={{
-                  marginTop: 6,
-                  width: 100,
-                  height: 20,
-                  borderRadius: theme.borderRadius,
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  marginLeft: 10,
                 }}
-              />
+              >
+                <View
+                  style={{
+                    width: 50,
+                    height: 20,
+                    borderRadius: theme.borderRadius,
+                  }}
+                />
+                <View
+                  style={{
+                    marginTop: 6,
+                    width: 100,
+                    height: 20,
+                    borderRadius: theme.borderRadius,
+                  }}
+                />
+              </View>
             </View>
-          </View>
-        ))}
+          ))}
       </View>
     </SkeletonPlaceholder>
   </View>

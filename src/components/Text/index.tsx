@@ -9,6 +9,42 @@ interface iTextProps {
   style?: StyleProp<TextStyle>;
 }
 
+export const Header = (props: iTextProps) => {
+  const { isLargeScreen, isSmallScreen } = useDevice();
+  return (
+    <Text
+      category={isLargeScreen ? 'h3' : isSmallScreen ? 'h4' : 'h5'}
+      style={[
+        {
+          fontWeight: '700',
+          color: COLORS.lightest,
+        },
+        props.style,
+      ]}
+    >
+      {props.children}
+    </Text>
+  );
+};
+
+export const SmallHeader = (props: iTextProps) => {
+  const { isLargeScreen, isSmallScreen } = useDevice();
+  return (
+    <Text
+      category={isLargeScreen ? 'h4' : isSmallScreen ? 'h5' : 'h6'}
+      style={[
+        {
+          fontWeight: '700',
+          color: COLORS.lightest,
+        },
+        props.style,
+      ]}
+    >
+      {props.children}
+    </Text>
+  );
+};
+
 export const SubHeader = (props: iTextProps) => {
   const { isLargeScreen, isSmallScreen } = useDevice();
   return (

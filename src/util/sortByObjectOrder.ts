@@ -1,28 +1,60 @@
+import _ from 'lodash';
+import { getAwardsBodyCategories } from '../constants/categories';
+import {
+  AwardsBody,
+  CategoryName,
+  EventModel,
+  WithId,
+  iCategoryPrediction,
+} from '../types/api';
+import { AWARDS_BODY_TO_STRING } from '../constants/awardsBodies';
+
 /**
  * Sorts an array based on the insert order of an object (with keys of type Enum)
- * @param objectWithOrderedKeys should be an object where keys are of an Enum type
+ * @param orderedKeys should be an object where keys are of an Enum type
+ * @param unorderedKeys should be the result of calling .map() on arrayToSort
  * @param arrayToSort
- * @param arrayOfMappedKeys should be the result of calling .map() on arrayToSort
  */
 const sortByObjectOrder = <T extends string, U>(
-  objectWithOrderedKeys: { [key in T]: any },
-  arrayToSort: U[],
-  arrayOfMappedKeys: T[],
+  sortedKeys: T[],
+  unorderedKeysToValues: Record<T, U>,
+): Map<string, U> => {
+  return sortedKeys.reduce((acc: Map<string, U>, key) => {
+    const valuesForGivenKey = unorderedKeysToValues[key];
+    if (!valuesForGivenKey) return acc;
+    acc.set(key, valuesForGivenKey);
+    return acc;
+  }, new Map());
+};
+
+export const getOrderedEvents = (unorderedEvents: WithId<EventModel>[]) => {
+  const orderedAwardsBodyKeys = _.keys(AWARDS_BODY_TO_STRING);
+  const orderedEvents = unorderedEvents.sort((e1, e2) => {
+    const i1 = orderedAwardsBodyKeys.indexOf(e1.awardsBody);
+    const i2 = orderedAwardsBodyKeys.indexOf(e2.awardsBody);
+    if (i1 > i2) return 1;
+    if (i2 < i1) return -1;
+    return 0;
+  });
+  return orderedEvents;
+};
+
+export const getOrderedCategories = (
+  awardsBody: AwardsBody,
+  year: number,
+  unorderedCategories: Record<CategoryName, iCategoryPrediction>,
 ) => {
-  const iterableKeys = (Object.keys(objectWithOrderedKeys) as T[]).filter(
-    (key) => objectWithOrderedKeys[key] !== undefined, // filter makes sure no undefined values are returned
+  const awardsBodyCategories = getAwardsBodyCategories(awardsBody, year);
+  const orderedCategoryKeys = _.keys(awardsBodyCategories) as CategoryName[];
+  return orderedCategoryKeys.reduce(
+    (acc: Array<[CategoryName, iCategoryPrediction]>, key) => {
+      const valuesForGivenKey = unorderedCategories[key];
+      if (!valuesForGivenKey) return acc;
+      acc.push([key, valuesForGivenKey]);
+      return acc;
+    },
+    [],
   );
-  if (arrayOfMappedKeys.length !== arrayToSort.length) {
-    console.error('invalid params in sortByObjectOrder');
-    return arrayToSort;
-  }
-  return iterableKeys.reduce((acc: U[], key) => {
-    const filteredEvents = arrayToSort.filter((item, i) => {
-      const itemToCompare = arrayOfMappedKeys[i];
-      return itemToCompare === key;
-    });
-    return [...acc, ...filteredEvents];
-  }, []);
 };
 
 export default sortByObjectOrder;

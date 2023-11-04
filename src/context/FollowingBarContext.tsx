@@ -7,21 +7,28 @@ import React, { createContext, useContext, useState } from 'react';
 type iFollowingBarContext = {
   isHidden: boolean;
   setIsHidden: React.Dispatch<React.SetStateAction<boolean>>;
+  hideAbsolutely: boolean;
+  setHideAbsolutely: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const FollowingBarContext = createContext<iFollowingBarContext>({
-  isHidden: false,
+  isHidden: false, // idk why but it's actually the opposite of hidden
   setIsHidden: () => {},
+  hideAbsolutely: true,
+  setHideAbsolutely: () => {},
 });
 
 export const FollowingBarProvider = (props: { children: React.ReactNode }) => {
   const [isHidden, setIsHidden] = useState<boolean>(false);
+  const [hideAbsolutely, setHideAbsolutely] = useState<boolean>(false);
 
   return (
     <FollowingBarContext.Provider
       value={{
         isHidden,
         setIsHidden,
+        hideAbsolutely,
+        setHideAbsolutely,
       }}
     >
       {props.children}

@@ -1,12 +1,7 @@
 import { useEffect, useState } from 'react';
-import {
-  getPaginatedFollowers,
-  getPaginatedFollowing,
-} from '../services/queryFuncs/getPaginatedRelationships';
-import { iUser } from '../types';
-import { useAuth } from '../context/UserContext';
-import getAuthFollowingUserIds from '../services/queryFuncs/getAuthFollowingUserIds';
-import { PAGINATED_USER_LIMIT } from '../constants';
+import { User, WithId } from '../types/api';
+import MongoApi from '../services/api/requests';
+import { PAGINATED_LIMIT } from '../services/api/requests/user';
 
 const usePaginatedFriends = ({
   userId,
@@ -15,36 +10,29 @@ const usePaginatedFriends = ({
   userId: string;
   type: 'followers' | 'following';
 }) => {
-  const { userId: authUserId } = useAuth();
-
-  const [stopFetching, setStopFetching] = useState<boolean>(false);
-  const [paginateToken, setPaginateToken] = useState<string | undefined>(undefined);
-  const [users, setUsers] = useState<iUser[]>([]);
+  const [allUsersAreFetched, setAllUsersAreFetched] = useState<boolean>(false);
+  const [pageNumber, setPageNumber] = useState<number>(1);
+  const [users, setUsers] = useState<WithId<User>[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [authFollowingUserIds, setAuthFollowingUserIds] = useState<string[]>([]);
+  // we need this to see if WE are following the user:
 
   const fetchPage = async () => {
-    if (stopFetching || isLoading) return;
+    if (allUsersAreFetched || isLoading) return;
     if (users.length === 0) setIsLoading(true);
-    // doing it this way lets us only fetch this once rather than on every paginated request
-    let followingUserIds = authFollowingUserIds;
-    if (authFollowingUserIds.length === 0) {
-      followingUserIds = await getAuthFollowingUserIds(authUserId);
-      setAuthFollowingUserIds(followingUserIds);
-    }
-    const Request = type === 'followers' ? getPaginatedFollowers : getPaginatedFollowing;
-    const { users: friends, nextToken } = await Request({
+    const Request =
+      type === 'followers'
+        ? MongoApi.listFollowersPaginated
+        : MongoApi.listFollowingPaginated;
+    const { data } = await Request({
       userId,
-      authFollowingUserIds: followingUserIds,
-      limit: PAGINATED_USER_LIMIT,
-      nextToken: paginateToken,
+      pageNumber,
     });
-    // token comes back as undefined when there are NO MORE results, so we don't want to make any more requests
-    if (friends.length < PAGINATED_USER_LIMIT || nextToken === undefined) {
-      setStopFetching(true);
+    const newUsers = data ?? [];
+    setPageNumber((prev) => prev + 1);
+    if (newUsers.length < PAGINATED_LIMIT) {
+      setAllUsersAreFetched(true);
     }
-    setUsers((prev) => [...prev, ...friends]);
-    setPaginateToken(nextToken);
+    setUsers((prev) => [...prev, ...newUsers]);
     setIsLoading(false);
   };
 
@@ -54,7 +42,7 @@ const usePaginatedFriends = ({
   }, []);
 
   // export fetchPage to allow user to fetch next page
-  return { users, fetchPage, isLoading, hasFetchedAll: stopFetching };
+  return { users, fetchPage, isLoading, allUsersAreFetched };
 };
 
 export default usePaginatedFriends;

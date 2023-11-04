@@ -1,80 +1,94 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { FlatList, Keyboard } from 'react-native';
-import { useCategory } from '../../context/CategoryContext';
-import { iCategory, iPrediction } from '../../types';
+import { useEvent } from '../../context/EventContext';
 import { removePredictionFromList } from '../../util/removePredictionFromList';
-import ContenderListItem, {
-  iContenderListItemProps,
-} from '../List/ContenderList/ContenderListItem';
-import ContenderListItemCondensed from '../List/ContenderList/ContenderListItemCondensed';
+import ContenderListItem from '../List/ContenderList/ContenderListItem';
+import { iPrediction } from '../../types/api';
+import { getTotalNumPredicting } from '../../util/getNumPredicting';
 
 type iMovieListProps = {
   predictions: iPrediction[];
   selectedPredictions: iPrediction[]; // for "add predictions"
-  setSelectedPredictions: (ps: iPrediction[]) => void; // for "add predictions"
-  isCollapsed?: boolean;
+  // Do either/or for the below. "setSelectedPrediction" is more of a hack for the "add performance/song" modal
+  setSelectedPrediction?: (p: iPrediction) => void;
+  setSelectedPredictions?: React.Dispatch<React.SetStateAction<iPrediction[]>>; // for "add predictions"
 };
 
 const MovieListSelectable = ({
   predictions,
   selectedPredictions,
+  setSelectedPrediction,
   setSelectedPredictions,
-  isCollapsed,
 }: iMovieListProps) => {
-  const { category: _category } = useCategory();
-  const category = _category as iCategory;
+  const { event: _event, category: _category } = useEvent();
+  const category = _category!;
+  const event = _event!;
+  const { type } = event.categories[category];
 
-  const [selectedContenderId, setSelectedContenderId] = useState<string | undefined>(); // this selection is whether the film is big or not
-
-  const onPressItem = async (prediction: iPrediction) => {
+  const onPressItem = useCallback(async (prediction: iPrediction) => {
     Keyboard.dismiss();
-    const selectedContenderIds = selectedPredictions.map((p) => p.contenderId);
-    const contenderId = prediction.contenderId;
-    const isAlreadySelected = selectedContenderIds.includes(contenderId);
-    const newSelected = isAlreadySelected
-      ? removePredictionFromList(selectedPredictions, prediction)
-      : [...selectedPredictions, prediction];
-    setSelectedPredictions(newSelected);
+    setSelectedPrediction && setSelectedPrediction(prediction);
+    setSelectedPredictions &&
+      setSelectedPredictions((sp) => {
+        const selectedContenderIds = sp.map((p) => p.contenderId);
+        const contenderId = prediction.contenderId;
+        const isAlreadySelected = selectedContenderIds.includes(contenderId);
+        const newSelected = isAlreadySelected
+          ? removePredictionFromList(sp, prediction)
+          : [...sp, prediction];
+        return newSelected;
+      });
+  }, []);
+
+  const totalNumPredictingTop = getTotalNumPredicting(
+    predictions?.[0]?.numPredicting ?? {},
+  );
+
+  const [numToShow, setNumToShow] = useState<number>(20);
+
+  const onEndReached = () => {
+    setNumToShow(numToShow + 10);
   };
 
-  const onPressThumbnail = (prediction: iPrediction) => {
-    const id = prediction.contenderId;
-    if (selectedContenderId === id) {
-      setSelectedContenderId(undefined);
-    } else {
-      setSelectedContenderId(id);
-    }
-  };
+  const selectedContenderIds = (selectedPredictions || []).map((sp) => sp.contenderId);
 
   return (
     <FlatList
-      data={predictions}
+      data={predictions.slice(0, numToShow)}
       keyExtractor={(item) => item.contenderId}
       style={{ width: '100%' }}
       contentContainerStyle={{ paddingBottom: 100 }}
       onScroll={() => {
         Keyboard.dismiss();
       }}
+      onScrollEndDrag={(e) => {
+        // Fetches more at bottom of scroll. Note the high event throttle to prevent too many requests
+        // get position of current scroll
+        const currentOffset = e.nativeEvent.contentOffset.y;
+        // get max bottom of scroll
+        const maxOffset =
+          e.nativeEvent.contentSize.height - e.nativeEvent.layoutMeasurement.height;
+        // if we're close to the bottom fetch more
+        if (currentOffset > maxOffset - 200) {
+          onEndReached();
+        }
+      }}
+      onEndReachedThreshold={0.5} // triggers onEndReached at (X*100)% of list, for example 0.9 = 90% down
       keyboardShouldPersistTaps={'always'}
       renderItem={({ item: prediction, index: i }) => {
-        const highlighted = (selectedPredictions || [])
-          .map((sp) => sp.contenderId)
-          .includes(prediction.contenderId);
+        const highlighted = selectedContenderIds.includes(prediction.contenderId);
 
-        const listItemProps: iContenderListItemProps = {
-          variant: 'selectable',
-          prediction,
-          ranking: i + 1,
-          isSelected: selectedContenderId === prediction.contenderId,
-          onPressItem,
-          onPressThumbnail,
-          categoryType: category.type,
-          highlighted,
-        };
-        return isCollapsed ? (
-          <ContenderListItemCondensed {...listItemProps} />
-        ) : (
-          <ContenderListItem {...listItemProps} />
+        return (
+          <ContenderListItem
+            variant="selectable"
+            prediction={prediction}
+            ranking={i + 1}
+            onPressItem={onPressItem}
+            onPressThumbnail={onPressItem}
+            categoryType={type}
+            highlighted={highlighted}
+            totalNumPredictingTop={totalNumPredictingTop}
+          />
         );
       }}
     />

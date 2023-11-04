@@ -6,7 +6,7 @@ import FormInput from '../../../components/Inputs/FormInput';
 import { BodyBold, SubHeader } from '../../../components/Text';
 import COLORS from '../../../constants/colors';
 import SlackApi, { SlackChannel } from '../../../services/slack';
-import { useAuth } from '../../../context/UserContext';
+import { useAuth } from '../../../context/AuthContext';
 import { useNavigateAwayEffect } from '../../../util/hooks';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 

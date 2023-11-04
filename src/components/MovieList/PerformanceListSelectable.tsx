@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { FlatList, Keyboard } from 'react-native';
-import { CategoryType } from '../../API';
-import { iPrediction } from '../../types';
 import ContenderListItem from '../List/ContenderList/ContenderListItem';
+import { CategoryType, iPrediction } from '../../types/api';
+import { useTmdbDataStore } from '../../context/TmdbDataStore';
 
 type iPerformanceListSelectableProps = {
   predictions: iPrediction[];
@@ -15,6 +15,7 @@ const PerformanceListSelectable = ({
   disablePaddingBottom,
   onSelect,
 }: iPerformanceListSelectableProps) => {
+  const { getTmdbDataFromPrediction } = useTmdbDataStore();
   const [selectedPerformance, setSelectedPerformance] = useState<
     { personTmdbId: number; movieTmdbId: number } | undefined
   >(undefined);
@@ -23,22 +24,6 @@ const PerformanceListSelectable = ({
   useEffect(() => {
     setSelectedPerformance(undefined);
   }, [predictions.length]);
-
-  const onPressItem = (prediction: iPrediction) => {
-    Keyboard.dismiss();
-    const movieTmdbId = prediction.contenderMovie?.tmdbId;
-    const personTmdbId = prediction.contenderPerson?.tmdbId;
-    if (!movieTmdbId || !personTmdbId) return;
-    if (
-      movieTmdbId === selectedPerformance?.movieTmdbId &&
-      personTmdbId === selectedPerformance?.personTmdbId
-    ) {
-      setSelectedPerformance(undefined);
-    } else {
-      setSelectedPerformance({ movieTmdbId, personTmdbId });
-    }
-    onSelect(movieTmdbId, personTmdbId);
-  };
 
   return (
     <FlatList
@@ -51,11 +36,25 @@ const PerformanceListSelectable = ({
       keyboardShouldPersistTaps={'always'}
       contentContainerStyle={{ paddingBottom: disablePaddingBottom ? 0 : 200 }}
       renderItem={({ item: prediction, index: i }) => {
-        const movieTmdbId = prediction?.contenderMovie?.tmdbId;
-        const personTmdbId = prediction?.contenderPerson?.tmdbId;
+        const { movie, person } = getTmdbDataFromPrediction(prediction)!;
+        const movieTmdbId = movie?.tmdbId;
+        const personTmdbId = person?.tmdbId;
         const selected =
           movieTmdbId === selectedPerformance?.movieTmdbId &&
           personTmdbId === selectedPerformance?.personTmdbId;
+
+        const onPressItem = () => {
+          Keyboard.dismiss();
+          const movieTmdbId = movie.tmdbId;
+          const personTmdbId = person!.tmdbId;
+          if (!movieTmdbId || !personTmdbId) return;
+          if (selected) {
+            setSelectedPerformance(undefined);
+          } else {
+            setSelectedPerformance({ movieTmdbId, personTmdbId });
+          }
+          onSelect(movieTmdbId, personTmdbId);
+        };
 
         return (
           <ContenderListItem
@@ -63,7 +62,6 @@ const PerformanceListSelectable = ({
             ranking={i + 1}
             onPressItem={onPressItem}
             onPressThumbnail={onPressItem}
-            isSelected={false}
             highlighted={selected}
             variant={'search'}
             categoryType={CategoryType.PERFORMANCE}

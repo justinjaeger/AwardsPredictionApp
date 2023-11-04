@@ -3,12 +3,12 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import TabBar, { ITabBarProps } from './TabBar';
 import PredictionsNavigator from '../PredictionsNavigator';
 import AdminNavigator from '../AdminNavigator';
-import { useAuth } from '../../context/UserContext';
-import { UserRole } from '../../API';
+import { useAuth } from '../../context/AuthContext';
 import { BottomTabParamList } from '../types';
 import HelpNavigator from '../HelpNavigator';
 import { FollowingBarProvider } from '../../context/FollowingBarContext';
 import { DisplayProvider } from '../../context/DisplayStateContext';
+import { UserRole } from '../../types/api';
 
 const Tab = createBottomTabNavigator<BottomTabParamList>();
 

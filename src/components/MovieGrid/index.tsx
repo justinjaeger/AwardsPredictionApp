@@ -1,35 +1,33 @@
 import { Divider } from '@ui-kitten/components';
 import React from 'react';
 import { StyleProp, useWindowDimensions, View, ViewStyle } from 'react-native';
-import { PredictionType } from '../../API';
-import { getCategorySlots } from '../../constants/categories';
 import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
-import { useCategory } from '../../context/CategoryContext';
-import { iPrediction } from '../../types';
-import PosterFromTmdbId from '../Images/PosterFromTmdbId';
+import { iCategory, iPrediction } from '../../types/api';
+import { useTmdbDataStore } from '../../context/TmdbDataStore';
+import PosterFromTmdb from '../Images/PosterFromTmdb';
+import MoviePosterSkeleton from '../Skeletons/MoviePosterSkeleton';
 
-const MovieGrid = (props: {
+const MOVIES_IN_ROW = 5;
+
+const MovieGrid = ({
+  predictions,
+  categoryInfo,
+  totalWidth: _totalWidth,
+  noLine,
+  style,
+}: {
   predictions: iPrediction[];
-  isCollapsed?: boolean;
+  categoryInfo?: iCategory;
   noLine?: boolean;
   totalWidth?: number;
   style?: StyleProp<ViewStyle>;
 }) => {
-  const { predictions, isCollapsed, totalWidth: _totalWidth, style } = props;
-  let noLine = props.noLine;
+  const { getTmdbDataFromPrediction } = useTmdbDataStore();
   const { width } = useWindowDimensions();
   const totalWidth = _totalWidth || width;
-  const { event, category } = useCategory();
 
-  const predictionType = predictions[0]?.predictionType || PredictionType.NOMINATION;
-
-  // don't want to show divider after noms have happened
-  const slots =
-    event && category ? getCategorySlots(event, category.name, predictionType) : 1;
-  if (slots === 1) {
-    noLine = true;
-  }
+  const slots = categoryInfo?.slots || 5;
 
   return (
     <View
@@ -37,49 +35,60 @@ const MovieGrid = (props: {
         {
           flexDirection: 'row',
           flexWrap: 'wrap',
-          marginLeft: theme.windowMargin - theme.posterMargin / 2,
-          marginRight: theme.windowMargin - theme.posterMargin / 2,
-          marginBottom: isCollapsed ? 0 : theme.windowMargin,
+          marginLeft: theme.windowMargin,
+          marginRight: theme.windowMargin,
+          marginBottom: theme.windowMargin,
           width: totalWidth,
         },
         style,
       ]}
     >
-      {predictions.map((p, i) => (
-        <View key={p.contenderId}>
-          {!noLine && i === slots ? (
-            <Divider
-              style={{
-                position: 'absolute',
-                width: totalWidth - theme.windowMargin * 2,
-                marginTop: 10,
-                marginBottom: 10,
-                borderBottomWidth: 1,
-                borderColor: COLORS.secondary,
-              }}
-            />
-          ) : null}
-          {p.contenderMovie ? (
-            <>
-              {!noLine && i >= slots && i < slots + 5 ? (
-                // we want to give a margin on top if this is the row beneath the divider (since divider is absolute pos)
-                <View style={{ marginTop: 20 }} />
-              ) : null}
-              <PosterFromTmdbId
-                movieTmdbId={p.contenderMovie.tmdbId}
-                personTmdbId={p.contenderPerson?.tmdbId}
-                width={
-                  (totalWidth - theme.windowMargin * 2 + theme.posterMargin) /
-                  (isCollapsed ? 10 : 5)
-                }
-                ranking={isCollapsed ? undefined : i + 1}
-                accolade={p.accolade}
-                predictionType={p.predictionType}
+      {predictions.map((prediction, i) => {
+        const { contenderId } = prediction;
+        // HERE is where it gets the movie data, including poster
+        // BUT ALSO it comes back here from event predictions
+        const { movie, person } = getTmdbDataFromPrediction(prediction) || {};
+        return (
+          <View
+            key={contenderId}
+            style={{
+              marginRight: theme.posterMargin * 2,
+              marginBottom: theme.posterMargin * 2,
+            }}
+          >
+            {!noLine && i === slots ? (
+              <Divider
+                style={{
+                  position: 'absolute',
+                  width: totalWidth - theme.windowMargin * 2,
+                  marginTop: theme.windowMargin / 2,
+                  borderBottomWidth: 1,
+                  borderColor: COLORS.secondary,
+                }}
               />
-            </>
-          ) : null}
-        </View>
-      ))}
+            ) : null}
+            {!noLine && i >= slots && i < slots + MOVIES_IN_ROW ? (
+              // we want to give a margin on top if this is the row beneath the divider (since divider is absolute pos)
+              <View style={{ marginTop: 20 }} />
+            ) : null}
+            {movie ? (
+              <PosterFromTmdb
+                movie={movie}
+                person={person}
+                width={
+                  (totalWidth -
+                    theme.posterMargin * (MOVIES_IN_ROW - 1) -
+                    theme.windowMargin) /
+                  MOVIES_IN_ROW
+                }
+                ranking={i + 1}
+              />
+            ) : (
+              <MoviePosterSkeleton />
+            )}
+          </View>
+        );
+      })}
     </View>
   );
 };

@@ -1,9 +1,6 @@
 import React, { useEffect, useRef } from 'react';
-import { Animated, TouchableHighlight, View } from 'react-native';
-import COLORS from '../../constants/colors';
-import useDevice from '../../util/device';
-import CustomIcon from '../CustomIcon';
-import { SubHeader } from '../Text';
+import { Animated } from 'react-native';
+import ActionButton from './ActionButton';
 
 type iFABProps = {
   iconName?: string;
@@ -12,26 +9,34 @@ type iFABProps = {
   visible?: boolean;
   bottomPercentage?: string;
   horizontalOffset?: number;
+  left?: boolean;
+  isLoading?: boolean;
 };
 
-export const FAB = (props: iFABProps) => {
-  const { iconName, text, onPress, visible, bottomPercentage, horizontalOffset } = props;
-  const { isPad } = useDevice();
-
+export const FAB = ({
+  iconName,
+  text,
+  onPress,
+  visible,
+  bottomPercentage,
+  horizontalOffset,
+  left,
+  isLoading,
+}: iFABProps) => {
   const buttonX = useRef(new Animated.Value(0)).current;
   const buttonOpacity = useRef(new Animated.Value(0)).current;
 
-  const toValue = -(horizontalOffset || 0);
+  const toValue = left ? horizontalOffset ?? 0 : -(horizontalOffset ?? 0);
 
   useEffect(() => {
     Animated.timing(buttonX, {
-      toValue: visible ? toValue : 100,
-      duration: 250,
+      toValue: left ? (visible ? 100 : toValue) : visible ? toValue : 100,
+      duration: 300,
       useNativeDriver: false,
     }).start();
     Animated.timing(buttonOpacity, {
       toValue: visible ? 1 : 0,
-      duration: 250,
+      duration: 300,
       useNativeDriver: false,
     }).start();
   }, [visible]);
@@ -40,34 +45,19 @@ export const FAB = (props: iFABProps) => {
     <Animated.View
       style={{
         position: 'absolute',
-        bottom: bottomPercentage || '1%',
+        bottom: bottomPercentage || '0%',
         alignSelf: 'flex-end',
         transform: [{ translateX: buttonX }],
         opacity: buttonOpacity,
+        left: left ? -100 : undefined,
       }}
     >
-      <TouchableHighlight
-        style={{
-          backgroundColor: COLORS.primary,
-          borderColor: COLORS.white,
-          borderWidth: 1,
-          borderRadius: 100,
-          alignItems: 'center',
-          padding: 15 * (isPad ? 2 : 1),
-          margin: 10,
-        }}
+      <ActionButton
+        iconName={iconName}
+        text={text}
         onPress={onPress}
-        underlayColor={COLORS.secondaryDark}
-      >
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          {iconName ? (
-            <CustomIcon name={iconName} color={COLORS.white} size={24} />
-          ) : null}
-          {text ? (
-            <SubHeader style={{ marginLeft: 5, marginRight: 5 }}>{text}</SubHeader>
-          ) : null}
-        </View>
-      </TouchableHighlight>
+        isLoading={isLoading}
+      />
     </Animated.View>
   );
 };

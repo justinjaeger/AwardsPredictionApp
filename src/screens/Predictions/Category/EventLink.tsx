@@ -4,13 +4,24 @@ import { TouchableHighlight } from 'react-native';
 import CustomIcon from '../../../components/CustomIcon';
 import COLORS from '../../../constants/colors';
 import theme from '../../../constants/theme';
-import { useCategory } from '../../../context/CategoryContext';
+import { useEvent } from '../../../context/EventContext';
 import { BodyBold } from '../../../components/Text';
 import { hexToRgb } from '../../../util/hexToRgb';
+import { useAuth } from '../../../context/AuthContext';
 
-const EventLink = ({ userId }: { userId: string | undefined }) => {
+const EventLink = ({
+  userId,
+  userImage,
+  userName,
+}: {
+  userId: string | undefined;
+  userImage?: string | undefined;
+  userName?: string | undefined;
+}) => {
+  const { userId: authUserId } = useAuth();
+  const isAuthUser = userId === authUserId;
   const navigation = useNavigation();
-  const { event } = useCategory();
+  const { event } = useEvent();
 
   if (!event) return null;
 
@@ -18,7 +29,15 @@ const EventLink = ({ userId }: { userId: string | undefined }) => {
     <TouchableHighlight
       onPress={() => {
         // overrides category and goes to event
-        navigation.dispatch(StackActions.replace('Event', { userId }));
+        if (isAuthUser) {
+          navigation.dispatch(
+            StackActions.replace('Event', { userId, userImage, userName }),
+          );
+        } else {
+          navigation.dispatch(
+            StackActions.replace('EventFromProfile', { userId, userImage, userName }),
+          );
+        }
       }}
       style={{
         position: 'absolute',

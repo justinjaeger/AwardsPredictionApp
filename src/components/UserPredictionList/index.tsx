@@ -1,62 +1,62 @@
 import React from 'react';
 import { TouchableHighlight, useWindowDimensions, View } from 'react-native';
-import { PredictionType } from '../../API';
 import MovieGrid from '../../components/MovieGrid';
 import { Body, Label, SubHeader } from '../../components/Text';
 import { AWARDS_BODY_TO_PLURAL_STRING } from '../../constants/awardsBodies';
-import { getAwardsBodyCategories, getCategorySlots } from '../../constants/categories';
 import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
-import { useCategory } from '../../context/CategoryContext';
-import { useAuth } from '../../context/UserContext';
+import { useEvent } from '../../context/EventContext';
+import { useAuth } from '../../context/AuthContext';
 import { PredictionsParamList } from '../../navigation/types';
-import { iPredictionSet } from '../../types';
 import { formatLastUpdated } from '../../util/formatDateTime';
 import { useTypedNavigation } from '../../util/hooks';
+import { AwardsBody, CategoryName, iRecentPrediction } from '../../types/api';
+import useQueryGetAllEvents from '../../hooks/queries/useQueryGetAllEvents';
 
-const ProfilePredictionsList = ({
+const UserPredictionList = ({
   predictionSets,
-  fixedSlots,
   userId,
+  userName,
+  userImage,
 }: {
-  predictionSets: iPredictionSet[];
+  predictionSets: iRecentPrediction[];
   fixedSlots?: number;
   userId: string;
+  userName: string | undefined;
+  userImage: string | undefined;
 }) => {
   const { userId: authUserId } = useAuth();
   const navigation = useTypedNavigation<PredictionsParamList>();
-  const { setEvent, setCategory } = useCategory();
+  const { data: events } = useQueryGetAllEvents();
+  const { setEvent, setCategory } = useEvent();
   const { width } = useWindowDimensions();
   const isAuthUserProfile = userId === authUserId;
+
   return (
     <>
       {predictionSets.map((ps) => {
         if (!ps) return null;
-        const awardsBodyCategories = getAwardsBodyCategories(
-          ps.event.awardsBody,
-          ps.event.year,
-        );
-        const predictions = ps.predictions;
-        const predictionType =
-          predictions[0]?.predictionType || PredictionType.NOMINATION;
-        const slots = getCategorySlots(ps.event, ps.category.name, predictionType);
-        const slotsToUse = slots !== 1 ? slots : 5; // slots is "1" when predictions have happened, so if predictions have happened, so for winner predictions let's just show top 5
-        const truncatedPredictions = predictions.slice(0, fixedSlots || slotsToUse);
-        const eventName = AWARDS_BODY_TO_PLURAL_STRING[ps.event.awardsBody];
-        const categoryName = awardsBodyCategories[ps.category.name]?.name || '';
+        const awardsBodyName = AWARDS_BODY_TO_PLURAL_STRING[ps.awardsBody as AwardsBody];
         const lastUpdatedText = formatLastUpdated(new Date(ps.createdAt));
+        const event = events?.find(
+          (e) => e.awardsBody === ps.awardsBody && e.year === ps.year,
+        );
         return (
           <TouchableHighlight
-            key={ps.id}
+            key={ps.category + lastUpdatedText}
             style={{
               width,
               alignItems: 'flex-start',
             }}
             underlayColor={COLORS.secondaryDark}
             onPress={() => {
+              if (!event) {
+                console.error('could not find event');
+                return;
+              }
               // navigate to user's predictions
-              setEvent(ps.event);
-              setCategory(ps.category);
+              setEvent(event);
+              setCategory(ps.category as CategoryName);
               if (isAuthUserProfile) {
                 navigation.navigate('Category', {
                   userId,
@@ -65,6 +65,8 @@ const ProfilePredictionsList = ({
               } else {
                 navigation.navigate('CategoryFromProfile', {
                   userId,
+                  userName,
+                  userImage,
                   showEventLink: true,
                 });
               }
@@ -83,16 +85,17 @@ const ProfilePredictionsList = ({
                 }}
               >
                 <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
-                  <SubHeader style={{ color: COLORS.lightest }}>{categoryName}</SubHeader>
-                  <Body style={{ color: COLORS.lightest }}>{'  |  ' + eventName}</Body>
+                  <SubHeader style={{ color: COLORS.lightest }}>{ps.category}</SubHeader>
+                  <Body style={{ color: COLORS.lightest }}>
+                    {'  |  ' + awardsBodyName}
+                  </Body>
                 </View>
                 <Label style={{ marginTop: 5 }}>
                   {'Updated' + ': ' + lastUpdatedText}
                 </Label>
               </View>
               <MovieGrid
-                predictions={truncatedPredictions}
-                isCollapsed={false} // TODO
+                predictions={ps.topPredictions}
                 noLine
                 style={{ marginBottom: 0 }}
               />
@@ -104,4 +107,4 @@ const ProfilePredictionsList = ({
   );
 };
 
-export default ProfilePredictionsList;
+export default UserPredictionList;

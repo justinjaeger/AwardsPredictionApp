@@ -103,29 +103,34 @@ export type CategoryUpdateLog = {
   yyyymmddUpdates: Record<number, boolean>;
 };
 
+export type EventUpdateLog = {
+  userId: ObjectId;
+  eventId: ObjectId;
+  yyyymmddUpdates: Record<number, boolean>;
+};
+
 export type Contender = {
   eventId: ObjectId;
-  movieId: ObjectId;
   category: CategoryName;
+  movieTmdbId: number;
+  personTmdbId?: number;
+  songId?: string;
   isHidden?: boolean;
   accolade?: Phase;
-  songId?: ObjectId;
-  personId?: ObjectId;
   numPredicting?: Record<number, number>; // for community predictions only
   amplify_id?: string;
 };
 
-export type iCategories = Record<
-  CategoryName,
-  {
-    type: CategoryType;
-    phase?: Phase;
-    shortlistDateTime?: Date;
-  }
->;
+export type iCategory = {
+  type: CategoryType;
+  name: string;
+  slots?: number; // 5 by default
+  shortlistDateTime?: Date;
+  isHidden?: boolean;
+};
 
 export type EventModel = {
-  categories: iCategories;
+  categories: Record<CategoryName, iCategory>;
   awardsBody: AwardsBody;
   year: number;
   status: EventStatus;
@@ -167,20 +172,19 @@ export type Person = {
   amplify_id?: string;
 };
 
-export type iPredictions = Array<{
+export type iPrediction = {
   contenderId: ObjectId;
   ranking: number;
-  movieId: ObjectId;
-  personId?: ObjectId;
-  songId?: ObjectId;
+  movieTmdbId: number;
+  personTmdbId?: number;
+  songId?: string;
   numPredicting?: Record<number, number>; // only applies to community predictions
-}>;
+};
 
 export type iCategoryPrediction = {
-  type: CategoryType;
   createdAt: Date;
-  predictions: iPredictions;
-  phase?: Phase | undefined;
+  predictions: iPrediction[];
+  totalUsersPredicting?: number; // only applies to community predictions
 };
 
 export type PredictionSet = {
@@ -205,7 +209,7 @@ export type RelationshipWithUser = Relationship & {
 };
 
 export type Song = {
-  movieId: ObjectId;
+  movieTmdbId: number;
   title: string;
   artist?: string;
   amplify_id?: string;
@@ -216,14 +220,14 @@ export type Token = {
   token: string;
 };
 
-export type iRecentPredictions = Array<{
+export type iRecentPrediction = {
   awardsBody: string;
   category: string;
   year: number;
   predictionSetId: ObjectId;
   createdAt: Date;
-  topPredictions: iPredictions;
-}>;
+  topPredictions: iPrediction[];
+};
 
 export type User = {
   email: string;
@@ -236,6 +240,10 @@ export type User = {
   followingCount?: number;
   followerCount?: number;
   eventsPredicting?: ObjectId[];
-  recentPredictionSets?: iRecentPredictions;
+  recentPredictionSets?: iRecentPrediction[];
   amplify_id?: string;
 };
+
+export type ApiData = {
+  eventYear: number;
+} & Record<string, ((Movie | Person | Song) & { type: CategoryType }) | number>;

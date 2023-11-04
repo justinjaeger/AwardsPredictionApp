@@ -1,8 +1,7 @@
 {
     "compilerOptions": {
         "jsx": "react",
-        "typeRoots": ["./src/types"]
+        "esModuleInterop": true
     },
     "extends": "@tsconfig/react-native/tsconfig.json"
 }
-  

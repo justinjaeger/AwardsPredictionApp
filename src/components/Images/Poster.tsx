@@ -1,11 +1,5 @@
 import React, { useState } from 'react';
-import {
-  ImageStyle,
-  StyleProp,
-  TouchableHighlight,
-  useWindowDimensions,
-  View,
-} from 'react-native';
+import { ImageStyle, StyleProp, TouchableHighlight, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import COLORS from '../../constants/colors';
 import {
@@ -13,44 +7,33 @@ import {
   PosterSize,
   POSTER_SIZE,
 } from '../../constants/posterDimensions';
-import { TMDB_IMAGE_URL } from '../../constants';
+import {
+  TMDB_IMAGE_URL_LARGE,
+  TMDB_IMAGE_URL_MED,
+  TMDB_IMAGE_URL_SMALL,
+} from '../../constants';
 import { Body, Label } from '../Text';
 import theme from '../../constants/theme';
-import { ContenderAccolade, PredictionType } from '../../API';
-import AccoladeTag from '../List/ContenderList/AccoladeTag';
-import { useCategory } from '../../context/CategoryContext';
 import useDevice from '../../util/device';
 
 type iPosterProps = {
   title: string;
-  path: string | null; // comes after TMDB_IMAGE_URL/
+  path: string | null; // comes after TMDB_IMAGE_URL_MED/
   width?: number; // 1 is 27*40px, defualt is 5
   ranking?: number;
   onPress?: () => void;
-  accolade?: ContenderAccolade | undefined;
-  predictionType?: PredictionType;
   styles?: StyleProp<ImageStyle>;
 };
 
-/**
- * TODO: add a blank image and blank movie poster for when poster is small
- */
-
-const Poster = (props: iPosterProps) => {
-  const {
-    path,
-    title,
-    width: _width,
-    ranking,
-    onPress,
-    accolade,
-    predictionType,
-    styles,
-  } = props;
-  const { width: windowWidth } = useWindowDimensions();
-  const { date } = useCategory();
+const Poster = ({
+  path,
+  title,
+  width: _width,
+  ranking,
+  onPress,
+  styles,
+}: iPosterProps) => {
   const { isPad } = useDevice();
-  const isHistory = !!date;
 
   const width = _width || PosterSize.MEDIUM;
 
@@ -66,7 +49,6 @@ const Poster = (props: iPosterProps) => {
     borderWidth: 1,
     borderColor: COLORS.secondary,
     borderRadius: 5,
-    margin: theme.posterMargin,
     opacity: isPressed ? 0.8 : 1,
   };
 
@@ -108,28 +90,17 @@ const Poster = (props: iPosterProps) => {
             </Body>
           </View>
         ) : null}
-        {isHistory && accolade && predictionType ? (
-          <View
-            style={{
-              position: 'absolute',
-              bottom: 0,
-              right: -10,
-              margin: theme.posterMargin,
-              zIndex: 1,
-            }}
-          >
-            <AccoladeTag
-              accolade={accolade}
-              type={predictionType}
-              small={width < windowWidth / 10}
-            />
-          </View>
-        ) : null}
         {path ? (
           <FastImage
             style={style as Record<string, unknown>}
             source={{
-              uri: `${TMDB_IMAGE_URL}/${path}`,
+              uri: `${
+                width >= PosterSize.LARGE
+                  ? TMDB_IMAGE_URL_LARGE
+                  : width >= PosterSize.MEDIUM
+                  ? TMDB_IMAGE_URL_MED
+                  : TMDB_IMAGE_URL_SMALL
+              }/${path}`,
             }}
           />
         ) : (

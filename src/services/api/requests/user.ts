@@ -1,7 +1,7 @@
 import { User, WithId } from '../../../types/api';
 import api from '../api';
 
-const PAGINATED_LIMIT = 15;
+export const PAGINATED_LIMIT = 15;
 
 export const getUser = async ({
   userId,
@@ -28,7 +28,20 @@ export const getUser = async ({
   if (excludeNestedFields) {
     queryString += `&excludeNestedFields=${excludeNestedFields}`;
   }
-  return await api.get<WithId<User>>(`user${queryString}`);
+  const url = `users${queryString}`;
+  return await api.get<WithId<User>>(url);
+};
+
+export const listFollowersPaginated = async ({
+  userId,
+  pageNumber,
+}: {
+  userId: string;
+  pageNumber: number;
+}) => {
+  return await api.get<WithId<User>[]>(
+    `users/${userId}/followers?pageNumber=${pageNumber}&limit=${PAGINATED_LIMIT}`,
+  );
 };
 
 export const listFollowingPaginated = async ({
@@ -40,21 +53,20 @@ export const listFollowingPaginated = async ({
   pageNumber: number;
   includeRecentPredictionSets?: boolean;
 }) => {
-  return await api.get<WithId<User>>(
-    `users/${userId}/following?pageNumber=${pageNumber}&limit=${PAGINATED_LIMIT}&includeRecentPredictionSets=${!!includeRecentPredictionSets}`,
+  return await api.get<WithId<User>[]>(
+    `users/${userId}/following?pageNumber=${pageNumber}&limit=${PAGINATED_LIMIT}&includeNestedFields=${!!includeRecentPredictionSets}`,
   );
 };
 
-export const listFollowersPaginated = async ({
-  userId,
-  pageNumber,
-}: {
-  userId: string;
-  pageNumber: number;
-}) => {
-  return await api.get<WithId<User>>(
-    `users/${userId}/followers?pageNumber=${pageNumber}&limit=${PAGINATED_LIMIT}`,
+// NOTE: expensive because unpaginated - we def want to cache this response
+export const listFollowingWithNestedFields = async (userId: string) => {
+  return await api.get<WithId<User>[]>(
+    `users/${userId}/following?includeNestedFields=true&limit=1000`,
   );
+};
+
+export const listMostFollowedPaginated = async (pageNumber: number) => {
+  return await api.get<WithId<User>[]>(`users/mostFollowed?pageNumber=${pageNumber}`);
 };
 
 // TODO: Be careful using this because it can be expensive. Don't debounce, just submit on blur or with a button
@@ -65,7 +77,7 @@ export const searchUsers = async ({
   query: string;
   pageNumber: number;
 }) => {
-  return await api.get<WithId<User>>(
+  return await api.get<WithId<User>[]>(
     `users/search?query=${query}&pageNumber=${pageNumber}&limit=${PAGINATED_LIMIT}`,
   );
 };
@@ -78,9 +90,13 @@ type iCreateUserPayload = {
 };
 
 export const createUser = async (payload: iCreateUserPayload) => {
-  return await api.post<string, iCreateUserPayload>('users', payload);
+  return await api.post<WithId<User>, iCreateUserPayload>('users', payload);
 };
 
 export const updateUser = async (payload: Partial<User>) => {
   return await api.put<undefined, Partial<User>>('users', payload);
+};
+
+export const deleteUser = async () => {
+  return await api.delete<undefined>('users');
 };

@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ReactChildren } from '../../types';
+import { ReactChildren } from '../../types/keys';
 
 export default function SafeAreaViewFixed({
   children,

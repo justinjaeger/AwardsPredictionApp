@@ -2,9 +2,11 @@ import React, { useEffect, useRef } from 'react';
 import {
   Animated,
   Modal,
+  StyleProp,
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
+  ViewStyle,
 } from 'react-native';
 import theme from '../../constants/theme';
 import COLORS from '../../constants/colors';
@@ -22,11 +24,24 @@ type iBasicModalProps = {
     title?: string;
     showClose?: boolean;
   };
+  style?: StyleProp<ViewStyle>;
+  childStyle?: StyleProp<ViewStyle>;
+  backgroundStyle?: StyleProp<ViewStyle>;
+  innerContainerStyle?: StyleProp<ViewStyle>;
 };
 
-const BasicModal = (props: iBasicModalProps) => {
-  const { visible, onClose, children, width, height, header } = props;
-
+const BasicModal = ({
+  visible,
+  onClose,
+  children,
+  width,
+  height,
+  header,
+  style,
+  childStyle,
+  backgroundStyle,
+  innerContainerStyle,
+}: iBasicModalProps) => {
   const opacity = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -38,16 +53,18 @@ const BasicModal = (props: iBasicModalProps) => {
   }, [visible]);
 
   return (
-    <Animated.View style={{ opacity }}>
+    <Animated.View style={[{ opacity }, style]}>
       <Modal visible={visible} transparent onDismiss={onClose} onRequestClose={onClose}>
         <TouchableOpacity
-          style={{
-            height: '100%',
-            width: '100%',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: 'rgba(0,0,0,0.8)',
-          }}
+          style={[
+            {
+              height: '100%',
+              width: '100%',
+              alignItems: 'center',
+              justifyContent: 'center',
+            },
+            backgroundStyle,
+          ]}
           activeOpacity={1}
           onPressOut={(e) => {
             e.stopPropagation();
@@ -60,14 +77,16 @@ const BasicModal = (props: iBasicModalProps) => {
             }}
           >
             <View
-              style={{
-                width: width || '85%',
-                height: height || '50%',
-                position: 'relative',
-                backgroundColor: COLORS.primary,
-                borderRadius: 10,
-                overflow: 'hidden',
-              }}
+              style={[
+                {
+                  width: width || '85%',
+                  height: height || '50%',
+                  position: 'relative',
+                  backgroundColor: COLORS.primary,
+                  borderRadius: 10,
+                },
+                innerContainerStyle,
+              ]}
             >
               {header ? (
                 <View
@@ -95,7 +114,7 @@ const BasicModal = (props: iBasicModalProps) => {
                   </View>
                 </View>
               ) : null}
-              <View style={{ paddingTop: 10 }}>{children}</View>
+              <View style={childStyle}>{children}</View>
             </View>
           </TouchableWithoutFeedback>
         </TouchableOpacity>

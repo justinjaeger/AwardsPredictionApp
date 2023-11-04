@@ -1,11 +1,11 @@
 import { useEffect, useRef } from 'react';
 import { Animated } from 'react-native';
-import { useCategory } from '../context/CategoryContext';
+import { useEvent } from '../context/EventContext';
 
 const useShowAddTab = () => {
   const animatedOpacity = useRef(new Animated.Value(0)).current;
 
-  const { personalCommunityTab } = useCategory();
+  const { personalCommunityTab } = useEvent();
 
   useEffect(() => {
     if (personalCommunityTab === 'personal') {

@@ -4,8 +4,8 @@ import React, { useState } from 'react';
 import { Alert, StyleProp, TouchableHighlight, ViewStyle } from 'react-native';
 import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
-import { useAuth } from '../../context/UserContext';
-import useUpdateRelationship from '../../hooks/mutations/updateRelationship';
+import { useAuth } from '../../context/AuthContext';
+import useMutationUpdateRelationship from '../../hooks/mutations/useMutationUpdateRelationship';
 import { BodyBold } from '../Text';
 import { MainScreenNavigationProp } from '../../navigation/types';
 
@@ -21,7 +21,7 @@ const FollowButton = ({
   const { userId: authUserId } = useAuth();
   const navigation = useNavigation<MainScreenNavigationProp>();
 
-  const { mutate: updateRelationship, isComplete } = useUpdateRelationship();
+  const { mutate: updateRelationship, isComplete } = useMutationUpdateRelationship();
 
   // just to display the updated value
   const [isFollowing, setIsFollowing] = useState(authUserIsFollowing);
@@ -57,7 +57,6 @@ const FollowButton = ({
                 await updateRelationship({
                   action: 'unfollow',
                   profileUserId,
-                  authUserId,
                 });
                 setIsFollowing(false);
               },
@@ -65,7 +64,7 @@ const FollowButton = ({
           ]);
         } else {
           if (!authUserId) return;
-          await updateRelationship({ action: 'follow', profileUserId, authUserId });
+          await updateRelationship({ action: 'follow', profileUserId });
           setIsFollowing(true);
         }
       }}

@@ -1,33 +1,38 @@
 import React, { memo } from 'react';
 import { TouchableHighlight, View } from 'react-native';
 import COLORS from '../../constants/colors';
-import { iUser } from '../../types';
 import FollowButton from '../FollowButton';
 import ProfileImage from '../ProfileImage';
 import { Body, SubHeader } from '../Text';
 import { IMAGE_SIZE } from '.';
+import { User, WithId } from '../../types/api';
 
 const UserSearchResultItem = ({
   item,
   authUserId,
+  authUserIsFollowing,
   onPress,
 }: {
-  item: iUser;
+  item: WithId<User>;
   authUserId: string | undefined;
+  authUserIsFollowing: boolean;
   onPress: (userId: string) => void;
 }) => {
   const hasOnlyOneName = !(item.name && item.username);
-  const isSignedInUser = item.id === authUserId;
-  const authUserIsFollowing = item.authUserIsFollowing || false;
+  const isSignedInUser = item._id === authUserId;
+  // TODO: get the relationship between the auth user and the profile user
+  // Problem here is this is expensive to do for every user in the list...
+  // But what we can do is just request every "following" relationship from auth user
+  // and compare to that
   return (
     <TouchableHighlight
-      key={item.id}
+      key={item._id}
       style={{
         flexDirection: 'row',
         padding: 10,
         width: '100%',
       }}
-      onPress={() => onPress(item.id)}
+      onPress={() => onPress(item._id)}
       underlayColor={COLORS.secondaryDark}
     >
       <View
@@ -42,7 +47,7 @@ const UserSearchResultItem = ({
           <ProfileImage
             image={item.image}
             imageSize={IMAGE_SIZE}
-            onPress={() => onPress(item.id)}
+            onPress={() => onPress(item._id)}
           />
           <View
             style={{
@@ -60,7 +65,7 @@ const UserSearchResultItem = ({
         {!isSignedInUser ? (
           <FollowButton
             authUserIsFollowing={authUserIsFollowing}
-            profileUserId={item.id}
+            profileUserId={item._id}
           />
         ) : null}
       </View>

@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { useLayoutEffect } from 'react';
 import { PredictionsParamList } from '../../../navigation/types';
 import PredictionTabsNavigator from '../../../navigation/PredictionTabsNavigator';
-import { useAuth } from '../../../context/UserContext';
-import { EventDisplayFab } from '../../../components/Buttons/DisplayFAB';
+import { useAuth } from '../../../context/AuthContext';
 import {
   RouteProp,
   StackActions,
@@ -11,52 +10,61 @@ import {
 } from '@react-navigation/native';
 import Event from './index';
 import FollowingBottomScroll from '../../../components/FollowingBottomScroll';
-import usePredictionData from '../../../hooks/queries/usePredictionData';
-import { useEventDisplay } from '../../../hooks/animatedState/useDisplay';
+import useQueryGetUserPredictions from '../../../hooks/queries/useQueryGetUserPredictions';
+import useQueryGetCommunityPredictions from '../../../hooks/queries/useQueryGetCommunityPredictions';
+import { eventToString } from '../../../util/stringConversions';
+import { useEvent } from '../../../context/EventContext';
+import { getHeaderTitleWithTrophy } from '../../../constants';
 
 const EventPersonalCommunity = () => {
   const navigation = useNavigation();
   const { params } = useRoute<RouteProp<PredictionsParamList, 'Event'>>();
 
+  const { event } = useEvent();
+
   const { userId: authUserId } = useAuth();
-  const userId = params?.userId || authUserId;
+  const userId = params?.userId || authUserId || '';
 
-  const { predictionData: personalPredictionData, isLoading: isLoadingPersonal } =
-    usePredictionData('personal', userId);
-  const { predictionData: communityPredictionData, isLoading: isLoadingCommunity } =
-    usePredictionData('community', userId);
+  const { data: personalPredictionData, isLoading: isLoadingPersonal } =
+    useQueryGetUserPredictions(userId);
+  const { data: communityPredictionData, isLoading: isLoadingCommunity } =
+    useQueryGetCommunityPredictions();
 
-  const { collapsedOpacity, expandedOpacity, delayedDisplay } = useEventDisplay();
-
-  const props = {
-    collapsedOpacity,
-    expandedOpacity,
-    delayedDisplay,
-    userId,
-  };
+  // define the header
+  useLayoutEffect(() => {
+    if (!event) return;
+    const headerTitle = eventToString(event.awardsBody, event.year);
+    navigation.setOptions({
+      headerTitle: getHeaderTitleWithTrophy(headerTitle, event.awardsBody),
+    });
+  }, [navigation]);
 
   return (
     <>
-      <EventDisplayFab />
-      {PredictionTabsNavigator(
-        <Event
-          tab={'personal'}
-          predictionData={personalPredictionData}
-          isLoading={isLoadingPersonal}
-          {...props}
-        />,
-        <Event
-          tab={'community'}
-          predictionData={communityPredictionData}
-          isLoading={isLoadingCommunity}
-          {...props}
-        />,
-      )}
+      <PredictionTabsNavigator
+        personal={
+          <Event
+            tab={'personal'}
+            predictionData={personalPredictionData ?? undefined}
+            isLoading={isLoadingPersonal}
+            userId={userId}
+          />
+        }
+        community={
+          <Event
+            tab={'community'}
+            predictionData={communityPredictionData ?? undefined}
+            isLoading={isLoadingCommunity}
+            userId={userId}
+          />
+        }
+      />
       {authUserId ? (
         <FollowingBottomScroll
-          userId={authUserId}
-          onPress={(id) => {
-            navigation.dispatch(StackActions.push('EventFromProfile', { userId: id }));
+          onPress={(userId, userName, userImage) => {
+            navigation.dispatch(
+              StackActions.push('EventFromProfile', { userId, userName, userImage }),
+            );
           }}
         />
       ) : null}

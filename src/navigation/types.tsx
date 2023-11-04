@@ -1,7 +1,6 @@
 import { StackNavigationProp } from '@react-navigation/stack';
-import { CategoryType } from '../API';
-import { iPrediction } from '../types';
 import { MaterialTopTabNavigationProp } from '@react-navigation/material-top-tabs';
+import { EventModel, WithId, iPrediction } from '../types/api';
 
 export type MainScreenNavigationProp = StackNavigationProp<MainParamList>;
 export type MainParamList = {
@@ -28,19 +27,32 @@ export type BottomTabParamList = {
   Help: undefined;
 };
 
+export type PredictionsNavigationProp = StackNavigationProp<PredictionsParamList>;
 export type PredictionsParamList = {
   EventSelect: undefined;
   // PREDICTION SCREENS
-  Event: { userId: string | undefined };
-  EventFromProfile: { userId: string | undefined };
+  Event: {
+    userId: string | undefined;
+    userName: string | undefined;
+    userImage: string | undefined;
+  };
+  EventFromProfile: {
+    userId: string | undefined;
+    userName: string | undefined;
+    userImage: string | undefined;
+  };
   Category: {
     userId: string | undefined;
+    userName: string | undefined;
+    userImage: string | undefined;
     isSelectable?: boolean;
     showEventLink?: boolean;
     onPressItem?: (contenderId: string) => void;
   };
   CategoryFromProfile: {
     userId: string | undefined;
+    userName: string | undefined;
+    userImage: string | undefined;
     isSelectable?: boolean;
     showEventLink?: boolean;
     onPressItem?: (contenderId: string) => void;
@@ -48,6 +60,10 @@ export type PredictionsParamList = {
   AddPredictions: {
     initialPredictions: iPrediction[];
     onFinish: (predictions: iPrediction[]) => void;
+  };
+  ContenderStats: {
+    movieTmdbId: number;
+    event: WithId<EventModel>;
   };
   // PROFILE SCREENS
   Profile: {
@@ -58,12 +74,6 @@ export type PredictionsParamList = {
     type: 'followers' | 'following';
   };
   UpdateProfileInfo: undefined;
-  // UNFINISHED SCREENS
-  ContenderDetails: {
-    categoryType: CategoryType;
-    contenderId: string;
-    personTmdb?: number | undefined;
-  };
   // FRIEND SCREENS
   SearchFriends: undefined;
 };

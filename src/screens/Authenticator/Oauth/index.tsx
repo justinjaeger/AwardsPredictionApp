@@ -1,23 +1,19 @@
 import React from 'react';
-import { StyleProp, TextStyle, View } from 'react-native';
+import { View } from 'react-native';
 import LoadingStatue from '../../../components/LoadingStatue';
 import { Body, BodyBold } from '../../../components/Text';
 import COLORS from '../../../constants/colors';
-import GoogleOauthButton from './GoogleOauthButton';
-import useGoogleSignIn from './useGoogleSignIn';
-import AppleOauthButton from './AppleOauthButton';
-import EmailButton from './EmailButton';
+import GoogleOauthButton from './Buttons/GoogleOauthButton';
+import AppleOauthButton from './Buttons/AppleOauthButton';
+import EmailButton from './Buttons/EmailButton';
+import useGoogleOAuth from './useGoogleOauth';
+import useAppleOauth from './useAppleOauth';
 
 const OauthPage = () => {
-  const { isLoading, isError } = useGoogleSignIn();
+  const { googleSignIn, isLoading: isLoadingGoogleAuth } = useGoogleOAuth();
+  const { appleSignIn, isLoading: isLoadingAppleAuth } = useAppleOauth();
 
-  const errorTextStyles: StyleProp<TextStyle> = {
-    color: COLORS.white,
-    textAlign: 'center',
-    width: '80%',
-    marginTop: 10,
-    lineHeight: 20,
-  };
+  const isLoading = isLoadingGoogleAuth ?? isLoadingAppleAuth;
 
   return (
     <View
@@ -35,17 +31,9 @@ const OauthPage = () => {
         </View>
       ) : (
         <>
-          <GoogleOauthButton />
-          <AppleOauthButton />
+          <GoogleOauthButton onPress={googleSignIn} />
+          <AppleOauthButton onPress={appleSignIn} />
           <EmailButton />
-          {isError ? (
-            <View style={{ width: '100%', alignItems: 'center', marginTop: 40 }}>
-              <Body style={errorTextStyles}>{'Sorry, an error has occured.'}</Body>
-              <Body style={errorTextStyles}>
-                {'Notify our developer by going back and messaging in the "?" tab.'}
-              </Body>
-            </View>
-          ) : null}
           <Body
             style={{
               textAlign: 'center',
