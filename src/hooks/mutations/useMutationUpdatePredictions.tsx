@@ -6,7 +6,7 @@ import MongoApi from '../../services/api/requests';
 import { iUpdatePredictionSetPayload } from '../../services/api/requests/predictionset';
 import { useEvent } from '../../context/EventContext';
 
-const useMutationUpdatePredictions = (onComplete: () => void) => {
+const useMutationUpdatePredictions = (onComplete: () => void, onIsSaving: () => void) => {
   const { userId: authUserId } = useAuth();
   const { event } = useEvent();
   const queryClient = useQueryClient();
@@ -16,6 +16,7 @@ const useMutationUpdatePredictions = (onComplete: () => void) => {
   const { mutate, isLoading } = useMutation({
     mutationFn: async (payload: iUpdatePredictionSetPayload) => {
       setIsComplete(false);
+      onIsSaving();
       return MongoApi.updatePredictionSet(payload);
     },
     onSuccess: async () => {

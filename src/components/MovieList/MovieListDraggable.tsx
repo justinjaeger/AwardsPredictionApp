@@ -39,6 +39,8 @@ const MovieListDraggable = ({
     setModalData(prediction);
   }, []);
 
+  const [itemsToDelete, setItemsToDelete] = useState<iPrediction[]>([]);
+
   return (
     <>
       <DraggableFlatList
@@ -53,7 +55,7 @@ const MovieListDraggable = ({
           <LastUpdatedText lastUpdated={lastUpdatedString} style={{ top: -35 }} />
         }
         ListFooterComponent={
-          isAuthProfile ? (
+          isAuthProfile && predictions.length === 0 ? (
             <View style={{ width: '100%', alignItems: 'center', marginTop: 40 }}>
               <TouchableHighlight
                 style={{
@@ -69,11 +71,7 @@ const MovieListDraggable = ({
                 underlayColor={COLORS.secondaryDark}
                 onPress={onPressAdd}
               >
-                <SubHeader>
-                  {predictions.length === 0
-                    ? `+ Add ${CATEGORY_TYPE_TO_STRING[type]}s`
-                    : `Add/Delete ${CATEGORY_TYPE_TO_STRING[type]}s`}
-                </SubHeader>
+                <SubHeader>{`+ Add ${CATEGORY_TYPE_TO_STRING[type]}s`}</SubHeader>
               </TouchableHighlight>
             </View>
           ) : null
@@ -97,7 +95,31 @@ const MovieListDraggable = ({
                   prediction={prediction}
                   ranking={ranking}
                   onPressItem={onPressItem}
-                  onPressThumbnail={onPressItem}
+                  onPressThumbnail={(item) => {
+                    setItemsToDelete((curr) => {
+                      const newItems = [...curr];
+                      const index = curr.findIndex(
+                        (p) => p.contenderId === item.contenderId,
+                      );
+                      if (index === -1) {
+                        newItems.push(item);
+                      } else {
+                        newItems.splice(index, 1);
+                      }
+                      return newItems;
+                    });
+                  }}
+                  isSelectedForDelete={itemsToDelete.some(
+                    (p) => p.contenderId === prediction.contenderId,
+                  )}
+                  onPressDelete={() => {
+                    setPredictions(
+                      predictions.filter((p) => p.contenderId !== prediction.contenderId),
+                    );
+                    setItemsToDelete((curr) =>
+                      curr.filter((p) => p.contenderId !== prediction.contenderId),
+                    );
+                  }}
                   draggable={{
                     drag,
                     isActive,

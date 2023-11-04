@@ -1,28 +1,31 @@
 import _ from 'lodash';
-import React, { memo, useEffect, useLayoutEffect, useState } from 'react';
-import { Alert, Animated, View } from 'react-native';
-import BackButton from '../../../components/Buttons/BackButton';
-import LoadingStatueModal from '../../../components/LoadingStatueModal';
+import React, { memo, useEffect, useRef, useState } from 'react';
+import { Animated, View } from 'react-native';
 import MovieListDraggable from '../../../components/MovieList/MovieListDraggable';
 import SignedOutState from '../../../components/SignedOutState';
-import Snackbar from '../../../components/Snackbar';
+// import Snackbar from '../../../components/Snackbar';
 import { BodyBold } from '../../../components/Text';
 import { useEvent } from '../../../context/EventContext';
 import useMutationUpdatePredictions from '../../../hooks/mutations/useMutationUpdatePredictions';
 import { PredictionsParamList } from '../../../navigation/types';
-import { useAsyncReference, useTypedNavigation } from '../../../util/hooks';
+import {
+  useNavigateAwayEffect,
+  useNavigateToEffect,
+  useTypedNavigation,
+} from '../../../util/hooks';
 import { formatLastUpdated } from '../../../util/formatDateTime';
 import { useAuth } from '../../../context/AuthContext';
-import useDevice from '../../../util/device';
 import { AddPredictionsFab } from '../../../components/Buttons/DisplayFAB';
-import useShowAddTab from '../../../hooks/useShowAddTab';
 import EventLink from './EventLink';
-import EditToolbar from '../../../components/Buttons/EditToolbar';
 import { iPrediction } from '../../../types/api';
 import useQueryGetUserPredictions from '../../../hooks/queries/useQueryGetUserPredictions';
 import CategorySkeleton from '../../../components/Skeletons/CategorySkeleton';
 import { sortPredictions } from '../../../util/sortPredictions';
 import ScreenshotMode from '../../../components/Buttons/ScreenshotMode';
+import { FAB } from '../../../components/Buttons/FAB';
+import { useFollowingBar } from '../../../context/FollowingBarContext';
+
+const EXTRA_BOTTOM_HEIGHT = 70;
 
 // used in both FromProfile and from event
 const CategoryPersonal = ({
@@ -38,14 +41,22 @@ const CategoryPersonal = ({
   showEventLink?: boolean;
   onBack?: () => void;
 }) => {
-  const { category: _category, event: _event, isEditing, setIsEditing } = useEvent();
+  const animatedBottomButtons = useRef(new Animated.Value(0)).current;
+  const { isHidden, setHideAbsolutely } = useFollowingBar();
+  useEffect(() => {
+    Animated.timing(animatedBottomButtons, {
+      toValue: isHidden ? 0 : EXTRA_BOTTOM_HEIGHT,
+      duration: 250,
+      useNativeDriver: true,
+    }).start();
+  }, [isHidden]);
+
+  const { category: _category, event: _event } = useEvent();
   const category = _category!;
   const event = _event!;
 
   const navigation = useTypedNavigation<PredictionsParamList>();
   const { userId: authUserId } = useAuth();
-  const { isPad } = useDevice();
-  const { animatedOpacity: showAddTabOpacity } = useShowAddTab();
   const isAuthUserProfile = userId === authUserId;
 
   const { data: predictionData, isLoading } = useQueryGetUserPredictions(userId);
@@ -55,62 +66,46 @@ const CategoryPersonal = ({
   );
 
   const [predictions, setPredictions] = useState<iPrediction[]>(initialPredictions);
-  const [goBackOnComplete, setGoBackOnComplete] = useAsyncReference<boolean>(false);
+  const [showSave, setShowSave] = useState(false);
+
+  useEffect(() => {
+    setHideAbsolutely(showSave);
+  }, [showSave]);
 
   useEffect(() => {
     setPredictions(initialPredictions);
   }, [userId, predictionData !== undefined]);
 
-  const goBack = () => {
+  useNavigateAwayEffect(() => {
     onBack && onBack();
-    navigation.goBack();
-  };
+    onSaveContenders();
+  }, []);
+  useNavigateToEffect(() => {
+    onSaveContenders();
+  }, []);
 
+  const [isSaving, setIsSaving] = useState(false);
   // func to fire after we update predictions on db
   const onComplete = () => {
-    setIsEditing(false);
-    Snackbar.success('Changes saved!');
-    if (goBackOnComplete.current) {
-      goBack();
-    }
+    setIsSaving(false);
+    setShowSave(false);
   };
-  const { mutate: updatePredictions, isComplete } =
-    useMutationUpdatePredictions(onComplete);
-
-  const predictionsHaveNotChanged = _.isEqual(predictions, initialPredictions);
-  useEffect(() => {
-    setIsEditing(!predictionsHaveNotChanged);
-  }, [predictionsHaveNotChanged]);
-
-  // set custom back arrow functionality & hide history button when editing
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      // eslint-disable-next-line react/no-unstable-nested-components
-      headerLeft: () => (
-        <BackButton
-          onPress={async () => {
-            if (!isAuthUserProfile) {
-              goBack();
-            }
-            if (isEditing) {
-              setGoBackOnComplete(true);
-              onSaveContenders();
-            } else {
-              goBack();
-            }
-          }}
-        />
-      ),
-    });
-  }, [navigation, isEditing]);
+  const onIsSaving = () => {
+    setIsSaving(true);
+  };
+  const { mutate: updatePredictions } = useMutationUpdatePredictions(
+    onComplete,
+    onIsSaving,
+  );
 
   const onSaveContenders = async (ps?: iPrediction[]) => {
     if (!userId || !isAuthUserProfile) return;
     const predictionsToSave = ps || predictions;
-    if (_.isEqual(initialPredictions, predictionsToSave)) {
-      setIsEditing(false);
-      return;
-    }
+    const predictionsHaveNotChanged = _.isEqual(
+      predictionsToSave.map((p) => p.contenderId),
+      initialPredictions.map((p) => p.contenderId),
+    );
+    if (predictionsHaveNotChanged) return;
     // set then rankings according to INSERTION ORDER
     const orderedPredictions: iPrediction[] = predictionsToSave.map((p, i) => ({
       ...p,
@@ -146,8 +141,6 @@ const CategoryPersonal = ({
 
   return (
     <>
-      <ScreenshotMode predictions={predictions} userId={userId} />
-      <LoadingStatueModal visible={!isComplete} text={'Saving changes...'} />
       {predictions && predictions.length === 0 ? (
         <View
           style={{
@@ -167,55 +160,45 @@ const CategoryPersonal = ({
       ) : null}
       <MovieListDraggable
         predictions={predictions}
-        setPredictions={(ps) => setPredictions(ps)}
+        setPredictions={(ps) => {
+          setShowSave(
+            !_.isEqual(
+              ps.map((p) => p.contenderId),
+              initialPredictions.map((p) => p.contenderId),
+            ),
+          );
+          setPredictions(ps);
+        }}
         lastUpdatedString={lastUpdatedString}
         isAuthProfile={isAuthUserProfile}
         onPressAdd={onPressAdd}
       />
-      {isPad ? (
-        <Animated.View
-          style={{
-            opacity: showAddTabOpacity,
-            position: 'absolute',
-            bottom: '1%',
-            alignSelf: 'flex-end',
+      <Animated.View
+        style={{
+          transform: [{ translateY: animatedBottomButtons }],
+        }}
+      >
+        <ScreenshotMode
+          predictions={predictions}
+          userId={userId}
+          positionFromBottom={EXTRA_BOTTOM_HEIGHT + 10}
+        />
+        <AddPredictionsFab
+          onPress={onPressAdd}
+          positionFromBottom={EXTRA_BOTTOM_HEIGHT + 10}
+          positionFromRight={80}
+        />
+      </Animated.View>
+      {isAuthUserProfile && showSave ? (
+        <FAB
+          iconName="save-outline"
+          text="Save"
+          onPress={() => {
+            onSaveContenders();
           }}
-        >
-          <AddPredictionsFab onPress={onPressAdd} />
-        </Animated.View>
-      ) : null}
-      {isAuthUserProfile ? (
-        <EditToolbar
-          visible={isEditing}
-          buttons={[
-            {
-              text: 'Undo',
-              iconName: 'undo',
-              onPress: () => {
-                Alert.alert('Undo Changes?', 'Reverts all changes since last saved', [
-                  {
-                    text: 'Cancel',
-                    onPress: () => {},
-                    style: 'cancel',
-                  },
-                  {
-                    text: 'Yes',
-                    onPress: () => setPredictions(initialPredictions),
-                  },
-                ]);
-              },
-            },
-            {
-              text: 'Add',
-              iconName: 'plus',
-              onPress: () => onPressAdd(),
-            },
-            {
-              text: 'Save',
-              iconName: 'save-outline',
-              onPress: () => onSaveContenders(),
-            },
-          ]}
+          visible={showSave}
+          left
+          isLoading={isSaving}
         />
       ) : null}
     </>

@@ -13,9 +13,15 @@ const displayStyle: StyleProp<ViewStyle> = {
   right: 10,
 };
 
-export const ScreenshotFab = ({ onPress }: { onPress: () => void }) => {
+export const ScreenshotFab = ({
+  onPress,
+  positionFromBottom,
+}: {
+  onPress: () => void;
+  positionFromBottom?: number;
+}) => {
   return (
-    <View style={[displayStyle, { bottom: 50 }]}>
+    <View style={[displayStyle, { bottom: positionFromBottom ?? 50 }]}>
       <FloatingButton onPress={() => onPress()} icon={'grid'} />
     </View>
   );
@@ -60,11 +66,27 @@ export const CategoryDisplayFab = ({ skipGrid }: { skipGrid?: boolean }) => {
   );
 };
 
-export const AddPredictionsFab = ({ onPress }: { onPress: () => void }) => {
+export const AddPredictionsFab = ({
+  onPress,
+  positionFromBottom,
+  positionFromRight,
+}: {
+  onPress: () => void;
+  positionFromBottom?: number;
+  positionFromRight?: number;
+}) => {
   const { isPad } = useDevice();
 
   return (
-    <View style={[displayStyle, { bottom: BOTTOM * 1.7 * (isPad ? 1.5 : 1) }]}>
+    <View
+      style={[
+        displayStyle,
+        {
+          bottom: positionFromBottom ?? BOTTOM * 1.7 * (isPad ? 1.5 : 1),
+          right: positionFromRight ?? 10,
+        },
+      ]}
+    >
       <FloatingButton onPress={onPress} icon={'plus'} />
     </View>
   );

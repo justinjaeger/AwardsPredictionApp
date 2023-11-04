@@ -1,6 +1,11 @@
 /* eslint-disable sonarjs/no-duplicate-string */
 import React, { memo } from 'react';
-import { TouchableHighlight, useWindowDimensions, View } from 'react-native';
+import {
+  TouchableHighlight,
+  TouchableOpacity,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 import COLORS from '../../../constants/colors';
 import {
   getPosterDimensionsByWidth,
@@ -36,6 +41,8 @@ export type iContenderListItemProps = {
   onPressThumbnail?: (prediction: iPrediction) => void;
   isAuthProfile?: boolean;
   totalNumPredictingTop?: number; // important when rendering histogram
+  isSelectedForDelete?: boolean;
+  onPressDelete?: (prediction: iPrediction) => void;
 };
 
 const IMAGE_SIZE = PosterSize.SMALL;
@@ -49,8 +56,11 @@ const ContenderListItem = ({
   categoryType,
   subtitle: _subtitle,
   onPressItem,
+  onPressThumbnail,
   isAuthProfile,
   totalNumPredictingTop,
+  isSelectedForDelete,
+  onPressDelete,
 }: iContenderListItemProps) => {
   const { isActive, drag } = draggable || {};
   const { width: windowWidth } = useWindowDimensions();
@@ -132,11 +142,14 @@ const ContenderListItem = ({
       disabled={isActive}
     >
       <>
-        <View
+        <TouchableOpacity
           style={{
             width: thumbnailContainerWidth,
             alignItems: 'center',
             justifyContent: 'center',
+          }}
+          onPress={() => {
+            onPressThumbnail && onPressThumbnail(prediction);
           }}
         >
           <Poster
@@ -150,7 +163,7 @@ const ContenderListItem = ({
             onPress={undefined}
             width={IMAGE_SIZE}
           />
-        </View>
+        </TouchableOpacity>
         <View
           style={{
             flexDirection: 'row',
@@ -205,10 +218,19 @@ const ContenderListItem = ({
           ) : null}
           {variant === 'personal' && !disableEditing ? (
             <IconButton
-              iconProps={{ name: 'menu', size: 24 }}
+              iconProps={{
+                name: isSelectedForDelete ? 'trash-outline' : 'menu',
+                size: 24,
+              }}
               color={COLORS.white}
-              enableOnPressIn
-              onPress={drag || (() => {})}
+              enableOnPressIn={!isSelectedForDelete}
+              onPress={() => {
+                if (isSelectedForDelete && onPressDelete) {
+                  onPressDelete(prediction);
+                } else if (drag) {
+                  drag();
+                }
+              }}
               styles={{
                 height: SMALL_POSTER,
                 width: 40,
@@ -216,6 +238,7 @@ const ContenderListItem = ({
                 marginRight: 13,
                 alignSelf: 'center',
                 alignItems: 'center',
+                backgroundColor: isSelectedForDelete ? COLORS.error : 'transparent',
               }}
             />
           ) : variant === 'selectable' ? (

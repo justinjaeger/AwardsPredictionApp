@@ -23,10 +23,12 @@ const ScreenshotMode = ({
   predictions,
   userId,
   date,
+  positionFromBottom,
 }: {
   predictions: iPrediction[];
   userId?: string;
   date?: Date;
+  positionFromBottom?: number;
 }) => {
   const { width, height } = useWindowDimensions();
   const { top } = useSafeAreaInsets();
@@ -80,23 +82,6 @@ const ScreenshotMode = ({
                 paddingTop: top,
               }}
             >
-              {/* <View
-                style={{
-                  position: 'absolute',
-                  bottom: 10,
-                  right: theme.windowMargin - theme.posterMargin,
-                  backgroundColor: COLORS.secondaryDark,
-                  borderWidth: 1.5,
-                  borderColor: COLORS.white,
-                  zIndex: 10,
-                  padding: 5,
-                  paddingLeft: 10,
-                  paddingRight: 10,
-                  borderRadius: 100,
-                }}
-              >
-                <BodyBold style={{ color: COLORS.white }}>{'Award Expert'}</BodyBold>
-              </View> */}
               <View
                 style={{
                   alignItems: 'flex-start',
@@ -132,9 +117,6 @@ const ScreenshotMode = ({
                     <BodyBold style={{ marginTop: 5 }}>{dateString}</BodyBold>
                   </View>
                 </View>
-                {/* <BodyBold style={{ paddingTop: 5, paddingLeft: 2 }}>
-                  {'@' + user?.username ?? ''}
-                </BodyBold> */}
               </View>
               <MovieGrid
                 predictions={predictions.slice(0, 20)}
@@ -160,7 +142,10 @@ const ScreenshotMode = ({
           </TouchableWithoutFeedback>
         </BasicModal>
       ) : (
-        <ScreenshotFab onPress={() => setVisible(true)} />
+        <ScreenshotFab
+          onPress={() => setVisible(true)}
+          positionFromBottom={positionFromBottom}
+        />
       )}
     </>
   );

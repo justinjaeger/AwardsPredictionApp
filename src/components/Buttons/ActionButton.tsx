@@ -4,6 +4,7 @@ import COLORS from '../../constants/colors';
 import useDevice from '../../util/device';
 import CustomIcon from '../CustomIcon';
 import { SubHeader } from '../Text';
+import { Spinner } from '@ui-kitten/components';
 
 const ActionButton = ({
   onPress,
@@ -11,12 +12,14 @@ const ActionButton = ({
   text,
   style,
   underlayColor,
+  isLoading,
 }: {
   onPress: () => void;
   iconName?: string | undefined;
   text?: string | undefined;
   style?: StyleProp<ViewStyle>;
   underlayColor?: string;
+  isLoading?: boolean;
 }) => {
   const { isPad } = useDevice();
 
@@ -24,7 +27,7 @@ const ActionButton = ({
     <TouchableHighlight
       style={[
         {
-          backgroundColor: COLORS.primary,
+          backgroundColor: COLORS.secondaryDark,
           borderColor: COLORS.white,
           borderWidth: 1,
           borderRadius: 100,
@@ -38,7 +41,11 @@ const ActionButton = ({
       underlayColor={underlayColor ?? COLORS.secondaryDark}
     >
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        {iconName ? <CustomIcon name={iconName} color={COLORS.white} size={24} /> : null}
+        {isLoading ? (
+          <Spinner size="medium" style={{ borderColor: COLORS.white }} />
+        ) : iconName ? (
+          <CustomIcon name={iconName} color={COLORS.white} size={24} />
+        ) : null}
         {text ? (
           <SubHeader style={{ marginLeft: 5, marginRight: 5 }}>{text}</SubHeader>
         ) : null}

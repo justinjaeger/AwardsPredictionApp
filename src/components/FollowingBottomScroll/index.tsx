@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Animated, ScrollView, View } from 'react-native';
+import { Animated, ScrollView } from 'react-native';
 import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
 import { useEvent } from '../../context/EventContext';
@@ -23,8 +23,9 @@ const FollowingBottomScroll = ({
   ) => void;
 }) => {
   const friendsYPos = useRef(new Animated.Value(0)).current;
+  const indicatorYPos = useRef(new Animated.Value(0)).current;
   const { event } = useEvent();
-  const { isHidden, setIsHidden } = useFollowingBar();
+  const { isHidden, setIsHidden, hideAbsolutely } = useFollowingBar();
   const { data: followingUsers } = useQueryGetFollowingUsers();
   const { isPad } = useDevice();
 
@@ -34,29 +35,34 @@ const FollowingBottomScroll = ({
 
   useEffect(() => {
     Animated.timing(friendsYPos, {
-      toValue: isHidden ? 100 : 0,
+      toValue: isHidden ? 0 : 100,
+      duration: 250,
+      useNativeDriver: true,
+    }).start();
+    Animated.timing(indicatorYPos, {
+      toValue: isHidden ? 0 : 60,
       duration: 250,
       useNativeDriver: true,
     }).start();
   }, [isHidden]);
 
-  if (usersPredictingEvent.length === 0) return null;
+  if (usersPredictingEvent.length === 0 || hideAbsolutely) return null;
 
   return (
     <>
-      <View
+      <Animated.View
         style={{
           position: 'absolute',
-          bottom: 0,
+          bottom: 70,
           alignItems: 'center',
           flexDirection: 'row',
-          marginBottom: 10,
           zIndex: 2,
+          transform: [{ translateY: indicatorYPos }],
         }}
       >
         <IconButton
           iconProps={{
-            name: isHidden ? 'people-outline' : 'chevron-down-outline',
+            name: isHidden ? 'chevron-down-outline' : 'people-outline',
           }}
           color={COLORS.white}
           styles={{
@@ -66,7 +72,7 @@ const FollowingBottomScroll = ({
           }}
           onPress={() => setIsHidden(!isHidden)}
         />
-      </View>
+      </Animated.View>
       <Animated.View
         style={{
           zIndex: 1,
@@ -82,7 +88,6 @@ const FollowingBottomScroll = ({
           contentContainerStyle={{
             justifyContent: 'center',
             alignItems: 'center',
-            paddingLeft: 80,
           }}
         >
           {usersPredictingEvent.map((user) => (
@@ -97,9 +102,9 @@ const FollowingBottomScroll = ({
                 borderWidth: 4,
                 borderColor: COLORS.secondary,
                 borderRadius: 100,
-                shadowRadius: 20,
+                shadowRadius: 5,
                 shadowColor: 'black',
-                shadowOpacity: 1,
+                shadowOpacity: 0.5,
                 shadowOffset: { height: 10, width: 0 },
               }}
             />
