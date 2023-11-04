@@ -242,7 +242,14 @@ const ContenderListItem = ({
               }}
             />
           ) : variant === 'selectable' ? (
-            <View style={{ top: SMALL_POSTER / 2, marginLeft: 5, marginRight: 5 }}>
+            <View
+              style={{
+                position: 'absolute',
+                top: SMALL_POSTER / 2,
+                marginRight: 10,
+                right: 0,
+              }}
+            >
               {highlighted ? (
                 <CustomIcon
                   name="checkmark-circle-2"
