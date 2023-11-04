@@ -1,11 +1,11 @@
 import React, { useLayoutEffect } from 'react';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { PredictionsParamList } from '../../navigation/types';
-import NumPredictingItem from '../../components/ItemStatBox.tsx';
+import ItemStatBox from '../../components/ItemStatBox.tsx';
 import useQueryGetCommunityPredictions from '../../hooks/queries/useQueryGetCommunityPredictions';
 import { CategoryName, Movie, iPrediction } from '../../types/api';
-import { getTotalNumPredicting } from '../../util/getNumPredicting';
-import { sortPredictions } from '../../util/sortPredictions';
+import { getNumPredicting, getTotalNumPredicting } from '../../util/getNumPredicting';
+import { sortByLikelihood } from '../../util/sortPredictions';
 import { FlatList, View } from 'react-native';
 import BackgroundWrapper from '../../components/BackgroundWrapper';
 import ContenderInfoHeader from '../../components/ContenderInfoHeader';
@@ -20,6 +20,7 @@ export type iContenderStatsData = iPrediction & {
   category: CategoryName;
   totalNumPredictingTop: number;
   totalNumPredictingCategory: number;
+  likelihood: number;
 };
 
 const ContenderStats = () => {
@@ -60,11 +61,20 @@ const ContenderStats = () => {
         totalNumPredictingTop;
 
       predictions.forEach((p) => {
+        const { slots } = event.categories[category as CategoryName];
+        const { win, nom, listed } = getNumPredicting(p?.numPredicting ?? {}, slots ?? 5);
+
+        const likelihood =
+          listed / totalNumPredictingCategory +
+          nom / totalNumPredictingCategory +
+          win / totalNumPredictingCategory;
+
         allPredictionsWithContender.push({
           ...p,
           category: category as CategoryName,
           totalNumPredictingTop,
           totalNumPredictingCategory,
+          likelihood,
         });
       });
     },
@@ -79,7 +89,7 @@ const ContenderStats = () => {
     <BackgroundWrapper>
       <View style={{ flex: 1 }}>
         <FlatList
-          data={sortPredictions(potentialPredictions) as iContenderStatsData[]}
+          data={sortByLikelihood(potentialPredictions) as iContenderStatsData[]}
           ListHeaderComponent={
             <>
               <ContenderInfoHeader
@@ -116,7 +126,7 @@ const ContenderStats = () => {
           keyExtractor={(item) => item.contenderId}
           renderItem={({ item: prediction }) => (
             <View style={{ flex: 1, paddingBottom: 25 }}>
-              <NumPredictingItem
+              <ItemStatBox
                 key={prediction.contenderId}
                 prediction={prediction}
                 event={event}
