@@ -43,7 +43,7 @@ const UserPredictionList = ({
         );
         return (
           <TouchableHighlight
-            key={ps.awardsBody + ps.year + ps.category}
+            key={ps.category + lastUpdatedText}
             style={{
               width,
               alignItems: 'flex-start',

@@ -12,14 +12,14 @@ type iFollowingBarContext = {
 };
 
 const FollowingBarContext = createContext<iFollowingBarContext>({
-  isHidden: true,
+  isHidden: false, // idk why but it's actually the opposite of hidden
   setIsHidden: () => {},
   hideAbsolutely: true,
   setHideAbsolutely: () => {},
 });
 
 export const FollowingBarProvider = (props: { children: React.ReactNode }) => {
-  const [isHidden, setIsHidden] = useState<boolean>(true);
+  const [isHidden, setIsHidden] = useState<boolean>(false);
   const [hideAbsolutely, setHideAbsolutely] = useState<boolean>(false);
 
   return (
