@@ -247,3 +247,9 @@ export type User = {
 export type ApiData = {
   eventYear: number;
 } & Record<string, ((Movie | Person | Song) & { type: CategoryType }) | number>;
+
+export type AppInfo = {
+  latestVersion: string;
+  forceUpdateIfBelow: string;
+  alert: string;
+};

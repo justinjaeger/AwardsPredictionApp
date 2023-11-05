@@ -1,7 +1,7 @@
 {
   "name": "awardspredictionapp",
-  "version": "0.0.2",
-  "description": "All-In-One RN Template for Indie Hackers",
+  "version": "2.0",
+  "description": "Awards Prediction App",
   "private": false,
   "scripts": {
     "typescript": "tsc --noEmit",

@@ -9,6 +9,9 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { GOOGLE_AUTH_CLIENT_ID } from './config';
+import { useForceUpdate } from './hooks/useForceUpdate';
+import { Alert, Linking } from 'react-native';
+import BackgroundWrapper from './components/BackgroundWrapper';
 
 const queryClient = new QueryClient();
 
@@ -19,6 +22,29 @@ GoogleSignin.configure({
 });
 
 const App = () => {
+  const forceUpdate = useForceUpdate();
+
+  if (forceUpdate) {
+    // alert users that they need to upgrade - link them to app store OR play store (in future)
+    Alert.alert(
+      'Please upgrade to the latest version of the app to continue using it.',
+      '',
+      [
+        {
+          text: 'Upgrade',
+          onPress: () => {
+            Linking.openURL('https://apps.apple.com/us/app/award-expert/id6446135720');
+          },
+        },
+      ],
+    );
+    return (
+      <BackgroundWrapper>
+        <></>
+      </BackgroundWrapper>
+    );
+  }
+
   return (
     <QueryClientProvider client={queryClient}>
       <IconRegistry icons={EvaIconsPack} />

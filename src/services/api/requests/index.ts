@@ -8,6 +8,7 @@ import * as EmailRequests from './email';
 import * as CategoryUpdateLogRequests from './categoryupdatelogs';
 import * as ContenderRequests from './contender';
 import * as UploadRequests from './upload';
+import * as AppInfoRequests from './appinfo';
 
 const MongoApi = {
   ...UserRequests,
@@ -20,6 +21,7 @@ const MongoApi = {
   ...CategoryUpdateLogRequests,
   ...ContenderRequests,
   ...UploadRequests,
+  ...AppInfoRequests,
 };
 
 export default MongoApi;
