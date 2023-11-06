@@ -7,10 +7,7 @@ import {
   View,
 } from 'react-native';
 import COLORS from '../../../constants/colors';
-import {
-  getPosterDimensionsByWidth,
-  PosterSize,
-} from '../../../constants/posterDimensions';
+import { getPosterDimensionsByWidth } from '../../../constants/posterDimensions';
 import { useEvent } from '../../../context/EventContext';
 import { getTotalNumPredicting } from '../../../util/getNumPredicting';
 import { IconButton } from '../../Buttons/IconButton';
@@ -44,8 +41,6 @@ export type iContenderListItemProps = {
   isSelectedForDelete?: boolean;
   onPressDelete?: (prediction: iPrediction) => void;
 };
-
-const IMAGE_SIZE = PosterSize.SMALL;
 
 const ContenderListItem = ({
   variant,
@@ -116,7 +111,7 @@ const ContenderListItem = ({
   if (dataHasNotLoaded) {
     return (
       <View style={{ marginLeft: theme.windowMargin / 2 }}>
-        <ListItemSkeleton posterWidth={IMAGE_SIZE} />
+        <ListItemSkeleton posterWidth={SMALL_POSTER} />
       </View>
     );
   }
@@ -149,7 +144,11 @@ const ContenderListItem = ({
             justifyContent: 'center',
           }}
           onPress={() => {
-            onPressThumbnail && onPressThumbnail(prediction);
+            if (onPressThumbnail) {
+              onPressThumbnail(prediction);
+            } else {
+              onPressItem(prediction);
+            }
           }}
         >
           <Poster
@@ -161,7 +160,7 @@ const ContenderListItem = ({
             title={movie?.title || ''}
             ranking={['selectable', 'search'].includes(variant) ? undefined : ranking}
             onPress={undefined}
-            width={IMAGE_SIZE}
+            width={SMALL_POSTER}
           />
         </TouchableOpacity>
         <View

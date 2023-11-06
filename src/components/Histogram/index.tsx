@@ -6,6 +6,7 @@ import { hexToRgb } from '../../util/hexToRgb';
 import { Body, Header, SubHeader, SubHeaderLight } from '../Text';
 import theme from '../../constants/theme';
 import { formatPercentage } from '../../util/formatPercentage';
+import useDevice from '../../util/device';
 
 const Histogram = ({
   numPredicting,
@@ -24,10 +25,14 @@ const Histogram = ({
   posterHeight?: number;
   enableHoverInfo?: boolean;
 }) => {
+  const { isPad } = useDevice();
   const { width: windowWidth } = useWindowDimensions();
-  const { height: pHeight } = getPosterDimensionsByWidth(PosterSize.SMALL);
+  const { height: pHeight } = getPosterDimensionsByWidth(
+    isPad ? PosterSize.MEDIUM : PosterSize.SMALL,
+  );
   const posterHeight = _posterHeight ?? pHeight;
-  const totalWidth = (_totalWidth ?? windowWidth) - 20;
+  const totalWidth =
+    ((_totalWidth ?? windowWidth) - 20) * (isPad ? theme.padHistogramContainerWidth : 1);
 
   const barsToShow = slots * 2;
   const barMaxHeight = posterHeight * 1;

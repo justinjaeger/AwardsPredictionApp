@@ -5,4 +5,5 @@ export default {
   posterMargin: 2,
   windowMargin: 15,
   cardStyle: { backgroundColor: COLORS.primary },
+  padHistogramContainerWidth: 0.7,
 };

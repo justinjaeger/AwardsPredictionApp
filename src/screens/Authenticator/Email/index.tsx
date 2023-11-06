@@ -60,7 +60,7 @@ const Auth = () => {
         onScroll={() => Keyboard.dismiss()}
       >
         {authScreen === 'signIn' ? (
-          <View style={{ width: '80%', backgroundColor: COLORS.primary }}>
+          <View style={{ width: '80%', maxWidth: 300, backgroundColor: COLORS.primary }}>
             <FormInput
               label="Email"
               value={email}

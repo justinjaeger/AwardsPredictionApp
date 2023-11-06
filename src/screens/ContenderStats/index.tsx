@@ -6,7 +6,7 @@ import useQueryGetCommunityPredictions from '../../hooks/queries/useQueryGetComm
 import { CategoryName, Movie, iPrediction } from '../../types/api';
 import { getNumPredicting, getTotalNumPredicting } from '../../util/getNumPredicting';
 import { sortByLikelihood } from '../../util/sortPredictions';
-import { FlatList, View } from 'react-native';
+import { FlatList, View, useWindowDimensions } from 'react-native';
 import BackgroundWrapper from '../../components/BackgroundWrapper';
 import ContenderInfoHeader from '../../components/ContenderInfoHeader';
 import { eventToString } from '../../util/stringConversions';
@@ -17,6 +17,9 @@ import { Header, SubHeader } from '../../components/Text';
 import { getAwardsBodyCategories } from '../../constants/categories';
 import PredictionTab from '../../navigation/PredictionTabsNavigator/PredictionTab';
 import { getPredictedOutcomes } from '../../util/getPredictedOutcomes';
+import useDevice from '../../util/device';
+import COLORS from '../../constants/colors';
+import theme from '../../constants/theme';
 
 export type iContenderStatsData = iPrediction & {
   category: CategoryName;
@@ -26,10 +29,12 @@ export type iContenderStatsData = iPrediction & {
 };
 
 const ContenderStats = () => {
+  const { isPad } = useDevice();
   const navigation = useNavigation();
   const route = useRoute<RouteProp<PredictionsParamList, 'ContenderStats'>>();
   const { movieTmdbId, event } = route.params;
   const { store } = useTmdbDataStore();
+  const { width } = useWindowDimensions();
 
   const { data: communityPredictions } = useQueryGetCommunityPredictions(event);
 
@@ -144,8 +149,8 @@ const ContenderStats = () => {
               {potential ? (
                 <View
                   style={{
-                    padding: 10,
-                    paddingBottom: 20,
+                    padding: isPad ? 40 : 10,
+                    paddingBottom: isPad ? 40 : 20,
                     width: '100%',
                     flexDirection: 'row',
                     justifyContent: 'space-between',
@@ -165,12 +170,23 @@ const ContenderStats = () => {
                   </View>
                 </View>
               ) : null}
-              <View style={{ flexDirection: 'row', width: '100%' }}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignSelf: 'center',
+                  width: width * theme.padHistogramContainerWidth,
+                  marginBottom: 25,
+                  borderRadius: 0,
+                  borderColor: COLORS.primaryLight,
+                  borderWidth: 1,
+                }}
+              >
                 <PredictionTab
                   text="Likelihood"
                   selected={sortSetting === 'likelihood'}
                   onPress={() => setSortSetting('likelihood')}
                 />
+                <View style={{ width: 1, backgroundColor: COLORS.primaryLight }} />
                 <PredictionTab
                   text="Category Order"
                   selected={sortSetting === 'cat-order'}

@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { View, useWindowDimensions } from 'react-native';
 import Poster from '../Images/Poster';
-import { getPosterDimensionsByWidth } from '../../constants/posterDimensions';
+import {
+  POSTER_DIMENSIONS,
+  getPosterDimensionsByHeight,
+  getPosterDimensionsByWidth,
+} from '../../constants/posterDimensions';
 import { Body, Header, SmallHeader, SubHeader } from '../Text';
 import { iPrediction } from '../../types/api';
 import ExternalLinkButton from '../ExternalLinkButton';
@@ -10,6 +14,7 @@ import { useTmdbDataStore } from '../../context/TmdbDataStore';
 import { MainScreenNavigationProp } from '../../navigation/types';
 import useQueryGetCommunityPredictions from '../../hooks/queries/useQueryGetCommunityPredictions';
 import BasicModal from '../BasicModal';
+import useDevice from '../../util/device';
 
 const ContenderInfoModal = ({
   prediction,
@@ -18,8 +23,9 @@ const ContenderInfoModal = ({
   prediction: iPrediction;
   onNavigateAway?: () => void;
 }) => {
+  const { isPad } = useDevice();
   const webViewNavigation = useNavigation<MainScreenNavigationProp>();
-  const { width } = useWindowDimensions();
+  const { width, height } = useWindowDimensions();
   const { getTmdbDataFromPrediction } = useTmdbDataStore();
 
   const { data: communityPredictions } = useQueryGetCommunityPredictions();
@@ -37,11 +43,17 @@ const ContenderInfoModal = ({
   const posterTitle = person?.name ?? movie?.title ?? '';
   const itemTitle = song?.title ?? person?.name ?? movie?.title ?? '';
 
-  const { height: smHeight, width: smWidth } = getPosterDimensionsByWidth(
-    width * 0.4 - 10,
-  );
+  const posterToInfoRatio = isPad ? 0.3 : 0.4;
 
-  const { height: bgHeight, width: bgWidth } = getPosterDimensionsByWidth(width);
+  const { height: smallPosterHeight, width: smallPosterWidth } =
+    getPosterDimensionsByWidth(width * posterToInfoRatio - 10);
+
+  const screenRatio = height / width;
+  const posterRatio = POSTER_DIMENSIONS.height / POSTER_DIMENSIONS.width;
+  const { height: fullPosterHeight, width: fullPosterWidth } =
+    screenRatio < posterRatio
+      ? getPosterDimensionsByHeight(height)
+      : getPosterDimensionsByWidth(width);
 
   const subheader =
     song || person
@@ -56,13 +68,14 @@ const ContenderInfoModal = ({
         <BasicModal
           visible={showFullPoster}
           onClose={() => setShowFullPoster(false)}
-          height={bgHeight}
-          width={bgWidth}
+          height={fullPosterHeight}
+          width={fullPosterWidth}
+          style={{ backgroundColor: 'red' }}
         >
           <Poster
             path={posterPath} // this will render the loading state if null
             title={posterTitle}
-            width={width}
+            width={fullPosterWidth}
             onPress={() => {
               setShowFullPoster(false);
             }}
@@ -80,7 +93,7 @@ const ContenderInfoModal = ({
         <Poster
           path={posterPath} // this will render the loading state if null
           title={posterTitle}
-          width={smWidth}
+          width={smallPosterWidth}
           onPress={() => {
             setShowFullPoster(true);
           }}
@@ -88,9 +101,9 @@ const ContenderInfoModal = ({
         />
         <View
           style={{
-            width: width * 0.6 - 5,
+            width: width * (1 - posterToInfoRatio) - 5,
             paddingLeft: 10,
-            height: smHeight,
+            height: smallPosterHeight,
             justifyContent: 'space-between',
           }}
         >

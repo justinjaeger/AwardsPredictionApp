@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View, useWindowDimensions } from 'react-native';
 import { Header, SubHeader, SubHeaderLight } from '../Text';
 import { CategoryName, EventModel, Phase, WithId, iPrediction } from '../../types/api';
 import { getNumPredicting, getTotalNumPredicting } from '../../util/getNumPredicting';
@@ -15,6 +15,7 @@ import { StackActions, useNavigation } from '@react-navigation/native';
 import { PredictionsNavigationProp } from '../../navigation/types';
 import { useAuth } from '../../context/AuthContext';
 import { useEvent } from '../../context/EventContext';
+import useDevice from '../../util/device';
 
 const NumPredictingItem = ({
   category,
@@ -31,6 +32,8 @@ const NumPredictingItem = ({
   totalNumPredictingCategory: number;
   disableCategoryLink?: boolean;
 }) => {
+  const { isPad } = useDevice();
+  const { width } = useWindowDimensions();
   const navigation = useNavigation<PredictionsNavigationProp>();
   const { userId: authUserId } = useAuth();
   const { setCategory, setEvent } = useEvent();
@@ -63,6 +66,8 @@ const NumPredictingItem = ({
         paddingBottom: 10,
         paddingTop: 5,
         borderRadius: theme.borderRadius,
+        width: isPad ? width * theme.padHistogramContainerWidth : width,
+        alignSelf: 'center',
       }}
     >
       <TouchableOpacity

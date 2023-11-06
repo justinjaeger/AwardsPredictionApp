@@ -13,6 +13,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import ContenderInfoHeader from '../ContenderInfoHeader';
 import { IconButton } from '../Buttons/IconButton';
 import COLORS from '../../constants/colors';
+import useDevice from '../../util/device';
 
 const ContenderInfoModal = ({
   visible,
@@ -27,6 +28,7 @@ const ContenderInfoModal = ({
   category: CategoryName;
   prediction: iPrediction;
 }) => {
+  const { isPad } = useDevice();
   const navigation = useNavigation<StackNavigationProp<PredictionsParamList>>();
   const { width, height } = useWindowDimensions();
   const { getTmdbDataFromPrediction } = useTmdbDataStore();
@@ -121,7 +123,13 @@ const ContenderInfoModal = ({
               );
             }}
             text={`More${person || song ? ' movie' : ''} stats`}
-            style={{ marginTop: 10, marginBottom: 10, height: 50, width: '80%' }}
+            style={{
+              marginTop: 10,
+              marginBottom: 10,
+              height: isPad ? 70 : 50,
+              width: '80%',
+              maxWidth: 400,
+            }}
           />
         </View>
       </>

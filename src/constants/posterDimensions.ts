@@ -1,10 +1,15 @@
-const getPosterDimensions = (height: number) => ({
+export const POSTER_DIMENSIONS = {
+  height: 40,
+  width: 27,
+};
+
+export const getPosterDimensionsByHeight = (height: number) => ({
   height,
-  width: height * (27 / 40),
+  width: height * (POSTER_DIMENSIONS.width / POSTER_DIMENSIONS.height),
 });
 
 export const getPosterDimensionsByWidth = (width: number) => ({
-  height: width * (40 / 27),
+  height: width * (POSTER_DIMENSIONS.height / POSTER_DIMENSIONS.width),
   width,
 });
 
@@ -21,8 +26,8 @@ export const POSTER_SIZE: {
     height: number;
   };
 } = {
-  [PosterSize.XSMALL]: getPosterDimensions(PosterSize.XSMALL),
-  [PosterSize.SMALL]: getPosterDimensions(PosterSize.SMALL),
-  [PosterSize.MEDIUM]: getPosterDimensions(PosterSize.MEDIUM),
-  [PosterSize.LARGE]: getPosterDimensions(PosterSize.LARGE),
+  [PosterSize.XSMALL]: getPosterDimensionsByHeight(PosterSize.XSMALL),
+  [PosterSize.SMALL]: getPosterDimensionsByHeight(PosterSize.SMALL),
+  [PosterSize.MEDIUM]: getPosterDimensionsByHeight(PosterSize.MEDIUM),
+  [PosterSize.LARGE]: getPosterDimensionsByHeight(PosterSize.LARGE),
 };

@@ -4,6 +4,7 @@ import COLORS from '../../constants/colors';
 import React from 'react';
 import theme from '../../constants/theme';
 import { StyleProp, ViewStyle } from 'react-native';
+import useDevice from '../../util/device';
 
 const ExternalLinkButton = ({
   text,
@@ -14,6 +15,7 @@ const ExternalLinkButton = ({
   onPress: () => void;
   style?: StyleProp<ViewStyle>;
 }) => {
+  const { isPad } = useDevice();
   return (
     <TouchableHighlight
       onPress={onPress}
@@ -21,8 +23,8 @@ const ExternalLinkButton = ({
         {
           alignItems: 'center',
           justifyContent: 'center',
-          padding: 5,
-          paddingHorizontal: 10,
+          padding: isPad ? 15 : 5,
+          paddingHorizontal: isPad ? 20 : 10,
           borderRadius: theme.borderRadius,
           backgroundColor: COLORS.secondaryDark,
         },

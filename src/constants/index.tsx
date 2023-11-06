@@ -10,9 +10,42 @@ import ProfileImage from '../components/ProfileImage';
  */
 
 // https://developer.themoviedb.org/reference/configuration-details
-export const TMDB_IMAGE_URL_SMALL = 'https://image.tmdb.org/t/p/w92';
-export const TMDB_IMAGE_URL_MED = 'https://image.tmdb.org/t/p/w185';
-export const TMDB_IMAGE_URL_LARGE = 'https://image.tmdb.org/t/p/w500';
+/**
+ * [
+    "w92",
+    "w154",
+    "w185",
+    "w342",
+    "w500",
+    "w780",
+  ]
+ */
+export const getTmdbImageUrl = (width: number) => {
+  let ext = 'w780';
+  if (width <= 92) {
+    ext = 'w92';
+  } else if (width <= 154) {
+    ext = 'w154';
+  } else if (width <= 185) {
+    ext = 'w185';
+  } else if (width <= 342) {
+    ext = 'w342';
+  } else if (width <= 500) {
+    ext = 'w500';
+  }
+  // IF THIS IS TOO BIG:
+  //   let ext = 'w500';
+  //   if (width <= 154) {
+  //     ext = 'w92';
+  //   } else if (width <= 185) {
+  //     ext = 'w154';
+  //   } else if (width <= 342) {
+  //     ext = 'w185';
+  //   } else if (width <= 500) {
+  //     ext = 'w342';
+  //   }
+  return `https://image.tmdb.org/t/p/${ext}`;
+};
 
 export const TOP_TAB_HEIGHT = 50;
 export const BOTTOM_TAB_HEIGHT = 50;

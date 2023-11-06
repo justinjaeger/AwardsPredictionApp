@@ -12,11 +12,12 @@ const AwardsBodyImage = (props: {
   white?: boolean;
   size?: number;
   style?: any;
+  disablePadResize?: boolean;
 }) => {
-  const { white, size, style } = props;
+  const { white, size, style, disablePadResize } = props;
   const { isPad } = useDevice();
 
-  const _size = (size || DEFAULT_SIZE) * (isPad ? 1.5 : 1);
+  const _size = (size || DEFAULT_SIZE) * (isPad && !disablePadResize ? 1.5 : 1);
 
   const source = white ? TrophyWhite : Trophy;
 

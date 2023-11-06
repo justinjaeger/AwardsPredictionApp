@@ -24,6 +24,7 @@ import { sortPredictions } from '../../../util/sortPredictions';
 import ScreenshotMode from '../../../components/Buttons/ScreenshotMode';
 import { FAB } from '../../../components/Buttons/FAB';
 import { useFollowingBar } from '../../../context/FollowingBarContext';
+import useDevice from '../../../util/device';
 
 const EXTRA_BOTTOM_HEIGHT = 70;
 
@@ -41,6 +42,7 @@ const CategoryPersonal = ({
   showEventLink?: boolean;
   onBack?: () => void;
 }) => {
+  const { isPad } = useDevice();
   const animatedBottomButtons = useRef(new Animated.Value(0)).current;
   const { isHidden, setHideAbsolutely } = useFollowingBar();
   useEffect(() => {
@@ -186,7 +188,7 @@ const CategoryPersonal = ({
         <AddPredictionsFab
           onPress={onPressAdd}
           positionFromBottom={EXTRA_BOTTOM_HEIGHT + 10}
-          positionFromRight={80}
+          positionFromRight={isPad ? 120 : 80}
         />
       </Animated.View>
       {isAuthUserProfile && showSave ? (

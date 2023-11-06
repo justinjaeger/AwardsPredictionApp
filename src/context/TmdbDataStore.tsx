@@ -117,7 +117,7 @@ export const TmdbDataStoreProvider = (props: { children: React.ReactNode }) => {
     const eventYearToRecentPredictions = _.groupBy(recentPredictions, (p) => p.year);
     const promises = Object.entries(eventYearToRecentPredictions).map(
       ([year, recent]) => {
-        const eventYear = parseInt(year, 8);
+        const eventYear = parseInt(year, 10);
         const predictions = recent.flatMap((c) => c.topPredictions);
         return storeTmdbDataFromPredictions(predictions, eventYear);
       },

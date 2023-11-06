@@ -18,6 +18,7 @@ import ProfileImage from '../ProfileImage';
 import useProfileUser from '../../screens/Profile/useProfileUser';
 import { ScreenshotFab } from './DisplayFAB';
 import AwardsBodyImage from '../AwardsBodyImage';
+import useDevice from '../../util/device';
 
 const ScreenshotMode = ({
   predictions,
@@ -30,6 +31,7 @@ const ScreenshotMode = ({
   date?: Date;
   positionFromBottom?: number;
 }) => {
+  const { isPad } = useDevice();
   const { width, height } = useWindowDimensions();
   const { top } = useSafeAreaInsets();
 
@@ -52,6 +54,8 @@ const ScreenshotMode = ({
     day: 'numeric',
     year: 'numeric',
   });
+
+  const headerHeight = 80;
 
   return (
     <>
@@ -93,28 +97,37 @@ const ScreenshotMode = ({
               >
                 <View style={{ flexDirection: 'row', marginTop: 10 }}>
                   {!user ? (
-                    <AwardsBodyImage awardsBody={event.awardsBody} size={90} />
+                    <AwardsBodyImage
+                      awardsBody={event.awardsBody}
+                      size={headerHeight}
+                      disablePadResize
+                    />
                   ) : (
                     <ProfileImage
-                      imageSize={80}
+                      imageSize={headerHeight}
                       image={user.image}
                       style={{ marginRight: marginSize }}
                     />
                   )}
                   <View
                     style={{
-                      width: width - 80 - marginSize * 2 - 10,
-                      justifyContent: 'flex-start',
+                      width: width - headerHeight * 2,
+                      flexDirection: isPad ? 'row' : undefined,
+                      justifyContent: isPad ? 'space-between' : undefined,
                     }}
                   >
-                    <SmallHeader>{categoryData.name}</SmallHeader>
-                    <SubHeader>{eventToString(event.awardsBody, event.year)}</SubHeader>
-                    {!user ? (
-                      <BodyBold style={{ marginTop: 5 }}>
-                        {'Award Expert Community'}
-                      </BodyBold>
-                    ) : null}
-                    <BodyBold style={{ marginTop: 5 }}>{dateString}</BodyBold>
+                    <View>
+                      <SmallHeader>{categoryData.name}</SmallHeader>
+                      <SubHeader>{eventToString(event.awardsBody, event.year)}</SubHeader>
+                    </View>
+                    <View>
+                      {!user ? (
+                        <BodyBold style={{ marginTop: 5 }}>
+                          {'Award Expert Community'}
+                        </BodyBold>
+                      ) : null}
+                      <BodyBold style={{ marginTop: 5 }}>{dateString}</BodyBold>
+                    </View>
                   </View>
                 </View>
               </View>
