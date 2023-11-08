@@ -59,7 +59,7 @@ const CategoryPersonal = ({
 
   const navigation = useTypedNavigation<PredictionsParamList>();
   const { userId: authUserId } = useAuth();
-  const isAuthUserProfile = userId === authUserId;
+  const isAuthProfile = userId === authUserId;
 
   const { data: predictionData, isLoading } = useQueryGetUserPredictions(userId);
   const { createdAt } = predictionData?.categories[category] ?? {};
@@ -101,7 +101,7 @@ const CategoryPersonal = ({
   );
 
   const onSaveContenders = async (ps?: iPrediction[]) => {
-    if (!userId || !isAuthUserProfile) return;
+    if (!userId || !isAuthProfile) return;
     const predictionsToSave = ps || predictions;
     const predictionsHaveNotChanged = _.isEqual(
       predictionsToSave.map((p) => p.contenderId),
@@ -172,7 +172,7 @@ const CategoryPersonal = ({
           setPredictions(ps);
         }}
         lastUpdatedString={lastUpdatedString}
-        isAuthProfile={isAuthUserProfile}
+        isAuthProfile={isAuthProfile}
         onPressAdd={onPressAdd}
       />
       <Animated.View
@@ -185,7 +185,7 @@ const CategoryPersonal = ({
           userId={userId}
           positionFromBottom={EXTRA_BOTTOM_HEIGHT + 10}
         />
-        {isAuthUserProfile ? (
+        {isAuthProfile ? (
           <AddPredictionsFab
             onPress={onPressAdd}
             positionFromBottom={EXTRA_BOTTOM_HEIGHT + 10}
@@ -193,7 +193,7 @@ const CategoryPersonal = ({
           />
         ) : null}
       </Animated.View>
-      {isAuthUserProfile && showSave ? (
+      {isAuthProfile && showSave ? (
         <FAB
           iconName="save-outline"
           text="Save"

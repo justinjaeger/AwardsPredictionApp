@@ -40,14 +40,14 @@ const Event = ({
   const { event, setCategory, setPersonalCommunityTab } = useEvent();
   const navigation = useTypedNavigation<PredictionsParamList>();
 
-  const isAuthUserProfile = userId === authUserId;
+  const isAuthProfile = userId === authUserId;
 
   const [numToShow, setNumToShow] = useState<number>(30); // essentially making this useless cause it's annoying
 
   const onSelectCategory = async (category: CategoryName) => {
     setCategory(category);
     setPersonalCommunityTab(tab);
-    if (isAuthUserProfile || tab === 'community') {
+    if (isAuthProfile || tab === 'community') {
       navigation.navigate('Category', { userId });
     } else {
       navigation.dispatch(
@@ -107,11 +107,7 @@ const Event = ({
         }
         keyExtractor={([catName]) => catName}
         renderItem={({ item }) => (
-          <EventItem
-            item={item}
-            onPress={onPress}
-            isAuthUserProfile={isAuthUserProfile}
-          />
+          <EventItem item={item} onPress={onPress} isAuthProfile={isAuthProfile} />
         )}
         onScrollEndDrag={(e) => {
           // Fetches more at bottom of scroll. Note the high event throttle to prevent too many requests

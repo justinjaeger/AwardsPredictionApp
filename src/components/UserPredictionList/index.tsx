@@ -30,7 +30,7 @@ const UserPredictionList = ({
   const { data: events } = useQueryGetAllEvents();
   const { setEvent, setCategory } = useEvent();
   const { width } = useWindowDimensions();
-  const isAuthUserProfile = userId === authUserId;
+  const isAuthProfile = userId === authUserId;
 
   return (
     <>
@@ -57,7 +57,7 @@ const UserPredictionList = ({
               // navigate to user's predictions
               setEvent(event);
               setCategory(ps.category as CategoryName);
-              if (isAuthUserProfile) {
+              if (isAuthProfile) {
                 navigation.navigate('Category', {
                   userId,
                   showEventLink: true,

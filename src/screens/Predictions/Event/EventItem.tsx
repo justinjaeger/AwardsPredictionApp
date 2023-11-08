@@ -11,11 +11,11 @@ import { sortPredictions } from '../../../util/sortPredictions';
 const EventItem = ({
   item: [category, categoryPrediction],
   onPress,
-  isAuthUserProfile,
+  isAuthProfile,
 }: {
   item: [CategoryName, iCategoryPrediction];
   onPress: (category: CategoryName) => void;
-  isAuthUserProfile: boolean;
+  isAuthProfile: boolean;
 }) => {
   const { event } = useEvent();
   const awardsBodyCategories = event?.categories;
@@ -52,7 +52,7 @@ const EventItem = ({
         </SubHeader>
         {truncatedPredictions.length === 0 ? (
           <HeaderLight style={{ marginLeft: theme.windowMargin }}>
-            {!isAuthUserProfile ? 'No Predictions' : 'Add Predictions'}
+            {!isAuthProfile ? 'No Predictions' : 'Add Predictions'}
           </HeaderLight>
         ) : null}
         <MovieGrid
