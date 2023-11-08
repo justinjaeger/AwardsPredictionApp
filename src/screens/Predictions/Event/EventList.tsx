@@ -60,7 +60,7 @@ const EventList = ({
   };
 
   const orderedEvents = getOrderedEvents(events);
-  const groupedByYear = _.groupBy(orderedEvents, (e: EventModel) => e.year);
+  const groupedByYear = _.groupBy(orderedEvents, (e: WithId<EventModel>) => e.year);
 
   const userIsAdminOrTester = user
     ? user.role === UserRole.ADMIN || user.role === UserRole.TESTER
