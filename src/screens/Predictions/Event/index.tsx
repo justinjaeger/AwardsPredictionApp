@@ -106,9 +106,11 @@ const Event = ({
           numToShow < orderedPredictions.length ? <CarouselSkeleton renderLabel /> : null
         }
         keyExtractor={([catName]) => catName}
-        renderItem={({ item }) => (
-          <EventItem item={item} onPress={onPress} isAuthProfile={isAuthProfile} />
-        )}
+        renderItem={({ item }) => {
+          return (
+            <EventItem item={item} onPress={onPress} isAuthProfile={isAuthProfile} />
+          );
+        }}
         onScrollEndDrag={(e) => {
           // Fetches more at bottom of scroll. Note the high event throttle to prevent too many requests
           // get position of current scroll

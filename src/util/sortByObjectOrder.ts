@@ -43,18 +43,14 @@ export const getOrderedCategories = (
   awardsBody: AwardsBody,
   year: number,
   unorderedCategories: Record<CategoryName, iCategoryPrediction>,
-) => {
+): Array<[CategoryName, iCategoryPrediction | undefined]> => {
   const awardsBodyCategories = getAwardsBodyCategories(awardsBody, year);
   const orderedCategoryKeys = _.keys(awardsBodyCategories) as CategoryName[];
-  return orderedCategoryKeys.reduce(
-    (acc: Array<[CategoryName, iCategoryPrediction]>, key) => {
-      const valuesForGivenKey = unorderedCategories[key];
-      if (!valuesForGivenKey) return acc;
-      acc.push([key, valuesForGivenKey]);
-      return acc;
-    },
-    [],
-  );
+  return orderedCategoryKeys.reduce((acc, key) => {
+    const valuesForGivenKey = unorderedCategories[key] as undefined;
+    acc.push([key, valuesForGivenKey]);
+    return acc;
+  }, []);
 };
 
 export default sortByObjectOrder;

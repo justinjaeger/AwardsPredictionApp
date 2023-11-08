@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import React, { memo, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Animated, View } from 'react-native';
 import MovieListDraggable from '../../../components/MovieList/MovieListDraggable';
 import SignedOutState from '../../../components/SignedOutState';
@@ -211,4 +211,4 @@ const CategoryPersonal = ({
   );
 };
 
-export default memo(CategoryPersonal);
+export default CategoryPersonal;

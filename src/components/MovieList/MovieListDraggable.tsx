@@ -35,11 +35,24 @@ const MovieListDraggable = ({
 
   const { slots, type } = event.categories[category];
 
+  const [itemsToDelete, setItemsToDelete] = useState<iPrediction[]>([]);
+
   const onPressItem = useCallback(async (prediction: iPrediction) => {
     setModalData(prediction);
   }, []);
 
-  const [itemsToDelete, setItemsToDelete] = useState<iPrediction[]>([]);
+  const toggleDeleteMode = useCallback((prediction: iPrediction) => {
+    setItemsToDelete((curr) => {
+      const newItems = [...curr];
+      const index = curr.findIndex((p) => p.contenderId === prediction.contenderId);
+      if (index === -1) {
+        newItems.push(prediction);
+      } else {
+        newItems.splice(index, 1);
+      }
+      return newItems;
+    });
+  }, []);
 
   return (
     <>
@@ -80,6 +93,9 @@ const MovieListDraggable = ({
         renderItem={({ item: prediction, getIndex, drag, isActive }) => {
           const index = getIndex() || 0;
           const ranking = index + 1;
+          const isSelectedForDelete = itemsToDelete.some(
+            (p) => p.contenderId === prediction.contenderId,
+          );
           return (
             <>
               {index === slots ? (
@@ -92,44 +108,53 @@ const MovieListDraggable = ({
               ) : null}
               <ScaleDecorator activeScale={0.9}>
                 <ContenderListItem
-                  variant="personal"
                   prediction={prediction}
                   ranking={ranking}
-                  onPressItem={onPressItem}
-                  onPressThumbnail={(item) => {
-                    if (!isAuthProfile) {
-                      return onPressItem(item);
+                  onPressItem={() => {
+                    if (itemsToDelete.includes(prediction)) {
+                      toggleDeleteMode(prediction);
+                    } else {
+                      onPressItem(prediction);
                     }
-                    setItemsToDelete((curr) => {
-                      const newItems = [...curr];
-                      const index = curr.findIndex(
-                        (p) => p.contenderId === item.contenderId,
-                      );
-                      if (index === -1) {
-                        newItems.push(item);
-                      } else {
-                        newItems.splice(index, 1);
-                      }
-                      return newItems;
-                    });
                   }}
-                  isSelectedForDelete={itemsToDelete.some(
-                    (p) => p.contenderId === prediction.contenderId,
-                  )}
-                  onPressDelete={() => {
-                    setPredictions(
-                      predictions.filter((p) => p.contenderId !== prediction.contenderId),
-                    );
-                    setItemsToDelete((curr) =>
-                      curr.filter((p) => p.contenderId !== prediction.contenderId),
-                    );
-                  }}
+                  onLongPress={
+                    isAuthProfile
+                      ? () => {
+                          toggleDeleteMode(prediction);
+                        }
+                      : undefined
+                  }
                   draggable={{
                     drag,
                     isActive,
                   }}
                   categoryType={type}
-                  isAuthProfile={isAuthProfile}
+                  iconRightProps={
+                    !isAuthProfile
+                      ? undefined
+                      : isSelectedForDelete
+                      ? {
+                          iconName: 'trash-outline',
+                          backgroundColor: COLORS.error,
+                          onPress: () => {
+                            setPredictions(
+                              predictions.filter(
+                                (p) => p.contenderId !== prediction.contenderId,
+                              ),
+                            );
+                            setItemsToDelete((curr) =>
+                              curr.filter(
+                                (p) => p.contenderId !== prediction.contenderId,
+                              ),
+                            );
+                          },
+                        }
+                      : {
+                          iconName: 'menu',
+                          enableOnPressIn: true,
+                          onPress: () => drag(),
+                        }
+                  }
                 />
               </ScaleDecorator>
             </>

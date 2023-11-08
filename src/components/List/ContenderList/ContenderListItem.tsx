@@ -10,9 +10,7 @@ import COLORS from '../../../constants/colors';
 import { getPosterDimensionsByWidth } from '../../../constants/posterDimensions';
 import { useEvent } from '../../../context/EventContext';
 import { getTotalNumPredicting } from '../../../util/getNumPredicting';
-import { IconButton } from '../../Buttons/IconButton';
 import { Body, SubHeader } from '../../Text';
-import CustomIcon from '../../CustomIcon';
 import { hexToRgb } from '../../../util/hexToRgb';
 import { CategoryType, iPrediction } from '../../../types/api';
 import { useTmdbDataStore } from '../../../context/TmdbDataStore';
@@ -21,12 +19,12 @@ import ListItemSkeleton from '../../Skeletons/ListItemSkeleton';
 import theme from '../../../constants/theme';
 import Histogram from '../../Histogram';
 import PosterFromTmdb from '../../Images/PosterFromTmdb';
+import CustomIcon from '../../CustomIcon';
 
 export type iContenderListItemProps = {
-  variant: 'community' | 'personal' | 'selectable' | 'search';
   prediction: iPrediction;
   categoryType: CategoryType;
-  ranking: number;
+  ranking?: number;
   disabled?: boolean;
   highlighted?: boolean;
   draggable?: {
@@ -34,36 +32,42 @@ export type iContenderListItemProps = {
     drag: () => void;
   };
   subtitle?: string;
-  onPressItem: (prediction: iPrediction) => void;
-  onPressThumbnail?: (prediction: iPrediction) => void;
-  isAuthProfile?: boolean;
+  onPressItem: () => void;
+  onPressThumbnail?: () => void;
+  onLongPress?: () => void;
   totalNumPredictingTop?: number; // important when rendering histogram
-  isSelectedForDelete?: boolean;
-  onPressDelete?: (prediction: iPrediction) => void;
+  iconRightProps?: {
+    iconName: string;
+    onPress: () => void;
+    enableOnPressIn?: boolean;
+    backgroundColor?: string;
+    iconColor?: string;
+    iconSize?: number;
+    underlayColor?: string;
+  };
+  showHistogram?: boolean;
 };
 
 const ContenderListItem = ({
-  variant,
   prediction,
   ranking,
   draggable,
   highlighted,
   categoryType,
   subtitle: _subtitle,
+  totalNumPredictingTop,
+  iconRightProps,
+  showHistogram,
   onPressItem,
   onPressThumbnail,
-  isAuthProfile,
-  totalNumPredictingTop,
-  isSelectedForDelete,
-  onPressDelete,
+  onLongPress,
 }: iContenderListItemProps) => {
-  const { isActive, drag } = draggable || {};
+  const { isActive } = draggable || {};
   const { width: windowWidth } = useWindowDimensions();
 
   const SMALL_POSTER = windowWidth / 10;
 
   const { category: _category, event: _event } = useEvent();
-  const disableEditing = !isAuthProfile;
   const category = _category!;
   const event = _event!;
   const { slots: _slots, type } = event.categories[category];
@@ -107,6 +111,7 @@ const ContenderListItem = ({
   const totalNumPredicting = getTotalNumPredicting(numPredicting || {});
 
   const thumbnailContainerWidth = posterWidth * 1.5;
+  const rightIconContainerWidth = iconRightProps ? posterHeight + 10 : 0;
 
   if (dataHasNotLoaded) {
     return (
@@ -117,10 +122,7 @@ const ContenderListItem = ({
   }
 
   return (
-    <TouchableHighlight
-      onPress={() => {
-        onPressItem(prediction);
-      }}
+    <View
       style={{
         backgroundColor: isActive
           ? COLORS.secondaryDark
@@ -132,41 +134,42 @@ const ContenderListItem = ({
         paddingBottom: 3,
         paddingTop: 3,
       }}
-      underlayColor={COLORS.secondaryDark}
-      onLongPress={disableEditing ? undefined : drag}
-      disabled={isActive}
     >
-      <>
-        <TouchableOpacity
-          style={{
-            width: thumbnailContainerWidth,
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-          onPress={() => {
-            if (onPressThumbnail) {
-              onPressThumbnail(prediction);
-            } else {
-              onPressItem(prediction);
-            }
-          }}
-        >
-          <PosterFromTmdb
-            movie={movie}
-            person={person}
-            width={posterWidth}
-            ranking={['selectable', 'search'].includes(variant) ? undefined : ranking}
-          />
-        </TouchableOpacity>
-        <View
-          style={{
-            flexDirection: 'row',
-            width: windowWidth - thumbnailContainerWidth,
-            justifyContent: 'flex-end',
-            alignItems: 'flex-start',
-            height: '100%',
-          }}
-        >
+      <TouchableOpacity
+        style={{
+          width: thumbnailContainerWidth,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+        onPress={() => {
+          if (onPressThumbnail) {
+            onPressThumbnail();
+          } else {
+            onPressItem();
+          }
+        }}
+      >
+        <PosterFromTmdb
+          movie={movie}
+          person={person}
+          width={posterWidth}
+          ranking={ranking}
+        />
+      </TouchableOpacity>
+      <TouchableHighlight
+        style={{
+          flexDirection: 'row',
+          width: windowWidth - thumbnailContainerWidth - rightIconContainerWidth,
+          justifyContent: 'flex-end',
+          alignItems: 'flex-start',
+          height: '100%',
+        }}
+        onPress={() => onPressItem()}
+        underlayColor={COLORS.secondaryDark}
+        onLongPress={onLongPress}
+        disabled={isActive}
+      >
+        <>
           <View
             style={{
               position: 'absolute',
@@ -198,77 +201,52 @@ const ContenderListItem = ({
               </Body>
             ) : null}
           </View>
-          {numPredicting &&
-          totalNumPredictingTop !== undefined &&
-          (variant === 'community' || variant === 'selectable') ? (
+          {numPredicting && totalNumPredictingTop !== undefined && showHistogram ? (
             <Histogram
               numPredicting={numPredicting}
               totalNumPredicting={totalNumPredicting}
               totalNumPredictingTop={totalNumPredictingTop}
               slots={slots}
-              totalWidth={windowWidth - thumbnailContainerWidth}
+              totalWidth={windowWidth - thumbnailContainerWidth - rightIconContainerWidth}
               posterHeight={posterHeight}
             />
           ) : null}
-          {variant === 'personal' && !disableEditing ? (
-            <IconButton
-              iconProps={{
-                name: isSelectedForDelete ? 'trash-outline' : 'menu',
-                size: 24,
-              }}
-              color={COLORS.white}
-              enableOnPressIn={!isSelectedForDelete}
-              onPress={() => {
-                if (isSelectedForDelete && onPressDelete) {
-                  onPressDelete(prediction);
-                } else if (drag) {
-                  drag();
-                }
-              }}
-              styles={{
-                height: SMALL_POSTER,
-                width: 40,
-                justifyContent: 'center',
-                marginRight: 13,
-                alignSelf: 'center',
-                alignItems: 'center',
-                backgroundColor: isSelectedForDelete ? COLORS.error : 'transparent',
-              }}
+        </>
+      </TouchableHighlight>
+      {iconRightProps ? (
+        <TouchableHighlight
+          style={{
+            height: posterHeight,
+            width: posterHeight + 10,
+            justifyContent: 'center',
+            alignSelf: 'center',
+            alignItems: 'center',
+          }}
+          underlayColor={iconRightProps.underlayColor || 'transparent'}
+          onPress={iconRightProps.onPress}
+          onPressIn={iconRightProps.enableOnPressIn ? iconRightProps.onPress : undefined}
+        >
+          <View
+            style={{
+              backgroundColor: iconRightProps.backgroundColor,
+              justifyContent: 'center',
+              borderRadius: theme.borderRadius,
+              height: posterWidth,
+              width: posterWidth,
+              alignSelf: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <CustomIcon
+              name={iconRightProps.iconName}
+              size={iconRightProps.iconSize || 24}
+              color={iconRightProps.iconColor || COLORS.white}
+              styles={{ borderRadius: 100 }}
             />
-          ) : variant === 'selectable' ? (
-            <View
-              style={{
-                position: 'absolute',
-                top: SMALL_POSTER / 2,
-                marginRight: 10,
-                right: 0,
-              }}
-            >
-              {highlighted ? (
-                <CustomIcon
-                  name="checkmark-circle-2"
-                  size={24}
-                  color={COLORS.secondaryLight}
-                  styles={{
-                    display: highlighted ? 'flex' : 'none',
-                  }}
-                />
-              ) : (
-                <View
-                  style={{
-                    width: 24,
-                    height: 24,
-                    borderRadius: 24,
-                    borderColor: COLORS.secondaryDark,
-                    borderWidth: 1,
-                  }}
-                />
-              )}
-            </View>
-          ) : null}
-        </View>
-      </>
-    </TouchableHighlight>
+          </View>
+        </TouchableHighlight>
+      ) : null}
+    </View>
   );
 };
 

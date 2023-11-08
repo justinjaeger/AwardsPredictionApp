@@ -8,6 +8,7 @@ import theme from '../../../constants/theme';
 import MovieGrid from '../../../components/MovieGrid';
 import { sortPredictions } from '../../../util/sortPredictions';
 
+// NOTE: Typescript is failing me here, but categoryPrediction is sometimes undefined!!
 const EventItem = ({
   item: [category, categoryPrediction],
   onPress,
@@ -21,11 +22,14 @@ const EventItem = ({
   const awardsBodyCategories = event?.categories;
   if (!awardsBodyCategories) return null;
 
-  const { isHidden, name, slots } = awardsBodyCategories[category];
+  const maybeUndefinedCategoryData = awardsBodyCategories[category];
+  const { isHidden, name, slots } = maybeUndefinedCategoryData || {};
   // hide hidden categories (like shorts)
   if (isHidden) return null;
 
-  const predictions = sortPredictions(categoryPrediction.predictions);
+  const predictions = categoryPrediction
+    ? sortPredictions(categoryPrediction.predictions)
+    : [];
   // once nominations happen, you want "slots" to be however many films are nominated
   const truncatedPredictions: iPrediction[] = predictions.slice(0, slots || 5);
 

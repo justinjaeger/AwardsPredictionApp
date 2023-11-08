@@ -35,7 +35,7 @@ const PerformanceListSelectable = ({
       }}
       keyboardShouldPersistTaps={'always'}
       contentContainerStyle={{ paddingBottom: disablePaddingBottom ? 0 : 200 }}
-      renderItem={({ item: prediction, index: i }) => {
+      renderItem={({ item: prediction }) => {
         const { movie, person } = getTmdbDataFromPrediction(prediction)!;
         const movieTmdbId = movie?.tmdbId;
         const personTmdbId = person?.tmdbId;
@@ -59,11 +59,8 @@ const PerformanceListSelectable = ({
         return (
           <ContenderListItem
             prediction={prediction}
-            ranking={i + 1}
-            onPressItem={onPressItem}
-            onPressThumbnail={onPressItem}
+            onPressItem={() => onPressItem()}
             highlighted={selected}
-            variant={'search'}
             categoryType={CategoryType.PERFORMANCE}
           />
         );

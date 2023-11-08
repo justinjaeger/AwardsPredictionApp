@@ -77,10 +77,10 @@ const MovieListCommunity = ({ predictions, lastUpdatedString }: iMovieListProps)
               />
             ) : null}
             <ContenderListItem
-              variant={'community'}
               prediction={prediction}
               ranking={index + 1}
-              onPressItem={onPressItem}
+              showHistogram
+              onPressItem={() => onPressItem(prediction)}
               categoryType={type}
               totalNumPredictingTop={totalNumPredictingTop}
             />

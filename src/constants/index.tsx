@@ -22,7 +22,6 @@ import ProfileImage from '../components/ProfileImage';
  */
 export const getTmdbImageUrl = (width: number) => {
   let ext = 'w154';
-  console.log('width', width);
   if (width >= 500) {
     ext = 'w780';
   } else if (width >= 342) {
