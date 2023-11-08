@@ -18,6 +18,9 @@ import Followers from '../screens/Profile/Followers';
 import { ProfilePredictionProvider } from '../context/ProfilePredictionContext';
 import { useHeaderSettings } from '../hooks/useHeaderSettings';
 import ContenderStats from '../screens/ContenderStats';
+import { EventProvider } from '../context/EventContext';
+import { FollowingBarProvider } from '../context/FollowingBarContext';
+import { DisplayProvider } from '../context/DisplayStateContext';
 
 const { Navigator, Screen } = createStackNavigator<PredictionsParamList>();
 
@@ -139,7 +142,14 @@ const PredictionsNavigator = () => {
 
 const WithProvider = () => (
   <ProfilePredictionProvider>
-    <PredictionsNavigator />
+    <EventProvider>
+      <FollowingBarProvider>
+        {/** Obsolete */}
+        <DisplayProvider>
+          <PredictionsNavigator />
+        </DisplayProvider>
+      </FollowingBarProvider>
+    </EventProvider>
   </ProfilePredictionProvider>
 );
 

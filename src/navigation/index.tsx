@@ -3,7 +3,6 @@ import React from 'react';
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import MainNavigator from './MainNavigator';
 import { AuthProvider } from '../context/AuthContext';
-import { EventProvider } from '../context/EventContext';
 import { TmdbDataStoreProvider } from '../context/TmdbDataStore';
 
 const Navigation = () => {
@@ -20,9 +19,7 @@ const Navigation = () => {
     <NavigationContainer theme={theme}>
       <TmdbDataStoreProvider>
         <AuthProvider>
-          <EventProvider>
-            <MainNavigator />
-          </EventProvider>
+          <MainNavigator />
         </AuthProvider>
       </TmdbDataStoreProvider>
     </NavigationContainer>
