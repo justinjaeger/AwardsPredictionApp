@@ -46,8 +46,6 @@ const Poster = ({ path, title, width, ranking, onPress, styles }: iPosterProps) 
           <View
             style={{
               position: 'absolute',
-              marginLeft: theme.posterMargin,
-              marginTop: theme.posterMargin,
               zIndex: 1,
               backgroundColor: 'rgba(0,0,0,0.7)',
               borderBottomRightRadius: 5,
