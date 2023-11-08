@@ -4,7 +4,7 @@ import FastImage from 'react-native-fast-image';
 import COLORS from '../../constants/colors';
 import { getPosterDimensionsByWidth, PosterSize } from '../../constants/posterDimensions';
 import { getTmdbImageUrl } from '../../constants';
-import { Body, Label } from '../Text';
+import { Label, SmallHeader, SubHeader } from '../Text';
 import theme from '../../constants/theme';
 import useDevice from '../../util/device';
 
@@ -33,6 +33,20 @@ const Poster = ({ path, title, width, ranking, onPress, styles }: iPosterProps) 
     opacity: isPressed ? 0.8 : 1,
   };
 
+  const Text = isPad ? SmallHeader : SubHeader;
+
+  const sizeSpecificStyles =
+    posterDimensions.height > 50
+      ? {
+          borderWidth: 1,
+          paddingRight: 2,
+          paddingLeft: 2,
+        }
+      : {
+          borderTopWidth: 1,
+          borderLeftWidth: 1,
+        };
+
   return (
     <TouchableHighlight
       onPress={onPress || undefined}
@@ -50,23 +64,19 @@ const Poster = ({ path, title, width, ranking, onPress, styles }: iPosterProps) 
               backgroundColor: 'rgba(0,0,0,0.7)',
               borderBottomRightRadius: 5,
               borderTopLeftRadius: 5,
-              borderWidth: 1,
               borderColor: COLORS.secondary,
               padding: isPad ? 5 : 0,
+              ...sizeSpecificStyles,
             }}
           >
-            <Body
+            <Text
               style={{
                 color: COLORS.white,
                 fontWeight: '600',
-                padding: 1,
-                paddingLeft: 2,
-                paddingRight: 2,
-                fontSize: isPad ? 22 : undefined,
               }}
             >
               {ranking.toString()}
-            </Body>
+            </Text>
           </View>
         ) : null}
         {path ? (
