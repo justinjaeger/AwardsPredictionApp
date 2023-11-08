@@ -33,7 +33,8 @@ const MovieListDraggable = ({
 
   const [modalData, setModalData] = useState<iPrediction | undefined>(undefined);
 
-  const { slots, type } = event.categories[category];
+  const { slots: _slots, type } = event.categories[category];
+  const slots = _slots ?? 5;
 
   const [itemsToDelete, setItemsToDelete] = useState<iPrediction[]>([]);
 
