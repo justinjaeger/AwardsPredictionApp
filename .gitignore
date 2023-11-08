@@ -66,7 +66,7 @@ buck-out/
 /vendor/bundle/
 
 # MY Additions
-.env
+.env*
 
 # Temporary files created by Metro to check the health of the file watcher
 .metro-health-check*
