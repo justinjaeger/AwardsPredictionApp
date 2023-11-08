@@ -1,13 +1,11 @@
 import 'react-native-gesture-handler';
 import React from 'react';
-// import RNBootSplash from 'react-native-bootsplash'; // splash screen (https://github.com/zoontek/react-native-bootsplash)
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import MainNavigator from './MainNavigator';
 import { AuthProvider } from '../context/AuthContext';
 import { EventProvider } from '../context/EventContext';
 import { TmdbDataStoreProvider } from '../context/TmdbDataStore';
 
-// onReady={() => RNBootSplash.hide()} (could add to NavigationContainer)
 const Navigation = () => {
   const theme = {
     ...DefaultTheme,
