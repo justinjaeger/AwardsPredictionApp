@@ -21,29 +21,15 @@ import ProfileImage from '../components/ProfileImage';
   ]
  */
 export const getTmdbImageUrl = (width: number) => {
-  let ext = 'w780';
-  if (width <= 92) {
-    ext = 'w92';
-  } else if (width <= 154) {
-    ext = 'w154';
-  } else if (width <= 185) {
-    ext = 'w185';
-  } else if (width <= 342) {
-    ext = 'w342';
-  } else if (width <= 500) {
+  let ext = 'w154';
+  console.log('width', width);
+  if (width >= 500) {
+    ext = 'w780';
+  } else if (width >= 342) {
     ext = 'w500';
+  } else if (width >= 120) {
+    ext = 'w342';
   }
-  // IF THIS IS TOO BIG:
-  //   let ext = 'w500';
-  //   if (width <= 154) {
-  //     ext = 'w92';
-  //   } else if (width <= 185) {
-  //     ext = 'w154';
-  //   } else if (width <= 342) {
-  //     ext = 'w185';
-  //   } else if (width <= 500) {
-  //     ext = 'w342';
-  //   }
   return `https://image.tmdb.org/t/p/${ext}`;
 };
 
