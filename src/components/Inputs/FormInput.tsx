@@ -3,7 +3,7 @@ import { Input } from '@ui-kitten/components';
 import { iTextContentType } from './types';
 import { EvaStatus } from '@ui-kitten/components/devsupport';
 import COLORS from '../../constants/colors';
-import { Body, SubHeaderLight } from '../Text';
+import { Body } from '../Text';
 
 const FormInput = ({
   label,
@@ -65,9 +65,9 @@ const FormInput = ({
 
   return (
     <Input
-      label={<SubHeaderLight style={{ marginBottom: 5 }}>{label}</SubHeaderLight>}
       value={value}
-      placeholder=""
+      placeholder={label}
+      placeholderTextColor={COLORS.gray}
       multiline={multiline}
       onChangeText={onChangeText}
       textContentType={textContentType}
