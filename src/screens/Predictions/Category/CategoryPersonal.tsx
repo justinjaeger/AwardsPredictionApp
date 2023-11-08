@@ -160,21 +160,23 @@ const CategoryPersonal = ({
       {showEventLink ? (
         <EventLink userId={userId} userImage={userImage} userName={userName} />
       ) : null}
-      <MovieListDraggable
-        predictions={predictions}
-        setPredictions={(ps) => {
-          setShowSave(
-            !_.isEqual(
-              ps.map((p) => p.contenderId),
-              initialPredictions.map((p) => p.contenderId),
-            ),
-          );
-          setPredictions(ps);
-        }}
-        lastUpdatedString={lastUpdatedString}
-        isAuthProfile={isAuthProfile}
-        onPressAdd={onPressAdd}
-      />
+      <View style={{ height: '100%' }}>
+        <MovieListDraggable
+          predictions={predictions}
+          setPredictions={(ps) => {
+            setShowSave(
+              !_.isEqual(
+                ps.map((p) => p.contenderId),
+                initialPredictions.map((p) => p.contenderId),
+              ),
+            );
+            setPredictions(ps);
+          }}
+          lastUpdatedString={lastUpdatedString}
+          isAuthProfile={isAuthProfile}
+          onPressAdd={onPressAdd}
+        />
+      </View>
       <Animated.View
         style={{
           transform: [{ translateY: animatedBottomButtons }],
