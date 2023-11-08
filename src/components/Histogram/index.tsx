@@ -70,6 +70,7 @@ const Histogram = ({
         marginRight: 10,
         marginLeft: 10,
         borderRadius: theme.borderRadius,
+        backgroundColor: enableHoverInfo ? hexToRgb(COLORS.gray, 0.05) : undefined,
       }}
       onTouchStart={handleGesture}
       onTouchMove={handleGesture}
