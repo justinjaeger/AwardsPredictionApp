@@ -21,6 +21,9 @@ const TabBar = (props: ITabBarProps) => {
     return null;
   }
 
+  const unfocusedColor = 'rgba(255,255,255,0.5)';
+  const focusedColor = COLORS.white;
+
   return (
     <SafeAreaViewFixed
       edges={['bottom']}
@@ -53,51 +56,46 @@ const TabBar = (props: ITabBarProps) => {
               case 'Predictions':
                 return (
                   <View key={index}>
-                    {isFocused ? (
-                      <CustomIcon name={'home'} />
-                    ) : (
-                      <CustomIcon name={'home-outline'} />
-                    )}
+                    <CustomIcon
+                      name={'home'}
+                      color={isFocused ? focusedColor : unfocusedColor}
+                    />
                   </View>
                 );
               case 'Profile':
                 return (
                   <View key={index}>
-                    {isFocused ? (
-                      <CustomIcon name={'person'} />
-                    ) : (
-                      <CustomIcon name={'person-outline'} />
-                    )}
+                    <CustomIcon
+                      name={'person'}
+                      color={isFocused ? focusedColor : unfocusedColor}
+                    />
                   </View>
                 );
               case 'Friend':
                 return (
                   <View key={index}>
-                    {isFocused ? (
-                      <CustomIcon name={'people'} />
-                    ) : (
-                      <CustomIcon name={'people-outline'} />
-                    )}
+                    <CustomIcon
+                      name={'search'}
+                      color={isFocused ? focusedColor : unfocusedColor}
+                    />
                   </View>
                 );
               case 'Admin':
                 return (
                   <View key={index}>
-                    {isFocused ? (
-                      <CustomIcon name={'lock'} />
-                    ) : (
-                      <CustomIcon name={'lock-outline'} />
-                    )}
+                    <CustomIcon
+                      name={'lock'}
+                      color={isFocused ? focusedColor : unfocusedColor}
+                    />
                   </View>
                 );
               case 'Help':
                 return (
                   <View key={index}>
-                    {isFocused ? (
-                      <CustomIcon name={'question-mark-circle'} />
-                    ) : (
-                      <CustomIcon name={'question-mark-circle-outline'} />
-                    )}
+                    <CustomIcon
+                      name={'question-mark'}
+                      color={isFocused ? focusedColor : unfocusedColor}
+                    />
                   </View>
                 );
             }
