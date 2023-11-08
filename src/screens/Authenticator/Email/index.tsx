@@ -48,7 +48,10 @@ const Auth = () => {
 
   return (
     <>
-      <LoadingStatueModal visible={isLoadingAuth || isLoadingVerification} />
+      <LoadingStatueModal
+        visible={isLoadingAuth || isLoadingVerification}
+        text={isLoadingAuth ? 'Signing in...' : 'Verifying...'}
+      />
       <ScrollView
         style={{ width: '100%', backgroundColor: COLORS.primary }}
         contentContainerStyle={{
