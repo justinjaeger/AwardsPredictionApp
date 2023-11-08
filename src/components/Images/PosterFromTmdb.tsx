@@ -4,7 +4,7 @@ import Poster from './Poster';
 import { Movie, Person } from '../../types/api';
 
 type iPosterFromTmdbProps = {
-  width?: number;
+  width: number;
   ranking?: number;
   onPress?: () => void;
   styles?: StyleProp<ImageStyle>;

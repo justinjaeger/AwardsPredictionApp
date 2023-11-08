@@ -68,7 +68,7 @@ const ContenderListItem = ({
             path={item.image}
             title={item.title}
             onPress={undefined}
-            width={IMAGE_SIZE}
+            width={posterWidth}
           />
         </View>
         <View

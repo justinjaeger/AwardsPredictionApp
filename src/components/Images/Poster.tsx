@@ -2,11 +2,7 @@ import React, { useState } from 'react';
 import { ImageStyle, StyleProp, TouchableHighlight, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import COLORS from '../../constants/colors';
-import {
-  getPosterDimensionsByWidth,
-  PosterSize,
-  POSTER_SIZE,
-} from '../../constants/posterDimensions';
+import { getPosterDimensionsByWidth, PosterSize } from '../../constants/posterDimensions';
 import { getTmdbImageUrl } from '../../constants';
 import { Body, Label } from '../Text';
 import theme from '../../constants/theme';
@@ -15,29 +11,18 @@ import useDevice from '../../util/device';
 type iPosterProps = {
   title: string;
   path: string | null;
-  width?: number; // 1 is 27*40px, defualt is 5
+  width: number; // 1 is 27*40px, defualt is 5
   ranking?: number;
   onPress?: () => void;
   styles?: StyleProp<ImageStyle>;
 };
 
-const Poster = ({
-  path,
-  title,
-  width: _width,
-  ranking,
-  onPress,
-  styles,
-}: iPosterProps) => {
+const Poster = ({ path, title, width, ranking, onPress, styles }: iPosterProps) => {
   const { isPad } = useDevice();
-
-  const width = _width || PosterSize.MEDIUM;
 
   const [isPressed, setIsPressed] = useState<boolean>(false);
 
-  const posterDimensions = width
-    ? getPosterDimensionsByWidth(width - theme.posterMargin * 2)
-    : POSTER_SIZE[PosterSize.MEDIUM];
+  const posterDimensions = getPosterDimensionsByWidth(width - theme.posterMargin * 2);
 
   const style: StyleProp<ImageStyle> = {
     ...(styles as Record<string, unknown>),

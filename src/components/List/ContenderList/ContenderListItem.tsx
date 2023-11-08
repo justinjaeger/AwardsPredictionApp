@@ -17,10 +17,10 @@ import { hexToRgb } from '../../../util/hexToRgb';
 import { CategoryType, iPrediction } from '../../../types/api';
 import { useTmdbDataStore } from '../../../context/TmdbDataStore';
 import { categoryNameToTmdbCredit } from '../../../util/categoryNameToTmdbCredit';
-import Poster from '../../Images/Poster';
 import ListItemSkeleton from '../../Skeletons/ListItemSkeleton';
 import theme from '../../../constants/theme';
 import Histogram from '../../Histogram';
+import PosterFromTmdb from '../../Images/PosterFromTmdb';
 
 export type iContenderListItemProps = {
   variant: 'community' | 'personal' | 'selectable' | 'search';
@@ -111,7 +111,7 @@ const ContenderListItem = ({
   if (dataHasNotLoaded) {
     return (
       <View style={{ marginLeft: theme.windowMargin / 2 }}>
-        <ListItemSkeleton posterWidth={SMALL_POSTER} />
+        <ListItemSkeleton posterWidth={posterWidth} />
       </View>
     );
   }
@@ -151,16 +151,11 @@ const ContenderListItem = ({
             }
           }}
         >
-          <Poster
-            path={
-              categoryType === CategoryType.PERFORMANCE
-                ? person?.posterPath || null
-                : movie?.posterPath || null
-            }
-            title={movie?.title || ''}
+          <PosterFromTmdb
+            movie={movie}
+            person={person}
+            width={posterWidth}
             ranking={['selectable', 'search'].includes(variant) ? undefined : ranking}
-            onPress={undefined}
-            width={SMALL_POSTER}
           />
         </TouchableOpacity>
         <View
