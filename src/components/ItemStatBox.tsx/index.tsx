@@ -1,13 +1,12 @@
 import React from 'react';
 import { TouchableOpacity, View, useWindowDimensions } from 'react-native';
-import { Header, SubHeader, SubHeaderLight } from '../Text';
+import { Header, SmallHeader, SubHeader, SubHeaderLight } from '../Text';
 import { CategoryName, EventModel, Phase, WithId, iPrediction } from '../../types/api';
 import { getNumPredicting, getTotalNumPredicting } from '../../util/getNumPredicting';
 import Histogram from '../Histogram';
 import { useTmdbDataStore } from '../../context/TmdbDataStore';
 import { categoryNameToTmdbCredit } from '../../util/categoryNameToTmdbCredit';
 import { getPhaseUserIsPredicting } from '../../util/getPhaseUserIsPredicting';
-import { formatPercentage } from '../../util/formatPercentage';
 import { hexToRgb } from '../../util/hexToRgb';
 import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
@@ -16,6 +15,7 @@ import { PredictionsNavigationProp } from '../../navigation/types';
 import { useAuth } from '../../context/AuthContext';
 import { useEvent } from '../../context/EventContext';
 import useDevice from '../../util/device';
+import Stat from './Stat';
 
 const NumPredictingItem = ({
   category,
@@ -113,38 +113,31 @@ const NumPredictingItem = ({
           flexDirection: 'row',
           justifyContent: 'space-between',
           paddingTop: 30,
+          paddingLeft: 10,
+          paddingRight: 10,
         }}
       >
+        <Stat percentage={win / totalNumPredictingCategory} subject="win" />
+        {[undefined, Phase.NOMINATION].includes(phaseUserIsPredicting) ? (
+          <Stat percentage={nom / totalNumPredictingCategory} subject="nom" />
+        ) : null}
         {/* undefined means nothing has happened; NOMINATION means it's been shortlisted */}
         {phaseUserIsPredicting === undefined ? (
-          <View style={{ alignItems: 'center', width: '33%' }}>
-            <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
-              <Header>{listed.toString()}</Header>
-              <SubHeaderLight style={{ marginLeft: 5 }}>{'list'}</SubHeaderLight>
-            </View>
-            <SubHeader>{`${formatPercentage(
-              listed / totalNumPredictingCategory,
-            )}`}</SubHeader>
-          </View>
+          <Stat percentage={listed / totalNumPredictingCategory} subject="listed" />
         ) : null}
-        {[undefined, Phase.NOMINATION].includes(phaseUserIsPredicting) ? (
-          <View style={{ alignItems: 'center', width: '33%' }}>
-            <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
-              <Header>{nom.toString()}</Header>
-              <SubHeaderLight style={{ marginLeft: 5 }}>{'nom'}</SubHeaderLight>
-            </View>
-            <SubHeader>{`${formatPercentage(
-              nom / totalNumPredictingCategory,
-            )}`}</SubHeader>
-          </View>
-        ) : null}
-        <View style={{ alignItems: 'center', width: '33%' }}>
-          <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
-            <Header>{win.toString()}</Header>
-            <SubHeaderLight style={{ marginLeft: 5 }}>{'win'}</SubHeaderLight>
-          </View>
-          <SubHeader>{`${formatPercentage(win / totalNumPredictingCategory)}`}</SubHeader>
-        </View>
+      </View>
+      <View
+        style={{
+          width: '100%',
+          justifyContent: 'center',
+          alignItems: 'baseline',
+          marginTop: 20,
+          flexDirection: 'row',
+        }}
+      >
+        <SubHeaderLight>{'out of'}</SubHeaderLight>
+        <SmallHeader>{` ${totalNumPredictingCategory} `}</SmallHeader>
+        <SubHeaderLight>{'users'}</SubHeaderLight>
       </View>
     </View>
   );
