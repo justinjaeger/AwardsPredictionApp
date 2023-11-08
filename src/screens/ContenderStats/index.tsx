@@ -137,6 +137,7 @@ const ContenderStats = () => {
       <View style={{ flex: 1 }}>
         <FlatList
           data={sortSetting === 'cat-order' ? dataInCategoryOrder : dataInLikelihoodOrder}
+          showsVerticalScrollIndicator={false}
           ListHeaderComponent={
             <>
               <ContenderInfoHeader

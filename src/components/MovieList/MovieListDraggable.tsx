@@ -47,6 +47,7 @@ const MovieListDraggable = ({
         data={predictions}
         keyExtractor={(item) => item.contenderId}
         style={{ width: '100%' }}
+        showsVerticalScrollIndicator={false}
         contentContainerStyle={{
           paddingBottom: 150,
           paddingTop: theme.windowMargin,
