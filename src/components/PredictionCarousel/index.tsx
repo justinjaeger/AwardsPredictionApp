@@ -115,10 +115,10 @@ const PredictionCarousel = ({
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'flex-start',
-            marginTop: 15,
+            marginTop: 10,
             marginLeft: theme.windowMargin,
             marginRight: theme.windowMargin,
-            marginBottom: 15,
+            marginBottom: 10,
             borderRadius: theme.borderRadius,
           }}
           onPress={() => {
@@ -144,7 +144,10 @@ const PredictionCarousel = ({
             borderLeftWidth: 0,
             borderRightWidth: 0,
             paddingBottom: 10,
-            height: getPosterDimensionsByWidth(width / 5).height + (isPad ? 100 : 80), // messy, but prevents a bug. has to be a factor of width since poster height is
+            height:
+              getPosterDimensionsByWidth(
+                (width - theme.posterMargin * (5 - 1) - theme.windowMargin) / 5,
+              ).height + (isPad ? 100 : 70), // messy, but prevents a bug. has to be a factor of width since poster height is
           },
           style,
         ]}
@@ -197,7 +200,6 @@ const PredictionCarousel = ({
             borderRadius: 5,
             zIndex: 2,
             marginLeft: theme.windowMargin,
-            marginTop: 20,
           }}
         />
         <Divider
