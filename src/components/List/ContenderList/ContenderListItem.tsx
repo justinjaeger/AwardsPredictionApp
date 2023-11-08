@@ -65,7 +65,7 @@ const ContenderListItem = ({
   const { isActive } = draggable || {};
   const { width: windowWidth } = useWindowDimensions();
 
-  const SMALL_POSTER = windowWidth / 10;
+  const SMALL_POSTER = windowWidth / 9;
 
   const { category: _category, event: _event } = useEvent();
   const category = _category!;
@@ -133,13 +133,16 @@ const ContenderListItem = ({
         alignItems: 'flex-end',
         paddingBottom: 3,
         paddingTop: 3,
+        height: posterHeight,
       }}
     >
       <TouchableOpacity
         style={{
           width: thumbnailContainerWidth,
-          alignItems: 'center',
+          flexDirection: 'row',
           justifyContent: 'center',
+          alignItems: 'center',
+          height: '100%',
         }}
         onPress={() => {
           if (onPressThumbnail) {
