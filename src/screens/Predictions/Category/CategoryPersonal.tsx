@@ -185,11 +185,13 @@ const CategoryPersonal = ({
           userId={userId}
           positionFromBottom={EXTRA_BOTTOM_HEIGHT + 10}
         />
-        <AddPredictionsFab
-          onPress={onPressAdd}
-          positionFromBottom={EXTRA_BOTTOM_HEIGHT + 10}
-          positionFromRight={isPad ? 120 : 80}
-        />
+        {isAuthUserProfile ? (
+          <AddPredictionsFab
+            onPress={onPressAdd}
+            positionFromBottom={EXTRA_BOTTOM_HEIGHT + 10}
+            positionFromRight={isPad ? 120 : 80}
+          />
+        ) : null}
       </Animated.View>
       {isAuthUserProfile && showSave ? (
         <FAB

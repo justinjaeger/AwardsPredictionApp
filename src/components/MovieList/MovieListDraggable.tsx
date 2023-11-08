@@ -96,6 +96,9 @@ const MovieListDraggable = ({
                   ranking={ranking}
                   onPressItem={onPressItem}
                   onPressThumbnail={(item) => {
+                    if (!isAuthProfile) {
+                      return onPressItem(item);
+                    }
                     setItemsToDelete((curr) => {
                       const newItems = [...curr];
                       const index = curr.findIndex(
