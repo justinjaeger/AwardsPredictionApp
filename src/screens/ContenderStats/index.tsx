@@ -175,7 +175,7 @@ const ContenderStats = () => {
                 style={{
                   flexDirection: 'row',
                   alignSelf: 'center',
-                  width: width * theme.padHistogramContainerWidth,
+                  width: width * (isPad ? theme.padHistogramContainerWidth : 1),
                   marginBottom: 25,
                   borderRadius: 0,
                   borderColor: COLORS.primaryLight,

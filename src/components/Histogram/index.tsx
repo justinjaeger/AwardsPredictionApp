@@ -126,7 +126,7 @@ const Histogram = ({
           style={{
             position: 'absolute',
             right: 0,
-            top: -barMaxHeight,
+            top: -barMaxHeight * 1.5,
             padding: 5,
             backgroundColor: COLORS.primary,
             borderRadius: theme.borderRadius,
