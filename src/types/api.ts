@@ -239,7 +239,7 @@ export type User = {
   image?: string;
   followingCount?: number;
   followerCount?: number;
-  eventsPredicting?: ObjectId[];
+  eventsPredicting?: Record<string, string[]>; // key is event, value is array of categories
   recentPredictionSets?: iRecentPrediction[];
   amplify_id?: string;
 };

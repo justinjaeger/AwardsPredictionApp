@@ -24,14 +24,22 @@ const FollowingBottomScroll = ({
 }) => {
   const friendsYPos = useRef(new Animated.Value(0)).current;
   const indicatorYPos = useRef(new Animated.Value(0)).current;
-  const { event } = useEvent();
+  const { event, category } = useEvent();
   const { isHidden, setIsHidden, hideAbsolutely } = useFollowingBar();
   const { data: followingUsers } = useQueryGetFollowingUsers();
   const { isPad } = useDevice();
 
   const usersPredictingEvent = (followingUsers ?? []).filter((user) =>
-    (user.eventsPredicting ?? []).some((e) => e === event?._id),
+    Object.keys(user.eventsPredicting ?? {}).some((e) => e === event?._id),
   );
+  const usersPredictingCategory = usersPredictingEvent.filter((user) =>
+    Object.entries(user.eventsPredicting ?? {}).some(
+      ([e, categories]) => e === event?._id && categories.includes(category),
+    ),
+  );
+  const usersPredictingCurrent = category
+    ? usersPredictingCategory
+    : usersPredictingEvent;
 
   useEffect(() => {
     Animated.timing(friendsYPos, {
@@ -46,7 +54,7 @@ const FollowingBottomScroll = ({
     }).start();
   }, [isHidden]);
 
-  if (usersPredictingEvent.length === 0 || hideAbsolutely) return null;
+  if (usersPredictingCurrent.length === 0 || hideAbsolutely) return null;
 
   return (
     <>
@@ -90,7 +98,7 @@ const FollowingBottomScroll = ({
             alignItems: 'center',
           }}
         >
-          {usersPredictingEvent.map((user) => (
+          {usersPredictingCurrent.map((user) => (
             <ProfileImage
               key={user._id}
               image={user.image}
