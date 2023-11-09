@@ -3,13 +3,13 @@ import { createStackNavigator } from '@react-navigation/stack';
 import BottomTabNavigator from './BottomTabNavigator';
 import AuthenticatorNavigator from './AuthenticatorNavigator';
 import WebView from '../screens/WebView';
-import { StatusBar } from 'expo-status-bar';
+import { StatusBar } from 'react-native';
 
 const { Navigator, Screen } = createStackNavigator();
 
 const MainNavigator = () => (
   <>
-    <StatusBar style={'light'} />
+    <StatusBar barStyle={'light-content'} />
     <Navigator
       initialRouteName="BottomTabNavigator"
       screenOptions={{

@@ -19,14 +19,12 @@
     "lint:prettier": "prettier --check \"**/*.ts\"",
     "bundle-ios": "node node_modules/react-native/local-cli/cli.js bundle --entry-file='./index.js' --bundle-output='./ios/awardspredictionapp/main.jsbundle' --assets-dest='./ios/awardspredictionapp' --dev=false --platform='ios'",
     "bundle-android": "node node_modules/react-native/local-cli/cli.js bundle --entry-file='./index.android.js' --bundle-output='./android/app/src/main/assets/main.jsbundle' --assets-dest='./android/app/src/main/res/' --dev=false --platform='android'",
-    "clean": "react-native-clean-project",
     "pod-clean-cache": "rm -rf ~/Library/Caches/CocoaPods; rm -rf Pods; rm -rf ~/Library/Developer/Xcode/DerivedData/*",
     "pod-clean": "cd ios && pod deintegrate; pod setup; pod install;",
     "postinstall": "patch-package",
     "watchman-clean": "watchman watch-del-all"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.421.0",
     "@babel/plugin-proposal-export-namespace-from": "^7.18.9",
     "@eva-design/eva": "^2.2.0",
     "@invertase/react-native-apple-authentication": "^2.2.2",
@@ -43,14 +41,10 @@
     "@tanstack/react-query": "^4.35.7",
     "@ui-kitten/components": "^5.3.1",
     "@ui-kitten/eva-icons": "^5.3.1",
-    "amazon-cognito-identity-js": "^5.2.10",
     "axios": "^0.27.2",
-    "expo-status-bar": "^1.4.2",
     "lodash": "^4.17.21",
     "lottie-react-native": "^5.1.6",
     "patch-package": "^8.0.0",
-    "postcss": "^8.4.23",
-    "postinstall-postinstall": "^2.1.0",
     "react": "18.2.0",
     "react-dom": "^18.2.0",
     "react-native": "0.71.10",
@@ -59,7 +53,6 @@
     "react-native-gesture-handler": "^2.11.0",
     "react-native-get-random-values": "^1.9.0",
     "react-native-image-picker": "^5.0.0",
-    "react-native-inappbrowser-reborn": "^3.7.0",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-keychain": "^8.1.1",
     "react-native-linear-gradient": "^2.6.2",
@@ -88,7 +81,6 @@
     "@types/lodash": "^4.14.184",
     "@types/react": "^18.2.24",
     "@types/react-native": "^0.72.3",
-    "@types/react-test-renderer": "^18.0.0",
     "@types/styled-components": "^5.1.26",
     "@typescript-eslint/eslint-plugin": "^5.59.9",
     "@typescript-eslint/parser": "^5.59.9",
@@ -105,7 +97,6 @@
     "metro-react-native-babel-preset": "0.73.9",
     "prettier": "^2.4.1",
     "react-native-dotenv": "^3.4.9",
-    "react-test-renderer": "18.2.0",
     "typescript": "^5.2.2"
   }
 }
