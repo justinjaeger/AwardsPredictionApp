@@ -43,7 +43,7 @@ const Profile = () => {
 
   const iterableEvents = events ? Object.values(events) || [] : [];
   const userEvents = Object.values(iterableEvents)?.filter((event) =>
-    Object.keys(user?.eventsPredicting)?.includes(event._id),
+    Object.keys(user?.eventsPredicting ?? {})?.includes(event._id),
   );
   const predictionSets = user?.recentPredictionSets || [];
   const isAuthUser = user && userId && user?._id === authUserId;
