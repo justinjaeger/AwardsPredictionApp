@@ -20,7 +20,6 @@ import { useHeaderSettings } from '../hooks/useHeaderSettings';
 import ContenderStats from '../screens/ContenderStats';
 import { EventProvider } from '../context/EventContext';
 import { FollowingBarProvider } from '../context/FollowingBarContext';
-import { DisplayProvider } from '../context/DisplayStateContext';
 
 const { Navigator, Screen } = createStackNavigator<PredictionsParamList>();
 
@@ -144,10 +143,7 @@ const WithProvider = () => (
   <ProfilePredictionProvider>
     <EventProvider>
       <FollowingBarProvider>
-        {/** Obsolete */}
-        <DisplayProvider>
-          <PredictionsNavigator />
-        </DisplayProvider>
+        <PredictionsNavigator />
       </FollowingBarProvider>
     </EventProvider>
   </ProfilePredictionProvider>

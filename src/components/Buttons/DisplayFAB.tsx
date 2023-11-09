@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
-import { useDisplayState } from '../../context/DisplayStateContext';
 import useDevice from '../../util/device';
 import FloatingButton from './FloatingButton';
 
@@ -23,45 +22,6 @@ export const ScreenshotFab = ({
   return (
     <View style={[displayStyle, { bottom: positionFromBottom ?? 50 }]}>
       <FloatingButton onPress={() => onPress()} icon={'grid'} />
-    </View>
-  );
-};
-
-export const EventDisplayFab = () => {
-  const { eventDisplayState, toggleEventDisplay } = useDisplayState();
-  const { isPad } = useDevice();
-  return (
-    <View style={[displayStyle, { bottom: BOTTOM * (isPad ? 1.5 : 1) }]}>
-      <FloatingButton
-        onPress={toggleEventDisplay}
-        icon={eventDisplayState === 'default' ? 'collapse' : 'grid'}
-      />
-    </View>
-  );
-};
-
-export const CategoryDisplayFab = ({ skipGrid }: { skipGrid?: boolean }) => {
-  const { categoryDisplayState, toggleCategoriesDisplay } = useDisplayState();
-  const { isPad } = useDevice();
-
-  useEffect(() => {
-    if (skipGrid && categoryDisplayState === 'grid') {
-      toggleCategoriesDisplay(true);
-    }
-  }, [categoryDisplayState]);
-
-  return (
-    <View style={[displayStyle, { bottom: BOTTOM * (isPad ? 1.5 : 1) }]}>
-      <FloatingButton
-        onPress={() => toggleCategoriesDisplay(skipGrid)}
-        icon={
-          categoryDisplayState === 'list-collapsed'
-            ? 'grid'
-            : categoryDisplayState === 'list'
-            ? 'collapse'
-            : 'list'
-        }
-      />
     </View>
   );
 };
