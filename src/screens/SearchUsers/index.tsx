@@ -34,6 +34,7 @@ const SearchUsers = () => {
               users={searchResults}
               allUsersAreFetched={allUsersAreFetched}
               onEndReached={fetchMore}
+              noHeader
             />
           )}
         </View>
