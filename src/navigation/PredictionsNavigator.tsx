@@ -26,7 +26,7 @@ const { Navigator, Screen } = createStackNavigator<PredictionsParamList>();
 const PredictionsNavigator = () => {
   const {
     params: { initialScreen },
-  } = useRoute<RouteProp<BottomTabParamList, 'Profile'>>();
+  } = useRoute<RouteProp<BottomTabParamList, 'ProfileTab'>>();
   const { toolbarOnly, medium, large } = useHeaderSettings();
 
   return (

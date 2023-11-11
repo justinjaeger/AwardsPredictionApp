@@ -105,8 +105,8 @@ const EventSelect = () => {
               )}
               {isLoadingUsers ? (
                 <View style={{ marginLeft: -10 }}>
-                  {new Array(2).fill(null).map(() => (
-                    <CarouselSkeleton renderProfile renderLabel />
+                  {new Array(2).fill(null).map((x, i) => (
+                    <CarouselSkeleton key={i} renderProfile renderLabel />
                   ))}
                 </View>
               ) : null}

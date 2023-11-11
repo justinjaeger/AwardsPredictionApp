@@ -18,7 +18,7 @@ const MainNavigator = () => (
       }}
     >
       <Screen name="BottomTabNavigator" component={BottomTabNavigator} />
-      <Screen name="Authenticator" component={AuthenticatorNavigator} />
+      <Screen name="AuthenticatorNavigator" component={AuthenticatorNavigator} />
       <Screen name="WebView" component={WebView} />
     </Navigator>
   </>

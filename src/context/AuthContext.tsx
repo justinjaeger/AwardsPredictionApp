@@ -123,12 +123,12 @@ export const AuthProvider = (props: { children: React.ReactNode }) => {
     await KeychainStorage.set(newAccessToken, newRefreshToken);
     // SET USER INFO
     setUserInfo(userInfo);
-    // NAVIGATE TO PROFILE
-    navigation.dispatch(resetToProfile);
     // SET IN ASYNC STORAGE (lets us remember whether user has signed in or not)
     AsyncStorage.setItem(AsyncStorageKeys.IS_NOT_FIRST_TIME, 'true');
     AsyncStorage.setItem(AsyncStorageKeys.USER_INFO, JSON.stringify(userInfo));
     setIsLoadingAuth(false);
+    // NAVIGATE TO PROFILE
+    navigation.dispatch(resetToProfile);
   };
 
   const resetAuth = async () => {
@@ -136,7 +136,7 @@ export const AuthProvider = (props: { children: React.ReactNode }) => {
     setUserInfo(undefined);
     setIsLoadingAuth(false);
     await AsyncStorage.removeItem(AsyncStorageKeys.USER_INFO);
-    navigation.navigate('Authenticator');
+    navigation.navigate('AuthenticatorNavigator');
   };
 
   // signs out user on a single device

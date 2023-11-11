@@ -42,7 +42,7 @@ const FollowButton = ({
       ]}
       onPress={async () => {
         if (!authUserId) {
-          navigation.navigate('Authenticator');
+          navigation.navigate('AuthenticatorNavigator');
         } else if (isFollowing) {
           // warn before they unfollow?
           Alert.alert('Unfollow user?', '', [

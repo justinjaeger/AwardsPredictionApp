@@ -55,7 +55,7 @@ const Profile = () => {
   }, [user?.username]);
 
   const logIn = () => {
-    globalNavigation.navigate('Authenticator');
+    globalNavigation.navigate('AuthenticatorNavigator');
   };
 
   const onPressProfileInfo = () => isAuthUser && navigation.navigate('UpdateProfileInfo');

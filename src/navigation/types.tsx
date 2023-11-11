@@ -7,7 +7,7 @@ export type MainParamList = {
   BottomTabNavigator: {
     screen: keyof BottomTabParamList;
   };
-  Authenticator: undefined;
+  AuthenticatorNavigator: undefined;
   WebView: {
     uri: string;
     title?: string;
@@ -21,7 +21,7 @@ type iBottomTabDefaultParamList = {
 
 export type BottomTabParamList = {
   Predictions: iBottomTabDefaultParamList;
-  Profile: iBottomTabDefaultParamList & { userId?: string };
+  ProfileTab: iBottomTabDefaultParamList & { userId?: string };
   Friend: iBottomTabDefaultParamList;
   Admin: undefined;
   Help: undefined;

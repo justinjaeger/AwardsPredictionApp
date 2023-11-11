@@ -17,7 +17,7 @@ const SignedOutState = () => {
         <SubmitButton
           text={'Sign in'}
           onPress={() => {
-            navigation.navigate('Authenticator');
+            navigation.navigate('AuthenticatorNavigator');
           }}
           style={{ marginTop: 20, maxWidth: 140 }}
         />

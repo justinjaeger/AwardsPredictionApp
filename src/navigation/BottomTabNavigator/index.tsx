@@ -28,7 +28,7 @@ const BottomTabNavigator = () => {
         initialParams={{ initialScreen: 'EventSelect' }}
       />
       <Tab.Screen
-        name="Profile"
+        name="ProfileTab"
         component={PredictionsNavigator}
         initialParams={{ initialScreen: 'Profile' }}
       />

@@ -62,7 +62,7 @@ const TabBar = (props: ITabBarProps) => {
                     />
                   </View>
                 );
-              case 'Profile':
+              case 'ProfileTab':
                 return (
                   <View key={index}>
                     <CustomIcon
