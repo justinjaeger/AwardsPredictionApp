@@ -10,14 +10,13 @@ const Stat = ({
   percentage: number;
   subject: 'nom' | 'win' | 'listed';
 }) => {
-  const subjectText = subject === 'nom' ? 'nom' : subject === 'win' ? 'win' : 'list';
+  const subjectText =
+    subject === 'nom' ? 'predict nom' : subject === 'win' ? 'predict win' : 'on list';
   return (
     <View style={{ alignItems: 'center' }}>
       <Header>{`${formatPercentage(percentage, true)}`}</Header>
       <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
-        <SubHeaderLight style={{ marginLeft: 5 }}>
-          {'predict ' + subjectText}
-        </SubHeaderLight>
+        <SubHeaderLight style={{ marginLeft: 5 }}>{subjectText}</SubHeaderLight>
       </View>
     </View>
   );
