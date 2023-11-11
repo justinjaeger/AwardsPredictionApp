@@ -1,0 +1,15 @@
+diff --git a/node_modules/@ui-kitten/components/devsupport/components/measure/measure.component.js b/node_modules/@ui-kitten/components/devsupport/components/measure/measure.component.js
+index 02180f9..164eb01 100644
+--- a/node_modules/@ui-kitten/components/devsupport/components/measure/measure.component.js
++++ b/node_modules/@ui-kitten/components/devsupport/components/measure/measure.component.js
+@@ -57,7 +57,9 @@ const MeasureElement = (props) => {
+     };
+     const measureSelf = () => {
+         const node = (0, react_native_1.findNodeHandle)(ref.current);
+-        react_native_1.UIManager.measureInWindow(node, onUIManagerMeasure);
++        if (node) {
++            react_native_1.UIManager.measureInWindow(node, onUIManagerMeasure);
++        }
+     };
+     if (props.force) {
+         measureSelf();
