@@ -79,7 +79,7 @@ const useRecommendedUsers = () => {
 
   useEffect(() => {
     fetchPage();
-  }, []);
+  }, [authUserId]);
 
   // export fetchPage to allow user to fetch next page
   return { users, isFetching, fetchMoreResults: fetchPage };
