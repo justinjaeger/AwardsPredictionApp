@@ -29,6 +29,7 @@ const Profile = () => {
   const { params } = useRoute<RouteProp<PredictionsParamList, 'Profile'>>();
   const { userId: authUserId, isNewUser } = useAuth();
   const userId = params?.userId || authUserId;
+  console.log('params?.userId', params?.userId);
 
   const globalNavigation = useNavigation<MainScreenNavigationProp>();
   const navigation = useTypedNavigation<PredictionsParamList>();
@@ -164,8 +165,7 @@ const Profile = () => {
                     StackActions.push('Followers', { userId, type: 'followers' }),
                   );
                 }}
-                text={`${user?.followerCount || 0} Followers`}
-                loading={user?.followerCount === undefined}
+                text={`${user?.followerCount ?? 0} Followers`}
               />
               <FollowCountButton
                 onPress={() => {
@@ -174,8 +174,7 @@ const Profile = () => {
                     StackActions.push('Followers', { userId, type: 'following' }),
                   );
                 }}
-                text={`${user?.followingCount} Following`}
-                loading={user?.followingCount === undefined}
+                text={`${user?.followingCount ?? 0} Following`}
               />
             </View>
             <View

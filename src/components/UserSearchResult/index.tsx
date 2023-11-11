@@ -37,9 +37,6 @@ const UserSearchResult = ({
 
   const noResults = users.length === 0 && !isLoading;
 
-  console.log('isLoading', isLoading);
-  console.log('allUsersAreFetched', allUsersAreFetched);
-
   return (
     <FlatList
       style={{ height: '100%', width: '100%' }}

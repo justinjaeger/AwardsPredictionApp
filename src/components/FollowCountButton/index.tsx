@@ -11,7 +11,7 @@ const FollowCountButton = ({
   text,
 }: {
   onPress: () => void;
-  loading: boolean;
+  loading?: boolean;
   text: string;
 }) => {
   return (
