@@ -6,9 +6,10 @@ import COLORS from '../../constants/colors';
 import { Body } from '../Text';
 
 const FormInput = ({
-  label,
   value,
   setValue,
+  label,
+  placeholder,
   textContentType,
   isYear,
   caption,
@@ -18,9 +19,10 @@ const FormInput = ({
   autoFocus,
   multiline,
 }: {
-  label: string;
   value: string;
   setValue: (v: string) => void;
+  label?: string;
+  placeholder?: string;
   textContentType?: iTextContentType;
   isYear?: boolean;
   caption?: string;
@@ -66,7 +68,8 @@ const FormInput = ({
   return (
     <Input
       value={value}
-      placeholder={label}
+      label={label}
+      placeholder={placeholder}
       placeholderTextColor={COLORS.gray}
       multiline={multiline}
       onChangeText={onChangeText}

@@ -29,7 +29,6 @@ const Profile = () => {
   const { params } = useRoute<RouteProp<PredictionsParamList, 'Profile'>>();
   const { userId: authUserId, isNewUser } = useAuth();
   const userId = params?.userId || authUserId;
-  console.log('params?.userId', params?.userId);
 
   const globalNavigation = useNavigation<MainScreenNavigationProp>();
   const navigation = useTypedNavigation<PredictionsParamList>();

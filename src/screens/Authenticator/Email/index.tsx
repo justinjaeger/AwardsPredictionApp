@@ -65,7 +65,7 @@ const Auth = () => {
         {authScreen === 'signIn' ? (
           <View style={{ width: '80%', maxWidth: 300, backgroundColor: COLORS.primary }}>
             <FormInput
-              label="Email"
+              placeholder="Email"
               value={email}
               setValue={(v) => {
                 setEmail(v);
