@@ -2,7 +2,6 @@ import React, { useLayoutEffect } from 'react';
 import CategoryPersonal from './CategoryPersonal';
 import { useTypedNavigation } from '../../../util/hooks';
 import { PredictionsParamList } from '../../../navigation/types';
-import { getAwardsBodyCategories } from '../../../constants/categories';
 import { useEvent } from '../../../context/EventContext';
 import { eventToString } from '../../../util/stringConversions';
 import { getHeaderTitleWithProfile } from '../../../constants';
@@ -23,9 +22,8 @@ const CategoryFromProfile = () => {
   // Set the header
   useLayoutEffect(() => {
     if (!category || !event) return;
-    const awardsBodyCategories = getAwardsBodyCategories(event.awardsBody, event.year);
     const eventName = eventToString(event.awardsBody, event.year);
-    const categoryName = awardsBodyCategories[category]?.name || '';
+    const categoryName = event.categories[category].name;
     const headerTitle = eventName + '\n' + 'Best ' + categoryName;
     const onPressProfileImage = () => {
       navigation.dispatch(StackActions.push('Profile', { userId }));

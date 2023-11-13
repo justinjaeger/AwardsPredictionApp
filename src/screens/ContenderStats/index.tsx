@@ -14,12 +14,12 @@ import { getHeaderTitleWithTrophy } from '../../constants';
 import { useTmdbDataStore } from '../../context/TmdbDataStore';
 import { truncateText } from '../../util/truncateText';
 import { Header, SubHeader } from '../../components/Text';
-import { getAwardsBodyCategories } from '../../constants/categories';
 import PredictionTab from '../../navigation/PredictionTabsNavigator/PredictionTab';
 import { getPredictedOutcomes } from '../../util/getPredictedOutcomes';
 import useDevice from '../../util/device';
 import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
+import { ORDERED_CATEGORIES } from '../../constants/categories';
 
 export type iContenderStatsData = iPrediction & {
   category: CategoryName;
@@ -41,7 +41,6 @@ const ContenderStats = () => {
   // Set the header
   useLayoutEffect(() => {
     if (!event) return;
-    // const awardsBodyCategories = getAwardsBodyCategories(event.awardsBody, event.year);
     const eventName = eventToString(event.awardsBody, event.year);
     // const categoryName = awardsBodyCategories[category]?.name || '';
     const headerTitle =
@@ -116,8 +115,7 @@ const ContenderStats = () => {
       potential: numPoential,
     });
 
-    const awardsBodyCategories = getAwardsBodyCategories(event.awardsBody, event.year);
-    const orderedCategoryKeys = Object.keys(awardsBodyCategories) as CategoryName[];
+    const orderedCategoryKeys = Object.keys(ORDERED_CATEGORIES) as CategoryName[];
 
     const sortedByCategoryOrder = orderedCategoryKeys.reduce(
       (acc: iContenderStatsData[], catName) => {

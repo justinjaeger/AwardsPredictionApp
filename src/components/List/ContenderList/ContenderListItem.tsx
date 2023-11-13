@@ -224,7 +224,8 @@ const ContenderListItem = ({
             justifyContent: 'center',
             alignSelf: 'center',
             alignItems: 'center',
-            paddingRight: 10,
+            paddingRight: 5,
+            paddingLeft: 5,
           }}
           underlayColor={iconRightProps.underlayColor || 'transparent'}
           onPress={iconRightProps.onPress}

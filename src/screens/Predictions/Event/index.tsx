@@ -42,8 +42,6 @@ const Event = ({
 
   const isAuthProfile = userId === authUserId;
 
-  const [numToShow, setNumToShow] = useState<number>(30); // essentially making this useless cause it's annoying
-
   const onSelectCategory = async (category: CategoryName) => {
     setCategory(category);
     setPersonalCommunityTab(tab);
@@ -90,41 +88,23 @@ const Event = ({
     iCategoryPrediction
   >;
   const orderedPredictions = event
-    ? getOrderedCategories(event.awardsBody, event.year, unorderedCategories)
+    ? getOrderedCategories(event, unorderedCategories)
     : [];
 
-  const onEndReached = () => {
-    setNumToShow(numToShow + 5);
-  };
+  console.log(Object.keys(orderedPredictions));
 
   return (
     <View style={{ flex: 1, width: '100%' }}>
       <FlatList
-        data={orderedPredictions.slice(0, numToShow)}
+        data={orderedPredictions}
         ListHeaderComponent={<LastUpdatedText lastUpdated={lastUpdatedString} />}
-        ListFooterComponent={
-          numToShow < orderedPredictions.length ? <CarouselSkeleton renderLabel /> : null
-        }
         keyExtractor={([catName]) => catName}
         renderItem={({ item }) => {
           return (
             <EventItem item={item} onPress={onPress} isAuthProfile={isAuthProfile} />
           );
         }}
-        onScrollEndDrag={(e) => {
-          // Fetches more at bottom of scroll. Note the high event throttle to prevent too many requests
-          // get position of current scroll
-          const currentOffset = e.nativeEvent.contentOffset.y;
-          // get max bottom of scroll
-          const maxOffset =
-            e.nativeEvent.contentSize.height - e.nativeEvent.layoutMeasurement.height;
-          // if we're close to the bottom fetch more
-          if (currentOffset > maxOffset - 200) {
-            onEndReached();
-          }
-        }}
         showsVerticalScrollIndicator={false}
-        onEndReachedThreshold={0.5} // triggers onEndReached at (X*100)% of list, for example 0.9 = 90% down
       />
     </View>
   );

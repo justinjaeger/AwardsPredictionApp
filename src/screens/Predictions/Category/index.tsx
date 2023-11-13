@@ -4,14 +4,12 @@ import CategoryCommunity from './CategoryCommunity';
 import CategoryPersonal from './CategoryPersonal';
 import { useTypedNavigation } from '../../../util/hooks';
 import { PredictionsParamList } from '../../../navigation/types';
-import { getAwardsBodyCategories } from '../../../constants/categories';
 import { useEvent } from '../../../context/EventContext';
 import { eventToString } from '../../../util/stringConversions';
 import { getHeaderTitleWithTrophy } from '../../../constants';
 import { useAuth } from '../../../context/AuthContext';
 import { RouteProp, StackActions, useRoute } from '@react-navigation/native';
 import FollowingBottomScroll from '../../../components/FollowingBottomScroll';
-import { CategoryName } from '../../../types/api';
 
 // Essentially "Category with personal/community tabs" (uses usePredictionData)
 const Category = () => {
@@ -33,9 +31,8 @@ const Category = () => {
   // Set the header
   useLayoutEffect(() => {
     if (!category || !event) return;
-    const awardsBodyCategories = getAwardsBodyCategories(event.awardsBody, event.year);
     const eventName = eventToString(event.awardsBody, event.year);
-    const categoryName = awardsBodyCategories[CategoryName[category]]?.name || '';
+    const categoryName = event.categories[category].name;
     const headerTitle = eventName + '\n' + 'Best ' + categoryName;
     navigation.setOptions({
       headerTitle: getHeaderTitleWithTrophy(headerTitle, event.awardsBody),

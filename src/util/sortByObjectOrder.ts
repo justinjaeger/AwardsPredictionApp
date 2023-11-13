@@ -1,13 +1,7 @@
 import _ from 'lodash';
-import { getAwardsBodyCategories } from '../constants/categories';
-import {
-  AwardsBody,
-  CategoryName,
-  EventModel,
-  WithId,
-  iCategoryPrediction,
-} from '../types/api';
+import { CategoryName, EventModel, WithId, iCategoryPrediction } from '../types/api';
 import { AWARDS_BODY_TO_STRING } from '../constants/awardsBodies';
+import { ORDERED_CATEGORIES } from '../constants/categories';
 
 /**
  * Sorts an array based on the insert order of an object (with keys of type Enum)
@@ -40,17 +34,27 @@ export const getOrderedEvents = (unorderedEvents: WithId<EventModel>[]) => {
 };
 
 export const getOrderedCategories = (
-  awardsBody: AwardsBody,
-  year: number,
+  event: EventModel,
   unorderedCategories: Record<CategoryName, iCategoryPrediction>,
 ): Array<[CategoryName, iCategoryPrediction | undefined]> => {
-  const awardsBodyCategories = getAwardsBodyCategories(awardsBody, year);
-  const orderedCategoryKeys = _.keys(awardsBodyCategories) as CategoryName[];
-  return orderedCategoryKeys.reduce((acc, key) => {
-    const valuesForGivenKey = unorderedCategories[key] as undefined;
-    acc.push([key, valuesForGivenKey]);
-    return acc;
-  }, []);
+  const allCategoriesInEvent = Object.keys(event.categories);
+  const allNonHiddenCategoriesInEvent = allCategoriesInEvent.filter(
+    (category) => !event.categories[category as CategoryName].isHidden,
+  );
+  return ORDERED_CATEGORIES.reduce(
+    (acc: Array<[CategoryName, iCategoryPrediction | undefined]>, key) => {
+      const valuesForGivenKey = unorderedCategories[key] as
+        | iCategoryPrediction
+        | undefined;
+      // if it's included in allNonHiddenCategoriesInEvent
+      // then we want to include it in the list
+      if (allNonHiddenCategoriesInEvent.includes(key)) {
+        acc.push([key, valuesForGivenKey]);
+      }
+      return acc;
+    },
+    [],
+  );
 };
 
 export default sortByObjectOrder;
