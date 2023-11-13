@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, TouchableHighlight, ScrollView } from 'react-native';
 import { SubmitButton } from '../../components/Buttons';
 import { Body, BodyBold, HeaderLight, SubHeader } from '../../components/Text';
@@ -13,7 +13,7 @@ import {
 import theme from '../../constants/theme';
 import PredictionCarousel from '../../components/PredictionCarousel';
 import COLORS from '../../constants/colors';
-import { useNavigateToEffect, useTypedNavigation } from '../../util/hooks';
+import { useTypedNavigation } from '../../util/hooks';
 import ProfileImage from '../../components/ProfileImage';
 import FollowButton from '../../components/FollowButton';
 import FollowCountButton from '../../components/FollowCountButton';
@@ -52,12 +52,12 @@ const Profile = () => {
   const predictionSets = user?.recentPredictionSets || [];
   const isAuthUser = user && userId && user?._id === authUserId;
 
-  useNavigateToEffect(() => {
+  useEffect(() => {
     if (isAuthUser && (!user.username || !user.name)) {
       navigation.navigate('UpdateProfileInfo');
       Snackbar.warning(`Update your ${!user.username ? 'username' : 'name'} to continue`);
     }
-  }, [user?.username]);
+  }, [user?.username, user?.name]);
 
   const logIn = () => {
     globalNavigation.navigate('AuthenticatorNavigator');
