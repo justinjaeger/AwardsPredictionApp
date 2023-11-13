@@ -107,7 +107,7 @@ const MovieListDraggable = ({
                   }}
                 />
               ) : null}
-              <ScaleDecorator activeScale={0.9}>
+              <ScaleDecorator activeScale={1}>
                 <ContenderListItem
                   prediction={prediction}
                   ranking={ranking}

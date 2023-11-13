@@ -111,7 +111,7 @@ const ContenderListItem = ({
   const totalNumPredicting = getTotalNumPredicting(numPredicting || {});
 
   const thumbnailContainerWidth = posterWidth * 1.5;
-  const rightIconContainerWidth = iconRightProps ? posterHeight + 10 : 0;
+  const rightIconContainerWidth = iconRightProps ? posterHeight - 10 : 0;
 
   if (dataHasNotLoaded) {
     return (
@@ -220,10 +220,11 @@ const ContenderListItem = ({
         <TouchableHighlight
           style={{
             height: posterHeight,
-            width: posterHeight + 10,
+            width: rightIconContainerWidth,
             justifyContent: 'center',
             alignSelf: 'center',
             alignItems: 'center',
+            paddingRight: 10,
           }}
           underlayColor={iconRightProps.underlayColor || 'transparent'}
           onPress={iconRightProps.onPress}
