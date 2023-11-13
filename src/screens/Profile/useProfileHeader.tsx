@@ -69,7 +69,7 @@ const useProfileHeader = (
             )
           : null,
     });
-  }, [userId, isLoading]);
+  }, [userId, isLoading, isAuthUser]);
 };
 
 export default useProfileHeader;
