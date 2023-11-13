@@ -38,7 +38,7 @@ const ActionButton = ({
         style,
       ]}
       onPress={onPress}
-      underlayColor={underlayColor ?? COLORS.secondaryDark}
+      underlayColor={underlayColor ?? COLORS.secondary}
     >
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         {isLoading ? (
