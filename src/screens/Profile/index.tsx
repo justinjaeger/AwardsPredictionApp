@@ -23,6 +23,8 @@ import { MainScreenNavigationProp, PredictionsParamList } from '../../navigation
 import useProfileUser from './useProfileUser';
 import useProfileHeader from './useProfileHeader';
 import ProfileSkeleton from '../../components/Skeletons/ProfileSkeleton';
+import { resetToProfile } from '../../util/navigationActions';
+import Snackbar from '../../components/Snackbar';
 
 const Profile = () => {
   // If we pass userId as params, it loads that user's profile. If not, it attemps to get logged in profile.
@@ -32,6 +34,8 @@ const Profile = () => {
 
   const globalNavigation = useNavigation<MainScreenNavigationProp>();
   const navigation = useTypedNavigation<PredictionsParamList>();
+
+  navigation.dispatch(resetToProfile);
 
   const { data: events, isLoading: isLoadingAllEvents } = useQueryGetAllEvents();
 
@@ -49,8 +53,9 @@ const Profile = () => {
   const isAuthUser = user && userId && user?._id === authUserId;
 
   useNavigateToEffect(() => {
-    if (isAuthUser && !user.username) {
+    if (isAuthUser && (!user.username || !user.name)) {
       navigation.navigate('UpdateProfileInfo');
+      Snackbar.warning(`Update your ${!user.username ? 'username' : 'name'} to continue`);
     }
   }, [user?.username]);
 
