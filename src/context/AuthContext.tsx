@@ -38,6 +38,7 @@ type iAuthContext = {
   userRole: UserRole | undefined;
   signInUser: (userInfo: iUserInfo) => void;
   signOutUser: () => void;
+  signOutAllDevices: () => void;
   verificationCode: iVerificationCode;
   generateVerificationCode: () => string | undefined;
   validateVerificationCode: (c: string) => void;
@@ -51,6 +52,7 @@ const AuthContext = createContext<iAuthContext>({
   userRole: undefined,
   signInUser: () => {},
   signOutUser: () => {},
+  signOutAllDevices: () => {},
   verificationCode: undefined,
   generateVerificationCode: () => undefined,
   validateVerificationCode: () => ({ isValid: false }),
@@ -85,10 +87,7 @@ export const AuthProvider = (props: { children: React.ReactNode }) => {
     // ends all sessions from user with this userId
     const endAllSessions = async () => {
       console.error('ending all sessions...');
-      setIsLoadingAuth(true);
-      if (userInfo?.userId) {
-        await MongoApi.removeUserTokens();
-      }
+      signOutAllDevices();
       resetAuth();
     };
 
@@ -152,6 +151,14 @@ export const AuthProvider = (props: { children: React.ReactNode }) => {
     resetAuth();
   };
 
+  // signs out user on all devices
+  const signOutAllDevices = async () => {
+    console.error('signOutAllDevices');
+    setIsLoadingAuth(true);
+    await MongoApi.removeUserTokens();
+    resetAuth();
+  };
+
   const generateVerificationCode = () => {
     // random string of 12 characters including special characters
     const code = Math.random().toString(36).slice(-12);
@@ -193,6 +200,7 @@ export const AuthProvider = (props: { children: React.ReactNode }) => {
         userRole: userInfo?.role,
         signInUser,
         signOutUser,
+        signOutAllDevices,
         verificationCode,
         generateVerificationCode,
         validateVerificationCode,

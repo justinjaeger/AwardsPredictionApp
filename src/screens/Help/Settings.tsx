@@ -11,7 +11,7 @@ import Snackbar from '../../components/Snackbar';
 import MongoApi from '../../services/api/requests';
 
 const Settings = () => {
-  const { userId, signOutUser } = useAuth();
+  const { userId, signOutUser, signOutAllDevices } = useAuth();
 
   const [deletionStatus, setDeletionStatus] = useState<
     'isLoading' | 'error' | 'success' | undefined
@@ -75,6 +75,26 @@ const Settings = () => {
     );
   };
 
+  const onPressSignOutAllDevices = () => {
+    Alert.alert(
+      'Sign out of all devices',
+      'This revokes access for all users signed into this account, and will log you out.',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Sign out',
+          onPress: () => {
+            signOutAllDevices();
+          },
+        },
+      ],
+      { cancelable: false },
+    );
+  };
+
   return (
     <BackgroundWrapper>
       <ScrollView
@@ -82,15 +102,23 @@ const Settings = () => {
         contentContainerStyle={{ width: '90%', alignSelf: 'center' }}
       >
         {userIsSignedIn ? (
-          <SubmitButton
-            text={'Delete Account'}
-            onPress={onPressDelete}
-            style={{ marginTop: 40, backgroundColor: COLORS.error }}
-            underlayColor={COLORS.errorDark}
-          />
+          <>
+            <SubmitButton
+              text={'Sign out of all devices'}
+              onPress={onPressSignOutAllDevices}
+              style={{ marginTop: 20 }}
+              underlayColor={COLORS.secondaryDark}
+            />
+            <SubmitButton
+              text={'Delete Account'}
+              onPress={onPressDelete}
+              style={{ marginTop: 20, backgroundColor: COLORS.error }}
+              underlayColor={COLORS.errorDark}
+            />
+          </>
         ) : (
           <Body style={{ textAlign: 'center', marginTop: 40 }}>
-            No settings to show when logged out
+            Sign in to view settings
           </Body>
         )}
         {deletionStatus !== undefined ? (
