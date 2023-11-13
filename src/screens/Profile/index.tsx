@@ -23,7 +23,6 @@ import { MainScreenNavigationProp, PredictionsParamList } from '../../navigation
 import useProfileUser from './useProfileUser';
 import useProfileHeader from './useProfileHeader';
 import ProfileSkeleton from '../../components/Skeletons/ProfileSkeleton';
-import { resetToProfile } from '../../util/navigationActions';
 import Snackbar from '../../components/Snackbar';
 
 const Profile = () => {
@@ -34,8 +33,6 @@ const Profile = () => {
 
   const globalNavigation = useNavigation<MainScreenNavigationProp>();
   const navigation = useTypedNavigation<PredictionsParamList>();
-
-  navigation.dispatch(resetToProfile);
 
   const { data: events, isLoading: isLoadingAllEvents } = useQueryGetAllEvents();
 
