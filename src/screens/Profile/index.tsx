@@ -27,7 +27,7 @@ import ProfileSkeleton from '../../components/Skeletons/ProfileSkeleton';
 const Profile = () => {
   // If we pass userId as params, it loads that user's profile. If not, it attemps to get logged in profile.
   const { params } = useRoute<RouteProp<PredictionsParamList, 'Profile'>>();
-  const { userId: authUserId, isNewUser } = useAuth();
+  const { userId: authUserId } = useAuth();
   const userId = params?.userId || authUserId;
 
   const globalNavigation = useNavigation<MainScreenNavigationProp>();
@@ -67,13 +67,11 @@ const Profile = () => {
       ) : !userId ? (
         <>
           <SubHeader style={{ marginTop: '10%', fontWeight: '700' }}>
-            {isNewUser
-              ? 'Create profile and make predictions!'
-              : 'Log in to make predictions!'}
+            {'Sign in to make predictions!'}
           </SubHeader>
           <SubmitButton
             style={{ marginTop: 20 }}
-            text={isNewUser ? 'Create Account' : 'Log in'}
+            text={'Log In / Sign Up'}
             onPress={logIn}
           />
         </>
