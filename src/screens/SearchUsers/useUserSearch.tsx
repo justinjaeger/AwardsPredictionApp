@@ -20,7 +20,6 @@ const useUserSearch = () => {
     const newUsers = (data ?? []).sort((a) =>
       usersIdsAuthUserIsFollowing.includes(a._id) ? -1 : 1,
     );
-    console.error('newUsers', newUsers.length);
     if (newUsers.length < PAGINATED_LIMIT) {
       setAllUsersAreFetched(true);
     }

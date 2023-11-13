@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import { FlatList, View } from 'react-native';
 import { PredictionsParamList } from '../../../navigation/types';
 import { useTypedNavigation } from '../../../util/hooks';
@@ -18,7 +18,6 @@ import {
 import EventSkeleton from '../../../components/Skeletons/EventSkeleton';
 import { getOrderedCategories } from '../../../util/sortByObjectOrder';
 import EventItem from './EventItem';
-import CarouselSkeleton from '../../../components/Skeletons/CarouselSkeleton';
 
 // This is shared by EventPersonalCommunity AND EventFromProfile
 const Event = ({

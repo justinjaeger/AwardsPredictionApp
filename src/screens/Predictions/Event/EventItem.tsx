@@ -14,7 +14,7 @@ const EventItem = ({
   onPress,
   isAuthProfile,
 }: {
-  item: [CategoryName, iCategoryPrediction];
+  item: [CategoryName, iCategoryPrediction | undefined];
   onPress: (category: CategoryName) => void;
   isAuthProfile: boolean;
 }) => {
