@@ -102,6 +102,7 @@ const NumPredictingItem = ({
         <Histogram
           totalNumPredicting={totalNumPredicting}
           totalNumPredictingTop={totalNumPredictingTop}
+          totalNumPredictingCategory={totalNumPredictingCategory}
           numPredicting={numPredicting}
           slots={slots}
           enableHoverInfo

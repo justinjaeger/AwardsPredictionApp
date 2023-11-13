@@ -12,6 +12,7 @@ const Histogram = ({
   numPredicting,
   totalNumPredicting,
   totalNumPredictingTop,
+  totalNumPredictingCategory,
   slots = 5,
   totalWidth: _totalWidth,
   posterHeight: _posterHeight,
@@ -20,6 +21,7 @@ const Histogram = ({
   numPredicting: Record<number, number>;
   totalNumPredicting: number;
   totalNumPredictingTop: number;
+  totalNumPredictingCategory?: number; // only necessary if hover info is enabled
   slots?: number;
   totalWidth?: number;
   posterHeight?: number;
@@ -141,9 +143,11 @@ const Histogram = ({
             <Header>{numPredictingInSelectedSlot.toString()}</Header>
             <SubHeaderLight style={{ marginLeft: 5 }}>{'predicting'}</SubHeaderLight>
           </View>
-          <SubHeader style={{ marginLeft: 10, marginTop: 10 }}>
-            {formatPercentage(numPredictingInSelectedSlot / totalNumPredicting)}
-          </SubHeader>
+          {totalNumPredictingCategory ? (
+            <SubHeader style={{ marginLeft: 10, marginTop: 10 }}>
+              {formatPercentage(numPredictingInSelectedSlot / totalNumPredictingCategory)}
+            </SubHeader>
+          ) : null}
         </View>
       ) : null}
     </View>
