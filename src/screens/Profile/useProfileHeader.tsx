@@ -7,7 +7,6 @@ import { useTypedNavigation } from '../../util/hooks';
 import BackButton from '../../components/Buttons/BackButton';
 import { PredictionsParamList } from '../../navigation/types';
 import { BodyBold } from '../../components/Text';
-import { useProfilePrediction } from '../../context/ProfilePredictionContext';
 
 const useProfileHeader = (
   userId: string | undefined,
@@ -17,14 +16,12 @@ const useProfileHeader = (
   const globalNavigation = useNavigation();
   const navigation = useTypedNavigation<PredictionsParamList>();
   const { userId: authUserId, signOutUser } = useAuth();
-  const { resetProfileUser } = useProfilePrediction();
 
   const isAuthUser = userId && userId === authUserId;
 
   const logOut = async () => {
     setIsLoading(true);
     await signOutUser();
-    resetProfileUser();
     Snackbar.success('You were signed out');
     setIsLoading(false);
   };

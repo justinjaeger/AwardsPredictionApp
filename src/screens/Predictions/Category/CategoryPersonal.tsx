@@ -3,7 +3,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Animated, View } from 'react-native';
 import MovieListDraggable from '../../../components/MovieList/MovieListDraggable';
 import SignedOutState from '../../../components/SignedOutState';
-// import Snackbar from '../../../components/Snackbar';
 import { BodyBold } from '../../../components/Text';
 import { useEvent } from '../../../context/EventContext';
 import useMutationUpdatePredictions from '../../../hooks/mutations/useMutationUpdatePredictions';

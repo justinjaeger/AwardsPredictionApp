@@ -15,7 +15,6 @@ import UpdateProfileInfo from '../screens/Profile/UpdateProfileInfo';
 import SearchFriends from '../screens/SearchUsers';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import Followers from '../screens/Profile/Followers';
-import { ProfilePredictionProvider } from '../context/ProfilePredictionContext';
 import { useHeaderSettings } from '../hooks/useHeaderSettings';
 import ContenderStats from '../screens/ContenderStats';
 import { EventProvider } from '../context/EventContext';
@@ -140,13 +139,11 @@ const PredictionsNavigator = () => {
 };
 
 const WithProvider = () => (
-  <ProfilePredictionProvider>
-    <EventProvider>
-      <FollowingBarProvider>
-        <PredictionsNavigator />
-      </FollowingBarProvider>
-    </EventProvider>
-  </ProfilePredictionProvider>
+  <EventProvider>
+    <FollowingBarProvider>
+      <PredictionsNavigator />
+    </FollowingBarProvider>
+  </EventProvider>
 );
 
 export default WithProvider;

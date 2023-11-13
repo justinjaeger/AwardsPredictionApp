@@ -7,13 +7,11 @@ import { Body } from '../../components/Text';
 import COLORS from '../../constants/colors';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigateAwayEffect } from '../../util/hooks';
-import { useProfilePrediction } from '../../context/ProfilePredictionContext';
 import Snackbar from '../../components/Snackbar';
 import MongoApi from '../../services/api/requests';
 
 const Settings = () => {
   const { userId, signOutUser } = useAuth();
-  const { resetProfileUser } = useProfilePrediction();
 
   const [deletionStatus, setDeletionStatus] = useState<
     'isLoading' | 'error' | 'success' | undefined
@@ -39,7 +37,6 @@ const Settings = () => {
     setDeletionStatus('success');
     // then log the user out
     signOutUser();
-    resetProfileUser();
     Snackbar.success('You were signed out');
   };
 
