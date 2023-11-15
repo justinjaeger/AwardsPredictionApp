@@ -66,10 +66,8 @@ const Category = () => {
       />
       {userId && !isEditing ? (
         <FollowingBottomScroll
-          onPress={(userId, userName, userImage) => {
-            navigation.dispatch(
-              StackActions.push('CategoryFromProfile', { userId, userName, userImage }),
-            );
+          onPress={(userId) => {
+            navigation.dispatch(StackActions.push('CategoryFromProfile', { userId }));
           }}
         />
       ) : null}

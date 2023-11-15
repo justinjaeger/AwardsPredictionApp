@@ -16,14 +16,10 @@ import useQueryGetAllEvents from '../../hooks/queries/useQueryGetAllEvents';
 const UserPredictionList = ({
   predictionSets,
   userId,
-  userName,
-  userImage,
 }: {
   predictionSets: iRecentPrediction[];
   fixedSlots?: number;
   userId: string;
-  userName: string | undefined;
-  userImage: string | undefined;
 }) => {
   const { userId: authUserId } = useAuth();
   const navigation = useTypedNavigation<PredictionsParamList>();
@@ -65,8 +61,6 @@ const UserPredictionList = ({
               } else {
                 navigation.navigate('CategoryFromProfile', {
                   userId,
-                  userName,
-                  userImage,
                   showEventLink: true,
                 });
               }

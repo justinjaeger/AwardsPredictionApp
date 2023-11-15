@@ -7,18 +7,8 @@ import CustomIcon from '../CustomIcon';
 import { SubHeader } from '../Text';
 
 // Was used to display user info above categories
-const UserHeader = ({
-  userId,
-  userName,
-  userImage,
-}: {
-  userId: string;
-  userName?: string;
-  userImage?: string;
-}) => {
+const UserHeader = ({ userId }: { userId: string }) => {
   const navigation = useTypedNavigation<PredictionsParamList>();
-
-  const name = userName || 'user';
 
   return (
     <View
@@ -39,8 +29,6 @@ const UserHeader = ({
           navigation.dispatch(
             StackActions.replace('EventFromProfile', {
               userId,
-              userName: name,
-              userImage: userImage,
             }),
           );
         }}

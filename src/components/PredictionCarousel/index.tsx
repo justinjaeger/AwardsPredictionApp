@@ -183,12 +183,7 @@ const PredictionCarousel = ({
             setCurrentPage(newXPos);
           }}
         >
-          <UserPredictionList
-            predictionSets={predictionSets}
-            userId={userId}
-            userName={userInfo?.name}
-            userImage={userInfo?.image}
-          />
+          <UserPredictionList predictionSets={predictionSets} userId={userId} />
         </ScrollView>
         {/* SCROLL BAR */}
         <Animated.View

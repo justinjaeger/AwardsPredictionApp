@@ -13,15 +13,7 @@ const IMAGE_WIDTH = 50;
 const IMAGE_MARGIN = 5;
 
 // always the auth user
-const FollowingBottomScroll = ({
-  onPress,
-}: {
-  onPress: (
-    userId: string,
-    userName: string | undefined,
-    userImage: string | undefined,
-  ) => void;
-}) => {
+const FollowingBottomScroll = ({ onPress }: { onPress: (userId: string) => void }) => {
   const friendsYPos = useRef(new Animated.Value(0)).current;
   const indicatorYPos = useRef(new Animated.Value(0)).current;
   const { event, category } = useEvent();
@@ -32,14 +24,14 @@ const FollowingBottomScroll = ({
   const usersPredictingEvent = (followingUsers ?? []).filter((user) =>
     Object.keys(user.eventsPredicting ?? {}).some((e) => e === event?._id),
   );
-  const usersPredictingCategory = usersPredictingEvent.filter((user) =>
-    Object.entries(user.eventsPredicting ?? {}).some(
-      ([e, categories]) => e === event?._id && categories.includes(category),
-    ),
-  );
-  const usersPredictingCurrent = category
-    ? usersPredictingCategory
-    : usersPredictingEvent;
+  const usersPredictingCategory =
+    category &&
+    usersPredictingEvent.filter((user) =>
+      Object.entries(user.eventsPredicting ?? {}).some(
+        ([e, categories]) => e === event?._id && categories.includes(category),
+      ),
+    );
+  const usersPredictingCurrent = usersPredictingCategory ?? usersPredictingEvent;
 
   useEffect(() => {
     Animated.timing(friendsYPos, {
@@ -103,7 +95,7 @@ const FollowingBottomScroll = ({
               key={user._id}
               image={user.image}
               imageSize={IMAGE_WIDTH}
-              onPress={() => onPress(user._id, user.name, user.image)}
+              onPress={() => onPress(user._id)}
               style={{
                 width: (IMAGE_WIDTH + 6) * (isPad ? IPAD_PROFILE_IMAGE_SCALE : 1), // this only makes sense because the profile image is equally scaled
                 margin: IMAGE_MARGIN,

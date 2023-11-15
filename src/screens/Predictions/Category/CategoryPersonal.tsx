@@ -30,14 +30,10 @@ const EXTRA_BOTTOM_HEIGHT = 70;
 // used in both FromProfile and from event
 const CategoryPersonal = ({
   userId,
-  userImage,
-  userName,
   showEventLink,
   onBack,
 }: {
   userId: string | undefined;
-  userImage?: string | undefined;
-  userName?: string | undefined;
   showEventLink?: boolean;
   onBack?: () => void;
 }) => {
@@ -156,9 +152,7 @@ const CategoryPersonal = ({
           </BodyBold>
         </View>
       ) : null}
-      {showEventLink ? (
-        <EventLink userId={userId} userImage={userImage} userName={userName} />
-      ) : null}
+      {showEventLink ? <EventLink userId={userId} /> : null}
       <View style={{ height: '100%' }}>
         <MovieListDraggable
           predictions={predictions}

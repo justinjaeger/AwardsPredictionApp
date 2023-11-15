@@ -23,15 +23,11 @@ import EventItem from './EventItem';
 const Event = ({
   tab,
   userId,
-  userName,
-  userImage,
   predictionData,
   isLoading,
 }: {
   tab: 'personal' | 'community';
   userId: string | undefined; // if undefined means user is logged out
-  userName?: string | undefined;
-  userImage?: string | undefined;
   predictionData: WithId<PredictionSet> | undefined;
   isLoading: boolean;
 }) => {
@@ -47,9 +43,7 @@ const Event = ({
     if (isAuthProfile || tab === 'community') {
       navigation.navigate('Category', { userId });
     } else {
-      navigation.dispatch(
-        StackActions.push('CategoryFromProfile', { userId, userName, userImage }),
-      );
+      navigation.dispatch(StackActions.push('CategoryFromProfile', { userId }));
     }
   };
 

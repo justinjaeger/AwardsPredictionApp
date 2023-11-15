@@ -8,10 +8,12 @@ import { getHeaderTitleWithProfile } from '../../../constants';
 import { View } from 'react-native';
 import { RouteProp, StackActions, useRoute } from '@react-navigation/native';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
+import useProfileUser from '../../Profile/useProfileUser';
 
 const CategoryFromProfile = () => {
   const { params } = useRoute<RouteProp<PredictionsParamList, 'CategoryFromProfile'>>();
-  const { userId, userImage, userName } = params;
+  const { userId } = params;
+  const { user } = useProfileUser(userId);
   const showEventLink = params?.showEventLink || false;
 
   const { category, event: _event } = useEvent();
@@ -29,19 +31,18 @@ const CategoryFromProfile = () => {
       navigation.dispatch(StackActions.push('Profile', { userId }));
     };
     navigation.setOptions({
-      headerTitle: getHeaderTitleWithProfile(headerTitle, userImage, onPressProfileImage),
+      headerTitle: getHeaderTitleWithProfile(
+        headerTitle,
+        user?.image,
+        onPressProfileImage,
+      ),
     });
   }, [navigation]);
 
   return (
     <BackgroundWrapper>
       <View style={{ width: '100%' }}>
-        <CategoryPersonal
-          userId={userId}
-          userImage={userImage}
-          userName={userName}
-          showEventLink={showEventLink}
-        />
+        <CategoryPersonal userId={userId} showEventLink={showEventLink} />
       </View>
     </BackgroundWrapper>
   );

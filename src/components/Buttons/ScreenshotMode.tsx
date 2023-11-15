@@ -35,7 +35,6 @@ const ScreenshotMode = ({
   const { width, height } = useWindowDimensions();
   const { top } = useSafeAreaInsets();
 
-  // TODO: do this everywhere
   const { user } = useProfileUser(userId);
 
   const { event: _event, category: _category } = useEvent();

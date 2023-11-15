@@ -12,11 +12,13 @@ import { eventToString } from '../../../util/stringConversions';
 import { getHeaderTitleWithProfile } from '../../../constants';
 import { useEvent } from '../../../context/EventContext';
 import useQueryGetUserPredictions from '../../../hooks/queries/useQueryGetUserPredictions';
+import useProfileUser from '../../Profile/useProfileUser';
 
 const EventFromProfile = () => {
   const navigation = useNavigation();
   const { params } = useRoute<RouteProp<PredictionsParamList, 'EventFromProfile'>>();
-  const { userId, userName, userImage } = params;
+  const { userId } = params;
+  const { user } = useProfileUser(userId);
 
   const { event } = useEvent();
 
@@ -30,7 +32,11 @@ const EventFromProfile = () => {
       navigation.dispatch(StackActions.push('Profile', { userId }));
     };
     navigation.setOptions({
-      headerTitle: getHeaderTitleWithProfile(headerTitle, userImage, onPressProfileImage),
+      headerTitle: getHeaderTitleWithProfile(
+        headerTitle,
+        user?.image,
+        onPressProfileImage,
+      ),
     });
   }, [navigation]);
 
@@ -42,8 +48,6 @@ const EventFromProfile = () => {
           predictionData={predictionData || undefined}
           isLoading={isLoading}
           userId={userId}
-          userImage={userImage}
-          userName={userName}
         />
       </BackgroundWrapper>
     </>

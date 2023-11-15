@@ -53,8 +53,6 @@ const EventList = ({
     } else {
       navigation.navigate('EventFromProfile', {
         userId,
-        userName: user?.name,
-        userImage: user?.image,
       });
     }
   };
