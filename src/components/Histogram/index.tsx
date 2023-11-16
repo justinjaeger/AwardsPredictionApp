@@ -18,6 +18,7 @@ const Histogram = ({
   totalWidth: _totalWidth,
   posterHeight: _posterHeight,
   enableHoverInfo,
+  containerWidthFactor,
 }: {
   numPredicting: Record<number, number>;
   totalNumPredicting: number;
@@ -27,6 +28,7 @@ const Histogram = ({
   totalWidth?: number;
   posterHeight?: number;
   enableHoverInfo?: boolean;
+  containerWidthFactor?: number;
 }) => {
   const { isPad } = useDevice();
   const { width: windowWidth } = useWindowDimensions();
@@ -34,8 +36,7 @@ const Histogram = ({
     isPad ? PosterSize.MEDIUM : PosterSize.SMALL,
   );
   const posterHeight = _posterHeight ?? pHeight;
-  const totalWidth =
-    ((_totalWidth ?? windowWidth) - 20) * (isPad ? theme.padHistogramContainerWidth : 1);
+  const totalWidth = ((_totalWidth ?? windowWidth) - 20) * (containerWidthFactor ?? 1);
 
   const barsToShow = slots * 2;
   const barMaxHeight = posterHeight * 1;
@@ -136,7 +137,7 @@ const Histogram = ({
           style={{
             position: 'absolute',
             right: 0,
-            top: -barMaxHeight * 1.5,
+            top: -barMaxHeight,
             padding: 5,
             backgroundColor: COLORS.primary,
             borderRadius: theme.borderRadius,

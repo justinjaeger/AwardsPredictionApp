@@ -1,6 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, View, useWindowDimensions } from 'react-native';
-import { Header, SmallHeader, SubHeader, SubHeaderLight } from '../Text';
+import { Header, Label, SmallHeader, SubHeader, SubHeaderLight } from '../Text';
 import { CategoryName, EventModel, Phase, WithId, iPrediction } from '../../types/api';
 import { getNumPredicting, getTotalNumPredicting } from '../../util/getNumPredicting';
 import Histogram from '../Histogram';
@@ -14,7 +14,6 @@ import { StackActions, useNavigation } from '@react-navigation/native';
 import { PredictionsNavigationProp } from '../../navigation/types';
 import { useAuth } from '../../context/AuthContext';
 import { useEvent } from '../../context/EventContext';
-import useDevice from '../../util/device';
 import Stat from './Stat';
 
 const NumPredictingItem = ({
@@ -24,6 +23,7 @@ const NumPredictingItem = ({
   totalNumPredictingTop,
   totalNumPredictingCategory,
   disableCategoryLink,
+  widthFactor,
 }: {
   category: CategoryName;
   event: WithId<EventModel>;
@@ -31,8 +31,8 @@ const NumPredictingItem = ({
   totalNumPredictingTop: number;
   totalNumPredictingCategory: number;
   disableCategoryLink?: boolean;
+  widthFactor?: number;
 }) => {
-  const { isPad } = useDevice();
   const { width } = useWindowDimensions();
   const navigation = useNavigation<PredictionsNavigationProp>();
   const { userId: authUserId } = useAuth();
@@ -66,7 +66,7 @@ const NumPredictingItem = ({
         paddingBottom: 10,
         paddingTop: 5,
         borderRadius: theme.borderRadius,
-        width: isPad ? width * theme.padHistogramContainerWidth : width,
+        width: width * (widthFactor ?? 1),
         alignSelf: 'center',
       }}
     >
@@ -105,6 +105,7 @@ const NumPredictingItem = ({
           totalNumPredictingCategory={totalNumPredictingCategory}
           numPredicting={numPredicting}
           slots={slots}
+          containerWidthFactor={widthFactor}
           enableHoverInfo
         />
       ) : null}
@@ -138,8 +139,8 @@ const NumPredictingItem = ({
       >
         <SubHeaderLight>{'out of'}</SubHeaderLight>
         <SmallHeader>{` ${totalNumPredictingCategory} `}</SmallHeader>
-        <SubHeaderLight>{'users'}</SubHeaderLight>
       </View>
+      <Label style={{ textAlign: 'center' }}>{'users predicting category'}</Label>
     </View>
   );
 };

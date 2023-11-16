@@ -14,6 +14,7 @@ import ContenderInfoHeader from '../ContenderInfoHeader';
 import { IconButton } from '../Buttons/IconButton';
 import COLORS from '../../constants/colors';
 import useDevice from '../../util/device';
+import theme from '../../constants/theme';
 
 const ContenderInfoModal = ({
   visible,
@@ -55,6 +56,8 @@ const ContenderInfoModal = ({
   const close = () => {
     onClose();
   };
+
+  const widthFactor = isPad ? theme.padHistogramContainerWidth : 1;
 
   return (
     <BasicModal
@@ -102,6 +105,7 @@ const ContenderInfoModal = ({
               totalNumPredictingTop={totalNumPredictingTop}
               totalNumPredictingCategory={totalNumPredictingCategory}
               disableCategoryLink
+              widthFactor={widthFactor}
             />
           ) : null}
         </View>

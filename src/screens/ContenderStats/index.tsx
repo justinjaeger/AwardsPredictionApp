@@ -130,6 +130,8 @@ const ContenderStats = () => {
     setDataInLikelihoodOrder(sortByLikelihood(allSignificantPredictions));
   }, []);
 
+  const widthFactor = isPad ? theme.padHistogramContainerWidth : 1;
+
   return (
     <BackgroundWrapper>
       <View style={{ flex: 1 }}>
@@ -173,7 +175,7 @@ const ContenderStats = () => {
                 style={{
                   flexDirection: 'row',
                   alignSelf: 'center',
-                  width: width * (isPad ? theme.padHistogramContainerWidth : 1),
+                  width: width * widthFactor,
                   marginBottom: 25,
                   borderRadius: 0,
                   borderColor: COLORS.primaryLight,
@@ -204,6 +206,7 @@ const ContenderStats = () => {
                 category={prediction.category}
                 totalNumPredictingTop={prediction.totalNumPredictingTop}
                 totalNumPredictingCategory={prediction.totalNumPredictingCategory}
+                widthFactor={widthFactor}
               />
             </View>
           )}
