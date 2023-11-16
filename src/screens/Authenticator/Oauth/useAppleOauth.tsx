@@ -12,16 +12,16 @@ const useAppleOauth = () => {
   const appleSignIn = async () => {
     // NOTE: AFTER FIRST LOGIN, THE USER'S INFORMATION MAY NOT BE RETURNED.
     // ON FIRST LOGIN, WILL RECEIVE EMAIL and NAME, THEN SUBSEQUENT LOGINS MAY JUST BE A UUID
+    // Therefore, we need to reference the Apple user by their oauthId, not their email
     try {
       setIsLoading(true);
       // performs login request
       const appleAuthRequestResponse = await appleAuth.performRequest({
         requestedOperation: appleAuth.Operation.LOGIN,
-        // Note: it appears putting FULL_NAME first is important, see issue #293
+        // Note: it appears putting FULL_NAME first is important, see issue #293: https://github.com/invertase/react-native-apple-authentication/issues/293
         requestedScopes: [appleAuth.Scope.FULL_NAME, appleAuth.Scope.EMAIL],
       });
-      // ISSUE: https://github.com/invertase/react-native-apple-authentication/issues/293
-      // https://developer.apple.com/documentation/authenticationservices/implementing_user_authentication_with_sign_in_with_apple#3546459
+      // (Handle User Credentials docs) https://developer.apple.com/documentation/authenticationservices/implementing_user_authentication_with_sign_in_with_apple#3546459
       const email = appleAuthRequestResponse.email;
       const oauthId = appleAuthRequestResponse.user; // This is a SPECIAL APPLE ACCOUNT (SAA)
       const firstName = appleAuthRequestResponse.fullName?.givenName || '';
