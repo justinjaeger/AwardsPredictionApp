@@ -8,7 +8,7 @@ const RecommendedUsers = ({ header }: { header?: string }) => {
 
   return (
     <UserSearchResult
-      users={isLoading ? [] : recommendedUsers}
+      users={recommendedUsers}
       onEndReached={fetchMoreResults}
       isLoading={isLoading}
       header={header}

@@ -142,7 +142,7 @@ const EventSelect = () => {
             }
           }}
           showsVerticalScrollIndicator={false}
-          onEndReachedThreshold={0.5} // triggers onEndReached at (X*100)% of list, for example 0.9 = 90% down
+          onEndReachedThreshold={0.8} // triggers onEndReached at (X*100)% of list, for example 0.9 = 90% down
         />
       </View>
     </BackgroundWrapper>

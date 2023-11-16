@@ -9,7 +9,6 @@ const MIN_NUM_OF_FOLLOWINGS_BEFORE_CUSTOM_SUGGESTIONS = 5;
 // pagenatedly fetch recommended users that user isn't currently following
 const useRecommendedUsers = () => {
   const { userId: authUserId } = useAuth();
-  // TODO: Would prefer this at top level because it might not have everything fetched yet
   const { data: allFollowingUsers } = useQueryGetFollowingUsers();
   const authFollowingUserIds = allFollowingUsers?.map((u) => u._id) ?? [];
 

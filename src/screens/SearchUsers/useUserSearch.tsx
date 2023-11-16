@@ -8,7 +8,9 @@ const useUserSearch = () => {
   const { usersIdsAuthUserIsFollowing } = useQueryGetFollowingUsers();
 
   // have this expire - make it part of useQuery
-  const [searchResults, setSearchResults] = useState<WithId<User>[]>([]);
+  const [searchResults, setSearchResults] = useState<WithId<User>[] | undefined>(
+    undefined,
+  );
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [allUsersAreFetched, setAllUsersAreFetched] = useState<boolean>(false);
   const [lastSearchInput, setLastSearchInput] = useState<string>('');
@@ -24,7 +26,7 @@ const useUserSearch = () => {
       setAllUsersAreFetched(true);
     }
     setPageNumber((prev) => prev + 1);
-    setSearchResults((prev) => [...prev, ...newUsers]);
+    setSearchResults((prev) => [...(prev ?? []), ...newUsers]);
   };
 
   const handleSearch = async (s: string) => {
@@ -38,7 +40,7 @@ const useUserSearch = () => {
   };
 
   const reset = () => {
-    setSearchResults([]);
+    setSearchResults(undefined);
     setPageNumber(1);
     setAllUsersAreFetched(false);
     setLastSearchInput('');

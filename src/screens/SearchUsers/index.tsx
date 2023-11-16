@@ -27,7 +27,7 @@ const SearchUsers = () => {
               reset();
             }}
           />
-          {searchResults.length === 0 ? (
+          {searchResults === undefined ? (
             <RecommendedUsers />
           ) : (
             <UserSearchResult

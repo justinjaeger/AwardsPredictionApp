@@ -1,9 +1,9 @@
 import { StackActions, useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, View, useWindowDimensions } from 'react-native';
 import theme from '../../constants/theme';
 import { useAuth } from '../../context/AuthContext';
-import { HeaderLight } from '../Text';
+import { HeaderLight, SubHeader } from '../Text';
 import UserListSkeleton from '../Skeletons/UserListSkeleton';
 import UserSearchResultItem from './UserSearchResultItem';
 import { User, WithId } from '../../types/api';
@@ -26,6 +26,7 @@ const UserSearchResult = ({
   header?: string;
   noHeader?: boolean;
 }) => {
+  const { width } = useWindowDimensions();
   const { userId: authUserId } = useAuth();
   const navigation = useNavigation();
   const { usersIdsAuthUserIsFollowing } = useQueryGetFollowingUsers();
@@ -34,8 +35,6 @@ const UserSearchResult = ({
     // important to push so we can have multiple profiles in same stack
     navigation.dispatch(StackActions.push('Profile', { userId }));
   };
-
-  const noResults = users.length === 0 && !isLoading;
 
   return (
     <FlatList
@@ -58,11 +57,17 @@ const UserSearchResult = ({
           onEndReached && onEndReached();
         }
       }}
-      onEndReachedThreshold={0.5} // triggers onEndReached at (X*100)% of list, for example 0.9 = 90% down
+      onEndReachedThreshold={0.8} // triggers onEndReached at (X*100)% of list, for example 0.9 = 90% down
       scrollEventThrottle={1000}
       keyboardShouldPersistTaps={'always'} // so keyboard doesn't dismiss when tapping on list
       ListHeaderComponent={
-        noHeader || noResults ? null : (
+        users.length === 0 && !isLoading ? (
+          <View style={{ width }}>
+            <SubHeader style={{ textAlign: 'center', marginTop: 20 }}>
+              No Results
+            </SubHeader>
+          </View>
+        ) : noHeader ? null : (
           <HeaderLight
             style={{
               paddingTop: 10,
