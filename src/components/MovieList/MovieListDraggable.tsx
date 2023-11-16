@@ -11,6 +11,7 @@ import ContenderListItem from '../List/ContenderList/ContenderListItem';
 import { SubHeader } from '../Text';
 import { iPrediction } from '../../types/api';
 import ContenderInfoModal from '../ContenderInfoModal';
+import { triggerHaptic } from '../../util/hapticFeedback';
 
 type iMovieListProps = {
   predictions: iPrediction[];
@@ -65,6 +66,9 @@ const MovieListDraggable = ({
         contentContainerStyle={{
           paddingBottom: 150,
           paddingTop: theme.windowMargin,
+        }}
+        onPlaceholderIndexChange={() => {
+          triggerHaptic();
         }}
         ListHeaderComponent={
           <LastUpdatedText lastUpdated={lastUpdatedString} style={{ top: -35 }} />
@@ -121,6 +125,7 @@ const MovieListDraggable = ({
                   onLongPress={
                     isAuthProfile
                       ? () => {
+                          triggerHaptic();
                           toggleDeleteMode(prediction);
                         }
                       : undefined

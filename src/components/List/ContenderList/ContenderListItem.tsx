@@ -151,6 +151,15 @@ const ContenderListItem = ({
             onPressItem();
           }
         }}
+        onLongPress={() => {
+          if (onPressThumbnail) {
+            onPressThumbnail();
+          } else if (onLongPress) {
+            onLongPress();
+          } else {
+            onPressItem();
+          }
+        }}
       >
         <PosterFromTmdb
           movie={movie}

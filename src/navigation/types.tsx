@@ -39,13 +39,11 @@ export type PredictionsParamList = {
   };
   Category: {
     userId: string | undefined;
-    isSelectable?: boolean;
     showEventLink?: boolean;
     onPressItem?: (contenderId: string) => void;
   };
   CategoryFromProfile: {
     userId: string | undefined;
-    isSelectable?: boolean;
     showEventLink?: boolean;
     onPressItem?: (contenderId: string) => void;
   };

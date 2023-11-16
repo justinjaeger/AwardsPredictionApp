@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { PosterSize, getPosterDimensionsByWidth } from '../../constants/posterDimensions';
 import { GestureResponderEvent, View, useWindowDimensions } from 'react-native';
 import COLORS from '../../constants/colors';
@@ -7,6 +7,7 @@ import { Body, Header, SubHeader, SubHeaderLight } from '../Text';
 import theme from '../../constants/theme';
 import { formatPercentage } from '../../util/formatPercentage';
 import useDevice from '../../util/device';
+import { triggerHaptic } from '../../util/hapticFeedback';
 
 const Histogram = ({
   numPredicting,
@@ -56,6 +57,12 @@ const Histogram = ({
     gesturePos && Math.floor((gesturePos.x / totalWidth) * barsToShow) + 1;
   const numPredictingInSelectedSlot =
     (slotThatTouchIsIn && numPredicting?.[slotThatTouchIsIn]) || 0;
+
+  useEffect(() => {
+    if (slotThatTouchIsIn !== undefined) {
+      triggerHaptic();
+    }
+  }, [slotThatTouchIsIn]);
 
   return (
     <View
