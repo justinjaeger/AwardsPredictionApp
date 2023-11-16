@@ -44,6 +44,7 @@ const MovieListDraggable = ({
   }, []);
 
   const toggleDeleteMode = useCallback((prediction: iPrediction) => {
+    triggerHaptic();
     setItemsToDelete((curr) => {
       const newItems = [...curr];
       const index = curr.findIndex((p) => p.contenderId === prediction.contenderId);
@@ -125,7 +126,6 @@ const MovieListDraggable = ({
                   onLongPress={
                     isAuthProfile
                       ? () => {
-                          triggerHaptic();
                           toggleDeleteMode(prediction);
                         }
                       : undefined
@@ -143,6 +143,7 @@ const MovieListDraggable = ({
                           iconName: 'trash-outline',
                           backgroundColor: COLORS.error,
                           onPress: () => {
+                            triggerHaptic();
                             setPredictions(
                               predictions.filter(
                                 (p) => p.contenderId !== prediction.contenderId,
