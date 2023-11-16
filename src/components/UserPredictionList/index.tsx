@@ -37,6 +37,7 @@ const UserPredictionList = ({
         const event = events?.find(
           (e) => e.awardsBody === ps.awardsBody && e.year === ps.year,
         );
+        const categoryData = event?.categories[ps.category as CategoryName];
         return (
           <TouchableHighlight
             key={ps.category + lastUpdatedText}
@@ -79,7 +80,9 @@ const UserPredictionList = ({
                 }}
               >
                 <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
-                  <SubHeader style={{ color: COLORS.lightest }}>{ps.category}</SubHeader>
+                  <SubHeader style={{ color: COLORS.lightest }}>
+                    {categoryData?.name ?? ''}
+                  </SubHeader>
                   <Body style={{ color: COLORS.lightest }}>
                     {'  |  ' + awardsBodyName}
                   </Body>

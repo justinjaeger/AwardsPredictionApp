@@ -38,7 +38,7 @@ const Histogram = ({
   const posterHeight = _posterHeight ?? pHeight;
   const totalWidth = ((_totalWidth ?? windowWidth) - 20) * (containerWidthFactor ?? 1);
 
-  const barsToShow = slots * 2;
+  const barsToShow = slots + 5;
   const barMaxHeight = posterHeight * 1;
 
   const [gesturePos, setGesturePos] = useState<{ x: number; y: number } | undefined>(
