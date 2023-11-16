@@ -115,9 +115,7 @@ const ContenderStats = () => {
       potential: numPoential,
     });
 
-    const orderedCategoryKeys = Object.keys(ORDERED_CATEGORIES) as CategoryName[];
-
-    const sortedByCategoryOrder = orderedCategoryKeys.reduce(
+    const sortedByCategoryOrder = ORDERED_CATEGORIES.reduce(
       (acc: iContenderStatsData[], catName) => {
         const predictions = allSignificantPredictions.filter(
           (p) => p.category === catName,
