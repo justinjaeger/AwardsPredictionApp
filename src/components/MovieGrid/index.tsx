@@ -37,7 +37,7 @@ const MovieGrid = ({
           flexWrap: 'wrap',
           marginLeft: theme.windowMargin,
           marginRight: theme.windowMargin,
-          marginBottom: theme.windowMargin,
+          marginBottom: theme.windowMargin / 2,
           width: totalWidth,
         },
         style,
