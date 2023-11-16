@@ -137,8 +137,7 @@ const Histogram = ({
           style={{
             position: 'absolute',
             right: 0,
-            top: -barMaxHeight,
-            padding: 5,
+            top: -barMaxHeight - (isPad ? 0 : 40),
             backgroundColor: COLORS.primary,
             borderRadius: theme.borderRadius,
             alignItems: 'flex-end',
@@ -147,15 +146,28 @@ const Histogram = ({
             borderColor: hexToRgb(COLORS.white, 0.2),
           }}
         >
-          <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
-            <Header>{numPredictingInSelectedSlot.toString()}</Header>
-            <SubHeaderLight style={{ marginLeft: 5 }}>{'predicting'}</SubHeaderLight>
+          <View style={{ padding: 5 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
+              <Header>{numPredictingInSelectedSlot.toString()}</Header>
+              <SubHeaderLight style={{ marginLeft: 5 }}>{'predicting'}</SubHeaderLight>
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                marginTop: 5,
+              }}
+            >
+              <SubHeaderLight>{'#' + slotThatTouchIsIn?.toString() ?? ''}</SubHeaderLight>
+              {totalNumPredictingCategory ? (
+                <SubHeader>
+                  {formatPercentage(
+                    numPredictingInSelectedSlot / totalNumPredictingCategory,
+                  )}
+                </SubHeader>
+              ) : null}
+            </View>
           </View>
-          {totalNumPredictingCategory ? (
-            <SubHeader style={{ marginLeft: 10, marginTop: 10 }}>
-              {formatPercentage(numPredictingInSelectedSlot / totalNumPredictingCategory)}
-            </SubHeader>
-          ) : null}
         </View>
       ) : null}
     </View>

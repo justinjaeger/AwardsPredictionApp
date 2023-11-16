@@ -4,9 +4,9 @@ import FastImage from 'react-native-fast-image';
 import COLORS from '../../constants/colors';
 import { getPosterDimensionsByWidth, PosterSize } from '../../constants/posterDimensions';
 import { getTmdbImageUrl } from '../../constants';
-import { Label, SmallHeader, SubHeader } from '../Text';
+import { Label } from '../Text';
 import theme from '../../constants/theme';
-import useDevice from '../../util/device';
+import RankingDisplay from '../RankingDisplay';
 
 type iPosterProps = {
   title: string;
@@ -18,8 +18,6 @@ type iPosterProps = {
 };
 
 const Poster = ({ path, title, width, ranking, onPress, styles }: iPosterProps) => {
-  const { isPad } = useDevice();
-
   const [isPressed, setIsPressed] = useState<boolean>(false);
 
   const posterDimensions = getPosterDimensionsByWidth(width - theme.posterMargin * 2);
@@ -33,20 +31,6 @@ const Poster = ({ path, title, width, ranking, onPress, styles }: iPosterProps) 
     opacity: isPressed ? 0.8 : 1,
   };
 
-  const Text = isPad ? SmallHeader : SubHeader;
-
-  const sizeSpecificStyles =
-    posterDimensions.height > 50
-      ? {
-          borderWidth: 1,
-          paddingRight: 2,
-          paddingLeft: 2,
-        }
-      : {
-          borderTopWidth: 1,
-          borderLeftWidth: 1,
-        };
-
   return (
     <TouchableHighlight
       onPress={onPress || undefined}
@@ -56,29 +40,7 @@ const Poster = ({ path, title, width, ranking, onPress, styles }: iPosterProps) 
       disabled={!onPress}
     >
       <>
-        {ranking !== undefined ? (
-          <View
-            style={{
-              position: 'absolute',
-              zIndex: 1,
-              backgroundColor: 'rgba(0,0,0,0.7)',
-              borderBottomRightRadius: 5,
-              borderTopLeftRadius: 5,
-              borderColor: COLORS.secondary,
-              padding: isPad ? 5 : 0,
-              ...sizeSpecificStyles,
-            }}
-          >
-            <Text
-              style={{
-                color: COLORS.white,
-                fontWeight: '600',
-              }}
-            >
-              {ranking.toString()}
-            </Text>
-          </View>
-        ) : null}
+        {ranking !== undefined ? <RankingDisplay ranking={ranking} /> : null}
         {path ? (
           <FastImage
             style={style as Record<string, unknown>}
