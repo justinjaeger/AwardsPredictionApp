@@ -9,9 +9,11 @@ import useGoogleOAuth from './useGoogleOauth';
 import useAppleOauth from './useAppleOauth';
 import { useAuth } from '../../../context/AuthContext';
 import LoadingStatueModal from '../../../components/LoadingStatueModal';
+import useDevice from '../../../util/device';
 
 const OauthPage = () => {
   const { isLoadingAuth } = useAuth();
+  const { isAndroid } = useDevice();
   const { googleSignIn, isLoading: isLoadingGoogleAuth } = useGoogleOAuth();
   const { appleSignIn, isLoading: isLoadingAppleAuth } = useAppleOauth();
 
@@ -32,7 +34,7 @@ const OauthPage = () => {
         }}
       >
         <GoogleOauthButton onPress={googleSignIn} />
-        <AppleOauthButton onPress={appleSignIn} />
+        {!isAndroid ? <AppleOauthButton onPress={appleSignIn} /> : null}
         <EmailButton />
         <Body
           style={{
