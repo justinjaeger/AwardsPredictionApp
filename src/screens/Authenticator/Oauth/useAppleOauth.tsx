@@ -3,8 +3,10 @@ import { appleAuth } from '@invertase/react-native-apple-authentication';
 import Snackbar from '../../../components/Snackbar';
 import { useAuth } from '../../../context/AuthContext';
 import MongoApi from '../../../services/api/requests';
+import useDevice from '../../../util/device';
 
 const useAppleOauth = () => {
+  const { isAndroid } = useDevice();
   const { signInUser } = useAuth();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -77,6 +79,9 @@ const useAppleOauth = () => {
   };
 
   useEffect(() => {
+    if (isAndroid) {
+      return;
+    }
     // onCredentialRevoked returns a function that will remove the event listener. useEffect will call this function when the component unmounts
     return appleAuth.onCredentialRevoked(async () => {
       console.warn('If this function executes, User Credentials have been Revoked');
