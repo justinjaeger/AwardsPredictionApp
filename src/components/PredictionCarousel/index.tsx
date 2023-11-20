@@ -131,7 +131,7 @@ const PredictionCarousel = ({
               style={{ marginRight: 15 }}
               isDisabled
             />
-            <SubHeader>{user.name}</SubHeader>
+            <SubHeader>{user.name ?? ''}</SubHeader>
           </>
         </TouchableOpacity>
       ) : null}

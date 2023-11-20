@@ -16,13 +16,7 @@ import useQueryGetCommunityPredictions from '../../hooks/queries/useQueryGetComm
 import BasicModal from '../BasicModal';
 import useDevice from '../../util/device';
 
-const ContenderInfoModal = ({
-  prediction,
-  onNavigateAway,
-}: {
-  prediction: iPrediction;
-  onNavigateAway?: () => void;
-}) => {
+const ContenderInfoHeader = ({ prediction }: { prediction: iPrediction }) => {
   const { isPad } = useDevice();
   const webViewNavigation = useNavigation<MainScreenNavigationProp>();
   const { width, height } = useWindowDimensions();
@@ -34,10 +28,6 @@ const ContenderInfoModal = ({
   const [showFullPoster, setShowFullPoster] = useState<boolean>(false);
 
   if (!communityPredictions) return null;
-
-  const close = () => {
-    onNavigateAway && onNavigateAway();
-  };
 
   const posterPath = person?.posterPath ?? movie?.posterPath ?? null;
   const posterTitle = person?.name ?? movie?.title ?? '';
@@ -127,13 +117,12 @@ const ContenderInfoModal = ({
             {person ? (
               <ExternalLinkButton
                 text={'Actor Info'}
-                onPressImmediate={() => {
+                onPress={() => {
                   webViewNavigation.navigate('WebView', {
                     uri: `https://www.themoviedb.org/person/${person.tmdbId}/`,
                     title: person.name || '',
                   });
                 }}
-                onPressDelay={() => close()}
               />
             ) : (
               <View />
@@ -141,13 +130,12 @@ const ContenderInfoModal = ({
             {movie ? (
               <ExternalLinkButton
                 text={person || song ? 'Movie Info' : 'More Info'}
-                onPressImmediate={() => {
+                onPress={() => {
                   webViewNavigation.navigate('WebView', {
                     uri: `https://www.themoviedb.org/movie/${movie.tmdbId}/`,
                     title: movie?.title || '',
                   });
                 }}
-                onPressDelay={() => close()}
               />
             ) : null}
           </View>
@@ -157,4 +145,4 @@ const ContenderInfoModal = ({
   );
 };
 
-export default ContenderInfoModal;
+export default ContenderInfoHeader;

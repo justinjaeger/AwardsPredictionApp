@@ -7,28 +7,17 @@ import useDevice from '../../util/device';
 
 const ExternalLinkButton = ({
   text,
-  onPressImmediate,
-  onPressDelay,
-  delay,
+  onPress,
   style,
 }: {
   text: string;
-  onPressImmediate: () => void;
-  onPressDelay?: () => void;
-  delay?: number;
+  onPress: () => void;
   style?: StyleProp<ViewStyle>;
 }) => {
-  const { isPad, isAndroid } = useDevice();
+  const { isPad } = useDevice();
   return (
     <TouchableHighlight
-      onPress={() => {
-        onPressImmediate();
-        if (onPressDelay) {
-          setTimeout(() => {
-            onPressDelay();
-          }, delay ?? (isAndroid ? 800 : 0));
-        }
-      }}
+      onPress={onPress}
       style={[
         {
           alignItems: 'center',

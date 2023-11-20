@@ -66,6 +66,10 @@ export type PredictionsParamList = {
   UpdateProfileInfo: undefined;
   // FRIEND SCREENS
   SearchFriends: undefined;
+  // MODALS
+  ContenderInfoModal: {
+    prediction: iPrediction;
+  };
 };
 
 export type AdminNavigationProp = StackNavigationProp<AdminParamList>;

@@ -124,10 +124,6 @@ const EventSelect = () => {
                 key={item._id}
                 predictionSets={item.recentPredictionSets || []}
                 userId={item._id}
-                userInfo={{
-                  name: item.name || item.username || '',
-                  image: item.image,
-                }}
               />
             </View>
           )}
