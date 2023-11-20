@@ -213,10 +213,6 @@ const Profile = () => {
                 <PredictionCarousel
                   predictionSets={predictionSets}
                   userId={userId}
-                  userInfo={{
-                    name: user?.name || '',
-                    image: user?.image || '',
-                  }}
                   style={{ marginTop: 10, minHeight: 10 }}
                 />
               </>

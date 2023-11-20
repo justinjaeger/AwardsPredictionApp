@@ -20,26 +20,23 @@ import { SubHeader } from '../Text';
 import UserPredictionList from '../UserPredictionList';
 import CarouselArrow from './CarouselArrow';
 import { iRecentPrediction } from '../../types/api';
+import useProfileUser from '../../screens/Profile/useProfileUser';
 
 const PredictionCarousel = ({
   predictionSets,
   userId,
-  userInfo,
   enableArrows,
   style,
 }: {
   predictionSets: iRecentPrediction[];
   userId: string;
-  userInfo?: {
-    name: string;
-    image: string | undefined;
-  };
   enableArrows?: boolean;
   style?: StyleProp<ViewStyle>;
 }) => {
   const { width } = useWindowDimensions();
   const navigation = useNavigation();
   const { isPad } = useDevice();
+  const { user } = useProfileUser(userId);
 
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [disableManualScroll, setDisableManualScroll] = useState<boolean>(false);
@@ -108,7 +105,7 @@ const PredictionCarousel = ({
         marginBottom: 10,
       }}
     >
-      {userInfo ? (
+      {user ? (
         <TouchableOpacity
           style={{
             alignSelf: 'flex-start',
@@ -127,12 +124,12 @@ const PredictionCarousel = ({
         >
           <>
             <ProfileImage
-              image={userInfo.image}
+              image={user.image}
               imageSize={40}
               style={{ marginRight: 15 }}
               isDisabled
             />
-            <SubHeader>{userInfo.name}</SubHeader>
+            <SubHeader>{user.name}</SubHeader>
           </>
         </TouchableOpacity>
       ) : null}
