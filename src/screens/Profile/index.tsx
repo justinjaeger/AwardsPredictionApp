@@ -105,7 +105,7 @@ const Profile = () => {
               <ProfileImage
                 image={user?.image}
                 onPress={isAuthUser ? () => onPressProfileInfo() : undefined}
-                style={{ marginLeft: 10, marginRight: 15 }}
+                style={{ marginRight: 15 }}
               />
               <View style={{ flexDirection: 'column', paddingLeft: 10 }}>
                 <TouchableHighlight
@@ -136,9 +136,7 @@ const Profile = () => {
               <TouchableHighlight
                 onPress={isAuthUser ? () => onPressProfileInfo() : undefined}
                 style={{
-                  padding: 10,
-                  margin: 20,
-                  marginTop: 0,
+                  margin: theme.windowMargin,
                   borderRadius: theme.borderRadius,
                 }}
                 underlayColor={COLORS.disabled}
@@ -154,7 +152,7 @@ const Profile = () => {
                 alignItems: 'center',
                 justifyContent: 'flex-start',
                 width: '100%',
-                marginLeft: theme.windowMargin + 10,
+                marginLeft: theme.windowMargin,
               }}
             >
               <FollowCountButton
@@ -182,7 +180,7 @@ const Profile = () => {
                 alignItems: 'center',
                 justifyContent: 'flex-start',
                 width: '100%',
-                marginLeft: theme.windowMargin + 10,
+                marginLeft: theme.windowMargin,
                 marginTop: 10,
               }}
             >
@@ -203,7 +201,6 @@ const Profile = () => {
                 <HeaderLight
                   style={{
                     alignSelf: 'flex-start',
-                    marginBottom: 10,
                     marginTop: 40,
                     marginLeft: theme.windowMargin,
                   }}
@@ -213,6 +210,7 @@ const Profile = () => {
                 <PredictionCarousel
                   predictionSets={predictionSets}
                   userId={userId}
+                  hideUserInfo
                   style={{ marginTop: 10, minHeight: 10 }}
                 />
               </>
@@ -224,10 +222,10 @@ const Profile = () => {
                     alignSelf: 'flex-start',
                     marginTop: 20,
                     marginLeft: theme.windowMargin,
+                    marginBottom: -10,
                   }}
                 >
-                  {(isAuthUser ? 'My' : user.name ? `${user.name}'s` : 'All') +
-                    ' Predictions'}
+                  {(isAuthUser ? 'My' : 'All') + ' Predictions'}
                 </HeaderLight>
                 <EventList user={user} events={userEvents} isProfile={true} />
               </>

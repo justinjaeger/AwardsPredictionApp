@@ -25,11 +25,13 @@ import useProfileUser from '../../screens/Profile/useProfileUser';
 const PredictionCarousel = ({
   predictionSets,
   userId,
+  hideUserInfo,
   enableArrows,
   style,
 }: {
   predictionSets: iRecentPrediction[];
   userId: string;
+  hideUserInfo?: boolean;
   enableArrows?: boolean;
   style?: StyleProp<ViewStyle>;
 }) => {
@@ -105,7 +107,7 @@ const PredictionCarousel = ({
         marginBottom: 10,
       }}
     >
-      {user ? (
+      {user && !hideUserInfo ? (
         <TouchableOpacity
           style={{
             alignSelf: 'flex-start',
