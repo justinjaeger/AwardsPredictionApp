@@ -8,6 +8,7 @@ import UserListSkeleton from '../Skeletons/UserListSkeleton';
 import UserSearchResultItem from './UserSearchResultItem';
 import { User, WithId } from '../../types/api';
 import useQueryGetFollowingUsers from '../../hooks/queries/useQueryGetFollowingUsers';
+import useDevice from '../../util/device';
 
 export const IMAGE_SIZE = 50;
 
@@ -26,6 +27,7 @@ const UserSearchResult = ({
   header?: string;
   noHeader?: boolean;
 }) => {
+  const { isPad } = useDevice();
   const { width } = useWindowDimensions();
   const { userId: authUserId } = useAuth();
   const navigation = useNavigation();
@@ -57,7 +59,7 @@ const UserSearchResult = ({
           onEndReached && onEndReached();
         }
       }}
-      onEndReachedThreshold={0.8} // triggers onEndReached at (X*100)% of list, for example 0.9 = 90% down
+      onEndReachedThreshold={isPad ? 0.8 : 0.5} // triggers onEndReached at (X*100)% of list, for example 0.9 = 90% down
       scrollEventThrottle={1000}
       keyboardShouldPersistTaps={'always'} // so keyboard doesn't dismiss when tapping on list
       ListHeaderComponent={

@@ -12,10 +12,12 @@ import theme from '../../../constants/theme';
 import RecommendedUsers from '../../../components/RecommendedUsers';
 import CarouselSkeleton from '../../../components/Skeletons/CarouselSkeleton';
 import EventBoxSkeleton from '../../../components/Skeletons/EventBoxSkeleton';
+import useDevice from '../../../util/device';
 
 const EventSelect = () => {
   const { width } = useWindowDimensions();
   const { userId: authUserId } = useAuth();
+  const { isPad } = useDevice();
 
   const {
     data: events,
@@ -142,7 +144,7 @@ const EventSelect = () => {
             }
           }}
           showsVerticalScrollIndicator={false}
-          onEndReachedThreshold={0.8} // triggers onEndReached at (X*100)% of list, for example 0.9 = 90% down
+          onEndReachedThreshold={isPad ? 0.8 : 0.5} // triggers onEndReached at (X*100)% of list, for example 0.9 = 90% down
         />
       </View>
     </BackgroundWrapper>
