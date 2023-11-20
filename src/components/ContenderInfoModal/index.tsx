@@ -64,7 +64,7 @@ const ContenderInfoModal = ({
       visible={visible}
       onClose={() => close()}
       width={width}
-      height={height * 0.8}
+      height={height * 0.85}
       childStyle={{
         height: '100%',
         justifyContent: 'space-between',
