@@ -1,24 +1,34 @@
-import { TouchableHighlight } from 'react-native-gesture-handler';
 import { BodyBold } from '../Text';
 import COLORS from '../../constants/colors';
 import React from 'react';
 import theme from '../../constants/theme';
-import { StyleProp, ViewStyle } from 'react-native';
+import { StyleProp, TouchableHighlight, ViewStyle } from 'react-native';
 import useDevice from '../../util/device';
 
 const ExternalLinkButton = ({
   text,
-  onPress,
+  onPressImmediate,
+  onPressDelay,
+  delay,
   style,
 }: {
   text: string;
-  onPress: () => void;
+  onPressImmediate: () => void;
+  onPressDelay?: () => void;
+  delay?: number;
   style?: StyleProp<ViewStyle>;
 }) => {
-  const { isPad } = useDevice();
+  const { isPad, isAndroid } = useDevice();
   return (
     <TouchableHighlight
-      onPress={onPress}
+      onPress={() => {
+        onPressImmediate();
+        if (onPressDelay) {
+          setTimeout(() => {
+            onPressDelay();
+          }, delay ?? (isAndroid ? 800 : 0));
+        }
+      }}
       style={[
         {
           alignItems: 'center',

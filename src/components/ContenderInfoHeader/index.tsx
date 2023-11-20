@@ -127,13 +127,13 @@ const ContenderInfoModal = ({
             {person ? (
               <ExternalLinkButton
                 text={'Actor Info'}
-                onPress={() => {
-                  close();
+                onPressImmediate={() => {
                   webViewNavigation.navigate('WebView', {
                     uri: `https://www.themoviedb.org/person/${person.tmdbId}/`,
                     title: person.name || '',
                   });
                 }}
+                onPressDelay={() => close()}
               />
             ) : (
               <View />
@@ -141,14 +141,13 @@ const ContenderInfoModal = ({
             {movie ? (
               <ExternalLinkButton
                 text={person || song ? 'Movie Info' : 'More Info'}
-                // eslint-disable-next-line sonarjs/no-identical-functions
-                onPress={() => {
-                  close();
+                onPressImmediate={() => {
                   webViewNavigation.navigate('WebView', {
                     uri: `https://www.themoviedb.org/movie/${movie.tmdbId}/`,
                     title: movie?.title || '',
                   });
                 }}
+                onPressDelay={() => close()}
               />
             ) : null}
           </View>

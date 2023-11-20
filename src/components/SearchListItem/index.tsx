@@ -109,7 +109,7 @@ const ContenderListItem = ({
               <>
                 <ExternalLinkButton
                   text={'More Info'}
-                  onPress={() => {
+                  onPressImmediate={() => {
                     navigation.navigate('WebView', {
                       uri: `https://www.themoviedb.org/person/${item.tmdbId}/`,
                       title: item.name || '',
@@ -118,7 +118,7 @@ const ContenderListItem = ({
                 />
                 <ExternalLinkButton
                   text={'Film'}
-                  onPress={() => {
+                  onPressImmediate={() => {
                     navigation.navigate('WebView', {
                       uri: `https://www.themoviedb.org/movie/${item.tmdbId}/`,
                       title: item?.title || '',
@@ -131,7 +131,7 @@ const ContenderListItem = ({
                 <ExternalLinkButton
                   text={'More Info'}
                   // eslint-disable-next-line sonarjs/no-identical-functions
-                  onPress={() => {
+                  onPressImmediate={() => {
                     navigation.navigate('WebView', {
                       uri: `https://www.themoviedb.org/movie/${item.tmdbId}/`,
                       title: item?.title || '',
@@ -140,7 +140,7 @@ const ContenderListItem = ({
                 />
                 <ExternalLinkButton
                   text={'Cast'}
-                  onPress={() => {
+                  onPressImmediate={() => {
                     navigation.navigate('WebView', {
                       uri: `https://www.themoviedb.org/movie/${item.tmdbId}/cast/`,
                       title: item?.title || '',
