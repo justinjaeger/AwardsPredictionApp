@@ -9,11 +9,12 @@ import { useAuth } from '../../../context/AuthContext';
 import LoadingStatueModal from '../../../components/LoadingStatueModal';
 import MongoApi from '../../../services/api/requests';
 import useMagicLinkListener from './useMagicLinkListener';
+import { UserRole } from '../../../types/api';
 
 type iAuthScreen = 'signIn' | 'confirmCode';
 
 const Auth = () => {
-  const { isLoadingAuth } = useAuth();
+  const { isLoadingAuth, signInUser } = useAuth();
 
   const { isLoading: isLoadingVerification } = useMagicLinkListener((message: string) => {
     // onFail callback:
@@ -38,6 +39,9 @@ const Auth = () => {
     }
     if (!user) {
       Snackbar.error('error signing in with email');
+    } else if (user.role === UserRole.NO_AUTH) {
+      // if user is role "NO_AUTH", sign them in directly. This is for Play Store testers
+      signInUser({ userId: user._id, email: user.email, role: user.role });
     } else {
       // whether user is new or not, send email to log in
       setAuthScreen('confirmCode');
