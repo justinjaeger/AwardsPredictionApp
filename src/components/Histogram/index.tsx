@@ -37,6 +37,7 @@ const Histogram = ({
   );
   const posterHeight = _posterHeight ?? pHeight;
   const totalWidth = ((_totalWidth ?? windowWidth) - 20) * (containerWidthFactor ?? 1);
+  const marginIfCenter = (windowWidth - totalWidth) / 2;
 
   const barsToShow = slots + 5;
   const barMaxHeight = posterHeight * 1;
@@ -46,16 +47,24 @@ const Histogram = ({
   );
 
   const handleGesture = (e: GestureResponderEvent) => {
+    e.preventDefault();
     if (!enableHoverInfo) return;
-    const x = e.nativeEvent.locationX;
-    const y = e.nativeEvent.locationY;
-    setGesturePos({ x, y });
+    const x = e.nativeEvent.pageX - marginIfCenter + 5;
+    const y = e.nativeEvent.pageY;
+    const touchIsAboveHistogram = y <= 0;
+    setGesturePos(touchIsAboveHistogram ? undefined : { x, y });
   };
 
   const widthOfEachBar = totalWidth / barsToShow;
 
-  const slotThatTouchIsIn =
+  let slotThatTouchIsIn =
     gesturePos && Math.floor((gesturePos.x / totalWidth) * barsToShow) + 1;
+
+  // adjust for margins:
+  slotThatTouchIsIn =
+    slotThatTouchIsIn && slotThatTouchIsIn > barsToShow
+      ? barsToShow
+      : Math.max(slotThatTouchIsIn, 1);
   const numPredictingInSelectedSlot =
     (slotThatTouchIsIn && numPredicting?.[slotThatTouchIsIn]) || 0;
 
@@ -84,7 +93,9 @@ const Histogram = ({
       }}
       onTouchStart={handleGesture}
       onTouchMove={handleGesture}
-      onTouchEnd={() => setGesturePos(undefined)}
+      onTouchEnd={() => {
+        setGesturePos(undefined);
+      }}
     >
       {new Array(barsToShow).fill(null).map((x, i) => {
         const place = i + 1;
