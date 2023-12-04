@@ -17,6 +17,7 @@ import { useEvent } from '../../../context/EventContext';
 import NumPredictingItem from '../../../components/ItemStatBox.tsx';
 import { SubmitButton } from '../../../components/Buttons';
 import ContenderInfoHeader from '../../../components/ContenderInfoHeader';
+import BackgroundWrapper from '../../../components/BackgroundWrapper';
 
 const ContenderInfoModal = () => {
   const route = useRoute<RouteProp<PredictionsParamList, 'ContenderInfoModal'>>();
@@ -50,7 +51,7 @@ const ContenderInfoModal = () => {
   const widthFactor = isPad ? theme.padHistogramContainerWidth : 1;
 
   return (
-    <View style={{ flex: 1 }}>
+    <BackgroundWrapper>
       <View>
         {communityPrediction ? (
           <ContenderInfoHeader prediction={communityPrediction} />
@@ -94,7 +95,7 @@ const ContenderInfoModal = () => {
           }}
         />
       </View>
-    </View>
+    </BackgroundWrapper>
   );
 };
 
