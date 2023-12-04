@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, View, useWindowDimensions } from 'react-native';
+import { FlatList, TouchableOpacity, View, useWindowDimensions } from 'react-native';
 import { Header, Label, SmallHeader, SubHeader, SubHeaderLight } from '../Text';
 import { CategoryName, EventModel, Phase, WithId, iPrediction } from '../../types/api';
 import { getNumPredicting, getTotalNumPredicting } from '../../util/getNumPredicting';
@@ -24,6 +24,8 @@ const NumPredictingItem = ({
   totalNumPredictingCategory,
   disableCategoryLink,
   widthFactor,
+  disableHistogramTouch,
+  flatListRef,
 }: {
   category: CategoryName;
   event: WithId<EventModel>;
@@ -32,6 +34,8 @@ const NumPredictingItem = ({
   totalNumPredictingCategory: number;
   disableCategoryLink?: boolean;
   widthFactor?: number;
+  disableHistogramTouch?: boolean;
+  flatListRef?: React.RefObject<FlatList<any>>;
 }) => {
   const { width } = useWindowDimensions();
   const navigation = useNavigation<PredictionsNavigationProp>();
@@ -107,6 +111,8 @@ const NumPredictingItem = ({
           slots={slots}
           containerWidthFactor={widthFactor}
           enableHoverInfo
+          disableHistogramTouch={disableHistogramTouch}
+          flatListRef={flatListRef}
         />
       ) : null}
       <View

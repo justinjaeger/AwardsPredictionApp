@@ -35,6 +35,7 @@ const ContenderStats = () => {
   const { movieTmdbId, event } = route.params;
   const { store } = useTmdbDataStore();
   const { width } = useWindowDimensions();
+  const ref = React.useRef<FlatList<iContenderStatsData>>(null);
 
   const { data: communityPredictions } = useQueryGetCommunityPredictions(event);
 
@@ -53,6 +54,8 @@ const ContenderStats = () => {
   const [sortSetting, setSortSetting] = useState<'likelihood' | 'cat-order'>(
     'likelihood',
   );
+
+  const [isScrolling, setIsScrolling] = useState(false);
 
   const [dataInCategoryOrder, setDataInCategoryOrder] = useState<iContenderStatsData[]>(
     [],
@@ -136,6 +139,9 @@ const ContenderStats = () => {
         <FlatList
           data={sortSetting === 'cat-order' ? dataInCategoryOrder : dataInLikelihoodOrder}
           showsVerticalScrollIndicator={false}
+          onMomentumScrollBegin={() => setIsScrolling(true)}
+          onMomentumScrollEnd={() => setIsScrolling(false)}
+          ref={ref}
           ListHeaderComponent={
             <>
               <ContenderInfoHeader
@@ -205,6 +211,8 @@ const ContenderStats = () => {
                 totalNumPredictingTop={prediction.totalNumPredictingTop}
                 totalNumPredictingCategory={prediction.totalNumPredictingCategory}
                 widthFactor={widthFactor}
+                disableHistogramTouch={isScrolling}
+                flatListRef={ref}
               />
             </View>
           )}

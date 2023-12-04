@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { PosterSize, getPosterDimensionsByWidth } from '../../constants/posterDimensions';
-import { GestureResponderEvent, View, useWindowDimensions } from 'react-native';
+import { FlatList, GestureResponderEvent, View, useWindowDimensions } from 'react-native';
 import COLORS from '../../constants/colors';
 import { hexToRgb } from '../../util/hexToRgb';
 import { Body, Header, SubHeader, SubHeaderLight } from '../Text';
@@ -19,6 +19,8 @@ const Histogram = ({
   posterHeight: _posterHeight,
   enableHoverInfo,
   containerWidthFactor,
+  disableHistogramTouch,
+  flatListRef,
 }: {
   numPredicting: Record<number, number>;
   totalNumPredicting: number;
@@ -29,6 +31,8 @@ const Histogram = ({
   posterHeight?: number;
   enableHoverInfo?: boolean;
   containerWidthFactor?: number;
+  disableHistogramTouch?: boolean;
+  flatListRef?: React.RefObject<FlatList<any>>;
 }) => {
   const { isPad } = useDevice();
   const { width: windowWidth } = useWindowDimensions();
@@ -74,6 +78,10 @@ const Histogram = ({
     }
   }, [slotThatTouchIsIn]);
 
+  const enableScroll = (scrollEnabled: boolean) => {
+    flatListRef?.current?.setNativeProps?.({ scrollEnabled });
+  };
+
   return (
     <View
       style={{
@@ -91,10 +99,18 @@ const Histogram = ({
         borderRadius: theme.borderRadius,
         backgroundColor: enableHoverInfo ? hexToRgb(COLORS.gray, 0.05) : undefined,
       }}
-      onTouchStart={handleGesture}
-      onTouchMove={handleGesture}
+      onStartShouldSetResponder={() => !disableHistogramTouch}
+      onMoveShouldSetResponder={() => !disableHistogramTouch}
+      onResponderGrant={(e) => {
+        handleGesture(e);
+        enableScroll(false);
+      }}
+      onResponderMove={(e) => {
+        handleGesture(e);
+      }}
       onTouchEnd={() => {
         setGesturePos(undefined);
+        enableScroll(true);
       }}
     >
       {new Array(barsToShow).fill(null).map((x, i) => {
