@@ -8,7 +8,7 @@ import theme from './theme';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import { GOOGLE_AUTH_CLIENT_ID } from './config';
+import { GOOGLE_AUTH_CLIENT_ID_IOS, GOOGLE_AUTH_CLIENT_ID_WEB } from './config';
 import { useForceUpdate } from './hooks/useForceUpdate';
 import { Alert, Linking } from 'react-native';
 import BackgroundWrapper from './components/BackgroundWrapper';
@@ -18,7 +18,8 @@ const queryClient = new QueryClient();
 // https://github.com/react-native-google-signin/google-signin/blob/master/docs/ios-guide.md
 GoogleSignin.configure({
   //   scopes: ['https://www.googleapis.com/auth/userinfo.email'], // default is email and profile so shouldn't need this
-  iosClientId: GOOGLE_AUTH_CLIENT_ID, // only for iOS
+  iosClientId: GOOGLE_AUTH_CLIENT_ID_IOS, // only for iOS
+  webClientId: GOOGLE_AUTH_CLIENT_ID_WEB,
 });
 
 const App = () => {

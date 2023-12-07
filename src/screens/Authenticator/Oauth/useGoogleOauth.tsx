@@ -14,6 +14,7 @@ const useGoogleOAuth = () => {
       setIsLoading(true);
       // google modal pops up, we get the user info
       const res = await GoogleSignin.signIn();
+      console.log('res', res);
       const { email, name } = res.user;
       // see if this user exists in our db
       const { data: existingUser } = await MongoApi.getUser({ email });
