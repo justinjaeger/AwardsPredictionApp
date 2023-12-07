@@ -99,6 +99,7 @@ const Histogram = ({
         borderRadius: theme.borderRadius,
         backgroundColor: enableHoverInfo ? hexToRgb(COLORS.gray, 0.05) : undefined,
       }}
+      pointerEvents={enableHoverInfo ? 'auto' : 'none'}
       onStartShouldSetResponder={() => !disableHistogramTouch}
       onMoveShouldSetResponder={() => !disableHistogramTouch}
       onResponderGrant={(e) => {
