@@ -55,8 +55,6 @@ const ContenderStats = () => {
     'likelihood',
   );
 
-  const [isScrolling, setIsScrolling] = useState(false);
-
   const [dataInCategoryOrder, setDataInCategoryOrder] = useState<iContenderStatsData[]>(
     [],
   );
@@ -139,8 +137,6 @@ const ContenderStats = () => {
         <FlatList
           data={sortSetting === 'cat-order' ? dataInCategoryOrder : dataInLikelihoodOrder}
           showsVerticalScrollIndicator={false}
-          onMomentumScrollBegin={() => setIsScrolling(true)}
-          onMomentumScrollEnd={() => setIsScrolling(false)}
           ref={ref}
           ListHeaderComponent={
             <>
@@ -211,7 +207,6 @@ const ContenderStats = () => {
                 totalNumPredictingTop={prediction.totalNumPredictingTop}
                 totalNumPredictingCategory={prediction.totalNumPredictingCategory}
                 widthFactor={widthFactor}
-                disableHistogramTouch={isScrolling}
                 flatListRef={ref}
               />
             </View>

@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { PosterSize, getPosterDimensionsByWidth } from '../../constants/posterDimensions';
-import { FlatList, GestureResponderEvent, View, useWindowDimensions } from 'react-native';
+import {
+  FlatList,
+  GestureResponderEvent,
+  ScrollView,
+  View,
+  useWindowDimensions,
+} from 'react-native';
 import COLORS from '../../constants/colors';
 import { hexToRgb } from '../../util/hexToRgb';
 import { Body, Header, SubHeader, SubHeaderLight } from '../Text';
@@ -19,8 +25,8 @@ const Histogram = ({
   posterHeight: _posterHeight,
   enableHoverInfo,
   containerWidthFactor,
-  disableHistogramTouch,
   flatListRef,
+  scrollRef,
 }: {
   numPredicting: Record<number, number>;
   totalNumPredicting: number;
@@ -31,8 +37,9 @@ const Histogram = ({
   posterHeight?: number;
   enableHoverInfo?: boolean;
   containerWidthFactor?: number;
-  disableHistogramTouch?: boolean;
+  // important props for enabling/disabling scroll when inside a scrollview:
   flatListRef?: React.RefObject<FlatList<any>>;
+  scrollRef?: React.MutableRefObject<ScrollView>;
 }) => {
   const { isPad } = useDevice();
   const { width: windowWidth } = useWindowDimensions();
@@ -78,8 +85,11 @@ const Histogram = ({
     }
   }, [slotThatTouchIsIn]);
 
+  // lets us set the props of the scrollview from outside the component
+  // better for performance since it won't re-render the component
   const enableScroll = (scrollEnabled: boolean) => {
     flatListRef?.current?.setNativeProps?.({ scrollEnabled });
+    scrollRef?.current?.setNativeProps?.({ scrollEnabled });
   };
 
   return (
@@ -100,8 +110,8 @@ const Histogram = ({
         backgroundColor: enableHoverInfo ? hexToRgb(COLORS.gray, 0.05) : undefined,
       }}
       pointerEvents={enableHoverInfo ? 'auto' : 'none'}
-      onStartShouldSetResponder={() => !disableHistogramTouch}
-      onMoveShouldSetResponder={() => !disableHistogramTouch}
+      onStartShouldSetResponder={() => true}
+      onMoveShouldSetResponder={() => true}
       onResponderGrant={(e) => {
         handleGesture(e);
         enableScroll(false);
