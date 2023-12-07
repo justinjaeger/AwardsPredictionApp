@@ -6,22 +6,13 @@ import Snackbar from '../../../components/Snackbar';
 import { HeaderLight } from '../../../components/Text';
 import COLORS from '../../../constants/colors';
 import { useAuth } from '../../../context/AuthContext';
-import LoadingStatueModal from '../../../components/LoadingStatueModal';
 import MongoApi from '../../../services/api/requests';
-import useMagicLinkListener from './useMagicLinkListener';
 import { UserRole } from '../../../types/api';
 
 type iAuthScreen = 'signIn' | 'confirmCode';
 
 const Auth = () => {
-  const { isLoadingAuth, signInUser } = useAuth();
-
-  const { isLoading: isLoadingVerification } = useMagicLinkListener((message: string) => {
-    // onFail callback:
-    console.error(message);
-    Snackbar.error(message);
-    setAuthScreen('signIn');
-  });
+  const { signInUser } = useAuth();
 
   const [email, setEmail] = useState<string>('');
   const validEmail = email.length > 0 && email.includes('.') && email.includes('@');
@@ -51,53 +42,47 @@ const Auth = () => {
   };
 
   return (
-    <>
-      <LoadingStatueModal
-        visible={isLoadingAuth || isLoadingVerification}
-        text={isLoadingAuth ? 'Signing in...' : 'Verifying...'}
-      />
-      <ScrollView
-        style={{ width: '100%', backgroundColor: COLORS.primary }}
-        contentContainerStyle={{
-          alignItems: 'center',
-          width: '100%',
-          marginTop: 20,
-        }}
-        keyboardShouldPersistTaps={'always'}
-        onScroll={() => Keyboard.dismiss()}
-      >
-        {authScreen === 'signIn' ? (
-          <View style={{ width: '80%', maxWidth: 300, backgroundColor: COLORS.primary }}>
-            <FormInput
-              placeholder="Email"
-              value={email}
-              setValue={(v) => {
-                setEmail(v);
-              }}
-              textContentType="emailAddress"
-            />
-            <SubmitButton
-              text={'Submit'}
-              onPress={() => submitEmail()}
-              disabled={!validEmail}
-              loading={loading}
-              style={{ marginTop: 20 }}
-            />
-          </View>
-        ) : (
-          <View style={{ width: '100%', backgroundColor: COLORS.primary }}>
-            <HeaderLight
-              style={{ textAlign: 'center', fontWeight: '500' }}
-            >{`We sent a link to ${email}`}</HeaderLight>
-            <SubmitButton
-              text={'Send again'}
-              onPress={() => setAuthScreen('signIn')}
-              style={{ marginTop: 30 }}
-            />
-          </View>
-        )}
-      </ScrollView>
-    </>
+    <ScrollView
+      style={{ width: '100%', backgroundColor: COLORS.primary }}
+      contentContainerStyle={{
+        alignItems: 'center',
+        width: '100%',
+        marginTop: 20,
+      }}
+      keyboardShouldPersistTaps={'always'}
+      onScroll={() => Keyboard.dismiss()}
+    >
+      {authScreen === 'signIn' ? (
+        <View style={{ width: '80%', maxWidth: 300, backgroundColor: COLORS.primary }}>
+          <FormInput
+            placeholder="Email"
+            value={email}
+            setValue={(v) => {
+              setEmail(v);
+            }}
+            textContentType="emailAddress"
+          />
+          <SubmitButton
+            text={'Submit'}
+            onPress={() => submitEmail()}
+            disabled={!validEmail}
+            loading={loading}
+            style={{ marginTop: 20 }}
+          />
+        </View>
+      ) : (
+        <View style={{ width: '100%', backgroundColor: COLORS.primary }}>
+          <HeaderLight
+            style={{ textAlign: 'center', fontWeight: '500' }}
+          >{`We sent a link to ${email}`}</HeaderLight>
+          <SubmitButton
+            text={'Send again'}
+            onPress={() => setAuthScreen('signIn')}
+            style={{ marginTop: 30 }}
+          />
+        </View>
+      )}
+    </ScrollView>
   );
 };
 

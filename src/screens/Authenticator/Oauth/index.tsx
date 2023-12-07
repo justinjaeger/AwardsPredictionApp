@@ -12,18 +12,18 @@ import LoadingStatueModal from '../../../components/LoadingStatueModal';
 import useDevice from '../../../util/device';
 
 const OauthPage = () => {
-  const { isLoadingAuth } = useAuth();
+  const { isLoadingSignIn } = useAuth();
   const { isAndroid } = useDevice();
   const { googleSignIn, isLoading: isLoadingGoogleAuth } = useGoogleOAuth();
   const { appleSignIn, isLoading: isLoadingAppleAuth } = useAppleOauth();
 
-  const isLoading = isLoadingAuth || isLoadingGoogleAuth || isLoadingAppleAuth;
+  const isLoading = isLoadingSignIn || isLoadingGoogleAuth || isLoadingAppleAuth;
 
   return (
     <>
       <LoadingStatueModal
         visible={isLoading}
-        text={isLoadingAuth ? 'Signing in...' : 'Authenticating...'}
+        text={isLoadingSignIn ? 'Signing in...' : 'Authenticating...'}
       />
       <View
         style={{

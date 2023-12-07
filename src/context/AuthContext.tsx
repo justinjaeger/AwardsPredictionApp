@@ -42,7 +42,8 @@ type iAuthContext = {
   verificationCode: iVerificationCode;
   generateVerificationCode: () => string | undefined;
   validateVerificationCode: (c: string) => void;
-  isLoadingAuth: boolean;
+  isLoadingSignIn: boolean;
+  isLoadingSignOut: boolean;
   isNewUser: boolean;
 };
 
@@ -56,7 +57,8 @@ const AuthContext = createContext<iAuthContext>({
   verificationCode: undefined,
   generateVerificationCode: () => undefined,
   validateVerificationCode: () => ({ isValid: false }),
-  isLoadingAuth: false,
+  isLoadingSignIn: false,
+  isLoadingSignOut: false,
   isNewUser: true,
 });
 
@@ -65,7 +67,8 @@ export const AuthProvider = (props: { children: React.ReactNode }) => {
 
   const [userInfo, setUserInfo] = useState<iUserInfo | undefined>(undefined);
   const [verificationCode, setVerificationCode] = useState<iVerificationCode>(undefined);
-  const [isLoadingAuth, setIsLoadingAuth] = useState<boolean>(false);
+  const [isLoadingSignIn, setIsLoadingSignIn] = useState<boolean>(false);
+  const [isLoadingSignOut, setIsLoadingSignOut] = useState<boolean>(false);
   const [isNewUser, setIsNewUser] = useState<boolean>(false);
 
   // On initial load, checks if user is new
@@ -106,7 +109,7 @@ export const AuthProvider = (props: { children: React.ReactNode }) => {
 
   // creates the access+refresh tokens and stores them in keychain
   const signInUser = async (userInfo: iUserInfo) => {
-    setIsLoadingAuth(true);
+    setIsLoadingSignIn(true);
     const { userId } = userInfo;
     // CREATE/SET ACCESS TOKEN
     const { data: newAccessToken } = await MongoApi.getAccessToken(userId);
@@ -125,7 +128,7 @@ export const AuthProvider = (props: { children: React.ReactNode }) => {
     // SET IN ASYNC STORAGE (lets us remember whether user has signed in or not)
     AsyncStorage.setItem(AsyncStorageKeys.IS_NOT_FIRST_TIME, 'true');
     AsyncStorage.setItem(AsyncStorageKeys.USER_INFO, JSON.stringify(userInfo));
-    setIsLoadingAuth(false);
+    setIsLoadingSignIn(false);
     // NAVIGATE TO PROFILE
     navigation.dispatch(resetToProfile);
   };
@@ -133,7 +136,8 @@ export const AuthProvider = (props: { children: React.ReactNode }) => {
   const resetAuth = async () => {
     await KeychainStorage.remove();
     setUserInfo(undefined);
-    setIsLoadingAuth(false);
+    setIsLoadingSignIn(false);
+    setIsLoadingSignOut(false);
     await AsyncStorage.removeItem(AsyncStorageKeys.USER_INFO);
     navigation.navigate('AuthenticatorNavigator');
   };
@@ -141,7 +145,7 @@ export const AuthProvider = (props: { children: React.ReactNode }) => {
   // signs out user on a single device
   const signOutUser = async () => {
     console.error('signOutUser');
-    setIsLoadingAuth(true);
+    setIsLoadingSignOut(true);
     const { data: payload } = await KeychainStorage.get();
     const { refreshToken } = payload || {};
     // delete refresh token from db
@@ -154,7 +158,7 @@ export const AuthProvider = (props: { children: React.ReactNode }) => {
   // signs out user on all devices
   const signOutAllDevices = async () => {
     console.error('signOutAllDevices');
-    setIsLoadingAuth(true);
+    setIsLoadingSignOut(true);
     await MongoApi.removeUserTokens();
     resetAuth();
   };
@@ -204,7 +208,8 @@ export const AuthProvider = (props: { children: React.ReactNode }) => {
         verificationCode,
         generateVerificationCode,
         validateVerificationCode,
-        isLoadingAuth,
+        isLoadingSignIn,
+        isLoadingSignOut,
         isNewUser,
       }}
     >

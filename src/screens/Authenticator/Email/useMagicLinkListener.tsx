@@ -15,18 +15,21 @@ const useMagicLinkListener = (onFailure: (m: string) => void) => {
 
   // when verification link is clicked, this callback fires
   const handleSignIn = async (url: string) => {
-    console.error('handleSignIn'); // because this seems to be getting invoked like 3 times
-    setIsLoading(true);
-    const { data: email } = await MongoApi.verifyEmailMagicLink(url);
-    if (!email) {
-      return onError('error: invalid link');
+    console.error('handleSignIn', url); // because this seems to be getting invoked like 3 times
+    try {
+      setIsLoading(true);
+      const { data: email } = await MongoApi.verifyEmailMagicLink(url);
+      if (!email) {
+        return onError('error: invalid link');
+      }
+      const { data: user } = await MongoApi.getUser({ email });
+      if (!user) {
+        return onError('error: unable to find user');
+      }
+      signInUser({ userId: user._id, email: user.email, role: user.role });
+    } finally {
+      setIsLoading(false);
     }
-    const { data: user } = await MongoApi.getUser({ email });
-    if (!user) {
-      return onError('error: unable to find user');
-    }
-    signInUser({ userId: user._id, email: user.email, role: user.role });
-    setIsLoading(false);
   };
 
   // listen for verification link
