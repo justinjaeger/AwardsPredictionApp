@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from 'react';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { PredictionsParamList } from '../../navigation/types';
 import { CategoryName, EventModel, Movie, WithId, iPrediction } from '../../types/api';
@@ -20,7 +20,7 @@ export type iContenderStatsData = iPrediction & {
 const ContenderStats = () => {
   const navigation = useNavigation();
   const route = useRoute<RouteProp<PredictionsParamList, 'ContenderStats'>>();
-  const ref = React.useRef<ScrollView>(null);
+  const scrollRef = useRef<ScrollView>(null);
   const { movieTmdbId, year } = route.params;
   const { store } = useTmdbDataStore();
   const { data: events } = useQueryGetAllEvents();
@@ -46,7 +46,7 @@ const ContenderStats = () => {
 
   return (
     <BackgroundWrapper>
-      <ScrollView ref={ref} style={{ flex: 1, width: '100%' }}>
+      <ScrollView ref={scrollRef} style={{ flex: 1, width: '100%' }}>
         <ContenderInfoHeader
           prediction={{
             contenderId: '',
@@ -54,7 +54,11 @@ const ContenderStats = () => {
             movieTmdbId,
           }}
         />
-        <ContenderStatEventTab event={event} movieTmdbId={movieTmdbId} ref={ref} />
+        <ContenderStatEventTab
+          event={event}
+          movieTmdbId={movieTmdbId}
+          scrollRef={scrollRef}
+        />
       </ScrollView>
     </BackgroundWrapper>
   );

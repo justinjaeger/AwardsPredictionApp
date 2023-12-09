@@ -25,14 +25,12 @@ export type iContenderStatsData = iPrediction & {
 const ContenderStatEventTab = ({
   event,
   movieTmdbId,
-  ref,
+  scrollRef,
 }: {
   event: WithId<EventModel>;
   movieTmdbId: number;
-  ref: React.RefObject<ScrollView>;
+  scrollRef: React.RefObject<ScrollView>;
 }) => {
-  //   const ref = React.useRef<FlatList<iContenderStatsData>>(null);
-
   const { isPad } = useDevice();
   const { width } = useWindowDimensions();
 
@@ -179,7 +177,7 @@ const ContenderStatEventTab = ({
             totalNumPredictingTop={prediction.totalNumPredictingTop}
             totalNumPredictingCategory={prediction.totalNumPredictingCategory}
             widthFactor={widthFactor}
-            scrollRef={ref}
+            scrollRef={scrollRef}
           />
         </View>
       ))}
