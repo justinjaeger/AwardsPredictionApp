@@ -8,6 +8,8 @@ import useDevice from '../../util/device';
 import { IconButton } from '../Buttons/IconButton';
 import ProfileImage, { IPAD_PROFILE_IMAGE_SCALE } from '../ProfileImage';
 import useQueryGetFollowingUsers from '../../hooks/queries/useQueryGetFollowingUsers';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { BOTTOM_TAB_HEIGHT } from '../../constants';
 
 const IMAGE_WIDTH = 50;
 const IMAGE_MARGIN = 5;
@@ -20,6 +22,7 @@ const FollowingBottomScroll = ({ onPress }: { onPress: (userId: string) => void 
   const { isHidden, setIsHidden, hideAbsolutely } = useFollowingBar();
   const { data: followingUsers } = useQueryGetFollowingUsers();
   const { isPad } = useDevice();
+  const { bottom } = useSafeAreaInsets();
 
   const usersPredictingEvent = (followingUsers ?? []).filter((user) =>
     Object.keys(user.eventsPredicting ?? {}).some((e) => e === event?._id),
@@ -40,7 +43,7 @@ const FollowingBottomScroll = ({ onPress }: { onPress: (userId: string) => void 
       useNativeDriver: true,
     }).start();
     Animated.timing(indicatorYPos, {
-      toValue: isHidden ? 0 : 60,
+      toValue: isHidden ? 0 : 60 * (isPad ? IPAD_PROFILE_IMAGE_SCALE : 1),
       duration: 250,
       useNativeDriver: true,
     }).start();
@@ -53,7 +56,7 @@ const FollowingBottomScroll = ({ onPress }: { onPress: (userId: string) => void 
       <Animated.View
         style={{
           position: 'absolute',
-          bottom: 70,
+          bottom: BOTTOM_TAB_HEIGHT + 20 + bottom,
           alignItems: 'center',
           flexDirection: 'row',
           zIndex: 2,

@@ -9,6 +9,7 @@ import useQueryGetCommunityPredictions from '../../../hooks/queries/useQueryGetC
 import CategorySkeleton from '../../../components/Skeletons/CategorySkeleton';
 import { sortPredictions } from '../../../util/sortPredictions';
 import ScreenshotMode from '../../../components/Buttons/ScreenshotMode';
+import BottomFABContainer from '../../../components/BottomFABContainer';
 
 // Note: We ALSO use this for non-authenticated user profiles
 const CategoryCommunity = ({ showEventLink }: { showEventLink?: boolean }) => {
@@ -29,7 +30,6 @@ const CategoryCommunity = ({ showEventLink }: { showEventLink?: boolean }) => {
 
   return (
     <>
-      <ScreenshotMode predictions={predictions.slice(0, 20)} />
       {predictions?.length === 0 ? (
         <View
           style={{
@@ -49,6 +49,9 @@ const CategoryCommunity = ({ showEventLink }: { showEventLink?: boolean }) => {
           lastUpdatedString={lastUpdatedString}
         />
       </View>
+      <BottomFABContainer>
+        <ScreenshotMode predictions={predictions.slice(0, 20)} />
+      </BottomFABContainer>
     </>
   );
 };

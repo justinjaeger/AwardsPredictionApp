@@ -14,19 +14,17 @@ import { eventToString } from '../../util/stringConversions';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import theme from '../../constants/theme';
 import useProfileUser from '../../screens/Profile/useProfileUser';
-import { ScreenshotFab } from './DisplayFAB';
 import useDevice from '../../util/device';
+import FloatingButton from './FloatingButton';
 
 const ScreenshotMode = ({
   predictions,
   userId,
   date,
-  positionFromBottom,
 }: {
   predictions: iPrediction[];
   userId?: string;
   date?: Date;
-  positionFromBottom?: number;
 }) => {
   const { isAndroid } = useDevice();
   const { width, height } = useWindowDimensions();
@@ -126,10 +124,7 @@ const ScreenshotMode = ({
           </TouchableWithoutFeedback>
         </BasicModal>
       ) : (
-        <ScreenshotFab
-          onPress={() => setVisible(true)}
-          positionFromBottom={positionFromBottom}
-        />
+        <FloatingButton onPress={() => setVisible(true)} icon={'grid'} />
       )}
     </>
   );
