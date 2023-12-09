@@ -15,6 +15,8 @@ import { formatPercentage } from '../../util/formatPercentage';
 import useDevice from '../../util/device';
 import { triggerHaptic } from '../../util/hapticFeedback';
 
+export const SLOTS_TO_DISPLAY_EXTRA = 5;
+
 const Histogram = ({
   numPredicting,
   totalNumPredicting,
@@ -50,7 +52,7 @@ const Histogram = ({
   const totalWidth = ((_totalWidth ?? windowWidth) - 20) * (containerWidthFactor ?? 1);
   const marginIfCenter = (windowWidth - totalWidth) / 2;
 
-  const barsToShow = slots + 5;
+  const barsToShow = slots + SLOTS_TO_DISPLAY_EXTRA;
   const barMaxHeight = posterHeight * 1;
 
   const [gesturePos, setGesturePos] = useState<{ x: number; y: number } | undefined>(

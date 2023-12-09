@@ -9,7 +9,7 @@ import {
 import { Header, Label, SmallHeader, SubHeader, SubHeaderLight } from '../Text';
 import { CategoryName, EventModel, Phase, WithId, iPrediction } from '../../types/api';
 import { getNumPredicting, getTotalNumPredicting } from '../../util/getNumPredicting';
-import Histogram from '../Histogram';
+import Histogram, { SLOTS_TO_DISPLAY_EXTRA } from '../Histogram';
 import { useTmdbDataStore } from '../../context/TmdbDataStore';
 import { categoryNameToTmdbCredit } from '../../util/categoryNameToTmdbCredit';
 import { getPhaseUserIsPredicting } from '../../util/getPhaseUserIsPredicting';
@@ -133,13 +133,16 @@ const NumPredictingItem = ({
           paddingRight: 10,
         }}
       >
-        <Stat percentage={win / totalNumPredictingCategory} subject="win" />
+        <Stat percentage={win / totalNumPredictingCategory} text="predict win" />
         {[undefined, Phase.NOMINATION].includes(phaseUserIsPredicting) ? (
-          <Stat percentage={nom / totalNumPredictingCategory} subject="nom" />
+          <Stat percentage={nom / totalNumPredictingCategory} text="predict nom" />
         ) : null}
         {/* undefined means nothing has happened; NOMINATION means it's been shortlisted */}
         {phaseUserIsPredicting === undefined ? (
-          <Stat percentage={listed / totalNumPredictingCategory} subject="listed" />
+          <Stat
+            percentage={listed / totalNumPredictingCategory}
+            text={`top ${(slots ?? 5) + SLOTS_TO_DISPLAY_EXTRA}`}
+          />
         ) : null}
       </View>
       <View
