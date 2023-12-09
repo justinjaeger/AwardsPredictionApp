@@ -13,18 +13,18 @@ import useQueryGetCommunityPredictions from '../../../hooks/queries/useQueryGetC
 import { StackNavigationProp } from '@react-navigation/stack';
 import useDevice from '../../../util/device';
 import theme from '../../../constants/theme';
-import { useEvent } from '../../../context/EventContext';
 import NumPredictingItem from '../../../components/ItemStatBox.tsx';
 import { SubmitButton } from '../../../components/Buttons';
 import ContenderInfoHeader from '../../../components/ContenderInfoHeader';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
+import { useRouteParams } from '../../../hooks/useRouteParams';
 
 const ContenderInfoModal = () => {
   const scrollRef = useRef<ScrollView>(null);
 
   const route = useRoute<RouteProp<PredictionsParamList, 'ContenderInfoModal'>>();
   const { prediction } = route.params;
-  const { event: _event, category: _category } = useEvent();
+  const { event: _event, category: _category } = useRouteParams();
   const event = _event!;
   const category = _category!;
   const { isPad } = useDevice();
@@ -82,7 +82,7 @@ const ContenderInfoModal = () => {
             onPress={() => {
               navigation.dispatch(
                 StackActions.replace('ContenderStats', {
-                  event,
+                  year: event.year,
                   movieTmdbId: prediction.movieTmdbId,
                 }),
               );

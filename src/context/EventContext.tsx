@@ -1,62 +1,40 @@
 import React, { createContext, useContext, useState } from 'react';
 import { useAuth } from './AuthContext';
-import { CategoryName, EventModel, WithId } from '../types/api';
 
 /**
- * Context that wraps the "read only" screens shared by community and personal
+ * Context for referencing the current tab, event, category, and user (who's predix we're seeing)
  */
 
 type iPersonalCommunityTab = 'personal' | 'community';
 
-type iEventContext = {
-  event: WithId<EventModel> | undefined;
-  setEvent: (event: WithId<EventModel>) => void;
-  category: CategoryName | undefined;
-  setCategory: (category: CategoryName) => void;
+type iPersonalCommunityTabContext = {
   personalCommunityTab: iPersonalCommunityTab;
   setPersonalCommunityTab: (d: iPersonalCommunityTab) => void;
-  isEditing: boolean;
-  setIsEditing: (v: boolean) => void;
 };
 
-const EventContext = createContext<iEventContext>({
-  event: undefined,
-  setEvent: () => {},
-  category: undefined,
-  setCategory: () => {},
+const PersonalCommunityTabContext = createContext<iPersonalCommunityTabContext>({
   personalCommunityTab: 'personal',
   setPersonalCommunityTab: () => {},
-  isEditing: false,
-  setIsEditing: () => {},
 });
 
-export const EventProvider = (props: { children: React.ReactNode }) => {
-  const { userId } = useAuth();
+export const PersonalCommunityTabProvider = (props: { children: React.ReactNode }) => {
+  const { userId: authUserId } = useAuth();
 
-  const [event, setEvent] = useState<WithId<EventModel>>();
-  const [category, setCategory] = useState<CategoryName>();
   // it's strange but we have to use setPersonalCommunityTab manually when we navigate
   const [personalCommunityTab, setPersonalCommunityTab] = useState<iPersonalCommunityTab>(
-    userId === undefined ? 'community' : 'personal',
+    authUserId === undefined ? 'community' : 'personal',
   );
-  const [isEditing, setIsEditing] = useState<boolean>(false);
 
   return (
-    <EventContext.Provider
+    <PersonalCommunityTabContext.Provider
       value={{
-        event,
-        setEvent,
-        category,
-        setCategory,
         personalCommunityTab,
         setPersonalCommunityTab,
-        isEditing,
-        setIsEditing,
       }}
     >
       {props.children}
-    </EventContext.Provider>
+    </PersonalCommunityTabContext.Provider>
   );
 };
 
-export const useEvent = () => useContext(EventContext);
+export const usePersonalCommunityTab = () => useContext(PersonalCommunityTabContext);

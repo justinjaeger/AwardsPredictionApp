@@ -1,6 +1,5 @@
 import React, { useCallback, useState } from 'react';
 import { FlatList, Keyboard } from 'react-native';
-import { useEvent } from '../../context/EventContext';
 import { removePredictionFromList } from '../../util/removePredictionFromList';
 import ContenderListItem from '../List/ContenderList/ContenderListItem';
 import { iPrediction } from '../../types/api';
@@ -9,6 +8,7 @@ import COLORS from '../../constants/colors';
 import { hexToRgb } from '../../util/hexToRgb';
 import { useNavigation } from '@react-navigation/native';
 import { PredictionsNavigationProp } from '../../navigation/types';
+import { useRouteParams } from '../../hooks/useRouteParams';
 
 type iMovieListProps = {
   predictions: iPrediction[];
@@ -25,13 +25,13 @@ const MovieListSelectable = ({
   setSelectedPredictions,
 }: iMovieListProps) => {
   const navigation = useNavigation<PredictionsNavigationProp>();
-  const { event: _event, category: _category } = useEvent();
+  const { categoryData, category: _category, eventId: _eventId } = useRouteParams();
+  const { type } = categoryData!;
   const category = _category!;
-  const event = _event!;
-  const { type } = event.categories[category];
+  const eventId = _eventId!;
 
   const onPressItem = useCallback(async (prediction: iPrediction) => {
-    navigation.navigate('ContenderInfoModal', { prediction });
+    navigation.navigate('ContenderInfoModal', { prediction, category, eventId });
   }, []);
 
   const onToggleItem = useCallback(async (prediction: iPrediction) => {

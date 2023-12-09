@@ -1,12 +1,12 @@
 import React from 'react';
 import { TouchableHighlight, View } from 'react-native';
-import { useEvent } from '../../../context/EventContext';
 import { CategoryName, iCategoryPrediction, iPrediction } from '../../../types/api';
 import COLORS from '../../../constants/colors';
 import { HeaderLight, SubHeader } from '../../../components/Text';
 import theme from '../../../constants/theme';
 import MovieGrid from '../../../components/MovieGrid';
 import { sortPredictions } from '../../../util/sortPredictions';
+import { useRouteParams } from '../../../hooks/useRouteParams';
 
 // NOTE: Typescript is failing me here, but categoryPrediction is sometimes undefined!!
 const EventItem = ({
@@ -18,7 +18,7 @@ const EventItem = ({
   onPress: (category: CategoryName) => void;
   isAuthProfile: boolean;
 }) => {
-  const { event } = useEvent();
+  const { event } = useRouteParams();
   const awardsBodyCategories = event?.categories;
   if (!awardsBodyCategories) return null;
 

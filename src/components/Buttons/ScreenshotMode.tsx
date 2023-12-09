@@ -6,36 +6,34 @@ import {
   useWindowDimensions,
 } from 'react-native';
 import BasicModal from '../BasicModal';
-import { iPrediction } from '../../types/api';
+import { EventModel, WithId, iCategory, iPrediction } from '../../types/api';
 import MovieGrid from '../MovieGrid';
 import { BodyBold, SmallHeader, SubHeader } from '../Text';
-import { useEvent } from '../../context/EventContext';
 import { eventToString } from '../../util/stringConversions';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import theme from '../../constants/theme';
 import useProfileUser from '../../screens/Profile/useProfileUser';
 import useDevice from '../../util/device';
 import FloatingButton from './FloatingButton';
+import { useRouteParams } from '../../hooks/useRouteParams';
 
 const ScreenshotMode = ({
   predictions,
-  userId,
   date,
 }: {
   predictions: iPrediction[];
-  userId?: string;
   date?: Date;
 }) => {
   const { isAndroid } = useDevice();
   const { width, height } = useWindowDimensions();
   const { top } = useSafeAreaInsets();
 
+  const { userId } = useRouteParams();
   const { user } = useProfileUser(userId);
 
-  const { event: _event, category: _category } = useEvent();
-  const event = _event!;
-  const category = _category!;
-  const categoryData = event.categories[category];
+  const { event: _event, categoryData: _categoryData } = useRouteParams();
+  const categoryData = _categoryData as iCategory;
+  const event = _event as WithId<EventModel>;
 
   const [visible, setVisible] = React.useState(false);
 
@@ -74,7 +72,10 @@ const ScreenshotMode = ({
               style={{
                 height: '100%',
                 width: '100%',
-                paddingTop: Math.max(top, StatusBar.currentHeight + (isAndroid ? 10 : 0)),
+                paddingTop: Math.max(
+                  top,
+                  (StatusBar.currentHeight ?? 0) + (isAndroid ? 10 : 0),
+                ),
               }}
             >
               <View
@@ -97,7 +98,7 @@ const ScreenshotMode = ({
                     alignItems: 'baseline',
                   }}
                 >
-                  <SmallHeader>{'Best ' + categoryData.name}</SmallHeader>
+                  <SmallHeader>{categoryData.name}</SmallHeader>
                   <BodyBold style={{ marginTop: 5, textAlign: 'right' }}>
                     {dateString}
                   </BodyBold>

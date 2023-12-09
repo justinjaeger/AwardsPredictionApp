@@ -2,13 +2,13 @@ import React, { useCallback, useState } from 'react';
 import { Divider } from '@ui-kitten/components';
 import { FlatList, View } from 'react-native';
 import COLORS from '../../constants/colors';
-import { useEvent } from '../../context/EventContext';
 import LastUpdatedText from '../LastUpdatedText';
 import ContenderListItem from '../List/ContenderList/ContenderListItem';
 import { iPrediction } from '../../types/api';
 import { getTotalNumPredicting } from '../../util/getNumPredicting';
 import { useNavigation } from '@react-navigation/native';
 import { PredictionsNavigationProp } from '../../navigation/types';
+import { useRouteParams } from '../../hooks/useRouteParams';
 
 export const PREDICT_STAT_WIDTH = 120;
 
@@ -19,7 +19,7 @@ type iMovieListProps = {
 
 const MovieListCommunity = ({ predictions, lastUpdatedString }: iMovieListProps) => {
   const navigation = useNavigation<PredictionsNavigationProp>();
-  const { event: _event, category: _category } = useEvent();
+  const { event: _event, category: _category } = useRouteParams();
   const event = _event!;
   const category = _category!;
   const { slots: _slots, type } = event.categories[category];
@@ -36,7 +36,11 @@ const MovieListCommunity = ({ predictions, lastUpdatedString }: iMovieListProps)
   };
 
   const onPressItem = useCallback(async (prediction: iPrediction) => {
-    navigation.navigate('ContenderInfoModal', { prediction });
+    navigation.navigate('ContenderInfoModal', {
+      prediction,
+      category,
+      eventId: event._id,
+    });
   }, []);
 
   return (

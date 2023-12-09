@@ -5,9 +5,11 @@ import { PredictionsParamList } from '../../navigation/types';
 import { useTypedNavigation } from '../../util/hooks';
 import CustomIcon from '../CustomIcon';
 import { SubHeader } from '../Text';
+import { useRouteParams } from '../../hooks/useRouteParams';
 
 // Was used to display user info above categories
-const UserHeader = ({ userId }: { userId: string }) => {
+const UserHeader = () => {
+  const { userId, event } = useRouteParams();
   const navigation = useTypedNavigation<PredictionsParamList>();
 
   return (
@@ -29,6 +31,7 @@ const UserHeader = ({ userId }: { userId: string }) => {
           navigation.dispatch(
             StackActions.replace('EventFromProfile', {
               userId,
+              eventId: event!._id,
             }),
           );
         }}

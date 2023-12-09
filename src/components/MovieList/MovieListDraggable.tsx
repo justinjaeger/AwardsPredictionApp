@@ -5,7 +5,6 @@ import DraggableFlatList, { ScaleDecorator } from 'react-native-draggable-flatli
 import { CATEGORY_TYPE_TO_STRING } from '../../constants/categories';
 import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
-import { useEvent } from '../../context/EventContext';
 import LastUpdatedText from '../LastUpdatedText';
 import ContenderListItem from '../List/ContenderList/ContenderListItem';
 import { SubHeader } from '../Text';
@@ -13,6 +12,7 @@ import { iPrediction } from '../../types/api';
 import { triggerHaptic } from '../../util/hapticFeedback';
 import { useNavigation } from '@react-navigation/native';
 import { PredictionsNavigationProp } from '../../navigation/types';
+import { useRouteParams } from '../../hooks/useRouteParams';
 
 type iMovieListProps = {
   predictions: iPrediction[];
@@ -30,17 +30,17 @@ const MovieListDraggable = ({
   onPressAdd,
 }: iMovieListProps) => {
   const navigation = useNavigation<PredictionsNavigationProp>();
-  const { event: _event, category: _category } = useEvent();
-  const event = _event!;
+  const { categoryData, category: _category, eventId: _eventId } = useRouteParams();
   const category = _category!;
+  const eventId = _eventId!;
 
-  const { slots: _slots, type } = event.categories[category];
+  const { slots: _slots, type } = categoryData!;
   const slots = _slots ?? 5;
 
   const [itemsToDelete, setItemsToDelete] = useState<iPrediction[]>([]);
 
   const onPressItem = useCallback(async (prediction: iPrediction) => {
-    navigation.navigate('ContenderInfoModal', { prediction });
+    navigation.navigate('ContenderInfoModal', { prediction, category, eventId });
   }, []);
 
   const toggleDeleteMode = useCallback((prediction: iPrediction) => {

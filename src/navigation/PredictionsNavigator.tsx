@@ -17,7 +17,7 @@ import { RouteProp, useRoute } from '@react-navigation/native';
 import Followers from '../screens/Profile/Followers';
 import { useHeaderSettings } from '../hooks/useHeaderSettings';
 import ContenderStats from '../screens/ContenderStats';
-import { EventProvider } from '../context/EventContext';
+import { PersonalCommunityTabProvider } from '../context/EventContext';
 import { FollowingBarProvider } from '../context/FollowingBarContext';
 import ContenderInfoModal from '../screens/Predictions/ContenderInfoModal';
 
@@ -153,11 +153,11 @@ const PredictionsNavigator = () => {
 };
 
 const WithProvider = () => (
-  <EventProvider>
+  <PersonalCommunityTabProvider>
     <FollowingBarProvider>
       <PredictionsNavigator />
     </FollowingBarProvider>
-  </EventProvider>
+  </PersonalCommunityTabProvider>
 );
 
 export default WithProvider;

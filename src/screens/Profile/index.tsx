@@ -4,12 +4,7 @@ import { SubmitButton } from '../../components/Buttons';
 import { Body, BodyBold, HeaderLight, SubHeader } from '../../components/Text';
 import { useAuth } from '../../context/AuthContext';
 import BackgroundWrapper from '../../components/BackgroundWrapper';
-import {
-  RouteProp,
-  useNavigation,
-  useRoute,
-  StackActions,
-} from '@react-navigation/native';
+import { useNavigation, StackActions } from '@react-navigation/native';
 import theme from '../../constants/theme';
 import PredictionCarousel from '../../components/PredictionCarousel';
 import COLORS from '../../constants/colors';
@@ -24,12 +19,12 @@ import useProfileUser from './useProfileUser';
 import useProfileHeader from './useProfileHeader';
 import ProfileSkeleton from '../../components/Skeletons/ProfileSkeleton';
 import Snackbar from '../../components/Snackbar';
+import { useRouteParams } from '../../hooks/useRouteParams';
 
 const Profile = () => {
   // If we pass userId as params, it loads that user's profile. If not, it attemps to get logged in profile.
-  const { params } = useRoute<RouteProp<PredictionsParamList, 'Profile'>>();
+  const { userId } = useRouteParams();
   const { userId: authUserId } = useAuth();
-  const userId = params?.userId || authUserId;
 
   const globalNavigation = useNavigation<MainScreenNavigationProp>();
   const navigation = useTypedNavigation<PredictionsParamList>();

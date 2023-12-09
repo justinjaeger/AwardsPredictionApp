@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { useEvent } from '../../../context/EventContext';
 import { CategoryType, Contender, WithId, iPrediction } from '../../../types/api';
 import TmdbServices, { iSearchData } from '../../../services/tmdb';
 import useMutationCreateContender from '../../../hooks/mutations/useMutationCreateContender';
 import Snackbar from '../../../components/Snackbar';
 import { CATEGORY_TYPE_TO_STRING } from '../../../constants/categories';
 import { getSongKey } from '../../../util/getSongKey';
+import { useRouteParams } from '../../../hooks/useRouteParams';
 
 const useContenderSearch = ({
   categoryType,
@@ -18,10 +18,10 @@ const useContenderSearch = ({
   selectedContenderIds: string[];
   setSelectedPredictions: React.Dispatch<React.SetStateAction<iPrediction[]>>;
 }) => {
-  const { category: _category, event: _event } = useEvent();
+  const { category: _category, event: _event, categoryData } = useRouteParams();
   const category = _category!;
   const event = _event!;
-  const { type } = event.categories[category];
+  const { type } = categoryData!;
 
   // when adding a contender to the list of overall contenders
   const { mutate: getOrCreateContender, isComplete } = useMutationCreateContender({

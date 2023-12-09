@@ -5,7 +5,6 @@ import { Body, Label, SubHeader } from '../../components/Text';
 import { AWARDS_BODY_TO_PLURAL_STRING } from '../../constants/awardsBodies';
 import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
-import { useEvent } from '../../context/EventContext';
 import { useAuth } from '../../context/AuthContext';
 import { PredictionsParamList } from '../../navigation/types';
 import { formatLastUpdated } from '../../util/formatDateTime';
@@ -24,7 +23,6 @@ const UserPredictionList = ({
   const { userId: authUserId } = useAuth();
   const navigation = useTypedNavigation<PredictionsParamList>();
   const { data: events } = useQueryGetAllEvents();
-  const { setEvent, setCategory } = useEvent();
   const { width } = useWindowDimensions();
   const isAuthProfile = userId === authUserId;
 
@@ -52,18 +50,16 @@ const UserPredictionList = ({
                 return;
               }
               // navigate to user's predictions
-              setEvent(event);
-              setCategory(ps.category as CategoryName);
+              const params = {
+                userId,
+                eventId: event._id,
+                category: ps.category as CategoryName,
+                showEventLink: true,
+              };
               if (isAuthProfile) {
-                navigation.navigate('Category', {
-                  userId,
-                  showEventLink: true,
-                });
+                navigation.navigate('Category', params);
               } else {
-                navigation.navigate('CategoryFromProfile', {
-                  userId,
-                  showEventLink: true,
-                });
+                navigation.navigate('CategoryFromProfile', params);
               }
             }}
           >

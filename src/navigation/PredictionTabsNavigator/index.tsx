@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Animated, ScrollView, useWindowDimensions, View } from 'react-native';
 import BackgroundWrapper from '../../components/BackgroundWrapper';
 import COLORS from '../../constants/colors';
-import { useEvent } from '../../context/EventContext';
+import { usePersonalCommunityTab } from '../../context/EventContext';
 import PredictionTab from './PredictionTab';
 
 /**
@@ -21,7 +21,7 @@ const PredictionTabsNavigator = ({
   onChangeTab?: (tab: 'personal' | 'community') => void;
 }) => {
   const { width } = useWindowDimensions();
-  const { personalCommunityTab } = useEvent();
+  const { personalCommunityTab } = usePersonalCommunityTab();
   const scrollBarPositionTwo = width / 2;
 
   // This seems unnecessary but without, it breaks the animation

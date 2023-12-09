@@ -19,7 +19,6 @@ import theme from '../../constants/theme';
 import { StackActions, useNavigation } from '@react-navigation/native';
 import { PredictionsNavigationProp } from '../../navigation/types';
 import { useAuth } from '../../context/AuthContext';
-import { useEvent } from '../../context/EventContext';
 import Stat from './Stat';
 
 const NumPredictingItem = ({
@@ -41,12 +40,11 @@ const NumPredictingItem = ({
   disableCategoryLink?: boolean;
   widthFactor?: number;
   flatListRef?: React.RefObject<FlatList<any>>;
-  scrollRef?: React.MutableRefObject<ScrollView>;
+  scrollRef?: React.RefObject<ScrollView>;
 }) => {
   const { width } = useWindowDimensions();
   const navigation = useNavigation<PredictionsNavigationProp>();
   const { userId: authUserId } = useAuth();
-  const { setCategory, setEvent } = useEvent();
 
   const numPredicting = prediction?.numPredicting;
   const totalNumPredicting = getTotalNumPredicting(numPredicting || {});
@@ -90,11 +88,11 @@ const NumPredictingItem = ({
           disableCategoryLink
             ? undefined
             : () => {
-                setCategory(category);
-                setEvent(event);
                 navigation.dispatch(
                   StackActions.push('Category', {
                     userId: authUserId ?? undefined,
+                    eventId: event._id,
+                    categoryId: category,
                   }),
                 );
               }

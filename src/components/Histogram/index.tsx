@@ -39,7 +39,7 @@ const Histogram = ({
   containerWidthFactor?: number;
   // important props for enabling/disabling scroll when inside a scrollview:
   flatListRef?: React.RefObject<FlatList<any>>;
-  scrollRef?: React.MutableRefObject<ScrollView>;
+  scrollRef?: React.RefObject<ScrollView>;
 }) => {
   const { isPad } = useDevice();
   const { width: windowWidth } = useWindowDimensions();
@@ -75,7 +75,9 @@ const Histogram = ({
   slotThatTouchIsIn =
     slotThatTouchIsIn && slotThatTouchIsIn > barsToShow
       ? barsToShow
-      : Math.max(slotThatTouchIsIn, 1);
+      : slotThatTouchIsIn
+      ? Math.max(slotThatTouchIsIn, 1)
+      : undefined;
   const numPredictingInSelectedSlot =
     (slotThatTouchIsIn && numPredicting?.[slotThatTouchIsIn]) || 0;
 

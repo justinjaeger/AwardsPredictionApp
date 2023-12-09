@@ -4,7 +4,6 @@ import { View } from 'react-native';
 import MovieListDraggable from '../../../components/MovieList/MovieListDraggable';
 import SignedOutState from '../../../components/SignedOutState';
 import { BodyBold } from '../../../components/Text';
-import { useEvent } from '../../../context/EventContext';
 import useMutationUpdatePredictions from '../../../hooks/mutations/useMutationUpdatePredictions';
 import { PredictionsParamList } from '../../../navigation/types';
 import {
@@ -24,20 +23,19 @@ import { FAB } from '../../../components/Buttons/FAB';
 import { useFollowingBar } from '../../../context/FollowingBarContext';
 import BottomFABContainer from '../../../components/BottomFABContainer';
 import FloatingButton from '../../../components/Buttons/FloatingButton';
+import { useRouteParams } from '../../../hooks/useRouteParams';
 
 // used in both FromProfile and from event
 const CategoryPersonal = ({
-  userId,
   showEventLink,
   onBack,
 }: {
-  userId: string | undefined;
   showEventLink?: boolean;
   onBack?: () => void;
 }) => {
   const { setHideAbsolutely } = useFollowingBar();
 
-  const { category: _category, event: _event } = useEvent();
+  const { category: _category, event: _event, userId } = useRouteParams();
   const category = _category!;
   const event = _event!;
 
@@ -106,6 +104,8 @@ const CategoryPersonal = ({
 
   const onPressAdd = () => {
     navigation.navigate('AddPredictions', {
+      category,
+      eventId: event._id,
       initialPredictions: predictions,
       onFinish: (ps: iPrediction[]) => {
         setPredictions(ps);
@@ -141,7 +141,6 @@ const CategoryPersonal = ({
           </BodyBold>
         </View>
       ) : null}
-      {showEventLink ? <EventLink userId={userId} /> : null}
       <View style={{ height: '100%' }}>
         <MovieListDraggable
           predictions={predictions}
@@ -160,8 +159,9 @@ const CategoryPersonal = ({
         />
       </View>
       <BottomFABContainer>
+        {showEventLink ? <EventLink userId={userId} /> : null}
         {isAuthProfile ? <FloatingButton onPress={onPressAdd} icon={'plus'} /> : null}
-        <ScreenshotMode predictions={predictions} userId={userId} />
+        <ScreenshotMode predictions={predictions} />
       </BottomFABContainer>
       {isAuthProfile && showSave ? (
         <FAB

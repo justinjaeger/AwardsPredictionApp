@@ -2,24 +2,23 @@ import React, { useLayoutEffect } from 'react';
 import CategoryPersonal from './CategoryPersonal';
 import { useTypedNavigation } from '../../../util/hooks';
 import { PredictionsParamList } from '../../../navigation/types';
-import { useEvent } from '../../../context/EventContext';
 import { eventToString } from '../../../util/stringConversions';
 import { getHeaderTitleWithProfile } from '../../../constants';
 import { View } from 'react-native';
 import { RouteProp, StackActions, useRoute } from '@react-navigation/native';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import useProfileUser from '../../Profile/useProfileUser';
+import { useRouteParams } from '../../../hooks/useRouteParams';
 
 const CategoryFromProfile = () => {
   const { params } = useRoute<RouteProp<PredictionsParamList, 'CategoryFromProfile'>>();
-  const { userId } = params;
-  const { user } = useProfileUser(userId);
   const showEventLink = params?.showEventLink || false;
+  const { userId } = useRouteParams();
+  const { user } = useProfileUser(userId);
 
-  const { category, event: _event } = useEvent();
+  const { category, event } = useRouteParams();
+
   const navigation = useTypedNavigation<PredictionsParamList>();
-
-  const event = _event!;
 
   // Set the header
   useLayoutEffect(() => {
@@ -42,7 +41,7 @@ const CategoryFromProfile = () => {
   return (
     <BackgroundWrapper>
       <View style={{ width: '100%' }}>
-        <CategoryPersonal userId={userId} showEventLink={showEventLink} />
+        <CategoryPersonal showEventLink={showEventLink} />
       </View>
     </BackgroundWrapper>
   );

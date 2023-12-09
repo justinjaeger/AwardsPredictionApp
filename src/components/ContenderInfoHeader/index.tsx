@@ -12,7 +12,6 @@ import ExternalLinkButton from '../ExternalLinkButton';
 import { useNavigation } from '@react-navigation/native';
 import { useTmdbDataStore } from '../../context/TmdbDataStore';
 import { MainScreenNavigationProp } from '../../navigation/types';
-import useQueryGetCommunityPredictions from '../../hooks/queries/useQueryGetCommunityPredictions';
 import BasicModal from '../BasicModal';
 import useDevice from '../../util/device';
 
@@ -22,12 +21,9 @@ const ContenderInfoHeader = ({ prediction }: { prediction: iPrediction }) => {
   const { width, height } = useWindowDimensions();
   const { getTmdbDataFromPrediction } = useTmdbDataStore();
 
-  const { data: communityPredictions } = useQueryGetCommunityPredictions();
   const { movie, person, song } = getTmdbDataFromPrediction(prediction) ?? {};
 
   const [showFullPoster, setShowFullPoster] = useState<boolean>(false);
-
-  if (!communityPredictions) return null;
 
   const posterPath = person?.posterPath ?? movie?.posterPath ?? null;
   const posterTitle = person?.name ?? movie?.title ?? '';
