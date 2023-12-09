@@ -15,7 +15,7 @@ import { useRouteParams } from '../../hooks/useRouteParams';
 const BottomFABContainer = ({ children }: { children?: React.ReactNode }) => {
   const animatedBottomButtons = useRef(new Animated.Value(0)).current;
   const navigation = useNavigation<PredictionsNavigationProp>();
-  const { isHidden, setIsHidden } = useFollowingBar();
+  const { isHidden, setIsHidden, hideAbsolutely } = useFollowingBar();
   const { isPad } = useDevice();
   const { userId: authUserId } = useAuth();
   const { eventId, category, userId } = useRouteParams();
@@ -40,7 +40,7 @@ const BottomFABContainer = ({ children }: { children?: React.ReactNode }) => {
         zIndex: 10,
       }}
     >
-      {isAuthUser ? (
+      {isAuthUser && !hideAbsolutely ? (
         <View
           style={{
             position: 'absolute',
