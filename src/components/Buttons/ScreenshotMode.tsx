@@ -12,12 +12,9 @@ import { BodyBold, SmallHeader, SubHeader } from '../Text';
 import { useEvent } from '../../context/EventContext';
 import { eventToString } from '../../util/stringConversions';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
-import ProfileImage from '../ProfileImage';
 import useProfileUser from '../../screens/Profile/useProfileUser';
 import { ScreenshotFab } from './DisplayFAB';
-import AwardsBodyImage from '../AwardsBodyImage';
 import useDevice from '../../util/device';
 
 const ScreenshotMode = ({
@@ -31,7 +28,7 @@ const ScreenshotMode = ({
   date?: Date;
   positionFromBottom?: number;
 }) => {
-  const { isPad, isAndroid } = useDevice();
+  const { isAndroid } = useDevice();
   const { width, height } = useWindowDimensions();
   const { top } = useSafeAreaInsets();
 
@@ -53,8 +50,6 @@ const ScreenshotMode = ({
     day: 'numeric',
     year: 'numeric',
   });
-
-  const headerHeight = 80;
 
   return (
     <>
@@ -87,68 +82,46 @@ const ScreenshotMode = ({
               <View
                 style={{
                   alignItems: 'flex-start',
+                  justifyContent: 'space-between',
+                  flexDirection: 'column',
                   width: '100%',
-                  paddingTop: 10,
                   paddingLeft: marginSize,
-                  paddingBottom: 10,
+                  paddingRight: marginSize,
+                  paddingTop: 20,
+                  paddingBottom: 20,
                 }}
               >
-                <View style={{ flexDirection: 'row', marginTop: 10 }}>
-                  {!user ? (
-                    <AwardsBodyImage
-                      awardsBody={event.awardsBody}
-                      size={headerHeight}
-                      disablePadResize
-                    />
-                  ) : (
-                    <ProfileImage
-                      imageSize={headerHeight}
-                      image={user.image}
-                      style={{ marginRight: marginSize }}
-                    />
-                  )}
-                  <View
-                    style={{
-                      width: width - headerHeight * 2,
-                      flexDirection: isPad ? 'row' : undefined,
-                      justifyContent: isPad ? 'space-between' : undefined,
-                    }}
-                  >
-                    <View>
-                      <SmallHeader>{categoryData.name}</SmallHeader>
-                      <SubHeader>{eventToString(event.awardsBody, event.year)}</SubHeader>
-                    </View>
-                    <View>
-                      {!user ? (
-                        <BodyBold style={{ marginTop: 5 }}>
-                          {'Award Expert Community'}
-                        </BodyBold>
-                      ) : null}
-                      <BodyBold style={{ marginTop: 5 }}>{dateString}</BodyBold>
-                    </View>
-                  </View>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    width: '100%',
+                    alignItems: 'baseline',
+                  }}
+                >
+                  <SmallHeader>{'Best ' + categoryData.name}</SmallHeader>
+                  <BodyBold style={{ marginTop: 5, textAlign: 'right' }}>
+                    {dateString}
+                  </BodyBold>
+                </View>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    width: '100%',
+                    alignItems: 'baseline',
+                  }}
+                >
+                  <SubHeader>{eventToString(event.awardsBody, event.year)}</SubHeader>
+                  <BodyBold style={{ marginTop: 5, textAlign: 'right' }}>
+                    {user ? '@' + user.username ?? '' : 'Award Expert Community'}
+                  </BodyBold>
                 </View>
               </View>
               <MovieGrid
                 predictions={predictions.slice(0, 20)}
                 categoryInfo={categoryData}
               />
-              {user ? (
-                <>
-                  <SubHeader style={{ marginLeft: marginSize }}>
-                    {'@' + user.username ?? ''}
-                  </SubHeader>
-                  <BodyBold
-                    style={{
-                      marginLeft: marginSize,
-                      marginTop: 5,
-                      color: COLORS.secondaryDark,
-                    }}
-                  >
-                    {'follow on Award Expert'}
-                  </BodyBold>
-                </>
-              ) : null}
             </View>
           </TouchableWithoutFeedback>
         </BasicModal>
