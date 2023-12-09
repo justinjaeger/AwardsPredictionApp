@@ -31,7 +31,7 @@ const ScreenshotMode = ({
   date?: Date;
   positionFromBottom?: number;
 }) => {
-  const { isPad } = useDevice();
+  const { isPad, isAndroid } = useDevice();
   const { width, height } = useWindowDimensions();
   const { top } = useSafeAreaInsets();
 
@@ -81,8 +81,7 @@ const ScreenshotMode = ({
               style={{
                 height: '100%',
                 width: '100%',
-                // TODO: Check this on a device that actually has a notch
-                paddingTop: top,
+                paddingTop: Math.max(top, StatusBar.currentHeight + (isAndroid ? 10 : 0)),
               }}
             >
               <View
