@@ -5,9 +5,9 @@ import { useGetEvent } from './useGetEvent';
 import { CategoryName, EventModel, WithId, iCategory } from '../types/api';
 
 /**
- * Has lots of type errors because I want to use it in any screen I want
- * Should access the current event, category, or user id
- * As derived from the current route's params
+ * Shortcut to getting route params, but at the expense of type safety
+ * Sometimes you want to route params in a component that is used by multiple routes
+ * For ex, you'd have to just expect "category" to be undefined if the route is 'Event'
  */
 export const useRouteParams = (): {
   userId: string | undefined;
