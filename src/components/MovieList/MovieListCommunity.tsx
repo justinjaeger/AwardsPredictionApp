@@ -19,10 +19,10 @@ type iMovieListProps = {
 
 const MovieListCommunity = ({ predictions, lastUpdatedString }: iMovieListProps) => {
   const navigation = useNavigation<PredictionsNavigationProp>();
-  const { event: _event, category: _category } = useRouteParams();
+  const { event: _event, category: _category, categoryData } = useRouteParams();
   const event = _event!;
   const category = _category!;
-  const { slots: _slots, type } = event.categories[category];
+  const { slots: _slots, type } = categoryData!;
   const slots = _slots ?? 5;
 
   const totalNumPredictingTop = getTotalNumPredicting(

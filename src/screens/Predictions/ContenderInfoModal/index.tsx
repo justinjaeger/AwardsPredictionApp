@@ -13,7 +13,7 @@ import useQueryGetCommunityPredictions from '../../../hooks/queries/useQueryGetC
 import { StackNavigationProp } from '@react-navigation/stack';
 import useDevice from '../../../util/device';
 import theme from '../../../constants/theme';
-import NumPredictingItem from '../../../components/ItemStatBox.tsx';
+import ItemStatBox from '../../../components/ItemStatBox.tsx';
 import { SubmitButton } from '../../../components/Buttons';
 import ContenderInfoHeader from '../../../components/ContenderInfoHeader';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
@@ -59,14 +59,13 @@ const ContenderInfoModal = () => {
       <ScrollView style={{ flex: 1, width: '100%' }} ref={scrollRef}>
         <View>
           <ContenderInfoHeader prediction={communityPrediction} />
-          <NumPredictingItem
+          <ItemStatBox
             key={communityPrediction.contenderId}
             prediction={communityPrediction}
             category={category}
             event={event}
             totalNumPredictingTop={totalNumPredictingTop}
             totalNumPredictingCategory={totalNumPredictingCategory}
-            disableCategoryLink
             widthFactor={widthFactor}
             scrollRef={scrollRef}
           />

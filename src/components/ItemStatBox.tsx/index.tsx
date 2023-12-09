@@ -16,7 +16,11 @@ import { getPhaseUserIsPredicting } from '../../util/getPhaseUserIsPredicting';
 import { hexToRgb } from '../../util/hexToRgb';
 import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
-import { StackActions, useNavigation } from '@react-navigation/native';
+import {
+  StackActions,
+  useNavigation,
+  useNavigationState,
+} from '@react-navigation/native';
 import { PredictionsNavigationProp } from '../../navigation/types';
 import { useAuth } from '../../context/AuthContext';
 import Stat from './Stat';
@@ -27,7 +31,6 @@ const NumPredictingItem = ({
   prediction,
   totalNumPredictingTop,
   totalNumPredictingCategory,
-  disableCategoryLink,
   widthFactor,
   flatListRef,
   scrollRef,
@@ -37,7 +40,6 @@ const NumPredictingItem = ({
   prediction: iPrediction;
   totalNumPredictingTop: number;
   totalNumPredictingCategory: number;
-  disableCategoryLink?: boolean;
   widthFactor?: number;
   flatListRef?: React.RefObject<FlatList<any>>;
   scrollRef?: React.RefObject<ScrollView>;
@@ -49,7 +51,9 @@ const NumPredictingItem = ({
   const numPredicting = prediction?.numPredicting;
   const totalNumPredicting = getTotalNumPredicting(numPredicting || {});
   const { getTmdbDataFromPrediction } = useTmdbDataStore();
+  const navigationState = useNavigationState((state) => state);
 
+  // THIS IS PROBABLY UNDEFINED!!
   const { slots, shortlistDateTime } = event.categories[category];
   const categoryString = event.categories[category].name;
 
@@ -84,19 +88,19 @@ const NumPredictingItem = ({
           flexDirection: 'row',
           alignItems: 'baseline',
         }}
-        onPress={
-          disableCategoryLink
-            ? undefined
-            : () => {
-                navigation.dispatch(
-                  StackActions.push('Category', {
-                    userId: authUserId ?? undefined,
-                    eventId: event._id,
-                    categoryId: category,
-                  }),
-                );
-              }
-        }
+        onPress={() => {
+          if (navigationState.routes[navigationState.index - 1].name === 'Category') {
+            navigation.goBack();
+          } else {
+            navigation.dispatch(
+              StackActions.replace('Category', {
+                userId: authUserId ?? undefined,
+                eventId: event._id,
+                category: category,
+              }),
+            );
+          }
+        }}
       >
         <>
           <Header>{`#${prediction?.ranking}`}</Header>
