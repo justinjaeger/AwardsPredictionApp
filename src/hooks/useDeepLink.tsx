@@ -9,8 +9,10 @@ export const SIGN_IN_PREFIX = 'oscar://signin/';
 const useDeepLink = (handleSignIn: (url: string) => void) => {
   // For links when app is ALREADY OPEN
   useEffect(() => {
+    console.error('useEFFECT');
     Linking.addEventListener('url', ({ url }) => {
       if (url.includes(SIGN_IN_PREFIX)) {
+        console.error('ALRAEDY OPEN'); // IOS WHEN LOG IN
         handleSignIn(url);
       }
     });
@@ -23,6 +25,7 @@ const useDeepLink = (handleSignIn: (url: string) => void) => {
       // Resolves to a link if one was used
       const url = await Linking.getInitialURL();
       if (url?.includes(SIGN_IN_PREFIX)) {
+        console.error('NOT OPEN'); // ANDROID WHEN LOG OUT
         handleSignIn(url);
       }
     };
