@@ -6,6 +6,7 @@ const useDevice = () => {
   const isSmallScreen = width < 400;
   const isLargeScreen = width > 700;
 
+  // isPad can be google tablet OR ipad
   // @ts-ignore
   const isPad = Platform.constants?.interfaceIdiom === 'pad' || isLargeScreen; // boolean
   const isAndroid = Platform.OS === 'android';
