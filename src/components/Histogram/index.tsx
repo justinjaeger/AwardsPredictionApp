@@ -75,11 +75,12 @@ const Histogram = ({
 
   // adjust for margins:
   slotThatTouchIsIn =
-    slotThatTouchIsIn && slotThatTouchIsIn > barsToShow
-      ? barsToShow
-      : slotThatTouchIsIn
-      ? Math.max(slotThatTouchIsIn, 1)
+    slotThatTouchIsIn !== undefined
+      ? slotThatTouchIsIn > barsToShow
+        ? barsToShow
+        : Math.max(slotThatTouchIsIn, 1)
       : undefined;
+
   const numPredictingInSelectedSlot =
     (slotThatTouchIsIn && numPredicting?.[slotThatTouchIsIn]) || 0;
 
