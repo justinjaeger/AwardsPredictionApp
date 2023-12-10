@@ -48,6 +48,7 @@ export type PredictionsParamList = {
   };
   CategoryFromProfile: {
     userId: string | undefined;
+    userImage?: string;
     eventId: string;
     category: CategoryName;
     showEventLink?: boolean;

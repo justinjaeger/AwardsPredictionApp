@@ -11,6 +11,7 @@ import { CategoryName, EventModel, WithId, iCategory } from '../types/api';
  */
 export const useRouteParams = (): {
   userId: string | undefined;
+  userImage: string | undefined;
   eventId: string | undefined;
   event: WithId<EventModel> | undefined;
   category: CategoryName | undefined;
@@ -24,6 +25,7 @@ export const useRouteParams = (): {
 
   return {
     userId: params?.userId,
+    userImage: params?.userImage,
     eventId: params?.eventId,
     event,
     category: params?.category,

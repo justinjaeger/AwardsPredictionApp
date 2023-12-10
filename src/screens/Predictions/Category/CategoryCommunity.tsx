@@ -49,7 +49,7 @@ const CategoryCommunity = ({ showEventLink }: { showEventLink?: boolean }) => {
         />
       </View>
       <BottomFABContainer>
-        {showEventLink ? <EventLink userId={undefined} /> : null}
+        {showEventLink ? <EventLink /> : null}
         <ScreenshotMode predictions={predictions.slice(0, 20)} />
       </BottomFABContainer>
     </>

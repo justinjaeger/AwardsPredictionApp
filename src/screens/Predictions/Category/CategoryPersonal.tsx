@@ -159,7 +159,7 @@ const CategoryPersonal = ({
         />
       </View>
       <BottomFABContainer>
-        {showEventLink ? <EventLink userId={userId} /> : null}
+        {showEventLink ? <EventLink /> : null}
         {isAuthProfile ? <FloatingButton onPress={onPressAdd} icon={'plus'} /> : null}
         <ScreenshotMode predictions={predictions} />
       </BottomFABContainer>

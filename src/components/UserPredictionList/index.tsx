@@ -15,10 +15,12 @@ import useQueryGetAllEvents from '../../hooks/queries/useQueryGetAllEvents';
 const UserPredictionList = ({
   predictionSets,
   userId,
+  userImage,
 }: {
   predictionSets: iRecentPrediction[];
   fixedSlots?: number;
   userId: string;
+  userImage: string | undefined;
 }) => {
   const { userId: authUserId } = useAuth();
   const navigation = useTypedNavigation<PredictionsParamList>();
@@ -52,6 +54,7 @@ const UserPredictionList = ({
               // navigate to user's predictions
               const params = {
                 userId,
+                userImage,
                 eventId: event._id,
                 category: ps.category as CategoryName,
                 showEventLink: true,

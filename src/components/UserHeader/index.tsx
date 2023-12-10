@@ -9,7 +9,7 @@ import { useRouteParams } from '../../hooks/useRouteParams';
 
 // Was used to display user info above categories
 const UserHeader = () => {
-  const { userId, event } = useRouteParams();
+  const { userId, event, userImage } = useRouteParams();
   const navigation = useTypedNavigation<PredictionsParamList>();
 
   return (
@@ -31,6 +31,7 @@ const UserHeader = () => {
           navigation.dispatch(
             StackActions.replace('EventFromProfile', {
               userId,
+              userImage,
               eventId: event!._id,
             }),
           );

@@ -20,17 +20,20 @@ import { SubHeader } from '../Text';
 import UserPredictionList from '../UserPredictionList';
 import CarouselArrow from './CarouselArrow';
 import { iRecentPrediction } from '../../types/api';
-import useProfileUser from '../../screens/Profile/useProfileUser';
 
 const PredictionCarousel = ({
   predictionSets,
   userId,
+  userName,
+  userImage,
   hideUserInfo,
   enableArrows,
   style,
 }: {
   predictionSets: iRecentPrediction[];
   userId: string;
+  userName: string | undefined;
+  userImage: string | undefined;
   hideUserInfo?: boolean;
   enableArrows?: boolean;
   style?: StyleProp<ViewStyle>;
@@ -38,7 +41,6 @@ const PredictionCarousel = ({
   const { width } = useWindowDimensions();
   const navigation = useNavigation();
   const { isPad } = useDevice();
-  const { user } = useProfileUser(userId);
 
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [disableManualScroll, setDisableManualScroll] = useState<boolean>(false);
@@ -107,7 +109,7 @@ const PredictionCarousel = ({
         marginBottom: 10,
       }}
     >
-      {user && !hideUserInfo ? (
+      {!hideUserInfo ? (
         <TouchableOpacity
           style={{
             alignSelf: 'flex-start',
@@ -126,12 +128,12 @@ const PredictionCarousel = ({
         >
           <>
             <ProfileImage
-              image={user.image}
+              image={userImage}
               imageSize={40}
               style={{ marginRight: 15 }}
               isDisabled
             />
-            <SubHeader>{user.name ?? ''}</SubHeader>
+            <SubHeader>{userName ?? ''}</SubHeader>
           </>
         </TouchableOpacity>
       ) : null}
@@ -182,7 +184,11 @@ const PredictionCarousel = ({
             setCurrentPage(newXPos);
           }}
         >
-          <UserPredictionList predictionSets={predictionSets} userId={userId} />
+          <UserPredictionList
+            predictionSets={predictionSets}
+            userId={userId}
+            userImage={userImage}
+          />
         </ScrollView>
         {/* SCROLL BAR */}
         <Animated.View

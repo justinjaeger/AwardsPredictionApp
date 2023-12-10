@@ -205,6 +205,8 @@ const Profile = () => {
                 <PredictionCarousel
                   predictionSets={predictionSets}
                   userId={userId}
+                  userName={user?.name ?? ''}
+                  userImage={user?.image ?? ''}
                   hideUserInfo
                   style={{ marginTop: 10, minHeight: 10 }}
                 />

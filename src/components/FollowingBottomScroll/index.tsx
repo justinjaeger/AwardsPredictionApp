@@ -11,7 +11,11 @@ const IMAGE_WIDTH = 50;
 const IMAGE_MARGIN = 5;
 
 // always the auth user
-const FollowingBottomScroll = ({ onPress }: { onPress: (userId: string) => void }) => {
+const FollowingBottomScroll = ({
+  onPress,
+}: {
+  onPress: (userId: string, userImage: string | undefined) => void;
+}) => {
   const { eventId, category } = useRouteParams();
   const { hideAbsolutely } = useFollowingBar();
   const { data: followingUsers } = useQueryGetFollowingUsers();
@@ -47,7 +51,7 @@ const FollowingBottomScroll = ({ onPress }: { onPress: (userId: string) => void 
           key={user._id}
           image={user.image}
           imageSize={IMAGE_WIDTH}
-          onPress={() => onPress(user._id)}
+          onPress={() => onPress(user._id, user.image)}
           style={{
             width: (IMAGE_WIDTH + 6) * (isPad ? IPAD_PROFILE_IMAGE_SCALE : 1), // this only makes sense because the profile image is equally scaled
             margin: IMAGE_MARGIN,

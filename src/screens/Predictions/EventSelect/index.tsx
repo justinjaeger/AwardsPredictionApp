@@ -124,6 +124,8 @@ const EventSelect = () => {
                 key={item._id}
                 predictionSets={item.recentPredictionSets || []}
                 userId={item._id}
+                userName={item.name}
+                userImage={item.image}
               />
             </View>
           )}

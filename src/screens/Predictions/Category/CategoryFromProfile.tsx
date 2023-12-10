@@ -7,14 +7,12 @@ import { getHeaderTitleWithProfile } from '../../../constants';
 import { View } from 'react-native';
 import { RouteProp, StackActions, useRoute } from '@react-navigation/native';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
-import useProfileUser from '../../Profile/useProfileUser';
 import { useRouteParams } from '../../../hooks/useRouteParams';
 
 const CategoryFromProfile = () => {
   const { params } = useRoute<RouteProp<PredictionsParamList, 'CategoryFromProfile'>>();
   const showEventLink = params?.showEventLink || false;
-  const { userId } = useRouteParams();
-  const { user } = useProfileUser(userId);
+  const { userId, userImage } = useRouteParams();
 
   const { category, event } = useRouteParams();
 
@@ -30,11 +28,7 @@ const CategoryFromProfile = () => {
       navigation.dispatch(StackActions.push('Profile', { userId }));
     };
     navigation.setOptions({
-      headerTitle: getHeaderTitleWithProfile(
-        headerTitle,
-        user?.image,
-        onPressProfileImage,
-      ),
+      headerTitle: getHeaderTitleWithProfile(headerTitle, userImage, onPressProfileImage),
     });
   }, [navigation]);
 

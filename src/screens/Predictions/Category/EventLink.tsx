@@ -11,8 +11,9 @@ import { useRouteParams } from '../../../hooks/useRouteParams';
 import { IPAD_PROFILE_IMAGE_SCALE } from '../../../components/ProfileImage';
 import useDevice from '../../../util/device';
 
-const EventLink = ({ userId }: { userId: string | undefined }) => {
+const EventLink = () => {
   const { userId: authUserId } = useAuth();
+  const { userId, userImage } = useRouteParams();
   const isAuthUser = userId === authUserId;
   const navigation = useNavigation();
   const { event } = useRouteParams();
@@ -23,7 +24,7 @@ const EventLink = ({ userId }: { userId: string | undefined }) => {
   return (
     <TouchableHighlight
       onPress={() => {
-        const params = { userId, eventId: event._id };
+        const params = { userId, userImage, eventId: event._id };
         // overrides category and goes to event
         if (isAuthUser) {
           navigation.dispatch(StackActions.replace('Event', params));
