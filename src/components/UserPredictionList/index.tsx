@@ -57,7 +57,7 @@ const UserPredictionList = ({
                 userImage,
                 eventId: event._id,
                 category: ps.category as CategoryName,
-                showEventLink: true,
+                showEventLink: !isAuthProfile,
               };
               if (isAuthProfile) {
                 navigation.navigate('Category', params);

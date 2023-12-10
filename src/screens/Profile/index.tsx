@@ -22,9 +22,9 @@ import Snackbar from '../../components/Snackbar';
 import { useRouteParams } from '../../hooks/useRouteParams';
 
 const Profile = () => {
-  // If we pass userId as params, it loads that user's profile. If not, it attemps to get logged in profile.
-  const { userId } = useRouteParams();
+  const { userId: paramsUserId } = useRouteParams();
   const { userId: authUserId } = useAuth();
+  const userId = paramsUserId || authUserId;
 
   const globalNavigation = useNavigation<MainScreenNavigationProp>();
   const navigation = useTypedNavigation<PredictionsParamList>();

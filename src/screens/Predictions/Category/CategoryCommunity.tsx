@@ -11,7 +11,7 @@ import ScreenshotMode from '../../../components/Buttons/ScreenshotMode';
 import BottomFABContainer from '../../../components/BottomFABContainer';
 import { useRouteParams } from '../../../hooks/useRouteParams';
 
-// Note: We ALSO use this for non-authenticated user profiles
+// Note: We ALSO use this for non-auth-user user profiles
 const CategoryCommunity = ({ showEventLink }: { showEventLink?: boolean }) => {
   const { category: _category } = useRouteParams();
   const category = _category!;

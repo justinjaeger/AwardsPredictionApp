@@ -13,19 +13,18 @@ import { PredictionsNavigationProp } from '../../navigation/types';
 import { useRouteParams } from '../../hooks/useRouteParams';
 
 const BottomFABContainer = ({ children }: { children?: React.ReactNode }) => {
-  const animatedBottomButtons = useRef(new Animated.Value(0)).current;
+  const { isPad } = useDevice();
+  const HEIGHT_TO_MOVE_UP = 60 * (isPad ? IPAD_PROFILE_IMAGE_SCALE : 1);
+  const animatedBottomButtons = useRef(new Animated.Value(HEIGHT_TO_MOVE_UP)).current;
   const navigation = useNavigation<PredictionsNavigationProp>();
   const { isHidden, setIsHidden, hideAbsolutely } = useFollowingBar();
-  const { isPad } = useDevice();
   const { userId: authUserId } = useAuth();
   const { eventId, category, userId } = useRouteParams();
   const isAuthUser = userId === authUserId;
 
-  const HEIGHT_TO_MOVE_UP = 60 * (isPad ? IPAD_PROFILE_IMAGE_SCALE : 1);
-
   useEffect(() => {
     Animated.timing(animatedBottomButtons, {
-      toValue: isHidden ? 0 : HEIGHT_TO_MOVE_UP,
+      toValue: isHidden ? HEIGHT_TO_MOVE_UP : 0,
       duration: 250,
       useNativeDriver: true,
     }).start();
@@ -59,7 +58,7 @@ const BottomFABContainer = ({ children }: { children?: React.ReactNode }) => {
               padding: 3,
               height: 45,
             }}
-            onPress={() => setIsHidden(!isHidden)}
+            onPress={() => setIsHidden((prev) => !prev)}
           />
         </View>
       ) : null}
