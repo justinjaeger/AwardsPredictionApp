@@ -1,11 +1,11 @@
 import React from 'react';
-import { ScrollView } from 'react-native';
 import COLORS from '../../constants/colors';
 import { useFollowingBar } from '../../context/FollowingBarContext';
 import useDevice from '../../util/device';
 import ProfileImage, { IPAD_PROFILE_IMAGE_SCALE } from '../ProfileImage';
 import useQueryGetFollowingUsers from '../../hooks/queries/useQueryGetFollowingUsers';
 import { useRouteParams } from '../../hooks/useRouteParams';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const IMAGE_WIDTH = 50;
 const IMAGE_MARGIN = 5;
@@ -22,10 +22,12 @@ const FollowingBottomScroll = ({ onPress }: { onPress: (userId: string) => void 
   );
   const usersPredictingCategory =
     category &&
-    usersPredictingEvent.filter((user) =>
-      Object.entries(user.eventsPredicting ?? {}).some(
-        ([e, categories]) => e === eventId && categories.includes(category),
-      ),
+    usersPredictingEvent.filter(
+      (user) =>
+        user.image &&
+        Object.entries(user.eventsPredicting ?? {}).some(
+          ([e, categories]) => e === eventId && categories.includes(category),
+        ),
     );
   const usersPredictingCurrent = usersPredictingCategory || usersPredictingEvent;
 
@@ -34,6 +36,7 @@ const FollowingBottomScroll = ({ onPress }: { onPress: (userId: string) => void 
   return (
     <ScrollView
       horizontal
+      scrollEnabled={true}
       contentContainerStyle={{
         justifyContent: 'center',
         alignItems: 'center',

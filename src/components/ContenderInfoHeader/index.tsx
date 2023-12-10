@@ -56,7 +56,6 @@ const ContenderInfoHeader = ({ prediction }: { prediction: iPrediction }) => {
           onClose={() => setShowFullPoster(false)}
           height={fullPosterHeight}
           width={fullPosterWidth}
-          style={{ backgroundColor: 'red' }}
         >
           <Poster
             path={posterPath} // this will render the loading state if null
