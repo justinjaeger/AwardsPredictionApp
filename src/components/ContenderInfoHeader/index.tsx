@@ -12,32 +12,18 @@ import ExternalLinkButton from '../ExternalLinkButton';
 import { useNavigation } from '@react-navigation/native';
 import { useTmdbDataStore } from '../../context/TmdbDataStore';
 import { MainScreenNavigationProp } from '../../navigation/types';
-import useQueryGetCommunityPredictions from '../../hooks/queries/useQueryGetCommunityPredictions';
 import BasicModal from '../BasicModal';
 import useDevice from '../../util/device';
 
-const ContenderInfoModal = ({
-  prediction,
-  onNavigateAway,
-}: {
-  prediction: iPrediction;
-  onNavigateAway?: () => void;
-}) => {
+const ContenderInfoHeader = ({ prediction }: { prediction: iPrediction }) => {
   const { isPad } = useDevice();
   const webViewNavigation = useNavigation<MainScreenNavigationProp>();
   const { width, height } = useWindowDimensions();
   const { getTmdbDataFromPrediction } = useTmdbDataStore();
 
-  const { data: communityPredictions } = useQueryGetCommunityPredictions();
   const { movie, person, song } = getTmdbDataFromPrediction(prediction) ?? {};
 
   const [showFullPoster, setShowFullPoster] = useState<boolean>(false);
-
-  if (!communityPredictions) return null;
-
-  const close = () => {
-    onNavigateAway && onNavigateAway();
-  };
 
   const posterPath = person?.posterPath ?? movie?.posterPath ?? null;
   const posterTitle = person?.name ?? movie?.title ?? '';
@@ -70,7 +56,6 @@ const ContenderInfoModal = ({
           onClose={() => setShowFullPoster(false)}
           height={fullPosterHeight}
           width={fullPosterWidth}
-          style={{ backgroundColor: 'red' }}
         >
           <Poster
             path={posterPath} // this will render the loading state if null
@@ -128,7 +113,6 @@ const ContenderInfoModal = ({
               <ExternalLinkButton
                 text={'Actor Info'}
                 onPress={() => {
-                  close();
                   webViewNavigation.navigate('WebView', {
                     uri: `https://www.themoviedb.org/person/${person.tmdbId}/`,
                     title: person.name || '',
@@ -141,9 +125,7 @@ const ContenderInfoModal = ({
             {movie ? (
               <ExternalLinkButton
                 text={person || song ? 'Movie Info' : 'More Info'}
-                // eslint-disable-next-line sonarjs/no-identical-functions
                 onPress={() => {
-                  close();
                   webViewNavigation.navigate('WebView', {
                     uri: `https://www.themoviedb.org/movie/${movie.tmdbId}/`,
                     title: movie?.title || '',
@@ -158,4 +140,4 @@ const ContenderInfoModal = ({
   );
 };
 
-export default ContenderInfoModal;
+export default ContenderInfoHeader;

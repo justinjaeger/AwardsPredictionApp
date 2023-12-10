@@ -24,16 +24,17 @@ import { iRecentPrediction } from '../../types/api';
 const PredictionCarousel = ({
   predictionSets,
   userId,
-  userInfo,
+  userName,
+  userImage,
+  hideUserInfo,
   enableArrows,
   style,
 }: {
   predictionSets: iRecentPrediction[];
   userId: string;
-  userInfo?: {
-    name: string;
-    image: string | undefined;
-  };
+  userName: string | undefined;
+  userImage: string | undefined;
+  hideUserInfo?: boolean;
   enableArrows?: boolean;
   style?: StyleProp<ViewStyle>;
 }) => {
@@ -108,7 +109,7 @@ const PredictionCarousel = ({
         marginBottom: 10,
       }}
     >
-      {userInfo ? (
+      {!hideUserInfo ? (
         <TouchableOpacity
           style={{
             alignSelf: 'flex-start',
@@ -127,12 +128,12 @@ const PredictionCarousel = ({
         >
           <>
             <ProfileImage
-              image={userInfo.image}
+              image={userImage}
               imageSize={40}
               style={{ marginRight: 15 }}
               isDisabled
             />
-            <SubHeader>{userInfo.name}</SubHeader>
+            <SubHeader>{userName ?? ''}</SubHeader>
           </>
         </TouchableOpacity>
       ) : null}
@@ -183,7 +184,11 @@ const PredictionCarousel = ({
             setCurrentPage(newXPos);
           }}
         >
-          <UserPredictionList predictionSets={predictionSets} userId={userId} />
+          <UserPredictionList
+            predictionSets={predictionSets}
+            userId={userId}
+            userImage={userImage}
+          />
         </ScrollView>
         {/* SCROLL BAR */}
         <Animated.View

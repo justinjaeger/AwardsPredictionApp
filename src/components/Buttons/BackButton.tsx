@@ -3,13 +3,17 @@ import React from 'react';
 import theme from '../../constants/theme';
 import { IconButton } from './IconButton';
 
-const BackButton = (props: { onPress?: () => void }) => {
-  const { onPress } = props;
+type iBackButtonProps = {
+  onPress?: () => void;
+  iconName?: string;
+};
+
+const BackButtonBase = ({ onPress, iconName }: iBackButtonProps) => {
   const navigation = useNavigation();
 
   return (
     <IconButton
-      iconProps={{ name: 'arrow-ios-back-outline' }}
+      iconProps={{ name: iconName || 'arrow-ios-back-outline' }}
       onPress={() => {
         if (onPress) {
           onPress();
@@ -21,5 +25,11 @@ const BackButton = (props: { onPress?: () => void }) => {
     />
   );
 };
+
+const BackButton = (props: iBackButtonProps) => <BackButtonBase {...props} />;
+
+export const DownButton = (props: iBackButtonProps) => (
+  <BackButtonBase {...props} iconName={'arrow-ios-downward-outline'} />
+);
 
 export default BackButton;

@@ -2,7 +2,7 @@
 import React from 'react';
 import { TouchableHighlight, useWindowDimensions, View } from 'react-native';
 import { iSearchData } from '../../services/tmdb';
-import { getPosterDimensionsByWidth, PosterSize } from '../../constants/posterDimensions';
+import { getPosterDimensionsByWidth } from '../../constants/posterDimensions';
 import COLORS from '../../constants/colors';
 import { hexToRgb } from '../../util/hexToRgb';
 import Poster from '../Images/Poster';
@@ -13,6 +13,8 @@ import { CategoryType } from '../../types/api';
 import { useNavigation } from '@react-navigation/native';
 import { MainScreenNavigationProp } from '../../navigation/types';
 import { truncateText } from '../../util/truncateText';
+import { EVENT_ITEM_HEIGHT } from '../../screens/Predictions/Event/EventList';
+import useDevice from '../../util/device';
 
 export type iSearchListItemProps = {
   isSelected: boolean;
@@ -27,8 +29,6 @@ export type iSearchListItemProps = {
   totalNumPredictingTop?: number;
 };
 
-const IMAGE_SIZE = PosterSize.MEDIUM;
-
 const ContenderListItem = ({
   item,
   isSelected,
@@ -36,11 +36,14 @@ const ContenderListItem = ({
   onPressItem,
   type,
 }: iSearchListItemProps) => {
+  const { isPad } = useDevice();
   const { width: windowWidth } = useWindowDimensions();
   const navigation = useNavigation<MainScreenNavigationProp>();
 
+  const eventItemHeight = EVENT_ITEM_HEIGHT * (isPad ? 1.5 : 1);
+
   const { width: posterWidth, height: posterHeight } =
-    getPosterDimensionsByWidth(IMAGE_SIZE);
+    getPosterDimensionsByWidth(eventItemHeight);
 
   return (
     <TouchableHighlight

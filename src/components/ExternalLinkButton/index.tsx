@@ -1,9 +1,8 @@
-import { TouchableHighlight } from 'react-native-gesture-handler';
 import { BodyBold } from '../Text';
 import COLORS from '../../constants/colors';
 import React from 'react';
 import theme from '../../constants/theme';
-import { StyleProp, ViewStyle } from 'react-native';
+import { StyleProp, TouchableHighlight, ViewStyle } from 'react-native';
 import useDevice from '../../util/device';
 
 const ExternalLinkButton = ({

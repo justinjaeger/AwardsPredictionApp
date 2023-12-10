@@ -2,13 +2,16 @@ import { Platform, useWindowDimensions } from 'react-native';
 
 const useDevice = () => {
   const { width } = useWindowDimensions();
-  // @ts-ignore
-  const isPad = Platform.constants?.interfaceIdiom === 'pad'; // boolean
 
   const isSmallScreen = width < 400;
-  const isLargeScreen = width > 900;
+  const isLargeScreen = width > 700;
 
-  return { isPad, isSmallScreen, isLargeScreen };
+  // isPad can be google tablet OR ipad
+  // @ts-ignore
+  const isPad = Platform.constants?.interfaceIdiom === 'pad' || isLargeScreen; // boolean
+  const isAndroid = Platform.OS === 'android';
+
+  return { isPad, isAndroid, isSmallScreen, isLargeScreen };
 };
 
 export default useDevice;

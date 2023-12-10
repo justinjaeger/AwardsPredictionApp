@@ -1,26 +1,17 @@
 import React, { useLayoutEffect } from 'react';
-import { PredictionsParamList } from '../../../navigation/types';
-import {
-  RouteProp,
-  StackActions,
-  useNavigation,
-  useRoute,
-} from '@react-navigation/native';
+import { StackActions, useNavigation } from '@react-navigation/native';
 import Event from './index';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import { eventToString } from '../../../util/stringConversions';
 import { getHeaderTitleWithProfile } from '../../../constants';
-import { useEvent } from '../../../context/EventContext';
 import useQueryGetUserPredictions from '../../../hooks/queries/useQueryGetUserPredictions';
 import useProfileUser from '../../Profile/useProfileUser';
+import { useRouteParams } from '../../../hooks/useRouteParams';
 
 const EventFromProfile = () => {
   const navigation = useNavigation();
-  const { params } = useRoute<RouteProp<PredictionsParamList, 'EventFromProfile'>>();
-  const { userId } = params;
+  const { userId, event } = useRouteParams();
   const { user } = useProfileUser(userId);
-
-  const { event } = useEvent();
 
   const { data: predictionData, isLoading } = useQueryGetUserPredictions(userId);
 
@@ -38,7 +29,7 @@ const EventFromProfile = () => {
         onPressProfileImage,
       ),
     });
-  }, [navigation]);
+  }, [navigation, user?.image]);
 
   return (
     <>
@@ -47,7 +38,6 @@ const EventFromProfile = () => {
           tab={'personal'}
           predictionData={predictionData || undefined}
           isLoading={isLoading}
-          userId={userId}
         />
       </BackgroundWrapper>
     </>

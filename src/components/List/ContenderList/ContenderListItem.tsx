@@ -8,7 +8,6 @@ import {
 } from 'react-native';
 import COLORS from '../../../constants/colors';
 import { getPosterDimensionsByWidth } from '../../../constants/posterDimensions';
-import { useEvent } from '../../../context/EventContext';
 import { getTotalNumPredicting } from '../../../util/getNumPredicting';
 import { Body, SubHeader } from '../../Text';
 import { hexToRgb } from '../../../util/hexToRgb';
@@ -20,6 +19,7 @@ import theme from '../../../constants/theme';
 import Histogram from '../../Histogram';
 import PosterFromTmdb from '../../Images/PosterFromTmdb';
 import CustomIcon from '../../CustomIcon';
+import { useRouteParams } from '../../../hooks/useRouteParams';
 
 export type iContenderListItemProps = {
   prediction: iPrediction;
@@ -67,10 +67,9 @@ const ContenderListItem = ({
 
   const SMALL_POSTER = windowWidth / 9;
 
-  const { category: _category, event: _event } = useEvent();
+  const { category: _category, categoryData } = useRouteParams();
   const category = _category!;
-  const event = _event!;
-  const { slots: _slots, type } = event.categories[category];
+  const { slots: _slots, type } = categoryData!;
   const slots = _slots || 5;
 
   const { width: posterWidth, height: posterHeight } =

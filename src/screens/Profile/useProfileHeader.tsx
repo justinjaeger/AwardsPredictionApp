@@ -19,6 +19,8 @@ const useProfileHeader = (
 
   const isAuthUser = userId && userId === authUserId;
 
+  console.log('userId', userId);
+
   const logOut = async () => {
     setIsLoading(true);
     await signOutUser();

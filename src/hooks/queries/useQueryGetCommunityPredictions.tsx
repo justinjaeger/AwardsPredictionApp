@@ -1,13 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
 import { QueryKeys } from '../../types/keys';
 import MongoApi from '../../services/api/requests';
-import { useEvent } from '../../context/EventContext';
 import { useTmdbDataStore } from '../../context/TmdbDataStore';
 import { EventModel, WithId } from '../../types/api';
+import { useRouteParams } from '../useRouteParams';
 
 const useQueryGetCommunityPredictions = (propsEvent?: WithId<EventModel>) => {
   const { storeTmdbDataFromPredictionSet } = useTmdbDataStore();
-  const { event: contextEvent } = useEvent();
+  const { event: contextEvent } = useRouteParams();
   const event = propsEvent ?? contextEvent;
   const eventId = event?._id;
 

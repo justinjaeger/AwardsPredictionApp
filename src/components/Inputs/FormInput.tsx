@@ -35,22 +35,22 @@ const FormInput = ({
   const onChangeText = (v: string) => {
     if (isYear) {
       if (/^[0-9]*$/.test(v) === true && v.length <= 4) {
-        setValue(v.toLowerCase());
+        setValue(v);
       }
       return;
     }
     switch (textContentType) {
       case 'emailAddress':
-        setValue(v.toLowerCase());
+        setValue(v);
         break;
       case 'username':
-        if (/^[a-zA-Z0-9_.]*$/.test(v) === true) {
-          setValue(v.toLowerCase());
+        if (/^[a-z0-9_.]*$/.test(v) === true) {
+          setValue(v);
         }
         break;
       case 'oneTimeCode':
         if (/^[0-9]*$/.test(v) === true && v.length <= 6) {
-          setValue(v.toLowerCase());
+          setValue(v);
         }
         break;
       case 'name':
@@ -62,6 +62,33 @@ const FormInput = ({
         setValue(v);
     }
   };
+
+  const getInputSpecificProps = (): any => {
+    switch (textContentType) {
+      case 'emailAddress':
+        return {
+          keyboardType: 'email-address',
+          autoCapitalize: 'none',
+        };
+      case 'username':
+        return {
+          autoCapitalize: 'none',
+          secureTextEntry: true,
+          keyboardType: 'visible-password',
+        };
+      case 'oneTimeCode':
+        return {
+          keyboardType: 'number-pad',
+        };
+      case 'name':
+        return {
+          autoCapitalize: 'words',
+        };
+      default:
+        return {};
+    }
+  };
+  const inputSpecificProps = getInputSpecificProps();
 
   const _status: EvaStatus = status || 'basic';
 
@@ -91,6 +118,7 @@ const FormInput = ({
         color: 'rgba(255,255,255,0.8)',
         fontSize: 18,
         padding: 5,
+        textAlignVertical: multiline ? 'top' : 'center',
         minHeight: multiline ? 100 : undefined,
       }}
       autoFocus={autoFocus}
@@ -99,6 +127,7 @@ const FormInput = ({
         borderColor: COLORS.white,
         ...style,
       }}
+      {...inputSpecificProps}
     />
   );
 };

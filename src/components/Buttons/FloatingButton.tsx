@@ -35,6 +35,8 @@ const FloatingButton = (props: {
         borderColor: COLORS.white,
         alignItems: 'center',
         justifyContent: 'center',
+        margin: 10,
+        marginBottom: 0,
         ...style,
       }}
       underlayColor={disabled ? COLORS.disabled : COLORS.secondary}

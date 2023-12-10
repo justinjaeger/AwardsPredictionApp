@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { FlatList, View } from 'react-native';
 import { PredictionsParamList } from '../../../navigation/types';
 import { useTypedNavigation } from '../../../util/hooks';
-import { useEvent } from '../../../context/EventContext';
+import { usePersonalCommunityTab } from '../../../context/EventContext';
 import SignedOutState from '../../../components/SignedOutState';
 import _ from 'lodash';
 import { formatLastUpdated } from '../../../util/formatDateTime';
@@ -18,32 +18,32 @@ import {
 import EventSkeleton from '../../../components/Skeletons/EventSkeleton';
 import { getOrderedCategories } from '../../../util/sortByObjectOrder';
 import EventItem from './EventItem';
+import { useRouteParams } from '../../../hooks/useRouteParams';
 
 // This is shared by EventPersonalCommunity AND EventFromProfile
 const Event = ({
   tab,
-  userId,
   predictionData,
   isLoading,
 }: {
   tab: 'personal' | 'community';
-  userId: string | undefined; // if undefined means user is logged out
   predictionData: WithId<PredictionSet> | undefined;
   isLoading: boolean;
 }) => {
   const { userId: authUserId } = useAuth();
-  const { event, setCategory, setPersonalCommunityTab } = useEvent();
+  const { userId, event, userImage } = useRouteParams();
+  const { setPersonalCommunityTab } = usePersonalCommunityTab();
   const navigation = useTypedNavigation<PredictionsParamList>();
 
   const isAuthProfile = userId === authUserId;
 
   const onSelectCategory = async (category: CategoryName) => {
-    setCategory(category);
     setPersonalCommunityTab(tab);
+    const params = { userId, userImage, eventId: event!._id, category };
     if (isAuthProfile || tab === 'community') {
-      navigation.navigate('Category', { userId });
+      navigation.navigate('Category', params);
     } else {
-      navigation.dispatch(StackActions.push('CategoryFromProfile', { userId }));
+      navigation.dispatch(StackActions.push('CategoryFromProfile', params));
     }
   };
 

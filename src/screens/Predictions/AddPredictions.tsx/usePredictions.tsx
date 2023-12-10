@@ -1,10 +1,10 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useState } from 'react';
-import { useEvent } from '../../../context/EventContext';
 import { PredictionsParamList } from '../../../navigation/types';
 import { iPrediction } from '../../../types/api';
 import useQueryGetCommunityPredictions from '../../../hooks/queries/useQueryGetCommunityPredictions';
 import { sortPredictions } from '../../../util/sortPredictions';
+import { useRouteParams } from '../../../hooks/useRouteParams';
 
 /**
  * Lists all community predictions with the ones you've selected
@@ -14,7 +14,7 @@ export const usePredictions = () => {
     params: { initialPredictions, onFinish },
   } = useRoute<RouteProp<PredictionsParamList, 'AddPredictions'>>();
   const navigation = useNavigation();
-  const { category: _category } = useEvent();
+  const { category: _category } = useRouteParams();
   const category = _category!;
 
   // We use the SAME KEY as the previous screen, because it avoids a re-fetch of the data which was available previously

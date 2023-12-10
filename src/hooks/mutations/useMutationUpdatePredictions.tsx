@@ -4,11 +4,12 @@ import { QueryKeys } from '../../types/keys';
 import { useAuth } from '../../context/AuthContext';
 import MongoApi from '../../services/api/requests';
 import { iUpdatePredictionSetPayload } from '../../services/api/requests/predictionset';
-import { useEvent } from '../../context/EventContext';
+import { useRouteParams } from '../useRouteParams';
 
 const useMutationUpdatePredictions = (onComplete: () => void, onIsSaving: () => void) => {
   const { userId: authUserId } = useAuth();
-  const { event } = useEvent();
+  const { event: _event } = useRouteParams();
+  const event = _event!;
   const queryClient = useQueryClient();
 
   const [isComplete, setIsComplete] = useState<boolean>(true);

@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { PosterSize, getPosterDimensionsByWidth } from '../../constants/posterDimensions';
-import { GestureResponderEvent, View, useWindowDimensions } from 'react-native';
+import {
+  FlatList,
+  GestureResponderEvent,
+  ScrollView,
+  View,
+  useWindowDimensions,
+} from 'react-native';
 import COLORS from '../../constants/colors';
 import { hexToRgb } from '../../util/hexToRgb';
 import { Body, Header, SubHeader, SubHeaderLight } from '../Text';
@@ -8,6 +14,8 @@ import theme from '../../constants/theme';
 import { formatPercentage } from '../../util/formatPercentage';
 import useDevice from '../../util/device';
 import { triggerHaptic } from '../../util/hapticFeedback';
+
+export const SLOTS_TO_DISPLAY_EXTRA = 5;
 
 const Histogram = ({
   numPredicting,
@@ -19,6 +27,8 @@ const Histogram = ({
   posterHeight: _posterHeight,
   enableHoverInfo,
   containerWidthFactor,
+  flatListRef,
+  scrollRef,
 }: {
   numPredicting: Record<number, number>;
   totalNumPredicting: number;
@@ -29,6 +39,9 @@ const Histogram = ({
   posterHeight?: number;
   enableHoverInfo?: boolean;
   containerWidthFactor?: number;
+  // important props for enabling/disabling scroll when inside a scrollview:
+  flatListRef?: React.RefObject<FlatList<any>>;
+  scrollRef?: React.RefObject<ScrollView>;
 }) => {
   const { isPad } = useDevice();
   const { width: windowWidth } = useWindowDimensions();
@@ -37,8 +50,9 @@ const Histogram = ({
   );
   const posterHeight = _posterHeight ?? pHeight;
   const totalWidth = ((_totalWidth ?? windowWidth) - 20) * (containerWidthFactor ?? 1);
+  const marginIfCenter = (windowWidth - totalWidth) / 2;
 
-  const barsToShow = slots + 5;
+  const barsToShow = slots + SLOTS_TO_DISPLAY_EXTRA;
   const barMaxHeight = posterHeight * 1;
 
   const [gesturePos, setGesturePos] = useState<{ x: number; y: number } | undefined>(
@@ -46,16 +60,27 @@ const Histogram = ({
   );
 
   const handleGesture = (e: GestureResponderEvent) => {
+    e.preventDefault();
     if (!enableHoverInfo) return;
-    const x = e.nativeEvent.locationX;
-    const y = e.nativeEvent.locationY;
-    setGesturePos({ x, y });
+    const x = e.nativeEvent.pageX - marginIfCenter + 5;
+    const y = e.nativeEvent.pageY;
+    const touchIsAboveHistogram = y <= 0;
+    setGesturePos(touchIsAboveHistogram ? undefined : { x, y });
   };
 
   const widthOfEachBar = totalWidth / barsToShow;
 
-  const slotThatTouchIsIn =
+  let slotThatTouchIsIn =
     gesturePos && Math.floor((gesturePos.x / totalWidth) * barsToShow) + 1;
+
+  // adjust for margins:
+  slotThatTouchIsIn =
+    slotThatTouchIsIn !== undefined
+      ? slotThatTouchIsIn > barsToShow
+        ? barsToShow
+        : Math.max(slotThatTouchIsIn, 1)
+      : undefined;
+
   const numPredictingInSelectedSlot =
     (slotThatTouchIsIn && numPredicting?.[slotThatTouchIsIn]) || 0;
 
@@ -64,6 +89,13 @@ const Histogram = ({
       triggerHaptic();
     }
   }, [slotThatTouchIsIn]);
+
+  // lets us set the props of the scrollview from outside the component
+  // better for performance since it won't re-render the component
+  const enableScroll = (scrollEnabled: boolean) => {
+    flatListRef?.current?.setNativeProps?.({ scrollEnabled });
+    scrollRef?.current?.setNativeProps?.({ scrollEnabled });
+  };
 
   return (
     <View
@@ -82,9 +114,20 @@ const Histogram = ({
         borderRadius: theme.borderRadius,
         backgroundColor: enableHoverInfo ? hexToRgb(COLORS.gray, 0.05) : undefined,
       }}
-      onTouchStart={handleGesture}
-      onTouchMove={handleGesture}
-      onTouchEnd={() => setGesturePos(undefined)}
+      pointerEvents={enableHoverInfo ? 'auto' : 'none'}
+      onStartShouldSetResponder={() => true}
+      onMoveShouldSetResponder={() => true}
+      onResponderGrant={(e) => {
+        handleGesture(e);
+        enableScroll(false);
+      }}
+      onResponderMove={(e) => {
+        handleGesture(e);
+      }}
+      onTouchEnd={() => {
+        setGesturePos(undefined);
+        enableScroll(true);
+      }}
     >
       {new Array(barsToShow).fill(null).map((x, i) => {
         const place = i + 1;

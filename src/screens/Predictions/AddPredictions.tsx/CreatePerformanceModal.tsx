@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import Snackbar from '../../../components/Snackbar';
-import { useEvent } from '../../../context/EventContext';
 import MovieListSearch from '../../../components/MovieList/MovieListSearch';
 import { FAB } from '../../../components/Buttons/FAB';
 import BasicModal from '../../../components/BasicModal';
@@ -12,6 +11,7 @@ import { SubmitButton } from '../../../components/Buttons';
 import ListItemSkeleton from '../../../components/Skeletons/ListItemSkeleton';
 import { PosterSize } from '../../../constants/posterDimensions';
 import { View } from 'react-native';
+import { useRouteParams } from '../../../hooks/useRouteParams';
 
 const CreatePerformanceModal = ({
   visible,
@@ -33,8 +33,9 @@ const CreatePerformanceModal = ({
   ) => void;
   addItemToPredictions: (prediction: iPrediction) => void;
 }) => {
-  const { event } = useEvent();
-  const minReleaseYear = event!.year - 1;
+  const { event } = useRouteParams();
+  const { year } = event!;
+  const minReleaseYear = year - 1;
 
   const communityPredictionsWithPerson = communityPredictions.filter(
     (p) => p.personTmdbId === selectedPersonTmdbId,

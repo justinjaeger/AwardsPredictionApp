@@ -1,10 +1,9 @@
 import _ from 'lodash';
-import React, { useEffect, useRef, useState } from 'react';
-import { Animated, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View } from 'react-native';
 import MovieListDraggable from '../../../components/MovieList/MovieListDraggable';
 import SignedOutState from '../../../components/SignedOutState';
 import { BodyBold } from '../../../components/Text';
-import { useEvent } from '../../../context/EventContext';
 import useMutationUpdatePredictions from '../../../hooks/mutations/useMutationUpdatePredictions';
 import { PredictionsParamList } from '../../../navigation/types';
 import {
@@ -14,7 +13,6 @@ import {
 } from '../../../util/hooks';
 import { formatLastUpdated } from '../../../util/formatDateTime';
 import { useAuth } from '../../../context/AuthContext';
-import { AddPredictionsFab } from '../../../components/Buttons/DisplayFAB';
 import EventLink from './EventLink';
 import { iPrediction } from '../../../types/api';
 import useQueryGetUserPredictions from '../../../hooks/queries/useQueryGetUserPredictions';
@@ -23,32 +21,21 @@ import { sortPredictions } from '../../../util/sortPredictions';
 import ScreenshotMode from '../../../components/Buttons/ScreenshotMode';
 import { FAB } from '../../../components/Buttons/FAB';
 import { useFollowingBar } from '../../../context/FollowingBarContext';
-import useDevice from '../../../util/device';
-
-const EXTRA_BOTTOM_HEIGHT = 70;
+import BottomFABContainer from '../../../components/BottomFABContainer';
+import FloatingButton from '../../../components/Buttons/FloatingButton';
+import { useRouteParams } from '../../../hooks/useRouteParams';
 
 // used in both FromProfile and from event
 const CategoryPersonal = ({
-  userId,
   showEventLink,
   onBack,
 }: {
-  userId: string | undefined;
   showEventLink?: boolean;
   onBack?: () => void;
 }) => {
-  const { isPad } = useDevice();
-  const animatedBottomButtons = useRef(new Animated.Value(0)).current;
-  const { isHidden, setHideAbsolutely } = useFollowingBar();
-  useEffect(() => {
-    Animated.timing(animatedBottomButtons, {
-      toValue: isHidden ? 0 : EXTRA_BOTTOM_HEIGHT,
-      duration: 250,
-      useNativeDriver: true,
-    }).start();
-  }, [isHidden]);
+  const { setHideAbsolutely } = useFollowingBar();
 
-  const { category: _category, event: _event } = useEvent();
+  const { category: _category, event: _event, userId } = useRouteParams();
   const category = _category!;
   const event = _event!;
 
@@ -117,6 +104,8 @@ const CategoryPersonal = ({
 
   const onPressAdd = () => {
     navigation.navigate('AddPredictions', {
+      category,
+      eventId: event._id,
       initialPredictions: predictions,
       onFinish: (ps: iPrediction[]) => {
         setPredictions(ps);
@@ -152,7 +141,6 @@ const CategoryPersonal = ({
           </BodyBold>
         </View>
       ) : null}
-      {showEventLink ? <EventLink userId={userId} /> : null}
       <View style={{ height: '100%' }}>
         <MovieListDraggable
           predictions={predictions}
@@ -170,24 +158,11 @@ const CategoryPersonal = ({
           onPressAdd={onPressAdd}
         />
       </View>
-      <Animated.View
-        style={{
-          transform: [{ translateY: animatedBottomButtons }],
-        }}
-      >
-        <ScreenshotMode
-          predictions={predictions}
-          userId={userId}
-          positionFromBottom={EXTRA_BOTTOM_HEIGHT + 10}
-        />
-        {isAuthProfile ? (
-          <AddPredictionsFab
-            onPress={onPressAdd}
-            positionFromBottom={EXTRA_BOTTOM_HEIGHT + 10}
-            positionFromRight={isPad ? 120 : 80}
-          />
-        ) : null}
-      </Animated.View>
+      <BottomFABContainer>
+        {showEventLink ? <EventLink /> : null}
+        {isAuthProfile ? <FloatingButton onPress={onPressAdd} icon={'plus'} /> : null}
+        <ScreenshotMode predictions={predictions} />
+      </BottomFABContainer>
       {isAuthProfile && showSave ? (
         <FAB
           iconName="save-outline"

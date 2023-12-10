@@ -17,7 +17,7 @@ const EventBoxSkeleton = () => {
         width: '100%',
         marginLeft: theme.windowMargin,
         marginRight: theme.windowMargin,
-        alignItems: 'center',
+        alignItems: 'flex-start',
       }}
     >
       <SkeletonPlaceholder
@@ -27,6 +27,8 @@ const EventBoxSkeleton = () => {
       >
         <View
           style={{
+            marginLeft: theme.windowMargin,
+            marginRight: theme.windowMargin,
             height: eventItemHeight,
             width: (isPad ? windowWidth / 2 : windowWidth) - theme.windowMargin * 1.5,
             marginTop: 20,

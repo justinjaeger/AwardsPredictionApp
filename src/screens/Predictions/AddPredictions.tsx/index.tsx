@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { SubHeader } from '../../../components/Text';
 import { View } from 'react-native';
-import { useEvent } from '../../../context/EventContext';
 import COLORS from '../../../constants/colors';
 import MovieListSearch from '../../../components/MovieList/MovieListSearch';
 import LoadingStatueModal from '../../../components/LoadingStatueModal';
@@ -18,15 +17,15 @@ import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import CreatePerformanceModal from './CreatePerformanceModal';
 import CreateSongModal from './CreateSongModal';
 import useContenderSearch from './useContenderSearch';
+import { useRouteParams } from '../../../hooks/useRouteParams';
 
 const AddPredictions = () => {
   const navigation = useTypedNavigation<PredictionsParamList>();
 
-  const { category: _category, event: _event } = useEvent();
-  const category = _category!;
+  const { event: _event, categoryData } = useRouteParams();
   const event = _event!;
 
-  const { shortlistDateTime, isHidden, type } = event.categories[category];
+  const { shortlistDateTime, isHidden, type } = categoryData!;
 
   const phaseUserIsPredicting = getPhaseUserIsPredicting(event, shortlistDateTime);
   const letUserCreateContenders = !isHidden && phaseUserIsPredicting === undefined;

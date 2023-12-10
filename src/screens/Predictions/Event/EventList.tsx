@@ -7,7 +7,7 @@ import COLORS from '../../../constants/colors';
 import { PredictionsParamList } from '../../../navigation/types';
 import { useTypedNavigation } from '../../../util/hooks';
 import { getOrderedEvents } from '../../../util/sortByObjectOrder';
-import { useEvent } from '../../../context/EventContext';
+import { usePersonalCommunityTab } from '../../../context/EventContext';
 import theme from '../../../constants/theme';
 import AwardsBodyImage from '../../../components/AwardsBodyImage';
 import {
@@ -34,7 +34,7 @@ const EventList = ({
 }) => {
   const { userId: authUserId } = useAuth();
   const { width } = useWindowDimensions();
-  const { setEvent, setPersonalCommunityTab } = useEvent();
+  const { setPersonalCommunityTab } = usePersonalCommunityTab();
   const navigation = useTypedNavigation<PredictionsParamList>();
   const { isPad } = useDevice();
 
@@ -45,15 +45,13 @@ const EventList = ({
   const userId = user?._id;
 
   const onSelectEvent = async (event: WithId<EventModel>) => {
-    setEvent(event);
     const noProfileSelected = !userId; // happens when signed out and click from home screen
     setPersonalCommunityTab(userId ? 'personal' : 'community');
+    const params = { userId, eventId: event._id };
     if ((authUserId && authUserId === userId) || noProfileSelected) {
-      navigation.navigate('Event', { userId });
+      navigation.navigate('Event', params);
     } else {
-      navigation.navigate('EventFromProfile', {
-        userId,
-      });
+      navigation.navigate('EventFromProfile', params);
     }
   };
 

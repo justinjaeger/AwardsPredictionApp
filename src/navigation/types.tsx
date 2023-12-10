@@ -1,6 +1,6 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import { MaterialTopTabNavigationProp } from '@react-navigation/material-top-tabs';
-import { EventModel, WithId, iPrediction } from '../types/api';
+import { CategoryName, iPrediction } from '../types/api';
 
 export type MainScreenNavigationProp = StackNavigationProp<MainParamList>;
 export type MainParamList = {
@@ -33,27 +33,36 @@ export type PredictionsParamList = {
   // PREDICTION SCREENS
   Event: {
     userId: string | undefined;
+    eventId: string;
   };
   EventFromProfile: {
     userId: string | undefined;
+    eventId: string;
   };
   Category: {
     userId: string | undefined;
+    eventId: string;
+    category: CategoryName;
     showEventLink?: boolean;
     onPressItem?: (contenderId: string) => void;
   };
   CategoryFromProfile: {
     userId: string | undefined;
+    userImage?: string;
+    eventId: string;
+    category: CategoryName;
     showEventLink?: boolean;
     onPressItem?: (contenderId: string) => void;
   };
   AddPredictions: {
+    eventId: string;
+    category: CategoryName;
     initialPredictions: iPrediction[];
     onFinish: (predictions: iPrediction[]) => void;
   };
   ContenderStats: {
     movieTmdbId: number;
-    event: WithId<EventModel>;
+    year: number;
   };
   // PROFILE SCREENS
   Profile: {
@@ -66,6 +75,12 @@ export type PredictionsParamList = {
   UpdateProfileInfo: undefined;
   // FRIEND SCREENS
   SearchFriends: undefined;
+  // MODALS
+  ContenderInfoModal: {
+    prediction: iPrediction;
+    category: CategoryName;
+    eventId: string;
+  };
 };
 
 export type AdminNavigationProp = StackNavigationProp<AdminParamList>;

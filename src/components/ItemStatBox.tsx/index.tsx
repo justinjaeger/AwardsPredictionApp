@@ -1,19 +1,28 @@
 import React from 'react';
-import { TouchableOpacity, View, useWindowDimensions } from 'react-native';
+import {
+  FlatList,
+  ScrollView,
+  TouchableOpacity,
+  View,
+  useWindowDimensions,
+} from 'react-native';
 import { Header, Label, SmallHeader, SubHeader, SubHeaderLight } from '../Text';
 import { CategoryName, EventModel, Phase, WithId, iPrediction } from '../../types/api';
 import { getNumPredicting, getTotalNumPredicting } from '../../util/getNumPredicting';
-import Histogram from '../Histogram';
+import Histogram, { SLOTS_TO_DISPLAY_EXTRA } from '../Histogram';
 import { useTmdbDataStore } from '../../context/TmdbDataStore';
 import { categoryNameToTmdbCredit } from '../../util/categoryNameToTmdbCredit';
 import { getPhaseUserIsPredicting } from '../../util/getPhaseUserIsPredicting';
 import { hexToRgb } from '../../util/hexToRgb';
 import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
-import { StackActions, useNavigation } from '@react-navigation/native';
+import {
+  StackActions,
+  useNavigation,
+  useNavigationState,
+} from '@react-navigation/native';
 import { PredictionsNavigationProp } from '../../navigation/types';
 import { useAuth } from '../../context/AuthContext';
-import { useEvent } from '../../context/EventContext';
 import Stat from './Stat';
 
 const NumPredictingItem = ({
@@ -22,26 +31,29 @@ const NumPredictingItem = ({
   prediction,
   totalNumPredictingTop,
   totalNumPredictingCategory,
-  disableCategoryLink,
   widthFactor,
+  flatListRef,
+  scrollRef,
 }: {
   category: CategoryName;
   event: WithId<EventModel>;
   prediction: iPrediction;
   totalNumPredictingTop: number;
   totalNumPredictingCategory: number;
-  disableCategoryLink?: boolean;
   widthFactor?: number;
+  flatListRef?: React.RefObject<FlatList<any>>;
+  scrollRef?: React.RefObject<ScrollView>;
 }) => {
   const { width } = useWindowDimensions();
   const navigation = useNavigation<PredictionsNavigationProp>();
   const { userId: authUserId } = useAuth();
-  const { setCategory, setEvent } = useEvent();
 
   const numPredicting = prediction?.numPredicting;
   const totalNumPredicting = getTotalNumPredicting(numPredicting || {});
   const { getTmdbDataFromPrediction } = useTmdbDataStore();
+  const navigationState = useNavigationState((state) => state);
 
+  // THIS IS PROBABLY UNDEFINED!!
   const { slots, shortlistDateTime } = event.categories[category];
   const categoryString = event.categories[category].name;
 
@@ -76,19 +88,19 @@ const NumPredictingItem = ({
           flexDirection: 'row',
           alignItems: 'baseline',
         }}
-        onPress={
-          disableCategoryLink
-            ? undefined
-            : () => {
-                setCategory(category);
-                setEvent(event);
-                navigation.dispatch(
-                  StackActions.push('Category', {
-                    userId: authUserId ?? undefined,
-                  }),
-                );
-              }
-        }
+        onPress={() => {
+          if (navigationState.routes[navigationState.index - 1].name === 'Category') {
+            navigation.goBack();
+          } else {
+            navigation.dispatch(
+              StackActions.replace('Category', {
+                userId: authUserId ?? undefined,
+                eventId: event._id,
+                category: category,
+              }),
+            );
+          }
+        }}
       >
         <>
           <Header>{`#${prediction?.ranking}`}</Header>
@@ -107,6 +119,8 @@ const NumPredictingItem = ({
           slots={slots}
           containerWidthFactor={widthFactor}
           enableHoverInfo
+          flatListRef={flatListRef}
+          scrollRef={scrollRef}
         />
       ) : null}
       <View
@@ -119,13 +133,16 @@ const NumPredictingItem = ({
           paddingRight: 10,
         }}
       >
-        <Stat percentage={win / totalNumPredictingCategory} subject="win" />
+        <Stat percentage={win / totalNumPredictingCategory} text="predict win" />
         {[undefined, Phase.NOMINATION].includes(phaseUserIsPredicting) ? (
-          <Stat percentage={nom / totalNumPredictingCategory} subject="nom" />
+          <Stat percentage={nom / totalNumPredictingCategory} text="predict nom" />
         ) : null}
         {/* undefined means nothing has happened; NOMINATION means it's been shortlisted */}
         {phaseUserIsPredicting === undefined ? (
-          <Stat percentage={listed / totalNumPredictingCategory} subject="listed" />
+          <Stat
+            percentage={listed / totalNumPredictingCategory}
+            text={`top ${(slots ?? 5) + SLOTS_TO_DISPLAY_EXTRA}`}
+          />
         ) : null}
       </View>
       <View

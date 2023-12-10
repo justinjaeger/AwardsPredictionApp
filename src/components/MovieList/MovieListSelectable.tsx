@@ -1,13 +1,14 @@
 import React, { useCallback, useState } from 'react';
 import { FlatList, Keyboard } from 'react-native';
-import { useEvent } from '../../context/EventContext';
 import { removePredictionFromList } from '../../util/removePredictionFromList';
 import ContenderListItem from '../List/ContenderList/ContenderListItem';
 import { iPrediction } from '../../types/api';
 import { getTotalNumPredicting } from '../../util/getNumPredicting';
 import COLORS from '../../constants/colors';
-import ContenderInfoModal from '../ContenderInfoModal';
 import { hexToRgb } from '../../util/hexToRgb';
+import { useNavigation } from '@react-navigation/native';
+import { PredictionsNavigationProp } from '../../navigation/types';
+import { useRouteParams } from '../../hooks/useRouteParams';
 
 type iMovieListProps = {
   predictions: iPrediction[];
@@ -23,15 +24,14 @@ const MovieListSelectable = ({
   setSelectedPrediction,
   setSelectedPredictions,
 }: iMovieListProps) => {
-  const { event: _event, category: _category } = useEvent();
+  const navigation = useNavigation<PredictionsNavigationProp>();
+  const { categoryData, category: _category, eventId: _eventId } = useRouteParams();
+  const { type } = categoryData!;
   const category = _category!;
-  const event = _event!;
-  const { type } = event.categories[category];
-
-  const [modalData, setModalData] = useState<iPrediction | undefined>(undefined);
+  const eventId = _eventId!;
 
   const onPressItem = useCallback(async (prediction: iPrediction) => {
-    setModalData(prediction);
+    navigation.navigate('ContenderInfoModal', { prediction, category, eventId });
   }, []);
 
   const onToggleItem = useCallback(async (prediction: iPrediction) => {
@@ -62,66 +62,55 @@ const MovieListSelectable = ({
   const selectedContenderIds = (selectedPredictions || []).map((sp) => sp.contenderId);
 
   return (
-    <>
-      <FlatList
-        data={predictions.slice(0, numToShow)}
-        keyExtractor={(item) => item.contenderId}
-        style={{ width: '100%' }}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 100 }}
-        onScroll={() => {
-          Keyboard.dismiss();
-        }}
-        onScrollEndDrag={(e) => {
-          // Fetches more at bottom of scroll. Note the high event throttle to prevent too many requests
-          // get position of current scroll
-          const currentOffset = e.nativeEvent.contentOffset.y;
-          // get max bottom of scroll
-          const maxOffset =
-            e.nativeEvent.contentSize.height - e.nativeEvent.layoutMeasurement.height;
-          // if we're close to the bottom fetch more
-          if (currentOffset > maxOffset - 200) {
-            onEndReached();
-          }
-        }}
-        onEndReachedThreshold={0.5} // triggers onEndReached at (X*100)% of list, for example 0.9 = 90% down
-        keyboardShouldPersistTaps={'always'}
-        renderItem={({ item: prediction, index: i }) => {
-          const highlighted = selectedContenderIds.includes(prediction.contenderId);
+    <FlatList
+      data={predictions.slice(0, numToShow)}
+      keyExtractor={(item) => item.contenderId}
+      style={{ width: '100%' }}
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={{ paddingBottom: 100 }}
+      onScroll={() => {
+        Keyboard.dismiss();
+      }}
+      onScrollEndDrag={(e) => {
+        // Fetches more at bottom of scroll. Note the high event throttle to prevent too many requests
+        // get position of current scroll
+        const currentOffset = e.nativeEvent.contentOffset.y;
+        // get max bottom of scroll
+        const maxOffset =
+          e.nativeEvent.contentSize.height - e.nativeEvent.layoutMeasurement.height;
+        // if we're close to the bottom fetch more
+        if (currentOffset > maxOffset - 200) {
+          onEndReached();
+        }
+      }}
+      onEndReachedThreshold={0.5} // triggers onEndReached at (X*100)% of list, for example 0.9 = 90% down
+      keyboardShouldPersistTaps={'always'}
+      renderItem={({ item: prediction, index: i }) => {
+        const highlighted = selectedContenderIds.includes(prediction.contenderId);
 
-          return (
-            <ContenderListItem
-              prediction={prediction}
-              ranking={i + 1}
-              onPressItem={() => {
-                onPressItem(prediction);
-              }}
-              categoryType={type}
-              showHistogram
-              totalNumPredictingTop={totalNumPredictingTop}
-              iconRightProps={{
-                iconName: highlighted ? 'checkmark-circle-2' : 'radio-button-off',
-                iconColor: highlighted ? COLORS.secondaryLight : COLORS.primaryLight,
-                onPress: () => {
-                  onToggleItem(prediction);
-                },
-                iconSize: 32,
-                underlayColor: hexToRgb(COLORS.secondaryDark, 0.2),
-              }}
-            />
-          );
-        }}
-      />
-      {modalData ? (
-        <ContenderInfoModal
-          visible={!!modalData}
-          onClose={() => setModalData(undefined)}
-          event={event}
-          category={category}
-          prediction={modalData}
-        />
-      ) : null}
-    </>
+        return (
+          <ContenderListItem
+            prediction={prediction}
+            ranking={i + 1}
+            onPressItem={() => {
+              onPressItem(prediction);
+            }}
+            categoryType={type}
+            showHistogram
+            totalNumPredictingTop={totalNumPredictingTop}
+            iconRightProps={{
+              iconName: highlighted ? 'checkmark-circle-2' : 'radio-button-off',
+              iconColor: highlighted ? COLORS.secondaryLight : COLORS.primaryLight,
+              onPress: () => {
+                onToggleItem(prediction);
+              },
+              iconSize: 32,
+              underlayColor: hexToRgb(COLORS.secondaryDark, 0.2),
+            }}
+          />
+        );
+      }}
+    />
   );
 };
 

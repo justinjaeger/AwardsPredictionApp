@@ -4,11 +4,13 @@ import BottomTabNavigator from './BottomTabNavigator';
 import AuthenticatorNavigator from './AuthenticatorNavigator';
 import WebView from '../screens/WebView';
 import { StatusBar } from 'react-native';
+import AuthLoadingModal from '../components/AuthLoadingModal';
 
 const { Navigator, Screen } = createStackNavigator();
 
 const MainNavigator = () => (
   <>
+    <AuthLoadingModal />
     <StatusBar barStyle={'light-content'} />
     <Navigator
       initialRouteName="BottomTabNavigator"

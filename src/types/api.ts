@@ -18,6 +18,7 @@ export enum Phase {
 export enum UserRole {
   ADMIN = 'ADMIN',
   TESTER = 'TESTER',
+  NO_AUTH = 'NO_AUTH',
   USER = 'USER',
 }
 

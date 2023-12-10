@@ -3,8 +3,8 @@ import { useState } from 'react';
 import { Contender, WithId } from '../../types/api';
 import MongoApi from '../../services/api/requests';
 import { useTmdbDataStore } from '../../context/TmdbDataStore';
-import { useEvent } from '../../context/EventContext';
 import { iCreateContenderPayload } from '../../services/api/requests/contender';
+import { useRouteParams } from '../useRouteParams';
 
 const useMutationCreateContender = ({
   onSuccess,
@@ -12,7 +12,8 @@ const useMutationCreateContender = ({
   onSuccess: (response: WithId<Contender>) => void;
 }) => {
   const { storeTmdbDataFromContender } = useTmdbDataStore();
-  const { event } = useEvent();
+  const { event: _event } = useRouteParams();
+  const event = _event!;
 
   const [isComplete, setIsComplete] = useState<boolean>(true);
 
