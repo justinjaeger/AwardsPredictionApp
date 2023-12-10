@@ -1,10 +1,12 @@
-## Awards Expert App
+# Awards Expert App
 * Predict any film
 * See aggregate "community" rankings
 * Follow friends, see recent updates
 * Track your history throughout awards season
 
-## How to release:
+# How to release:
+1. Make sure ENV is pointing to production!!
+## IOS
 ### Update the app version in:
 * info.plist CFBundleShortVersionString
 * project.pbxproj - MARKETING_VERSION, CURRENT_PROJECT_VERSION
@@ -24,4 +26,4 @@
 * Then, `Distribute App` and choose either for Testflight or App Store
 ### Testflight
 * Go to App Store Connect account (https://appstoreconnect.apple.com/apps/6446135720/testflight/ios)
-* 
+## ANDROID
