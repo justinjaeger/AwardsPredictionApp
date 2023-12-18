@@ -23,7 +23,7 @@ const OauthPage = () => {
         paddingTop: 30,
       }}
     >
-      {!isAndroid ? <GoogleOauthButton onPress={googleSignIn} /> : null}
+      <GoogleOauthButton onPress={googleSignIn} />
       {!isAndroid ? <AppleOauthButton onPress={appleSignIn} /> : null}
       <EmailButton />
       <Body
