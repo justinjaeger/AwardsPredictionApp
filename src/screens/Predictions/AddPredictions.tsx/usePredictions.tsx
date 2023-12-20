@@ -1,4 +1,4 @@
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { RouteProp, useRoute } from '@react-navigation/native';
 import { useState } from 'react';
 import { PredictionsParamList } from '../../../navigation/types';
 import { iPrediction } from '../../../types/api';
@@ -13,7 +13,6 @@ export const usePredictions = () => {
   const {
     params: { initialPredictions, onFinish },
   } = useRoute<RouteProp<PredictionsParamList, 'AddPredictions'>>();
-  const navigation = useNavigation();
   const { category: _category } = useRouteParams();
   const category = _category!;
 
@@ -54,7 +53,6 @@ export const usePredictions = () => {
       return acc;
     }, []);
     onFinish(sortedPredictions);
-    navigation.goBack();
   };
 
   // TODO: what happens to movies we just added?

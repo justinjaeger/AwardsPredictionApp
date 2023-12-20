@@ -8,7 +8,7 @@ import { FAB } from '../../../components/Buttons/FAB';
 import { CategoryType } from '../../../types/api';
 import SearchInput from '../../../components/Inputs/SearchInput';
 import MovieListSelectable from '../../../components/MovieList/MovieListSelectable';
-import { useTypedNavigation } from '../../../util/hooks';
+import { useNavigateAwayEffect, useTypedNavigation } from '../../../util/hooks';
 import { PredictionsParamList } from '../../../navigation/types';
 import { getPhaseUserIsPredicting } from '../../../util/getPhaseUserIsPredicting';
 import { usePredictions } from '../AddPredictions.tsx/usePredictions';
@@ -61,13 +61,24 @@ const AddPredictions = () => {
   const [selectedMovieTmdbIdForSong, setSelectedMovieTmdbIdForSong] = useState<
     number | undefined
   >(undefined);
+
   // set custom back arrow functionality
   useEffect(() => {
     navigation.setOptions({
       // eslint-disable-next-line react/no-unstable-nested-components
-      headerLeft: () => <BackButton onPress={onSave} />,
+      headerLeft: () => <BackButton onPress={() => saveAndGoBack()} />,
     });
   }, [navigation]);
+
+  const saveAndGoBack = () => {
+    onSave();
+    navigation.goBack();
+  };
+
+  // for android native back swipe, we want this to save
+  useNavigateAwayEffect(() => {
+    onSave();
+  }, []);
 
   // applies for both persons AND songs
   const onCloseModal = () => {
@@ -164,7 +175,7 @@ const AddPredictions = () => {
             <FAB
               iconName="checkmark-outline"
               text="Done"
-              onPress={onSave}
+              onPress={() => saveAndGoBack()}
               visible={!searchResults.length}
             />
           )}
