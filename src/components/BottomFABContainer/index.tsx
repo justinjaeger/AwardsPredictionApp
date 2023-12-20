@@ -49,7 +49,7 @@ const BottomFABContainer = ({ children }: { children?: React.ReactNode }) => {
         >
           <IconButton
             iconProps={{
-              name: isHidden ? 'chevron-down-outline' : 'people-outline',
+              name: isHidden ? 'people-outline' : 'chevron-down-outline',
             }}
             color={COLORS.white}
             styles={{
