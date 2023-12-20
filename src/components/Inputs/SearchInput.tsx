@@ -108,19 +108,30 @@ const SearchInput = ({
               <Spinner size="medium" style={{ borderColor: COLORS.gray }} />
             </View>
           ) : search.length ? (
-            <TouchableOpacity
-              onPress={() => {
-                resetSearch();
-                Keyboard.dismiss();
-              }}
-            >
-              <CustomIcon
-                name="close-outline"
-                color={COLORS.gray}
-                size={25}
-                styles={{ marginRight: 2 }}
-              />
-            </TouchableOpacity>
+            <View>
+              <TouchableOpacity
+                onPress={() => {
+                  resetSearch();
+                  Keyboard.dismiss();
+                }}
+                style={{
+                  paddingLeft: 20,
+                  paddingRight: 20,
+                  left: -10,
+                  width: searchHeight,
+                  height: searchHeight,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <CustomIcon
+                  name="close-outline"
+                  color={COLORS.gray}
+                  size={25}
+                  styles={{ marginRight: 2 }}
+                />
+              </TouchableOpacity>
+            </View>
           ) : undefined
         }
         keyboardAppearance={'dark'}
