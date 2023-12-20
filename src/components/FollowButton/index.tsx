@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import { Spinner } from '@ui-kitten/components';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Alert, StyleProp, TouchableHighlight, ViewStyle } from 'react-native';
 import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
@@ -25,6 +25,7 @@ const FollowButton = ({
 
   // just to display the updated value
   const [isFollowing, setIsFollowing] = useState(authUserIsFollowing);
+  useEffect(() => setIsFollowing(authUserIsFollowing), [authUserIsFollowing]);
 
   const isAuthProfile = profileUserId === authUserId;
   if (isAuthProfile) return null;
