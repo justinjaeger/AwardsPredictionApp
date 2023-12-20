@@ -16,18 +16,21 @@ const LastUpdatedText = ({
   const { isAndroid } = useDevice();
   if (isDisabled || lastUpdated === 'Invalid Date' || !lastUpdated) return null;
   return (
-    <View
-      style={{
-        position: 'absolute',
-        top: isAndroid ? 0 : -25,
-        right: 10,
-        flexDirection: 'row',
-        alignItems: 'center',
-        ...style,
-      }}
-    >
-      <Body>{`Last Updated: ${lastUpdated}`}</Body>
-    </View>
+    <>
+      <View
+        style={{
+          position: 'absolute',
+          top: isAndroid ? 0 : -25,
+          right: 10,
+          flexDirection: 'row',
+          alignItems: 'center',
+          ...style,
+        }}
+      >
+        <Body>{`Last Updated: ${lastUpdated}`}</Body>
+      </View>
+      <View style={{ height: isAndroid ? 15 : 10 }} />
+    </>
   );
 };
 

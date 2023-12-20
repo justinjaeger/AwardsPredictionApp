@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { Divider } from '@ui-kitten/components';
-import { FlatList, View } from 'react-native';
+import { FlatList } from 'react-native';
 import COLORS from '../../constants/colors';
 import LastUpdatedText from '../LastUpdatedText';
 import ContenderListItem from '../List/ContenderList/ContenderListItem';
@@ -49,12 +49,7 @@ const MovieListCommunity = ({ predictions, lastUpdatedString }: iMovieListProps)
       keyExtractor={(item) => item.contenderId}
       style={{ width: '100%' }}
       contentContainerStyle={{ paddingBottom: 100 }}
-      ListHeaderComponent={
-        <>
-          <LastUpdatedText lastUpdated={lastUpdatedString} />
-          <View style={{ height: 10 }} />
-        </>
-      }
+      ListHeaderComponent={<LastUpdatedText lastUpdated={lastUpdatedString} />}
       onScrollEndDrag={(e) => {
         // Fetches more at bottom of scroll. Note the high event throttle to prevent too many requests
         // get position of current scroll

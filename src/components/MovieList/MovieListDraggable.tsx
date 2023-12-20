@@ -69,12 +69,7 @@ const MovieListDraggable = ({
       onPlaceholderIndexChange={() => {
         triggerHaptic();
       }}
-      ListHeaderComponent={
-        <>
-          <LastUpdatedText lastUpdated={lastUpdatedString} />
-          <View style={{ height: 10 }} />
-        </>
-      }
+      ListHeaderComponent={<LastUpdatedText lastUpdated={lastUpdatedString} />}
       ListFooterComponent={
         isAuthProfile && predictions.length === 0 ? (
           <View style={{ width: '100%', alignItems: 'center', marginTop: 40 }}>
