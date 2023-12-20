@@ -20,7 +20,7 @@ const LastUpdatedText = ({
       <View
         style={{
           position: 'absolute',
-          top: isAndroid ? 0 : -25,
+          top: isAndroid ? 0 : -20,
           right: 10,
           flexDirection: 'row',
           alignItems: 'center',
@@ -29,7 +29,7 @@ const LastUpdatedText = ({
       >
         <Body>{`Last Updated: ${lastUpdated}`}</Body>
       </View>
-      <View style={{ height: isAndroid ? 15 : 10 }} />
+      <View style={{ height: isAndroid ? 15 : 5 }} />
     </>
   );
 };
