@@ -69,6 +69,9 @@ const FormInput = ({
         return {
           keyboardType: 'email-address',
           autoCapitalize: 'none',
+          autoComplete: 'email',
+          inputMode: 'email',
+          textContentType: 'emailAddress',
         };
       case 'username':
         return {
