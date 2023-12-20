@@ -18,6 +18,7 @@ import { SubmitButton } from '../../../components/Buttons';
 import ContenderInfoHeader from '../../../components/ContenderInfoHeader';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import { useRouteParams } from '../../../hooks/useRouteParams';
+import ModalHeader from '../../../components/ModalHeader';
 
 const ContenderInfoModal = () => {
   const scrollRef = useRef<ScrollView>(null);
@@ -55,49 +56,52 @@ const ContenderInfoModal = () => {
   if (!communityPrediction) return null;
 
   return (
-    <BackgroundWrapper>
-      <ScrollView style={{ flex: 1, width: '100%' }} ref={scrollRef}>
-        <View>
-          <ContenderInfoHeader prediction={communityPrediction} />
-          <ItemStatBox
-            key={communityPrediction.contenderId}
-            prediction={communityPrediction}
-            category={category}
-            event={event}
-            totalNumPredictingTop={totalNumPredictingTop}
-            totalNumPredictingCategory={totalNumPredictingCategory}
-            widthFactor={widthFactor}
-            scrollRef={scrollRef}
-          />
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            width: '100%',
-            justifyContent: 'center',
-          }}
-        >
-          <SubmitButton
-            onPress={() => {
-              navigation.dispatch(
-                StackActions.replace('ContenderStats', {
-                  year: event.year,
-                  movieTmdbId: prediction.movieTmdbId,
-                }),
-              );
-            }}
-            text={`More${person || song ? ' movie' : ''} stats`}
+    <>
+      <ModalHeader />
+      <BackgroundWrapper>
+        <ScrollView style={{ flex: 1, width: '100%' }} ref={scrollRef}>
+          <View>
+            <ContenderInfoHeader prediction={communityPrediction} />
+            <ItemStatBox
+              key={communityPrediction.contenderId}
+              prediction={communityPrediction}
+              category={category}
+              event={event}
+              totalNumPredictingTop={totalNumPredictingTop}
+              totalNumPredictingCategory={totalNumPredictingCategory}
+              widthFactor={widthFactor}
+              scrollRef={scrollRef}
+            />
+          </View>
+          <View
             style={{
-              marginTop: 10,
-              marginBottom: 10,
-              height: isPad ? 70 : 50,
-              width: '80%',
-              maxWidth: 400,
+              flexDirection: 'row',
+              width: '100%',
+              justifyContent: 'center',
             }}
-          />
-        </View>
-      </ScrollView>
-    </BackgroundWrapper>
+          >
+            <SubmitButton
+              onPress={() => {
+                navigation.dispatch(
+                  StackActions.replace('ContenderStats', {
+                    year: event.year,
+                    movieTmdbId: prediction.movieTmdbId,
+                  }),
+                );
+              }}
+              text={`More${person || song ? ' movie' : ''} stats`}
+              style={{
+                marginTop: 10,
+                marginBottom: 10,
+                height: isPad ? 70 : 50,
+                width: '80%',
+                maxWidth: 400,
+              }}
+            />
+          </View>
+        </ScrollView>
+      </BackgroundWrapper>
+    </>
   );
 };
 

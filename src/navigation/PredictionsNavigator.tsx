@@ -1,6 +1,6 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import BackButton, { DownButton } from '../components/Buttons/BackButton';
+import BackButton from '../components/Buttons/BackButton';
 import { BottomTabParamList, PredictionsParamList } from './types';
 import Category from '../screens/Predictions/Category';
 import EventSelect from '../screens/Predictions/EventSelect';
@@ -142,9 +142,7 @@ const PredictionsNavigator = () => {
           name="ContenderInfoModal"
           component={ContenderInfoModal}
           options={{
-            headerTitle: '',
-            headerLeft: DownButton,
-            ...medium,
+            headerShown: false,
           }}
         />
       </Group>
