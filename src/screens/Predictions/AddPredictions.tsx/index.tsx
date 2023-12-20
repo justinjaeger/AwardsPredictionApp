@@ -18,15 +18,15 @@ import CreatePerformanceModal from './CreatePerformanceModal';
 import CreateSongModal from './CreateSongModal';
 import useContenderSearch from './useContenderSearch';
 import { useRouteParams } from '../../../hooks/useRouteParams';
+import useKeyboard from '../../../hooks/useKeyboard';
 
 const AddPredictions = () => {
   const navigation = useTypedNavigation<PredictionsParamList>();
-
   const { event: _event, categoryData } = useRouteParams();
   const event = _event!;
-
   const { shortlistDateTime, isHidden, type } = categoryData!;
 
+  const { androidKeyboardIsVisible } = useKeyboard();
   const phaseUserIsPredicting = getPhaseUserIsPredicting(event, shortlistDateTime);
   const letUserCreateContenders = !isHidden && phaseUserIsPredicting === undefined;
 
@@ -153,12 +153,14 @@ const AddPredictions = () => {
             selectedPredictions={selectedPredictions}
             setSelectedPredictions={(ps) => setSelectedPredictions(ps)}
           />
-          <FAB
-            iconName="checkmark-outline"
-            text="Done"
-            onPress={onSave}
-            visible={!searchResults.length}
-          />
+          {androidKeyboardIsVisible ? null : (
+            <FAB
+              iconName="checkmark-outline"
+              text="Done"
+              onPress={onSave}
+              visible={!searchResults.length}
+            />
+          )}
         </>
       )}
     </BackgroundWrapper>

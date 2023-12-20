@@ -5,6 +5,7 @@ import COLORS from '../../constants/colors';
 import { BOTTOM_TAB_HEIGHT } from '../../constants';
 import SafeAreaViewFixed from '../../components/SafeAreaViewFixed';
 import useDevice from '../../util/device';
+import useKeyboard from '../../hooks/useKeyboard';
 
 export type ITabBarProps = {
   state: any;
@@ -16,13 +17,14 @@ const TabBar = (props: ITabBarProps) => {
   const { state, descriptors, navigation } = props;
   const { tabBarVisible } = descriptors[state.routes[state.index].key].options;
   const { isPad } = useDevice();
-
-  if (tabBarVisible === false) {
-    return null;
-  }
+  const { androidKeyboardIsVisible } = useKeyboard();
 
   const unfocusedColor = 'rgba(255,255,255,0.5)';
   const focusedColor = COLORS.white;
+
+  if (tabBarVisible === false || androidKeyboardIsVisible) {
+    return null;
+  }
 
   return (
     <SafeAreaViewFixed
