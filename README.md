@@ -33,7 +33,7 @@
 
 ## ANDROID
 ### In VSCode
-* Update version `build.gradle` -> `versionName` AND `versionCode`
+* Update version `app/build.gradle` -> `versionName` AND `versionCode`
 * Important: versionCode must be an integer, and is NOT what is displayed on play store
 * (https://developer.android.com/studio/publish/versioning)
 ### Build
@@ -46,7 +46,7 @@
 * Choose `Release`
 * After the build runs, it will be at `/Users/justinjaeger/VSCode/OscarExpert/AwardsPredictionApp/android/app/release/app-release.aab`
 ### Upload to Play Console
-* Now that we have a build file, we can upload it to the play store here: (https://play.google.com/console/u/0/developers/7592820188677524175/app/4975201475300894677/bundle-explorer-selector)
+* Now that we have a build file, we can upload it to the play store `[sidebar] App bundle explorer` (https://play.google.com/console/u/0/developers/7592820188677524175/app/4975201475300894677/bundle-explorer-selector)
 ### Testing
 * Before we publish, we have to do a round of testing
 * Not sure about subsequent rounds, but for FIRST ROUND, Play store requires a published  round of Closed testing (https://play.google.com/console/u/0/developers/7592820188677524175/app/4975201475300894677/closed-testing)
