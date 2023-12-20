@@ -4,8 +4,8 @@ import { EvaStatus } from '@ui-kitten/components/devsupport';
 import CustomIcon from '../CustomIcon';
 import COLORS from '../../constants/colors';
 import { Keyboard, TouchableOpacity, useWindowDimensions, View } from 'react-native';
-import { HEADER_HEIGHT } from '../../constants';
 import theme from '../../constants/theme';
+import useDevice from '../../util/device';
 
 const SearchInput = ({
   handleSearch,
@@ -29,6 +29,7 @@ const SearchInput = ({
   style?: any;
 }) => {
   const { width } = useWindowDimensions();
+  const { isPad } = useDevice();
 
   const [search, setSearch] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -38,10 +39,16 @@ const SearchInput = ({
     setSearch('');
   };
 
-  const searchHeight = HEADER_HEIGHT;
+  const searchHeight = isPad ? 40 : 30;
 
   return (
-    <View style={{ position: 'relative', width, padding: theme.windowMargin }}>
+    <View
+      style={{
+        position: 'relative',
+        width,
+        padding: 10,
+      }}
+    >
       <Input
         label={label}
         value={search}
