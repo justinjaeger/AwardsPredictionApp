@@ -16,6 +16,7 @@ type iMovieListProps = {
   // Do either/or for the below. "setSelectedPrediction" is more of a hack for the "add performance/song" modal
   setSelectedPrediction?: (p: iPrediction) => void;
   setSelectedPredictions?: React.Dispatch<React.SetStateAction<iPrediction[]>>; // for "add predictions"
+  anyTapSelectsItem?: boolean;
 };
 
 const MovieListSelectable = ({
@@ -23,6 +24,7 @@ const MovieListSelectable = ({
   selectedPredictions,
   setSelectedPrediction,
   setSelectedPredictions,
+  anyTapSelectsItem,
 }: iMovieListProps) => {
   const navigation = useNavigation<PredictionsNavigationProp>();
   const { categoryData, category: _category, eventId: _eventId } = useRouteParams();
@@ -31,6 +33,10 @@ const MovieListSelectable = ({
   const eventId = _eventId!;
 
   const onPressItem = useCallback(async (prediction: iPrediction) => {
+    if (anyTapSelectsItem) {
+      onToggleItem(prediction);
+      return;
+    }
     navigation.navigate('ContenderInfoModal', { prediction, category, eventId });
   }, []);
 

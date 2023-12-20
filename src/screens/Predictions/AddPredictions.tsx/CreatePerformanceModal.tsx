@@ -129,10 +129,11 @@ const CreatePerformanceModal = ({
               setSelectedPrediction={(p) =>
                 setSelectedExistingPrediction((curr) => (curr === p ? undefined : p))
               }
+              anyTapSelectsItem
             />
             {!selectedExistingPrediction ? (
               <SubmitButton
-                style={{ position: 'absolute', bottom: 0, width: 100 }}
+                style={{ position: 'absolute', bottom: 0, width: 200 }}
                 text={'Add New Performance'}
                 onPress={() => {
                   setModalState('create');

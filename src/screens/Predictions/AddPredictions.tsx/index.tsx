@@ -69,13 +69,20 @@ const AddPredictions = () => {
     });
   }, [navigation]);
 
+  // applies for both persons AND songs
+  const onCloseModal = () => {
+    setSelectedPersonTmdbId(undefined);
+    setSelectedMovieTmdbIdForSong(undefined);
+    resetSearch();
+  };
+
   return (
     <BackgroundWrapper>
       <LoadingStatueModal visible={isSavingFilm} text={'Saving film...'} />
       {selectedPersonTmdbId !== undefined ? (
         <CreatePerformanceModal
           visible={selectedPersonTmdbId !== undefined}
-          onClose={() => setSelectedPersonTmdbId(undefined)}
+          onClose={onCloseModal}
           selectedPersonTmdbId={selectedPersonTmdbId}
           communityPredictions={communityPredictions}
           onAddContender={onAddContender}
@@ -85,7 +92,7 @@ const AddPredictions = () => {
       {selectedMovieTmdbIdForSong !== undefined ? (
         <CreateSongModal
           visible={selectedMovieTmdbIdForSong !== undefined}
-          onClose={() => setSelectedMovieTmdbIdForSong(undefined)}
+          onClose={onCloseModal}
           selectedMovieTmdbId={selectedMovieTmdbIdForSong}
           communityPredictions={communityPredictions}
           onAddContender={onAddContender}
