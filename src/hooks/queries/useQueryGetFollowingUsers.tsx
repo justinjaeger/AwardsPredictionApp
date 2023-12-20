@@ -20,14 +20,23 @@ const useQueryGetFollowingUsers = () => {
       // Get all following users and their predictions
       const { data: users } = await MongoApi.listFollowingWithNestedFields(authUserId);
       if (!users) return [];
-      const usersSortedByMostRecentPrediction = users.sort((u1, u2) => {
-        const uiPDate = u1.recentPredictionSets?.[0]?.createdAt;
-        const u2PDate = u2.recentPredictionSets?.[0]?.createdAt;
-        if (!uiPDate || !u2PDate) return 0; // if either user has no predictions, don't sort them (yet
-        if (uiPDate > u2PDate) return -1;
-        if (uiPDate < u2PDate) return 1;
-        return 0;
-      });
+      const usersSortedByMostRecentPrediction = users
+        .sort((u1, u2) => {
+          const uiPDate = u1.recentPredictionSets?.[0]?.createdAt;
+          const u2PDate = u2.recentPredictionSets?.[0]?.createdAt;
+          if (!uiPDate || !u2PDate) return 0; // if either user has no predictions, don't sort them (yet)
+          if (uiPDate > u2PDate) return -1;
+          if (uiPDate < u2PDate) return 1;
+          return 0;
+        })
+        .filter((u) => {
+          // filter out users who haven't predicted in the past 60 days
+          const uiPDate = u.recentPredictionSets?.[0]?.createdAt;
+          if (!uiPDate) return false;
+          const sixtyDaysAgo = new Date();
+          sixtyDaysAgo.setDate(sixtyDaysAgo.getDate() - 60);
+          return new Date(uiPDate) > new Date(sixtyDaysAgo);
+        });
 
       // store prediction data in cache
       const allRecentPredictions: iRecentPrediction[] = [];
