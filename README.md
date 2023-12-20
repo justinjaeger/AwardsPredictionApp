@@ -45,6 +45,7 @@
 * Enter passwords (they're the same, see notes)
 * Choose `Release`
 * After the build runs, it will be at `/Users/justinjaeger/VSCode/OscarExpert/AwardsPredictionApp/android/app/release/app-release.aab`
+* Troubleshooting: make sure all local ports are closed, quit simulators, metro, etc
 ### Upload to Play Console
 * Now that we have a build file, we can upload it to the play store `[sidebar] App bundle explorer` (https://play.google.com/console/u/0/developers/7592820188677524175/app/4975201475300894677/bundle-explorer-selector)
 ### Testing
