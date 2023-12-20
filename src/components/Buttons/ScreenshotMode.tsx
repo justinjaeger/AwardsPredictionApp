@@ -72,10 +72,7 @@ const ScreenshotMode = ({
               style={{
                 height: '100%',
                 width: '100%',
-                paddingTop: Math.max(
-                  top,
-                  (StatusBar.currentHeight ?? 0) + (isAndroid ? 10 : 0),
-                ),
+                paddingTop: top + (isAndroid ? 10 : 0),
               }}
             >
               <View
