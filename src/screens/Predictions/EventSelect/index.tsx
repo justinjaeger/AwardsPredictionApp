@@ -129,7 +129,7 @@ const EventSelect = () => {
               />
             </View>
           )}
-          onScrollEndDrag={(e) => {
+          onScroll={(e) => {
             // Fetches more at bottom of scroll. Note the high event throttle to prevent too many requests
             // get position of current scroll
             const currentOffset = e.nativeEvent.contentOffset.y;
@@ -141,6 +141,7 @@ const EventSelect = () => {
               onEndReached();
             }
           }}
+          scrollEventThrottle={500}
           showsVerticalScrollIndicator={false}
           onEndReachedThreshold={isPad ? 0.8 : 0.5} // triggers onEndReached at (X*100)% of list, for example 0.9 = 90% down
         />
