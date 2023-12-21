@@ -28,6 +28,10 @@
 * Open `Window -> Organizer`
 * Inside the window, `Validate App`
 * Then, `Distribute App` and choose either for Testflight or App Store
+#### App Store Connect
+* Add new iOS app and the build once it's uploaded
+* `Add For Review`
+* `Submit for App Review`
 ### Testflight
 * Go to App Store Connect account (https://appstoreconnect.apple.com/apps/6446135720/testflight/ios)
 
