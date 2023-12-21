@@ -15,7 +15,7 @@
 * info.plist CFBundleShortVersionString
 * project.pbxproj - MARKETING_VERSION, CURRENT_PROJECT_VERSION
 * `package.json.version` (for ability to version check / force updates)
-* Update `appinfo` collection in mongodb to be in sync with the info.plist version
+* IF WANT TO FORCE UPDATE: Update `appinfo` collection in mongodb to be in sync with the info.plist version
 ### Open app in XCode
 * `xed ios`
 #### Sign into correct account under Signing & Capabilities
@@ -51,5 +51,5 @@
 ### Testing
 * Before we publish, we have to do a round of testing
 * Not sure about subsequent rounds, but for FIRST ROUND, Play store requires a published  round of Closed testing (https://play.google.com/console/u/0/developers/7592820188677524175/app/4975201475300894677/closed-testing)
-* Hit `Manage Track`, `Create new release`, add the App bundle from library, Next, Save
+* Click Alpha track; Click `Manage Track`, `Create new release`, add the App bundle from library, Next, Save
 * Publish for review - click `Send changes out for review` (https://play.google.com/console/u/0/developers/7592820188677524175/app/4975201475300894677/publishing)
