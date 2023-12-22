@@ -6,11 +6,8 @@ import { EventModel, EventStatus, Phase } from '../types/api';
  * If nominations happened, and you're predicting what wins, it should return Phase.WINNER
  * If nothing has already happened, it should return undefined
  */
-export const getPhaseUserIsPredicting = (
-  event: EventModel,
-  shortlistDateTime: Date | undefined,
-) => {
-  const { status, nomDateTime, winDateTime } = event;
+export const getPhaseUserIsPredicting = (event: EventModel) => {
+  const { status, nomDateTime, winDateTime, shortlistDateTime } = event;
   const shortlistDateHasPassed = !!(shortlistDateTime && shortlistDateTime < new Date());
   const nomDateHasPassed = !!(nomDateTime && nomDateTime < new Date());
   const winDateHasPassed = !!(winDateTime && winDateTime < new Date());

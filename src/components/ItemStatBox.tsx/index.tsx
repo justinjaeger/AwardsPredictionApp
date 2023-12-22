@@ -54,7 +54,7 @@ const NumPredictingItem = ({
   const navigationState = useNavigationState((state) => state);
 
   // THIS IS PROBABLY UNDEFINED!!
-  const { slots, shortlistDateTime } = event.categories[category];
+  const { slots } = event.categories[category];
   const categoryString = event.categories[category].name;
 
   const catCredits = getTmdbDataFromPrediction(prediction)?.movie.categoryCredits;
@@ -64,7 +64,7 @@ const NumPredictingItem = ({
   const creditString =
     songName ?? performerName ?? (credit ? credit.join(', ') : undefined);
 
-  const phaseUserIsPredicting = getPhaseUserIsPredicting(event, shortlistDateTime);
+  const phaseUserIsPredicting = getPhaseUserIsPredicting(event);
   const { win, nom, listed } = getNumPredicting(
     prediction?.numPredicting ?? {},
     slots ?? 5,

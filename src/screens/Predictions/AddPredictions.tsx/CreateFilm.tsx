@@ -24,9 +24,9 @@ const CreateFilm = () => {
   const { event: _event, categoryData } = useRouteParams();
   const event = _event!;
 
-  const { shortlistDateTime, isHidden, type } = categoryData!;
+  const { isHidden, type } = categoryData!;
 
-  const phaseUserIsPredicting = getPhaseUserIsPredicting(event, shortlistDateTime);
+  const phaseUserIsPredicting = getPhaseUserIsPredicting(event);
   const letUserCreateContenders = !isHidden && phaseUserIsPredicting === undefined;
 
   const {
