@@ -19,7 +19,7 @@ export const usePredictions = () => {
   // We use the SAME KEY as the previous screen, because it avoids a re-fetch of the data which was available previously
   const { data: communityPredictionData } = useQueryGetCommunityPredictions();
   const communityPredictions = sortPredictions(
-    communityPredictionData?.categories[category].predictions ?? [],
+    communityPredictionData?.categories[category]?.predictions ?? [],
   );
 
   const [selectedPredictions, setSelectedPredictions] =

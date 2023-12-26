@@ -30,7 +30,7 @@ const CategoryCommunity = ({ showEventLink }: { showEventLink?: boolean }) => {
 
   return (
     <>
-      {predictions?.length === 0 ? (
+      {predictions.length === 0 ? (
         <View
           style={{
             width: '100%',
@@ -42,7 +42,7 @@ const CategoryCommunity = ({ showEventLink }: { showEventLink?: boolean }) => {
           <BodyBold>{'Community predictions not yet tallied'}</BodyBold>
         </View>
       ) : null}
-      <View style={{ width: '100%' }}>
+      <View style={{ width: '100%', flex: 1 }}>
         <MovieListCommunity
           predictions={predictions}
           lastUpdatedString={lastUpdatedString}
