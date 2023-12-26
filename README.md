@@ -8,8 +8,8 @@
 * Android: `yarn start` in one terminal, then `yarn android` in another
 
 # How to release:
-1. Make sure ENV is pointing to production!!
-
+* Make sure ENV is pointing to production!!
+* AND run yarn reset-env after changing it so the env cache is clear
 ## IOS
 ### Update the app version in:
 * info.plist CFBundleShortVersionString
