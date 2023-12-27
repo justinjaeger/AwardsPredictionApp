@@ -69,7 +69,10 @@ const MovieListSelectable = ({
   };
 
   const selectedContenderIds = (selectedPredictions || []).map((sp) => sp.contenderId);
-  const combinedPredictions = filterDuplicates([...predictions, ...selectedPredictions]);
+  const combinedPredictions = filterDuplicates<iPrediction>(
+    [...predictions, ...selectedPredictions],
+    (p) => p.contenderId,
+  );
 
   return (
     <FlatList
