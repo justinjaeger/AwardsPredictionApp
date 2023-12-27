@@ -7,6 +7,7 @@ import theme from '../../../constants/theme';
 import MovieGrid from '../../../components/MovieGrid';
 import { sortPredictions } from '../../../util/sortPredictions';
 import { useRouteParams } from '../../../hooks/useRouteParams';
+import { getCategoryIsHidden } from '../../../util/getCategoryIsHidden';
 
 // NOTE: Typescript is failing me here, but categoryPrediction is sometimes undefined!!
 const EventItem = ({
@@ -23,9 +24,10 @@ const EventItem = ({
   if (!awardsBodyCategories) return null;
 
   const maybeUndefinedCategoryData = awardsBodyCategories[category];
-  const { isHidden, name, slots } = maybeUndefinedCategoryData || {};
+  const { name, slots } = maybeUndefinedCategoryData || {};
+  const categoryIsHidden = getCategoryIsHidden(event, category);
   // hide hidden categories (like shorts)
-  if (isHidden) return null;
+  if (categoryIsHidden) return null;
 
   const predictions = categoryPrediction
     ? sortPredictions(categoryPrediction.predictions)

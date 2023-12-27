@@ -126,8 +126,12 @@ export type iCategory = {
   type: CategoryType;
   name: string;
   slots?: number; // 5 by default
+  shortlistSlots?: number;
+  winSlots?: number; // 1 by default, just in case there's a tie
   isShortlisted?: boolean;
   isHidden?: boolean;
+  isHiddenBeforeShortlist?: boolean;
+  isHiddenBeforeNoms?: boolean;
 };
 
 export type EventModel = {

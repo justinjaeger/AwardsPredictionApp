@@ -19,16 +19,20 @@ import CreateSongModal from './CreateSongModal';
 import useContenderSearch from './useContenderSearch';
 import { useRouteParams } from '../../../hooks/useRouteParams';
 import useKeyboard from '../../../hooks/useKeyboard';
+import { getCategoryIsHidden } from '../../../util/getCategoryIsHidden';
 
 const AddPredictions = () => {
   const navigation = useTypedNavigation<PredictionsParamList>();
-  const { event: _event, categoryData, category } = useRouteParams();
+  const { event: _event, categoryData, category: _category } = useRouteParams();
   const event = _event!;
-  const { isHidden, type } = categoryData!;
+  const category = _category!;
+  const { type } = categoryData!;
+  const categoryIsHidden = getCategoryIsHidden(event, category);
 
   const { androidKeyboardIsVisible } = useKeyboard();
   const biggestPhaseThatHasHappened = getBiggestPhaseThatHasHappened(event, category);
-  const letUserCreateContenders = !isHidden && biggestPhaseThatHasHappened === undefined;
+  const letUserCreateContenders =
+    !categoryIsHidden && biggestPhaseThatHasHappened === undefined;
 
   const {
     selectedPredictions,

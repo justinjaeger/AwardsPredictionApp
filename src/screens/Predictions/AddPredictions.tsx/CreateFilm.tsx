@@ -17,6 +17,7 @@ import useFilmSearch from './useContenderSearch';
 import CreatePerformanceModal from './CreatePerformanceModal';
 import CreateSongModal from './CreateSongModal';
 import { useRouteParams } from '../../../hooks/useRouteParams';
+import { getCategoryIsHidden } from '../../../util/getCategoryIsHidden';
 
 const CreateFilm = () => {
   const navigation = useTypedNavigation<PredictionsParamList>();
@@ -25,10 +26,12 @@ const CreateFilm = () => {
   const event = _event!;
   const category = _category!;
 
-  const { isHidden, type } = categoryData!;
+  const { type } = categoryData!;
+  const categoryIsHidden = getCategoryIsHidden(event, category);
 
   const biggestPhaseThatHasHappened = getBiggestPhaseThatHasHappened(event, category);
-  const letUserCreateContenders = !isHidden && biggestPhaseThatHasHappened === undefined;
+  const letUserCreateContenders =
+    !categoryIsHidden && biggestPhaseThatHasHappened === undefined;
 
   const {
     selectedPredictions,

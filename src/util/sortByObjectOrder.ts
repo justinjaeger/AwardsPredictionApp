@@ -2,6 +2,7 @@ import _ from 'lodash';
 import { CategoryName, EventModel, WithId, iCategoryPrediction } from '../types/api';
 import { AWARDS_BODY_TO_STRING } from '../constants/awardsBodies';
 import { ORDERED_CATEGORIES } from '../constants/categories';
+import { getCategoryIsHidden } from './getCategoryIsHidden';
 
 /**
  * Sorts an array based on the insert order of an object (with keys of type Enum)
@@ -39,7 +40,7 @@ export const getOrderedCategories = (
 ): Array<[CategoryName, iCategoryPrediction | undefined]> => {
   const allCategoriesInEvent = Object.keys(event.categories);
   const allNonHiddenCategoriesInEvent = allCategoriesInEvent.filter(
-    (category) => !event.categories[category as CategoryName].isHidden,
+    (category) => !getCategoryIsHidden(event, category as CategoryName),
   );
   return ORDERED_CATEGORIES.reduce(
     (acc: Array<[CategoryName, iCategoryPrediction | undefined]>, key) => {
