@@ -10,7 +10,7 @@ import SearchInput from '../../../components/Inputs/SearchInput';
 import MovieListSelectable from '../../../components/MovieList/MovieListSelectable';
 import { useNavigateAwayEffect, useTypedNavigation } from '../../../util/hooks';
 import { PredictionsParamList } from '../../../navigation/types';
-import { getPhaseUserIsPredicting } from '../../../util/getPhaseUserIsPredicting';
+import { getBiggestPhaseThatHasHappened } from '../../../util/getBiggestPhaseThatHasHappened';
 import { usePredictions } from '../AddPredictions.tsx/usePredictions';
 import BackButton from '../../../components/Buttons/BackButton';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
@@ -22,13 +22,13 @@ import useKeyboard from '../../../hooks/useKeyboard';
 
 const AddPredictions = () => {
   const navigation = useTypedNavigation<PredictionsParamList>();
-  const { event: _event, categoryData } = useRouteParams();
+  const { event: _event, categoryData, category } = useRouteParams();
   const event = _event!;
   const { isHidden, type } = categoryData!;
 
   const { androidKeyboardIsVisible } = useKeyboard();
-  const phaseUserIsPredicting = getPhaseUserIsPredicting(event);
-  const letUserCreateContenders = !isHidden && phaseUserIsPredicting === undefined;
+  const biggestPhaseThatHasHappened = getBiggestPhaseThatHasHappened(event, category);
+  const letUserCreateContenders = !isHidden && biggestPhaseThatHasHappened === undefined;
 
   const {
     selectedPredictions,

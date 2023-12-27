@@ -142,8 +142,8 @@ const EventSelect = () => {
             }
           }}
           scrollEventThrottle={500}
-          showsVerticalScrollIndicator={false}
           onEndReachedThreshold={isPad ? 0.8 : 0.5} // triggers onEndReached at (X*100)% of list, for example 0.9 = 90% down
+          showsVerticalScrollIndicator={false}
         />
       </View>
     </BackgroundWrapper>

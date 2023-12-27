@@ -9,6 +9,7 @@ import { getTotalNumPredicting } from '../../util/getNumPredicting';
 import { useNavigation } from '@react-navigation/native';
 import { PredictionsNavigationProp } from '../../navigation/types';
 import { useRouteParams } from '../../hooks/useRouteParams';
+import useDevice from '../../util/device';
 
 export const PREDICT_STAT_WIDTH = 120;
 
@@ -19,6 +20,7 @@ type iMovieListProps = {
 
 const MovieListCommunity = ({ predictions, lastUpdatedString }: iMovieListProps) => {
   const navigation = useNavigation<PredictionsNavigationProp>();
+  const { isPad } = useDevice();
   const { event: _event, category: _category, categoryData } = useRouteParams();
   const event = _event!;
   const category = _category!;
@@ -50,7 +52,7 @@ const MovieListCommunity = ({ predictions, lastUpdatedString }: iMovieListProps)
       style={{ width: '100%' }}
       contentContainerStyle={{ paddingBottom: 100 }}
       ListHeaderComponent={<LastUpdatedText lastUpdated={lastUpdatedString} />}
-      onScrollEndDrag={(e) => {
+      onScroll={(e) => {
         // Fetches more at bottom of scroll. Note the high event throttle to prevent too many requests
         // get position of current scroll
         const currentOffset = e.nativeEvent.contentOffset.y;
@@ -58,12 +60,13 @@ const MovieListCommunity = ({ predictions, lastUpdatedString }: iMovieListProps)
         const maxOffset =
           e.nativeEvent.contentSize.height - e.nativeEvent.layoutMeasurement.height;
         // if we're close to the bottom fetch more
-        if (currentOffset > maxOffset - 200) {
+        if (currentOffset > maxOffset - 200 && onEndReached) {
           onEndReached();
         }
       }}
+      scrollEventThrottle={500}
+      onEndReachedThreshold={isPad ? 0.8 : 0.5} // triggers onEndReached at (X*100)% of list, for example 0.9 = 90% down
       showsVerticalScrollIndicator={false}
-      onEndReachedThreshold={0.5} // triggers onEndReached at (X*100)% of list, for example 0.9 = 90% down
       renderItem={({ item: prediction, index }) => (
         <>
           {index === slots ? (

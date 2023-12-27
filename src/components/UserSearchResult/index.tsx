@@ -47,7 +47,7 @@ const UserSearchResult = ({
         alignItems: 'flex-start',
       }}
       keyExtractor={(item) => item._id}
-      onScrollEndDrag={(e) => {
+      onScroll={(e) => {
         // Fetches more at bottom of scroll. Note the high event throttle to prevent too many requests
         // get position of current scroll
         const currentOffset = e.nativeEvent.contentOffset.y;
@@ -59,8 +59,8 @@ const UserSearchResult = ({
           onEndReached && onEndReached();
         }
       }}
+      scrollEventThrottle={500}
       onEndReachedThreshold={isPad ? 0.8 : 0.5} // triggers onEndReached at (X*100)% of list, for example 0.9 = 90% down
-      scrollEventThrottle={1000}
       keyboardShouldPersistTaps={'always'} // so keyboard doesn't dismiss when tapping on list
       ListHeaderComponent={
         users.length === 0 && !isLoading ? (

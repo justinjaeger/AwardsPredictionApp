@@ -9,6 +9,8 @@ import { hexToRgb } from '../../util/hexToRgb';
 import { useNavigation } from '@react-navigation/native';
 import { PredictionsNavigationProp } from '../../navigation/types';
 import { useRouteParams } from '../../hooks/useRouteParams';
+import { filterDuplicates } from '../../util/filterDuplicates';
+import useDevice from '../../util/device';
 
 type iMovieListProps = {
   predictions: iPrediction[];
@@ -27,6 +29,7 @@ const MovieListSelectable = ({
   anyTapSelectsItem,
 }: iMovieListProps) => {
   const navigation = useNavigation<PredictionsNavigationProp>();
+  const { isPad } = useDevice();
   const { categoryData, category: _category, eventId: _eventId } = useRouteParams();
   const { type } = categoryData!;
   const category = _category!;
@@ -66,18 +69,17 @@ const MovieListSelectable = ({
   };
 
   const selectedContenderIds = (selectedPredictions || []).map((sp) => sp.contenderId);
+  const combinedPredictions = filterDuplicates([...predictions, ...selectedPredictions]);
 
   return (
     <FlatList
-      data={predictions.slice(0, numToShow)}
+      data={combinedPredictions.slice(0, numToShow)}
       keyExtractor={(item) => item.contenderId}
       style={{ width: '100%' }}
       showsVerticalScrollIndicator={false}
       contentContainerStyle={{ paddingBottom: 100 }}
-      onScroll={() => {
+      onScroll={(e) => {
         Keyboard.dismiss();
-      }}
-      onScrollEndDrag={(e) => {
         // Fetches more at bottom of scroll. Note the high event throttle to prevent too many requests
         // get position of current scroll
         const currentOffset = e.nativeEvent.contentOffset.y;
@@ -85,11 +87,12 @@ const MovieListSelectable = ({
         const maxOffset =
           e.nativeEvent.contentSize.height - e.nativeEvent.layoutMeasurement.height;
         // if we're close to the bottom fetch more
-        if (currentOffset > maxOffset - 200) {
+        if (currentOffset > maxOffset - 200 && onEndReached) {
           onEndReached();
         }
       }}
-      onEndReachedThreshold={0.5} // triggers onEndReached at (X*100)% of list, for example 0.9 = 90% down
+      scrollEventThrottle={500}
+      onEndReachedThreshold={isPad ? 0.8 : 0.5} // triggers onEndReached at (X*100)% of list, for example 0.9 = 90% down
       keyboardShouldPersistTaps={'always'}
       renderItem={({ item: prediction, index: i }) => {
         const highlighted = selectedContenderIds.includes(prediction.contenderId);

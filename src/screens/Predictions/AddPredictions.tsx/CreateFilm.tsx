@@ -10,7 +10,7 @@ import SearchInput from '../../../components/Inputs/SearchInput';
 import MovieListSelectable from '../../../components/MovieList/MovieListSelectable';
 import { useTypedNavigation } from '../../../util/hooks';
 import { PredictionsParamList } from '../../../navigation/types';
-import { getPhaseUserIsPredicting } from '../../../util/getPhaseUserIsPredicting';
+import { getBiggestPhaseThatHasHappened } from '../../../util/getBiggestPhaseThatHasHappened';
 import { usePredictions } from './usePredictions';
 import BackButton from '../../../components/Buttons/BackButton';
 import useFilmSearch from './useContenderSearch';
@@ -21,13 +21,14 @@ import { useRouteParams } from '../../../hooks/useRouteParams';
 const CreateFilm = () => {
   const navigation = useTypedNavigation<PredictionsParamList>();
 
-  const { event: _event, categoryData } = useRouteParams();
+  const { event: _event, categoryData, category: _category } = useRouteParams();
   const event = _event!;
+  const category = _category!;
 
   const { isHidden, type } = categoryData!;
 
-  const phaseUserIsPredicting = getPhaseUserIsPredicting(event);
-  const letUserCreateContenders = !isHidden && phaseUserIsPredicting === undefined;
+  const biggestPhaseThatHasHappened = getBiggestPhaseThatHasHappened(event, category);
+  const letUserCreateContenders = !isHidden && biggestPhaseThatHasHappened === undefined;
 
   const {
     selectedPredictions,

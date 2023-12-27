@@ -12,7 +12,7 @@ import { getNumPredicting, getTotalNumPredicting } from '../../util/getNumPredic
 import Histogram, { SLOTS_TO_DISPLAY_EXTRA } from '../Histogram';
 import { useTmdbDataStore } from '../../context/TmdbDataStore';
 import { categoryNameToTmdbCredit } from '../../util/categoryNameToTmdbCredit';
-import { getPhaseUserIsPredicting } from '../../util/getPhaseUserIsPredicting';
+import { getBiggestPhaseThatHasHappened } from '../../util/getBiggestPhaseThatHasHappened';
 import { hexToRgb } from '../../util/hexToRgb';
 import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
@@ -64,7 +64,7 @@ const NumPredictingItem = ({
   const creditString =
     songName ?? performerName ?? (credit ? credit.join(', ') : undefined);
 
-  const phaseUserIsPredicting = getPhaseUserIsPredicting(event);
+  const biggestPhaseThatHasHappened = getBiggestPhaseThatHasHappened(event, category);
   const { win, nom, listed } = getNumPredicting(
     prediction?.numPredicting ?? {},
     slots ?? 5,
@@ -127,22 +127,21 @@ const NumPredictingItem = ({
         style={{
           width: '100%',
           flexDirection: 'row',
-          justifyContent: 'space-between',
+          justifyContent: 'space-around',
           paddingTop: 30,
-          paddingLeft: 10,
-          paddingRight: 10,
         }}
       >
         <Stat percentage={win / totalNumPredictingCategory} text="predict win" />
-        {[undefined, Phase.NOMINATION].includes(phaseUserIsPredicting) ? (
-          <Stat percentage={nom / totalNumPredictingCategory} text="predict nom" />
-        ) : null}
-        {/* undefined means nothing has happened; NOMINATION means it's been shortlisted */}
-        {phaseUserIsPredicting === undefined ? (
-          <Stat
-            percentage={listed / totalNumPredictingCategory}
-            text={`top ${(slots ?? 5) + SLOTS_TO_DISPLAY_EXTRA}`}
-          />
+        {[undefined, Phase.SHORTLIST].includes(biggestPhaseThatHasHappened) ? (
+          <>
+            <Stat percentage={nom / totalNumPredictingCategory} text="predict nom" />
+            {biggestPhaseThatHasHappened === undefined ? (
+              <Stat
+                percentage={listed / totalNumPredictingCategory}
+                text={`top ${(slots ?? 5) + SLOTS_TO_DISPLAY_EXTRA}`}
+              />
+            ) : null}
+          </>
         ) : null}
       </View>
       <View
