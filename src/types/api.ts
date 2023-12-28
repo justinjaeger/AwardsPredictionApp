@@ -140,9 +140,9 @@ export type EventModel = {
   year: number;
   status: EventStatus;
   liveAt?: Date;
+  shortlistDateTime?: Date;
   nomDateTime?: Date;
   winDateTime?: Date;
-  shortlistDateTime?: Date;
   amplify_id?: string;
 };
 
@@ -235,6 +235,24 @@ export type iRecentPrediction = {
   topPredictions: iPrediction[];
 };
 
+export type iCategoriesPredicting = {
+  [eventId: string]: {
+    [categoryName: string]: {
+      createdAt: Date;
+    };
+  };
+};
+
+export type iLeaderboardRanking = {
+  eventId: ObjectId;
+  phase: Phase;
+  noShorts: boolean;
+  rank: number;
+  percentageAccuracy: number;
+  riskiness: number;
+  predictionSetId: ObjectId;
+};
+
 export type User = {
   email: string;
   oauthId?: string;
@@ -246,7 +264,9 @@ export type User = {
   followingCount?: number;
   followerCount?: number;
   eventsPredicting?: Record<string, string[]>; // key is event, value is array of categories
+  categoriesPredicting?: iCategoriesPredicting; // ...and replace with this
   recentPredictionSets?: iRecentPrediction[];
+  leaderboardRankings?: iLeaderboardRanking[];
   amplify_id?: string;
 };
 
