@@ -1,6 +1,6 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import { MaterialTopTabNavigationProp } from '@react-navigation/material-top-tabs';
-import { CategoryName, iPrediction } from '../types/api';
+import { CategoryName, Phase, iPrediction } from '../types/api';
 
 export type MainScreenNavigationProp = StackNavigationProp<MainParamList>;
 export type MainParamList = {
@@ -23,8 +23,9 @@ export type BottomTabParamList = {
   Predictions: iBottomTabDefaultParamList;
   ProfileTab: iBottomTabDefaultParamList & { userId?: string };
   Friend: iBottomTabDefaultParamList;
-  Admin: undefined;
+  Leaderboard: undefined;
   Help: undefined;
+  Admin: undefined;
 };
 
 export type PredictionsNavigationProp = StackNavigationProp<PredictionsParamList>;
@@ -80,6 +81,15 @@ export type PredictionsParamList = {
     prediction: iPrediction;
     category: CategoryName;
     eventId: string;
+  };
+};
+
+export type LeaderboardNavigationProp = StackNavigationProp<LeaderboardParamList>;
+export type LeaderboardParamList = {
+  LeaderboardList: undefined;
+  Leaderboard: {
+    eventId: string;
+    phase: Phase;
   };
 };
 
