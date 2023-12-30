@@ -9,6 +9,7 @@ import * as CategoryUpdateLogRequests from './categoryupdatelogs';
 import * as ContenderRequests from './contender';
 import * as UploadRequests from './upload';
 import * as AppInfoRequests from './appinfo';
+import * as LeaderboardRequests from './leaderboard';
 
 const MongoApi = {
   ...UserRequests,
@@ -22,6 +23,7 @@ const MongoApi = {
   ...ContenderRequests,
   ...UploadRequests,
   ...AppInfoRequests,
+  ...LeaderboardRequests,
 };
 
 export default MongoApi;
