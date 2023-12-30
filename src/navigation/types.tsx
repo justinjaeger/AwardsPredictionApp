@@ -90,6 +90,7 @@ export type LeaderboardParamList = {
   Leaderboard: {
     eventId: string;
     phase: Phase;
+    noShorts?: boolean;
   };
 };
 
