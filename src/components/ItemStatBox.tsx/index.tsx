@@ -89,7 +89,11 @@ const NumPredictingItem = ({
           alignItems: 'baseline',
         }}
         onPress={() => {
-          if (navigationState.routes[navigationState.index - 1].name === 'Category') {
+          // If the current screen is the ContenderInfoModal, go back
+          // since the only category displayed here is the one of the prev screen
+          if (
+            navigationState.routes[navigationState.index].name === 'ContenderInfoModal'
+          ) {
             navigation.goBack();
           } else {
             navigation.dispatch(
