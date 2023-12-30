@@ -134,6 +134,14 @@ export type iCategory = {
   isHiddenBeforeNoms?: boolean;
 };
 
+export type iEventLeaderboards = {
+  [key: string]: {
+    phase: Phase;
+    noShorts: boolean;
+    numPredicted: number;
+  };
+};
+
 export type EventModel = {
   categories: Record<CategoryName, iCategory>;
   awardsBody: AwardsBody;
@@ -143,7 +151,7 @@ export type EventModel = {
   shortlistDateTime?: Date;
   nomDateTime?: Date;
   winDateTime?: Date;
-  leaderboards?: Phase[];
+  leaderboards?: iEventLeaderboards;
   amplify_id?: string;
 };
 

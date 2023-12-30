@@ -6,7 +6,7 @@ export const useGetEventsWithLeaderboard = () => {
   if (!events) return [];
 
   const eventsWithLeaderboards = events?.filter(
-    (event) => event.leaderboards && event.leaderboards.length > 0,
+    (event) => event.leaderboards && Object.keys(event.leaderboards).length > 0,
   );
 
   return eventsWithLeaderboards;

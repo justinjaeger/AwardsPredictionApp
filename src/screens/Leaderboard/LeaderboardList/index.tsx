@@ -6,7 +6,10 @@ import { useGetEventsWithLeaderboard } from '../../../hooks/useGetEventsWithLead
  * First, we need a screen with Leaderboard Selection
  * So this will be a list of events where event.leaderboards contains a Phase
  * Then we list each event+phase combo
- * ALSO: make the "get" accessible from the BottomTabNavigator so we can determine whether to show the tab or not (in case it's empty)
+ *
+ * What info do we want about a leaderboard, besides the users and their scores?
+ * We want the number of users who predicted in that leaderboard!
+ * We should store this information on the event, also
  */
 const LeaderboardList = () => {
   const navigation = useNavigation<LeaderboardNavigationProp>();
