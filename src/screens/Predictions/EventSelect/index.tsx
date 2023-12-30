@@ -4,7 +4,7 @@ import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import useQueryGetAllEvents from '../../../hooks/queries/useQueryGetAllEvents';
 import { useAuth } from '../../../context/AuthContext';
 import useQueryGetUser from '../../../hooks/queries/useQueryGetUser';
-import EventList from '../Event/EventList';
+import EventList from './EventList';
 import { HeaderLight } from '../../../components/Text';
 import useQueryGetFollowingUsers from '../../../hooks/queries/useQueryGetFollowingUsers';
 import PredictionCarousel from '../../../components/PredictionCarousel';

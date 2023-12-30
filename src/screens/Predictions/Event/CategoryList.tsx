@@ -17,11 +17,11 @@ import {
 } from '../../../types/api';
 import EventSkeleton from '../../../components/Skeletons/EventSkeleton';
 import { getOrderedCategories } from '../../../util/sortByObjectOrder';
-import EventItem from './EventItem';
+import CategoryListItem from './CategoryListItem';
 import { useRouteParams } from '../../../hooks/useRouteParams';
 
 // This is shared by EventPersonalCommunity AND EventFromProfile
-const Event = ({
+const CategoryList = ({
   tab,
   predictionData,
   isLoading,
@@ -94,7 +94,11 @@ const Event = ({
         keyExtractor={([catName]) => catName}
         renderItem={({ item }) => {
           return (
-            <EventItem item={item} onPress={onPress} isAuthProfile={isAuthProfile} />
+            <CategoryListItem
+              item={item}
+              onPress={onPress}
+              isAuthProfile={isAuthProfile}
+            />
           );
         }}
         showsVerticalScrollIndicator={false}
@@ -103,4 +107,4 @@ const Event = ({
   );
 };
 
-export default Event;
+export default CategoryList;

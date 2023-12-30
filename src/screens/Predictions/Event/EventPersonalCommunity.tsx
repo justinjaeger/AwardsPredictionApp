@@ -2,7 +2,7 @@ import React, { useLayoutEffect } from 'react';
 import PredictionTabsNavigator from '../../../navigation/PredictionTabsNavigator';
 import { useAuth } from '../../../context/AuthContext';
 import { useNavigation } from '@react-navigation/native';
-import Event from './index';
+import CategoryList from './CategoryList';
 import useQueryGetUserPredictions from '../../../hooks/queries/useQueryGetUserPredictions';
 import useQueryGetCommunityPredictions from '../../../hooks/queries/useQueryGetCommunityPredictions';
 import { eventToString } from '../../../util/stringConversions';
@@ -36,14 +36,14 @@ const EventPersonalCommunity = () => {
     <>
       <PredictionTabsNavigator
         personal={
-          <Event
+          <CategoryList
             tab={'personal'}
             predictionData={personalPredictionData ?? undefined}
             isLoading={isLoadingPersonal}
           />
         }
         community={
-          <Event
+          <CategoryList
             tab={'community'}
             predictionData={communityPredictionData ?? undefined}
             isLoading={isLoadingCommunity}

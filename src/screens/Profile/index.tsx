@@ -13,7 +13,7 @@ import ProfileImage from '../../components/ProfileImage';
 import FollowButton from '../../components/FollowButton';
 import FollowCountButton from '../../components/FollowCountButton';
 import useQueryGetAllEvents from '../../hooks/queries/useQueryGetAllEvents';
-import EventList from '../Predictions/Event/EventList';
+import EventList from '../Predictions/EventSelect/EventList';
 import { MainScreenNavigationProp, PredictionsParamList } from '../../navigation/types';
 import useProfileUser from './useProfileUser';
 import useProfileHeader from './useProfileHeader';

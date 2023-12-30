@@ -1,6 +1,6 @@
 import React, { useLayoutEffect } from 'react';
 import { StackActions, useNavigation } from '@react-navigation/native';
-import Event from './index';
+import CategoryList from './CategoryList';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import { eventToString } from '../../../util/stringConversions';
 import { getHeaderTitleWithProfile } from '../../../constants';
@@ -34,7 +34,7 @@ const EventFromProfile = () => {
   return (
     <>
       <BackgroundWrapper>
-        <Event
+        <CategoryList
           tab={'personal'}
           predictionData={predictionData || undefined}
           isLoading={isLoading}

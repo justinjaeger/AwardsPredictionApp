@@ -10,7 +10,7 @@ import { useRouteParams } from '../../../hooks/useRouteParams';
 import { getCategoryIsHidden } from '../../../util/getCategoryIsHidden';
 
 // NOTE: Typescript is failing me here, but categoryPrediction is sometimes undefined!!
-const EventItem = ({
+const CategoryListItem = ({
   item: [category, categoryPrediction],
   onPress,
   isAuthProfile,
@@ -71,4 +71,4 @@ const EventItem = ({
   );
 };
 
-export default EventItem;
+export default CategoryListItem;
