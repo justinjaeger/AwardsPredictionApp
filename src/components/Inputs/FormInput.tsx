@@ -4,6 +4,7 @@ import { iTextContentType } from './types';
 import { EvaStatus } from '@ui-kitten/components/devsupport';
 import COLORS from '../../constants/colors';
 import { Body } from '../Text';
+import useDevice from '../../util/device';
 
 const FormInput = ({
   value,
@@ -32,6 +33,8 @@ const FormInput = ({
   autoFocus?: boolean;
   multiline?: boolean;
 }) => {
+  const { isAndroid } = useDevice();
+
   const onChangeText = (v: string) => {
     if (isYear) {
       if (/^[0-9]*$/.test(v) === true && v.length <= 4) {
@@ -76,8 +79,8 @@ const FormInput = ({
       case 'username':
         return {
           autoCapitalize: 'none',
-          secureTextEntry: true,
-          keyboardType: 'visible-password',
+          secureTextEntry: false,
+          keyboardType: isAndroid ? 'visible-password' : undefined,
         };
       case 'oneTimeCode':
         return {
