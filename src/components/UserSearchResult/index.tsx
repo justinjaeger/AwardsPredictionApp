@@ -2,7 +2,6 @@ import { StackActions, useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { FlatList, View, useWindowDimensions } from 'react-native';
 import theme from '../../constants/theme';
-import { useAuth } from '../../context/AuthContext';
 import { HeaderLight, SubHeader } from '../Text';
 import UserListSkeleton from '../Skeletons/UserListSkeleton';
 import UserSearchResultItem from './UserSearchResultItem';
@@ -29,7 +28,6 @@ const UserSearchResult = ({
 }) => {
   const { isPad } = useDevice();
   const { width } = useWindowDimensions();
-  const { userId: authUserId } = useAuth();
   const navigation = useNavigation();
   const { usersIdsAuthUserIsFollowing } = useQueryGetFollowingUsers();
 
@@ -90,7 +88,6 @@ const UserSearchResult = ({
       renderItem={({ item }) => (
         <UserSearchResultItem
           item={item}
-          authUserId={authUserId}
           authUserIsFollowing={usersIdsAuthUserIsFollowing.includes(item._id)}
           onPress={navigateToProfile}
         />

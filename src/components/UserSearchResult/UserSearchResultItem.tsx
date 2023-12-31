@@ -6,24 +6,20 @@ import ProfileImage from '../ProfileImage';
 import { Body, SubHeader } from '../Text';
 import { IMAGE_SIZE } from '.';
 import { User, WithId } from '../../types/api';
+import { useAuth } from '../../context/AuthContext';
 
 const UserSearchResultItem = ({
   item,
-  authUserId,
   authUserIsFollowing,
   onPress,
 }: {
   item: WithId<User>;
-  authUserId: string | undefined;
   authUserIsFollowing: boolean;
   onPress: (userId: string) => void;
 }) => {
+  const { userId: authUserId } = useAuth();
   const hasOnlyOneName = !(item.name && item.username);
-  const isSignedInUser = item._id === authUserId;
-  // TODO: get the relationship between the auth user and the profile user
-  // Problem here is this is expensive to do for every user in the list...
-  // But what we can do is just request every "following" relationship from auth user
-  // and compare to that
+
   return (
     <TouchableHighlight
       key={item._id}
@@ -62,7 +58,7 @@ const UserSearchResultItem = ({
             <Body>{hasOnlyOneName ? '' : item.username || ''}</Body>
           </View>
         </View>
-        {!isSignedInUser ? (
+        {authUserId ? (
           <FollowButton
             authUserIsFollowing={authUserIsFollowing}
             profileUserId={item._id}

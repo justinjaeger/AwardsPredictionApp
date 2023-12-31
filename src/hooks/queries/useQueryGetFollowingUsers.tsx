@@ -13,30 +13,26 @@ const useQueryGetFollowingUsers = () => {
   const { userId: authUserId } = useAuth();
   const { storeTmdbDataFromRecentPredictions } = useTmdbDataStore();
 
-  const { isFetching, data, refetch } = useQuery({
+  const {
+    isFetching,
+    data: allUsers,
+    refetch,
+  } = useQuery({
     queryKey: [QueryKeys.FOLLOWING_USERS_NESTED_FIELDS],
     queryFn: async () => {
       if (!authUserId) return [];
       // Get all following users and their predictions
       const { data: users } = await MongoApi.listFollowingWithNestedFields(authUserId);
+      // TODO: WE CAN'T FILTER THE USERS because this is how we get who we are following!!!!
       if (!users) return [];
-      const usersSortedByMostRecentPrediction = users
-        .sort((u1, u2) => {
-          const uiPDate = u1.recentPredictionSets?.[0]?.createdAt;
-          const u2PDate = u2.recentPredictionSets?.[0]?.createdAt;
-          if (!uiPDate || !u2PDate) return 0; // if either user has no predictions, don't sort them (yet)
-          if (uiPDate > u2PDate) return -1;
-          if (uiPDate < u2PDate) return 1;
-          return 0;
-        })
-        .filter((u) => {
-          // filter out users who haven't predicted in the past 60 days
-          const uiPDate = u.recentPredictionSets?.[0]?.createdAt;
-          if (!uiPDate) return false;
-          const sixtyDaysAgo = new Date();
-          sixtyDaysAgo.setDate(sixtyDaysAgo.getDate() - 60);
-          return new Date(uiPDate) > new Date(sixtyDaysAgo);
-        });
+      const usersSortedByMostRecentPrediction = users.sort((u1, u2) => {
+        const uiPDate = u1.recentPredictionSets?.[0]?.createdAt;
+        const u2PDate = u2.recentPredictionSets?.[0]?.createdAt;
+        if (!uiPDate || !u2PDate) return 0; // if either user has no predictions, don't sort them (yet)
+        if (uiPDate > u2PDate) return -1;
+        if (uiPDate < u2PDate) return 1;
+        return 0;
+      });
 
       // store prediction data in cache
       const allRecentPredictions: iRecentPrediction[] = [];
@@ -51,11 +47,20 @@ const useQueryGetFollowingUsers = () => {
     },
   });
 
+  const usersWhoHaveNotPredictedInLast60Days = allUsers?.filter((u) => {
+    // filter out users who haven't predicted in the past 60 days
+    const uiPDate = u.recentPredictionSets?.[0]?.createdAt;
+    if (!uiPDate) return false;
+    const sixtyDaysAgo = new Date();
+    sixtyDaysAgo.setDate(sixtyDaysAgo.getDate() - 60);
+    return new Date(uiPDate) > new Date(sixtyDaysAgo);
+  });
+
   return {
-    data,
+    data: usersWhoHaveNotPredictedInLast60Days,
     isLoading: isFetching,
     refetch,
-    usersIdsAuthUserIsFollowing: data?.map((u) => u._id) ?? [],
+    usersIdsAuthUserIsFollowing: allUsers?.map((u) => u._id) ?? [],
   };
 };
 
