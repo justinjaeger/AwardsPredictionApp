@@ -134,14 +134,17 @@ export type iCategory = {
   isHiddenBeforeNoms?: boolean;
 };
 
-export type iEventLeaderboard = {
+export type iLeaderboard = {
   phase: Phase;
   noShorts: boolean;
   numPredicted: number;
+  topPercentageAccuracy: number;
+  medianPercentageAccuracy: number;
+  percentageAccuracyDistribution: { [percentageAccuracy: number]: number };
 };
 
 export type iIndexedEventLeaderboards = {
-  [key: string]: iEventLeaderboard;
+  [key: string]: iLeaderboard;
 };
 
 export type EventModel = {

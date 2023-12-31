@@ -5,7 +5,7 @@ import { useGetEventsWithLeaderboard } from '../../../hooks/useGetEventsWithLead
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import { FlatList } from 'react-native';
 import EventItem from '../../../components/EventItem';
-import { EventModel, WithId, iEventLeaderboard } from '../../../types/api';
+import { EventModel, WithId, iLeaderboard } from '../../../types/api';
 import { AWARDS_BODY_TO_PLURAL_STRING } from '../../../constants/awardsBodies';
 import { getLeaderboardTitle } from '../../../constants';
 
@@ -23,7 +23,7 @@ const LeaderboardList = () => {
   const events = useGetEventsWithLeaderboard();
 
   const leaderboards = events.reduce(
-    (acc: (WithId<EventModel> & iEventLeaderboard)[], event) => {
+    (acc: (WithId<EventModel> & iLeaderboard)[], event) => {
       if (!event.leaderboards) return acc;
       for (const leaderboard of Object.values(event.leaderboards)) {
         const a = { ...event, ...leaderboard };

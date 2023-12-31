@@ -1,36 +1,43 @@
-import React, { memo } from 'react';
+import React from 'react';
 import { TouchableHighlight, View } from 'react-native';
 import COLORS from '../../constants/colors';
 import FollowButton from '../FollowButton';
 import ProfileImage from '../ProfileImage';
 import { Body, SubHeader } from '../Text';
-import { IMAGE_SIZE } from '.';
 import { User, WithId } from '../../types/api';
 import { useAuth } from '../../context/AuthContext';
 
-const UserSearchResultItem = ({
-  item,
+export const LEADERBOARD_PROFILE_IMAGE_SIZE = 50;
+
+const LeaderboardListuser = ({
+  user,
   authUserIsFollowing,
   onPress,
+  rank,
+  riskiness,
+  percentageAccuracy,
 }: {
-  item: WithId<User>;
+  user: WithId<User>;
   authUserIsFollowing: boolean;
   onPress: (userId: string) => void;
+  rank: number;
+  riskiness: number;
+  percentageAccuracy: number;
 }) => {
   const { userId: authUserId } = useAuth();
-  const isAuthUser = item._id === authUserId;
+  const isAuthUser = user._id === authUserId;
 
-  const hasOnlyOneName = !(item.name && item.username);
+  const hasOnlyOneName = !(user.name && user.username);
 
   return (
     <TouchableHighlight
-      key={item._id}
+      key={user._id}
       style={{
         flexDirection: 'row',
         padding: 10,
         width: '100%',
       }}
-      onPress={() => onPress(item._id)}
+      onPress={() => onPress(user._id)}
       underlayColor={COLORS.secondaryDark}
     >
       <View
@@ -43,9 +50,9 @@ const UserSearchResultItem = ({
       >
         <View style={{ flexDirection: 'row' }}>
           <ProfileImage
-            image={item.image}
-            imageSize={IMAGE_SIZE}
-            onPress={() => onPress(item._id)}
+            image={user.image}
+            imageSize={LEADERBOARD_PROFILE_IMAGE_SIZE}
+            onPress={() => onPress(user._id)}
           />
           <View
             style={{
@@ -55,15 +62,15 @@ const UserSearchResultItem = ({
             }}
           >
             <SubHeader>
-              {hasOnlyOneName ? item.name || item.username || '' : item.name || ''}
+              {hasOnlyOneName ? user.name || user.username || '' : user.name || ''}
             </SubHeader>
-            <Body>{hasOnlyOneName ? '' : item.username || ''}</Body>
+            <Body>{hasOnlyOneName ? '' : user.username || ''}</Body>
           </View>
         </View>
         {!isAuthUser ? (
           <FollowButton
             authUserIsFollowing={authUserIsFollowing}
-            profileUserId={item._id}
+            profileUserId={user._id}
           />
         ) : null}
       </View>
@@ -71,4 +78,4 @@ const UserSearchResultItem = ({
   );
 };
 
-export default memo(UserSearchResultItem);
+export default LeaderboardListuser;
