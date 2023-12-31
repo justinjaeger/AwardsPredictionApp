@@ -7,7 +7,7 @@ import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
 import LastUpdatedText from '../LastUpdatedText';
 import ContenderListItem from '../List/ContenderList/ContenderListItem';
-import { SubHeader } from '../Text';
+import { Body, SubHeader } from '../Text';
 import { iPrediction } from '../../types/api';
 import { triggerHaptic } from '../../util/hapticFeedback';
 import { useNavigation } from '@react-navigation/native';
@@ -90,6 +90,18 @@ const MovieListDraggable = ({
               <SubHeader>{`+ Add ${CATEGORY_TYPE_TO_STRING[type]}s`}</SubHeader>
             </TouchableHighlight>
           </View>
+        ) : isAuthProfile && predictions.length > 0 ? (
+          <Body
+            style={{
+              color: COLORS.gray,
+              width: '100%',
+              marginTop: 20,
+              alignItems: 'center',
+              textAlign: 'center',
+            }}
+          >
+            {'To delete, press + hold'}
+          </Body>
         ) : null
       }
       renderItem={({ item: prediction, getIndex, drag, isActive }) => {
