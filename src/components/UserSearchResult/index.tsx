@@ -4,11 +4,11 @@ import { FlatList, View, useWindowDimensions } from 'react-native';
 import theme from '../../constants/theme';
 import { HeaderLight, SubHeader } from '../Text';
 import UserListSkeleton from '../Skeletons/UserListSkeleton';
-import UserSearchResultItem from './UserSearchResultItem';
 import { User, WithId } from '../../types/api';
 import useQueryGetFollowingUsers from '../../hooks/queries/useQueryGetFollowingUsers';
 import useDevice from '../../util/device';
 import { PredictionsNavigationProp } from '../../navigation/types';
+import UserSearchResultItem from './UserSearchResultItem';
 
 export const IMAGE_SIZE = 50;
 

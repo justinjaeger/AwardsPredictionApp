@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import MongoApi from '../../services/api/requests';
 import useQueryGetUser from '../../hooks/queries/useQueryGetUser';
+import useQueryGetFollowingUsers from '../../hooks/queries/useQueryGetFollowingUsers';
 
 const useProfileUser = (userId: string | undefined) => {
   const { userId: authUserId } = useAuth();
@@ -11,6 +12,7 @@ const useProfileUser = (userId: string | undefined) => {
   const [isFollowingAuthUser, setIsFollowingAuthUser] = useState<boolean>(false);
 
   const { data: user, isLoading: isLoadingProfileUser } = useQueryGetUser(userId);
+  const { usersIdsAuthUserIsFollowing } = useQueryGetFollowingUsers();
 
   useEffect(() => {
     if (!userId) {
@@ -22,10 +24,7 @@ const useProfileUser = (userId: string | undefined) => {
         const userIsFollowingAuthUser = !!relationship;
         setIsFollowingAuthUser(userIsFollowingAuthUser);
       });
-      MongoApi.getRelationship(authUserId, userId).then(({ data: relationship }) => {
-        const authUserIsFollowing = !!relationship;
-        setAuthUserIsFollowing(authUserIsFollowing);
-      });
+      setAuthUserIsFollowing(usersIdsAuthUserIsFollowing.includes(userId));
     }
   }, [authUserId, userId]);
 

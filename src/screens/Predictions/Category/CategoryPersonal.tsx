@@ -124,6 +124,8 @@ const CategoryPersonal = ({
     return <CategorySkeleton />;
   }
 
+  console.log('predictions', predictions.length);
+
   return (
     <>
       {predictions && predictions.length === 0 ? (
@@ -140,7 +142,7 @@ const CategoryPersonal = ({
           </BodyBold>
         </View>
       ) : null}
-      <View style={{ height: '100%', flex: 1 }}>
+      <View style={{ height: '100%' }}>
         <MovieListDraggable
           predictions={predictions}
           setPredictions={(ps) => {
