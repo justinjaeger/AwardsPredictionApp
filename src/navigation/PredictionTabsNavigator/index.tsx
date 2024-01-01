@@ -13,11 +13,13 @@ const PredictionTabsNavigator = ({
   personal,
   community,
   personalText,
+  personalImage,
   onChangeTab,
 }: {
   personal: JSX.Element;
   community: JSX.Element;
   personalText?: string;
+  personalImage?: string;
   onChangeTab?: (tab: 'personal' | 'community') => void;
 }) => {
   const { width } = useWindowDimensions();
@@ -88,6 +90,7 @@ const PredictionTabsNavigator = ({
             />
             <PredictionTab
               text={personalText || 'My Predictions'}
+              image={personalImage}
               onPress={() => {
                 openPersonalTab();
                 onChangeTab && onChangeTab('personal');

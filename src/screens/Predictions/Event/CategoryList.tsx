@@ -1,14 +1,13 @@
 import React, { useCallback } from 'react';
 import { FlatList, View } from 'react-native';
-import { PredictionsParamList } from '../../../navigation/types';
-import { useTypedNavigation } from '../../../util/hooks';
+import { PredictionsNavigationProp } from '../../../navigation/types';
 import { usePersonalCommunityTab } from '../../../context/EventContext';
 import SignedOutState from '../../../components/SignedOutState';
 import _ from 'lodash';
 import { formatLastUpdated } from '../../../util/formatDateTime';
 import LastUpdatedText from '../../../components/LastUpdatedText';
 import { useAuth } from '../../../context/AuthContext';
-import { StackActions } from '@react-navigation/native';
+import { StackActions, useNavigation } from '@react-navigation/native';
 import {
   CategoryName,
   PredictionSet,
@@ -31,19 +30,19 @@ const CategoryList = ({
   isLoading: boolean;
 }) => {
   const { userId: authUserId } = useAuth();
-  const { userId, event, userImage } = useRouteParams();
+  const { userInfo, event } = useRouteParams();
   const { setPersonalCommunityTab } = usePersonalCommunityTab();
-  const navigation = useTypedNavigation<PredictionsParamList>();
+  const navigation = useNavigation<PredictionsNavigationProp>();
 
-  const isAuthProfile = userId === authUserId;
+  const isAuthProfile = userInfo?.userId === authUserId;
 
   const onSelectCategory = async (category: CategoryName) => {
     setPersonalCommunityTab(tab);
-    const params = { userId, userImage, eventId: event!._id, category };
+    const params = { userInfo, eventId: event!._id, category };
     if (isAuthProfile || tab === 'community') {
       navigation.navigate('Category', params);
     } else {
-      navigation.dispatch(StackActions.push('CategoryFromProfile', params));
+      navigation.dispatch(StackActions.push('Category', params));
     }
   };
 
@@ -51,7 +50,7 @@ const CategoryList = ({
     onSelectCategory(category);
   }, []);
 
-  if (!userId && tab === 'personal') {
+  if (!userInfo?.userId && tab === 'personal') {
     return <SignedOutState />;
   }
 

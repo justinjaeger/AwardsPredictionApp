@@ -1,14 +1,16 @@
 import React, { useLayoutEffect } from 'react';
-import { RouteProp, useRoute } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { getHeaderTitle } from '../../../constants';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
-import { useTypedNavigation } from '../../../util/hooks';
 import UserSearchResult from '../../../components/UserSearchResult';
 import usePaginatedFriends from '../../../hooks/usePaginatedFriends';
-import { PredictionsParamList } from '../../../navigation/types';
+import {
+  PredictionsNavigationProp,
+  PredictionsParamList,
+} from '../../../navigation/types';
 
 const Followers = () => {
-  const navigation = useTypedNavigation<PredictionsParamList>();
+  const navigation = useNavigation<PredictionsNavigationProp>();
   const {
     params: { userId, type },
   } = useRoute<RouteProp<PredictionsParamList, 'Followers'>>();

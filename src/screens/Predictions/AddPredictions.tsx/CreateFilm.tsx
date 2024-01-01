@@ -8,8 +8,7 @@ import { FAB } from '../../../components/Buttons/FAB';
 import { CategoryType } from '../../../types/api';
 import SearchInput from '../../../components/Inputs/SearchInput';
 import MovieListSelectable from '../../../components/MovieList/MovieListSelectable';
-import { useTypedNavigation } from '../../../util/hooks';
-import { PredictionsParamList } from '../../../navigation/types';
+import { PredictionsNavigationProp } from '../../../navigation/types';
 import { getBiggestPhaseThatHasHappened } from '../../../util/getBiggestPhaseThatHasHappened';
 import { usePredictions } from './usePredictions';
 import BackButton from '../../../components/Buttons/BackButton';
@@ -18,9 +17,10 @@ import CreatePerformanceModal from './CreatePerformanceModal';
 import CreateSongModal from './CreateSongModal';
 import { useRouteParams } from '../../../hooks/useRouteParams';
 import { getCategoryIsHidden } from '../../../util/getCategoryIsHidden';
+import { useNavigation } from '@react-navigation/native';
 
 const CreateFilm = () => {
-  const navigation = useTypedNavigation<PredictionsParamList>();
+  const navigation = useNavigation<PredictionsNavigationProp>();
 
   const { event: _event, categoryData, category: _category } = useRouteParams();
   const event = _event!;

@@ -10,7 +10,10 @@ import useQueryGetFollowingUsers from '../../../hooks/queries/useQueryGetFollowi
 import UserListSkeleton from '../../../components/Skeletons/UserListSkeleton';
 import { SubHeader } from '../../../components/Text';
 import { useGetEventsWithLeaderboard } from '../../../hooks/useGetEventsWithLeaderboard';
-import { PredictionsParamList } from '../../../navigation/types';
+import {
+  PredictionsNavigationProp,
+  PredictionsParamList,
+} from '../../../navigation/types';
 
 /**
  * TODO: MAKE SURE IT'S CAPTURING THE INDEX ON THE USER TABLE with the leaderboard
@@ -21,7 +24,7 @@ const Leaderboard = () => {
   const {
     params: { eventId, phase, noShorts },
   } = useRoute<RouteProp<PredictionsParamList, 'Leaderboard'>>();
-  const navigation = useNavigation();
+  const navigation = useNavigation<PredictionsNavigationProp>();
 
   const events = useGetEventsWithLeaderboard();
   const event = events.find((e) => e._id === eventId);
@@ -44,7 +47,7 @@ const Leaderboard = () => {
 
   const navigateToPredictions = (userId: string) => {
     // TODO: When they navigate to predictions, it should show which ones they got right n stuff
-    // So either that's a new screen or it's EventFromProfile with some modification
+    // So either that's a new screen or it's Event with some modification
   };
 
   if (!leaderboard) return null;

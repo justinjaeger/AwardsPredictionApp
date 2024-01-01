@@ -19,17 +19,19 @@ import { useRouteParams } from '../../hooks/useRouteParams';
 
 const ScreenshotMode = ({
   predictions,
+  isCommunity,
   date,
 }: {
   predictions: iPrediction[];
+  isCommunity: boolean;
   date?: Date;
 }) => {
   const { isAndroid } = useDevice();
   const { width, height } = useWindowDimensions();
   const { top } = useSafeAreaInsets();
 
-  const { userId } = useRouteParams();
-  const { user } = useProfileUser(userId);
+  const { userInfo } = useRouteParams();
+  const { user } = useProfileUser(userInfo?.userId);
 
   const { event: _event, categoryData: _categoryData } = useRouteParams();
   const categoryData = _categoryData as iCategory;
@@ -110,7 +112,9 @@ const ScreenshotMode = ({
                 >
                   <SubHeader>{eventToString(event.awardsBody, event.year)}</SubHeader>
                   <BodyBold style={{ marginTop: 5, textAlign: 'right' }}>
-                    {user ? '@' + user.username ?? '' : 'Award Expert Community'}
+                    {isCommunity || !user
+                      ? 'Award Expert Community'
+                      : '@' + user.username ?? ''}
                   </BodyBold>
                 </View>
               </View>

@@ -19,8 +19,8 @@ const BottomFABContainer = ({ children }: { children?: React.ReactNode }) => {
   const navigation = useNavigation<PredictionsNavigationProp>();
   const { isHidden, setIsHidden, hideAbsolutely } = useFollowingBar();
   const { userId: authUserId } = useAuth();
-  const { eventId, category, userId } = useRouteParams();
-  const isAuthUser = userId === authUserId;
+  const { eventId, category, userInfo } = useRouteParams();
+  const isAuthUser = userInfo?.userId === authUserId;
 
   useEffect(() => {
     Animated.timing(animatedBottomButtons, {
@@ -81,17 +81,16 @@ const BottomFABContainer = ({ children }: { children?: React.ReactNode }) => {
           }}
         >
           <FollowingBottomScroll
-            onPress={(uId, userImage) => {
+            onPress={(userInfo) => {
               const params = {
-                userId: uId,
-                userImage,
+                userInfo,
                 eventId,
                 category,
               };
               if (category) {
-                navigation.dispatch(StackActions.push('CategoryFromProfile', params));
+                navigation.dispatch(StackActions.push('Category', params));
               } else {
-                navigation.dispatch(StackActions.push('EventFromProfile', params));
+                navigation.dispatch(StackActions.push('Event', params));
               }
             }}
           />

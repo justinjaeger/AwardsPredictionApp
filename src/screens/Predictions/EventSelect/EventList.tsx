@@ -2,8 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import { View } from 'react-native';
 import COLORS from '../../../constants/colors';
-import { PredictionsParamList } from '../../../navigation/types';
-import { useTypedNavigation } from '../../../util/hooks';
+import { PredictionsNavigationProp } from '../../../navigation/types';
 import { getOrderedEvents } from '../../../util/sortByObjectOrder';
 import { usePersonalCommunityTab } from '../../../context/EventContext';
 import {
@@ -12,10 +11,10 @@ import {
   getEventTime,
 } from '../../../constants/events';
 import { Divider } from '@ui-kitten/components';
-import { useAuth } from '../../../context/AuthContext';
 import { EventModel, EventStatus, User, UserRole, WithId } from '../../../types/api';
 import EventItem from '../../../components/EventItem';
 import { AWARDS_BODY_TO_PLURAL_STRING } from '../../../constants/awardsBodies';
+import { useNavigation } from '@react-navigation/native';
 
 const EventList = ({
   events,
@@ -26,21 +25,24 @@ const EventList = ({
   user: WithId<User> | undefined;
   isProfile?: boolean;
 }) => {
-  const { userId: authUserId } = useAuth();
   const { setPersonalCommunityTab } = usePersonalCommunityTab();
-  const navigation = useTypedNavigation<PredictionsParamList>();
+  const navigation = useNavigation<PredictionsNavigationProp>();
 
   const userId = user?._id;
 
   const onSelectEvent = async (event: WithId<EventModel>) => {
-    const noProfileSelected = !userId; // happens when signed out and click from home screen
     setPersonalCommunityTab(userId ? 'personal' : 'community');
-    const params = { userId, eventId: event._id };
-    if ((authUserId && authUserId === userId) || noProfileSelected) {
-      navigation.navigate('Event', params);
-    } else {
-      navigation.navigate('EventFromProfile', params);
-    }
+    const params = {
+      userInfo: userId
+        ? {
+            userId: userId,
+            userImage: user?.image,
+            userName: user?.name ?? user?.username ?? '',
+          }
+        : undefined,
+      eventId: event._id,
+    };
+    navigation.navigate('Event', params);
   };
 
   const orderedEvents = getOrderedEvents(events);

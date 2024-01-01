@@ -1,25 +1,28 @@
-import React, { useCallback, useLayoutEffect, useRef } from 'react';
-import PredictionTabsNavigator from '../../../navigation/PredictionTabsNavigator';
-import CategoryCommunity from './CategoryCommunity';
+import React, { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import CategoryPersonal from './CategoryPersonal';
-import { useTypedNavigation } from '../../../util/hooks';
-import { PredictionsParamList } from '../../../navigation/types';
-import { usePersonalCommunityTab } from '../../../context/EventContext';
+import {
+  PredictionsNavigationProp,
+  PredictionsParamList,
+} from '../../../navigation/types';
 import { eventToString } from '../../../util/stringConversions';
 import { getHeaderTitleWithTrophy } from '../../../constants';
-import { RouteProp, useRoute } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useRouteParams } from '../../../hooks/useRouteParams';
+import CategoryCommunity from './CategoryCommunity';
+import { usePersonalCommunityTab } from '../../../context/EventContext';
+import PredictionTabsNavigator from '../../../navigation/PredictionTabsNavigator';
+import { useAuth } from '../../../context/AuthContext';
 
-// Essentially "Category with personal/community tabs" (uses usePredictionData)
 const Category = () => {
   const { params } = useRoute<RouteProp<PredictionsParamList, 'Category'>>();
   const showEventLink = params?.showEventLink || false;
+  const { userName, userImage } = params?.userInfo ?? {};
+  const { userId: authUserId } = useAuth();
+  const isAuthUser = params?.userInfo?.userId === authUserId;
 
-  const { category, event: _event } = useRouteParams();
-  const event = _event!;
+  const { category, event } = useRouteParams();
 
-  const { personalCommunityTab, setPersonalCommunityTab } = usePersonalCommunityTab();
-  const navigation = useTypedNavigation<PredictionsParamList>();
+  const navigation = useNavigation<PredictionsNavigationProp>();
 
   // Set the header
   useLayoutEffect(() => {
@@ -32,9 +35,9 @@ const Category = () => {
     });
   }, [navigation]);
 
+  const { personalCommunityTab, setPersonalCommunityTab } = usePersonalCommunityTab();
   const initialTab = useRef<'personal' | 'community'>(personalCommunityTab);
-
-  const [, setCurrentTab] = React.useState<'personal' | 'community'>(initialTab.current);
+  const [, setCurrentTab] = useState<'personal' | 'community'>(initialTab.current);
 
   // Allows us to track the current tab so we can set it onBack
   const onBack = useCallback(() => {
@@ -47,6 +50,8 @@ const Category = () => {
   return (
     <PredictionTabsNavigator
       onChangeTab={setCurrentTab}
+      personalText={userName ?? 'User'}
+      personalImage={isAuthUser ? undefined : userImage}
       personal={<CategoryPersonal showEventLink={showEventLink} onBack={onBack} />}
       community={<CategoryCommunity showEventLink={showEventLink} />}
     />

@@ -2,26 +2,6 @@ import { useNavigation } from '@react-navigation/native';
 import _ from 'lodash';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-type NavigationParams<
-  ParamList,
-  RouteName extends keyof ParamList,
-> = ParamList[RouteName];
-
-export const useTypedNavigation = <ParamList>() => {
-  const navigation = useNavigation();
-  const navigate = (
-    routeName: keyof ParamList,
-    params?: NavigationParams<ParamList, keyof ParamList>,
-  ) =>
-    navigation.navigate(
-      // @ts-ignore
-      routeName,
-      // @ts-ignore
-      params,
-    );
-  return { ...navigation, navigate };
-};
-
 export const useAsyncEffect = (effect: () => Promise<void>, deps: any[]) => {
   useEffect(() => {
     (async () => {

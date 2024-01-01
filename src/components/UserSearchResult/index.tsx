@@ -8,6 +8,7 @@ import UserSearchResultItem from './UserSearchResultItem';
 import { User, WithId } from '../../types/api';
 import useQueryGetFollowingUsers from '../../hooks/queries/useQueryGetFollowingUsers';
 import useDevice from '../../util/device';
+import { PredictionsNavigationProp } from '../../navigation/types';
 
 export const IMAGE_SIZE = 50;
 
@@ -28,7 +29,7 @@ const UserSearchResult = ({
 }) => {
   const { isPad } = useDevice();
   const { width } = useWindowDimensions();
-  const navigation = useNavigation();
+  const navigation = useNavigation<PredictionsNavigationProp>();
   const { usersIdsAuthUserIsFollowing } = useQueryGetFollowingUsers();
 
   const navigateToProfile = (userId: string) => {

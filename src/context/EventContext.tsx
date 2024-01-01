@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useState } from 'react';
-import { useAuth } from './AuthContext';
 
 /**
  * Context for referencing the current tab, event, category, and user (who's predix we're seeing)
@@ -18,12 +17,9 @@ const PersonalCommunityTabContext = createContext<iPersonalCommunityTabContext>(
 });
 
 export const PersonalCommunityTabProvider = (props: { children: React.ReactNode }) => {
-  const { userId: authUserId } = useAuth();
-
   // it's strange but we have to use setPersonalCommunityTab manually when we navigate
-  const [personalCommunityTab, setPersonalCommunityTab] = useState<iPersonalCommunityTab>(
-    authUserId === undefined ? 'community' : 'personal',
-  );
+  const [personalCommunityTab, setPersonalCommunityTab] =
+    useState<iPersonalCommunityTab>('personal');
 
   return (
     <PersonalCommunityTabContext.Provider

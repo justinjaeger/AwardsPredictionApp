@@ -15,12 +15,13 @@ import ProfileImage from '../../components/ProfileImage';
 import useMutationUpdateProfileImage from '../../hooks/mutations/useMutationUpdateProfileImage';
 import BackButton from '../../components/Buttons/BackButton';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { PredictionsNavigationProp } from '../../navigation/types';
 
 const BIO_CHAR_LIMIT = 150;
 
 const UpdateProfileInfo = () => {
   const { userId: authUserId } = useAuth();
-  const navigation = useNavigation();
+  const navigation = useNavigation<PredictionsNavigationProp>();
 
   const { data: user } = useQueryGetUser(authUserId);
   const { mutate: updateUser, isComplete } = useMutationUpdateUser(() => {

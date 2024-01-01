@@ -28,28 +28,22 @@ export type BottomTabParamList = {
   Admin: undefined;
 };
 
+export type iUserInfo = {
+  userId: string;
+  userName: string;
+  userImage: string | undefined;
+};
+
 export type PredictionsNavigationProp = StackNavigationProp<PredictionsParamList>;
 export type PredictionsParamList = {
   EventSelect: undefined;
   // PREDICTION SCREENS
   Event: {
-    userId: string | undefined;
-    eventId: string;
-  };
-  EventFromProfile: {
-    userId: string | undefined;
+    userInfo: iUserInfo | undefined;
     eventId: string;
   };
   Category: {
-    userId: string | undefined;
-    eventId: string;
-    category: CategoryName;
-    showEventLink?: boolean;
-    onPressItem?: (contenderId: string) => void;
-  };
-  CategoryFromProfile: {
-    userId: string | undefined;
-    userImage?: string;
+    userInfo: iUserInfo | undefined;
     eventId: string;
     category: CategoryName;
     showEventLink?: boolean;

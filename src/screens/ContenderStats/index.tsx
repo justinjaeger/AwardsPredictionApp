@@ -1,6 +1,6 @@
 import React, { useLayoutEffect, useRef, useState } from 'react';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { PredictionsParamList } from '../../navigation/types';
+import { PredictionsNavigationProp, PredictionsParamList } from '../../navigation/types';
 import { CategoryName, EventModel, Movie, WithId, iPrediction } from '../../types/api';
 import { useTmdbDataStore } from '../../context/TmdbDataStore';
 import { truncateText } from '../../util/truncateText';
@@ -18,7 +18,7 @@ export type iContenderStatsData = iPrediction & {
 };
 
 const ContenderStats = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<PredictionsNavigationProp>();
   const route = useRoute<RouteProp<PredictionsParamList, 'ContenderStats'>>();
   const scrollRef = useRef<ScrollView>(null);
   const { movieTmdbId, year } = route.params;

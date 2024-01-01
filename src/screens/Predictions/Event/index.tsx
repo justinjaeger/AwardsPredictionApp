@@ -9,16 +9,18 @@ import { eventToString } from '../../../util/stringConversions';
 import { getHeaderTitleWithTrophy } from '../../../constants';
 import BottomFABContainer from '../../../components/BottomFABContainer';
 import { useRouteParams } from '../../../hooks/useRouteParams';
+import { PredictionsNavigationProp } from '../../../navigation/types';
 
 const EventPersonalCommunity = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<PredictionsNavigationProp>();
 
-  const { event, userId: paramsUserId } = useRouteParams();
-
+  const { event, userInfo } = useRouteParams();
   const { userId: authUserId } = useAuth();
-  const userId = paramsUserId || authUserId || '';
+  const isAuthUser = userInfo?.userId === authUserId;
 
-  const { data: personalPredictionData, isLoading: isLoadingPersonal } =
+  const userId = userInfo?.userId || authUserId || '';
+
+  const { data: userPredictionData, isLoading: isLoadingPersonal } =
     useQueryGetUserPredictions(userId);
   const { data: communityPredictionData, isLoading: isLoadingCommunity } =
     useQueryGetCommunityPredictions();
@@ -35,10 +37,12 @@ const EventPersonalCommunity = () => {
   return (
     <>
       <PredictionTabsNavigator
+        personalText={isAuthUser ? 'My Predictions' : userInfo?.userName}
+        personalImage={isAuthUser ? undefined : userInfo?.userImage}
         personal={
           <CategoryList
             tab={'personal'}
-            predictionData={personalPredictionData ?? undefined}
+            predictionData={userPredictionData ?? undefined}
             isLoading={isLoadingPersonal}
           />
         }

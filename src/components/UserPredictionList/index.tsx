@@ -6,27 +6,27 @@ import { AWARDS_BODY_TO_PLURAL_STRING } from '../../constants/awardsBodies';
 import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
 import { useAuth } from '../../context/AuthContext';
-import { PredictionsParamList } from '../../navigation/types';
+import { iUserInfo, PredictionsNavigationProp } from '../../navigation/types';
 import { formatLastUpdated } from '../../util/formatDateTime';
-import { useTypedNavigation } from '../../util/hooks';
 import { AwardsBody, CategoryName, iRecentPrediction } from '../../types/api';
 import useQueryGetAllEvents from '../../hooks/queries/useQueryGetAllEvents';
+import { useNavigation } from '@react-navigation/native';
+import { usePersonalCommunityTab } from '../../context/EventContext';
 
 const UserPredictionList = ({
   predictionSets,
-  userId,
-  userImage,
+  userInfo,
 }: {
   predictionSets: iRecentPrediction[];
+  userInfo: iUserInfo | undefined;
   fixedSlots?: number;
-  userId: string;
-  userImage: string | undefined;
 }) => {
   const { userId: authUserId } = useAuth();
-  const navigation = useTypedNavigation<PredictionsParamList>();
+  const { setPersonalCommunityTab } = usePersonalCommunityTab();
+  const navigation = useNavigation<PredictionsNavigationProp>();
   const { data: events } = useQueryGetAllEvents();
   const { width } = useWindowDimensions();
-  const isAuthProfile = userId === authUserId;
+  const isAuthProfile = userInfo?.userId === authUserId;
 
   return (
     <>
@@ -51,19 +51,14 @@ const UserPredictionList = ({
                 console.error('could not find event');
                 return;
               }
+              setPersonalCommunityTab('personal');
               // navigate to user's predictions
-              const params = {
-                userId,
-                userImage,
+              navigation.navigate('Category', {
+                userInfo,
                 eventId: event._id,
                 category: ps.category as CategoryName,
                 showEventLink: !isAuthProfile,
-              };
-              if (isAuthProfile) {
-                navigation.navigate('Category', params);
-              } else {
-                navigation.navigate('CategoryFromProfile', params);
-              }
+              });
             }}
           >
             <>

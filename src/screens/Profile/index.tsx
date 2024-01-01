@@ -1,33 +1,32 @@
 import React, { useEffect } from 'react';
 import { View, TouchableHighlight, ScrollView } from 'react-native';
-import { SubmitButton } from '../../components/Buttons';
 import { Body, BodyBold, HeaderLight, SubHeader } from '../../components/Text';
 import { useAuth } from '../../context/AuthContext';
 import BackgroundWrapper from '../../components/BackgroundWrapper';
-import { useNavigation, StackActions } from '@react-navigation/native';
+import { StackActions, useNavigation } from '@react-navigation/native';
 import theme from '../../constants/theme';
 import PredictionCarousel from '../../components/PredictionCarousel';
 import COLORS from '../../constants/colors';
-import { useTypedNavigation } from '../../util/hooks';
 import ProfileImage from '../../components/ProfileImage';
 import FollowButton from '../../components/FollowButton';
 import FollowCountButton from '../../components/FollowCountButton';
 import useQueryGetAllEvents from '../../hooks/queries/useQueryGetAllEvents';
 import EventList from '../Predictions/EventSelect/EventList';
-import { MainScreenNavigationProp, PredictionsParamList } from '../../navigation/types';
+import { PredictionsNavigationProp } from '../../navigation/types';
 import useProfileUser from './useProfileUser';
 import useProfileHeader from './useProfileHeader';
 import ProfileSkeleton from '../../components/Skeletons/ProfileSkeleton';
 import Snackbar from '../../components/Snackbar';
 import { useRouteParams } from '../../hooks/useRouteParams';
+import SignedOutState from '../../components/SignedOutState';
 
 const Profile = () => {
-  const { userId: paramsUserId } = useRouteParams();
+  const { userInfo } = useRouteParams();
   const { userId: authUserId } = useAuth();
-  const userId = paramsUserId || authUserId;
+  console.log('authUserId', authUserId);
+  const userId = userInfo?.userId || authUserId;
 
-  const globalNavigation = useNavigation<MainScreenNavigationProp>();
-  const navigation = useTypedNavigation<PredictionsParamList>();
+  const navigation = useNavigation<PredictionsNavigationProp>();
 
   const { data: events, isLoading: isLoadingAllEvents } = useQueryGetAllEvents();
 
@@ -51,10 +50,6 @@ const Profile = () => {
     }
   }, [user?.username, user?.name]);
 
-  const logIn = () => {
-    globalNavigation.navigate('AuthenticatorNavigator');
-  };
-
   const onPressProfileInfo = () => isAuthUser && navigation.navigate('UpdateProfileInfo');
 
   return (
@@ -62,16 +57,7 @@ const Profile = () => {
       {isLoading ? (
         <ProfileSkeleton />
       ) : !userId ? (
-        <>
-          <SubHeader style={{ marginTop: '10%', fontWeight: '700' }}>
-            {'Sign in to make predictions!'}
-          </SubHeader>
-          <SubmitButton
-            style={{ marginTop: 20 }}
-            text={'Log In / Sign Up'}
-            onPress={logIn}
-          />
-        </>
+        <SignedOutState />
       ) : (
         <ScrollView
           style={{ width: '100%' }}
@@ -204,9 +190,7 @@ const Profile = () => {
                 </HeaderLight>
                 <PredictionCarousel
                   predictionSets={predictionSets}
-                  userId={userId}
-                  userName={user?.name ?? ''}
-                  userImage={user?.image ?? ''}
+                  userInfo={userInfo}
                   hideUserInfo
                   style={{ marginTop: 10, minHeight: 10 }}
                 />

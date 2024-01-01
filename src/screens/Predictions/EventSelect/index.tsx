@@ -123,9 +123,11 @@ const EventSelect = () => {
               <PredictionCarousel
                 key={item._id}
                 predictionSets={item.recentPredictionSets || []}
-                userId={item._id}
-                userName={item.name}
-                userImage={item.image}
+                userInfo={{
+                  userId: item._id,
+                  userName: item.name ?? item.username ?? '',
+                  userImage: item.image,
+                }}
               />
             </View>
           )}
