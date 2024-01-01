@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import MovieListCommunity from '../../../components/MovieList/MovieListCommunity';
 import { BodyBold } from '../../../components/Text';
 import { formatLastUpdated } from '../../../util/formatDateTime';
-import EventLink from './EventLink';
+import EventLink from '../../../components/EventLinkButton';
 import useQueryGetCommunityPredictions from '../../../hooks/queries/useQueryGetCommunityPredictions';
 import CategorySkeleton from '../../../components/Skeletons/CategorySkeleton';
 import { sortPredictions } from '../../../util/sortPredictions';

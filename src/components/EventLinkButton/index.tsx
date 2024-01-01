@@ -1,17 +1,17 @@
 import { StackActions, useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { TouchableHighlight } from 'react-native';
-import CustomIcon from '../../../components/CustomIcon';
-import COLORS from '../../../constants/colors';
-import theme from '../../../constants/theme';
-import { BodyBold } from '../../../components/Text';
-import { hexToRgb } from '../../../util/hexToRgb';
-import { useRouteParams } from '../../../hooks/useRouteParams';
-import { IPAD_PROFILE_IMAGE_SCALE } from '../../../components/ProfileImage';
-import useDevice from '../../../util/device';
-import { PredictionsNavigationProp } from '../../../navigation/types';
+import CustomIcon from '../CustomIcon';
+import COLORS from '../../constants/colors';
+import theme from '../../constants/theme';
+import { BodyBold } from '../Text';
+import { hexToRgb } from '../../util/hexToRgb';
+import { useRouteParams } from '../../hooks/useRouteParams';
+import { IPAD_PROFILE_IMAGE_SCALE } from '../ProfileImage';
+import useDevice from '../../util/device';
+import { PredictionsNavigationProp } from '../../navigation/types';
 
-const EventLink = () => {
+const EventLinkButton = () => {
   const { userInfo } = useRouteParams();
   const navigation = useNavigation<PredictionsNavigationProp>();
   const { event } = useRouteParams();
@@ -53,4 +53,4 @@ const EventLink = () => {
   );
 };
 
-export default EventLink;
+export default EventLinkButton;
