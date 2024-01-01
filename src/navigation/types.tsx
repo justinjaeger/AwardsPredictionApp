@@ -23,7 +23,7 @@ export type BottomTabParamList = {
   Predictions: iBottomTabDefaultParamList;
   ProfileTab: iBottomTabDefaultParamList & { userId?: string };
   Friend: iBottomTabDefaultParamList;
-  Leaderboard: undefined;
+  Leaderboard: iBottomTabDefaultParamList;
   Help: undefined;
   Admin: undefined;
 };
@@ -76,21 +76,18 @@ export type PredictionsParamList = {
   UpdateProfileInfo: undefined;
   // FRIEND SCREENS
   SearchFriends: undefined;
-  // MODALS
-  ContenderInfoModal: {
-    prediction: iPrediction;
-    category: CategoryName;
-    eventId: string;
-  };
-};
-
-export type LeaderboardNavigationProp = StackNavigationProp<LeaderboardParamList>;
-export type LeaderboardParamList = {
+  // LEADERBOARD SCREENS
   LeaderboardList: undefined;
   Leaderboard: {
     eventId: string;
     phase: Phase;
     noShorts?: boolean;
+  };
+  // MODALS
+  ContenderInfoModal: {
+    prediction: iPrediction;
+    category: CategoryName;
+    eventId: string;
   };
 };
 

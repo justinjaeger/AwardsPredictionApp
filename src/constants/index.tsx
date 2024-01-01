@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import AwardsBodyImage from '../components/AwardsBodyImage';
 import { SubHeader } from '../components/Text';
-import { AwardsBody, Phase, iEventLeaderboard } from '../types/api';
+import { AwardsBody, Phase, iLeaderboard } from '../types/api';
 import ProfileImage from '../components/ProfileImage';
 
 /**
@@ -70,7 +70,7 @@ export const getHeaderTitleWithProfile = (
   );
 };
 
-export const getLeaderboardTitle = (leaderboard: iEventLeaderboard) => {
+export const getLeaderboardTitle = (leaderboard: iLeaderboard) => {
   const { phase, noShorts } = leaderboard;
   const phaseString = (() => {
     switch (phase) {

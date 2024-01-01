@@ -1,6 +1,5 @@
 import React from 'react';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { LeaderboardParamList } from '../../../navigation/types';
 import useGetLeaderboardUsers from '../../../hooks/useGetLeaderboardUsers';
 import { FlatList, Keyboard } from 'react-native';
 import useDevice from '../../../util/device';
@@ -11,6 +10,7 @@ import useQueryGetFollowingUsers from '../../../hooks/queries/useQueryGetFollowi
 import UserListSkeleton from '../../../components/Skeletons/UserListSkeleton';
 import { SubHeader } from '../../../components/Text';
 import { useGetEventsWithLeaderboard } from '../../../hooks/useGetEventsWithLeaderboard';
+import { PredictionsParamList } from '../../../navigation/types';
 
 /**
  * TODO: MAKE SURE IT'S CAPTURING THE INDEX ON THE USER TABLE with the leaderboard
@@ -20,7 +20,7 @@ const Leaderboard = () => {
   const { isPad } = useDevice();
   const {
     params: { eventId, phase, noShorts },
-  } = useRoute<RouteProp<LeaderboardParamList, 'Leaderboard'>>();
+  } = useRoute<RouteProp<PredictionsParamList, 'Leaderboard'>>();
   const navigation = useNavigation();
 
   const events = useGetEventsWithLeaderboard();
@@ -31,7 +31,7 @@ const Leaderboard = () => {
       (l) => l.phase === phase && !!l.noShorts === !!noShorts,
     );
 
-  const { users, fetchPage, isLoading, hasNextPage } = useGetLeaderboardUsers({
+  const { users, fetchPage, isLoading } = useGetLeaderboardUsers({
     eventId,
     phase,
     noShorts,

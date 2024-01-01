@@ -20,6 +20,8 @@ import ContenderStats from '../screens/ContenderStats';
 import { PersonalCommunityTabProvider } from '../context/EventContext';
 import { FollowingBarProvider } from '../context/FollowingBarContext';
 import ContenderInfoModal from '../screens/Predictions/ContenderInfoModal';
+import LeaderboardList from '../screens/Leaderboard/LeaderboardList';
+import Leaderboard from '../screens/Leaderboard/Leaderboard';
 
 const { Navigator, Screen, Group } = createStackNavigator<PredictionsParamList>();
 
@@ -134,6 +136,23 @@ const PredictionsNavigator = () => {
           component={SearchFriends}
           options={{
             ...toolbarOnly,
+          }}
+        />
+        {/* Leaderboard Screens */}
+        <Screen
+          name="LeaderboardList"
+          component={LeaderboardList}
+          options={{
+            headerTitle: getHeaderTitle('Leaderboards'),
+            headerLeft: BackButton,
+          }}
+        />
+        <Screen
+          name="Leaderboard"
+          component={Leaderboard}
+          options={{
+            headerTitle: getHeaderTitle('Leaderboard'),
+            headerLeft: BackButton,
           }}
         />
       </Group>

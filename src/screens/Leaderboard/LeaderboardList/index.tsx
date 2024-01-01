@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { LeaderboardNavigationProp } from '../../../navigation/types';
+import { PredictionsNavigationProp } from '../../../navigation/types';
 import { useGetEventsWithLeaderboard } from '../../../hooks/useGetEventsWithLeaderboard';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import { FlatList } from 'react-native';
@@ -19,7 +19,7 @@ import { getLeaderboardTitle } from '../../../constants';
  * We should store this information on the event, also
  */
 const LeaderboardList = () => {
-  const navigation = useNavigation<LeaderboardNavigationProp>();
+  const navigation = useNavigation<PredictionsNavigationProp>();
   const events = useGetEventsWithLeaderboard();
 
   const leaderboards = events.reduce(
