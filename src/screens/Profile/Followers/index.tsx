@@ -12,11 +12,11 @@ import {
 const Followers = () => {
   const navigation = useNavigation<PredictionsNavigationProp>();
   const {
-    params: { userId, type },
+    params: { userInfo, type },
   } = useRoute<RouteProp<PredictionsParamList, 'Followers'>>();
 
   const { users, fetchPage, isLoading, allUsersAreFetched } = usePaginatedFriends({
-    userId,
+    userId: userInfo.userId,
     type,
   });
 
@@ -31,9 +31,7 @@ const Followers = () => {
     <BackgroundWrapper>
       <UserSearchResult
         users={users}
-        onEndReached={() => {
-          fetchPage();
-        }}
+        onEndReached={() => fetchPage()}
         isLoading={isLoading}
         allUsersAreFetched={allUsersAreFetched}
         noHeader

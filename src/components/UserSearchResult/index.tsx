@@ -7,7 +7,7 @@ import UserListSkeleton from '../Skeletons/UserListSkeleton';
 import { User, WithId } from '../../types/api';
 import useQueryGetFollowingUsers from '../../hooks/queries/useQueryGetFollowingUsers';
 import useDevice from '../../util/device';
-import { PredictionsNavigationProp } from '../../navigation/types';
+import { PredictionsNavigationProp, iUserInfo } from '../../navigation/types';
 import UserSearchResultItem from './UserSearchResultItem';
 
 export const IMAGE_SIZE = 50;
@@ -32,9 +32,9 @@ const UserSearchResult = ({
   const navigation = useNavigation<PredictionsNavigationProp>();
   const { usersIdsAuthUserIsFollowing } = useQueryGetFollowingUsers();
 
-  const navigateToProfile = (userId: string) => {
+  const navigateToProfile = (userInfo: iUserInfo) => {
     // important to push so we can have multiple profiles in same stack
-    navigation.dispatch(StackActions.push('Profile', { userId }));
+    navigation.dispatch(StackActions.push('Profile', { userInfo }));
   };
 
   return (

@@ -19,11 +19,11 @@ import ProfileSkeleton from '../../components/Skeletons/ProfileSkeleton';
 import Snackbar from '../../components/Snackbar';
 import { useRouteParams } from '../../hooks/useRouteParams';
 import SignedOutState from '../../components/SignedOutState';
+import { getUserInfo } from '../../util/getUserInfo';
 
 const Profile = () => {
   const { userInfo } = useRouteParams();
   const { userId: authUserId } = useAuth();
-  console.log('authUserId', authUserId);
   const userId = userInfo?.userId || authUserId;
 
   const navigation = useNavigation<PredictionsNavigationProp>();
@@ -140,7 +140,10 @@ const Profile = () => {
                 onPress={() => {
                   if (user?.followerCount === 0) return;
                   navigation.dispatch(
-                    StackActions.push('Followers', { userId, type: 'followers' }),
+                    StackActions.push('Followers', {
+                      userInfo: getUserInfo(user),
+                      type: 'followers',
+                    }),
                   );
                 }}
                 text={`${user?.followerCount ?? 0} Followers`}
@@ -149,7 +152,10 @@ const Profile = () => {
                 onPress={() => {
                   if (user?.followingCount === 0) return;
                   navigation.dispatch(
-                    StackActions.push('Followers', { userId, type: 'following' }),
+                    StackActions.push('Followers', {
+                      userInfo: getUserInfo(user),
+                      type: 'following',
+                    }),
                   );
                 }}
                 text={`${user?.followingCount ?? 0} Following`}

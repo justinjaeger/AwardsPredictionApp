@@ -7,6 +7,7 @@ import { Body, SubHeader } from '../Text';
 import { IMAGE_SIZE } from '.';
 import { User, WithId } from '../../types/api';
 import { useAuth } from '../../context/AuthContext';
+import { iUserInfo } from '../../navigation/types';
 
 const UserSearchResultItem = ({
   item,
@@ -15,12 +16,20 @@ const UserSearchResultItem = ({
 }: {
   item: WithId<User>;
   authUserIsFollowing: boolean;
-  onPress: (userId: string) => void;
+  onPress: (userInfo: iUserInfo) => void;
 }) => {
   const { userId: authUserId } = useAuth();
   const isAuthUser = item._id === authUserId;
 
   const hasOnlyOneName = !(item.name && item.username);
+
+  const onPressProfileImage = () => {
+    onPress({
+      userId: item._id,
+      userName: item.name ?? item.username ?? '',
+      userImage: item.image,
+    });
+  };
 
   return (
     <TouchableHighlight
@@ -30,7 +39,7 @@ const UserSearchResultItem = ({
         padding: 10,
         width: '100%',
       }}
-      onPress={() => onPress(item._id)}
+      onPress={() => onPressProfileImage()}
       underlayColor={COLORS.secondaryDark}
     >
       <View
@@ -45,7 +54,7 @@ const UserSearchResultItem = ({
           <ProfileImage
             image={item.image}
             imageSize={IMAGE_SIZE}
-            onPress={() => onPress(item._id)}
+            onPress={() => onPressProfileImage()}
           />
           <View
             style={{

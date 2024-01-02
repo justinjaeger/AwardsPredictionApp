@@ -61,10 +61,10 @@ export type PredictionsParamList = {
   };
   // PROFILE SCREENS
   Profile: {
-    userId?: string;
+    userInfo: iUserInfo;
   };
   Followers: {
-    userId: string;
+    userInfo: iUserInfo;
     type: 'followers' | 'following';
   };
   UpdateProfileInfo: undefined;
