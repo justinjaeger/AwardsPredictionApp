@@ -7,7 +7,7 @@ export const getUserInfo = (
   return user?._id
     ? {
         userId: user?._id,
-        userName: user?.name ?? user.username ?? '',
+        userName: user.name ?? user.username ?? '',
         userImage: user?.image,
       }
     : undefined;

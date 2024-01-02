@@ -15,6 +15,7 @@ import { EventModel, EventStatus, User, UserRole, WithId } from '../../../types/
 import EventItem from '../../../components/EventItem';
 import { AWARDS_BODY_TO_PLURAL_STRING } from '../../../constants/awardsBodies';
 import { useNavigation } from '@react-navigation/native';
+import { getUserInfo } from '../../../util/getUserInfo';
 
 const EventList = ({
   events,
@@ -33,13 +34,7 @@ const EventList = ({
   const onSelectEvent = async (event: WithId<EventModel>) => {
     setPersonalCommunityTab(userId ? 'personal' : 'community');
     const params = {
-      userInfo: userId
-        ? {
-            userId: userId,
-            userImage: user?.image,
-            userName: user?.name ?? user?.username ?? '',
-          }
-        : undefined,
+      userInfo: getUserInfo(user),
       eventId: event._id,
     };
     navigation.navigate('Event', params);
