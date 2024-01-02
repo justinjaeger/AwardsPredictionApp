@@ -50,7 +50,7 @@ const Category = () => {
   return (
     <PredictionTabsNavigator
       onChangeTab={setCurrentTab}
-      personalText={userName ?? 'User'}
+      personalText={isAuthUser ? 'My Predictions' : userName}
       personalImage={isAuthUser ? undefined : userImage}
       personal={<CategoryPersonal showEventLink={showEventLink} onBack={onBack} />}
       community={<CategoryCommunity showEventLink={showEventLink} />}
