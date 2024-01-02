@@ -19,7 +19,7 @@ const CategoryListItem = ({
   onPress: (category: CategoryName) => void;
   isAuthProfile: boolean;
 }) => {
-  const { event } = useRouteParams();
+  const { event, yyyymmdd } = useRouteParams();
   const awardsBodyCategories = event?.categories;
   if (!awardsBodyCategories) return null;
 

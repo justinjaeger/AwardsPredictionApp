@@ -32,7 +32,7 @@ const CategoryPersonal = ({
 }) => {
   const { setHideAbsolutely } = useFollowingBar();
 
-  const { category: _category, event: _event, userInfo } = useRouteParams();
+  const { category: _category, event: _event, userInfo, yyyymmdd } = useRouteParams();
   const category = _category!;
   const event = _event!;
 
@@ -40,9 +40,10 @@ const CategoryPersonal = ({
   const { userId: authUserId } = useAuth();
   const isAuthProfile = userInfo?.userId === authUserId;
 
-  const { data: predictionData, isLoading } = useQueryGetUserPredictions(
-    userInfo?.userId,
-  );
+  const { data: predictionData, isLoading } = useQueryGetUserPredictions({
+    userId: userInfo?.userId,
+    yyyymmdd,
+  });
   const { createdAt } = predictionData?.categories[category] ?? {};
   const initialPredictions = sortPredictions(
     predictionData?.categories[category]?.predictions ?? [],

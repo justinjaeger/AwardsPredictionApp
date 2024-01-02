@@ -13,10 +13,12 @@ import { useRouteParams } from '../../../hooks/useRouteParams';
 
 // Note: We ALSO use this for non-auth-user user profiles
 const CategoryCommunity = ({ showEventLink }: { showEventLink?: boolean }) => {
-  const { category: _category } = useRouteParams();
+  const { category: _category, yyyymmdd } = useRouteParams();
   const category = _category!;
 
-  const { data: predictionSet, isLoading } = useQueryGetCommunityPredictions();
+  const { data: predictionSet, isLoading } = useQueryGetCommunityPredictions({
+    yyyymmdd,
+  });
 
   const { createdAt } = predictionSet?.categories[category] || {};
   const predictions = sortPredictions(

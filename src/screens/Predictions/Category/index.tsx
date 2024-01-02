@@ -16,11 +16,11 @@ import { useAuth } from '../../../context/AuthContext';
 const Category = () => {
   const { params } = useRoute<RouteProp<PredictionsParamList, 'Category'>>();
   const showEventLink = params?.showEventLink || false;
-  const { userName, userImage } = params?.userInfo ?? {};
   const { userId: authUserId } = useAuth();
   const isAuthUser = params?.userInfo?.userId === authUserId;
 
-  const { category, event } = useRouteParams();
+  const { userInfo, category, event } = useRouteParams();
+  const { userName, userImage } = userInfo ?? {};
 
   const navigation = useNavigation<PredictionsNavigationProp>();
 

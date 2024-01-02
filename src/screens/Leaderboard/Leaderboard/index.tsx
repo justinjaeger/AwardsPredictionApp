@@ -13,7 +13,9 @@ import { useGetEventsWithLeaderboard } from '../../../hooks/useGetEventsWithLead
 import {
   PredictionsNavigationProp,
   PredictionsParamList,
+  iUserInfo,
 } from '../../../navigation/types';
+import { getUserInfo } from '../../../util/getUserInfo';
 
 /**
  * TODO: MAKE SURE IT'S CAPTURING THE INDEX ON THE USER TABLE with the leaderboard
@@ -45,9 +47,12 @@ const Leaderboard = () => {
     fetchPage();
   };
 
-  const navigateToPredictions = (userId: string) => {
-    // TODO: When they navigate to predictions, it should show which ones they got right n stuff
-    // So either that's a new screen or it's Event with some modification
+  const navigateToPredictions = (userInfo: iUserInfo, yyyymmdd: number) => {
+    navigation.navigate('Event', {
+      eventId,
+      userInfo,
+      yyyymmdd,
+    });
   };
 
   if (!leaderboard) return null;
@@ -84,12 +89,15 @@ const Leaderboard = () => {
       renderItem={({ item }) => {
         const currentLeaderboard = item.leaderboardRankings?.[0]; // it should already be filtered and have one result
         if (!currentLeaderboard) return null;
-        const { rank, percentageAccuracy, riskiness } = currentLeaderboard;
+        const { rank, percentageAccuracy, riskiness, yyyymmdd } = currentLeaderboard;
         return (
           <LeaderboardListItem
             user={item}
             authUserIsFollowing={usersIdsAuthUserIsFollowing.includes(item._id)}
-            onPress={() => navigateToPredictions(item._id)}
+            onPress={() => {
+              const userInfo = getUserInfo(item);
+              userInfo && navigateToPredictions(userInfo, yyyymmdd);
+            }}
             rank={rank}
             riskiness={riskiness}
             percentageAccuracy={percentageAccuracy}

@@ -14,16 +14,16 @@ import { PredictionsNavigationProp } from '../../../navigation/types';
 const EventPersonalCommunity = () => {
   const navigation = useNavigation<PredictionsNavigationProp>();
 
-  const { event, userInfo } = useRouteParams();
+  const { event, userInfo, yyyymmdd } = useRouteParams();
   const { userId: authUserId } = useAuth();
   const isAuthUser = userInfo?.userId === authUserId;
 
   const userId = userInfo?.userId || authUserId || '';
 
   const { data: userPredictionData, isLoading: isLoadingPersonal } =
-    useQueryGetUserPredictions(userId);
+    useQueryGetUserPredictions({ userId, yyyymmdd });
   const { data: communityPredictionData, isLoading: isLoadingCommunity } =
-    useQueryGetCommunityPredictions();
+    useQueryGetCommunityPredictions({ yyyymmdd });
 
   // define the header
   useLayoutEffect(() => {

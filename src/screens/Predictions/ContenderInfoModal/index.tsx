@@ -25,14 +25,16 @@ const ContenderInfoModal = () => {
 
   const route = useRoute<RouteProp<PredictionsParamList, 'ContenderInfoModal'>>();
   const { prediction } = route.params;
-  const { event: _event, category: _category } = useRouteParams();
+  const { event: _event, category: _category, yyyymmdd } = useRouteParams();
   const event = _event!;
   const category = _category!;
   const { isPad } = useDevice();
   const navigation = useNavigation<StackNavigationProp<PredictionsParamList>>();
   const { getTmdbDataFromPrediction } = useTmdbDataStore();
 
-  const { data: communityPredictions } = useQueryGetCommunityPredictions();
+  const { data: communityPredictions } = useQueryGetCommunityPredictions({
+    yyyymmdd,
+  });
   const { person, song } = getTmdbDataFromPrediction(prediction) ?? {};
 
   if (!communityPredictions) return null;

@@ -41,14 +41,14 @@ export type PredictionsParamList = {
   Event: {
     userInfo: iUserInfo | undefined;
     eventId: string;
-    yyyymmdd?: string;
+    yyyymmdd?: number;
     predictionSetId?: string;
   };
   Category: {
     userInfo: iUserInfo | undefined;
     eventId: string;
     category: CategoryName;
-    yyyymmdd?: string;
+    yyyymmdd?: number;
     predictionSetId?: string;
     showEventLink?: boolean;
     onPressItem?: (contenderId: string) => void;

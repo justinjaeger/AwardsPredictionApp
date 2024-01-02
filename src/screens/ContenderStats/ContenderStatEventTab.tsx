@@ -22,6 +22,7 @@ export type iContenderStatsData = iPrediction & {
 
 // TODO: When there are multiple categories here, make it so
 // it doesn't fetch the data until you tap the tab - else this could be overwhelming
+// TODO: make it so you can pass yyyymmdd into here
 const ContenderStatEventTab = ({
   event,
   movieTmdbId,
@@ -34,7 +35,7 @@ const ContenderStatEventTab = ({
   const { isPad } = useDevice();
   const { width } = useWindowDimensions();
 
-  const { data: communityPredictions } = useQueryGetCommunityPredictions(event);
+  const { data: communityPredictions } = useQueryGetCommunityPredictions({ event });
 
   const [sortSetting, setSortSetting] = useState<'likelihood' | 'cat-order'>(
     'likelihood',
