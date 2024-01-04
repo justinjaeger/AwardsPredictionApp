@@ -6,14 +6,16 @@ import KeychainStorage from '../../keychain';
  * https://github.com/aws/aws-sdk-js-v3/issues/4877#issuecomment-1656007484
  */
 
-export const uploadProfilePicture = async (uri: string) => {
+export const uploadProfilePicture = async (uri: string, size: 'sm' | 'md' | 'lg') => {
   try {
     const response = await fetch(uri);
     const blob = await response.blob();
 
     const { data } = await KeychainStorage.get();
     const token = data?.accessToken;
-    await fetch(`${API_ENDPOINT}/image`, {
+    const path = size === 'sm' ? 'imageSm' : size === 'md' ? 'imageMd' : 'imageLg';
+
+    await fetch(`${API_ENDPOINT}/${path}`, {
       method: 'POST',
       body: blob,
       headers: {

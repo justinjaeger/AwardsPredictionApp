@@ -18,18 +18,35 @@ const useMutationUpdateProfileImage = (onComplete?: () => void) => {
       setIsComplete(false);
       try {
         setIsChoosingImage(true);
-        const result = await launchImageLibrary({
-          maxWidth: 200,
-          maxHeight: 200,
-          mediaType: 'photo',
-        });
-        if (result && result.assets) {
-          const { uri } = result.assets[0];
-          if (uri) {
-            setIsSuccessful(true);
-            await MongoApi.uploadProfilePicture(uri);
+        const [resultSm, resultMd, resultLg] = await Promise.all([
+          launchImageLibrary({
+            maxWidth: 50,
+            maxHeight: 50,
+            mediaType: 'photo',
+          }),
+          launchImageLibrary({
+            maxWidth: 200,
+            maxHeight: 200,
+            mediaType: 'photo',
+          }),
+          launchImageLibrary({
+            maxWidth: 600,
+            maxHeight: 600,
+            mediaType: 'photo',
+          }),
+        ]);
+        const uploadImagesPromises = [resultSm, resultMd, resultLg].map((result, i) => {
+          const size = i === 0 ? 'sm' : i === 1 ? 'md' : 'lg';
+          if (result && result.assets) {
+            const { uri } = result.assets[0];
+            if (uri) {
+              setIsSuccessful(true);
+              return MongoApi.uploadProfilePicture(uri, size);
+            }
           }
-        }
+          return undefined;
+        });
+        await Promise.all(uploadImagesPromises);
         setIsChoosingImage(false);
       } catch {
         console.error('error in useUpdateProfileImage');
