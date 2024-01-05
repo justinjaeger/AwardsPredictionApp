@@ -117,7 +117,6 @@ export type Contender = {
   personTmdbId?: number;
   songId?: string;
   isHidden?: boolean;
-  accolade?: Phase; // LEGACY (now on new table Accolade)
   numPredicting?: Record<number, number>; // for community predictions only
   amplify_id?: string;
 };
