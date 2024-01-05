@@ -119,6 +119,7 @@ const ScreenshotMode = ({
                 </View>
               </View>
               <MovieGrid
+                eventId={event._id}
                 predictions={predictions.slice(0, 20)}
                 categoryInfo={categoryData}
               />

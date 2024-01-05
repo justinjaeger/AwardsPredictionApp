@@ -11,7 +11,7 @@ import { getPosterDimensionsByWidth } from '../../../constants/posterDimensions'
 import { getTotalNumPredicting } from '../../../util/getNumPredicting';
 import { Body, SubHeader } from '../../Text';
 import { hexToRgb } from '../../../util/hexToRgb';
-import { CategoryType, iPrediction } from '../../../types/api';
+import { CategoryType, iPrediction, Phase } from '../../../types/api';
 import { useTmdbDataStore } from '../../../context/TmdbDataStore';
 import { categoryNameToTmdbCredit } from '../../../util/categoryNameToTmdbCredit';
 import ListItemSkeleton from '../../Skeletons/ListItemSkeleton';
@@ -20,6 +20,7 @@ import Histogram from '../../Histogram';
 import PosterFromTmdb from '../../Images/PosterFromTmdb';
 import CustomIcon from '../../CustomIcon';
 import { useRouteParams } from '../../../hooks/useRouteParams';
+import AccoladeIndicator from '../../AccoladeIndicator';
 
 export type iContenderListItemProps = {
   prediction: iPrediction;
@@ -46,6 +47,7 @@ export type iContenderListItemProps = {
     underlayColor?: string;
   };
   showHistogram?: boolean;
+  accolade?: Phase;
 };
 
 const ContenderListItem = ({
@@ -58,6 +60,7 @@ const ContenderListItem = ({
   totalNumPredictingTop,
   iconRightProps,
   showHistogram,
+  accolade,
   onPressItem,
   onPressThumbnail,
   onLongPress,
@@ -259,6 +262,7 @@ const ContenderListItem = ({
           </View>
         </TouchableHighlight>
       ) : null}
+      {accolade ? <AccoladeIndicator accolade={accolade} /> : null}
     </View>
   );
 };

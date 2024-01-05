@@ -7,22 +7,29 @@ import { iCategory, iPrediction } from '../../types/api';
 import { useTmdbDataStore } from '../../context/TmdbDataStore';
 import PosterFromTmdb from '../Images/PosterFromTmdb';
 import MoviePosterSkeleton from '../Skeletons/MoviePosterSkeleton';
+import useQueryGetEventAccolades from '../../hooks/queries/useQueryGetEventAccolades';
+import AccoladeIndicator from '../AccoladeIndicator';
 
 const MOVIES_IN_ROW = 5;
 
 const MovieGrid = ({
+  eventId,
   predictions,
   categoryInfo,
   totalWidth: _totalWidth,
   noLine,
   style,
+  showAccolades,
 }: {
+  eventId: string;
   predictions: iPrediction[];
   categoryInfo?: iCategory;
   noLine?: boolean;
   totalWidth?: number;
   style?: StyleProp<ViewStyle>;
+  showAccolades?: boolean;
 }) => {
+  const { data: contenderIdsToPhase } = useQueryGetEventAccolades(eventId);
   const { getTmdbDataFromPrediction } = useTmdbDataStore();
   const { width } = useWindowDimensions();
   const totalWidth = _totalWidth || width;
@@ -48,6 +55,7 @@ const MovieGrid = ({
         // HERE is where it gets the movie data, including poster
         // BUT ALSO it comes back here from event predictions
         const { movie, person } = getTmdbDataFromPrediction(prediction) || {};
+        const accolade = contenderIdsToPhase && contenderIdsToPhase[contenderId];
         return (
           <View
             key={contenderId}
@@ -70,6 +78,20 @@ const MovieGrid = ({
             {!noLine && i >= slots && i < slots + MOVIES_IN_ROW ? (
               // we want to give a margin on top if this is the row beneath the divider (since divider is absolute pos)
               <View style={{ marginTop: 20 }} />
+            ) : null}
+            {showAccolades && accolade ? (
+              <View
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  backgroundColor: COLORS.secondary,
+                  padding: 5,
+                  borderRadius: theme.borderRadius,
+                }}
+              >
+                <AccoladeIndicator accolade={accolade} />
+              </View>
             ) : null}
             {movie ? (
               <PosterFromTmdb

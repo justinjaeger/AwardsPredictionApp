@@ -37,6 +37,7 @@ const UserPredictionList = ({
         const event = events?.find(
           (e) => e.awardsBody === ps.awardsBody && e.year === ps.year,
         );
+        if (!event) return null;
         const categoryData = event?.categories[ps.category as CategoryName];
         return (
           <TouchableHighlight
@@ -86,6 +87,7 @@ const UserPredictionList = ({
                 </Label>
               </View>
               <MovieGrid
+                eventId={event?._id}
                 predictions={ps.topPredictions}
                 noLine
                 style={{ marginBottom: 0 }}

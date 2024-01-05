@@ -18,8 +18,12 @@ import EventSkeleton from '../../../components/Skeletons/EventSkeleton';
 import { getOrderedCategories } from '../../../util/sortByObjectOrder';
 import CategoryListItem from './CategoryListItem';
 import { useRouteParams } from '../../../hooks/useRouteParams';
+import theme from '../../../constants/theme';
+import Stat from '../../../components/ItemStatBox.tsx/Stat';
+import { Body } from '../../../components/Text';
+import { formatYyyymmdd } from '../../../util/formatYyyymmdd';
+import useProfileUser from '../../Profile/useProfileUser';
 
-// This is shared by EventPersonalCommunity AND EventFromProfile
 const CategoryList = ({
   tab,
   predictionData,
@@ -30,7 +34,8 @@ const CategoryList = ({
   isLoading: boolean;
 }) => {
   const { userId: authUserId } = useAuth();
-  const { userInfo, event } = useRouteParams();
+  const { userInfo, event, yyyymmdd, noShorts } = useRouteParams();
+  const { user } = useProfileUser(userInfo?.userId);
   const { setPersonalCommunityTab } = usePersonalCommunityTab();
   const navigation = useNavigation<PredictionsNavigationProp>();
 
@@ -83,13 +88,34 @@ const CategoryList = ({
     ? getOrderedCategories(event, unorderedCategories)
     : [];
 
-  console.log(Object.keys(orderedPredictions));
+  const userLeaderboard = user?.leaderboardRankings?.find(
+    (l) =>
+      l.eventId === event?._id && l.yyyymmdd === yyyymmdd && l.noShorts === !!noShorts,
+  );
 
   return (
     <View style={{ flex: 1, width: '100%' }}>
       <FlatList
         data={orderedPredictions}
-        ListHeaderComponent={<LastUpdatedText lastUpdated={lastUpdatedString} />}
+        ListHeaderComponent={
+          yyyymmdd && userLeaderboard ? (
+            <View
+              style={{
+                marginTop: theme.windowMargin,
+              }}
+            >
+              <Body>{formatYyyymmdd(yyyymmdd)}</Body>
+              <Stat
+                number={userLeaderboard.percentageAccuracy.toString() + '%'}
+                text="accuracy"
+              />
+              <Stat number={'#' + userLeaderboard.rank.toString()} text="rank" />
+              <Stat number={userLeaderboard.riskiness.toString()} text="riskiness" />
+            </View>
+          ) : (
+            <LastUpdatedText lastUpdated={lastUpdatedString} />
+          )
+        }
         keyExtractor={([catName]) => catName}
         renderItem={({ item }) => {
           return (

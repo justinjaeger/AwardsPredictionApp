@@ -143,6 +143,8 @@ export type iLeaderboard = {
   percentageAccuracyDistribution: { [percentageAccuracy: number]: number };
 };
 
+// overall aggregate data on event leaderboards
+// forget the key -- just filter by values. Key is just so we don't duplicate
 export type iIndexedEventLeaderboards = {
   [key: string]: iLeaderboard;
 };
@@ -285,6 +287,8 @@ export type User = {
   amplify_id?: string;
 };
 
+// instead of the contender being marked with an accolade, keep a separate table
+// as for leaderboard data, that goes under event.leaderboards
 export type Accolade = {
   eventId: ObjectId;
   accolades: {

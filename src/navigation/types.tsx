@@ -41,14 +41,16 @@ export type PredictionsParamList = {
   Event: {
     userInfo: iUserInfo | undefined;
     eventId: string;
-    yyyymmdd?: number;
+    yyyymmdd?: number; // for viewing a leaderboard
+    noShorts?: boolean; // for viewing a leaderboard
     predictionSetId?: string;
   };
   Category: {
     userInfo: iUserInfo | undefined;
     eventId: string;
     category: CategoryName;
-    yyyymmdd?: number;
+    yyyymmdd?: number; // for viewing a leaderboard
+    noShorts?: boolean; // for viewing a leaderboard
     predictionSetId?: string;
     showEventLink?: boolean;
     onPressItem?: (contenderId: string) => void;

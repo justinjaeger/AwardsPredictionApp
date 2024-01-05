@@ -13,6 +13,7 @@ import { triggerHaptic } from '../../util/hapticFeedback';
 import { useNavigation } from '@react-navigation/native';
 import { PredictionsNavigationProp } from '../../navigation/types';
 import { useRouteParams } from '../../hooks/useRouteParams';
+import useQueryGetEventAccolades from '../../hooks/queries/useQueryGetEventAccolades';
 
 type iMovieListProps = {
   predictions: iPrediction[];
@@ -30,9 +31,16 @@ const MovieListDraggable = ({
   onPressAdd,
 }: iMovieListProps) => {
   const navigation = useNavigation<PredictionsNavigationProp>();
-  const { categoryData, category: _category, eventId: _eventId } = useRouteParams();
+  const {
+    categoryData,
+    category: _category,
+    eventId: _eventId,
+    yyyymmdd,
+  } = useRouteParams();
   const category = _category!;
   const eventId = _eventId!;
+
+  const { data: contenderIdsToPhase } = useQueryGetEventAccolades(eventId);
 
   const { slots: _slots, type } = categoryData!;
   const slots = _slots ?? 5;
@@ -56,6 +64,8 @@ const MovieListDraggable = ({
       return newItems;
     });
   }, []);
+
+  const showAccolades = !!yyyymmdd;
 
   return (
     <DraggableFlatList
@@ -110,6 +120,10 @@ const MovieListDraggable = ({
         const isSelectedForDelete = itemsToDelete.some(
           (p) => p.contenderId === prediction.contenderId,
         );
+        const accoladeToShow = showAccolades
+          ? contenderIdsToPhase && contenderIdsToPhase[prediction.contenderId]
+          : undefined;
+
         return (
           <>
             {index === slots ? (
@@ -168,6 +182,7 @@ const MovieListDraggable = ({
                         onPress: () => drag(),
                       }
                 }
+                accolade={accoladeToShow ?? undefined}
               />
             </ScaleDecorator>
           </>

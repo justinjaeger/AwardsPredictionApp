@@ -16,6 +16,7 @@ export const useRouteParams = (): {
   category: CategoryName | undefined;
   categoryData: iCategory | undefined;
   yyyymmdd?: number;
+  noShorts?: boolean;
 } => {
   const { params } = useRoute<RouteProp<PredictionsParamList>>();
   const maybeEventId = params?.eventId;
@@ -30,5 +31,6 @@ export const useRouteParams = (): {
     category: params?.category,
     categoryData: categoryData,
     yyyymmdd: params?.yyyymmdd,
+    noShorts: params?.noShorts,
   };
 };

@@ -62,8 +62,10 @@ const CategoryListItem = ({
           </HeaderLight>
         ) : null}
         <MovieGrid
+          eventId={event?._id}
           predictions={truncatedPredictions}
           categoryInfo={awardsBodyCategories[category]}
+          showAccolades={!!yyyymmdd}
           noLine
         />
       </View>
