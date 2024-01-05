@@ -5,18 +5,24 @@ import useDevice from '../../util/device';
 import { getImageUri } from '../../util/getImageUri';
 import { Spinner } from '@ui-kitten/components';
 import COLORS from '../../constants/colors';
+import { User } from '../../types/api';
 
 export const IPAD_PROFILE_IMAGE_SCALE = 1.5;
+export enum ProfileImageSize {
+  SM = 50,
+  MD = 200,
+  LG = 600,
+}
 
 const ProfileImage = ({
-  image,
+  user,
   imageSize,
   style,
   onPress,
   isDisabled,
   isLoading,
 }: {
-  image?: string;
+  user?: User | null;
   imageSize?: number;
   style?: StyleProp<ViewStyle>;
   onPress?: () => void;
@@ -24,9 +30,23 @@ const ProfileImage = ({
   isLoading?: boolean;
 }) => {
   const { isPad } = useDevice();
-  const uri = image ? getImageUri(image) : undefined;
-
   const size = (imageSize || 100) * (isPad ? IPAD_PROFILE_IMAGE_SCALE : 1);
+
+  const profileImageSize: ProfileImageSize =
+    size <= ProfileImageSize.SM
+      ? ProfileImageSize.SM
+      : size <= ProfileImageSize.MD
+      ? ProfileImageSize.MD
+      : ProfileImageSize.LG;
+
+  const image =
+    (profileImageSize === ProfileImageSize.SM
+      ? user?.imageSm
+      : profileImageSize === ProfileImageSize.MD
+      ? user?.imageMd
+      : user?.imageLg) ?? user?.image;
+
+  const uri = image ? getImageUri(image) : undefined;
 
   return (
     <View

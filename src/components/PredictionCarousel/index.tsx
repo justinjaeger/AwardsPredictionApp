@@ -19,21 +19,17 @@ import ProfileImage from '../ProfileImage';
 import { SubHeader } from '../Text';
 import UserPredictionList from '../UserPredictionList';
 import CarouselArrow from './CarouselArrow';
-import { iRecentPrediction } from '../../types/api';
+import { User, WithId, iRecentPrediction } from '../../types/api';
 
 const PredictionCarousel = ({
   predictionSets,
-  userId,
-  userName,
-  userImage,
+  user,
   hideUserInfo,
   enableArrows,
   style,
 }: {
   predictionSets: iRecentPrediction[];
-  userId: string;
-  userName: string | undefined;
-  userImage: string | undefined;
+  user: WithId<User>;
   hideUserInfo?: boolean;
   enableArrows?: boolean;
   style?: StyleProp<ViewStyle>;
@@ -123,17 +119,17 @@ const PredictionCarousel = ({
             borderRadius: theme.borderRadius,
           }}
           onPress={() => {
-            navigation.dispatch(StackActions.push('Profile', { userId }));
+            navigation.dispatch(StackActions.push('Profile', { userId: user._id }));
           }}
         >
           <>
             <ProfileImage
-              image={userImage}
+              user={user}
               imageSize={40}
               style={{ marginRight: 15 }}
               isDisabled
             />
-            <SubHeader>{userName ?? ''}</SubHeader>
+            <SubHeader>{user.name ?? ''}</SubHeader>
           </>
         </TouchableOpacity>
       ) : null}
@@ -186,8 +182,8 @@ const PredictionCarousel = ({
         >
           <UserPredictionList
             predictionSets={predictionSets}
-            userId={userId}
-            userImage={userImage}
+            userId={user._id}
+            userImage={user.image}
           />
         </ScrollView>
         {/* SCROLL BAR */}

@@ -81,10 +81,9 @@ const BottomFABContainer = ({ children }: { children?: React.ReactNode }) => {
           }}
         >
           <FollowingBottomScroll
-            onPress={(uId, userImage) => {
+            onPress={(uId) => {
               const params = {
                 userId: uId,
-                userImage,
                 eventId,
                 category,
               };

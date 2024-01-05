@@ -98,7 +98,7 @@ const Profile = () => {
               }}
             >
               <ProfileImage
-                image={user?.image}
+                user={user}
                 onPress={isAuthUser ? () => onPressProfileInfo() : undefined}
                 style={{ marginRight: 15 }}
               />
@@ -202,14 +202,14 @@ const Profile = () => {
                 >
                   Recent Predictions:
                 </HeaderLight>
-                <PredictionCarousel
-                  predictionSets={predictionSets}
-                  userId={userId}
-                  userName={user?.name ?? ''}
-                  userImage={user?.image ?? ''}
-                  hideUserInfo
-                  style={{ marginTop: 10, minHeight: 10 }}
-                />
+                {user ? (
+                  <PredictionCarousel
+                    predictionSets={predictionSets}
+                    user={user}
+                    hideUserInfo
+                    style={{ marginTop: 10, minHeight: 10 }}
+                  />
+                ) : null}
               </>
             ) : null}
             {!isLoadingAllEvents && user && userEvents.length > 0 ? (

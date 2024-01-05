@@ -8,11 +8,13 @@ import { View } from 'react-native';
 import { RouteProp, StackActions, useRoute } from '@react-navigation/native';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import { useRouteParams } from '../../../hooks/useRouteParams';
+import useProfileUser from '../../Profile/useProfileUser';
 
 const CategoryFromProfile = () => {
   const { params } = useRoute<RouteProp<PredictionsParamList, 'CategoryFromProfile'>>();
   const showEventLink = params?.showEventLink || false;
-  const { userId, userImage } = useRouteParams();
+  const { userId } = useRouteParams();
+  const { user } = useProfileUser(userId);
 
   const { category, event } = useRouteParams();
 
@@ -20,7 +22,7 @@ const CategoryFromProfile = () => {
 
   // Set the header
   useLayoutEffect(() => {
-    if (!category || !event) return;
+    if (!category || !event || !user) return;
     const eventName = eventToString(event.awardsBody, event.year);
     const categoryName = event.categories[category].name;
     const headerTitle = eventName + '\n' + 'Best ' + categoryName;
@@ -28,9 +30,9 @@ const CategoryFromProfile = () => {
       navigation.dispatch(StackActions.push('Profile', { userId }));
     };
     navigation.setOptions({
-      headerTitle: getHeaderTitleWithProfile(headerTitle, userImage, onPressProfileImage),
+      headerTitle: getHeaderTitleWithProfile(headerTitle, user, onPressProfileImage),
     });
-  }, [navigation]);
+  }, [navigation, user]);
 
   return (
     <BackgroundWrapper>

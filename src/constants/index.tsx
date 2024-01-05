@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import AwardsBodyImage from '../components/AwardsBodyImage';
 import { SubHeader } from '../components/Text';
-import { AwardsBody } from '../types/api';
+import { AwardsBody, User, WithId } from '../types/api';
 import ProfileImage from '../components/ProfileImage';
 
 /**
@@ -54,14 +54,14 @@ export const getHeaderTitleWithTrophy = (title: string, awardsBody: AwardsBody) 
 
 export const getHeaderTitleWithProfile = (
   title: string,
-  userImage: string | undefined,
+  user: WithId<User>,
   onPressProfileImage: () => void,
 ) => {
   return () => (
     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
       <ProfileImage
         imageSize={HEADER_HEIGHT}
-        image={userImage}
+        user={user}
         onPress={() => onPressProfileImage()}
         style={{ marginLeft: 10, marginRight: 10 }}
       />

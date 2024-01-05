@@ -17,19 +17,15 @@ const EventFromProfile = () => {
 
   // define the header
   useLayoutEffect(() => {
-    if (!event) return;
+    if (!event || !user) return;
     const headerTitle = eventToString(event.awardsBody, event.year);
     const onPressProfileImage = () => {
       navigation.dispatch(StackActions.push('Profile', { userId }));
     };
     navigation.setOptions({
-      headerTitle: getHeaderTitleWithProfile(
-        headerTitle,
-        user?.image,
-        onPressProfileImage,
-      ),
+      headerTitle: getHeaderTitleWithProfile(headerTitle, user, onPressProfileImage),
     });
-  }, [navigation, user?.image]);
+  }, [navigation, user]);
 
   return (
     <>

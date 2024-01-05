@@ -123,7 +123,7 @@ const UpdateProfileInfo = () => {
       >
         <View style={{ width: '80%', alignItems: 'center' }}>
           <ProfileImage
-            image={user?.image}
+            user={user}
             imageSize={140}
             onPress={() => {
               updateProfileImage();

@@ -41,7 +41,7 @@ const UserSearchResultItem = ({
       >
         <View style={{ flexDirection: 'row' }}>
           <ProfileImage
-            image={item.image}
+            user={item}
             imageSize={IMAGE_SIZE}
             onPress={() => onPress(item._id)}
           />
