@@ -16,6 +16,7 @@ import {
   iUserInfo,
 } from '../../../navigation/types';
 import { getUserInfo } from '../../../util/getUserInfo';
+import BackgroundWrapper from '../../../components/BackgroundWrapper';
 
 /**
  * TODO: MAKE SURE IT'S CAPTURING THE INDEX ON THE USER TABLE with the leaderboard
@@ -58,53 +59,55 @@ const Leaderboard = () => {
   if (!leaderboard) return null;
 
   return (
-    <FlatList
-      data={users}
-      keyExtractor={(item) => item._id}
-      style={{ width: '100%' }}
-      showsVerticalScrollIndicator={false}
-      contentContainerStyle={{ paddingBottom: 100 }}
-      onScroll={(e) => {
-        Keyboard.dismiss();
-        // Fetches more at bottom of scroll. Note the high event throttle to prevent too many requests
-        // get position of current scroll
-        const currentOffset = e.nativeEvent.contentOffset.y;
-        // get max bottom of scroll
-        const maxOffset =
-          e.nativeEvent.contentSize.height - e.nativeEvent.layoutMeasurement.height;
-        // if we're close to the bottom fetch more
-        if (currentOffset > maxOffset - 200 && onEndReached) {
-          onEndReached();
+    <BackgroundWrapper>
+      <FlatList
+        data={users}
+        keyExtractor={(item) => item._id}
+        style={{ width: '100%' }}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 100 }}
+        onScroll={(e) => {
+          Keyboard.dismiss();
+          // Fetches more at bottom of scroll. Note the high event throttle to prevent too many requests
+          // get position of current scroll
+          const currentOffset = e.nativeEvent.contentOffset.y;
+          // get max bottom of scroll
+          const maxOffset =
+            e.nativeEvent.contentSize.height - e.nativeEvent.layoutMeasurement.height;
+          // if we're close to the bottom fetch more
+          if (currentOffset > maxOffset - 200 && onEndReached) {
+            onEndReached();
+          }
+        }}
+        scrollEventThrottle={500}
+        onEndReachedThreshold={isPad ? 0.8 : 0.5} // triggers onEndReached at (X*100)% of list, for example 0.9 = 90% down
+        keyboardShouldPersistTaps={'always'}
+        ListHeaderComponent={<SubHeader>{`${leaderboard.numPredicted} users`}</SubHeader>}
+        ListFooterComponent={
+          isLoading ? (
+            <UserListSkeleton imageSize={LEADERBOARD_PROFILE_IMAGE_SIZE} numResults={3} />
+          ) : null
         }
-      }}
-      scrollEventThrottle={500}
-      onEndReachedThreshold={isPad ? 0.8 : 0.5} // triggers onEndReached at (X*100)% of list, for example 0.9 = 90% down
-      keyboardShouldPersistTaps={'always'}
-      ListHeaderComponent={<SubHeader>{`${leaderboard.numPredicted} users`}</SubHeader>}
-      ListFooterComponent={
-        isLoading ? (
-          <UserListSkeleton imageSize={LEADERBOARD_PROFILE_IMAGE_SIZE} numResults={3} />
-        ) : null
-      }
-      renderItem={({ item }) => {
-        const currentLeaderboard = item.leaderboardRankings?.[0]; // it should already be filtered and have one result
-        if (!currentLeaderboard) return null;
-        const { rank, percentageAccuracy, riskiness, yyyymmdd } = currentLeaderboard;
-        return (
-          <LeaderboardListItem
-            user={item}
-            authUserIsFollowing={usersIdsAuthUserIsFollowing.includes(item._id)}
-            onPress={() => {
-              const userInfo = getUserInfo(item);
-              userInfo && navigateToPredictions(userInfo, yyyymmdd);
-            }}
-            rank={rank}
-            riskiness={riskiness}
-            percentageAccuracy={percentageAccuracy}
-          />
-        );
-      }}
-    />
+        renderItem={({ item }) => {
+          const currentLeaderboard = item.leaderboardRankings?.[0]; // it should already be filtered and have one result
+          if (!currentLeaderboard) return null;
+          const { rank, percentageAccuracy, riskiness, yyyymmdd } = currentLeaderboard;
+          return (
+            <LeaderboardListItem
+              user={item}
+              authUserIsFollowing={usersIdsAuthUserIsFollowing.includes(item._id)}
+              onPress={() => {
+                const userInfo = getUserInfo(item);
+                userInfo && navigateToPredictions(userInfo, yyyymmdd);
+              }}
+              rank={rank}
+              riskiness={riskiness}
+              percentageAccuracy={percentageAccuracy}
+            />
+          );
+        }}
+      />
+    </BackgroundWrapper>
   );
 };
 
