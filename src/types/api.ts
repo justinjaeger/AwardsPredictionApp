@@ -139,6 +139,8 @@ export type iLeaderboard = {
   numPredicted: number;
   topPercentageAccuracy: number;
   medianPercentageAccuracy: number;
+  communityPercentageAccuracy: number;
+  communityRiskiness: number;
   percentageAccuracyDistribution: { [percentageAccuracy: number]: number };
 };
 
