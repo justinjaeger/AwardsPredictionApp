@@ -123,7 +123,7 @@ const PredictionsNavigator = () => {
           component={LeaderboardList}
           options={{
             headerTitle: getHeaderTitle('Leaderboards'),
-            headerLeft: BackButton,
+            ...medium,
           }}
         />
         <Screen
@@ -132,6 +132,7 @@ const PredictionsNavigator = () => {
           options={{
             headerTitle: getHeaderTitle('Leaderboard'),
             headerLeft: BackButton,
+            ...medium,
           }}
         />
       </Group>
