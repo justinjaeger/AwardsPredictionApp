@@ -88,7 +88,10 @@ const CategoryList = ({
     ? getOrderedCategories(event, unorderedCategories)
     : [];
 
-  const userLeaderboard = user?.leaderboardRankings?.find(
+  const leaderboardRankings =
+    Object.values(user?.leaderboardRankings?.[event?._id ?? ''] ?? {}) ?? [];
+
+  const userLeaderboard = leaderboardRankings.find(
     (l) =>
       l.eventId === event?._id && l.yyyymmdd === yyyymmdd && l.noShorts === !!noShorts,
   );

@@ -17,9 +17,9 @@ import {
 } from '../../../navigation/types';
 import { getUserInfo } from '../../../util/getUserInfo';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
+import { User, WithId } from '../../../types/api';
 
 /**
- * TODO: MAKE SURE IT'S CAPTURING THE INDEX ON THE USER TABLE with the leaderboard
  * First, we need a screen with Leaderboard Selection
  */
 const Leaderboard = () => {
@@ -37,7 +37,7 @@ const Leaderboard = () => {
       (l) => l.phase === phase && !!l.noShorts === !!noShorts,
     );
 
-  const { users, fetchPage, isLoading } = useGetLeaderboardUsers({
+  const { leaderboardRankings, fetchPage, isLoading } = useGetLeaderboardUsers({
     eventId,
     phase,
     noShorts,
@@ -61,8 +61,8 @@ const Leaderboard = () => {
   return (
     <BackgroundWrapper>
       <FlatList
-        data={users}
-        keyExtractor={(item) => item._id}
+        data={leaderboardRankings}
+        keyExtractor={(item) => item.userId}
         style={{ width: '100%' }}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 100 }}
@@ -89,20 +89,16 @@ const Leaderboard = () => {
           ) : null
         }
         renderItem={({ item }) => {
-          const currentLeaderboard = item.leaderboardRankings?.[0]; // it should already be filtered and have one result
-          if (!currentLeaderboard) return null;
-          const { rank, percentageAccuracy, riskiness, yyyymmdd } = currentLeaderboard;
+          if (!item) return null;
           return (
             <LeaderboardListItem
-              user={item}
-              authUserIsFollowing={usersIdsAuthUserIsFollowing.includes(item._id)}
+              leaderboardRanking={item}
+              authUserIsFollowing={usersIdsAuthUserIsFollowing.includes(item.userId)}
               onPress={() => {
-                const userInfo = getUserInfo(item);
-                userInfo && navigateToPredictions(userInfo, yyyymmdd);
+                if (!item) return;
+                const userInfo = getUserInfo(item as WithId<User>);
+                userInfo && navigateToPredictions(userInfo, item.yyyymmdd);
               }}
-              rank={rank}
-              riskiness={riskiness}
-              percentageAccuracy={percentageAccuracy}
             />
           );
         }}

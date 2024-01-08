@@ -4,40 +4,34 @@ import COLORS from '../../constants/colors';
 import FollowButton from '../FollowButton';
 import ProfileImage from '../ProfileImage';
 import { Body, SubHeader } from '../Text';
-import { User, WithId } from '../../types/api';
 import { useAuth } from '../../context/AuthContext';
+import { iLeaderboardRankingsWithUserData } from '../../services/api/requests/leaderboard';
 
 export const LEADERBOARD_PROFILE_IMAGE_SIZE = 50;
 
-const LeaderboardListuser = ({
-  user,
+const LeaderboardListItem = ({
+  leaderboardRanking,
   authUserIsFollowing,
   onPress,
-  rank,
-  riskiness,
-  percentageAccuracy,
 }: {
-  user: WithId<User>;
+  leaderboardRanking: iLeaderboardRankingsWithUserData;
   authUserIsFollowing: boolean;
   onPress: (userId: string) => void;
-  rank: number;
-  riskiness: number;
-  percentageAccuracy: number;
 }) => {
   const { userId: authUserId } = useAuth();
-  const isAuthUser = user._id === authUserId;
+  const isAuthUser = leaderboardRanking.userId === authUserId;
 
-  const hasOnlyOneName = !(user.name && user.username);
+  const hasOnlyOneName = !(leaderboardRanking.name && leaderboardRanking.username);
 
   return (
     <TouchableHighlight
-      key={user._id}
+      key={leaderboardRanking._id}
       style={{
         flexDirection: 'row',
         padding: 10,
         width: '100%',
       }}
-      onPress={() => onPress(user._id)}
+      onPress={() => onPress(leaderboardRanking.userId)}
       underlayColor={COLORS.secondaryDark}
     >
       <View
@@ -50,9 +44,9 @@ const LeaderboardListuser = ({
       >
         <View style={{ flexDirection: 'row' }}>
           <ProfileImage
-            image={user.image}
+            image={leaderboardRanking.image}
             imageSize={LEADERBOARD_PROFILE_IMAGE_SIZE}
-            onPress={() => onPress(user._id)}
+            onPress={() => onPress(leaderboardRanking.userId)}
           />
           <View
             style={{
@@ -62,15 +56,17 @@ const LeaderboardListuser = ({
             }}
           >
             <SubHeader>
-              {hasOnlyOneName ? user.name || user.username || '' : user.name || ''}
+              {hasOnlyOneName
+                ? leaderboardRanking.name || leaderboardRanking.username || ''
+                : leaderboardRanking.name || ''}
             </SubHeader>
-            <Body>{hasOnlyOneName ? '' : user.username || ''}</Body>
+            <Body>{hasOnlyOneName ? '' : leaderboardRanking.username || ''}</Body>
           </View>
         </View>
         {!isAuthUser ? (
           <FollowButton
             authUserIsFollowing={authUserIsFollowing}
-            profileUserId={user._id}
+            profileUserId={leaderboardRanking.userId}
           />
         ) : null}
       </View>
@@ -78,4 +74,4 @@ const LeaderboardListuser = ({
   );
 };
 
-export default LeaderboardListuser;
+export default LeaderboardListItem;

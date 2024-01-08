@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Phase, User, WithId } from '../types/api';
+import { Phase } from '../types/api';
 import MongoApi from '../services/api/requests';
+import { iLeaderboardRankingsWithUserData } from '../services/api/requests/leaderboard';
 
 const useGetLeaderboardUsers = ({
   eventId,
@@ -17,12 +18,14 @@ const useGetLeaderboardUsers = ({
 }) => {
   const [hasNextPage, setHasNextPage] = useState<boolean>(true);
   const [pageNumber, setPageNumber] = useState<number>(1);
-  const [users, setUsers] = useState<WithId<User>[]>([]);
+  const [leaderboardRankings, setLeaderboardRankings] = useState<
+    iLeaderboardRankingsWithUserData[]
+  >([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const fetchPage = async () => {
-    if (hasNextPage || isLoading) return;
-    if (users.length === 0) setIsLoading(true);
+    if (!hasNextPage || isLoading) return;
+    if (leaderboardRankings.length === 0) setIsLoading(true);
     const { data } = await MongoApi.getLeaderboardUsers({
       eventId,
       phase,
@@ -31,10 +34,10 @@ const useGetLeaderboardUsers = ({
       sortByField,
       sortOrder,
     });
-    const newUsers = data?.users ?? [];
+    const newRankings = data?.leaderboardRankingsWithUserData ?? [];
     setPageNumber((prev) => prev + 1);
     setHasNextPage(data?.hasNextPage ?? false);
-    setUsers((prev) => [...prev, ...newUsers]);
+    setLeaderboardRankings((prev) => [...prev, ...newRankings]);
     setIsLoading(false);
   };
 
@@ -44,7 +47,7 @@ const useGetLeaderboardUsers = ({
   }, []);
 
   // export fetchPage to allow user to fetch next page
-  return { users, fetchPage, isLoading, hasNextPage };
+  return { leaderboardRankings, fetchPage, isLoading, hasNextPage };
 };
 
 export default useGetLeaderboardUsers;

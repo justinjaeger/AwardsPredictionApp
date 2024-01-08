@@ -1,5 +1,7 @@
-import { Phase, User, WithId } from '../../../types/api';
+import { LeaderboardRanking, Phase, User, WithId } from '../../../types/api';
 import api from '../api';
+
+export type iLeaderboardRankingsWithUserData = LeaderboardRanking & Partial<WithId<User>>;
 
 export const getLeaderboardUsers = async ({
   eventId,
@@ -35,7 +37,10 @@ export const getLeaderboardUsers = async ({
     }
     queryString += `sortOrder=${sortOrder}`;
   }
-  return await api.get<{ users: WithId<User>[]; hasNextPage: boolean }>(
+  return await api.get<{
+    leaderboardRankingsWithUserData: iLeaderboardRankingsWithUserData[];
+    hasNextPage: boolean;
+  }>(
     `leaderboard/${eventId}/${phase}/${pageNum}${queryString === '?' ? '' : queryString}`,
   );
 };
