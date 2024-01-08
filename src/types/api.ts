@@ -147,7 +147,7 @@ export type iLeaderboard = {
 // overall aggregate data on event leaderboards
 // forget the key -- just filter by values. Key is just so we don't duplicate
 export type iIndexedEventLeaderboards = {
-  [key: string]: iLeaderboard;
+  [phaseNoShortsKey: string]: iLeaderboard;
 };
 
 export type EventModel = {
@@ -261,14 +261,26 @@ export type iCategoriesPredicting = {
   };
 };
 
+// For leaderboards: Duplicate data between LeaderboardRanking and User
+
 export type iLeaderboardRanking = {
   eventId: ObjectId;
   phase: Phase;
-  noShorts: boolean;
+  noShorts?: boolean;
   rank: number;
-  percentageAccuracy: number;
   riskiness: number;
+  percentageAccuracy: number;
   yyyymmdd: number; // date of close
+};
+
+export type LeaderboardRanking = {
+  userId: ObjectId;
+} & iLeaderboardRanking;
+
+export type iIndexedUserLeaderboardRanking = {
+  [eventId: string]: {
+    [phaseNoShortsKey: string]: iLeaderboardRanking;
+  };
 };
 
 export type User = {
@@ -284,7 +296,7 @@ export type User = {
   eventsPredicting?: Record<string, string[]>; // key is event, value is array of categories
   categoriesPredicting?: iCategoriesPredicting; // ...and replace with this
   recentPredictionSets?: iRecentPrediction[];
-  leaderboardRankings?: iLeaderboardRanking[];
+  leaderboardRankings?: iIndexedUserLeaderboardRanking;
   amplify_id?: string;
 };
 
