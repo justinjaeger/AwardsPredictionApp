@@ -19,9 +19,6 @@ import { getUserInfo } from '../../../util/getUserInfo';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import { User, WithId } from '../../../types/api';
 
-/**
- * First, we need a screen with Leaderboard Selection
- */
 const Leaderboard = () => {
   const { isPad } = useDevice();
   const {
