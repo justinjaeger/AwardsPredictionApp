@@ -60,3 +60,9 @@
 * Not sure about subsequent rounds, but for FIRST ROUND, Play store requires a published  round of Closed testing (https://play.google.com/console/u/0/developers/7592820188677524175/app/4975201475300894677/closed-testing)
 * Click Alpha track; Click `Manage Track`, `Create new release`, add the App bundle from library, Next, Save
 * Publish for review - click `Send changes out for review` (https://play.google.com/console/u/0/developers/7592820188677524175/app/4975201475300894677/publishing)
+### Deploying
+* (https://play.google.com/console/u/0/developers/7592820188677524175/app/4975201475300894677/tracks/production)
+* Create New Release
+* Upload the `app-release.aab` file
+* After that step, see Publishing Overview tab
+* Here you may have to send changes to Google for review before publishing
