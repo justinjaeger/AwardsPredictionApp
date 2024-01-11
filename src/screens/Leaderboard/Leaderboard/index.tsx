@@ -1,30 +1,34 @@
 import React from 'react';
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { RouteProp, useRoute } from '@react-navigation/native';
 import useGetLeaderboardUsers from '../../../hooks/useGetLeaderboardUsers';
-import { FlatList, Keyboard } from 'react-native';
+import { FlatList, Keyboard, TouchableHighlight, View } from 'react-native';
 import useDevice from '../../../util/device';
 import LeaderboardListItem, {
   LEADERBOARD_PROFILE_IMAGE_SIZE,
 } from '../../../components/LeaderboardListItem';
-import useQueryGetFollowingUsers from '../../../hooks/queries/useQueryGetFollowingUsers';
 import UserListSkeleton from '../../../components/Skeletons/UserListSkeleton';
-import { SubHeader } from '../../../components/Text';
+import { Body, SmallHeader, SubHeader } from '../../../components/Text';
 import { useGetEventsWithLeaderboard } from '../../../hooks/useGetEventsWithLeaderboard';
-import {
-  PredictionsNavigationProp,
-  PredictionsParamList,
-  iUserInfo,
-} from '../../../navigation/types';
-import { getUserInfo } from '../../../util/getUserInfo';
+import { PredictionsParamList } from '../../../navigation/types';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
-import { User, WithId } from '../../../types/api';
+import COLORS from '../../../constants/colors';
+import {
+  formatDecimalAsPercentage,
+  formatPercentage,
+} from '../../../util/formatPercentage';
+import { useAuth } from '../../../context/AuthContext';
+import useProfileUser from '../../Profile/useProfileUser';
+import { getUserLeaderboard } from '../../../util/getUserLeaderboard';
 
 const Leaderboard = () => {
   const { isPad } = useDevice();
   const {
     params: { eventId, phase, noShorts },
   } = useRoute<RouteProp<PredictionsParamList, 'Leaderboard'>>();
-  const navigation = useNavigation<PredictionsNavigationProp>();
+
+  const { userId: authUserId } = useAuth();
+  const { user } = useProfileUser(authUserId);
+  const userLeaderboard = user && getUserLeaderboard({ user, eventId, phase, noShorts });
 
   const events = useGetEventsWithLeaderboard();
   const event = events.find((e) => e._id === eventId);
@@ -39,21 +43,15 @@ const Leaderboard = () => {
     phase,
     noShorts,
   });
-  const { usersIdsAuthUserIsFollowing } = useQueryGetFollowingUsers();
 
   const onEndReached = () => {
     fetchPage();
   };
 
-  const navigateToPredictions = (userInfo: iUserInfo, yyyymmdd: number) => {
-    navigation.navigate('Event', {
-      eventId,
-      userInfo,
-      yyyymmdd,
-    });
-  };
-
   if (!leaderboard) return null;
+
+  // TODO:
+  // leaderboard.percentageAccuracyDistribution can become a chart
 
   return (
     <BackgroundWrapper>
@@ -79,25 +77,99 @@ const Leaderboard = () => {
         scrollEventThrottle={500}
         onEndReachedThreshold={isPad ? 0.8 : 0.5} // triggers onEndReached at (X*100)% of list, for example 0.9 = 90% down
         keyboardShouldPersistTaps={'always'}
-        ListHeaderComponent={<SubHeader>{`${leaderboard.numPredicted} users`}</SubHeader>}
+        ListHeaderComponent={
+          <>
+            <SubHeader>{`Num predicting: ${leaderboard.numPredicted}`}</SubHeader>
+            <SubHeader>{`Median %: ${leaderboard.medianPercentageAccuracy} users`}</SubHeader>
+            {/* <SubHeader>{`Best: ${leaderboard.topPercentageAccuracy})`}</SubHeader> */}
+            <SubHeader>{`Community % accurate: ${leaderboard.communityPercentageAccuracy}`}</SubHeader>
+            <SubHeader>{`Community riskiness: ${leaderboard.communityRiskiness}`}</SubHeader>
+            <TouchableHighlight
+              style={{
+                flexDirection: 'row',
+                padding: 10,
+                width: '100%',
+              }}
+              onPress={() => {}}
+              underlayColor={COLORS.secondaryDark}
+            >
+              <View
+                style={{
+                  flexDirection: 'row',
+                  width: '100%',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  flex: 1,
+                }}
+              >
+                <View style={{ flexDirection: 'row', flex: 2 }}>
+                  <View
+                    style={{
+                      flexDirection: 'column',
+                      justifyContent: 'space-around',
+                      marginLeft: 10,
+                    }}
+                  >
+                    <SubHeader>Community</SubHeader>
+                    <Body>{'Performance of the user collective'}</Body>
+                  </View>
+                </View>
+                <View style={{ alignItems: 'flex-end', flex: 1 }}>
+                  <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
+                    <SmallHeader>
+                      {formatDecimalAsPercentage(leaderboard.communityPercentageAccuracy)}
+                    </SmallHeader>
+                    <SubHeader>{'%'}</SubHeader>
+                  </View>
+                  <SubHeader>{`Better than ${formatPercentage(
+                    leaderboard.communityPerformedBetterThanNumUsers /
+                      leaderboard.numPredicted,
+                  )} of users`}</SubHeader>
+                  {/* You can't get any lower than THIS number, bc riskiness is relative to community 
+                      Unless you didn't predict every slot, then you'd get no points
+                      But then riskiness isn't really a good metric anyway is it?
+                    */}
+                  <SubHeader>{leaderboard.communityRiskiness.toFixed(0)}</SubHeader>
+                </View>
+              </View>
+            </TouchableHighlight>
+            <View
+              style={{
+                height: 0.5,
+                width: '100%',
+                backgroundColor: COLORS.white,
+                marginTop: 5,
+                marginBottom: 5,
+              }}
+            />
+            {/* TODO: Display auth user now. Can get from the user object. */}
+            {user && userLeaderboard ? (
+              <LeaderboardListItem
+                leaderboardRanking={{ userId: user._id, ...user, ...userLeaderboard }}
+              />
+            ) : null}
+            <View
+              style={{
+                height: 0.5,
+                width: '100%',
+                backgroundColor: COLORS.white,
+                marginTop: 5,
+                marginBottom: 5,
+              }}
+            />
+          </>
+        }
         ListFooterComponent={
           isLoading ? (
-            <UserListSkeleton imageSize={LEADERBOARD_PROFILE_IMAGE_SIZE} numResults={3} />
+            <UserListSkeleton
+              imageSize={LEADERBOARD_PROFILE_IMAGE_SIZE}
+              numResults={10}
+            />
           ) : null
         }
         renderItem={({ item }) => {
           if (!item) return null;
-          return (
-            <LeaderboardListItem
-              leaderboardRanking={item}
-              authUserIsFollowing={usersIdsAuthUserIsFollowing.includes(item.userId)}
-              onPress={() => {
-                if (!item) return;
-                const userInfo = getUserInfo(item as WithId<User>);
-                userInfo && navigateToPredictions(userInfo, item.yyyymmdd);
-              }}
-            />
-          );
+          return <LeaderboardListItem leaderboardRanking={item} />;
         }}
       />
     </BackgroundWrapper>
