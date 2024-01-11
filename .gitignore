@@ -24,6 +24,7 @@ ios/.xcode.env.local
 
 # Android/IntelliJ
 #
+release/
 build/
 .idea
 .gradle
@@ -76,6 +77,3 @@ dist/
 node_modules/
 .secret-*
 **.sample
-
-# Builds
-.android/app/release/
