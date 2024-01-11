@@ -35,6 +35,8 @@ const LeaderboardListItem = ({
     navigation.navigate('Event', {
       eventId: leaderboardRanking.eventId,
       userInfo,
+      yyyymmdd: leaderboardRanking.yyyymmdd,
+      isLeaderboard: true,
     });
   };
 

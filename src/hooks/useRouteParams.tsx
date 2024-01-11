@@ -17,6 +17,7 @@ export const useRouteParams = (): {
   categoryData: iCategory | undefined;
   yyyymmdd?: number;
   noShorts?: boolean;
+  isLeaderboard?: boolean; // need to distinguish leaderboard vs history
 } => {
   const { params } = useRoute<RouteProp<PredictionsParamList>>();
   const maybeEventId = params?.eventId;
@@ -32,5 +33,6 @@ export const useRouteParams = (): {
     categoryData: categoryData,
     yyyymmdd: params?.yyyymmdd,
     noShorts: params?.noShorts,
+    isLeaderboard: params?.isLeaderboard,
   };
 };

@@ -44,6 +44,7 @@ export type PredictionsParamList = {
     yyyymmdd?: number; // for viewing a leaderboard
     noShorts?: boolean; // for viewing a leaderboard
     predictionSetId?: string;
+    isLeaderboard?: boolean;
   };
   Category: {
     userInfo: iUserInfo | undefined;
@@ -53,6 +54,7 @@ export type PredictionsParamList = {
     noShorts?: boolean; // for viewing a leaderboard
     predictionSetId?: string;
     showEventLink?: boolean;
+    isLeaderboard?: boolean;
     onPressItem?: (contenderId: string) => void;
   };
   AddPredictions: {

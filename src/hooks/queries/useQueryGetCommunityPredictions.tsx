@@ -28,6 +28,7 @@ const useQueryGetCommunityPredictions = (params?: {
       const { data: predictionSet } = await MongoApi.getPredictionSet({
         userId: 'community',
         eventId,
+        yyyymmdd,
       });
 
       const endTime = performance.now();
