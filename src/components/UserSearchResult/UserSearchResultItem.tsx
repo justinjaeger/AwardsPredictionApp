@@ -6,7 +6,6 @@ import ProfileImage from '../ProfileImage';
 import { Body, SubHeader } from '../Text';
 import { IMAGE_SIZE } from '.';
 import { User, WithId } from '../../types/api';
-import { useAuth } from '../../context/AuthContext';
 
 const UserSearchResultItem = ({
   item,
@@ -17,7 +16,6 @@ const UserSearchResultItem = ({
   authUserIsFollowing: boolean;
   onPress: (userId: string) => void;
 }) => {
-  const { userId: authUserId } = useAuth();
   const hasOnlyOneName = !(item.name && item.username);
 
   return (
@@ -58,12 +56,10 @@ const UserSearchResultItem = ({
             <Body>{hasOnlyOneName ? '' : item.username || ''}</Body>
           </View>
         </View>
-        {authUserId ? (
-          <FollowButton
-            authUserIsFollowing={authUserIsFollowing}
-            profileUserId={item._id}
-          />
-        ) : null}
+        <FollowButton
+          authUserIsFollowing={authUserIsFollowing}
+          profileUserId={item._id}
+        />
       </View>
     </TouchableHighlight>
   );
