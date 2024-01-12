@@ -1,8 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
-import AwardsBodyImage from '../components/AwardsBodyImage';
 import { SubHeader } from '../components/Text';
-import { AwardsBody, Phase, iLeaderboard } from '../types/api';
+import { Phase, iLeaderboard } from '../types/api';
 import ProfileImage from '../components/ProfileImage';
 
 /**
@@ -43,10 +42,9 @@ export const getHeaderTitle = (title: string) => {
   return () => <SubHeader>{title}</SubHeader>;
 };
 
-export const getHeaderTitleWithTrophy = (title: string, awardsBody: AwardsBody) => {
+export const getTwoLineHeaderTitle = (title: string) => {
   return () => (
     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-      <AwardsBodyImage awardsBody={awardsBody} white size={HEADER_HEIGHT} />
       <SubHeader>{title}</SubHeader>
     </View>
   );

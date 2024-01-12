@@ -5,7 +5,7 @@ import {
   PredictionsParamList,
 } from '../../../navigation/types';
 import { eventToString } from '../../../util/stringConversions';
-import { getHeaderTitleWithTrophy } from '../../../constants';
+import { getTwoLineHeaderTitle } from '../../../constants';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useRouteParams } from '../../../hooks/useRouteParams';
 import CategoryCommunity from './CategoryCommunity';
@@ -31,7 +31,7 @@ const Category = () => {
     const categoryName = event.categories[category].name;
     const headerTitle = eventName + '\n' + 'Best ' + categoryName;
     navigation.setOptions({
-      headerTitle: getHeaderTitleWithTrophy(headerTitle, event.awardsBody),
+      headerTitle: getTwoLineHeaderTitle(headerTitle),
     });
   }, [navigation]);
 

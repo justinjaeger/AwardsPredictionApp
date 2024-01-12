@@ -10,12 +10,15 @@
 # How to release:
 * Make sure ENV is pointing to production!!
 * AND run yarn reset-env after changing it so the env cache is clear
+* To be sure, can also just shut down local dev server so it's obvious
+## Versioning (iOS+Android)
+* This is for forcing updates:
+* Update `package.json.version`
+* Then, AFTER BUILD GOES LIVE, update `appinfo` collection in mongodb to the package.json version of the latest build
 ## IOS
 ### Update the app version in:
 * info.plist CFBundleShortVersionString
 * project.pbxproj - MARKETING_VERSION, CURRENT_PROJECT_VERSION
-* `package.json.version` (for ability to version check / force updates)
-* IF WANT TO FORCE UPDATE: Update `appinfo` collection in mongodb to be in sync with the info.plist version
 ### Open app in XCode
 * `xed ios`
 #### Sign into correct account under Signing & Capabilities
@@ -36,7 +39,7 @@
 * Go to App Store Connect account (https://appstoreconnect.apple.com/apps/6446135720/testflight/ios)
 
 ## ANDROID
-### In VSCode
+### Update app version:
 * Update version `app/build.gradle` -> `versionName` AND `versionCode`
 * Important: versionCode must be an integer, and is NOT what is displayed on play store
 * (https://developer.android.com/studio/publish/versioning)
@@ -57,3 +60,9 @@
 * Not sure about subsequent rounds, but for FIRST ROUND, Play store requires a published  round of Closed testing (https://play.google.com/console/u/0/developers/7592820188677524175/app/4975201475300894677/closed-testing)
 * Click Alpha track; Click `Manage Track`, `Create new release`, add the App bundle from library, Next, Save
 * Publish for review - click `Send changes out for review` (https://play.google.com/console/u/0/developers/7592820188677524175/app/4975201475300894677/publishing)
+### Deploying
+* (https://play.google.com/console/u/0/developers/7592820188677524175/app/4975201475300894677/tracks/production)
+* Create New Release
+* Upload the `app-release.aab` file
+* After that step, see Publishing Overview tab
+* Here you may have to send changes to Google for review before publishing

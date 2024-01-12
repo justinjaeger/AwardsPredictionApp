@@ -69,7 +69,7 @@ const PredictionsNavigator = () => {
           options={{
             headerTitle: getHeaderTitle('Add / Remove Predictions'),
             headerLeft: BackButton,
-            ...medium,
+            ...large,
           }}
         />
         <Screen
