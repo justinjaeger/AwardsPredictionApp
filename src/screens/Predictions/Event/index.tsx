@@ -6,10 +6,10 @@ import CategoryList from './CategoryList';
 import useQueryGetUserPredictions from '../../../hooks/queries/useQueryGetUserPredictions';
 import useQueryGetCommunityPredictions from '../../../hooks/queries/useQueryGetCommunityPredictions';
 import { eventToString } from '../../../util/stringConversions';
-import { getHeaderTitleWithTrophy } from '../../../constants';
 import BottomFABContainer from '../../../components/BottomFABContainer';
 import { useRouteParams } from '../../../hooks/useRouteParams';
 import { PredictionsNavigationProp } from '../../../navigation/types';
+import { getTwoLineHeaderTitle } from '../../../constants';
 
 const EventPersonalCommunity = () => {
   const navigation = useNavigation<PredictionsNavigationProp>();
@@ -30,7 +30,7 @@ const EventPersonalCommunity = () => {
     if (!event) return;
     const headerTitle = eventToString(event.awardsBody, event.year);
     navigation.setOptions({
-      headerTitle: getHeaderTitleWithTrophy(headerTitle, event.awardsBody),
+      headerTitle: getTwoLineHeaderTitle(headerTitle),
     });
   }, [navigation]);
 
