@@ -20,6 +20,8 @@ import useContenderSearch from './useContenderSearch';
 import { useRouteParams } from '../../../hooks/useRouteParams';
 import useKeyboard from '../../../hooks/useKeyboard';
 import { getCategoryIsHidden } from '../../../util/getCategoryIsHidden';
+import { getTwoLineHeaderTitle } from '../../../constants';
+import { eventToString } from '../../../util/stringConversions';
 
 const AddPredictions = () => {
   const navigation = useTypedNavigation<PredictionsParamList>();
@@ -68,9 +70,14 @@ const AddPredictions = () => {
 
   // set custom back arrow functionality
   useEffect(() => {
+    if (!category || !event) return;
+    const eventName = eventToString(event.awardsBody, event.year);
+    const categoryName = event.categories[category].name;
+    const headerTitle = eventName + '\n' + 'Best ' + categoryName + ' • Add / Remove';
     navigation.setOptions({
       // eslint-disable-next-line react/no-unstable-nested-components
       headerLeft: () => <BackButton onPress={() => saveAndGoBack()} />,
+      headerTitle: getTwoLineHeaderTitle(headerTitle),
     });
   }, [navigation]);
 

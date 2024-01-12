@@ -6,7 +6,7 @@ import Event from './index';
 import useQueryGetUserPredictions from '../../../hooks/queries/useQueryGetUserPredictions';
 import useQueryGetCommunityPredictions from '../../../hooks/queries/useQueryGetCommunityPredictions';
 import { eventToString } from '../../../util/stringConversions';
-import { getHeaderTitleWithTrophy } from '../../../constants';
+import { getTwoLineHeaderTitle } from '../../../constants';
 import BottomFABContainer from '../../../components/BottomFABContainer';
 import { useRouteParams } from '../../../hooks/useRouteParams';
 
@@ -28,7 +28,7 @@ const EventPersonalCommunity = () => {
     if (!event) return;
     const headerTitle = eventToString(event.awardsBody, event.year);
     navigation.setOptions({
-      headerTitle: getHeaderTitleWithTrophy(headerTitle, event.awardsBody),
+      headerTitle: getTwoLineHeaderTitle(headerTitle),
     });
   }, [navigation]);
 
