@@ -1,12 +1,18 @@
 import React from 'react';
-import { TouchableHighlight, View, useWindowDimensions } from 'react-native';
+import {
+  StyleProp,
+  TouchableHighlight,
+  View,
+  ViewStyle,
+  useWindowDimensions,
+} from 'react-native';
 import theme from '../../constants/theme';
 import useDevice from '../../util/device';
 import { hexToRgb } from '../../util/hexToRgb';
 import COLORS from '../../constants/colors';
 import { Body, HeaderLight, SubHeader } from '../Text';
 
-export const EVENT_ITEM_HEIGHT = 100;
+export const EVENT_ITEM_HEIGHT = 80;
 
 const EventItem = ({
   subtitle,
@@ -14,12 +20,14 @@ const EventItem = ({
   onPress,
   bottomRightText,
   mode,
+  style,
 }: {
   subtitle: string;
   title: string;
   onPress: () => void;
   bottomRightText?: string;
   mode?: 'transparent' | 'solid';
+  style?: StyleProp<ViewStyle>;
 }) => {
   const { width } = useWindowDimensions();
   const { isPad } = useDevice();
@@ -28,20 +36,23 @@ const EventItem = ({
 
   return (
     <TouchableHighlight
-      style={{
-        marginLeft: theme.windowMargin,
-        flexDirection: 'row',
-        height: eventItemHeight,
-        backgroundColor: isTransparent
-          ? 'transparent'
-          : hexToRgb(COLORS.secondaryDark, 1),
-        borderRadius: theme.borderRadius,
-        borderWidth: 1,
-        borderColor: COLORS.white,
-        width: (isPad ? width / 2 : width) - theme.windowMargin * 2,
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
+      style={[
+        {
+          marginLeft: theme.windowMargin,
+          flexDirection: 'row',
+          height: eventItemHeight,
+          backgroundColor: isTransparent
+            ? 'transparent'
+            : hexToRgb(COLORS.secondaryDark, 1),
+          borderRadius: theme.borderRadius,
+          borderWidth: 1,
+          borderColor: COLORS.white,
+          width: (isPad ? width / 2 : width) - theme.windowMargin * 2,
+          alignItems: 'center',
+          justifyContent: 'center',
+        },
+        style,
+      ]}
       underlayColor={isTransparent ? COLORS.secondaryDark : COLORS.secondary}
       onPress={onPress}
     >
@@ -49,7 +60,7 @@ const EventItem = ({
         <View
           style={{
             flexDirection: 'column',
-            justifyContent: 'space-around',
+            justifyContent: 'space-between',
             width: '100%',
             height: '100%',
             padding: 10,
@@ -60,8 +71,6 @@ const EventItem = ({
             <HeaderLight
               style={{
                 color: COLORS.white,
-                marginTop: 5,
-                marginBottom: 10,
                 fontWeight: '700',
               }}
             >

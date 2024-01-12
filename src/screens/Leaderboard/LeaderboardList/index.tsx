@@ -54,6 +54,7 @@ const LeaderboardList = () => {
                 });
               }}
               bottomRightText={leaderboard.numPredicted.toString() + ' users'}
+              style={{ marginTop: 10 }}
             />
           );
         }}
