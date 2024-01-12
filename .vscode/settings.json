@@ -1,6 +1,7 @@
 {
   "editor.codeActionsOnSave": {
     "source.fixAll": "explicit"
-},
+  },
+  "editor.tabSize": 2,
   "java.configuration.updateBuildConfiguration": "automatic"
 }
