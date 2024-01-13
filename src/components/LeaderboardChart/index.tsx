@@ -7,11 +7,17 @@ import {
   useWindowDimensions,
 } from 'react-native';
 import { iLeaderboard } from '../../types/api';
-import { formatLowDecimalAsPercentage } from '../../util/formatPercentage';
+import {
+  formatDecimalAsPercentage,
+  formatLowDecimalAsPercentage,
+} from '../../util/formatPercentage';
 import COLORS from '../../constants/colors';
 import Slider from './Slider';
 import Indicators from './Indicators';
 import ChartToolbar, { SM } from './ChartToolbar';
+import { Header, SubHeader, SubHeaderLight } from '../Text';
+import { hexToRgb } from '../../util/hexToRgb';
+import theme from '../../theme';
 
 const MARGIN = 15;
 const CHART_HEIGHT = 75;
@@ -44,17 +50,25 @@ const LeaderboardChart = ({
   const barWidth = Math.max(width / totalBars, minBarWidth);
   const chartWidth = totalBars * barWidth;
 
+  const [scrollPos, setScrollPos] = useState<number>(0);
   const [gesturePos, setGesturePos] = useState<{ x: number; y: number } | undefined>(
     undefined,
   );
+
   const handleGesture = (e: GestureResponderEvent) => {
     e.preventDefault();
     const x = e.nativeEvent.pageX;
     const y = e.nativeEvent.pageY;
-    console.log({ x });
-    const touchIsAboveHistogram = y <= 0;
-    setGesturePos(touchIsAboveHistogram ? undefined : { x, y });
+    const left = scrollPos;
+    const touchPosition = left + x - MARGIN;
+    const touchIsAboveChart = y <= 0;
+    setGesturePos(touchIsAboveChart ? undefined : { x: touchPosition, y });
   };
+
+  const slotIndex = gesturePos && Math.floor(gesturePos.x / barWidth);
+  const slot = slotIndex && groupedByPercentage[Math.floor(slotIndex)];
+  const percentage = slot?.[0];
+  const numPredicting = slot && slot[1];
 
   // lets us set the props of the scrollview from outside the component
   // better for performance since it won't re-render the component
@@ -63,7 +77,45 @@ const LeaderboardChart = ({
   };
 
   return (
-    <>
+    <View style={{ position: 'relative' }}>
+      {gesturePos !== undefined && slot ? (
+        <View
+          style={{
+            position: 'absolute',
+            top: -CHART_HEIGHT,
+            right: 0,
+            backgroundColor: COLORS.primary,
+            borderRadius: theme.borderRadius,
+            alignItems: 'flex-end',
+            flexDirection: 'column',
+            borderWidth: 1,
+            borderColor: hexToRgb(COLORS.white, 0.2),
+          }}
+        >
+          <View style={{ padding: 5, alignItems: 'flex-end' }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'flex-end',
+              }}
+            >
+              <Header style={{ textAlign: 'right' }}>{`${formatDecimalAsPercentage(
+                percentage,
+              )}%`}</Header>
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                marginTop: 5,
+                alignItems: 'baseline',
+              }}
+            >
+              <SubHeader>{`${numPredicting}`}</SubHeader>
+              <SubHeaderLight style={{ marginLeft: 5 }}>{'predicting'}</SubHeaderLight>
+            </View>
+          </View>
+        </View>
+      ) : null}
       <ScrollView
         horizontal
         style={{ width: '100%' }}
@@ -98,23 +150,28 @@ const LeaderboardChart = ({
             enableScroll(true);
           }}
         >
-          {groupedByPercentage.map(([percentage, numPredicting]) => {
+          {groupedByPercentage.map(([percentage, numPredicting], i) => {
+            const isHovering = slotIndex === i;
             return (
               <View style={{ width: barWidth }}>
                 <View
                   style={{
                     height: '100%',
                     justifyContent: 'flex-end',
+                    alignItems: 'center',
+                    backgroundColor: isHovering ? 'rgba(255,255,255,0.1)' : undefined,
                   }}
                 >
                   <View
                     key={percentage}
                     style={{
-                      backgroundColor: COLORS.secondaryDark,
+                      backgroundColor: isHovering
+                        ? COLORS.secondaryLight
+                        : COLORS.secondaryDark,
                       height:
                         (numPredicting / largestSegmentOfUsersWithSamePercentage) *
                         CHART_HEIGHT,
-                      width: '50%',
+                      width: '70%',
                       marginBottom: 0,
                     }}
                   />
@@ -134,15 +191,24 @@ const LeaderboardChart = ({
       </ScrollView>
       <Slider
         onValueChange={(v) => {
+          const x = (chartWidth - width) * (v / 100);
           chartRef.current?.scrollTo({
-            x: (chartWidth - width) * (v / 100),
+            x,
             animated: false,
           });
+        }}
+        onSlidingComplete={(v) => {
+          const x = (chartWidth - width) * (v / 100);
+          chartRef.current?.scrollTo({
+            x,
+            animated: false,
+          });
+          setScrollPos(x);
         }}
         style={{ marginTop: 20 }}
       />
       <ChartToolbar minBarWidth={minBarWidth} setMinBarWidth={setMinBarWidth} />
-    </>
+    </View>
   );
 };
 

@@ -8,9 +8,11 @@ const THUMB_SIZE = 24;
 
 const Slider = ({
   onValueChange,
+  onSlidingComplete,
   style,
 }: {
   onValueChange: (v: number) => void;
+  onSlidingComplete: (v: number) => void;
   style?: StyleProp<ViewStyle>;
 }) => {
   const sliderMin = useSharedValue(0);
@@ -31,6 +33,7 @@ const Slider = ({
         style,
       ]}
       onValueChange={onValueChange}
+      onSlidingComplete={onSlidingComplete}
       progress={sliderProgress}
       minimumValue={sliderMin}
       maximumValue={sliderMax}
