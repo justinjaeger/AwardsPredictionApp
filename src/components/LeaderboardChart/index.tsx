@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   FlatList,
   GestureResponderEvent,
@@ -33,6 +33,9 @@ const LeaderboardChart = ({
   const { width } = useWindowDimensions();
 
   const totalBars = leaderboard.totalPossibleSlots;
+  const largestSegmentOfUsersWithSamePercentage = Math.max(
+    ...Object.values(leaderboard.percentageAccuracyDistribution),
+  );
 
   const getBarWidth = (minBarWidth: number) => {
     return Math.max(width / totalBars, minBarWidth);
@@ -70,36 +73,36 @@ const LeaderboardChart = ({
     });
   };
 
-  const largestSegmentOfUsersWithSamePercentage = Math.max(
-    ...Object.values(leaderboard.percentageAccuracyDistribution),
-  );
+  // const groupedByPercentage: [percentage: number, numPredicting: number][] = [];
+  const [groupedByPercentage, setGroupedByPercentage] = useState<
+    [percentage: number, numPredicting: number][]
+  >([]);
 
-  const groupedByPercentage: [percentage: number, numPredicting: number][] = [];
-  for (let i = totalBars; i >= 0; i--) {
-    const percentage = formatLowDecimalAsPercentage(i / totalBars);
-    const numPredicting: number | undefined =
-      leaderboard.percentageAccuracyDistribution[percentage];
-    groupedByPercentage.push([percentage, numPredicting ?? 0]);
-  }
+  useEffect(() => {
+    const groupedByPercentage: [percentage: number, numPredicting: number][] = [];
+    for (let i = totalBars; i >= 0; i--) {
+      const percentage = formatLowDecimalAsPercentage(i / totalBars);
+      const numPredicting: number | undefined =
+        leaderboard.percentageAccuracyDistribution[percentage];
+      groupedByPercentage.push([percentage, numPredicting ?? 0]);
+    }
+    setGroupedByPercentage(groupedByPercentage);
+  }, []);
 
   const barWidth = getBarWidth(minBarWidth);
   const chartWidth = totalBars * barWidth;
 
-  const [gesturePos, setGesturePos] = useState<{ x: number; y: number } | undefined>(
-    undefined,
-  );
+  const [gesturePos, setGesturePos] = useState<number | undefined>(undefined);
 
   const handleGesture = (e: GestureResponderEvent) => {
-    e.preventDefault();
+    // e.preventDefault();
     const x = e.nativeEvent.pageX;
-    const y = e.nativeEvent.pageY;
     const left = scrollPos;
     const touchPosition = left + x - MARGIN;
-    const touchIsAboveChart = y <= 0;
-    setGesturePos(touchIsAboveChart ? undefined : { x: touchPosition, y });
+    setGesturePos(Math.floor(touchPosition));
   };
 
-  const slotIndex = gesturePos && Math.floor(gesturePos.x / barWidth);
+  const slotIndex = gesturePos && Math.floor(gesturePos / barWidth);
   const slot = slotIndex && groupedByPercentage[Math.floor(slotIndex)];
   const percentage = slot?.[0];
   const numPredicting = slot && slot[1];
@@ -186,6 +189,8 @@ const LeaderboardChart = ({
         >
           {groupedByPercentage.map(([percentage, numPredicting], i) => {
             const isHovering = slotIndex === i;
+            const height =
+              (numPredicting / largestSegmentOfUsersWithSamePercentage) * CHART_HEIGHT;
             return (
               <View style={{ width: barWidth }}>
                 <View
@@ -196,19 +201,19 @@ const LeaderboardChart = ({
                     backgroundColor: isHovering ? 'rgba(255,255,255,0.1)' : undefined,
                   }}
                 >
-                  <View
-                    key={percentage}
-                    style={{
-                      backgroundColor: isHovering
-                        ? COLORS.secondaryLight
-                        : COLORS.secondaryDark,
-                      height:
-                        (numPredicting / largestSegmentOfUsersWithSamePercentage) *
-                        CHART_HEIGHT,
-                      width: '70%',
-                      marginBottom: 0,
-                    }}
-                  />
+                  {height > 0 ? (
+                    <View
+                      key={percentage}
+                      style={{
+                        backgroundColor: isHovering
+                          ? COLORS.secondaryLight
+                          : COLORS.secondaryDark,
+                        height,
+                        width: '70%',
+                        marginBottom: 0,
+                      }}
+                    />
+                  ) : null}
                 </View>
               </View>
             );

@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableHighlight, View } from 'react-native';
+import { StyleProp, TouchableHighlight, View, ViewStyle } from 'react-native';
 import COLORS from '../../constants/colors';
 import ProfileImage from '../ProfileImage';
 import { Body, SmallHeader, SubHeader } from '../Text';
@@ -13,8 +13,10 @@ export const LEADERBOARD_PROFILE_IMAGE_SIZE = 50;
 
 const LeaderboardListItem = ({
   leaderboardRanking,
+  style,
 }: {
   leaderboardRanking: iLeaderboardRankingsWithUserData;
+  style?: StyleProp<ViewStyle>;
 }) => {
   const navigation = useNavigation<PredictionsNavigationProp>();
 
@@ -48,11 +50,14 @@ const LeaderboardListItem = ({
   return (
     <TouchableHighlight
       key={leaderboardRanking._id}
-      style={{
-        flexDirection: 'row',
-        padding: 10,
-        width: '100%',
-      }}
+      style={[
+        {
+          flexDirection: 'row',
+          padding: 10,
+          width: '100%',
+        },
+        style,
+      ]}
       onPress={navigateToPredictions}
       underlayColor={COLORS.secondaryDark}
     >

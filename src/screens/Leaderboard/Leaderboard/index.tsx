@@ -1,16 +1,14 @@
 import React, { useEffect, useRef } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import useGetLeaderboardUsers from '../../../hooks/useGetLeaderboardUsers';
-import { FlatList, Keyboard, TouchableHighlight, View } from 'react-native';
+import { FlatList, Keyboard, View } from 'react-native';
 import useDevice from '../../../util/device';
 import LeaderboardListItem, {
   LEADERBOARD_PROFILE_IMAGE_SIZE,
 } from '../../../components/LeaderboardListItem';
 import UserListSkeleton from '../../../components/Skeletons/UserListSkeleton';
-import { SubHeader } from '../../../components/Text';
+import { Body, SubHeader } from '../../../components/Text';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
-import COLORS from '../../../constants/colors';
-import { formatDecimalAsPercentage } from '../../../util/formatPercentage';
 import { useAuth } from '../../../context/AuthContext';
 import useProfileUser from '../../Profile/useProfileUser';
 import { getUserLeaderboard } from '../../../util/getUserLeaderboard';
@@ -18,8 +16,8 @@ import { getTwoLineHeaderTitle } from '../../../constants';
 import { eventToString } from '../../../util/stringConversions';
 import { useRouteParams } from '../../../hooks/useRouteParams';
 import { PHASE_TO_STRING } from '../../../constants/categories';
-import Stat from '../../../components/ItemStatBox/Stat';
 import LeaderboardChart from '../../../components/LeaderboardChart';
+import LeaderboardStats from './LeaderboardStats';
 
 const Leaderboard = () => {
   const flatListRef = useRef<FlatList<any>>(null);
@@ -90,99 +88,55 @@ const Leaderboard = () => {
         keyboardShouldPersistTaps={'always'}
         ListHeaderComponent={
           <>
-            <TouchableHighlight
-              style={{
-                flexDirection: 'row',
-                width: '100%',
+            <LeaderboardStats
+              title={'Community Scores'}
+              subtitle={'The aggregate of all users'}
+              percentageAccuracy={leaderboard.communityPercentageAccuracy}
+              numCorrect={leaderboard.communityNumCorrect}
+              totalPossibleSlots={leaderboard.totalPossibleSlots}
+              numPredicted={leaderboard.numPredicted}
+              rank={
+                leaderboard.numPredicted -
+                leaderboard.communityPerformedBetterThanNumUsers
+              }
+              onPress={() => {
+                // TODO: Navigate to community predictions
               }}
-              onPress={() => {}}
-              underlayColor={COLORS.secondaryDark}
-            >
-              <View
-                style={{
-                  flexDirection: 'column',
-                  width: '100%',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  flex: 1,
-                  paddingTop: 10,
-                  paddingBottom: 20,
+            />
+            {/* {user && userLeaderboard ? (
+              <LeaderboardStats
+                title={'Your Scores'}
+                percentageAccuracy={userLeaderboard.percentageAccuracy}
+                numCorrect={userLeaderboard.numCorrect}
+                totalPossibleSlots={userLeaderboard.totalPossibleSlots}
+                numPredicted={leaderboard.numPredicted}
+                rank={userLeaderboard.rank}
+                onPress={() => {
+                  // TODO: Navigate to user's predictions
                 }}
-              >
-                <View
-                  style={{
-                    flexDirection: 'column',
-                    justifyContent: 'space-around',
-                    padding: 20,
-                    marginTop: 0,
-                  }}
-                >
-                  <SubHeader>Community Aggregate</SubHeader>
-                </View>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    width: '100%',
-                    justifyContent: 'space-around',
-                    alignItems: 'flex-end',
-                  }}
-                >
-                  <Stat
-                    number={`${formatDecimalAsPercentage(
-                      leaderboard.communityPercentageAccuracy,
-                    )}%`}
-                    text="accuracy"
-                  />
-                  <Stat
-                    number={`${leaderboard.communityNumCorrect}/${leaderboard.totalPossibleSlots}`}
-                    text="correct"
-                  />
-                  <Stat
-                    number={`${
-                      leaderboard.numPredicted -
-                      leaderboard.communityPerformedBetterThanNumUsers
-                    }/${leaderboard.numPredicted}`}
-                    text="rank"
-                  />
-                </View>
-              </View>
-            </TouchableHighlight>
-            {/* <View
+              />
+            ) : null} */}
+            <View
               style={{
                 flexDirection: 'column',
                 justifyContent: 'space-around',
                 width: '100%',
                 alignItems: 'center',
-                padding: 10,
+                padding: 20,
+                paddingBottom: 10,
               }}
             >
-              <SubHeader>#users / %accuracy</SubHeader>
-            </View> */}
+              <SubHeader>Score Distribution</SubHeader>
+              <Body style={{ marginTop: 5 }}>All Users</Body>
+            </View>
             <LeaderboardChart leaderboard={leaderboard} flatListRef={flatListRef} />
-            <View
-              style={{
-                height: 0.5,
-                width: '100%',
-                backgroundColor: COLORS.white,
-                marginTop: 5,
-                marginBottom: 5,
-              }}
-            />
             {/* TODO: Display auth user now. Can get from the user object. */}
             {user && userLeaderboard ? (
               <LeaderboardListItem
                 leaderboardRanking={{ userId: user._id, ...user, ...userLeaderboard }}
+                style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
               />
             ) : null}
-            <View
-              style={{
-                height: 0.5,
-                width: '100%',
-                backgroundColor: COLORS.white,
-                marginTop: 5,
-                marginBottom: 5,
-              }}
-            />
           </>
         }
         ListFooterComponent={
