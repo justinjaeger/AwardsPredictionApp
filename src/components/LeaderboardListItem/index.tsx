@@ -106,16 +106,16 @@ const LeaderboardListItem = ({
             </SmallHeader>
             <SubHeader>{'%'}</SubHeader>
           </View>
-          {/* TODO: Some visual representation of riskiness?? No one will know what this number means */}
-          <SubHeader>{leaderboardRanking.riskiness.toFixed(0)}</SubHeader>
-          {/* <SubHeader>{leaderboardRanking.rank}</SubHeader> */}
+          <View style={{ flexDirection: 'row' }}>
+            <SubHeader
+              style={{ fontWeight: '400' }}
+            >{`${leaderboardRanking.riskiness.toFixed(0)}pts  |  `}</SubHeader>
+            {/* TODO: Some visual representation of riskiness?? No one will know what this number means */}
+            <SubHeader
+              style={{ fontWeight: '400' }}
+            >{`${leaderboardRanking.numCorrect}/${leaderboardRanking.totalPossibleSlots}`}</SubHeader>
+          </View>
         </View>
-        {/* {!isAuthUser ? (
-          <FollowButton
-            authUserIsFollowing={authUserIsFollowing}
-            profileUserId={leaderboardRanking.userId}
-          />
-        ) : null} */}
       </View>
     </TouchableHighlight>
   );

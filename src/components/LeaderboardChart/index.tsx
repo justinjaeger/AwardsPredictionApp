@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import {
   FlatList,
   GestureResponderEvent,
@@ -19,7 +19,7 @@ import { Header, SubHeader, SubHeaderLight } from '../Text';
 import { hexToRgb } from '../../util/hexToRgb';
 import theme from '../../theme';
 
-const MARGIN = 0;
+const MARGIN = 15;
 const CHART_HEIGHT = 75;
 
 const LeaderboardChart = ({
@@ -145,7 +145,7 @@ const LeaderboardChart = ({
               }}
             >
               <SubHeader>{`${numPredicting}`}</SubHeader>
-              <SubHeaderLight style={{ marginLeft: 5 }}>{'predicting'}</SubHeaderLight>
+              <SubHeaderLight style={{ marginLeft: 5 }}>{'users'}</SubHeaderLight>
             </View>
           </View>
         </View>
