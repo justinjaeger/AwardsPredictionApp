@@ -20,9 +20,13 @@ import LeaderboardChart from '../../../components/LeaderboardChart';
 import LeaderboardStats from './LeaderboardStats';
 import { PredictionsNavigationProp } from '../../../navigation/types';
 import { getLeaderboardFromEvent } from '../../../util/getLeaderboardFromEvent';
+import { getUserInfo } from '../../../util/getUserInfo';
+import { usePersonalCommunityTab } from '../../../context/EventContext';
 
 const Leaderboard = () => {
   const flatListRef = useRef<FlatList<any>>(null);
+
+  const { setPersonalCommunityTab } = usePersonalCommunityTab();
 
   const { isPad } = useDevice();
   const navigation = useNavigation<PredictionsNavigationProp>();
@@ -100,13 +104,14 @@ const Leaderboard = () => {
               onPress={() => {
                 const yyyymmdd = leaderboardRankings[0]?.yyyymmdd;
                 if (!yyyymmdd) return;
-                // const userInfo =
-                // TODO: Navigate to community predictions
+                setPersonalCommunityTab('community');
                 navigation.navigate('Event', {
                   eventId,
                   yyyymmdd,
-                  userInfo: undefined,
+                  phase,
+                  userInfo: getUserInfo(user),
                   isLeaderboard: true,
+                  noShorts,
                 });
               }}
             />

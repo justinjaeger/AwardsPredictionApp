@@ -11,7 +11,7 @@ import { useRouteParams } from '../../../hooks/useRouteParams';
 import { PredictionsNavigationProp } from '../../../navigation/types';
 import { getTwoLineHeaderTitle } from '../../../constants';
 
-const EventPersonalCommunity = () => {
+const Event = () => {
   const navigation = useNavigation<PredictionsNavigationProp>();
 
   const { event, userInfo, yyyymmdd } = useRouteParams();
@@ -59,4 +59,4 @@ const EventPersonalCommunity = () => {
   );
 };
 
-export default EventPersonalCommunity;
+export default Event;
