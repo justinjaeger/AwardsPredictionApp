@@ -38,6 +38,7 @@ const LeaderboardListItem = ({
       eventId: leaderboardRanking.eventId,
       userInfo,
       yyyymmdd: leaderboardRanking.yyyymmdd,
+      phase: leaderboardRanking.phase,
       isLeaderboard: true,
     });
   };

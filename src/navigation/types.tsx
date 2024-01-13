@@ -41,8 +41,10 @@ export type PredictionsParamList = {
   Event: {
     userInfo: iUserInfo | undefined;
     eventId: string;
-    yyyymmdd?: number; // for viewing a leaderboard
-    noShorts?: boolean; // for viewing a leaderboard
+    // for viewing a leaderboard or history:
+    yyyymmdd?: number;
+    noShorts?: boolean;
+    phase?: Phase;
     predictionSetId?: string;
     isLeaderboard?: boolean;
   };
@@ -50,12 +52,14 @@ export type PredictionsParamList = {
     userInfo: iUserInfo | undefined;
     eventId: string;
     category: CategoryName;
-    yyyymmdd?: number; // for viewing a leaderboard
-    noShorts?: boolean; // for viewing a leaderboard
-    predictionSetId?: string;
     showEventLink?: boolean;
-    isLeaderboard?: boolean;
     onPressItem?: (contenderId: string) => void;
+    // for viewing a leaderboard
+    yyyymmdd?: number;
+    noShorts?: boolean;
+    predictionSetId?: string;
+    isLeaderboard?: boolean;
+    phase?: Phase;
   };
   AddPredictions: {
     eventId: string;

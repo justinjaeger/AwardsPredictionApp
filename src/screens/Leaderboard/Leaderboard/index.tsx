@@ -18,12 +18,14 @@ import { useRouteParams } from '../../../hooks/useRouteParams';
 import { PHASE_TO_STRING } from '../../../constants/categories';
 import LeaderboardChart from '../../../components/LeaderboardChart';
 import LeaderboardStats from './LeaderboardStats';
+import { PredictionsNavigationProp } from '../../../navigation/types';
+import { getLeaderboardFromEvent } from '../../../util/getLeaderboardFromEvent';
 
 const Leaderboard = () => {
   const flatListRef = useRef<FlatList<any>>(null);
 
   const { isPad } = useDevice();
-  const navigation = useNavigation();
+  const navigation = useNavigation<PredictionsNavigationProp>();
   const { event, eventId: _eventId, phase: _phase, noShorts } = useRouteParams();
   const eventId = _eventId!;
   const phase = _phase!;
@@ -32,11 +34,7 @@ const Leaderboard = () => {
   const { user } = useProfileUser(authUserId);
   const userLeaderboard = user && getUserLeaderboard({ user, eventId, phase, noShorts });
 
-  const leaderboard =
-    event?.leaderboards &&
-    Object.values(event.leaderboards).find(
-      (l) => l.phase === phase && !!l.noShorts === !!noShorts,
-    );
+  const leaderboard = getLeaderboardFromEvent(event, phase, noShorts);
 
   const { leaderboardRankings, fetchPage, isLoading } = useGetLeaderboardUsers({
     eventId,
@@ -94,28 +92,24 @@ const Leaderboard = () => {
               percentageAccuracy={leaderboard.communityPercentageAccuracy}
               numCorrect={leaderboard.communityNumCorrect}
               totalPossibleSlots={leaderboard.totalPossibleSlots}
-              numPredicted={leaderboard.numPredicted}
+              numUsersPredicting={leaderboard.numUsersPredicting}
               rank={
-                leaderboard.numPredicted -
+                leaderboard.numUsersPredicting -
                 leaderboard.communityPerformedBetterThanNumUsers
               }
               onPress={() => {
+                const yyyymmdd = leaderboardRankings[0]?.yyyymmdd;
+                if (!yyyymmdd) return;
+                // const userInfo =
                 // TODO: Navigate to community predictions
+                navigation.navigate('Event', {
+                  eventId,
+                  yyyymmdd,
+                  userInfo: undefined,
+                  isLeaderboard: true,
+                });
               }}
             />
-            {/* {user && userLeaderboard ? (
-              <LeaderboardStats
-                title={'Your Scores'}
-                percentageAccuracy={userLeaderboard.percentageAccuracy}
-                numCorrect={userLeaderboard.numCorrect}
-                totalPossibleSlots={userLeaderboard.totalPossibleSlots}
-                numPredicted={leaderboard.numPredicted}
-                rank={userLeaderboard.rank}
-                onPress={() => {
-                  // TODO: Navigate to user's predictions
-                }}
-              />
-            ) : null} */}
             <View
               style={{
                 flexDirection: 'column',

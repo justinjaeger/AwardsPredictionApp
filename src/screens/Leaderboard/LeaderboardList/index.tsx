@@ -42,7 +42,7 @@ const LeaderboardList = () => {
                 phase: leaderboard.phase,
               });
             }}
-            bottomRightText={leaderboard.numPredicted.toString() + ' users'}
+            bottomRightText={leaderboard.numUsersPredicting.toString() + ' users'}
             style={{ marginTop: 10 }}
             mode="solid"
             icon="award-outline"

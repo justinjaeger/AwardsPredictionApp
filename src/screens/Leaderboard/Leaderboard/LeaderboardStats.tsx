@@ -11,18 +11,18 @@ const LeaderboardStats = ({
   percentageAccuracy,
   numCorrect,
   totalPossibleSlots,
-  numPredicted,
+  numUsersPredicting,
   rank,
   onPress,
 }: {
-  title: string;
+  title?: string;
   subtitle?: string;
   percentageAccuracy: number;
   numCorrect: number;
   totalPossibleSlots: number;
-  numPredicted: number;
+  numUsersPredicting: number;
   rank: number;
-  onPress: () => void;
+  onPress?: () => void;
 }) => {
   return (
     <TouchableHighlight
@@ -42,16 +42,20 @@ const LeaderboardStats = ({
           flex: 1,
         }}
       >
-        <View
-          style={{
-            flexDirection: 'column',
-            padding: 20,
-            alignItems: 'center',
-          }}
-        >
-          <SubHeader>{title}</SubHeader>
-          {subtitle ? <Body style={{ marginTop: 5 }}>{subtitle}</Body> : null}
-        </View>
+        {title ? (
+          <View
+            style={{
+              flexDirection: 'column',
+              padding: 20,
+              alignItems: 'center',
+            }}
+          >
+            <SubHeader>{title}</SubHeader>
+            {subtitle ? <Body style={{ marginTop: 5 }}>{subtitle}</Body> : null}
+          </View>
+        ) : (
+          <View style={{ padding: 15 }} />
+        )}
         <View
           style={{
             flexDirection: 'row',
@@ -65,7 +69,7 @@ const LeaderboardStats = ({
             text="accuracy"
           />
           <Stat number={`${numCorrect}/${totalPossibleSlots}`} text="correct" />
-          <Stat number={`${rank}/${numPredicted}`} text="rank" />
+          <Stat number={`${rank}/${numUsersPredicting}`} text="rank" />
         </View>
         <View
           style={{

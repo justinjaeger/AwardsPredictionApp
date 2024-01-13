@@ -18,11 +18,9 @@ import EventSkeleton from '../../../components/Skeletons/EventSkeleton';
 import { getOrderedCategories } from '../../../util/sortByObjectOrder';
 import CategoryListItem from './CategoryListItem';
 import { useRouteParams } from '../../../hooks/useRouteParams';
-import theme from '../../../constants/theme';
-import Stat from '../../../components/ItemStatBox/Stat';
-import { Body } from '../../../components/Text';
-import { formatYyyymmdd } from '../../../util/formatYyyymmdd';
 import useProfileUser from '../../Profile/useProfileUser';
+import LeaderboardStats from '../../Leaderboard/Leaderboard/LeaderboardStats';
+import { getLeaderboardFromEvent } from '../../../util/getLeaderboardFromEvent';
 
 const CategoryList = ({
   tab,
@@ -34,16 +32,18 @@ const CategoryList = ({
   isLoading: boolean;
 }) => {
   const { userId: authUserId } = useAuth();
-  const { userInfo, event, yyyymmdd, noShorts } = useRouteParams();
+  const { userInfo, event, phase, yyyymmdd, noShorts } = useRouteParams();
   const { user } = useProfileUser(userInfo?.userId);
   const { setPersonalCommunityTab } = usePersonalCommunityTab();
   const navigation = useNavigation<PredictionsNavigationProp>();
+
+  const leaderboard = getLeaderboardFromEvent(event, phase, noShorts);
 
   const isAuthProfile = userInfo?.userId === authUserId;
 
   const onSelectCategory = async (category: CategoryName) => {
     setPersonalCommunityTab(tab);
-    const params = { userInfo, eventId: event!._id, category };
+    const params = { userInfo, eventId: event!._id, category, phase, yyyymmdd, noShorts };
     if (isAuthProfile || tab === 'community') {
       navigation.navigate('Category', params);
     } else {
@@ -102,19 +102,31 @@ const CategoryList = ({
         data={orderedPredictions}
         ListHeaderComponent={
           yyyymmdd && userLeaderboard ? (
-            <View
-              style={{
-                marginTop: theme.windowMargin,
-              }}
-            >
-              <Body>{formatYyyymmdd(yyyymmdd)}</Body>
-              <Stat
-                number={userLeaderboard.percentageAccuracy.toString() + '%'}
-                text="accuracy"
-              />
-              <Stat number={'#' + userLeaderboard.rank.toString()} text="rank" />
-              <Stat number={userLeaderboard.riskiness.toString()} text="riskiness" />
-            </View>
+            <>
+              {tab === 'community' ? (
+                leaderboard ? (
+                  <LeaderboardStats
+                    percentageAccuracy={leaderboard.communityPercentageAccuracy}
+                    numCorrect={leaderboard.communityNumCorrect}
+                    totalPossibleSlots={leaderboard.totalPossibleSlots}
+                    numUsersPredicting={leaderboard.numUsersPredicting}
+                    rank={
+                      leaderboard.numUsersPredicting -
+                      leaderboard.communityPerformedBetterThanNumUsers
+                    }
+                  />
+                ) : null
+              ) : (
+                <LeaderboardStats
+                  percentageAccuracy={userLeaderboard.percentageAccuracy}
+                  numCorrect={userLeaderboard.numCorrect}
+                  totalPossibleSlots={userLeaderboard.totalPossibleSlots}
+                  numUsersPredicting={userLeaderboard.numUsersPredicting}
+                  rank={userLeaderboard.rank}
+                />
+              )}
+              <View style={{ marginBottom: 20 }} />
+            </>
           ) : (
             <LastUpdatedText lastUpdated={lastUpdatedString} />
           )
