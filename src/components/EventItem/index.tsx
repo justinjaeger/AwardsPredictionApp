@@ -11,8 +11,9 @@ import useDevice from '../../util/device';
 import { hexToRgb } from '../../util/hexToRgb';
 import COLORS from '../../constants/colors';
 import { Body, HeaderLight, SubHeader } from '../Text';
+import CustomIcon from '../CustomIcon';
 
-export const EVENT_ITEM_HEIGHT = 80;
+export const EVENT_ITEM_HEIGHT = 90;
 
 const EventItem = ({
   subtitle,
@@ -21,6 +22,7 @@ const EventItem = ({
   bottomRightText,
   mode,
   style,
+  icon = 'list-outline',
 }: {
   subtitle: string;
   title: string;
@@ -28,6 +30,7 @@ const EventItem = ({
   bottomRightText?: string;
   mode?: 'transparent' | 'solid';
   style?: StyleProp<ViewStyle>;
+  icon?: 'award-outline' | 'list-outline';
 }) => {
   const { width } = useWindowDimensions();
   const { isPad } = useDevice();
@@ -59,33 +62,52 @@ const EventItem = ({
       <>
         <View
           style={{
-            flexDirection: 'column',
+            flexDirection: 'row',
             justifyContent: 'space-between',
             width: '100%',
             height: '100%',
             padding: 10,
+            paddingLeft: 5,
           }}
         >
-          <View style={{ justifyContent: 'flex-start' }}>
-            <SubHeader>{subtitle}</SubHeader>
-            <HeaderLight
-              style={{
-                color: COLORS.white,
-                fontWeight: '700',
-              }}
-            >
-              {title}
-            </HeaderLight>
+          <View
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              flex: 1,
+            }}
+          >
+            <CustomIcon name={icon} styles={{ marginRight: 5 }} />
           </View>
-          <View style={{ alignItems: 'flex-end' }}>
-            <Body
-              style={{
-                color: isTransparent ? COLORS.gray : COLORS.white,
-                fontWeight: '600',
-              }}
-            >
-              {bottomRightText ?? ''}
-            </Body>
+          <View
+            style={{
+              flex: 6,
+              flexDirection: 'column',
+              height: '100%',
+              justifyContent: 'space-between',
+            }}
+          >
+            <View style={{ justifyContent: 'flex-start' }}>
+              <SubHeader>{subtitle}</SubHeader>
+              <HeaderLight
+                style={{
+                  color: COLORS.white,
+                  fontWeight: '700',
+                }}
+              >
+                {title}
+              </HeaderLight>
+            </View>
+            <View style={{ alignItems: 'flex-end' }}>
+              <Body
+                style={{
+                  color: isTransparent ? COLORS.gray : COLORS.white,
+                  fontWeight: '600',
+                }}
+              >
+                {bottomRightText ?? ''}
+              </Body>
+            </View>
           </View>
         </View>
       </>

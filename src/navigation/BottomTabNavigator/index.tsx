@@ -7,7 +7,6 @@ import { useAuth } from '../../context/AuthContext';
 import { BottomTabParamList } from '../types';
 import HelpNavigator from '../HelpNavigator';
 import { UserRole } from '../../types/api';
-import { useGetEventsWithLeaderboard } from '../../hooks/useGetEventsWithLeaderboard';
 
 const Tab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -15,8 +14,6 @@ const TB = (p: ITabBarProps) => <TabBar {...p} />;
 
 const BottomTabNavigator = () => {
   const { userRole } = useAuth();
-  const eventsWithLeaderboard = useGetEventsWithLeaderboard();
-  const aLeaderboardExists = eventsWithLeaderboard.length > 0;
 
   return (
     <Tab.Navigator
@@ -30,13 +27,6 @@ const BottomTabNavigator = () => {
         component={PredictionsNavigator}
         initialParams={{ initialScreen: 'EventSelect' }}
       />
-      {aLeaderboardExists ? (
-        <Tab.Screen
-          name="Leaderboard"
-          component={PredictionsNavigator}
-          initialParams={{ initialScreen: 'LeaderboardList' }}
-        />
-      ) : null}
       <Tab.Screen
         name="ProfileTab"
         component={PredictionsNavigator}

@@ -13,6 +13,7 @@ import RecommendedUsers from '../../../components/RecommendedUsers';
 import CarouselSkeleton from '../../../components/Skeletons/CarouselSkeleton';
 import EventBoxSkeleton from '../../../components/Skeletons/EventBoxSkeleton';
 import useDevice from '../../../util/device';
+import LeaderboardList from '../../Leaderboard/LeaderboardList';
 
 const EventSelect = () => {
   const { width } = useWindowDimensions();
@@ -90,6 +91,7 @@ const EventSelect = () => {
                   events={events}
                 />
               )}
+              <LeaderboardList />
               {!authUserId ? (
                 // users not signed in can see recommended users
                 <RecommendedUsers header={'Follow Users'} />

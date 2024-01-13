@@ -2,22 +2,12 @@ import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { PredictionsNavigationProp } from '../../../navigation/types';
 import { useGetEventsWithLeaderboard } from '../../../hooks/useGetEventsWithLeaderboard';
-import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import { FlatList } from 'react-native';
 import EventItem from '../../../components/EventItem';
 import { EventModel, WithId, iLeaderboard } from '../../../types/api';
 import { AWARDS_BODY_TO_PLURAL_STRING } from '../../../constants/awardsBodies';
 import { getLeaderboardTitle } from '../../../constants';
 
-/**
- * First, we need a screen with Leaderboard Selection
- * So this will be a list of events where event.leaderboards contains a Phase
- * Then we list each event+phase combo
- *
- * What info do we want about a leaderboard, besides the users and their scores?
- * We want the number of users who predicted in that leaderboard!
- * We should store this information on the event, also
- */
 const LeaderboardList = () => {
   const navigation = useNavigation<PredictionsNavigationProp>();
   const events = useGetEventsWithLeaderboard();
@@ -35,32 +25,33 @@ const LeaderboardList = () => {
   );
 
   return (
-    <BackgroundWrapper>
-      <FlatList
-        data={leaderboards}
-        renderItem={({ item: leaderboard }) => {
-          return (
-            <EventItem
-              subtitle={
-                leaderboard.year +
-                ' ' +
-                AWARDS_BODY_TO_PLURAL_STRING[leaderboard.awardsBody]
-              }
-              title={getLeaderboardTitle(leaderboard)}
-              onPress={() => {
-                navigation.navigate('Leaderboard', {
-                  eventId: leaderboard._id,
-                  phase: leaderboard.phase,
-                });
-              }}
-              bottomRightText={leaderboard.numPredicted.toString() + ' users'}
-              style={{ marginTop: 10 }}
-            />
-          );
-        }}
-        keyExtractor={(item) => item._id + item.phase + item.noShorts.toString()}
-      />
-    </BackgroundWrapper>
+    <FlatList
+      data={leaderboards}
+      renderItem={({ item: leaderboard }) => {
+        return (
+          <EventItem
+            subtitle={
+              leaderboard.year +
+              ' ' +
+              AWARDS_BODY_TO_PLURAL_STRING[leaderboard.awardsBody]
+            }
+            title={getLeaderboardTitle(leaderboard) + ' Leaderboard'}
+            onPress={() => {
+              navigation.navigate('Leaderboard', {
+                eventId: leaderboard._id,
+                phase: leaderboard.phase,
+              });
+            }}
+            bottomRightText={leaderboard.numPredicted.toString() + ' users'}
+            style={{ marginTop: 10 }}
+            mode="solid"
+            icon="award-outline"
+          />
+        );
+      }}
+      keyExtractor={(item) => item._id + item.phase + item.noShorts.toString()}
+      style={{ width: '100%' }}
+    />
   );
 };
 

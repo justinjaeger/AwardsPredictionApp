@@ -19,7 +19,7 @@ import { getOrderedCategories } from '../../../util/sortByObjectOrder';
 import CategoryListItem from './CategoryListItem';
 import { useRouteParams } from '../../../hooks/useRouteParams';
 import theme from '../../../constants/theme';
-import Stat from '../../../components/ItemStatBox.tsx/Stat';
+import Stat from '../../../components/ItemStatBox/Stat';
 import { Body } from '../../../components/Text';
 import { formatYyyymmdd } from '../../../util/formatYyyymmdd';
 import useProfileUser from '../../Profile/useProfileUser';

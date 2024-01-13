@@ -73,11 +73,11 @@ export const getLeaderboardTitle = (leaderboard: iLeaderboard) => {
   const phaseString = (() => {
     switch (phase) {
       case Phase.SHORTLIST:
-        return 'Shortlists';
+        return 'Shortlist';
       case Phase.NOMINATION:
-        return 'Nominations';
+        return 'Nomination';
       case Phase.WINNER:
-        return 'Winners';
+        return 'Winner';
       default:
         return '';
     }

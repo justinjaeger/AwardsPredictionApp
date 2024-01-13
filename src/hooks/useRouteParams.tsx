@@ -2,7 +2,7 @@
 import { RouteProp, useRoute } from '@react-navigation/native';
 import { PredictionsParamList, iUserInfo } from '../navigation/types';
 import { useGetEvent } from './useGetEvent';
-import { CategoryName, EventModel, WithId, iCategory } from '../types/api';
+import { CategoryName, EventModel, Phase, WithId, iCategory } from '../types/api';
 
 /**
  * Shortcut to getting route params, but at the expense of type safety
@@ -18,6 +18,7 @@ export const useRouteParams = (): {
   yyyymmdd?: number;
   noShorts?: boolean;
   isLeaderboard?: boolean; // need to distinguish leaderboard vs history
+  phase?: Phase;
 } => {
   const { params } = useRoute<RouteProp<PredictionsParamList>>();
   const maybeEventId = params?.eventId;
@@ -34,5 +35,6 @@ export const useRouteParams = (): {
     yyyymmdd: params?.yyyymmdd,
     noShorts: params?.noShorts,
     isLeaderboard: params?.isLeaderboard,
+    phase: params?.phase,
   };
 };

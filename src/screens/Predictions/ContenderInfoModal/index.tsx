@@ -13,7 +13,7 @@ import useQueryGetCommunityPredictions from '../../../hooks/queries/useQueryGetC
 import { StackNavigationProp } from '@react-navigation/stack';
 import useDevice from '../../../util/device';
 import theme from '../../../constants/theme';
-import ItemStatBox from '../../../components/ItemStatBox.tsx';
+import ItemStatBox from '../../../components/ItemStatBox';
 import { SubmitButton } from '../../../components/Buttons';
 import ContenderInfoHeader from '../../../components/ContenderInfoHeader';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';

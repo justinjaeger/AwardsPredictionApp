@@ -132,7 +132,8 @@ const PredictionsNavigator = () => {
           options={{
             headerTitle: getHeaderTitle('Leaderboard'),
             headerLeft: BackButton,
-            ...medium,
+            gestureEnabled: false,
+            ...large,
           }}
         />
       </Group>

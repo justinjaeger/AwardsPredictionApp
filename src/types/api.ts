@@ -142,7 +142,9 @@ export type iLeaderboard = {
   communityPercentageAccuracy: number;
   communityRiskiness: number;
   communityPerformedBetterThanNumUsers: number;
+  communityNumCorrect: number;
   percentageAccuracyDistribution: { [percentageAccuracy: number]: number };
+  totalPossibleSlots: number;
 };
 
 // overall aggregate data on event leaderboards
@@ -271,6 +273,8 @@ export type iLeaderboardRanking = {
   rank: number;
   riskiness: number;
   percentageAccuracy: number;
+  numCorrect: number;
+  totalPossibleSlots: number;
   yyyymmdd: number; // date of close
 };
 
