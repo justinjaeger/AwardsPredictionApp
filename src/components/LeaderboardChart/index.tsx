@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   FlatList,
   GestureResponderEvent,
@@ -19,7 +19,7 @@ import { Header, SubHeader, SubHeaderLight } from '../Text';
 import { hexToRgb } from '../../util/hexToRgb';
 import theme from '../../theme';
 
-const MARGIN = 15;
+const MARGIN = 0;
 const CHART_HEIGHT = 75;
 
 const LeaderboardChart = ({
@@ -32,14 +32,49 @@ const LeaderboardChart = ({
   const chartRef = useRef<ScrollView>(null);
   const { width } = useWindowDimensions();
 
-  const [minBarWidth, setMinBarWidth] = useState<number>(SM);
+  const totalBars = leaderboard.totalPossibleSlots;
+
+  const getBarWidth = (minBarWidth: number) => {
+    return Math.max(width / totalBars, minBarWidth);
+  };
+
+  // the position of the inner scroll
+  const [scrollPos, setScrollPos] = useState<number>(0);
+
+  const [minBarWidth, _setMinBarWidth] = useState<number>(SM);
+
+  const setMinBarWidth = (newW: number) => {
+    _setMinBarWidth((prevW) => {
+      // have to compensate the inner scroll position because the total width changes, so it will be off otherwise
+
+      const newChartWidth = totalBars * getBarWidth(newW); // this is like 900, 1800, 2700
+      const prevChartWidth = totalBars * getBarWidth(prevW);
+
+      const v = (scrollPos / (prevChartWidth - width)) * 100;
+      const percentageOfSliderThatIsFilled = v;
+
+      const x = (newChartWidth - width) * (percentageOfSliderThatIsFilled / 100);
+
+      // setTimeout is essential so the chart div can update before we scroll
+      setTimeout(() => {
+        chartRef.current?.scrollTo({
+          x: x,
+          animated: false,
+        });
+      }, 0);
+
+      // have to also update the new inner scroll position
+      setScrollPos(x);
+
+      return newW;
+    });
+  };
 
   const largestSegmentOfUsersWithSamePercentage = Math.max(
     ...Object.values(leaderboard.percentageAccuracyDistribution),
   );
 
   const groupedByPercentage: [percentage: number, numPredicting: number][] = [];
-  const totalBars = leaderboard.totalPossibleSlots;
   for (let i = totalBars; i >= 0; i--) {
     const percentage = formatLowDecimalAsPercentage(i / totalBars);
     const numPredicting: number | undefined =
@@ -47,10 +82,9 @@ const LeaderboardChart = ({
     groupedByPercentage.push([percentage, numPredicting ?? 0]);
   }
 
-  const barWidth = Math.max(width / totalBars, minBarWidth);
+  const barWidth = getBarWidth(minBarWidth);
   const chartWidth = totalBars * barWidth;
 
-  const [scrollPos, setScrollPos] = useState<number>(0);
   const [gesturePos, setGesturePos] = useState<{ x: number; y: number } | undefined>(
     undefined,
   );
