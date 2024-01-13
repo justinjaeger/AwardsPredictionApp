@@ -1,26 +1,35 @@
 import React from 'react';
-import { View } from 'react-native';
+import { StyleProp, View, ViewStyle } from 'react-native';
 import { useSharedValue } from 'react-native-reanimated';
 import COLORS from '../../constants/colors';
 import { Slider as AwesomeSlider } from 'react-native-awesome-slider';
 
 const THUMB_SIZE = 24;
 
-const Slider = ({ onValueChange }: { onValueChange: (v: number) => void }) => {
+const Slider = ({
+  onValueChange,
+  style,
+}: {
+  onValueChange: (v: number) => void;
+  style?: StyleProp<ViewStyle>;
+}) => {
   const sliderMin = useSharedValue(0);
   const sliderMax = useSharedValue(100);
   const sliderProgress = useSharedValue(0);
 
   return (
     <AwesomeSlider
-      style={{
-        width: '90%',
-        alignSelf: 'center',
-        margin: 20,
-        borderRadius: 10,
-        paddingLeft: 10,
-        paddingRight: 10,
-      }}
+      style={[
+        {
+          width: '90%',
+          alignSelf: 'center',
+          margin: 10,
+          borderRadius: 10,
+          paddingLeft: 10,
+          paddingRight: 10,
+        },
+        style,
+      ]}
       onValueChange={onValueChange}
       progress={sliderProgress}
       minimumValue={sliderMin}

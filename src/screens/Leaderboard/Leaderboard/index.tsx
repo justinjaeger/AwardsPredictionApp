@@ -102,15 +102,15 @@ const Leaderboard = () => {
                   justifyContent: 'space-between',
                   alignItems: 'center',
                   flex: 1,
-                  padding: 10,
-                  paddingVertical: 20,
+                  paddingTop: 10,
+                  paddingBottom: 20,
                 }}
               >
                 <View
                   style={{
                     flexDirection: 'column',
                     justifyContent: 'space-around',
-                    margin: 10,
+                    padding: 20,
                     marginTop: 0,
                   }}
                 >
@@ -153,7 +153,7 @@ const Leaderboard = () => {
                 padding: 10,
               }}
             >
-              <SubHeader>Num predicting / % Accuracy</SubHeader>
+              <SubHeader>#users / %accuracy</SubHeader>
             </View> */}
             <LeaderboardChart leaderboard={leaderboard} />
             <View
