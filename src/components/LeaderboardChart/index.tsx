@@ -121,7 +121,7 @@ const LeaderboardChart = ({
             position: 'absolute',
             top: -CHART_HEIGHT,
             right: 0,
-            backgroundColor: COLORS.primary,
+            backgroundColor: COLORS.primaryLight,
             borderRadius: theme.borderRadius,
             alignItems: 'flex-end',
             flexDirection: 'column',
@@ -155,7 +155,7 @@ const LeaderboardChart = ({
       ) : null}
       <ScrollView
         horizontal
-        style={{ width: '100%' }}
+        style={{ width: '100%', backgroundColor: 'rgba(255,255,255,0.02)' }}
         contentContainerStyle={{
           flexDirection: 'column',
           marginLeft: MARGIN,
@@ -244,7 +244,7 @@ const LeaderboardChart = ({
           });
           setScrollPos(x);
         }}
-        style={{ marginTop: 20 }}
+        style={{ marginTop: 15 }}
       />
       <ChartToolbar minBarWidth={minBarWidth} setMinBarWidth={setMinBarWidth} />
     </View>

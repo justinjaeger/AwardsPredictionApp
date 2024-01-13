@@ -25,7 +25,6 @@ const Slider = ({
         {
           width: '90%',
           alignSelf: 'center',
-          margin: 10,
           borderRadius: 10,
           paddingLeft: 10,
           paddingRight: 10,

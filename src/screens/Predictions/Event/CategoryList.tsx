@@ -32,7 +32,7 @@ const CategoryList = ({
   isLoading: boolean;
 }) => {
   const { userId: authUserId } = useAuth();
-  const { userInfo, event, phase, yyyymmdd, noShorts } = useRouteParams();
+  const { userInfo, event, phase, yyyymmdd, noShorts, isLeaderboard } = useRouteParams();
   const { user } = useProfileUser(userInfo?.userId);
   const { setPersonalCommunityTab } = usePersonalCommunityTab();
   const navigation = useNavigation<PredictionsNavigationProp>();
@@ -43,7 +43,15 @@ const CategoryList = ({
 
   const onSelectCategory = async (category: CategoryName) => {
     setPersonalCommunityTab(tab);
-    const params = { userInfo, eventId: event!._id, category, phase, yyyymmdd, noShorts };
+    const params = {
+      userInfo,
+      eventId: event!._id,
+      category,
+      phase,
+      yyyymmdd,
+      noShorts,
+      isLeaderboard,
+    };
     if (isAuthProfile || tab === 'community') {
       navigation.navigate('Category', params);
     } else {
@@ -114,6 +122,7 @@ const CategoryList = ({
                       leaderboard.numUsersPredicting -
                       leaderboard.communityPerformedBetterThanNumUsers
                     }
+                    riskiness={leaderboard.communityRiskiness}
                   />
                 ) : null
               ) : (
@@ -123,6 +132,7 @@ const CategoryList = ({
                   totalPossibleSlots={userLeaderboard.totalPossibleSlots}
                   numUsersPredicting={userLeaderboard.numUsersPredicting}
                   rank={userLeaderboard.rank}
+                  riskiness={userLeaderboard.riskiness}
                 />
               )}
               <View style={{ marginBottom: 20 }} />

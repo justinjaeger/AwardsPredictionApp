@@ -35,18 +35,21 @@ const PredictionTab = ({
     >
       <View style={{ zIndex: 3, flexDirection: 'row', alignItems: 'center' }}>
         {image ? (
-          <ProfileImage image={image} imageSize={isPad ? 60 : 40} />
-        ) : (
-          <SubHeader
-            style={{
-              zIndex: 3,
-              color: selected ? COLORS.white : 'rgba(255,255,255,0.6)',
-              textAlign: 'center',
-            }}
-          >
-            {text}
-          </SubHeader>
-        )}
+          <ProfileImage
+            image={image}
+            imageSize={isPad ? 60 : 40}
+            style={{ marginRight: 10 }}
+          />
+        ) : null}
+        <SubHeader
+          style={{
+            zIndex: 3,
+            color: selected ? COLORS.white : 'rgba(255,255,255,0.6)',
+            textAlign: 'center',
+          }}
+        >
+          {text}
+        </SubHeader>
       </View>
     </TouchableHighlight>
   );

@@ -4,10 +4,10 @@ import COLORS from '../../constants/colors';
 import ProfileImage from '../ProfileImage';
 import { Body, SmallHeader, SubHeader } from '../Text';
 import { iLeaderboardRankingsWithUserData } from '../../services/api/requests/leaderboard';
-import theme from '../../constants/theme';
 import { formatDecimalAsPercentage } from '../../util/formatPercentage';
 import { StackActions, useNavigation } from '@react-navigation/native';
 import { PredictionsNavigationProp, iUserInfo } from '../../navigation/types';
+import { usePersonalCommunityTab } from '../../context/EventContext';
 
 export const LEADERBOARD_PROFILE_IMAGE_SIZE = 50;
 
@@ -19,6 +19,7 @@ const LeaderboardListItem = ({
   style?: StyleProp<ViewStyle>;
 }) => {
   const navigation = useNavigation<PredictionsNavigationProp>();
+  const { setPersonalCommunityTab } = usePersonalCommunityTab();
 
   const hasOnlyOneName = !(leaderboardRanking.name && leaderboardRanking.username);
 
@@ -30,10 +31,7 @@ const LeaderboardListItem = ({
   };
 
   const navigateToPredictions = () => {
-    // TODO: pass parameter to get history
-    // then, the event page will show overall stats at the top and checkmarks for correct predictions
-    // make sure to include a follow button in there too
-    // THEN, we probably want leaderboards to display on the profile page
+    setPersonalCommunityTab('personal');
     navigation.navigate('Event', {
       eventId: leaderboardRanking.eventId,
       userInfo,
@@ -71,17 +69,19 @@ const LeaderboardListItem = ({
           flex: 1,
         }}
       >
-        <View style={{ flexDirection: 'row', flex: 2 }}>
+        <View style={{ flexDirection: 'row' }}>
           <View
             style={{
-              width: 20,
-              marginRight: theme.windowMargin,
-              alignItems: 'center',
+              width: 35,
+              alignItems: 'flex-start',
               justifyContent: 'center',
               overflow: 'visible',
             }}
           >
-            <SubHeader style={{ alignSelf: 'center' }} numberOfLines={1}>
+            <SubHeader
+              style={{ overflow: 'visible', textAlign: 'left' }}
+              numberOfLines={1}
+            >
               {leaderboardRanking.rank.toString()}
             </SubHeader>
           </View>

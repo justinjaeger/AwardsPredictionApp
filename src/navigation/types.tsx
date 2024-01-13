@@ -34,6 +34,14 @@ export type iUserInfo = {
   userImage: string | undefined;
 };
 
+type iHistoryNavigationProps = {
+  yyyymmdd?: number;
+  noShorts?: boolean;
+  phase?: Phase;
+  predictionSetId?: string;
+  isLeaderboard?: boolean;
+};
+
 export type PredictionsNavigationProp = StackNavigationProp<PredictionsParamList>;
 export type PredictionsParamList = {
   EventSelect: undefined;
@@ -41,26 +49,14 @@ export type PredictionsParamList = {
   Event: {
     userInfo: iUserInfo | undefined;
     eventId: string;
-    // for viewing a leaderboard or history:
-    yyyymmdd?: number;
-    noShorts?: boolean;
-    phase?: Phase;
-    predictionSetId?: string;
-    isLeaderboard?: boolean;
-  };
+  } & iHistoryNavigationProps;
   Category: {
     userInfo: iUserInfo | undefined;
     eventId: string;
     category: CategoryName;
     showEventLink?: boolean;
     onPressItem?: (contenderId: string) => void;
-    // for viewing a leaderboard
-    yyyymmdd?: number;
-    noShorts?: boolean;
-    predictionSetId?: string;
-    isLeaderboard?: boolean;
-    phase?: Phase;
-  };
+  } & iHistoryNavigationProps;
   AddPredictions: {
     eventId: string;
     category: CategoryName;

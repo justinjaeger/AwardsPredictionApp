@@ -3,7 +3,7 @@ import CustomIcon from '../CustomIcon';
 import COLORS from '../../constants/colors';
 import React from 'react';
 
-const RESIZE_BUTTON_SIZE = 40;
+const RESIZE_BUTTON_SIZE = 30;
 const RESIZE_BUTTON_STYLE = {
   width: RESIZE_BUTTON_SIZE,
   height: RESIZE_BUTTON_SIZE,
@@ -42,8 +42,10 @@ const ChartToolbar = ({
     <View
       style={{
         flexDirection: 'row',
-        width: '100%',
-        justifyContent: 'flex-end',
+        alignSelf: 'center',
+        width: '90%',
+        justifyContent: 'space-between',
+        marginTop: 5,
       }}
     >
       <TouchableHighlight
@@ -54,7 +56,7 @@ const ChartToolbar = ({
         <CustomIcon
           color={COLORS.gray}
           size={RESIZE_BUTTON_SIZE}
-          name={'minus-circle-outline'}
+          name={'minus-outline'}
         />
       </TouchableHighlight>
       <TouchableHighlight
@@ -62,11 +64,7 @@ const ChartToolbar = ({
         style={RESIZE_BUTTON_STYLE}
         underlayColor={COLORS.secondary}
       >
-        <CustomIcon
-          color={COLORS.gray}
-          size={RESIZE_BUTTON_SIZE}
-          name={'plus-circle-outline'}
-        />
+        <CustomIcon color={COLORS.gray} size={RESIZE_BUTTON_SIZE} name={'plus-outline'} />
       </TouchableHighlight>
     </View>
   );

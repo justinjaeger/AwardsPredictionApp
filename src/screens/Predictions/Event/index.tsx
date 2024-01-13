@@ -37,7 +37,9 @@ const Event = () => {
   return (
     <>
       <PredictionTabsNavigator
-        personalText={isAuthUser ? 'My Predictions' : userInfo?.userName}
+        personalText={
+          isAuthUser ? 'My Predictions' : userInfo?.userName?.split(' ')?.[0] ?? ''
+        }
         personalImage={isAuthUser ? undefined : userInfo?.userImage}
         personal={
           <CategoryList

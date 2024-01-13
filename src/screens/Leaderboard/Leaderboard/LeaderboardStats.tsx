@@ -13,6 +13,7 @@ const LeaderboardStats = ({
   totalPossibleSlots,
   numUsersPredicting,
   rank,
+  riskiness,
   onPress,
 }: {
   title?: string;
@@ -22,6 +23,7 @@ const LeaderboardStats = ({
   totalPossibleSlots: number;
   numUsersPredicting: number;
   rank: number;
+  riskiness?: number;
   onPress?: () => void;
 }) => {
   return (
@@ -70,12 +72,18 @@ const LeaderboardStats = ({
           />
           <Stat number={`${numCorrect}/${totalPossibleSlots}`} text="correct" />
           <Stat number={`${rank}/${numUsersPredicting}`} text="rank" />
+          {riskiness ? (
+            <Stat
+              number={`${parseFloat(riskiness.toString()).toFixed(0)}`}
+              text="riskiness"
+            />
+          ) : null}
         </View>
         <View
           style={{
             height: 0.5,
             width: '90%',
-            backgroundColor: COLORS.white,
+            backgroundColor: COLORS.primaryLight,
             marginTop: 30,
             marginBottom: 5,
           }}

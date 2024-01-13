@@ -23,9 +23,13 @@ const useGetLeaderboardUsers = ({
   >([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  /**
+   * This is being called in overlapping requests
+   */
   const fetchPage = async () => {
     if (!hasNextPage || isLoading) return;
-    if (leaderboardRankings.length === 0) setIsLoading(true);
+    setIsLoading(true);
+    setPageNumber((prev) => prev + 1);
     const { data } = await MongoApi.getLeaderboardUsers({
       eventId,
       phase,
@@ -35,8 +39,7 @@ const useGetLeaderboardUsers = ({
       sortOrder,
     });
     const newRankings = data?.leaderboardRankingsWithUserData ?? [];
-    setPageNumber((prev) => prev + 1);
-    setHasNextPage(data?.hasNextPage ?? false);
+    setHasNextPage(data?.hasNextPage || false);
     setLeaderboardRankings((prev) => [...prev, ...newRankings]);
     setIsLoading(false);
   };

@@ -1,7 +1,7 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import useGetLeaderboardUsers from '../../../hooks/useGetLeaderboardUsers';
-import { FlatList, Keyboard, View } from 'react-native';
+import { FlatList, Keyboard, View, useWindowDimensions } from 'react-native';
 import useDevice from '../../../util/device';
 import LeaderboardListItem, {
   LEADERBOARD_PROFILE_IMAGE_SIZE,
@@ -22,9 +22,16 @@ import { PredictionsNavigationProp } from '../../../navigation/types';
 import { getLeaderboardFromEvent } from '../../../util/getLeaderboardFromEvent';
 import { getUserInfo } from '../../../util/getUserInfo';
 import { usePersonalCommunityTab } from '../../../context/EventContext';
+import PredictionTab from '../../../navigation/PredictionTabsNavigator/PredictionTab';
+import COLORS from '../../../constants/colors';
+import theme from '../../../constants/theme';
+import useQueryGetFollowingUsers from '../../../hooks/queries/useQueryGetFollowingUsers';
+import { iLeaderboardRankingsWithUserData } from '../../../services/api/requests/leaderboard';
 
 const Leaderboard = () => {
   const flatListRef = useRef<FlatList<any>>(null);
+
+  const { width } = useWindowDimensions();
 
   const { setPersonalCommunityTab } = usePersonalCommunityTab();
 
@@ -33,6 +40,8 @@ const Leaderboard = () => {
   const { event, eventId: _eventId, phase: _phase, noShorts } = useRouteParams();
   const eventId = _eventId!;
   const phase = _phase!;
+
+  const widthFactor = isPad ? theme.padHistogramContainerWidth : 1;
 
   const { userId: authUserId } = useAuth();
   const { user } = useProfileUser(authUserId);
@@ -45,6 +54,18 @@ const Leaderboard = () => {
     phase,
     noShorts,
   });
+  const { data: users } = useQueryGetFollowingUsers();
+  const followingLeaderboardRankings = users
+    .reduce((acc: iLeaderboardRankingsWithUserData[], user) => {
+      const userLeaderboard = getUserLeaderboard({ user, eventId, phase, noShorts });
+      if (userLeaderboard) {
+        acc.push({ ...userLeaderboard, ...user, userId: user._id });
+      }
+      return acc;
+    }, [] as any[])
+    .sort((a, b) => a.rank - b.rank);
+
+  const [sortSetting, setSortSetting] = useState<'all' | 'following'>('all');
 
   // set custom back arrow functionality
   useEffect(() => {
@@ -63,11 +84,13 @@ const Leaderboard = () => {
 
   if (!leaderboard) return null;
 
+  const data = sortSetting === 'all' ? leaderboardRankings : followingLeaderboardRankings;
+
   return (
     <BackgroundWrapper>
       <FlatList
         ref={flatListRef}
-        data={leaderboardRankings}
+        data={data}
         keyExtractor={(item) => item.userId}
         style={{ width: '100%' }}
         showsVerticalScrollIndicator={false}
@@ -129,12 +152,36 @@ const Leaderboard = () => {
               <Body style={{ marginTop: 5 }}>All Users</Body>
             </View>
             <LeaderboardChart leaderboard={leaderboard} flatListRef={flatListRef} />
-            {/* TODO: Display auth user now. Can get from the user object. */}
             {user && userLeaderboard ? (
               <LeaderboardListItem
                 leaderboardRanking={{ userId: user._id, ...user, ...userLeaderboard }}
                 style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
               />
+            ) : null}
+            {authUserId ? (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignSelf: 'center',
+                  width: width * widthFactor,
+                  borderRadius: 0,
+                  borderColor: COLORS.primaryLight,
+                  borderWidth: 1,
+                  marginTop: 10,
+                }}
+              >
+                <PredictionTab
+                  text="All Users"
+                  selected={sortSetting === 'all'}
+                  onPress={() => setSortSetting('all')}
+                />
+                <View style={{ width: 1, backgroundColor: COLORS.primaryLight }} />
+                <PredictionTab
+                  text="Following"
+                  selected={sortSetting === 'following'}
+                  onPress={() => setSortSetting('following')}
+                />
+              </View>
             ) : null}
           </>
         }
