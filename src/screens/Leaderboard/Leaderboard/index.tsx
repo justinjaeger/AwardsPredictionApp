@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import useGetLeaderboardUsers from '../../../hooks/useGetLeaderboardUsers';
 import { FlatList, Keyboard, TouchableHighlight, View } from 'react-native';
@@ -22,6 +22,8 @@ import Stat from '../../../components/ItemStatBox/Stat';
 import LeaderboardChart from '../../../components/LeaderboardChart';
 
 const Leaderboard = () => {
+  const flatListRef = useRef<FlatList<any>>(null);
+
   const { isPad } = useDevice();
   const navigation = useNavigation();
   const { event, eventId: _eventId, phase: _phase, noShorts } = useRouteParams();
@@ -64,6 +66,7 @@ const Leaderboard = () => {
   return (
     <BackgroundWrapper>
       <FlatList
+        ref={flatListRef}
         data={leaderboardRankings}
         keyExtractor={(item) => item.userId}
         style={{ width: '100%' }}
@@ -155,7 +158,7 @@ const Leaderboard = () => {
             >
               <SubHeader>#users / %accuracy</SubHeader>
             </View> */}
-            <LeaderboardChart leaderboard={leaderboard} />
+            <LeaderboardChart leaderboard={leaderboard} flatListRef={flatListRef} />
             <View
               style={{
                 height: 0.5,

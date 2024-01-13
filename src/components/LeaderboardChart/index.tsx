@@ -1,37 +1,32 @@
 import React, { useRef, useState } from 'react';
-import { ScrollView, TouchableHighlight, View, useWindowDimensions } from 'react-native';
+import {
+  FlatList,
+  GestureResponderEvent,
+  ScrollView,
+  View,
+  useWindowDimensions,
+} from 'react-native';
 import { iLeaderboard } from '../../types/api';
 import { formatLowDecimalAsPercentage } from '../../util/formatPercentage';
 import COLORS from '../../constants/colors';
 import Slider from './Slider';
 import Indicators from './Indicators';
-import CustomIcon from '../CustomIcon';
+import ChartToolbar, { SM } from './ChartToolbar';
 
 const MARGIN = 15;
 const CHART_HEIGHT = 75;
-const RESIZE_BUTTON_SIZE = 40;
 
-const LeaderboardChart = ({ leaderboard }: { leaderboard: iLeaderboard }) => {
+const LeaderboardChart = ({
+  leaderboard,
+  flatListRef,
+}: {
+  leaderboard: iLeaderboard;
+  flatListRef: React.RefObject<FlatList<any>>;
+}) => {
   const chartRef = useRef<ScrollView>(null);
   const { width } = useWindowDimensions();
 
-  const [minBarWidth, setMinBarWidth] = useState<'sm' | 'md' | 'lg'>('sm');
-  const minBarWidthValue = minBarWidth === 'sm' ? 10 : minBarWidth === 'md' ? 20 : 30;
-  const toggleBarWidth = (mode: 'inc' | 'dec') => {
-    if (mode === 'inc') {
-      if (minBarWidth === 'sm') {
-        setMinBarWidth('md');
-      } else if (minBarWidth === 'md') {
-        setMinBarWidth('lg');
-      }
-    } else if (mode === 'dec') {
-      if (minBarWidth === 'lg') {
-        setMinBarWidth('md');
-      } else if (minBarWidth === 'md') {
-        setMinBarWidth('sm');
-      }
-    }
-  };
+  const [minBarWidth, setMinBarWidth] = useState<number>(SM);
 
   const largestSegmentOfUsersWithSamePercentage = Math.max(
     ...Object.values(leaderboard.percentageAccuracyDistribution),
@@ -46,18 +41,29 @@ const LeaderboardChart = ({ leaderboard }: { leaderboard: iLeaderboard }) => {
     groupedByPercentage.push([percentage, numPredicting ?? 0]);
   }
 
-  const barWidth = Math.max(width / totalBars, minBarWidthValue);
+  const barWidth = Math.max(width / totalBars, minBarWidth);
   const chartWidth = totalBars * barWidth;
 
-  const resizeButtonStyle = {
-    width: RESIZE_BUTTON_SIZE,
-    height: RESIZE_BUTTON_SIZE,
-    borderRadius: RESIZE_BUTTON_SIZE,
-    margin: 10,
+  const [gesturePos, setGesturePos] = useState<{ x: number; y: number } | undefined>(
+    undefined,
+  );
+  const handleGesture = (e: GestureResponderEvent) => {
+    e.preventDefault();
+    const x = e.nativeEvent.pageX;
+    const y = e.nativeEvent.pageY;
+    console.log({ x });
+    const touchIsAboveHistogram = y <= 0;
+    setGesturePos(touchIsAboveHistogram ? undefined : { x, y });
+  };
+
+  // lets us set the props of the scrollview from outside the component
+  // better for performance since it won't re-render the component
+  const enableScroll = (scrollEnabled: boolean) => {
+    flatListRef?.current?.setNativeProps?.({ scrollEnabled });
   };
 
   return (
-    <View>
+    <>
       <ScrollView
         horizontal
         style={{ width: '100%' }}
@@ -78,13 +84,23 @@ const LeaderboardChart = ({ leaderboard }: { leaderboard: iLeaderboard }) => {
             width: chartWidth,
             marginTop: 20,
           }}
+          onStartShouldSetResponder={() => true}
+          onMoveShouldSetResponder={() => true}
+          onResponderGrant={(e) => {
+            handleGesture(e);
+            enableScroll(false);
+          }}
+          onResponderMove={(e) => {
+            handleGesture(e);
+          }}
+          onTouchEnd={() => {
+            setGesturePos(undefined);
+            enableScroll(true);
+          }}
         >
           {groupedByPercentage.map(([percentage, numPredicting]) => {
             return (
-              <View
-                style={{ width: barWidth }}
-                onTouchMove={() => console.log({ percentage })}
-              >
+              <View style={{ width: barWidth }}>
                 <View
                   style={{
                     height: '100%',
@@ -125,37 +141,8 @@ const LeaderboardChart = ({ leaderboard }: { leaderboard: iLeaderboard }) => {
         }}
         style={{ marginTop: 20 }}
       />
-      <View
-        style={{
-          flexDirection: 'row',
-          width: '100%',
-          justifyContent: 'flex-end',
-        }}
-      >
-        <TouchableHighlight
-          onPress={() => toggleBarWidth('dec')}
-          style={resizeButtonStyle}
-          underlayColor={COLORS.secondary}
-        >
-          <CustomIcon
-            color={COLORS.gray}
-            size={RESIZE_BUTTON_SIZE}
-            name={'minus-circle-outline'}
-          />
-        </TouchableHighlight>
-        <TouchableHighlight
-          onPress={() => toggleBarWidth('inc')}
-          style={resizeButtonStyle}
-          underlayColor={COLORS.secondary}
-        >
-          <CustomIcon
-            color={COLORS.gray}
-            size={RESIZE_BUTTON_SIZE}
-            name={'plus-circle-outline'}
-          />
-        </TouchableHighlight>
-      </View>
-    </View>
+      <ChartToolbar minBarWidth={minBarWidth} setMinBarWidth={setMinBarWidth} />
+    </>
   );
 };
 
