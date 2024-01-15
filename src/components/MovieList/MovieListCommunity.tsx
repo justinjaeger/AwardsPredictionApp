@@ -19,6 +19,7 @@ type iMovieListProps = {
   lastUpdatedString: string;
 };
 
+// TODO: Might want to combine with MovieListCommunity eventually
 const MovieListCommunity = ({ predictions, lastUpdatedString }: iMovieListProps) => {
   const navigation = useNavigation<PredictionsNavigationProp>();
   const { isPad } = useDevice();

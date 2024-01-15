@@ -11,7 +11,7 @@ import { getPosterDimensionsByWidth } from '../../../constants/posterDimensions'
 import { getTotalNumPredicting } from '../../../util/getNumPredicting';
 import { Body, SubHeader } from '../../Text';
 import { hexToRgb } from '../../../util/hexToRgb';
-import { CategoryName, CategoryType, iPrediction, Phase } from '../../../types/api';
+import { CategoryType, iPrediction, Phase } from '../../../types/api';
 import { useTmdbDataStore } from '../../../context/TmdbDataStore';
 import { categoryNameToTmdbCredit } from '../../../util/categoryNameToTmdbCredit';
 import ListItemSkeleton from '../../Skeletons/ListItemSkeleton';
@@ -21,9 +21,6 @@ import PosterFromTmdb from '../../Images/PosterFromTmdb';
 import CustomIcon from '../../CustomIcon';
 import { useRouteParams } from '../../../hooks/useRouteParams';
 import { getSlotsInPhase } from '../../../util/getSlotsInPhase';
-import { getContenderRiskiness } from '../../../util/getContenderRiskiness';
-import useQueryGetEventAccolades from '../../../hooks/queries/useQueryGetEventAccolades';
-import useQueryGetCommunityPredictions from '../../../hooks/queries/useQueryGetCommunityPredictions';
 import { formatDecimalAsPercentage } from '../../../util/formatPercentage';
 
 export type iContenderListItemProps = {
@@ -37,6 +34,7 @@ export type iContenderListItemProps = {
     drag: () => void;
   };
   subtitle?: string;
+  riskiness?: number;
   onPressItem: () => void;
   onPressThumbnail?: () => void;
   onLongPress?: () => void;
@@ -74,6 +72,8 @@ const ContenderListItem = ({
   totalNumPredictingTop,
   iconRightProps,
   showHistogram,
+  riskiness,
+  accolade,
   onPressItem,
   onPressThumbnail,
   onLongPress,
@@ -83,35 +83,10 @@ const ContenderListItem = ({
 
   const SMALL_POSTER = windowWidth / 9;
 
-  const {
-    eventId,
-    phase,
-    yyyymmdd,
-    category: _category,
-    categoryData,
-  } = useRouteParams();
+  const { phase, category: _category, categoryData } = useRouteParams();
   const category = _category!;
   const { type } = categoryData!;
   const slots = getSlotsInPhase(phase, categoryData);
-
-  const { data: contenderIdsToPhase } = useQueryGetEventAccolades(eventId);
-
-  // TODO: Is this A LOT to put inside each contende rlist item, or does it not matter?
-  // All this "riskiness" stuff
-  // Also, because we're calculating it no matter what the props are!
-  const { data: predictionSet } = useQueryGetCommunityPredictions({
-    yyyymmdd,
-  });
-  const { predictions: communityPredictions, totalUsersPredicting } =
-    predictionSet.categories[category as CategoryName];
-  const numPredictingContender = (communityPredictions ?? []).find(
-    (p) => p.contenderId === prediction.contenderId,
-  )?.numPredicting;
-  const riskiness = getContenderRiskiness(
-    numPredictingContender,
-    slots,
-    totalUsersPredicting,
-  );
 
   const { width: posterWidth, height: posterHeight } =
     getPosterDimensionsByWidth(SMALL_POSTER);
@@ -161,11 +136,6 @@ const ContenderListItem = ({
     );
   }
 
-  const showAccolades = !!yyyymmdd;
-  const accolade = contenderIdsToPhase?.[prediction.contenderId];
-  const userDidPredictWithinSlots = ranking && ranking <= slots;
-  const userScoredPoints = !!(userDidPredictWithinSlots && accolade);
-
   return (
     <View
       style={{
@@ -211,10 +181,10 @@ const ContenderListItem = ({
           person={person}
           width={posterWidth}
           ranking={ranking}
-          accolade={showAccolades && accolade}
+          accolade={accolade}
         />
       </TouchableOpacity>
-      {userScoredPoints ? <Body>{riskiness.toString() + 'pts • '}</Body> : null}
+      {riskiness ? <Body>{riskiness.toString() + 'pts • '}</Body> : null}
       <Body>{formatDecimalAsPercentage(100 - riskiness) + '% predicting'}</Body>
       <TouchableHighlight
         style={{

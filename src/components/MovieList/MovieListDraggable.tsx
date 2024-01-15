@@ -7,14 +7,16 @@ import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
 import LastUpdatedText from '../LastUpdatedText';
 import ContenderListItem from '../List/ContenderList/ContenderListItem';
-import { Body, SubHeader } from '../Text';
-import { iPrediction } from '../../types/api';
+import { Body, SmallHeader, SubHeader } from '../Text';
+import { CategoryName, iPrediction } from '../../types/api';
 import { triggerHaptic } from '../../util/hapticFeedback';
 import { useNavigation } from '@react-navigation/native';
 import { PredictionsNavigationProp } from '../../navigation/types';
 import { useRouteParams } from '../../hooks/useRouteParams';
 import useQueryGetEventAccolades from '../../hooks/queries/useQueryGetEventAccolades';
 import { getSlotsInPhase } from '../../util/getSlotsInPhase';
+import useQueryGetCommunityPredictions from '../../hooks/queries/useQueryGetCommunityPredictions';
+import { getContenderRiskiness } from '../../util/getContenderRiskiness';
 
 type iMovieListProps = {
   predictions: iPrediction[];
@@ -24,6 +26,7 @@ type iMovieListProps = {
   onPressAdd: () => void;
 };
 
+// TODO: Might want to combine with MovieListCommunity eventually
 const MovieListDraggable = ({
   predictions,
   setPredictions,
@@ -49,6 +52,12 @@ const MovieListDraggable = ({
   const slotsInPhase = getSlotsInPhase(phase, categoryData);
   const slots = showAccolades ? slotsInPhase : _slots ?? 5;
 
+  const { data: predictionSet } = useQueryGetCommunityPredictions({
+    yyyymmdd,
+  });
+  const { predictions: communityPredictions, totalUsersPredicting } =
+    predictionSet.categories[category as CategoryName];
+
   const [itemsToDelete, setItemsToDelete] = useState<iPrediction[]>([]);
 
   const onPressItem = useCallback(async (prediction: iPrediction) => {
@@ -69,6 +78,29 @@ const MovieListDraggable = ({
     });
   }, []);
 
+  // for leaderboard: get riskiness of all contenders that user earned points for
+  const contenderIdToRiskiness: { [cId: string]: number } = {};
+  if (showAccolades) {
+    predictions.forEach(({ contenderId, ranking }) => {
+      const accolade = contenderIdsToPhase?.[contenderId];
+      const userDidPredictWithinSlots = ranking && ranking <= slots;
+      const userScoredPoints = !!(userDidPredictWithinSlots && accolade);
+      if (!userScoredPoints) {
+        return;
+      }
+      const numPredictingContender = (communityPredictions ?? []).find(
+        (p) => p.contenderId === contenderId,
+      )?.numPredicting;
+      const riskiness = getContenderRiskiness(
+        numPredictingContender,
+        slots,
+        totalUsersPredicting,
+      );
+      contenderIdToRiskiness[contenderId] = riskiness;
+    });
+  }
+  const totalRiskiness = Object.values(contenderIdToRiskiness).reduce((a, b) => a + b);
+
   return (
     <DraggableFlatList
       data={predictions}
@@ -81,7 +113,12 @@ const MovieListDraggable = ({
       onPlaceholderIndexChange={() => {
         triggerHaptic();
       }}
-      ListHeaderComponent={<LastUpdatedText lastUpdated={lastUpdatedString} />}
+      ListHeaderComponent={
+        <>
+          <LastUpdatedText lastUpdated={lastUpdatedString} />
+          <SmallHeader style={{ padding: 10 }}>{`${totalRiskiness}pts`}</SmallHeader>
+        </>
+      }
       ListFooterComponent={
         isAuthProfile && predictions.length === 0 ? (
           <View style={{ width: '100%', alignItems: 'center', marginTop: 40 }}>
@@ -184,7 +221,12 @@ const MovieListDraggable = ({
                         onPress: () => drag(),
                       }
                 }
-                accolade={accoladeToShow ?? undefined}
+                accolade={accoladeToShow || undefined}
+                riskiness={
+                  showAccolades
+                    ? contenderIdToRiskiness[prediction.contenderId]
+                    : undefined
+                }
               />
             </ScaleDecorator>
           </>
