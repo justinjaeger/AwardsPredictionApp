@@ -10,11 +10,12 @@ import BottomFABContainer from '../../../components/BottomFABContainer';
 import { useRouteParams } from '../../../hooks/useRouteParams';
 import { PredictionsNavigationProp } from '../../../navigation/types';
 import { getTwoLineHeaderTitle } from '../../../constants';
+import { PHASE_TO_STRING } from '../../../constants/categories';
 
 const Event = () => {
   const navigation = useNavigation<PredictionsNavigationProp>();
 
-  const { event, userInfo, yyyymmdd } = useRouteParams();
+  const { event, userInfo, yyyymmdd, phase, isLeaderboard } = useRouteParams();
   const { userId: authUserId } = useAuth();
   const isAuthUser = userInfo?.userId === authUserId;
 
@@ -29,8 +30,12 @@ const Event = () => {
   useLayoutEffect(() => {
     if (!event) return;
     const headerTitle = eventToString(event.awardsBody, event.year);
+    // need to add "shortlist leaderboard"
+    const leaderboardTitle = isLeaderboard
+      ? `\n${PHASE_TO_STRING[phase]} Predictions`
+      : '';
     navigation.setOptions({
-      headerTitle: getTwoLineHeaderTitle(headerTitle),
+      headerTitle: getTwoLineHeaderTitle(headerTitle + leaderboardTitle),
     });
   }, [navigation]);
 
