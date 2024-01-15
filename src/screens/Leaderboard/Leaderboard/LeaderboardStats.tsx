@@ -4,6 +4,7 @@ import COLORS from '../../../constants/colors';
 import { Body, SubHeader } from '../../../components/Text';
 import { formatDecimalAsPercentage } from '../../../util/formatPercentage';
 import Stat from '../../../components/ItemStatBox/Stat';
+import useDevice from '../../../util/device';
 
 const LeaderboardStats = ({
   title,
@@ -26,6 +27,8 @@ const LeaderboardStats = ({
   riskiness?: number;
   onPress?: () => void;
 }) => {
+  const { isPad } = useDevice();
+  const statsOnTwoRows = riskiness && !isPad;
   return (
     <TouchableHighlight
       style={{
@@ -60,24 +63,31 @@ const LeaderboardStats = ({
         )}
         <View
           style={{
-            flexDirection: 'row',
+            flexDirection: statsOnTwoRows ? 'column' : 'row',
             width: '100%',
             justifyContent: 'space-around',
             alignItems: 'flex-end',
+            flex: 1,
           }}
         >
-          <Stat
-            number={`${formatDecimalAsPercentage(percentageAccuracy)}%`}
-            text="accuracy"
-          />
-          <Stat number={`${numCorrect}/${totalPossibleSlots}`} text="correct" />
-          <Stat number={`${rank}/${numUsersPredicting}`} text="rank" />
-          {riskiness ? (
+          <View style={{ flex: 2, flexDirection: 'row' }}>
             <Stat
-              number={`${parseFloat(riskiness.toString()).toFixed(0)}`}
-              text="riskiness"
+              number={`${formatDecimalAsPercentage(percentageAccuracy)}%`}
+              text="accuracy"
             />
-          ) : null}
+            <Stat number={`${numCorrect}/${totalPossibleSlots}`} text="correct" />
+          </View>
+          <View
+            style={{ flex: 1, flexDirection: 'row', marginTop: statsOnTwoRows ? 20 : 0 }}
+          >
+            <Stat number={`${rank}/${numUsersPredicting}`} text="rank" />
+            {riskiness ? (
+              <Stat
+                number={`${parseFloat(riskiness.toString()).toFixed(0)}pts`}
+                text={'bragging points'}
+              />
+            ) : null}
+          </View>
         </View>
         <View
           style={{
