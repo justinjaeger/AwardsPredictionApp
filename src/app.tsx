@@ -12,6 +12,7 @@ import { GOOGLE_AUTH_CLIENT_ID } from './config';
 import { useForceUpdate } from './hooks/useForceUpdate';
 import { Alert, Linking } from 'react-native';
 import BackgroundWrapper from './components/BackgroundWrapper';
+import useDevice from './util/device';
 
 const queryClient = new QueryClient();
 
@@ -23,6 +24,7 @@ GoogleSignin.configure({
 
 const App = () => {
   const forceUpdate = useForceUpdate();
+  const { isAndroid } = useDevice();
 
   if (forceUpdate) {
     // alert users that they need to upgrade - link them to app store OR play store (in future)
@@ -33,7 +35,10 @@ const App = () => {
         {
           text: 'Upgrade',
           onPress: () => {
-            Linking.openURL('https://apps.apple.com/us/app/award-expert/id6446135720');
+            const url = isAndroid
+              ? 'https://play.google.com/store/apps/details?id=com.awardspredictionapp'
+              : 'https://apps.apple.com/us/app/award-expert/id6446135720';
+            Linking.openURL(url);
           },
         },
       ],
