@@ -7,6 +7,8 @@ import { getTmdbImageUrl } from '../../constants';
 import { Label } from '../Text';
 import theme from '../../constants/theme';
 import RankingDisplay from '../RankingDisplay';
+import { Phase } from '../../types/api';
+import { getAccoladeColor } from '../../util/getAccoladeColor';
 
 type iPosterProps = {
   title: string;
@@ -15,20 +17,29 @@ type iPosterProps = {
   ranking?: number;
   onPress?: () => void;
   styles?: StyleProp<ImageStyle>;
+  accolade?: Phase;
 };
 
-const Poster = ({ path, title, width, ranking, onPress, styles }: iPosterProps) => {
+const Poster = ({
+  path,
+  title,
+  width,
+  ranking,
+  onPress,
+  styles,
+  accolade,
+}: iPosterProps) => {
   const [isPressed, setIsPressed] = useState<boolean>(false);
 
   const posterDimensions = getPosterDimensionsByWidth(width - theme.posterMargin * 2);
 
   const style: StyleProp<ImageStyle> = {
-    ...(styles as Record<string, unknown>),
     ...posterDimensions,
-    borderWidth: 1,
-    borderColor: COLORS.secondary,
+    borderWidth: accolade ? 8 : 1,
+    borderColor: accolade ? getAccoladeColor(accolade) : COLORS.secondary,
     borderRadius: 5,
     opacity: isPressed ? 0.8 : 1,
+    ...(styles as Record<string, unknown>),
   };
 
   return (
@@ -40,7 +51,22 @@ const Poster = ({ path, title, width, ranking, onPress, styles }: iPosterProps) 
       disabled={!onPress}
     >
       <>
-        {ranking !== undefined ? <RankingDisplay ranking={ranking} /> : null}
+        {ranking !== undefined ? (
+          <RankingDisplay ranking={ranking} accolade={accolade} />
+        ) : null}
+        {accolade ? (
+          <RankingDisplay
+            ranking={
+              accolade === Phase.SHORTLIST
+                ? 'S'
+                : accolade === Phase.NOMINATION
+                ? 'N'
+                : 'W'
+            }
+            accolade={accolade}
+            style={{ bottom: 0, right: 0 }}
+          />
+        ) : null}
         {path ? (
           <FastImage
             style={style as Record<string, unknown>}

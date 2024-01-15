@@ -20,7 +20,6 @@ import Histogram from '../../Histogram';
 import PosterFromTmdb from '../../Images/PosterFromTmdb';
 import CustomIcon from '../../CustomIcon';
 import { useRouteParams } from '../../../hooks/useRouteParams';
-import AccoladeIndicator from '../../AccoladeIndicator';
 
 export type iContenderListItemProps = {
   prediction: iPrediction;
@@ -60,7 +59,6 @@ const ContenderListItem = ({
   totalNumPredictingTop,
   iconRightProps,
   showHistogram,
-  accolade,
   onPressItem,
   onPressThumbnail,
   onLongPress,
@@ -262,7 +260,6 @@ const ContenderListItem = ({
           </View>
         </TouchableHighlight>
       ) : null}
-      {accolade ? <AccoladeIndicator accolade={accolade} /> : null}
     </View>
   );
 };

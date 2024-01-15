@@ -1,13 +1,14 @@
 import React from 'react';
 import { ImageStyle, StyleProp } from 'react-native';
 import Poster from './Poster';
-import { Movie, Person } from '../../types/api';
+import { Movie, Person, Phase } from '../../types/api';
 
 type iPosterFromTmdbProps = {
   width: number;
   ranking?: number;
   onPress?: () => void;
   styles?: StyleProp<ImageStyle>;
+  accolade?: Phase;
 };
 
 const PosterFromMovie = ({
@@ -16,6 +17,7 @@ const PosterFromMovie = ({
   onPress,
   ranking,
   styles,
+  accolade,
 }: iPosterFromTmdbProps & { movie: Movie }) => (
   <Poster
     path={movie.posterPath || null} // this will render the loading state if null
@@ -24,6 +26,7 @@ const PosterFromMovie = ({
     ranking={ranking}
     onPress={onPress}
     styles={styles}
+    accolade={accolade}
   />
 );
 
@@ -33,6 +36,7 @@ const PosterFromPerson = ({
   width,
   ranking,
   styles,
+  accolade,
 }: iPosterFromTmdbProps & { person: Person }) => (
   <Poster
     path={person.posterPath || null} // this will render the loading state if null
@@ -41,6 +45,7 @@ const PosterFromPerson = ({
     ranking={ranking}
     onPress={onPress}
     styles={styles}
+    accolade={accolade}
   />
 );
 

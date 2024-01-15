@@ -1,17 +1,21 @@
 import React from 'react';
-import { View, useWindowDimensions } from 'react-native';
+import { StyleProp, View, ViewStyle, useWindowDimensions } from 'react-native';
 import COLORS from '../../constants/colors';
 import useDevice from '../../util/device';
 import { SmallHeader, SubHeader } from '../Text';
 import { getPosterDimensionsByWidth } from '../../constants/posterDimensions';
 import theme from '../../constants/theme';
+import { Phase } from '../../types/api';
+import { getAccoladeColor } from '../../util/getAccoladeColor';
 
 const RankingDisplay = ({
   ranking,
-  borderColor,
+  accolade,
+  style,
 }: {
-  ranking: number;
-  borderColor?: string;
+  ranking: string | number;
+  accolade?: Phase;
+  style?: StyleProp<ViewStyle>;
 }) => {
   const { width } = useWindowDimensions();
   const { isPad } = useDevice();
@@ -33,20 +37,23 @@ const RankingDisplay = ({
 
   return (
     <View
-      style={{
-        position: 'absolute',
-        zIndex: 1,
-        backgroundColor: 'rgba(0,0,0,0.7)',
-        borderBottomRightRadius: 5,
-        borderTopLeftRadius: 5,
-        borderColor: borderColor ?? COLORS.secondary,
-        padding: isPad ? 5 : 0,
-        ...sizeSpecificStyles,
-      }}
+      style={[
+        {
+          position: 'absolute',
+          zIndex: 1,
+          backgroundColor: accolade ? getAccoladeColor(accolade) : 'rgba(0,0,0,0.7)',
+          borderBottomRightRadius: 5,
+          borderTopLeftRadius: 5,
+          borderColor: accolade ? getAccoladeColor(accolade) : COLORS.secondary,
+          padding: isPad ? 5 : 0,
+          ...sizeSpecificStyles,
+        },
+        style,
+      ]}
     >
       <Text
         style={{
-          color: COLORS.white,
+          color: accolade ? 'black' : COLORS.white,
           fontWeight: '600',
         }}
       >

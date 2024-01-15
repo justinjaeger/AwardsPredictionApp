@@ -15,6 +15,8 @@ import { useRouteParams } from '../../../hooks/useRouteParams';
 import { getCategoryIsHidden } from '../../../util/getCategoryIsHidden';
 import { getSlotsInPhase } from '../../../util/getSlotsInPhase';
 import { getPhaseFromYyyymmdd } from '../../../util/getPhaseFromYyyymmdd';
+import useQueryGetEventAccolades from '../../../hooks/queries/useQueryGetEventAccolades';
+import { getAccoladeColor } from '../../../util/getAccoladeColor';
 
 // TODO: make this work for HISTORY, and not just leaderboards.
 // The problem right now with using this as History is, it's hiding the non-shortlisted categories
@@ -22,11 +24,6 @@ import { getPhaseFromYyyymmdd } from '../../../util/getPhaseFromYyyymmdd';
 // Second is to have some prop that indicates it's a leaderboard and not history
 // - In the case that it IS leaderboard, we can say, if it's before shortlist, hide non shortlisted categories
 // - In the case that it's history, we can say, if it's before shortlist, show the normal/nomination slots. Don't hide, don't expand what's visible
-
-/**
- * TODO: Display accolades with posters
- * Then check those accolades against the summary numbers to make sure they makes sense
- */
 
 /**
  * TODO: WOULD BE NICE: If the ones you didn't get, which are not displayed, are show just beneath
@@ -50,9 +47,8 @@ const CategoryListItem = ({
   isAuthProfile: boolean;
 }) => {
   // yyyymmdd is not necessarily a leaderboard. When it's history, we don't event want to display shortlist performance
-  const { event, yyyymmdd, isLeaderboard } = useRouteParams();
+  const { eventId, event, yyyymmdd, isLeaderboard } = useRouteParams();
   const awardsBodyCategories = event?.categories;
-  if (!awardsBodyCategories) return null;
 
   const maybeUndefinedCategoryData = awardsBodyCategories[category];
   const {
@@ -62,14 +58,18 @@ const CategoryListItem = ({
     isHiddenBeforeShortlist,
   } = maybeUndefinedCategoryData || {};
 
+  const { data: contenderIdsToPhase } = useQueryGetEventAccolades(eventId);
+
+  if (!awardsBodyCategories) return null;
+
   // effectively, hides categories that are not shortlisted, when it's a shortlist leaderboard
-  const eventPhase = isLeaderboard && yyyymmdd && getPhaseFromYyyymmdd(yyyymmdd, event);
-  if (eventPhase === Phase.SHORTLIST && (!isShortlisted || isHiddenBeforeShortlist))
+  const phase = isLeaderboard && yyyymmdd && getPhaseFromYyyymmdd(yyyymmdd, event);
+  if (phase === Phase.SHORTLIST && (!isShortlisted || isHiddenBeforeShortlist))
     return null;
 
   const slots =
-    isLeaderboard && eventPhase
-      ? getSlotsInPhase(eventPhase, maybeUndefinedCategoryData)
+    isLeaderboard && phase
+      ? getSlotsInPhase(phase, maybeUndefinedCategoryData)
       : _categorySlots;
 
   const categoryIsHidden = getCategoryIsHidden(event, category);
@@ -83,6 +83,12 @@ const CategoryListItem = ({
   // once nominations happen, you want "slots" to be however many films are nominated
   const truncatedPredictions: iPrediction[] = predictions.slice(0, slots || 5);
 
+  const showAccolades = !!yyyymmdd;
+
+  const numCorrectInCategory = truncatedPredictions.filter(
+    (prediction) => contenderIdsToPhase?.[prediction.contenderId],
+  ).length;
+
   return (
     <TouchableHighlight
       key={category}
@@ -94,16 +100,36 @@ const CategoryListItem = ({
       onPress={() => onPress(category)}
     >
       <View>
-        <SubHeader
+        <View
           style={{
-            color: COLORS.lightest,
-            marginLeft: theme.windowMargin,
-            marginBottom: 5,
-            marginTop: 5,
+            paddingRight: 45, // bad but idk
+            flexDirection: 'row',
+            justifyContent: 'space-between',
           }}
         >
-          {name}
-        </SubHeader>
+          <SubHeader
+            style={{
+              color: COLORS.lightest,
+              marginLeft: theme.windowMargin,
+              marginBottom: 5,
+              marginTop: 5,
+            }}
+          >
+            {name}
+          </SubHeader>
+          {showAccolades ? (
+            <SubHeader
+              style={{
+                color: getAccoladeColor(phase),
+                marginLeft: theme.windowMargin,
+                marginBottom: 5,
+                marginTop: 5,
+              }}
+            >
+              {`${numCorrectInCategory}/${slots}`}
+            </SubHeader>
+          ) : null}
+        </View>
         {truncatedPredictions.length === 0 ? (
           <HeaderLight style={{ marginLeft: theme.windowMargin }}>
             {!isAuthProfile ? 'No Predictions' : 'Add Predictions'}
@@ -113,7 +139,7 @@ const CategoryListItem = ({
           eventId={event?._id}
           predictions={truncatedPredictions}
           categoryInfo={awardsBodyCategories[category]}
-          showAccolades={!!yyyymmdd}
+          showAccolades={showAccolades}
           noLine
         />
       </View>

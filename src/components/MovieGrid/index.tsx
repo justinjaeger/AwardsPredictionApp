@@ -8,7 +8,6 @@ import { useTmdbDataStore } from '../../context/TmdbDataStore';
 import PosterFromTmdb from '../Images/PosterFromTmdb';
 import MoviePosterSkeleton from '../Skeletons/MoviePosterSkeleton';
 import useQueryGetEventAccolades from '../../hooks/queries/useQueryGetEventAccolades';
-import AccoladeIndicator from '../AccoladeIndicator';
 
 const MOVIES_IN_ROW = 5;
 
@@ -62,6 +61,7 @@ const MovieGrid = ({
             style={{
               marginRight: theme.posterMargin * 2,
               marginBottom: theme.posterMargin * 2,
+              position: 'relative',
             }}
           >
             {!noLine && i === slots ? (
@@ -79,20 +79,6 @@ const MovieGrid = ({
               // we want to give a margin on top if this is the row beneath the divider (since divider is absolute pos)
               <View style={{ marginTop: 20 }} />
             ) : null}
-            {showAccolades && accolade ? (
-              <View
-                style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  backgroundColor: COLORS.secondary,
-                  padding: 5,
-                  borderRadius: theme.borderRadius,
-                }}
-              >
-                <AccoladeIndicator accolade={accolade} />
-              </View>
-            ) : null}
             {movie ? (
               <PosterFromTmdb
                 movie={movie}
@@ -104,6 +90,7 @@ const MovieGrid = ({
                   MOVIES_IN_ROW
                 }
                 ranking={i + 1}
+                accolade={showAccolades && accolade}
               />
             ) : (
               <MoviePosterSkeleton />

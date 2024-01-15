@@ -55,7 +55,7 @@ const Leaderboard = () => {
     noShorts,
   });
   const { data: users } = useQueryGetFollowingUsers();
-  const followingLeaderboardRankings = users
+  const followingLeaderboardRankings = (users ?? [])
     .reduce((acc: iLeaderboardRankingsWithUserData[], user) => {
       const userLeaderboard = getUserLeaderboard({ user, eventId, phase, noShorts });
       if (userLeaderboard) {
