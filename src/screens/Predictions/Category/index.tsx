@@ -12,6 +12,7 @@ import CategoryCommunity from './CategoryCommunity';
 import { usePersonalCommunityTab } from '../../../context/EventContext';
 import PredictionTabsNavigator from '../../../navigation/PredictionTabsNavigator';
 import { useAuth } from '../../../context/AuthContext';
+import { PHASE_TO_STRING } from '../../../constants/categories';
 
 const Category = () => {
   const { params } = useRoute<RouteProp<PredictionsParamList, 'Category'>>();
@@ -19,7 +20,7 @@ const Category = () => {
   const { userId: authUserId } = useAuth();
   const isAuthUser = params?.userInfo?.userId === authUserId;
 
-  const { userInfo, category, event } = useRouteParams();
+  const { userInfo, category, event, phase, isLeaderboard } = useRouteParams();
   const { userName, userImage } = userInfo ?? {};
 
   const navigation = useNavigation<PredictionsNavigationProp>();
@@ -29,7 +30,14 @@ const Category = () => {
     if (!category || !event) return;
     const eventName = eventToString(event.awardsBody, event.year);
     const categoryName = event.categories[category].name;
-    const headerTitle = eventName + '\n' + 'Best ' + categoryName;
+    const leaderboardTitle = isLeaderboard
+      ? `\n${PHASE_TO_STRING[phase]} LB Results`
+      : '';
+    const headerTitle =
+      (leaderboardTitle ? '' : eventName + '\n') +
+      'Best ' +
+      categoryName +
+      (leaderboardTitle || '');
     navigation.setOptions({
       headerTitle: getTwoLineHeaderTitle(headerTitle),
     });

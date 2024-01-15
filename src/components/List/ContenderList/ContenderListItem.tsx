@@ -11,7 +11,7 @@ import { getPosterDimensionsByWidth } from '../../../constants/posterDimensions'
 import { getTotalNumPredicting } from '../../../util/getNumPredicting';
 import { Body, SubHeader } from '../../Text';
 import { hexToRgb } from '../../../util/hexToRgb';
-import { CategoryType, iPrediction, Phase } from '../../../types/api';
+import { CategoryName, CategoryType, iPrediction, Phase } from '../../../types/api';
 import { useTmdbDataStore } from '../../../context/TmdbDataStore';
 import { categoryNameToTmdbCredit } from '../../../util/categoryNameToTmdbCredit';
 import ListItemSkeleton from '../../Skeletons/ListItemSkeleton';
@@ -20,6 +20,11 @@ import Histogram from '../../Histogram';
 import PosterFromTmdb from '../../Images/PosterFromTmdb';
 import CustomIcon from '../../CustomIcon';
 import { useRouteParams } from '../../../hooks/useRouteParams';
+import { getSlotsInPhase } from '../../../util/getSlotsInPhase';
+import { getContenderRiskiness } from '../../../util/getContenderRiskiness';
+import useQueryGetEventAccolades from '../../../hooks/queries/useQueryGetEventAccolades';
+import useQueryGetCommunityPredictions from '../../../hooks/queries/useQueryGetCommunityPredictions';
+import { formatDecimalAsPercentage } from '../../../util/formatPercentage';
 
 export type iContenderListItemProps = {
   prediction: iPrediction;
@@ -49,6 +54,16 @@ export type iContenderListItemProps = {
   accolade?: Phase;
 };
 
+/**
+ * TODO: Display Accolade
+ * THEN TODO: Display riskiness, which is a function of:
+ * - whatever the community predicted for that contender
+ *
+ * TODO: I think we should LIFT the points/riskiness calculation OUT OF HERE and put it in the overall list component
+ * BECAUSE: First, we don't care about community rankings what the points are.
+ * Second, we want the TOTAL NUM OF POINTS
+ * Third, it's weird to do this big calculation inside of a single item
+ */
 const ContenderListItem = ({
   prediction,
   ranking,
@@ -68,16 +83,41 @@ const ContenderListItem = ({
 
   const SMALL_POSTER = windowWidth / 9;
 
-  const { category: _category, categoryData } = useRouteParams();
+  const {
+    eventId,
+    phase,
+    yyyymmdd,
+    category: _category,
+    categoryData,
+  } = useRouteParams();
   const category = _category!;
-  const { slots: _slots, type } = categoryData!;
-  const slots = _slots || 5;
+  const { type } = categoryData!;
+  const slots = getSlotsInPhase(phase, categoryData);
+
+  const { data: contenderIdsToPhase } = useQueryGetEventAccolades(eventId);
+
+  // TODO: Is this A LOT to put inside each contende rlist item, or does it not matter?
+  // All this "riskiness" stuff
+  // Also, because we're calculating it no matter what the props are!
+  const { data: predictionSet } = useQueryGetCommunityPredictions({
+    yyyymmdd,
+  });
+  const { predictions: communityPredictions, totalUsersPredicting } =
+    predictionSet.categories[category as CategoryName];
+  const numPredictingContender = (communityPredictions ?? []).find(
+    (p) => p.contenderId === prediction.contenderId,
+  )?.numPredicting;
+  const riskiness = getContenderRiskiness(
+    numPredictingContender,
+    slots,
+    totalUsersPredicting,
+  );
 
   const { width: posterWidth, height: posterHeight } =
     getPosterDimensionsByWidth(SMALL_POSTER);
 
   // note: numPredicting is only commnuity
-  const { numPredicting } = prediction;
+  const { numPredicting: numPredictingIfIsCommunity } = prediction;
 
   const { getTmdbDataFromPrediction } = useTmdbDataStore();
   const { movie, person, song } = getTmdbDataFromPrediction(prediction) ?? {};
@@ -108,7 +148,7 @@ const ContenderListItem = ({
 
   // The bar should be at 100% if everybody is predicting a nomination.
   // So like, every bar is out of 100% of all users
-  const totalNumPredicting = getTotalNumPredicting(numPredicting || {});
+  const totalNumPredicting = getTotalNumPredicting(numPredictingIfIsCommunity || {});
 
   const thumbnailContainerWidth = posterWidth * 1.5;
   const rightIconContainerWidth = iconRightProps ? posterHeight - 10 : 0;
@@ -120,6 +160,11 @@ const ContenderListItem = ({
       </View>
     );
   }
+
+  const showAccolades = !!yyyymmdd;
+  const accolade = contenderIdsToPhase?.[prediction.contenderId];
+  const userDidPredictWithinSlots = ranking && ranking <= slots;
+  const userScoredPoints = !!(userDidPredictWithinSlots && accolade);
 
   return (
     <View
@@ -166,8 +211,11 @@ const ContenderListItem = ({
           person={person}
           width={posterWidth}
           ranking={ranking}
+          accolade={showAccolades && accolade}
         />
       </TouchableOpacity>
+      {userScoredPoints ? <Body>{riskiness.toString() + 'pts • '}</Body> : null}
+      <Body>{formatDecimalAsPercentage(100 - riskiness) + '% predicting'}</Body>
       <TouchableHighlight
         style={{
           flexDirection: 'row',
@@ -213,9 +261,11 @@ const ContenderListItem = ({
               </Body>
             ) : null}
           </View>
-          {numPredicting && totalNumPredictingTop !== undefined && showHistogram ? (
+          {numPredictingIfIsCommunity &&
+          totalNumPredictingTop !== undefined &&
+          showHistogram ? (
             <Histogram
-              numPredicting={numPredicting}
+              numPredicting={numPredictingIfIsCommunity}
               totalNumPredicting={totalNumPredicting}
               totalNumPredictingTop={totalNumPredictingTop}
               slots={slots}

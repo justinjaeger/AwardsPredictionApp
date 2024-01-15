@@ -35,7 +35,7 @@ const Poster = ({
 
   const style: StyleProp<ImageStyle> = {
     ...posterDimensions,
-    borderWidth: accolade ? 8 : 1,
+    borderWidth: accolade ? Math.floor(posterDimensions.height / 15) : 1,
     borderColor: accolade ? getAccoladeColor(accolade) : COLORS.secondary,
     borderRadius: 5,
     opacity: isPressed ? 0.8 : 1,

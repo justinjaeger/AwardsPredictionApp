@@ -14,6 +14,7 @@ import { useNavigation } from '@react-navigation/native';
 import { PredictionsNavigationProp } from '../../navigation/types';
 import { useRouteParams } from '../../hooks/useRouteParams';
 import useQueryGetEventAccolades from '../../hooks/queries/useQueryGetEventAccolades';
+import { getSlotsInPhase } from '../../util/getSlotsInPhase';
 
 type iMovieListProps = {
   predictions: iPrediction[];
@@ -36,14 +37,17 @@ const MovieListDraggable = ({
     category: _category,
     eventId: _eventId,
     yyyymmdd,
+    phase,
   } = useRouteParams();
+  const showAccolades = !!yyyymmdd;
   const category = _category!;
   const eventId = _eventId!;
 
   const { data: contenderIdsToPhase } = useQueryGetEventAccolades(eventId);
 
   const { slots: _slots, type } = categoryData!;
-  const slots = _slots ?? 5;
+  const slotsInPhase = getSlotsInPhase(phase, categoryData);
+  const slots = showAccolades ? slotsInPhase : _slots ?? 5;
 
   const [itemsToDelete, setItemsToDelete] = useState<iPrediction[]>([]);
 
@@ -64,8 +68,6 @@ const MovieListDraggable = ({
       return newItems;
     });
   }, []);
-
-  const showAccolades = !!yyyymmdd;
 
   return (
     <DraggableFlatList

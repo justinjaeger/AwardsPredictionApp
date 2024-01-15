@@ -125,8 +125,6 @@ const CategoryPersonal = ({
     return <CategorySkeleton />;
   }
 
-  console.log('predictions', predictions.length);
-
   return (
     <>
       {predictions && predictions.length === 0 ? (

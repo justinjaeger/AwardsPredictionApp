@@ -10,6 +10,7 @@ import { useNavigation } from '@react-navigation/native';
 import { PredictionsNavigationProp } from '../../navigation/types';
 import { useRouteParams } from '../../hooks/useRouteParams';
 import useDevice from '../../util/device';
+import { getSlotsInPhase } from '../../util/getSlotsInPhase';
 
 export const PREDICT_STAT_WIDTH = 120;
 
@@ -21,11 +22,20 @@ type iMovieListProps = {
 const MovieListCommunity = ({ predictions, lastUpdatedString }: iMovieListProps) => {
   const navigation = useNavigation<PredictionsNavigationProp>();
   const { isPad } = useDevice();
-  const { event: _event, category: _category, categoryData } = useRouteParams();
+  const {
+    event: _event,
+    category: _category,
+    categoryData,
+    yyyymmdd,
+    phase,
+  } = useRouteParams();
+  const showAccolades = !!yyyymmdd;
   const event = _event!;
   const category = _category!;
+
   const { slots: _slots, type } = categoryData!;
-  const slots = _slots ?? 5;
+  const slotsInPhase = getSlotsInPhase(phase, categoryData);
+  const slots = showAccolades ? slotsInPhase : _slots ?? 5;
 
   const totalNumPredictingTop = getTotalNumPredicting(
     predictions?.[0]?.numPredicting ?? {},
