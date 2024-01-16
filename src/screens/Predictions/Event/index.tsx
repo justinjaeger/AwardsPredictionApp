@@ -31,9 +31,7 @@ const Event = () => {
     if (!event) return;
     const headerTitle = eventToString(event.awardsBody, event.year);
     // need to add "shortlist leaderboard"
-    const leaderboardTitle = isLeaderboard
-      ? `\n${PHASE_TO_STRING[phase]} LB Results`
-      : '';
+    const leaderboardTitle = isLeaderboard ? `\n${PHASE_TO_STRING[phase]} Results` : '';
     navigation.setOptions({
       headerTitle: getTwoLineHeaderTitle(headerTitle + leaderboardTitle),
     });

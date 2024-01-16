@@ -21,7 +21,6 @@ import PosterFromTmdb from '../../Images/PosterFromTmdb';
 import CustomIcon from '../../CustomIcon';
 import { useRouteParams } from '../../../hooks/useRouteParams';
 import { getSlotsInPhase } from '../../../util/getSlotsInPhase';
-import { formatDecimalAsPercentage } from '../../../util/formatPercentage';
 
 export type iContenderListItemProps = {
   prediction: iPrediction;
@@ -143,6 +142,8 @@ const ContenderListItem = ({
           ? COLORS.secondaryDark
           : highlighted
           ? hexToRgb(COLORS.secondaryLight, 0.15)
+          : ranking % 2 === 1
+          ? 'rgba(255,255,255,0.05)'
           : 'transparent',
         flexDirection: 'row',
         alignItems: 'flex-end',
@@ -184,8 +185,6 @@ const ContenderListItem = ({
           accolade={accolade}
         />
       </TouchableOpacity>
-      {riskiness ? <Body>{riskiness.toString() + 'pts • '}</Body> : null}
-      <Body>{formatDecimalAsPercentage(100 - riskiness) + '% predicting'}</Body>
       <TouchableHighlight
         style={{
           flexDirection: 'row',
@@ -203,33 +202,55 @@ const ContenderListItem = ({
           <View
             style={{
               position: 'absolute',
-              flexDirection: 'row',
-              alignItems: 'baseline',
+              flexDirection: 'column',
+              height: '100%',
               paddingLeft: 5,
               zIndex: 2,
               width: '100%',
+              justifyContent: 'space-between',
             }}
           >
-            <SubHeader
+            <View
               style={{
-                shadowColor: 'black',
-                shadowOpacity: 1,
-                shadowRadius: 5,
+                flexDirection: 'row',
+                alignItems: 'baseline',
               }}
             >
-              {title}
-            </SubHeader>
-            {type !== CategoryType.FILM ? (
-              <Body
+              <SubHeader
                 style={{
                   shadowColor: 'black',
                   shadowOpacity: 1,
                   shadowRadius: 5,
                 }}
               >
-                {` • ${subtitle}`}
-              </Body>
-            ) : null}
+                {title}
+              </SubHeader>
+              {type !== CategoryType.FILM ? (
+                <Body
+                  style={{
+                    shadowColor: 'black',
+                    shadowOpacity: 1,
+                    shadowRadius: 5,
+                  }}
+                >
+                  {` • ${subtitle}`}
+                </Body>
+              ) : null}
+              <View />
+            </View>
+            <View style={{ flexDirection: 'row', marginTop: 5 }}>
+              {riskiness ? (
+                <Body
+                  style={{
+                    fontWeight: '700',
+                    width: '100%',
+                    textAlign: 'right',
+                    marginBottom: 5,
+                    paddingRight: theme.windowMargin,
+                  }}
+                >{`${riskiness.toString()}pts`}</Body>
+              ) : null}
+            </View>
           </View>
           {numPredictingIfIsCommunity &&
           totalNumPredictingTop !== undefined &&

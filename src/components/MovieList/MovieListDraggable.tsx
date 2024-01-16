@@ -101,6 +101,8 @@ const MovieListDraggable = ({
   }
   const totalRiskiness = Object.values(contenderIdToRiskiness).reduce((a, b) => a + b);
 
+  const isEditable = isAuthProfile && !yyyymmdd;
+
   return (
     <DraggableFlatList
       data={predictions}
@@ -116,11 +118,15 @@ const MovieListDraggable = ({
       ListHeaderComponent={
         <>
           <LastUpdatedText lastUpdated={lastUpdatedString} />
-          <SmallHeader style={{ padding: 10 }}>{`${totalRiskiness}pts`}</SmallHeader>
+          <View style={{ alignItems: 'flex-end' }}>
+            <SmallHeader style={{ padding: 10, paddingRight: 15 }}>{`${parseFloat(
+              totalRiskiness.toString(),
+            ).toFixed(2)}pts`}</SmallHeader>
+          </View>
         </>
       }
       ListFooterComponent={
-        isAuthProfile && predictions.length === 0 ? (
+        isEditable && predictions.length === 0 ? (
           <View style={{ width: '100%', alignItems: 'center', marginTop: 40 }}>
             <TouchableHighlight
               style={{
@@ -139,7 +145,7 @@ const MovieListDraggable = ({
               <SubHeader>{`+ Add ${CATEGORY_TYPE_TO_STRING[type]}s`}</SubHeader>
             </TouchableHighlight>
           </View>
-        ) : isAuthProfile && predictions.length > 0 ? (
+        ) : isEditable && predictions.length > 0 ? (
           <Body
             style={{
               color: COLORS.gray,
@@ -185,7 +191,7 @@ const MovieListDraggable = ({
                   }
                 }}
                 onLongPress={
-                  isAuthProfile
+                  isEditable
                     ? () => {
                         toggleDeleteMode(prediction);
                       }
@@ -197,7 +203,7 @@ const MovieListDraggable = ({
                 }}
                 categoryType={type}
                 iconRightProps={
-                  !isAuthProfile
+                  !isEditable
                     ? undefined
                     : isSelectedForDelete
                     ? {

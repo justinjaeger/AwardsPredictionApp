@@ -84,7 +84,7 @@ const LeaderboardStats = ({
             {riskiness ? (
               <Stat
                 number={`${parseFloat(riskiness.toString()).toFixed(0)}pts`}
-                text={'bragging points'}
+                text={'points'}
               />
             ) : null}
           </View>
