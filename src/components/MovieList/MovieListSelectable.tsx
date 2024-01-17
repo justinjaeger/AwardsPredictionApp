@@ -30,7 +30,15 @@ const MovieListSelectable = ({
 }: iMovieListProps) => {
   const navigation = useNavigation<PredictionsNavigationProp>();
   const { isPad } = useDevice();
-  const { categoryData, category: _category, eventId: _eventId } = useRouteParams();
+  const {
+    categoryData,
+    category: _category,
+    eventId: _eventId,
+    yyyymmdd,
+    phase,
+    noShorts,
+    isLeaderboard,
+  } = useRouteParams();
   const { type } = categoryData!;
   const category = _category!;
   const eventId = _eventId!;
@@ -40,7 +48,15 @@ const MovieListSelectable = ({
       onToggleItem(prediction);
       return;
     }
-    navigation.navigate('ContenderInfoModal', { prediction, category, eventId });
+    navigation.navigate('ContenderInfoModal', {
+      prediction,
+      category,
+      eventId,
+      yyyymmdd,
+      phase,
+      noShorts,
+      isLeaderboard,
+    });
   }, []);
 
   const onToggleItem = useCallback(async (prediction: iPrediction) => {

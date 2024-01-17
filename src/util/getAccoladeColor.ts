@@ -3,10 +3,10 @@ import { Phase } from '../types/api';
 
 export const getAccoladeColor = (phase: Phase) => {
   return phase === Phase.SHORTLIST
-    ? '#EFA96A'
+    ? '#db7e53'
     : phase === Phase.NOMINATION
-    ? '#c4c5cc'
+    ? '#9da3b0'
     : phase === Phase.WINNER
-    ? '#ffd04d'
+    ? '#ebb12a'
     : COLORS.primary;
 };

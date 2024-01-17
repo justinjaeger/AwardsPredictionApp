@@ -11,16 +11,19 @@ import { getAccoladeColor } from '../../util/getAccoladeColor';
 const RankingDisplay = ({
   ranking,
   accolade,
+  isUnaccoladed,
   style,
 }: {
   ranking: string | number;
   accolade?: Phase;
+  isUnaccoladed?: boolean;
   style?: StyleProp<ViewStyle>;
 }) => {
   const { width } = useWindowDimensions();
   const { isPad } = useDevice();
   const Text = isPad ? SmallHeader : SubHeader;
 
+  const accoladeColor: string = getAccoladeColor(accolade);
   const posterDimensions = getPosterDimensionsByWidth(width - theme.posterMargin * 2);
 
   const sizeSpecificStyles =
@@ -41,10 +44,18 @@ const RankingDisplay = ({
         {
           position: 'absolute',
           zIndex: 1,
-          backgroundColor: accolade ? getAccoladeColor(accolade) : 'rgba(0,0,0,0.7)',
+          backgroundColor: accolade
+            ? accoladeColor
+            : isUnaccoladed
+            ? 'rgba(0,0,0,0.5)'
+            : 'rgba(0,0,0,0.7)',
           borderBottomRightRadius: 5,
           borderTopLeftRadius: 5,
-          borderColor: accolade ? getAccoladeColor(accolade) : COLORS.secondary,
+          borderColor: accolade
+            ? accoladeColor
+            : isUnaccoladed
+            ? undefined
+            : COLORS.secondary,
           padding: isPad ? 5 : 0,
           ...sizeSpecificStyles,
         },
@@ -53,7 +64,7 @@ const RankingDisplay = ({
     >
       <Text
         style={{
-          color: accolade ? 'black' : COLORS.white,
+          color: isUnaccoladed ? 'rgba(255,255,255,0.5)' : COLORS.white,
           fontWeight: '600',
         }}
       >

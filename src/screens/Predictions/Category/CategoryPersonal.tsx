@@ -125,6 +125,8 @@ const CategoryPersonal = ({
     return <CategorySkeleton />;
   }
 
+  const isEditable = isAuthProfile && !yyyymmdd;
+
   return (
     <>
       {predictions && predictions.length === 0 ? (
@@ -160,10 +162,10 @@ const CategoryPersonal = ({
       </View>
       <BottomFABContainer>
         {showEventLink ? <EventLink /> : null}
-        {isAuthProfile ? <FloatingButton onPress={onPressAdd} icon={'plus'} /> : null}
+        {isEditable ? <FloatingButton onPress={onPressAdd} icon={'plus'} /> : null}
         <ScreenshotMode predictions={predictions} isCommunity={false} />
       </BottomFABContainer>
-      {isAuthProfile && showSave ? (
+      {isEditable && showSave ? (
         <FAB
           iconName="save-outline"
           text="Save"

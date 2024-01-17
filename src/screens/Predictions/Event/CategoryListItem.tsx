@@ -16,7 +16,6 @@ import { getCategoryIsHidden } from '../../../util/getCategoryIsHidden';
 import { getSlotsInPhase } from '../../../util/getSlotsInPhase';
 import { getPhaseFromYyyymmdd } from '../../../util/getPhaseFromYyyymmdd';
 import useQueryGetEventAccolades from '../../../hooks/queries/useQueryGetEventAccolades';
-import { getAccoladeColor } from '../../../util/getAccoladeColor';
 
 // TODO: make this work for HISTORY, and not just leaderboards.
 // The problem right now with using this as History is, it's hiding the non-shortlisted categories
@@ -120,7 +119,7 @@ const CategoryListItem = ({
           {showAccolades ? (
             <SubHeader
               style={{
-                color: getAccoladeColor(phase),
+                color: COLORS.white,
                 marginLeft: theme.windowMargin,
                 marginBottom: 5,
                 marginTop: 5,

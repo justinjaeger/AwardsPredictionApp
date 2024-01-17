@@ -19,6 +19,7 @@ import ContenderInfoHeader from '../../../components/ContenderInfoHeader';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import { useRouteParams } from '../../../hooks/useRouteParams';
 import ModalHeader from '../../../components/ModalHeader';
+import HistoryDateIndicator from '../../../components/HistoryDateIndicator';
 
 const ContenderInfoModal = () => {
   const scrollRef = useRef<ScrollView>(null);
@@ -64,6 +65,7 @@ const ContenderInfoModal = () => {
         <ScrollView style={{ flex: 1, width: '100%' }} ref={scrollRef}>
           <View>
             <ContenderInfoHeader prediction={communityPrediction} />
+            <HistoryDateIndicator yyyymmdd={yyyymmdd} style={{ marginBottom: 10 }} />
             <ItemStatBox
               key={communityPrediction.contenderId}
               prediction={communityPrediction}
@@ -88,6 +90,7 @@ const ContenderInfoModal = () => {
                   StackActions.replace('ContenderStats', {
                     year: event.year,
                     movieTmdbId: prediction.movieTmdbId,
+                    yyyymmdd,
                   }),
                 );
               }}

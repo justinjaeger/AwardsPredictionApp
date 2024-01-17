@@ -9,6 +9,7 @@ type iPosterFromTmdbProps = {
   onPress?: () => void;
   styles?: StyleProp<ImageStyle>;
   accolade?: Phase;
+  isUnaccoladed?: boolean;
 };
 
 const PosterFromMovie = ({
@@ -18,6 +19,7 @@ const PosterFromMovie = ({
   ranking,
   styles,
   accolade,
+  isUnaccoladed,
 }: iPosterFromTmdbProps & { movie: Movie }) => (
   <Poster
     path={movie.posterPath || null} // this will render the loading state if null
@@ -27,6 +29,7 @@ const PosterFromMovie = ({
     onPress={onPress}
     styles={styles}
     accolade={accolade}
+    isUnaccoladed={isUnaccoladed}
   />
 );
 
@@ -37,6 +40,7 @@ const PosterFromPerson = ({
   ranking,
   styles,
   accolade,
+  isUnaccoladed,
 }: iPosterFromTmdbProps & { person: Person }) => (
   <Poster
     path={person.posterPath || null} // this will render the loading state if null
@@ -46,6 +50,7 @@ const PosterFromPerson = ({
     onPress={onPress}
     styles={styles}
     accolade={accolade}
+    isUnaccoladed={isUnaccoladed}
   />
 );
 

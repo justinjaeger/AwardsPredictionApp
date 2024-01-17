@@ -91,6 +91,7 @@ const MovieGrid = ({
                 }
                 ranking={i + 1}
                 accolade={showAccolades && accolade}
+                isUnaccoladed={showAccolades && !accolade}
               />
             ) : (
               <MoviePosterSkeleton />

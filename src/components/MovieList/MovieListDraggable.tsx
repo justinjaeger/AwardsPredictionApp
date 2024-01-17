@@ -1,6 +1,6 @@
 import { Divider } from '@ui-kitten/components';
 import React, { useCallback, useState } from 'react';
-import { TouchableHighlight, View } from 'react-native';
+import { TouchableHighlight, TouchableOpacity, View } from 'react-native';
 import DraggableFlatList, { ScaleDecorator } from 'react-native-draggable-flatlist';
 import { CATEGORY_TYPE_TO_STRING } from '../../constants/categories';
 import COLORS from '../../constants/colors';
@@ -41,6 +41,8 @@ const MovieListDraggable = ({
     eventId: _eventId,
     yyyymmdd,
     phase,
+    noShorts,
+    isLeaderboard,
   } = useRouteParams();
   const showAccolades = !!yyyymmdd;
   const category = _category!;
@@ -59,9 +61,18 @@ const MovieListDraggable = ({
     predictionSet.categories[category as CategoryName];
 
   const [itemsToDelete, setItemsToDelete] = useState<iPrediction[]>([]);
+  const [showPointsHelp, setShowPointsHelp] = useState<boolean>(false);
 
   const onPressItem = useCallback(async (prediction: iPrediction) => {
-    navigation.navigate('ContenderInfoModal', { prediction, category, eventId });
+    navigation.navigate('ContenderInfoModal', {
+      prediction,
+      category,
+      eventId,
+      yyyymmdd,
+      phase,
+      noShorts,
+      isLeaderboard,
+    });
   }, []);
 
   const toggleDeleteMode = useCallback((prediction: iPrediction) => {
@@ -118,11 +129,25 @@ const MovieListDraggable = ({
       ListHeaderComponent={
         <>
           <LastUpdatedText lastUpdated={lastUpdatedString} />
-          <View style={{ alignItems: 'flex-end' }}>
-            <SmallHeader style={{ padding: 10, paddingRight: 15 }}>{`${parseFloat(
+          <TouchableOpacity
+            style={{
+              alignItems: 'flex-end',
+              paddingRight: 15,
+              paddingBottom: 10,
+            }}
+            onPress={() => setShowPointsHelp((prev) => !prev)}
+          >
+            <SmallHeader style={{ marginRight: 2 }}>{`${parseFloat(
               totalRiskiness.toString(),
             ).toFixed(2)}pts`}</SmallHeader>
-          </View>
+            {showPointsHelp ? (
+              <Body style={{ color: COLORS.gray, paddingBottom: 10, textAlign: 'right' }}>
+                {
+                  'earned for accurate predix against the grain\ne.g. if 10% of users called it, you get 90pts'
+                }
+              </Body>
+            ) : null}
+          </TouchableOpacity>
         </>
       }
       ListFooterComponent={
@@ -171,7 +196,7 @@ const MovieListDraggable = ({
 
         return (
           <>
-            {index === slots ? (
+            {index === slots && !showAccolades ? (
               <Divider
                 style={{
                   margin: 10,
@@ -228,6 +253,7 @@ const MovieListDraggable = ({
                       }
                 }
                 accolade={accoladeToShow || undefined}
+                isUnaccaloded={showAccolades && !accoladeToShow}
                 riskiness={
                   showAccolades
                     ? contenderIdToRiskiness[prediction.contenderId]

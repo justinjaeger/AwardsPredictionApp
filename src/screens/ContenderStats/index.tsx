@@ -9,6 +9,7 @@ import useQueryGetAllEvents from '../../hooks/queries/useQueryGetAllEvents';
 import ContenderInfoHeader from '../../components/ContenderInfoHeader';
 import BackgroundWrapper from '../../components/BackgroundWrapper';
 import { ScrollView } from 'react-native';
+import HistoryDateIndicator from '../../components/HistoryDateIndicator';
 
 export type iContenderStatsData = iPrediction & {
   category: CategoryName;
@@ -21,7 +22,7 @@ const ContenderStats = () => {
   const navigation = useNavigation<PredictionsNavigationProp>();
   const route = useRoute<RouteProp<PredictionsParamList, 'ContenderStats'>>();
   const scrollRef = useRef<ScrollView>(null);
-  const { movieTmdbId, year } = route.params;
+  const { movieTmdbId, year, yyyymmdd } = route.params;
   const { store } = useTmdbDataStore();
   const { data: events } = useQueryGetAllEvents();
   const movie = store[movieTmdbId] as Movie;
@@ -54,6 +55,7 @@ const ContenderStats = () => {
             movieTmdbId,
           }}
         />
+        <HistoryDateIndicator yyyymmdd={yyyymmdd} />
         <ContenderStatEventTab
           event={event}
           movieTmdbId={movieTmdbId}

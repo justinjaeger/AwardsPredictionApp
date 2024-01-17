@@ -113,6 +113,12 @@ const Leaderboard = () => {
         keyboardShouldPersistTaps={'always'}
         ListHeaderComponent={
           <>
+            {user && userLeaderboard ? (
+              <LeaderboardListItem
+                leaderboardRanking={{ userId: user._id, ...user, ...userLeaderboard }}
+                style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
+              />
+            ) : null}
             <LeaderboardStats
               title={'Community Scores'}
               subtitle={'The aggregate of all users'}
@@ -152,12 +158,6 @@ const Leaderboard = () => {
               <Body style={{ marginTop: 5 }}>All Users</Body>
             </View>
             <LeaderboardChart leaderboard={leaderboard} flatListRef={flatListRef} />
-            {user && userLeaderboard ? (
-              <LeaderboardListItem
-                leaderboardRanking={{ userId: user._id, ...user, ...userLeaderboard }}
-                style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
-              />
-            ) : null}
             {authUserId ? (
               <View
                 style={{

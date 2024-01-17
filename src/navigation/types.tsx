@@ -34,6 +34,7 @@ export type iUserInfo = {
   userImage: string | undefined;
 };
 
+// TODO: Not all of these are going to be relevant
 type iHistoryNavigationProps = {
   yyyymmdd?: number;
   noShorts?: boolean;
@@ -66,7 +67,7 @@ export type PredictionsParamList = {
   ContenderStats: {
     movieTmdbId: number;
     year: number;
-  };
+  } & iHistoryNavigationProps;
   // PROFILE SCREENS
   Profile: {
     userInfo: iUserInfo;
@@ -90,7 +91,7 @@ export type PredictionsParamList = {
     prediction: iPrediction;
     category: CategoryName;
     eventId: string;
-  };
+  } & iHistoryNavigationProps;
 };
 
 export type AdminNavigationProp = StackNavigationProp<AdminParamList>;

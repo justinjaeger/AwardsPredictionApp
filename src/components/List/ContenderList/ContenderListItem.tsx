@@ -49,6 +49,7 @@ export type iContenderListItemProps = {
   };
   showHistogram?: boolean;
   accolade?: Phase;
+  isUnaccaloded?: boolean;
 };
 
 /**
@@ -73,6 +74,7 @@ const ContenderListItem = ({
   showHistogram,
   riskiness,
   accolade,
+  isUnaccaloded,
   onPressItem,
   onPressThumbnail,
   onLongPress,
@@ -142,8 +144,12 @@ const ContenderListItem = ({
           ? COLORS.secondaryDark
           : highlighted
           ? hexToRgb(COLORS.secondaryLight, 0.15)
+          : accolade
+          ? 'rgba(255,255,255,0.03)'
+          : isUnaccaloded
+          ? 'rgba(0,0,0,0.5)'
           : ranking % 2 === 1
-          ? 'rgba(255,255,255,0.05)'
+          ? 'rgba(255,255,255,0.03)'
           : 'transparent',
         flexDirection: 'row',
         alignItems: 'flex-end',
@@ -183,6 +189,7 @@ const ContenderListItem = ({
           width={posterWidth}
           ranking={ranking}
           accolade={accolade}
+          isUnaccoladed={isUnaccaloded}
         />
       </TouchableOpacity>
       <TouchableHighlight
@@ -221,6 +228,7 @@ const ContenderListItem = ({
                   shadowColor: 'black',
                   shadowOpacity: 1,
                   shadowRadius: 5,
+                  color: isUnaccaloded ? 'rgba(255,255,255,0.5)' : COLORS.white,
                 }}
               >
                 {title}

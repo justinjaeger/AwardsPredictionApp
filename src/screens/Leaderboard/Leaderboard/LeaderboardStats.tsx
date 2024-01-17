@@ -1,5 +1,5 @@
-import React from 'react';
-import { TouchableHighlight, View } from 'react-native';
+import React, { useState } from 'react';
+import { TouchableHighlight, TouchableOpacity, View } from 'react-native';
 import COLORS from '../../../constants/colors';
 import { Body, SubHeader } from '../../../components/Text';
 import { formatDecimalAsPercentage } from '../../../util/formatPercentage';
@@ -29,6 +29,9 @@ const LeaderboardStats = ({
 }) => {
   const { isPad } = useDevice();
   const statsOnTwoRows = riskiness && !isPad;
+
+  const [showPointsInfo, setShowPointsInfo] = useState<boolean>(false);
+
   return (
     <TouchableHighlight
       style={{
@@ -82,10 +85,27 @@ const LeaderboardStats = ({
           >
             <Stat number={`${rank}/${numUsersPredicting}`} text="rank" />
             {riskiness ? (
-              <Stat
-                number={`${parseFloat(riskiness.toString()).toFixed(0)}pts`}
-                text={'points'}
-              />
+              <TouchableOpacity
+                onPress={() => setShowPointsInfo((prev) => !prev)}
+                style={{ alignItems: 'center', flex: 1 }}
+              >
+                {showPointsInfo ? (
+                  <Body style={{ padding: 10, textAlign: 'center' }}>
+                    {
+                      'Earned for accurate predix against the grain.\ne.g. if 10% of users called it, you get 90pts'
+                    }
+                  </Body>
+                ) : (
+                  <>
+                    {riskiness ? (
+                      <Stat
+                        number={`${parseFloat(riskiness.toString()).toFixed(0)}pts`}
+                        text={'points'}
+                      />
+                    ) : null}
+                  </>
+                )}
+              </TouchableOpacity>
             ) : null}
           </View>
         </View>
