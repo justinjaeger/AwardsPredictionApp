@@ -3,7 +3,7 @@ import React from 'react';
 import { StyleProp, useWindowDimensions, View, ViewStyle } from 'react-native';
 import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
-import { iCategory, iPrediction } from '../../types/api';
+import { iCategory, iPrediction, Phase } from '../../types/api';
 import { useTmdbDataStore } from '../../context/TmdbDataStore';
 import PosterFromTmdb from '../Images/PosterFromTmdb';
 import MoviePosterSkeleton from '../Skeletons/MoviePosterSkeleton';
@@ -19,6 +19,7 @@ const MovieGrid = ({
   noLine,
   style,
   showAccolades,
+  phase,
 }: {
   eventId: string;
   predictions: iPrediction[];
@@ -26,7 +27,9 @@ const MovieGrid = ({
   noLine?: boolean;
   totalWidth?: number;
   style?: StyleProp<ViewStyle>;
+  // needed for leaderboards:
   showAccolades?: boolean;
+  phase?: Phase;
 }) => {
   const { data: contenderIdsToPhase } = useQueryGetEventAccolades(eventId);
   const { getTmdbDataFromPrediction } = useTmdbDataStore();
@@ -55,6 +58,7 @@ const MovieGrid = ({
         // BUT ALSO it comes back here from event predictions
         const { movie, person } = getTmdbDataFromPrediction(prediction) || {};
         const accolade = contenderIdsToPhase && contenderIdsToPhase[contenderId];
+        const accoladeMatchesPhase = phase === accolade;
         return (
           <View
             key={contenderId}
@@ -90,8 +94,8 @@ const MovieGrid = ({
                   MOVIES_IN_ROW
                 }
                 ranking={i + 1}
-                accolade={showAccolades && accolade}
-                isUnaccoladed={showAccolades && !accolade}
+                accolade={showAccolades && accoladeMatchesPhase && accolade}
+                isUnaccoladed={showAccolades && (!accoladeMatchesPhase || !accolade)}
               />
             ) : (
               <MoviePosterSkeleton />

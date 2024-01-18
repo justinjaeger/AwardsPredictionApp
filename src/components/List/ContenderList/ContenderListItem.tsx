@@ -129,6 +129,9 @@ const ContenderListItem = ({
   const thumbnailContainerWidth = posterWidth * 1.5;
   const rightIconContainerWidth = iconRightProps ? posterHeight - 10 : 0;
 
+  const accoladeMatchesPhase = phase === accolade;
+  const accoladeToShow = accoladeMatchesPhase ? accolade : undefined;
+
   if (dataHasNotLoaded) {
     return (
       <View style={{ marginLeft: theme.windowMargin / 2 }}>
@@ -144,7 +147,7 @@ const ContenderListItem = ({
           ? COLORS.secondaryDark
           : highlighted
           ? hexToRgb(COLORS.secondaryLight, 0.15)
-          : accolade
+          : accoladeToShow
           ? 'rgba(255,255,255,0.03)'
           : isUnaccaloded
           ? 'rgba(0,0,0,0.5)'
@@ -188,7 +191,7 @@ const ContenderListItem = ({
           person={person}
           width={posterWidth}
           ranking={ranking}
-          accolade={accolade}
+          accolade={accoladeToShow}
           isUnaccoladed={isUnaccaloded}
         />
       </TouchableOpacity>

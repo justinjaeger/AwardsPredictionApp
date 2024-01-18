@@ -14,7 +14,6 @@ import { sortPredictions } from '../../../util/sortPredictions';
 import { useRouteParams } from '../../../hooks/useRouteParams';
 import { getCategoryIsHidden } from '../../../util/getCategoryIsHidden';
 import { getSlotsInPhase } from '../../../util/getSlotsInPhase';
-import { getPhaseFromYyyymmdd } from '../../../util/getPhaseFromYyyymmdd';
 import useQueryGetEventAccolades from '../../../hooks/queries/useQueryGetEventAccolades';
 
 // TODO: make this work for HISTORY, and not just leaderboards.
@@ -46,7 +45,7 @@ const CategoryListItem = ({
   isAuthProfile: boolean;
 }) => {
   // yyyymmdd is not necessarily a leaderboard. When it's history, we don't event want to display shortlist performance
-  const { eventId, event, yyyymmdd, isLeaderboard } = useRouteParams();
+  const { eventId, event, yyyymmdd, phase, isLeaderboard } = useRouteParams();
   const awardsBodyCategories = event?.categories;
 
   const maybeUndefinedCategoryData = awardsBodyCategories[category];
@@ -62,7 +61,6 @@ const CategoryListItem = ({
   if (!awardsBodyCategories) return null;
 
   // effectively, hides categories that are not shortlisted, when it's a shortlist leaderboard
-  const phase = isLeaderboard && yyyymmdd && getPhaseFromYyyymmdd(yyyymmdd, event);
   if (phase === Phase.SHORTLIST && (!isShortlisted || isHiddenBeforeShortlist))
     return null;
 
@@ -139,6 +137,7 @@ const CategoryListItem = ({
           predictions={truncatedPredictions}
           categoryInfo={awardsBodyCategories[category]}
           showAccolades={showAccolades}
+          phase={phase}
           noLine
         />
       </View>
