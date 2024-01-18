@@ -5,6 +5,7 @@ const COLORS = {
   primaryLightest: theme['grayscale-200'],
   primaryLight: theme['grayscale-800'],
   secondaryLight: '#F1BE46',
+  secondaryLightest: '#ffe4a6',
   secondary: '#c49933',
   secondaryMiddle: theme['color-gold-700'],
   secondaryDark: '#c48900',

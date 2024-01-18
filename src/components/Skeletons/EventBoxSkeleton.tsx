@@ -4,7 +4,7 @@ import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
 import useDevice from '../../util/device';
-import { EVENT_ITEM_HEIGHT } from '../../screens/Predictions/Event/EventList';
+import { EVENT_ITEM_HEIGHT } from '../EventItem';
 
 const EventBoxSkeleton = () => {
   const { isPad } = useDevice();

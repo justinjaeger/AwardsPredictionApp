@@ -3,10 +3,9 @@ import { Alert, TouchableOpacity } from 'react-native';
 import Snackbar from '../../components/Snackbar';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigation } from '@react-navigation/native';
-import { useTypedNavigation } from '../../util/hooks';
 import BackButton from '../../components/Buttons/BackButton';
-import { PredictionsParamList } from '../../navigation/types';
 import { BodyBold } from '../../components/Text';
+import { PredictionsNavigationProp } from '../../navigation/types';
 
 const useProfileHeader = (
   userId: string | undefined,
@@ -14,12 +13,10 @@ const useProfileHeader = (
   setIsLoading: (l: boolean) => void,
 ) => {
   const globalNavigation = useNavigation();
-  const navigation = useTypedNavigation<PredictionsParamList>();
+  const navigation = useNavigation<PredictionsNavigationProp>();
   const { userId: authUserId, signOutUser } = useAuth();
 
   const isAuthUser = userId && userId === authUserId;
-
-  console.log('userId', userId);
 
   const logOut = async () => {
     setIsLoading(true);
@@ -42,7 +39,7 @@ const useProfileHeader = (
       headerLeft:
         navigation.canGoBack() && (!isFirstProfile || !isAuthUser)
           ? () => <BackButton />
-          : null,
+          : () => <></>,
       // don't set logout header if someone else's profile
       headerRight:
         isAuthUser && !isLoading
@@ -69,7 +66,7 @@ const useProfileHeader = (
                 </BodyBold>
               </TouchableOpacity>
             )
-          : null,
+          : () => <></>,
     });
   }, [userId, isLoading, isAuthUser]);
 };

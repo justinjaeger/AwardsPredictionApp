@@ -5,19 +5,21 @@ import { useTmdbDataStore } from '../../context/TmdbDataStore';
 import { EventModel, WithId } from '../../types/api';
 import { useRouteParams } from '../useRouteParams';
 
-const useQueryGetCommunityPredictions = (propsEvent?: WithId<EventModel>) => {
+const useQueryGetCommunityPredictions = (params?: {
+  event?: WithId<EventModel>;
+  yyyymmdd?: number;
+}) => {
+  const { event: propsEvent, yyyymmdd } = params ?? {};
   const { storeTmdbDataFromPredictionSet } = useTmdbDataStore();
   const { event: contextEvent } = useRouteParams();
   const event = propsEvent ?? contextEvent;
   const eventId = event?._id;
 
-  const key = QueryKeys.COMMUNITY_PREDICTIONS + eventId;
-
   /**
    * Note: We can cache this data for an hour because it changes on an hour timer func anyway
    */
   const { data, isLoading, refetch } = useQuery({
-    queryKey: [key],
+    queryKey: [QueryKeys.COMMUNITY_PREDICTIONS, eventId, yyyymmdd],
     queryFn: async () => {
       if (!eventId) return null;
       // TODO: remove performance monitoring
@@ -26,6 +28,7 @@ const useQueryGetCommunityPredictions = (propsEvent?: WithId<EventModel>) => {
       const { data: predictionSet } = await MongoApi.getPredictionSet({
         userId: 'community',
         eventId,
+        yyyymmdd,
       });
 
       const endTime = performance.now();

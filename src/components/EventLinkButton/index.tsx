@@ -1,21 +1,19 @@
 import { StackActions, useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { TouchableHighlight } from 'react-native';
-import CustomIcon from '../../../components/CustomIcon';
-import COLORS from '../../../constants/colors';
-import theme from '../../../constants/theme';
-import { BodyBold } from '../../../components/Text';
-import { hexToRgb } from '../../../util/hexToRgb';
-import { useAuth } from '../../../context/AuthContext';
-import { useRouteParams } from '../../../hooks/useRouteParams';
-import { IPAD_PROFILE_IMAGE_SCALE } from '../../../components/ProfileImage';
-import useDevice from '../../../util/device';
+import CustomIcon from '../CustomIcon';
+import COLORS from '../../constants/colors';
+import theme from '../../constants/theme';
+import { BodyBold } from '../Text';
+import { hexToRgb } from '../../util/hexToRgb';
+import { useRouteParams } from '../../hooks/useRouteParams';
+import { IPAD_PROFILE_IMAGE_SCALE } from '../ProfileImage';
+import useDevice from '../../util/device';
+import { PredictionsNavigationProp } from '../../navigation/types';
 
-const EventLink = () => {
-  const { userId: authUserId } = useAuth();
-  const { userId, userImage } = useRouteParams();
-  const isAuthUser = userId === authUserId;
-  const navigation = useNavigation();
+const EventLinkButton = () => {
+  const { userInfo } = useRouteParams();
+  const navigation = useNavigation<PredictionsNavigationProp>();
   const { event } = useRouteParams();
   const { isPad } = useDevice();
 
@@ -24,13 +22,10 @@ const EventLink = () => {
   return (
     <TouchableHighlight
       onPress={() => {
-        const params = { userId, userImage, eventId: event._id };
         // overrides category and goes to event
-        if (isAuthUser) {
-          navigation.dispatch(StackActions.replace('Event', params));
-        } else {
-          navigation.dispatch(StackActions.replace('EventFromProfile', params));
-        }
+        navigation.dispatch(
+          StackActions.replace('Event', { userInfo, eventId: event._id }),
+        );
       }}
       style={{
         position: 'absolute',
@@ -58,4 +53,4 @@ const EventLink = () => {
   );
 };
 
-export default EventLink;
+export default EventLinkButton;

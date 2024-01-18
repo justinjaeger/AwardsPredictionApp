@@ -8,8 +8,8 @@ import { FAB } from '../../../components/Buttons/FAB';
 import { CategoryType } from '../../../types/api';
 import SearchInput from '../../../components/Inputs/SearchInput';
 import MovieListSelectable from '../../../components/MovieList/MovieListSelectable';
-import { useNavigateAwayEffect, useTypedNavigation } from '../../../util/hooks';
-import { PredictionsParamList } from '../../../navigation/types';
+import { useNavigateAwayEffect } from '../../../util/hooks';
+import { PredictionsNavigationProp } from '../../../navigation/types';
 import { getBiggestPhaseThatHasHappened } from '../../../util/getBiggestPhaseThatHasHappened';
 import { usePredictions } from '../AddPredictions.tsx/usePredictions';
 import BackButton from '../../../components/Buttons/BackButton';
@@ -20,11 +20,12 @@ import useContenderSearch from './useContenderSearch';
 import { useRouteParams } from '../../../hooks/useRouteParams';
 import useKeyboard from '../../../hooks/useKeyboard';
 import { getCategoryIsHidden } from '../../../util/getCategoryIsHidden';
+import { useNavigation } from '@react-navigation/native';
 import { getTwoLineHeaderTitle } from '../../../constants';
 import { eventToString } from '../../../util/stringConversions';
 
 const AddPredictions = () => {
-  const navigation = useTypedNavigation<PredictionsParamList>();
+  const navigation = useNavigation<PredictionsNavigationProp>();
   const { event: _event, categoryData, category: _category } = useRouteParams();
   const event = _event!;
   const category = _category!;

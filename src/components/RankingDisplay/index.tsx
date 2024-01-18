@@ -1,22 +1,29 @@
 import React from 'react';
-import { View, useWindowDimensions } from 'react-native';
+import { StyleProp, View, ViewStyle, useWindowDimensions } from 'react-native';
 import COLORS from '../../constants/colors';
 import useDevice from '../../util/device';
 import { SmallHeader, SubHeader } from '../Text';
 import { getPosterDimensionsByWidth } from '../../constants/posterDimensions';
 import theme from '../../constants/theme';
+import { Phase } from '../../types/api';
+import { getAccoladeColor } from '../../util/getAccoladeColor';
 
 const RankingDisplay = ({
   ranking,
-  borderColor,
+  accolade,
+  isUnaccoladed,
+  style,
 }: {
-  ranking: number;
-  borderColor?: string;
+  ranking: string | number;
+  accolade?: Phase;
+  isUnaccoladed?: boolean;
+  style?: StyleProp<ViewStyle>;
 }) => {
   const { width } = useWindowDimensions();
   const { isPad } = useDevice();
   const Text = isPad ? SmallHeader : SubHeader;
 
+  const accoladeColor: string = getAccoladeColor(accolade);
   const posterDimensions = getPosterDimensionsByWidth(width - theme.posterMargin * 2);
 
   const sizeSpecificStyles =
@@ -33,20 +40,31 @@ const RankingDisplay = ({
 
   return (
     <View
-      style={{
-        position: 'absolute',
-        zIndex: 1,
-        backgroundColor: 'rgba(0,0,0,0.7)',
-        borderBottomRightRadius: 5,
-        borderTopLeftRadius: 5,
-        borderColor: borderColor ?? COLORS.secondary,
-        padding: isPad ? 5 : 0,
-        ...sizeSpecificStyles,
-      }}
+      style={[
+        {
+          position: 'absolute',
+          zIndex: 1,
+          backgroundColor: accolade
+            ? accoladeColor
+            : isUnaccoladed
+            ? 'rgba(0,0,0,0.5)'
+            : 'rgba(0,0,0,0.7)',
+          borderBottomRightRadius: 5,
+          borderTopLeftRadius: 5,
+          borderColor: accolade
+            ? accoladeColor
+            : isUnaccoladed
+            ? undefined
+            : COLORS.secondary,
+          padding: isPad ? 5 : 0,
+          ...sizeSpecificStyles,
+        },
+        style,
+      ]}
     >
       <Text
         style={{
-          color: COLORS.white,
+          color: isUnaccoladed ? 'rgba(255,255,255,0.5)' : COLORS.white,
           fontWeight: '600',
         }}
       >

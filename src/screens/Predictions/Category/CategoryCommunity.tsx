@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import MovieListCommunity from '../../../components/MovieList/MovieListCommunity';
 import { BodyBold } from '../../../components/Text';
 import { formatLastUpdated } from '../../../util/formatDateTime';
-import EventLink from './EventLink';
+import EventLink from '../../../components/EventLinkButton';
 import useQueryGetCommunityPredictions from '../../../hooks/queries/useQueryGetCommunityPredictions';
 import CategorySkeleton from '../../../components/Skeletons/CategorySkeleton';
 import { sortPredictions } from '../../../util/sortPredictions';
@@ -13,10 +13,12 @@ import { useRouteParams } from '../../../hooks/useRouteParams';
 
 // Note: We ALSO use this for non-auth-user user profiles
 const CategoryCommunity = ({ showEventLink }: { showEventLink?: boolean }) => {
-  const { category: _category } = useRouteParams();
+  const { category: _category, yyyymmdd } = useRouteParams();
   const category = _category!;
 
-  const { data: predictionSet, isLoading } = useQueryGetCommunityPredictions();
+  const { data: predictionSet, isLoading } = useQueryGetCommunityPredictions({
+    yyyymmdd,
+  });
 
   const { createdAt } = predictionSet?.categories[category] || {};
   const predictions = sortPredictions(
@@ -50,7 +52,7 @@ const CategoryCommunity = ({ showEventLink }: { showEventLink?: boolean }) => {
       </View>
       <BottomFABContainer>
         {showEventLink ? <EventLink /> : null}
-        <ScreenshotMode predictions={predictions.slice(0, 20)} />
+        <ScreenshotMode predictions={predictions.slice(0, 20)} isCommunity={true} />
       </BottomFABContainer>
     </>
   );

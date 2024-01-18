@@ -7,6 +7,8 @@ import { getTmdbImageUrl } from '../../constants';
 import { Label } from '../Text';
 import theme from '../../constants/theme';
 import RankingDisplay from '../RankingDisplay';
+import { Phase } from '../../types/api';
+import { getAccoladeColor } from '../../util/getAccoladeColor';
 
 type iPosterProps = {
   title: string;
@@ -15,20 +17,37 @@ type iPosterProps = {
   ranking?: number;
   onPress?: () => void;
   styles?: StyleProp<ImageStyle>;
+  accolade?: Phase;
+  isUnaccoladed?: boolean;
 };
 
-const Poster = ({ path, title, width, ranking, onPress, styles }: iPosterProps) => {
+const BORDER_RADIUS = 5;
+
+const Poster = ({
+  path,
+  title,
+  width,
+  ranking,
+  onPress,
+  styles,
+  accolade,
+  isUnaccoladed,
+}: iPosterProps) => {
   const [isPressed, setIsPressed] = useState<boolean>(false);
 
   const posterDimensions = getPosterDimensionsByWidth(width - theme.posterMargin * 2);
 
+  const accoladeColor: string = getAccoladeColor(accolade);
+
+  const borderWidth = accolade ? posterDimensions.width / 15 : 1;
+
   const style: StyleProp<ImageStyle> = {
-    ...(styles as Record<string, unknown>),
     ...posterDimensions,
-    borderWidth: 1,
-    borderColor: COLORS.secondary,
-    borderRadius: 5,
+    borderWidth,
+    borderColor: accolade ? accoladeColor : isUnaccoladed ? undefined : COLORS.secondary,
+    borderRadius: BORDER_RADIUS,
     opacity: isPressed ? 0.8 : 1,
+    ...(styles as Record<string, unknown>),
   };
 
   return (
@@ -40,21 +59,41 @@ const Poster = ({ path, title, width, ranking, onPress, styles }: iPosterProps) 
       disabled={!onPress}
     >
       <>
-        {ranking !== undefined ? <RankingDisplay ranking={ranking} /> : null}
-        {path ? (
-          <FastImage
-            style={style as Record<string, unknown>}
-            source={{
-              uri: getTmdbImageUrl(posterDimensions.width) + '/' + path,
-            }}
+        {ranking !== undefined ? (
+          <RankingDisplay
+            ranking={ranking}
+            accolade={accolade}
+            isUnaccoladed={isUnaccoladed}
           />
+        ) : null}
+        {path ? (
+          <View style={{ position: 'relative' }}>
+            {isUnaccoladed ? (
+              <View
+                style={{
+                  position: 'absolute',
+                  width: posterDimensions.width,
+                  height: posterDimensions.height,
+                  backgroundColor: 'rgba(0,0,0,0.5)',
+                  borderRadius: BORDER_RADIUS,
+                  zIndex: 2,
+                }}
+              />
+            ) : null}
+            <FastImage
+              style={style as Record<string, unknown>}
+              source={{
+                uri: getTmdbImageUrl(posterDimensions.width) + '/' + path,
+              }}
+            />
+          </View>
         ) : (
           <View
             style={{
               ...(style as Record<string, unknown>),
               justifyContent: 'center',
               alignItems: 'center',
-              backgroundColor: 'rgba(0,0,0,0.3)',
+              backgroundColor: isUnaccoladed ? 'rgba(0,0,0,0.3)' : undefined,
               padding: theme.posterMargin,
             }}
           >

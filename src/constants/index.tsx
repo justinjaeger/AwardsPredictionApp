@@ -1,6 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { SubHeader } from '../components/Text';
+import { Phase, iLeaderboard } from '../types/api';
 import ProfileImage from '../components/ProfileImage';
 
 /**
@@ -65,4 +66,22 @@ export const getHeaderTitleWithProfile = (
       <SubHeader>{title}</SubHeader>
     </View>
   );
+};
+
+export const getLeaderboardTitle = (leaderboard: iLeaderboard) => {
+  const { phase, noShorts } = leaderboard;
+  const phaseString = (() => {
+    switch (phase) {
+      case Phase.SHORTLIST:
+        return 'Shortlist';
+      case Phase.NOMINATION:
+        return 'Nomination';
+      case Phase.WINNER:
+        return 'Winner';
+      default:
+        return '';
+    }
+  })();
+  const noShortsString = noShorts ? '- No Shorts' : '';
+  return phaseString + noShortsString;
 };

@@ -6,6 +6,7 @@ export enum QueryKeys {
   COMMUNITY_PREDICTIONS = 'community-predictions-by-event',
   USER_PREDICTIONS = 'user-predictions-by-event',
   FOLLOWING_USERS_NESTED_FIELDS = 'following-users-nested-fields',
+  EVENT_ACCOLADES = 'event-accolades',
 }
 
 export enum AsyncStorageKeys {

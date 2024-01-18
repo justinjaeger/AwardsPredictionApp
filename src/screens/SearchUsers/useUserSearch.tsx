@@ -17,6 +17,7 @@ const useUserSearch = () => {
 
   const fetchPage = async (s: string, pn: number) => {
     setLastSearchInput(s);
+    setPageNumber((prev) => prev + 1);
     const { data } = await MongoApi.searchUsers({ query: s, pageNumber: pn });
     // sort by whether user follows them or not
     const newUsers = (data ?? []).sort((a) =>
@@ -25,7 +26,6 @@ const useUserSearch = () => {
     if (newUsers.length < PAGINATED_LIMIT) {
       setAllUsersAreFetched(true);
     }
-    setPageNumber((prev) => prev + 1);
     setSearchResults((prev) => [...(prev ?? []), ...newUsers]);
   };
 

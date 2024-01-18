@@ -1,4 +1,4 @@
-import { CategoryName, CategoryType } from '../types/api';
+import { CategoryName, CategoryType, Phase } from '../types/api';
 
 export type iCategoryData = {
   name: string;
@@ -11,6 +11,13 @@ export const CATEGORY_TYPE_TO_STRING: { [key in CategoryType]: string } = {
   [CategoryType.FILM]: 'Film',
   [CategoryType.PERFORMANCE]: 'Performance',
   [CategoryType.SONG]: 'Song',
+};
+
+export const PHASE_TO_STRING: { [key in Phase]: string } = {
+  [Phase.WINNER]: 'Winner',
+  [Phase.NOMINATION]: 'Nomination',
+  [Phase.SHORTLIST]: 'Shortlist',
+  [Phase.CLOSED]: 'Closed',
 };
 
 export const ORDERED_CATEGORIES = [

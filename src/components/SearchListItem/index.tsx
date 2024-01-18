@@ -13,8 +13,8 @@ import { CategoryType } from '../../types/api';
 import { useNavigation } from '@react-navigation/native';
 import { MainScreenNavigationProp } from '../../navigation/types';
 import { truncateText } from '../../util/truncateText';
-import { EVENT_ITEM_HEIGHT } from '../../screens/Predictions/Event/EventList';
 import useDevice from '../../util/device';
+import { EVENT_ITEM_HEIGHT } from '../EventItem';
 
 export type iSearchListItemProps = {
   isSelected: boolean;

@@ -5,15 +5,10 @@ import MovieListDraggable from '../../../components/MovieList/MovieListDraggable
 import SignedOutState from '../../../components/SignedOutState';
 import { BodyBold } from '../../../components/Text';
 import useMutationUpdatePredictions from '../../../hooks/mutations/useMutationUpdatePredictions';
-import { PredictionsParamList } from '../../../navigation/types';
-import {
-  useNavigateAwayEffect,
-  useNavigateToEffect,
-  useTypedNavigation,
-} from '../../../util/hooks';
+import { useNavigateAwayEffect, useNavigateToEffect } from '../../../util/hooks';
 import { formatLastUpdated } from '../../../util/formatDateTime';
 import { useAuth } from '../../../context/AuthContext';
-import EventLink from './EventLink';
+import EventLink from '../../../components/EventLinkButton';
 import { iPrediction } from '../../../types/api';
 import useQueryGetUserPredictions from '../../../hooks/queries/useQueryGetUserPredictions';
 import CategorySkeleton from '../../../components/Skeletons/CategorySkeleton';
@@ -24,6 +19,8 @@ import { useFollowingBar } from '../../../context/FollowingBarContext';
 import BottomFABContainer from '../../../components/BottomFABContainer';
 import FloatingButton from '../../../components/Buttons/FloatingButton';
 import { useRouteParams } from '../../../hooks/useRouteParams';
+import { useNavigation } from '@react-navigation/native';
+import { PredictionsNavigationProp } from '../../../navigation/types';
 
 // used in both FromProfile and from event
 const CategoryPersonal = ({
@@ -35,15 +32,18 @@ const CategoryPersonal = ({
 }) => {
   const { setHideAbsolutely } = useFollowingBar();
 
-  const { category: _category, event: _event, userId } = useRouteParams();
+  const { category: _category, event: _event, userInfo, yyyymmdd } = useRouteParams();
   const category = _category!;
   const event = _event!;
 
-  const navigation = useTypedNavigation<PredictionsParamList>();
+  const navigation = useNavigation<PredictionsNavigationProp>();
   const { userId: authUserId } = useAuth();
-  const isAuthProfile = userId === authUserId;
+  const isAuthProfile = userInfo?.userId === authUserId;
 
-  const { data: predictionData, isLoading } = useQueryGetUserPredictions(userId);
+  const { data: predictionData, isLoading } = useQueryGetUserPredictions({
+    userId: userInfo?.userId,
+    yyyymmdd,
+  });
   const { createdAt } = predictionData?.categories[category] ?? {};
   const initialPredictions = sortPredictions(
     predictionData?.categories[category]?.predictions ?? [],
@@ -58,7 +58,7 @@ const CategoryPersonal = ({
 
   useEffect(() => {
     setPredictions(initialPredictions);
-  }, [userId, predictionData !== undefined]);
+  }, [userInfo?.userId, predictionData !== undefined]);
 
   useNavigateAwayEffect(() => {
     onBack && onBack();
@@ -83,7 +83,7 @@ const CategoryPersonal = ({
   );
 
   const onSaveContenders = async (ps?: iPrediction[]) => {
-    if (!userId || !isAuthProfile) return;
+    if (!userInfo?.userId || !isAuthProfile) return;
     const predictionsToSave = ps || predictions;
     const predictionsHaveNotChanged = _.isEqual(
       predictionsToSave.map((p) => p.contenderId),
@@ -117,7 +117,7 @@ const CategoryPersonal = ({
   // get last updated time
   const lastUpdatedString = formatLastUpdated(new Date(createdAt || ''));
 
-  if (!userId) {
+  if (!userInfo?.userId) {
     return <SignedOutState />;
   }
 
@@ -125,7 +125,7 @@ const CategoryPersonal = ({
     return <CategorySkeleton />;
   }
 
-  console.log('predictions', predictions.length);
+  const isEditable = isAuthProfile && !yyyymmdd;
 
   return (
     <>
@@ -162,10 +162,10 @@ const CategoryPersonal = ({
       </View>
       <BottomFABContainer>
         {showEventLink ? <EventLink /> : null}
-        {isAuthProfile ? <FloatingButton onPress={onPressAdd} icon={'plus'} /> : null}
-        <ScreenshotMode predictions={predictions} />
+        {isEditable ? <FloatingButton onPress={onPressAdd} icon={'plus'} /> : null}
+        <ScreenshotMode predictions={predictions} isCommunity={false} />
       </BottomFABContainer>
-      {isAuthProfile && showSave ? (
+      {isEditable && showSave ? (
         <FAB
           iconName="save-outline"
           text="Save"

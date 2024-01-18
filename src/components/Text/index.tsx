@@ -6,6 +6,7 @@ import useDevice from '../../util/device';
 
 interface iTextProps {
   children: string;
+  numberOfLines?: number;
   style?: StyleProp<TextStyle>;
 }
 
@@ -57,6 +58,7 @@ export const SubHeader = (props: iTextProps) => {
         },
         props.style,
       ]}
+      numberOfLines={props.numberOfLines}
     >
       {props.children}
     </Text>

@@ -13,11 +13,13 @@ export const usePredictions = () => {
   const {
     params: { initialPredictions, onFinish },
   } = useRoute<RouteProp<PredictionsParamList, 'AddPredictions'>>();
-  const { category: _category } = useRouteParams();
+  const { category: _category, yyyymmdd } = useRouteParams();
   const category = _category!;
 
   // We use the SAME KEY as the previous screen, because it avoids a re-fetch of the data which was available previously
-  const { data: communityPredictionData } = useQueryGetCommunityPredictions();
+  const { data: communityPredictionData } = useQueryGetCommunityPredictions({
+    yyyymmdd,
+  });
   const communityPredictions = sortPredictions(
     communityPredictionData?.categories[category]?.predictions ?? [],
   );

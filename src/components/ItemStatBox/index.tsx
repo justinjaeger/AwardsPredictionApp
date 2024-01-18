@@ -24,6 +24,7 @@ import {
 import { PredictionsNavigationProp } from '../../navigation/types';
 import { useAuth } from '../../context/AuthContext';
 import Stat from './Stat';
+import { formatPercentage } from '../../util/formatPercentage';
 
 const NumPredictingItem = ({
   category,
@@ -135,13 +136,19 @@ const NumPredictingItem = ({
           paddingTop: 30,
         }}
       >
-        <Stat percentage={win / totalNumPredictingCategory} text="predict win" />
+        <Stat
+          number={`${formatPercentage(win / totalNumPredictingCategory, true)}`}
+          text="predict win"
+        />
         {[undefined, Phase.SHORTLIST].includes(biggestPhaseThatHasHappened) ? (
           <>
-            <Stat percentage={nom / totalNumPredictingCategory} text="predict nom" />
+            <Stat
+              number={`${formatPercentage(nom / totalNumPredictingCategory, true)}`}
+              text="predict nom"
+            />
             {biggestPhaseThatHasHappened === undefined ? (
               <Stat
-                percentage={listed / totalNumPredictingCategory}
+                number={`${formatPercentage(listed / totalNumPredictingCategory, true)}`}
                 text={`top ${(slots ?? 5) + SLOTS_TO_DISPLAY_EXTRA}`}
               />
             ) : null}
