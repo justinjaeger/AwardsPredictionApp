@@ -14,8 +14,11 @@ const useUserSearch = () => {
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [allUsersAreFetched, setAllUsersAreFetched] = useState<boolean>(false);
   const [lastSearchInput, setLastSearchInput] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const fetchPage = async (s: string, pn: number) => {
+    if (isLoading) return;
+    setIsLoading(true);
     setLastSearchInput(s);
     setPageNumber((prev) => prev + 1);
     const { data } = await MongoApi.searchUsers({ query: s, pageNumber: pn });
@@ -46,7 +49,7 @@ const useUserSearch = () => {
     setLastSearchInput('');
   };
 
-  return { searchResults, allUsersAreFetched, handleSearch, fetchMore, reset };
+  return { searchResults, allUsersAreFetched, handleSearch, fetchMore, reset, isLoading };
 };
 
 export default useUserSearch;
