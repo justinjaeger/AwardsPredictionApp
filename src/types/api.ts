@@ -145,6 +145,7 @@ export type iLeaderboard = {
   communityNumCorrect: number;
   percentageAccuracyDistribution: { [percentageAccuracy: number]: number };
   totalPossibleSlots: number;
+  isHidden?: boolean;
 };
 
 // overall aggregate data on event leaderboards

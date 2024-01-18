@@ -4,19 +4,22 @@ import { PredictionsNavigationProp } from '../../../navigation/types';
 import { useGetEventsWithLeaderboard } from '../../../hooks/useGetEventsWithLeaderboard';
 import { FlatList } from 'react-native';
 import EventItem from '../../../components/EventItem';
-import { EventModel, WithId, iLeaderboard } from '../../../types/api';
+import { EventModel, UserRole, WithId, iLeaderboard } from '../../../types/api';
 import { AWARDS_BODY_TO_PLURAL_STRING } from '../../../constants/awardsBodies';
 import { getLeaderboardTitle } from '../../../constants';
+import { useAuth } from '../../../context/AuthContext';
 
 const LeaderboardList = () => {
   const navigation = useNavigation<PredictionsNavigationProp>();
   const events = useGetEventsWithLeaderboard();
+  const { userRole: authUserRole } = useAuth();
 
   const leaderboards = events.reduce(
     (acc: (WithId<EventModel> & iLeaderboard)[], event) => {
       if (!event.leaderboards) return acc;
       for (const leaderboard of Object.values(event.leaderboards)) {
         const a = { ...event, ...leaderboard };
+        if (leaderboard.isHidden && authUserRole !== UserRole.ADMIN) continue;
         acc.push(a);
       }
       return acc;
