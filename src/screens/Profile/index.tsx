@@ -24,10 +24,11 @@ import LeaderboardListItem from '../../components/LeaderboardListItem';
 import { AWARDS_BODY_TO_PLURAL_STRING } from '../../constants/awardsBodies';
 import { PHASE_TO_STRING } from '../../constants/categories';
 import CustomIcon from '../../components/CustomIcon';
+import { UserRole, iLeaderboard, iLeaderboardRanking } from '../../types/api';
 
 const Profile = () => {
   const { userInfo: routeUserInfo } = useRouteParams();
-  const { userId: authUserId } = useAuth();
+  const { userId: authUserId, userRole: authUserRole } = useAuth();
   const userId = routeUserInfo?.userId || authUserId;
 
   const navigation = useNavigation<PredictionsNavigationProp>();
@@ -58,7 +59,30 @@ const Profile = () => {
 
   const userInfo = getUserInfo(user); // this SEEMS redundant since from params, but if we're the auth user, we actually won't have this
 
-  const leaderboards = Object.values(user?.leaderboardRankings || {});
+  const eventLeaderboards = events.reduce((acc: iLeaderboard[], event) => {
+    if (!event.leaderboards) return acc;
+    for (const leaderboard of Object.values(event.leaderboards)) {
+      const a = { ...event, ...leaderboard };
+      if (leaderboard.isHidden && authUserRole !== UserRole.ADMIN) continue;
+      acc.push(a);
+    }
+    return acc;
+  }, []);
+
+  // TODO: This is similar to what's in LeaderboardList. Maybe refactor?
+  const leaderboards: iLeaderboardRanking[] = Object.values(
+    user?.leaderboardRankings || {},
+  ).reduce((acc, phaseToLbRanking) => {
+    Object.values(phaseToLbRanking).forEach((lbRanking) => {
+      // filter out hidden events
+      const lb = eventLeaderboards.find(
+        (e) => e.phase === lbRanking.phase && e.noShorts === lbRanking.noShorts,
+      );
+      if (lb.isHidden && authUserRole !== UserRole.ADMIN) return acc;
+      acc.push(lbRanking);
+    });
+    return acc;
+  }, []);
 
   return (
     <BackgroundWrapper>
@@ -237,50 +261,48 @@ const Profile = () => {
                 >
                   {'Leaderboards'}
                 </HeaderLight>
-                {leaderboards.map((phaseToLbRanking) =>
-                  Object.values(phaseToLbRanking).map((lbRanking) => {
-                    const event = events.find((e) => e._id === lbRanking.eventId);
-                    return (
-                      <>
-                        <TouchableHighlight
-                          onPress={() => {
-                            navigation.dispatch(
-                              StackActions.push('Leaderboard', {
-                                eventId: event._id,
-                                phase: lbRanking.phase,
-                              }),
-                            );
-                          }}
-                          style={{
-                            padding: 10,
-                            backgroundColor: 'rgba(255,255,255,0.2)',
-                            justifyContent: 'space-between',
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                          }}
-                          underlayColor={COLORS.secondaryDark}
-                        >
-                          <>
-                            <SubHeader>
-                              {`${AWARDS_BODY_TO_PLURAL_STRING[event.awardsBody]} ${
-                                event.year
-                              } - ${PHASE_TO_STRING[lbRanking.phase]}`}
-                            </SubHeader>
-                            <CustomIcon
-                              name="chevron-right"
-                              size={24}
-                              color={COLORS.white}
-                            />
-                          </>
-                        </TouchableHighlight>
-                        <LeaderboardListItem
-                          leaderboardRanking={{ userId: user._id, ...user, ...lbRanking }}
-                          style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
-                        />
-                      </>
-                    );
-                  }),
-                )}
+                {leaderboards.map((lbRanking) => {
+                  const event = events.find((e) => e._id === lbRanking.eventId);
+                  return (
+                    <>
+                      <TouchableHighlight
+                        onPress={() => {
+                          navigation.dispatch(
+                            StackActions.push('Leaderboard', {
+                              eventId: event._id,
+                              phase: lbRanking.phase,
+                            }),
+                          );
+                        }}
+                        style={{
+                          padding: 10,
+                          backgroundColor: 'rgba(255,255,255,0.2)',
+                          justifyContent: 'space-between',
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                        }}
+                        underlayColor={COLORS.secondaryDark}
+                      >
+                        <>
+                          <SubHeader>
+                            {`${AWARDS_BODY_TO_PLURAL_STRING[event.awardsBody]} ${
+                              event.year
+                            } - ${PHASE_TO_STRING[lbRanking.phase]}`}
+                          </SubHeader>
+                          <CustomIcon
+                            name="chevron-right"
+                            size={24}
+                            color={COLORS.white}
+                          />
+                        </>
+                      </TouchableHighlight>
+                      <LeaderboardListItem
+                        leaderboardRanking={{ userId: user._id, ...user, ...lbRanking }}
+                        style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
+                      />
+                    </>
+                  );
+                })}
               </>
             ) : null}
           </View>
