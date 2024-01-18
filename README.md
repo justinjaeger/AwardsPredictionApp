@@ -9,7 +9,7 @@
 
 # How to release:
 * Make sure ENV is pointing to production!!
-* AND run yarn reset-env after changing it so the env cache is clear
+* AND run `yarn reset-env` after changing it so the env cache is clear
 * To be sure, can also just shut down local dev server so it's obvious
 ## Versioning (iOS+Android)
 * This is for forcing updates:
