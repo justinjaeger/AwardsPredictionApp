@@ -19,6 +19,7 @@ const Category = () => {
   const showEventLink = params?.showEventLink || false;
   const { userId: authUserId } = useAuth();
   const isAuthUser = params?.userInfo?.userId === authUserId;
+  console.log('params?.userInfo', params?.userInfo);
 
   const { userInfo, category, event, phase, isLeaderboard } = useRouteParams();
   const { userName, userImage } = userInfo ?? {};

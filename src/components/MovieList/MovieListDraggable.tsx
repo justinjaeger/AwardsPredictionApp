@@ -110,7 +110,7 @@ const MovieListDraggable = ({
       contenderIdToRiskiness[contenderId] = riskiness;
     });
   }
-  const totalRiskiness = Object.values(contenderIdToRiskiness).reduce((a, b) => a + b);
+  const totalRiskiness = Object.values(contenderIdToRiskiness).reduce((a, b) => a + b, 0);
 
   const isEditable = isAuthProfile && !yyyymmdd;
 
@@ -137,9 +137,11 @@ const MovieListDraggable = ({
             }}
             onPress={() => setShowPointsHelp((prev) => !prev)}
           >
-            <SmallHeader style={{ marginRight: 2 }}>{`${parseFloat(
-              totalRiskiness.toString(),
-            ).toFixed(2)}pts`}</SmallHeader>
+            {isLeaderboard ? (
+              <SmallHeader style={{ marginRight: 2 }}>{`${parseFloat(
+                totalRiskiness.toString(),
+              ).toFixed(2)}pts`}</SmallHeader>
+            ) : null}
             {showPointsHelp ? (
               <Body style={{ color: COLORS.gray, paddingBottom: 10, textAlign: 'right' }}>
                 {

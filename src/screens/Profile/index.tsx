@@ -20,11 +20,15 @@ import Snackbar from '../../components/Snackbar';
 import { useRouteParams } from '../../hooks/useRouteParams';
 import SignedOutState from '../../components/SignedOutState';
 import { getUserInfo } from '../../util/getUserInfo';
+import LeaderboardListItem from '../../components/LeaderboardListItem';
+import { AWARDS_BODY_TO_PLURAL_STRING } from '../../constants/awardsBodies';
+import { PHASE_TO_STRING } from '../../constants/categories';
+import CustomIcon from '../../components/CustomIcon';
 
 const Profile = () => {
-  const { userInfo } = useRouteParams();
+  const { userInfo: routeUserInfo } = useRouteParams();
   const { userId: authUserId } = useAuth();
-  const userId = userInfo?.userId || authUserId;
+  const userId = routeUserInfo?.userId || authUserId;
 
   const navigation = useNavigation<PredictionsNavigationProp>();
 
@@ -51,6 +55,10 @@ const Profile = () => {
   }, [user?.username, user?.name]);
 
   const onPressProfileInfo = () => isAuthUser && navigation.navigate('UpdateProfileInfo');
+
+  const userInfo = getUserInfo(user); // this SEEMS redundant since from params, but if we're the auth user, we actually won't have this
+
+  const leaderboards = Object.values(user?.leaderboardRankings || {});
 
   return (
     <BackgroundWrapper>
@@ -215,6 +223,64 @@ const Profile = () => {
                   {(isAuthUser ? 'My' : 'All') + ' Predictions'}
                 </HeaderLight>
                 <EventList user={user} events={userEvents} isProfile={true} />
+              </>
+            ) : null}
+            {leaderboards.length ? (
+              <>
+                <HeaderLight
+                  style={{
+                    alignSelf: 'flex-start',
+                    marginTop: 20,
+                    marginLeft: theme.windowMargin,
+                    marginBottom: 10,
+                  }}
+                >
+                  {'Leaderboards'}
+                </HeaderLight>
+                {leaderboards.map((phaseToLbRanking) =>
+                  Object.values(phaseToLbRanking).map((lbRanking) => {
+                    const event = events.find((e) => e._id === lbRanking.eventId);
+                    return (
+                      <>
+                        <TouchableHighlight
+                          onPress={() => {
+                            navigation.dispatch(
+                              StackActions.push('Leaderboard', {
+                                eventId: event._id,
+                                phase: lbRanking.phase,
+                              }),
+                            );
+                          }}
+                          style={{
+                            padding: 10,
+                            backgroundColor: 'rgba(255,255,255,0.2)',
+                            justifyContent: 'space-between',
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                          }}
+                          underlayColor={COLORS.secondaryDark}
+                        >
+                          <>
+                            <SubHeader>
+                              {`${AWARDS_BODY_TO_PLURAL_STRING[event.awardsBody]} ${
+                                event.year
+                              } - ${PHASE_TO_STRING[lbRanking.phase]}`}
+                            </SubHeader>
+                            <CustomIcon
+                              name="chevron-right"
+                              size={24}
+                              color={COLORS.white}
+                            />
+                          </>
+                        </TouchableHighlight>
+                        <LeaderboardListItem
+                          leaderboardRanking={{ userId: user._id, ...user, ...lbRanking }}
+                          style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
+                        />
+                      </>
+                    );
+                  }),
+                )}
               </>
             ) : null}
           </View>
