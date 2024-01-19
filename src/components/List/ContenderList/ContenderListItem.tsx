@@ -159,6 +159,8 @@ const ContenderListItem = ({
         paddingBottom: 3,
         paddingTop: 3,
         height: posterHeight,
+        borderBottomColor: 'rgba(0,0,0,1)',
+        borderBottomWidth: accoladeToShow ? 1 : 0,
       }}
     >
       <TouchableOpacity

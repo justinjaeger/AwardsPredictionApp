@@ -5,8 +5,6 @@ export const getSlotsInPhase = (
   categoryData: iCategory,
 ) => {
   const { slots: nomSlots, shortlistSlots, winSlots } = categoryData;
-  console.log('categoryData', categoryData);
-  console.log('eventPhase', eventPhase);
 
   if (eventPhase === undefined) {
     return nomSlots ?? 5;
