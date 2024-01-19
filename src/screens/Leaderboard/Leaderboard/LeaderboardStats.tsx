@@ -92,7 +92,7 @@ const LeaderboardStats = ({
                 {showPointsInfo ? (
                   <Body style={{ padding: 10, textAlign: 'center' }}>
                     {
-                      'Earned for accurate predix against the grain.\ne.g. if 10% of users called it, you get 90pts'
+                      'Earned for accurate predix against the grain.\ne.g. if 90% of users did NOT predict, you get 90/100pts'
                     }
                   </Body>
                 ) : (

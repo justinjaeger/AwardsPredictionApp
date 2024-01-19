@@ -148,7 +148,7 @@ const MovieListDraggable = ({
             {showPointsHelp ? (
               <Body style={{ color: COLORS.gray, paddingBottom: 10, textAlign: 'right' }}>
                 {
-                  'earned for accurate predix against the grain\ne.g. if 10% of users called it, you get 90pts'
+                  'earned for accurate predix against the grain\ne.g. if 10% of users predicted, you get 90/100pts'
                 }
               </Body>
             ) : null}
