@@ -11,18 +11,13 @@ import { useRouteParams } from '../../../hooks/useRouteParams';
 import CategoryCommunity from './CategoryCommunity';
 import { usePersonalCommunityTab } from '../../../context/EventContext';
 import PredictionTabsNavigator from '../../../navigation/PredictionTabsNavigator';
-import { useAuth } from '../../../context/AuthContext';
 import { PHASE_TO_STRING } from '../../../constants/categories';
 
 const Category = () => {
   const { params } = useRoute<RouteProp<PredictionsParamList, 'Category'>>();
   const showEventLink = params?.showEventLink || false;
-  const { userId: authUserId } = useAuth();
-  const isAuthUser = params?.userInfo?.userId === authUserId;
-  console.log('params?.userInfo', params?.userInfo);
 
-  const { userInfo, category, event, phase, isLeaderboard } = useRouteParams();
-  const { userName, userImage } = userInfo ?? {};
+  const { category, event, phase, isLeaderboard } = useRouteParams();
 
   const navigation = useNavigation<PredictionsNavigationProp>();
 
@@ -59,8 +54,7 @@ const Category = () => {
   return (
     <PredictionTabsNavigator
       onChangeTab={setCurrentTab}
-      personalText={isAuthUser ? 'My Predictions' : userName}
-      personalImage={isAuthUser ? undefined : userImage}
+      userInfo={params?.userInfo}
       personal={<CategoryPersonal showEventLink={showEventLink} onBack={onBack} />}
       community={<CategoryCommunity showEventLink={showEventLink} />}
     />

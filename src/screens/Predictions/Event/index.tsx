@@ -17,7 +17,6 @@ const Event = () => {
 
   const { event, userInfo, yyyymmdd, phase, isLeaderboard } = useRouteParams();
   const { userId: authUserId } = useAuth();
-  const isAuthUser = userInfo?.userId === authUserId;
 
   const userId = userInfo?.userId || authUserId || '';
 
@@ -40,10 +39,7 @@ const Event = () => {
   return (
     <>
       <PredictionTabsNavigator
-        personalText={
-          isAuthUser ? 'My Predictions' : userInfo?.userName?.split(' ')?.[0] ?? ''
-        }
-        personalImage={isAuthUser ? undefined : userInfo?.userImage}
+        userInfo={userInfo}
         personal={
           <CategoryList
             tab={'personal'}

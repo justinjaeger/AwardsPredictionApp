@@ -4,6 +4,9 @@ import { SubHeader } from '../../components/Text';
 import COLORS from '../../constants/colors';
 import ProfileImage from '../../components/ProfileImage';
 import useDevice from '../../util/device';
+import { useNavigation } from '@react-navigation/native';
+import { PredictionsNavigationProp, iUserInfo } from '../types';
+import { useAuth } from '../../context/AuthContext';
 
 export const HIGHLIGHT_COLOR = COLORS.white;
 
@@ -11,14 +14,17 @@ const PredictionTab = ({
   text,
   selected,
   onPress,
-  image,
+  userInfo,
 }: {
   text: string;
   selected: boolean;
   onPress: () => void;
-  image?: string;
+  userInfo?: iUserInfo;
 }) => {
   const { isPad } = useDevice();
+  const { userId: authUserId } = useAuth();
+  const navigation = useNavigation<PredictionsNavigationProp>();
+
   return (
     <TouchableHighlight
       style={{
@@ -34,11 +40,14 @@ const PredictionTab = ({
       underlayColor={COLORS.secondary}
     >
       <View style={{ zIndex: 3, flexDirection: 'row', alignItems: 'center' }}>
-        {image ? (
+        {!authUserId && userInfo?.userImage ? (
           <ProfileImage
-            image={image}
+            image={userInfo.userImage}
             imageSize={isPad ? 60 : 40}
             style={{ marginRight: 10 }}
+            onPress={() => {
+              navigation.navigate('Profile', { userInfo });
+            }}
           />
         ) : null}
         <SubHeader

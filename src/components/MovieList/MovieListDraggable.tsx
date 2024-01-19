@@ -57,8 +57,6 @@ const MovieListDraggable = ({
   const { data: predictionSet } = useQueryGetCommunityPredictions({
     yyyymmdd,
   });
-  const { predictions: communityPredictions, totalUsersPredicting } =
-    predictionSet.categories[category as CategoryName];
 
   const [itemsToDelete, setItemsToDelete] = useState<iPrediction[]>([]);
   const [showPointsHelp, setShowPointsHelp] = useState<boolean>(false);
@@ -88,6 +86,11 @@ const MovieListDraggable = ({
       return newItems;
     });
   }, []);
+
+  if (!predictionSet) return null; // weird because it returns a blank screen but
+
+  const { predictions: communityPredictions, totalUsersPredicting } =
+    predictionSet.categories[category as CategoryName];
 
   // for leaderboard: get riskiness of all contenders that user earned points for
   const contenderIdToRiskiness: { [cId: string]: number } = {};

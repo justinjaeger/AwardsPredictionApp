@@ -5,7 +5,7 @@ import ProfileImage from '../ProfileImage';
 import { Body, SmallHeader, SubHeader } from '../Text';
 import { iLeaderboardRankingsWithUserData } from '../../services/api/requests/leaderboard';
 import { formatDecimalAsPercentage } from '../../util/formatPercentage';
-import { StackActions, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { PredictionsNavigationProp, iUserInfo } from '../../navigation/types';
 import { usePersonalCommunityTab } from '../../context/EventContext';
 
@@ -39,11 +39,6 @@ const LeaderboardListItem = ({
       phase: leaderboardRanking.phase,
       isLeaderboard: true,
     });
-  };
-
-  const navigateToProfile = () => {
-    if (!userInfo) return;
-    navigation.dispatch(StackActions.push('Profile', { userInfo }));
   };
 
   return (
@@ -88,7 +83,7 @@ const LeaderboardListItem = ({
           <ProfileImage
             image={leaderboardRanking.image}
             imageSize={LEADERBOARD_PROFILE_IMAGE_SIZE}
-            onPress={navigateToProfile}
+            onPress={navigateToPredictions}
           />
           <View
             style={{
