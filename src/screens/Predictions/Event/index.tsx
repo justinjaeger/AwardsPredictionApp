@@ -39,7 +39,6 @@ const Event = () => {
   return (
     <>
       <PredictionTabsNavigator
-        userInfo={userInfo}
         personal={
           <CategoryList
             tab={'personal'}

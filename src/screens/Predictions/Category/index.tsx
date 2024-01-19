@@ -54,7 +54,6 @@ const Category = () => {
   return (
     <PredictionTabsNavigator
       onChangeTab={setCurrentTab}
-      userInfo={params?.userInfo}
       personal={<CategoryPersonal showEventLink={showEventLink} onBack={onBack} />}
       community={<CategoryCommunity showEventLink={showEventLink} />}
     />

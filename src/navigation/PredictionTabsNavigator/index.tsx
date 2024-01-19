@@ -4,8 +4,8 @@ import BackgroundWrapper from '../../components/BackgroundWrapper';
 import COLORS from '../../constants/colors';
 import { usePersonalCommunityTab } from '../../context/EventContext';
 import PredictionTab from './PredictionTab';
-import { iUserInfo } from '../types';
 import { useAuth } from '../../context/AuthContext';
+import { useRouteParams } from '../../hooks/useRouteParams';
 
 /**
  * Note: This component is a bit whack but it's done in this way to prevent re-renders of lists
@@ -14,18 +14,16 @@ import { useAuth } from '../../context/AuthContext';
 const PredictionTabsNavigator = ({
   personal,
   community,
-  userInfo,
   onChangeTab,
 }: {
   personal: JSX.Element;
   community: JSX.Element;
-  userInfo?: iUserInfo;
   onChangeTab?: (tab: 'personal' | 'community') => void;
 }) => {
-  console.error('userInfo', userInfo);
   const { width } = useWindowDimensions();
   const { personalCommunityTab } = usePersonalCommunityTab();
   const { userId: authUserId } = useAuth();
+  const { userInfo } = useRouteParams();
   const isAuthUser = userInfo?.userId === authUserId;
   const scrollBarPositionTwo = width / 2;
 

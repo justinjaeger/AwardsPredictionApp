@@ -23,6 +23,7 @@ const PredictionTab = ({
 }) => {
   const { isPad } = useDevice();
   const { userId: authUserId } = useAuth();
+  const isAuthUser = userInfo?.userId === authUserId;
   const navigation = useNavigation<PredictionsNavigationProp>();
 
   return (
@@ -40,7 +41,7 @@ const PredictionTab = ({
       underlayColor={COLORS.secondary}
     >
       <View style={{ zIndex: 3, flexDirection: 'row', alignItems: 'center' }}>
-        {!authUserId && userInfo?.userImage ? (
+        {!isAuthUser && userInfo?.userImage ? (
           <ProfileImage
             image={userInfo.userImage}
             imageSize={isPad ? 60 : 40}
