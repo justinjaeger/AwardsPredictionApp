@@ -7,7 +7,7 @@ const useQueryGetAllEvents = () => {
     queryKey: [QueryKeys.EVENTS],
     queryFn: async () => {
       const { data: events } = await MongoApi.getEvents({});
-      return events ?? undefined;
+      return events || [];
     },
   });
 

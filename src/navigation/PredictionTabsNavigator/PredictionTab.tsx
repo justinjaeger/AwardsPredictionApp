@@ -44,8 +44,8 @@ const PredictionTab = ({
         {!isAuthUser && userInfo?.userImage ? (
           <ProfileImage
             image={userInfo.userImage}
-            imageSize={isPad ? 60 : 40}
-            style={{ marginRight: 10 }}
+            imageSize={40}
+            style={{ marginRight: isPad ? 20 : 10 }}
             onPress={() => {
               navigation.navigate('Profile', { userInfo });
             }}

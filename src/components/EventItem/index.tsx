@@ -50,7 +50,7 @@ const EventItem = ({
           borderRadius: theme.borderRadius,
           borderWidth: 1,
           borderColor: COLORS.white,
-          width: (isPad ? width / 2 : width) - theme.windowMargin * 2,
+          width: width - theme.windowMargin * 2,
           alignItems: 'center',
           justifyContent: 'center',
         },

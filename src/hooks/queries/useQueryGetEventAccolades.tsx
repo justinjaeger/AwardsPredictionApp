@@ -6,7 +6,7 @@ const useQueryGetEventAccolades = (eventId: string | undefined) => {
   const { isLoading, data, refetch } = useQuery({
     queryKey: [QueryKeys.EVENT_ACCOLADES, eventId],
     queryFn: async () => {
-      if (!eventId) return null;
+      if (!eventId) return {};
       const eventAccolades = await MongoApi.getEventAccolades({ eventId });
       return eventAccolades;
     },

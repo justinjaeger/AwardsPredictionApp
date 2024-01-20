@@ -4,7 +4,6 @@ import COLORS from '../../../constants/colors';
 import { Body, SubHeader } from '../../../components/Text';
 import { formatDecimalAsPercentage } from '../../../util/formatPercentage';
 import Stat from '../../../components/ItemStatBox/Stat';
-import useDevice from '../../../util/device';
 
 const LeaderboardStats = ({
   title,
@@ -27,8 +26,7 @@ const LeaderboardStats = ({
   riskiness?: number;
   onPress?: () => void;
 }) => {
-  const { isPad } = useDevice();
-  const statsOnTwoRows = riskiness && !isPad;
+  const statsOnTwoRows = riskiness;
 
   const [showPointsInfo, setShowPointsInfo] = useState<boolean>(false);
 

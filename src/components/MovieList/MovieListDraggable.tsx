@@ -17,6 +17,7 @@ import useQueryGetEventAccolades from '../../hooks/queries/useQueryGetEventAccol
 import { getSlotsInPhase } from '../../util/getSlotsInPhase';
 import useQueryGetCommunityPredictions from '../../hooks/queries/useQueryGetCommunityPredictions';
 import { getContenderRiskiness } from '../../util/getContenderRiskiness';
+import useDevice from '../../util/device';
 
 type iMovieListProps = {
   predictions: iPrediction[];
@@ -34,6 +35,7 @@ const MovieListDraggable = ({
   isAuthProfile,
   onPressAdd,
 }: iMovieListProps) => {
+  const { isAndroid } = useDevice();
   const navigation = useNavigation<PredictionsNavigationProp>();
   const {
     categoryData,
@@ -141,9 +143,12 @@ const MovieListDraggable = ({
             onPress={() => setShowPointsHelp((prev) => !prev)}
           >
             {isLeaderboard ? (
-              <SmallHeader style={{ marginRight: 2 }}>{`${parseFloat(
-                totalRiskiness.toString(),
-              ).toFixed(2)}pts`}</SmallHeader>
+              <SmallHeader
+                style={{
+                  marginRight: 2,
+                  marginTop: isAndroid ? 10 : 0, // bc last updated text appears
+                }}
+              >{`${parseFloat(totalRiskiness.toString()).toFixed(2)}pts`}</SmallHeader>
             ) : null}
             {showPointsHelp ? (
               <Body style={{ color: COLORS.gray, paddingBottom: 10, textAlign: 'right' }}>

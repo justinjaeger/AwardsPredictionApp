@@ -32,7 +32,7 @@ const ScreenshotMode = ({
   const { width, height } = useWindowDimensions();
   const { top } = useSafeAreaInsets();
 
-  const { userInfo, yyyymmdd } = useRouteParams();
+  const { userInfo, yyyymmdd, phase } = useRouteParams();
   const { user } = useProfileUser(userInfo?.userId);
 
   const { event: _event, categoryData: _categoryData } = useRouteParams();
@@ -121,6 +121,7 @@ const ScreenshotMode = ({
                 predictions={predictions.slice(0, 20)}
                 categoryInfo={categoryData}
                 showAccolades={!!yyyymmdd}
+                phase={phase}
               />
             </View>
           </TouchableWithoutFeedback>

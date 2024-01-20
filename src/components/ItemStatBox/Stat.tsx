@@ -7,9 +7,7 @@ const Stat = ({ number, text }: { number: string; text: string }) => {
     <View style={{ alignItems: 'center', flex: 1 }}>
       <Header>{number.toString()}</Header>
       <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
-        <SubHeaderLight style={{ marginLeft: 5, textAlign: 'center' }}>
-          {text}
-        </SubHeaderLight>
+        <SubHeaderLight style={{ textAlign: 'center' }}>{text}</SubHeaderLight>
       </View>
     </View>
   );
