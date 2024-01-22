@@ -37,9 +37,10 @@ const Leaderboard = () => {
 
   const { isPad } = useDevice();
   const navigation = useNavigation<PredictionsNavigationProp>();
-  const { event, eventId: _eventId, phase: _phase, noShorts } = useRouteParams();
+  const { event: _event, eventId: _eventId, phase: _phase, noShorts } = useRouteParams();
   const eventId = _eventId!;
   const phase = _phase!;
+  const event = _event!;
 
   const widthFactor = isPad ? theme.padHistogramContainerWidth : 1;
 

@@ -48,6 +48,10 @@ const CategoryListItem = ({
   const { eventId, event, yyyymmdd, phase, isLeaderboard } = useRouteParams();
   const awardsBodyCategories = event?.categories;
 
+  const { data: contenderIdsToPhase } = useQueryGetEventAccolades(eventId);
+
+  if (!awardsBodyCategories) return null;
+
   const maybeUndefinedCategoryData = awardsBodyCategories[category];
   const {
     name,
@@ -55,10 +59,6 @@ const CategoryListItem = ({
     isShortlisted,
     isHiddenBeforeShortlist,
   } = maybeUndefinedCategoryData || {};
-
-  const { data: contenderIdsToPhase } = useQueryGetEventAccolades(eventId);
-
-  if (!awardsBodyCategories) return null;
 
   // effectively, hides categories that are not shortlisted, when it's a shortlist leaderboard
   if (phase === Phase.SHORTLIST && (!isShortlisted || isHiddenBeforeShortlist))

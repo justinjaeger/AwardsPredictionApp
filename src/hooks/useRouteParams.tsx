@@ -24,7 +24,8 @@ export const useRouteParams = (): {
   const maybeEventId = params?.eventId;
 
   const event = useGetEvent(maybeEventId) as WithId<EventModel> | undefined;
-  const categoryData = event?.categories[params?.category as CategoryName];
+  const categoryData =
+    params?.category && event?.categories[params.category as CategoryName];
 
   return {
     userInfo: params?.userInfo,

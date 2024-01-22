@@ -151,7 +151,7 @@ const ContenderListItem = ({
           ? 'rgba(255,255,255,0.03)'
           : isUnaccaloded
           ? 'rgba(0,0,0,0.5)'
-          : ranking % 2 === 1
+          : ranking && ranking % 2 === 1
           ? 'rgba(255,255,255,0.03)'
           : 'transparent',
         flexDirection: 'row',

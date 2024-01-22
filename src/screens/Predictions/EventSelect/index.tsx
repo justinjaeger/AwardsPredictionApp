@@ -14,6 +14,7 @@ import CarouselSkeleton from '../../../components/Skeletons/CarouselSkeleton';
 import EventBoxSkeleton from '../../../components/Skeletons/EventBoxSkeleton';
 import useDevice from '../../../util/device';
 import LeaderboardList from '../../Leaderboard/LeaderboardList';
+import { getUserInfo } from '../../../util/getUserInfo';
 
 const EventSelect = () => {
   const { width } = useWindowDimensions();
@@ -125,11 +126,7 @@ const EventSelect = () => {
               <PredictionCarousel
                 key={item._id}
                 predictionSets={item.recentPredictionSets || []}
-                userInfo={{
-                  userId: item._id,
-                  userName: item.name ?? item.username ?? '',
-                  userImage: item.image,
-                }}
+                userInfo={getUserInfo(item)}
               />
             </View>
           )}

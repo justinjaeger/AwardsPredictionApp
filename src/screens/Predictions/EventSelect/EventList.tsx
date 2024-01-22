@@ -33,11 +33,10 @@ const EventList = ({
 
   const onSelectEvent = async (event: WithId<EventModel>) => {
     setPersonalCommunityTab(userId ? 'personal' : 'community');
-    const params = {
+    navigation.navigate('Event', {
       userInfo: getUserInfo(user),
       eventId: event._id,
-    };
-    navigation.navigate('Event', params);
+    });
   };
 
   const orderedEvents = getOrderedEvents(events);

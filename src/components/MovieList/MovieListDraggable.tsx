@@ -104,13 +104,13 @@ const MovieListDraggable = ({
       if (!userScoredPoints) {
         return;
       }
-      const numPredictingContender = (communityPredictions ?? []).find(
-        (p) => p.contenderId === contenderId,
-      )?.numPredicting;
+      const numPredictingContender =
+        (communityPredictions ?? []).find((p) => p.contenderId === contenderId)
+          ?.numPredicting || {};
       const riskiness = getContenderRiskiness(
         numPredictingContender,
         slots,
-        totalUsersPredicting,
+        totalUsersPredicting || 0,
       );
       contenderIdToRiskiness[contenderId] = riskiness;
     });

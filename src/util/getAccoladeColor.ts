@@ -1,7 +1,7 @@
 import COLORS from '../constants/colors';
 import { Phase } from '../types/api';
 
-export const getAccoladeColor = (phase: Phase) => {
+export const getAccoladeColor = (phase: Phase): string => {
   return phase === Phase.SHORTLIST
     ? '#db7e53'
     : phase === Phase.NOMINATION

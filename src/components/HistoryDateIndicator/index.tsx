@@ -9,7 +9,7 @@ const HistoryDateIndicator = ({
   yyyymmdd,
   style,
 }: {
-  yyyymmdd: number;
+  yyyymmdd: number | undefined;
   style?: StyleProp<ViewStyle>;
 }) => {
   if (!yyyymmdd) return null;

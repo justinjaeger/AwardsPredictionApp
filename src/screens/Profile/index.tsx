@@ -33,7 +33,8 @@ const Profile = () => {
 
   const navigation = useNavigation<PredictionsNavigationProp>();
 
-  const { data: events, isLoading: isLoadingAllEvents } = useQueryGetAllEvents();
+  const { data: _events, isLoading: isLoadingAllEvents } = useQueryGetAllEvents();
+  const events = _events || [];
 
   const { isLoading, setIsLoading, user, authUserIsFollowing, isFollowingAuthUser } =
     useProfileUser(userId);
@@ -41,7 +42,7 @@ const Profile = () => {
   // handles the header (and logout button)
   useProfileHeader(userId, isLoading, setIsLoading);
 
-  const iterableEvents = events ? Object.values(events) || [] : [];
+  const iterableEvents = Object.values(events);
   const userEvents = Object.values(iterableEvents)?.filter((event) =>
     Object.keys(user?.eventsPredicting ?? {})?.includes(event._id),
   );
@@ -70,19 +71,20 @@ const Profile = () => {
   }, []);
 
   // TODO: This is similar to what's in LeaderboardList. Maybe refactor?
-  const leaderboards: iLeaderboardRanking[] = Object.values(
-    user?.leaderboardRankings || {},
-  ).reduce((acc, phaseToLbRanking) => {
-    Object.values(phaseToLbRanking).forEach((lbRanking) => {
-      // filter out hidden events
-      const lb = eventLeaderboards.find(
-        (e) => e.phase === lbRanking.phase && e.noShorts === lbRanking.noShorts,
-      );
-      if (lb.isHidden && authUserRole !== UserRole.ADMIN) return acc;
-      acc.push(lbRanking);
-    });
-    return acc;
-  }, []);
+  const leaderboards = Object.values(user?.leaderboardRankings || {}).reduce(
+    (acc: iLeaderboardRanking[], phaseToLbRanking) => {
+      Object.values(phaseToLbRanking).forEach((lbRanking) => {
+        // filter out hidden events
+        const lb = eventLeaderboards.find(
+          (e) => e.phase === lbRanking.phase && e.noShorts === lbRanking.noShorts,
+        );
+        if (lb && lb?.isHidden && authUserRole !== UserRole.ADMIN) return acc;
+        acc.push(lbRanking);
+      });
+      return acc;
+    },
+    [],
+  );
 
   return (
     <BackgroundWrapper>
@@ -263,6 +265,7 @@ const Profile = () => {
                 </HeaderLight>
                 {leaderboards.map((lbRanking) => {
                   const event = events.find((e) => e._id === lbRanking.eventId);
+                  if (!event) return null;
                   return (
                     <>
                       <TouchableHighlight
@@ -296,10 +299,12 @@ const Profile = () => {
                           />
                         </>
                       </TouchableHighlight>
-                      <LeaderboardListItem
-                        leaderboardRanking={{ userId: user._id, ...user, ...lbRanking }}
-                        style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
-                      />
+                      {user ? (
+                        <LeaderboardListItem
+                          leaderboardRanking={{ userId: user._id, ...user, ...lbRanking }}
+                          style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
+                        />
+                      ) : null}
                     </>
                   );
                 })}

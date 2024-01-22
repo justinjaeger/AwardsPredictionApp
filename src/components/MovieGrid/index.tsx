@@ -94,7 +94,7 @@ const MovieGrid = ({
                   MOVIES_IN_ROW
                 }
                 ranking={i + 1}
-                accolade={showAccolades && accoladeMatchesPhase && accolade}
+                accolade={showAccolades && accoladeMatchesPhase ? accolade : undefined}
                 isUnaccoladed={showAccolades && (!accoladeMatchesPhase || !accolade)}
               />
             ) : (

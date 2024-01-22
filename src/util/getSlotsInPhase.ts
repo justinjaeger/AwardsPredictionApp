@@ -2,8 +2,10 @@ import { Phase, iCategory } from '../types/api';
 
 export const getSlotsInPhase = (
   eventPhase: Phase | undefined,
-  categoryData: iCategory,
+  categoryData: iCategory | undefined, // possible undefined for safety
 ) => {
+  if (!categoryData) return 5;
+
   const { slots: nomSlots, shortlistSlots, winSlots } = categoryData;
 
   if (eventPhase === undefined) {

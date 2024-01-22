@@ -104,7 +104,7 @@ const LeaderboardChart = ({
 
   const slotIndex = gesturePos && Math.floor(gesturePos / barWidth);
   const slot = slotIndex && groupedByPercentage[Math.floor(slotIndex)];
-  const percentage = slot?.[0];
+  const percentage = slot && slot[0];
   const numPredicting = slot && slot[1];
 
   // lets us set the props of the scrollview from outside the component
@@ -115,7 +115,7 @@ const LeaderboardChart = ({
 
   return (
     <View style={{ position: 'relative' }}>
-      {gesturePos !== undefined && slot ? (
+      {gesturePos !== undefined && slot && percentage ? (
         <View
           style={{
             position: 'absolute',

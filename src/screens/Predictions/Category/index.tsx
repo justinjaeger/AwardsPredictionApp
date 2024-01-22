@@ -26,9 +26,8 @@ const Category = () => {
     if (!category || !event) return;
     const eventName = eventToString(event.awardsBody, event.year);
     const categoryName = event.categories[category].name;
-    const leaderboardTitle = isLeaderboard
-      ? `\n${PHASE_TO_STRING[phase]} LB Results`
-      : '';
+    const leaderboardTitle =
+      isLeaderboard && phase ? `\n${PHASE_TO_STRING[phase]} LB Results` : '';
     const headerTitle =
       (leaderboardTitle ? '' : eventName + '\n') +
       'Best ' +

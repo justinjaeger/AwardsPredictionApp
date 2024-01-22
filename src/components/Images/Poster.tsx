@@ -37,7 +37,7 @@ const Poster = ({
 
   const posterDimensions = getPosterDimensionsByWidth(width - theme.posterMargin * 2);
 
-  const accoladeColor: string = getAccoladeColor(accolade);
+  const accoladeColor = accolade && getAccoladeColor(accolade);
 
   const borderWidth = accolade ? posterDimensions.width / 15 : 1;
 

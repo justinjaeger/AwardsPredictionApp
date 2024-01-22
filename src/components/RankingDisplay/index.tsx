@@ -23,7 +23,7 @@ const RankingDisplay = ({
   const { isPad } = useDevice();
   const Text = isPad ? SmallHeader : SubHeader;
 
-  const accoladeColor: string = getAccoladeColor(accolade);
+  const accoladeColor = accolade && getAccoladeColor(accolade);
   const posterDimensions = getPosterDimensionsByWidth(width - theme.posterMargin * 2);
 
   const sizeSpecificStyles =
