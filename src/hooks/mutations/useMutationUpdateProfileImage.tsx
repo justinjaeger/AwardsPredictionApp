@@ -40,7 +40,7 @@ const useMutationUpdateProfileImage = (onComplete?: () => void) => {
     onSuccess: async () => {
       // re-fetch predictions so the UI updates
       await queryClient.invalidateQueries({
-        queryKey: [QueryKeys.USER + authUserId],
+        queryKey: [QueryKeys.USER, authUserId],
       });
       setIsComplete(true);
       onComplete && onComplete();

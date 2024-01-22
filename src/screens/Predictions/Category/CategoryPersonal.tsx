@@ -83,18 +83,21 @@ const CategoryPersonal = ({
   );
 
   const onSaveContenders = async (ps?: iPrediction[]) => {
+    console.log('onSaveContenders', userInfo?.userId, isAuthProfile);
     if (!userInfo?.userId || !isAuthProfile) return;
     const predictionsToSave = ps || predictions;
     const predictionsHaveNotChanged = _.isEqual(
       predictionsToSave.map((p) => p.contenderId),
       initialPredictions.map((p) => p.contenderId),
     );
+    console.log('predictionsHaveNotChanged', predictionsHaveNotChanged);
     if (predictionsHaveNotChanged) return;
     // set then rankings according to INSERTION ORDER
     const orderedPredictions: iPrediction[] = predictionsToSave.map((p, i) => ({
       ...p,
       ranking: i + 1,
     }));
+    console.log('updating...');
     await updatePredictions({
       categoryName: category,
       eventId: event._id,
