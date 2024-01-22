@@ -78,7 +78,7 @@ const Profile = () => {
         const lb = eventLeaderboards.find(
           (e) => e.phase === lbRanking.phase && e.noShorts === lbRanking.noShorts,
         );
-        if (lb && lb?.isHidden && authUserRole !== UserRole.ADMIN) return acc;
+        if (!lb) return acc;
         acc.push(lbRanking);
       });
       return acc;
