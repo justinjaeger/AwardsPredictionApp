@@ -37,9 +37,7 @@ const CategoryList = ({
   const { setPersonalCommunityTab } = usePersonalCommunityTab();
   const navigation = useNavigation<PredictionsNavigationProp>();
 
-  if (!event || !phase) return null;
-
-  const leaderboard = getLeaderboardFromEvent(event, phase, noShorts);
+  const leaderboard = event && phase && getLeaderboardFromEvent(event, phase, noShorts);
 
   const isAuthProfile = userInfo?.userId === authUserId;
 
