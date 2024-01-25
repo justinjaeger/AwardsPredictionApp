@@ -94,9 +94,10 @@ const MovieListCommunity = ({ predictions, lastUpdatedString }: iMovieListProps)
       showsVerticalScrollIndicator={false}
       renderItem={({ item: prediction, index }) => {
         const accolade = contenderIdsToPhase?.[prediction.contenderId];
+        const accoladeMatchesPhase = phase === accolade;
         return (
           <>
-            {index === slots && !showAccolades ? (
+            {index === slots ? (
               <Divider
                 style={{
                   margin: 10,
@@ -113,7 +114,7 @@ const MovieListCommunity = ({ predictions, lastUpdatedString }: iMovieListProps)
               categoryType={type}
               totalNumPredictingTop={totalNumPredictingTop}
               accolade={accolade}
-              isUnaccaloded={showAccolades && !accolade}
+              isUnaccaloded={showAccolades && !accoladeMatchesPhase}
               displayNoExtraSlots={displayNoExtraSlots}
             />
           </>

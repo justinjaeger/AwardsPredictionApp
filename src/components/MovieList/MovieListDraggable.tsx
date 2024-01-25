@@ -200,13 +200,14 @@ const MovieListDraggable = ({
         const isSelectedForDelete = itemsToDelete.some(
           (p) => p.contenderId === prediction.contenderId,
         );
-        const accoladeToShow = showAccolades
+        const accolade = showAccolades
           ? contenderIdsToPhase && contenderIdsToPhase[prediction.contenderId]
           : undefined;
+        const accoladeMatchesPhase = phase === accolade;
 
         return (
           <>
-            {index === slots && !showAccolades ? (
+            {index === slots ? (
               <Divider
                 style={{
                   margin: 10,
@@ -262,8 +263,8 @@ const MovieListDraggable = ({
                         onPress: () => drag(),
                       }
                 }
-                accolade={accoladeToShow || undefined}
-                isUnaccaloded={showAccolades && !accoladeToShow}
+                accolade={accolade || undefined}
+                isUnaccaloded={showAccolades && !accoladeMatchesPhase}
                 riskiness={
                   showAccolades
                     ? contenderIdToRiskiness[prediction.contenderId]
