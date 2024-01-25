@@ -67,23 +67,6 @@ const CategoryList = ({
     return <SignedOutState />;
   }
 
-  const iterablePredictionData = _.values(predictionData?.categories || {});
-
-  // only applies to community since all categories are updated at once
-  const lastUpdated =
-    tab === 'community'
-      ? // if community, all categories were last updated at same time
-        iterablePredictionData[0]?.createdAt || ''
-      : // if personal, find the most recent updatedAt on category (bc this is for entire event)
-        iterablePredictionData.reduce((acc: Date, prediction) => {
-          const curUpdatedAt = prediction.createdAt;
-          if (curUpdatedAt > acc) {
-            acc = curUpdatedAt;
-          }
-          return acc;
-        }, new Date('1970-01-01'));
-  const lastUpdatedString = formatLastUpdated(new Date(lastUpdated || ''));
-
   if (isLoading ?? !predictionData) {
     return <EventSkeleton />;
   }
@@ -104,42 +87,70 @@ const CategoryList = ({
       l.eventId === event?._id && l.yyyymmdd === yyyymmdd && l.noShorts === !!noShorts,
   );
 
+  const displayLbStats = yyyymmdd && userLeaderboard;
+
+  const iterablePredictionData = _.values(predictionData?.categories || {});
+
+  // only applies to community since all categories are updated at once
+  const lastUpdated =
+    tab === 'community'
+      ? // if community, all categories were last updated at same time
+        displayLbStats
+        ? ''
+        : iterablePredictionData[0]?.createdAt || ''
+      : // if personal, find the most recent updatedAt on category (bc this is for entire event)
+        iterablePredictionData.reduce((acc: Date, prediction) => {
+          const curUpdatedAt = new Date(prediction.createdAt);
+          if (curUpdatedAt > acc) {
+            acc = curUpdatedAt;
+          }
+          return acc;
+        }, new Date('1970-01-01'));
+  const lastUpdatedString = formatLastUpdated(new Date(lastUpdated || ''));
+
   return (
     <View style={{ flex: 1, width: '100%' }}>
       <FlatList
         data={orderedPredictions}
         ListHeaderComponent={
-          yyyymmdd && userLeaderboard ? (
-            <>
-              {tab === 'community' ? (
-                leaderboard ? (
+          <>
+            {displayLbStats ? (
+              <>
+                {tab === 'community' ? (
+                  leaderboard ? (
+                    <LeaderboardStats
+                      percentageAccuracy={leaderboard.communityPercentageAccuracy}
+                      numCorrect={leaderboard.communityNumCorrect}
+                      totalPossibleSlots={leaderboard.totalPossibleSlots}
+                      numUsersPredicting={leaderboard.numUsersPredicting}
+                      rank={
+                        leaderboard.numUsersPredicting -
+                        leaderboard.communityPerformedBetterThanNumUsers
+                      }
+                      riskiness={leaderboard.communityRiskiness}
+                    />
+                  ) : null
+                ) : (
                   <LeaderboardStats
-                    percentageAccuracy={leaderboard.communityPercentageAccuracy}
-                    numCorrect={leaderboard.communityNumCorrect}
-                    totalPossibleSlots={leaderboard.totalPossibleSlots}
-                    numUsersPredicting={leaderboard.numUsersPredicting}
-                    rank={
-                      leaderboard.numUsersPredicting -
-                      leaderboard.communityPerformedBetterThanNumUsers
-                    }
-                    riskiness={leaderboard.communityRiskiness}
+                    percentageAccuracy={userLeaderboard.percentageAccuracy}
+                    numCorrect={userLeaderboard.numCorrect}
+                    totalPossibleSlots={userLeaderboard.totalPossibleSlots}
+                    numUsersPredicting={userLeaderboard.numUsersPredicting}
+                    rank={userLeaderboard.rank}
+                    riskiness={userLeaderboard.riskiness}
+                    lastUpdatedString={lastUpdatedString}
+                    slotsPredicted={userLeaderboard.slotsPredicted}
                   />
-                ) : null
-              ) : (
-                <LeaderboardStats
-                  percentageAccuracy={userLeaderboard.percentageAccuracy}
-                  numCorrect={userLeaderboard.numCorrect}
-                  totalPossibleSlots={userLeaderboard.totalPossibleSlots}
-                  numUsersPredicting={userLeaderboard.numUsersPredicting}
-                  rank={userLeaderboard.rank}
-                  riskiness={userLeaderboard.riskiness}
-                />
-              )}
-              <View style={{ marginBottom: 20 }} />
-            </>
-          ) : (
-            <LastUpdatedText lastUpdated={lastUpdatedString} />
-          )
+                )}
+                <View style={{ marginBottom: 20 }} />
+              </>
+            ) : (
+              <LastUpdatedText
+                lastUpdated={lastUpdatedString}
+                noAbsolutePosition={!!displayLbStats}
+              />
+            )}
+          </>
         }
         keyExtractor={([catName]) => catName}
         renderItem={({ item }) => {
