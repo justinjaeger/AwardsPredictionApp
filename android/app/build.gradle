@@ -98,8 +98,8 @@ android {
         applicationId "com.awardspredictionapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 8
-        versionName "1.07"
+        versionCode 9
+        versionName "1.08"
     }
 
     splits {
