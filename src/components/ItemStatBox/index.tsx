@@ -25,8 +25,9 @@ import { PredictionsNavigationProp } from '../../navigation/types';
 import { useAuth } from '../../context/AuthContext';
 import Stat from './Stat';
 import { formatPercentage } from '../../util/formatPercentage';
+import { useRouteParams } from '../../hooks/useRouteParams';
 
-const NumPredictingItem = ({
+const ItemStatBox = ({
   category,
   event,
   prediction,
@@ -47,6 +48,7 @@ const NumPredictingItem = ({
 }) => {
   const { width } = useWindowDimensions();
   const navigation = useNavigation<PredictionsNavigationProp>();
+  const { yyyymmdd } = useRouteParams();
   const { userId: authUserId } = useAuth();
 
   const numPredicting = prediction?.numPredicting;
@@ -54,7 +56,6 @@ const NumPredictingItem = ({
   const { getTmdbDataFromPrediction } = useTmdbDataStore();
   const navigationState = useNavigationState((state) => state);
 
-  // THIS IS PROBABLY UNDEFINED!!
   const { slots } = event.categories[category];
   const categoryString = event.categories[category].name;
 
@@ -70,6 +71,12 @@ const NumPredictingItem = ({
     prediction?.numPredicting ?? {},
     slots ?? 5,
   );
+  console.log('biggestPhaseThatHasHappened', biggestPhaseThatHasHappened);
+  const nominationsHaveNotHappened = [undefined, Phase.SHORTLIST].includes(
+    biggestPhaseThatHasHappened,
+  );
+  const displayNoExtraSlots = !nominationsHaveNotHappened && !yyyymmdd;
+  console.log('displayNoExtraSlots', displayNoExtraSlots);
 
   return (
     <View
@@ -126,6 +133,7 @@ const NumPredictingItem = ({
           enableHoverInfo
           flatListRef={flatListRef}
           scrollRef={scrollRef}
+          displayNoExtraSlots={displayNoExtraSlots}
         />
       ) : null}
       <View
@@ -140,7 +148,7 @@ const NumPredictingItem = ({
           number={`${formatPercentage(win / totalNumPredictingCategory, true)}`}
           text="predict win"
         />
-        {[undefined, Phase.SHORTLIST].includes(biggestPhaseThatHasHappened) ? (
+        {nominationsHaveNotHappened ? (
           <>
             <Stat
               number={`${formatPercentage(nom / totalNumPredictingCategory, true)}`}
@@ -172,4 +180,4 @@ const NumPredictingItem = ({
   );
 };
 
-export default NumPredictingItem;
+export default ItemStatBox;

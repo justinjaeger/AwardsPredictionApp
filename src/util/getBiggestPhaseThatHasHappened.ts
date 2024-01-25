@@ -27,3 +27,19 @@ export const getBiggestPhaseThatHasHappened = (
     : undefined;
   return phaseUserIsPredicting;
 };
+
+export const getCurrentPhaseBeingPredicted = (event: EventModel) => {
+  const biggestPhaseThatHasHappened = getBiggestPhaseThatHasHappened(event, undefined);
+  if (
+    biggestPhaseThatHasHappened === undefined ||
+    biggestPhaseThatHasHappened === Phase.SHORTLIST
+  ) {
+    return Phase.NOMINATION;
+  }
+  if (biggestPhaseThatHasHappened === Phase.NOMINATION) {
+    return Phase.WINNER;
+  }
+  if ([Phase.WINNER, Phase.CLOSED].includes(biggestPhaseThatHasHappened)) {
+    return Phase.CLOSED;
+  }
+};

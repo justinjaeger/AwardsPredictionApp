@@ -27,6 +27,7 @@ const Histogram = ({
   posterHeight: _posterHeight,
   enableHoverInfo,
   containerWidthFactor,
+  displayNoExtraSlots,
   flatListRef,
   scrollRef,
 }: {
@@ -39,6 +40,7 @@ const Histogram = ({
   posterHeight?: number;
   enableHoverInfo?: boolean;
   containerWidthFactor?: number;
+  displayNoExtraSlots?: boolean;
   // important props for enabling/disabling scroll when inside a scrollview:
   flatListRef?: React.RefObject<FlatList<any>>;
   scrollRef?: React.RefObject<ScrollView>;
@@ -52,7 +54,7 @@ const Histogram = ({
   const totalWidth = ((_totalWidth ?? windowWidth) - 20) * (containerWidthFactor ?? 1);
   const marginIfCenter = (windowWidth - totalWidth) / 2;
 
-  const barsToShow = slots + SLOTS_TO_DISPLAY_EXTRA;
+  const barsToShow = slots + (displayNoExtraSlots ? 0 : SLOTS_TO_DISPLAY_EXTRA);
   const barMaxHeight = posterHeight * 1;
 
   const [gesturePos, setGesturePos] = useState<{ x: number; y: number } | undefined>(

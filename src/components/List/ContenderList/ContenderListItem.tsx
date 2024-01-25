@@ -48,6 +48,7 @@ export type iContenderListItemProps = {
     underlayColor?: string;
   };
   showHistogram?: boolean;
+  displayNoExtraSlots?: boolean;
   accolade?: Phase;
   isUnaccaloded?: boolean;
 };
@@ -75,6 +76,7 @@ const ContenderListItem = ({
   riskiness,
   accolade,
   isUnaccaloded,
+  displayNoExtraSlots, // for showing histogram
   onPressItem,
   onPressThumbnail,
   onLongPress,
@@ -275,6 +277,7 @@ const ContenderListItem = ({
               slots={slots}
               totalWidth={windowWidth - thumbnailContainerWidth - rightIconContainerWidth}
               posterHeight={posterHeight}
+              displayNoExtraSlots={displayNoExtraSlots}
             />
           ) : null}
         </>
