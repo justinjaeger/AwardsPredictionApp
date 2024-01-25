@@ -6,6 +6,7 @@ import useDevice from '../../../util/device';
 import LeaderboardListItem, {
   LEADERBOARD_PROFILE_IMAGE_SIZE,
 } from '../../../components/LeaderboardListItem';
+import LeaderboardListItemTemplate from '../../../components/LeaderboardListItem/Template';
 import UserListSkeleton from '../../../components/Skeletons/UserListSkeleton';
 import { Body, SubHeader } from '../../../components/Text';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
@@ -17,7 +18,6 @@ import { eventToString } from '../../../util/stringConversions';
 import { useRouteParams } from '../../../hooks/useRouteParams';
 import { PHASE_TO_STRING } from '../../../constants/categories';
 import LeaderboardChart from '../../../components/LeaderboardChart';
-import LeaderboardStats from './LeaderboardStats';
 import { PredictionsNavigationProp } from '../../../navigation/types';
 import { getLeaderboardFromEvent } from '../../../util/getLeaderboardFromEvent';
 import { getUserInfo } from '../../../util/getUserInfo';
@@ -120,13 +120,26 @@ const Leaderboard = () => {
                 style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
               />
             ) : null}
-            <LeaderboardStats
-              title={'Community Scores'}
-              subtitle={'The aggregate of all users'}
+            <View
+              style={{
+                flexDirection: 'column',
+                justifyContent: 'space-around',
+                width: '100%',
+                alignItems: 'center',
+                padding: 20,
+                paddingBottom: 10,
+              }}
+            >
+              <SubHeader>Score Distribution</SubHeader>
+              <Body style={{ marginTop: 5 }}>All Users</Body>
+            </View>
+            <LeaderboardChart leaderboard={leaderboard} flatListRef={flatListRef} />
+            <LeaderboardListItemTemplate
+              title={'Community'}
+              subtitle={'Aggregate of all users'}
               percentageAccuracy={leaderboard.communityPercentageAccuracy}
               numCorrect={leaderboard.communityNumCorrect}
               totalPossibleSlots={leaderboard.totalPossibleSlots}
-              numUsersPredicting={leaderboard.numUsersPredicting}
               rank={
                 leaderboard.numUsersPredicting -
                 leaderboard.communityPerformedBetterThanNumUsers
@@ -144,21 +157,11 @@ const Leaderboard = () => {
                   noShorts,
                 });
               }}
+              profileImage={undefined}
+              riskiness={leaderboard.communityRiskiness}
+              style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
+              hideProfileImage
             />
-            <View
-              style={{
-                flexDirection: 'column',
-                justifyContent: 'space-around',
-                width: '100%',
-                alignItems: 'center',
-                padding: 20,
-                paddingBottom: 10,
-              }}
-            >
-              <SubHeader>Score Distribution</SubHeader>
-              <Body style={{ marginTop: 5 }}>All Users</Body>
-            </View>
-            <LeaderboardChart leaderboard={leaderboard} flatListRef={flatListRef} />
             {authUserId ? (
               <View
                 style={{
@@ -184,6 +187,34 @@ const Leaderboard = () => {
                 />
               </View>
             ) : null}
+            {/* <LeaderboardListItemTemplate
+              title={'Community'}
+              subtitle={'Aggregate of all users'}
+              percentageAccuracy={leaderboard.communityPercentageAccuracy}
+              numCorrect={leaderboard.communityNumCorrect}
+              totalPossibleSlots={leaderboard.totalPossibleSlots}
+              rank={
+                leaderboard.numUsersPredicting -
+                leaderboard.communityPerformedBetterThanNumUsers
+              }
+              onPress={() => {
+                const yyyymmdd = leaderboardRankings[0]?.yyyymmdd;
+                if (!yyyymmdd) return;
+                setPersonalCommunityTab('community');
+                navigation.navigate('Event', {
+                  eventId,
+                  yyyymmdd,
+                  phase,
+                  userInfo: getUserInfo(user),
+                  isLeaderboard: true,
+                  noShorts,
+                });
+              }}
+              profileImage={undefined}
+              riskiness={leaderboard.communityRiskiness}
+              style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
+              hideProfileImage
+            /> */}
           </>
         }
         ListFooterComponent={

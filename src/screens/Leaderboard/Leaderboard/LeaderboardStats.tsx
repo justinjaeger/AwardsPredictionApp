@@ -4,10 +4,13 @@ import COLORS from '../../../constants/colors';
 import { Body, SubHeader } from '../../../components/Text';
 import { formatDecimalAsPercentage } from '../../../util/formatPercentage';
 import Stat from '../../../components/ItemStatBox/Stat';
+import ProfileImage from '../../../components/ProfileImage';
+import { LEADERBOARD_PROFILE_IMAGE_SIZE } from '../../../components/LeaderboardListItem';
 
 const LeaderboardStats = ({
   title,
   subtitle,
+  userImage,
   percentageAccuracy,
   numCorrect,
   totalPossibleSlots,
@@ -18,6 +21,7 @@ const LeaderboardStats = ({
 }: {
   title?: string;
   subtitle?: string;
+  userImage?: string;
   percentageAccuracy: number;
   numCorrect: number;
   totalPossibleSlots: number;
@@ -56,7 +60,17 @@ const LeaderboardStats = ({
               alignItems: 'center',
             }}
           >
-            <SubHeader>{title}</SubHeader>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              {userImage ? (
+                <ProfileImage
+                  image={userImage}
+                  imageSize={LEADERBOARD_PROFILE_IMAGE_SIZE}
+                  onPress={() => {}}
+                  style={{ marginRight: 10 }}
+                />
+              ) : null}
+              <SubHeader>{title}</SubHeader>
+            </View>
             {subtitle ? <Body style={{ marginTop: 5 }}>{subtitle}</Body> : null}
           </View>
         ) : (
@@ -72,16 +86,21 @@ const LeaderboardStats = ({
           }}
         >
           <View style={{ flex: 2, flexDirection: 'row' }}>
+            <Stat number={`#${rank}`} text={`of ${numUsersPredicting} users`} />
+            <Stat number={`${numCorrect}/${totalPossibleSlots}`} text="correct" />
+          </View>
+          <View
+            style={{
+              flex: 1,
+              flexDirection: 'row',
+              marginTop: statsOnTwoRows ? 20 : 0,
+              overflow: 'visible',
+            }}
+          >
             <Stat
               number={`${formatDecimalAsPercentage(percentageAccuracy)}%`}
               text="accuracy"
             />
-            <Stat number={`${numCorrect}/${totalPossibleSlots}`} text="correct" />
-          </View>
-          <View
-            style={{ flex: 1, flexDirection: 'row', marginTop: statsOnTwoRows ? 20 : 0 }}
-          >
-            <Stat number={`${rank}/${numUsersPredicting}`} text="rank" />
             {riskiness ? (
               <TouchableOpacity
                 onPress={() => setShowPointsInfo((prev) => !prev)}
