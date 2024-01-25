@@ -4,7 +4,7 @@ import { FlatList } from 'react-native';
 import COLORS from '../../constants/colors';
 import LastUpdatedText from '../LastUpdatedText';
 import ContenderListItem from '../List/ContenderList/ContenderListItem';
-import { iPrediction } from '../../types/api';
+import { Phase, iPrediction } from '../../types/api';
 import { getTotalNumPredicting } from '../../util/getNumPredicting';
 import { useNavigation } from '@react-navigation/native';
 import { PredictionsNavigationProp } from '../../navigation/types';
@@ -66,6 +66,10 @@ const MovieListCommunity = ({ predictions, lastUpdatedString }: iMovieListProps)
     });
   }, []);
 
+  const nominationsHaveNotHappened =
+    phase && [Phase.SHORTLIST, Phase.NOMINATION].includes(phase);
+  const displayNoExtraSlots = !nominationsHaveNotHappened && !yyyymmdd;
+
   return (
     <FlatList
       data={predictions.slice(0, numToShow)}
@@ -90,9 +94,10 @@ const MovieListCommunity = ({ predictions, lastUpdatedString }: iMovieListProps)
       showsVerticalScrollIndicator={false}
       renderItem={({ item: prediction, index }) => {
         const accolade = contenderIdsToPhase?.[prediction.contenderId];
+        const accoladeMatchesPhase = phase === accolade;
         return (
           <>
-            {index === slots && !showAccolades ? (
+            {index === slots ? (
               <Divider
                 style={{
                   margin: 10,
@@ -109,7 +114,8 @@ const MovieListCommunity = ({ predictions, lastUpdatedString }: iMovieListProps)
               categoryType={type}
               totalNumPredictingTop={totalNumPredictingTop}
               accolade={accolade}
-              isUnaccaloded={showAccolades && !accolade}
+              isUnaccaloded={showAccolades && !accoladeMatchesPhase}
+              displayNoExtraSlots={displayNoExtraSlots}
             />
           </>
         );

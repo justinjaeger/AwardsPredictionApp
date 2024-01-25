@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleProp, View, ViewStyle, useWindowDimensions } from 'react-native';
 import COLORS from '../../constants/colors';
 import useDevice from '../../util/device';
-import { SmallHeader, SubHeader } from '../Text';
+import { Body, SmallHeader } from '../Text';
 import { getPosterDimensionsByWidth } from '../../constants/posterDimensions';
 import theme from '../../constants/theme';
 import { Phase } from '../../types/api';
@@ -21,7 +21,7 @@ const RankingDisplay = ({
 }) => {
   const { width } = useWindowDimensions();
   const { isPad } = useDevice();
-  const Text = isPad ? SmallHeader : SubHeader;
+  const Text = isPad ? SmallHeader : Body;
 
   const accoladeColor = accolade && getAccoladeColor(accolade);
   const posterDimensions = getPosterDimensionsByWidth(width - theme.posterMargin * 2);
@@ -65,7 +65,7 @@ const RankingDisplay = ({
       <Text
         style={{
           color: isUnaccoladed ? 'rgba(255,255,255,0.5)' : COLORS.white,
-          fontWeight: '600',
+          fontWeight: '700',
         }}
       >
         {ranking.toString()}

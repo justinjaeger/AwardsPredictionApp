@@ -4,26 +4,35 @@ import COLORS from '../../../constants/colors';
 import { Body, SubHeader } from '../../../components/Text';
 import { formatDecimalAsPercentage } from '../../../util/formatPercentage';
 import Stat from '../../../components/ItemStatBox/Stat';
+import ProfileImage from '../../../components/ProfileImage';
+import { LEADERBOARD_PROFILE_IMAGE_SIZE } from '../../../components/LeaderboardListItem';
+import LastUpdatedText from '../../../components/LastUpdatedText';
 
 const LeaderboardStats = ({
   title,
   subtitle,
+  userImage,
   percentageAccuracy,
   numCorrect,
   totalPossibleSlots,
   numUsersPredicting,
   rank,
   riskiness,
+  lastUpdatedString,
+  slotsPredicted,
   onPress,
 }: {
   title?: string;
   subtitle?: string;
+  userImage?: string;
   percentageAccuracy: number;
   numCorrect: number;
   totalPossibleSlots: number;
   numUsersPredicting: number;
   rank: number;
   riskiness?: number;
+  lastUpdatedString?: string;
+  slotsPredicted?: number;
   onPress?: () => void;
 }) => {
   const statsOnTwoRows = riskiness;
@@ -56,7 +65,17 @@ const LeaderboardStats = ({
               alignItems: 'center',
             }}
           >
-            <SubHeader>{title}</SubHeader>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              {userImage ? (
+                <ProfileImage
+                  image={userImage}
+                  imageSize={LEADERBOARD_PROFILE_IMAGE_SIZE}
+                  onPress={() => {}}
+                  style={{ marginRight: 10 }}
+                />
+              ) : null}
+              <SubHeader>{title}</SubHeader>
+            </View>
             {subtitle ? <Body style={{ marginTop: 5 }}>{subtitle}</Body> : null}
           </View>
         ) : (
@@ -72,16 +91,21 @@ const LeaderboardStats = ({
           }}
         >
           <View style={{ flex: 2, flexDirection: 'row' }}>
+            <Stat number={`#${rank}`} text={`of ${numUsersPredicting} users`} />
+            <Stat number={`${numCorrect}/${totalPossibleSlots}`} text="correct" />
+          </View>
+          <View
+            style={{
+              flex: 1,
+              flexDirection: 'row',
+              marginTop: statsOnTwoRows ? 20 : 0,
+              overflow: 'visible',
+            }}
+          >
             <Stat
               number={`${formatDecimalAsPercentage(percentageAccuracy)}%`}
               text="accuracy"
             />
-            <Stat number={`${numCorrect}/${totalPossibleSlots}`} text="correct" />
-          </View>
-          <View
-            style={{ flex: 1, flexDirection: 'row', marginTop: statsOnTwoRows ? 20 : 0 }}
-          >
-            <Stat number={`${rank}/${numUsersPredicting}`} text="rank" />
             {riskiness ? (
               <TouchableOpacity
                 onPress={() => setShowPointsInfo((prev) => !prev)}
@@ -109,10 +133,28 @@ const LeaderboardStats = ({
         </View>
         <View
           style={{
+            flexDirection: 'row',
+            alignItems: 'baseline',
+            width: '100%',
+            justifyContent: 'space-around',
+            marginTop: 20,
+          }}
+        >
+          {lastUpdatedString ? (
+            <LastUpdatedText lastUpdated={lastUpdatedString} noAbsolutePosition={true} />
+          ) : null}
+          {slotsPredicted ? (
+            <Body style={{ color: COLORS.gray, fontWeight: '500' }}>
+              {`${slotsPredicted.toString()}/${totalPossibleSlots} predix made`}
+            </Body>
+          ) : null}
+        </View>
+        <View
+          style={{
             height: 0.5,
             width: '90%',
             backgroundColor: COLORS.primaryLight,
-            marginTop: 30,
+            marginTop: 10,
             marginBottom: 5,
           }}
         />

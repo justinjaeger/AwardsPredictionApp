@@ -5,17 +5,14 @@ import COLORS from '../../../constants/colors';
 import { PredictionsNavigationProp } from '../../../navigation/types';
 import { getOrderedEvents } from '../../../util/sortByObjectOrder';
 import { usePersonalCommunityTab } from '../../../context/EventContext';
-import {
-  EVENT_STATUS_TO_STRING,
-  EVENT_STATUS_TO_STRING_SHORT,
-  getEventTime,
-} from '../../../constants/events';
+import { PHASE_TO_CTA, getEventTime } from '../../../constants/events';
 import { Divider } from '@ui-kitten/components';
-import { EventModel, EventStatus, User, UserRole, WithId } from '../../../types/api';
+import { EventModel, Phase, User, WithId } from '../../../types/api';
 import EventItem from '../../../components/EventItem';
 import { AWARDS_BODY_TO_PLURAL_STRING } from '../../../constants/awardsBodies';
 import { useNavigation } from '@react-navigation/native';
 import { getUserInfo } from '../../../util/getUserInfo';
+import { getCurrentPhaseBeingPredicted } from '../../../util/getBiggestPhaseThatHasHappened';
 
 const EventList = ({
   events,
@@ -41,10 +38,6 @@ const EventList = ({
 
   const orderedEvents = getOrderedEvents(events);
   const groupedByYear = _.groupBy(orderedEvents, (e: WithId<EventModel>) => e.year);
-
-  const userIsAdminOrTester = user
-    ? user.role === UserRole.ADMIN || user.role === UserRole.TESTER
-    : false;
 
   return (
     <>
@@ -75,18 +68,21 @@ const EventList = ({
               }}
             >
               {events.map((event) => {
-                const { status, awardsBody } = event;
-                const eventIsAdminOnly = status === EventStatus.NOMS_STAGING;
-                if (eventIsAdminOnly && !userIsAdminOrTester) return null; // don't display events with status NOMS_STAGING to non-admin
+                const { awardsBody } = event;
+                const phase = getCurrentPhaseBeingPredicted(event);
                 const closeTime = getEventTime(event);
+
+                // TODO: for now, if this event has closed, just don't show it.
+                // When we have a history link, we can show that
+                // But for now, we can just not and it will display the leaderboard
+                if (phase === Phase.CLOSED) return null;
+
+                const eventString = year + ' ' + AWARDS_BODY_TO_PLURAL_STRING[awardsBody];
+
                 return (
                   <EventItem
-                    subtitle={year + ' ' + AWARDS_BODY_TO_PLURAL_STRING[awardsBody]}
-                    title={
-                      isProfile
-                        ? `${EVENT_STATUS_TO_STRING_SHORT[status]}`
-                        : `${EVENT_STATUS_TO_STRING[status]}`
-                    }
+                    subtitle={isProfile ? '' : eventString}
+                    title={isProfile ? eventString : PHASE_TO_CTA[phase || Phase.CLOSED]}
                     onPress={() => onSelectEvent(event)}
                     mode={isProfile ? 'transparent' : 'solid'}
                     bottomRightText={closeTime === '' ? '' : `Closes ${closeTime}`}

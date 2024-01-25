@@ -20,6 +20,13 @@ export const PHASE_TO_STRING: { [key in Phase]: string } = {
   [Phase.CLOSED]: 'Closed',
 };
 
+export const PHASE_TO_STRING_PLURAL: { [key in Phase]: string } = {
+  [Phase.WINNER]: 'Winners',
+  [Phase.NOMINATION]: 'Nominations',
+  [Phase.SHORTLIST]: 'Shortlists',
+  [Phase.CLOSED]: 'Closed',
+};
+
 export const ORDERED_CATEGORIES = [
   CategoryName.PICTURE,
   CategoryName.INDIE_PICTURE,

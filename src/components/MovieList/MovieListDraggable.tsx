@@ -7,7 +7,7 @@ import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
 import LastUpdatedText from '../LastUpdatedText';
 import ContenderListItem from '../List/ContenderList/ContenderListItem';
-import { Body, SmallHeader, SubHeader } from '../Text';
+import { Body, SubHeader } from '../Text';
 import { CategoryName, iPrediction } from '../../types/api';
 import { triggerHaptic } from '../../util/hapticFeedback';
 import { useNavigation } from '@react-navigation/native';
@@ -143,12 +143,12 @@ const MovieListDraggable = ({
             onPress={() => setShowPointsHelp((prev) => !prev)}
           >
             {isLeaderboard ? (
-              <SmallHeader
+              <SubHeader
                 style={{
                   marginRight: 2,
-                  marginTop: isAndroid ? 10 : 0, // bc last updated text appears
+                  marginTop: isAndroid ? 10 : 5, // bc last updated text appears
                 }}
-              >{`${parseFloat(totalRiskiness.toString()).toFixed(2)}pts`}</SmallHeader>
+              >{`${parseFloat(totalRiskiness.toString()).toFixed(2)}pts`}</SubHeader>
             ) : null}
             {showPointsHelp ? (
               <Body style={{ color: COLORS.gray, paddingBottom: 10, textAlign: 'right' }}>
@@ -200,13 +200,14 @@ const MovieListDraggable = ({
         const isSelectedForDelete = itemsToDelete.some(
           (p) => p.contenderId === prediction.contenderId,
         );
-        const accoladeToShow = showAccolades
+        const accolade = showAccolades
           ? contenderIdsToPhase && contenderIdsToPhase[prediction.contenderId]
           : undefined;
+        const accoladeMatchesPhase = phase === accolade;
 
         return (
           <>
-            {index === slots && !showAccolades ? (
+            {index === slots ? (
               <Divider
                 style={{
                   margin: 10,
@@ -262,8 +263,8 @@ const MovieListDraggable = ({
                         onPress: () => drag(),
                       }
                 }
-                accolade={accoladeToShow || undefined}
-                isUnaccaloded={showAccolades && !accoladeToShow}
+                accolade={accolade || undefined}
+                isUnaccaloded={showAccolades && !accoladeMatchesPhase}
                 riskiness={
                   showAccolades
                     ? contenderIdToRiskiness[prediction.contenderId]

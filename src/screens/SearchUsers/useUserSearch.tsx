@@ -30,6 +30,7 @@ const useUserSearch = () => {
       setAllUsersAreFetched(true);
     }
     setSearchResults((prev) => [...(prev ?? []), ...newUsers]);
+    setIsLoading(false);
   };
 
   const handleSearch = async (s: string) => {

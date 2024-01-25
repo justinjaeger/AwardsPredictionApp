@@ -21,6 +21,10 @@ import { useRouteParams } from '../../../hooks/useRouteParams';
 import useProfileUser from '../../Profile/useProfileUser';
 import LeaderboardStats from '../../Leaderboard/Leaderboard/LeaderboardStats';
 import { getLeaderboardFromEvent } from '../../../util/getLeaderboardFromEvent';
+import FollowButton from '../../../components/FollowButton';
+import useQueryGetFollowingUsers from '../../../hooks/queries/useQueryGetFollowingUsers';
+import theme from '../../../constants/theme';
+import { truncateText } from '../../../util/truncateText';
 
 const CategoryList = ({
   tab,
@@ -36,6 +40,7 @@ const CategoryList = ({
   const { user } = useProfileUser(userInfo?.userId);
   const { setPersonalCommunityTab } = usePersonalCommunityTab();
   const navigation = useNavigation<PredictionsNavigationProp>();
+  const { usersIdsAuthUserIsFollowing } = useQueryGetFollowingUsers();
 
   const leaderboard = event && phase && getLeaderboardFromEvent(event, phase, noShorts);
 
@@ -67,23 +72,6 @@ const CategoryList = ({
     return <SignedOutState />;
   }
 
-  const iterablePredictionData = _.values(predictionData?.categories || {});
-
-  // only applies to community since all categories are updated at once
-  const lastUpdated =
-    tab === 'community'
-      ? // if community, all categories were last updated at same time
-        iterablePredictionData[0]?.createdAt || ''
-      : // if personal, find the most recent updatedAt on category (bc this is for entire event)
-        iterablePredictionData.reduce((acc: Date, prediction) => {
-          const curUpdatedAt = prediction.createdAt;
-          if (curUpdatedAt > acc) {
-            acc = curUpdatedAt;
-          }
-          return acc;
-        }, new Date('1970-01-01'));
-  const lastUpdatedString = formatLastUpdated(new Date(lastUpdated || ''));
-
   if (isLoading ?? !predictionData) {
     return <EventSkeleton />;
   }
@@ -104,42 +92,103 @@ const CategoryList = ({
       l.eventId === event?._id && l.yyyymmdd === yyyymmdd && l.noShorts === !!noShorts,
   );
 
+  const displayLbStats = yyyymmdd && userLeaderboard;
+  const authUserIsFollowing = user && usersIdsAuthUserIsFollowing.includes(user._id);
+  const displayFollowButton = user && !isAuthProfile && !authUserIsFollowing;
+
+  const iterablePredictionData = _.values(predictionData?.categories || {});
+
+  // only applies to community since all categories are updated at once
+  const lastUpdated =
+    tab === 'community'
+      ? // if community, all categories were last updated at same time
+        displayLbStats
+        ? ''
+        : iterablePredictionData[0]?.createdAt || ''
+      : // if personal, find the most recent updatedAt on category (bc this is for entire event)
+        iterablePredictionData.reduce((acc: Date, prediction) => {
+          const curUpdatedAt = new Date(prediction.createdAt);
+          if (curUpdatedAt > acc) {
+            acc = curUpdatedAt;
+          }
+          return acc;
+        }, new Date('1970-01-01'));
+  const lastUpdatedString = formatLastUpdated(new Date(lastUpdated || ''));
+
   return (
     <View style={{ flex: 1, width: '100%' }}>
       <FlatList
         data={orderedPredictions}
         ListHeaderComponent={
-          yyyymmdd && userLeaderboard ? (
-            <>
-              {tab === 'community' ? (
-                leaderboard ? (
-                  <LeaderboardStats
-                    percentageAccuracy={leaderboard.communityPercentageAccuracy}
-                    numCorrect={leaderboard.communityNumCorrect}
-                    totalPossibleSlots={leaderboard.totalPossibleSlots}
-                    numUsersPredicting={leaderboard.numUsersPredicting}
-                    rank={
-                      leaderboard.numUsersPredicting -
-                      leaderboard.communityPerformedBetterThanNumUsers
-                    }
-                    riskiness={leaderboard.communityRiskiness}
-                  />
-                ) : null
-              ) : (
-                <LeaderboardStats
-                  percentageAccuracy={userLeaderboard.percentageAccuracy}
-                  numCorrect={userLeaderboard.numCorrect}
-                  totalPossibleSlots={userLeaderboard.totalPossibleSlots}
-                  numUsersPredicting={userLeaderboard.numUsersPredicting}
-                  rank={userLeaderboard.rank}
-                  riskiness={userLeaderboard.riskiness}
-                />
-              )}
-              <View style={{ marginBottom: 20 }} />
-            </>
-          ) : (
-            <LastUpdatedText lastUpdated={lastUpdatedString} />
-          )
+          <>
+            {displayLbStats ? (
+              <>
+                {tab === 'community' ? (
+                  leaderboard ? (
+                    <LeaderboardStats
+                      percentageAccuracy={leaderboard.communityPercentageAccuracy}
+                      numCorrect={leaderboard.communityNumCorrect}
+                      totalPossibleSlots={leaderboard.totalPossibleSlots}
+                      numUsersPredicting={leaderboard.numUsersPredicting}
+                      rank={
+                        leaderboard.numUsersPredicting -
+                        leaderboard.communityPerformedBetterThanNumUsers
+                      }
+                      riskiness={leaderboard.communityRiskiness}
+                    />
+                  ) : null
+                ) : (
+                  <>
+                    <LeaderboardStats
+                      percentageAccuracy={userLeaderboard.percentageAccuracy}
+                      numCorrect={userLeaderboard.numCorrect}
+                      totalPossibleSlots={userLeaderboard.totalPossibleSlots}
+                      numUsersPredicting={userLeaderboard.numUsersPredicting}
+                      rank={userLeaderboard.rank}
+                      riskiness={userLeaderboard.riskiness}
+                      lastUpdatedString={lastUpdatedString}
+                      slotsPredicted={userLeaderboard.slotsPredicted}
+                    />
+                    {displayFollowButton ? (
+                      <View
+                        style={{
+                          justifyContent: 'flex-end',
+                          width: '100%',
+                          flexDirection: 'row',
+                          marginTop: 10,
+                          paddingRight: theme.windowMargin,
+                          paddingLeft: theme.windowMargin,
+                        }}
+                      >
+                        <View
+                          style={{
+                            alignSelf: 'flex-end',
+                          }}
+                        >
+                          <FollowButton
+                            authUserIsFollowing={usersIdsAuthUserIsFollowing.includes(
+                              user._id,
+                            )}
+                            profileUserId={user._id}
+                            textWhenNotFollowing={`Follow ${truncateText(
+                              user?.name ?? user.username ?? '',
+                              15,
+                            )}`}
+                          />
+                        </View>
+                      </View>
+                    ) : null}
+                  </>
+                )}
+                <View style={{ marginBottom: displayFollowButton ? 10 : 20 }} />
+              </>
+            ) : (
+              <LastUpdatedText
+                lastUpdated={lastUpdatedString}
+                noAbsolutePosition={!!displayLbStats}
+              />
+            )}
+          </>
         }
         keyExtractor={([catName]) => catName}
         renderItem={({ item }) => {

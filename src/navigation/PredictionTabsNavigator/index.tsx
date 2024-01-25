@@ -6,6 +6,7 @@ import { usePersonalCommunityTab } from '../../context/EventContext';
 import PredictionTab from './PredictionTab';
 import { useAuth } from '../../context/AuthContext';
 import { useRouteParams } from '../../hooks/useRouteParams';
+import { truncateText } from '../../util/truncateText';
 
 /**
  * Note: This component is a bit whack but it's done in this way to prevent re-renders of lists
@@ -91,7 +92,7 @@ const PredictionTabsNavigator = ({
             />
             <PredictionTab
               text={
-                isAuthUser ? 'My Predictions' : userInfo?.userName.split(' ')[0] ?? ''
+                isAuthUser ? 'My Predictions' : truncateText(userInfo?.userName ?? '', 13)
               }
               userInfo={userInfo}
               onPress={() => {
