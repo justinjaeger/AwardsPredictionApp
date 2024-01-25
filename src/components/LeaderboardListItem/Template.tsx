@@ -57,7 +57,6 @@ const Template = ({
         <View style={{ flexDirection: 'row' }}>
           <View
             style={{
-              // width: 50,
               alignItems: 'flex-start',
               justifyContent: 'center',
               overflow: 'visible',
