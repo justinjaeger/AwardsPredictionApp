@@ -11,7 +11,6 @@ import ProfileImage from '../../components/ProfileImage';
 import FollowButton from '../../components/FollowButton';
 import FollowCountButton from '../../components/FollowCountButton';
 import useQueryGetAllEvents from '../../hooks/queries/useQueryGetAllEvents';
-import EventList from '../Predictions/EventSelect/EventList';
 import { PredictionsNavigationProp } from '../../navigation/types';
 import useProfileUser from './useProfileUser';
 import useProfileHeader from './useProfileHeader';
@@ -22,9 +21,11 @@ import SignedOutState from '../../components/SignedOutState';
 import { getUserInfo } from '../../util/getUserInfo';
 import LeaderboardListItem from '../../components/LeaderboardListItem';
 import { AWARDS_BODY_TO_PLURAL_STRING } from '../../constants/awardsBodies';
-import { PHASE_TO_STRING } from '../../constants/categories';
-import CustomIcon from '../../components/CustomIcon';
-import { UserRole, iLeaderboard, iLeaderboardRanking } from '../../types/api';
+import { PHASE_TO_STRING_PLURAL } from '../../constants/categories';
+import { Phase, UserRole, iLeaderboard, iLeaderboardRanking } from '../../types/api';
+import EventItemSimple from '../../components/EventItemSimple';
+import { usePersonalCommunityTab } from '../../context/EventContext';
+import { getCurrentPhaseBeingPredicted } from '../../util/getBiggestPhaseThatHasHappened';
 
 const Profile = () => {
   const { userInfo: routeUserInfo } = useRouteParams();
@@ -32,6 +33,7 @@ const Profile = () => {
   const userId = routeUserInfo?.userId || authUserId;
 
   const navigation = useNavigation<PredictionsNavigationProp>();
+  const { setPersonalCommunityTab } = usePersonalCommunityTab();
 
   const { data: _events, isLoading: isLoadingAllEvents } = useQueryGetAllEvents();
   const events = _events || [];
@@ -243,12 +245,28 @@ const Profile = () => {
                     alignSelf: 'flex-start',
                     marginTop: 20,
                     marginLeft: theme.windowMargin,
-                    marginBottom: -10,
+                    marginBottom: 10,
                   }}
                 >
                   {(isAuthUser ? 'My' : 'All') + ' Predictions'}
                 </HeaderLight>
-                <EventList user={user} events={userEvents} isProfile={true} />
+                {userEvents.map((event) => {
+                  const phase = getCurrentPhaseBeingPredicted(event);
+                  return (
+                    <EventItemSimple
+                      onPress={() => {
+                        setPersonalCommunityTab('personal');
+                        navigation.navigate('Event', {
+                          userInfo: getUserInfo(user),
+                          eventId: event._id,
+                        });
+                      }}
+                      title={`${AWARDS_BODY_TO_PLURAL_STRING[event.awardsBody]} ${
+                        event.year
+                      } - ${PHASE_TO_STRING_PLURAL[phase || Phase.CLOSED]}`}
+                    />
+                  );
+                })}
               </>
             ) : null}
             {leaderboards.length ? (
@@ -256,7 +274,7 @@ const Profile = () => {
                 <HeaderLight
                   style={{
                     alignSelf: 'flex-start',
-                    marginTop: 20,
+                    marginTop: 30,
                     marginLeft: theme.windowMargin,
                     marginBottom: 10,
                   }}
@@ -268,7 +286,7 @@ const Profile = () => {
                   if (!event) return null;
                   return (
                     <>
-                      <TouchableHighlight
+                      <EventItemSimple
                         onPress={() => {
                           navigation.dispatch(
                             StackActions.push('Leaderboard', {
@@ -277,28 +295,10 @@ const Profile = () => {
                             }),
                           );
                         }}
-                        style={{
-                          padding: 10,
-                          backgroundColor: 'rgba(255,255,255,0.2)',
-                          justifyContent: 'space-between',
-                          flexDirection: 'row',
-                          alignItems: 'center',
-                        }}
-                        underlayColor={COLORS.secondaryDark}
-                      >
-                        <>
-                          <SubHeader>
-                            {`${AWARDS_BODY_TO_PLURAL_STRING[event.awardsBody]} ${
-                              event.year
-                            } - ${PHASE_TO_STRING[lbRanking.phase]}`}
-                          </SubHeader>
-                          <CustomIcon
-                            name="chevron-right"
-                            size={24}
-                            color={COLORS.white}
-                          />
-                        </>
-                      </TouchableHighlight>
+                        title={`${AWARDS_BODY_TO_PLURAL_STRING[event.awardsBody]} ${
+                          event.year
+                        } - ${PHASE_TO_STRING_PLURAL[lbRanking.phase]}`}
+                      />
                       {user ? (
                         <LeaderboardListItem
                           leaderboardRanking={{ userId: user._id, ...user, ...lbRanking }}
