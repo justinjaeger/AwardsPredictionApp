@@ -57,10 +57,11 @@ const Template = ({
         <View style={{ flexDirection: 'row' }}>
           <View
             style={{
-              width: 35,
+              // width: 50,
               alignItems: 'flex-start',
               justifyContent: 'center',
               overflow: 'visible',
+              marginRight: 10,
             }}
           >
             <SubHeader
