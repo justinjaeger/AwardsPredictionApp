@@ -82,8 +82,9 @@ const CategoryListItem = ({
 
   const showAccolades = !!yyyymmdd;
 
+  // we need to know the number of predictions that are in the PHASE
   const numCorrectInCategory = truncatedPredictions.filter(
-    (prediction) => contenderIdsToPhase?.[prediction.contenderId],
+    (prediction) => contenderIdsToPhase?.[prediction.contenderId] === phase,
   ).length;
 
   return (
