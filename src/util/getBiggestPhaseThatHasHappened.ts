@@ -1,18 +1,20 @@
 import { CategoryName, EventModel, EventStatus, Phase } from '../types/api';
+import { yyyymmddToDate } from './yyyymmddToDate';
 
 export const getBiggestPhaseThatHasHappened = (
   event: EventModel,
   category: CategoryName | undefined,
+  yyyymmdd?: number, // if pass this, we'll see if phase has happed BY THIS DATE
 ) => {
   const { status, nomDateTime, winDateTime, shortlistDateTime } = event;
   const { isShortlisted } = category
     ? event.categories[category]
     : { isShortlisted: false };
 
-  const shortlistDateHasPassed =
-    shortlistDateTime && new Date(shortlistDateTime) < new Date();
-  const nomDateHasPassed = nomDateTime && new Date(nomDateTime) < new Date();
-  const winDateHasPassed = winDateTime && new Date(winDateTime) < new Date();
+  const d = yyyymmdd ? yyyymmddToDate(yyyymmdd) : new Date();
+  const shortlistDateHasPassed = shortlistDateTime && new Date(shortlistDateTime) < d;
+  const nomDateHasPassed = nomDateTime && new Date(nomDateTime) < d;
+  const winDateHasPassed = winDateTime && new Date(winDateTime) < d;
 
   const isPredictingForbidden = winDateHasPassed || status === EventStatus.ARCHIVED;
   const isPredictingWinners = nomDateHasPassed;

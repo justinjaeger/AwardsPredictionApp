@@ -66,17 +66,20 @@ const ItemStatBox = ({
   const creditString =
     songName ?? performerName ?? (credit ? credit.join(', ') : undefined);
 
-  const biggestPhaseThatHasHappened = getBiggestPhaseThatHasHappened(event, category);
+  const biggestPhaseThatHasHappened = getBiggestPhaseThatHasHappened(
+    event,
+    category,
+    yyyymmdd,
+  );
   const { win, nom, listed } = getNumPredicting(
     prediction?.numPredicting ?? {},
     slots ?? 5,
   );
-  console.log('biggestPhaseThatHasHappened', biggestPhaseThatHasHappened);
+
   const nominationsHaveNotHappened = [undefined, Phase.SHORTLIST].includes(
     biggestPhaseThatHasHappened,
   );
   const displayNoExtraSlots = !nominationsHaveNotHappened && !yyyymmdd;
-  console.log('displayNoExtraSlots', displayNoExtraSlots);
 
   return (
     <View
@@ -154,12 +157,10 @@ const ItemStatBox = ({
               number={`${formatPercentage(nom / totalNumPredictingCategory, true)}`}
               text="predict nom"
             />
-            {biggestPhaseThatHasHappened === undefined ? (
-              <Stat
-                number={`${formatPercentage(listed / totalNumPredictingCategory, true)}`}
-                text={`top ${(slots ?? 5) + SLOTS_TO_DISPLAY_EXTRA}`}
-              />
-            ) : null}
+            <Stat
+              number={`${formatPercentage(listed / totalNumPredictingCategory, true)}`}
+              text={`top ${(slots ?? 5) + SLOTS_TO_DISPLAY_EXTRA}`}
+            />
           </>
         ) : null}
       </View>
