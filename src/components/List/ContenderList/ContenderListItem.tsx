@@ -246,6 +246,7 @@ const ContenderListItem = ({
                     shadowColor: 'black',
                     shadowOpacity: 1,
                     shadowRadius: 5,
+                    color: isUnaccaloded ? 'rgba(255,255,255,0.5)' : COLORS.white,
                   }}
                 >
                   {` • ${subtitle}`}
