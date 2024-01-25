@@ -114,13 +114,7 @@ const Leaderboard = () => {
         keyboardShouldPersistTaps={'always'}
         ListHeaderComponent={
           <>
-            {user && userLeaderboard ? (
-              <LeaderboardListItem
-                leaderboardRanking={{ userId: user._id, ...user, ...userLeaderboard }}
-                style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
-              />
-            ) : null}
-            <View
+            {/* <View
               style={{
                 flexDirection: 'column',
                 justifyContent: 'space-around',
@@ -133,7 +127,13 @@ const Leaderboard = () => {
               <SubHeader>Score Distribution</SubHeader>
               <Body style={{ marginTop: 5 }}>All Users</Body>
             </View>
-            <LeaderboardChart leaderboard={leaderboard} flatListRef={flatListRef} />
+            <LeaderboardChart leaderboard={leaderboard} flatListRef={flatListRef} /> */}
+            {user && userLeaderboard ? (
+              <LeaderboardListItem
+                leaderboardRanking={{ userId: user._id, ...user, ...userLeaderboard }}
+                style={{ backgroundColor: 'rgba(255,255,255,0.1)', marginBottom: 2 }}
+              />
+            ) : null}
             <LeaderboardListItemTemplate
               title={'Community'}
               subtitle={'Aggregate of all users'}
@@ -162,6 +162,20 @@ const Leaderboard = () => {
               style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
               hideProfileImage
             />
+            <View
+              style={{
+                flexDirection: 'column',
+                justifyContent: 'space-around',
+                width: '100%',
+                alignItems: 'center',
+                padding: 20,
+                paddingBottom: 10,
+              }}
+            >
+              <SubHeader>Score Distribution</SubHeader>
+              <Body style={{ marginTop: 5 }}>All Users</Body>
+            </View>
+            <LeaderboardChart leaderboard={leaderboard} flatListRef={flatListRef} />
             {authUserId ? (
               <View
                 style={{
@@ -187,34 +201,6 @@ const Leaderboard = () => {
                 />
               </View>
             ) : null}
-            {/* <LeaderboardListItemTemplate
-              title={'Community'}
-              subtitle={'Aggregate of all users'}
-              percentageAccuracy={leaderboard.communityPercentageAccuracy}
-              numCorrect={leaderboard.communityNumCorrect}
-              totalPossibleSlots={leaderboard.totalPossibleSlots}
-              rank={
-                leaderboard.numUsersPredicting -
-                leaderboard.communityPerformedBetterThanNumUsers
-              }
-              onPress={() => {
-                const yyyymmdd = leaderboardRankings[0]?.yyyymmdd;
-                if (!yyyymmdd) return;
-                setPersonalCommunityTab('community');
-                navigation.navigate('Event', {
-                  eventId,
-                  yyyymmdd,
-                  phase,
-                  userInfo: getUserInfo(user),
-                  isLeaderboard: true,
-                  noShorts,
-                });
-              }}
-              profileImage={undefined}
-              riskiness={leaderboard.communityRiskiness}
-              style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
-              hideProfileImage
-            /> */}
           </>
         }
         ListFooterComponent={
