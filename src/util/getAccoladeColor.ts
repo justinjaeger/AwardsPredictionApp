@@ -1,5 +1,5 @@
 import COLORS from '../constants/colors';
-import { Phase } from '../types/api';
+import { Phase } from '../models';
 
 export const getAccoladeColor = (phase: Phase): string => {
   return phase === Phase.SHORTLIST

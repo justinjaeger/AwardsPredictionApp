@@ -1,5 +1,5 @@
 import { AWARDS_BODY_TO_PLURAL_STRING } from '../constants/awardsBodies';
-import { AwardsBody } from '../types/api';
+import { AwardsBody } from '../models';
 
 /**
  * "2022 Academy Awards (Nominations)"

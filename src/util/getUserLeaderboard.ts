@@ -1,4 +1,4 @@
-import { Phase, User } from '../types/api';
+import { Phase, User } from '../models';
 
 export const getUserLeaderboard = ({
   user,

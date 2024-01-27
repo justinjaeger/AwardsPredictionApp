@@ -1,11 +1,6 @@
 import React from 'react';
 import { TouchableHighlight, View } from 'react-native';
-import {
-  CategoryName,
-  Phase,
-  iCategoryPrediction,
-  iPrediction,
-} from '../../../types/api';
+import { CategoryName, Phase, iCategoryPrediction, iPrediction } from '../../../models';
 import COLORS from '../../../constants/colors';
 import { HeaderLight, SubHeader } from '../../../components/Text';
 import theme from '../../../constants/theme';

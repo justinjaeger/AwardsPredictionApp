@@ -4,7 +4,7 @@ import { FlatList, View, useWindowDimensions } from 'react-native';
 import theme from '../../constants/theme';
 import { HeaderLight, SubHeader } from '../Text';
 import UserListSkeleton from '../Skeletons/UserListSkeleton';
-import { User, WithId } from '../../types/api';
+import { User, WithId } from '../../models';
 import useQueryGetFollowingUsers from '../../hooks/queries/useQueryGetFollowingUsers';
 import useDevice from '../../util/device';
 import { PredictionsNavigationProp, iUserInfo } from '../../navigation/types';

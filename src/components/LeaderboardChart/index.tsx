@@ -6,7 +6,7 @@ import {
   View,
   useWindowDimensions,
 } from 'react-native';
-import { iLeaderboard } from '../../types/api';
+import { iLeaderboard } from '../../models';
 import {
   formatDecimalAsPercentage,
   formatLowDecimalAsPercentage,

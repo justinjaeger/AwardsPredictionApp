@@ -2,7 +2,7 @@
 import { RouteProp, useRoute } from '@react-navigation/native';
 import { PredictionsParamList, iUserInfo } from '../navigation/types';
 import { useGetEvent } from './useGetEvent';
-import { CategoryName, EventModel, Phase, WithId, iCategory } from '../types/api';
+import { CategoryName, EventModel, Phase, WithId, iCategory } from '../models';
 
 /**
  * Shortcut to getting route params, but at the expense of type safety

@@ -5,7 +5,7 @@ import FollowButton from '../FollowButton';
 import ProfileImage from '../ProfileImage';
 import { Body, SubHeader } from '../Text';
 import { IMAGE_SIZE } from '.';
-import { User, WithId } from '../../types/api';
+import { User, WithId } from '../../models';
 import { iUserInfo } from '../../navigation/types';
 
 const UserSearchResultItem = ({

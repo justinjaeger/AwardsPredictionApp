@@ -1,4 +1,4 @@
-import { CategoryName, CategoryType, Phase } from '../types/api';
+import { CategoryName, CategoryType, Phase } from '../models';
 
 export type iCategoryData = {
   name: string;

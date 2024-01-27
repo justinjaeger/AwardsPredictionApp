@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ItemStatBox from '../../components/ItemStatBox/index';
 import useQueryGetCommunityPredictions from '../../hooks/queries/useQueryGetCommunityPredictions';
-import { CategoryName, EventModel, WithId, iPrediction } from '../../types/api';
+import { CategoryName, EventModel, WithId, iPrediction } from '../../models';
 import { getNumPredicting, getTotalNumPredicting } from '../../util/getNumPredicting';
 import { sortByLikelihood } from '../../util/sortPredictions';
 import { ScrollView, View, useWindowDimensions } from 'react-native';

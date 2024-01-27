@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { User, WithId } from '../types/api';
+import { User, WithId } from '../models';
 import MongoApi from '../services/api/requests';
 import { PAGINATED_LIMIT } from '../services/api/requests/user';
 

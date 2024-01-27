@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { QueryKeys } from '../../types/keys';
 import MongoApi from '../../services/api/requests';
 import { useTmdbDataStore } from '../../context/TmdbDataStore';
-import { EventModel, WithId } from '../../types/api';
+import { EventModel, WithId } from '../../models';
 import { useRouteParams } from '../useRouteParams';
 
 const useQueryGetCommunityPredictions = (params?: {

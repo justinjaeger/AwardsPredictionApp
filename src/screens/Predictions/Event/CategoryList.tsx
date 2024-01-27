@@ -13,7 +13,7 @@ import {
   PredictionSet,
   WithId,
   iCategoryPrediction,
-} from '../../../types/api';
+} from '../../../models';
 import EventSkeleton from '../../../components/Skeletons/EventSkeleton';
 import { getOrderedCategories } from '../../../util/sortByObjectOrder';
 import CategoryListItem from './CategoryListItem';

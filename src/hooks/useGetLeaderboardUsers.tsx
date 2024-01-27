@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Phase } from '../types/api';
+import { Phase } from '../models';
 import MongoApi from '../services/api/requests';
 import { iLeaderboardRankingsWithUserData } from '../services/api/requests/leaderboard';
 

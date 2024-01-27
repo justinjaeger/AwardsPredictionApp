@@ -9,7 +9,7 @@ import { useNavigateAwayEffect, useNavigateToEffect } from '../../../util/hooks'
 import { formatLastUpdated } from '../../../util/formatDateTime';
 import { useAuth } from '../../../context/AuthContext';
 import EventLink from '../../../components/EventLinkButton';
-import { iPrediction } from '../../../types/api';
+import { iPrediction } from '../../../models';
 import useQueryGetUserPredictions from '../../../hooks/queries/useQueryGetUserPredictions';
 import CategorySkeleton from '../../../components/Skeletons/CategorySkeleton';
 import { sortPredictions } from '../../../util/sortPredictions';

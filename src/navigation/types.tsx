@@ -1,6 +1,6 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import { MaterialTopTabNavigationProp } from '@react-navigation/material-top-tabs';
-import { CategoryName, Phase, iPrediction } from '../types/api';
+import { CategoryName, Phase, iPrediction } from '../models';
 
 export type MainScreenNavigationProp = StackNavigationProp<MainParamList>;
 export type MainParamList = {

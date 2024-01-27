@@ -1,7 +1,7 @@
 import { RouteProp, useRoute } from '@react-navigation/native';
 import { useState } from 'react';
 import { PredictionsParamList } from '../../../navigation/types';
-import { iPrediction } from '../../../types/api';
+import { iPrediction } from '../../../models';
 import useQueryGetCommunityPredictions from '../../../hooks/queries/useQueryGetCommunityPredictions';
 import { sortPredictions } from '../../../util/sortPredictions';
 import { useRouteParams } from '../../../hooks/useRouteParams';

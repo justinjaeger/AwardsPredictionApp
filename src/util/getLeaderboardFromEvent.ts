@@ -1,4 +1,4 @@
-import { EventModel, Phase } from '../types/api';
+import { EventModel, Phase } from '../models';
 
 export const getLeaderboardFromEvent = (
   event: EventModel,

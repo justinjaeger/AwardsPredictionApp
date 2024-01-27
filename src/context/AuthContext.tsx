@@ -8,7 +8,7 @@ import { AsyncStorageKeys } from '../types/keys';
 import { useAsyncEffect } from '../util/hooks';
 import { resetToProfile } from '../util/navigationActions';
 import MongoApi from '../services/api/requests';
-import { UserRole } from '../types/api';
+import { UserRole } from '../models';
 
 /** Async Storage Functions (to persist data when user closes app)
  * We're not exporting the async functions because we ONLY want to use them in here, or else syncing persisted state with this context is annoying

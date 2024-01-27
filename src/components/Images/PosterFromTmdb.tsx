@@ -1,7 +1,7 @@
 import React from 'react';
 import { ImageStyle, StyleProp } from 'react-native';
 import Poster from './Poster';
-import { Movie, Person, Phase } from '../../types/api';
+import { Movie, Person, Phase } from '../../models';
 
 type iPosterFromTmdbProps = {
   width: number;

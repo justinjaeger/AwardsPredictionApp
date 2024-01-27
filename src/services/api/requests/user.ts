@@ -1,4 +1,4 @@
-import { User, WithId } from '../../../types/api';
+import { User, WithId } from '../../../models';
 import api from '../api';
 
 export const PAGINATED_LIMIT = 15;

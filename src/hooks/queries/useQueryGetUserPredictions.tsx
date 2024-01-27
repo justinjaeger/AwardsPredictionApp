@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { QueryKeys } from '../../types/keys';
 import MongoApi from '../../services/api/requests';
 import { useTmdbDataStore } from '../../context/TmdbDataStore';
-import { PredictionSet, WithId } from '../../types/api';
+import { PredictionSet, WithId } from '../../models';
 import { useRouteParams } from '../useRouteParams';
 
 const useQueryGetUserPredictions = ({

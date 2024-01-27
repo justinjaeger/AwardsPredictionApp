@@ -11,7 +11,7 @@ import { getPosterDimensionsByWidth } from '../../../constants/posterDimensions'
 import { getTotalNumPredicting } from '../../../util/getNumPredicting';
 import { Body, SubHeader } from '../../Text';
 import { hexToRgb } from '../../../util/hexToRgb';
-import { CategoryType, iPrediction, Phase } from '../../../types/api';
+import { CategoryType, iPrediction, Phase } from '../../../models';
 import { useTmdbDataStore } from '../../../context/TmdbDataStore';
 import { categoryNameToTmdbCredit } from '../../../util/categoryNameToTmdbCredit';
 import ListItemSkeleton from '../../Skeletons/ListItemSkeleton';

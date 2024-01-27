@@ -1,4 +1,4 @@
-import { ApiData, WithId } from '../../../types/api';
+import { ApiData, WithId } from '../../../models';
 import api from '../api';
 
 export const getApiData = async ({ eventYear }: { eventYear: number }) => {

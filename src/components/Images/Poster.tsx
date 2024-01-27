@@ -7,7 +7,7 @@ import { getTmdbImageUrl } from '../../constants';
 import { Label } from '../Text';
 import theme from '../../constants/theme';
 import RankingDisplay from '../RankingDisplay';
-import { Phase } from '../../types/api';
+import { Phase } from '../../models';
 import { getAccoladeColor } from '../../util/getAccoladeColor';
 
 type iPosterProps = {

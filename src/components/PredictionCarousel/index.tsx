@@ -19,7 +19,7 @@ import ProfileImage from '../ProfileImage';
 import { SubHeader } from '../Text';
 import UserPredictionList from '../UserPredictionList';
 import CarouselArrow from './CarouselArrow';
-import { iRecentPrediction } from '../../types/api';
+import { iRecentPrediction } from '../../models';
 import { PredictionsNavigationProp, iUserInfo } from '../../navigation/types';
 
 const PredictionCarousel = ({

@@ -4,7 +4,7 @@ import { FlatList } from 'react-native';
 import COLORS from '../../constants/colors';
 import LastUpdatedText from '../LastUpdatedText';
 import ContenderListItem from '../List/ContenderList/ContenderListItem';
-import { Phase, iPrediction } from '../../types/api';
+import { Phase, iPrediction } from '../../models';
 import { getTotalNumPredicting } from '../../util/getNumPredicting';
 import { useNavigation } from '@react-navigation/native';
 import { PredictionsNavigationProp } from '../../navigation/types';

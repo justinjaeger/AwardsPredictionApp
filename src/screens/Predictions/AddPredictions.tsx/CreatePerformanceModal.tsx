@@ -3,7 +3,7 @@ import Snackbar from '../../../components/Snackbar';
 import MovieListSearch from '../../../components/MovieList/MovieListSearch';
 import { FAB } from '../../../components/Buttons/FAB';
 import BasicModal from '../../../components/BasicModal';
-import { CategoryType, iPrediction } from '../../../types/api';
+import { CategoryType, iPrediction } from '../../../models';
 import TmdbServices, { iSearchData } from '../../../services/tmdb';
 import MovieListSelectable from '../../../components/MovieList/MovieListSelectable';
 import { useAsyncEffect } from '../../../util/hooks';

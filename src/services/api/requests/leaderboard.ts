@@ -1,4 +1,4 @@
-import { LeaderboardRanking, Phase, User, WithId } from '../../../types/api';
+import { LeaderboardRanking, Phase, User, WithId } from '../../../models';
 import api from '../api';
 
 export type iLeaderboardRankingsWithUserData = LeaderboardRanking & Partial<WithId<User>>;

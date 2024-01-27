@@ -8,7 +8,7 @@ import theme from '../../constants/theme';
 import { useAuth } from '../../context/AuthContext';
 import { iUserInfo, PredictionsNavigationProp } from '../../navigation/types';
 import { formatLastUpdated } from '../../util/formatDateTime';
-import { AwardsBody, CategoryName, iRecentPrediction } from '../../types/api';
+import { AwardsBody, CategoryName, iRecentPrediction } from '../../models';
 import useQueryGetAllEvents from '../../hooks/queries/useQueryGetAllEvents';
 import { useNavigation } from '@react-navigation/native';
 import { usePersonalCommunityTab } from '../../context/EventContext';

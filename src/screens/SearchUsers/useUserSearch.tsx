@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import MongoApi from '../../services/api/requests';
-import { User, WithId } from '../../types/api';
+import { User, WithId } from '../../models';
 import { PAGINATED_LIMIT } from '../../services/api/requests/user';
 import useQueryGetFollowingUsers from '../../hooks/queries/useQueryGetFollowingUsers';
 

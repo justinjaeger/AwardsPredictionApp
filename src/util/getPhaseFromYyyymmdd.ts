@@ -1,4 +1,4 @@
-import { EventModel, Phase } from '../types/api';
+import { EventModel, Phase } from '../models';
 
 const dateToYyyymmdd = (d: Date | string): number => {
   const date = new Date(d);

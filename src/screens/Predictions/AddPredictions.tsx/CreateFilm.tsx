@@ -5,7 +5,7 @@ import COLORS from '../../../constants/colors';
 import MovieListSearch from '../../../components/MovieList/MovieListSearch';
 import LoadingStatueModal from '../../../components/LoadingStatueModal';
 import { FAB } from '../../../components/Buttons/FAB';
-import { CategoryType } from '../../../types/api';
+import { CategoryType } from '../../../models';
 import SearchInput from '../../../components/Inputs/SearchInput';
 import MovieListSelectable from '../../../components/MovieList/MovieListSelectable';
 import { PredictionsNavigationProp } from '../../../navigation/types';

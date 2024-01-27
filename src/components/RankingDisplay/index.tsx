@@ -5,7 +5,7 @@ import useDevice from '../../util/device';
 import { Body, SmallHeader } from '../Text';
 import { getPosterDimensionsByWidth } from '../../constants/posterDimensions';
 import theme from '../../constants/theme';
-import { Phase } from '../../types/api';
+import { Phase } from '../../models';
 import { getAccoladeColor } from '../../util/getAccoladeColor';
 
 const RankingDisplay = ({

@@ -1,4 +1,4 @@
-import { Relationship, WithId } from '../../../types/api';
+import { Relationship, WithId } from '../../../models';
 import api from '../api';
 
 export const getRelationship = async (

@@ -6,7 +6,7 @@ import {
   useWindowDimensions,
 } from 'react-native';
 import BasicModal from '../BasicModal';
-import { EventModel, WithId, iCategory, iPrediction } from '../../types/api';
+import { EventModel, WithId, iCategory, iPrediction } from '../../models';
 import MovieGrid from '../MovieGrid';
 import { BodyBold, SmallHeader, SubHeader } from '../Text';
 import { eventToString } from '../../util/stringConversions';

@@ -9,7 +9,7 @@ import Poster from '../Images/Poster';
 import { Body, SubHeader } from '../Text';
 import ExternalLinkButton from '../ExternalLinkButton';
 import theme from '../../constants/theme';
-import { CategoryType } from '../../types/api';
+import { CategoryType } from '../../models';
 import { useNavigation } from '@react-navigation/native';
 import { MainScreenNavigationProp } from '../../navigation/types';
 import { truncateText } from '../../util/truncateText';

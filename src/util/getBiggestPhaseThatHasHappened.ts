@@ -1,4 +1,4 @@
-import { CategoryName, EventModel, EventStatus, Phase } from '../types/api';
+import { CategoryName, EventModel, EventStatus, Phase } from '../models';
 import { yyyymmddToDate } from './yyyymmddToDate';
 
 export const getBiggestPhaseThatHasHappened = (

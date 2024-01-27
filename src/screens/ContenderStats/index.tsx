@@ -1,7 +1,7 @@
 import React, { useLayoutEffect, useRef, useState } from 'react';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { PredictionsNavigationProp, PredictionsParamList } from '../../navigation/types';
-import { CategoryName, EventModel, Movie, WithId, iPrediction } from '../../types/api';
+import { CategoryName, EventModel, Movie, WithId, iPrediction } from '../../models';
 import { useTmdbDataStore } from '../../context/TmdbDataStore';
 import { truncateText } from '../../util/truncateText';
 import ContenderStatEventTab from './ContenderStatEventTab';

@@ -4,7 +4,7 @@ import { PredictionsNavigationProp } from '../../../navigation/types';
 import { useGetEventsWithLeaderboard } from '../../../hooks/useGetEventsWithLeaderboard';
 import { FlatList } from 'react-native';
 import EventItem from '../../../components/EventItem';
-import { EventModel, UserRole, WithId, iLeaderboard } from '../../../types/api';
+import { EventModel, UserRole, WithId, iLeaderboard } from '../../../models';
 import { AWARDS_BODY_TO_PLURAL_STRING } from '../../../constants/awardsBodies';
 import { getLeaderboardTitle } from '../../../constants';
 import { useAuth } from '../../../context/AuthContext';

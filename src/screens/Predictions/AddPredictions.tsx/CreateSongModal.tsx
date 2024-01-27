@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FAB } from '../../../components/Buttons/FAB';
 import BasicModal from '../../../components/BasicModal';
-import { iPrediction } from '../../../types/api';
+import { iPrediction } from '../../../models';
 import MovieListSelectable from '../../../components/MovieList/MovieListSelectable';
 import { SubmitButton } from '../../../components/Buttons';
 import FormInput from '../../../components/Inputs/FormInput';

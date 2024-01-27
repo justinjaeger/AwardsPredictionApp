@@ -1,5 +1,5 @@
 import { iUserInfo } from '../navigation/types';
-import { User, WithId } from '../types/api';
+import { User, WithId } from '../models';
 
 export const getUserInfo = (
   user: WithId<User> | null | undefined,

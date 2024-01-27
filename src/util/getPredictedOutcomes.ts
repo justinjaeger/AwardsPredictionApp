@@ -1,5 +1,5 @@
 import { iContenderStatsData } from '../screens/ContenderStats';
-import { CategoryName, EventModel } from '../types/api';
+import { CategoryName, EventModel } from '../models';
 
 export const getPredictedOutcomes = (
   predictions: iContenderStatsData[],

@@ -7,7 +7,7 @@ import {
   useWindowDimensions,
 } from 'react-native';
 import { Header, Label, SmallHeader, SubHeader, SubHeaderLight } from '../Text';
-import { CategoryName, EventModel, Phase, WithId, iPrediction } from '../../types/api';
+import { CategoryName, EventModel, Phase, WithId, iPrediction } from '../../models';
 import { getNumPredicting, getTotalNumPredicting } from '../../util/getNumPredicting';
 import Histogram, { SLOTS_TO_DISPLAY_EXTRA } from '../Histogram';
 import { useTmdbDataStore } from '../../context/TmdbDataStore';

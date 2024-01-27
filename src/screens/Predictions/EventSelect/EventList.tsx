@@ -7,7 +7,7 @@ import { getOrderedEvents } from '../../../util/sortByObjectOrder';
 import { usePersonalCommunityTab } from '../../../context/EventContext';
 import { PHASE_TO_CTA, getEventTime } from '../../../constants/events';
 import { Divider } from '@ui-kitten/components';
-import { EventModel, Phase, User, WithId } from '../../../types/api';
+import { EventModel, Phase, User, WithId } from '../../../models';
 import EventItem from '../../../components/EventItem';
 import { AWARDS_BODY_TO_PLURAL_STRING } from '../../../constants/awardsBodies';
 import { useNavigation } from '@react-navigation/native';

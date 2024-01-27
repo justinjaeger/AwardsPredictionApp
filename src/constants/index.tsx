@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { SubHeader } from '../components/Text';
-import { Phase, iLeaderboard } from '../types/api';
+import { Phase, iLeaderboard } from '../models';
 import ProfileImage from '../components/ProfileImage';
 
 /**

@@ -8,7 +8,7 @@ import theme from '../../constants/theme';
 import LastUpdatedText from '../LastUpdatedText';
 import ContenderListItem from '../List/ContenderList/ContenderListItem';
 import { Body, SubHeader } from '../Text';
-import { CategoryName, iPrediction } from '../../types/api';
+import { CategoryName, iPrediction } from '../../models';
 import { triggerHaptic } from '../../util/hapticFeedback';
 import { useNavigation } from '@react-navigation/native';
 import { PredictionsNavigationProp } from '../../navigation/types';

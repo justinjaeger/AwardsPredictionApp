@@ -22,7 +22,7 @@ import { getUserInfo } from '../../util/getUserInfo';
 import LeaderboardListItem from '../../components/LeaderboardListItem';
 import { AWARDS_BODY_TO_PLURAL_STRING } from '../../constants/awardsBodies';
 import { PHASE_TO_STRING_PLURAL } from '../../constants/categories';
-import { Phase, UserRole, iLeaderboard, iLeaderboardRanking } from '../../types/api';
+import { Phase, UserRole, iLeaderboard, iLeaderboardRanking } from '../../models';
 import EventItemSimple from '../../components/EventItemSimple';
 import { usePersonalCommunityTab } from '../../context/EventContext';
 import { getCurrentPhaseBeingPredicted } from '../../util/getBiggestPhaseThatHasHappened';

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { CategoryType, Contender, WithId, iPrediction } from '../../../types/api';
+import { CategoryType, Contender, WithId, iPrediction } from '../../../models';
 import TmdbServices, { iSearchData } from '../../../services/tmdb';
 import useMutationCreateContender from '../../../hooks/mutations/useMutationCreateContender';
 import Snackbar from '../../../components/Snackbar';

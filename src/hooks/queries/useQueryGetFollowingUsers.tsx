@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { QueryKeys } from '../../types/keys';
 import MongoApi from '../../services/api/requests';
-import { iRecentPrediction } from '../../types/api';
+import { iRecentPrediction } from '../../models';
 import { useTmdbDataStore } from '../../context/TmdbDataStore';
 import { useAuth } from '../../context/AuthContext';
 

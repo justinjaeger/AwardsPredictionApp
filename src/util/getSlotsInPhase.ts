@@ -1,4 +1,4 @@
-import { Phase, iCategory } from '../types/api';
+import { Phase, iCategory } from '../models';
 
 export const getSlotsInPhase = (
   eventPhase: Phase | undefined,

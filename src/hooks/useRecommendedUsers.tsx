@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { User, WithId } from '../types/api';
+import { User, WithId } from '../models';
 import MongoApi from '../services/api/requests';
 import useQueryGetFollowingUsers from './queries/useQueryGetFollowingUsers';
 

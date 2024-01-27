@@ -3,7 +3,7 @@ import React from 'react';
 import { StyleProp, useWindowDimensions, View, ViewStyle } from 'react-native';
 import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
-import { iCategory, iPrediction, Phase } from '../../types/api';
+import { iCategory, iPrediction, Phase } from '../../models';
 import { useTmdbDataStore } from '../../context/TmdbDataStore';
 import PosterFromTmdb from '../Images/PosterFromTmdb';
 import MoviePosterSkeleton from '../Skeletons/MoviePosterSkeleton';

@@ -6,7 +6,7 @@ import AdminNavigator from '../AdminNavigator';
 import { useAuth } from '../../context/AuthContext';
 import { BottomTabParamList } from '../types';
 import HelpNavigator from '../HelpNavigator';
-import { UserRole } from '../../types/api';
+import { UserRole } from '../../models';
 
 const Tab = createBottomTabNavigator<BottomTabParamList>();
 

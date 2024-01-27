@@ -7,7 +7,7 @@ import {
   getPosterDimensionsByWidth,
 } from '../../constants/posterDimensions';
 import { Body, Header, SmallHeader, SubHeader } from '../Text';
-import { iPrediction } from '../../types/api';
+import { iPrediction } from '../../models';
 import ExternalLinkButton from '../ExternalLinkButton';
 import { useNavigation } from '@react-navigation/native';
 import { useTmdbDataStore } from '../../context/TmdbDataStore';

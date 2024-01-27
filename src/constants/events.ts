@@ -1,4 +1,4 @@
-import { EventModel, EventStatus, Phase } from '../types/api';
+import { EventModel, EventStatus, Phase } from '../models';
 import { formatDateTime } from '../util/formatDateTime';
 import { getCurrentPhaseBeingPredicted } from '../util/getBiggestPhaseThatHasHappened';
 

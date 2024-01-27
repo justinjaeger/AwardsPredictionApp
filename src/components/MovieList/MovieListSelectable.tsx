@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { FlatList, Keyboard } from 'react-native';
 import { removePredictionFromList } from '../../util/removePredictionFromList';
 import ContenderListItem from '../List/ContenderList/ContenderListItem';
-import { Phase, iPrediction } from '../../types/api';
+import { Phase, iPrediction } from '../../models';
 import { getTotalNumPredicting } from '../../util/getNumPredicting';
 import COLORS from '../../constants/colors';
 import { hexToRgb } from '../../util/hexToRgb';
