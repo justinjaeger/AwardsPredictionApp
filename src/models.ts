@@ -166,6 +166,7 @@ export type EventModel = {
   winDateTime?: Date;
   leaderboards?: iIndexedEventLeaderboards;
   amplify_id?: string;
+  isHidden?: boolean;
 };
 
 export type IMovieCategoryCredit =
