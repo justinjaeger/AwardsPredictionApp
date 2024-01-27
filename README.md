@@ -8,7 +8,7 @@
 * Android: `yarn start` in one terminal, then `yarn android` in another
 
 # How to release:
-* Make sure ENV is pointing to production!!
+* Make sure `ENV is pointing to production`!!
 * AND run `yarn reset-env` after changing it so the env cache is clear
 * To be sure, can also just shut down local dev server so it's obvious
 ## Versioning (iOS+Android)
