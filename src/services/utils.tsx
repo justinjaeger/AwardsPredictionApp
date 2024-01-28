@@ -1,5 +1,4 @@
 import Snackbar from '../components/Snackbar';
-import SlackApi, { SlackChannel } from './slack';
 
 export interface iApiResponse<T> {
   status: 'success' | 'error';
@@ -31,13 +30,5 @@ export const handleError = (
       Snackbar.error(m);
     }
   }
-  const allInfo = `
-    Message: ${
-      isInvalidToken ? 'Invalid token' : isUnauthorized ? 'Unauthorized' : message
-    }
-    Error: ${JSON.stringify(error)}
-    m: ${m}
-  `;
-  SlackApi.sendMessage(allInfo, SlackChannel.ERRORS);
   return { status: 'error', message: m, error: error.name };
 };
