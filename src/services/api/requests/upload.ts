@@ -13,7 +13,7 @@ export const uploadProfilePicture = async (uri: string) => {
 
     const { data } = await KeychainStorage.get();
     const token = data?.accessToken;
-    await fetch(`${API_ENDPOINT}/image`, {
+    await fetch(`${API_ENDPOINT}/imageV2`, {
       method: 'POST',
       body: blob,
       headers: {
