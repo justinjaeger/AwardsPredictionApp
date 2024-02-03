@@ -24,9 +24,9 @@ const ProfileImage = ({
   isLoading?: boolean;
 }) => {
   const { isPad } = useDevice();
-  const uri = image ? getImageUri(image) : undefined;
-
   const size = (imageSize || 100) * (isPad ? IPAD_PROFILE_IMAGE_SCALE : 1);
+
+  const uri = image ? getImageUri(image, size) : undefined;
 
   return (
     <View
