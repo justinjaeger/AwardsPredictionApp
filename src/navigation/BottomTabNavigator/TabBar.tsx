@@ -64,6 +64,15 @@ const TabBar = (props: ITabBarProps) => {
                     />
                   </View>
                 );
+              case 'Leaderboard':
+                return (
+                  <View key={index}>
+                    <CustomIcon
+                      name={'award-outline'}
+                      color={isFocused ? focusedColor : unfocusedColor}
+                    />
+                  </View>
+                );
               case 'ProfileTab':
                 return (
                   <View key={index}>

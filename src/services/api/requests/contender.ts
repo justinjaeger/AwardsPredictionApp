@@ -1,4 +1,4 @@
-import { CategoryName, Contender, WithId } from '../../../types/api';
+import { CategoryName, Contender, WithId } from '../../../models';
 import api from '../api';
 
 /**

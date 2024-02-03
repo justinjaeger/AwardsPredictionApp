@@ -29,7 +29,7 @@ const useMutationUpdateUser = (onComplete?: () => void) => {
       }
       // re-fetch predictions so the UI updates
       await queryClient.invalidateQueries({
-        queryKey: [QueryKeys.USER + authUserId],
+        queryKey: [QueryKeys.USER, authUserId],
       });
       setIsComplete(true);
       onComplete && onComplete();

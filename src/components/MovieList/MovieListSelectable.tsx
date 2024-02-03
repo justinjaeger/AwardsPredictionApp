@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { FlatList, Keyboard } from 'react-native';
 import { removePredictionFromList } from '../../util/removePredictionFromList';
 import ContenderListItem from '../List/ContenderList/ContenderListItem';
-import { iPrediction } from '../../types/api';
+import { Phase, iPrediction } from '../../models';
 import { getTotalNumPredicting } from '../../util/getNumPredicting';
 import COLORS from '../../constants/colors';
 import { hexToRgb } from '../../util/hexToRgb';
@@ -30,7 +30,15 @@ const MovieListSelectable = ({
 }: iMovieListProps) => {
   const navigation = useNavigation<PredictionsNavigationProp>();
   const { isPad } = useDevice();
-  const { categoryData, category: _category, eventId: _eventId } = useRouteParams();
+  const {
+    categoryData,
+    category: _category,
+    eventId: _eventId,
+    yyyymmdd,
+    phase,
+    noShorts,
+    isLeaderboard,
+  } = useRouteParams();
   const { type } = categoryData!;
   const category = _category!;
   const eventId = _eventId!;
@@ -40,7 +48,15 @@ const MovieListSelectable = ({
       onToggleItem(prediction);
       return;
     }
-    navigation.navigate('ContenderInfoModal', { prediction, category, eventId });
+    navigation.navigate('ContenderInfoModal', {
+      prediction,
+      category,
+      eventId,
+      yyyymmdd,
+      phase,
+      noShorts,
+      isLeaderboard,
+    });
   }, []);
 
   const onToggleItem = useCallback(async (prediction: iPrediction) => {
@@ -73,6 +89,10 @@ const MovieListSelectable = ({
     [...predictions, ...selectedPredictions],
     (p) => p.contenderId,
   );
+
+  const nominationsHaveNotHappened =
+    phase && [Phase.SHORTLIST, Phase.NOMINATION].includes(phase);
+  const displayNoExtraSlots = !nominationsHaveNotHappened && !yyyymmdd;
 
   return (
     <FlatList
@@ -109,6 +129,7 @@ const MovieListSelectable = ({
             }}
             categoryType={type}
             showHistogram
+            displayNoExtraSlots={displayNoExtraSlots}
             totalNumPredictingTop={totalNumPredictingTop}
             iconRightProps={{
               iconName: highlighted ? 'checkmark-circle-2' : 'radio-button-off',

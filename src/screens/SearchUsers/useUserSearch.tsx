@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import MongoApi from '../../services/api/requests';
-import { User, WithId } from '../../types/api';
+import { User, WithId } from '../../models';
 import { PAGINATED_LIMIT } from '../../services/api/requests/user';
 import useQueryGetFollowingUsers from '../../hooks/queries/useQueryGetFollowingUsers';
 
@@ -14,9 +14,13 @@ const useUserSearch = () => {
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [allUsersAreFetched, setAllUsersAreFetched] = useState<boolean>(false);
   const [lastSearchInput, setLastSearchInput] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const fetchPage = async (s: string, pn: number) => {
+    if (isLoading) return;
+    setIsLoading(true);
     setLastSearchInput(s);
+    setPageNumber((prev) => prev + 1);
     const { data } = await MongoApi.searchUsers({ query: s, pageNumber: pn });
     // sort by whether user follows them or not
     const newUsers = (data ?? []).sort((a) =>
@@ -25,8 +29,8 @@ const useUserSearch = () => {
     if (newUsers.length < PAGINATED_LIMIT) {
       setAllUsersAreFetched(true);
     }
-    setPageNumber((prev) => prev + 1);
     setSearchResults((prev) => [...(prev ?? []), ...newUsers]);
+    setIsLoading(false);
   };
 
   const handleSearch = async (s: string) => {
@@ -46,7 +50,7 @@ const useUserSearch = () => {
     setLastSearchInput('');
   };
 
-  return { searchResults, allUsersAreFetched, handleSearch, fetchMore, reset };
+  return { searchResults, allUsersAreFetched, handleSearch, fetchMore, reset, isLoading };
 };
 
 export default useUserSearch;

@@ -4,6 +4,9 @@ import BackgroundWrapper from '../../components/BackgroundWrapper';
 import COLORS from '../../constants/colors';
 import { usePersonalCommunityTab } from '../../context/EventContext';
 import PredictionTab from './PredictionTab';
+import { useAuth } from '../../context/AuthContext';
+import { useRouteParams } from '../../hooks/useRouteParams';
+import { truncateText } from '../../util/truncateText';
 
 /**
  * Note: This component is a bit whack but it's done in this way to prevent re-renders of lists
@@ -12,16 +15,17 @@ import PredictionTab from './PredictionTab';
 const PredictionTabsNavigator = ({
   personal,
   community,
-  personalText,
   onChangeTab,
 }: {
   personal: JSX.Element;
   community: JSX.Element;
-  personalText?: string;
   onChangeTab?: (tab: 'personal' | 'community') => void;
 }) => {
   const { width } = useWindowDimensions();
   const { personalCommunityTab } = usePersonalCommunityTab();
+  const { userId: authUserId } = useAuth();
+  const { userInfo } = useRouteParams();
+  const isAuthUser = userInfo?.userId === authUserId;
   const scrollBarPositionTwo = width / 2;
 
   // This seems unnecessary but without, it breaks the animation
@@ -87,7 +91,10 @@ const PredictionTabsNavigator = ({
               }}
             />
             <PredictionTab
-              text={personalText || 'My Predictions'}
+              text={
+                isAuthUser ? 'My Predictions' : truncateText(userInfo?.userName ?? '', 13)
+              }
+              userInfo={userInfo}
               onPress={() => {
                 openPersonalTab();
                 onChangeTab && onChangeTab('personal');

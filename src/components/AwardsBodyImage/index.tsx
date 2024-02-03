@@ -3,7 +3,7 @@ import useDevice from '../../util/device';
 import Trophy from '../../assets/awardsBodies/trophy_color.png';
 import TrophyWhite from '../../assets/awardsBodies/trophy.png';
 import { Image } from 'react-native';
-import { AwardsBody } from '../../types/api';
+import { AwardsBody } from '../../models';
 
 const DEFAULT_SIZE = 60;
 

@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
-import { Contender, WithId } from '../../types/api';
+import { Contender, WithId } from '../../models';
 import MongoApi from '../../services/api/requests';
 import { useTmdbDataStore } from '../../context/TmdbDataStore';
 import { iCreateContenderPayload } from '../../services/api/requests/contender';

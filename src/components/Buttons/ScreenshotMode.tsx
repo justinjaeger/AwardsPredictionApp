@@ -6,7 +6,7 @@ import {
   useWindowDimensions,
 } from 'react-native';
 import BasicModal from '../BasicModal';
-import { EventModel, WithId, iCategory, iPrediction } from '../../types/api';
+import { EventModel, WithId, iCategory, iPrediction } from '../../models';
 import MovieGrid from '../MovieGrid';
 import { BodyBold, SmallHeader, SubHeader } from '../Text';
 import { eventToString } from '../../util/stringConversions';
@@ -16,20 +16,24 @@ import useProfileUser from '../../screens/Profile/useProfileUser';
 import useDevice from '../../util/device';
 import FloatingButton from './FloatingButton';
 import { useRouteParams } from '../../hooks/useRouteParams';
+import { yyyymmddToDate } from '../../util/yyyymmddToDate';
+import { toDateString } from '../../util/toDateString';
 
 const ScreenshotMode = ({
   predictions,
+  isCommunity,
   date,
 }: {
   predictions: iPrediction[];
+  isCommunity: boolean;
   date?: Date;
 }) => {
   const { isAndroid } = useDevice();
   const { width, height } = useWindowDimensions();
   const { top } = useSafeAreaInsets();
 
-  const { userId } = useRouteParams();
-  const { user } = useProfileUser(userId);
+  const { userInfo, yyyymmdd, phase } = useRouteParams();
+  const { user } = useProfileUser(userInfo?.userId);
 
   const { event: _event, categoryData: _categoryData } = useRouteParams();
   const categoryData = _categoryData as iCategory;
@@ -39,13 +43,9 @@ const ScreenshotMode = ({
 
   const marginSize = theme.windowMargin - theme.posterMargin;
 
-  const d = date ?? new Date();
   // format: June 7, 2021
-  const dateString = d.toLocaleDateString('en-US', {
-    month: 'long',
-    day: 'numeric',
-    year: 'numeric',
-  });
+  const d = yyyymmdd ? yyyymmddToDate(yyyymmdd) : date || new Date();
+  const dateString = toDateString(d);
 
   return (
     <>
@@ -110,13 +110,18 @@ const ScreenshotMode = ({
                 >
                   <SubHeader>{eventToString(event.awardsBody, event.year)}</SubHeader>
                   <BodyBold style={{ marginTop: 5, textAlign: 'right' }}>
-                    {user ? '@' + user.username ?? '' : 'Award Expert Community'}
+                    {isCommunity || !user
+                      ? 'Award Expert Community'
+                      : '@' + user.username ?? ''}
                   </BodyBold>
                 </View>
               </View>
               <MovieGrid
+                eventId={event._id}
                 predictions={predictions.slice(0, 20)}
                 categoryInfo={categoryData}
+                showAccolades={!!yyyymmdd}
+                phase={phase}
               />
             </View>
           </TouchableWithoutFeedback>

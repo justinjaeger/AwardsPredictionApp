@@ -1,4 +1,4 @@
-import { CategoryName, EventModel, Phase } from '../types/api';
+import { CategoryName, EventModel, Phase } from '../models';
 import { getBiggestPhaseThatHasHappened } from './getBiggestPhaseThatHasHappened';
 
 export const getCategoryIsHidden = (

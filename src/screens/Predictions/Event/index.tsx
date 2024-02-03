@@ -1,105 +1,62 @@
-import React, { useCallback } from 'react';
-import { FlatList, View } from 'react-native';
-import { PredictionsParamList } from '../../../navigation/types';
-import { useTypedNavigation } from '../../../util/hooks';
-import { usePersonalCommunityTab } from '../../../context/EventContext';
-import SignedOutState from '../../../components/SignedOutState';
-import _ from 'lodash';
-import { formatLastUpdated } from '../../../util/formatDateTime';
-import LastUpdatedText from '../../../components/LastUpdatedText';
+import React, { useLayoutEffect } from 'react';
+import PredictionTabsNavigator from '../../../navigation/PredictionTabsNavigator';
 import { useAuth } from '../../../context/AuthContext';
-import { StackActions } from '@react-navigation/native';
-import {
-  CategoryName,
-  PredictionSet,
-  WithId,
-  iCategoryPrediction,
-} from '../../../types/api';
-import EventSkeleton from '../../../components/Skeletons/EventSkeleton';
-import { getOrderedCategories } from '../../../util/sortByObjectOrder';
-import EventItem from './EventItem';
+import { useNavigation } from '@react-navigation/native';
+import CategoryList from './CategoryList';
+import useQueryGetUserPredictions from '../../../hooks/queries/useQueryGetUserPredictions';
+import useQueryGetCommunityPredictions from '../../../hooks/queries/useQueryGetCommunityPredictions';
+import { eventToString } from '../../../util/stringConversions';
+import BottomFABContainer from '../../../components/BottomFABContainer';
 import { useRouteParams } from '../../../hooks/useRouteParams';
+import { PredictionsNavigationProp } from '../../../navigation/types';
+import { getTwoLineHeaderTitle } from '../../../constants';
+import { PHASE_TO_STRING } from '../../../constants/categories';
 
-// This is shared by EventPersonalCommunity AND EventFromProfile
-const Event = ({
-  tab,
-  predictionData,
-  isLoading,
-}: {
-  tab: 'personal' | 'community';
-  predictionData: WithId<PredictionSet> | undefined;
-  isLoading: boolean;
-}) => {
+const Event = () => {
+  const navigation = useNavigation<PredictionsNavigationProp>();
+
+  const { event, userInfo, yyyymmdd, phase, isLeaderboard } = useRouteParams();
   const { userId: authUserId } = useAuth();
-  const { userId, event, userImage } = useRouteParams();
-  const { setPersonalCommunityTab } = usePersonalCommunityTab();
-  const navigation = useTypedNavigation<PredictionsParamList>();
 
-  const isAuthProfile = userId === authUserId;
+  const userId = userInfo?.userId || authUserId || '';
 
-  const onSelectCategory = async (category: CategoryName) => {
-    setPersonalCommunityTab(tab);
-    const params = { userId, userImage, eventId: event!._id, category };
-    if (isAuthProfile || tab === 'community') {
-      navigation.navigate('Category', params);
-    } else {
-      navigation.dispatch(StackActions.push('CategoryFromProfile', params));
-    }
-  };
+  const { data: userPredictionData, isLoading: isLoadingPersonal } =
+    useQueryGetUserPredictions({ userId, yyyymmdd });
+  const { data: communityPredictionData, isLoading: isLoadingCommunity } =
+    useQueryGetCommunityPredictions({ yyyymmdd });
 
-  const onPress = useCallback(async (category: CategoryName) => {
-    onSelectCategory(category);
-  }, []);
-
-  if (!userId && tab === 'personal') {
-    return <SignedOutState />;
-  }
-
-  const iterablePredictionData = _.values(predictionData?.categories || {});
-
-  // only applies to community since all categories are updated at once
-  const lastUpdated =
-    tab === 'community'
-      ? // if community, all categories were last updated at same time
-        iterablePredictionData[0]?.createdAt || ''
-      : // if personal, find the most recent updatedAt on category (bc this is for entire event)
-        iterablePredictionData.reduce((acc: Date, prediction) => {
-          const curUpdatedAt = prediction.createdAt;
-          if (curUpdatedAt > acc) {
-            acc = curUpdatedAt;
-          }
-          return acc;
-        }, new Date('1970-01-01'));
-  const lastUpdatedString = formatLastUpdated(new Date(lastUpdated || ''));
-
-  if (isLoading ?? !predictionData) {
-    return <EventSkeleton />;
-  }
-
-  const unorderedCategories = (predictionData?.categories || {}) as Record<
-    CategoryName,
-    iCategoryPrediction
-  >;
-  const orderedPredictions = event
-    ? getOrderedCategories(event, unorderedCategories)
-    : [];
-
-  console.log(Object.keys(orderedPredictions));
+  // define the header
+  useLayoutEffect(() => {
+    if (!event) return;
+    const headerTitle = eventToString(event.awardsBody, event.year);
+    // need to add "shortlist leaderboard"
+    const leaderboardTitle =
+      isLeaderboard && phase ? `\n${PHASE_TO_STRING[phase]} Results` : '';
+    navigation.setOptions({
+      headerTitle: getTwoLineHeaderTitle(headerTitle + leaderboardTitle),
+    });
+  }, [navigation]);
 
   return (
-    <View style={{ flex: 1, width: '100%' }}>
-      <FlatList
-        data={orderedPredictions}
-        ListHeaderComponent={<LastUpdatedText lastUpdated={lastUpdatedString} />}
-        keyExtractor={([catName]) => catName}
-        renderItem={({ item }) => {
-          return (
-            <EventItem item={item} onPress={onPress} isAuthProfile={isAuthProfile} />
-          );
-        }}
-        showsVerticalScrollIndicator={false}
+    <>
+      <PredictionTabsNavigator
+        personal={
+          <CategoryList
+            tab={'personal'}
+            predictionData={userPredictionData ?? undefined}
+            isLoading={isLoadingPersonal}
+          />
+        }
+        community={
+          <CategoryList
+            tab={'community'}
+            predictionData={communityPredictionData ?? undefined}
+            isLoading={isLoadingCommunity}
+          />
+        }
       />
-    </View>
+      <BottomFABContainer />
+    </>
   );
 };
 

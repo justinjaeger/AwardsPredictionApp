@@ -1,4 +1,4 @@
-import { CategoryName, PredictionSet, WithId, iPrediction } from '../../../types/api';
+import { CategoryName, PredictionSet, WithId, iPrediction } from '../../../models';
 import api from '../api';
 
 /**

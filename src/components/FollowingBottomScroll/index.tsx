@@ -6,12 +6,18 @@ import ProfileImage, { IPAD_PROFILE_IMAGE_SCALE } from '../ProfileImage';
 import useQueryGetFollowingUsers from '../../hooks/queries/useQueryGetFollowingUsers';
 import { useRouteParams } from '../../hooks/useRouteParams';
 import { ScrollView } from 'react-native-gesture-handler';
+import { iUserInfo } from '../../navigation/types';
+import { getUserInfo } from '../../util/getUserInfo';
 
 const IMAGE_WIDTH = 50;
 const IMAGE_MARGIN = 5;
 
 // always the auth user
-const FollowingBottomScroll = ({ onPress }: { onPress: (userId: string) => void }) => {
+const FollowingBottomScroll = ({
+  onPress,
+}: {
+  onPress: (userInfo: iUserInfo) => void;
+}) => {
   const { eventId, category } = useRouteParams();
   const { hideAbsolutely } = useFollowingBar();
   const { data: followingUsers } = useQueryGetFollowingUsers();
@@ -47,7 +53,10 @@ const FollowingBottomScroll = ({ onPress }: { onPress: (userId: string) => void 
           key={user._id}
           user={user}
           imageSize={IMAGE_WIDTH}
-          onPress={() => onPress(user._id)}
+          onPress={() => {
+            const userInfo = getUserInfo(user);
+            userInfo && onPress(userInfo);
+          }}
           style={{
             width: (IMAGE_WIDTH + 6) * (isPad ? IPAD_PROFILE_IMAGE_SCALE : 1), // this only makes sense because the profile image is equally scaled
             margin: IMAGE_MARGIN,

@@ -1,6 +1,6 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import { MaterialTopTabNavigationProp } from '@react-navigation/material-top-tabs';
-import { CategoryName, iPrediction } from '../types/api';
+import { CategoryName, Phase, iPrediction } from '../models';
 
 export type MainScreenNavigationProp = StackNavigationProp<MainParamList>;
 export type MainParamList = {
@@ -23,8 +23,24 @@ export type BottomTabParamList = {
   Predictions: iBottomTabDefaultParamList;
   ProfileTab: iBottomTabDefaultParamList & { userId?: string };
   Friend: iBottomTabDefaultParamList;
-  Admin: undefined;
+  Leaderboard: iBottomTabDefaultParamList;
   Help: undefined;
+  Admin: undefined;
+};
+
+export type iUserInfo = {
+  userId: string;
+  userName: string;
+  userImage: string | undefined;
+};
+
+// TODO: Not all of these are going to be relevant
+type iHistoryNavigationProps = {
+  yyyymmdd?: number;
+  noShorts?: boolean;
+  phase?: Phase;
+  predictionSetId?: string;
+  isLeaderboard?: boolean;
 };
 
 export type PredictionsNavigationProp = StackNavigationProp<PredictionsParamList>;
@@ -32,28 +48,16 @@ export type PredictionsParamList = {
   EventSelect: undefined;
   // PREDICTION SCREENS
   Event: {
-    userId: string | undefined;
+    userInfo: iUserInfo | undefined;
     eventId: string;
-  };
-  EventFromProfile: {
-    userId: string | undefined;
-    eventId: string;
-  };
+  } & iHistoryNavigationProps;
   Category: {
-    userId: string | undefined;
+    userInfo: iUserInfo | undefined;
     eventId: string;
     category: CategoryName;
     showEventLink?: boolean;
     onPressItem?: (contenderId: string) => void;
-  };
-  CategoryFromProfile: {
-    userId: string | undefined;
-    userImage?: string;
-    eventId: string;
-    category: CategoryName;
-    showEventLink?: boolean;
-    onPressItem?: (contenderId: string) => void;
-  };
+  } & iHistoryNavigationProps;
   AddPredictions: {
     eventId: string;
     category: CategoryName;
@@ -63,24 +67,31 @@ export type PredictionsParamList = {
   ContenderStats: {
     movieTmdbId: number;
     year: number;
-  };
+  } & iHistoryNavigationProps;
   // PROFILE SCREENS
   Profile: {
-    userId?: string;
+    userInfo: iUserInfo;
   };
   Followers: {
-    userId: string;
+    userInfo: iUserInfo;
     type: 'followers' | 'following';
   };
   UpdateProfileInfo: undefined;
   // FRIEND SCREENS
   SearchFriends: undefined;
+  // LEADERBOARD SCREENS
+  LeaderboardList: undefined;
+  Leaderboard: {
+    eventId: string;
+    phase: Phase;
+    noShorts?: boolean;
+  };
   // MODALS
   ContenderInfoModal: {
     prediction: iPrediction;
     category: CategoryName;
     eventId: string;
-  };
+  } & iHistoryNavigationProps;
 };
 
 export type AdminNavigationProp = StackNavigationProp<AdminParamList>;

@@ -1,4 +1,4 @@
-import { EventModel, WithId } from '../../../types/api';
+import { EventModel, WithId } from '../../../models';
 import api from '../api';
 
 export const getEvents = async ({

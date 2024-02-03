@@ -2,14 +2,10 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import BackButton from '../components/Buttons/BackButton';
 import { BottomTabParamList, PredictionsParamList } from './types';
-import Category from '../screens/Predictions/Category';
 import EventSelect from '../screens/Predictions/EventSelect';
 import theme from '../constants/theme';
 import { getHeaderTitle } from '../constants';
 import AddPredictions from '../screens/Predictions/AddPredictions.tsx';
-import EventPersonalCommunity from '../screens/Predictions/Event/EventPersonalCommunity';
-import EventFromProfile from '../screens/Predictions/Event/EventFromProfile';
-import CategoryFromProfile from '../screens/Predictions/Category/CategoryFromProfile';
 import Profile from '../screens/Profile';
 import UpdateProfileInfo from '../screens/Profile/UpdateProfileInfo';
 import SearchFriends from '../screens/SearchUsers';
@@ -20,6 +16,10 @@ import ContenderStats from '../screens/ContenderStats';
 import { PersonalCommunityTabProvider } from '../context/EventContext';
 import { FollowingBarProvider } from '../context/FollowingBarContext';
 import ContenderInfoModal from '../screens/Predictions/ContenderInfoModal';
+import LeaderboardList from '../screens/Leaderboard/LeaderboardList';
+import Leaderboard from '../screens/Leaderboard/Leaderboard';
+import Category from '../screens/Predictions/Category';
+import Event from '../screens/Predictions/Event';
 
 const { Navigator, Screen, Group } = createStackNavigator<PredictionsParamList>();
 
@@ -46,16 +46,7 @@ const PredictionsNavigator = () => {
         {/* Prediction Screens */}
         <Screen
           name="Event"
-          component={EventPersonalCommunity}
-          options={{
-            headerTitle: getHeaderTitle('Event Predictions'),
-            headerLeft: BackButton,
-            ...large,
-          }}
-        />
-        <Screen
-          name="EventFromProfile"
-          component={EventFromProfile}
+          component={Event}
           options={{
             headerTitle: getHeaderTitle('Event Predictions'),
             headerLeft: BackButton,
@@ -73,22 +64,12 @@ const PredictionsNavigator = () => {
           }}
         />
         <Screen
-          name="CategoryFromProfile"
-          component={CategoryFromProfile}
-          options={{
-            headerTitle: getHeaderTitle('Category'),
-            headerLeft: BackButton,
-            cardStyle: theme.cardStyle,
-            ...large,
-          }}
-        />
-        <Screen
           name="AddPredictions"
           component={AddPredictions}
           options={{
             headerTitle: getHeaderTitle('Add / Remove Predictions'),
             headerLeft: BackButton,
-            ...medium,
+            ...large,
           }}
         />
         <Screen
@@ -134,6 +115,25 @@ const PredictionsNavigator = () => {
           component={SearchFriends}
           options={{
             ...toolbarOnly,
+          }}
+        />
+        {/* Leaderboard Screens */}
+        <Screen
+          name="LeaderboardList"
+          component={LeaderboardList}
+          options={{
+            headerTitle: getHeaderTitle('Leaderboards'),
+            ...medium,
+          }}
+        />
+        <Screen
+          name="Leaderboard"
+          component={Leaderboard}
+          options={{
+            headerTitle: getHeaderTitle('Leaderboard'),
+            headerLeft: BackButton,
+            gestureEnabled: false,
+            ...large,
           }}
         />
       </Group>

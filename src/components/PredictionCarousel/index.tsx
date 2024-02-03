@@ -19,23 +19,24 @@ import ProfileImage from '../ProfileImage';
 import { SubHeader } from '../Text';
 import UserPredictionList from '../UserPredictionList';
 import CarouselArrow from './CarouselArrow';
-import { User, WithId, iRecentPrediction } from '../../types/api';
+import { iRecentPrediction } from '../../models';
+import { PredictionsNavigationProp, iUserInfo } from '../../navigation/types';
 
 const PredictionCarousel = ({
   predictionSets,
-  user,
+  userInfo,
   hideUserInfo,
   enableArrows,
   style,
 }: {
   predictionSets: iRecentPrediction[];
-  user: WithId<User>;
+  userInfo: iUserInfo | undefined;
   hideUserInfo?: boolean;
   enableArrows?: boolean;
   style?: StyleProp<ViewStyle>;
 }) => {
   const { width } = useWindowDimensions();
-  const navigation = useNavigation();
+  const navigation = useNavigation<PredictionsNavigationProp>();
   const { isPad } = useDevice();
 
   const [currentPage, setCurrentPage] = useState<number>(0);
@@ -119,17 +120,17 @@ const PredictionCarousel = ({
             borderRadius: theme.borderRadius,
           }}
           onPress={() => {
-            navigation.dispatch(StackActions.push('Profile', { userId: user._id }));
+            navigation.dispatch(StackActions.push('Profile', { userInfo }));
           }}
         >
           <>
             <ProfileImage
-              user={user}
+              image={userInfo?.userImage}
               imageSize={40}
               style={{ marginRight: 15 }}
               isDisabled
             />
-            <SubHeader>{user.name ?? ''}</SubHeader>
+            <SubHeader>{userInfo?.userName ?? ''}</SubHeader>
           </>
         </TouchableOpacity>
       ) : null}
@@ -180,11 +181,7 @@ const PredictionCarousel = ({
             setCurrentPage(newXPos);
           }}
         >
-          <UserPredictionList
-            predictionSets={predictionSets}
-            userId={user._id}
-            userImage={user.image}
-          />
+          <UserPredictionList predictionSets={predictionSets} userInfo={userInfo} />
         </ScrollView>
         {/* SCROLL BAR */}
         <Animated.View

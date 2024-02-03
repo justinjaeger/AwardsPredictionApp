@@ -4,7 +4,7 @@ import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import useQueryGetAllEvents from '../../../hooks/queries/useQueryGetAllEvents';
 import { useAuth } from '../../../context/AuthContext';
 import useQueryGetUser from '../../../hooks/queries/useQueryGetUser';
-import EventList from '../Event/EventList';
+import EventList from './EventList';
 import { HeaderLight } from '../../../components/Text';
 import useQueryGetFollowingUsers from '../../../hooks/queries/useQueryGetFollowingUsers';
 import PredictionCarousel from '../../../components/PredictionCarousel';
@@ -13,6 +13,8 @@ import RecommendedUsers from '../../../components/RecommendedUsers';
 import CarouselSkeleton from '../../../components/Skeletons/CarouselSkeleton';
 import EventBoxSkeleton from '../../../components/Skeletons/EventBoxSkeleton';
 import useDevice from '../../../util/device';
+import LeaderboardList from '../../Leaderboard/LeaderboardList';
+import { getUserInfo } from '../../../util/getUserInfo';
 
 const EventSelect = () => {
   const { width } = useWindowDimensions();
@@ -90,6 +92,7 @@ const EventSelect = () => {
                   events={events}
                 />
               )}
+              <LeaderboardList />
               {!authUserId ? (
                 // users not signed in can see recommended users
                 <RecommendedUsers header={'Follow Users'} />
@@ -123,7 +126,7 @@ const EventSelect = () => {
               <PredictionCarousel
                 key={item._id}
                 predictionSets={item.recentPredictionSets || []}
-                user={item}
+                userInfo={getUserInfo(item)}
               />
             </View>
           )}

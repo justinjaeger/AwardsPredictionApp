@@ -1,40 +1,46 @@
-import React, { useCallback, useLayoutEffect, useRef } from 'react';
-import PredictionTabsNavigator from '../../../navigation/PredictionTabsNavigator';
-import CategoryCommunity from './CategoryCommunity';
+import React, { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import CategoryPersonal from './CategoryPersonal';
-import { useTypedNavigation } from '../../../util/hooks';
-import { PredictionsParamList } from '../../../navigation/types';
-import { usePersonalCommunityTab } from '../../../context/EventContext';
+import {
+  PredictionsNavigationProp,
+  PredictionsParamList,
+} from '../../../navigation/types';
 import { eventToString } from '../../../util/stringConversions';
-import { getHeaderTitleWithTrophy } from '../../../constants';
-import { RouteProp, useRoute } from '@react-navigation/native';
+import { getTwoLineHeaderTitle } from '../../../constants';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useRouteParams } from '../../../hooks/useRouteParams';
+import CategoryCommunity from './CategoryCommunity';
+import { usePersonalCommunityTab } from '../../../context/EventContext';
+import PredictionTabsNavigator from '../../../navigation/PredictionTabsNavigator';
+import { PHASE_TO_STRING } from '../../../constants/categories';
 
-// Essentially "Category with personal/community tabs" (uses usePredictionData)
 const Category = () => {
   const { params } = useRoute<RouteProp<PredictionsParamList, 'Category'>>();
   const showEventLink = params?.showEventLink || false;
 
-  const { category, event: _event } = useRouteParams();
-  const event = _event!;
+  const { category, event, phase, isLeaderboard } = useRouteParams();
 
-  const { personalCommunityTab, setPersonalCommunityTab } = usePersonalCommunityTab();
-  const navigation = useTypedNavigation<PredictionsParamList>();
+  const navigation = useNavigation<PredictionsNavigationProp>();
 
   // Set the header
   useLayoutEffect(() => {
     if (!category || !event) return;
     const eventName = eventToString(event.awardsBody, event.year);
     const categoryName = event.categories[category].name;
-    const headerTitle = eventName + '\n' + 'Best ' + categoryName;
+    const leaderboardTitle =
+      isLeaderboard && phase ? `\n${PHASE_TO_STRING[phase]} LB Results` : '';
+    const headerTitle =
+      (leaderboardTitle ? '' : eventName + '\n') +
+      'Best ' +
+      categoryName +
+      (leaderboardTitle || '');
     navigation.setOptions({
-      headerTitle: getHeaderTitleWithTrophy(headerTitle, event.awardsBody),
+      headerTitle: getTwoLineHeaderTitle(headerTitle),
     });
   }, [navigation]);
 
+  const { personalCommunityTab, setPersonalCommunityTab } = usePersonalCommunityTab();
   const initialTab = useRef<'personal' | 'community'>(personalCommunityTab);
-
-  const [, setCurrentTab] = React.useState<'personal' | 'community'>(initialTab.current);
+  const [, setCurrentTab] = useState<'personal' | 'community'>(initialTab.current);
 
   // Allows us to track the current tab so we can set it onBack
   const onBack = useCallback(() => {

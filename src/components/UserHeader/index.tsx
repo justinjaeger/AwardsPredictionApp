@@ -1,16 +1,15 @@
-import { StackActions } from '@react-navigation/native';
+import { StackActions, useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
-import { PredictionsParamList } from '../../navigation/types';
-import { useTypedNavigation } from '../../util/hooks';
+import { PredictionsNavigationProp } from '../../navigation/types';
 import CustomIcon from '../CustomIcon';
 import { SubHeader } from '../Text';
 import { useRouteParams } from '../../hooks/useRouteParams';
 
 // Was used to display user info above categories
 const UserHeader = () => {
-  const { userId, event, userImage } = useRouteParams();
-  const navigation = useTypedNavigation<PredictionsParamList>();
+  const { userInfo, event } = useRouteParams();
+  const navigation = useNavigation<PredictionsNavigationProp>();
 
   return (
     <View
@@ -29,9 +28,8 @@ const UserHeader = () => {
       <TouchableOpacity
         onPress={() => {
           navigation.dispatch(
-            StackActions.replace('EventFromProfile', {
-              userId,
-              userImage,
+            StackActions.replace('Event', {
+              userInfo,
               eventId: event!._id,
             }),
           );

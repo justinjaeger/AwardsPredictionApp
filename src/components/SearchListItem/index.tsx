@@ -9,12 +9,12 @@ import Poster from '../Images/Poster';
 import { Body, SubHeader } from '../Text';
 import ExternalLinkButton from '../ExternalLinkButton';
 import theme from '../../constants/theme';
-import { CategoryType } from '../../types/api';
+import { CategoryType } from '../../models';
 import { useNavigation } from '@react-navigation/native';
 import { MainScreenNavigationProp } from '../../navigation/types';
 import { truncateText } from '../../util/truncateText';
-import { EVENT_ITEM_HEIGHT } from '../../screens/Predictions/Event/EventList';
 import useDevice from '../../util/device';
+import { EVENT_ITEM_HEIGHT } from '../EventItem';
 
 export type iSearchListItemProps = {
   isSelected: boolean;

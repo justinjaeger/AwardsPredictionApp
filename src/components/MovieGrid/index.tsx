@@ -3,26 +3,35 @@ import React from 'react';
 import { StyleProp, useWindowDimensions, View, ViewStyle } from 'react-native';
 import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
-import { iCategory, iPrediction } from '../../types/api';
+import { iCategory, iPrediction, Phase } from '../../models';
 import { useTmdbDataStore } from '../../context/TmdbDataStore';
 import PosterFromTmdb from '../Images/PosterFromTmdb';
 import MoviePosterSkeleton from '../Skeletons/MoviePosterSkeleton';
+import useQueryGetEventAccolades from '../../hooks/queries/useQueryGetEventAccolades';
 
 const MOVIES_IN_ROW = 5;
 
 const MovieGrid = ({
+  eventId,
   predictions,
   categoryInfo,
   totalWidth: _totalWidth,
   noLine,
   style,
+  showAccolades,
+  phase,
 }: {
+  eventId: string;
   predictions: iPrediction[];
   categoryInfo?: iCategory;
   noLine?: boolean;
   totalWidth?: number;
   style?: StyleProp<ViewStyle>;
+  // needed for leaderboards:
+  showAccolades?: boolean;
+  phase?: Phase;
 }) => {
+  const { data: contenderIdsToPhase } = useQueryGetEventAccolades(eventId);
   const { getTmdbDataFromPrediction } = useTmdbDataStore();
   const { width } = useWindowDimensions();
   const totalWidth = _totalWidth || width;
@@ -48,12 +57,15 @@ const MovieGrid = ({
         // HERE is where it gets the movie data, including poster
         // BUT ALSO it comes back here from event predictions
         const { movie, person } = getTmdbDataFromPrediction(prediction) || {};
+        const accolade = contenderIdsToPhase && contenderIdsToPhase[contenderId];
+        const accoladeMatchesPhase = phase === accolade;
         return (
           <View
             key={contenderId}
             style={{
               marginRight: theme.posterMargin * 2,
               marginBottom: theme.posterMargin * 2,
+              position: 'relative',
             }}
           >
             {!noLine && i === slots ? (
@@ -82,6 +94,8 @@ const MovieGrid = ({
                   MOVIES_IN_ROW
                 }
                 ranking={i + 1}
+                accolade={showAccolades && accoladeMatchesPhase ? accolade : undefined}
+                isUnaccoladed={showAccolades && (!accoladeMatchesPhase || !accolade)}
               />
             ) : (
               <MoviePosterSkeleton />

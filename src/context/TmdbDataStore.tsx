@@ -8,7 +8,7 @@ import {
   WithId,
   iPrediction,
   iRecentPrediction,
-} from '../types/api';
+} from '../models';
 import TmdbCache from '../services/cache/tmdb';
 import _ from 'lodash';
 import { filterDuplicates } from '../util/filterDuplicates';

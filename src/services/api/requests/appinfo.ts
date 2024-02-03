@@ -1,4 +1,4 @@
-import { AppInfo } from '../../../types/api';
+import { AppInfo } from '../../../models';
 import api from '../api';
 
 export const getAppInfo = async () => {

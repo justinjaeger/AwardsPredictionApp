@@ -13,10 +13,12 @@ const FollowButton = ({
   authUserIsFollowing,
   profileUserId,
   style,
+  textWhenNotFollowing,
 }: {
   authUserIsFollowing: boolean;
   profileUserId: string;
   style?: StyleProp<ViewStyle>;
+  textWhenNotFollowing?: string;
 }) => {
   const { userId: authUserId } = useAuth();
   const navigation = useNavigation<MainScreenNavigationProp>();
@@ -38,6 +40,8 @@ const FollowButton = ({
           backgroundColor: isFollowing ? COLORS.disabled : COLORS.secondaryDark,
           padding: 10,
           borderRadius: theme.borderRadius,
+          height: 35,
+          justifyContent: 'center',
         },
         style,
       ]}
@@ -72,9 +76,11 @@ const FollowButton = ({
       underlayColor={COLORS.secondary}
     >
       {isComplete ? (
-        <BodyBold>{isFollowing ? 'Following' : 'Follow'}</BodyBold>
+        <BodyBold>
+          {isFollowing ? 'Following' : textWhenNotFollowing || 'Follow'}
+        </BodyBold>
       ) : (
-        <Spinner size="medium" style={{ borderColor: COLORS.gray }} />
+        <Spinner size="medium" style={{ borderColor: COLORS.white }} />
       )}
     </TouchableHighlight>
   );

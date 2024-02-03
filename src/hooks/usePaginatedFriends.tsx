@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { User, WithId } from '../types/api';
+import { User, WithId } from '../models';
 import MongoApi from '../services/api/requests';
 import { PAGINATED_LIMIT } from '../services/api/requests/user';
 
@@ -18,7 +18,8 @@ const usePaginatedFriends = ({
 
   const fetchPage = async () => {
     if (allUsersAreFetched || isLoading) return;
-    if (users.length === 0) setIsLoading(true);
+    setIsLoading(true);
+    setPageNumber((prev) => prev + 1);
     const Request =
       type === 'followers'
         ? MongoApi.listFollowersPaginated
@@ -28,7 +29,6 @@ const usePaginatedFriends = ({
       pageNumber,
     });
     const newUsers = data ?? [];
-    setPageNumber((prev) => prev + 1);
     if (newUsers.length < PAGINATED_LIMIT) {
       setAllUsersAreFetched(true);
     }

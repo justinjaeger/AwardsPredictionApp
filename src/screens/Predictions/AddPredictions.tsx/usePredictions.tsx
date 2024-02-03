@@ -1,7 +1,7 @@
 import { RouteProp, useRoute } from '@react-navigation/native';
 import { useState } from 'react';
 import { PredictionsParamList } from '../../../navigation/types';
-import { iPrediction } from '../../../types/api';
+import { iPrediction } from '../../../models';
 import useQueryGetCommunityPredictions from '../../../hooks/queries/useQueryGetCommunityPredictions';
 import { sortPredictions } from '../../../util/sortPredictions';
 import { useRouteParams } from '../../../hooks/useRouteParams';
@@ -13,11 +13,13 @@ export const usePredictions = () => {
   const {
     params: { initialPredictions, onFinish },
   } = useRoute<RouteProp<PredictionsParamList, 'AddPredictions'>>();
-  const { category: _category } = useRouteParams();
+  const { category: _category, yyyymmdd } = useRouteParams();
   const category = _category!;
 
   // We use the SAME KEY as the previous screen, because it avoids a re-fetch of the data which was available previously
-  const { data: communityPredictionData } = useQueryGetCommunityPredictions();
+  const { data: communityPredictionData } = useQueryGetCommunityPredictions({
+    yyyymmdd,
+  });
   const communityPredictions = sortPredictions(
     communityPredictionData?.categories[category]?.predictions ?? [],
   );

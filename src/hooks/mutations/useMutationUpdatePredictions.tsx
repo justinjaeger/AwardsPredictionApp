@@ -25,12 +25,12 @@ const useMutationUpdatePredictions = (onComplete: () => void, onIsSaving: () => 
       // re-fetch predictions so the UI updates
       promises.push(
         queryClient.invalidateQueries({
-          queryKey: [QueryKeys.USER_PREDICTIONS + authUserId + event!._id],
+          queryKey: [QueryKeys.USER_PREDICTIONS, authUserId, event!._id],
         }),
       );
       promises.push(
         queryClient.invalidateQueries({
-          queryKey: [QueryKeys.USER + authUserId],
+          queryKey: [QueryKeys.USER, authUserId],
         }),
       );
       await Promise.all(promises);

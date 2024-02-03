@@ -8,7 +8,7 @@ import { AsyncStorageKeys } from '../types/keys';
 import { useAsyncEffect } from '../util/hooks';
 import { resetToProfile } from '../util/navigationActions';
 import MongoApi from '../services/api/requests';
-import { UserRole } from '../types/api';
+import { UserRole } from '../models';
 
 /** Async Storage Functions (to persist data when user closes app)
  * We're not exporting the async functions because we ONLY want to use them in here, or else syncing persisted state with this context is annoying
@@ -19,7 +19,7 @@ import { UserRole } from '../types/api';
  * Lets us get the userId and userEmail synchronously
  */
 
-export type iUserInfo = {
+export type iAuthUserInfo = {
   userId: string;
   email: string;
   role?: UserRole;
@@ -36,7 +36,7 @@ type iAuthContext = {
   userId: string | undefined;
   userEmail: string | undefined;
   userRole: UserRole | undefined;
-  signInUser: (userInfo: iUserInfo) => void;
+  signInUser: (userInfo: iAuthUserInfo) => void;
   signOutUser: () => void;
   signOutAllDevices: () => void;
   verificationCode: iVerificationCode;
@@ -65,7 +65,7 @@ const AuthContext = createContext<iAuthContext>({
 export const AuthProvider = (props: { children: React.ReactNode }) => {
   const navigation = useNavigation<MainScreenNavigationProp>();
 
-  const [userInfo, setUserInfo] = useState<iUserInfo | undefined>(undefined);
+  const [userInfo, setUserInfo] = useState<iAuthUserInfo | undefined>(undefined);
   const [verificationCode, setVerificationCode] = useState<iVerificationCode>(undefined);
   const [isLoadingSignIn, setIsLoadingSignIn] = useState<boolean>(false);
   const [isLoadingSignOut, setIsLoadingSignOut] = useState<boolean>(false);
@@ -108,7 +108,7 @@ export const AuthProvider = (props: { children: React.ReactNode }) => {
   };
 
   // creates the access+refresh tokens and stores them in keychain
-  const signInUser = async (userInfo: iUserInfo) => {
+  const signInUser = async (userInfo: iAuthUserInfo) => {
     setIsLoadingSignIn(true);
     const { userId } = userInfo;
     // CREATE/SET ACCESS TOKEN

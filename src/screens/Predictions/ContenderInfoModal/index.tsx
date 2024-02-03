@@ -13,26 +13,29 @@ import useQueryGetCommunityPredictions from '../../../hooks/queries/useQueryGetC
 import { StackNavigationProp } from '@react-navigation/stack';
 import useDevice from '../../../util/device';
 import theme from '../../../constants/theme';
-import ItemStatBox from '../../../components/ItemStatBox.tsx';
+import ItemStatBox from '../../../components/ItemStatBox';
 import { SubmitButton } from '../../../components/Buttons';
 import ContenderInfoHeader from '../../../components/ContenderInfoHeader';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import { useRouteParams } from '../../../hooks/useRouteParams';
 import ModalHeader from '../../../components/ModalHeader';
+import HistoryDateIndicator from '../../../components/HistoryDateIndicator';
 
 const ContenderInfoModal = () => {
   const scrollRef = useRef<ScrollView>(null);
 
   const route = useRoute<RouteProp<PredictionsParamList, 'ContenderInfoModal'>>();
   const { prediction } = route.params;
-  const { event: _event, category: _category } = useRouteParams();
+  const { event: _event, category: _category, yyyymmdd } = useRouteParams();
   const event = _event!;
   const category = _category!;
   const { isPad } = useDevice();
   const navigation = useNavigation<StackNavigationProp<PredictionsParamList>>();
   const { getTmdbDataFromPrediction } = useTmdbDataStore();
 
-  const { data: communityPredictions } = useQueryGetCommunityPredictions();
+  const { data: communityPredictions } = useQueryGetCommunityPredictions({
+    yyyymmdd,
+  });
   const { person, song } = getTmdbDataFromPrediction(prediction) ?? {};
 
   if (!communityPredictions) return null;
@@ -62,6 +65,7 @@ const ContenderInfoModal = () => {
         <ScrollView style={{ flex: 1, width: '100%' }} ref={scrollRef}>
           <View>
             <ContenderInfoHeader prediction={communityPrediction} />
+            <HistoryDateIndicator yyyymmdd={yyyymmdd} style={{ marginBottom: 10 }} />
             <ItemStatBox
               key={communityPrediction.contenderId}
               prediction={communityPrediction}
@@ -86,6 +90,7 @@ const ContenderInfoModal = () => {
                   StackActions.replace('ContenderStats', {
                     year: event.year,
                     movieTmdbId: prediction.movieTmdbId,
+                    yyyymmdd,
                   }),
                 );
               }}

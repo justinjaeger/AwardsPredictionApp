@@ -1,4 +1,4 @@
-import { CategoryName, IMovieCategoryCredit } from '../types/api';
+import { CategoryName, IMovieCategoryCredit } from '../models';
 
 export const categoryNameToTmdbCredit = (
   categoryName: CategoryName,

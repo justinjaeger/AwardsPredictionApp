@@ -1,35 +1,42 @@
 import React, { useEffect } from 'react';
 import { View, TouchableHighlight, ScrollView } from 'react-native';
-import { SubmitButton } from '../../components/Buttons';
 import { Body, BodyBold, HeaderLight, SubHeader } from '../../components/Text';
 import { useAuth } from '../../context/AuthContext';
 import BackgroundWrapper from '../../components/BackgroundWrapper';
-import { useNavigation, StackActions } from '@react-navigation/native';
+import { StackActions, useNavigation } from '@react-navigation/native';
 import theme from '../../constants/theme';
 import PredictionCarousel from '../../components/PredictionCarousel';
 import COLORS from '../../constants/colors';
-import { useTypedNavigation } from '../../util/hooks';
 import ProfileImage from '../../components/ProfileImage';
 import FollowButton from '../../components/FollowButton';
 import FollowCountButton from '../../components/FollowCountButton';
 import useQueryGetAllEvents from '../../hooks/queries/useQueryGetAllEvents';
-import EventList from '../Predictions/Event/EventList';
-import { MainScreenNavigationProp, PredictionsParamList } from '../../navigation/types';
+import { PredictionsNavigationProp } from '../../navigation/types';
 import useProfileUser from './useProfileUser';
 import useProfileHeader from './useProfileHeader';
 import ProfileSkeleton from '../../components/Skeletons/ProfileSkeleton';
 import Snackbar from '../../components/Snackbar';
 import { useRouteParams } from '../../hooks/useRouteParams';
+import SignedOutState from '../../components/SignedOutState';
+import { getUserInfo } from '../../util/getUserInfo';
+import LeaderboardListItem from '../../components/LeaderboardListItem';
+import { AWARDS_BODY_TO_PLURAL_STRING } from '../../constants/awardsBodies';
+import { PHASE_TO_STRING_PLURAL } from '../../constants/categories';
+import { Phase, UserRole, iLeaderboard, iLeaderboardRanking } from '../../models';
+import EventItemSimple from '../../components/EventItemSimple';
+import { usePersonalCommunityTab } from '../../context/EventContext';
+import { getCurrentPhaseBeingPredicted } from '../../util/getBiggestPhaseThatHasHappened';
 
 const Profile = () => {
-  const { userId: paramsUserId } = useRouteParams();
-  const { userId: authUserId } = useAuth();
-  const userId = paramsUserId || authUserId;
+  const { userInfo: routeUserInfo } = useRouteParams();
+  const { userId: authUserId, userRole: authUserRole } = useAuth();
+  const userId = routeUserInfo?.userId || authUserId;
 
-  const globalNavigation = useNavigation<MainScreenNavigationProp>();
-  const navigation = useTypedNavigation<PredictionsParamList>();
+  const navigation = useNavigation<PredictionsNavigationProp>();
+  const { setPersonalCommunityTab } = usePersonalCommunityTab();
 
-  const { data: events, isLoading: isLoadingAllEvents } = useQueryGetAllEvents();
+  const { data: _events, isLoading: isLoadingAllEvents } = useQueryGetAllEvents();
+  const events = _events || [];
 
   const { isLoading, setIsLoading, user, authUserIsFollowing, isFollowingAuthUser } =
     useProfileUser(userId);
@@ -37,7 +44,7 @@ const Profile = () => {
   // handles the header (and logout button)
   useProfileHeader(userId, isLoading, setIsLoading);
 
-  const iterableEvents = events ? Object.values(events) || [] : [];
+  const iterableEvents = Object.values(events);
   const userEvents = Object.values(iterableEvents)?.filter((event) =>
     Object.keys(user?.eventsPredicting ?? {})?.includes(event._id),
   );
@@ -51,27 +58,42 @@ const Profile = () => {
     }
   }, [user?.username, user?.name]);
 
-  const logIn = () => {
-    globalNavigation.navigate('AuthenticatorNavigator');
-  };
-
   const onPressProfileInfo = () => isAuthUser && navigation.navigate('UpdateProfileInfo');
+
+  const userInfo = getUserInfo(user); // this SEEMS redundant since from params, but if we're the auth user, we actually won't have this
+
+  const eventLeaderboards = events.reduce((acc: iLeaderboard[], event) => {
+    if (!event.leaderboards) return acc;
+    for (const leaderboard of Object.values(event.leaderboards)) {
+      const a = { ...event, ...leaderboard };
+      if (leaderboard.isHidden && authUserRole !== UserRole.ADMIN) continue;
+      acc.push(a);
+    }
+    return acc;
+  }, []);
+
+  // TODO: This is similar to what's in LeaderboardList. Maybe refactor?
+  const leaderboards = Object.values(user?.leaderboardRankings || {}).reduce(
+    (acc: iLeaderboardRanking[], phaseToLbRanking) => {
+      Object.values(phaseToLbRanking).forEach((lbRanking) => {
+        // filter out hidden events
+        const lb = eventLeaderboards.find(
+          (e) => e.phase === lbRanking.phase && e.noShorts === lbRanking.noShorts,
+        );
+        if (!lb) return acc;
+        acc.push(lbRanking);
+      });
+      return acc;
+    },
+    [],
+  );
 
   return (
     <BackgroundWrapper>
       {isLoading ? (
         <ProfileSkeleton />
       ) : !userId ? (
-        <>
-          <SubHeader style={{ marginTop: '10%', fontWeight: '700' }}>
-            {'Sign in to make predictions!'}
-          </SubHeader>
-          <SubmitButton
-            style={{ marginTop: 20 }}
-            text={'Log In / Sign Up'}
-            onPress={logIn}
-          />
-        </>
+        <SignedOutState />
       ) : (
         <ScrollView
           style={{ width: '100%' }}
@@ -154,7 +176,10 @@ const Profile = () => {
                 onPress={() => {
                   if (user?.followerCount === 0) return;
                   navigation.dispatch(
-                    StackActions.push('Followers', { userId, type: 'followers' }),
+                    StackActions.push('Followers', {
+                      userInfo: getUserInfo(user),
+                      type: 'followers',
+                    }),
                   );
                 }}
                 text={`${user?.followerCount ?? 0} Followers`}
@@ -163,7 +188,10 @@ const Profile = () => {
                 onPress={() => {
                   if (user?.followingCount === 0) return;
                   navigation.dispatch(
-                    StackActions.push('Followers', { userId, type: 'following' }),
+                    StackActions.push('Followers', {
+                      userInfo: getUserInfo(user),
+                      type: 'following',
+                    }),
                   );
                 }}
                 text={`${user?.followingCount ?? 0} Following`}
@@ -202,14 +230,12 @@ const Profile = () => {
                 >
                   Recent Predictions:
                 </HeaderLight>
-                {user ? (
-                  <PredictionCarousel
-                    predictionSets={predictionSets}
-                    user={user}
-                    hideUserInfo
-                    style={{ marginTop: 10, minHeight: 10 }}
-                  />
-                ) : null}
+                <PredictionCarousel
+                  predictionSets={predictionSets}
+                  userInfo={userInfo}
+                  hideUserInfo
+                  style={{ marginTop: 10, minHeight: 10 }}
+                />
               </>
             ) : null}
             {!isLoadingAllEvents && user && userEvents.length > 0 ? (
@@ -219,12 +245,69 @@ const Profile = () => {
                     alignSelf: 'flex-start',
                     marginTop: 20,
                     marginLeft: theme.windowMargin,
-                    marginBottom: -10,
+                    marginBottom: 10,
                   }}
                 >
                   {(isAuthUser ? 'My' : 'All') + ' Predictions'}
                 </HeaderLight>
-                <EventList user={user} events={userEvents} isProfile={true} />
+                {userEvents.map((event) => {
+                  const phase = getCurrentPhaseBeingPredicted(event);
+                  return (
+                    <EventItemSimple
+                      onPress={() => {
+                        setPersonalCommunityTab('personal');
+                        navigation.navigate('Event', {
+                          userInfo: getUserInfo(user),
+                          eventId: event._id,
+                        });
+                      }}
+                      title={`${AWARDS_BODY_TO_PLURAL_STRING[event.awardsBody]} ${
+                        event.year
+                      } - ${PHASE_TO_STRING_PLURAL[phase || Phase.CLOSED]}`}
+                    />
+                  );
+                })}
+              </>
+            ) : null}
+            {leaderboards.length ? (
+              <>
+                <HeaderLight
+                  style={{
+                    alignSelf: 'flex-start',
+                    marginTop: 30,
+                    marginLeft: theme.windowMargin,
+                    marginBottom: 10,
+                  }}
+                >
+                  {'Leaderboards'}
+                </HeaderLight>
+                {leaderboards.map((lbRanking) => {
+                  const event = events.find((e) => e._id === lbRanking.eventId);
+                  if (!event) return null;
+                  return (
+                    <>
+                      <EventItemSimple
+                        onPress={() => {
+                          navigation.dispatch(
+                            StackActions.push('Leaderboard', {
+                              eventId: event._id,
+                              phase: lbRanking.phase,
+                            }),
+                          );
+                        }}
+                        title={`${AWARDS_BODY_TO_PLURAL_STRING[event.awardsBody]} ${
+                          event.year
+                        } - ${PHASE_TO_STRING_PLURAL[lbRanking.phase]}`}
+                      />
+                      {user ? (
+                        <LeaderboardListItem
+                          leaderboardRanking={{ userId: user._id, ...user, ...lbRanking }}
+                          style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
+                        />
+                      ) : null}
+                    </>
+                  );
+                })}
               </>
             ) : null}
           </View>

@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { CategoryName, EventModel, WithId, iCategoryPrediction } from '../types/api';
+import { CategoryName, EventModel, WithId, iCategoryPrediction } from '../models';
 import { AWARDS_BODY_TO_STRING } from '../constants/awardsBodies';
 import { ORDERED_CATEGORIES } from '../constants/categories';
 import { getCategoryIsHidden } from './getCategoryIsHidden';

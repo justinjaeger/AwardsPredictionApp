@@ -4,10 +4,11 @@ import { FlatList, View, useWindowDimensions } from 'react-native';
 import theme from '../../constants/theme';
 import { HeaderLight, SubHeader } from '../Text';
 import UserListSkeleton from '../Skeletons/UserListSkeleton';
-import UserSearchResultItem from './UserSearchResultItem';
-import { User, WithId } from '../../types/api';
+import { User, WithId } from '../../models';
 import useQueryGetFollowingUsers from '../../hooks/queries/useQueryGetFollowingUsers';
 import useDevice from '../../util/device';
+import { PredictionsNavigationProp, iUserInfo } from '../../navigation/types';
+import UserSearchResultItem from './UserSearchResultItem';
 
 export const IMAGE_SIZE = 50;
 
@@ -28,12 +29,12 @@ const UserSearchResult = ({
 }) => {
   const { isPad } = useDevice();
   const { width } = useWindowDimensions();
-  const navigation = useNavigation();
+  const navigation = useNavigation<PredictionsNavigationProp>();
   const { usersIdsAuthUserIsFollowing } = useQueryGetFollowingUsers();
 
-  const navigateToProfile = (userId: string) => {
+  const navigateToProfile = (userInfo: iUserInfo) => {
     // important to push so we can have multiple profiles in same stack
-    navigation.dispatch(StackActions.push('Profile', { userId }));
+    navigation.dispatch(StackActions.push('Profile', { userInfo }));
   };
 
   return (

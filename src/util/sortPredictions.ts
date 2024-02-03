@@ -1,5 +1,5 @@
 import { iContenderStatsData } from '../screens/ContenderStats';
-import { iPrediction } from '../types/api';
+import { iPrediction } from '../models';
 
 export const sortPredictions = (ps: iPrediction[]) =>
   [...ps].sort((p1, p2) => {

@@ -7,7 +7,7 @@ import { HeaderLight } from '../../../components/Text';
 import COLORS from '../../../constants/colors';
 import { useAuth } from '../../../context/AuthContext';
 import MongoApi from '../../../services/api/requests';
-import { UserRole } from '../../../types/api';
+import { UserRole } from '../../../models';
 
 type iAuthScreen = 'signIn' | 'confirmCode';
 

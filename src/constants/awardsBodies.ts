@@ -10,7 +10,7 @@ import criticsChoiceWhite from '../assets/awardsBodies/criticsChoiceWhite.png';
 import goldenGlobesWhite from '../assets/awardsBodies/goldenGlobesWhite.png';
 import pgaWhite from '../assets/awardsBodies/pgaWhite.png';
 import sagWhite from '../assets/awardsBodies/sagWhite.png';
-import { AwardsBody } from '../types/api';
+import { AwardsBody } from '../models';
 
 export const AWARDS_BODY_TO_STRING: {
   [key in AwardsBody]: string;

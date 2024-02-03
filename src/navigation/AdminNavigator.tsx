@@ -4,7 +4,7 @@ import { getHeaderTitle } from '../constants';
 import Admin from '../screens/Admin';
 import { useHeaderSettings } from '../hooks/useHeaderSettings';
 import { useAuth } from '../context/AuthContext';
-import { UserRole } from '../types/api';
+import { UserRole } from '../models';
 
 const { Navigator, Screen } = createStackNavigator();
 

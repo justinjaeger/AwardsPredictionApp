@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { User, WithId } from '../types/api';
+import { User, WithId } from '../models';
 import MongoApi from '../services/api/requests';
 import useQueryGetFollowingUsers from './queries/useQueryGetFollowingUsers';
 
@@ -17,6 +17,8 @@ const useRecommendedUsers = () => {
   const [isFetching, setIsFetching] = useState<boolean>(false);
 
   const fetchPage = async () => {
+    if (isFetching) return;
+
     const getMostFollowingPaginated = async (additionalPagesToAdd: number) => {
       // NOTE: I hope this isn't stale
       const { data } = await MongoApi.listMostFollowedPaginated(
@@ -26,6 +28,8 @@ const useRecommendedUsers = () => {
     };
 
     setIsFetching(true);
+    setPageNumber((prev) => prev + 1);
+
     let suggestedUsers: WithId<User>[] = [];
     if (authUserId) {
       // if user is signed in, get who they are following
@@ -70,9 +74,7 @@ const useRecommendedUsers = () => {
     // ...AND get users who actually have a username
     suggestedUsers = suggestedUsers.filter((user) => user.username || user.name);
 
-    setPageNumber((prev) => prev + 1);
     setIsFetching(false);
-
     setUsers((prev) => [...prev, ...suggestedUsers]);
   };
 

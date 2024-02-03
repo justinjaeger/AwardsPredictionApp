@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import ItemStatBox from '../../components/ItemStatBox.tsx';
+import ItemStatBox from '../../components/ItemStatBox/index';
 import useQueryGetCommunityPredictions from '../../hooks/queries/useQueryGetCommunityPredictions';
-import { CategoryName, EventModel, WithId, iPrediction } from '../../types/api';
+import { CategoryName, EventModel, WithId, iPrediction } from '../../models';
 import { getNumPredicting, getTotalNumPredicting } from '../../util/getNumPredicting';
 import { sortByLikelihood } from '../../util/sortPredictions';
 import { ScrollView, View, useWindowDimensions } from 'react-native';
-import { Header, SubHeader } from '../../components/Text';
 import PredictionTab from '../../navigation/PredictionTabsNavigator/PredictionTab';
 import { getPredictedOutcomes } from '../../util/getPredictedOutcomes';
 import useDevice from '../../util/device';
 import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
 import { ORDERED_CATEGORIES } from '../../constants/categories';
+import Stat from '../../components/ItemStatBox/Stat';
 
 export type iContenderStatsData = iPrediction & {
   category: CategoryName;
@@ -22,6 +22,7 @@ export type iContenderStatsData = iPrediction & {
 
 // TODO: When there are multiple categories here, make it so
 // it doesn't fetch the data until you tap the tab - else this could be overwhelming
+// TODO: make it so you can pass yyyymmdd into here
 const ContenderStatEventTab = ({
   event,
   movieTmdbId,
@@ -34,7 +35,7 @@ const ContenderStatEventTab = ({
   const { isPad } = useDevice();
   const { width } = useWindowDimensions();
 
-  const { data: communityPredictions } = useQueryGetCommunityPredictions(event);
+  const { data: communityPredictions } = useQueryGetCommunityPredictions({ event });
 
   const [sortSetting, setSortSetting] = useState<'likelihood' | 'cat-order'>(
     'likelihood',
@@ -130,18 +131,9 @@ const ContenderStatEventTab = ({
             justifyContent: 'space-between',
           }}
         >
-          <View>
-            <Header>{potential.wins.toString()}</Header>
-            <SubHeader>wins predicted</SubHeader>
-          </View>
-          <View>
-            <Header>{potential.noms.toString()}</Header>
-            <SubHeader>noms predicted</SubHeader>
-          </View>
-          <View>
-            <Header>{potential.potential.toString()}</Header>
-            <SubHeader>potential</SubHeader>
-          </View>
+          <Stat number={`${potential.wins}`} text="wins predicted" />
+          <Stat number={`${potential.noms}`} text="noms predicted" />
+          <Stat number={`${potential.potential}`} text="potential" />
         </View>
       ) : null}
       <View

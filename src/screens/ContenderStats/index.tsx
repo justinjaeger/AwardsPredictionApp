@@ -1,7 +1,7 @@
 import React, { useLayoutEffect, useRef, useState } from 'react';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { PredictionsParamList } from '../../navigation/types';
-import { CategoryName, EventModel, Movie, WithId, iPrediction } from '../../types/api';
+import { PredictionsNavigationProp, PredictionsParamList } from '../../navigation/types';
+import { CategoryName, EventModel, Movie, WithId, iPrediction } from '../../models';
 import { useTmdbDataStore } from '../../context/TmdbDataStore';
 import { truncateText } from '../../util/truncateText';
 import ContenderStatEventTab from './ContenderStatEventTab';
@@ -9,6 +9,7 @@ import useQueryGetAllEvents from '../../hooks/queries/useQueryGetAllEvents';
 import ContenderInfoHeader from '../../components/ContenderInfoHeader';
 import BackgroundWrapper from '../../components/BackgroundWrapper';
 import { ScrollView } from 'react-native';
+import HistoryDateIndicator from '../../components/HistoryDateIndicator';
 
 export type iContenderStatsData = iPrediction & {
   category: CategoryName;
@@ -18,10 +19,10 @@ export type iContenderStatsData = iPrediction & {
 };
 
 const ContenderStats = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<PredictionsNavigationProp>();
   const route = useRoute<RouteProp<PredictionsParamList, 'ContenderStats'>>();
   const scrollRef = useRef<ScrollView>(null);
-  const { movieTmdbId, year } = route.params;
+  const { movieTmdbId, year, yyyymmdd } = route.params;
   const { store } = useTmdbDataStore();
   const { data: events } = useQueryGetAllEvents();
   const movie = store[movieTmdbId] as Movie;
@@ -54,6 +55,7 @@ const ContenderStats = () => {
             movieTmdbId,
           }}
         />
+        <HistoryDateIndicator yyyymmdd={yyyymmdd} />
         <ContenderStatEventTab
           event={event}
           movieTmdbId={movieTmdbId}

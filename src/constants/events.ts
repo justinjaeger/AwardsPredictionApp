@@ -1,5 +1,6 @@
-import { EventModel, EventStatus, Phase } from '../types/api';
+import { EventModel, EventStatus, Phase } from '../models';
 import { formatDateTime } from '../util/formatDateTime';
+import { getCurrentPhaseBeingPredicted } from '../util/getBiggestPhaseThatHasHappened';
 
 export const EVENT_STATUS_TO_STRING: {
   [key in EventStatus]: string;
@@ -30,6 +31,15 @@ export const ACCOLADE_TO_STRING: {
   [Phase.CLOSED]: '',
 };
 
+export const PHASE_TO_CTA: {
+  [key in Phase]: string;
+} = {
+  [Phase.SHORTLIST]: 'Predict Nominations',
+  [Phase.NOMINATION]: 'Predict Nominations',
+  [Phase.WINNER]: 'Predict Winners',
+  [Phase.CLOSED]: 'View History',
+};
+
 export const ACCOLADE_TO_SHORTSTRING: {
   [key in Phase]: string;
 } = {
@@ -57,10 +67,15 @@ export const eventStatusToPredictionType = (eventStatus: EventStatus): Phase =>
     ? Phase.NOMINATION
     : Phase.WINNER;
 
+/**
+ * Shows the time the event closes
+ */
 export const getEventTime = (event: EventModel) => {
   const longAgo = new Date('1970-01-01');
   const nomDateTime = event.nomDateTime ? new Date(event.nomDateTime) : longAgo;
   const winDateTime = event.winDateTime ? new Date(event.winDateTime) : longAgo;
+
+  const phase = getCurrentPhaseBeingPredicted(event);
 
   const now = new Date();
   // set showTimeNom to true if is within one week of event
@@ -70,11 +85,9 @@ export const getEventTime = (event: EventModel) => {
 
   return EventStatus.ARCHIVED === event.status
     ? ''
-    : eventStatusToPredictionType(event.status) === Phase.NOMINATION
-    ? event.nomDateTime
-      ? formatDateTime(nomDateTime, showTimeNom)
-      : ''
-    : event.winDateTime
+    : event.nomDateTime && phase === Phase.NOMINATION
+    ? formatDateTime(nomDateTime, showTimeNom)
+    : event.winDateTime && phase === Phase.WINNER
     ? formatDateTime(winDateTime, showTimeWin)
     : '';
 };

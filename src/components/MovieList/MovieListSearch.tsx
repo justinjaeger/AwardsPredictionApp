@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Alert, FlatList, Keyboard, Linking, TouchableOpacity } from 'react-native';
 import COLORS from '../../constants/colors';
 import { BodyBold } from '../Text';
-import { CategoryType } from '../../types/api';
+import { CategoryType } from '../../models';
 import { iSearchData } from '../../services/tmdb';
 import SearchListItem from '../SearchListItem';
 

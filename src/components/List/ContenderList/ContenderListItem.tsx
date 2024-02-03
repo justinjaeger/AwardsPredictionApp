@@ -11,7 +11,7 @@ import { getPosterDimensionsByWidth } from '../../../constants/posterDimensions'
 import { getTotalNumPredicting } from '../../../util/getNumPredicting';
 import { Body, SubHeader } from '../../Text';
 import { hexToRgb } from '../../../util/hexToRgb';
-import { CategoryType, iPrediction } from '../../../types/api';
+import { CategoryType, iPrediction, Phase } from '../../../models';
 import { useTmdbDataStore } from '../../../context/TmdbDataStore';
 import { categoryNameToTmdbCredit } from '../../../util/categoryNameToTmdbCredit';
 import ListItemSkeleton from '../../Skeletons/ListItemSkeleton';
@@ -20,6 +20,7 @@ import Histogram from '../../Histogram';
 import PosterFromTmdb from '../../Images/PosterFromTmdb';
 import CustomIcon from '../../CustomIcon';
 import { useRouteParams } from '../../../hooks/useRouteParams';
+import { getSlotsInPhase } from '../../../util/getSlotsInPhase';
 
 export type iContenderListItemProps = {
   prediction: iPrediction;
@@ -32,6 +33,7 @@ export type iContenderListItemProps = {
     drag: () => void;
   };
   subtitle?: string;
+  riskiness?: number;
   onPressItem: () => void;
   onPressThumbnail?: () => void;
   onLongPress?: () => void;
@@ -46,8 +48,21 @@ export type iContenderListItemProps = {
     underlayColor?: string;
   };
   showHistogram?: boolean;
+  displayNoExtraSlots?: boolean;
+  accolade?: Phase;
+  isUnaccaloded?: boolean;
 };
 
+/**
+ * TODO: Display Accolade
+ * THEN TODO: Display riskiness, which is a function of:
+ * - whatever the community predicted for that contender
+ *
+ * TODO: I think we should LIFT the points/riskiness calculation OUT OF HERE and put it in the overall list component
+ * BECAUSE: First, we don't care about community rankings what the points are.
+ * Second, we want the TOTAL NUM OF POINTS
+ * Third, it's weird to do this big calculation inside of a single item
+ */
 const ContenderListItem = ({
   prediction,
   ranking,
@@ -58,6 +73,10 @@ const ContenderListItem = ({
   totalNumPredictingTop,
   iconRightProps,
   showHistogram,
+  riskiness,
+  accolade,
+  isUnaccaloded,
+  displayNoExtraSlots, // for showing histogram
   onPressItem,
   onPressThumbnail,
   onLongPress,
@@ -67,16 +86,16 @@ const ContenderListItem = ({
 
   const SMALL_POSTER = windowWidth / 9;
 
-  const { category: _category, categoryData } = useRouteParams();
+  const { phase, category: _category, categoryData } = useRouteParams();
   const category = _category!;
-  const { slots: _slots, type } = categoryData!;
-  const slots = _slots || 5;
+  const { type } = categoryData!;
+  const slots = getSlotsInPhase(phase, categoryData);
 
   const { width: posterWidth, height: posterHeight } =
     getPosterDimensionsByWidth(SMALL_POSTER);
 
   // note: numPredicting is only commnuity
-  const { numPredicting } = prediction;
+  const { numPredicting: numPredictingIfIsCommunity } = prediction;
 
   const { getTmdbDataFromPrediction } = useTmdbDataStore();
   const { movie, person, song } = getTmdbDataFromPrediction(prediction) ?? {};
@@ -107,10 +126,13 @@ const ContenderListItem = ({
 
   // The bar should be at 100% if everybody is predicting a nomination.
   // So like, every bar is out of 100% of all users
-  const totalNumPredicting = getTotalNumPredicting(numPredicting || {});
+  const totalNumPredicting = getTotalNumPredicting(numPredictingIfIsCommunity || {});
 
   const thumbnailContainerWidth = posterWidth * 1.5;
   const rightIconContainerWidth = iconRightProps ? posterHeight - 10 : 0;
+
+  const accoladeMatchesPhase = phase === accolade;
+  const accoladeToShow = accoladeMatchesPhase ? accolade : undefined;
 
   if (dataHasNotLoaded) {
     return (
@@ -127,12 +149,20 @@ const ContenderListItem = ({
           ? COLORS.secondaryDark
           : highlighted
           ? hexToRgb(COLORS.secondaryLight, 0.15)
+          : accoladeToShow
+          ? 'rgba(255,255,255,0.03)'
+          : isUnaccaloded
+          ? 'rgba(0,0,0,0.5)'
+          : ranking && ranking % 2 === 1
+          ? 'rgba(255,255,255,0.03)'
           : 'transparent',
         flexDirection: 'row',
         alignItems: 'flex-end',
         paddingBottom: 3,
         paddingTop: 3,
         height: posterHeight,
+        borderBottomColor: 'rgba(0,0,0,1)',
+        borderBottomWidth: accoladeToShow ? 1 : 0,
       }}
     >
       <TouchableOpacity
@@ -165,6 +195,8 @@ const ContenderListItem = ({
           person={person}
           width={posterWidth}
           ranking={ranking}
+          accolade={accoladeToShow}
+          isUnaccoladed={isUnaccaloded}
         />
       </TouchableOpacity>
       <TouchableHighlight
@@ -184,42 +216,69 @@ const ContenderListItem = ({
           <View
             style={{
               position: 'absolute',
-              flexDirection: 'row',
-              alignItems: 'baseline',
+              flexDirection: 'column',
+              height: '100%',
               paddingLeft: 5,
               zIndex: 2,
               width: '100%',
+              justifyContent: 'space-between',
             }}
           >
-            <SubHeader
+            <View
               style={{
-                shadowColor: 'black',
-                shadowOpacity: 1,
-                shadowRadius: 5,
+                flexDirection: 'row',
+                alignItems: 'baseline',
               }}
             >
-              {title}
-            </SubHeader>
-            {type !== CategoryType.FILM ? (
-              <Body
+              <SubHeader
                 style={{
                   shadowColor: 'black',
                   shadowOpacity: 1,
                   shadowRadius: 5,
+                  color: isUnaccaloded ? 'rgba(255,255,255,0.5)' : COLORS.white,
                 }}
               >
-                {` • ${subtitle}`}
-              </Body>
-            ) : null}
+                {title}
+              </SubHeader>
+              {type !== CategoryType.FILM ? (
+                <Body
+                  style={{
+                    shadowColor: 'black',
+                    shadowOpacity: 1,
+                    shadowRadius: 5,
+                    color: isUnaccaloded ? 'rgba(255,255,255,0.5)' : COLORS.white,
+                  }}
+                >
+                  {` • ${subtitle}`}
+                </Body>
+              ) : null}
+              <View />
+            </View>
+            <View style={{ flexDirection: 'row', marginTop: 5 }}>
+              {riskiness ? (
+                <Body
+                  style={{
+                    fontWeight: '700',
+                    width: '100%',
+                    textAlign: 'right',
+                    marginBottom: 5,
+                    paddingRight: theme.windowMargin,
+                  }}
+                >{`${riskiness.toString()}pts`}</Body>
+              ) : null}
+            </View>
           </View>
-          {numPredicting && totalNumPredictingTop !== undefined && showHistogram ? (
+          {numPredictingIfIsCommunity &&
+          totalNumPredictingTop !== undefined &&
+          showHistogram ? (
             <Histogram
-              numPredicting={numPredicting}
+              numPredicting={numPredictingIfIsCommunity}
               totalNumPredicting={totalNumPredicting}
               totalNumPredictingTop={totalNumPredictingTop}
               slots={slots}
               totalWidth={windowWidth - thumbnailContainerWidth - rightIconContainerWidth}
               posterHeight={posterHeight}
+              displayNoExtraSlots={displayNoExtraSlots}
             />
           ) : null}
         </>
