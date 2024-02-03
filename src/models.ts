@@ -97,6 +97,18 @@ export enum CategoryName {
   BREAKTHROUGH = 'BREAKTHROUGH',
 }
 
+export enum ProfileImageSize {
+  SMALL = 60,
+  MEDIUM = 150,
+  LARGE = 500,
+}
+
+export enum ProfileImageSuffix {
+  SMALL = 'sm',
+  MEDIUM = 'md',
+  LARGE = 'lg',
+}
+
 export type CategoryUpdateLog = {
   userId: ObjectId;
   eventId: ObjectId;

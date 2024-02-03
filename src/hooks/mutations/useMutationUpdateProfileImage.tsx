@@ -4,6 +4,7 @@ import { launchImageLibrary } from 'react-native-image-picker';
 import { QueryKeys } from '../../types/keys';
 import { useAuth } from '../../context/AuthContext';
 import MongoApi from '../../services/api/requests';
+import { ProfileImageSize } from '../../models';
 
 const useMutationUpdateProfileImage = (onComplete?: () => void) => {
   const queryClient = useQueryClient();
@@ -19,8 +20,8 @@ const useMutationUpdateProfileImage = (onComplete?: () => void) => {
       try {
         setIsChoosingImage(true);
         const result = await launchImageLibrary({
-          maxWidth: 200,
-          maxHeight: 200,
+          maxWidth: ProfileImageSize.LARGE,
+          maxHeight: ProfileImageSize.LARGE,
           mediaType: 'photo',
         });
         if (result && result.assets) {
