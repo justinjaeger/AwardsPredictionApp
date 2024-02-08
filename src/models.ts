@@ -281,6 +281,7 @@ export type iLeaderboardRanking = {
   numUsersPredicting: number;
   slotsPredicted: number;
   yyyymmdd: number; // date of close
+  lastUpdated: Date; // last datetime user updated any category
 };
 
 export type LeaderboardRanking = {
