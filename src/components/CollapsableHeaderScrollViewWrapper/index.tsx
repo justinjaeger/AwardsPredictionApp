@@ -8,39 +8,35 @@ const TITLE_WHEN_COLLAPSED_HEIGHT = 40;
 const CollapsableHeaderScrollViewWrapper = ({
   children,
   titleWhenCollapsed,
-  headerContentOnlyAtTopHeight,
-  HeaderContentOnlyAtTop,
-  headerContentToPersistHeight,
-  HeaderContentToPersist,
+  topOnlyContent,
+  persistedContent,
   scrollViewProps,
 }: {
   children: JSX.Element;
   titleWhenCollapsed: string;
-  headerContentOnlyAtTopHeight: number;
-  HeaderContentOnlyAtTop: JSX.Element;
-  headerContentToPersistHeight: number;
-  HeaderContentToPersist: JSX.Element;
+  topOnlyContent: { height: number; component: JSX.Element };
+  persistedContent: { height: number; component: JSX.Element };
   scrollViewProps?: ScrollViewProps;
 }) => {
   return (
     <DynamicHeaderScrollViewWrapper
       scrollViewProps={scrollViewProps}
-      headerContentOnlyAtTopHeight={headerContentOnlyAtTopHeight}
-      HeaderContentOnlyAtTop={HeaderContentOnlyAtTop}
-      headerContentOnlyWhenCollapsedHeight={TITLE_WHEN_COLLAPSED_HEIGHT}
-      HeaderContentOnlyWhenCollapsed={
-        <View
-          style={{
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: '100%',
-          }}
-        >
-          <SubHeader style={{ textAlign: 'center' }}>{titleWhenCollapsed}</SubHeader>
-        </View>
-      }
-      headerContentToPersistHeight={headerContentToPersistHeight}
-      HeaderContentToPersist={HeaderContentToPersist}
+      topOnlyContent={topOnlyContent}
+      collapsedContent={{
+        height: TITLE_WHEN_COLLAPSED_HEIGHT,
+        component: (
+          <View
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              height: '100%',
+            }}
+          >
+            <SubHeader style={{ textAlign: 'center' }}>{titleWhenCollapsed}</SubHeader>
+          </View>
+        ),
+      }}
+      persistedContent={persistedContent}
     >
       {children}
     </DynamicHeaderScrollViewWrapper>

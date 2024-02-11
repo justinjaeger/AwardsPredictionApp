@@ -16,9 +16,8 @@ import { EventModel, WithId } from '../../../models';
 import EventTopTabs, { EVENT_TOP_TABS_HEIGHT } from '../../../components/EventTopTabs';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import { ScrollView, View } from 'react-native';
-import { HeaderLight, SubHeader } from '../../../components/Text';
+import { HeaderLight } from '../../../components/Text';
 import theme from '../../../constants/theme';
-import ScrollViewDynamicHeader from '../../../components/DynamicHeaderScrollViewWrapper';
 import TabBodies from '../../../navigation/PredictionTabsNavigator/TabBodies';
 import { getPredictionTabHeight } from '../../../navigation/PredictionTabsNavigator/PredictionTab';
 import useDevice from '../../../util/device';
@@ -28,12 +27,7 @@ import CollapsableHeaderScrollViewWrapper from '../../../components/CollapsableH
 /**
  * TODO:
  * - render back button when going back is an option
- * - make the header scrollable WITH THE BODY, but make the top tabs sticky somehow
  * - had some bug where it wasn't passing "event" into CategoryList I think, since it didn't navigate when I pressed a category
- *
- * PLAN FOR SCROLLING:
- * - capture the scroll ref from the inner FlatList
- * - when the user scrolls, the header goes off screen
  *
  * Whole screen is a scroll view, not a flatlist
  * - header is HeaderComponent
@@ -82,8 +76,10 @@ const Event = () => {
     });
   }, [navigation]);
 
+  const titleMarginTop = 10;
   const titleHeight = 40;
-  const tabHeight = getPredictionTabHeight(isPad);
+  const predictionTabHeight = getPredictionTabHeight(isPad);
+  const eventTopTabsMarginBottom = 10;
 
   if (!event) return null;
 
@@ -94,44 +90,61 @@ const Event = () => {
           // @ts-ignore
           ref: verticalScrollRef,
         }}
-        headerContentOnlyAtTopHeight={titleHeight + EVENT_TOP_TABS_HEIGHT}
-        HeaderContentOnlyAtTop={
-          <View>
-            <View
-              style={{
-                marginLeft: theme.windowMargin,
-                height: titleHeight,
-                alignItems: 'flex-start',
-                justifyContent: 'center',
-              }}
-            >
-              <HeaderLight>{`Predictions ${event?.year ?? ''}`}</HeaderLight>
+        topOnlyContent={{
+          height:
+            titleHeight +
+            titleMarginTop +
+            EVENT_TOP_TABS_HEIGHT +
+            eventTopTabsMarginBottom,
+          component: (
+            <View>
+              <View
+                style={{
+                  marginLeft: theme.windowMargin,
+                  marginTop: titleMarginTop,
+                  height: titleHeight,
+                  alignItems: 'flex-start',
+                  justifyContent: 'center',
+                }}
+              >
+                <HeaderLight>{`Predictions ${event?.year ?? ''}`}</HeaderLight>
+              </View>
+              {event ? (
+                <EventTopTabs
+                  style={{
+                    marginBottom: eventTopTabsMarginBottom,
+                  }}
+                  selectedEvent={event}
+                  setEvent={setEvent}
+                />
+              ) : null}
             </View>
-            {event ? <EventTopTabs selectedEvent={event} setEvent={setEvent} /> : null}
-          </View>
-        }
+          ),
+        }}
         titleWhenCollapsed={`${AWARDS_BODY_TO_PLURAL_STRING[event?.awardsBody]} ${
           event?.year ?? ''
         }`}
-        headerContentToPersistHeight={tabHeight}
-        HeaderContentToPersist={
-          <View
-            style={{
-              width: '100%',
-              justifyContent: 'flex-end',
-            }}
-          >
-            <PredictionTabsNavigator
-              scrollViewRef={tabsScrollRef}
-              onChangeTab={(tab) => {
-                // if showing the "sign in to make predictions" scroll to top so it's in view
-                if (!userInfo?.userId && tab === 'personal') {
-                  verticalScrollRef.current?.scrollTo({ y: 0 });
-                }
+        persistedContent={{
+          height: predictionTabHeight,
+          component: (
+            <View
+              style={{
+                width: '100%',
+                justifyContent: 'flex-end',
               }}
-            />
-          </View>
-        }
+            >
+              <PredictionTabsNavigator
+                scrollViewRef={tabsScrollRef}
+                onChangeTab={(tab) => {
+                  // if showing the "sign in to make predictions" scroll to top so it's in view
+                  if (!userInfo?.userId && tab === 'personal') {
+                    verticalScrollRef.current?.scrollTo({ y: 0 });
+                  }
+                }}
+              />
+            </View>
+          ),
+        }}
       >
         <>
           <TabBodies

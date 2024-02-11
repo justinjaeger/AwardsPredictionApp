@@ -7,35 +7,32 @@ const BG_COLOR = COLORS.primary;
 const PRIMARY_COLOR = COLORS.secondaryDark;
 
 export type iDynamicHeaderProps = {
-  HeaderContentOnlyAtTop: JSX.Element;
-  HeaderContentOnlyWhenCollapsed: JSX.Element;
-  HeaderContentToPersist: JSX.Element;
-  headerContentOnlyAtTopHeight: number;
-  headerContentOnlyWhenCollapsedHeight: number;
-  headerContentToPersistHeight: number;
+  topOnlyContent: { height: number; component: JSX.Element };
+  collapsedContent: { height: number; component: JSX.Element };
+  persistedContent: { height: number; component: JSX.Element };
 };
 
 const DynamicHeader = ({
   animHeaderValue,
-  HeaderContentOnlyAtTop,
-  HeaderContentOnlyWhenCollapsed,
-  HeaderContentToPersist,
-  headerContentOnlyAtTopHeight,
-  headerContentOnlyWhenCollapsedHeight,
-  headerContentToPersistHeight,
+  topOnlyContent,
+  collapsedContent,
+  persistedContent,
 }: { animHeaderValue: Animated.Value } & iDynamicHeaderProps) => {
   const { width } = useWindowDimensions();
   const { top } = useSafeAreaInsets();
 
-  const minHeaderHeight =
-    headerContentOnlyWhenCollapsedHeight + headerContentToPersistHeight;
-  const maxHeaderHeight = headerContentOnlyAtTopHeight + headerContentToPersistHeight;
+  const { height: topOnlyComponentHeight, component: topOnlyComponent } = topOnlyContent;
+  const { height: collapsedComponentHeight, component: collapsedComponent } =
+    collapsedContent;
+  const { height: persistedComponentHeight, component: persistedComponent } =
+    persistedContent;
 
-  const minInnerHeaderHeight = headerContentOnlyAtTopHeight;
-  const maxInnerHeaderHeight =
-    headerContentOnlyAtTopHeight + headerContentOnlyWhenCollapsedHeight;
-
+  const minHeaderHeight = collapsedComponentHeight + persistedComponentHeight;
+  const maxHeaderHeight = topOnlyComponentHeight + persistedComponentHeight;
   const SCROLL_DISTANCE = maxHeaderHeight - minHeaderHeight;
+
+  const minInnerHeaderHeight = topOnlyComponentHeight;
+  const maxInnerHeaderHeight = topOnlyComponentHeight + collapsedComponentHeight;
 
   const animatedHeaderHeight = animHeaderValue.interpolate({
     inputRange: [0, SCROLL_DISTANCE],
@@ -91,34 +88,36 @@ const DynamicHeader = ({
             <Animated.View
               style={[
                 {
-                  height: headerContentOnlyAtTopHeight,
+                  height: topOnlyComponentHeight,
                 },
                 {
                   opacity: animateTopContentOpacity,
                 },
               ]}
             >
-              {HeaderContentOnlyAtTop}
+              {topOnlyComponent}
             </Animated.View>
+          </Animated.View>
+          <Animated.View style={{ backgroundColor: animateHeaderBackgroundColor }}>
             <Animated.View
               style={[
-                { height: headerContentOnlyWhenCollapsedHeight },
+                { height: collapsedComponentHeight },
                 {
                   opacity: animateCollapsedContentOpacity,
                 },
               ]}
             >
-              {HeaderContentOnlyWhenCollapsed}
+              {collapsedComponent}
             </Animated.View>
           </Animated.View>
         </Animated.View>
         <View
           style={{
-            height: headerContentToPersistHeight,
+            height: persistedComponentHeight,
             backgroundColor: BG_COLOR,
           }}
         >
-          {HeaderContentToPersist}
+          {persistedComponent}
         </View>
       </Animated.View>
     </>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView, TouchableHighlight } from 'react-native';
+import { ScrollView, StyleProp, TouchableHighlight, ViewStyle } from 'react-native';
 import {
   AWARDS_BODY_TO_PLURAL_STRING,
   SORTED_AWARDS_BODIES,
@@ -17,9 +17,11 @@ export const EVENT_TOP_TABS_HEIGHT = 40;
 const EventTopTabs = ({
   selectedEvent,
   setEvent,
+  style,
 }: {
   selectedEvent: WithId<EventModel>;
   setEvent: (event: WithId<EventModel>) => void;
+  style?: StyleProp<ViewStyle>;
 }) => {
   const { year, awardsBody } = selectedEvent;
   const { data: events } = useQueryGetAllEvents();
@@ -44,10 +46,13 @@ const EventTopTabs = ({
   return (
     <ScrollView
       horizontal
-      style={{
-        width: '100%',
-        height: EVENT_TOP_TABS_HEIGHT,
-      }}
+      style={[
+        {
+          width: '100%',
+          height: EVENT_TOP_TABS_HEIGHT,
+        },
+        style,
+      ]}
       contentContainerStyle={{
         alignItems: 'center',
       }}

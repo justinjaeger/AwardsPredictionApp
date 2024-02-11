@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ScrollView, useWindowDimensions, View } from 'react-native';
 import { usePersonalCommunityTab } from '../../context/EventContext';
+import COLORS from '../../constants/colors';
 
 /**
  * Note: This component is a bit whack but it's done in this way to prevent re-renders of lists
@@ -37,6 +38,7 @@ const PredictionTabsNavigator = ({
         x: initialTab === 'personal' ? 0 : width,
         y: 0,
       }}
+      style={{ backgroundColor: COLORS.primaryDark }}
     >
       <View style={{ width, height: '100%' }}>{personal}</View>
       <View style={{ width, height: '100%' }}>{community}</View>
