@@ -6,7 +6,7 @@
   "scripts": {
     "typescript": "tsc --noEmit",
     "android": "react-native run-android",
-    "ios": "react-native run-ios --simulator=\"iPhone 14\"",
+    "ios": "react-native run-ios --simulator=\"iPhone SE (3rd generation)\"",
     "ios:new": "export NODE_OPTIONS=--max-old-space-size=8192 && react-native run-ios --simulator=\"iPhone 14\"",
     "reset-env": "rm -rf node_modules/.cache/babel-loader/* && yarn && react-native start --reset-cache",
     "free-up-memory": "node --max-old-space-size=8192 node_modules/react-native/local-cli/cli.js",
