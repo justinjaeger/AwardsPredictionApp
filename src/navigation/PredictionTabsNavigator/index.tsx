@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Animated, ScrollView, useWindowDimensions, View } from 'react-native';
-import BackgroundWrapper from '../../components/BackgroundWrapper';
 import COLORS from '../../constants/colors';
 import { usePersonalCommunityTab } from '../../context/EventContext';
 import PredictionTab from './PredictionTab';
@@ -13,12 +12,10 @@ import { truncateText } from '../../util/truncateText';
  * We call the setPersonalCommunityTab function manually WHEN we navigate, instead of calling it inside here
  */
 const PredictionTabsNavigator = ({
-  personal,
-  community,
+  scrollViewRef,
   onChangeTab,
 }: {
-  personal: JSX.Element;
-  community: JSX.Element;
+  scrollViewRef: React.RefObject<ScrollView>;
   onChangeTab?: (tab: 'personal' | 'community') => void;
 }) => {
   const { width } = useWindowDimensions();
@@ -28,12 +25,6 @@ const PredictionTabsNavigator = ({
   const isAuthUser = userInfo?.userId === authUserId;
   const scrollBarPositionTwo = width / 2;
 
-  // This seems unnecessary but without, it breaks the animation
-  const [initialTab] = useState<'personal' | 'community'>(
-    personalCommunityTab || 'personal',
-  );
-
-  const scrollViewRef = useRef<ScrollView>(null);
   const scrollBarAnim = useRef(
     new Animated.Value(personalCommunityTab === 'personal' ? 0 : scrollBarPositionTwo),
   ).current;
@@ -68,70 +59,50 @@ const PredictionTabsNavigator = ({
   };
 
   return (
-    <>
-      <BackgroundWrapper>
-        <>
-          <View
-            style={{
-              flexDirection: 'row',
-              width,
-            }}
-          >
-            {/* ScrollBar */}
-            <Animated.View
-              style={{
-                position: 'absolute',
-                bottom: 0,
-                transform: [{ translateX: scrollBarAnim }],
-                width: SCROLL_BAR_WIDTH,
-                backgroundColor: COLORS.white,
-                height: 4,
-                borderRadius: 5,
-                zIndex: 2,
-              }}
-            />
-            <PredictionTab
-              text={
-                isAuthUser ? 'My Predictions' : truncateText(userInfo?.userName ?? '', 13)
-              }
-              userInfo={userInfo}
-              onPress={() => {
-                openPersonalTab();
-                onChangeTab && onChangeTab('personal');
-                setTab('personal');
-              }}
-              selected={tab === 'personal'}
-            />
-            <PredictionTab
-              text={'Community'}
-              onPress={() => {
-                openCommunityTab();
-                onChangeTab && onChangeTab('community');
-                setTab('community');
-              }}
-              selected={tab === 'community'}
-            />
-          </View>
-          <ScrollView
-            horizontal
-            pagingEnabled
-            ref={scrollViewRef}
-            showsHorizontalScrollIndicator={false}
-            nestedScrollEnabled
-            scrollEventThrottle={1}
-            scrollEnabled={false}
-            // basically a starting value
-            contentOffset={{
-              x: initialTab === 'personal' ? 0 : width,
-              y: 0,
-            }}
-          >
-            <View style={{ width, height: '100%' }}>{personal}</View>
-            <View style={{ width, height: '100%' }}>{community}</View>
-          </ScrollView>
-        </>
-      </BackgroundWrapper>
-    </>
+    <View
+      style={{
+        flexDirection: 'row',
+        width,
+      }}
+    >
+      {/* ScrollBar */}
+      <Animated.View
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          transform: [{ translateX: scrollBarAnim }],
+          width: SCROLL_BAR_WIDTH,
+          backgroundColor: COLORS.white,
+          height: 2,
+          borderRadius: 5,
+          zIndex: 2,
+        }}
+      />
+      <PredictionTab
+        text={
+          isAuthUser
+            ? 'My Predictions'
+            : truncateText(userInfo?.userName ?? 'My Predictions', 13)
+        }
+        userInfo={userInfo}
+        onPress={() => {
+          scrollViewRef.current?.scrollTo({ y: 0 }); // why no work?
+          openPersonalTab();
+          onChangeTab && onChangeTab('personal');
+          setTab('personal');
+        }}
+        selected={tab === 'personal'}
+      />
+      <PredictionTab
+        text={'Community'}
+        onPress={() => {
+          openCommunityTab();
+          onChangeTab && onChangeTab('community');
+          setTab('community');
+        }}
+        selected={tab === 'community'}
+      />
+    </View>
   );
 };
 

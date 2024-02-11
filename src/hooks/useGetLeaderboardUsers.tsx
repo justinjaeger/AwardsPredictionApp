@@ -10,8 +10,8 @@ const useGetLeaderboardUsers = ({
   sortByField,
   sortOrder,
 }: {
-  eventId: string;
-  phase: Phase;
+  eventId: string | undefined;
+  phase: Phase | undefined;
   noShorts?: boolean;
   sortByField?: 'rank' | 'riskiness'; // rank by default in db
   sortOrder?: 'asc' | 'desc'; // asc by default in db
@@ -27,7 +27,7 @@ const useGetLeaderboardUsers = ({
    * This is being called in overlapping requests
    */
   const fetchPage = async () => {
-    if (!hasNextPage || isLoading) return;
+    if (!hasNextPage || isLoading || !eventId || !phase) return;
     setIsLoading(true);
     setPageNumber((prev) => prev + 1);
     const { data } = await MongoApi.getLeaderboardUsers({

@@ -1,7 +1,7 @@
 import React from 'react';
 import { TouchableHighlight, useWindowDimensions, View } from 'react-native';
 import MovieGrid from '../../components/MovieGrid';
-import { Body, Label, SubHeader } from '../../components/Text';
+import { Body, SubHeader } from '../../components/Text';
 import { AWARDS_BODY_TO_PLURAL_STRING } from '../../constants/awardsBodies';
 import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
@@ -82,9 +82,7 @@ const UserPredictionList = ({
                     {'  |  ' + awardsBodyName}
                   </Body>
                 </View>
-                <Label style={{ marginTop: 5 }}>
-                  {'Updated' + ': ' + lastUpdatedText}
-                </Label>
+                <Body style={{ marginTop: 5 }}>{'Updated' + ': ' + lastUpdatedText}</Body>
               </View>
               <MovieGrid
                 eventId={event?._id}

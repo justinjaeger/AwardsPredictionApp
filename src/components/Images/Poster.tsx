@@ -4,7 +4,7 @@ import FastImage from 'react-native-fast-image';
 import COLORS from '../../constants/colors';
 import { getPosterDimensionsByWidth, PosterSize } from '../../constants/posterDimensions';
 import { getTmdbImageUrl } from '../../constants';
-import { Label } from '../Text';
+import { Body } from '../Text';
 import theme from '../../constants/theme';
 import RankingDisplay from '../RankingDisplay';
 import { Phase } from '../../models';
@@ -98,14 +98,14 @@ const Poster = ({
             }}
           >
             {(width || 0) > PosterSize.SMALL ? (
-              <Label
+              <Body
                 style={{
                   textAlign: 'center',
                   color: COLORS.primaryLightest,
                 }}
               >
                 {title}
-              </Label>
+              </Body>
             ) : null}
           </View>
         )}

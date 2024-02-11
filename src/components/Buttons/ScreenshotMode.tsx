@@ -8,7 +8,7 @@ import {
 import BasicModal from '../BasicModal';
 import { EventModel, WithId, iCategory, iPrediction } from '../../models';
 import MovieGrid from '../MovieGrid';
-import { BodyBold, SmallHeader, SubHeader } from '../Text';
+import { BodyBold, HeaderLight, SubHeader } from '../Text';
 import { eventToString } from '../../util/stringConversions';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import theme from '../../constants/theme';
@@ -95,7 +95,7 @@ const ScreenshotMode = ({
                     alignItems: 'baseline',
                   }}
                 >
-                  <SmallHeader>{categoryData.name}</SmallHeader>
+                  <HeaderLight>{categoryData.name}</HeaderLight>
                   <BodyBold style={{ marginTop: 5, textAlign: 'right' }}>
                     {dateString}
                   </BodyBold>

@@ -55,7 +55,7 @@ const TabBar = (props: ITabBarProps) => {
           };
           const icon = (() => {
             switch (route.name) {
-              case 'Predictions':
+              case 'Social':
                 return (
                   <View key={index}>
                     <CustomIcon
@@ -64,11 +64,20 @@ const TabBar = (props: ITabBarProps) => {
                     />
                   </View>
                 );
-              case 'Leaderboard':
+              case 'Predictions':
                 return (
                   <View key={index}>
                     <CustomIcon
                       name={'award-outline'}
+                      color={isFocused ? focusedColor : unfocusedColor}
+                    />
+                  </View>
+                );
+              case 'Leaderboard':
+                return (
+                  <View key={index}>
+                    <CustomIcon
+                      name={'bar-chart'}
                       color={isFocused ? focusedColor : unfocusedColor}
                     />
                   </View>
@@ -78,15 +87,6 @@ const TabBar = (props: ITabBarProps) => {
                   <View key={index}>
                     <CustomIcon
                       name={'person'}
-                      color={isFocused ? focusedColor : unfocusedColor}
-                    />
-                  </View>
-                );
-              case 'Friend':
-                return (
-                  <View key={index}>
-                    <CustomIcon
-                      name={'search'}
                       color={isFocused ? focusedColor : unfocusedColor}
                     />
                   </View>
@@ -116,7 +116,7 @@ const TabBar = (props: ITabBarProps) => {
               key={index}
               accessibilityRole="button"
               accessibilityState={isFocused ? { selected: true } : {}}
-              accessibilityLabel={options.tabBarAccessibilityLabel}
+              accessibilityBody={options.tabBarAccessibilityBody}
               testID={options.tabBarTestID}
               onPress={onPress}
               style={{

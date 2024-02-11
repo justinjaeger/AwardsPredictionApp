@@ -8,10 +8,10 @@ import theme from '../../constants/theme';
 const PIC_SIZE = 50;
 
 const CarouselSkeleton = ({
-  renderLabel,
+  renderBody,
   renderProfile,
 }: {
-  renderLabel?: boolean;
+  renderBody?: boolean;
   renderProfile?: boolean;
 }) => {
   const { width } = useWindowDimensions();
@@ -52,7 +52,7 @@ const CarouselSkeleton = ({
               />
             </View>
           ) : null}
-          {renderLabel ? (
+          {renderBody ? (
             <View
               style={{
                 width: 100,

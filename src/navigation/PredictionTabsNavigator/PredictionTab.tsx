@@ -9,6 +9,7 @@ import { PredictionsNavigationProp, iUserInfo } from '../types';
 import { useAuth } from '../../context/AuthContext';
 
 export const HIGHLIGHT_COLOR = COLORS.white;
+export const getPredictionTabHeight = (isPad: boolean) => (isPad ? 65 : 45);
 
 const PredictionTab = ({
   text,
@@ -35,7 +36,7 @@ const PredictionTab = ({
         borderRadius: 0,
         borderBottomColor: COLORS.primaryLight,
         borderBottomWidth: 1,
-        height: isPad ? 80 : 60,
+        height: getPredictionTabHeight(isPad),
       }}
       onPress={onPress}
       underlayColor={COLORS.secondary}

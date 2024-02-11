@@ -34,7 +34,6 @@ const useUserSearch = () => {
   };
 
   const handleSearch = async (s: string) => {
-    reset();
     await fetchPage(s, 1);
   };
 
@@ -49,6 +48,8 @@ const useUserSearch = () => {
     setAllUsersAreFetched(false);
     setLastSearchInput('');
   };
+
+  console.log('searchResults', searchResults);
 
   return { searchResults, allUsersAreFetched, handleSearch, fetchMore, reset, isLoading };
 };

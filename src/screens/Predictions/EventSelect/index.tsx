@@ -1,37 +1,45 @@
 import React, { useEffect, useState } from 'react';
 import { FlatList, View, useWindowDimensions } from 'react-native';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
-import useQueryGetAllEvents from '../../../hooks/queries/useQueryGetAllEvents';
 import { useAuth } from '../../../context/AuthContext';
 import useQueryGetUser from '../../../hooks/queries/useQueryGetUser';
-import EventList from './EventList';
 import { HeaderLight } from '../../../components/Text';
 import useQueryGetFollowingUsers from '../../../hooks/queries/useQueryGetFollowingUsers';
 import PredictionCarousel from '../../../components/PredictionCarousel';
 import theme from '../../../constants/theme';
 import RecommendedUsers from '../../../components/RecommendedUsers';
 import CarouselSkeleton from '../../../components/Skeletons/CarouselSkeleton';
-import EventBoxSkeleton from '../../../components/Skeletons/EventBoxSkeleton';
 import useDevice from '../../../util/device';
-import LeaderboardList from '../../Leaderboard/LeaderboardList';
 import { getUserInfo } from '../../../util/getUserInfo';
+import SearchInput from '../../../components/Inputs/SearchInput';
+import useUserSearch from '../../SearchUsers/useUserSearch';
+import UserSearchResultItem from '../../../components/UserSearchResult/UserSearchResultItem';
+import { StackActions, useNavigation } from '@react-navigation/native';
+import { PredictionsNavigationProp, iUserInfo } from '../../../navigation/types';
+import { getLazyLoadProps } from '../../../util/getLazyLoadProps';
 
 const EventSelect = () => {
   const { width } = useWindowDimensions();
   const { userId: authUserId } = useAuth();
   const { isPad } = useDevice();
+  const navigation = useNavigation<PredictionsNavigationProp>();
 
-  const {
-    data: events,
-    isLoading: isLoadingEvents,
-    refetch: refetchEvents,
-  } = useQueryGetAllEvents();
   const { data: user, refetch: refetchUser } = useQueryGetUser(authUserId);
   const {
     data: usersWithNestedData,
     isLoading: isLoadingUsers,
     refetch: refetchFollowingPredictions,
   } = useQueryGetFollowingUsers();
+  const {
+    searchResults,
+    handleSearch,
+    fetchMore,
+    reset,
+    isLoading: searchIsLoading,
+  } = useUserSearch();
+  const { usersIdsAuthUserIsFollowing } = useQueryGetFollowingUsers();
+
+  const [searchIsFocused, setSearchIsFocused] = useState<boolean>(false);
 
   useEffect(() => {
     if (authUserId && user === undefined) {
@@ -43,20 +51,15 @@ const EventSelect = () => {
     }
   }, [authUserId, user]);
 
-  // just in case there's some refresh problem
-  useEffect(() => {
-    if (events === undefined) {
-      refetchEvents();
-    }
-  }, [events]);
-
   const [numToShow, setNumToShow] = useState<number>(3);
 
-  const onEndReached = () => {
-    setNumToShow((n) => n + 5);
+  const navigateToProfile = (userInfo: iUserInfo) => {
+    // important to push so we can have multiple profiles in same stack
+    navigation.dispatch(StackActions.push('Profile', { userInfo }));
   };
 
-  const data = usersWithNestedData ?? [];
+  const searchIsActive =
+    searchIsFocused || searchResults !== undefined || searchIsLoading;
 
   return (
     <BackgroundWrapper>
@@ -67,85 +70,95 @@ const EventSelect = () => {
           justifyContent: 'center',
         }}
       >
-        <FlatList
-          data={data.slice(0, numToShow)}
-          style={{ width: '100%' }}
-          contentContainerStyle={{
-            paddingBottom: 100,
+        <SearchInput
+          searchIsActive={searchIsActive}
+          placeholder={'Search users'}
+          handleSearch={handleSearch}
+          onReset={() => {
+            reset();
+            setSearchIsFocused(false);
           }}
-          ListHeaderComponent={
-            <View style={{ width: '100%', alignItems: 'center' }}>
-              <HeaderLight
-                style={{
-                  alignSelf: 'flex-start',
-                  marginTop: 20,
-                  marginLeft: theme.windowMargin,
-                }}
-              >
-                Make Predictions
-              </HeaderLight>
-              {isLoadingEvents || !events ? (
-                <EventBoxSkeleton />
-              ) : (
-                <EventList
-                  user={user ?? undefined} // so if the user is signed out they don't see their old predictions
-                  events={events}
-                />
-              )}
-              <LeaderboardList />
-              {!authUserId ? (
-                // users not signed in can see recommended users
-                <RecommendedUsers header={'Follow Users'} />
-              ) : (
-                <HeaderLight
-                  style={{
-                    alignSelf: 'flex-start',
-                    marginTop: 20,
-                    marginLeft: theme.windowMargin,
-                    marginBottom: 10,
-                  }}
-                >
-                  New From Friends
-                </HeaderLight>
-              )}
-              {isLoadingUsers ? (
-                <View style={{ marginLeft: -10 }}>
-                  {new Array(2).fill(null).map((x, i) => (
-                    <CarouselSkeleton key={i} renderProfile renderLabel />
-                  ))}
-                </View>
-              ) : null}
-            </View>
-          }
-          ListFooterComponent={
-            numToShow < data.length ? <CarouselSkeleton renderLabel /> : null
-          }
-          keyExtractor={(item) => item._id}
-          renderItem={({ item }) => (
-            <View style={{ width }}>
-              <PredictionCarousel
-                key={item._id}
-                predictionSets={item.recentPredictionSets || []}
-                userInfo={getUserInfo(item)}
-              />
-            </View>
-          )}
-          onScroll={(e) => {
-            // Fetches more at bottom of scroll. Note the high event throttle to prevent too many requests
-            // get position of current scroll
-            const currentOffset = e.nativeEvent.contentOffset.y;
-            // get max bottom of scroll
-            const maxOffset =
-              e.nativeEvent.contentSize.height - e.nativeEvent.layoutMeasurement.height;
-            // if we're close to the bottom fetch more
-            if (currentOffset > maxOffset - 200) {
-              onEndReached();
-            }
-          }}
-          scrollEventThrottle={500}
-          onEndReachedThreshold={isPad ? 0.8 : 0.5} // triggers onEndReached at (X*100)% of list, for example 0.9 = 90% down
-          showsVerticalScrollIndicator={false}
+          onFocus={() => setSearchIsFocused(true)}
         />
+        {searchIsActive ? (
+          <FlatList
+            data={searchResults ?? []}
+            style={{ width: '100%' }}
+            contentContainerStyle={{
+              paddingBottom: 100,
+            }}
+            ListHeaderComponent={
+              <View style={{ width: '100%', alignItems: 'center' }}>
+                {searchResults === undefined ? (
+                  <RecommendedUsers header={'Follow Users'} />
+                ) : null}
+              </View>
+            }
+            ListFooterComponent={
+              searchResults === undefined ? <CarouselSkeleton renderBody /> : null
+            }
+            keyExtractor={(item) => item._id + 'search'}
+            renderItem={({ item }) => (
+              <UserSearchResultItem
+                item={item}
+                authUserIsFollowing={usersIdsAuthUserIsFollowing.includes(item._id)}
+                onPress={navigateToProfile}
+              />
+            )}
+            {...getLazyLoadProps(() => fetchMore(), isPad)}
+            showsVerticalScrollIndicator={false}
+          />
+        ) : (
+          <FlatList
+            data={(usersWithNestedData ?? []).slice(0, numToShow)}
+            style={{ width: '100%' }}
+            contentContainerStyle={{
+              paddingBottom: 100,
+            }}
+            ListHeaderComponent={
+              <View style={{ width: '100%', alignItems: 'center' }}>
+                {!authUserId ? (
+                  // users not signed in can see recommended users
+                  <RecommendedUsers header={'Follow Users'} />
+                ) : (
+                  <HeaderLight
+                    style={{
+                      alignSelf: 'flex-start',
+                      marginTop: 10,
+                      marginLeft: theme.windowMargin,
+                      marginBottom: 10,
+                    }}
+                  >
+                    New From Friends
+                  </HeaderLight>
+                )}
+                {isLoadingUsers ? (
+                  <View style={{ marginLeft: -10 }}>
+                    {new Array(2).fill(null).map((x, i) => (
+                      <CarouselSkeleton key={i} renderProfile renderBody />
+                    ))}
+                  </View>
+                ) : null}
+              </View>
+            }
+            ListFooterComponent={
+              numToShow < (usersWithNestedData ?? []).length ? (
+                <CarouselSkeleton renderBody />
+              ) : null
+            }
+            keyExtractor={(item) => item._id + 'carousel'}
+            renderItem={({ item }) => (
+              <View style={{ width }}>
+                <PredictionCarousel
+                  predictionSets={item.recentPredictionSets || []}
+                  userInfo={getUserInfo(item)}
+                />
+              </View>
+            )}
+            {...getLazyLoadProps(() => setNumToShow((n) => n + 5), isPad)}
+            showsVerticalScrollIndicator={false}
+          />
+        )}
       </View>
     </BackgroundWrapper>
   );

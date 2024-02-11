@@ -6,7 +6,7 @@ import {
   getPosterDimensionsByHeight,
   getPosterDimensionsByWidth,
 } from '../../constants/posterDimensions';
-import { Body, Header, SmallHeader, SubHeader } from '../Text';
+import { Body, Header, HeaderLight, SubHeader } from '../Text';
 import { iPrediction } from '../../models';
 import ExternalLinkButton from '../ExternalLinkButton';
 import { useNavigation } from '@react-navigation/native';
@@ -94,7 +94,7 @@ const ContenderInfoHeader = ({ prediction }: { prediction: iPrediction }) => {
         >
           <View>
             {itemTitle.length > 20 ? (
-              <SmallHeader>{itemTitle ?? ''}</SmallHeader>
+              <HeaderLight>{itemTitle ?? ''}</HeaderLight>
             ) : (
               <Header>{itemTitle ?? ''}</Header>
             )}

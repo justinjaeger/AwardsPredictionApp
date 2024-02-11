@@ -39,7 +39,6 @@ const PredictionsNavigator = () => {
           name="EventSelect"
           component={EventSelect}
           options={{
-            headerTitle: '',
             ...toolbarOnly,
           }}
         />
@@ -48,9 +47,7 @@ const PredictionsNavigator = () => {
           name="Event"
           component={Event}
           options={{
-            headerTitle: getHeaderTitle('Event Predictions'),
-            headerLeft: BackButton,
-            ...large,
+            headerShown: false,
           }}
         />
         <Screen
@@ -130,10 +127,11 @@ const PredictionsNavigator = () => {
           name="Leaderboard"
           component={Leaderboard}
           options={{
-            headerTitle: getHeaderTitle('Leaderboard'),
-            headerLeft: BackButton,
+            // headerTitle: getHeaderTitle('Leaderboard'),
+            // headerLeft: BackButton,
             gestureEnabled: false,
-            ...large,
+            // ...large,
+            ...toolbarOnly,
           }}
         />
       </Group>

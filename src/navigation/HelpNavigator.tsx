@@ -24,7 +24,7 @@ const HelpTabs = () => {
             borderBottomWidth: 1,
             padding: isPad ? 10 : 0,
           },
-          tabBarLabelStyle: {
+          tabBarBodyStyle: {
             color: COLORS.white,
             fontSize: isPad ? 20 : 14,
             textTransform: 'none',

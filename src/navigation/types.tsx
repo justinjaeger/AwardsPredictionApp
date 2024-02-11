@@ -20,9 +20,9 @@ type iBottomTabDefaultParamList = {
 };
 
 export type BottomTabParamList = {
+  Social: iBottomTabDefaultParamList;
   Predictions: iBottomTabDefaultParamList;
   ProfileTab: iBottomTabDefaultParamList & { userId?: string };
-  Friend: iBottomTabDefaultParamList;
   Leaderboard: iBottomTabDefaultParamList;
   Help: undefined;
   Admin: undefined;

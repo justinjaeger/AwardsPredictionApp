@@ -2,7 +2,6 @@ import React from 'react';
 import { Text } from '@ui-kitten/components';
 import { StyleProp, TextStyle } from 'react-native';
 import COLORS from '../../constants/colors';
-import useDevice from '../../util/device';
 
 interface iTextProps {
   children: string;
@@ -11,10 +10,9 @@ interface iTextProps {
 }
 
 export const Header = (props: iTextProps) => {
-  const { isLargeScreen, isSmallScreen } = useDevice();
   return (
     <Text
-      category={isLargeScreen ? 'h3' : isSmallScreen ? 'h4' : 'h5'}
+      category={'h4'}
       style={[
         {
           fontWeight: '700',
@@ -28,11 +26,10 @@ export const Header = (props: iTextProps) => {
   );
 };
 
-export const SmallHeader = (props: iTextProps) => {
-  const { isLargeScreen, isSmallScreen } = useDevice();
+export const HeaderLight = (props: iTextProps) => {
   return (
     <Text
-      category={isLargeScreen ? 'h4' : isSmallScreen ? 'h5' : 'h6'}
+      category={'h5'}
       style={[
         {
           fontWeight: '700',
@@ -47,10 +44,9 @@ export const SmallHeader = (props: iTextProps) => {
 };
 
 export const SubHeader = (props: iTextProps) => {
-  const { isLargeScreen, isSmallScreen } = useDevice();
   return (
     <Text
-      category={isLargeScreen ? 'h4' : isSmallScreen ? 'p1' : 'h6'}
+      category={'p1'}
       style={[
         {
           fontWeight: '700',
@@ -66,10 +62,9 @@ export const SubHeader = (props: iTextProps) => {
 };
 
 export const SubHeaderLight = (props: iTextProps) => {
-  const { isLargeScreen, isSmallScreen } = useDevice();
   return (
     <Text
-      category={isLargeScreen ? 'h4' : isSmallScreen ? 'p1' : 'h6'}
+      category={'p1'}
       style={[
         {
           fontWeight: '400',
@@ -83,30 +78,10 @@ export const SubHeaderLight = (props: iTextProps) => {
   );
 };
 
-export const HeaderLight = (props: iTextProps) => {
-  const { isLargeScreen, isSmallScreen } = useDevice();
-  return (
-    <Text
-      category={isLargeScreen ? 'h2' : isSmallScreen ? 'h5' : 'h4'}
-      style={[
-        {
-          fontWeight: '700',
-          color: COLORS.lightest,
-        },
-        props.style,
-      ]}
-    >
-      {props.children}
-    </Text>
-  );
-};
-
 export const Body = (props: iTextProps) => {
-  const { isLargeScreen, isSmallScreen } = useDevice();
-
   return (
     <Text
-      category={isLargeScreen ? 'h6' : isSmallScreen ? 'label' : 'p1'}
+      category={'label'}
       style={[
         {
           fontWeight: '400',
@@ -121,33 +96,12 @@ export const Body = (props: iTextProps) => {
 };
 
 export const BodyBold = (props: iTextProps) => {
-  const { isLargeScreen, isSmallScreen } = useDevice();
-
   return (
     <Text
-      category={isLargeScreen ? 'h6' : isSmallScreen ? 'label' : 'p1'}
+      category={'label'}
       style={[
         {
           fontWeight: '700',
-          color: COLORS.lightest,
-        },
-        props.style,
-      ]}
-    >
-      {props.children}
-    </Text>
-  );
-};
-
-export const Label = (props: iTextProps) => {
-  const { isLargeScreen } = useDevice();
-
-  return (
-    <Text
-      category={isLargeScreen ? 'h6' : 'label'}
-      style={[
-        {
-          fontWeight: '400',
           color: COLORS.lightest,
         },
         props.style,

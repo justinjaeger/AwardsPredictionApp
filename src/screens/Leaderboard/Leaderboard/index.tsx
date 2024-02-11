@@ -8,7 +8,7 @@ import LeaderboardListItem, {
 } from '../../../components/LeaderboardListItem';
 import LeaderboardListItemTemplate from '../../../components/LeaderboardListItem/Template';
 import UserListSkeleton from '../../../components/Skeletons/UserListSkeleton';
-import { Body, SubHeader } from '../../../components/Text';
+import { Body, BodyBold, HeaderLight, SubHeader } from '../../../components/Text';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import { useAuth } from '../../../context/AuthContext';
 import useProfileUser from '../../Profile/useProfileUser';
@@ -16,7 +16,7 @@ import { getUserLeaderboard } from '../../../util/getUserLeaderboard';
 import { getTwoLineHeaderTitle } from '../../../constants';
 import { eventToString } from '../../../util/stringConversions';
 import { useRouteParams } from '../../../hooks/useRouteParams';
-import { PHASE_TO_STRING } from '../../../constants/categories';
+import { PHASE_TO_STRING, PHASE_TO_STRING_PLURAL } from '../../../constants/categories';
 import LeaderboardChart from '../../../components/LeaderboardChart';
 import { PredictionsNavigationProp } from '../../../navigation/types';
 import { getLeaderboardFromEvent } from '../../../util/getLeaderboardFromEvent';
@@ -27,35 +27,72 @@ import COLORS from '../../../constants/colors';
 import theme from '../../../constants/theme';
 import useQueryGetFollowingUsers from '../../../hooks/queries/useQueryGetFollowingUsers';
 import { iLeaderboardRankingsWithUserData } from '../../../services/api/requests/leaderboard';
+import { EventModel, Phase, WithId } from '../../../models';
+import useQueryGetAllEvents from '../../../hooks/queries/useQueryGetAllEvents';
+import { AWARDS_BODY_TO_PLURAL_STRING } from '../../../constants/awardsBodies';
+import EventTopTabs from '../../../components/EventTopTabs';
+import LeaderboardStats from './LeaderboardStats';
+import { getLastUpdatedOnPredictionSet } from '../../../util/getLastUpdatedOnPredictionSet';
 
 const Leaderboard = () => {
   const flatListRef = useRef<FlatList<any>>(null);
 
   const { width } = useWindowDimensions();
+  const { event: initialEvent, phase: initialPhase } = useRouteParams();
 
   const { setPersonalCommunityTab } = usePersonalCommunityTab();
+  const { defaultEvent, defaultLeaderboard } = useQueryGetAllEvents();
 
   const { isPad } = useDevice();
   const navigation = useNavigation<PredictionsNavigationProp>();
-  const { event: _event, eventId: _eventId, phase: _phase, noShorts } = useRouteParams();
-  const eventId = _eventId!;
-  const phase = _phase!;
-  const event = _event!;
+
+  const [event, setEvent] = useState<WithId<EventModel> | undefined>(initialEvent);
+  const [phase, setPhase] = useState<Phase | undefined>(initialPhase);
+
+  // sets event as most recent academy awards if none is selected
+  useEffect(() => {
+    if (!event && defaultEvent) {
+      setEvent(defaultEvent);
+    }
+    if (!phase && defaultLeaderboard) {
+      setPhase(defaultLeaderboard.phase);
+    }
+  }, [defaultEvent, defaultLeaderboard]);
 
   const widthFactor = isPad ? theme.padHistogramContainerWidth : 1;
+  const noShorts = false;
 
   const { userId: authUserId } = useAuth();
   const { user } = useProfileUser(authUserId);
-  const userLeaderboard = user && getUserLeaderboard({ user, eventId, phase, noShorts });
-
-  const leaderboard = getLeaderboardFromEvent(event, phase, noShorts);
-
   const { leaderboardRankings, fetchPage, isLoading } = useGetLeaderboardUsers({
-    eventId,
+    eventId: event?._id,
     phase,
     noShorts,
   });
   const { data: users } = useQueryGetFollowingUsers();
+
+  const [sortSetting, setSortSetting] = useState<'all' | 'following'>('all');
+
+  // set custom back arrow functionality
+  useEffect(() => {
+    if (!event || !phase) return;
+    const eventName = eventToString(event.awardsBody, event.year);
+    const headerTitle = `${eventName}\n${PHASE_TO_STRING[phase]} Leaderboard`;
+    navigation.setOptions({
+      // eslint-disable-next-line react/no-unstable-nested-components
+      headerTitle: getTwoLineHeaderTitle(headerTitle),
+    });
+  }, [navigation]);
+
+  if (!event || !phase) return null;
+
+  const eventId = event?._id;
+
+  const userLeaderboard =
+    user && getUserLeaderboard({ user, eventId: event?._id, phase });
+
+  const leaderboard = getLeaderboardFromEvent(event, phase, noShorts);
+
   const followingLeaderboardRankings = (users ?? [])
     .reduce((acc: iLeaderboardRankingsWithUserData[], user) => {
       const userLeaderboard = getUserLeaderboard({ user, eventId, phase, noShorts });
@@ -66,19 +103,6 @@ const Leaderboard = () => {
     }, [] as any[])
     .sort((a, b) => a.rank - b.rank);
 
-  const [sortSetting, setSortSetting] = useState<'all' | 'following'>('all');
-
-  // set custom back arrow functionality
-  useEffect(() => {
-    if (!event) return;
-    const eventName = eventToString(event.awardsBody, event.year);
-    const headerTitle = `${eventName}\n${PHASE_TO_STRING[phase]} Leaderboard`;
-    navigation.setOptions({
-      // eslint-disable-next-line react/no-unstable-nested-components
-      headerTitle: getTwoLineHeaderTitle(headerTitle),
-    });
-  }, [navigation]);
-
   const onEndReached = () => {
     fetchPage();
   };
@@ -87,8 +111,41 @@ const Leaderboard = () => {
 
   const data = sortSetting === 'all' ? leaderboardRankings : followingLeaderboardRankings;
 
+  const navigateToPredictions = () => {
+    if (!userLeaderboard) return;
+    setPersonalCommunityTab('personal');
+    navigation.navigate('Event', {
+      eventId: userLeaderboard.eventId,
+      userInfo: getUserInfo(user),
+      yyyymmdd: userLeaderboard.yyyymmdd,
+      phase: userLeaderboard.phase,
+      isLeaderboard: true,
+    });
+  };
+
   return (
     <BackgroundWrapper>
+      <HeaderLight
+        style={{
+          alignSelf: 'flex-start',
+          marginTop: 10,
+          marginLeft: theme.windowMargin,
+        }}
+      >
+        {'Leaderboard'}
+      </HeaderLight>
+      <BodyBold
+        style={{
+          alignSelf: 'flex-start',
+          marginTop: 5,
+          marginLeft: theme.windowMargin,
+        }}
+      >
+        {`${AWARDS_BODY_TO_PLURAL_STRING[event.awardsBody]} ${event.year} • ${
+          PHASE_TO_STRING_PLURAL[phase]
+        }`}
+      </BodyBold>
+      {event ? <EventTopTabs selectedEvent={event} setEvent={setEvent} /> : null}
       <FlatList
         ref={flatListRef}
         data={data}
@@ -114,54 +171,20 @@ const Leaderboard = () => {
         keyboardShouldPersistTaps={'always'}
         ListHeaderComponent={
           <>
-            {/* <View
-              style={{
-                flexDirection: 'column',
-                justifyContent: 'space-around',
-                width: '100%',
-                alignItems: 'center',
-                padding: 20,
-                paddingBottom: 10,
-              }}
-            >
-              <SubHeader>Score Distribution</SubHeader>
-              <Body style={{ marginTop: 5 }}>All Users</Body>
-            </View>
-            <LeaderboardChart leaderboard={leaderboard} flatListRef={flatListRef} /> */}
             {user && userLeaderboard ? (
-              <LeaderboardListItem
-                leaderboardRanking={{ userId: user._id, ...user, ...userLeaderboard }}
-                style={{ backgroundColor: 'rgba(255,255,255,0.1)', marginBottom: 2 }}
+              <LeaderboardStats
+                title={'My Score'}
+                percentageAccuracy={userLeaderboard.percentageAccuracy}
+                numCorrect={userLeaderboard.numCorrect}
+                totalPossibleSlots={userLeaderboard.totalPossibleSlots}
+                numUsersPredicting={userLeaderboard.numUsersPredicting}
+                rank={userLeaderboard.rank}
+                riskiness={userLeaderboard.riskiness}
+                lastUpdated={userLeaderboard.lastUpdated}
+                slotsPredicted={userLeaderboard.slotsPredicted}
+                onPress={() => navigateToPredictions()}
               />
             ) : null}
-            <LeaderboardListItemTemplate
-              title={'Community'}
-              subtitle={'Aggregate of all users'}
-              percentageAccuracy={leaderboard.communityPercentageAccuracy}
-              numCorrect={leaderboard.communityNumCorrect}
-              totalPossibleSlots={leaderboard.totalPossibleSlots}
-              rank={
-                leaderboard.numUsersPredicting -
-                leaderboard.communityPerformedBetterThanNumUsers
-              }
-              onPress={() => {
-                const yyyymmdd = leaderboardRankings[0]?.yyyymmdd;
-                if (!yyyymmdd) return;
-                setPersonalCommunityTab('community');
-                navigation.navigate('Event', {
-                  eventId,
-                  yyyymmdd,
-                  phase,
-                  userInfo: getUserInfo(user),
-                  isLeaderboard: true,
-                  noShorts,
-                });
-              }}
-              profileImage={undefined}
-              riskiness={leaderboard.communityRiskiness}
-              style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
-              hideProfileImage
-            />
             <View
               style={{
                 flexDirection: 'column',

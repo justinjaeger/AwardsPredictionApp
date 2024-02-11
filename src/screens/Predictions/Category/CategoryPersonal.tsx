@@ -41,6 +41,7 @@ const CategoryPersonal = ({
   const isAuthProfile = userInfo?.userId === authUserId;
 
   const { data: predictionData, isLoading } = useQueryGetUserPredictions({
+    event,
     userId: userInfo?.userId,
     yyyymmdd,
   });

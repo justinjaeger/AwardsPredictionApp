@@ -25,7 +25,7 @@ const AuthTabs = () => {
             borderBottomColor: 'rgba(255,255,255,0.1)',
             borderBottomWidth: 1,
           },
-          tabBarLabelStyle: { color: COLORS.white, fontSize: 16, textTransform: 'none' },
+          tabBarBodyStyle: { color: COLORS.white, fontSize: 16, textTransform: 'none' },
           tabBarIndicatorStyle: { backgroundColor: COLORS.white },
           tabBarActiveTintColor: COLORS.primary,
         }}

@@ -12,6 +12,7 @@ import CategoryCommunity from './CategoryCommunity';
 import { usePersonalCommunityTab } from '../../../context/EventContext';
 import PredictionTabsNavigator from '../../../navigation/PredictionTabsNavigator';
 import { PHASE_TO_STRING } from '../../../constants/categories';
+import BackgroundWrapper from '../../../components/BackgroundWrapper';
 
 const Category = () => {
   const { params } = useRoute<RouteProp<PredictionsParamList, 'Category'>>();
@@ -51,11 +52,13 @@ const Category = () => {
   }, []);
 
   return (
-    <PredictionTabsNavigator
-      onChangeTab={setCurrentTab}
-      personal={<CategoryPersonal showEventLink={showEventLink} onBack={onBack} />}
-      community={<CategoryCommunity showEventLink={showEventLink} />}
-    />
+    <BackgroundWrapper>
+      <PredictionTabsNavigator
+        onChangeTab={setCurrentTab}
+        personal={<CategoryPersonal showEventLink={showEventLink} onBack={onBack} />}
+        community={<CategoryCommunity showEventLink={showEventLink} />}
+      />
+    </BackgroundWrapper>
   );
 };
 

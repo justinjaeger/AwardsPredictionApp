@@ -6,7 +6,7 @@ import {
   View,
   useWindowDimensions,
 } from 'react-native';
-import { Header, Label, SmallHeader, SubHeader, SubHeaderLight } from '../Text';
+import { Header, Body, HeaderLight, SubHeader, SubHeaderLight } from '../Text';
 import { CategoryName, EventModel, Phase, WithId, iPrediction } from '../../models';
 import { getNumPredicting, getTotalNumPredicting } from '../../util/getNumPredicting';
 import Histogram, { SLOTS_TO_DISPLAY_EXTRA } from '../Histogram';
@@ -174,9 +174,9 @@ const ItemStatBox = ({
         }}
       >
         <SubHeaderLight>{'out of'}</SubHeaderLight>
-        <SmallHeader>{` ${totalNumPredictingCategory} `}</SmallHeader>
+        <HeaderLight>{` ${totalNumPredictingCategory} `}</HeaderLight>
       </View>
-      <Label style={{ textAlign: 'center' }}>{'users predicting category'}</Label>
+      <Body style={{ textAlign: 'center' }}>{'users predicting category'}</Body>
     </View>
   );
 };

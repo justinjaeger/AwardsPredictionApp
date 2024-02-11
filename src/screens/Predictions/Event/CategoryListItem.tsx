@@ -1,6 +1,13 @@
 import React from 'react';
 import { TouchableHighlight, View } from 'react-native';
-import { CategoryName, Phase, iCategoryPrediction, iPrediction } from '../../../models';
+import {
+  CategoryName,
+  EventModel,
+  Phase,
+  WithId,
+  iCategoryPrediction,
+  iPrediction,
+} from '../../../models';
 import COLORS from '../../../constants/colors';
 import { HeaderLight, SubHeader } from '../../../components/Text';
 import theme from '../../../constants/theme';
@@ -34,14 +41,17 @@ const CategoryListItem = ({
   item: [category, categoryPrediction],
   onPress,
   isAuthProfile,
+  event,
 }: {
   item: [CategoryName, iCategoryPrediction | undefined];
   onPress: (category: CategoryName) => void;
   isAuthProfile: boolean;
+  event: WithId<EventModel>;
 }) => {
   // yyyymmdd is not necessarily a leaderboard. When it's history, we don't event want to display shortlist performance
-  const { eventId, event, yyyymmdd, phase, isLeaderboard } = useRouteParams();
+  const { yyyymmdd, phase, isLeaderboard } = useRouteParams();
   const awardsBodyCategories = event?.categories;
+  const eventId = event?._id;
 
   const { data: contenderIdsToPhase } = useQueryGetEventAccolades(eventId);
 

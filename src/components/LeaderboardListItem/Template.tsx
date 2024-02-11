@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleProp, TouchableHighlight, View, ViewStyle } from 'react-native';
 import COLORS from '../../constants/colors';
 import ProfileImage from '../ProfileImage';
-import { Body, SmallHeader, SubHeader } from '../Text';
+import { Body, HeaderLight, SubHeader } from '../Text';
 import { formatDecimalAsPercentage } from '../../util/formatPercentage';
 
 export const LEADERBOARD_PROFILE_IMAGE_SIZE = 50;
@@ -91,7 +91,7 @@ const Template = ({
         </View>
         <View style={{ alignItems: 'flex-end', flex: 1 }}>
           <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
-            <SmallHeader>{formatDecimalAsPercentage(percentageAccuracy)}</SmallHeader>
+            <HeaderLight>{formatDecimalAsPercentage(percentageAccuracy)}</HeaderLight>
             <SubHeader>{'%'}</SubHeader>
           </View>
           <View style={{ flexDirection: 'row' }}>

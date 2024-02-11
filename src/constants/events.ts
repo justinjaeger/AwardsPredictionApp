@@ -71,7 +71,7 @@ export const eventStatusToPredictionType = (eventStatus: EventStatus): Phase =>
  * Shows the time the event closes
  */
 export const getEventTime = (event: EventModel) => {
-  const longAgo = new Date('1970-01-01');
+  const longAgo = new Date(0);
   const nomDateTime = event.nomDateTime ? new Date(event.nomDateTime) : longAgo;
   const winDateTime = event.winDateTime ? new Date(event.winDateTime) : longAgo;
 
