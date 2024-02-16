@@ -12,8 +12,8 @@ import { PredictionsNavigationProp } from '../../../navigation/types';
 import { getTwoLineHeaderTitle } from '../../../constants';
 import { PHASE_TO_STRING } from '../../../constants/categories';
 import useQueryGetAllEvents from '../../../hooks/queries/useQueryGetAllEvents';
-import { EventModel, WithId } from '../../../models';
-import EventTopTabs, { EVENT_TOP_TABS_HEIGHT } from '../../../components/EventTopTabs';
+import { AwardsBody, EventModel, WithId } from '../../../models';
+import EventTopTabs from '../../../components/EventTopTabs';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import { ScrollView, View } from 'react-native';
 import { HeaderLight } from '../../../components/Text';
@@ -23,6 +23,9 @@ import { getPredictionTabHeight } from '../../../navigation/PredictionTabsNaviga
 import useDevice from '../../../util/device';
 import { AWARDS_BODY_TO_PLURAL_STRING } from '../../../constants/awardsBodies';
 import CollapsableHeaderScrollViewWrapper from '../../../components/CollapsableHeaderScrollViewWrapper';
+import HeaderDropdownButton from '../../../components/HeaderDropdownButton';
+import { EVENT_TOP_TABS_HEIGHT } from '../../../components/TopTabs';
+import HeaderDropdownOverlay from '../../../components/HeaderDropdownOverlay';
 
 /**
  * TODO:
@@ -45,17 +48,40 @@ const Event = () => {
     phase,
     isLeaderboard,
   } = useRouteParams();
-  const { defaultEvent } = useQueryGetAllEvents();
+  const { data: events, defaultEvent } = useQueryGetAllEvents();
   const { userId: authUserId } = useAuth();
   const userId = userInfo?.userId || authUserId || '';
 
-  const [event, setEvent] = useState<WithId<EventModel> | undefined>(initialEvent);
   const [yyyymmdd, setYyyymmdd] = useState<number | undefined>(initialYyyymmdd);
+  const [year, _setYear] = useState<number | undefined>(
+    initialEvent?.year ?? defaultEvent?.year,
+  );
+  const [event, setEvent] = useState<WithId<EventModel> | undefined>(
+    initialEvent ?? defaultEvent,
+  );
+  const setYear = (year: number) => {
+    _setYear(year);
+    const eventsWithNewYear = events?.filter((e) => e.year === year);
+    const eventWithNewYearAndSameAwardsBody = eventsWithNewYear?.find(
+      (e) => e.awardsBody === event?.awardsBody,
+    );
+    if (eventWithNewYearAndSameAwardsBody) {
+      setEvent(eventWithNewYearAndSameAwardsBody);
+      return;
+    }
+    const defaultEvent =
+      eventsWithNewYear?.find((e) => e.awardsBody === AwardsBody.ACADEMY_AWARDS) ||
+      eventsWithNewYear?.[0];
+    if (defaultEvent) {
+      setEvent(defaultEvent);
+    }
+  };
 
   // sets event as most recent academy awards if none is selected
   useEffect(() => {
     if (!event && defaultEvent) {
       setEvent(defaultEvent);
+      setYear(defaultEvent.year);
     }
   }, [defaultEvent]);
 
@@ -83,8 +109,14 @@ const Event = () => {
 
   if (!event) return null;
 
+  const yearOptions = (events ?? []).reduce((acc, e) => {
+    if (acc.includes(e.year)) return acc;
+    return [...acc, e.year];
+  }, [] as number[]);
+
   return (
     <BackgroundWrapper>
+      <HeaderDropdownOverlay />
       <CollapsableHeaderScrollViewWrapper
         scrollViewProps={{
           // @ts-ignore
@@ -100,14 +132,33 @@ const Event = () => {
             <View>
               <View
                 style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
                   marginLeft: theme.windowMargin,
+                  marginRight: theme.windowMargin,
                   marginTop: titleMarginTop,
                   height: titleHeight,
-                  alignItems: 'flex-start',
-                  justifyContent: 'center',
                 }}
               >
-                <HeaderLight>{`Predictions ${event?.year ?? ''}`}</HeaderLight>
+                <View
+                  style={{
+                    alignItems: 'flex-start',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <HeaderLight>{'Predictions'}</HeaderLight>
+                </View>
+                <HeaderDropdownButton
+                  height={titleHeight - 5}
+                  position={{ top: titleMarginTop, right: theme.windowMargin }}
+                  options={yearOptions.map((y) => ({
+                    text: y.toString(),
+                    value: y,
+                    isSelected: y === year,
+                  }))}
+                  onSelect={(value) => setYear(value)}
+                />
               </View>
               {event ? (
                 <EventTopTabs

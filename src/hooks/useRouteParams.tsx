@@ -21,9 +21,9 @@ export const useRouteParams = (): {
   phase?: Phase;
 } => {
   const { params } = useRoute<RouteProp<PredictionsParamList>>();
-  const maybeEventId = params?.eventId;
+  const maybeEventId = params?.eventId as string | undefined;
 
-  const event = useGetEvent(maybeEventId) as WithId<EventModel> | undefined;
+  const event = useGetEvent(maybeEventId);
   const categoryData =
     params?.category && event?.categories[params.category as CategoryName];
 

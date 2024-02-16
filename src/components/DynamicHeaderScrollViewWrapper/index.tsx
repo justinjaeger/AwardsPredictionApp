@@ -37,7 +37,12 @@ const DynamicHeaderScrollViewWrapper = (
     <View>
       <DynamicHeader animHeaderValue={scrollOffsetY} {...props} />
       <Animated.ScrollView
-        style={{ paddingTop }}
+        style={{
+          paddingTop,
+          position: 'relative',
+          zIndex: -1,
+          elevation: -1,
+        }}
         scrollEventThrottle={16}
         onScroll={(e) => {
           const currY = e.nativeEvent.contentOffset.y;

@@ -25,6 +25,7 @@ import useQueryGetFollowingUsers from '../../../hooks/queries/useQueryGetFollowi
 import theme from '../../../constants/theme';
 import { truncateText } from '../../../util/truncateText';
 import { getLastUpdatedOnPredictionSet } from '../../../util/getLastUpdatedOnPredictionSet';
+import { getUserInfo } from '../../../util/getUserInfo';
 
 const CategoryList = ({
   tab,
@@ -41,21 +42,21 @@ const CategoryList = ({
 }) => {
   const { userId: authUserId } = useAuth();
   const { userInfo, phase, noShorts, isLeaderboard } = useRouteParams();
-  const { user } = useProfileUser(userInfo?.userId);
+  const { user } = useProfileUser(userInfo?.userId || authUserId);
   const { setPersonalCommunityTab } = usePersonalCommunityTab();
   const navigation = useNavigation<PredictionsNavigationProp>();
   const { usersIdsAuthUserIsFollowing } = useQueryGetFollowingUsers();
 
   const leaderboard = event && phase && getLeaderboardFromEvent(event, phase, noShorts);
 
-  const isAuthProfile = userInfo?.userId === authUserId;
+  // TODO: userInfo doesn't contain the auth user. So just assume it's the auth user
+  const isAuthProfile = user?._id === authUserId;
 
   const onSelectCategory = async (category: CategoryName) => {
-    console.log('event', event);
     if (!event) return;
     setPersonalCommunityTab(tab);
     const params = {
-      userInfo,
+      userInfo: userInfo || getUserInfo(user),
       eventId: event._id,
       category,
       phase,
@@ -74,7 +75,7 @@ const CategoryList = ({
     onSelectCategory(category);
   }, []);
 
-  if (!userInfo?.userId && tab === 'personal') {
+  if (!user?._id && tab === 'personal') {
     return <SignedOutState />;
   }
 
@@ -172,12 +173,9 @@ const CategoryList = ({
               )}
               <View style={{ marginBottom: displayFollowButton ? 10 : 20 }} />
             </>
-          ) : (
-            <LastUpdatedText
-              lastUpdated={lastUpdatedString}
-              noAbsolutePosition={!!displayLbStats}
-            />
-          )}
+          ) : lastUpdatedString ? (
+            <LastUpdatedText lastUpdated={lastUpdatedString} />
+          ) : null}
         </>
         {orderedPredictions.map((category) => {
           return event ? (
@@ -185,7 +183,6 @@ const CategoryList = ({
               key={category[0]}
               item={category}
               onPress={onPress}
-              isAuthProfile={isAuthProfile}
               event={event}
             />
           ) : null;

@@ -20,6 +20,7 @@ import LeaderboardList from '../screens/Leaderboard/LeaderboardList';
 import Leaderboard from '../screens/Leaderboard/Leaderboard';
 import Category from '../screens/Predictions/Category';
 import Event from '../screens/Predictions/Event';
+import { HeaderDropdownProvider } from '../context/HeaderDropdownContext';
 
 const { Navigator, Screen, Group } = createStackNavigator<PredictionsParamList>();
 
@@ -150,9 +151,11 @@ const PredictionsNavigator = () => {
 
 const WithProvider = () => (
   <PersonalCommunityTabProvider>
-    <FollowingBarProvider>
-      <PredictionsNavigator />
-    </FollowingBarProvider>
+    <HeaderDropdownProvider>
+      <FollowingBarProvider>
+        <PredictionsNavigator />
+      </FollowingBarProvider>
+    </HeaderDropdownProvider>
   </PersonalCommunityTabProvider>
 );
 

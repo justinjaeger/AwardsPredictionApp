@@ -39,14 +39,6 @@ export enum AwardsBody {
   MPSE = 'MPSE',
 }
 
-export enum EventStatus {
-  NOMS_STAGING = 'NOMS_STAGING', // before nominations go public
-  NOMS_LIVE = 'NOMS_LIVE', // when everyone can predict nominations
-  WINS_STAGING = 'WINS_STAGING', // when nominations are being announced + prepared
-  WINS_LIVE = 'WINS_LIVE', // when everyone can predict wins
-  ARCHIVED = 'ARCHIVED', // when winners have been announced and such
-}
-
 export enum CategoryType {
   FILM = 'FILM',
   PERFORMANCE = 'PERFORMANCE',
@@ -56,6 +48,7 @@ export enum CategoryType {
 export enum CategoryName {
   PICTURE = 'PICTURE',
   DIRECTOR = 'DIRECTOR',
+  ENSEMBLE = 'ENSEMBLE',
   ACTOR = 'ACTOR',
   ACTRESS = 'ACTRESS',
   SUPPORTING_ACTOR = 'SUPPORTING_ACTOR',
@@ -63,9 +56,11 @@ export enum CategoryName {
   ORIGINAL_SCREENPLAY = 'ORIGINAL_SCREENPLAY',
   ADAPTED_SCREENPLAY = 'ADAPTED_SCREENPLAY',
   SCREENPLAY = 'SCREENPLAY',
+  CASTING = 'CASTING',
   INTERNATIONAL = 'INTERNATIONAL',
   ANIMATED = 'ANIMATED',
   DOCUMENTARY = 'DOCUMENTARY',
+  BOX_OFFICE = 'BOX_OFFICE',
   EDITING = 'EDITING',
   CINEMATOGRAPHY = 'CINEMATOGRAPHY',
   PRODUCTION_DESIGN = 'PRODUCTION_DESIGN',
@@ -78,7 +73,6 @@ export enum CategoryName {
   SHORT_ANIMATED = 'SHORT_ANIMATED',
   SHORT_DOCUMENTARY = 'SHORT_DOCUMENTARY',
   SHORT_LIVE_ACTION = 'SHORT_LIVE_ACTION',
-  ENSEMBLE = 'ENSEMBLE',
   COMEDY_PICTURE = 'COMEDY_PICTURE',
   COMEDY_ACTOR = 'COMEDY_ACTOR',
   COMEDY_ACTRESS = 'COMEDY_ACTRESS',
@@ -159,7 +153,6 @@ export type EventModel = {
   categories: Record<CategoryName, iCategory>;
   awardsBody: AwardsBody;
   year: number;
-  status: EventStatus;
   accoladeId?: ObjectId;
   shortlistDateTime?: Date;
   nomDateTime?: Date;

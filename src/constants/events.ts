@@ -1,26 +1,6 @@
-import { EventModel, EventStatus, Phase } from '../models';
+import { EventModel, Phase } from '../models';
 import { formatDateTime } from '../util/formatDateTime';
 import { getCurrentPhaseBeingPredicted } from '../util/getBiggestPhaseThatHasHappened';
-
-export const EVENT_STATUS_TO_STRING: {
-  [key in EventStatus]: string;
-} = {
-  [EventStatus.NOMS_STAGING]: 'Pending Release', // shouldn't show this to user / start preparing nominations
-  [EventStatus.NOMS_LIVE]: 'Predict Nominations', // let users predict nominations
-  [EventStatus.WINS_STAGING]: 'Nominations Closed', // start preparing winners
-  [EventStatus.WINS_LIVE]: 'Predict Winners', // let users predict winners
-  [EventStatus.ARCHIVED]: 'View Results', // view history only
-};
-
-export const EVENT_STATUS_TO_STRING_SHORT: {
-  [key in EventStatus]: string;
-} = {
-  [EventStatus.NOMS_STAGING]: 'Pending Release', // shouldn't show this to user / start preparing nominations
-  [EventStatus.NOMS_LIVE]: 'Nominations', // let users predict nominations
-  [EventStatus.WINS_STAGING]: 'Nominations Closed', // start preparing winners
-  [EventStatus.WINS_LIVE]: 'Winners', // let users predict winners
-  [EventStatus.ARCHIVED]: 'Complete', // view history only
-};
 
 export const ACCOLADE_TO_STRING: {
   [key in Phase]: string;
@@ -59,15 +39,6 @@ export const ACCOLADE_TO_LETTER: {
 };
 
 /**
- * PredictionType = NOMINATION if event is in NOMS_LIVE or NOMS_STAGING
- * else, we're predicting for the win, so PredictionType = WIN
- */
-export const eventStatusToPredictionType = (eventStatus: EventStatus): Phase =>
-  [EventStatus.NOMS_LIVE, EventStatus.NOMS_STAGING].includes(eventStatus)
-    ? Phase.NOMINATION
-    : Phase.WINNER;
-
-/**
  * Shows the time the event closes
  */
 export const getEventTime = (event: EventModel) => {
@@ -83,9 +54,7 @@ export const getEventTime = (event: EventModel) => {
   const showTimeNom = now.getTime() - nomDateTime.getTime() < oneWeek;
   const showTimeWin = now.getTime() - winDateTime.getTime() < oneWeek;
 
-  return EventStatus.ARCHIVED === event.status
-    ? ''
-    : event.nomDateTime && phase === Phase.NOMINATION
+  return event.nomDateTime && phase === Phase.NOMINATION
     ? formatDateTime(nomDateTime, showTimeNom)
     : event.winDateTime && phase === Phase.WINNER
     ? formatDateTime(winDateTime, showTimeWin)

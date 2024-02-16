@@ -9,7 +9,7 @@ import {
   iPrediction,
 } from '../../../models';
 import COLORS from '../../../constants/colors';
-import { HeaderLight, SubHeader } from '../../../components/Text';
+import { Body, HeaderLight, SubHeader } from '../../../components/Text';
 import theme from '../../../constants/theme';
 import MovieGrid from '../../../components/MovieGrid';
 import { sortPredictions } from '../../../util/sortPredictions';
@@ -17,6 +17,8 @@ import { useRouteParams } from '../../../hooks/useRouteParams';
 import { getCategoryIsHidden } from '../../../util/getCategoryIsHidden';
 import { getSlotsInPhase } from '../../../util/getSlotsInPhase';
 import useQueryGetEventAccolades from '../../../hooks/queries/useQueryGetEventAccolades';
+import CustomIcon from '../../../components/CustomIcon';
+import { formatLastUpdated } from '../../../util/formatDateTime';
 
 // TODO: make this work for HISTORY, and not just leaderboards.
 // The problem right now with using this as History is, it's hiding the non-shortlisted categories
@@ -40,12 +42,10 @@ import useQueryGetEventAccolades from '../../../hooks/queries/useQueryGetEventAc
 const CategoryListItem = ({
   item: [category, categoryPrediction],
   onPress,
-  isAuthProfile,
   event,
 }: {
   item: [CategoryName, iCategoryPrediction | undefined];
   onPress: (category: CategoryName) => void;
-  isAuthProfile: boolean;
   event: WithId<EventModel>;
 }) => {
   // yyyymmdd is not necessarily a leaderboard. When it's history, we don't event want to display shortlist performance
@@ -98,55 +98,50 @@ const CategoryListItem = ({
       style={{
         width: '100%',
         alignItems: 'flex-start',
+        borderBottomWidth: 0.5,
+        borderBottomColor: COLORS.primaryLight,
+        backgroundColor: COLORS.primaryDark,
       }}
       underlayColor={COLORS.secondaryDark}
       onPress={() => onPress(category)}
     >
-      <View>
+      <>
         <View
           style={{
-            paddingRight: 45, // bad but idk
             flexDirection: 'row',
             justifyContent: 'space-between',
+            alignItems: 'center',
+            width: '100%',
+            paddingLeft: theme.windowMargin,
+            paddingRight: theme.windowMargin,
+            height: theme.windowMargin * 3,
           }}
         >
-          <SubHeader
-            style={{
-              color: COLORS.lightest,
-              marginLeft: theme.windowMargin,
-              marginBottom: 5,
-              marginTop: 5,
-            }}
-          >
-            {name}
-          </SubHeader>
+          <SubHeader style={{ color: COLORS.lightest }}>{name}</SubHeader>
           {showAccolades ? (
-            <SubHeader
-              style={{
-                color: COLORS.white,
-                marginLeft: theme.windowMargin,
-                marginBottom: 5,
-                marginTop: 5,
-              }}
-            >
+            <SubHeader style={{ color: COLORS.white }}>
               {`${numCorrectInCategory}/${slots}`}
             </SubHeader>
-          ) : null}
+          ) : (
+            <CustomIcon
+              name={'chevron-right-outline'}
+              color={COLORS.gray}
+              size={24}
+              styles={{ right: -6 }}
+            />
+          )}
         </View>
-        {truncatedPredictions.length === 0 ? (
-          <HeaderLight style={{ marginLeft: theme.windowMargin }}>
-            {!isAuthProfile ? 'No Predictions' : 'Add Predictions'}
-          </HeaderLight>
+        {truncatedPredictions.length ? (
+          <MovieGrid
+            eventId={event?._id}
+            predictions={truncatedPredictions}
+            categoryInfo={awardsBodyCategories[category]}
+            showAccolades={showAccolades}
+            phase={phase}
+            noLine
+          />
         ) : null}
-        <MovieGrid
-          eventId={event?._id}
-          predictions={truncatedPredictions}
-          categoryInfo={awardsBodyCategories[category]}
-          showAccolades={showAccolades}
-          phase={phase}
-          noLine
-        />
-      </View>
+      </>
     </TouchableHighlight>
   );
 };

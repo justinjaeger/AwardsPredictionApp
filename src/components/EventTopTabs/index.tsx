@@ -1,15 +1,12 @@
 import React from 'react';
-import { ScrollView, StyleProp, TouchableHighlight, ViewStyle } from 'react-native';
+import { StyleProp, ViewStyle } from 'react-native';
 import {
   AWARDS_BODY_TO_PLURAL_STRING,
   SORTED_AWARDS_BODIES,
 } from '../../constants/awardsBodies';
 import useQueryGetAllEvents from '../../hooks/queries/useQueryGetAllEvents';
-import { AwardsBody, EventModel, WithId } from '../../models';
-import { BodyBold } from '../Text';
-import COLORS from '../../constants/colors';
-
-export const EVENT_TOP_TABS_HEIGHT = 40;
+import { EventModel, WithId } from '../../models';
+import TopTabs from '../TopTabs';
 
 /**
  * Shows tabs within the selected event's year
@@ -23,7 +20,7 @@ const EventTopTabs = ({
   setEvent: (event: WithId<EventModel>) => void;
   style?: StyleProp<ViewStyle>;
 }) => {
-  const { year, awardsBody } = selectedEvent;
+  const { year: selectedYear, awardsBody: selectedAwardsBody } = selectedEvent;
   const { data: events } = useQueryGetAllEvents();
 
   if (!events) {
@@ -32,7 +29,7 @@ const EventTopTabs = ({
   }
 
   const eventsFilteredByYear = events.filter((e) => {
-    return e.year === year;
+    return e.year === selectedYear;
   });
 
   const eventsSorted = eventsFilteredByYear.sort(
@@ -44,48 +41,20 @@ const EventTopTabs = ({
   );
 
   return (
-    <ScrollView
-      horizontal
-      style={[
-        {
-          width: '100%',
-          height: EVENT_TOP_TABS_HEIGHT,
-        },
-        style,
-      ]}
-      contentContainerStyle={{
-        alignItems: 'center',
+    <TopTabs
+      options={eventsSorted.map((e) => ({
+        isSelected: e.awardsBody === selectedAwardsBody,
+        text: AWARDS_BODY_TO_PLURAL_STRING[e.awardsBody],
+        value: e._id,
+      }))}
+      onPress={(eventId) => {
+        const event = events.find((e) => e._id === eventId);
+        if (event) {
+          setEvent(event);
+        }
       }}
-    >
-      {eventsSorted.map((event) => {
-        const { awardsBody: ab } = event;
-        const eventIsSelected = awardsBody === ab;
-        return (
-          <TouchableHighlight
-            key={awardsBody}
-            style={{
-              backgroundColor: eventIsSelected
-                ? COLORS.secondaryDark
-                : COLORS.primaryLight,
-              padding: 5,
-              paddingLeft: 10,
-              paddingRight: 10,
-              marginLeft: 10,
-              borderRadius: 30,
-              alignItems: 'center',
-              justifyContent: 'center',
-              height: EVENT_TOP_TABS_HEIGHT - 10,
-            }}
-            underlayColor={COLORS.secondary}
-            onPress={() => setEvent(event)}
-          >
-            <BodyBold style={{ color: COLORS.white }}>
-              {AWARDS_BODY_TO_PLURAL_STRING[awardsBody as AwardsBody]}
-            </BodyBold>
-          </TouchableHighlight>
-        );
-      })}
-    </ScrollView>
+      style={style}
+    />
   );
 };
 

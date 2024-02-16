@@ -34,15 +34,17 @@ const useQueryGetAllEvents = () => {
     }
 
     // get the most recent leaderboard that has happened
-    const mostRecentEventLeaderboard = Object.values(e.leaderboards ?? {}).reduce(
-      (acc, curr) => {
-        if (curr.createdAt > acc.createdAt) return curr;
-        return acc;
-      },
-    );
+    const mostRecentEventLeaderboard = e.leaderboards
+      ? Object.values(e.leaderboards ?? {}).reduce((acc, curr) => {
+          if (curr.createdAt > acc.createdAt) return curr;
+          return acc;
+        })
+      : undefined;
+
     if (
-      !mostRecentLeaderboard ||
-      mostRecentEventLeaderboard.createdAt > mostRecentLeaderboard.createdAt
+      mostRecentEventLeaderboard &&
+      (!mostRecentLeaderboard ||
+        mostRecentEventLeaderboard.createdAt > mostRecentLeaderboard.createdAt)
     ) {
       mostRecentLeaderboard = mostRecentEventLeaderboard;
     }

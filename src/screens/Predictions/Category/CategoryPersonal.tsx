@@ -62,11 +62,13 @@ const CategoryPersonal = ({
   }, [userInfo?.userId, predictionData !== undefined]);
 
   useNavigateAwayEffect(() => {
+    console.error('useNavigateAwayEffect');
     onBack && onBack();
     onSaveContenders();
   }, []);
   useNavigateToEffect(() => {
-    onSaveContenders();
+    // TODO: This used to save contenders but I think it was doing a double save so, make sure it's safe to delete
+    console.error('useNavigateToEffect');
   }, []);
 
   const [isSaving, setIsSaving] = useState(false);
@@ -84,21 +86,18 @@ const CategoryPersonal = ({
   );
 
   const onSaveContenders = async (ps?: iPrediction[]) => {
-    console.log('onSaveContenders', userInfo?.userId, isAuthProfile);
     if (!userInfo?.userId || !isAuthProfile) return;
     const predictionsToSave = ps || predictions;
     const predictionsHaveNotChanged = _.isEqual(
       predictionsToSave.map((p) => p.contenderId),
       initialPredictions.map((p) => p.contenderId),
     );
-    console.log('predictionsHaveNotChanged', predictionsHaveNotChanged);
     if (predictionsHaveNotChanged) return;
     // set then rankings according to INSERTION ORDER
     const orderedPredictions: iPrediction[] = predictionsToSave.map((p, i) => ({
       ...p,
       ranking: i + 1,
     }));
-    console.log('updating...');
     await updatePredictions({
       categoryName: category,
       eventId: event._id,
