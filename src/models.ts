@@ -161,7 +161,6 @@ export type EventModel = {
   year: number;
   status: EventStatus;
   accoladeId?: ObjectId;
-  liveAt?: Date;
   shortlistDateTime?: Date;
   nomDateTime?: Date;
   winDateTime?: Date;
