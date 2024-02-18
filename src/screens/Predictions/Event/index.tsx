@@ -1,16 +1,11 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PredictionTabsNavigator from '../../../navigation/PredictionTabsNavigator';
 import { useAuth } from '../../../context/AuthContext';
-import { useNavigation } from '@react-navigation/native';
 import CategoryList from './CategoryList';
 import useQueryGetUserPredictions from '../../../hooks/queries/useQueryGetUserPredictions';
 import useQueryGetCommunityPredictions from '../../../hooks/queries/useQueryGetCommunityPredictions';
-import { eventToString } from '../../../util/stringConversions';
 import BottomFABContainer from '../../../components/BottomFABContainer';
 import { useRouteParams } from '../../../hooks/useRouteParams';
-import { PredictionsNavigationProp } from '../../../navigation/types';
-import { getTwoLineHeaderTitle } from '../../../constants';
-import { PHASE_TO_STRING } from '../../../constants/categories';
 import useQueryGetAllEvents from '../../../hooks/queries/useQueryGetAllEvents';
 import { AwardsBody, EventModel, WithId } from '../../../models';
 import EventTopTabs from '../../../components/EventTopTabs';
@@ -40,7 +35,6 @@ const Event = () => {
   const verticalScrollRef = useRef<ScrollView>(null);
 
   const { isPad } = useDevice();
-  const navigation = useNavigation<PredictionsNavigationProp>();
   const {
     userInfo,
     event: initialEvent,
@@ -89,18 +83,6 @@ const Event = () => {
     useQueryGetUserPredictions({ event, userId, yyyymmdd });
   const { data: communityPredictionData, isLoading: isLoadingCommunity } =
     useQueryGetCommunityPredictions({ event, yyyymmdd });
-
-  // define the header
-  useLayoutEffect(() => {
-    if (!event) return;
-    const headerTitle = eventToString(event.awardsBody, event.year);
-    // need to add "shortlist leaderboard"
-    const leaderboardTitle =
-      isLeaderboard && phase ? `\n${PHASE_TO_STRING[phase]} Results` : '';
-    navigation.setOptions({
-      headerTitle: getTwoLineHeaderTitle(headerTitle + leaderboardTitle),
-    });
-  }, [navigation]);
 
   const titleMarginTop = 10;
   const titleHeight = 40;
