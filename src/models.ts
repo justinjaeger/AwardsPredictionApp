@@ -296,8 +296,11 @@ export type User = {
   image?: string;
   followingCount?: number;
   followerCount?: number;
-  eventsPredicting?: Record<string, string[]>; // key is event, value is array of categories
-  categoriesPredicting?: iCategoriesPredicting; // ...and replace with this
+  eventsPredicting?: Record<string, string[]>; // key is eventId, value is array of CategoryNames
+  // TODO: replace eventsPredicting with this:
+  // It's the same thing, just a different structure which includes a "createdAt" field on each category
+  // but we don't use it anywhere in the app yet. I forget what it's for
+  categoriesPredicting?: iCategoriesPredicting;
   recentPredictionSets?: iRecentPrediction[];
   leaderboardRankings?: iIndexedUserLeaderboardRanking;
   amplify_id?: string;
