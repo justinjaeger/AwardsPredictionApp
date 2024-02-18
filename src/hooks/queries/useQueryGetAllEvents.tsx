@@ -2,7 +2,9 @@ import { useQuery } from '@tanstack/react-query';
 import { QueryKeys } from '../../types/keys';
 import MongoApi from '../../services/api/requests';
 import { useAuth } from '../../context/AuthContext';
-import { AwardsBody, EventModel, UserRole, WithId, iLeaderboard } from '../../models';
+import { UserRole } from '../../models';
+import { getDefaultEvent } from '../../util/getDefaultEvent';
+import { getDefaultLeaderboard } from '../../util/getDefaultLeaderboard';
 
 const useQueryGetAllEvents = () => {
   const { userRole } = useAuth();
@@ -20,42 +22,15 @@ const useQueryGetAllEvents = () => {
     },
   });
 
-  let mostRecentAcademyAwardEvent: WithId<EventModel> | undefined;
-  // date way in the past:
-  let mostRecentLeaderboard: iLeaderboard | undefined; // how get this? compare to today: what's the most recent leaderboard that has happened
-  data?.forEach((e) => {
-    const { awardsBody, year } = e;
-    if (
-      awardsBody === AwardsBody.ACADEMY_AWARDS &&
-      (!mostRecentAcademyAwardEvent ||
-        (mostRecentAcademyAwardEvent && mostRecentAcademyAwardEvent.year < year))
-    ) {
-      mostRecentAcademyAwardEvent = e;
-    }
-
-    // get the most recent leaderboard that has happened
-    const mostRecentEventLeaderboard = e.leaderboards
-      ? Object.values(e.leaderboards ?? {}).reduce((acc, curr) => {
-          if (curr.createdAt > acc.createdAt) return curr;
-          return acc;
-        })
-      : undefined;
-
-    if (
-      mostRecentEventLeaderboard &&
-      (!mostRecentLeaderboard ||
-        mostRecentEventLeaderboard.createdAt > mostRecentLeaderboard.createdAt)
-    ) {
-      mostRecentLeaderboard = mostRecentEventLeaderboard;
-    }
-  });
+  const defaultEvent = getDefaultEvent(data);
+  const defaultLeaderboard = getDefaultLeaderboard(data);
 
   return {
     data,
     isLoading,
     refetch,
-    defaultEvent: mostRecentAcademyAwardEvent,
-    defaultLeaderboard: mostRecentLeaderboard,
+    defaultEvent,
+    defaultLeaderboard,
   };
 };
 
