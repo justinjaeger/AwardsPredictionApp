@@ -20,25 +20,6 @@ import useQueryGetEventAccolades from '../../../hooks/queries/useQueryGetEventAc
 import CustomIcon from '../../../components/CustomIcon';
 import { formatLastUpdated } from '../../../util/formatDateTime';
 
-// TODO: make this work for HISTORY, and not just leaderboards.
-// The problem right now with using this as History is, it's hiding the non-shortlisted categories
-// First solution to this would be to just not anticipate any shortlist leaderboards at all,
-// Second is to have some prop that indicates it's a leaderboard and not history
-// - In the case that it IS leaderboard, we can say, if it's before shortlist, hide non shortlisted categories
-// - In the case that it's history, we can say, if it's before shortlist, show the normal/nomination slots. Don't hide, don't expand what's visible
-
-/**
- * TODO: WOULD BE NICE: If the ones you didn't get, which are not displayed, are show just beneath
- * For both history AND leaderboard would be nice
- * However idk how I'd access that contender info. Because accolades just contains the contenderId.
- * I COULD just do a bulk fetch for contenderIds that aren't in our predictions, but that could be heavy for the super early predictions
- *
- * MIGHT WANT TO RECONSIDER the structure of Accolade table
- * Because, if I ever want to just DISPLAY WHAT GOT NOMINATED, it would be nice to be able to do that.
- * But instead, I have to reference the community predictions.
- * I mean, I COULD just get the most recent community predictions and use that data though. And filter that for what's accoladed.
- * But otherwise, we can key by event and store an object somewhere that has the accolades for that event, such that they're structured like a predictionset / the apidata can be used
- */
 const CategoryListItem = ({
   item: [category, categoryPrediction],
   onPress,
