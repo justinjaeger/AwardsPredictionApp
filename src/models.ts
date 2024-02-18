@@ -45,6 +45,7 @@ export enum CategoryType {
   SONG = 'SONG',
 }
 
+// NOTE: When updating this, must also update categories.ts
 export enum CategoryName {
   PICTURE = 'PICTURE',
   DIRECTOR = 'DIRECTOR',

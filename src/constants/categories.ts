@@ -55,6 +55,7 @@ export const ORDERED_CATEGORIES = [
   CategoryName.COSTUMES,
   CategoryName.MAKEUP,
   CategoryName.VISUAL_EFFECTS,
+  CategoryName.STUNT,
   CategoryName.SOUND,
   CategoryName.SCORE,
   CategoryName.SONG,

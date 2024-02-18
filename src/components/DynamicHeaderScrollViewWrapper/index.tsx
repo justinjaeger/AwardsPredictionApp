@@ -2,6 +2,8 @@ import React, { useRef } from 'react';
 import { Animated, ScrollViewProps, View } from 'react-native';
 import DynamicHeader, { iDynamicHeaderProps } from './DynamicHeader';
 import { getNumberWithinRange } from '../../util/getNumberWithinRange';
+import { BOTTOM_TAB_HEIGHT } from '../../constants';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const DynamicHeaderScrollViewWrapper = (
   props: {
@@ -19,6 +21,8 @@ const DynamicHeaderScrollViewWrapper = (
   const { height: topOnlyComponentHeight } = topOnlyContent;
   const { height: collapsedComponentHeight } = collapsedContent;
   const { height: persistedComponentHeight } = persistedContent;
+
+  const { bottom } = useSafeAreaInsets();
 
   const minHeaderHeight = collapsedComponentHeight + persistedComponentHeight;
   const maxHeaderHeight = topOnlyComponentHeight + persistedComponentHeight;
@@ -42,6 +46,9 @@ const DynamicHeaderScrollViewWrapper = (
           position: 'relative',
           zIndex: -1,
           elevation: -1,
+        }}
+        contentContainerStyle={{
+          paddingBottom: BOTTOM_TAB_HEIGHT + bottom + 10,
         }}
         scrollEventThrottle={16}
         onScroll={(e) => {

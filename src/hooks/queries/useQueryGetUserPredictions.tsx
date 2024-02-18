@@ -14,8 +14,6 @@ const useQueryGetUserPredictions = ({
   yyyymmdd?: number;
 }) => {
   const { storeTmdbDataFromPredictionSet } = useTmdbDataStore();
-  // const { event } = useRouteParams();
-  // const { _id: eventId, year } = event;
   const eventId = event?._id;
 
   const { data, isLoading, refetch } = useQuery({

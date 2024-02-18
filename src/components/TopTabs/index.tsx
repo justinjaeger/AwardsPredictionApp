@@ -31,6 +31,7 @@ const TopTabs = ({
       contentContainerStyle={{
         alignItems: 'center',
       }}
+      showsHorizontalScrollIndicator={false}
     >
       {options.map(({ isSelected, text, value }) => {
         return (
