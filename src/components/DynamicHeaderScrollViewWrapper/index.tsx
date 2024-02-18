@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { Animated, ScrollViewProps, View } from 'react-native';
+import { Animated, ScrollViewProps, View, useWindowDimensions } from 'react-native';
 import DynamicHeader, { iDynamicHeaderProps } from './DynamicHeader';
 import { getNumberWithinRange } from '../../util/getNumberWithinRange';
 import { BOTTOM_TAB_HEIGHT } from '../../constants';
@@ -23,15 +23,15 @@ const DynamicHeaderScrollViewWrapper = (
   const { height: persistedComponentHeight } = persistedContent;
 
   const { bottom } = useSafeAreaInsets();
+  const { height } = useWindowDimensions();
 
   const minHeaderHeight = collapsedComponentHeight + persistedComponentHeight;
   const maxHeaderHeight = topOnlyComponentHeight + persistedComponentHeight;
   const SCROLL_DISTANCE = maxHeaderHeight - minHeaderHeight;
 
-  const scrollOffsetY = useRef(new Animated.Value(0)).current;
+  const animHeaderValue = useRef(new Animated.Value(0)).current;
 
-  // TODO: when we "spring", this should also spring, else it gets slightly offset. can't figure out how
-  const paddingTop = scrollOffsetY.interpolate({
+  const paddingTop = animHeaderValue.interpolate({
     inputRange: [0, SCROLL_DISTANCE],
     outputRange: [0, SCROLL_DISTANCE],
     extrapolate: 'clamp',
@@ -39,7 +39,7 @@ const DynamicHeaderScrollViewWrapper = (
 
   return (
     <View>
-      <DynamicHeader animHeaderValue={scrollOffsetY} {...props} />
+      <DynamicHeader animHeaderValue={animHeaderValue} {...props} />
       <Animated.ScrollView
         style={{
           paddingTop,
@@ -49,6 +49,7 @@ const DynamicHeaderScrollViewWrapper = (
         }}
         contentContainerStyle={{
           paddingBottom: BOTTOM_TAB_HEIGHT + bottom + 10,
+          minHeight: height,
         }}
         scrollEventThrottle={16}
         onScroll={(e) => {
@@ -57,7 +58,7 @@ const DynamicHeaderScrollViewWrapper = (
             min: 0,
             max: SCROLL_DISTANCE,
           });
-          scrollOffsetY.setValue(numberWithinRange);
+          animHeaderValue.setValue(numberWithinRange);
         }}
         onScrollEndDrag={(e) => {
           const currY = e.nativeEvent.contentOffset.y;
@@ -66,7 +67,7 @@ const DynamicHeaderScrollViewWrapper = (
             max: SCROLL_DISTANCE,
           });
           const isAtTop = numberWithinRange < SCROLL_DISTANCE / 2;
-          Animated.spring(scrollOffsetY, {
+          Animated.spring(animHeaderValue, {
             toValue: isAtTop ? 0 : SCROLL_DISTANCE,
             useNativeDriver: false,
           }).start();
