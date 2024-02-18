@@ -67,6 +67,7 @@ export enum CategoryName {
   COSTUMES = 'COSTUMES',
   MAKEUP = 'MAKEUP',
   VISUAL_EFFECTS = 'VISUAL_EFFECTS',
+  STUNT = 'STUNT',
   SOUND = 'SOUND',
   SCORE = 'SCORE',
   SONG = 'SONG',
