@@ -17,6 +17,7 @@ const DynamicHeaderScrollViewWrapper = (
     topOnlyContent,
     collapsedContent,
     persistedContent,
+    scrollViewRef,
   } = props;
   const { height: topOnlyComponentHeight } = topOnlyContent;
   const { height: collapsedComponentHeight } = collapsedContent;
@@ -47,6 +48,7 @@ const DynamicHeaderScrollViewWrapper = (
           zIndex: -1,
           elevation: -1,
         }}
+        ref={scrollViewRef}
         contentContainerStyle={{
           paddingBottom: BOTTOM_TAB_HEIGHT + bottom + 10,
           minHeight: height,

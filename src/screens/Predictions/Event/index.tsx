@@ -100,10 +100,7 @@ const Event = () => {
     <BackgroundWrapper>
       <HeaderDropdownOverlay />
       <CollapsableHeaderScrollViewWrapper
-        scrollViewProps={{
-          // @ts-ignore
-          ref: verticalScrollRef,
-        }}
+        scrollViewRef={verticalScrollRef}
         topOnlyContent={{
           height:
             titleHeight +

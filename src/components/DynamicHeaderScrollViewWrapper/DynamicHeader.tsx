@@ -1,5 +1,11 @@
 import * as React from 'react';
-import { Animated, View, useWindowDimensions } from 'react-native';
+import {
+  Animated,
+  ScrollView,
+  TouchableOpacity,
+  View,
+  useWindowDimensions,
+} from 'react-native';
 import COLORS from '../../constants/colors';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -10,6 +16,7 @@ export type iDynamicHeaderProps = {
   topOnlyContent: { height: number; component: JSX.Element };
   collapsedContent: { height: number; component: JSX.Element };
   persistedContent: { height: number; component: JSX.Element };
+  scrollViewRef: React.RefObject<ScrollView>;
 };
 
 const DynamicHeader = ({
@@ -17,6 +24,7 @@ const DynamicHeader = ({
   topOnlyContent,
   collapsedContent,
   persistedContent,
+  scrollViewRef,
 }: { animHeaderValue: Animated.Value } & iDynamicHeaderProps) => {
   const { width } = useWindowDimensions();
   const { top } = useSafeAreaInsets();
@@ -107,7 +115,13 @@ const DynamicHeader = ({
                 },
               ]}
             >
-              {collapsedComponent}
+              <TouchableOpacity
+                onPress={() => {
+                  scrollViewRef.current?.scrollTo({ y: 0 });
+                }}
+              >
+                {collapsedComponent}
+              </TouchableOpacity>
             </Animated.View>
           </Animated.View>
         </Animated.View>
