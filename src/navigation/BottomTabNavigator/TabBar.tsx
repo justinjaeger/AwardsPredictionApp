@@ -116,7 +116,6 @@ const TabBar = (props: ITabBarProps) => {
               key={index}
               accessibilityRole="button"
               accessibilityState={isFocused ? { selected: true } : {}}
-              accessibilityBody={options.tabBarAccessibilityBody}
               testID={options.tabBarTestID}
               onPress={onPress}
               style={{

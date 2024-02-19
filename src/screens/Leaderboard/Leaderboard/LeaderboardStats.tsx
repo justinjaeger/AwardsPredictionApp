@@ -145,9 +145,7 @@ const LeaderboardStats = ({
             marginBottom: 5,
           }}
         >
-          {lastUpdatedString ? (
-            <LastUpdatedText lastUpdated={lastUpdatedString} noAbsolutePosition={true} />
-          ) : null}
+          {lastUpdatedString ? <LastUpdatedText lastUpdated={lastUpdatedString} /> : null}
           {slotsPredicted ? (
             <Body style={{ color: COLORS.gray, fontWeight: '500' }}>
               {`${slotsPredicted.toString()}/${totalPossibleSlots} predix made`}

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ImageStyle, StyleProp, TouchableHighlight, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import COLORS from '../../constants/colors';
-import { getPosterDimensionsByWidth, PosterSize } from '../../constants/posterDimensions';
+import { PosterSize } from '../../constants/posterDimensions';
 import { getTmdbImageUrl } from '../../constants';
 import { Body } from '../Text';
 import theme from '../../constants/theme';

@@ -60,7 +60,10 @@ const ContenderInfoHeader = ({ prediction }: { prediction: iPrediction }) => {
           <Poster
             path={posterPath} // this will render the loading state if null
             title={posterTitle}
-            width={fullPosterWidth}
+            posterDimensions={{
+              width: fullPosterWidth,
+              height: fullPosterHeight,
+            }}
             onPress={() => {
               setShowFullPoster(false);
             }}
@@ -78,7 +81,10 @@ const ContenderInfoHeader = ({ prediction }: { prediction: iPrediction }) => {
         <Poster
           path={posterPath} // this will render the loading state if null
           title={posterTitle}
-          width={smallPosterWidth}
+          posterDimensions={{
+            width: smallPosterWidth,
+            height: smallPosterHeight,
+          }}
           onPress={() => {
             setShowFullPoster(true);
           }}
