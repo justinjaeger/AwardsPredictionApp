@@ -10,7 +10,7 @@ import useQueryGetAllEvents from '../../../hooks/queries/useQueryGetAllEvents';
 import { AwardsBody, EventModel, WithId } from '../../../models';
 import EventTopTabs from '../../../components/EventTopTabs';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
-import { ScrollView, View, useWindowDimensions } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { HeaderLight } from '../../../components/Text';
 import theme from '../../../constants/theme';
 import TabBodies from '../../../navigation/PredictionTabsNavigator/TabBodies';
@@ -39,7 +39,6 @@ const Event = () => {
   const verticalScrollRef = useRef<ScrollView>(null);
   const horizontalTabsScrollViewRef = useRef<ScrollView>(null);
 
-  const { width } = useWindowDimensions();
   const { isPad } = useDevice();
   const {
     userInfo,
@@ -195,6 +194,7 @@ const Event = () => {
           horizontalTabsScrollViewRef={horizontalTabsScrollViewRef}
           personal={
             <CategoryList
+              key={'p'}
               tab={'personal'}
               predictionData={userPredictionData ?? undefined}
               isLoading={isLoadingPersonal}
@@ -205,6 +205,7 @@ const Event = () => {
           }
           community={
             <CategoryList
+              key={'c'}
               tab={'community'}
               predictionData={communityPredictionData ?? undefined}
               isLoading={isLoadingCommunity}

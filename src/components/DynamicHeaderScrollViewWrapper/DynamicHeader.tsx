@@ -75,12 +75,14 @@ const DynamicHeader = ({
   return (
     <>
       <Animated.View
-        style={{
-          height: top,
-          width,
-          zIndex: 2,
-          backgroundColor: animateHeaderBackgroundColor,
-        }}
+        style={[
+          {
+            height: top,
+            width,
+            zIndex: 2,
+          },
+          { backgroundColor: animateHeaderBackgroundColor },
+        ]}
       />
       <Animated.View
         style={[

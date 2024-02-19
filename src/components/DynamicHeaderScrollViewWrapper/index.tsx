@@ -75,10 +75,12 @@ const DynamicHeaderScrollViewWrapper = (
             max: SCROLL_DISTANCE,
           });
           const isAtTop = numberWithinRange < SCROLL_DISTANCE / 2;
-          Animated.spring(animHeaderValue, {
-            toValue: isAtTop ? 0 : SCROLL_DISTANCE,
-            useNativeDriver: false,
-          }).start();
+          if (numberWithinRange !== 0 && numberWithinRange !== SCROLL_DISTANCE) {
+            Animated.timing(animHeaderValue, {
+              toValue: isAtTop ? 0 : SCROLL_DISTANCE,
+              useNativeDriver: false,
+            }).start();
+          }
         }}
         {...scrollViewProps}
       >

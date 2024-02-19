@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { View } from 'react-native';
+import { View, useWindowDimensions } from 'react-native';
 import { PredictionsNavigationProp } from '../../../navigation/types';
 import { usePersonalCommunityTab } from '../../../context/EventContext';
 import SignedOutState from '../../../components/SignedOutState';
@@ -27,6 +27,7 @@ import { truncateText } from '../../../util/truncateText';
 import { getLastUpdatedOnPredictionSet } from '../../../util/getLastUpdatedOnPredictionSet';
 import { getUserInfo } from '../../../util/getUserInfo';
 import { getNumPostersInRow } from '../../../util/getNumPostersInRow';
+import { getCategoryListItemHeight } from '../../../util/getCategoryListItemHeight';
 
 const CategoryList = ({
   tab,
@@ -43,6 +44,7 @@ const CategoryList = ({
   yyyymmdd?: number;
   isFirstRender?: boolean;
 }) => {
+  const { width } = useWindowDimensions();
   const { userId: authUserId } = useAuth();
   const { userInfo, phase, noShorts, isLeaderboard } = useRouteParams();
   const { user } = useProfileUser(userInfo?.userId || authUserId);
@@ -85,7 +87,12 @@ const CategoryList = ({
   if (isLoading ?? !predictionData) {
     const firstCat = Object.values(event?.categories ?? {})[0];
     firstCat.slots = 5;
-    return <EventSkeleton numPostersInRow={getNumPostersInRow(firstCat.slots)} />;
+    return (
+      <EventSkeleton
+        numRowsToRender={3}
+        numPostersInRow={getNumPostersInRow(firstCat.slots)}
+      />
+    );
   }
 
   const unorderedCategories = (predictionData?.categories || {}) as Record<
@@ -115,6 +122,8 @@ const CategoryList = ({
   const showLastUpdated = !displayLbStats && lastUpdatedString;
 
   // TODO: ALSO ADD THE HEIGHT OF THE LEADERBOARD SECTION
+
+  console.log('isFirstRender', isFirstRender);
 
   return (
     <View
@@ -188,9 +197,20 @@ const CategoryList = ({
             const [categoryName, categoryPrediction] = item;
             const numPredictions = categoryPrediction?.predictions?.length ?? 0;
             if (isFirstRender && numPredictions > 0 && i > 2) {
-              const slots = event?.categories[categoryName].slots ?? 5;
+              const categoryData = event.categories[categoryName];
+              const slots = categoryData.slots ?? 5;
               const numPostersInRow = getNumPostersInRow(slots);
-              return <EventSkeleton numPostersInRow={numPostersInRow} />;
+              const height = getCategoryListItemHeight({
+                categoryName,
+                event,
+                numUserPredictionsInCategory: numPredictions,
+                windowWidth: width,
+              });
+              return (
+                <View style={{ height }} key={'event-skeleton' + i}>
+                  <EventSkeleton numPostersInRow={numPostersInRow} />
+                </View>
+              );
             }
             return (
               <CategoryListItem

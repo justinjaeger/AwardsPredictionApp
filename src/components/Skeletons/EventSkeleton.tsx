@@ -9,7 +9,13 @@ import {
   CATEGORY_TOP_AREA_HEIGHT,
 } from '../../screens/Predictions/Event/constants';
 
-const EventSkeleton = ({ numPostersInRow = 5 }: { numPostersInRow?: number }) => {
+const EventSkeleton = ({
+  numPostersInRow = 5,
+  numRowsToRender = 1,
+}: {
+  numPostersInRow?: number;
+  numRowsToRender?: number;
+}) => {
   const { width: windowWidth } = useWindowDimensions();
   const totalWidth = windowWidth - theme.windowMargin - theme.posterMargin;
   const { width, height } = getPosterDimensionsByWidth(
@@ -30,7 +36,7 @@ const EventSkeleton = ({ numPostersInRow = 5 }: { numPostersInRow?: number }) =>
         highlightColor={COLORS.primaryLight}
       >
         <View style={{ flexDirection: 'column' }}>
-          {Array(3)
+          {Array(numRowsToRender)
             .fill(null)
             .map((x, i) => (
               <View
