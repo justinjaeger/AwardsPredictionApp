@@ -5,6 +5,7 @@ import { useAuth } from '../../context/AuthContext';
 import { UserRole } from '../../models';
 import { getDefaultEvent } from '../../util/getDefaultEvent';
 import { getDefaultLeaderboard } from '../../util/getDefaultLeaderboard';
+import { QUERY_OPTIONS } from './constants';
 
 const useQueryGetAllEvents = () => {
   const { userRole } = useAuth();
@@ -20,6 +21,7 @@ const useQueryGetAllEvents = () => {
       });
       return filteredEvents;
     },
+    ...QUERY_OPTIONS,
   });
 
   const defaultEvent = getDefaultEvent(data);

@@ -4,6 +4,7 @@ import MongoApi from '../../services/api/requests';
 import { useTmdbDataStore } from '../../context/TmdbDataStore';
 import { EventModel, WithId } from '../../models';
 import { useRouteParams } from '../useRouteParams';
+import { QUERY_OPTIONS } from './constants';
 
 const useQueryGetCommunityPredictions = (params?: {
   event?: WithId<EventModel>;
@@ -39,6 +40,7 @@ const useQueryGetCommunityPredictions = (params?: {
       }
       return predictionSet ?? null;
     },
+    ...QUERY_OPTIONS,
   });
 
   return { data, isLoading, refetch };

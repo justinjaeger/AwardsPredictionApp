@@ -3,6 +3,7 @@ import { QueryKeys } from '../../types/keys';
 import MongoApi from '../../services/api/requests';
 import { useTmdbDataStore } from '../../context/TmdbDataStore';
 import { EventModel, PredictionSet, WithId } from '../../models';
+import { QUERY_OPTIONS } from './constants';
 
 const useQueryGetUserPredictions = ({
   event,
@@ -31,6 +32,7 @@ const useQueryGetUserPredictions = ({
       }
       return predictionSet ?? null;
     },
+    ...QUERY_OPTIONS,
   });
 
   return { data, isLoading, refetch };
