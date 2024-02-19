@@ -177,16 +177,18 @@ const CategoryList = ({
             <LastUpdatedText lastUpdated={lastUpdatedString} />
           ) : null}
         </>
-        {orderedPredictions.map((category) => {
-          return event ? (
-            <CategoryListItem
-              key={category[0]}
-              item={category}
-              onPress={onPress}
-              event={event}
-            />
-          ) : null;
-        })}
+        {event
+          ? orderedPredictions.map((category) => {
+              return (
+                <CategoryListItem
+                  key={category[0]}
+                  item={category}
+                  onPress={onPress}
+                  event={event}
+                />
+              );
+            })
+          : null}
       </View>
     </View>
   );
