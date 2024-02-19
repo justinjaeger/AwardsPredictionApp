@@ -1,5 +1,11 @@
 import React, { useRef } from 'react';
-import { Animated, ScrollViewProps, View, useWindowDimensions } from 'react-native';
+import {
+  Animated,
+  ScrollView,
+  ScrollViewProps,
+  View,
+  useWindowDimensions,
+} from 'react-native';
 import DynamicHeader, { iDynamicHeaderProps } from './DynamicHeader';
 import { getNumberWithinRange } from '../../util/getNumberWithinRange';
 import { BOTTOM_TAB_HEIGHT } from '../../constants';
@@ -42,9 +48,8 @@ const DynamicHeaderScrollViewWrapper = (
   return (
     <View>
       <DynamicHeader animHeaderValue={animHeaderValue} {...props} />
-      <Animated.ScrollView
+      <ScrollView
         style={{
-          paddingTop,
           position: 'relative',
           zIndex: -1,
           elevation: -1,
@@ -77,8 +82,9 @@ const DynamicHeaderScrollViewWrapper = (
         }}
         {...scrollViewProps}
       >
+        <Animated.View style={{ paddingTop }} />
         {children}
-      </Animated.ScrollView>
+      </ScrollView>
     </View>
   );
 };
