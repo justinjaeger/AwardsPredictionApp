@@ -13,8 +13,12 @@ import { usePersonalCommunityTab } from '../../../context/EventContext';
 import PredictionTabsNavigator from '../../../navigation/PredictionTabsNavigator';
 import { PHASE_TO_STRING } from '../../../constants/categories';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
+import TabBodies from '../../../navigation/PredictionTabsNavigator/TabBodies';
+import { ScrollView, View } from 'react-native';
 
 const Category = () => {
+  const horizontalTabsScrollViewRef = useRef<ScrollView>(null);
+
   const { params } = useRoute<RouteProp<PredictionsParamList, 'Category'>>();
   const showEventLink = params?.showEventLink || false;
 
@@ -53,11 +57,25 @@ const Category = () => {
 
   return (
     <BackgroundWrapper>
-      <PredictionTabsNavigator
-        onChangeTab={setCurrentTab}
-        personal={<CategoryPersonal showEventLink={showEventLink} onBack={onBack} />}
-        community={<CategoryCommunity showEventLink={showEventLink} />}
-      />
+      <>
+        <View
+          style={{
+            width: '100%',
+            justifyContent: 'flex-end',
+          }}
+        >
+          <PredictionTabsNavigator
+            horizontalTabsScrollViewRef={horizontalTabsScrollViewRef}
+          />
+        </View>
+        <TabBodies
+          horizontalTabsScrollViewRef={horizontalTabsScrollViewRef}
+          personal={
+            <CategoryPersonal key="p" showEventLink={showEventLink} onBack={onBack} />
+          }
+          community={<CategoryCommunity key="c" showEventLink={showEventLink} />}
+        />
+      </>
     </BackgroundWrapper>
   );
 };
