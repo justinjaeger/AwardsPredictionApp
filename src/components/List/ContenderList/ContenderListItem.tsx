@@ -74,15 +74,14 @@ const ContenderListItem = ({
   const { isActive } = draggable || {};
   const { width: windowWidth } = useWindowDimensions();
 
-  const SMALL_POSTER = windowWidth / 9;
-
   const { phase, category: _category, categoryData } = useRouteParams();
   const category = _category!;
   const { type } = categoryData!;
   const slots = getSlotsInPhase(phase, categoryData);
 
-  const { width: posterWidth, height: posterHeight } =
-    getPosterDimensionsByWidth(SMALL_POSTER);
+  const { width: posterWidth, height: posterHeight } = getPosterDimensionsByWidth(
+    windowWidth / 9 - theme.posterMargin * 2,
+  );
 
   // note: numPredicting is only commnuity
   const { numPredicting: numPredictingIfIsCommunity } = prediction;
@@ -148,11 +147,9 @@ const ContenderListItem = ({
           : 'transparent',
         flexDirection: 'row',
         alignItems: 'flex-end',
-        paddingBottom: 3,
-        paddingTop: 3,
-        height: posterHeight,
         borderBottomColor: 'rgba(0,0,0,1)',
         borderBottomWidth: accoladeToShow ? 1 : 0,
+        padding: theme.posterMargin,
       }}
     >
       <TouchableOpacity
