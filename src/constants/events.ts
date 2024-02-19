@@ -1,5 +1,5 @@
 import { EventModel, Phase } from '../models';
-import { formatDateTime } from '../util/formatDateTime';
+import { formatDateTimeShort } from '../util/formatDateTime';
 import { getCurrentPhaseBeingPredicted } from '../util/getBiggestPhaseThatHasHappened';
 
 export const ACCOLADE_TO_STRING: {
@@ -55,8 +55,8 @@ export const getEventTime = (event: EventModel) => {
   const showTimeWin = now.getTime() - winDateTime.getTime() < oneWeek;
 
   return event.nomDateTime && phase === Phase.NOMINATION
-    ? formatDateTime(nomDateTime, showTimeNom)
+    ? formatDateTimeShort(nomDateTime, showTimeNom)
     : event.winDateTime && phase === Phase.WINNER
-    ? formatDateTime(winDateTime, showTimeWin)
-    : '';
+    ? formatDateTimeShort(winDateTime, showTimeWin)
+    : undefined;
 };

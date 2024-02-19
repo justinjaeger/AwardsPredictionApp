@@ -85,7 +85,7 @@ const EventList = ({
                     title={isProfile ? eventString : PHASE_TO_CTA[phase || Phase.CLOSED]}
                     onPress={() => onSelectEvent(event)}
                     mode={isProfile ? 'transparent' : 'solid'}
-                    bottomRightText={closeTime === '' ? '' : `Closes ${closeTime}`}
+                    bottomRightText={closeTime ? `Closes ${closeTime}` : ''}
                   />
                 );
               })}
