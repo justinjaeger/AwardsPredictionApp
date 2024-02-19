@@ -28,13 +28,8 @@ import theme from '../../../constants/theme';
 import { truncateText } from '../../../util/truncateText';
 import { getLastUpdatedOnPredictionSet } from '../../../util/getLastUpdatedOnPredictionSet';
 import { getUserInfo } from '../../../util/getUserInfo';
-import {
-  CATEGORY_BOTTOM_AREA_HEIGHT,
-  CATEGORY_TOP_AREA_HEIGHT,
-  UNEXPLAINED_EXTRA_SCROLL_HEIGHT,
-} from './constants';
-import { getNumPostersInRow } from '../../../util/getNumPostersInRow';
-import { getPosterContainerDimensionsGrid } from '../../../constants/posterDimensions';
+import { UNEXPLAINED_EXTRA_SCROLL_HEIGHT } from './constants';
+import { getCategoryListItemHeight } from '../../../util/getCategoryListItemHeight';
 
 const CategoryList = ({
   tab,
@@ -121,24 +116,14 @@ const CategoryList = ({
 
   const bodyHeight = orderedPredictions.reduce(
     (acc, [categoryName, categoryPrediction]) => {
-      const predictionsInCategoryLength = categoryPrediction?.predictions?.length ?? 0;
-      // if no predictions,
-      if (predictionsInCategoryLength === 0) {
-        return acc + CATEGORY_TOP_AREA_HEIGHT;
-      }
-
-      // determine how many rows we're going to show (e.g. best picture is 2)
-      const categoryData = event?.categories[categoryName as CategoryName];
-      if (!categoryData) return acc;
-
-      const slots = categoryData.slots ?? 5;
-      const moviesInRow = getNumPostersInRow(slots);
-
-      // if there are more slots than movies in row, it's going to have extra rows
-      const totalRows = Math.ceil(slots / moviesInRow);
-
-      const heightToAdd = totalRows * getPosterContainerDimensionsGrid(width, slots);
-      return acc + CATEGORY_TOP_AREA_HEIGHT + heightToAdd + CATEGORY_BOTTOM_AREA_HEIGHT;
+      if (!event) return acc;
+      const listItemHeight = getCategoryListItemHeight({
+        categoryName,
+        numUserPredictionsInCategory: categoryPrediction?.predictions?.length ?? 0,
+        event,
+        windowWidth: width,
+      });
+      return acc + listItemHeight;
     },
     UNEXPLAINED_EXTRA_SCROLL_HEIGHT + (showLastUpdated ? LAST_UPDATED_SECTION_HEIGHT : 0),
   );
