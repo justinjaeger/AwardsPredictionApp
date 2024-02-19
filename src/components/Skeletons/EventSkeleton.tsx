@@ -4,15 +4,18 @@ import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
 import { getPosterDimensionsByWidth } from '../../constants/posterDimensions';
+import {
+  CATEGORY_BOTTOM_AREA_HEIGHT,
+  CATEGORY_TOP_AREA_HEIGHT,
+} from '../../screens/Predictions/Event/constants';
 
-const AMOUNT_IN_ROW = 5;
-
-const EventSkeleton = () => {
+const EventSkeleton = ({ numPostersInRow = 5 }: { numPostersInRow?: number }) => {
   const { width: windowWidth } = useWindowDimensions();
   const totalWidth = windowWidth - theme.windowMargin - theme.posterMargin;
   const { width, height } = getPosterDimensionsByWidth(
-    (totalWidth - theme.windowMargin * 2 + theme.posterMargin) / 5,
+    (totalWidth - theme.windowMargin * 2 + theme.posterMargin) / numPostersInRow,
   );
+
   return (
     <View
       style={{
@@ -27,7 +30,7 @@ const EventSkeleton = () => {
         highlightColor={COLORS.primaryLight}
       >
         <View style={{ flexDirection: 'column' }}>
-          {Array(5)
+          {Array(3)
             .fill(null)
             .map((x, i) => (
               <View
@@ -35,19 +38,30 @@ const EventSkeleton = () => {
                 style={{
                   flexDirection: 'column',
                   alignItems: 'flex-start',
-                  marginTop: theme.windowMargin,
                 }}
               >
                 <View
                   style={{
-                    width: 100,
-                    height: 20,
-                    marginBottom: 5,
-                    borderRadius: theme.borderRadius,
+                    height: CATEGORY_TOP_AREA_HEIGHT,
+                    alignItems: 'center',
+                    justifyContent: 'center',
                   }}
-                />
-                <View style={{ flexDirection: 'row' }}>
-                  {Array(AMOUNT_IN_ROW)
+                >
+                  <View
+                    style={{
+                      height: '33%',
+                      width: 100,
+                      borderRadius: theme.borderRadius,
+                    }}
+                  />
+                </View>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    paddingBottom: CATEGORY_BOTTOM_AREA_HEIGHT,
+                  }}
+                >
+                  {Array(numPostersInRow)
                     .fill(null)
                     .map((y, j) => (
                       <View
@@ -55,8 +69,7 @@ const EventSkeleton = () => {
                         style={{
                           width,
                           height,
-                          marginLeft: theme.posterMargin,
-                          marginRight: theme.posterMargin,
+                          margin: theme.posterMargin,
                           borderRadius: theme.borderRadius,
                         }}
                       />
