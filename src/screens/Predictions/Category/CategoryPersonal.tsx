@@ -5,7 +5,7 @@ import MovieListDraggable from '../../../components/MovieList/MovieListDraggable
 import SignedOutState from '../../../components/SignedOutState';
 import { BodyBold } from '../../../components/Text';
 import useMutationUpdatePredictions from '../../../hooks/mutations/useMutationUpdatePredictions';
-import { useNavigateAwayEffect, useNavigateToEffect } from '../../../util/hooks';
+import { useNavigateAwayEffect } from '../../../util/hooks';
 import { formatLastUpdated } from '../../../util/formatDateTime';
 import { useAuth } from '../../../context/AuthContext';
 import EventLink from '../../../components/EventLinkButton';
@@ -62,13 +62,8 @@ const CategoryPersonal = ({
   }, [userInfo?.userId, predictionData !== undefined]);
 
   useNavigateAwayEffect(() => {
-    console.error('useNavigateAwayEffect');
     onBack && onBack();
     onSaveContenders();
-  }, []);
-  useNavigateToEffect(() => {
-    // TODO: This used to save contenders but I think it was doing a double save so, make sure it's safe to delete
-    console.error('useNavigateToEffect');
   }, []);
 
   const [isSaving, setIsSaving] = useState(false);
