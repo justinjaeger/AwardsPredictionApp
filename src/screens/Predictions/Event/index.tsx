@@ -10,7 +10,7 @@ import useQueryGetAllEvents from '../../../hooks/queries/useQueryGetAllEvents';
 import { AwardsBody, EventModel, WithId } from '../../../models';
 import EventTopTabs from '../../../components/EventTopTabs';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
-import { ScrollView, View } from 'react-native';
+import { ScrollView, View, useWindowDimensions } from 'react-native';
 import { HeaderLight } from '../../../components/Text';
 import theme from '../../../constants/theme';
 import TabBodies from '../../../navigation/PredictionTabsNavigator/TabBodies';
@@ -21,6 +21,7 @@ import CollapsableHeaderScrollViewWrapper from '../../../components/CollapsableH
 import HeaderDropdownButton from '../../../components/HeaderDropdownButton';
 import { EVENT_TOP_TABS_HEIGHT } from '../../../components/TopTabs';
 import HeaderDropdownOverlay from '../../../components/HeaderDropdownOverlay';
+import { useIsTrueAfterJavaScriptUpdates } from '../../../hooks/useIsTrueAfterJavaScriptUpdates';
 
 /**
  * TODO:
@@ -38,6 +39,7 @@ const Event = () => {
   const verticalScrollRef = useRef<ScrollView>(null);
   const horizontalTabsScrollViewRef = useRef<ScrollView>(null);
 
+  const { width } = useWindowDimensions();
   const { isPad } = useDevice();
   const {
     userInfo,
@@ -93,12 +95,21 @@ const Event = () => {
   const predictionTabHeight = getPredictionTabHeight(isPad);
   const eventTopTabsMarginBottom = 10;
 
+  const trueAfterJavaScriptRuns = useIsTrueAfterJavaScriptUpdates([
+    event?._id,
+    year,
+    yyyymmdd,
+    userId,
+  ]);
+
   if (!event) return null;
 
-  const yearOptions = (events ?? []).reduce((acc, e) => {
-    if (acc.includes(e.year)) return acc;
-    return [...acc, e.year];
-  }, [] as number[]);
+  const yearOptions = (events ?? [])
+    .reduce((acc, e) => {
+      if (acc.includes(e.year)) return acc;
+      return [...acc, e.year];
+    }, [] as number[])
+    .sort((a, b) => b - a);
 
   return (
     <BackgroundWrapper>
@@ -180,29 +191,29 @@ const Event = () => {
           ),
         }}
       >
-        <>
-          <TabBodies
-            horizontalTabsScrollViewRef={horizontalTabsScrollViewRef}
-            personal={
-              <CategoryList
-                tab={'personal'}
-                predictionData={userPredictionData ?? undefined}
-                isLoading={isLoadingPersonal}
-                event={event}
-                yyyymmdd={yyyymmdd}
-              />
-            }
-            community={
-              <CategoryList
-                tab={'community'}
-                predictionData={communityPredictionData ?? undefined}
-                isLoading={isLoadingCommunity}
-                event={event}
-                yyyymmdd={yyyymmdd}
-              />
-            }
-          />
-        </>
+        <TabBodies
+          horizontalTabsScrollViewRef={horizontalTabsScrollViewRef}
+          personal={
+            <CategoryList
+              tab={'personal'}
+              predictionData={userPredictionData ?? undefined}
+              isLoading={isLoadingPersonal}
+              event={event}
+              yyyymmdd={yyyymmdd}
+              isFirstRender={!trueAfterJavaScriptRuns}
+            />
+          }
+          community={
+            <CategoryList
+              tab={'community'}
+              predictionData={communityPredictionData ?? undefined}
+              isLoading={isLoadingCommunity}
+              event={event}
+              yyyymmdd={yyyymmdd}
+              isFirstRender={!trueAfterJavaScriptRuns}
+            />
+          }
+        />
       </CollapsableHeaderScrollViewWrapper>
       <BottomFABContainer />
     </BackgroundWrapper>

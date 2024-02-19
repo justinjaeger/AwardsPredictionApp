@@ -1,11 +1,9 @@
 import React, { useCallback } from 'react';
-import { View, useWindowDimensions } from 'react-native';
+import { View } from 'react-native';
 import { PredictionsNavigationProp } from '../../../navigation/types';
 import { usePersonalCommunityTab } from '../../../context/EventContext';
 import SignedOutState from '../../../components/SignedOutState';
-import LastUpdatedText, {
-  LAST_UPDATED_SECTION_HEIGHT,
-} from '../../../components/LastUpdatedText';
+import LastUpdatedText from '../../../components/LastUpdatedText';
 import { useAuth } from '../../../context/AuthContext';
 import { StackActions, useNavigation } from '@react-navigation/native';
 import {
@@ -28,8 +26,7 @@ import theme from '../../../constants/theme';
 import { truncateText } from '../../../util/truncateText';
 import { getLastUpdatedOnPredictionSet } from '../../../util/getLastUpdatedOnPredictionSet';
 import { getUserInfo } from '../../../util/getUserInfo';
-import { UNEXPLAINED_EXTRA_SCROLL_HEIGHT } from './constants';
-import { getCategoryListItemHeight } from '../../../util/getCategoryListItemHeight';
+import { getNumPostersInRow } from '../../../util/getNumPostersInRow';
 
 const CategoryList = ({
   tab,
@@ -37,14 +34,15 @@ const CategoryList = ({
   isLoading,
   event,
   yyyymmdd,
+  isFirstRender,
 }: {
   tab: 'personal' | 'community';
   predictionData: WithId<PredictionSet> | undefined;
   isLoading: boolean;
   event: WithId<EventModel> | undefined;
   yyyymmdd?: number;
+  isFirstRender?: boolean;
 }) => {
-  const { width } = useWindowDimensions();
   const { userId: authUserId } = useAuth();
   const { userInfo, phase, noShorts, isLeaderboard } = useRouteParams();
   const { user } = useProfileUser(userInfo?.userId || authUserId);
@@ -85,7 +83,9 @@ const CategoryList = ({
   }
 
   if (isLoading ?? !predictionData) {
-    return <EventSkeleton />;
+    const firstCat = Object.values(event?.categories ?? {})[0];
+    firstCat.slots = 5;
+    return <EventSkeleton numPostersInRow={getNumPostersInRow(firstCat.slots)} />;
   }
 
   const unorderedCategories = (predictionData?.categories || {}) as Record<
@@ -114,28 +114,12 @@ const CategoryList = ({
   );
   const showLastUpdated = !displayLbStats && lastUpdatedString;
 
-  const bodyHeight = orderedPredictions.reduce(
-    (acc, [categoryName, categoryPrediction]) => {
-      if (!event) return acc;
-      const listItemHeight = getCategoryListItemHeight({
-        categoryName,
-        numUserPredictionsInCategory: categoryPrediction?.predictions?.length ?? 0,
-        event,
-        windowWidth: width,
-      });
-      return acc + listItemHeight;
-    },
-    UNEXPLAINED_EXTRA_SCROLL_HEIGHT + (showLastUpdated ? LAST_UPDATED_SECTION_HEIGHT : 0),
-  );
-
   // TODO: ALSO ADD THE HEIGHT OF THE LEADERBOARD SECTION
 
   return (
     <View
       style={{
         width: '100%',
-        // TODO: just added as a test to see if this is correct
-        height: bodyHeight,
       }}
     >
       {displayLbStats ? (
@@ -200,11 +184,18 @@ const CategoryList = ({
       ) : null}
       {showLastUpdated ? <LastUpdatedText lastUpdated={lastUpdatedString} /> : null}
       {event
-        ? orderedPredictions.map((category) => {
+        ? orderedPredictions.map((item, i) => {
+            const [categoryName, categoryPrediction] = item;
+            const numPredictions = categoryPrediction?.predictions?.length ?? 0;
+            if (isFirstRender && numPredictions > 0 && i > 2) {
+              const slots = event?.categories[categoryName].slots ?? 5;
+              const numPostersInRow = getNumPostersInRow(slots);
+              return <EventSkeleton numPostersInRow={numPostersInRow} />;
+            }
             return (
               <CategoryListItem
-                key={category[0]}
-                item={category}
+                key={categoryName}
+                item={item}
                 onPress={onPress}
                 event={event}
               />
