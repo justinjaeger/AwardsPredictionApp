@@ -20,20 +20,19 @@ const BORDER_RADIUS = 5;
 const Poster = ({
   path,
   title,
-  width,
+  posterDimensions,
   ranking,
   onPress,
   styles,
   accolade,
   isUnaccoladed,
 }: iPosterProps) => {
+  const { width, height } = posterDimensions;
   const [isPressed, setIsPressed] = useState<boolean>(false);
-
-  const posterDimensions = getPosterDimensionsByWidth(width - theme.posterMargin * 2);
 
   const accoladeColor = accolade && getAccoladeColor(accolade);
 
-  const borderWidth = accolade ? posterDimensions.width / 15 : 1;
+  const borderWidth = accolade ? width / 15 : 1;
 
   const style: StyleProp<ImageStyle> = {
     ...posterDimensions,
@@ -66,8 +65,8 @@ const Poster = ({
               <View
                 style={{
                   position: 'absolute',
-                  width: posterDimensions.width,
-                  height: posterDimensions.height,
+                  width: width,
+                  height: height,
                   backgroundColor: 'rgba(0,0,0,0.5)',
                   borderRadius: BORDER_RADIUS,
                   zIndex: 2,
@@ -77,7 +76,7 @@ const Poster = ({
             <FastImage
               style={style as Record<string, unknown>}
               source={{
-                uri: getTmdbImageUrl(posterDimensions.width) + '/' + path,
+                uri: getTmdbImageUrl(width) + '/' + path,
               }}
             />
           </View>

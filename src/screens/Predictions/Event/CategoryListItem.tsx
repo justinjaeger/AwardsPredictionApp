@@ -9,7 +9,7 @@ import {
   iPrediction,
 } from '../../../models';
 import COLORS from '../../../constants/colors';
-import { Body, HeaderLight, SubHeader } from '../../../components/Text';
+import { SubHeader } from '../../../components/Text';
 import theme from '../../../constants/theme';
 import MovieGrid from '../../../components/MovieGrid';
 import { sortPredictions } from '../../../util/sortPredictions';
@@ -18,7 +18,7 @@ import { getCategoryIsHidden } from '../../../util/getCategoryIsHidden';
 import { getSlotsInPhase } from '../../../util/getSlotsInPhase';
 import useQueryGetEventAccolades from '../../../hooks/queries/useQueryGetEventAccolades';
 import CustomIcon from '../../../components/CustomIcon';
-import { formatLastUpdated } from '../../../util/formatDateTime';
+import { CATEGORY_BOTTOM_AREA_HEIGHT, CATEGORY_TOP_AREA_HEIGHT } from './constants';
 
 const CategoryListItem = ({
   item: [category, categoryPrediction],
@@ -95,7 +95,7 @@ const CategoryListItem = ({
             width: '100%',
             paddingLeft: theme.windowMargin,
             paddingRight: theme.windowMargin,
-            height: theme.windowMargin * 3,
+            height: CATEGORY_TOP_AREA_HEIGHT,
           }}
         >
           <SubHeader style={{ color: COLORS.lightest }}>{name}</SubHeader>
@@ -120,6 +120,9 @@ const CategoryListItem = ({
             showAccolades={showAccolades}
             phase={phase}
             noLine
+            style={{
+              paddingBottom: CATEGORY_BOTTOM_AREA_HEIGHT,
+            }}
           />
         ) : null}
       </>

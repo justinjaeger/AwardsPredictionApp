@@ -4,7 +4,7 @@ import Poster from './Poster';
 import { Movie, Person, Phase } from '../../models';
 
 export type iPosterFromTmdbProps = {
-  width: number;
+  posterDimensions: { width: number; height: number };
   ranking?: number;
   onPress?: () => void;
   styles?: StyleProp<ImageStyle>;

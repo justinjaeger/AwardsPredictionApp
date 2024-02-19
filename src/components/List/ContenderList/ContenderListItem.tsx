@@ -53,16 +53,6 @@ export type iContenderListItemProps = {
   isUnaccaloded?: boolean;
 };
 
-/**
- * TODO: Display Accolade
- * THEN TODO: Display riskiness, which is a function of:
- * - whatever the community predicted for that contender
- *
- * TODO: I think we should LIFT the points/riskiness calculation OUT OF HERE and put it in the overall list component
- * BECAUSE: First, we don't care about community rankings what the points are.
- * Second, we want the TOTAL NUM OF POINTS
- * Third, it's weird to do this big calculation inside of a single item
- */
 const ContenderListItem = ({
   prediction,
   ranking,
@@ -193,7 +183,10 @@ const ContenderListItem = ({
         <PosterFromTmdb
           movie={movie}
           person={person}
-          width={posterWidth}
+          posterDimensions={{
+            width: posterWidth,
+            height: posterHeight,
+          }}
           ranking={ranking}
           accolade={accoladeToShow}
           isUnaccoladed={isUnaccaloded}
