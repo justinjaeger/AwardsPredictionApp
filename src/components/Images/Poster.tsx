@@ -7,19 +7,13 @@ import { getTmdbImageUrl } from '../../constants';
 import { Body } from '../Text';
 import theme from '../../constants/theme';
 import RankingDisplay from '../RankingDisplay';
-import { Phase } from '../../models';
 import { getAccoladeColor } from '../../util/getAccoladeColor';
+import { iPosterFromTmdbProps } from './PosterFromTmdb';
 
-type iPosterProps = {
+export type iPosterProps = {
   title: string;
   path: string | null;
-  width: number; // 1 is 27*40px, defualt is 5
-  ranking?: number;
-  onPress?: () => void;
-  styles?: StyleProp<ImageStyle>;
-  accolade?: Phase;
-  isUnaccoladed?: boolean;
-};
+} & iPosterFromTmdbProps;
 
 const BORDER_RADIUS = 5;
 
