@@ -1,9 +1,11 @@
 import React, { useCallback } from 'react';
-import { View } from 'react-native';
+import { View, useWindowDimensions } from 'react-native';
 import { PredictionsNavigationProp } from '../../../navigation/types';
 import { usePersonalCommunityTab } from '../../../context/EventContext';
 import SignedOutState from '../../../components/SignedOutState';
-import LastUpdatedText from '../../../components/LastUpdatedText';
+import LastUpdatedText, {
+  LAST_UPDATED_SECTION_HEIGHT,
+} from '../../../components/LastUpdatedText';
 import { useAuth } from '../../../context/AuthContext';
 import { StackActions, useNavigation } from '@react-navigation/native';
 import {
@@ -26,6 +28,13 @@ import theme from '../../../constants/theme';
 import { truncateText } from '../../../util/truncateText';
 import { getLastUpdatedOnPredictionSet } from '../../../util/getLastUpdatedOnPredictionSet';
 import { getUserInfo } from '../../../util/getUserInfo';
+import {
+  CATEGORY_BOTTOM_AREA_HEIGHT,
+  CATEGORY_TOP_AREA_HEIGHT,
+  UNEXPLAINED_EXTRA_SCROLL_HEIGHT,
+} from './constants';
+import { getNumPostersInRow } from '../../../util/getNumPostersInRow';
+import { getPosterContainerDimensionsGrid } from '../../../constants/posterDimensions';
 
 const CategoryList = ({
   tab,
@@ -40,6 +49,7 @@ const CategoryList = ({
   event: WithId<EventModel> | undefined;
   yyyymmdd?: number;
 }) => {
+  const { width } = useWindowDimensions();
   const { userId: authUserId } = useAuth();
   const { userInfo, phase, noShorts, isLeaderboard } = useRouteParams();
   const { user } = useProfileUser(userInfo?.userId || authUserId);
@@ -107,87 +117,115 @@ const CategoryList = ({
     predictionData,
     tab === 'community',
   );
+  const showLastUpdated = !displayLbStats && lastUpdatedString;
+
+  const bodyHeight = orderedPredictions.reduce(
+    (acc, [categoryName, categoryPrediction]) => {
+      const predictionsInCategoryLength = categoryPrediction?.predictions?.length ?? 0;
+      // if no predictions,
+      if (predictionsInCategoryLength === 0) {
+        return acc + CATEGORY_TOP_AREA_HEIGHT;
+      }
+
+      // determine how many rows we're going to show (e.g. best picture is 2)
+      const categoryData = event?.categories[categoryName as CategoryName];
+      if (!categoryData) return acc;
+
+      const slots = categoryData.slots ?? 5;
+      const moviesInRow = getNumPostersInRow(slots);
+
+      // if there are more slots than movies in row, it's going to have extra rows
+      const totalRows = Math.ceil(slots / moviesInRow);
+
+      const heightToAdd = totalRows * getPosterContainerDimensionsGrid(width, slots);
+      return acc + CATEGORY_TOP_AREA_HEIGHT + heightToAdd + CATEGORY_BOTTOM_AREA_HEIGHT;
+    },
+    UNEXPLAINED_EXTRA_SCROLL_HEIGHT + (showLastUpdated ? LAST_UPDATED_SECTION_HEIGHT : 0),
+  );
+
+  // TODO: ALSO ADD THE HEIGHT OF THE LEADERBOARD SECTION
 
   return (
-    <View style={{ width: '100%' }}>
-      <View>
+    <View
+      style={{
+        width: '100%',
+        // TODO: just added as a test to see if this is correct
+        height: bodyHeight,
+      }}
+    >
+      {displayLbStats ? (
         <>
-          {displayLbStats ? (
+          {tab === 'community' ? (
+            leaderboard ? (
+              <LeaderboardStats
+                percentageAccuracy={leaderboard.communityPercentageAccuracy}
+                numCorrect={leaderboard.communityNumCorrect}
+                totalPossibleSlots={leaderboard.totalPossibleSlots}
+                numUsersPredicting={leaderboard.numUsersPredicting}
+                rank={
+                  leaderboard.numUsersPredicting -
+                  leaderboard.communityPerformedBetterThanNumUsers
+                }
+                riskiness={leaderboard.communityRiskiness}
+              />
+            ) : null
+          ) : (
             <>
-              {tab === 'community' ? (
-                leaderboard ? (
-                  <LeaderboardStats
-                    percentageAccuracy={leaderboard.communityPercentageAccuracy}
-                    numCorrect={leaderboard.communityNumCorrect}
-                    totalPossibleSlots={leaderboard.totalPossibleSlots}
-                    numUsersPredicting={leaderboard.numUsersPredicting}
-                    rank={
-                      leaderboard.numUsersPredicting -
-                      leaderboard.communityPerformedBetterThanNumUsers
-                    }
-                    riskiness={leaderboard.communityRiskiness}
-                  />
-                ) : null
-              ) : (
-                <>
-                  <LeaderboardStats
-                    percentageAccuracy={userLeaderboard.percentageAccuracy}
-                    numCorrect={userLeaderboard.numCorrect}
-                    totalPossibleSlots={userLeaderboard.totalPossibleSlots}
-                    numUsersPredicting={userLeaderboard.numUsersPredicting}
-                    rank={userLeaderboard.rank}
-                    riskiness={userLeaderboard.riskiness}
-                    lastUpdated={userLeaderboard.lastUpdated}
-                    slotsPredicted={userLeaderboard.slotsPredicted}
-                  />
-                  {displayFollowButton ? (
-                    <View
-                      style={{
-                        justifyContent: 'flex-end',
-                        width: '100%',
-                        flexDirection: 'row',
-                        marginTop: 10,
-                        paddingRight: theme.windowMargin,
-                        paddingLeft: theme.windowMargin,
-                      }}
-                    >
-                      <View
-                        style={{
-                          alignSelf: 'flex-end',
-                        }}
-                      >
-                        <FollowButton
-                          authUserIsFollowing={usersIdsAuthUserIsFollowing.includes(
-                            user._id,
-                          )}
-                          profileUserId={user._id}
-                          textWhenNotFollowing={`Follow ${truncateText(
-                            user?.name ?? user.username ?? '',
-                            15,
-                          )}`}
-                        />
-                      </View>
-                    </View>
-                  ) : null}
-                </>
-              )}
-              <View style={{ marginBottom: displayFollowButton ? 10 : 20 }} />
+              <LeaderboardStats
+                percentageAccuracy={userLeaderboard.percentageAccuracy}
+                numCorrect={userLeaderboard.numCorrect}
+                totalPossibleSlots={userLeaderboard.totalPossibleSlots}
+                numUsersPredicting={userLeaderboard.numUsersPredicting}
+                rank={userLeaderboard.rank}
+                riskiness={userLeaderboard.riskiness}
+                lastUpdated={userLeaderboard.lastUpdated}
+                slotsPredicted={userLeaderboard.slotsPredicted}
+              />
+              {displayFollowButton ? (
+                <View
+                  style={{
+                    justifyContent: 'flex-end',
+                    width: '100%',
+                    flexDirection: 'row',
+                    marginTop: 10,
+                    paddingRight: theme.windowMargin,
+                    paddingLeft: theme.windowMargin,
+                  }}
+                >
+                  <View
+                    style={{
+                      alignSelf: 'flex-end',
+                    }}
+                  >
+                    <FollowButton
+                      authUserIsFollowing={usersIdsAuthUserIsFollowing.includes(user._id)}
+                      profileUserId={user._id}
+                      textWhenNotFollowing={`Follow ${truncateText(
+                        user?.name ?? user.username ?? '',
+                        15,
+                      )}`}
+                    />
+                  </View>
+                </View>
+              ) : null}
             </>
-          ) : lastUpdatedString ? (
-            <LastUpdatedText lastUpdated={lastUpdatedString} />
-          ) : null}
+          )}
+          <View style={{ marginBottom: displayFollowButton ? 10 : 20 }} />
         </>
-        {orderedPredictions.map((category) => {
-          return event ? (
-            <CategoryListItem
-              key={category[0]}
-              item={category}
-              onPress={onPress}
-              event={event}
-            />
-          ) : null;
-        })}
-      </View>
+      ) : null}
+      {showLastUpdated ? <LastUpdatedText lastUpdated={lastUpdatedString} /> : null}
+      {event
+        ? orderedPredictions.map((category) => {
+            return (
+              <CategoryListItem
+                key={category[0]}
+                item={category}
+                onPress={onPress}
+                event={event}
+              />
+            );
+          })
+        : null}
     </View>
   );
 };
