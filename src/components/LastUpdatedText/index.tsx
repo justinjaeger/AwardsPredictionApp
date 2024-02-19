@@ -5,6 +5,8 @@ import { Body } from '../Text';
 import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
 
+export const LAST_UPDATED_SECTION_HEIGHT = 20;
+
 const LastUpdatedText = ({
   lastUpdated,
   isDisabled,
@@ -20,7 +22,12 @@ const LastUpdatedText = ({
     <>
       <View
         style={[
-          { alignSelf: 'flex-end', paddingRight: theme.windowMargin, marginTop: 5 },
+          {
+            alignSelf: 'flex-end',
+            paddingRight: theme.windowMargin,
+            height: LAST_UPDATED_SECTION_HEIGHT,
+            justifyContent: 'center',
+          },
           style,
         ]}
       >
