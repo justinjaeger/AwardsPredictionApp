@@ -12,10 +12,10 @@ import { truncateText } from '../../util/truncateText';
  * We call the setPersonalCommunityTab function manually WHEN we navigate, instead of calling it inside here
  */
 const PredictionTabsNavigator = ({
-  scrollViewRef,
+  horizontalTabsScrollViewRef,
   onChangeTab,
 }: {
-  scrollViewRef: React.RefObject<ScrollView>;
+  horizontalTabsScrollViewRef: React.RefObject<ScrollView>;
   onChangeTab?: (tab: 'personal' | 'community') => void;
 }) => {
   const { width } = useWindowDimensions();
@@ -41,7 +41,7 @@ const PredictionTabsNavigator = ({
   );
 
   const openPersonalTab = (instant?: boolean) => {
-    scrollViewRef.current?.scrollTo({ x: 0, animated: !instant });
+    horizontalTabsScrollViewRef.current?.scrollTo({ x: 0, animated: !instant });
     Animated.timing(scrollBarAnim, {
       toValue: 0,
       duration: instant ? 0 : 250,
@@ -50,7 +50,7 @@ const PredictionTabsNavigator = ({
   };
 
   const openCommunityTab = (instant?: boolean) => {
-    scrollViewRef.current?.scrollTo({ x: width, animated: !instant });
+    horizontalTabsScrollViewRef.current?.scrollTo({ x: width, animated: !instant });
     Animated.timing(scrollBarAnim, {
       toValue: scrollBarPositionTwo,
       duration: instant ? 0 : 250,
@@ -86,7 +86,7 @@ const PredictionTabsNavigator = ({
         }
         userInfo={userInfo}
         onPress={() => {
-          scrollViewRef.current?.scrollTo({ y: 0 }); // why no work?
+          // scrollViewRef.current?.scrollTo({ y: 0 }); // why no work?
           openPersonalTab();
           onChangeTab && onChangeTab('personal');
           setTab('personal');

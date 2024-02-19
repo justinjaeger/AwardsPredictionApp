@@ -27,12 +27,16 @@ import HeaderDropdownOverlay from '../../../components/HeaderDropdownOverlay';
  * - render back button when going back is an option
  * - had some bug where it wasn't passing "event" into CategoryList I think, since it didn't navigate when I pressed a category
  *
- * Whole screen is a scroll view, not a flatlist
- * - header is HeaderComponent
+ * When changing events, it's pretty slow
+ * - Could optimize by not rendering all of the javascript which is not in view
+ * - But it might be hard to determine what the height of the out-of-view javascript is
+ * - maybe we just don't render posters if you're out of view!
+ * - Although it's still slow when you switch from Academy Awards to Golden Globes with no posters :/
+ * - But even still, it's reeeeally long when switching to the WITH-photos
  */
 const Event = () => {
-  const tabsScrollRef = useRef<ScrollView>(null);
   const verticalScrollRef = useRef<ScrollView>(null);
+  const horizontalTabsScrollViewRef = useRef<ScrollView>(null);
 
   const { isPad } = useDevice();
   const {
@@ -164,10 +168,10 @@ const Event = () => {
               }}
             >
               <PredictionTabsNavigator
-                scrollViewRef={tabsScrollRef}
+                horizontalTabsScrollViewRef={horizontalTabsScrollViewRef}
                 onChangeTab={(tab) => {
                   // if showing the "sign in to make predictions" scroll to top so it's in view
-                  if (!userInfo?.userId && tab === 'personal') {
+                  if (!userId && tab === 'personal') {
                     verticalScrollRef.current?.scrollTo({ y: 0 });
                   }
                 }}
@@ -178,7 +182,7 @@ const Event = () => {
       >
         <>
           <TabBodies
-            scrollViewRef={tabsScrollRef}
+            horizontalTabsScrollViewRef={horizontalTabsScrollViewRef}
             personal={
               <CategoryList
                 tab={'personal'}

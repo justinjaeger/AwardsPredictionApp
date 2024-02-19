@@ -10,11 +10,11 @@ import COLORS from '../../constants/colors';
 const PredictionTabsNavigator = ({
   personal,
   community,
-  scrollViewRef,
+  horizontalTabsScrollViewRef,
 }: {
   personal: JSX.Element;
   community: JSX.Element;
-  scrollViewRef: React.RefObject<ScrollView>;
+  horizontalTabsScrollViewRef: React.RefObject<ScrollView>;
 }) => {
   const { width } = useWindowDimensions();
   const { personalCommunityTab } = usePersonalCommunityTab();
@@ -28,7 +28,7 @@ const PredictionTabsNavigator = ({
     <ScrollView
       horizontal
       pagingEnabled
-      ref={scrollViewRef}
+      ref={horizontalTabsScrollViewRef}
       showsHorizontalScrollIndicator={false}
       nestedScrollEnabled
       scrollEventThrottle={1}
