@@ -15,7 +15,7 @@ const PRIMARY_COLOR = COLORS.secondaryDark;
 export type iDynamicHeaderProps = {
   topOnlyContent: { height: number; component: JSX.Element };
   collapsedContent: { height: number; component: JSX.Element };
-  persistedContent: { height: number; component: JSX.Element };
+  persistedContent?: { height: number; component: JSX.Element };
   scrollViewRef: React.RefObject<ScrollView>;
 };
 
@@ -33,7 +33,7 @@ const DynamicHeader = ({
   const { height: collapsedComponentHeight, component: collapsedComponent } =
     collapsedContent;
   const { height: persistedComponentHeight, component: persistedComponent } =
-    persistedContent;
+    persistedContent || { height: 0, component: <></> };
 
   const minHeaderHeight = collapsedComponentHeight + persistedComponentHeight;
   const maxHeaderHeight = topOnlyComponentHeight + persistedComponentHeight;
@@ -61,7 +61,7 @@ const DynamicHeader = ({
   });
 
   const animateCollapsedContentOpacity = animHeaderValue.interpolate({
-    inputRange: [SCROLL_DISTANCE / 2, SCROLL_DISTANCE],
+    inputRange: [0, SCROLL_DISTANCE],
     outputRange: [0, 1],
     extrapolate: 'clamp',
   });
@@ -108,15 +108,13 @@ const DynamicHeader = ({
               {topOnlyComponent}
             </Animated.View>
           </Animated.View>
-          <Animated.View style={{ backgroundColor: animateHeaderBackgroundColor }}>
-            <Animated.View
-              style={[
-                { height: collapsedComponentHeight },
-                {
-                  opacity: animateCollapsedContentOpacity,
-                },
-              ]}
-            >
+          <Animated.View
+            style={{
+              backgroundColor: PRIMARY_COLOR,
+              opacity: animateCollapsedContentOpacity,
+            }}
+          >
+            <View style={[{ height: collapsedComponentHeight }]}>
               <TouchableOpacity
                 onPress={() => {
                   scrollViewRef.current?.scrollTo({ y: 0 });
@@ -124,7 +122,7 @@ const DynamicHeader = ({
               >
                 {collapsedComponent}
               </TouchableOpacity>
-            </Animated.View>
+            </View>
           </Animated.View>
         </Animated.View>
         <View

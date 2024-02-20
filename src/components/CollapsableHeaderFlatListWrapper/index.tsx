@@ -1,30 +1,23 @@
 import React from 'react';
-import DynamicHeaderScrollViewWrapper from '../DynamicHeaderScrollViewWrapper';
 import { SubHeader } from '../Text';
-import { ScrollView, ScrollViewProps, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
+import DynamicHeaderFlatListWrapper, {
+  iDynamicHeaderFlatListProps,
+} from '../DynamicHeaderFlatListWrapper';
 
 const TITLE_WHEN_COLLAPSED_HEIGHT = 40;
 
-const CollapsableHeaderScrollViewWrapper = ({
-  children,
-  titleWhenCollapsed,
-  topOnlyContent,
-  persistedContent,
-  scrollViewRef,
-  scrollViewProps,
-}: {
-  children: JSX.Element;
+const CollapsableHeaderFlatListWrapper = <T,>(props: {
   titleWhenCollapsed: string;
   topOnlyContent: { height: number; component: JSX.Element };
   persistedContent?: { height: number; component: JSX.Element };
   scrollViewRef: React.RefObject<ScrollView>;
-  scrollViewProps?: ScrollViewProps;
+  flatListProps: iDynamicHeaderFlatListProps<T>;
+  onEndReached?: () => void;
 }) => {
+  const { titleWhenCollapsed } = props;
   return (
-    <DynamicHeaderScrollViewWrapper
-      scrollViewProps={scrollViewProps}
-      scrollViewRef={scrollViewRef}
-      topOnlyContent={topOnlyContent}
+    <DynamicHeaderFlatListWrapper
       collapsedContent={{
         height: TITLE_WHEN_COLLAPSED_HEIGHT,
         component: (
@@ -39,11 +32,9 @@ const CollapsableHeaderScrollViewWrapper = ({
           </View>
         ),
       }}
-      persistedContent={persistedContent}
-    >
-      {children}
-    </DynamicHeaderScrollViewWrapper>
+      {...props}
+    />
   );
 };
 
-export default CollapsableHeaderScrollViewWrapper;
+export default CollapsableHeaderFlatListWrapper;

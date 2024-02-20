@@ -1,11 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Animated, ScrollView, useWindowDimensions, View } from 'react-native';
-import COLORS from '../../constants/colors';
+import React from 'react';
+import { ScrollView, useWindowDimensions } from 'react-native';
 import { usePersonalCommunityTab } from '../../context/EventContext';
-import PredictionTab from './PredictionTab';
 import { useAuth } from '../../context/AuthContext';
 import { useRouteParams } from '../../hooks/useRouteParams';
 import { truncateText } from '../../util/truncateText';
+import SectionTopTabs from '../../components/SectionTopTabs';
+import { useNavigateAwayEffect } from '../../util/hooks';
 
 /**
  * Note: This component is a bit whack but it's done in this way to prevent re-renders of lists
@@ -19,90 +19,52 @@ const PredictionTabsNavigator = ({
   onChangeTab?: (tab: 'personal' | 'community') => void;
 }) => {
   const { width } = useWindowDimensions();
-  const { personalCommunityTab } = usePersonalCommunityTab();
+  const { personalCommunityTab, setPersonalCommunityTab } = usePersonalCommunityTab();
   const { userId: authUserId } = useAuth();
   const { userInfo } = useRouteParams();
   const isAuthUser = userInfo?.userId === authUserId;
-  const scrollBarPositionTwo = width / 2;
 
-  const scrollBarAnim = useRef(
-    new Animated.Value(personalCommunityTab === 'personal' ? 0 : scrollBarPositionTwo),
-  ).current;
+  const initialTabIndex = personalCommunityTab === 'personal' ? 0 : 1;
 
-  const SCROLL_BAR_WIDTH = width / 2;
-
-  useEffect(() => {
-    personalCommunityTab === 'community' ? openCommunityTab(true) : openPersonalTab(true);
-    setTab(personalCommunityTab || 'personal');
-  }, [personalCommunityTab]);
-
-  const [tab, setTab] = useState<'personal' | 'community'>(
-    personalCommunityTab || 'personal',
+  const [currentTab, setCurrentTab] = React.useState<'personal' | 'community'>(
+    personalCommunityTab,
   );
 
-  const openPersonalTab = (instant?: boolean) => {
-    horizontalTabsScrollViewRef.current?.scrollTo({ x: 0, animated: !instant });
-    Animated.timing(scrollBarAnim, {
-      toValue: 0,
-      duration: instant ? 0 : 250,
-      useNativeDriver: true,
-    }).start();
-  };
-
-  const openCommunityTab = (instant?: boolean) => {
-    horizontalTabsScrollViewRef.current?.scrollTo({ x: width, animated: !instant });
-    Animated.timing(scrollBarAnim, {
-      toValue: scrollBarPositionTwo,
-      duration: instant ? 0 : 250,
-      useNativeDriver: true,
-    }).start();
-  };
+  // important for tracking the current tab
+  useNavigateAwayEffect(() => {
+    setPersonalCommunityTab(currentTab);
+  }, []);
 
   return (
-    <View
-      style={{
-        flexDirection: 'row',
-        width,
-      }}
-    >
-      {/* ScrollBar */}
-      <Animated.View
-        style={{
-          position: 'absolute',
-          bottom: 0,
-          transform: [{ translateX: scrollBarAnim }],
-          width: SCROLL_BAR_WIDTH,
-          backgroundColor: COLORS.white,
-          height: 2,
-          borderRadius: 5,
-          zIndex: 2,
-        }}
-      />
-      <PredictionTab
-        text={
-          isAuthUser
+    <SectionTopTabs
+      tabs={[
+        {
+          title: isAuthUser
             ? 'My Predictions'
-            : truncateText(userInfo?.userName ?? 'My Predictions', 13)
-        }
-        userInfo={userInfo}
-        onPress={() => {
-          // scrollViewRef.current?.scrollTo({ y: 0 }); // why no work?
-          openPersonalTab();
-          onChangeTab && onChangeTab('personal');
-          setTab('personal');
-        }}
-        selected={tab === 'personal'}
-      />
-      <PredictionTab
-        text={'Community'}
-        onPress={() => {
-          openCommunityTab();
-          onChangeTab && onChangeTab('community');
-          setTab('community');
-        }}
-        selected={tab === 'community'}
-      />
-    </View>
+            : truncateText(userInfo?.userName ?? 'My Predictions', 13),
+          onOpenTab: (isOpeningWithoutAnimation) => {
+            setCurrentTab('personal');
+            onChangeTab && onChangeTab('personal');
+            horizontalTabsScrollViewRef.current?.scrollTo({
+              x: 0,
+              animated: !isOpeningWithoutAnimation,
+            });
+          },
+        },
+        {
+          title: 'Community',
+          onOpenTab: (isOpeningWithoutAnimation) => {
+            setCurrentTab('community');
+            onChangeTab && onChangeTab('community');
+            horizontalTabsScrollViewRef.current?.scrollTo({
+              x: width,
+              animated: !isOpeningWithoutAnimation,
+            });
+          },
+        },
+      ]}
+      initialTabIndex={initialTabIndex}
+    />
   );
 };
 

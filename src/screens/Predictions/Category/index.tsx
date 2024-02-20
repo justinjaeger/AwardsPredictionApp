@@ -1,4 +1,4 @@
-import React, { useCallback, useLayoutEffect, useRef, useState } from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 import CategoryPersonal from './CategoryPersonal';
 import {
   PredictionsNavigationProp,
@@ -9,7 +9,6 @@ import { getTwoLineHeaderTitle } from '../../../constants';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useRouteParams } from '../../../hooks/useRouteParams';
 import CategoryCommunity from './CategoryCommunity';
-import { usePersonalCommunityTab } from '../../../context/EventContext';
 import PredictionTabsNavigator from '../../../navigation/PredictionTabsNavigator';
 import { PHASE_TO_STRING } from '../../../constants/categories';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
@@ -43,18 +42,6 @@ const Category = () => {
     });
   }, [navigation]);
 
-  const { personalCommunityTab, setPersonalCommunityTab } = usePersonalCommunityTab();
-  const initialTab = useRef<'personal' | 'community'>(personalCommunityTab);
-  const [, setCurrentTab] = useState<'personal' | 'community'>(initialTab.current);
-
-  // Allows us to track the current tab so we can set it onBack
-  const onBack = useCallback(() => {
-    setCurrentTab((curr) => {
-      setPersonalCommunityTab(curr);
-      return curr;
-    });
-  }, []);
-
   return (
     <BackgroundWrapper>
       <>
@@ -70,9 +57,7 @@ const Category = () => {
         </View>
         <TabBodies
           horizontalTabsScrollViewRef={horizontalTabsScrollViewRef}
-          personal={
-            <CategoryPersonal key="p" showEventLink={showEventLink} onBack={onBack} />
-          }
+          personal={<CategoryPersonal key="p" showEventLink={showEventLink} />}
           community={<CategoryCommunity key="c" showEventLink={showEventLink} />}
         />
       </>

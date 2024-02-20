@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import PredictionTabsNavigator from '../../../navigation/PredictionTabsNavigator';
 import { useAuth } from '../../../context/AuthContext';
 import CategoryList from './CategoryList';
@@ -6,22 +6,23 @@ import useQueryGetUserPredictions from '../../../hooks/queries/useQueryGetUserPr
 import useQueryGetCommunityPredictions from '../../../hooks/queries/useQueryGetCommunityPredictions';
 import BottomFABContainer from '../../../components/BottomFABContainer';
 import { useRouteParams } from '../../../hooks/useRouteParams';
-import useQueryGetAllEvents from '../../../hooks/queries/useQueryGetAllEvents';
-import { AwardsBody, EventModel, WithId } from '../../../models';
-import EventTopTabs from '../../../components/EventTopTabs';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import { ScrollView, View } from 'react-native';
-import { HeaderLight } from '../../../components/Text';
-import theme from '../../../constants/theme';
 import TabBodies from '../../../navigation/PredictionTabsNavigator/TabBodies';
-import { getPredictionTabHeight } from '../../../navigation/PredictionTabsNavigator/PredictionTab';
 import useDevice from '../../../util/device';
 import { AWARDS_BODY_TO_PLURAL_STRING } from '../../../constants/awardsBodies';
 import CollapsableHeaderScrollViewWrapper from '../../../components/CollapsableHeaderScrollViewWrapper';
-import HeaderDropdownButton from '../../../components/HeaderDropdownButton';
-import { EVENT_TOP_TABS_HEIGHT } from '../../../components/TopTabs';
+import { EVENT_TOP_TABS_HEIGHT } from '../../../components/HorizontalScrollingTabs';
 import HeaderDropdownOverlay from '../../../components/HeaderDropdownOverlay';
 import { useIsTrueAfterJavaScriptUpdates } from '../../../hooks/useIsTrueAfterJavaScriptUpdates';
+import HeaderWithEventSelect, {
+  HEADER_TITLE_HEIGHT,
+  HEADER_TITLE_MARGIN_TOP,
+  HEADER_TOP_TAB_MARGIN_BOTTOM,
+} from '../../../components/HeaderWithEventSelect';
+import { useEventSelect } from '../../../hooks/useEventSelect';
+import useQueryGetAllEvents from '../../../hooks/queries/useQueryGetAllEvents';
+import { getSectionTabHeight } from '../../../components/SectionTopTabs';
 
 /**
  * TODO:
@@ -40,59 +41,19 @@ const Event = () => {
   const horizontalTabsScrollViewRef = useRef<ScrollView>(null);
 
   const { isPad } = useDevice();
-  const {
-    userInfo,
-    event: initialEvent,
-    yyyymmdd: initialYyyymmdd,
-    phase,
-    isLeaderboard,
-  } = useRouteParams();
-  const { data: events, defaultEvent } = useQueryGetAllEvents();
+  const { userInfo } = useRouteParams();
   const { userId: authUserId } = useAuth();
   const userId = userInfo?.userId || authUserId || '';
 
-  const [yyyymmdd, setYyyymmdd] = useState<number | undefined>(initialYyyymmdd);
-  const [year, _setYear] = useState<number | undefined>(
-    initialEvent?.year ?? defaultEvent?.year,
-  );
-  const [event, setEvent] = useState<WithId<EventModel> | undefined>(
-    initialEvent ?? defaultEvent,
-  );
-  const setYear = (year: number) => {
-    _setYear(year);
-    const eventsWithNewYear = events?.filter((e) => e.year === year);
-    const eventWithNewYearAndSameAwardsBody = eventsWithNewYear?.find(
-      (e) => e.awardsBody === event?.awardsBody,
-    );
-    if (eventWithNewYearAndSameAwardsBody) {
-      setEvent(eventWithNewYearAndSameAwardsBody);
-      return;
-    }
-    const defaultEvent =
-      eventsWithNewYear?.find((e) => e.awardsBody === AwardsBody.ACADEMY_AWARDS) ||
-      eventsWithNewYear?.[0];
-    if (defaultEvent) {
-      setEvent(defaultEvent);
-    }
-  };
-
-  // sets event as most recent academy awards if none is selected
-  useEffect(() => {
-    if (!event && defaultEvent) {
-      setEvent(defaultEvent);
-      setYear(defaultEvent.year);
-    }
-  }, [defaultEvent]);
+  const { data: events } = useQueryGetAllEvents();
+  const { event, year, yyyymmdd, setEvent, setYear } = useEventSelect();
 
   const { data: userPredictionData, isLoading: isLoadingPersonal } =
     useQueryGetUserPredictions({ event, userId, yyyymmdd });
   const { data: communityPredictionData, isLoading: isLoadingCommunity } =
     useQueryGetCommunityPredictions({ event, yyyymmdd });
 
-  const titleMarginTop = 10;
-  const titleHeight = 40;
-  const predictionTabHeight = getPredictionTabHeight(isPad);
-  const eventTopTabsMarginBottom = 10;
+  const predictionTabHeight = getSectionTabHeight(isPad);
 
   const trueAfterJavaScriptRuns = useIsTrueAfterJavaScriptUpdates([
     event?._id,
@@ -103,13 +64,6 @@ const Event = () => {
 
   if (!event) return null;
 
-  const yearOptions = (events ?? [])
-    .reduce((acc, e) => {
-      if (acc.includes(e.year)) return acc;
-      return [...acc, e.year];
-    }, [] as number[])
-    .sort((a, b) => b - a);
-
   return (
     <BackgroundWrapper>
       <HeaderDropdownOverlay />
@@ -117,52 +71,18 @@ const Event = () => {
         scrollViewRef={verticalScrollRef}
         topOnlyContent={{
           height:
-            titleHeight +
-            titleMarginTop +
+            HEADER_TITLE_HEIGHT +
+            HEADER_TITLE_MARGIN_TOP +
             EVENT_TOP_TABS_HEIGHT +
-            eventTopTabsMarginBottom,
+            HEADER_TOP_TAB_MARGIN_BOTTOM,
           component: (
-            <View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  marginLeft: theme.windowMargin,
-                  marginRight: theme.windowMargin,
-                  marginTop: titleMarginTop,
-                  height: titleHeight,
-                }}
-              >
-                <View
-                  style={{
-                    alignItems: 'flex-start',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <HeaderLight>{'Predictions'}</HeaderLight>
-                </View>
-                <HeaderDropdownButton
-                  height={titleHeight - 5}
-                  position={{ top: titleMarginTop, right: theme.windowMargin }}
-                  options={yearOptions.map((y) => ({
-                    text: y.toString(),
-                    value: y,
-                    isSelected: y === year,
-                  }))}
-                  onSelect={(value) => setYear(value)}
-                />
-              </View>
-              {event ? (
-                <EventTopTabs
-                  style={{
-                    marginBottom: eventTopTabsMarginBottom,
-                  }}
-                  selectedEvent={event}
-                  setEvent={setEvent}
-                />
-              ) : null}
-            </View>
+            <HeaderWithEventSelect
+              title={'Predictions'}
+              event={event}
+              setEvent={setEvent}
+              eventOptions={events ?? []}
+              setYear={setYear}
+            />
           ),
         }}
         titleWhenCollapsed={`${AWARDS_BODY_TO_PLURAL_STRING[event?.awardsBody]} ${

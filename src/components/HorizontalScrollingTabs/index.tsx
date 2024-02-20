@@ -8,7 +8,7 @@ export const EVENT_TOP_TABS_HEIGHT = 40;
 /**
  * Shows tabs within the selected event's year
  */
-const TopTabs = ({
+const HorizontalScrollingTabs = ({
   options,
   onPress,
   style,
@@ -59,4 +59,4 @@ const TopTabs = ({
   );
 };
 
-export default TopTabs;
+export default HorizontalScrollingTabs;

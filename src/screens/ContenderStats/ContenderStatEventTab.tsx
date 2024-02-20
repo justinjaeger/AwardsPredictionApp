@@ -4,14 +4,13 @@ import useQueryGetCommunityPredictions from '../../hooks/queries/useQueryGetComm
 import { CategoryName, EventModel, WithId, iPrediction } from '../../models';
 import { getNumPredicting, getTotalNumPredicting } from '../../util/getNumPredicting';
 import { sortByLikelihood } from '../../util/sortPredictions';
-import { ScrollView, View, useWindowDimensions } from 'react-native';
-import PredictionTab from '../../navigation/PredictionTabsNavigator/PredictionTab';
+import { ScrollView, View } from 'react-native';
 import { getPredictedOutcomes } from '../../util/getPredictedOutcomes';
 import useDevice from '../../util/device';
-import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
 import { ORDERED_CATEGORIES } from '../../constants/categories';
 import Stat from '../../components/ItemStatBox/Stat';
+import SectionTopTabs from '../../components/SectionTopTabs';
 
 export type iContenderStatsData = iPrediction & {
   category: CategoryName;
@@ -33,7 +32,6 @@ const ContenderStatEventTab = ({
   scrollRef: React.RefObject<ScrollView>;
 }) => {
   const { isPad } = useDevice();
-  const { width } = useWindowDimensions();
 
   const { data: communityPredictions } = useQueryGetCommunityPredictions({ event });
 
@@ -136,29 +134,18 @@ const ContenderStatEventTab = ({
           <Stat number={`${potential.potential}`} text="potential" />
         </View>
       ) : null}
-      <View
-        style={{
-          flexDirection: 'row',
-          alignSelf: 'center',
-          width: width * widthFactor,
-          marginBottom: 25,
-          borderRadius: 0,
-          borderColor: COLORS.primaryLight,
-          borderWidth: 1,
-        }}
-      >
-        <PredictionTab
-          text="Likelihood"
-          selected={sortSetting === 'likelihood'}
-          onPress={() => setSortSetting('likelihood')}
-        />
-        <View style={{ width: 1, backgroundColor: COLORS.primaryLight }} />
-        <PredictionTab
-          text="Category Order"
-          selected={sortSetting === 'cat-order'}
-          onPress={() => setSortSetting('cat-order')}
-        />
-      </View>
+      <SectionTopTabs
+        tabs={[
+          {
+            title: 'Likelihood',
+            onOpenTab: () => setSortSetting('likelihood'),
+          },
+          {
+            title: 'Category Order',
+            onOpenTab: () => setSortSetting('cat-order'),
+          },
+        ]}
+      />
       {data.map((prediction) => (
         <View style={{ flex: 1, paddingBottom: 25 }}>
           <ItemStatBox

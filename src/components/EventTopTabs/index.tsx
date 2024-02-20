@@ -6,7 +6,7 @@ import {
 } from '../../constants/awardsBodies';
 import useQueryGetAllEvents from '../../hooks/queries/useQueryGetAllEvents';
 import { EventModel, WithId } from '../../models';
-import TopTabs from '../TopTabs';
+import HorizontalScrollingTabs from '../HorizontalScrollingTabs';
 
 /**
  * Shows tabs within the selected event's year
@@ -41,7 +41,7 @@ const EventTopTabs = ({
   );
 
   return (
-    <TopTabs
+    <HorizontalScrollingTabs
       options={eventsSorted.map((e) => ({
         isSelected: e.awardsBody === selectedAwardsBody,
         text: AWARDS_BODY_TO_PLURAL_STRING[e.awardsBody],

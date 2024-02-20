@@ -128,11 +128,8 @@ const PredictionsNavigator = () => {
           name="Leaderboard"
           component={Leaderboard}
           options={{
-            // headerTitle: getHeaderTitle('Leaderboard'),
-            // headerLeft: BackButton,
             gestureEnabled: false,
-            // ...large,
-            ...toolbarOnly,
+            headerShown: false,
           }}
         />
       </Group>

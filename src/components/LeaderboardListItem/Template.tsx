@@ -95,12 +95,12 @@ const Template = ({
             <SubHeader>{'%'}</SubHeader>
           </View>
           <View style={{ flexDirection: 'row' }}>
-            <SubHeader style={{ fontWeight: '400' }}>{`${riskiness.toFixed(
-              0,
-            )}pts  |  `}</SubHeader>
             <SubHeader
               style={{ fontWeight: '400' }}
-            >{`${numCorrect}/${totalPossibleSlots}`}</SubHeader>
+            >{`${numCorrect}/${totalPossibleSlots}  |  `}</SubHeader>
+            <SubHeader style={{ fontWeight: '400' }}>{`${riskiness.toFixed(
+              0,
+            )}pts`}</SubHeader>
           </View>
         </View>
       </View>
