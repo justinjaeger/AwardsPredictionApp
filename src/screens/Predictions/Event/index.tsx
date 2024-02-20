@@ -11,7 +11,6 @@ import { ScrollView, View } from 'react-native';
 import TabBodies from '../../../navigation/PredictionTabsNavigator/TabBodies';
 import useDevice from '../../../util/device';
 import { AWARDS_BODY_TO_PLURAL_STRING } from '../../../constants/awardsBodies';
-import CollapsableHeaderScrollViewWrapper from '../../../components/CollapsableHeaderScrollViewWrapper';
 import { EVENT_TOP_TABS_HEIGHT } from '../../../components/HorizontalScrollingTabs';
 import HeaderDropdownOverlay from '../../../components/HeaderDropdownOverlay';
 import { useIsTrueAfterJavaScriptUpdates } from '../../../hooks/useIsTrueAfterJavaScriptUpdates';
@@ -23,6 +22,7 @@ import HeaderWithEventSelect, {
 import { useEventSelect } from '../../../hooks/useEventSelect';
 import useQueryGetAllEvents from '../../../hooks/queries/useQueryGetAllEvents';
 import { getSectionTabHeight } from '../../../components/SectionTopTabs';
+import DynamicHeaderScrollViewWrapper from '../../../components/DynamicHeaderWrapper/DynamicHeaderScrollViewWrapper';
 
 /**
  * TODO:
@@ -67,7 +67,7 @@ const Event = () => {
   return (
     <BackgroundWrapper>
       <HeaderDropdownOverlay />
-      <CollapsableHeaderScrollViewWrapper
+      <DynamicHeaderScrollViewWrapper
         scrollViewRef={verticalScrollRef}
         topOnlyContent={{
           height:
@@ -135,7 +135,7 @@ const Event = () => {
             />
           }
         />
-      </CollapsableHeaderScrollViewWrapper>
+      </DynamicHeaderScrollViewWrapper>
       <BottomFABContainer />
     </BackgroundWrapper>
   );

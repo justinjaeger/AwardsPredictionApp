@@ -32,8 +32,8 @@ import HeaderWithEventSelect, {
 } from '../../../components/HeaderWithEventSelect';
 import { EVENT_TOP_TABS_HEIGHT } from '../../../components/HorizontalScrollingTabs';
 import { useEventSelect } from '../../../hooks/useEventSelect';
-import CollapsableHeaderFlatListWrapper from '../../../components/CollapsableHeaderFlatListWrapper';
 import SectionTopTabs from '../../../components/SectionTopTabs';
+import DynamicHeaderFlatListWrapper from '../../../components/DynamicHeaderWrapper/DynamicHeaderFlatListWrapper';
 
 const Leaderboard = () => {
   const verticalScrollRef = useRef<ScrollView>(null);
@@ -110,7 +110,7 @@ const Leaderboard = () => {
   return (
     <BackgroundWrapper>
       <HeaderDropdownOverlay />
-      <CollapsableHeaderFlatListWrapper<iLeaderboardRankingsWithUserData>
+      <DynamicHeaderFlatListWrapper<iLeaderboardRankingsWithUserData>
         scrollViewRef={verticalScrollRef}
         topOnlyContent={{
           height:
