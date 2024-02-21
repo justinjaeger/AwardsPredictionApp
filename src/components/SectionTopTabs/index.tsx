@@ -6,7 +6,7 @@ import { SubHeader } from '../Text';
 
 type iSectionTopTab = {
   title: string;
-  onOpenTab?: (isOpeningWithoutAnimation?: boolean) => void;
+  onOpenTab?: () => void;
 };
 
 export const getSectionTabHeight = (isPad: boolean) => (isPad ? 65 : 45);
@@ -29,22 +29,22 @@ const SectionTopTabs = ({
     initialTabIndex ? tabs[initialTabIndex] : tabs[0],
   );
 
-  const openTab = (t: iSectionTopTab, index: number, instant?: boolean) => {
+  const openTab = (t: iSectionTopTab, index: number) => {
     setSelectedTab(t);
 
-    t.onOpenTab && t.onOpenTab(instant);
+    t.onOpenTab && t.onOpenTab();
 
     const scrollBarPosition = index * (width / (index + 1));
     Animated.timing(scrollBarAnim, {
       toValue: scrollBarPosition,
-      duration: instant ? 0 : 250,
+      duration: 250,
       useNativeDriver: true,
     }).start();
   };
 
   useEffect(() => {
     if (initialTabIndex !== undefined) {
-      openTab(tabs[initialTabIndex], initialTabIndex, true);
+      openTab(tabs[initialTabIndex], initialTabIndex);
     }
   }, [initialTabIndex]);
 

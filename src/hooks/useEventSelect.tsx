@@ -23,8 +23,23 @@ export const useEventSelect = () => {
   const [phase, setPhase] = useState<Phase | undefined>(initialPhase);
   const [yyyymmdd, setYyyymmdd] = useState<number | undefined>(initialYyyymmdd);
 
+  const setEvent = (event: WithId<EventModel>) => {
+    _setYear(event.year);
+    _setEvent(event);
+    // set phase to the most recent phase
+    const phases = getLeaderboardsFromEvents([event]);
+    const winnerEvent = phases.find((p) => p.phase === Phase.WINNER);
+    const nominationsEvent = phases.find((p) => p.phase === Phase.NOMINATION);
+    if (winnerEvent) {
+      setPhase(Phase.WINNER);
+    } else if (nominationsEvent) {
+      setPhase(Phase.NOMINATION);
+    } else {
+      setPhase(undefined);
+    }
+  };
+
   const setYear = (year: number) => {
-    _setYear(year);
     const eventsWithNewYear = events?.filter((e) => e.year === year);
     const eventWithNewYearAndSameAwardsBody = eventsWithNewYear?.find(
       (e) => e.awardsBody === event?.awardsBody,
@@ -36,22 +51,6 @@ export const useEventSelect = () => {
     const defaultEvent = getDefaultEvent(eventsWithNewYear);
     if (defaultEvent) {
       setEvent(defaultEvent);
-    }
-  };
-
-  const setEvent = (event: WithId<EventModel>) => {
-    _setYear(event.year);
-    setEvent(event);
-    // set phase to the most recent phase
-    const phases = getLeaderboardsFromEvents([event]);
-    const winnerEvent = phases.find((p) => p.phase === Phase.WINNER);
-    const nominationsEvent = phases.find((p) => p.phase === Phase.NOMINATION);
-    if (winnerEvent) {
-      setPhase(Phase.WINNER);
-    } else if (nominationsEvent) {
-      setPhase(Phase.NOMINATION);
-    } else {
-      setPhase(undefined);
     }
   };
 

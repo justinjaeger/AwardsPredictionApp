@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef } from 'react';
+import React, { useLayoutEffect } from 'react';
 import CategoryPersonal from './CategoryPersonal';
 import {
   PredictionsNavigationProp,
@@ -13,11 +13,9 @@ import PredictionTabsNavigator from '../../../navigation/PredictionTabsNavigator
 import { PHASE_TO_STRING } from '../../../constants/categories';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import TabBodies from '../../../navigation/PredictionTabsNavigator/TabBodies';
-import { ScrollView, View } from 'react-native';
+import { View } from 'react-native';
 
 const Category = () => {
-  const horizontalTabsScrollViewRef = useRef<ScrollView>(null);
-
   const { params } = useRoute<RouteProp<PredictionsParamList, 'Category'>>();
   const showEventLink = params?.showEventLink || false;
 
@@ -44,23 +42,13 @@ const Category = () => {
 
   return (
     <BackgroundWrapper>
-      <>
-        <View
-          style={{
-            width: '100%',
-            justifyContent: 'flex-end',
-          }}
-        >
-          <PredictionTabsNavigator
-            horizontalTabsScrollViewRef={horizontalTabsScrollViewRef}
-          />
-        </View>
+      <View style={{ width: '100%' }}>
+        <PredictionTabsNavigator />
         <TabBodies
-          horizontalTabsScrollViewRef={horizontalTabsScrollViewRef}
           personal={<CategoryPersonal key="p" showEventLink={showEventLink} />}
           community={<CategoryCommunity key="c" showEventLink={showEventLink} />}
         />
-      </>
+      </View>
     </BackgroundWrapper>
   );
 };

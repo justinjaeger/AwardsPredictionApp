@@ -39,7 +39,6 @@ import DynamicHeaderScrollViewWrapper from '../../../components/DynamicHeaderWra
  */
 const Event = () => {
   const verticalScrollRef = useRef<ScrollView>(null);
-  const horizontalTabsScrollViewRef = useRef<ScrollView>(null);
 
   const { isPad } = useDevice();
   const { userInfo } = useRouteParams();
@@ -100,7 +99,6 @@ const Event = () => {
               }}
             >
               <PredictionTabsNavigator
-                horizontalTabsScrollViewRef={horizontalTabsScrollViewRef}
                 onChangeTab={(tab) => {
                   // if showing the "sign in to make predictions" scroll to top so it's in view
                   if (!userId && tab === 'personal') {
@@ -113,7 +111,6 @@ const Event = () => {
         }}
       >
         <TabBodies
-          horizontalTabsScrollViewRef={horizontalTabsScrollViewRef}
           personal={
             <CategoryList
               key={'p'}

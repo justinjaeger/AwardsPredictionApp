@@ -26,10 +26,8 @@ const EventList = ({
   const { setPersonalCommunityTab } = usePersonalCommunityTab();
   const navigation = useNavigation<PredictionsNavigationProp>();
 
-  const userId = user?._id;
-
   const onSelectEvent = async (event: WithId<EventModel>) => {
-    setPersonalCommunityTab(userId ? 'personal' : 'community');
+    setPersonalCommunityTab(user?._id ? 'personal' : 'community');
     navigation.navigate('Event', {
       userInfo: getUserInfo(user),
       eventId: event._id,

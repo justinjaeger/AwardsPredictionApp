@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react';
 import { View, useWindowDimensions } from 'react-native';
 import { PredictionsNavigationProp } from '../../../navigation/types';
-import { usePersonalCommunityTab } from '../../../context/EventContext';
 import SignedOutState from '../../../components/SignedOutState';
 import LastUpdatedText from '../../../components/LastUpdatedText';
 import { useAuth } from '../../../context/AuthContext';
@@ -48,7 +47,6 @@ const CategoryList = ({
   const { userId: authUserId } = useAuth();
   const { userInfo, phase, noShorts, isLeaderboard } = useRouteParams();
   const { user } = useProfileUser(userInfo?.userId || authUserId);
-  const { setPersonalCommunityTab } = usePersonalCommunityTab();
   const navigation = useNavigation<PredictionsNavigationProp>();
   const { usersIdsAuthUserIsFollowing } = useQueryGetFollowingUsers();
 
@@ -59,7 +57,7 @@ const CategoryList = ({
 
   const onSelectCategory = async (category: CategoryName) => {
     if (!event) return;
-    setPersonalCommunityTab(tab);
+    // setPersonalCommunityTab(tab);
     const params = {
       userInfo: userInfo || getUserInfo(user),
       eventId: event._id,
@@ -123,14 +121,8 @@ const CategoryList = ({
 
   // TODO: ALSO ADD THE HEIGHT OF THE LEADERBOARD SECTION
 
-  console.log('isFirstRender', isFirstRender);
-
   return (
-    <View
-      style={{
-        width: '100%',
-      }}
-    >
+    <View style={{ width: '100%' }}>
       {displayLbStats ? (
         <>
           {tab === 'community' ? (
