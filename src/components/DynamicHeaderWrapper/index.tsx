@@ -12,6 +12,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { UNEXPLAINED_EXTRA_SCROLL_HEIGHT } from '../../screens/Predictions/Event/constants';
 import useDevice from '../../util/device';
 import DynamicHeader, { iDynamicHeaderProps } from './DynamicHeader';
+import { debounce } from 'lodash';
 
 const DynamicHeaderWrapper = (
   props: {
@@ -51,6 +52,10 @@ const DynamicHeaderWrapper = (
     extrapolate: 'clamp',
   });
 
+  const debouncedOnEndReached = debounce(() => {
+    onEndReached && onEndReached();
+  }, 500);
+
   const scrollViewProps: ScrollViewProps = {
     style: {
       position: 'relative',
@@ -85,7 +90,7 @@ const DynamicHeaderWrapper = (
         e.nativeEvent.contentSize.height - e.nativeEvent.layoutMeasurement.height;
       // if we're close to the bottom fetch more
       if (currentOffset > maxOffset - 200 && onEndReached) {
-        onEndReached();
+        debouncedOnEndReached();
       }
     },
     onScrollEndDrag: (e) => {
