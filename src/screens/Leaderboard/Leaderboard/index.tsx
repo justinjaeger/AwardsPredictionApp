@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import useGetLeaderboardUsers from '../../../hooks/useGetLeaderboardUsers';
 import { FlatList, ScrollView, View } from 'react-native';
@@ -11,16 +11,13 @@ import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import { useAuth } from '../../../context/AuthContext';
 import useProfileUser from '../../Profile/useProfileUser';
 import { getUserLeaderboard } from '../../../util/getUserLeaderboard';
-import { useRouteParams } from '../../../hooks/useRouteParams';
 import { PHASE_TO_STRING_PLURAL } from '../../../constants/categories';
 import LeaderboardChart from '../../../components/LeaderboardChart';
 import { PredictionsNavigationProp } from '../../../navigation/types';
-import { getLeaderboardFromEvent } from '../../../util/getLeaderboardFromEvent';
 import { getUserInfo } from '../../../util/getUserInfo';
 import { usePersonalCommunityTab } from '../../../context/EventContext';
 import useQueryGetFollowingUsers from '../../../hooks/queries/useQueryGetFollowingUsers';
 import { iLeaderboardRankingsWithUserData } from '../../../services/api/requests/leaderboard';
-import { Phase } from '../../../models';
 import useQueryGetAllEvents from '../../../hooks/queries/useQueryGetAllEvents';
 import { AWARDS_BODY_TO_PLURAL_STRING } from '../../../constants/awardsBodies';
 import LeaderboardStats from './LeaderboardStats';
@@ -29,42 +26,36 @@ import HeaderWithEventSelect, {
   HEADER_TITLE_HEIGHT,
   HEADER_TITLE_MARGIN_TOP,
   HEADER_TOP_TAB_MARGIN_BOTTOM,
+  HEADER_TOP_TAB_MARGIN_TOP,
 } from '../../../components/HeaderWithEventSelect';
 import { EVENT_TOP_TABS_HEIGHT } from '../../../components/HorizontalScrollingTabs';
 import { useEventSelect } from '../../../hooks/useEventSelect';
 import SectionTopTabs from '../../../components/SectionTopTabs';
 import DynamicHeaderFlatListWrapper from '../../../components/DynamicHeaderWrapper/DynamicHeaderFlatListWrapper';
+import LeaderboardPhaseTabs from '../../../components/LeaderboardTabs';
 
 const Leaderboard = () => {
   const verticalScrollRef = useRef<ScrollView>(null);
   const flatListRef = useRef<FlatList<any>>(null);
 
-  const { phase: initialPhase } = useRouteParams();
   const navigation = useNavigation<PredictionsNavigationProp>();
 
   const { setPersonalCommunityTab } = usePersonalCommunityTab();
-  const { data: events, defaultLeaderboard } = useQueryGetAllEvents();
-  const { event, year, yyyymmdd, setEvent, setYear } = useEventSelect();
-
-  const [phase, setPhase] = useState<Phase | undefined>(initialPhase);
-
-  // sets event as most recent academy awards if none is selected
-  useEffect(() => {
-    if (!phase && defaultLeaderboard) {
-      setPhase(defaultLeaderboard.phase);
-    }
-  }, [defaultLeaderboard]);
-
-  const noShorts = false;
+  const { data: events } = useQueryGetAllEvents();
+  const { event, setEvent, setYear, phase, setPhase, leaderboard } = useEventSelect();
 
   const { userId: authUserId } = useAuth();
   const { user } = useProfileUser(authUserId);
   const { leaderboardRankings, fetchPage, isLoading } = useGetLeaderboardUsers({
     eventId: event?._id,
     phase,
-    noShorts,
   });
   const { data: users } = useQueryGetFollowingUsers();
+
+  const eventsWithLeaderboard =
+    events?.filter(
+      (event) => event.leaderboards && Object.keys(event.leaderboards).length > 0,
+    ) ?? [];
 
   const [sortSetting, setSortSetting] = useState<'all' | 'following'>('all');
 
@@ -75,11 +66,9 @@ const Leaderboard = () => {
   const userLeaderboard =
     user && getUserLeaderboard({ user, eventId: event?._id, phase });
 
-  const leaderboard = getLeaderboardFromEvent(event, phase, noShorts);
-
   const followingLeaderboardRankings = (users ?? [])
     .reduce((acc: iLeaderboardRankingsWithUserData[], user) => {
-      const userLeaderboard = getUserLeaderboard({ user, eventId, phase, noShorts });
+      const userLeaderboard = getUserLeaderboard({ user, eventId, phase });
       if (userLeaderboard) {
         acc.push({ ...userLeaderboard, ...user, userId: user._id });
       }
@@ -117,15 +106,26 @@ const Leaderboard = () => {
             HEADER_TITLE_HEIGHT +
             HEADER_TITLE_MARGIN_TOP +
             EVENT_TOP_TABS_HEIGHT +
-            HEADER_TOP_TAB_MARGIN_BOTTOM,
+            EVENT_TOP_TABS_HEIGHT +
+            HEADER_TOP_TAB_MARGIN_BOTTOM +
+            HEADER_TOP_TAB_MARGIN_BOTTOM +
+            HEADER_TOP_TAB_MARGIN_TOP,
           component: (
-            <HeaderWithEventSelect
-              title={'Leaderboards'}
-              event={event}
-              setEvent={setEvent}
-              eventOptions={events ?? []}
-              setYear={setYear}
-            />
+            <>
+              <HeaderWithEventSelect
+                title={'Leaderboards'}
+                event={event}
+                setEvent={setEvent}
+                eventOptions={eventsWithLeaderboard}
+                setYear={setYear}
+              />
+              <LeaderboardPhaseTabs
+                event={event}
+                phase={phase}
+                setPhase={setPhase}
+                style={{ marginBottom: HEADER_TOP_TAB_MARGIN_BOTTOM }}
+              />
+            </>
           ),
         }}
         titleWhenCollapsed={`${AWARDS_BODY_TO_PLURAL_STRING[event.awardsBody]} ${

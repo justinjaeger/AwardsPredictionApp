@@ -6,6 +6,7 @@ import { UserRole } from '../../models';
 import { getDefaultEvent } from '../../util/getDefaultEvent';
 import { getDefaultLeaderboard } from '../../util/getDefaultLeaderboard';
 import { QUERY_OPTIONS } from './constants';
+import { getLeaderboardsFromEvents } from '../../util/getLeaderboardsFromEvents';
 
 const useQueryGetAllEvents = () => {
   const { userRole } = useAuth();
@@ -24,11 +25,14 @@ const useQueryGetAllEvents = () => {
     ...QUERY_OPTIONS,
   });
 
+  const leaderboards = getLeaderboardsFromEvents(data);
+
   const defaultEvent = getDefaultEvent(data);
   const defaultLeaderboard = getDefaultLeaderboard(data);
 
   return {
     data,
+    leaderboards,
     isLoading,
     refetch,
     defaultEvent,

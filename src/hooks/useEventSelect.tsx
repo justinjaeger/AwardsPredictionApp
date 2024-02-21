@@ -1,19 +1,28 @@
 import { useEffect, useState } from 'react';
-import { AwardsBody, EventModel, WithId } from '../models';
+import { EventModel, Phase, WithId } from '../models';
 import { useRouteParams } from './useRouteParams';
 import useQueryGetAllEvents from './queries/useQueryGetAllEvents';
+import { getLeaderboardFromEvent } from '../util/getLeaderboardFromEvent';
+import { getLeaderboardsFromEvents } from '../util/getLeaderboardsFromEvents';
+import { getDefaultEvent } from '../util/getDefaultEvent';
 
 export const useEventSelect = () => {
-  const { event: initialEvent, yyyymmdd: initialYyyymmdd } = useRouteParams();
-  const { data: events, defaultEvent } = useQueryGetAllEvents();
+  const {
+    event: initialEvent,
+    yyyymmdd: initialYyyymmdd,
+    phase: initialPhase,
+  } = useRouteParams();
+  const { data: events, defaultEvent, defaultLeaderboard } = useQueryGetAllEvents();
 
-  const [yyyymmdd, setYyyymmdd] = useState<number | undefined>(initialYyyymmdd);
   const [year, _setYear] = useState<number | undefined>(
     initialEvent?.year ?? defaultEvent?.year,
   );
-  const [event, setEvent] = useState<WithId<EventModel> | undefined>(
+  const [event, _setEvent] = useState<WithId<EventModel> | undefined>(
     initialEvent ?? defaultEvent,
   );
+  const [phase, setPhase] = useState<Phase | undefined>(initialPhase);
+  const [yyyymmdd, setYyyymmdd] = useState<number | undefined>(initialYyyymmdd);
+
   const setYear = (year: number) => {
     _setYear(year);
     const eventsWithNewYear = events?.filter((e) => e.year === year);
@@ -24,11 +33,25 @@ export const useEventSelect = () => {
       setEvent(eventWithNewYearAndSameAwardsBody);
       return;
     }
-    const defaultEvent =
-      eventsWithNewYear?.find((e) => e.awardsBody === AwardsBody.ACADEMY_AWARDS) ||
-      eventsWithNewYear?.[0];
+    const defaultEvent = getDefaultEvent(eventsWithNewYear);
     if (defaultEvent) {
       setEvent(defaultEvent);
+    }
+  };
+
+  const setEvent = (event: WithId<EventModel>) => {
+    _setYear(event.year);
+    setEvent(event);
+    // set phase to the most recent phase
+    const phases = getLeaderboardsFromEvents([event]);
+    const winnerEvent = phases.find((p) => p.phase === Phase.WINNER);
+    const nominationsEvent = phases.find((p) => p.phase === Phase.NOMINATION);
+    if (winnerEvent) {
+      setPhase(Phase.WINNER);
+    } else if (nominationsEvent) {
+      setPhase(Phase.NOMINATION);
+    } else {
+      setPhase(undefined);
     }
   };
 
@@ -36,9 +59,26 @@ export const useEventSelect = () => {
   useEffect(() => {
     if (!event && defaultEvent) {
       setEvent(defaultEvent);
-      setYear(defaultEvent.year);
     }
   }, [defaultEvent]);
 
-  return { yyyymmdd, setYyyymmdd, year, setYear, event, setEvent };
+  useEffect(() => {
+    if (!phase && defaultLeaderboard) {
+      setPhase(defaultLeaderboard.phase);
+    }
+  }, [defaultLeaderboard]);
+
+  const leaderboard = event && phase ? getLeaderboardFromEvent(event, phase) : undefined;
+
+  return {
+    yyyymmdd,
+    setYyyymmdd,
+    year,
+    setYear,
+    event,
+    setEvent,
+    phase,
+    setPhase,
+    leaderboard,
+  };
 };

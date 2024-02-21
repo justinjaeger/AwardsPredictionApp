@@ -9,6 +9,7 @@ import { EventModel, WithId } from '../../models';
 export const HEADER_TITLE_MARGIN_TOP = 10;
 export const HEADER_TITLE_HEIGHT = 40;
 export const HEADER_TOP_TAB_MARGIN_BOTTOM = 10;
+export const HEADER_TOP_TAB_MARGIN_TOP = 10;
 
 const HeaderWithEventSelect = ({
   title,
@@ -40,6 +41,7 @@ const HeaderWithEventSelect = ({
           marginLeft: theme.windowMargin,
           marginRight: theme.windowMargin,
           marginTop: HEADER_TITLE_MARGIN_TOP,
+          marginBottom: HEADER_TOP_TAB_MARGIN_TOP,
           height: HEADER_TITLE_HEIGHT,
         }}
       >

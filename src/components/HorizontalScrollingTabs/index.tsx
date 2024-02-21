@@ -3,7 +3,7 @@ import { ScrollView, StyleProp, TouchableHighlight, ViewStyle } from 'react-nati
 import { BodyBold } from '../Text';
 import COLORS from '../../constants/colors';
 
-export const EVENT_TOP_TABS_HEIGHT = 40;
+export const EVENT_TOP_TABS_HEIGHT = 30;
 
 /**
  * Shows tabs within the selected event's year
@@ -46,7 +46,7 @@ const HorizontalScrollingTabs = ({
               borderRadius: 30,
               alignItems: 'center',
               justifyContent: 'center',
-              height: EVENT_TOP_TABS_HEIGHT - 10,
+              height: EVENT_TOP_TABS_HEIGHT,
             }}
             underlayColor={COLORS.secondary}
             onPress={() => onPress(value)}

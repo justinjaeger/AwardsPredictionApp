@@ -18,6 +18,7 @@ import HeaderWithEventSelect, {
   HEADER_TITLE_HEIGHT,
   HEADER_TITLE_MARGIN_TOP,
   HEADER_TOP_TAB_MARGIN_BOTTOM,
+  HEADER_TOP_TAB_MARGIN_TOP,
 } from '../../../components/HeaderWithEventSelect';
 import { useEventSelect } from '../../../hooks/useEventSelect';
 import useQueryGetAllEvents from '../../../hooks/queries/useQueryGetAllEvents';
@@ -74,7 +75,8 @@ const Event = () => {
             HEADER_TITLE_HEIGHT +
             HEADER_TITLE_MARGIN_TOP +
             EVENT_TOP_TABS_HEIGHT +
-            HEADER_TOP_TAB_MARGIN_BOTTOM,
+            HEADER_TOP_TAB_MARGIN_BOTTOM +
+            HEADER_TOP_TAB_MARGIN_TOP,
           component: (
             <HeaderWithEventSelect
               title={'Predictions'}

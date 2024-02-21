@@ -192,7 +192,7 @@ const LeaderboardChart = ({
             const height =
               (numPredicting / largestSegmentOfUsersWithSamePercentage) * CHART_HEIGHT;
             return (
-              <View style={{ width: barWidth }}>
+              <View key={percentage} style={{ width: barWidth }}>
                 <View
                   style={{
                     height: '100%',
