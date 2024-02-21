@@ -10,6 +10,7 @@ export const getCollapsedContent = (titleWhenCollapsed: string) => {
     component: (
       <View
         style={{
+          width: '100%',
           alignItems: 'center',
           justifyContent: 'center',
           height: '100%',

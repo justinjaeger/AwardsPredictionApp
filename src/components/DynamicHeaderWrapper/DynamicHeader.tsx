@@ -39,29 +39,20 @@ const DynamicHeader = ({
   const maxHeaderHeight = topOnlyComponentHeight + persistedComponentHeight;
   const SCROLL_DISTANCE = maxHeaderHeight - minHeaderHeight;
 
-  const minInnerHeaderHeight = topOnlyComponentHeight;
-  const maxInnerHeaderHeight = topOnlyComponentHeight + collapsedComponentHeight;
-
   const animatedHeaderHeight = animHeaderValue.interpolate({
     inputRange: [0, SCROLL_DISTANCE],
     outputRange: [maxHeaderHeight, minHeaderHeight],
     extrapolate: 'clamp',
   });
 
-  const animatedInnerHeaderHeight = animHeaderValue.interpolate({
-    inputRange: [0, SCROLL_DISTANCE],
-    outputRange: [minInnerHeaderHeight, maxInnerHeaderHeight],
-    extrapolate: 'clamp',
-  });
-
   const animateTopContentOpacity = animHeaderValue.interpolate({
-    inputRange: [0, SCROLL_DISTANCE],
+    inputRange: [0, SCROLL_DISTANCE / 2],
     outputRange: [1, 0],
     extrapolate: 'clamp',
   });
 
   const animateCollapsedContentOpacity = animHeaderValue.interpolate({
-    inputRange: [0, SCROLL_DISTANCE],
+    inputRange: [SCROLL_DISTANCE / 2, SCROLL_DISTANCE],
     outputRange: [0, 1],
     extrapolate: 'clamp',
   });
@@ -93,24 +84,24 @@ const DynamicHeader = ({
           { height: animatedHeaderHeight },
         ]}
       >
-        <Animated.View style={[{ height: animatedInnerHeaderHeight }]}>
-          <Animated.View style={{ backgroundColor: animateHeaderBackgroundColor }}>
-            <Animated.View
-              style={[
-                {
-                  height: topOnlyComponentHeight,
-                },
-                {
-                  opacity: animateTopContentOpacity,
-                },
-              ]}
-            >
-              {topOnlyComponent}
-            </Animated.View>
+        <Animated.View style={{ backgroundColor: animateHeaderBackgroundColor }}>
+          <Animated.View
+            style={[
+              {
+                height: topOnlyComponentHeight,
+              },
+              {
+                opacity: animateTopContentOpacity,
+              },
+            ]}
+          >
+            {topOnlyComponent}
           </Animated.View>
           <Animated.View
             style={{
-              backgroundColor: PRIMARY_COLOR,
+              width: '100%',
+              position: 'absolute',
+              top: topOnlyComponentHeight - collapsedComponentHeight,
               opacity: animateCollapsedContentOpacity,
             }}
           >
