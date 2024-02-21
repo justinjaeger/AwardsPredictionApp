@@ -1,7 +1,7 @@
 import React from 'react';
 import { Animated, useWindowDimensions, View } from 'react-native';
 import COLORS from '../../constants/colors';
-import { usePersonalCommunityTab } from '../../context/EventContext';
+import { usePersonalCommunityTab } from '../../context/PersonalCommunityContext';
 
 /**
  * Note: This component is a bit whack but it's done in this way to prevent re-renders of lists

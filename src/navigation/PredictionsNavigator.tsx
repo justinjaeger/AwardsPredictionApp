@@ -13,7 +13,7 @@ import { RouteProp, useRoute } from '@react-navigation/native';
 import Followers from '../screens/Profile/Followers';
 import { useHeaderSettings } from '../hooks/useHeaderSettings';
 import ContenderStats from '../screens/ContenderStats';
-import { PersonalCommunityTabProvider } from '../context/EventContext';
+import { PersonalCommunityTabProvider } from '../context/PersonalCommunityContext';
 import { FollowingBarProvider } from '../context/FollowingBarContext';
 import ContenderInfoModal from '../screens/Predictions/ContenderInfoModal';
 import LeaderboardList from '../screens/Leaderboard/LeaderboardList';

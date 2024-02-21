@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { Animated } from 'react-native';
-import { usePersonalCommunityTab } from '../context/EventContext';
+import { usePersonalCommunityTab } from '../context/PersonalCommunityContext';
 
 const useShowAddTab = () => {
   const animatedOpacity = useRef(new Animated.Value(0)).current;

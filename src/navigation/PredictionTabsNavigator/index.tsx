@@ -1,5 +1,5 @@
 import React from 'react';
-import { usePersonalCommunityTab } from '../../context/EventContext';
+import { usePersonalCommunityTab } from '../../context/PersonalCommunityContext';
 import { useAuth } from '../../context/AuthContext';
 import { useRouteParams } from '../../hooks/useRouteParams';
 import { truncateText } from '../../util/truncateText';

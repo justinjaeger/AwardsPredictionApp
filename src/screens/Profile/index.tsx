@@ -24,7 +24,7 @@ import { AWARDS_BODY_TO_PLURAL_STRING } from '../../constants/awardsBodies';
 import { PHASE_TO_STRING_PLURAL } from '../../constants/categories';
 import { Phase, UserRole, iLeaderboard, iLeaderboardRanking } from '../../models';
 import EventItemSimple from '../../components/EventItemSimple';
-import { usePersonalCommunityTab } from '../../context/EventContext';
+import { usePersonalCommunityTab } from '../../context/PersonalCommunityContext';
 import { getCurrentPhaseBeingPredicted } from '../../util/getBiggestPhaseThatHasHappened';
 
 const Profile = () => {

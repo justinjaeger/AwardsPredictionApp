@@ -11,7 +11,7 @@ import { formatLastUpdated } from '../../util/formatDateTime';
 import { AwardsBody, CategoryName, iRecentPrediction } from '../../models';
 import useQueryGetAllEvents from '../../hooks/queries/useQueryGetAllEvents';
 import { useNavigation } from '@react-navigation/native';
-import { usePersonalCommunityTab } from '../../context/EventContext';
+import { usePersonalCommunityTab } from '../../context/PersonalCommunityContext';
 
 const UserPredictionList = ({
   predictionSets,

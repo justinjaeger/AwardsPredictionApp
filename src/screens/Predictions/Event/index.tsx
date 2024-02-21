@@ -55,6 +55,7 @@ const Event = () => {
 
   const predictionTabHeight = getSectionTabHeight(isPad);
 
+  // TODO: replace this once we render everything in FlatList
   const trueAfterJavaScriptRuns = useIsTrueAfterJavaScriptUpdates([
     event?._id,
     year,

@@ -15,7 +15,7 @@ import { PHASE_TO_STRING_PLURAL } from '../../../constants/categories';
 import LeaderboardChart from '../../../components/LeaderboardChart';
 import { PredictionsNavigationProp } from '../../../navigation/types';
 import { getUserInfo } from '../../../util/getUserInfo';
-import { usePersonalCommunityTab } from '../../../context/EventContext';
+import { usePersonalCommunityTab } from '../../../context/PersonalCommunityContext';
 import useQueryGetFollowingUsers from '../../../hooks/queries/useQueryGetFollowingUsers';
 import { iLeaderboardRankingsWithUserData } from '../../../services/api/requests/leaderboard';
 import useQueryGetAllEvents from '../../../hooks/queries/useQueryGetAllEvents';
@@ -33,6 +33,7 @@ import { useEventSelect } from '../../../hooks/useEventSelect';
 import SectionTopTabs from '../../../components/SectionTopTabs';
 import DynamicHeaderFlatListWrapper from '../../../components/DynamicHeaderWrapper/DynamicHeaderFlatListWrapper';
 import LeaderboardPhaseTabs from '../../../components/LeaderboardTabs';
+import COLORS from '../../../constants/colors';
 
 const Leaderboard = () => {
   const verticalScrollRef = useRef<ScrollView>(null);
@@ -111,7 +112,12 @@ const Leaderboard = () => {
             HEADER_TOP_TAB_MARGIN_BOTTOM +
             HEADER_TOP_TAB_MARGIN_TOP,
           component: (
-            <>
+            <View
+              style={{
+                borderBottomColor: COLORS.primaryLight,
+                borderBottomWidth: 1,
+              }}
+            >
               <HeaderWithEventSelect
                 title={'Leaderboards'}
                 event={event}
@@ -125,7 +131,7 @@ const Leaderboard = () => {
                 setPhase={setPhase}
                 style={{ marginBottom: HEADER_TOP_TAB_MARGIN_BOTTOM }}
               />
-            </>
+            </View>
           ),
         }}
         titleWhenCollapsed={`${AWARDS_BODY_TO_PLURAL_STRING[event.awardsBody]} ${

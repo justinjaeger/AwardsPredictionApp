@@ -4,7 +4,7 @@ import { View } from 'react-native';
 import COLORS from '../../../constants/colors';
 import { PredictionsNavigationProp } from '../../../navigation/types';
 import { getOrderedEvents } from '../../../util/sortByObjectOrder';
-import { usePersonalCommunityTab } from '../../../context/EventContext';
+import { usePersonalCommunityTab } from '../../../context/PersonalCommunityContext';
 import { PHASE_TO_CTA, getEventTime } from '../../../constants/events';
 import { Divider } from '@ui-kitten/components';
 import { EventModel, Phase, User, WithId } from '../../../models';
