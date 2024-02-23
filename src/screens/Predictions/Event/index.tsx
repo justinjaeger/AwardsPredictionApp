@@ -30,7 +30,6 @@ import CategoryListItem, { iCategoryListItem } from './CategoryListItem';
 import { StackActions, useNavigation } from '@react-navigation/native';
 import { PredictionsNavigationProp } from '../../../navigation/types';
 import useProfileUser from '../../Profile/useProfileUser';
-import { useIsTrueAfterJavaScriptUpdates } from '../../../hooks/useIsTrueAfterJavaScriptUpdates';
 import EventSkeleton from '../../../components/Skeletons/EventSkeleton';
 import { getCategoryListItemHeight } from '../../../util/getCategoryListItemHeight';
 
@@ -85,7 +84,7 @@ const Event = () => {
   const isAuthProfile = user?._id === authUserId;
 
   const { data: events } = useQueryGetAllEvents();
-  const { event, year, yyyymmdd, setEvent, setYear } = useEventSelect();
+  const { event, yyyymmdd, setEvent, setYear } = useEventSelect();
 
   const { data: userPredictionData, isLoading: isLoadingPersonal } =
     useQueryGetUserPredictions({ event, userId, yyyymmdd });
@@ -93,14 +92,6 @@ const Event = () => {
     useQueryGetCommunityPredictions({ event, yyyymmdd });
 
   const predictionTabHeight = getSectionTabHeight(isPad);
-
-  // TODO: replace this once we render everything in FlatList
-  const trueAfterJavaScriptRuns = useIsTrueAfterJavaScriptUpdates([
-    event?._id,
-    year,
-    yyyymmdd,
-    userId,
-  ]);
 
   const onSelectCategory = async (category: CategoryName, isCommunityTab?: boolean) => {
     if (!event) return;
@@ -178,16 +169,9 @@ const Event = () => {
         flatListProps={{
           data,
           keyExtractor: (item) => item[0][0], // the category name
-          renderItem: ({ item, index }) => {
+          renderItem: ({ item }) => {
             const category = item[0][0] as CategoryName | undefined;
-            const predictions = item[0][1]?.predictions;
-            const numPredictions = predictions?.length ?? 0;
-            if (
-              isLoading ||
-              !event ||
-              !category ||
-              (!trueAfterJavaScriptRuns && numPredictions > 0 && index > 2)
-            ) {
+            if (isLoading || !event || !category) {
               return (
                 <View key={'event-skeleton' + category}>
                   <EventSkeleton event={event} category={category} />

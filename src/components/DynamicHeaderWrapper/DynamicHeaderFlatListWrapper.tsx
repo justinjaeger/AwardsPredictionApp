@@ -37,15 +37,9 @@ const DynamicHeaderFlatListWrapper = <T,>(props: {
               {props.flatListProps.ListHeaderComponent}
             </>
           }
-          // So the problem with flatlist:
-          // I can use all the optimizations I want
-          // But when we switch from one tab back to the other,
-          // flatlist doesn't reset
-          // and acts like the blank spaces are no longer necessary
-          removeClippedSubviews
           maxToRenderPerBatch={3}
-          updateCellsBatchingPeriod={500}
           initialNumToRender={3} // can use this instead of "first render" thing
+          windowSize={3} // the units here are viewport size
         />
       )}
       collapsedContent={getCollapsedContent(props.titleWhenCollapsed)}

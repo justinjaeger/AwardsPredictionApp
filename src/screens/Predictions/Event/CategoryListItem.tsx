@@ -1,13 +1,6 @@
 import React from 'react';
 import { TouchableHighlight, View } from 'react-native';
-import {
-  CategoryName,
-  EventModel,
-  Phase,
-  WithId,
-  iCategoryPrediction,
-  iPrediction,
-} from '../../../models';
+import { CategoryName, EventModel, Phase, WithId, iPrediction } from '../../../models';
 import COLORS from '../../../constants/colors';
 import { SubHeader } from '../../../components/Text';
 import theme from '../../../constants/theme';
@@ -20,7 +13,7 @@ import useQueryGetEventAccolades from '../../../hooks/queries/useQueryGetEventAc
 import CustomIcon from '../../../components/CustomIcon';
 import { CATEGORY_BOTTOM_AREA_HEIGHT, CATEGORY_TOP_AREA_HEIGHT } from './constants';
 
-export type iCategoryListItem = [CategoryName, iCategoryPrediction | undefined];
+export type iCategoryListItem = [CategoryName, iPrediction[]];
 
 const CategoryListItem = ({
   item: [category, categoryPrediction],
@@ -61,9 +54,8 @@ const CategoryListItem = ({
   // hide hidden categories (like shorts)
   if (categoryIsHidden) return null;
 
-  const predictions = categoryPrediction
-    ? sortPredictions(categoryPrediction.predictions)
-    : [];
+  // they're already sorted but if that's the case this is not expensive so may as well for safety
+  const predictions = sortPredictions(categoryPrediction);
 
   // once nominations happen, you want "slots" to be however many films are nominated
   const truncatedPredictions: iPrediction[] = predictions.slice(0, slots || 5);

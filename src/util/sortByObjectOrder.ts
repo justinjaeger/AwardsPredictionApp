@@ -3,6 +3,7 @@ import { CategoryName, EventModel, WithId, iCategoryPrediction } from '../models
 import { AWARDS_BODY_TO_STRING } from '../constants/awardsBodies';
 import { ORDERED_CATEGORIES } from '../constants/categories';
 import { getCategoryIsHidden } from './getCategoryIsHidden';
+import { iCategoryListItem } from '../screens/Predictions/Event/CategoryListItem';
 
 /**
  * Sorts an array based on the insert order of an object (with keys of type Enum)
@@ -37,13 +38,13 @@ export const getOrderedEvents = (unorderedEvents: WithId<EventModel>[]) => {
 export const getOrderedPredictionSetCategories = (
   event: EventModel,
   unorderedCategories?: Record<CategoryName, iCategoryPrediction>,
-): Array<[CategoryName, iCategoryPrediction | undefined]> => {
+): Array<iCategoryListItem> => {
   const allCategoriesInOrder = getCategoriesFromEvent(event);
   return allCategoriesInOrder.map((catName) => {
     const valuesForGivenKey = unorderedCategories
       ? (unorderedCategories[catName] as iCategoryPrediction | undefined)
       : undefined;
-    return [catName, valuesForGivenKey];
+    return [catName, valuesForGivenKey?.predictions || []];
   }, []);
 };
 
