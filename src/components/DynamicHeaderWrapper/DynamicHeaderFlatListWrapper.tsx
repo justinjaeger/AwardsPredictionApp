@@ -37,9 +37,7 @@ const DynamicHeaderFlatListWrapper = <T,>(props: {
               {props.flatListProps.ListHeaderComponent}
             </>
           }
-          maxToRenderPerBatch={3}
-          initialNumToRender={3} // can use this instead of "first render" thing
-          windowSize={3} // the units here are viewport size
+          initialNumToRender={3}
         />
       )}
       collapsedContent={getCollapsedContent(props.titleWhenCollapsed)}

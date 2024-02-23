@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableHighlight, View } from 'react-native';
+import { TouchableHighlight, View, useWindowDimensions } from 'react-native';
 import { CategoryName, EventModel, Phase, WithId, iPrediction } from '../../../models';
 import COLORS from '../../../constants/colors';
 import { SubHeader } from '../../../components/Text';
@@ -12,6 +12,7 @@ import { getSlotsInPhase } from '../../../util/getSlotsInPhase';
 import useQueryGetEventAccolades from '../../../hooks/queries/useQueryGetEventAccolades';
 import CustomIcon from '../../../components/CustomIcon';
 import { CATEGORY_BOTTOM_AREA_HEIGHT, CATEGORY_TOP_AREA_HEIGHT } from './constants';
+import { getCategoryListItemHeight } from '../../../util/getCategoryListItemHeight';
 
 export type iCategoryListItem = [CategoryName, iPrediction[]];
 
@@ -24,6 +25,7 @@ const CategoryListItem = ({
   onPress: (category: CategoryName) => void;
   event: WithId<EventModel>;
 }) => {
+  const { width } = useWindowDimensions();
   // yyyymmdd is not necessarily a leaderboard. When it's history, we don't event want to display shortlist performance
   const { yyyymmdd, phase, isLeaderboard } = useRouteParams();
   const awardsBodyCategories = event?.categories;
@@ -67,10 +69,17 @@ const CategoryListItem = ({
     (prediction) => contenderIdsToPhase?.[prediction.contenderId] === phase,
   ).length;
 
+  const height = getCategoryListItemHeight({
+    categoryName: category,
+    event,
+    windowWidth: width,
+  });
+
   return (
     <TouchableHighlight
       key={'categorylistitem' + category}
       style={{
+        height,
         width: '100%',
         alignItems: 'flex-start',
         borderBottomWidth: 0.5,

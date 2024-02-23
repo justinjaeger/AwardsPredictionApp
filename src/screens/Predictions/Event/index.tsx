@@ -30,6 +30,7 @@ import CategoryListItem, { iCategoryListItem } from './CategoryListItem';
 import { StackActions, useNavigation } from '@react-navigation/native';
 import { PredictionsNavigationProp } from '../../../navigation/types';
 import useProfileUser from '../../Profile/useProfileUser';
+import { useIsTrueAfterJavaScriptUpdates } from '../../../hooks/useIsTrueAfterJavaScriptUpdates';
 import EventSkeleton from '../../../components/Skeletons/EventSkeleton';
 import { getCategoryListItemHeight } from '../../../util/getCategoryListItemHeight';
 
@@ -84,7 +85,7 @@ const Event = () => {
   const isAuthProfile = user?._id === authUserId;
 
   const { data: events } = useQueryGetAllEvents();
-  const { event, yyyymmdd, setEvent, setYear } = useEventSelect();
+  const { event, year, yyyymmdd, setEvent, setYear } = useEventSelect();
 
   const { data: userPredictionData, isLoading: isLoadingPersonal } =
     useQueryGetUserPredictions({ event, userId, yyyymmdd });
@@ -92,6 +93,13 @@ const Event = () => {
     useQueryGetCommunityPredictions({ event, yyyymmdd });
 
   const predictionTabHeight = getSectionTabHeight(isPad);
+
+  const trueAfterJavaScriptRuns = useIsTrueAfterJavaScriptUpdates([
+    event?._id,
+    year,
+    yyyymmdd,
+    userId,
+  ]);
 
   const onSelectCategory = async (category: CategoryName, isCommunityTab?: boolean) => {
     if (!event) return;
@@ -169,9 +177,15 @@ const Event = () => {
         flatListProps={{
           data,
           keyExtractor: (item) => item[0][0], // the category name
-          renderItem: ({ item }) => {
+          renderItem: ({ item, index }) => {
             const category = item[0][0] as CategoryName | undefined;
-            if (isLoading || !event || !category) {
+            const numPredicting = item[0][1]?.length;
+            if (
+              isLoading ||
+              !event ||
+              !category ||
+              (!trueAfterJavaScriptRuns && numPredicting > 0 && index > 2)
+            ) {
               return (
                 <View key={'event-skeleton' + category}>
                   <EventSkeleton event={event} category={category} />
@@ -198,14 +212,19 @@ const Event = () => {
             );
           },
           getItemLayout: (data, index) => {
-            if (!data) return { length: 0, offset: 0 * index, index };
-            const [category] = data[index][0];
-            const height = getCategoryListItemHeight({
-              categoryName: category,
-              event,
-              windowWidth: width,
+            const heightAtEachIndex = (data ?? []).map((item) => {
+              const [category] = item[0];
+              return getCategoryListItemHeight({
+                categoryName: category,
+                event,
+                windowWidth: width,
+              });
             });
-            return { length: height, offset: height * index, index };
+            return {
+              length: heightAtEachIndex[index],
+              offset: heightAtEachIndex.slice(0, index).reduce((a, b) => a + b, 0),
+              index,
+            };
           },
           ListHeaderComponent: (
             <DualTabsWrapper
