@@ -9,7 +9,7 @@ export type iDynamicHeaderFlatListProps<T> = {
   renderItem: (item: { item: T; index: number }) => JSX.Element;
   ListHeaderComponent?: JSX.Element;
   ListFooterComponent?: JSX.Element;
-  ref: React.RefObject<FlatList<T>>;
+  ref?: React.RefObject<FlatList<T>>;
 };
 
 const DynamicHeaderFlatListWrapper = <T,>(props: {

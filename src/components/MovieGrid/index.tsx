@@ -13,6 +13,7 @@ import {
   getPosterContainerDimensionsGrid,
 } from '../../constants/posterDimensions';
 import { getNumPostersInRow } from '../../util/getNumPostersInRow';
+import { hexToRgb } from '../../util/hexToRgb';
 
 const MovieGrid = ({
   eventId,
@@ -56,7 +57,23 @@ const MovieGrid = ({
         style,
       ]}
     >
-      {predictions.map((prediction, i) => {
+      {new Array(slots).fill(null).map((x, i) => {
+        const prediction = predictions[i];
+        if (!prediction) {
+          return (
+            <View
+              key={'grid-placeholder' + i}
+              style={{
+                height: posterDimensions.height,
+                width: posterDimensions.width,
+                margin: theme.posterMargin,
+                borderRadius: theme.borderRadius,
+                borderColor: hexToRgb(COLORS.secondary, 0.2),
+                borderWidth: 1,
+              }}
+            />
+          );
+        }
         const { contenderId } = prediction;
         const { movie, person } = getTmdbDataFromPrediction(prediction) || {};
         const accolade = contenderIdsToPhase && contenderIdsToPhase[contenderId];

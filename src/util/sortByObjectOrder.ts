@@ -34,28 +34,31 @@ export const getOrderedEvents = (unorderedEvents: WithId<EventModel>[]) => {
   return orderedEvents;
 };
 
-export const getOrderedCategories = (
+export const getOrderedPredictionSetCategories = (
   event: EventModel,
-  unorderedCategories: Record<CategoryName, iCategoryPrediction>,
+  unorderedCategories?: Record<CategoryName, iCategoryPrediction>,
 ): Array<[CategoryName, iCategoryPrediction | undefined]> => {
+  const allCategoriesInOrder = getCategoriesFromEvent(event);
+  return allCategoriesInOrder.map((catName) => {
+    const valuesForGivenKey = unorderedCategories
+      ? (unorderedCategories[catName] as iCategoryPrediction | undefined)
+      : undefined;
+    return [catName, valuesForGivenKey];
+  }, []);
+};
+
+// gets all categories from event and returns them in an ordered list
+export const getCategoriesFromEvent = (event: EventModel): Array<CategoryName> => {
   const allCategoriesInEvent = Object.keys(event.categories);
   const allNonHiddenCategoriesInEvent = allCategoriesInEvent.filter(
     (category) => !getCategoryIsHidden(event, category as CategoryName),
   );
-  return ORDERED_CATEGORIES.reduce(
-    (acc: Array<[CategoryName, iCategoryPrediction | undefined]>, key) => {
-      const valuesForGivenKey = unorderedCategories[key] as
-        | iCategoryPrediction
-        | undefined;
-      // if it's included in allNonHiddenCategoriesInEvent
-      // then we want to include it in the list
-      if (allNonHiddenCategoriesInEvent.includes(key)) {
-        acc.push([key, valuesForGivenKey]);
-      }
-      return acc;
-    },
-    [],
-  );
+  return ORDERED_CATEGORIES.reduce((acc: Array<CategoryName>, categoryName) => {
+    if (allNonHiddenCategoriesInEvent.includes(categoryName)) {
+      acc.push(categoryName);
+    }
+    return acc;
+  }, []);
 };
 
 export default sortByObjectOrder;

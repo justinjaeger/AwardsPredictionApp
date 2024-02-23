@@ -2,7 +2,7 @@ import { PredictionSet, WithId } from '../models';
 import { formatLastUpdated } from './formatDateTime';
 
 export const getLastUpdatedOnPredictionSet = (
-  predictionSet: WithId<PredictionSet>,
+  predictionSet: WithId<PredictionSet> | undefined,
   isCommunity?: boolean,
 ) => {
   const iterablePredictionData = Object.values(predictionSet?.categories || {});

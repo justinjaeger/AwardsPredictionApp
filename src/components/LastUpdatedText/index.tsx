@@ -9,14 +9,12 @@ export const LAST_UPDATED_SECTION_HEIGHT = 20;
 
 const LastUpdatedText = ({
   lastUpdated,
-  isDisabled,
   style,
 }: {
-  lastUpdated: string;
-  isDisabled?: boolean;
+  lastUpdated: string | undefined;
   style?: any;
 }) => {
-  if (isDisabled || lastUpdated === 'Invalid Date' || !lastUpdated) return null;
+  const renderBlank = !lastUpdated || lastUpdated === 'Invalid Date';
 
   return (
     <>
@@ -31,9 +29,11 @@ const LastUpdatedText = ({
           style,
         ]}
       >
-        <Body
-          style={{ color: COLORS.gray, fontWeight: '500' }}
-        >{`last update: ${lastUpdated}`}</Body>
+        {!renderBlank ? (
+          <Body
+            style={{ color: COLORS.gray, fontWeight: '500' }}
+          >{`last update: ${lastUpdated}`}</Body>
+        ) : null}
       </View>
     </>
   );

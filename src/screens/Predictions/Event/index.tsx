@@ -1,19 +1,16 @@
 import React, { useRef } from 'react';
 import PredictionTabsNavigator from '../../../navigation/PredictionTabsNavigator';
 import { useAuth } from '../../../context/AuthContext';
-import CategoryList from './CategoryList';
 import useQueryGetUserPredictions from '../../../hooks/queries/useQueryGetUserPredictions';
 import useQueryGetCommunityPredictions from '../../../hooks/queries/useQueryGetCommunityPredictions';
 import BottomFABContainer from '../../../components/BottomFABContainer';
 import { useRouteParams } from '../../../hooks/useRouteParams';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import { ScrollView, View } from 'react-native';
-import TabBodies from '../../../navigation/PredictionTabsNavigator/TabBodies';
 import useDevice from '../../../util/device';
 import { AWARDS_BODY_TO_PLURAL_STRING } from '../../../constants/awardsBodies';
 import { EVENT_TOP_TABS_HEIGHT } from '../../../components/HorizontalScrollingTabs';
 import HeaderDropdownOverlay from '../../../components/HeaderDropdownOverlay';
-import { useIsTrueAfterJavaScriptUpdates } from '../../../hooks/useIsTrueAfterJavaScriptUpdates';
 import HeaderWithEventSelect, {
   HEADER_TITLE_HEIGHT,
   HEADER_TITLE_MARGIN_TOP,
@@ -23,7 +20,18 @@ import HeaderWithEventSelect, {
 import { useEventSelect } from '../../../hooks/useEventSelect';
 import useQueryGetAllEvents from '../../../hooks/queries/useQueryGetAllEvents';
 import { getSectionTabHeight } from '../../../components/SectionTopTabs';
-import DynamicHeaderScrollViewWrapper from '../../../components/DynamicHeaderWrapper/DynamicHeaderScrollViewWrapper';
+import { getUserInfo } from '../../../util/getUserInfo';
+import DynamicHeaderFlatListWrapper from '../../../components/DynamicHeaderWrapper/DynamicHeaderFlatListWrapper';
+import EventListHeaderComponent from './EventListHeaderComponent';
+import DualTabsWrapper from '../../../components/DualTabsWrapper';
+import { CategoryName, EventModel, PredictionSet, WithId } from '../../../models';
+import { getOrderedPredictionSetCategories } from '../../../util/sortByObjectOrder';
+import CategoryListItem, { iCategoryListItem } from './CategoryListItem';
+import { StackActions, useNavigation } from '@react-navigation/native';
+import { PredictionsNavigationProp } from '../../../navigation/types';
+import useProfileUser from '../../Profile/useProfileUser';
+import { useIsTrueAfterJavaScriptUpdates } from '../../../hooks/useIsTrueAfterJavaScriptUpdates';
+import EventSkeleton from '../../../components/Skeletons/EventSkeleton';
 
 /**
  * TODO:
@@ -37,13 +45,41 @@ import DynamicHeaderScrollViewWrapper from '../../../components/DynamicHeaderWra
  * - Although it's still slow when you switch from Academy Awards to Golden Globes with no posters :/
  * - But even still, it's reeeeally long when switching to the WITH-photos
  */
+
+/**
+ * Returns an array with two items per item, the first being the user's prediction and the second being the community's prediction
+ *
+ * TODO: rename the func... dual predictions data?
+ */
+const getPredictionsData = (
+  userPredictionSet: WithId<PredictionSet> | undefined,
+  communityPredictionSet: WithId<PredictionSet> | undefined,
+  event: EventModel,
+): iCategoryListItem[][] => {
+  const orderedUserPredictions = getOrderedPredictionSetCategories(
+    event,
+    userPredictionSet?.categories,
+  );
+  const orderedCommuintyPredictions = getOrderedPredictionSetCategories(
+    event,
+    communityPredictionSet?.categories,
+  );
+  const result = orderedUserPredictions.map((category, i) => {
+    return [category, orderedCommuintyPredictions[i]];
+  });
+  return result;
+};
+
 const Event = () => {
   const verticalScrollRef = useRef<ScrollView>(null);
 
   const { isPad } = useDevice();
-  const { userInfo } = useRouteParams();
+  const navigation = useNavigation<PredictionsNavigationProp>();
+  const { userInfo, phase, noShorts, isLeaderboard } = useRouteParams();
   const { userId: authUserId } = useAuth();
-  const userId = userInfo?.userId || authUserId || '';
+  const userId = userInfo?.userId || authUserId || undefined;
+  const { user } = useProfileUser(userId);
+  const isAuthProfile = user?._id === authUserId;
 
   const { data: events } = useQueryGetAllEvents();
   const { event, year, yyyymmdd, setEvent, setYear } = useEventSelect();
@@ -65,10 +101,34 @@ const Event = () => {
 
   if (!event) return null;
 
+  const onSelectCategory = async (category: CategoryName, isCommunityTab?: boolean) => {
+    if (!event) return;
+    const params = {
+      userInfo: userInfo || getUserInfo(user),
+      eventId: event._id,
+      category,
+      phase,
+      yyyymmdd,
+      noShorts,
+      isLeaderboard,
+    };
+    if (isAuthProfile || isCommunityTab) {
+      navigation.navigate('Category', params);
+    } else {
+      navigation.dispatch(StackActions.push('Category', params));
+    }
+  };
+
+  const data = getPredictionsData(
+    userPredictionData || undefined,
+    communityPredictionData || undefined,
+    event,
+  );
+
   return (
     <BackgroundWrapper>
       <HeaderDropdownOverlay />
-      <DynamicHeaderScrollViewWrapper
+      <DynamicHeaderFlatListWrapper<iCategoryListItem[]>
         scrollViewRef={verticalScrollRef}
         topOnlyContent={{
           height:
@@ -110,32 +170,69 @@ const Event = () => {
             </View>
           ),
         }}
-      >
-        <TabBodies
-          personal={
-            <CategoryList
-              key={'p'}
-              tab={'personal'}
-              predictionData={userPredictionData ?? undefined}
-              isLoading={isLoadingPersonal}
-              event={event}
-              yyyymmdd={yyyymmdd}
-              isFirstRender={!trueAfterJavaScriptRuns}
+        flatListProps={{
+          data,
+          keyExtractor: (item) => item[0][0], // the category name
+          renderItem: ({ item, index }) => {
+            const category = item[0][0];
+            const predictions = item[0][1]?.predictions;
+            const numPredictions = predictions?.length ?? 0;
+            if (!trueAfterJavaScriptRuns && numPredictions > 0 && index > 2) {
+              return (
+                <View key={'event-skeleton' + category}>
+                  <EventSkeleton
+                    event={event}
+                    category={category}
+                    numPredictions={numPredictions}
+                  />
+                </View>
+              );
+            }
+            return (
+              <DualTabsWrapper
+                tab1={
+                  <CategoryListItem
+                    event={event}
+                    item={item[0]}
+                    onPress={() => onSelectCategory(category, false)}
+                  />
+                }
+                tab2={
+                  <CategoryListItem
+                    event={event}
+                    item={item[1]}
+                    onPress={() => onSelectCategory(category, true)}
+                  />
+                }
+              />
+            );
+          },
+          ListHeaderComponent: (
+            <DualTabsWrapper
+              tab1={
+                <EventListHeaderComponent
+                  tab={'personal'}
+                  predictionData={userPredictionData || undefined}
+                  isLoading={isLoadingPersonal}
+                  event={event}
+                  yyyymmdd={yyyymmdd}
+                />
+              }
+              tab2={
+                <EventListHeaderComponent
+                  tab={'community'}
+                  predictionData={communityPredictionData || undefined}
+                  isLoading={isLoadingCommunity}
+                  event={event}
+                  yyyymmdd={yyyymmdd}
+                />
+              }
             />
-          }
-          community={
-            <CategoryList
-              key={'c'}
-              tab={'community'}
-              predictionData={communityPredictionData ?? undefined}
-              isLoading={isLoadingCommunity}
-              event={event}
-              yyyymmdd={yyyymmdd}
-              isFirstRender={!trueAfterJavaScriptRuns}
-            />
-          }
-        />
-      </DynamicHeaderScrollViewWrapper>
+          ),
+          ListFooterComponent: undefined,
+          ref: undefined,
+        }}
+      />
       <BottomFABContainer />
     </BackgroundWrapper>
   );

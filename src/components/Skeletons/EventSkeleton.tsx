@@ -3,29 +3,41 @@ import { View, useWindowDimensions } from 'react-native';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
+import { CATEGORY_TOP_AREA_HEIGHT } from '../../screens/Predictions/Event/constants';
+import { getNumPostersInRow } from '../../util/getNumPostersInRow';
+import { getCategoryListItemHeight } from '../../util/getCategoryListItemHeight';
+import { CategoryName, EventModel } from '../../models';
 import { getPosterDimensionsByWidth } from '../../constants/posterDimensions';
-import {
-  CATEGORY_BOTTOM_AREA_HEIGHT,
-  CATEGORY_TOP_AREA_HEIGHT,
-} from '../../screens/Predictions/Event/constants';
 
 const EventSkeleton = ({
-  numPostersInRow = 5,
-  numRowsToRender = 1,
+  event,
+  category,
+  numPredictions,
 }: {
-  numPostersInRow?: number;
-  numRowsToRender?: number;
+  event: EventModel;
+  category: CategoryName;
+  numPredictions: number;
 }) => {
-  const { width: windowWidth } = useWindowDimensions();
-  const totalWidth = windowWidth - theme.windowMargin - theme.posterMargin;
-  const { width, height } = getPosterDimensionsByWidth(
-    (totalWidth - theme.windowMargin * 2 + theme.posterMargin) / numPostersInRow,
+  const { width } = useWindowDimensions();
+
+  const categoryData = event.categories[category];
+  const slots = categoryData.slots ?? 5;
+  const numPostersInRow = getNumPostersInRow(slots);
+  const numRowsToRender = Math.ceil(slots / numPostersInRow);
+  const height = getCategoryListItemHeight({
+    categoryName: category,
+    event,
+    numUserPredictionsInCategory: numPredictions,
+    windowWidth: width,
+  });
+  const { width: posterWidth, height: posterHeight } = getPosterDimensionsByWidth(
+    (width - theme.windowMargin * 2 + theme.posterMargin) / numPostersInRow,
   );
 
   return (
     <View
       style={{
-        height: '100%',
+        height,
         marginLeft: theme.windowMargin,
         marginRight: theme.windowMargin,
       }}
@@ -40,41 +52,38 @@ const EventSkeleton = ({
             .fill(null)
             .map((x, i) => (
               <View
-                key={i}
+                key={'event-skeleton-row' + i}
                 style={{
                   flexDirection: 'column',
                   alignItems: 'flex-start',
                 }}
               >
-                <View
-                  style={{
-                    height: CATEGORY_TOP_AREA_HEIGHT,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
+                {i === 0 ? (
                   <View
                     style={{
-                      height: '33%',
-                      width: 100,
-                      borderRadius: theme.borderRadius,
+                      height: CATEGORY_TOP_AREA_HEIGHT,
+                      alignItems: 'center',
+                      justifyContent: 'center',
                     }}
-                  />
-                </View>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    paddingBottom: CATEGORY_BOTTOM_AREA_HEIGHT,
-                  }}
-                >
+                  >
+                    <View
+                      style={{
+                        height: '33%',
+                        width: 100,
+                        borderRadius: theme.borderRadius,
+                      }}
+                    />
+                  </View>
+                ) : null}
+                <View style={{ flexDirection: 'row' }}>
                   {Array(numPostersInRow)
                     .fill(null)
                     .map((y, j) => (
                       <View
-                        key={j}
+                        key={`event-skeleton-poster${j}`}
                         style={{
-                          width,
-                          height,
+                          width: posterWidth,
+                          height: posterHeight,
                           margin: theme.posterMargin,
                           borderRadius: theme.borderRadius,
                         }}

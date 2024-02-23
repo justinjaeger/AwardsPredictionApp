@@ -1,20 +1,8 @@
-import React, { useCallback } from 'react';
-import { View, useWindowDimensions } from 'react-native';
-import { PredictionsNavigationProp } from '../../../navigation/types';
-import SignedOutState from '../../../components/SignedOutState';
+import React from 'react';
+import { View } from 'react-native';
 import LastUpdatedText from '../../../components/LastUpdatedText';
 import { useAuth } from '../../../context/AuthContext';
-import { StackActions, useNavigation } from '@react-navigation/native';
-import {
-  CategoryName,
-  EventModel,
-  PredictionSet,
-  WithId,
-  iCategoryPrediction,
-} from '../../../models';
-import EventSkeleton from '../../../components/Skeletons/EventSkeleton';
-import { getOrderedCategories } from '../../../util/sortByObjectOrder';
-import CategoryListItem from './CategoryListItem';
+import { EventModel, PredictionSet, WithId } from '../../../models';
 import { useRouteParams } from '../../../hooks/useRouteParams';
 import useProfileUser from '../../Profile/useProfileUser';
 import LeaderboardStats from '../../Leaderboard/Leaderboard/LeaderboardStats';
@@ -24,82 +12,28 @@ import useQueryGetFollowingUsers from '../../../hooks/queries/useQueryGetFollowi
 import theme from '../../../constants/theme';
 import { truncateText } from '../../../util/truncateText';
 import { getLastUpdatedOnPredictionSet } from '../../../util/getLastUpdatedOnPredictionSet';
-import { getUserInfo } from '../../../util/getUserInfo';
-import { getNumPostersInRow } from '../../../util/getNumPostersInRow';
-import { getCategoryListItemHeight } from '../../../util/getCategoryListItemHeight';
 
-const CategoryList = ({
+const EventListHeaderComponent = ({
   tab,
   predictionData,
-  isLoading,
+  isLoading, // TODO: need this when viewing event with leaderboard
   event,
   yyyymmdd,
-  isFirstRender,
 }: {
   tab: 'personal' | 'community';
   predictionData: WithId<PredictionSet> | undefined;
   isLoading: boolean;
   event: WithId<EventModel> | undefined;
   yyyymmdd?: number;
-  isFirstRender?: boolean;
 }) => {
-  const { width } = useWindowDimensions();
   const { userId: authUserId } = useAuth();
-  const { userInfo, phase, noShorts, isLeaderboard } = useRouteParams();
+  const { userInfo, phase, noShorts } = useRouteParams();
   const { user } = useProfileUser(userInfo?.userId || authUserId);
-  const navigation = useNavigation<PredictionsNavigationProp>();
+  const isAuthProfile = user?._id === authUserId;
+
   const { usersIdsAuthUserIsFollowing } = useQueryGetFollowingUsers();
 
   const leaderboard = event && phase && getLeaderboardFromEvent(event, phase, noShorts);
-
-  // TODO: userInfo doesn't contain the auth user. So just assume it's the auth user
-  const isAuthProfile = user?._id === authUserId;
-
-  const onSelectCategory = async (category: CategoryName) => {
-    if (!event) return;
-    // setPersonalCommunityTab(tab);
-    const params = {
-      userInfo: userInfo || getUserInfo(user),
-      eventId: event._id,
-      category,
-      phase,
-      yyyymmdd,
-      noShorts,
-      isLeaderboard,
-    };
-    if (isAuthProfile || tab === 'community') {
-      navigation.navigate('Category', params);
-    } else {
-      navigation.dispatch(StackActions.push('Category', params));
-    }
-  };
-
-  const onPress = useCallback(async (category: CategoryName) => {
-    onSelectCategory(category);
-  }, []);
-
-  if (!user?._id && tab === 'personal') {
-    return <SignedOutState />;
-  }
-
-  if (isLoading ?? !predictionData) {
-    const firstCat = Object.values(event?.categories ?? {})[0];
-    firstCat.slots = 5;
-    return (
-      <EventSkeleton
-        numRowsToRender={3}
-        numPostersInRow={getNumPostersInRow(firstCat.slots)}
-      />
-    );
-  }
-
-  const unorderedCategories = (predictionData?.categories || {}) as Record<
-    CategoryName,
-    iCategoryPrediction
-  >;
-  const orderedPredictions = event
-    ? getOrderedCategories(event, unorderedCategories)
-    : [];
 
   const leaderboardRankings =
     Object.values(user?.leaderboardRankings?.[event?._id ?? ''] ?? {}) ?? [];
@@ -117,9 +51,8 @@ const CategoryList = ({
     predictionData,
     tab === 'community',
   );
-  const showLastUpdated = !displayLbStats && lastUpdatedString;
 
-  // TODO: ALSO ADD THE HEIGHT OF THE LEADERBOARD SECTION
+  console.log('header', displayLbStats);
 
   return (
     <View style={{ width: '100%' }}>
@@ -182,40 +115,11 @@ const CategoryList = ({
           )}
           <View style={{ marginBottom: displayFollowButton ? 10 : 20 }} />
         </>
-      ) : null}
-      {showLastUpdated ? <LastUpdatedText lastUpdated={lastUpdatedString} /> : null}
-      {event
-        ? orderedPredictions.map((item, i) => {
-            const [categoryName, categoryPrediction] = item;
-            const numPredictions = categoryPrediction?.predictions?.length ?? 0;
-            if (isFirstRender && numPredictions > 0 && i > 2) {
-              const categoryData = event.categories[categoryName];
-              const slots = categoryData.slots ?? 5;
-              const numPostersInRow = getNumPostersInRow(slots);
-              const height = getCategoryListItemHeight({
-                categoryName,
-                event,
-                numUserPredictionsInCategory: numPredictions,
-                windowWidth: width,
-              });
-              return (
-                <View style={{ height }} key={'event-skeleton' + i}>
-                  <EventSkeleton numPostersInRow={numPostersInRow} />
-                </View>
-              );
-            }
-            return (
-              <CategoryListItem
-                key={categoryName}
-                item={item}
-                onPress={onPress}
-                event={event}
-              />
-            );
-          })
-        : null}
+      ) : (
+        <LastUpdatedText lastUpdated={lastUpdatedString} />
+      )}
     </View>
   );
 };
 
-export default CategoryList;
+export default EventListHeaderComponent;

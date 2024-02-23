@@ -20,12 +20,14 @@ import useQueryGetEventAccolades from '../../../hooks/queries/useQueryGetEventAc
 import CustomIcon from '../../../components/CustomIcon';
 import { CATEGORY_BOTTOM_AREA_HEIGHT, CATEGORY_TOP_AREA_HEIGHT } from './constants';
 
+export type iCategoryListItem = [CategoryName, iCategoryPrediction | undefined];
+
 const CategoryListItem = ({
   item: [category, categoryPrediction],
   onPress,
   event,
 }: {
-  item: [CategoryName, iCategoryPrediction | undefined];
+  item: iCategoryListItem;
   onPress: (category: CategoryName) => void;
   event: WithId<EventModel>;
 }) => {
@@ -75,7 +77,7 @@ const CategoryListItem = ({
 
   return (
     <TouchableHighlight
-      key={category}
+      key={'categorylistitem' + category}
       style={{
         width: '100%',
         alignItems: 'flex-start',
@@ -104,27 +106,30 @@ const CategoryListItem = ({
               {`${numCorrectInCategory}/${slots}`}
             </SubHeader>
           ) : (
-            <CustomIcon
-              name={'chevron-right-outline'}
-              color={COLORS.gray}
-              size={24}
-              styles={{ right: -6 }}
-            />
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              {truncatedPredictions.length === 0 ? (
+                <SubHeader style={{ fontWeight: '400' }}>Add</SubHeader>
+              ) : null}
+              <CustomIcon
+                name={'chevron-right-outline'}
+                color={COLORS.gray}
+                size={24}
+                styles={{ right: -6 }}
+              />
+            </View>
           )}
         </View>
-        {truncatedPredictions.length ? (
-          <MovieGrid
-            eventId={event?._id}
-            predictions={truncatedPredictions}
-            categoryInfo={awardsBodyCategories[category]}
-            showAccolades={showAccolades}
-            phase={phase}
-            noLine
-            style={{
-              paddingBottom: CATEGORY_BOTTOM_AREA_HEIGHT,
-            }}
-          />
-        ) : null}
+        <MovieGrid
+          eventId={event?._id}
+          predictions={truncatedPredictions}
+          categoryInfo={awardsBodyCategories[category]}
+          showAccolades={showAccolades}
+          phase={phase}
+          noLine
+          style={{
+            paddingBottom: CATEGORY_BOTTOM_AREA_HEIGHT,
+          }}
+        />
       </>
     </TouchableHighlight>
   );
