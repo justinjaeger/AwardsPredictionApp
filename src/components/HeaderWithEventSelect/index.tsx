@@ -19,7 +19,7 @@ const HeaderWithEventSelect = ({
   setYear,
 }: {
   title: string;
-  event: WithId<EventModel>;
+  event: WithId<EventModel> | undefined;
   setEvent: (event: WithId<EventModel>) => void;
   eventOptions: WithId<EventModel>[];
   setYear: (year: number) => void;
@@ -30,6 +30,7 @@ const HeaderWithEventSelect = ({
       return [...acc, e.year];
     }, [] as number[])
     .sort((a, b) => b - a);
+  console.log('yearOptions', yearOptions);
 
   return (
     <View>
@@ -59,7 +60,7 @@ const HeaderWithEventSelect = ({
           options={yearOptions.map((y) => ({
             text: y.toString(),
             value: y,
-            isSelected: y === event.year,
+            isSelected: y === event?.year,
           }))}
           onSelect={(value) => setYear(value)}
         />

@@ -16,6 +16,7 @@ const BottomTabNavigator = () => {
       screenOptions={{
         headerShown: false,
       }}
+      initialRouteName="Predictions"
     >
       <Tab.Screen
         name="Social"

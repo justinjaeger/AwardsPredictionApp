@@ -6,7 +6,7 @@ import useQueryGetCommunityPredictions from '../../../hooks/queries/useQueryGetC
 import BottomFABContainer from '../../../components/BottomFABContainer';
 import { useRouteParams } from '../../../hooks/useRouteParams';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
-import { ScrollView, View } from 'react-native';
+import { ScrollView, View, useWindowDimensions } from 'react-native';
 import useDevice from '../../../util/device';
 import { AWARDS_BODY_TO_PLURAL_STRING } from '../../../constants/awardsBodies';
 import { EVENT_TOP_TABS_HEIGHT } from '../../../components/HorizontalScrollingTabs';
@@ -32,6 +32,7 @@ import { PredictionsNavigationProp } from '../../../navigation/types';
 import useProfileUser from '../../Profile/useProfileUser';
 import { useIsTrueAfterJavaScriptUpdates } from '../../../hooks/useIsTrueAfterJavaScriptUpdates';
 import EventSkeleton from '../../../components/Skeletons/EventSkeleton';
+import { getCategoryListItemHeight } from '../../../util/getCategoryListItemHeight';
 
 /**
  * TODO:
@@ -54,8 +55,9 @@ import EventSkeleton from '../../../components/Skeletons/EventSkeleton';
 const getPredictionsData = (
   userPredictionSet: WithId<PredictionSet> | undefined,
   communityPredictionSet: WithId<PredictionSet> | undefined,
-  event: EventModel,
+  event: EventModel | undefined,
 ): iCategoryListItem[][] => {
+  if (!event) return [];
   const orderedUserPredictions = getOrderedPredictionSetCategories(
     event,
     userPredictionSet?.categories,
@@ -73,6 +75,7 @@ const getPredictionsData = (
 const Event = () => {
   const verticalScrollRef = useRef<ScrollView>(null);
 
+  const { width } = useWindowDimensions();
   const { isPad } = useDevice();
   const navigation = useNavigation<PredictionsNavigationProp>();
   const { userInfo, phase, noShorts, isLeaderboard } = useRouteParams();
@@ -99,8 +102,6 @@ const Event = () => {
     userId,
   ]);
 
-  if (!event) return null;
-
   const onSelectCategory = async (category: CategoryName, isCommunityTab?: boolean) => {
     if (!event) return;
     const params = {
@@ -125,6 +126,8 @@ const Event = () => {
     event,
   );
 
+  const isLoading = isLoadingPersonal || isLoadingCommunity;
+
   return (
     <BackgroundWrapper>
       <HeaderDropdownOverlay />
@@ -147,9 +150,11 @@ const Event = () => {
             />
           ),
         }}
-        titleWhenCollapsed={`${AWARDS_BODY_TO_PLURAL_STRING[event?.awardsBody]} ${
-          event?.year ?? ''
-        }`}
+        titleWhenCollapsed={
+          event
+            ? `${AWARDS_BODY_TO_PLURAL_STRING[event.awardsBody]} ${event?.year ?? ''}`
+            : ''
+        }
         persistedContent={{
           height: predictionTabHeight,
           component: (
@@ -174,17 +179,18 @@ const Event = () => {
           data,
           keyExtractor: (item) => item[0][0], // the category name
           renderItem: ({ item, index }) => {
-            const category = item[0][0];
+            const category = item[0][0] as CategoryName | undefined;
             const predictions = item[0][1]?.predictions;
             const numPredictions = predictions?.length ?? 0;
-            if (!trueAfterJavaScriptRuns && numPredictions > 0 && index > 2) {
+            if (
+              isLoading ||
+              !event ||
+              !category ||
+              (!trueAfterJavaScriptRuns && numPredictions > 0 && index > 2)
+            ) {
               return (
                 <View key={'event-skeleton' + category}>
-                  <EventSkeleton
-                    event={event}
-                    category={category}
-                    numPredictions={numPredictions}
-                  />
+                  <EventSkeleton event={event} category={category} />
                 </View>
               );
             }
@@ -206,6 +212,16 @@ const Event = () => {
                 }
               />
             );
+          },
+          getItemLayout: (data, index) => {
+            if (!data) return { length: 0, offset: 0 * index, index };
+            const [category] = data[index][0];
+            const height = getCategoryListItemHeight({
+              categoryName: category,
+              event,
+              windowWidth: width,
+            });
+            return { length: height, offset: height * index, index };
           },
           ListHeaderComponent: (
             <DualTabsWrapper

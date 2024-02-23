@@ -115,7 +115,7 @@ const MovieGrid = ({
                 isUnaccoladed={showAccolades && (!accoladeMatchesPhase || !accolade)}
               />
             ) : (
-              <MoviePosterSkeleton />
+              <MoviePosterSkeleton posterDimensions={posterDimensions} />
             )}
           </View>
         );

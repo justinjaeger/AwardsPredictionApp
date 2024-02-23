@@ -38,6 +38,7 @@ const HeaderDropdownOverlay = (): React.ReactElement => {
       >
         {dropdownOptions.map((o, i) => (
           <TouchableHighlight
+            key={'y-dropdown' + o.text}
             onPress={() => {
               o.onPress();
               closeDropdown();

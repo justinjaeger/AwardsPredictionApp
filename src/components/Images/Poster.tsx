@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { ImageStyle, StyleProp, TouchableHighlight, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import COLORS from '../../constants/colors';
@@ -28,7 +28,6 @@ const Poster = ({
   isUnaccoladed,
 }: iPosterProps) => {
   const { width, height } = posterDimensions;
-  const [isPressed, setIsPressed] = useState<boolean>(false);
 
   const accoladeColor = accolade && getAccoladeColor(accolade);
 
@@ -39,15 +38,12 @@ const Poster = ({
     borderWidth,
     borderColor: accolade ? accoladeColor : isUnaccoladed ? undefined : COLORS.secondary,
     borderRadius: BORDER_RADIUS,
-    opacity: isPressed ? 0.8 : 1,
     ...(styles as Record<string, unknown>),
   };
 
   return (
     <TouchableHighlight
       onPress={onPress || undefined}
-      onPressIn={() => setIsPressed(true)}
-      onPressOut={() => setIsPressed(false)}
       underlayColor={'#FFF'}
       disabled={!onPress}
     >

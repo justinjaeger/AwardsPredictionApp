@@ -9,24 +9,15 @@ import { getNumPostersInRow } from './getNumPostersInRow';
 export const getCategoryListItemHeight = ({
   categoryName,
   event,
-  numUserPredictionsInCategory,
   windowWidth,
 }: {
-  categoryName: CategoryName;
-  event: EventModel;
-  numUserPredictionsInCategory: number;
+  categoryName: CategoryName | undefined;
+  event: EventModel | undefined;
   windowWidth: number;
 }) => {
-  // if no predictions,
-  if (numUserPredictionsInCategory === 0) {
-    return CATEGORY_TOP_AREA_HEIGHT;
-  }
-
   // determine how many rows we're going to show (e.g. best picture is 2)
-  const categoryData = event?.categories[categoryName];
-  if (!categoryData) return 0;
 
-  const slots = categoryData.slots ?? 5;
+  const slots = !categoryName ? 5 : event?.categories[categoryName]?.slots ?? 5;
   const moviesInRow = getNumPostersInRow(slots);
 
   // if there are more slots than movies in row, it's going to have extra rows

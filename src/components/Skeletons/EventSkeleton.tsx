@@ -12,26 +12,24 @@ import { getPosterDimensionsByWidth } from '../../constants/posterDimensions';
 const EventSkeleton = ({
   event,
   category,
-  numPredictions,
 }: {
-  event: EventModel;
-  category: CategoryName;
-  numPredictions: number;
+  event: EventModel | undefined;
+  category: CategoryName | undefined;
 }) => {
   const { width } = useWindowDimensions();
 
-  const categoryData = event.categories[category];
-  const slots = categoryData.slots ?? 5;
+  const isLoading = !event || !category;
+  const slots = isLoading ? 5 : event.categories[category]?.slots ?? 5;
   const numPostersInRow = getNumPostersInRow(slots);
   const numRowsToRender = Math.ceil(slots / numPostersInRow);
   const height = getCategoryListItemHeight({
     categoryName: category,
     event,
-    numUserPredictionsInCategory: numPredictions,
     windowWidth: width,
   });
   const { width: posterWidth, height: posterHeight } = getPosterDimensionsByWidth(
-    (width - theme.windowMargin * 2 + theme.posterMargin) / numPostersInRow,
+    (width - theme.windowMargin * 2 - theme.posterMargin * 2 * numPostersInRow) /
+      numPostersInRow,
   );
 
   return (

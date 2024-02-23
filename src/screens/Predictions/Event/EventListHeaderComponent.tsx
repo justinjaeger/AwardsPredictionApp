@@ -52,8 +52,6 @@ const EventListHeaderComponent = ({
     tab === 'community',
   );
 
-  console.log('header', displayLbStats);
-
   return (
     <View style={{ width: '100%' }}>
       {displayLbStats ? (
