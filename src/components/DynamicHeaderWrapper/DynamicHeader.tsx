@@ -63,6 +63,11 @@ const DynamicHeader = ({
     extrapolate: 'clamp',
   });
 
+  const animateTopZIndex = animHeaderValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: [maxHeaderHeight, minHeaderHeight],
+  });
+
   return (
     <>
       <Animated.View
@@ -92,6 +97,7 @@ const DynamicHeader = ({
               },
               {
                 opacity: animateTopContentOpacity,
+                zIndex: animateTopZIndex,
               },
             ]}
           >
