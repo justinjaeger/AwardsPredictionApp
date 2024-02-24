@@ -11,13 +11,13 @@ import useDevice from '../../../util/device';
 import { AWARDS_BODY_TO_PLURAL_STRING } from '../../../constants/awardsBodies';
 import { EVENT_TOP_TABS_HEIGHT } from '../../../components/HorizontalScrollingTabs';
 import HeaderDropdownOverlay from '../../../components/HeaderDropdownOverlay';
-import HeaderWithEventSelect, {
+import HeaderWithYearDropdown, {
   BACK_BUTTON_HEIGHT,
   HEADER_TITLE_HEIGHT,
   HEADER_TITLE_MARGIN_TOP,
   HEADER_TOP_TAB_MARGIN_BOTTOM,
   HEADER_TOP_TAB_MARGIN_TOP,
-} from '../../../components/HeaderWithEventSelect';
+} from '../../../components/HeaderWithYearDropdown';
 import { useEventSelect } from '../../../hooks/useEventSelect';
 import useQueryGetAllEvents from '../../../hooks/queries/useQueryGetAllEvents';
 import { getSectionTabHeight } from '../../../components/SectionTopTabs';
@@ -34,25 +34,8 @@ import useProfileUser from '../../Profile/useProfileUser';
 import { useIsTrueAfterJavaScriptUpdates } from '../../../hooks/useIsTrueAfterJavaScriptUpdates';
 import EventSkeleton from '../../../components/Skeletons/EventSkeleton';
 import { getCategoryListItemHeight } from '../../../util/getCategoryListItemHeight';
+import EventTopTabs from '../../../components/EventTopTabs';
 
-/**
- * TODO:
- * - render back button when going back is an option
- * - had some bug where it wasn't passing "event" into CategoryList I think, since it didn't navigate when I pressed a category
- *
- * When changing events, it's pretty slow
- * - Could optimize by not rendering all of the javascript which is not in view
- * - But it might be hard to determine what the height of the out-of-view javascript is
- * - maybe we just don't render posters if you're out of view!
- * - Although it's still slow when you switch from Academy Awards to Golden Globes with no posters :/
- * - But even still, it's reeeeally long when switching to the WITH-photos
- */
-
-/**
- * Returns an array with two items per item, the first being the user's prediction and the second being the community's prediction
- *
- * TODO: rename the func... dual predictions data?
- */
 const getPredictionsData = (
   userPredictionSet: WithId<PredictionSet> | undefined,
   communityPredictionSet: WithId<PredictionSet> | undefined,
@@ -142,14 +125,30 @@ const Event = () => {
             HEADER_TOP_TAB_MARGIN_TOP +
             (disableBack ? 0 : BACK_BUTTON_HEIGHT),
           component: (
-            <HeaderWithEventSelect
-              title={'Predictions'}
-              event={event}
-              setEvent={setEvent}
-              eventOptions={events ?? []}
-              setYear={setYear}
-              disableBack={disableBack}
-            />
+            <View
+              style={{
+                marginTop: HEADER_TOP_TAB_MARGIN_TOP,
+                marginBottom: HEADER_TOP_TAB_MARGIN_BOTTOM,
+              }}
+            >
+              <HeaderWithYearDropdown
+                title={'Predictions'}
+                event={event}
+                eventOptions={events ?? []}
+                setYear={setYear}
+                disableBack={disableBack}
+              />
+              {event ? (
+                <EventTopTabs
+                  style={{
+                    marginTop: HEADER_TOP_TAB_MARGIN_TOP,
+                    marginBottom: HEADER_TOP_TAB_MARGIN_BOTTOM,
+                  }}
+                  selectedEvent={event}
+                  setEvent={setEvent}
+                />
+              ) : null}
+            </View>
           ),
         }}
         titleWhenCollapsed={

@@ -22,19 +22,20 @@ import useQueryGetAllEvents from '../../../hooks/queries/useQueryGetAllEvents';
 import { AWARDS_BODY_TO_PLURAL_STRING } from '../../../constants/awardsBodies';
 import LeaderboardStats from './LeaderboardStats';
 import HeaderDropdownOverlay from '../../../components/HeaderDropdownOverlay';
-import HeaderWithLeaderboardSelect, {
+import HeaderWithYearDropdown, {
   BACK_BUTTON_HEIGHT,
   HEADER_TITLE_HEIGHT,
   HEADER_TITLE_MARGIN_TOP,
   HEADER_TOP_TAB_MARGIN_BOTTOM,
   HEADER_TOP_TAB_MARGIN_TOP,
-} from '../../../components/HeaderWithLeaderboardSelect';
+} from '../../../components/HeaderWithYearDropdown';
 import { EVENT_TOP_TABS_HEIGHT } from '../../../components/HorizontalScrollingTabs';
 import { useEventSelect } from '../../../hooks/useEventSelect';
 import SectionTopTabs from '../../../components/SectionTopTabs';
 import DynamicHeaderFlatListWrapper from '../../../components/DynamicHeaderWrapper/DynamicHeaderFlatListWrapper';
 import COLORS from '../../../constants/colors';
 import { useRouteParams } from '../../../hooks/useRouteParams';
+import LeaderboardTopTabs from '../../../components/LeaderboardTabs';
 
 const Leaderboard = () => {
   const verticalScrollRef = useRef<ScrollView>(null);
@@ -117,22 +118,33 @@ const Leaderboard = () => {
           component: (
             <View
               style={{
+                marginTop: HEADER_TOP_TAB_MARGIN_TOP,
+                paddingBottom: HEADER_TOP_TAB_MARGIN_BOTTOM,
                 borderBottomColor: COLORS.primaryLight,
                 borderBottomWidth: 1,
               }}
             >
-              <HeaderWithLeaderboardSelect
+              <HeaderWithYearDropdown
                 title={'Leaderboards'}
                 event={event}
-                phase={phase}
-                setLeaderboard={(event, phase) => {
-                  setPhase(phase);
-                  setEvent(event);
-                }}
                 eventOptions={eventsWithLeaderboard}
                 setYear={setYear}
                 disableBack={disableBack}
               />
+              {event && phase ? (
+                <LeaderboardTopTabs
+                  style={{
+                    marginTop: HEADER_TOP_TAB_MARGIN_TOP,
+                    marginBottom: HEADER_TOP_TAB_MARGIN_BOTTOM,
+                  }}
+                  selectedEvent={event}
+                  phase={phase}
+                  setLeaderboard={(event, phase) => {
+                    setPhase(phase);
+                    setEvent(event);
+                  }}
+                />
+              ) : null}
             </View>
           ),
         }}
