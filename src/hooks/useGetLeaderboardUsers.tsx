@@ -44,10 +44,14 @@ const useGetLeaderboardUsers = ({
     setIsLoading(false);
   };
 
+  const hasEventIdAndPhase = eventId && phase;
+
   useEffect(() => {
     // fetch page when land on screen
-    fetchPage();
-  }, []);
+    if (hasEventIdAndPhase) {
+      fetchPage();
+    }
+  }, [hasEventIdAndPhase]);
 
   // export fetchPage to allow user to fetch next page
   return { leaderboardRankings, fetchPage, isLoading, hasNextPage };

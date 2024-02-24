@@ -22,17 +22,16 @@ import useQueryGetAllEvents from '../../../hooks/queries/useQueryGetAllEvents';
 import { AWARDS_BODY_TO_PLURAL_STRING } from '../../../constants/awardsBodies';
 import LeaderboardStats from './LeaderboardStats';
 import HeaderDropdownOverlay from '../../../components/HeaderDropdownOverlay';
-import HeaderWithEventSelect, {
+import HeaderWithLeaderboardSelect, {
   HEADER_TITLE_HEIGHT,
   HEADER_TITLE_MARGIN_TOP,
   HEADER_TOP_TAB_MARGIN_BOTTOM,
   HEADER_TOP_TAB_MARGIN_TOP,
-} from '../../../components/HeaderWithEventSelect';
+} from '../../../components/HeaderWithLeaderboardSelect';
 import { EVENT_TOP_TABS_HEIGHT } from '../../../components/HorizontalScrollingTabs';
 import { useEventSelect } from '../../../hooks/useEventSelect';
 import SectionTopTabs from '../../../components/SectionTopTabs';
 import DynamicHeaderFlatListWrapper from '../../../components/DynamicHeaderWrapper/DynamicHeaderFlatListWrapper';
-import LeaderboardPhaseTabs from '../../../components/LeaderboardTabs';
 import COLORS from '../../../constants/colors';
 
 const Leaderboard = () => {
@@ -107,8 +106,6 @@ const Leaderboard = () => {
             HEADER_TITLE_HEIGHT +
             HEADER_TITLE_MARGIN_TOP +
             EVENT_TOP_TABS_HEIGHT +
-            EVENT_TOP_TABS_HEIGHT +
-            HEADER_TOP_TAB_MARGIN_BOTTOM +
             HEADER_TOP_TAB_MARGIN_BOTTOM +
             HEADER_TOP_TAB_MARGIN_TOP,
           component: (
@@ -118,18 +115,16 @@ const Leaderboard = () => {
                 borderBottomWidth: 1,
               }}
             >
-              <HeaderWithEventSelect
+              <HeaderWithLeaderboardSelect
                 title={'Leaderboards'}
                 event={event}
-                setEvent={setEvent}
+                phase={phase}
+                setLeaderboard={(event, phase) => {
+                  setPhase(phase);
+                  setEvent(event);
+                }}
                 eventOptions={eventsWithLeaderboard}
                 setYear={setYear}
-              />
-              <LeaderboardPhaseTabs
-                event={event}
-                phase={phase}
-                setPhase={setPhase}
-                style={{ marginBottom: HEADER_TOP_TAB_MARGIN_BOTTOM }}
               />
             </View>
           ),
@@ -146,6 +141,7 @@ const Leaderboard = () => {
             if (!item) return <></>;
             return <LeaderboardListItem leaderboardRanking={item} />;
           },
+          initialNumToRender: 10,
           ListHeaderComponent: (
             <>
               {user && userLeaderboard ? (

@@ -175,6 +175,7 @@ const Event = () => {
           ),
         }}
         flatListProps={{
+          initialNumToRender: 3,
           data,
           keyExtractor: (item) => item[0][0], // the category name
           renderItem: ({ item, index }) => {

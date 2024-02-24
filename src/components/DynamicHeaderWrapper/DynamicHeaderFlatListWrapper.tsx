@@ -14,6 +14,7 @@ export type iDynamicHeaderFlatListProps<T> = {
     index: number,
   ) => { length: number; offset: number; index: number };
   ref?: React.RefObject<FlatList<T>>;
+  initialNumToRender?: number;
 };
 
 const DynamicHeaderFlatListWrapper = <T,>(props: {
@@ -37,7 +38,6 @@ const DynamicHeaderFlatListWrapper = <T,>(props: {
               {props.flatListProps.ListHeaderComponent}
             </>
           }
-          initialNumToRender={3}
         />
       )}
       collapsedContent={getCollapsedContent(props.titleWhenCollapsed)}

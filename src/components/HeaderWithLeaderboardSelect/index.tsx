@@ -3,26 +3,30 @@ import theme from '../../constants/theme';
 import { HeaderLight } from '../Text';
 import React from 'react';
 import HeaderDropdownButton from '../HeaderDropdownButton';
-import EventTopTabs from '../EventTopTabs';
-import { EventModel, WithId } from '../../models';
+import { EventModel, Phase, WithId } from '../../models';
+import LeaderboardTopTabs from '../LeaderboardTabs';
 
 export const HEADER_TITLE_MARGIN_TOP = 10;
 export const HEADER_TITLE_HEIGHT = 40;
 export const HEADER_TOP_TAB_MARGIN_BOTTOM = 10;
 export const HEADER_TOP_TAB_MARGIN_TOP = 10;
 
-const HeaderWithEventSelect = ({
+// TODO: This is awfully similar to HeaderWithEventSelect
+const HeaderWithLeaderboardSelect = ({
   title,
   event,
-  setEvent,
+  phase,
+  setLeaderboard,
   eventOptions,
   setYear,
 }: {
   title: string;
   event: WithId<EventModel> | undefined;
-  setEvent: (event: WithId<EventModel>) => void;
+  phase: Phase | undefined;
+  setLeaderboard: (event: WithId<EventModel>, phase: Phase) => void;
   eventOptions: WithId<EventModel>[];
   setYear: (year: number) => void;
+  disableTabs?: boolean;
 }) => {
   const yearOptions = (eventOptions ?? [])
     .reduce((acc, e) => {
@@ -64,17 +68,16 @@ const HeaderWithEventSelect = ({
           onSelect={(value) => setYear(value)}
         />
       </View>
-      {event ? (
-        <EventTopTabs
-          style={{
-            marginBottom: HEADER_TOP_TAB_MARGIN_BOTTOM,
-          }}
+      {event && phase ? (
+        <LeaderboardTopTabs
           selectedEvent={event}
-          setEvent={setEvent}
+          phase={phase}
+          setLeaderboard={setLeaderboard}
+          style={{ marginBottom: HEADER_TOP_TAB_MARGIN_BOTTOM }}
         />
       ) : null}
     </View>
   );
 };
 
-export default HeaderWithEventSelect;
+export default HeaderWithLeaderboardSelect;

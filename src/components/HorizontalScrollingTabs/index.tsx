@@ -8,13 +8,13 @@ export const EVENT_TOP_TABS_HEIGHT = 30;
 /**
  * Shows tabs within the selected event's year
  */
-const HorizontalScrollingTabs = ({
+const HorizontalScrollingTabs = <T,>({
   options,
   onPress,
   style,
 }: {
-  options: { text: string; value: any; isSelected?: boolean }[];
-  onPress: (value: any) => void;
+  options: { text: string; value: T; isSelected?: boolean }[];
+  onPress: (value: T) => void;
   style?: StyleProp<ViewStyle>;
 }) => {
   return (
@@ -36,7 +36,7 @@ const HorizontalScrollingTabs = ({
       {options.map(({ isSelected, text, value }) => {
         return (
           <TouchableHighlight
-            key={value}
+            key={'hst' + JSON.stringify(value)}
             style={{
               backgroundColor: isSelected ? COLORS.secondaryDark : COLORS.primaryLight,
               padding: 5,
