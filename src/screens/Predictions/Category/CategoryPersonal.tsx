@@ -15,7 +15,6 @@ import CategorySkeleton from '../../../components/Skeletons/CategorySkeleton';
 import { sortPredictions } from '../../../util/sortPredictions';
 import ScreenshotMode from '../../../components/Buttons/ScreenshotMode';
 import { FAB } from '../../../components/Buttons/FAB';
-import { useFollowingBar } from '../../../context/FollowingBarContext';
 import BottomFABContainer from '../../../components/BottomFABContainer';
 import FloatingButton from '../../../components/Buttons/FloatingButton';
 import { useRouteParams } from '../../../hooks/useRouteParams';
@@ -30,8 +29,6 @@ const CategoryPersonal = ({
   showEventLink?: boolean;
   onBack?: () => void;
 }) => {
-  const { setHideAbsolutely } = useFollowingBar();
-
   const { category: _category, event: _event, userInfo, yyyymmdd } = useRouteParams();
   const category = _category!;
   const event = _event!;
@@ -52,10 +49,6 @@ const CategoryPersonal = ({
 
   const [predictions, setPredictions] = useState<iPrediction[]>(initialPredictions);
   const [showSave, setShowSave] = useState(false);
-
-  useEffect(() => {
-    setHideAbsolutely(showSave);
-  }, [showSave]);
 
   useEffect(() => {
     setPredictions(initialPredictions);

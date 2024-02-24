@@ -138,7 +138,6 @@ const Leaderboard = () => {
           data,
           keyExtractor: (item) => item.userId,
           renderItem: ({ item }) => {
-            if (!item) return <></>;
             return <LeaderboardListItem leaderboardRanking={item} />;
           },
           initialNumToRender: 10,

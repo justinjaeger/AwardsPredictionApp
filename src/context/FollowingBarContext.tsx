@@ -18,6 +18,10 @@ const FollowingBarContext = createContext<iFollowingBarContext>({
   setHideAbsolutely: () => {},
 });
 
+/**
+ * DISABLED:
+ * We'll move this functionality into the SOCIAL tab
+ */
 export const FollowingBarProvider = (props: { children: React.ReactNode }) => {
   const [isHidden, setIsHidden] = useState<boolean>(true);
   const [hideAbsolutely, setHideAbsolutely] = useState<boolean>(false);

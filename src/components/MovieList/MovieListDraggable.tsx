@@ -131,6 +131,7 @@ const MovieListDraggable = ({
       onPlaceholderIndexChange={() => {
         triggerHaptic();
       }}
+      initialNumToRender={10}
       ListHeaderComponent={
         <>
           <LastUpdatedText lastUpdated={lastUpdatedString} />
