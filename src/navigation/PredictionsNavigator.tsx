@@ -15,7 +15,6 @@ import { useHeaderSettings } from '../hooks/useHeaderSettings';
 import ContenderStats from '../screens/ContenderStats';
 import { PersonalCommunityTabProvider } from '../context/PersonalCommunityContext';
 import ContenderInfoModal from '../screens/Predictions/ContenderInfoModal';
-import LeaderboardList from '../screens/Leaderboard/LeaderboardList';
 import Leaderboard from '../screens/Leaderboard/Leaderboard';
 import Category from '../screens/Predictions/Category';
 import Event from '../screens/Predictions/Event';
@@ -115,14 +114,6 @@ const PredictionsNavigator = () => {
           }}
         />
         {/* Leaderboard Screens */}
-        <Screen
-          name="LeaderboardList"
-          component={LeaderboardList}
-          options={{
-            headerTitle: getHeaderTitle('Leaderboards'),
-            ...medium,
-          }}
-        />
         <Screen
           name="Leaderboard"
           component={Leaderboard}

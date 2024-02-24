@@ -80,7 +80,6 @@ export type PredictionsParamList = {
   // FRIEND SCREENS
   SearchFriends: undefined;
   // LEADERBOARD SCREENS
-  LeaderboardList: undefined;
   Leaderboard: {
     eventId: string;
     phase: Phase;
