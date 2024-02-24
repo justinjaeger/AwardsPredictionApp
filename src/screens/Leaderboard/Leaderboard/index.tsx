@@ -23,6 +23,7 @@ import { AWARDS_BODY_TO_PLURAL_STRING } from '../../../constants/awardsBodies';
 import LeaderboardStats from './LeaderboardStats';
 import HeaderDropdownOverlay from '../../../components/HeaderDropdownOverlay';
 import HeaderWithLeaderboardSelect, {
+  BACK_BUTTON_HEIGHT,
   HEADER_TITLE_HEIGHT,
   HEADER_TITLE_MARGIN_TOP,
   HEADER_TOP_TAB_MARGIN_BOTTOM,
@@ -33,6 +34,7 @@ import { useEventSelect } from '../../../hooks/useEventSelect';
 import SectionTopTabs from '../../../components/SectionTopTabs';
 import DynamicHeaderFlatListWrapper from '../../../components/DynamicHeaderWrapper/DynamicHeaderFlatListWrapper';
 import COLORS from '../../../constants/colors';
+import { useRouteParams } from '../../../hooks/useRouteParams';
 
 const Leaderboard = () => {
   const verticalScrollRef = useRef<ScrollView>(null);
@@ -42,6 +44,7 @@ const Leaderboard = () => {
 
   const { setPersonalCommunityTab } = usePersonalCommunityTab();
   const { data: events } = useQueryGetAllEvents();
+  const { disableBack } = useRouteParams();
   const { event, setEvent, setYear, phase, setPhase, leaderboard } = useEventSelect();
 
   const { userId: authUserId } = useAuth();
@@ -101,13 +104,16 @@ const Leaderboard = () => {
       <HeaderDropdownOverlay />
       <DynamicHeaderFlatListWrapper<iLeaderboardRankingsWithUserData>
         scrollViewRef={verticalScrollRef}
+        disableBack={disableBack}
         topOnlyContent={{
           height:
             HEADER_TITLE_HEIGHT +
             HEADER_TITLE_MARGIN_TOP +
             EVENT_TOP_TABS_HEIGHT +
             HEADER_TOP_TAB_MARGIN_BOTTOM +
-            HEADER_TOP_TAB_MARGIN_TOP,
+            HEADER_TOP_TAB_MARGIN_BOTTOM +
+            HEADER_TOP_TAB_MARGIN_TOP +
+            (disableBack ? 0 : BACK_BUTTON_HEIGHT),
           component: (
             <View
               style={{
@@ -125,6 +131,7 @@ const Leaderboard = () => {
                 }}
                 eventOptions={eventsWithLeaderboard}
                 setYear={setYear}
+                disableBack={disableBack}
               />
             </View>
           ),

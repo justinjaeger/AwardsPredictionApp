@@ -19,6 +19,7 @@ export const useRouteParams = (): {
   noShorts?: boolean;
   isLeaderboard?: boolean; // need to distinguish leaderboard vs history
   phase?: Phase;
+  disableBack?: boolean;
 } => {
   const { params } = useRoute<RouteProp<PredictionsParamList>>();
   const maybeEventId = params?.eventId as string | undefined;
@@ -37,5 +38,6 @@ export const useRouteParams = (): {
     noShorts: params?.noShorts,
     isLeaderboard: params?.isLeaderboard,
     phase: params?.phase,
+    disableBack: params?.disableBack,
   };
 };

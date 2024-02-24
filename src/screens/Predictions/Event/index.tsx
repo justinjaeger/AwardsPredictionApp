@@ -12,6 +12,7 @@ import { AWARDS_BODY_TO_PLURAL_STRING } from '../../../constants/awardsBodies';
 import { EVENT_TOP_TABS_HEIGHT } from '../../../components/HorizontalScrollingTabs';
 import HeaderDropdownOverlay from '../../../components/HeaderDropdownOverlay';
 import HeaderWithEventSelect, {
+  BACK_BUTTON_HEIGHT,
   HEADER_TITLE_HEIGHT,
   HEADER_TITLE_MARGIN_TOP,
   HEADER_TOP_TAB_MARGIN_BOTTOM,
@@ -78,14 +79,14 @@ const Event = () => {
   const { width } = useWindowDimensions();
   const { isPad } = useDevice();
   const navigation = useNavigation<PredictionsNavigationProp>();
-  const { userInfo, phase, noShorts, isLeaderboard } = useRouteParams();
+  const { userInfo, isLeaderboard, disableBack } = useRouteParams();
   const { userId: authUserId } = useAuth();
   const userId = userInfo?.userId || authUserId || undefined;
   const { user } = useProfileUser(userId);
   const isAuthProfile = user?._id === authUserId;
 
   const { data: events } = useQueryGetAllEvents();
-  const { event, year, yyyymmdd, setEvent, setYear } = useEventSelect();
+  const { event, year, phase, yyyymmdd, setEvent, setYear } = useEventSelect();
 
   const { data: userPredictionData, isLoading: isLoadingPersonal } =
     useQueryGetUserPredictions({ event, userId, yyyymmdd });
@@ -109,7 +110,6 @@ const Event = () => {
       category,
       phase,
       yyyymmdd,
-      noShorts,
       isLeaderboard,
     };
     if (isAuthProfile || isCommunityTab) {
@@ -132,13 +132,15 @@ const Event = () => {
       <HeaderDropdownOverlay />
       <DynamicHeaderFlatListWrapper<iCategoryListItem[]>
         scrollViewRef={verticalScrollRef}
+        disableBack={disableBack}
         topOnlyContent={{
           height:
             HEADER_TITLE_HEIGHT +
             HEADER_TITLE_MARGIN_TOP +
             EVENT_TOP_TABS_HEIGHT +
             HEADER_TOP_TAB_MARGIN_BOTTOM +
-            HEADER_TOP_TAB_MARGIN_TOP,
+            HEADER_TOP_TAB_MARGIN_TOP +
+            (disableBack ? 0 : BACK_BUTTON_HEIGHT),
           component: (
             <HeaderWithEventSelect
               title={'Predictions'}
@@ -146,6 +148,7 @@ const Event = () => {
               setEvent={setEvent}
               eventOptions={events ?? []}
               setYear={setYear}
+              disableBack={disableBack}
             />
           ),
         }}

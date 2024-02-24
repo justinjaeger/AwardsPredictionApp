@@ -17,6 +17,7 @@ export type MainParamList = {
 
 type iBottomTabDefaultParamList = {
   initialScreen?: keyof PredictionsParamList;
+  disableBack?: boolean;
 };
 
 export type BottomTabParamList = {
@@ -50,6 +51,7 @@ export type PredictionsParamList = {
   Event: {
     userInfo: iUserInfo | undefined;
     eventId: string;
+    disableBack?: boolean;
   } & iHistoryNavigationProps;
   Category: {
     userInfo: iUserInfo | undefined;
@@ -84,6 +86,7 @@ export type PredictionsParamList = {
     eventId: string;
     phase: Phase;
     noShorts?: boolean;
+    disableBack?: boolean;
   };
   // MODALS
   ContenderInfoModal: {
