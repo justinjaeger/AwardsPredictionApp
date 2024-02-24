@@ -2,7 +2,6 @@ import React from 'react';
 import { usePersonalCommunityTab } from '../../context/PersonalCommunityContext';
 import { useAuth } from '../../context/AuthContext';
 import { useRouteParams } from '../../hooks/useRouteParams';
-import { truncateText } from '../../util/truncateText';
 import SectionTopTabs from '../../components/SectionTopTabs';
 
 /**
@@ -25,9 +24,7 @@ const PredictionTabsNavigator = ({
     <SectionTopTabs
       tabs={[
         {
-          title: isAuthUser
-            ? 'My Predictions'
-            : truncateText(userInfo?.userName ?? 'My Predictions', 13),
+          title: isAuthUser ? 'My Predictions' : userInfo?.userName ?? 'User',
           onOpenTab: () => {
             setPersonalCommunityTab('personal');
             onChangeTab && onChangeTab('personal');
