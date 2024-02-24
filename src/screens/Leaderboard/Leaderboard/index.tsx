@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import useGetLeaderboardUsers from '../../../hooks/useGetLeaderboardUsers';
-import { FlatList, ScrollView, View } from 'react-native';
+import { FlatList, View } from 'react-native';
 import LeaderboardListItem, {
   LEADERBOARD_PROFILE_IMAGE_SIZE,
 } from '../../../components/LeaderboardListItem';
@@ -38,8 +38,7 @@ import { useRouteParams } from '../../../hooks/useRouteParams';
 import LeaderboardTopTabs from '../../../components/LeaderboardTabs';
 
 const Leaderboard = () => {
-  const verticalScrollRef = useRef<ScrollView>(null);
-  const flatListRef = useRef<FlatList<any>>(null);
+  const flatListRef = useRef<FlatList>(null);
 
   const navigation = useNavigation<PredictionsNavigationProp>();
 
@@ -104,7 +103,7 @@ const Leaderboard = () => {
     <BackgroundWrapper>
       <HeaderDropdownOverlay />
       <DynamicHeaderFlatListWrapper<iLeaderboardRankingsWithUserData>
-        scrollViewRef={verticalScrollRef}
+        flatListRef={flatListRef}
         disableBack={disableBack}
         topOnlyContent={{
           height:
@@ -153,7 +152,6 @@ const Leaderboard = () => {
         } • ${PHASE_TO_STRING_PLURAL[phase]}`}
         // FLAT LIST PROPS:
         flatListProps={{
-          ref: flatListRef,
           data,
           keyExtractor: (item) => item.userId,
           renderItem: ({ item }) => {

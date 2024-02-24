@@ -10,7 +10,6 @@ import { getNumberWithinRange } from '../../util/getNumberWithinRange';
 import { BOTTOM_TAB_HEIGHT } from '../../constants';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { UNEXPLAINED_EXTRA_SCROLL_HEIGHT } from '../../screens/Predictions/Event/constants';
-import useDevice from '../../util/device';
 import DynamicHeader, { iDynamicHeaderProps } from './DynamicHeader';
 import { debounce } from 'lodash';
 
@@ -36,7 +35,6 @@ const DynamicHeaderWrapper = (
   const { height: collapsedComponentHeight } = collapsedContent;
   const { height: persistedComponentHeight } = persistedContent || { height: 0 };
 
-  const { isPad } = useDevice();
   const { bottom } = useSafeAreaInsets();
   const { height } = useWindowDimensions();
 
@@ -53,6 +51,7 @@ const DynamicHeaderWrapper = (
   });
 
   const debouncedOnEndReached = debounce(() => {
+    console.error('ON END', Math.random());
     onEndReached && onEndReached();
   }, 500);
 
@@ -62,14 +61,11 @@ const DynamicHeaderWrapper = (
       zIndex: -1,
       elevation: -1,
     },
-    // @ts-ignore
-    ref: scrollViewRef,
     contentContainerStyle: {
       paddingBottom: BOTTOM_TAB_HEIGHT + bottom + UNEXPLAINED_EXTRA_SCROLL_HEIGHT,
       minHeight: height,
     },
     scrollEventThrottle: 16,
-    onEndReachedThreshold: isPad ? 0.8 : 0.5, // triggers onEndReached at (X*100)% of list, for example 0.9 = 90% down
     keyboardShouldPersistTaps: 'always',
     showsVerticalScrollIndicator: false,
     onScroll: (e) => {
@@ -107,6 +103,8 @@ const DynamicHeaderWrapper = (
         }).start();
       }
     },
+    // @ts-ignore
+    ref: scrollViewRef,
   };
 
   return (

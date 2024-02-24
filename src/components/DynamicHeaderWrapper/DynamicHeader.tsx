@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {
   Animated,
+  FlatList,
   ScrollView,
   TouchableOpacity,
   View,
@@ -16,7 +17,8 @@ export type iDynamicHeaderProps = {
   topOnlyContent: { height: number; component: JSX.Element };
   collapsedContent: { height: number; component: JSX.Element };
   persistedContent?: { height: number; component: JSX.Element };
-  scrollViewRef: React.RefObject<ScrollView>;
+  flatListRef?: React.RefObject<FlatList>;
+  scrollViewRef?: React.RefObject<ScrollView>;
 };
 
 const DynamicHeader = ({
@@ -24,6 +26,7 @@ const DynamicHeader = ({
   topOnlyContent,
   collapsedContent,
   persistedContent,
+  flatListRef,
   scrollViewRef,
 }: { animHeaderValue: Animated.Value } & iDynamicHeaderProps) => {
   const { width } = useWindowDimensions();
@@ -114,7 +117,8 @@ const DynamicHeader = ({
             <View style={[{ height: collapsedComponentHeight }]}>
               <TouchableOpacity
                 onPress={() => {
-                  scrollViewRef.current?.scrollTo({ y: 0 });
+                  flatListRef && flatListRef.current?.scrollToOffset({ offset: 0 });
+                  scrollViewRef && scrollViewRef.current?.scrollTo({ y: 0 });
                 }}
               >
                 {collapsedComponent}
