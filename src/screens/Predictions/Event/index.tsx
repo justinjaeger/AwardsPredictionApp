@@ -165,14 +165,7 @@ const Event = () => {
                 justifyContent: 'flex-end',
               }}
             >
-              <PredictionTabsNavigator
-                onChangeTab={(tab) => {
-                  // if showing the "sign in to make predictions" scroll to top so it's in view
-                  if (!userId && tab === 'personal') {
-                    verticalScrollRef.current?.scrollTo({ y: 0 });
-                  }
-                }}
-              />
+              <PredictionTabsNavigator />
             </View>
           ),
         }}

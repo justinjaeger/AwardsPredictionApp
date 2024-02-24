@@ -29,7 +29,7 @@ const TabBodies = ({
     <Animated.View
       style={[
         { transform: [{ translateX: scrollPosX }] },
-        { backgroundColor: COLORS.primaryDark, flexDirection: 'row' },
+        { backgroundColor: COLORS.primaryDark, flexDirection: 'row', height: '100%' },
       ]}
     >
       <View style={{ width, height: '100%' }}>{personal}</View>
