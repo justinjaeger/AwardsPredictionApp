@@ -18,7 +18,7 @@ const PredictionTabsNavigator = ({
 
   const { userId: authUserId } = useAuth();
   const { userInfo } = useRouteParams();
-  const isAuthUser = userInfo?.userId === authUserId;
+  const isAuthUser = !userInfo || userInfo?.userId === authUserId;
 
   return (
     <SectionTopTabs
