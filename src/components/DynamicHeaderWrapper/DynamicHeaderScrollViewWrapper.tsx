@@ -2,6 +2,7 @@ import React from 'react';
 import { Animated, ScrollView, ScrollViewProps } from 'react-native';
 import DynamicHeaderWrapper from '.';
 import { getCollapsedContent } from './getCollapsedContent';
+import { useNavigation } from '@react-navigation/native';
 
 const DynamicHeaderScrollViewWrapper = (props: {
   children: JSX.Element;
@@ -12,7 +13,9 @@ const DynamicHeaderScrollViewWrapper = (props: {
   scrollViewProps?: ScrollViewProps;
   disableBack?: boolean;
   onEndReached?: () => void;
+  distanceToCollapse?: number;
 }) => {
+  const navigation = useNavigation();
   return (
     <DynamicHeaderWrapper
       {...props}
@@ -26,7 +29,11 @@ const DynamicHeaderScrollViewWrapper = (props: {
           {props.children}
         </ScrollView>
       )}
-      collapsedContent={getCollapsedContent(props.titleWhenCollapsed, props.disableBack)}
+      collapsedContent={getCollapsedContent(
+        props.titleWhenCollapsed,
+        props.disableBack,
+        () => navigation.goBack(),
+      )}
     />
   );
 };

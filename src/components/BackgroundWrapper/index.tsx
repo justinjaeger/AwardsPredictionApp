@@ -2,6 +2,7 @@ import React from 'react';
 import { View, useWindowDimensions } from 'react-native';
 import { ReactChildren } from '../../types/keys';
 import LinearGradient from 'react-native-linear-gradient';
+import COLORS from '../../constants/colors';
 
 const BackgroundWrapper = (props: { children: ReactChildren }) => {
   const { width } = useWindowDimensions();
@@ -30,6 +31,7 @@ const BackgroundWrapper = (props: { children: ReactChildren }) => {
           height: '100%',
           width: '100%',
           alignItems: 'center',
+          backgroundColor: COLORS.primaryDark,
         }}
       >
         {props.children}

@@ -21,7 +21,6 @@ export const getCollapsedContent = (
           alignItems: 'center',
           justifyContent: 'center',
           height: '100%',
-          // backgroundColor: COLORS.secondaryDark,
         }}
       >
         {disableBack ? null : (

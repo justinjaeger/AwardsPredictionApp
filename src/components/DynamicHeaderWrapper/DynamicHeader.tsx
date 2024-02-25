@@ -10,7 +10,7 @@ import {
 import COLORS from '../../constants/colors';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-const BG_COLOR = COLORS.primary;
+const BG_COLOR = COLORS.primaryDark;
 const PRIMARY_COLOR = COLORS.secondaryDark;
 
 export type iDynamicHeaderProps = {
@@ -23,12 +23,20 @@ export type iDynamicHeaderProps = {
 
 const DynamicHeader = ({
   animHeaderValue,
+  collapsedHeaderHeight,
+  topHeaderHeight,
+  scrollDistance,
   topOnlyContent,
   collapsedContent,
   persistedContent,
   flatListRef,
   scrollViewRef,
-}: { animHeaderValue: Animated.Value } & iDynamicHeaderProps) => {
+}: {
+  animHeaderValue: Animated.Value;
+  collapsedHeaderHeight: number;
+  topHeaderHeight: number;
+  scrollDistance: number;
+} & iDynamicHeaderProps) => {
   const { width } = useWindowDimensions();
   const { top } = useSafeAreaInsets();
 
@@ -37,10 +45,6 @@ const DynamicHeader = ({
     collapsedContent;
   const { height: persistedComponentHeight, component: persistedComponent } =
     persistedContent || { height: 0, component: <></> };
-
-  const collapsedHeaderHeight = collapsedComponentHeight + persistedComponentHeight;
-  const topHeaderHeight = topOnlyComponentHeight + persistedComponentHeight;
-  const scrollDistance = Math.abs(collapsedHeaderHeight - topHeaderHeight);
 
   // less than zero if the collapsed header is taller than the top header
   const negativeAmountToHideCollapsed = Math.min(
@@ -80,7 +84,7 @@ const DynamicHeader = ({
 
   const animateTopZIndex = animHeaderValue.interpolate({
     inputRange: [0, scrollDistance],
-    outputRange: [0, 1],
+    outputRange: [0, 2],
   });
 
   return (
@@ -118,7 +122,7 @@ const DynamicHeader = ({
               },
               {
                 opacity: animateTopContentOpacity,
-                zIndex: animateTopZIndex,
+                zIndex: 1,
               },
             ]}
           >
@@ -130,6 +134,7 @@ const DynamicHeader = ({
               position: 'absolute',
               top: topOnlyComponentHeight - collapsedComponentHeight,
               opacity: animateCollapsedContentOpacity,
+              zIndex: animateTopZIndex,
             }}
           >
             <View style={[{ height: collapsedComponentHeight }]}>

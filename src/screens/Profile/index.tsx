@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { View, TouchableHighlight, ScrollView } from 'react-native';
+import { View, TouchableHighlight, ScrollView, TouchableOpacity } from 'react-native';
 import { Body, BodyBold, HeaderLight, SubHeader } from '../../components/Text';
 import { useAuth } from '../../context/AuthContext';
 import BackgroundWrapper from '../../components/BackgroundWrapper';
@@ -97,12 +97,13 @@ const Profile = () => {
       <DynamicHeaderScrollViewWrapper
         scrollViewRef={scrollViewRef}
         disableBack={disableBack}
+        distanceToCollapse={disableBack ? undefined : 40}
         topOnlyContent={{
           height: disableBack ? 0 : 40,
           component: disableBack ? (
             <></>
           ) : (
-            <TouchableHighlight
+            <TouchableOpacity
               onPress={() => {
                 navigation.goBack();
               }}
@@ -115,7 +116,7 @@ const Profile = () => {
               }}
             >
               <CustomIcon name="chevron-left-outline" size={30} color={COLORS.white} />
-            </TouchableHighlight>
+            </TouchableOpacity>
           ),
         }}
         titleWhenCollapsed={user?.name ?? user?.username ?? 'Profile'}

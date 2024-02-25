@@ -15,6 +15,7 @@ import { debounce } from 'lodash';
 
 const DynamicHeaderWrapper = (
   props: {
+    distanceToCollapse?: number;
     onEndReached?: () => void;
     renderBodyComponent: (props: {
       paddingTop: number;
@@ -23,6 +24,7 @@ const DynamicHeaderWrapper = (
   } & iDynamicHeaderProps,
 ) => {
   const {
+    distanceToCollapse,
     renderBodyComponent,
     topOnlyContent,
     collapsedContent,
@@ -38,7 +40,8 @@ const DynamicHeaderWrapper = (
 
   const collapsedHeaderHeight = collapsedComponentHeight + persistedComponentHeight;
   const topHeaderHeight = topOnlyComponentHeight + persistedComponentHeight;
-  const scrollDistance = Math.abs(topHeaderHeight - collapsedHeaderHeight);
+  const scrollDistance =
+    distanceToCollapse || Math.abs(topHeaderHeight - collapsedHeaderHeight);
 
   const animHeaderValue = useRef(new Animated.Value(0)).current;
 
@@ -98,7 +101,13 @@ const DynamicHeaderWrapper = (
 
   return (
     <View>
-      <DynamicHeader animHeaderValue={animHeaderValue} {...props} />
+      <DynamicHeader
+        animHeaderValue={animHeaderValue}
+        collapsedHeaderHeight={collapsedHeaderHeight}
+        topHeaderHeight={topHeaderHeight}
+        scrollDistance={scrollDistance}
+        {...props}
+      />
       {renderBodyComponent({ paddingTop: topHeaderHeight, scrollViewProps })}
     </View>
   );
