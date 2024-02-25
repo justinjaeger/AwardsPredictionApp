@@ -141,8 +141,7 @@ const LeaderboardStats = ({
             alignItems: 'baseline',
             width: '100%',
             justifyContent: 'space-around',
-            marginTop: lastUpdatedString || slotsPredicted ? 20 : 0,
-            marginBottom: 5,
+            marginTop: 15,
           }}
         >
           {lastUpdatedString ? <LastUpdatedText lastUpdated={lastUpdatedString} /> : null}

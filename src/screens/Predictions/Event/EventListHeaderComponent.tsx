@@ -7,10 +7,6 @@ import { useRouteParams } from '../../../hooks/useRouteParams';
 import useProfileUser from '../../Profile/useProfileUser';
 import LeaderboardStats from '../../Leaderboard/Leaderboard/LeaderboardStats';
 import { getLeaderboardFromEvent } from '../../../util/getLeaderboardFromEvent';
-import FollowButton from '../../../components/FollowButton';
-import useQueryGetFollowingUsers from '../../../hooks/queries/useQueryGetFollowingUsers';
-import theme from '../../../constants/theme';
-import { truncateText } from '../../../util/truncateText';
 import { getLastUpdatedOnPredictionSet } from '../../../util/getLastUpdatedOnPredictionSet';
 
 const EventListHeaderComponent = ({
@@ -29,9 +25,6 @@ const EventListHeaderComponent = ({
   const { userId: authUserId } = useAuth();
   const { userInfo, phase, noShorts } = useRouteParams();
   const { user } = useProfileUser(userInfo?.userId || authUserId);
-  const isAuthProfile = user?._id === authUserId;
-
-  const { usersIdsAuthUserIsFollowing } = useQueryGetFollowingUsers();
 
   const leaderboard = event && phase && getLeaderboardFromEvent(event, phase, noShorts);
 
@@ -44,8 +37,6 @@ const EventListHeaderComponent = ({
   );
 
   const displayLbStats = yyyymmdd && userLeaderboard;
-  const authUserIsFollowing = user && usersIdsAuthUserIsFollowing.includes(user._id);
-  const displayFollowButton = user && !isAuthProfile && !authUserIsFollowing;
 
   const lastUpdatedString = getLastUpdatedOnPredictionSet(
     predictionData,
@@ -71,47 +62,18 @@ const EventListHeaderComponent = ({
               />
             ) : null
           ) : (
-            <>
-              <LeaderboardStats
-                percentageAccuracy={userLeaderboard.percentageAccuracy}
-                numCorrect={userLeaderboard.numCorrect}
-                totalPossibleSlots={userLeaderboard.totalPossibleSlots}
-                numUsersPredicting={userLeaderboard.numUsersPredicting}
-                rank={userLeaderboard.rank}
-                riskiness={userLeaderboard.riskiness}
-                lastUpdated={userLeaderboard.lastUpdated}
-                slotsPredicted={userLeaderboard.slotsPredicted}
-              />
-              {displayFollowButton ? (
-                <View
-                  style={{
-                    justifyContent: 'flex-end',
-                    width: '100%',
-                    flexDirection: 'row',
-                    marginTop: 10,
-                    paddingRight: theme.windowMargin,
-                    paddingLeft: theme.windowMargin,
-                  }}
-                >
-                  <View
-                    style={{
-                      alignSelf: 'flex-end',
-                    }}
-                  >
-                    <FollowButton
-                      authUserIsFollowing={usersIdsAuthUserIsFollowing.includes(user._id)}
-                      profileUserId={user._id}
-                      textWhenNotFollowing={`Follow ${truncateText(
-                        user?.name ?? user.username ?? '',
-                        15,
-                      )}`}
-                    />
-                  </View>
-                </View>
-              ) : null}
-            </>
+            <LeaderboardStats
+              percentageAccuracy={userLeaderboard.percentageAccuracy}
+              numCorrect={userLeaderboard.numCorrect}
+              totalPossibleSlots={userLeaderboard.totalPossibleSlots}
+              numUsersPredicting={userLeaderboard.numUsersPredicting}
+              rank={userLeaderboard.rank}
+              riskiness={userLeaderboard.riskiness}
+              lastUpdated={userLeaderboard.lastUpdated}
+              slotsPredicted={userLeaderboard.slotsPredicted}
+            />
           )}
-          <View style={{ marginBottom: displayFollowButton ? 10 : 20 }} />
+          <View style={{ marginBottom: 10 }} />
         </>
       ) : (
         <LastUpdatedText lastUpdated={lastUpdatedString} />
