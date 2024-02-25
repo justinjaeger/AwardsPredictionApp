@@ -24,7 +24,7 @@ const { Navigator, Screen, Group } = createStackNavigator<PredictionsParamList>(
 
 const PredictionsNavigator = () => {
   const {
-    params: { initialScreen, disableBack },
+    params: { initialScreen },
   } = useRoute<RouteProp<BottomTabParamList, 'ProfileTab'>>();
   const { toolbarOnly, medium, large } = useHeaderSettings();
 
@@ -42,12 +42,7 @@ const PredictionsNavigator = () => {
           }}
         />
         {/* Prediction Screens */}
-        <Screen
-          name="Event"
-          component={Event}
-          options={{ headerShown: false }}
-          initialParams={{ disableBack }}
-        />
+        <Screen name="Event" component={Event} options={{ headerShown: false }} />
         <Screen
           name="Category"
           component={Category}
@@ -78,12 +73,7 @@ const PredictionsNavigator = () => {
           }}
         />
         {/* Profile Screens */}
-        <Screen
-          name="Profile"
-          component={Profile}
-          options={{ headerShown: false }}
-          initialParams={{ disableBack }}
-        />
+        <Screen name="Profile" component={Profile} options={{ headerShown: false }} />
         <Screen
           name="UpdateProfileInfo"
           component={UpdateProfileInfo}
@@ -118,7 +108,6 @@ const PredictionsNavigator = () => {
             gestureEnabled: false,
             headerShown: false,
           }}
-          initialParams={{ disableBack }}
         />
       </Group>
       <Group screenOptions={{ presentation: 'modal' }}>

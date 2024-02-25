@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { RouteProp, useRoute } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { PredictionsParamList, iUserInfo } from '../navigation/types';
 import { useGetEvent } from './useGetEvent';
 import { CategoryName, EventModel, Phase, WithId, iCategory } from '../models';
@@ -21,6 +21,9 @@ export const useRouteParams = (): {
   phase?: Phase;
   disableBack?: boolean;
 } => {
+  const navigation = useNavigation();
+  const isRootOfBottomtabs = navigation.getState().index === 0;
+
   const { params } = useRoute<RouteProp<PredictionsParamList>>();
   const maybeEventId = params?.eventId as string | undefined;
 
@@ -38,6 +41,6 @@ export const useRouteParams = (): {
     noShorts: params?.noShorts,
     isLeaderboard: params?.isLeaderboard,
     phase: params?.phase,
-    disableBack: params?.disableBack,
+    disableBack: isRootOfBottomtabs,
   };
 };
