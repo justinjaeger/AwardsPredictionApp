@@ -10,18 +10,23 @@ const DynamicHeaderScrollViewWrapper = (props: {
   persistedContent?: { height: number; component: JSX.Element };
   scrollViewRef: React.RefObject<ScrollView>;
   scrollViewProps?: ScrollViewProps;
+  disableBack?: boolean;
   onEndReached?: () => void;
 }) => {
   return (
     <DynamicHeaderWrapper
       {...props}
       renderBodyComponent={({ paddingTop, scrollViewProps }) => (
-        <ScrollView {...scrollViewProps} {...props.scrollViewProps}>
+        <ScrollView
+          {...scrollViewProps}
+          {...props.scrollViewProps}
+          ref={props.scrollViewRef}
+        >
           <Animated.View style={{ paddingTop }} />
           {props.children}
         </ScrollView>
       )}
-      collapsedContent={getCollapsedContent(props.titleWhenCollapsed)}
+      collapsedContent={getCollapsedContent(props.titleWhenCollapsed, props.disableBack)}
     />
   );
 };

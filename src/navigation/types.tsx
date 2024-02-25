@@ -73,6 +73,7 @@ export type PredictionsParamList = {
   // PROFILE SCREENS
   Profile: {
     userInfo: iUserInfo;
+    disableBack?: boolean;
   };
   Followers: {
     userInfo: iUserInfo;

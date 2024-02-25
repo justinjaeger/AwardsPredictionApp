@@ -81,10 +81,8 @@ const PredictionsNavigator = () => {
         <Screen
           name="Profile"
           component={Profile}
-          options={{
-            headerTitle: '',
-            ...medium,
-          }}
+          options={{ headerShown: false }}
+          initialParams={{ disableBack }}
         />
         <Screen
           name="UpdateProfileInfo"

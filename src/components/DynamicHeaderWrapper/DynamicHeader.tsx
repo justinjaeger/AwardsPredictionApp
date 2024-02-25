@@ -38,37 +38,42 @@ const DynamicHeader = ({
   const { height: persistedComponentHeight, component: persistedComponent } =
     persistedContent || { height: 0, component: <></> };
 
-  const minHeaderHeight = collapsedComponentHeight + persistedComponentHeight;
-  const maxHeaderHeight = topOnlyComponentHeight + persistedComponentHeight;
-  const SCROLL_DISTANCE = maxHeaderHeight - minHeaderHeight;
+  const collapsedHeaderHeight = collapsedComponentHeight + persistedComponentHeight;
+  const topHeaderHeight = topOnlyComponentHeight + persistedComponentHeight;
+
+  // how much we have to scroll to collapse the header
+  const scrollDistance = Math.abs(collapsedHeaderHeight - topHeaderHeight);
+
+  const minRange = 0;
+  const maxRange = Math.max(scrollDistance, 0);
 
   const animatedHeaderHeight = animHeaderValue.interpolate({
-    inputRange: [0, SCROLL_DISTANCE],
-    outputRange: [maxHeaderHeight, minHeaderHeight],
+    inputRange: [minRange, maxRange],
+    outputRange: [topHeaderHeight, collapsedHeaderHeight],
     extrapolate: 'clamp',
   });
 
   const animateTopContentOpacity = animHeaderValue.interpolate({
-    inputRange: [0, SCROLL_DISTANCE / 2],
+    inputRange: [minRange, maxRange / 2],
     outputRange: [1, 0],
     extrapolate: 'clamp',
   });
 
   const animateCollapsedContentOpacity = animHeaderValue.interpolate({
-    inputRange: [SCROLL_DISTANCE / 2, SCROLL_DISTANCE],
+    inputRange: [maxRange / 2, maxRange],
     outputRange: [0, 1],
     extrapolate: 'clamp',
   });
 
   const animateHeaderBackgroundColor = animHeaderValue.interpolate({
-    inputRange: [0, SCROLL_DISTANCE],
+    inputRange: [minRange, maxRange],
     outputRange: [BG_COLOR, PRIMARY_COLOR],
     extrapolate: 'clamp',
   });
 
   const animateTopZIndex = animHeaderValue.interpolate({
-    inputRange: [0, 1],
-    outputRange: [maxHeaderHeight, minHeaderHeight],
+    inputRange: [minRange, maxRange],
+    outputRange: [0, 1],
   });
 
   return (
@@ -89,7 +94,7 @@ const DynamicHeader = ({
             justifyContent: 'flex-end',
             width,
           },
-          { height: animatedHeaderHeight },
+          { height: animatedHeaderHeight, backgroundColor: animateHeaderBackgroundColor },
         ]}
       >
         <Animated.View style={{ backgroundColor: animateHeaderBackgroundColor }}>

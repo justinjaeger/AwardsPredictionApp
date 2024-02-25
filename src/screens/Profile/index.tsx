@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { View, TouchableHighlight, ScrollView } from 'react-native';
 import { Body, BodyBold, HeaderLight, SubHeader } from '../../components/Text';
 import { useAuth } from '../../context/AuthContext';
@@ -26,9 +26,13 @@ import { Phase, UserRole, iLeaderboard, iLeaderboardRanking } from '../../models
 import EventItemSimple from '../../components/EventItemSimple';
 import { usePersonalCommunityTab } from '../../context/PersonalCommunityContext';
 import { getCurrentPhaseBeingPredicted } from '../../util/getBiggestPhaseThatHasHappened';
+import CustomIcon from '../../components/CustomIcon';
+import DynamicHeaderScrollViewWrapper from '../../components/DynamicHeaderWrapper/DynamicHeaderScrollViewWrapper';
 
 const Profile = () => {
-  const { userInfo: routeUserInfo } = useRouteParams();
+  const scrollViewRef = useRef<ScrollView>(null);
+
+  const { userInfo: routeUserInfo, disableBack } = useRouteParams();
   const { userId: authUserId, userRole: authUserRole } = useAuth();
   const userId = routeUserInfo?.userId || authUserId;
 
@@ -90,229 +94,246 @@ const Profile = () => {
 
   return (
     <BackgroundWrapper>
-      {isLoading ? (
-        <ProfileSkeleton />
-      ) : !userId ? (
-        <SignedOutState />
-      ) : (
-        <ScrollView
-          style={{ width: '100%' }}
-          contentContainerStyle={{
-            alignItems: 'center',
-            marginTop: 20,
-            width: '100%',
-            paddingBottom: 100,
-          }}
-          showsVerticalScrollIndicator={false}
-        >
-          <View
-            style={{
-              width: '100%',
-              flex: 1,
-              justifyContent: 'center',
-            }}
-          >
-            <View
-              style={{
-                alignItems: 'center',
-                flexDirection: 'row',
-                marginLeft: theme.windowMargin,
+      <DynamicHeaderScrollViewWrapper
+        scrollViewRef={scrollViewRef}
+        disableBack={disableBack}
+        topOnlyContent={{
+          height: disableBack ? 0 : 40,
+          component: disableBack ? (
+            <></>
+          ) : (
+            <TouchableHighlight
+              onPress={() => {
+                navigation.goBack();
               }}
-            >
-              <ProfileImage
-                image={user?.image}
-                onPress={isAuthUser ? () => onPressProfileInfo() : undefined}
-                style={{ marginRight: 15 }}
-              />
-              <View style={{ flexDirection: 'column', paddingLeft: 10 }}>
-                <TouchableHighlight
-                  onPress={isAuthUser ? () => onPressProfileInfo() : undefined}
-                  style={{
-                    borderRadius: theme.borderRadius,
-                    paddingTop: 10,
-                    paddingBottom: 10,
-                  }}
-                  underlayColor={COLORS.disabled}
-                >
-                  <>
-                    <HeaderLight>
-                      {user?.name || (isAuthUser ? 'Add Name' : '')}
-                    </HeaderLight>
-                    <SubHeader style={{ marginTop: 5 }}>
-                      {user?.username
-                        ? '@' + user?.username
-                        : isAuthUser
-                        ? 'Add Username'
-                        : ''}
-                    </SubHeader>
-                  </>
-                </TouchableHighlight>
-              </View>
-            </View>
-            {user?.bio ? (
-              <TouchableHighlight
-                onPress={isAuthUser ? () => onPressProfileInfo() : undefined}
-                style={{
-                  margin: theme.windowMargin,
-                  borderRadius: theme.borderRadius,
-                }}
-                underlayColor={COLORS.disabled}
-              >
-                <Body>{user.bio || ''}</Body>
-              </TouchableHighlight>
-            ) : (
-              <View style={{ marginTop: 20 }} />
-            )}
-            <View
               style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'flex-start',
-                width: '100%',
-                marginLeft: theme.windowMargin,
-              }}
-            >
-              <FollowCountButton
-                onPress={() => {
-                  if (user?.followerCount === 0) return;
-                  navigation.dispatch(
-                    StackActions.push('Followers', {
-                      userInfo: getUserInfo(user),
-                      type: 'followers',
-                    }),
-                  );
-                }}
-                text={`${user?.followerCount ?? 0} Followers`}
-              />
-              <FollowCountButton
-                onPress={() => {
-                  if (user?.followingCount === 0) return;
-                  navigation.dispatch(
-                    StackActions.push('Followers', {
-                      userInfo: getUserInfo(user),
-                      type: 'following',
-                    }),
-                  );
-                }}
-                text={`${user?.followingCount ?? 0} Following`}
-              />
-            </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'flex-start',
-                width: '100%',
+                width: 30,
+                backgroundColor: COLORS.primaryLight,
+                borderRadius: 100,
                 marginLeft: theme.windowMargin,
                 marginTop: 10,
               }}
             >
-              {user ? (
-                <FollowButton
-                  authUserIsFollowing={authUserIsFollowing || false}
-                  profileUserId={user._id}
+              <CustomIcon name="chevron-left-outline" size={30} color={COLORS.white} />
+            </TouchableHighlight>
+          ),
+        }}
+        titleWhenCollapsed={user?.name ?? user?.username ?? 'Profile'}
+      >
+        <>
+          {isLoading ? (
+            <ProfileSkeleton />
+          ) : !userId ? (
+            <SignedOutState />
+          ) : (
+            <View>
+              <View
+                style={{
+                  alignItems: 'center',
+                  flexDirection: 'row',
+                  marginLeft: theme.windowMargin,
+                  marginTop: 10,
+                }}
+              >
+                <ProfileImage
+                  image={user?.image}
+                  onPress={isAuthUser ? () => onPressProfileInfo() : undefined}
+                  style={{ marginRight: 15 }}
                 />
-              ) : null}
-              {isFollowingAuthUser ? (
-                <BodyBold style={{ marginLeft: 10, color: 'rgba(255,255,255,0.8)' }}>
-                  Follows You
-                </BodyBold>
-              ) : null}
-            </View>
-            {predictionSets.length > 0 ? (
-              <>
-                <HeaderLight
-                  style={{
-                    alignSelf: 'flex-start',
-                    marginTop: 40,
-                    marginLeft: theme.windowMargin,
-                  }}
-                >
-                  Recent Predictions:
-                </HeaderLight>
-                <PredictionCarousel
-                  predictionSets={predictionSets}
-                  userInfo={userInfo}
-                  hideUserInfo
-                  style={{ marginTop: 10, minHeight: 10 }}
-                />
-              </>
-            ) : null}
-            {!isLoadingAllEvents && user && userEvents.length > 0 ? (
-              <>
-                <HeaderLight
-                  style={{
-                    alignSelf: 'flex-start',
-                    marginTop: 20,
-                    marginLeft: theme.windowMargin,
-                    marginBottom: 10,
-                  }}
-                >
-                  {(isAuthUser ? 'My' : 'All') + ' Predictions'}
-                </HeaderLight>
-                {userEvents.map((event) => {
-                  const phase = getCurrentPhaseBeingPredicted(event);
-                  return (
-                    <EventItemSimple
-                      onPress={() => {
-                        setPersonalCommunityTab('personal');
-                        navigation.navigate('Event', {
-                          userInfo: getUserInfo(user),
-                          eventId: event._id,
-                        });
-                      }}
-                      title={`${AWARDS_BODY_TO_PLURAL_STRING[event.awardsBody]} ${
-                        event.year
-                      } - ${PHASE_TO_STRING_PLURAL[phase || Phase.CLOSED]}`}
-                    />
-                  );
-                })}
-              </>
-            ) : null}
-            {leaderboards.length ? (
-              <>
-                <HeaderLight
-                  style={{
-                    alignSelf: 'flex-start',
-                    marginTop: 30,
-                    marginLeft: theme.windowMargin,
-                    marginBottom: 10,
-                  }}
-                >
-                  {'Leaderboards'}
-                </HeaderLight>
-                {leaderboards.map((lbRanking) => {
-                  const event = events.find((e) => e._id === lbRanking.eventId);
-                  if (!event) return null;
-                  return (
+                <View style={{ flexDirection: 'column', paddingLeft: 10 }}>
+                  <TouchableHighlight
+                    onPress={isAuthUser ? () => onPressProfileInfo() : undefined}
+                    style={{
+                      borderRadius: theme.borderRadius,
+                      paddingTop: 10,
+                      paddingBottom: 10,
+                    }}
+                    underlayColor={COLORS.disabled}
+                  >
                     <>
+                      <HeaderLight>
+                        {user?.name || (isAuthUser ? 'Add Name' : '')}
+                      </HeaderLight>
+                      <SubHeader style={{ marginTop: 5 }}>
+                        {user?.username
+                          ? '@' + user?.username
+                          : isAuthUser
+                          ? 'Add Username'
+                          : ''}
+                      </SubHeader>
+                    </>
+                  </TouchableHighlight>
+                </View>
+              </View>
+              {user?.bio ? (
+                <TouchableHighlight
+                  onPress={isAuthUser ? () => onPressProfileInfo() : undefined}
+                  style={{
+                    margin: theme.windowMargin,
+                    borderRadius: theme.borderRadius,
+                  }}
+                  underlayColor={COLORS.disabled}
+                >
+                  <Body>{user.bio || ''}</Body>
+                </TouchableHighlight>
+              ) : (
+                <View style={{ marginTop: 20 }} />
+              )}
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'flex-start',
+                  width: '100%',
+                  marginLeft: theme.windowMargin,
+                }}
+              >
+                <FollowCountButton
+                  onPress={() => {
+                    if (user?.followerCount === 0) return;
+                    navigation.dispatch(
+                      StackActions.push('Followers', {
+                        userInfo: getUserInfo(user),
+                        type: 'followers',
+                      }),
+                    );
+                  }}
+                  text={`${user?.followerCount ?? 0} Followers`}
+                />
+                <FollowCountButton
+                  onPress={() => {
+                    if (user?.followingCount === 0) return;
+                    navigation.dispatch(
+                      StackActions.push('Followers', {
+                        userInfo: getUserInfo(user),
+                        type: 'following',
+                      }),
+                    );
+                  }}
+                  text={`${user?.followingCount ?? 0} Following`}
+                />
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'flex-start',
+                  width: '100%',
+                  marginLeft: theme.windowMargin,
+                  marginTop: 10,
+                }}
+              >
+                {user ? (
+                  <FollowButton
+                    authUserIsFollowing={authUserIsFollowing || false}
+                    profileUserId={user._id}
+                  />
+                ) : null}
+                {isFollowingAuthUser ? (
+                  <BodyBold style={{ marginLeft: 10, color: 'rgba(255,255,255,0.8)' }}>
+                    Follows You
+                  </BodyBold>
+                ) : null}
+              </View>
+              {predictionSets.length > 0 ? (
+                <>
+                  <HeaderLight
+                    style={{
+                      alignSelf: 'flex-start',
+                      marginTop: 40,
+                      marginLeft: theme.windowMargin,
+                    }}
+                  >
+                    Recent Predictions:
+                  </HeaderLight>
+                  <PredictionCarousel
+                    predictionSets={predictionSets}
+                    userInfo={userInfo}
+                    hideUserInfo
+                    style={{ marginTop: 10, minHeight: 10 }}
+                  />
+                </>
+              ) : null}
+              {!isLoadingAllEvents && user && userEvents.length > 0 ? (
+                <>
+                  <HeaderLight
+                    style={{
+                      alignSelf: 'flex-start',
+                      marginTop: 20,
+                      marginLeft: theme.windowMargin,
+                      marginBottom: 10,
+                    }}
+                  >
+                    {(isAuthUser ? 'My' : 'All') + ' Predictions'}
+                  </HeaderLight>
+                  {userEvents.map((event) => {
+                    const phase = getCurrentPhaseBeingPredicted(event);
+                    return (
                       <EventItemSimple
                         onPress={() => {
-                          navigation.dispatch(
-                            StackActions.push('Leaderboard', {
-                              eventId: event._id,
-                              phase: lbRanking.phase,
-                            }),
-                          );
+                          setPersonalCommunityTab('personal');
+                          navigation.navigate('Event', {
+                            userInfo: getUserInfo(user),
+                            eventId: event._id,
+                          });
                         }}
                         title={`${AWARDS_BODY_TO_PLURAL_STRING[event.awardsBody]} ${
                           event.year
-                        } - ${PHASE_TO_STRING_PLURAL[lbRanking.phase]}`}
+                        } - ${PHASE_TO_STRING_PLURAL[phase || Phase.CLOSED]}`}
                       />
-                      {user ? (
-                        <LeaderboardListItem
-                          leaderboardRanking={{ userId: user._id, ...user, ...lbRanking }}
-                          style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
+                    );
+                  })}
+                </>
+              ) : null}
+              {leaderboards.length ? (
+                <>
+                  <HeaderLight
+                    style={{
+                      alignSelf: 'flex-start',
+                      marginTop: 30,
+                      marginLeft: theme.windowMargin,
+                      marginBottom: 10,
+                    }}
+                  >
+                    {'Leaderboards'}
+                  </HeaderLight>
+                  {leaderboards.map((lbRanking) => {
+                    const event = events.find((e) => e._id === lbRanking.eventId);
+                    if (!event) return null;
+                    return (
+                      <>
+                        <EventItemSimple
+                          onPress={() => {
+                            navigation.dispatch(
+                              StackActions.push('Leaderboard', {
+                                eventId: event._id,
+                                phase: lbRanking.phase,
+                              }),
+                            );
+                          }}
+                          title={`${AWARDS_BODY_TO_PLURAL_STRING[event.awardsBody]} ${
+                            event.year
+                          } - ${PHASE_TO_STRING_PLURAL[lbRanking.phase]}`}
                         />
-                      ) : null}
-                    </>
-                  );
-                })}
-              </>
-            ) : null}
-          </View>
-        </ScrollView>
-      )}
+                        {user ? (
+                          <LeaderboardListItem
+                            leaderboardRanking={{
+                              userId: user._id,
+                              ...user,
+                              ...lbRanking,
+                            }}
+                            style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
+                          />
+                        ) : null}
+                      </>
+                    );
+                  })}
+                </>
+              ) : null}
+            </View>
+          )}
+        </>
+      </DynamicHeaderScrollViewWrapper>
     </BackgroundWrapper>
   );
 };

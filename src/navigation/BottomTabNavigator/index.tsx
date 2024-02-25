@@ -36,7 +36,7 @@ const BottomTabNavigator = () => {
       <Tab.Screen
         name="ProfileTab"
         component={PredictionsNavigator}
-        initialParams={{ initialScreen: 'Profile' }}
+        initialParams={{ initialScreen: 'Profile', disableBack: true }}
       />
       <Tab.Screen name="Help" component={HelpNavigator} />
     </Tab.Navigator>

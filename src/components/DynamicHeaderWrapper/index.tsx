@@ -27,7 +27,6 @@ const DynamicHeaderWrapper = (
     topOnlyContent,
     collapsedContent,
     persistedContent,
-    scrollViewRef,
     onEndReached,
   } = props;
 
@@ -38,20 +37,22 @@ const DynamicHeaderWrapper = (
   const { bottom } = useSafeAreaInsets();
   const { height } = useWindowDimensions();
 
+  // TODO: this is repeated in the other component
   const minHeaderHeight = collapsedComponentHeight + persistedComponentHeight;
   const maxHeaderHeight = topOnlyComponentHeight + persistedComponentHeight;
-  const SCROLL_DISTANCE = maxHeaderHeight - minHeaderHeight;
+  const scrollDistance = Math.abs(maxHeaderHeight - minHeaderHeight);
+  const minRange = Math.min(scrollDistance, 0);
+  const maxRange = Math.max(scrollDistance, 0);
 
   const animHeaderValue = useRef(new Animated.Value(0)).current;
 
   const paddingTop = animHeaderValue.interpolate({
-    inputRange: [0, SCROLL_DISTANCE],
-    outputRange: [0, SCROLL_DISTANCE],
+    inputRange: [minRange, maxRange],
+    outputRange: [minRange, maxRange],
     extrapolate: 'clamp',
   });
 
   const debouncedOnEndReached = debounce(() => {
-    console.error('ON END', Math.random());
     onEndReached && onEndReached();
   }, 500);
 
@@ -71,8 +72,8 @@ const DynamicHeaderWrapper = (
     onScroll: (e) => {
       const currY = e.nativeEvent.contentOffset.y;
       const numberWithinRange = getNumberWithinRange(currY, {
-        min: 0,
-        max: SCROLL_DISTANCE,
+        min: minRange,
+        max: maxRange,
       });
       animHeaderValue.setValue(numberWithinRange);
 
@@ -92,19 +93,17 @@ const DynamicHeaderWrapper = (
     onScrollEndDrag: (e) => {
       const currY = e.nativeEvent.contentOffset.y;
       const numberWithinRange = getNumberWithinRange(currY, {
-        min: 0,
-        max: SCROLL_DISTANCE,
+        min: minRange,
+        max: maxRange,
       });
-      const isAtTop = numberWithinRange < SCROLL_DISTANCE / 2;
-      if (numberWithinRange !== 0 && numberWithinRange !== SCROLL_DISTANCE) {
+      const isAtTop = numberWithinRange < maxRange / 2;
+      if (numberWithinRange !== minRange && numberWithinRange !== maxRange) {
         Animated.timing(animHeaderValue, {
-          toValue: isAtTop ? 0 : SCROLL_DISTANCE,
+          toValue: isAtTop ? minRange : maxRange,
           useNativeDriver: false,
         }).start();
       }
     },
-    // @ts-ignore
-    ref: scrollViewRef,
   };
 
   return (
