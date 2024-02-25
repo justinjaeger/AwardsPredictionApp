@@ -1,5 +1,5 @@
 import React from 'react';
-import { Animated, FlatList, ScrollView } from 'react-native';
+import { FlatList, ScrollView, View } from 'react-native';
 import DynamicHeaderWrapper from '.';
 import { getCollapsedContent } from './getCollapsedContent';
 import { useNavigation } from '@react-navigation/native';
@@ -37,7 +37,7 @@ const DynamicHeaderFlatListWrapper = <T,>(props: {
           {...props.flatListProps}
           ListHeaderComponent={
             <>
-              <Animated.View style={{ paddingTop }} />
+              <View style={{ paddingTop }} />
               {props.flatListProps.ListHeaderComponent}
             </>
           }

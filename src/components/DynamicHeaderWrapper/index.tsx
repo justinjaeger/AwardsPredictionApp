@@ -17,7 +17,7 @@ const DynamicHeaderWrapper = (
   props: {
     onEndReached?: () => void;
     renderBodyComponent: (props: {
-      paddingTop: Animated.AnimatedInterpolation<string | number>;
+      paddingTop: number;
       scrollViewProps: ScrollViewProps;
     }) => JSX.Element;
   } & iDynamicHeaderProps,
@@ -29,28 +29,18 @@ const DynamicHeaderWrapper = (
     persistedContent,
     onEndReached,
   } = props;
+  const { height } = useWindowDimensions();
+  const { bottom } = useSafeAreaInsets();
 
   const { height: topOnlyComponentHeight } = topOnlyContent;
   const { height: collapsedComponentHeight } = collapsedContent;
   const { height: persistedComponentHeight } = persistedContent || { height: 0 };
 
-  const { bottom } = useSafeAreaInsets();
-  const { height } = useWindowDimensions();
-
-  // TODO: this is repeated in the other component
-  const minHeaderHeight = collapsedComponentHeight + persistedComponentHeight;
-  const maxHeaderHeight = topOnlyComponentHeight + persistedComponentHeight;
-  const scrollDistance = Math.abs(maxHeaderHeight - minHeaderHeight);
-  const minRange = Math.min(scrollDistance, 0);
-  const maxRange = Math.max(scrollDistance, 0);
+  const collapsedHeaderHeight = collapsedComponentHeight + persistedComponentHeight;
+  const topHeaderHeight = topOnlyComponentHeight + persistedComponentHeight;
+  const scrollDistance = Math.abs(topHeaderHeight - collapsedHeaderHeight);
 
   const animHeaderValue = useRef(new Animated.Value(0)).current;
-
-  const paddingTop = animHeaderValue.interpolate({
-    inputRange: [minRange, maxRange],
-    outputRange: [minRange, maxRange],
-    extrapolate: 'clamp',
-  });
 
   const debouncedOnEndReached = debounce(() => {
     onEndReached && onEndReached();
@@ -72,8 +62,8 @@ const DynamicHeaderWrapper = (
     onScroll: (e) => {
       const currY = e.nativeEvent.contentOffset.y;
       const numberWithinRange = getNumberWithinRange(currY, {
-        min: minRange,
-        max: maxRange,
+        min: 0,
+        max: scrollDistance,
       });
       animHeaderValue.setValue(numberWithinRange);
 
@@ -93,13 +83,13 @@ const DynamicHeaderWrapper = (
     onScrollEndDrag: (e) => {
       const currY = e.nativeEvent.contentOffset.y;
       const numberWithinRange = getNumberWithinRange(currY, {
-        min: minRange,
-        max: maxRange,
+        min: 0,
+        max: scrollDistance,
       });
-      const isAtTop = numberWithinRange < maxRange / 2;
-      if (numberWithinRange !== minRange && numberWithinRange !== maxRange) {
+      const isAtTop = numberWithinRange < scrollDistance / 2;
+      if (numberWithinRange !== 0 && numberWithinRange !== scrollDistance) {
         Animated.timing(animHeaderValue, {
-          toValue: isAtTop ? minRange : maxRange,
+          toValue: isAtTop ? 0 : scrollDistance,
           useNativeDriver: false,
         }).start();
       }
@@ -109,7 +99,7 @@ const DynamicHeaderWrapper = (
   return (
     <View>
       <DynamicHeader animHeaderValue={animHeaderValue} {...props} />
-      {renderBodyComponent({ paddingTop, scrollViewProps })}
+      {renderBodyComponent({ paddingTop: topHeaderHeight, scrollViewProps })}
     </View>
   );
 };
