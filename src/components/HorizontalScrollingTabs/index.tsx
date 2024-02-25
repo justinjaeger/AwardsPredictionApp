@@ -42,7 +42,6 @@ const HorizontalScrollingTabs = <T,>({
               padding: 5,
               paddingLeft: 10,
               paddingRight: 10,
-              marginLeft: 10,
               borderRadius: 30,
               alignItems: 'center',
               justifyContent: 'center',

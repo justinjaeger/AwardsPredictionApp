@@ -22,20 +22,24 @@ import useQueryGetAllEvents from '../../../hooks/queries/useQueryGetAllEvents';
 import { AWARDS_BODY_TO_PLURAL_STRING } from '../../../constants/awardsBodies';
 import LeaderboardStats from './LeaderboardStats';
 import HeaderDropdownOverlay from '../../../components/HeaderDropdownOverlay';
-import HeaderWithYearDropdown, {
-  BACK_BUTTON_HEIGHT,
-  HEADER_TITLE_HEIGHT,
-  HEADER_TITLE_MARGIN_TOP,
-  HEADER_TOP_TAB_MARGIN_BOTTOM,
-  HEADER_TOP_TAB_MARGIN_TOP,
-} from '../../../components/HeaderWithYearDropdown';
 import { EVENT_TOP_TABS_HEIGHT } from '../../../components/HorizontalScrollingTabs';
 import { useEventSelect } from '../../../hooks/useEventSelect';
 import SectionTopTabs from '../../../components/SectionTopTabs';
 import DynamicHeaderFlatListWrapper from '../../../components/DynamicHeaderWrapper/DynamicHeaderFlatListWrapper';
-import COLORS from '../../../constants/colors';
 import { useRouteParams } from '../../../hooks/useRouteParams';
-import LeaderboardTopTabs from '../../../components/LeaderboardTabs';
+import LeaderboardTopTabs from '../../../components/HeaderComponents/LeaderboardTabs';
+import Header, { HEADER_HEIGHT } from '../../../components/HeaderComponents/Header';
+import YearDropdown from '../../../components/HeaderComponents/YearDropdown';
+import BackButton, {
+  BACK_BUTTON_HEIGHT,
+} from '../../../components/HeaderComponents/BackButton';
+import theme from '../../../constants/theme';
+import {
+  HEADER_TITLE_MARGIN_TOP,
+  HEADER_TOP_TAB_MARGIN_BOTTOM,
+  HEADER_TOP_TAB_MARGIN_TOP,
+} from '../../../components/HeaderComponents/constants';
+import COLORS from '../../../constants/colors';
 
 const Leaderboard = () => {
   const flatListRef = useRef<FlatList>(null);
@@ -107,43 +111,63 @@ const Leaderboard = () => {
         disableBack={disableBack}
         topOnlyContent={{
           height:
-            HEADER_TITLE_HEIGHT +
+            HEADER_HEIGHT +
             HEADER_TITLE_MARGIN_TOP +
             EVENT_TOP_TABS_HEIGHT +
-            HEADER_TOP_TAB_MARGIN_BOTTOM +
-            HEADER_TOP_TAB_MARGIN_BOTTOM +
+            HEADER_TOP_TAB_MARGIN_BOTTOM * 2 +
             HEADER_TOP_TAB_MARGIN_TOP +
             (disableBack ? 0 : BACK_BUTTON_HEIGHT),
           component: (
             <View
               style={{
-                marginTop: HEADER_TOP_TAB_MARGIN_TOP,
-                paddingBottom: HEADER_TOP_TAB_MARGIN_BOTTOM,
+                marginTop: HEADER_TITLE_MARGIN_TOP,
                 borderBottomColor: COLORS.primaryLight,
                 borderBottomWidth: 1,
               }}
             >
-              <HeaderWithYearDropdown
-                title={'Leaderboards'}
-                event={event}
-                eventOptions={eventsWithLeaderboard}
-                setYear={setYear}
-                disableBack={disableBack}
-              />
-              {event && phase ? (
-                <LeaderboardTopTabs
+              <View
+                style={{
+                  paddingLeft: theme.windowMargin,
+                  paddingRight: theme.windowMargin,
+                }}
+              >
+                {disableBack ? null : <BackButton />}
+                <View
                   style={{
-                    marginTop: HEADER_TOP_TAB_MARGIN_TOP,
-                    marginBottom: HEADER_TOP_TAB_MARGIN_BOTTOM,
+                    flexDirection: 'row',
+                    width: '100%',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
                   }}
-                  selectedEvent={event}
-                  phase={phase}
-                  setLeaderboard={(event, phase) => {
-                    setPhase(phase);
-                    setEvent(event);
-                  }}
-                />
-              ) : null}
+                >
+                  <Header text={'Predictions'} />
+                  <YearDropdown
+                    event={event}
+                    eventOptions={eventsWithLeaderboard}
+                    setYear={setYear}
+                  />
+                </View>
+              </View>
+              <View
+                style={{
+                  marginTop: HEADER_TOP_TAB_MARGIN_TOP,
+                  marginBottom: HEADER_TOP_TAB_MARGIN_BOTTOM * 2,
+                }}
+              >
+                {event && phase ? (
+                  <LeaderboardTopTabs
+                    style={{
+                      paddingLeft: theme.windowMargin,
+                    }}
+                    selectedEvent={event}
+                    phase={phase}
+                    setLeaderboard={(event, phase) => {
+                      setPhase(phase);
+                      setEvent(event);
+                    }}
+                  />
+                ) : null}
+              </View>
             </View>
           ),
         }}

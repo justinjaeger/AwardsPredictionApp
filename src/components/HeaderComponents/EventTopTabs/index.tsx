@@ -3,10 +3,10 @@ import { StyleProp, ViewStyle } from 'react-native';
 import {
   AWARDS_BODY_TO_PLURAL_STRING,
   SORTED_AWARDS_BODIES,
-} from '../../constants/awardsBodies';
-import useQueryGetAllEvents from '../../hooks/queries/useQueryGetAllEvents';
-import { EventModel, WithId } from '../../models';
-import HorizontalScrollingTabs from '../HorizontalScrollingTabs';
+} from '../../../constants/awardsBodies';
+import useQueryGetAllEvents from '../../../hooks/queries/useQueryGetAllEvents';
+import { EventModel, WithId } from '../../../models';
+import HorizontalScrollingTabs from '../../HorizontalScrollingTabs';
 
 /**
  * Shows tabs within the selected event's year

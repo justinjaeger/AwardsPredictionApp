@@ -1,14 +1,14 @@
 import React from 'react';
 import { StyleProp, ViewStyle } from 'react-native';
-import { EventModel, Phase, WithId } from '../../models';
-import HorizontalScrollingTabs from '../HorizontalScrollingTabs';
-import { getLeaderboardsFromEvents } from '../../util/getLeaderboardsFromEvents';
-import { PHASE_TO_STRING_PLURAL } from '../../constants/categories';
-import useQueryGetAllEvents from '../../hooks/queries/useQueryGetAllEvents';
+import { EventModel, Phase, WithId } from '../../../models';
+import HorizontalScrollingTabs from '../../HorizontalScrollingTabs';
+import { getLeaderboardsFromEvents } from '../../../util/getLeaderboardsFromEvents';
+import { PHASE_TO_STRING_PLURAL } from '../../../constants/categories';
+import useQueryGetAllEvents from '../../../hooks/queries/useQueryGetAllEvents';
 import {
   AWARDS_BODY_TO_STRING,
   SORTED_AWARDS_BODIES,
-} from '../../constants/awardsBodies';
+} from '../../../constants/awardsBodies';
 
 /**
  * Shows phases within event
