@@ -77,7 +77,6 @@ const CategoryListItem = ({
 
   return (
     <TouchableHighlight
-      key={'categorylistitem' + category}
       style={{
         height,
         width: '100%',

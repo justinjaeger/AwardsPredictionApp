@@ -40,7 +40,6 @@ const LeaderboardListItem = ({
 
   return (
     <Template
-      key={leaderboardRanking.userId}
       onPress={navigateToPredictions}
       title={
         hasOnlyOneName

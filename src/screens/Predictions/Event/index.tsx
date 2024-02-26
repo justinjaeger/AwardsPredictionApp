@@ -6,7 +6,7 @@ import useQueryGetCommunityPredictions from '../../../hooks/queries/useQueryGetC
 import BottomFABContainer from '../../../components/BottomFABContainer';
 import { useRouteParams } from '../../../hooks/useRouteParams';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
-import { View, useWindowDimensions, FlatList } from 'react-native';
+import { View, useWindowDimensions, FlatList, ScrollView } from 'react-native';
 import useDevice from '../../../util/device';
 import { AWARDS_BODY_TO_PLURAL_STRING } from '../../../constants/awardsBodies';
 import { EVENT_TOP_TABS_HEIGHT } from '../../../components/HorizontalScrollingTabs';
@@ -23,7 +23,6 @@ import CategoryListItem, { iCategoryListItem } from './CategoryListItem';
 import { StackActions, useNavigation } from '@react-navigation/native';
 import { PredictionsNavigationProp } from '../../../navigation/types';
 import useProfileUser from '../../Profile/useProfileUser';
-import { useIsTrueAfterJavaScriptUpdates } from '../../../hooks/useIsTrueAfterJavaScriptUpdates';
 import EventSkeleton from '../../../components/Skeletons/EventSkeleton';
 import { getCategoryListItemHeight } from '../../../util/getCategoryListItemHeight';
 import EventTopTabs from '../../../components/HeaderComponents/EventTopTabs';
@@ -45,6 +44,7 @@ import UserProfile, {
   USER_PROFILE_HEIGHT,
 } from '../../../components/HeaderComponents/UserProfile';
 import { PHASE_TO_STRING_PLURAL } from '../../../constants/categories';
+import { FlashList } from '@shopify/flash-list';
 
 const getPredictionsData = (
   userPredictionSet: WithId<PredictionSet> | undefined,
@@ -67,7 +67,7 @@ const getPredictionsData = (
 };
 
 const Event = () => {
-  const flatListRef = useRef<FlatList>(null);
+  const scrollViewRef = useRef<ScrollView>(null);
 
   const { width } = useWindowDimensions();
   const { isPad } = useDevice();
@@ -79,7 +79,7 @@ const Event = () => {
   const isAuthProfile = user?._id === authUserId;
 
   const { data: events } = useQueryGetAllEvents();
-  const { event, year, phase, yyyymmdd, setEvent, setYear } = useEventSelect();
+  const { event, phase, yyyymmdd, setEvent, setYear } = useEventSelect();
 
   const { data: userPredictionData, isLoading: isLoadingPersonal } =
     useQueryGetUserPredictions({ event, userId, yyyymmdd });
@@ -87,13 +87,6 @@ const Event = () => {
     useQueryGetCommunityPredictions({ event, yyyymmdd });
 
   const predictionTabHeight = getSectionTabHeight(isPad);
-
-  const trueAfterJavaScriptRuns = useIsTrueAfterJavaScriptUpdates([
-    event?._id,
-    year,
-    yyyymmdd,
-    userId,
-  ]);
 
   const onSelectCategory = async (category: CategoryName, isCommunityTab?: boolean) => {
     if (!event) return;
@@ -214,7 +207,7 @@ const Event = () => {
     <BackgroundWrapper>
       <HeaderDropdownOverlay />
       <DynamicHeaderFlatListWrapper<iCategoryListItem[]>
-        flatListRef={flatListRef}
+        scrollViewRef={scrollViewRef}
         disableBack={disableBack}
         topOnlyContent={topOnlyContent}
         titleWhenCollapsed={
@@ -234,18 +227,16 @@ const Event = () => {
           ),
         }}
         flatListProps={{
-          initialNumToRender: 3,
           data,
           keyExtractor: (item) => item[0][0], // the category name
-          renderItem: ({ item, index }) => {
+          estimatedItemSize: getCategoryListItemHeight({
+            categoryName: CategoryName.ACTOR,
+            event,
+            windowWidth: width,
+          }),
+          renderItem: ({ item }) => {
             const category = item[0][0] as CategoryName | undefined;
-            const numPredicting = item[0][1]?.length;
-            if (
-              isLoading ||
-              !event ||
-              !category ||
-              (!trueAfterJavaScriptRuns && numPredicting > 0 && index > 2)
-            ) {
+            if (isLoading || !event || !category) {
               return (
                 <View key={'event-skeleton' + category}>
                   <EventSkeleton event={event} category={category} />
@@ -270,21 +261,6 @@ const Event = () => {
                 }
               />
             );
-          },
-          getItemLayout: (data, index) => {
-            const heightAtEachIndex = (data ?? []).map((item) => {
-              const [category] = item[0];
-              return getCategoryListItemHeight({
-                categoryName: category,
-                event,
-                windowWidth: width,
-              });
-            });
-            return {
-              length: heightAtEachIndex[index],
-              offset: heightAtEachIndex.slice(0, index).reduce((a, b) => a + b, 0),
-              index,
-            };
           },
         }}
       />

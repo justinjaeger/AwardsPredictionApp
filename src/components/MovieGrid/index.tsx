@@ -62,7 +62,6 @@ const MovieGrid = ({
         if (!prediction) {
           return (
             <View
-              key={'grid-placeholder' + i}
               style={{
                 height: posterDimensions.height,
                 width: posterDimensions.width,
@@ -80,7 +79,6 @@ const MovieGrid = ({
         const accoladeMatchesPhase = phase === accolade;
         return (
           <View
-            key={contenderId}
             style={{
               height: posterContainerHeight,
               marginLeft: theme.posterMargin,

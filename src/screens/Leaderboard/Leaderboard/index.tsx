@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import useGetLeaderboardUsers from '../../../hooks/useGetLeaderboardUsers';
-import { FlatList, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import LeaderboardListItem, {
   LEADERBOARD_PROFILE_IMAGE_SIZE,
 } from '../../../components/LeaderboardListItem';
@@ -43,7 +43,7 @@ import COLORS from '../../../constants/colors';
 import { LEADERBOARD_LIST_ITEM_HEIGHT } from '../../../components/LeaderboardListItem/Template';
 
 const Leaderboard = () => {
-  const flatListRef = useRef<FlatList>(null);
+  const scrollViewRef = useRef<ScrollView>(null);
 
   const navigation = useNavigation<PredictionsNavigationProp>();
 
@@ -108,7 +108,7 @@ const Leaderboard = () => {
     <BackgroundWrapper>
       <HeaderDropdownOverlay />
       <DynamicHeaderFlatListWrapper<iLeaderboardRankingsWithUserData>
-        flatListRef={flatListRef}
+        scrollViewRef={scrollViewRef}
         disableBack={disableBack}
         topOnlyContent={{
           height:
@@ -182,12 +182,7 @@ const Leaderboard = () => {
           renderItem: ({ item }) => {
             return <LeaderboardListItem leaderboardRanking={item} />;
           },
-          getItemLayout: (x, index) => ({
-            length: LEADERBOARD_LIST_ITEM_HEIGHT,
-            offset: LEADERBOARD_LIST_ITEM_HEIGHT * index,
-            index,
-          }),
-          initialNumToRender: 10,
+          estimatedItemSize: LEADERBOARD_LIST_ITEM_HEIGHT,
           ListHeaderComponent: (
             <>
               {user && userLeaderboard ? (
@@ -217,7 +212,7 @@ const Leaderboard = () => {
                 <SubHeader>Score Distribution</SubHeader>
                 <Body style={{ marginTop: 5 }}>All Users</Body>
               </View>
-              <LeaderboardChart leaderboard={leaderboard} flatListRef={flatListRef} />
+              <LeaderboardChart leaderboard={leaderboard} scrollViewRef={scrollViewRef} />
               {authUserId ? (
                 <SectionTopTabs
                   tabs={[

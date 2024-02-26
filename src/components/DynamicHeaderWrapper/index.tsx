@@ -1,17 +1,12 @@
-import React, { useRef } from 'react';
-import {
-  Animated,
-  Keyboard,
-  View,
-  useWindowDimensions,
-  ScrollViewProps,
-} from 'react-native';
+import React from 'react';
+import { View, useWindowDimensions, ScrollViewProps } from 'react-native';
 import { getNumberWithinRange } from '../../util/getNumberWithinRange';
 import { BOTTOM_TAB_HEIGHT } from '../../constants';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { UNEXPLAINED_EXTRA_SCROLL_HEIGHT } from '../../screens/Predictions/Event/constants';
 import DynamicHeader, { iDynamicHeaderProps } from './DynamicHeader';
-import { debounce } from 'lodash';
+import { useSharedValue, withTiming } from 'react-native-reanimated';
+import { FlashListProps } from '@shopify/flash-list';
 
 const DynamicHeaderWrapper = (
   props: {
@@ -43,13 +38,9 @@ const DynamicHeaderWrapper = (
   const scrollDistance =
     distanceToCollapse || Math.abs(topHeaderHeight - collapsedHeaderHeight);
 
-  const animHeaderValue = useRef(new Animated.Value(0)).current;
+  const scrollY = useSharedValue(0);
 
-  const debouncedOnEndReached = debounce(() => {
-    onEndReached && onEndReached();
-  }, 500);
-
-  const scrollViewProps: ScrollViewProps = {
+  const scrollViewProps: FlashListProps<any> | ScrollViewProps = {
     style: {
       position: 'relative',
       zIndex: -1,
@@ -68,10 +59,8 @@ const DynamicHeaderWrapper = (
         min: 0,
         max: scrollDistance,
       });
-      animHeaderValue.setValue(numberWithinRange);
+      scrollY.value = numberWithinRange;
 
-      // BELOW IS NOT in the scroll view component
-      Keyboard.dismiss();
       // Fetches more at bottom of scroll. Note the high event throttle to prevent too many requests
       // get position of current scroll
       const currentOffset = e.nativeEvent.contentOffset.y;
@@ -80,7 +69,7 @@ const DynamicHeaderWrapper = (
         e.nativeEvent.contentSize.height - e.nativeEvent.layoutMeasurement.height;
       // if we're close to the bottom fetch more
       if (currentOffset > maxOffset - 200 && onEndReached) {
-        debouncedOnEndReached();
+        onEndReached();
       }
     },
     onScrollEndDrag: (e) => {
@@ -91,10 +80,7 @@ const DynamicHeaderWrapper = (
       });
       const isAtTop = numberWithinRange < scrollDistance / 2;
       if (numberWithinRange !== 0 && numberWithinRange !== scrollDistance) {
-        Animated.timing(animHeaderValue, {
-          toValue: isAtTop ? 0 : scrollDistance,
-          useNativeDriver: false,
-        }).start();
+        scrollY.value = withTiming(isAtTop ? 0 : scrollDistance);
       }
     },
   };
@@ -102,7 +88,7 @@ const DynamicHeaderWrapper = (
   return (
     <View>
       <DynamicHeader
-        animHeaderValue={animHeaderValue}
+        scrollY={scrollY}
         collapsedHeaderHeight={collapsedHeaderHeight}
         topHeaderHeight={topHeaderHeight}
         scrollDistance={scrollDistance}

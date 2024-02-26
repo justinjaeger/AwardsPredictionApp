@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {
-  Animated,
   FlatList,
   ScrollView,
   TouchableOpacity,
@@ -9,6 +8,14 @@ import {
 } from 'react-native';
 import COLORS from '../../constants/colors';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Animated, {
+  Extrapolation,
+  SharedValue,
+  interpolate,
+  interpolateColor,
+  useAnimatedStyle,
+} from 'react-native-reanimated';
+import { FlashList } from '@shopify/flash-list';
 
 const BG_COLOR = COLORS.primaryDark;
 const PRIMARY_COLOR = COLORS.secondaryDark;
@@ -17,12 +24,13 @@ export type iDynamicHeaderProps = {
   topOnlyContent: { height: number; component: JSX.Element };
   collapsedContent: { height: number; component: JSX.Element };
   persistedContent?: { height: number; component: JSX.Element };
-  flatListRef?: React.RefObject<FlatList>;
+  flatListRef?: React.LegacyRef<FlashList<any>>;
   scrollViewRef?: React.RefObject<ScrollView>;
 };
 
+// TODO: replace with reanimated
 const DynamicHeader = ({
-  animHeaderValue,
+  scrollY,
   collapsedHeaderHeight,
   topHeaderHeight,
   scrollDistance,
@@ -32,7 +40,7 @@ const DynamicHeader = ({
   flatListRef,
   scrollViewRef,
 }: {
-  animHeaderValue: Animated.Value;
+  scrollY: SharedValue<number>;
   collapsedHeaderHeight: number;
   topHeaderHeight: number;
   scrollDistance: number;
@@ -52,40 +60,53 @@ const DynamicHeader = ({
     0,
   );
 
-  const animatedHeaderHeight = animHeaderValue.interpolate({
-    inputRange: [0, scrollDistance],
-    outputRange: [topHeaderHeight, collapsedHeaderHeight],
-    extrapolate: 'clamp',
-  });
+  const animatedHeaderHeight = useAnimatedStyle(() => ({
+    height: interpolate(
+      scrollY.value,
+      [0, scrollDistance],
+      [topHeaderHeight, collapsedHeaderHeight],
+      Extrapolation.CLAMP,
+    ),
+  }));
 
-  const animatedMarginTop = animHeaderValue.interpolate({
-    inputRange: [0, scrollDistance],
-    outputRange: [negativeAmountToHideCollapsed, 0],
-    extrapolate: 'clamp',
-  });
+  const animatedMarginTop = useAnimatedStyle(() => ({
+    marginTop: interpolate(
+      scrollY.value,
+      [0, scrollDistance],
+      [negativeAmountToHideCollapsed, 0],
+      Extrapolation.CLAMP,
+    ),
+  }));
 
-  const animateTopContentOpacity = animHeaderValue.interpolate({
-    inputRange: [0, scrollDistance / 2],
-    outputRange: [1, 0],
-    extrapolate: 'clamp',
-  });
+  const animateTopContentOpacity = useAnimatedStyle(() => ({
+    opacity: interpolate(
+      scrollY.value,
+      [0, scrollDistance / 2],
+      [1, 0],
+      Extrapolation.CLAMP,
+    ),
+  }));
 
-  const animateCollapsedContentOpacity = animHeaderValue.interpolate({
-    inputRange: [scrollDistance / 2, scrollDistance],
-    outputRange: [0, 1],
-    extrapolate: 'clamp',
-  });
+  const animateCollapsedContentOpacity = useAnimatedStyle(() => ({
+    opacity: interpolate(
+      scrollY.value,
+      [scrollDistance / 2, scrollDistance],
+      [0, 1],
+      Extrapolation.CLAMP,
+    ),
+  }));
 
-  const animateHeaderBackgroundColor = animHeaderValue.interpolate({
-    inputRange: [0, scrollDistance],
-    outputRange: [BG_COLOR, PRIMARY_COLOR],
-    extrapolate: 'clamp',
-  });
+  const animateHeaderBackgroundColor = useAnimatedStyle(() => ({
+    backgroundColor: interpolateColor(
+      scrollY.value,
+      [0, scrollDistance],
+      [BG_COLOR, PRIMARY_COLOR],
+    ),
+  }));
 
-  const animateTopZIndex = animHeaderValue.interpolate({
-    inputRange: [0, scrollDistance],
-    outputRange: [0, 2],
-  });
+  const animateTopZIndex = useAnimatedStyle(() => ({
+    zIndex: interpolate(scrollY.value, [0, scrollDistance], [0, 2], Extrapolation.CLAMP),
+  }));
 
   return (
     <>
@@ -96,7 +117,7 @@ const DynamicHeader = ({
             width,
             zIndex: 2,
           },
-          { backgroundColor: animateHeaderBackgroundColor },
+          animateHeaderBackgroundColor,
         ]}
       />
       <Animated.View
@@ -108,39 +129,46 @@ const DynamicHeader = ({
           {
             position: 'absolute',
             top,
-            marginTop: animatedMarginTop,
-            height: animatedHeaderHeight,
-            backgroundColor: animateHeaderBackgroundColor,
+            zIndex: 1000,
+            // marginTop: animatedMarginTop,
+            // height: animatedHeaderHeight,
+            // backgroundColor: animateHeaderBackgroundColor,
           },
+          animatedMarginTop,
+          animatedHeaderHeight,
+          animateHeaderBackgroundColor,
         ]}
       >
-        <Animated.View style={{ backgroundColor: animateHeaderBackgroundColor }}>
+        <Animated.View style={[animateHeaderBackgroundColor]}>
           <Animated.View
             style={[
               {
                 height: topOnlyComponentHeight,
-              },
-              {
-                opacity: animateTopContentOpacity,
                 zIndex: 1,
               },
+              animateTopContentOpacity,
             ]}
           >
             {topOnlyComponent}
           </Animated.View>
           <Animated.View
-            style={{
-              width: '100%',
-              position: 'absolute',
-              top: topOnlyComponentHeight - collapsedComponentHeight,
-              opacity: animateCollapsedContentOpacity,
-              zIndex: animateTopZIndex,
-            }}
+            style={[
+              {
+                width: '100%',
+                position: 'absolute',
+                top: topOnlyComponentHeight - collapsedComponentHeight,
+                // opacity: animateCollapsedContentOpacity,
+                // zIndex: animateTopZIndex,
+              },
+              animateCollapsedContentOpacity,
+              animateTopZIndex,
+            ]}
           >
             <View style={[{ height: collapsedComponentHeight }]}>
               <TouchableOpacity
                 onPress={() => {
-                  flatListRef && flatListRef.current?.scrollToOffset({ offset: 0 });
+                  console.log('flatListRef', flatListRef);
+                  // flatListRef && flatListRef.current?.scrollToOffset({ offset: 0 });
                   scrollViewRef && scrollViewRef.current?.scrollTo({ y: 0 });
                 }}
               >

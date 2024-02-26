@@ -25,9 +25,11 @@ const CHART_HEIGHT = 75;
 const LeaderboardChart = ({
   leaderboard,
   flatListRef,
+  scrollViewRef,
 }: {
   leaderboard: iLeaderboard;
-  flatListRef: React.RefObject<FlatList<any>>;
+  flatListRef?: React.RefObject<FlatList<any>>;
+  scrollViewRef?: React.RefObject<ScrollView>;
 }) => {
   const chartRef = useRef<ScrollView>(null);
   const { width } = useWindowDimensions();
@@ -111,6 +113,7 @@ const LeaderboardChart = ({
   // better for performance since it won't re-render the component
   const enableScroll = (scrollEnabled: boolean) => {
     flatListRef?.current?.setNativeProps?.({ scrollEnabled });
+    scrollViewRef?.current?.setNativeProps?.({ scrollEnabled });
   };
 
   return (

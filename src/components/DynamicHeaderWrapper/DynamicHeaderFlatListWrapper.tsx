@@ -1,36 +1,28 @@
-import React from 'react';
-import { FlatList, ScrollView, View } from 'react-native';
+import React, { LegacyRef } from 'react';
+import { ScrollView, View } from 'react-native';
 import DynamicHeaderWrapper from '.';
 import { getCollapsedContent } from './getCollapsedContent';
+import { FlashList, FlashListProps } from '@shopify/flash-list';
 
-export type iDynamicHeaderFlatListProps<T> = {
-  data: T[];
-  keyExtractor: (item: T, index: number) => string;
-  renderItem: (item: { item: T; index: number }) => JSX.Element;
-  ListHeaderComponent?: JSX.Element;
-  ListFooterComponent?: JSX.Element;
-  getItemLayout?: (
-    data: Array<T> | null | undefined,
-    index: number,
-  ) => { length: number; offset: number; index: number };
-  initialNumToRender?: number;
-};
+const stripRef = (object: any) => ({
+  ...object,
+  ref: undefined,
+});
 
 const DynamicHeaderFlatListWrapper = <T,>(props: {
   titleWhenCollapsed: string;
   topOnlyContent: { height: number; component: JSX.Element };
-  flatListProps: iDynamicHeaderFlatListProps<T>;
+  flatListProps: FlashListProps<T>;
   persistedContent?: { height: number; component: JSX.Element };
   scrollViewRef?: React.RefObject<ScrollView>;
-  flatListRef?: React.RefObject<FlatList>;
   onEndReached?: () => void;
   disableBack?: boolean;
 }) => {
   return (
     <DynamicHeaderWrapper
-      {...props}
+      {...stripRef(props)}
       renderBodyComponent={({ paddingTop, scrollViewProps }) => (
-        <FlatList
+        <FlashList
           {...scrollViewProps}
           {...props.flatListProps}
           ListHeaderComponent={
@@ -39,7 +31,9 @@ const DynamicHeaderFlatListWrapper = <T,>(props: {
               {props.flatListProps.ListHeaderComponent}
             </>
           }
-          ref={props.flatListRef}
+          renderScrollComponent={(scrollProps) => (
+            <ScrollView {...scrollProps} ref={props.scrollViewRef} />
+          )}
         />
       )}
       collapsedContent={getCollapsedContent(props.titleWhenCollapsed, props.disableBack)}
