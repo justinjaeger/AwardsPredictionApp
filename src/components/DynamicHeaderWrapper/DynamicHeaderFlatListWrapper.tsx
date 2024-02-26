@@ -2,7 +2,6 @@ import React from 'react';
 import { FlatList, ScrollView, View } from 'react-native';
 import DynamicHeaderWrapper from '.';
 import { getCollapsedContent } from './getCollapsedContent';
-import { useNavigation } from '@react-navigation/native';
 
 export type iDynamicHeaderFlatListProps<T> = {
   data: T[];
@@ -27,7 +26,6 @@ const DynamicHeaderFlatListWrapper = <T,>(props: {
   onEndReached?: () => void;
   disableBack?: boolean;
 }) => {
-  const navigation = useNavigation();
   return (
     <DynamicHeaderWrapper
       {...props}
@@ -44,11 +42,7 @@ const DynamicHeaderFlatListWrapper = <T,>(props: {
           ref={props.flatListRef}
         />
       )}
-      collapsedContent={getCollapsedContent(
-        props.titleWhenCollapsed,
-        props.disableBack,
-        () => navigation.goBack(),
-      )}
+      collapsedContent={getCollapsedContent(props.titleWhenCollapsed, props.disableBack)}
     />
   );
 };

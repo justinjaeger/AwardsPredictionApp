@@ -12,7 +12,6 @@ import { useNavigateAwayEffect } from '../../../util/hooks';
 import { PredictionsNavigationProp } from '../../../navigation/types';
 import { getBiggestPhaseThatHasHappened } from '../../../util/getBiggestPhaseThatHasHappened';
 import { usePredictions } from '../AddPredictions.tsx/usePredictions';
-import BackButton from '../../../components/Buttons/BackButton';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import CreatePerformanceModal from './CreatePerformanceModal';
 import CreateSongModal from './CreateSongModal';
@@ -23,6 +22,7 @@ import { getCategoryIsHidden } from '../../../util/getCategoryIsHidden';
 import { useNavigation } from '@react-navigation/native';
 import { getTwoLineHeaderTitle } from '../../../constants';
 import { eventToString } from '../../../util/stringConversions';
+import BackButton from '../../../components/HeaderComponents/BackButton';
 
 const AddPredictions = () => {
   const navigation = useNavigation<PredictionsNavigationProp>();

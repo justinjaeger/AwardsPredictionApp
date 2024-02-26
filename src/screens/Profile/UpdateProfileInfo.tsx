@@ -13,9 +13,9 @@ import useMutationUpdateUser from '../../hooks/mutations/useMutationUpdateUser';
 import useQueryGetUser from '../../hooks/queries/useQueryGetUser';
 import ProfileImage from '../../components/ProfileImage';
 import useMutationUpdateProfileImage from '../../hooks/mutations/useMutationUpdateProfileImage';
-import BackButton from '../../components/Buttons/BackButton';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { PredictionsNavigationProp } from '../../navigation/types';
+import BackButton from '../../components/HeaderComponents/BackButton';
 
 const BIO_CHAR_LIMIT = 150;
 

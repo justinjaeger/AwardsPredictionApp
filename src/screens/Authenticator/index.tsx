@@ -4,8 +4,8 @@ import COLORS from '../../constants/colors';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import OauthPage from './Oauth';
 import EmailPage from './Email';
-import BackButton from '../../components/Buttons/BackButton';
 import SafeAreaViewFixed from '../../components/SafeAreaViewFixed';
+import BackButton from '../../components/HeaderComponents/BackButton';
 
 const Tab = createMaterialTopTabNavigator();
 

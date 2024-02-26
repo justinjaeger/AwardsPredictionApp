@@ -3,7 +3,6 @@ import { Alert, TouchableOpacity } from 'react-native';
 import Snackbar from '../../components/Snackbar';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigation } from '@react-navigation/native';
-import BackButton from '../../components/Buttons/BackButton';
 import { BodyBold } from '../../components/Text';
 import { PredictionsNavigationProp } from '../../navigation/types';
 
@@ -12,7 +11,6 @@ const useProfileHeader = (
   isLoading: boolean,
   setIsLoading: (l: boolean) => void,
 ) => {
-  const globalNavigation = useNavigation();
   const navigation = useNavigation<PredictionsNavigationProp>();
   const { userId: authUserId, signOutUser } = useAuth();
 
@@ -27,19 +25,8 @@ const useProfileHeader = (
 
   // put the logout button in the top right corner
   useLayoutEffect(() => {
-    // helps NOT render a back arrow on root profile
-    const isFirstProfile =
-      globalNavigation
-        .getState()
-        .routes.map((r) => r.name)
-        .filter((r) => r === 'Profile').length === 1;
-
     if (!userId) return;
     navigation.setOptions({
-      headerLeft:
-        navigation.canGoBack() && (!isFirstProfile || !isAuthUser)
-          ? () => <BackButton />
-          : () => <></>,
       // don't set logout header if someone else's profile
       headerRight:
         isAuthUser && !isLoading

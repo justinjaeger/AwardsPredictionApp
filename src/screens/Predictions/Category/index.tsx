@@ -10,7 +10,7 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useRouteParams } from '../../../hooks/useRouteParams';
 import CategoryCommunity from './CategoryCommunity';
 import PredictionTabsNavigator from '../../../navigation/PredictionTabsNavigator';
-import { PHASE_TO_STRING } from '../../../constants/categories';
+import { PHASE_TO_STRING_PLURAL } from '../../../constants/categories';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import TabBodies from '../../../navigation/PredictionTabsNavigator/TabBodies';
 import { View } from 'react-native';
@@ -29,12 +29,9 @@ const Category = () => {
     const eventName = eventToString(event.awardsBody, event.year);
     const categoryName = event.categories[category].name;
     const leaderboardTitle =
-      isLeaderboard && phase ? `\n${PHASE_TO_STRING[phase]} LB Results` : '';
+      isLeaderboard && phase ? ` • ${PHASE_TO_STRING_PLURAL[phase]}` : '';
     const headerTitle =
-      (leaderboardTitle ? '' : eventName + '\n') +
-      'Best ' +
-      categoryName +
-      (leaderboardTitle || '');
+      eventName + '\n' + 'Best ' + categoryName + (leaderboardTitle || '');
     navigation.setOptions({
       headerTitle: getTwoLineHeaderTitle(headerTitle),
     });

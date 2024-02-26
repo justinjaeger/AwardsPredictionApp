@@ -1,6 +1,5 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import BackButton from '../components/Buttons/BackButton';
 import { BottomTabParamList, PredictionsParamList } from './types';
 import EventSelect from '../screens/Predictions/EventSelect';
 import theme from '../constants/theme';
@@ -19,6 +18,7 @@ import Leaderboard from '../screens/Leaderboard/Leaderboard';
 import Category from '../screens/Predictions/Category';
 import Event from '../screens/Predictions/Event';
 import { HeaderDropdownProvider } from '../context/HeaderDropdownContext';
+import { BackButtonForNavigator } from '../components/HeaderComponents/BackButton';
 
 const { Navigator, Screen, Group } = createStackNavigator<PredictionsParamList>();
 
@@ -48,7 +48,7 @@ const PredictionsNavigator = () => {
           component={Category}
           options={{
             headerTitle: getHeaderTitle('Category'),
-            headerLeft: BackButton,
+            headerLeft: BackButtonForNavigator,
             cardStyle: theme.cardStyle,
             ...large,
           }}
@@ -58,7 +58,7 @@ const PredictionsNavigator = () => {
           component={AddPredictions}
           options={{
             headerTitle: getHeaderTitle('Add / Remove Predictions'),
-            headerLeft: BackButton,
+            headerLeft: BackButtonForNavigator,
             ...large,
           }}
         />
@@ -67,7 +67,7 @@ const PredictionsNavigator = () => {
           component={ContenderStats}
           options={{
             headerTitle: getHeaderTitle('Stats'),
-            headerLeft: BackButton,
+            headerLeft: BackButtonForNavigator,
             gestureEnabled: false,
             ...large,
           }}
@@ -79,7 +79,7 @@ const PredictionsNavigator = () => {
           component={UpdateProfileInfo}
           options={{
             headerTitle: getHeaderTitle('Enter Username'),
-            headerLeft: BackButton,
+            headerLeft: BackButtonForNavigator,
             ...medium,
           }}
         />
@@ -87,7 +87,7 @@ const PredictionsNavigator = () => {
           name="Followers"
           component={Followers}
           options={{
-            headerLeft: BackButton,
+            headerLeft: BackButtonForNavigator,
             headerTitle: getHeaderTitle('Followers'),
             ...medium,
           }}

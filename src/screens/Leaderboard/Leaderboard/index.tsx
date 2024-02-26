@@ -131,7 +131,7 @@ const Leaderboard = () => {
                   paddingRight: theme.windowMargin,
                 }}
               >
-                {disableBack ? null : <BackButton />}
+                {disableBack ? null : <BackButton variation={'on-dark'} />}
                 <View
                   style={{
                     flexDirection: 'row',

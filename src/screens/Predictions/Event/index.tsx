@@ -139,9 +139,9 @@ const Event = () => {
             >
               <View style={{ position: 'relative', alignItems: 'center' }}>
                 <View style={{ position: 'absolute', top: 0, left: 0 }}>
-                  {disableBack ? null : <BackButton />}
+                  {disableBack ? null : <BackButton variation={'on-dark'} />}
                 </View>
-                <UserProfile image={userInfo?.userImage} />
+                {userInfo ? <UserProfile userInfo={userInfo} /> : null}
                 <View />
               </View>
               <View
@@ -174,7 +174,7 @@ const Event = () => {
                 paddingRight: theme.windowMargin,
               }}
             >
-              {disableBack ? null : <BackButton />}
+              {disableBack ? null : <BackButton variation={'on-dark'} />}
               <View
                 style={{
                   flexDirection: 'row',
