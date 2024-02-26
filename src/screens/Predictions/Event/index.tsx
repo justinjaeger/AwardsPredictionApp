@@ -16,7 +16,6 @@ import useQueryGetAllEvents from '../../../hooks/queries/useQueryGetAllEvents';
 import { getSectionTabHeight } from '../../../components/SectionTopTabs';
 import { getUserInfo } from '../../../util/getUserInfo';
 import DynamicHeaderFlatListWrapper from '../../../components/DynamicHeaderWrapper/DynamicHeaderFlatListWrapper';
-import EventListHeaderComponent from './EventListHeaderComponent';
 import DualTabsWrapper from '../../../components/DualTabsWrapper';
 import { CategoryName, EventModel, PredictionSet, WithId } from '../../../models';
 import { getOrderedPredictionSetCategories } from '../../../util/sortByObjectOrder';
@@ -287,28 +286,6 @@ const Event = () => {
               index,
             };
           },
-          ListHeaderComponent: (
-            <DualTabsWrapper
-              tab1={
-                <EventListHeaderComponent
-                  tab={'personal'}
-                  predictionData={userPredictionData || undefined}
-                  isLoading={isLoadingPersonal}
-                  event={event}
-                  yyyymmdd={yyyymmdd}
-                />
-              }
-              tab2={
-                <EventListHeaderComponent
-                  tab={'community'}
-                  predictionData={communityPredictionData || undefined}
-                  isLoading={isLoadingCommunity}
-                  event={event}
-                  yyyymmdd={yyyymmdd}
-                />
-              }
-            />
-          ),
         }}
       />
       <BottomFABContainer />
