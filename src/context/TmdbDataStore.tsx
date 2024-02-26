@@ -70,18 +70,10 @@ export const TmdbDataStoreProvider = (props: { children: React.ReactNode }) => {
     const nonDupIds = filterDuplicates(ids);
     // if it's already in the store, don't fetch from async storage
     const idsNotInStore = nonDupIds.filter((id) => !store[id]);
-    console.log('idsNotInStore', idsNotInStore.length);
-
     if (idsNotInStore.length > 0) {
-      // TODO: remove performance monitoring
-      const startTime = performance.now();
       const storedItems = await TmdbCache.setItemsInAsyncStorage(
         idsNotInStore,
         eventYear,
-      );
-      const endTime = performance.now();
-      console.log(
-        'setItemsInAsyncStorage.all took ' + (endTime - startTime) + ' milliseconds.',
       );
       addItemsToStore(storedItems);
     }

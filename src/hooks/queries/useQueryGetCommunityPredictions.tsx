@@ -23,17 +23,12 @@ const useQueryGetCommunityPredictions = (params?: {
     queryKey: [QueryKeys.COMMUNITY_PREDICTIONS, eventId, yyyymmdd],
     queryFn: async () => {
       if (!eventId) return null;
-      // TODO: remove performance monitoring
-      const startTime = performance.now();
 
       const { data: predictionSet } = await MongoApi.getPredictionSet({
         userId: 'community',
         eventId,
         yyyymmdd,
       });
-
-      const endTime = performance.now();
-      console.log('getPredictionSet took ' + (endTime - startTime) + ' milliseconds.');
 
       if (predictionSet) {
         storeTmdbDataFromPredictionSet(predictionSet, event.year);

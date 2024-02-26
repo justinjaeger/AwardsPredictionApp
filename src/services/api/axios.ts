@@ -8,12 +8,7 @@ const axiosInstance = axios.create({
 
 // Attaches access token to every request
 axiosInstance.interceptors.request.use(async (config) => {
-  const startTime = performance.now();
   const res = await KeychainStorage.get();
-  const endTime = performance.now();
-  // takes from 70-200ms
-  console.log('KeychainStorage.get() took ' + (endTime - startTime) + ' milliseconds.');
-
   const accessToken = res.data?.accessToken;
   if (accessToken) {
     const headers = config.headers || {};

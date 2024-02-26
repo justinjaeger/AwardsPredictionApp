@@ -13,7 +13,6 @@ const UserProfile = ({ userInfo }: { userInfo: iUserInfo }) => {
   const navigation = useNavigation<PredictionsNavigationProp>();
 
   const navigateToProfile = () => {
-    console.log('navigateToProfile', userInfo);
     // important to push so we can have multiple profiles in same stack
     navigation.dispatch(StackActions.push('Profile', { userInfo }));
   };

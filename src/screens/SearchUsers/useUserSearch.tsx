@@ -49,8 +49,6 @@ const useUserSearch = () => {
     setLastSearchInput('');
   };
 
-  console.log('searchResults', searchResults);
-
   return { searchResults, allUsersAreFetched, handleSearch, fetchMore, reset, isLoading };
 };
 

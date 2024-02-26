@@ -57,7 +57,6 @@ const CreatePerformanceModal = ({
         selectedPersonTmdbId,
         minReleaseYear,
       );
-      console.log('_searchData', _searchData);
       setIsLoadingMovies(false);
       if (!_searchData || _searchData.length === 0) {
         Snackbar.warning('This actor has no upcoming films');
