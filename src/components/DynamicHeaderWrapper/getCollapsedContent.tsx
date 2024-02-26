@@ -12,8 +12,9 @@ export const getCollapsedContent = (
   disableBack?: boolean,
   onPressBack?: () => void,
 ) => {
+  const numExtraLines = titleWhenCollapsed.split('\n').length - 1;
   return {
-    height: TITLE_WHEN_COLLAPSED_HEIGHT,
+    height: TITLE_WHEN_COLLAPSED_HEIGHT + numExtraLines * 15,
     component: (
       <View
         style={{

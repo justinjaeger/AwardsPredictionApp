@@ -9,19 +9,11 @@ const Header = ({ text }: { text: string }) => {
     <View
       style={{
         flexDirection: 'row',
-        justifyContent: 'space-between',
         alignItems: 'center',
         height: HEADER_HEIGHT,
       }}
     >
-      <View
-        style={{
-          alignItems: 'flex-start',
-          justifyContent: 'center',
-        }}
-      >
-        <HeaderLight>{text}</HeaderLight>
-      </View>
+      <HeaderLight>{text}</HeaderLight>
     </View>
   );
 };

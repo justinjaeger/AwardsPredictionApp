@@ -1,5 +1,5 @@
 import { View } from 'react-native';
-import { HeaderLight } from '../Text';
+import { SubHeader } from '../Text';
 import React from 'react';
 
 export const SUBHEADER_HEIGHT = 30;
@@ -9,19 +9,11 @@ const Subheader = ({ text }: { text: string }) => {
     <View
       style={{
         flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
+        alignItems: 'baseline',
         height: SUBHEADER_HEIGHT,
       }}
     >
-      <View
-        style={{
-          alignItems: 'flex-start',
-          justifyContent: 'center',
-        }}
-      >
-        <HeaderLight>{text}</HeaderLight>
-      </View>
+      <SubHeader style={{ fontWeight: '600' }}>{text}</SubHeader>
     </View>
   );
 };

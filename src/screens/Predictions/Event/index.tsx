@@ -28,9 +28,7 @@ import { useIsTrueAfterJavaScriptUpdates } from '../../../hooks/useIsTrueAfterJa
 import EventSkeleton from '../../../components/Skeletons/EventSkeleton';
 import { getCategoryListItemHeight } from '../../../util/getCategoryListItemHeight';
 import EventTopTabs from '../../../components/HeaderComponents/EventTopTabs';
-import { SubHeader } from '../../../components/Text';
 import YearDropdown from '../../../components/HeaderComponents/YearDropdown';
-import { PHASE_TO_STRING_PLURAL } from '../../../constants/categories';
 import theme from '../../../constants/theme';
 import Header, { HEADER_HEIGHT } from '../../../components/HeaderComponents/Header';
 import BackButton, {
@@ -41,7 +39,13 @@ import {
   HEADER_TOP_TAB_MARGIN_BOTTOM,
   HEADER_TOP_TAB_MARGIN_TOP,
 } from '../../../components/HeaderComponents/constants';
-import { SUBHEADER_HEIGHT } from '../../../components/HeaderComponents/Subheader';
+import Subheader, {
+  SUBHEADER_HEIGHT,
+} from '../../../components/HeaderComponents/Subheader';
+import UserProfile, {
+  USER_PROFILE_HEIGHT,
+} from '../../../components/HeaderComponents/UserProfile';
+import { PHASE_TO_STRING_PLURAL } from '../../../constants/categories';
 
 const getPredictionsData = (
   userPredictionSet: WithId<PredictionSet> | undefined,
@@ -118,13 +122,13 @@ const Event = () => {
   const isLoading = isLoadingPersonal || isLoadingCommunity;
 
   const eventName = event
-    ? `${AWARDS_BODY_TO_PLURAL_STRING[event.awardsBody]} ${event?.year ?? ''}`
+    ? `${event?.year ?? ''} ${AWARDS_BODY_TO_PLURAL_STRING[event.awardsBody]}`
     : '';
-  const phaseName = phase ? PHASE_TO_STRING_PLURAL[phase] : '';
+  const phaseName = (phase ? PHASE_TO_STRING_PLURAL[phase] : '') + ' ';
 
   const topOnlyContent = isLeaderboard
     ? {
-        height: HEADER_HEIGHT + (disableBack ? 0 : BACK_BUTTON_HEIGHT) + SUBHEADER_HEIGHT,
+        height: HEADER_HEIGHT + SUBHEADER_HEIGHT + USER_PROFILE_HEIGHT,
         component: (
           <View style={{ marginTop: HEADER_TITLE_MARGIN_TOP }}>
             <View
@@ -133,17 +137,22 @@ const Event = () => {
                 paddingRight: theme.windowMargin,
               }}
             >
-              {disableBack ? null : <BackButton />}
+              <View style={{ position: 'relative', alignItems: 'center' }}>
+                <View style={{ position: 'absolute', top: 0, left: 0 }}>
+                  {disableBack ? null : <BackButton />}
+                </View>
+                <UserProfile image={userInfo?.userImage} />
+                <View />
+              </View>
               <View
                 style={{
-                  flexDirection: 'row',
+                  flexDirection: 'column',
                   width: '100%',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
+                  alignItems: 'flex-start',
                 }}
               >
                 <Header text={eventName} />
-                <SubHeader>{phaseName}</SubHeader>
+                <Subheader text={phaseName + 'Leaderboard'} />
               </View>
             </View>
           </View>
@@ -209,7 +218,9 @@ const Event = () => {
         flatListRef={flatListRef}
         disableBack={disableBack}
         topOnlyContent={topOnlyContent}
-        titleWhenCollapsed={eventName}
+        titleWhenCollapsed={
+          eventName + (isLeaderboard ? `\n${phaseName} Leaderboard` : '')
+        }
         persistedContent={{
           height: predictionTabHeight,
           component: (
