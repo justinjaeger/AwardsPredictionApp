@@ -1,10 +1,10 @@
-import React, { LegacyRef } from 'react';
-import { ScrollView, View } from 'react-native';
+import React from 'react';
+import { View } from 'react-native';
 import DynamicHeaderWrapper from '.';
 import { getCollapsedContent } from './getCollapsedContent';
 import { FlashList, FlashListProps } from '@shopify/flash-list';
 
-const stripRef = (object: any) => ({
+const stripProps = (object: any) => ({
   ...object,
   ref: undefined,
 });
@@ -14,13 +14,12 @@ const DynamicHeaderFlatListWrapper = <T,>(props: {
   topOnlyContent: { height: number; component: JSX.Element };
   flatListProps: FlashListProps<T>;
   persistedContent?: { height: number; component: JSX.Element };
-  scrollViewRef?: React.RefObject<ScrollView>;
-  onEndReached?: () => void;
+  flashListRef?: React.LegacyRef<FlashList<T>>;
   disableBack?: boolean;
 }) => {
   return (
     <DynamicHeaderWrapper
-      {...stripRef(props)}
+      {...stripProps(props)}
       renderBodyComponent={({ paddingTop, scrollViewProps }) => (
         <FlashList
           {...scrollViewProps}
@@ -31,9 +30,7 @@ const DynamicHeaderFlatListWrapper = <T,>(props: {
               {props.flatListProps.ListHeaderComponent}
             </>
           }
-          renderScrollComponent={(scrollProps) => (
-            <ScrollView {...scrollProps} ref={props.scrollViewRef} />
-          )}
+          ref={props.flashListRef}
         />
       )}
       collapsedContent={getCollapsedContent(props.titleWhenCollapsed, props.disableBack)}

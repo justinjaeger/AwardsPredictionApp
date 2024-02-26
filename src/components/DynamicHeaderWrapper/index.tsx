@@ -11,7 +11,6 @@ import { FlashListProps } from '@shopify/flash-list';
 const DynamicHeaderWrapper = (
   props: {
     distanceToCollapse?: number;
-    onEndReached?: () => void;
     renderBodyComponent: (props: {
       paddingTop: number;
       scrollViewProps: ScrollViewProps;
@@ -24,7 +23,6 @@ const DynamicHeaderWrapper = (
     topOnlyContent,
     collapsedContent,
     persistedContent,
-    onEndReached,
   } = props;
   const { height } = useWindowDimensions();
   const { bottom } = useSafeAreaInsets();
@@ -60,17 +58,6 @@ const DynamicHeaderWrapper = (
         max: scrollDistance,
       });
       scrollY.value = numberWithinRange;
-
-      // Fetches more at bottom of scroll. Note the high event throttle to prevent too many requests
-      // get position of current scroll
-      const currentOffset = e.nativeEvent.contentOffset.y;
-      // get max bottom of scroll
-      const maxOffset =
-        e.nativeEvent.contentSize.height - e.nativeEvent.layoutMeasurement.height;
-      // if we're close to the bottom fetch more
-      if (currentOffset > maxOffset - 200 && onEndReached) {
-        onEndReached();
-      }
     },
     onScrollEndDrag: (e) => {
       const currY = e.nativeEvent.contentOffset.y;

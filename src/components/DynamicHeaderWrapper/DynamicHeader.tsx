@@ -1,11 +1,5 @@
 import * as React from 'react';
-import {
-  FlatList,
-  ScrollView,
-  TouchableOpacity,
-  View,
-  useWindowDimensions,
-} from 'react-native';
+import { TouchableOpacity, View, useWindowDimensions } from 'react-native';
 import COLORS from '../../constants/colors';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Animated, {
@@ -24,8 +18,7 @@ export type iDynamicHeaderProps = {
   topOnlyContent: { height: number; component: JSX.Element };
   collapsedContent: { height: number; component: JSX.Element };
   persistedContent?: { height: number; component: JSX.Element };
-  flatListRef?: React.LegacyRef<FlashList<any>>;
-  scrollViewRef?: React.RefObject<ScrollView>;
+  flashListRef?: React.LegacyRef<FlashList<any>>;
 };
 
 // TODO: replace with reanimated
@@ -37,8 +30,7 @@ const DynamicHeader = ({
   topOnlyContent,
   collapsedContent,
   persistedContent,
-  flatListRef,
-  scrollViewRef,
+  flashListRef,
 }: {
   scrollY: SharedValue<number>;
   collapsedHeaderHeight: number;
@@ -130,9 +122,6 @@ const DynamicHeader = ({
             position: 'absolute',
             top,
             zIndex: 1000,
-            // marginTop: animatedMarginTop,
-            // height: animatedHeaderHeight,
-            // backgroundColor: animateHeaderBackgroundColor,
           },
           animatedMarginTop,
           animatedHeaderHeight,
@@ -157,8 +146,6 @@ const DynamicHeader = ({
                 width: '100%',
                 position: 'absolute',
                 top: topOnlyComponentHeight - collapsedComponentHeight,
-                // opacity: animateCollapsedContentOpacity,
-                // zIndex: animateTopZIndex,
               },
               animateCollapsedContentOpacity,
               animateTopZIndex,
@@ -167,9 +154,9 @@ const DynamicHeader = ({
             <View style={[{ height: collapsedComponentHeight }]}>
               <TouchableOpacity
                 onPress={() => {
-                  console.log('flatListRef', flatListRef);
-                  // flatListRef && flatListRef.current?.scrollToOffset({ offset: 0 });
-                  scrollViewRef && scrollViewRef.current?.scrollTo({ y: 0 });
+                  flashListRef &&
+                    // @ts-ignore
+                    flashListRef?.current.scrollToOffset({ offset: 0, animated: true });
                 }}
               >
                 {collapsedComponent}

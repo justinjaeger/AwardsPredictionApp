@@ -6,7 +6,7 @@ import useQueryGetCommunityPredictions from '../../../hooks/queries/useQueryGetC
 import BottomFABContainer from '../../../components/BottomFABContainer';
 import { useRouteParams } from '../../../hooks/useRouteParams';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
-import { View, useWindowDimensions, FlatList, ScrollView } from 'react-native';
+import { View, useWindowDimensions } from 'react-native';
 import useDevice from '../../../util/device';
 import { AWARDS_BODY_TO_PLURAL_STRING } from '../../../constants/awardsBodies';
 import { EVENT_TOP_TABS_HEIGHT } from '../../../components/HorizontalScrollingTabs';
@@ -67,7 +67,7 @@ const getPredictionsData = (
 };
 
 const Event = () => {
-  const scrollViewRef = useRef<ScrollView>(null);
+  const flashListRef = useRef<FlashList<any>>(null);
 
   const { width } = useWindowDimensions();
   const { isPad } = useDevice();
@@ -207,7 +207,7 @@ const Event = () => {
     <BackgroundWrapper>
       <HeaderDropdownOverlay />
       <DynamicHeaderFlatListWrapper<iCategoryListItem[]>
-        scrollViewRef={scrollViewRef}
+        flashListRef={flashListRef}
         disableBack={disableBack}
         topOnlyContent={topOnlyContent}
         titleWhenCollapsed={

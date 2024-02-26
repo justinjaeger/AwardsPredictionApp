@@ -41,9 +41,10 @@ import {
 } from '../../../components/HeaderComponents/constants';
 import COLORS from '../../../constants/colors';
 import { LEADERBOARD_LIST_ITEM_HEIGHT } from '../../../components/LeaderboardListItem/Template';
+import { FlashList } from '@shopify/flash-list';
 
 const Leaderboard = () => {
-  const scrollViewRef = useRef<ScrollView>(null);
+  const flashListRef = useRef<FlashList<any>>(null);
 
   const navigation = useNavigation<PredictionsNavigationProp>();
 
@@ -108,7 +109,7 @@ const Leaderboard = () => {
     <BackgroundWrapper>
       <HeaderDropdownOverlay />
       <DynamicHeaderFlatListWrapper<iLeaderboardRankingsWithUserData>
-        scrollViewRef={scrollViewRef}
+        flashListRef={flashListRef}
         disableBack={disableBack}
         topOnlyContent={{
           height:
@@ -212,7 +213,7 @@ const Leaderboard = () => {
                 <SubHeader>Score Distribution</SubHeader>
                 <Body style={{ marginTop: 5 }}>All Users</Body>
               </View>
-              <LeaderboardChart leaderboard={leaderboard} scrollViewRef={scrollViewRef} />
+              <LeaderboardChart leaderboard={leaderboard} scrollViewRef={flashListRef} />
               {authUserId ? (
                 <SectionTopTabs
                   tabs={[
@@ -239,8 +240,8 @@ const Leaderboard = () => {
               ) : null}
             </>
           ),
+          onEndReached,
         }}
-        onEndReached={onEndReached}
       />
     </BackgroundWrapper>
   );
