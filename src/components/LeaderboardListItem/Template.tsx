@@ -5,6 +5,7 @@ import ProfileImage from '../ProfileImage';
 import { Body, HeaderLight, SubHeader } from '../Text';
 import { formatDecimalAsPercentage } from '../../util/formatPercentage';
 
+export const LEADERBOARD_LIST_ITEM_HEIGHT = 70;
 export const LEADERBOARD_PROFILE_IMAGE_SIZE = 50;
 
 const Template = ({
@@ -39,6 +40,7 @@ const Template = ({
           flexDirection: 'row',
           padding: 10,
           width: '100%',
+          height: LEADERBOARD_LIST_ITEM_HEIGHT,
         },
         style,
       ]}

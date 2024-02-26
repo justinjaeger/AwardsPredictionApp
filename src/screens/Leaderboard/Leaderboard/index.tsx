@@ -40,6 +40,7 @@ import {
   HEADER_TOP_TAB_MARGIN_TOP,
 } from '../../../components/HeaderComponents/constants';
 import COLORS from '../../../constants/colors';
+import { LEADERBOARD_LIST_ITEM_HEIGHT } from '../../../components/LeaderboardListItem/Template';
 
 const Leaderboard = () => {
   const flatListRef = useRef<FlatList>(null);
@@ -181,6 +182,11 @@ const Leaderboard = () => {
           renderItem: ({ item }) => {
             return <LeaderboardListItem leaderboardRanking={item} />;
           },
+          getItemLayout: (x, index) => ({
+            length: LEADERBOARD_LIST_ITEM_HEIGHT,
+            offset: LEADERBOARD_LIST_ITEM_HEIGHT * index,
+            index,
+          }),
           initialNumToRender: 10,
           ListHeaderComponent: (
             <>
