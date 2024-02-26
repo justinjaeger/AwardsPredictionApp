@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
-  FlatList,
   GestureResponderEvent,
   ScrollView,
   View,
@@ -24,12 +23,10 @@ const CHART_HEIGHT = 75;
 
 const LeaderboardChart = ({
   leaderboard,
-  flatListRef,
-  scrollViewRef,
+  setScrollEnabled,
 }: {
   leaderboard: iLeaderboard;
-  flatListRef?: React.RefObject<FlatList<any>>;
-  scrollViewRef?: React.RefObject<ScrollView>;
+  setScrollEnabled: (scrollEnabled: boolean) => void;
 }) => {
   const chartRef = useRef<ScrollView>(null);
   const { width } = useWindowDimensions();
@@ -109,11 +106,8 @@ const LeaderboardChart = ({
   const percentage = slot && slot[0];
   const numPredicting = slot && slot[1];
 
-  // lets us set the props of the scrollview from outside the component
-  // better for performance since it won't re-render the component
   const enableScroll = (scrollEnabled: boolean) => {
-    flatListRef?.current?.setNativeProps?.({ scrollEnabled });
-    scrollViewRef?.current?.setNativeProps?.({ scrollEnabled });
+    setScrollEnabled(scrollEnabled);
   };
 
   return (

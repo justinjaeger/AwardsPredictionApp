@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import useGetLeaderboardUsers from '../../../hooks/useGetLeaderboardUsers';
-import { ScrollView, View } from 'react-native';
+import { View } from 'react-native';
 import LeaderboardListItem, {
   LEADERBOARD_PROFILE_IMAGE_SIZE,
 } from '../../../components/LeaderboardListItem';
@@ -67,6 +67,7 @@ const Leaderboard = () => {
     ) ?? [];
 
   const [sortSetting, setSortSetting] = useState<'all' | 'following'>('all');
+  const [scrollEnabled, setScrollEnabled] = useState(true);
 
   if (!event || !phase) return null;
 
@@ -176,13 +177,13 @@ const Leaderboard = () => {
         titleWhenCollapsed={`${AWARDS_BODY_TO_PLURAL_STRING[event.awardsBody]} ${
           event.year
         } • ${PHASE_TO_STRING_PLURAL[phase]}`}
-        // FLAT LIST PROPS:
         flatListProps={{
           data,
           keyExtractor: (item) => item.userId,
           renderItem: ({ item }) => {
             return <LeaderboardListItem leaderboardRanking={item} />;
           },
+          scrollEnabled,
           estimatedItemSize: LEADERBOARD_LIST_ITEM_HEIGHT,
           ListHeaderComponent: (
             <>
@@ -213,7 +214,10 @@ const Leaderboard = () => {
                 <SubHeader>Score Distribution</SubHeader>
                 <Body style={{ marginTop: 5 }}>All Users</Body>
               </View>
-              <LeaderboardChart leaderboard={leaderboard} scrollViewRef={flashListRef} />
+              <LeaderboardChart
+                leaderboard={leaderboard}
+                setScrollEnabled={setScrollEnabled}
+              />
               {authUserId ? (
                 <SectionTopTabs
                   tabs={[
