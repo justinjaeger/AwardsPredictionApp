@@ -30,6 +30,7 @@ import DynamicHeaderScrollViewWrapper from '../../components/DynamicHeaderWrappe
 import SectionTopTabs from '../../components/SectionTopTabs';
 import DualTabsWrapper from '../../components/DualTabsWrapper';
 import { useSharedValue } from 'react-native-reanimated';
+import LinearGradient from 'react-native-linear-gradient';
 
 const Profile = () => {
   const tabsPosX = useSharedValue(0);
@@ -132,114 +133,119 @@ const Profile = () => {
             <SignedOutState />
           ) : (
             <View>
-              <View
-                style={{
-                  alignItems: 'center',
-                  flexDirection: 'row',
-                  marginLeft: theme.windowMargin,
-                  marginTop: 10,
-                }}
+              <LinearGradient
+                colors={[COLORS.primaryDark, COLORS.primary]}
+                style={{ paddingBottom: 20 }}
               >
-                <ProfileImage
-                  image={user?.image}
-                  onPress={isAuthUser ? () => onPressProfileInfo() : undefined}
-                  style={{ marginRight: 15 }}
-                />
-                <View style={{ flexDirection: 'column', paddingLeft: 10 }}>
+                <View
+                  style={{
+                    alignItems: 'center',
+                    flexDirection: 'row',
+                    marginLeft: theme.windowMargin,
+                    marginTop: 10,
+                  }}
+                >
+                  <ProfileImage
+                    image={user?.image}
+                    onPress={isAuthUser ? () => onPressProfileInfo() : undefined}
+                    style={{ marginRight: 15 }}
+                  />
+                  <View style={{ flexDirection: 'column', paddingLeft: 10 }}>
+                    <TouchableHighlight
+                      onPress={isAuthUser ? () => onPressProfileInfo() : undefined}
+                      style={{
+                        borderRadius: theme.borderRadius,
+                        paddingTop: 10,
+                        paddingBottom: 10,
+                      }}
+                      underlayColor={COLORS.disabled}
+                    >
+                      <>
+                        <HeaderLight>
+                          {user?.name || (isAuthUser ? 'Add Name' : '')}
+                        </HeaderLight>
+                        <SubHeader style={{ marginTop: 5 }}>
+                          {user?.username
+                            ? '@' + user?.username
+                            : isAuthUser
+                            ? 'Add Username'
+                            : ''}
+                        </SubHeader>
+                      </>
+                    </TouchableHighlight>
+                  </View>
+                </View>
+                {user?.bio ? (
                   <TouchableHighlight
                     onPress={isAuthUser ? () => onPressProfileInfo() : undefined}
                     style={{
+                      margin: theme.windowMargin,
                       borderRadius: theme.borderRadius,
-                      paddingTop: 10,
-                      paddingBottom: 10,
                     }}
                     underlayColor={COLORS.disabled}
                   >
-                    <>
-                      <HeaderLight>
-                        {user?.name || (isAuthUser ? 'Add Name' : '')}
-                      </HeaderLight>
-                      <SubHeader style={{ marginTop: 5 }}>
-                        {user?.username
-                          ? '@' + user?.username
-                          : isAuthUser
-                          ? 'Add Username'
-                          : ''}
-                      </SubHeader>
-                    </>
+                    <Body>{user.bio || ''}</Body>
                   </TouchableHighlight>
-                </View>
-              </View>
-              {user?.bio ? (
-                <TouchableHighlight
-                  onPress={isAuthUser ? () => onPressProfileInfo() : undefined}
+                ) : (
+                  <View style={{ marginTop: 20 }} />
+                )}
+                <View
                   style={{
-                    margin: theme.windowMargin,
-                    borderRadius: theme.borderRadius,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'flex-start',
+                    width: '100%',
+                    marginLeft: theme.windowMargin,
                   }}
-                  underlayColor={COLORS.disabled}
                 >
-                  <Body>{user.bio || ''}</Body>
-                </TouchableHighlight>
-              ) : (
-                <View style={{ marginTop: 20 }} />
-              )}
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'flex-start',
-                  width: '100%',
-                  marginLeft: theme.windowMargin,
-                }}
-              >
-                <FollowCountButton
-                  onPress={() => {
-                    if (user?.followerCount === 0) return;
-                    navigation.dispatch(
-                      StackActions.push('Followers', {
-                        userInfo: getUserInfo(user),
-                        type: 'followers',
-                      }),
-                    );
-                  }}
-                  text={`${user?.followerCount ?? 0} Followers`}
-                />
-                <FollowCountButton
-                  onPress={() => {
-                    if (user?.followingCount === 0) return;
-                    navigation.dispatch(
-                      StackActions.push('Followers', {
-                        userInfo: getUserInfo(user),
-                        type: 'following',
-                      }),
-                    );
-                  }}
-                  text={`${user?.followingCount ?? 0} Following`}
-                />
-              </View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'flex-start',
-                  width: '100%',
-                  marginLeft: theme.windowMargin,
-                  marginTop: 10,
-                }}
-              >
-                {user ? (
-                  <FollowButton
-                    authUserIsFollowing={authUserIsFollowing || false}
-                    profileUserId={user._id}
+                  <FollowCountButton
+                    onPress={() => {
+                      if (user?.followerCount === 0) return;
+                      navigation.dispatch(
+                        StackActions.push('Followers', {
+                          userInfo: getUserInfo(user),
+                          type: 'followers',
+                        }),
+                      );
+                    }}
+                    text={`${user?.followerCount ?? 0} Followers`}
                   />
-                ) : null}
-                {isFollowingAuthUser ? (
-                  <BodyBold style={{ marginLeft: 10, color: 'rgba(255,255,255,0.8)' }}>
-                    Follows You
-                  </BodyBold>
-                ) : null}
-              </View>
+                  <FollowCountButton
+                    onPress={() => {
+                      if (user?.followingCount === 0) return;
+                      navigation.dispatch(
+                        StackActions.push('Followers', {
+                          userInfo: getUserInfo(user),
+                          type: 'following',
+                        }),
+                      );
+                    }}
+                    text={`${user?.followingCount ?? 0} Following`}
+                  />
+                </View>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'flex-start',
+                    width: '100%',
+                    marginLeft: theme.windowMargin,
+                    marginTop: 10,
+                  }}
+                >
+                  {user ? (
+                    <FollowButton
+                      authUserIsFollowing={authUserIsFollowing || false}
+                      profileUserId={user._id}
+                    />
+                  ) : null}
+                  {isFollowingAuthUser ? (
+                    <BodyBold style={{ marginLeft: 10, color: 'rgba(255,255,255,0.8)' }}>
+                      Follows You
+                    </BodyBold>
+                  ) : null}
+                </View>
+              </LinearGradient>
               <SectionTopTabs
                 tabs={[{ title: 'Predictions' }, { title: 'Leaderboards' }]}
                 tabsPosX={tabsPosX}
