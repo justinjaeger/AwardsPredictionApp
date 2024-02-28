@@ -6,7 +6,7 @@ import LeaderboardListItem, {
   LEADERBOARD_PROFILE_IMAGE_SIZE,
 } from '../../../components/LeaderboardListItem';
 import UserListSkeleton from '../../../components/Skeletons/UserListSkeleton';
-import { Body, SubHeader } from '../../../components/Text';
+import { SubHeader } from '../../../components/Text';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import { useAuth } from '../../../context/AuthContext';
 import useProfileUser from '../../Profile/useProfileUser';
@@ -210,12 +210,10 @@ const Leaderboard = () => {
                   justifyContent: 'space-around',
                   width: '100%',
                   alignItems: 'center',
-                  padding: 20,
-                  paddingBottom: 10,
+                  padding: 15,
                 }}
               >
-                <SubHeader>Score Distribution</SubHeader>
-                <Body style={{ marginTop: 5 }}>All Users</Body>
+                <SubHeader>Community Scores</SubHeader>
               </View>
               <LeaderboardChart
                 leaderboard={leaderboard}
