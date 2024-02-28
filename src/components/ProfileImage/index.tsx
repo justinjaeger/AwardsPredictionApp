@@ -52,6 +52,7 @@ const ProfileImage = ({
           justifyContent: 'center',
         }}
         disabled={isDisabled}
+        activeOpacity={0.5}
       >
         {isLoading ? (
           <Spinner size="medium" style={{ borderColor: COLORS.gray }} />
