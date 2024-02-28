@@ -4,6 +4,7 @@ import COLORS from '../../constants/colors';
 import useDevice from '../../util/device';
 import { SubHeader } from '../Text';
 import { SharedValue, withTiming } from 'react-native-reanimated';
+import { hexToRgb } from '../../util/hexToRgb';
 
 type iSectionTopTab = {
   title: string;
@@ -90,7 +91,7 @@ const SectionTopTabs = ({
               justifyContent: 'center',
               width: '50%',
               borderRadius: 0,
-              borderBottomColor: COLORS.primaryLight,
+              borderBottomColor: hexToRgb(COLORS.primaryLight, 0.5),
               borderBottomWidth: 1,
               height: getSectionTabHeight(isPad),
             }}

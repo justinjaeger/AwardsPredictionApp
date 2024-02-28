@@ -20,9 +20,9 @@ const EventItemSimple = ({ onPress, title }: { onPress: () => void; title: strin
         justifyContent: 'space-between',
         flexDirection: 'row',
         alignItems: 'center',
-        borderTopColor: COLORS.primaryLight,
+        borderTopColor: hexToRgb(COLORS.primaryLight, 0.5),
         borderTopWidth: 1,
-        borderBottomColor: COLORS.primaryLight,
+        borderBottomColor: hexToRgb(COLORS.primaryLight, 0.5),
         borderBottomWidth: 1,
         marginTop: -1,
       }}
