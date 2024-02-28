@@ -4,6 +4,7 @@ import COLORS from '../../constants/colors';
 import ProfileImage from '../ProfileImage';
 import { Body, HeaderLight, SubHeader } from '../Text';
 import { formatDecimalAsPercentage } from '../../util/formatPercentage';
+import { hexToRgb } from '../../util/hexToRgb';
 
 export const LEADERBOARD_LIST_ITEM_HEIGHT = 70;
 export const LEADERBOARD_PROFILE_IMAGE_SIZE = 50;
@@ -41,6 +42,8 @@ const Template = ({
           padding: 10,
           width: '100%',
           height: LEADERBOARD_LIST_ITEM_HEIGHT,
+          borderBottomColor: hexToRgb(COLORS.primaryLight, 0.3),
+          borderBottomWidth: 1,
         },
         style,
       ]}
