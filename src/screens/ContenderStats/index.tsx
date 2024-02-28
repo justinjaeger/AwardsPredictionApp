@@ -10,6 +10,10 @@ import ContenderInfoHeader from '../../components/ContenderInfoHeader';
 import BackgroundWrapper from '../../components/BackgroundWrapper';
 import { ScrollView } from 'react-native';
 import HistoryDateIndicator from '../../components/HistoryDateIndicator';
+import EventTopTabs from '../../components/HeaderComponents/EventTopTabs';
+import LinearGradient from 'react-native-linear-gradient';
+import COLORS from '../../constants/colors';
+import theme from '../../constants/theme';
 
 export type iContenderStatsData = iPrediction & {
   category: CategoryName;
@@ -45,17 +49,29 @@ const ContenderStats = () => {
     return null;
   }
 
+  // TODO: Can use the collapsing header flatlist component here
   return (
     <BackgroundWrapper>
       <ScrollView ref={scrollRef} style={{ flex: 1, width: '100%' }}>
-        <ContenderInfoHeader
-          prediction={{
-            contenderId: '',
-            ranking: 0,
-            movieTmdbId,
-          }}
-        />
-        <HistoryDateIndicator yyyymmdd={yyyymmdd} />
+        <LinearGradient
+          colors={[COLORS.primaryDark, COLORS.primary]}
+          style={{ paddingBottom: 20 }}
+        >
+          <ContenderInfoHeader
+            prediction={{
+              contenderId: '',
+              ranking: 0,
+              movieTmdbId,
+            }}
+          />
+          <HistoryDateIndicator yyyymmdd={yyyymmdd} />
+          <EventTopTabs
+            selectedEvent={event}
+            setEvent={setEvent}
+            eventOptions={eventsWithinYear}
+            style={{ marginTop: 10, paddingLeft: theme.windowMargin }}
+          />
+        </LinearGradient>
         <ContenderStatEventTab
           event={event}
           movieTmdbId={movieTmdbId}

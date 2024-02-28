@@ -69,7 +69,7 @@ const PredictionsNavigator = () => {
             headerTitle: getHeaderTitle('Stats'),
             headerLeft: BackButtonForNavigator,
             gestureEnabled: false,
-            ...large,
+            ...medium,
           }}
         />
         {/* Profile Screens */}
