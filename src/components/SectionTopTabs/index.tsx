@@ -3,6 +3,7 @@ import { Animated, TouchableHighlight, useWindowDimensions, View } from 'react-n
 import COLORS from '../../constants/colors';
 import useDevice from '../../util/device';
 import { SubHeader } from '../Text';
+import { SharedValue, withTiming } from 'react-native-reanimated';
 
 type iSectionTopTab = {
   title: string;
@@ -11,12 +12,17 @@ type iSectionTopTab = {
 
 export const getSectionTabHeight = (isPad: boolean) => (isPad ? 65 : 45);
 
+/**
+ * Use it with DualTabsWrapper and pass in a shared "tabsPosX" for each to get animated tab switching
+ */
 const SectionTopTabs = ({
   tabs,
   initialTabIndex,
+  tabsPosX,
 }: {
   tabs: iSectionTopTab[];
   initialTabIndex?: number;
+  tabsPosX?: SharedValue<number>;
 }) => {
   const { isPad } = useDevice();
   const { width } = useWindowDimensions();
@@ -40,6 +46,12 @@ const SectionTopTabs = ({
       duration: 250,
       useNativeDriver: true,
     }).start();
+
+    // Animates the underlying tabs, if you want to use it
+    if (tabsPosX) {
+      const newTabPosition = -(index * width);
+      tabsPosX.value = withTiming(newTabPosition, { duration: 250 });
+    }
   };
 
   useEffect(() => {

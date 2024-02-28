@@ -1,16 +1,27 @@
 import React from 'react';
-import { Animated, View, useWindowDimensions } from 'react-native';
-import { usePersonalCommunityTab } from '../../context/PersonalCommunityContext';
+import { View, useWindowDimensions } from 'react-native';
 import COLORS from '../../constants/colors';
+import Animated, { SharedValue } from 'react-native-reanimated';
 
-const DualTabsWrapper = ({ tab1, tab2 }: { tab1: JSX.Element; tab2: JSX.Element }) => {
+/**
+ * Use it with SectionTopTabs and pass in a shared "tabsPosX" for each to get animated tab switching
+ */
+const DualTabsWrapper = ({
+  tab1,
+  tab2,
+  tabsPosX,
+}: {
+  tab1: JSX.Element;
+  tab2: JSX.Element;
+  tabsPosX: SharedValue<number>;
+}) => {
   const { width } = useWindowDimensions();
-  const { scrollPosX } = usePersonalCommunityTab();
+
   return (
     <Animated.View
       style={[
-        { transform: [{ translateX: scrollPosX }] },
         { backgroundColor: COLORS.primaryDark, flexDirection: 'row' },
+        { left: tabsPosX },
       ]}
     >
       <View style={{ width, height: '100%' }}>{tab1}</View>

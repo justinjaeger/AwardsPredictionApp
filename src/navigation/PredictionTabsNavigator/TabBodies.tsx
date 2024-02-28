@@ -1,7 +1,8 @@
 import React from 'react';
-import { Animated, useWindowDimensions, View } from 'react-native';
+import { useWindowDimensions, View } from 'react-native';
 import COLORS from '../../constants/colors';
 import { usePersonalCommunityTab } from '../../context/PersonalCommunityContext';
+import Animated from 'react-native-reanimated';
 
 /**
  * Note: This component is a bit whack but it's done in this way to prevent re-renders of lists
@@ -15,20 +16,12 @@ const TabBodies = ({
   community: JSX.Element;
 }) => {
   const { width } = useWindowDimensions();
-  const { scrollPosX } = usePersonalCommunityTab();
-  // What we can do is, instead of horizontal paginted scroll view,
-  // we can animate the translateX property of the parent view
-  // so all the "horizontalTabsScrollViewRef.scrollTo" is actually running a callback to change the translateX value
-
-  // Below is basically a proof of concept that we can put personal+community items into a flatlist
-  // Because essentially you can wrap EACH ITEM of the flatlist with this component
-
-  // TODO: what is the initial value?
+  const { tabsPosX } = usePersonalCommunityTab();
 
   return (
     <Animated.View
       style={[
-        { transform: [{ translateX: scrollPosX }] },
+        { left: tabsPosX },
         { backgroundColor: COLORS.primaryDark, flexDirection: 'row', height: '100%' },
       ]}
     >

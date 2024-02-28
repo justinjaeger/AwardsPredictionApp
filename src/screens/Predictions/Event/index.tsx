@@ -45,6 +45,7 @@ import UserProfile, {
 } from '../../../components/HeaderComponents/UserProfile';
 import { PHASE_TO_STRING_PLURAL } from '../../../constants/categories';
 import { FlashList } from '@shopify/flash-list';
+import { usePersonalCommunityTab } from '../../../context/PersonalCommunityContext';
 
 const getPredictionsData = (
   userPredictionSet: WithId<PredictionSet> | undefined,
@@ -77,6 +78,7 @@ const Event = () => {
   const userId = userInfo?.userId || authUserId || undefined;
   const { user } = useProfileUser(userId);
   const isAuthProfile = user?._id === authUserId;
+  const { tabsPosX } = usePersonalCommunityTab();
 
   const { data: events } = useQueryGetAllEvents();
   const { event, phase, yyyymmdd, setEvent, setYear } = useEventSelect();
@@ -281,6 +283,7 @@ const Event = () => {
                     onPress={() => onSelectCategory(category, true)}
                   />
                 }
+                tabsPosX={tabsPosX}
               />
             );
           },

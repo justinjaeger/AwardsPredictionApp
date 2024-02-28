@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useRef, useState } from 'react';
-import { Animated, useWindowDimensions } from 'react-native';
+import React, { createContext, useContext, useState } from 'react';
+import { useWindowDimensions } from 'react-native';
+import { SharedValue, useSharedValue, withTiming } from 'react-native-reanimated';
 
 /**
  * Context for referencing the current tab, event, category, and user (who's predix we're seeing)
@@ -10,28 +11,24 @@ type iPersonalCommunityTab = 'personal' | 'community';
 type iPersonalCommunityTabContext = {
   personalCommunityTab: iPersonalCommunityTab;
   setPersonalCommunityTab: (d: iPersonalCommunityTab, disableAnimation?: boolean) => void;
-  scrollPosX: Animated.Value;
+  tabsPosX: SharedValue<number>;
 };
 
 const PersonalCommunityTabContext = createContext<iPersonalCommunityTabContext>({
   personalCommunityTab: 'personal',
   setPersonalCommunityTab: () => {},
-  scrollPosX: new Animated.Value(0),
+  tabsPosX: { value: 0 } as SharedValue<number>,
 });
 
 export const PersonalCommunityTabProvider = (props: { children: React.ReactNode }) => {
-  const scrollPosX = useRef(new Animated.Value(0)).current;
+  const tabsPosX = useSharedValue(0);
   const { width } = useWindowDimensions();
 
   const [personalCommunityTab, _setPersonalCommunityTab] =
     useState<iPersonalCommunityTab>('personal');
 
   const scrollToX = (v: number, disableAnimation?: boolean) => {
-    Animated.timing(scrollPosX, {
-      toValue: -v,
-      duration: disableAnimation ? 0 : 250,
-      useNativeDriver: true,
-    }).start();
+    tabsPosX.value = disableAnimation ? v : withTiming(-v, { duration: 250 });
   };
 
   const setPersonalCommunityTab = (
@@ -47,7 +44,7 @@ export const PersonalCommunityTabProvider = (props: { children: React.ReactNode 
       value={{
         personalCommunityTab,
         setPersonalCommunityTab,
-        scrollPosX,
+        tabsPosX,
       }}
     >
       {props.children}

@@ -22,14 +22,18 @@ import { getUserInfo } from '../../util/getUserInfo';
 import LeaderboardListItem from '../../components/LeaderboardListItem';
 import { AWARDS_BODY_TO_PLURAL_STRING } from '../../constants/awardsBodies';
 import { PHASE_TO_STRING_PLURAL } from '../../constants/categories';
-import { Phase, UserRole, iLeaderboard, iLeaderboardRanking } from '../../models';
+import { UserRole, iLeaderboard, iLeaderboardRanking } from '../../models';
 import EventItemSimple from '../../components/EventItemSimple';
 import { usePersonalCommunityTab } from '../../context/PersonalCommunityContext';
-import { getCurrentPhaseBeingPredicted } from '../../util/getBiggestPhaseThatHasHappened';
 import CustomIcon from '../../components/CustomIcon';
 import DynamicHeaderScrollViewWrapper from '../../components/DynamicHeaderWrapper/DynamicHeaderScrollViewWrapper';
+import SectionTopTabs from '../../components/SectionTopTabs';
+import DualTabsWrapper from '../../components/DualTabsWrapper';
+import { useSharedValue } from 'react-native-reanimated';
 
 const Profile = () => {
+  const tabsPosX = useSharedValue(0);
+
   const scrollViewRef = useRef<ScrollView>(null);
 
   const { userInfo: routeUserInfo, disableBack } = useRouteParams();
@@ -236,101 +240,90 @@ const Profile = () => {
                   </BodyBold>
                 ) : null}
               </View>
-              {predictionSets.length > 0 ? (
-                <>
-                  <HeaderLight
-                    style={{
-                      alignSelf: 'flex-start',
-                      marginTop: 40,
-                      marginLeft: theme.windowMargin,
-                    }}
-                  >
-                    Recent Predictions:
-                  </HeaderLight>
-                  <PredictionCarousel
-                    predictionSets={predictionSets}
-                    userInfo={userInfo}
-                    hideUserInfo
-                    style={{ marginTop: 10, minHeight: 10 }}
-                  />
-                </>
-              ) : null}
-              {!isLoadingAllEvents && user && userEvents.length > 0 ? (
-                <>
-                  <HeaderLight
-                    style={{
-                      alignSelf: 'flex-start',
-                      marginTop: 20,
-                      marginLeft: theme.windowMargin,
-                      marginBottom: 10,
-                    }}
-                  >
-                    {(isAuthUser ? 'My' : 'All') + ' Predictions'}
-                  </HeaderLight>
-                  {userEvents.map((event) => {
-                    const phase = getCurrentPhaseBeingPredicted(event);
-                    return (
-                      <EventItemSimple
-                        onPress={() => {
-                          setPersonalCommunityTab('personal');
-                          navigation.navigate('Event', {
-                            userInfo: getUserInfo(user),
-                            eventId: event._id,
-                          });
-                        }}
-                        title={`${AWARDS_BODY_TO_PLURAL_STRING[event.awardsBody]} ${
-                          event.year
-                        } - ${PHASE_TO_STRING_PLURAL[phase || Phase.CLOSED]}`}
-                      />
-                    );
-                  })}
-                </>
-              ) : null}
-              {leaderboards.length ? (
-                <>
-                  <HeaderLight
-                    style={{
-                      alignSelf: 'flex-start',
-                      marginTop: 30,
-                      marginLeft: theme.windowMargin,
-                      marginBottom: 10,
-                    }}
-                  >
-                    {'Leaderboards'}
-                  </HeaderLight>
-                  {leaderboards.map((lbRanking) => {
-                    const event = events.find((e) => e._id === lbRanking.eventId);
-                    if (!event) return null;
-                    return (
+              <SectionTopTabs
+                tabs={[{ title: 'Predictions' }, { title: 'Leaderboards' }]}
+                tabsPosX={tabsPosX}
+              />
+              <DualTabsWrapper
+                tab1={
+                  <>
+                    {predictionSets.length > 0 ? (
                       <>
-                        <EventItemSimple
-                          onPress={() => {
-                            navigation.dispatch(
-                              StackActions.push('Leaderboard', {
-                                eventId: event._id,
-                                phase: lbRanking.phase,
-                              }),
-                            );
-                          }}
-                          title={`${AWARDS_BODY_TO_PLURAL_STRING[event.awardsBody]} ${
-                            event.year
-                          } - ${PHASE_TO_STRING_PLURAL[lbRanking.phase]}`}
+                        <View style={{ marginTop: 10 }} />
+                        <PredictionCarousel
+                          predictionSets={predictionSets}
+                          userInfo={userInfo}
+                          hideUserInfo
+                          style={{ marginTop: 10, minHeight: 10 }}
                         />
-                        {user ? (
-                          <LeaderboardListItem
-                            leaderboardRanking={{
-                              userId: user._id,
-                              ...user,
-                              ...lbRanking,
-                            }}
-                            style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
-                          />
-                        ) : null}
                       </>
-                    );
-                  })}
-                </>
-              ) : null}
+                    ) : null}
+                    {!isLoadingAllEvents && user && userEvents.length > 0 ? (
+                      <>
+                        <View style={{ marginTop: 10 }} />
+                        {userEvents.map((event) => {
+                          return (
+                            <EventItemSimple
+                              onPress={() => {
+                                setPersonalCommunityTab('personal');
+                                navigation.navigate('Event', {
+                                  userInfo: getUserInfo(user),
+                                  eventId: event._id,
+                                });
+                              }}
+                              title={`${AWARDS_BODY_TO_PLURAL_STRING[event.awardsBody]} ${
+                                event.year
+                              }`}
+                            />
+                          );
+                        })}
+                      </>
+                    ) : null}
+                  </>
+                }
+                tab2={
+                  <>
+                    {leaderboards.length ? (
+                      <>
+                        {leaderboards.map((lbRanking) => {
+                          const event = events.find((e) => e._id === lbRanking.eventId);
+                          if (!event) return null;
+                          return (
+                            <>
+                              <EventItemSimple
+                                onPress={() => {
+                                  navigation.dispatch(
+                                    StackActions.push('Leaderboard', {
+                                      eventId: event._id,
+                                      phase: lbRanking.phase,
+                                    }),
+                                  );
+                                }}
+                                title={`${
+                                  AWARDS_BODY_TO_PLURAL_STRING[event.awardsBody]
+                                } ${event.year} - ${
+                                  PHASE_TO_STRING_PLURAL[lbRanking.phase]
+                                }`}
+                              />
+                              {user ? (
+                                <LeaderboardListItem
+                                  leaderboardRanking={{
+                                    userId: user._id,
+                                    ...user,
+                                    ...lbRanking,
+                                  }}
+                                  style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
+                                />
+                              ) : null}
+                            </>
+                          );
+                        })}
+                      </>
+                    ) : null}
+                  </>
+                }
+                tabsPosX={tabsPosX}
+              />
             </View>
           )}
         </>
