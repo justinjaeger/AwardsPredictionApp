@@ -16,7 +16,7 @@ import Indicators from './Indicators';
 import ChartToolbar, { SM } from './ChartToolbar';
 import { Header, SubHeader, SubHeaderLight } from '../Text';
 import { hexToRgb } from '../../util/hexToRgb';
-import theme from '../../theme';
+import theme from '../../constants/theme';
 
 const MARGIN = 15;
 const CHART_HEIGHT = 75;
