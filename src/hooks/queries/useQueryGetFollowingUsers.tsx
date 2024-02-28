@@ -47,6 +47,7 @@ const useQueryGetFollowingUsers = () => {
       return usersSortedByMostRecentPrediction;
     },
     ...QUERY_OPTIONS,
+    enabled: !!authUserId,
   });
 
   const usersWhoHaveNotPredictedInLast60Days = allUsers?.filter((u) => {

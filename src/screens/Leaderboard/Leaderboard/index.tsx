@@ -42,8 +42,11 @@ import {
 import COLORS from '../../../constants/colors';
 import { LEADERBOARD_LIST_ITEM_HEIGHT } from '../../../components/LeaderboardListItem/Template';
 import { FlashList } from '@shopify/flash-list';
+import DualTabsWrapper from '../../../components/DualTabsWrapper';
+import { useSharedValue } from 'react-native-reanimated';
 
 const Leaderboard = () => {
+  const tabsPosX = useSharedValue(0);
   const flashListRef = useRef<FlashList<any>>(null);
 
   const navigation = useNavigation<PredictionsNavigationProp>();
@@ -66,7 +69,6 @@ const Leaderboard = () => {
       (event) => event.leaderboards && Object.keys(event.leaderboards).length > 0,
     ) ?? [];
 
-  const [sortSetting, setSortSetting] = useState<'all' | 'following'>('all');
   const [scrollEnabled, setScrollEnabled] = useState(true);
 
   if (!event || !phase) return null;
@@ -92,7 +94,18 @@ const Leaderboard = () => {
 
   if (!leaderboard) return null;
 
-  const data = sortSetting === 'all' ? leaderboardRankings : followingLeaderboardRankings;
+  const longestList = Math.max(
+    leaderboardRankings.length,
+    followingLeaderboardRankings.length,
+  );
+  const dataToLoopThrough =
+    longestList === leaderboardRankings.length
+      ? leaderboardRankings
+      : followingLeaderboardRankings;
+  const data = dataToLoopThrough.map((_, i) => [
+    leaderboardRankings[i],
+    followingLeaderboardRankings[i],
+  ]);
 
   const navigateToPredictions = () => {
     if (!userLeaderboard) return;
@@ -111,7 +124,7 @@ const Leaderboard = () => {
   return (
     <BackgroundWrapper>
       <HeaderDropdownOverlay />
-      <DynamicHeaderFlatListWrapper<iLeaderboardRankingsWithUserData>
+      <DynamicHeaderFlatListWrapper<(iLeaderboardRankingsWithUserData | undefined)[]>
         flashListRef={flashListRef}
         disableBack={disableBack}
         topOnlyContent={{
@@ -182,9 +195,21 @@ const Leaderboard = () => {
         } • ${PHASE_TO_STRING_PLURAL[phase]}`}
         flatListProps={{
           data,
-          keyExtractor: (item) => item.userId,
+          keyExtractor: (item) => {
+            return `${item?.[0]?.userId}${item?.[1]?.userId}`;
+          },
           renderItem: ({ item }) => {
-            return <LeaderboardListItem leaderboardRanking={item} />;
+            return (
+              <DualTabsWrapper
+                tab1={
+                  item[0] ? <LeaderboardListItem leaderboardRanking={item[0]} /> : <></>
+                }
+                tab2={
+                  item[1] ? <LeaderboardListItem leaderboardRanking={item[1]} /> : <></>
+                }
+                tabsPosX={tabsPosX}
+              />
+            );
           },
           scrollEnabled,
           estimatedItemSize: LEADERBOARD_LIST_ITEM_HEIGHT,
@@ -221,16 +246,8 @@ const Leaderboard = () => {
               />
               {authUserId ? (
                 <SectionTopTabs
-                  tabs={[
-                    {
-                      title: 'All Users',
-                      onOpenTab: () => setSortSetting('all'),
-                    },
-                    {
-                      title: 'Following',
-                      onOpenTab: () => setSortSetting('following'),
-                    },
-                  ]}
+                  tabs={[{ title: 'All Users' }, { title: 'Following' }]}
+                  tabsPosX={tabsPosX}
                 />
               ) : null}
             </>
