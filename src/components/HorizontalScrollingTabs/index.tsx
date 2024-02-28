@@ -43,6 +43,7 @@ const HorizontalScrollingTabs = <T,>({
               paddingLeft: 10,
               paddingRight: 10,
               borderRadius: 30,
+              marginRight: 10,
               alignItems: 'center',
               justifyContent: 'center',
               height: EVENT_TOP_TABS_HEIGHT,
