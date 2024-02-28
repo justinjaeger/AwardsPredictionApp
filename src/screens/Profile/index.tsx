@@ -32,6 +32,14 @@ import DualTabsWrapper from '../../components/DualTabsWrapper';
 import { useSharedValue } from 'react-native-reanimated';
 import LinearGradient from 'react-native-linear-gradient';
 
+const NullTabState = ({ tab }: { tab: string }) => {
+  return (
+    <SubHeader style={{ alignSelf: 'center', marginTop: 20, color: COLORS.gray }}>
+      {`No ${tab} yet`}
+    </SubHeader>
+  );
+};
+
 const Profile = () => {
   const tabsPosX = useSharedValue(0);
 
@@ -284,7 +292,9 @@ const Profile = () => {
                           );
                         })}
                       </>
-                    ) : null}
+                    ) : (
+                      <NullTabState tab={'Predictions'} />
+                    )}
                   </>
                 }
                 tab2={
@@ -325,7 +335,9 @@ const Profile = () => {
                           );
                         })}
                       </>
-                    ) : null}
+                    ) : (
+                      <NullTabState tab={'Leaderboards'} />
+                    )}
                   </>
                 }
                 tabsPosX={tabsPosX}
