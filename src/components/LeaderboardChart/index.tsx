@@ -13,7 +13,10 @@ import {
 import COLORS from '../../constants/colors';
 import Slider from './Slider';
 import Indicators from './Indicators';
-import ChartToolbar, { SM } from './ChartToolbar';
+import {
+  // ChartToolbar,
+  SM,
+} from './ChartToolbar';
 import { Header, SubHeader, SubHeaderLight } from '../Text';
 import { hexToRgb } from '../../util/hexToRgb';
 import theme from '../../constants/theme';
@@ -45,32 +48,32 @@ const LeaderboardChart = ({
 
   const [minBarWidth, _setMinBarWidth] = useState<number>(SM);
 
-  const setMinBarWidth = (newW: number) => {
-    _setMinBarWidth((prevW) => {
-      // have to compensate the inner scroll position because the total width changes, so it will be off otherwise
+  // const setMinBarWidth = (newW: number) => {
+  //   _setMinBarWidth((prevW) => {
+  //     // have to compensate the inner scroll position because the total width changes, so it will be off otherwise
 
-      const newChartWidth = totalBars * getBarWidth(newW); // this is like 900, 1800, 2700
-      const prevChartWidth = totalBars * getBarWidth(prevW);
+  //     const newChartWidth = totalBars * getBarWidth(newW); // this is like 900, 1800, 2700
+  //     const prevChartWidth = totalBars * getBarWidth(prevW);
 
-      const v = (scrollPos / (prevChartWidth - width)) * 100;
-      const percentageOfSliderThatIsFilled = v;
+  //     const v = (scrollPos / (prevChartWidth - width)) * 100;
+  //     const percentageOfSliderThatIsFilled = v;
 
-      const x = (newChartWidth - width) * (percentageOfSliderThatIsFilled / 100);
+  //     const x = (newChartWidth - width) * (percentageOfSliderThatIsFilled / 100);
 
-      // setTimeout is essential so the chart div can update before we scroll
-      setTimeout(() => {
-        chartRef.current?.scrollTo({
-          x: x,
-          animated: false,
-        });
-      }, 0);
+  //     // setTimeout is essential so the chart div can update before we scroll
+  //     setTimeout(() => {
+  //       chartRef.current?.scrollTo({
+  //         x: x,
+  //         animated: false,
+  //       });
+  //     }, 0);
 
-      // have to also update the new inner scroll position
-      setScrollPos(x);
+  //     // have to also update the new inner scroll position
+  //     setScrollPos(x);
 
-      return newW;
-    });
-  };
+  //     return newW;
+  //   });
+  // };
 
   // const groupedByPercentage: [percentage: number, numPredicting: number][] = [];
   const [groupedByPercentage, setGroupedByPercentage] = useState<
@@ -243,7 +246,8 @@ const LeaderboardChart = ({
         }}
         style={{ marginTop: 15 }}
       />
-      <ChartToolbar minBarWidth={minBarWidth} setMinBarWidth={setMinBarWidth} />
+      <View style={{ marginTop: 20 }} />
+      {/* <ChartToolbar minBarWidth={minBarWidth} setMinBarWidth={setMinBarWidth} /> */}
     </View>
   );
 };
