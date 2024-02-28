@@ -67,6 +67,7 @@ export type PredictionsParamList = {
     onFinish: (predictions: iPrediction[]) => void;
   };
   ContenderStats: {
+    eventId: string;
     movieTmdbId: number;
     year: number;
   } & iHistoryNavigationProps;

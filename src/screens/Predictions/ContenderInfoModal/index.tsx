@@ -88,6 +88,7 @@ const ContenderInfoModal = () => {
               onPress={() => {
                 navigation.dispatch(
                   StackActions.replace('ContenderStats', {
+                    eventId: event._id,
                     year: event.year,
                     movieTmdbId: prediction.movieTmdbId,
                     yyyymmdd,

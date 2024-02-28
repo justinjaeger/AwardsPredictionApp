@@ -26,16 +26,16 @@ const ContenderStats = () => {
   const navigation = useNavigation<PredictionsNavigationProp>();
   const route = useRoute<RouteProp<PredictionsParamList, 'ContenderStats'>>();
   const scrollRef = useRef<ScrollView>(null);
-  const { movieTmdbId, year, yyyymmdd } = route.params;
+  const { eventId, movieTmdbId, year, yyyymmdd } = route.params;
   const { store } = useTmdbDataStore();
   const { data: events } = useQueryGetAllEvents();
   const movie = store[movieTmdbId] as Movie;
-  const eventsWithinYear = events?.filter((event) => event.year === year);
 
-  // TODO: Make dropdown so they can set whether they're seeing academy awards or something else
-  const [event, setEvent] = useState<WithId<EventModel> | undefined>(
-    eventsWithinYear?.[0],
-  );
+  const eventsWithinYear = events?.filter((event) => event.year === year);
+  const initialEvent =
+    eventsWithinYear?.find(({ _id }) => eventId === _id) ?? eventsWithinYear?.[0];
+
+  const [event, setEvent] = useState<WithId<EventModel> | undefined>(initialEvent);
 
   // Set the header
   useLayoutEffect(() => {
