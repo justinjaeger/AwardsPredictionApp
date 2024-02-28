@@ -148,6 +148,7 @@ const Leaderboard = () => {
                     event={event}
                     eventOptions={eventsWithLeaderboard}
                     setYear={setYear}
+                    heightAboveDropdown={HEADER_TITLE_MARGIN_TOP}
                   />
                 </View>
               </View>

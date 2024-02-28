@@ -81,6 +81,13 @@ const Event = () => {
   const { data: events } = useQueryGetAllEvents();
   const { event, phase, yyyymmdd, setEvent, setYear } = useEventSelect();
 
+  const eventIdsUserIsPredicting = Object.keys(user?.eventsPredicting ?? {});
+  const eventOptions = isAuthProfile
+    ? events
+    : (eventIdsUserIsPredicting
+        .map((id) => events?.find((e) => e._id === id))
+        .filter(Boolean) as WithId<EventModel>[]);
+
   const { data: userPredictionData, isLoading: isLoadingPersonal } =
     useQueryGetUserPredictions({ event, userId, yyyymmdd });
   const { data: communityPredictionData, isLoading: isLoadingCommunity } =
@@ -119,6 +126,11 @@ const Event = () => {
   const phaseName = (phase ? PHASE_TO_STRING_PLURAL[phase] : '') + ' ';
 
   const showUserInfo = userInfo && !isAuthProfile;
+  const heightOfTopSection = showUserInfo
+    ? USER_PROFILE_HEIGHT
+    : disableBack
+    ? 0
+    : BACK_BUTTON_HEIGHT;
 
   const topOnlyContent = isLeaderboard
     ? {
@@ -159,7 +171,7 @@ const Event = () => {
           EVENT_TOP_TABS_HEIGHT +
           HEADER_TOP_TAB_MARGIN_BOTTOM +
           HEADER_TOP_TAB_MARGIN_TOP +
-          (showUserInfo ? USER_PROFILE_HEIGHT : disableBack ? 0 : BACK_BUTTON_HEIGHT),
+          heightOfTopSection,
         component: (
           <View style={{ marginTop: HEADER_TITLE_MARGIN_TOP }}>
             <View
@@ -186,8 +198,9 @@ const Event = () => {
                 <Header text={'Predictions'} />
                 <YearDropdown
                   event={event}
-                  eventOptions={events ?? []}
+                  eventOptions={eventOptions ?? []}
                   setYear={setYear}
+                  heightAboveDropdown={heightOfTopSection + HEADER_TITLE_MARGIN_TOP}
                 />
               </View>
             </View>

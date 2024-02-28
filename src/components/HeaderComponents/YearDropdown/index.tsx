@@ -3,16 +3,17 @@ import React from 'react';
 import HeaderDropdownButton from '../../HeaderDropdownButton';
 import { EventModel, WithId } from '../../../models';
 import { HEADER_HEIGHT } from '../Header';
-import { HEADER_TITLE_MARGIN_TOP } from '../constants';
 
 const YearDropdown = ({
   event,
   eventOptions,
   setYear,
+  heightAboveDropdown,
 }: {
   event: WithId<EventModel> | undefined;
   eventOptions: WithId<EventModel>[];
   setYear: (year: number) => void;
+  heightAboveDropdown: number;
 }) => {
   const yearOptions = (eventOptions ?? [])
     .reduce((acc, e) => {
@@ -24,7 +25,7 @@ const YearDropdown = ({
   return (
     <HeaderDropdownButton
       height={HEADER_HEIGHT - 5}
-      position={{ top: HEADER_TITLE_MARGIN_TOP, right: theme.windowMargin }}
+      position={{ top: heightAboveDropdown, right: theme.windowMargin }}
       options={yearOptions.map((y) => ({
         text: y.toString(),
         value: y,
