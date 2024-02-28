@@ -106,6 +106,8 @@ const Leaderboard = () => {
     });
   };
 
+  const backButtonHeight = disableBack ? 0 : BACK_BUTTON_HEIGHT;
+
   return (
     <BackgroundWrapper>
       <HeaderDropdownOverlay />
@@ -119,7 +121,7 @@ const Leaderboard = () => {
             EVENT_TOP_TABS_HEIGHT +
             HEADER_TOP_TAB_MARGIN_BOTTOM * 2 +
             HEADER_TOP_TAB_MARGIN_TOP +
-            (disableBack ? 0 : BACK_BUTTON_HEIGHT),
+            backButtonHeight,
           component: (
             <View
               style={{
@@ -143,12 +145,12 @@ const Leaderboard = () => {
                     justifyContent: 'space-between',
                   }}
                 >
-                  <Header text={'Predictions'} />
+                  <Header text={'Leaderboards'} />
                   <YearDropdown
                     event={event}
                     eventOptions={eventsWithLeaderboard}
                     setYear={setYear}
-                    heightAboveDropdown={HEADER_TITLE_MARGIN_TOP}
+                    heightAboveDropdown={HEADER_TITLE_MARGIN_TOP + backButtonHeight}
                   />
                 </View>
               </View>

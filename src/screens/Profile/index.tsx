@@ -301,6 +301,7 @@ const Profile = () => {
                   <>
                     {leaderboards.length ? (
                       <>
+                        <View style={{ marginTop: 20 }} />
                         {leaderboards.map((lbRanking) => {
                           const event = events.find((e) => e._id === lbRanking.eventId);
                           if (!event) return null;
@@ -328,7 +329,6 @@ const Profile = () => {
                                     ...user,
                                     ...lbRanking,
                                   }}
-                                  style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
                                 />
                               ) : null}
                             </>
