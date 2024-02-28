@@ -67,8 +67,8 @@ const MovieGrid = ({
                 width: posterDimensions.width,
                 margin: theme.posterMargin,
                 borderRadius: theme.borderRadius,
-                borderColor: hexToRgb(COLORS.secondary, 0.2),
-                borderWidth: 1,
+                borderColor: hexToRgb(COLORS.secondary, 0.1),
+                backgroundColor: COLORS.primary,
               }}
             />
           );
