@@ -217,6 +217,7 @@ const Event = () => {
                   }}
                   selectedEvent={event}
                   setEvent={setEvent}
+                  eventOptions={eventOptions ?? []}
                 />
               ) : null}
             </View>

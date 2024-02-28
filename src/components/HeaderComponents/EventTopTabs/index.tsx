@@ -15,15 +15,18 @@ const EventTopTabs = ({
   selectedEvent,
   setEvent,
   style,
+  eventOptions, // if not passed, it will fetch all events
 }: {
   selectedEvent: WithId<EventModel>;
   setEvent: (event: WithId<EventModel>) => void;
   style?: StyleProp<ViewStyle>;
+  eventOptions?: WithId<EventModel>[];
 }) => {
   const { year: selectedYear, awardsBody: selectedAwardsBody } = selectedEvent;
-  const { data: events } = useQueryGetAllEvents();
+  const { data: _events } = useQueryGetAllEvents();
+  const events = eventOptions ?? _events ?? [];
 
-  const eventsFilteredByYear = (events ?? []).filter((e) => {
+  const eventsFilteredByYear = events.filter((e) => {
     return e.year === selectedYear;
   });
 
@@ -43,7 +46,7 @@ const EventTopTabs = ({
         value: e._id,
       }))}
       onPress={(eventId) => {
-        const event = (events ?? []).find((e) => e._id === eventId);
+        const event = events.find((e) => e._id === eventId);
         if (event) {
           setEvent(event);
         }
