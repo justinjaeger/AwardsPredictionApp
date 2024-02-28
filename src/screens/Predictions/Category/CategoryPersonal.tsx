@@ -20,6 +20,7 @@ import FloatingButton from '../../../components/Buttons/FloatingButton';
 import { useRouteParams } from '../../../hooks/useRouteParams';
 import { useNavigation } from '@react-navigation/native';
 import { PredictionsNavigationProp } from '../../../navigation/types';
+import { eventToString } from '../../../util/stringConversions';
 
 // used in both FromProfile and from event
 const CategoryPersonal = ({
@@ -152,7 +153,9 @@ const CategoryPersonal = ({
         />
       </View>
       <BottomFABContainer>
-        {showEventLink ? <EventLink /> : null}
+        {showEventLink ? (
+          <EventLink text={eventToString(event.awardsBody, event.year)} />
+        ) : null}
         {isEditable ? <FloatingButton onPress={onPressAdd} icon={'plus'} /> : null}
         <ScreenshotMode predictions={predictions} isCommunity={false} />
       </BottomFABContainer>

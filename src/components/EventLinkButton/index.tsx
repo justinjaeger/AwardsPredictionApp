@@ -11,7 +11,7 @@ import { IPAD_PROFILE_IMAGE_SCALE } from '../ProfileImage';
 import useDevice from '../../util/device';
 import { PredictionsNavigationProp } from '../../navigation/types';
 
-const EventLinkButton = () => {
+const EventLinkButton = ({ text }: { text?: string }) => {
   const { userInfo } = useRouteParams();
   const navigation = useNavigation<PredictionsNavigationProp>();
   const { event } = useRouteParams();
@@ -46,7 +46,7 @@ const EventLinkButton = () => {
       underlayColor={COLORS.secondaryDark}
     >
       <>
-        <BodyBold>All Categories</BodyBold>
+        <BodyBold>{text ?? 'All Categories'}</BodyBold>
         <CustomIcon name={'chevron-right'} size={30} />
       </>
     </TouchableHighlight>

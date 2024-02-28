@@ -5,7 +5,7 @@ import {
   PredictionsParamList,
 } from '../../../navigation/types';
 import { eventToString } from '../../../util/stringConversions';
-import { getTwoLineHeaderTitle } from '../../../constants';
+import { BOTTOM_TAB_HEIGHT, getTwoLineHeaderTitle } from '../../../constants';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useRouteParams } from '../../../hooks/useRouteParams';
 import CategoryCommunity from './CategoryCommunity';
@@ -39,7 +39,7 @@ const Category = () => {
 
   return (
     <BackgroundWrapper>
-      <View style={{ width: '100%' }}>
+      <View style={{ width: '100%', paddingBottom: BOTTOM_TAB_HEIGHT }}>
         <PredictionTabsNavigator />
         <TabBodies
           personal={<CategoryPersonal key="p" showEventLink={showEventLink} />}

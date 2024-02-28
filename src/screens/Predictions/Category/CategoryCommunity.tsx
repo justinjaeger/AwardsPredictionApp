@@ -10,11 +10,13 @@ import { sortPredictions } from '../../../util/sortPredictions';
 import ScreenshotMode from '../../../components/Buttons/ScreenshotMode';
 import BottomFABContainer from '../../../components/BottomFABContainer';
 import { useRouteParams } from '../../../hooks/useRouteParams';
+import { eventToString } from '../../../util/stringConversions';
 
 // Note: We ALSO use this for non-auth-user user profiles
 const CategoryCommunity = ({ showEventLink }: { showEventLink?: boolean }) => {
-  const { category: _category, yyyymmdd } = useRouteParams();
+  const { category: _category, event: _event, yyyymmdd } = useRouteParams();
   const category = _category!;
+  const event = _event!;
 
   const { data: predictionSet, isLoading } = useQueryGetCommunityPredictions({
     yyyymmdd,
@@ -51,7 +53,9 @@ const CategoryCommunity = ({ showEventLink }: { showEventLink?: boolean }) => {
         />
       </View>
       <BottomFABContainer>
-        {showEventLink ? <EventLink /> : null}
+        {showEventLink ? (
+          <EventLink text={eventToString(event.awardsBody, event.year)} />
+        ) : null}
         <ScreenshotMode predictions={predictions.slice(0, 20)} isCommunity={true} />
       </BottomFABContainer>
     </>

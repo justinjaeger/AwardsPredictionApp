@@ -8,7 +8,7 @@ const BottomFABContainer = ({ children }: { children?: React.ReactNode }) => {
   const { isPad } = useDevice();
   const HEIGHT_TO_MOVE_UP = 60 * (isPad ? IPAD_PROFILE_IMAGE_SCALE : 1);
   const animatedBottomButtons = useRef(new Animated.Value(HEIGHT_TO_MOVE_UP)).current;
-  const bottom = BOTTOM_TAB_HEIGHT + (HEIGHT_TO_MOVE_UP - 40);
+  const bottom = BOTTOM_TAB_HEIGHT + HEIGHT_TO_MOVE_UP;
 
   return (
     <Animated.View
