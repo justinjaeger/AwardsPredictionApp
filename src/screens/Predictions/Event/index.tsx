@@ -118,6 +118,8 @@ const Event = () => {
     : '';
   const phaseName = (phase ? PHASE_TO_STRING_PLURAL[phase] : '') + ' ';
 
+  const showUserInfo = userInfo && !isAuthProfile;
+
   const topOnlyContent = isLeaderboard
     ? {
         height: HEADER_HEIGHT + SUBHEADER_HEIGHT + USER_PROFILE_HEIGHT,
@@ -157,7 +159,7 @@ const Event = () => {
           EVENT_TOP_TABS_HEIGHT +
           HEADER_TOP_TAB_MARGIN_BOTTOM +
           HEADER_TOP_TAB_MARGIN_TOP +
-          (disableBack ? 0 : BACK_BUTTON_HEIGHT),
+          (showUserInfo ? USER_PROFILE_HEIGHT : disableBack ? 0 : BACK_BUTTON_HEIGHT),
         component: (
           <View style={{ marginTop: HEADER_TITLE_MARGIN_TOP }}>
             <View
@@ -166,7 +168,13 @@ const Event = () => {
                 paddingRight: theme.windowMargin,
               }}
             >
-              {disableBack ? null : <BackButton variation={'on-dark'} />}
+              <View style={{ position: 'relative', alignItems: 'center' }}>
+                <View style={{ position: 'absolute', top: 0, left: 0 }}>
+                  {disableBack ? null : <BackButton variation={'on-dark'} />}
+                </View>
+                {showUserInfo ? <UserProfile userInfo={userInfo} /> : null}
+                <View />
+              </View>
               <View
                 style={{
                   flexDirection: 'row',
