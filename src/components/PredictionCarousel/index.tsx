@@ -98,10 +98,9 @@ const PredictionCarousel = ({
   return (
     <View
       style={{
-        borderWidth: 1,
-        borderColor: hexToRgb(COLORS.white, 0.2),
-        backgroundColor: hexToRgb(COLORS.white, 0.02),
-        borderRadius: theme.borderRadius,
+        borderTopWidth: 1,
+        borderTopColor: hexToRgb(COLORS.primaryLight, 0.5),
+        backgroundColor: COLORS.primary,
         marginTop: 10,
         marginBottom: 10,
       }}
