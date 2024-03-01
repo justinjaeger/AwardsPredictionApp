@@ -26,6 +26,14 @@ import useRecommendedUsers from '../../../hooks/useRecommendedUsers';
 
 const SEARCH_MARGIN_BOTTOM = 10;
 
+/**
+ * TODO: I think this needs a few tabs.
+ * 1. Recent
+ * 2. By Event
+ * 3. Search (with recommended)
+ *
+ * But for next event, we can skip the middle
+ */
 const Social = () => {
   const flashListRef = useRef<FlashList<any>>(null);
 
@@ -142,7 +150,6 @@ const Social = () => {
         ),
         estimatedItemSize: itemHeightCarousel,
       };
-  console.log('flatListProps', flatListProps);
 
   const topOnlyContent = {
     height: getSearchHeight(isPad) + SEARCH_MARGIN_BOTTOM,
@@ -162,7 +169,7 @@ const Social = () => {
 
   return (
     <BackgroundWrapper>
-      {searchIsActive ? (
+      <View style={{ display: searchIsActive ? 'flex' : 'none' }}>
         <DynamicHeaderFlatListWrapper<WithId<User>>
           flashListRef={flashListRef}
           disableBack={true}
@@ -196,7 +203,8 @@ const Social = () => {
             estimatedItemSize: USER_SEARCH_ITEM_HEIGHT,
           }}
         />
-      ) : (
+      </View>
+      <View style={{ display: searchIsActive ? 'none' : 'flex' }}>
         <DynamicHeaderFlatListWrapper<WithId<User>>
           flashListRef={flashListRef}
           disableBack={true}
@@ -241,7 +249,7 @@ const Social = () => {
             estimatedItemSize: itemHeightCarousel,
           }}
         />
-      )}
+      </View>
     </BackgroundWrapper>
   );
 };
