@@ -6,6 +6,9 @@ import COLORS from '../../constants/colors';
 import { useHeaderDropdown } from '../../context/HeaderDropdownContext';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+/**
+ * Used to render a backdrop to the year dropdown when focused
+ */
 const HeaderDropdownOverlay = (): React.ReactElement => {
   const { width, height } = useWindowDimensions();
   const { top } = useSafeAreaInsets();
