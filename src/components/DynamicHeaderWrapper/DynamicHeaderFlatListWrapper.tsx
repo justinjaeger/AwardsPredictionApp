@@ -10,7 +10,7 @@ const stripProps = (object: any) => ({
 });
 
 const DynamicHeaderFlatListWrapper = <T,>(props: {
-  titleWhenCollapsed: string;
+  titleWhenCollapsed?: string;
   topOnlyContent: { height: number; component: JSX.Element };
   flatListProps: FlashListProps<T>;
   persistedContent?: { height: number; component: JSX.Element };
@@ -33,7 +33,14 @@ const DynamicHeaderFlatListWrapper = <T,>(props: {
           ref={props.flashListRef}
         />
       )}
-      collapsedContent={getCollapsedContent(props.titleWhenCollapsed, props.disableBack)}
+      collapsedContent={
+        props.titleWhenCollapsed
+          ? getCollapsedContent(props.titleWhenCollapsed, props.disableBack)
+          : {
+              height: 0,
+              component: <></>,
+            }
+      }
     />
   );
 };

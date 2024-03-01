@@ -22,6 +22,14 @@ import CarouselArrow from './CarouselArrow';
 import { iRecentPrediction } from '../../models';
 import { PredictionsNavigationProp, iUserInfo } from '../../navigation/types';
 
+export const CAROUSEL_MARGIN = 10;
+export const CAROUSEL_PROFILE_IMAGE_SIZE = 40;
+
+export const getCarouselSliderHeight = (width: number, isPad: boolean) =>
+  getPosterDimensionsByWidth(
+    (width - theme.posterMargin * (5 - 1) - theme.windowMargin) / 5,
+  ).height + (isPad ? 100 : 70);
+
 const PredictionCarousel = ({
   predictionSets,
   userInfo,
@@ -101,8 +109,8 @@ const PredictionCarousel = ({
         borderTopWidth: 1,
         borderTopColor: hexToRgb(COLORS.primaryLight, 0.5),
         backgroundColor: COLORS.primary,
-        marginTop: 10,
-        marginBottom: 10,
+        marginTop: CAROUSEL_MARGIN,
+        marginBottom: CAROUSEL_MARGIN,
       }}
     >
       {!hideUserInfo ? (
@@ -112,10 +120,10 @@ const PredictionCarousel = ({
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'flex-start',
-            marginTop: 10,
+            marginTop: CAROUSEL_MARGIN,
             marginLeft: theme.windowMargin,
             marginRight: theme.windowMargin,
-            marginBottom: 10,
+            marginBottom: CAROUSEL_MARGIN,
             borderRadius: theme.borderRadius,
           }}
           onPress={() => {
@@ -125,7 +133,7 @@ const PredictionCarousel = ({
           <>
             <ProfileImage
               image={userInfo?.userImage}
-              imageSize={40}
+              imageSize={CAROUSEL_PROFILE_IMAGE_SIZE}
               style={{ marginRight: 15 }}
               isDisabled
             />
@@ -141,10 +149,7 @@ const PredictionCarousel = ({
             borderLeftWidth: 0,
             borderRightWidth: 0,
             paddingBottom: 10,
-            height:
-              getPosterDimensionsByWidth(
-                (width - theme.posterMargin * (5 - 1) - theme.windowMargin) / 5,
-              ).height + (isPad ? 100 : 70), // messy, but prevents a bug. has to be a factor of width since poster height is
+            height: getCarouselSliderHeight(width, isPad),
           },
           style,
         ]}

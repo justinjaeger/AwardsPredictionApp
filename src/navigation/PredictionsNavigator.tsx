@@ -34,13 +34,7 @@ const PredictionsNavigator = () => {
       screenOptions={{ headerMode: 'screen' }}
     >
       <Group>
-        <Screen
-          name="Social"
-          component={Social}
-          options={{
-            ...toolbarOnly,
-          }}
-        />
+        <Screen name="Social" component={Social} options={{ headerShown: false }} />
         {/* Prediction Screens */}
         <Screen name="Event" component={Event} options={{ headerShown: false }} />
         <Screen

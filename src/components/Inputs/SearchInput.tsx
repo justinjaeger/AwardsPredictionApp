@@ -15,6 +15,8 @@ import theme from '../../constants/theme';
 import useDevice from '../../util/device';
 import { BodyBold } from '../Text';
 
+export const getSearchHeight = (isPad: boolean) => (isPad ? 45 : 35);
+
 const SearchInput = ({
   handleSearch,
   searchIsActive,
@@ -52,7 +54,7 @@ const SearchInput = ({
     Keyboard.dismiss();
   };
 
-  const searchHeight = isPad ? 45 : 35;
+  const searchHeight = getSearchHeight(isPad);
 
   return (
     <View style={[{ flexDirection: 'row', padding: 10 }, style]}>
