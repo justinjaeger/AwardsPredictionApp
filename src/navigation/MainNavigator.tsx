@@ -35,6 +35,7 @@ const MainNavigator = () => {
           options={{
             headerShown: true,
             headerTitle: getHeaderTitle(''),
+            // @ts-ignore
             headerLeft: BackButtonForNavigator,
             ...dark,
           }}
