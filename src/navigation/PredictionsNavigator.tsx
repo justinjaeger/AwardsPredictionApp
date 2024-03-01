@@ -1,7 +1,6 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { BottomTabParamList, PredictionsParamList } from './types';
-import EventSelect from '../screens/Predictions/EventSelect';
 import theme from '../constants/theme';
 import { getHeaderTitle } from '../constants';
 import AddPredictions from '../screens/Predictions/AddPredictions.tsx';
@@ -19,6 +18,7 @@ import Category from '../screens/Predictions/Category';
 import Event from '../screens/Predictions/Event';
 import { HeaderDropdownProvider } from '../context/HeaderDropdownContext';
 import { BackButtonForNavigator } from '../components/HeaderComponents/BackButton';
+import Social from '../screens/Predictions/Social';
 
 const { Navigator, Screen, Group } = createStackNavigator<PredictionsParamList>();
 
@@ -30,13 +30,13 @@ const PredictionsNavigator = () => {
 
   return (
     <Navigator
-      initialRouteName={initialScreen || 'EventSelect'}
+      initialRouteName={initialScreen || 'Social'}
       screenOptions={{ headerMode: 'screen' }}
     >
       <Group>
         <Screen
-          name="EventSelect"
-          component={EventSelect}
+          name="Social"
+          component={Social}
           options={{
             ...toolbarOnly,
           }}

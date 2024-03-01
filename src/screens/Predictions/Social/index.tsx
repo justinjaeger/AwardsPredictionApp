@@ -18,7 +18,7 @@ import { StackActions, useNavigation } from '@react-navigation/native';
 import { PredictionsNavigationProp, iUserInfo } from '../../../navigation/types';
 import { getLazyLoadProps } from '../../../util/getLazyLoadProps';
 
-const EventSelect = () => {
+const Social = () => {
   const { width } = useWindowDimensions();
   const { userId: authUserId } = useAuth();
   const { isPad } = useDevice();
@@ -164,4 +164,4 @@ const EventSelect = () => {
   );
 };
 
-export default EventSelect;
+export default Social;

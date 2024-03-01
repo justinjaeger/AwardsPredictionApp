@@ -47,7 +47,7 @@ type iHistoryNavigationProps = {
 
 export type PredictionsNavigationProp = StackNavigationProp<PredictionsParamList>;
 export type PredictionsParamList = {
-  EventSelect: undefined;
+  Social: undefined;
   // PREDICTION SCREENS
   Event: {
     userInfo: iUserInfo | undefined;

@@ -25,7 +25,7 @@ const BottomTabNavigator = () => {
       <Tab.Screen
         name="Social"
         component={PredictionsNavigator}
-        initialParams={{ initialScreen: 'EventSelect' }}
+        initialParams={{ initialScreen: 'Social' }}
       />
       <Tab.Screen
         name="Leaderboard"
