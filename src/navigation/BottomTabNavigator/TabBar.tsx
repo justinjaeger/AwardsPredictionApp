@@ -59,7 +59,7 @@ const TabBar = (props: ITabBarProps) => {
                 return (
                   <View key={index}>
                     <CustomIcon
-                      name={'home'}
+                      name={'people-outline'}
                       color={isFocused ? focusedColor : unfocusedColor}
                     />
                   </View>
@@ -68,7 +68,7 @@ const TabBar = (props: ITabBarProps) => {
                 return (
                   <View key={index}>
                     <CustomIcon
-                      name={'award-outline'}
+                      name={'home'}
                       color={isFocused ? focusedColor : unfocusedColor}
                     />
                   </View>

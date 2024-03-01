@@ -3,7 +3,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import TabBar, { ITabBarProps } from './TabBar';
 import PredictionsNavigator from '../PredictionsNavigator';
 import { BottomTabParamList } from '../types';
-import HelpNavigator from '../HelpNavigator';
 
 const Tab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -19,14 +18,14 @@ const BottomTabNavigator = () => {
       initialRouteName="Predictions"
     >
       <Tab.Screen
-        name="Social"
-        component={PredictionsNavigator}
-        initialParams={{ initialScreen: 'EventSelect' }}
-      />
-      <Tab.Screen
         name="Predictions"
         component={PredictionsNavigator}
         initialParams={{ initialScreen: 'Event' }}
+      />
+      <Tab.Screen
+        name="Social"
+        component={PredictionsNavigator}
+        initialParams={{ initialScreen: 'EventSelect' }}
       />
       <Tab.Screen
         name="Leaderboard"
@@ -38,7 +37,7 @@ const BottomTabNavigator = () => {
         component={PredictionsNavigator}
         initialParams={{ initialScreen: 'Profile' }}
       />
-      <Tab.Screen name="Help" component={HelpNavigator} />
+      {/* <Tab.Screen name="Help" component={HelpNavigator} /> */}
     </Tab.Navigator>
   );
 };

@@ -1,5 +1,11 @@
 import React, { useEffect, useRef } from 'react';
-import { View, TouchableHighlight, ScrollView, TouchableOpacity } from 'react-native';
+import {
+  View,
+  TouchableHighlight,
+  ScrollView,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
 import { Body, BodyBold, HeaderLight, SubHeader } from '../../components/Text';
 import { useAuth } from '../../context/AuthContext';
 import BackgroundWrapper from '../../components/BackgroundWrapper';
@@ -11,9 +17,11 @@ import ProfileImage from '../../components/ProfileImage';
 import FollowButton from '../../components/FollowButton';
 import FollowCountButton from '../../components/FollowCountButton';
 import useQueryGetAllEvents from '../../hooks/queries/useQueryGetAllEvents';
-import { PredictionsNavigationProp } from '../../navigation/types';
+import {
+  MainScreenNavigationProp,
+  PredictionsNavigationProp,
+} from '../../navigation/types';
 import useProfileUser from './useProfileUser';
-import useProfileHeader from './useProfileHeader';
 import ProfileSkeleton from '../../components/Skeletons/ProfileSkeleton';
 import Snackbar from '../../components/Snackbar';
 import { useRouteParams } from '../../hooks/useRouteParams';
@@ -31,6 +39,7 @@ import SectionTopTabs from '../../components/SectionTopTabs';
 import DualTabsWrapper from '../../components/DualTabsWrapper';
 import { useSharedValue } from 'react-native-reanimated';
 import LinearGradient from 'react-native-linear-gradient';
+import HeaderButton from '../../components/HeaderComponents/HeaderButton';
 
 const NullTabState = ({ tab }: { tab: string }) => {
   return (
@@ -46,9 +55,10 @@ const Profile = () => {
   const scrollViewRef = useRef<ScrollView>(null);
 
   const { userInfo: routeUserInfo, disableBack } = useRouteParams();
-  const { userId: authUserId, userRole: authUserRole } = useAuth();
+  const { userId: authUserId, userRole: authUserRole, signOutUser } = useAuth();
   const userId = routeUserInfo?.userId || authUserId;
 
+  const mainNavigation = useNavigation<MainScreenNavigationProp>();
   const navigation = useNavigation<PredictionsNavigationProp>();
   const { setPersonalCommunityTab } = usePersonalCommunityTab();
 
@@ -57,9 +67,6 @@ const Profile = () => {
 
   const { isLoading, setIsLoading, user, authUserIsFollowing, isFollowingAuthUser } =
     useProfileUser(userId);
-
-  // handles the header (and logout button)
-  useProfileHeader(userId, isLoading, setIsLoading);
 
   const iterableEvents = Object.values(events);
   const userEvents = Object.values(iterableEvents)?.filter((event) =>
@@ -74,6 +81,29 @@ const Profile = () => {
       Snackbar.warning(`Update your ${!user.username ? 'username' : 'name'} to continue`);
     }
   }, [user?.username, user?.name]);
+
+  const logOut = async () => {
+    setIsLoading(true);
+    await signOutUser();
+    Snackbar.success('You were signed out');
+    setIsLoading(false);
+  };
+
+  const onPressLogOut = () => {
+    Alert.alert('Log out', 'Are you sure you want to log out?', [
+      {
+        text: 'Cancel',
+        onPress: () => {},
+        style: 'cancel',
+      },
+      {
+        text: 'Yes',
+        onPress: () => {
+          logOut();
+        },
+      },
+    ]);
+  };
 
   const onPressProfileInfo = () => isAuthUser && navigation.navigate('UpdateProfileInfo');
 
@@ -153,6 +183,32 @@ const Profile = () => {
                     marginTop: 10,
                   }}
                 >
+                  {isAuthUser ? (
+                    <View
+                      style={{
+                        position: 'absolute',
+                        top: 0,
+                        right: 10,
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                      }}
+                    >
+                      <HeaderButton
+                        onPress={() => {
+                          mainNavigation.navigate('Help');
+                        }}
+                        icon={'question-mark-outline'}
+                        variation={'on-dark'}
+                      />
+                      <HeaderButton
+                        onPress={() => {
+                          onPressLogOut();
+                        }}
+                        icon={'log-out-outline'}
+                        variation={'on-dark'}
+                      />
+                    </View>
+                  ) : null}
                   <ProfileImage
                     image={user?.image}
                     onPress={isAuthUser ? () => onPressProfileInfo() : undefined}

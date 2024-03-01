@@ -15,7 +15,7 @@ import ProfileImage from '../../components/ProfileImage';
 import useMutationUpdateProfileImage from '../../hooks/mutations/useMutationUpdateProfileImage';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { PredictionsNavigationProp } from '../../navigation/types';
-import BackButton from '../../components/HeaderComponents/BackButton';
+import { BackButtonForNavigator } from '../../components/HeaderComponents/BackButton';
 
 const BIO_CHAR_LIMIT = 150;
 
@@ -79,8 +79,8 @@ const UpdateProfileInfo = () => {
       ),
       // eslint-disable-next-line react/no-unstable-nested-components
       headerLeft: () => (
-        <BackButton
-          onPress={
+        <BackButtonForNavigator
+          onPressExtra={
             submitEnabled
               ? () => {
                   Alert.alert('Discard Changes?', '', [

@@ -23,6 +23,7 @@ import { useNavigation } from '@react-navigation/native';
 import { getTwoLineHeaderTitle } from '../../../constants';
 import { eventToString } from '../../../util/stringConversions';
 import BackButton from '../../../components/HeaderComponents/BackButton';
+import { CATEGORY_TYPE_TO_STRING } from '../../../constants/categories';
 
 const AddPredictions = () => {
   const navigation = useNavigation<PredictionsNavigationProp>();
@@ -73,8 +74,11 @@ const AddPredictions = () => {
   useEffect(() => {
     if (!category || !event) return;
     const eventName = eventToString(event.awardsBody, event.year);
-    const categoryName = event.categories[category].name;
-    const headerTitle = eventName + '\n' + 'Best ' + categoryName + ' • Add / Remove';
+    const categoryData = event.categories[category];
+    const categoryName = categoryData.name;
+    const type = categoryData.type;
+    const typeAsString = CATEGORY_TYPE_TO_STRING[type];
+    const headerTitle = `${eventName}\nBest ${categoryName}\nAdd ${typeAsString}s`;
     navigation.setOptions({
       // eslint-disable-next-line react/no-unstable-nested-components
       headerLeft: () => <BackButton onPress={() => saveAndGoBack()} />,

@@ -13,6 +13,7 @@ export type MainParamList = {
     title?: string;
     showWebLink?: boolean;
   };
+  Help: undefined;
 };
 
 type iBottomTabDefaultParamList = {

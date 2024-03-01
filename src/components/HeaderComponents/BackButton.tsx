@@ -33,11 +33,16 @@ const BackButton = ({
 };
 
 // we pass props here because this is used directly in navigation header
-export const BackButtonForNavigator = () => (
+export const BackButtonForNavigator = ({
+  onPressExtra,
+}: {
+  onPressExtra?: () => void;
+}) => (
   <BackButton
     style={{
       marginLeft: theme.windowMargin,
     }}
+    onPress={onPressExtra}
   />
 );
 

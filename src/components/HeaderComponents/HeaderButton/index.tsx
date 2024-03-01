@@ -17,38 +17,36 @@ const HeaderButton = ({
   variation?: 'transparent' | 'on-dark';
 }) => {
   return (
-    <View
+    <TouchableOpacity
+      onPress={() => {
+        console.log('FUK');
+        onPress();
+      }}
       style={{
+        width: HEADER_BUTTON_HEIGHT,
         height: HEADER_BUTTON_HEIGHT,
+        alignItems: 'center',
         justifyContent: 'center',
+        borderRadius: 100,
       }}
     >
-      <TouchableOpacity
-        onPress={onPress}
-        style={{
-          width: HEADER_BUTTON_HEIGHT,
-          height: HEADER_BUTTON_HEIGHT,
-          alignItems: 'center',
-          justifyContent: 'center',
-          borderRadius: 100,
-        }}
+      <View
+        style={[
+          {
+            width: HEADER_BUTTON_HEIGHT - 10,
+            height: HEADER_BUTTON_HEIGHT - 10,
+            backgroundColor:
+              variation === 'transparent' ? 'transparent' : COLORS.primaryLight,
+            borderRadius: 100,
+            alignItems: 'center',
+            justifyContent: 'center',
+          },
+          style,
+        ]}
       >
-        <View
-          style={[
-            {
-              width: HEADER_BUTTON_HEIGHT - 10,
-              height: HEADER_BUTTON_HEIGHT - 10,
-              backgroundColor:
-                variation === 'transparent' ? 'transparent' : COLORS.primaryLight,
-              borderRadius: 100,
-            },
-            style,
-          ]}
-        >
-          <CustomIcon name={icon} size={HEADER_BUTTON_HEIGHT - 10} color={COLORS.white} />
-        </View>
-      </TouchableOpacity>
-    </View>
+        <CustomIcon name={icon} size={HEADER_BUTTON_HEIGHT - 15} color={COLORS.white} />
+      </View>
+    </TouchableOpacity>
   );
 };
 
