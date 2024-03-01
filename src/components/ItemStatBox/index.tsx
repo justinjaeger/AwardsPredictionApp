@@ -26,6 +26,8 @@ import { useAuth } from '../../context/AuthContext';
 import Stat from './Stat';
 import { formatPercentage } from '../../util/formatPercentage';
 import { useRouteParams } from '../../hooks/useRouteParams';
+import { getUserInfo } from '../../util/getUserInfo';
+import useQueryGetUser from '../../hooks/queries/useQueryGetUser';
 
 const ItemStatBox = ({
   category,
@@ -50,6 +52,7 @@ const ItemStatBox = ({
   const navigation = useNavigation<PredictionsNavigationProp>();
   const { yyyymmdd } = useRouteParams();
   const { userId: authUserId } = useAuth();
+  const { data: user } = useQueryGetUser(authUserId);
 
   const numPredicting = prediction?.numPredicting;
   const totalNumPredicting = getTotalNumPredicting(numPredicting || {});
@@ -109,8 +112,8 @@ const ItemStatBox = ({
             navigation.goBack();
           } else {
             navigation.dispatch(
-              StackActions.replace('Category', {
-                userId: authUserId ?? undefined,
+              StackActions.push('Category', {
+                userInfo: getUserInfo(user),
                 eventId: event._id,
                 category: category,
               }),
