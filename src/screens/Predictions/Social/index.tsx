@@ -23,6 +23,11 @@ import DynamicHeaderFlatListWrapper from '../../../components/DynamicHeaderWrapp
 import { FlashList } from '@shopify/flash-list';
 import { User, WithId } from '../../../models';
 import useRecommendedUsers from '../../../hooks/useRecommendedUsers';
+import Header, { HEADER_HEIGHT } from '../../../components/HeaderComponents/Header';
+import theme from '../../../constants/theme';
+import { HEADER_TOP_TAB_MARGIN_BOTTOM } from '../../../components/HeaderComponents/constants';
+import { hexToRgb } from '../../../util/hexToRgb';
+import COLORS from '../../../constants/colors';
 
 const SEARCH_MARGIN_BOTTOM = 10;
 
@@ -88,46 +93,59 @@ const Social = () => {
     getCarouselSliderHeight(width, isPad);
 
   const showRecommended = searchResults === undefined && !isFetchingRecommended;
+  const showUserSearch = !authUserId || searchIsActive;
+
+  const screenTitle = showUserSearch ? 'Find Users' : 'New From Friends';
 
   const topOnlyContent = {
-    height: getSearchHeight(isPad) + SEARCH_MARGIN_BOTTOM,
+    height:
+      getSearchHeight(isPad) +
+      SEARCH_MARGIN_BOTTOM +
+      HEADER_HEIGHT +
+      HEADER_TOP_TAB_MARGIN_BOTTOM,
     component: (
-      <SearchInput
-        searchIsActive={searchIsActive}
-        placeholder={'Search users'}
-        handleSearch={handleSearch}
-        onReset={() => {
-          reset();
-          setSearchIsFocused(false);
-        }}
-        onFocus={() => setSearchIsFocused(true)}
-      />
+      <>
+        <SearchInput
+          searchIsActive={searchIsActive}
+          placeholder={'Search users'}
+          handleSearch={handleSearch}
+          onReset={() => {
+            reset();
+            setSearchIsFocused(false);
+          }}
+          onFocus={() => setSearchIsFocused(true)}
+        />
+        <Header
+          text={screenTitle}
+          style={{
+            marginLeft: theme.windowMargin,
+            marginBottom: HEADER_TOP_TAB_MARGIN_BOTTOM,
+          }}
+        />
+        <View
+          style={{
+            borderBottomWidth: 1,
+            borderColor: hexToRgb(COLORS.primaryLight, 0.5),
+          }}
+        />
+      </>
     ),
   };
 
-  console.log('isLoadingUsers', isLoadingUsers);
-
-  // if (true) {
-  //   return (
-  //     <BackgroundWrapper>
-  //       <View style={{ backgroundColor: 'red' }}>
-  //         {new Array(3).fill(null).map((x, i) => (
-  //           <CarouselSkeleton key={i} renderProfile renderBody />
-  //         ))}
-  //       </View>
-  //     </BackgroundWrapper>
-  //   );
-  // }
-
   return (
     <BackgroundWrapper>
-      <View style={{ display: searchIsActive ? 'flex' : 'none' }}>
+      <View style={{ display: showUserSearch ? 'flex' : 'none' }}>
         <DynamicHeaderFlatListWrapper<WithId<User>>
           flashListRef={flashListRef}
           disableBack={true}
           topOnlyContent={topOnlyContent}
+          titleWhenCollapsed={screenTitle}
           flatListProps={{
-            data: showRecommended ? recommendedUsers : searchResults ?? [],
+            data: isFetchingRecommended
+              ? []
+              : showRecommended
+              ? recommendedUsers
+              : searchResults ?? [],
             keyExtractor: (item) => item._id + 'search',
             renderItem: ({ item }) => (
               <UserSearchResultItem
@@ -136,15 +154,6 @@ const Social = () => {
                 onPress={navigateToProfile}
               />
             ),
-            // ListHeaderComponent: (
-            //   <View style={{ width: '100%', alignItems: 'center' }}>
-            //     {searchResults === undefined ? (
-            //       <RecommendedUsers header={'Follow Users'} />
-            //     ) : null}
-            //   </View>
-            // ),
-            // ListFooterComponent:
-            //   searchResults === undefined ? <CarouselSkeleton renderBody /> : null,
             onEndReached: () => {
               if (showRecommended) {
                 fetchMoreRecommended();
@@ -156,13 +165,15 @@ const Social = () => {
           }}
         />
       </View>
-      <View style={{ display: searchIsActive ? 'none' : 'flex' }}>
+      <View style={{ display: showUserSearch ? 'none' : 'flex' }}>
         <DynamicHeaderFlatListWrapper<WithId<User>>
           flashListRef={flashListRef}
           disableBack={true}
           topOnlyContent={topOnlyContent}
+          titleWhenCollapsed={screenTitle}
           flatListProps={{
-            data: usersWithNestedData ?? [],
+            // important: if loading users, this allows the header loader to render without being blocked by js
+            data: isLoadingUsers ? [] : usersWithNestedData ?? [],
             keyExtractor: (item) => item._id + 'carousel',
             renderItem: ({ item }) => (
               <View style={{ width }}>
@@ -174,25 +185,15 @@ const Social = () => {
             ),
             ListHeaderComponent: (
               <View style={{ width: '100%', alignItems: 'center' }}>
-                {/* {!authUserId ? (
-                  // users not signed in can see recommended users
-                  <RecommendedUsers header={'Follow Users'} />
-                ) : (
-                  <HeaderLight
-                    style={{
-                      alignSelf: 'flex-start',
-                      marginTop: 10,
-                      marginLeft: theme.windowMargin,
-                      marginBottom: 10,
-                    }}
-                  >
-                    New From Friends
-                  </HeaderLight>
-                )} */}
                 {isLoadingUsers ? (
-                  <View style={{ marginLeft: -10 }}>
-                    {new Array(2).fill(null).map((x, i) => (
-                      <CarouselSkeleton key={i} renderProfile renderBody />
+                  <View style={{ flexDirection: 'column' }}>
+                    {new Array(3).fill(null).map((x, i) => (
+                      <CarouselSkeleton
+                        key={i}
+                        renderProfile
+                        renderBody
+                        height={itemHeightCarousel}
+                      />
                     ))}
                   </View>
                 ) : null}

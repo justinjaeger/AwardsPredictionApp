@@ -42,7 +42,7 @@ const useQueryGetFollowingUsers = () => {
         .forEach((p) => {
           if (p) allRecentPredictions.push(p);
         });
-      await storeTmdbDataFromRecentPredictions(allRecentPredictions);
+      storeTmdbDataFromRecentPredictions(allRecentPredictions);
 
       return usersSortedByMostRecentPrediction;
     },
