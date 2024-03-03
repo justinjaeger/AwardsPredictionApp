@@ -11,6 +11,7 @@ type iFABProps = {
   horizontalOffset?: number;
   left?: boolean;
   isLoading?: boolean;
+  bottom?: number;
 };
 
 export const FAB = ({
@@ -22,6 +23,7 @@ export const FAB = ({
   horizontalOffset,
   left,
   isLoading,
+  bottom,
 }: iFABProps) => {
   const buttonX = useRef(new Animated.Value(0)).current;
   const buttonOpacity = useRef(new Animated.Value(0)).current;
@@ -32,12 +34,12 @@ export const FAB = ({
     Animated.timing(buttonX, {
       toValue: left ? (visible ? 100 : toValue) : visible ? toValue : 100,
       duration: 300,
-      useNativeDriver: false,
+      useNativeDriver: true,
     }).start();
     Animated.timing(buttonOpacity, {
       toValue: visible ? 1 : 0,
       duration: 300,
-      useNativeDriver: false,
+      useNativeDriver: true,
     }).start();
   }, [visible]);
 
@@ -45,7 +47,7 @@ export const FAB = ({
     <Animated.View
       style={{
         position: 'absolute',
-        bottom: bottomPercentage || '0%',
+        bottom: bottom || bottomPercentage || '0%',
         alignSelf: 'flex-end',
         transform: [{ translateX: buttonX }],
         opacity: buttonOpacity,

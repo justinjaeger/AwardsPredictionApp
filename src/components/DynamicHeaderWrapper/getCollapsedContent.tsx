@@ -7,6 +7,12 @@ export const getCollapsedContent = (
 ) => {
   return {
     height: getHeaderBasicHeight(titleWhenCollapsed),
-    component: <HeaderBasic title={titleWhenCollapsed} disableBack={disableBack} />,
+    component: (
+      <HeaderBasic
+        title={titleWhenCollapsed}
+        disableBack={disableBack}
+        backgroundColor={'transparent'}
+      />
+    ),
   };
 };

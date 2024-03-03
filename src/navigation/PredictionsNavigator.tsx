@@ -1,7 +1,6 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { BottomTabParamList, PredictionsParamList } from './types';
-import theme from '../constants/theme';
 import { getHeaderTitle } from '../constants';
 import AddPredictions from '../screens/Predictions/AddPredictions.tsx';
 import Profile from '../screens/Profile';
@@ -26,7 +25,7 @@ const PredictionsNavigator = () => {
   const {
     params: { initialScreen },
   } = useRoute<RouteProp<BottomTabParamList, 'ProfileTab'>>();
-  const { toolbarOnly, medium, large } = useHeaderSettings();
+  const { toolbarOnly, medium } = useHeaderSettings();
 
   return (
     <Navigator
@@ -37,24 +36,11 @@ const PredictionsNavigator = () => {
         <Screen name="Social" component={Social} options={{ headerShown: false }} />
         {/* Prediction Screens */}
         <Screen name="Event" component={Event} options={{ headerShown: false }} />
-        <Screen
-          name="Category"
-          component={Category}
-          options={{
-            headerTitle: getHeaderTitle('Category'),
-            headerLeft: BackButtonForNavigator,
-            cardStyle: theme.cardStyle,
-            ...large,
-          }}
-        />
+        <Screen name="Category" component={Category} options={{ headerShown: false }} />
         <Screen
           name="AddPredictions"
           component={AddPredictions}
-          options={{
-            headerTitle: getHeaderTitle('Add / Remove Predictions'),
-            headerLeft: BackButtonForNavigator,
-            ...large,
-          }}
+          options={{ headerShown: false }}
         />
         <Screen
           name="ContenderStats"

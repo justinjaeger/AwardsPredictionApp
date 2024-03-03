@@ -1,49 +1,56 @@
-import React, { useLayoutEffect } from 'react';
+import React from 'react';
 import CategoryPersonal from './CategoryPersonal';
-import {
-  PredictionsNavigationProp,
-  PredictionsParamList,
-} from '../../../navigation/types';
+import { PredictionsParamList } from '../../../navigation/types';
 import { eventToString } from '../../../util/stringConversions';
-import { BOTTOM_TAB_HEIGHT, getTwoLineHeaderTitle } from '../../../constants';
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { RouteProp, useRoute } from '@react-navigation/native';
 import { useRouteParams } from '../../../hooks/useRouteParams';
 import CategoryCommunity from './CategoryCommunity';
 import PredictionTabsNavigator from '../../../navigation/PredictionTabsNavigator';
 import { PHASE_TO_STRING_PLURAL } from '../../../constants/categories';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
-import TabBodies from '../../../navigation/PredictionTabsNavigator/TabBodies';
 import { View } from 'react-native';
+import HeaderBasic, { getHeaderBasicHeight } from '../../../components/HeaderBasic';
+import DualTabsWrapper from '../../../components/DualTabsWrapper';
+import { usePersonalCommunityTab } from '../../../context/PersonalCommunityContext';
 
 const Category = () => {
+  const { tabsPosX } = usePersonalCommunityTab();
   const { params } = useRoute<RouteProp<PredictionsParamList, 'Category'>>();
   const showEventLink = params?.showEventLink || false;
 
   const { category, event, phase, isLeaderboard } = useRouteParams();
 
-  const navigation = useNavigation<PredictionsNavigationProp>();
-
-  // Set the header
-  useLayoutEffect(() => {
-    if (!category || !event) return;
+  let headerText = '';
+  if (event && category) {
     const eventName = eventToString(event.awardsBody, event.year);
     const categoryName = event.categories[category].name;
     const leaderboardTitle =
-      isLeaderboard && phase ? ` • ${PHASE_TO_STRING_PLURAL[phase]}` : '';
-    const headerTitle =
-      eventName + '\n' + 'Best ' + categoryName + (leaderboardTitle || '');
-    navigation.setOptions({
-      headerTitle: getTwoLineHeaderTitle(headerTitle),
-    });
-  }, [navigation]);
+      isLeaderboard && phase ? `\n${PHASE_TO_STRING_PLURAL[phase]}` : '';
+    const headerTitle = `${eventName}\nBest ${categoryName} ${leaderboardTitle || ''}`;
+    headerText = headerTitle;
+  }
+
+  const headerHeight = getHeaderBasicHeight(headerText);
 
   return (
     <BackgroundWrapper>
-      <View style={{ width: '100%', paddingBottom: BOTTOM_TAB_HEIGHT }}>
+      <View style={{ flex: 1, width: '100%' }}>
+        <HeaderBasic title={headerText} safeAreaTop />
         <PredictionTabsNavigator />
-        <TabBodies
-          personal={<CategoryPersonal key="p" showEventLink={showEventLink} />}
-          community={<CategoryCommunity key="c" showEventLink={showEventLink} />}
+        <DualTabsWrapper
+          tab1={
+            <CategoryPersonal
+              showEventLink={showEventLink}
+              extraBottomHeight={headerHeight}
+            />
+          }
+          tab2={
+            <CategoryCommunity
+              showEventLink={showEventLink}
+              extraBottomHeight={headerHeight}
+            />
+          }
+          tabsPosX={tabsPosX}
         />
       </View>
     </BackgroundWrapper>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { SubHeader } from '../../../components/Text';
 import { View } from 'react-native';
 import COLORS from '../../../constants/colors';
@@ -20,10 +20,9 @@ import { useRouteParams } from '../../../hooks/useRouteParams';
 import useKeyboard from '../../../hooks/useKeyboard';
 import { getCategoryIsHidden } from '../../../util/getCategoryIsHidden';
 import { useNavigation } from '@react-navigation/native';
-import { getTwoLineHeaderTitle } from '../../../constants';
 import { eventToString } from '../../../util/stringConversions';
-import BackButton from '../../../components/HeaderComponents/BackButton';
 import { CATEGORY_TYPE_TO_STRING } from '../../../constants/categories';
+import HeaderBasic from '../../../components/HeaderBasic';
 
 const AddPredictions = () => {
   const navigation = useNavigation<PredictionsNavigationProp>();
@@ -70,21 +69,15 @@ const AddPredictions = () => {
     number | undefined
   >(undefined);
 
-  // set custom back arrow functionality
-  useEffect(() => {
-    if (!category || !event) return;
+  let headerText = '';
+  if (category && event) {
     const eventName = eventToString(event.awardsBody, event.year);
     const categoryData = event.categories[category];
     const categoryName = categoryData.name;
     const type = categoryData.type;
     const typeAsString = CATEGORY_TYPE_TO_STRING[type];
-    const headerTitle = `${eventName}\nBest ${categoryName}\nAdd ${typeAsString}s`;
-    navigation.setOptions({
-      // eslint-disable-next-line react/no-unstable-nested-components
-      headerLeft: () => <BackButton onPress={() => saveAndGoBack()} />,
-      headerTitle: getTwoLineHeaderTitle(headerTitle),
-    });
-  }, [navigation]);
+    headerText = `${eventName}\nBest ${categoryName}\nAdd ${typeAsString}s`;
+  }
 
   const saveAndGoBack = () => {
     onSave();
@@ -126,6 +119,7 @@ const AddPredictions = () => {
           addItemToPredictions={addItemToPredictions}
         />
       ) : null}
+      <HeaderBasic title={headerText} safeAreaTop onPressBack={saveAndGoBack} />
       {letUserCreateContenders ? (
         <SearchInput
           placeholder={`Search ${type === CategoryType.PERFORMANCE ? 'actors' : 'films'}`}

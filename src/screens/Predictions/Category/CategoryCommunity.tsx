@@ -13,7 +13,13 @@ import { useRouteParams } from '../../../hooks/useRouteParams';
 import { eventToString } from '../../../util/stringConversions';
 
 // Note: We ALSO use this for non-auth-user user profiles
-const CategoryCommunity = ({ showEventLink }: { showEventLink?: boolean }) => {
+const CategoryCommunity = ({
+  showEventLink,
+  extraBottomHeight,
+}: {
+  showEventLink?: boolean;
+  extraBottomHeight?: number;
+}) => {
   const { category: _category, event: _event, yyyymmdd } = useRouteParams();
   const category = _category!;
   const event = _event!;
@@ -46,13 +52,13 @@ const CategoryCommunity = ({ showEventLink }: { showEventLink?: boolean }) => {
           <BodyBold>{'Community predictions not yet tallied'}</BodyBold>
         </View>
       ) : null}
-      <View style={{ width: '100%', flex: 1 }}>
+      <View style={{ width: '100%', height: '100%' }}>
         <MovieListCommunity
           predictions={predictions}
           lastUpdatedString={lastUpdatedString}
         />
       </View>
-      <BottomFABContainer>
+      <BottomFABContainer extraBottomHeight={extraBottomHeight}>
         {showEventLink ? (
           <EventLink text={eventToString(event.awardsBody, event.year)} />
         ) : null}
