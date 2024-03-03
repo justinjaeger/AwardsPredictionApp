@@ -135,7 +135,7 @@ const CategoryPersonal = ({
           </BodyBold>
         </View>
       ) : null}
-      <View style={{ height: '100%' }}>
+      <View style={{ flex: 1, height: '100%' }}>
         <MovieListDraggable
           predictions={predictions}
           setPredictions={(ps) => {

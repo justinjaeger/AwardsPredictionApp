@@ -91,8 +91,8 @@ const MovieListDraggable = ({
 
   if (!predictionSet) return null; // weird because it returns a blank screen but
 
-  const { predictions: communityPredictions, totalUsersPredicting } =
-    predictionSet.categories[category as CategoryName];
+  const { predictions: communityPredictions, totalUsersPredicting } = predictionSet
+    .categories[category as CategoryName] || { predictions: [], totalUsersPredicting: 0 };
 
   // for leaderboard: get riskiness of all contenders that user earned points for
   const contenderIdToRiskiness: { [cId: string]: number } = {};
