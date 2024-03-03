@@ -1,4 +1,5 @@
 // @ts-nocheck
+import { useRef } from 'react';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { PredictionsParamList, iUserInfo } from '../navigation/types';
 import { useGetEvent } from './useGetEvent';
@@ -31,6 +32,10 @@ export const useRouteParams = (): {
   const categoryData =
     params?.category && event?.categories[params.category as CategoryName];
 
+  const _disableBack = isRootOfBottomtabs;
+  // prevents a re-render when the route changes (fine as long as )
+  const disableBack = useRef(_disableBack).current;
+
   return {
     userInfo: params?.userInfo,
     eventId: params?.eventId,
@@ -41,6 +46,6 @@ export const useRouteParams = (): {
     noShorts: params?.noShorts,
     isLeaderboard: params?.isLeaderboard,
     phase: params?.phase,
-    disableBack: isRootOfBottomtabs,
+    disableBack,
   };
 };
