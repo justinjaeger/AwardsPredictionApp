@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import TabBar, { ITabBarProps } from './TabBar';
 import PredictionsNavigator from '../PredictionsNavigator';
 import { BottomTabParamList } from '../types';
+import HelpNavigator from '../HelpNavigator';
 
 const Tab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -37,7 +38,11 @@ const BottomTabNavigator = () => {
         component={PredictionsNavigator}
         initialParams={{ initialScreen: 'Profile' }}
       />
-      {/* <Tab.Screen name="Help" component={HelpNavigator} /> */}
+      <Tab.Screen
+        name="HelpTab"
+        component={HelpNavigator}
+        initialParams={{ disableBack: true }}
+      />
     </Tab.Navigator>
   );
 };

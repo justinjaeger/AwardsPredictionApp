@@ -17,10 +17,7 @@ import ProfileImage from '../../components/ProfileImage';
 import FollowButton from '../../components/FollowButton';
 import FollowCountButton from '../../components/FollowCountButton';
 import useQueryGetAllEvents from '../../hooks/queries/useQueryGetAllEvents';
-import {
-  MainScreenNavigationProp,
-  PredictionsNavigationProp,
-} from '../../navigation/types';
+import { PredictionsNavigationProp } from '../../navigation/types';
 import useProfileUser from './useProfileUser';
 import ProfileSkeleton from '../../components/Skeletons/ProfileSkeleton';
 import Snackbar from '../../components/Snackbar';
@@ -58,7 +55,6 @@ const Profile = () => {
   const { userId: authUserId, userRole: authUserRole, signOutUser } = useAuth();
   const userId = routeUserInfo?.userId || authUserId;
 
-  const mainNavigation = useNavigation<MainScreenNavigationProp>();
   const navigation = useNavigation<PredictionsNavigationProp>();
   const { setPersonalCommunityTab } = usePersonalCommunityTab();
 
@@ -187,19 +183,18 @@ const Profile = () => {
                     <View
                       style={{
                         position: 'absolute',
-                        top: 0,
                         right: 10,
                         flexDirection: 'row',
                         justifyContent: 'space-between',
                       }}
                     >
-                      <HeaderButton
+                      {/* <HeaderButton
                         onPress={() => {
-                          mainNavigation.navigate('Help');
+                          mainNavigation.navigate('HelpTab');
                         }}
                         icon={'question-mark-outline'}
                         variation={'on-dark'}
-                      />
+                      /> */}
                       <HeaderButton
                         onPress={() => {
                           onPressLogOut();

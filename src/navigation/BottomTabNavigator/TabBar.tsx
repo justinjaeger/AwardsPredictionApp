@@ -100,7 +100,7 @@ const TabBar = (props: ITabBarProps) => {
                     />
                   </View>
                 );
-              case 'Help':
+              case 'HelpTab':
                 return (
                   <View key={index}>
                     <CustomIcon

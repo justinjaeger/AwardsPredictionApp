@@ -12,10 +12,12 @@ const HorizontalScrollingTabs = <T,>({
   options,
   onPress,
   style,
+  contentContainerStyle,
 }: {
   options: { text: string; value: T; isSelected?: boolean }[];
   onPress: (value: T) => void;
   style?: StyleProp<ViewStyle>;
+  contentContainerStyle?: StyleProp<ViewStyle>;
 }) => {
   return (
     <ScrollView
@@ -28,9 +30,12 @@ const HorizontalScrollingTabs = <T,>({
         },
         style,
       ]}
-      contentContainerStyle={{
-        alignItems: 'center',
-      }}
+      contentContainerStyle={[
+        {
+          alignItems: 'center',
+        },
+        contentContainerStyle,
+      ]}
       showsHorizontalScrollIndicator={false}
     >
       {options.map(({ isSelected, text, value }) => {

@@ -13,7 +13,9 @@ export type MainParamList = {
     title?: string;
     showWebLink?: boolean;
   };
-  Help: undefined;
+  HelpTab: {
+    disableBack?: boolean;
+  };
 };
 
 type iBottomTabDefaultParamList = {
@@ -26,7 +28,9 @@ export type BottomTabParamList = {
   Predictions: iBottomTabDefaultParamList;
   ProfileTab: iBottomTabDefaultParamList & { userId?: string };
   Leaderboard: iBottomTabDefaultParamList;
-  Help: undefined;
+  HelpTab: {
+    disableBack?: boolean;
+  };
   Admin: undefined;
 };
 

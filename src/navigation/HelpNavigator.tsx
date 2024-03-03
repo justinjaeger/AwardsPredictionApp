@@ -5,10 +5,18 @@ import Settings from '../screens/Help/Settings';
 import COLORS from '../constants/colors';
 import About from '../screens/Help/About';
 import useDevice from '../util/device';
+import { RouteProp, useRoute } from '@react-navigation/native';
+import { MainParamList } from './types';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const Tab = createMaterialTopTabNavigator();
 
 const HelpTabs = () => {
+  const { params } = useRoute<RouteProp<MainParamList, 'HelpTab'>>();
+  const disableBack = params?.disableBack;
+
+  const { top } = useSafeAreaInsets();
+
   const { isPad } = useDevice();
   return (
     <Tab.Navigator
@@ -26,6 +34,11 @@ const HelpTabs = () => {
         },
         tabBarIndicatorStyle: { backgroundColor: COLORS.white },
         tabBarActiveTintColor: COLORS.primary,
+        swipeEnabled: false,
+      }}
+      style={{
+        paddingTop: disableBack ? top : undefined,
+        backgroundColor: COLORS.primary,
       }}
     >
       <Tab.Screen name="Contact" component={SendMessage} />
