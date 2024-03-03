@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { FlatListProps, View, useWindowDimensions } from 'react-native';
+import { View, useWindowDimensions } from 'react-native';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import { useAuth } from '../../../context/AuthContext';
 import useQueryGetUser from '../../../hooks/queries/useQueryGetUser';
@@ -74,8 +74,6 @@ const Social = () => {
     }
   }, [authUserId, user]);
 
-  // const [numToShow, setNumToShow] = useState<number>(3);
-
   const navigateToProfile = (userInfo: iUserInfo) => {
     // important to push so we can have multiple profiles in same stack
     navigation.dispatch(StackActions.push('Profile', { userInfo }));
@@ -90,66 +88,6 @@ const Social = () => {
     getCarouselSliderHeight(width, isPad);
 
   const showRecommended = searchResults === undefined && !isFetchingRecommended;
-
-  const flatListProps: FlatListProps<WithId<User>> = searchIsActive
-    ? {
-        data: showRecommended ? recommendedUsers : searchResults ?? [],
-        keyExtractor: (item) => item._id + 'search',
-        renderItem: ({ item }) => (
-          <UserSearchResultItem
-            item={item}
-            authUserIsFollowing={usersIdsAuthUserIsFollowing.includes(item._id)}
-            onPress={navigateToProfile}
-          />
-        ),
-        onEndReached: () => {
-          if (showRecommended) {
-            fetchMoreRecommended();
-          } else {
-            fetchMore();
-          }
-        },
-        estimatedItemSize: USER_SEARCH_ITEM_HEIGHT,
-      }
-    : {
-        data: usersWithNestedData ?? [],
-        keyExtractor: (item) => item._id + 'carousel',
-        renderItem: ({ item }) => (
-          <View style={{ width }}>
-            <PredictionCarousel
-              predictionSets={item.recentPredictionSets || []}
-              userInfo={getUserInfo(item)}
-            />
-          </View>
-        ),
-        ListHeaderComponent: (
-          <View style={{ width: '100%', alignItems: 'center' }}>
-            {/* {!authUserId ? (
-              // users not signed in can see recommended users
-              <RecommendedUsers header={'Follow Users'} />
-            ) : (
-              <HeaderLight
-                style={{
-                  alignSelf: 'flex-start',
-                  marginTop: 10,
-                  marginLeft: theme.windowMargin,
-                  marginBottom: 10,
-                }}
-              >
-                New From Friends
-              </HeaderLight>
-            )} */}
-            {isLoadingUsers ? (
-              <View style={{ marginLeft: -10 }}>
-                {new Array(2).fill(null).map((x, i) => (
-                  <CarouselSkeleton key={i} renderProfile renderBody />
-                ))}
-              </View>
-            ) : null}
-          </View>
-        ),
-        estimatedItemSize: itemHeightCarousel,
-      };
 
   const topOnlyContent = {
     height: getSearchHeight(isPad) + SEARCH_MARGIN_BOTTOM,
@@ -166,6 +104,20 @@ const Social = () => {
       />
     ),
   };
+
+  console.log('isLoadingUsers', isLoadingUsers);
+
+  // if (true) {
+  //   return (
+  //     <BackgroundWrapper>
+  //       <View style={{ backgroundColor: 'red' }}>
+  //         {new Array(3).fill(null).map((x, i) => (
+  //           <CarouselSkeleton key={i} renderProfile renderBody />
+  //         ))}
+  //       </View>
+  //     </BackgroundWrapper>
+  //   );
+  // }
 
   return (
     <BackgroundWrapper>
