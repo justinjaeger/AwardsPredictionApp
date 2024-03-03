@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import { SubmitButton } from '../../../components/Buttons';
 import FormInput from '../../../components/Inputs/FormInput';
-import { BodyBold, SubHeader, SubHeaderLight } from '../../../components/Text';
+import { BodyBold, SubHeader } from '../../../components/Text';
 import COLORS from '../../../constants/colors';
 import SlackApi, { SlackChannel } from '../../../services/slack';
 import { useAuth } from '../../../context/AuthContext';
@@ -80,11 +80,6 @@ const SendMessage = () => {
   return (
     <BackgroundWrapper>
       <KeyboardAwareScrollView extraHeight={200} style={{ width: '100%' }}>
-        <SubHeaderLight
-          style={{ paddingLeft: theme.windowMargin, paddingTop: theme.windowMargin }}
-        >
-          {'Your feedback improves the app!'}
-        </SubHeaderLight>
         <View
           style={{
             paddingTop: theme.windowMargin,
@@ -97,6 +92,11 @@ const SendMessage = () => {
             contentContainerStyle={{ paddingLeft: theme.windowMargin }}
           />
         </View>
+        <BodyBold
+          style={{ paddingLeft: theme.windowMargin, paddingBottom: theme.windowMargin }}
+        >
+          {'Your feedback improves the app!'}
+        </BodyBold>
         <View
           style={{
             width: '100%',
