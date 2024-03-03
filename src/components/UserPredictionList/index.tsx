@@ -12,6 +12,7 @@ import { AwardsBody, CategoryName, iRecentPrediction } from '../../models';
 import useQueryGetAllEvents from '../../hooks/queries/useQueryGetAllEvents';
 import { useNavigation } from '@react-navigation/native';
 import { usePersonalCommunityTab } from '../../context/PersonalCommunityContext';
+import { CAROUSEL_MARGIN } from '../PredictionCarousel';
 
 const UserPredictionList = ({
   predictionSets,
@@ -45,6 +46,8 @@ const UserPredictionList = ({
             style={{
               width,
               alignItems: 'flex-start',
+              paddingTop: CAROUSEL_MARGIN,
+              paddingBottom: CAROUSEL_MARGIN,
             }}
             underlayColor={COLORS.secondaryDark}
             onPress={() => {
@@ -65,24 +68,39 @@ const UserPredictionList = ({
             <>
               <View
                 style={{
+                  flexDirection: 'row',
                   width: '100%',
-                  flexDirection: 'column',
+                  alignItems: 'center',
                   justifyContent: 'space-between',
-                  alignItems: 'baseline',
                   paddingLeft: theme.windowMargin,
-                  paddingRight: theme.windowMargin,
+                  paddingRight: 10,
                   marginBottom: 10,
                 }}
               >
-                <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
-                  <SubHeader style={{ color: COLORS.lightest }}>
-                    {categoryData?.name ?? ''}
-                  </SubHeader>
-                  <Body style={{ color: COLORS.lightest }}>
-                    {'  |  ' + awardsBodyName}
+                <View
+                  style={{
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    alignItems: 'baseline',
+                  }}
+                >
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'baseline',
+                    }}
+                  >
+                    <SubHeader style={{ color: COLORS.lightest }}>
+                      {categoryData?.name ?? ''}
+                    </SubHeader>
+                    <Body style={{ color: COLORS.lightest }}>
+                      {'  |  ' + awardsBodyName}
+                    </Body>
+                  </View>
+                  <Body style={{ marginTop: 5 }}>
+                    {'Updated' + ': ' + lastUpdatedText}
                   </Body>
                 </View>
-                <Body style={{ marginTop: 5 }}>{'Updated' + ': ' + lastUpdatedText}</Body>
               </View>
               <MovieGrid
                 eventId={event?._id}

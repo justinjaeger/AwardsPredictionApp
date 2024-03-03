@@ -5,9 +5,7 @@ import { useAuth } from '../../../context/AuthContext';
 import useQueryGetUser from '../../../hooks/queries/useQueryGetUser';
 import useQueryGetFollowingUsers from '../../../hooks/queries/useQueryGetFollowingUsers';
 import PredictionCarousel, {
-  CAROUSEL_MARGIN,
-  CAROUSEL_PROFILE_IMAGE_SIZE,
-  getCarouselSliderHeight,
+  getCarouselHeight,
 } from '../../../components/PredictionCarousel';
 import CarouselSkeleton from '../../../components/Skeletons/CarouselSkeleton';
 import useDevice from '../../../util/device';
@@ -87,10 +85,7 @@ const Social = () => {
   const searchIsActive =
     searchIsFocused || searchResults !== undefined || searchIsLoading;
 
-  const itemHeightCarousel =
-    CAROUSEL_MARGIN * 4 +
-    CAROUSEL_PROFILE_IMAGE_SIZE +
-    getCarouselSliderHeight(width, isPad);
+  const itemHeightCarousel = getCarouselHeight(width, isPad);
 
   const showRecommended = searchResults === undefined && !isFetchingRecommended;
   const showUserSearch = !authUserId || searchIsActive;
@@ -102,7 +97,7 @@ const Social = () => {
       getSearchHeight(isPad) +
       SEARCH_MARGIN_BOTTOM +
       HEADER_HEIGHT +
-      HEADER_TOP_TAB_MARGIN_BOTTOM,
+      HEADER_TOP_TAB_MARGIN_BOTTOM * 2,
     component: (
       <>
         <SearchInput
