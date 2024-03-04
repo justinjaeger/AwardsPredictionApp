@@ -186,15 +186,9 @@ const Profile = () => {
                         right: 10,
                         flexDirection: 'row',
                         justifyContent: 'space-between',
+                        top: 0,
                       }}
                     >
-                      {/* <HeaderButton
-                        onPress={() => {
-                          mainNavigation.navigate('HelpTab');
-                        }}
-                        icon={'question-mark-outline'}
-                        variation={'on-dark'}
-                      /> */}
                       <HeaderButton
                         onPress={() => {
                           onPressLogOut();
@@ -238,8 +232,8 @@ const Profile = () => {
                   <TouchableHighlight
                     onPress={isAuthUser ? () => onPressProfileInfo() : undefined}
                     style={{
-                      margin: theme.windowMargin,
                       borderRadius: theme.borderRadius,
+                      padding: theme.windowMargin,
                     }}
                     underlayColor={COLORS.disabled}
                   >
