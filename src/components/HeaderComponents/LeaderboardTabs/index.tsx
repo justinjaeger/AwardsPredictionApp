@@ -70,7 +70,7 @@ const LeaderboardTopTabs = ({
       onPress={({ event, phase }) => {
         setLeaderboard(event, phase);
       }}
-      style={style}
+      contentContainerStyle={style}
     />
   );
 };

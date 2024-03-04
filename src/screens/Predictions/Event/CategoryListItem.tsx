@@ -20,10 +20,12 @@ const CategoryListItem = ({
   item: [category, categoryPrediction],
   onPress,
   event,
+  tab,
 }: {
   item: iCategoryListItem;
   onPress: (category: CategoryName) => void;
   event: WithId<EventModel>;
+  tab: 'personal' | 'community';
 }) => {
   const { width } = useWindowDimensions();
   // yyyymmdd is not necessarily a leaderboard. When it's history, we don't event want to display shortlist performance
@@ -106,8 +108,13 @@ const CategoryListItem = ({
               {`${numCorrectInCategory}/${slots}`}
             </SubHeader>
           ) : (
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              {truncatedPredictions.length === 0 ? (
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}
+            >
+              {truncatedPredictions.length === 0 && tab === 'personal' ? (
                 <SubHeader style={{ fontWeight: '400' }}>Add</SubHeader>
               ) : null}
               <CustomIcon

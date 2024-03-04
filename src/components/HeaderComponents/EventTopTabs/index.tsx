@@ -51,7 +51,7 @@ const EventTopTabs = ({
           setEvent(event);
         }
       }}
-      style={style}
+      contentContainerStyle={style}
     />
   );
 };

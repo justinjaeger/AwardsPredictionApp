@@ -274,6 +274,7 @@ const Event = () => {
                     event={event}
                     item={item[0]}
                     onPress={() => onSelectCategory(category, false)}
+                    tab={'personal'}
                   />
                 }
                 tab2={
@@ -281,6 +282,7 @@ const Event = () => {
                     event={event}
                     item={item[1]}
                     onPress={() => onSelectCategory(category, true)}
+                    tab={'community'}
                   />
                 }
                 tabsPosX={tabsPosX}
