@@ -2,41 +2,39 @@
 import React from 'react';
 import { View } from 'react-native';
 import { Body } from '../Text';
-import useDevice from '../../util/device';
 import COLORS from '../../constants/colors';
+import theme from '../../constants/theme';
+
+export const LAST_UPDATED_SECTION_HEIGHT = 20;
 
 const LastUpdatedText = ({
   lastUpdated,
-  isDisabled,
-  noAbsolutePosition, // ios only
   style,
 }: {
-  lastUpdated: string;
-  isDisabled?: boolean;
-  noAbsolutePosition?: boolean;
+  lastUpdated: string | undefined;
   style?: any;
 }) => {
-  const { isAndroid } = useDevice();
-  if (isDisabled || lastUpdated === 'Invalid Date' || !lastUpdated) return null;
+  const renderBlank = !lastUpdated || lastUpdated === 'Invalid Date';
 
-  const s = noAbsolutePosition
-    ? { alignSelf: 'center' }
-    : {
-        position: 'absolute',
-        top: isAndroid ? 0 : -20,
-        right: 10,
-        flexDirection: 'row',
-        alignItems: 'center',
-        ...style,
-      };
   return (
     <>
-      <View style={[s, style]}>
-        <Body
-          style={{ color: COLORS.gray, fontWeight: '500' }}
-        >{`last update: ${lastUpdated}`}</Body>
+      <View
+        style={[
+          {
+            alignSelf: 'flex-end',
+            paddingRight: theme.windowMargin,
+            height: LAST_UPDATED_SECTION_HEIGHT,
+            justifyContent: 'center',
+          },
+          style,
+        ]}
+      >
+        {!renderBlank ? (
+          <Body
+            style={{ color: COLORS.gray, fontWeight: '500' }}
+          >{`last update: ${lastUpdated}`}</Body>
+        ) : null}
       </View>
-      {noAbsolutePosition ? null : <View style={{ height: isAndroid ? 15 : 5 }} />}
     </>
   );
 };

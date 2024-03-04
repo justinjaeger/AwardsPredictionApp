@@ -10,11 +10,19 @@ import { sortPredictions } from '../../../util/sortPredictions';
 import ScreenshotMode from '../../../components/Buttons/ScreenshotMode';
 import BottomFABContainer from '../../../components/BottomFABContainer';
 import { useRouteParams } from '../../../hooks/useRouteParams';
+import { eventToString } from '../../../util/stringConversions';
 
 // Note: We ALSO use this for non-auth-user user profiles
-const CategoryCommunity = ({ showEventLink }: { showEventLink?: boolean }) => {
-  const { category: _category, yyyymmdd } = useRouteParams();
+const CategoryCommunity = ({
+  showEventLink,
+  bottomHeight,
+}: {
+  showEventLink?: boolean;
+  bottomHeight?: number;
+}) => {
+  const { category: _category, event: _event, yyyymmdd } = useRouteParams();
   const category = _category!;
+  const event = _event!;
 
   const { data: predictionSet, isLoading } = useQueryGetCommunityPredictions({
     yyyymmdd,
@@ -35,23 +43,27 @@ const CategoryCommunity = ({ showEventLink }: { showEventLink?: boolean }) => {
       {predictions.length === 0 ? (
         <View
           style={{
+            position: 'absolute',
             width: '100%',
-            marginTop: 20,
+            top: 15,
             alignItems: 'center',
             justifyContent: 'center',
+            zIndex: 20,
           }}
         >
           <BodyBold>{'Community predictions not yet tallied'}</BodyBold>
         </View>
       ) : null}
-      <View style={{ width: '100%', flex: 1 }}>
+      <View style={{ width: '100%', height: '100%' }}>
         <MovieListCommunity
           predictions={predictions}
           lastUpdatedString={lastUpdatedString}
         />
       </View>
-      <BottomFABContainer>
-        {showEventLink ? <EventLink /> : null}
+      <BottomFABContainer bottom={bottomHeight}>
+        {showEventLink ? (
+          <EventLink text={eventToString(event.awardsBody, event.year)} />
+        ) : null}
         <ScreenshotMode predictions={predictions.slice(0, 20)} isCommunity={true} />
       </BottomFABContainer>
     </>

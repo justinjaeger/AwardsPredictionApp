@@ -2,6 +2,7 @@ import * as RNLocalize from 'react-native-localize';
 
 /**
  * Formats datetime for locale of user
+ * Like "7:00pm"
  */
 export const formatDateTime = (date: Date, showTime?: boolean) => {
   const locale = RNLocalize.getLocales();
@@ -17,6 +18,27 @@ export const formatDateTime = (date: Date, showTime?: boolean) => {
     options.minute = '2-digit';
   }
 
+  return date.toLocaleString(tag, options);
+};
+
+/**
+ * Formats datetime for locale of user
+ * Like "7PM"
+ */
+export const formatDateTimeShort = (date: Date, showTime?: boolean) => {
+  const locale = RNLocalize.getLocales();
+  const tag = locale[0].languageTag;
+
+  const options: Intl.DateTimeFormatOptions = {
+    month: 'numeric',
+    day: 'numeric',
+  };
+
+  if (showTime) {
+    options.hour = 'numeric';
+  }
+
+  // make it like "7PM"
   return date.toLocaleString(tag, options);
 };
 

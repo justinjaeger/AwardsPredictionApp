@@ -3,7 +3,7 @@ import { StyleProp, ViewStyle } from 'react-native';
 import { iLeaderboardRankingsWithUserData } from '../../services/api/requests/leaderboard';
 import { useNavigation } from '@react-navigation/native';
 import { PredictionsNavigationProp, iUserInfo } from '../../navigation/types';
-import { usePersonalCommunityTab } from '../../context/EventContext';
+import { usePersonalCommunityTab } from '../../context/PersonalCommunityContext';
 import Template from './Template';
 
 export const LEADERBOARD_PROFILE_IMAGE_SIZE = 50;
@@ -40,7 +40,6 @@ const LeaderboardListItem = ({
 
   return (
     <Template
-      key={leaderboardRanking.userId}
       onPress={navigateToPredictions}
       title={
         hasOnlyOneName

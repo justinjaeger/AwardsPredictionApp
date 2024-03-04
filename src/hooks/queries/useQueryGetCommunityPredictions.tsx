@@ -4,6 +4,7 @@ import MongoApi from '../../services/api/requests';
 import { useTmdbDataStore } from '../../context/TmdbDataStore';
 import { EventModel, WithId } from '../../models';
 import { useRouteParams } from '../useRouteParams';
+import { QUERY_OPTIONS } from './constants';
 
 const useQueryGetCommunityPredictions = (params?: {
   event?: WithId<EventModel>;
@@ -22,8 +23,6 @@ const useQueryGetCommunityPredictions = (params?: {
     queryKey: [QueryKeys.COMMUNITY_PREDICTIONS, eventId, yyyymmdd],
     queryFn: async () => {
       if (!eventId) return null;
-      // TODO: remove performance monitoring
-      const startTime = performance.now();
 
       const { data: predictionSet } = await MongoApi.getPredictionSet({
         userId: 'community',
@@ -31,14 +30,12 @@ const useQueryGetCommunityPredictions = (params?: {
         yyyymmdd,
       });
 
-      const endTime = performance.now();
-      console.log('getPredictionSet took ' + (endTime - startTime) + ' milliseconds.');
-
       if (predictionSet) {
         storeTmdbDataFromPredictionSet(predictionSet, event.year);
       }
       return predictionSet ?? null;
     },
+    ...QUERY_OPTIONS,
   });
 
   return { data, isLoading, refetch };

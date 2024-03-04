@@ -31,6 +31,15 @@ export const AWARDS_BODY_TO_STRING: {
   [AwardsBody.WGA]: 'Writers Guild',
 };
 
+export const SORTED_AWARDS_BODIES = [
+  AwardsBody.ACADEMY_AWARDS,
+  AwardsBody.BAFTA,
+  AwardsBody.CRITICS_CHOICE,
+  AwardsBody.GOLDEN_GLOBES,
+  AwardsBody.PGA,
+  AwardsBody.SAG,
+];
+
 export const AWARDS_BODY_TO_PLURAL_STRING: {
   [key in AwardsBody]: string;
 } = {

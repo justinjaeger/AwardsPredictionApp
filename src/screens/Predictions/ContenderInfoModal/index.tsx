@@ -40,7 +40,7 @@ const ContenderInfoModal = () => {
 
   if (!communityPredictions) return null;
 
-  const predictions = communityPredictions.categories[category].predictions;
+  const predictions = communityPredictions.categories[category].predictions ?? [];
 
   const communityPrediction = predictions.find(
     (p) => p.contenderId === prediction.contenderId,
@@ -88,6 +88,7 @@ const ContenderInfoModal = () => {
               onPress={() => {
                 navigation.dispatch(
                   StackActions.replace('ContenderStats', {
+                    eventId: event._id,
                     year: event.year,
                     movieTmdbId: prediction.movieTmdbId,
                     yyyymmdd,

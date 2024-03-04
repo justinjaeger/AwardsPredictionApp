@@ -7,6 +7,8 @@ import Stat from '../../../components/ItemStatBox/Stat';
 import ProfileImage from '../../../components/ProfileImage';
 import { LEADERBOARD_PROFILE_IMAGE_SIZE } from '../../../components/LeaderboardListItem';
 import LastUpdatedText from '../../../components/LastUpdatedText';
+import { formatLastUpdated } from '../../../util/formatDateTime';
+import { DividerSubtle } from '../../../components/DividerSubtle';
 
 const LeaderboardStats = ({
   title,
@@ -18,7 +20,7 @@ const LeaderboardStats = ({
   numUsersPredicting,
   rank,
   riskiness,
-  lastUpdatedString,
+  lastUpdated,
   slotsPredicted,
   onPress,
 }: {
@@ -31,13 +33,15 @@ const LeaderboardStats = ({
   numUsersPredicting: number;
   rank: number;
   riskiness?: number;
-  lastUpdatedString?: string;
+  lastUpdated?: Date;
   slotsPredicted?: number;
   onPress?: () => void;
 }) => {
   const statsOnTwoRows = riskiness;
 
   const [showPointsInfo, setShowPointsInfo] = useState<boolean>(false);
+
+  const lastUpdatedString = lastUpdated ? formatLastUpdated(new Date(lastUpdated)) : '';
 
   return (
     <TouchableHighlight
@@ -61,7 +65,7 @@ const LeaderboardStats = ({
           <View
             style={{
               flexDirection: 'column',
-              padding: 20,
+              padding: 10,
               alignItems: 'center',
             }}
           >
@@ -79,7 +83,7 @@ const LeaderboardStats = ({
             {subtitle ? <Body style={{ marginTop: 5 }}>{subtitle}</Body> : null}
           </View>
         ) : (
-          <View style={{ padding: 15 }} />
+          <View style={{ padding: 7.5 }} />
         )}
         <View
           style={{
@@ -113,9 +117,7 @@ const LeaderboardStats = ({
               >
                 {showPointsInfo ? (
                   <Body style={{ padding: 10, textAlign: 'center' }}>
-                    {
-                      'Earned for accurate predix against the grain.\ne.g. if 90% of users did NOT predict, you get 90/100pts'
-                    }
+                    {'points are earned for risky predix (100 max on each prediction)'}
                   </Body>
                 ) : (
                   <>
@@ -137,27 +139,17 @@ const LeaderboardStats = ({
             alignItems: 'baseline',
             width: '100%',
             justifyContent: 'space-around',
-            marginTop: 20,
+            marginTop: 15,
           }}
         >
-          {lastUpdatedString ? (
-            <LastUpdatedText lastUpdated={lastUpdatedString} noAbsolutePosition={true} />
-          ) : null}
+          {lastUpdatedString ? <LastUpdatedText lastUpdated={lastUpdatedString} /> : null}
           {slotsPredicted ? (
             <Body style={{ color: COLORS.gray, fontWeight: '500' }}>
               {`${slotsPredicted.toString()}/${totalPossibleSlots} predix made`}
             </Body>
           ) : null}
         </View>
-        <View
-          style={{
-            height: 0.5,
-            width: '90%',
-            backgroundColor: COLORS.primaryLight,
-            marginTop: 10,
-            marginBottom: 5,
-          }}
-        />
+        <DividerSubtle />
       </View>
     </TouchableHighlight>
   );

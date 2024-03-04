@@ -12,6 +12,7 @@ import ListItemSkeleton from '../../../components/Skeletons/ListItemSkeleton';
 import { PosterSize } from '../../../constants/posterDimensions';
 import { View } from 'react-native';
 import { useRouteParams } from '../../../hooks/useRouteParams';
+import COLORS from '../../../constants/colors';
 
 const CreatePerformanceModal = ({
   visible,
@@ -57,7 +58,6 @@ const CreatePerformanceModal = ({
         selectedPersonTmdbId,
         minReleaseYear,
       );
-      console.log('_searchData', _searchData);
       setIsLoadingMovies(false);
       if (!_searchData || _searchData.length === 0) {
         Snackbar.warning('This actor has no upcoming films');
@@ -94,17 +94,25 @@ const CreatePerformanceModal = ({
     >
       {modalState === 'create' ? (
         <>
-          {!isLoadingMovies ? (
-            <MovieListSearch
-              data={moviesWithPerson}
-              onSelect={(tmdbId) => {
-                setSelectedMovieTmdb(selectedMovieTmdb === tmdbId ? undefined : tmdbId);
-              }}
-              categoryType={CategoryType.FILM}
-            />
-          ) : (
-            <ListItemSkeleton posterWidth={PosterSize.MEDIUM} />
-          )}
+          <View
+            style={{
+              height: '100%',
+              overflow: 'hidden',
+              backgroundColor: COLORS.primary,
+            }}
+          >
+            {!isLoadingMovies ? (
+              <MovieListSearch
+                data={moviesWithPerson}
+                onSelect={(tmdbId) => {
+                  setSelectedMovieTmdb(selectedMovieTmdb === tmdbId ? undefined : tmdbId);
+                }}
+                categoryType={CategoryType.FILM}
+              />
+            ) : (
+              <ListItemSkeleton posterWidth={PosterSize.MEDIUM} />
+            )}
+          </View>
           <FAB
             iconName="plus"
             text="Select"
@@ -120,7 +128,7 @@ const CreatePerformanceModal = ({
         </>
       ) : (
         <>
-          <View style={{ height: '90%', position: 'relative' }}>
+          <View style={{ height: '100%', position: 'relative', overflow: 'hidden' }}>
             <MovieListSelectable
               predictions={communityPredictionsWithPerson}
               selectedPredictions={

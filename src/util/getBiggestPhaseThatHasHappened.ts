@@ -1,4 +1,4 @@
-import { CategoryName, EventModel, EventStatus, Phase } from '../models';
+import { CategoryName, EventModel, Phase } from '../models';
 import { yyyymmddToDate } from './yyyymmddToDate';
 
 export const getBiggestPhaseThatHasHappened = (
@@ -6,7 +6,7 @@ export const getBiggestPhaseThatHasHappened = (
   category: CategoryName | undefined,
   yyyymmdd?: number, // if pass this, we'll see if phase has happed BY THIS DATE
 ) => {
-  const { status, nomDateTime, winDateTime, shortlistDateTime } = event;
+  const { nomDateTime, winDateTime, shortlistDateTime } = event;
   const { isShortlisted } = category
     ? event.categories[category]
     : { isShortlisted: false };
@@ -16,7 +16,7 @@ export const getBiggestPhaseThatHasHappened = (
   const nomDateHasPassed = nomDateTime && new Date(nomDateTime) < d;
   const winDateHasPassed = winDateTime && new Date(winDateTime) < d;
 
-  const isPredictingForbidden = winDateHasPassed || status === EventStatus.ARCHIVED;
+  const isPredictingForbidden = winDateHasPassed;
   const isPredictingWinners = nomDateHasPassed;
   const isPredictingAfterShortlist = isShortlisted && shortlistDateHasPassed;
 

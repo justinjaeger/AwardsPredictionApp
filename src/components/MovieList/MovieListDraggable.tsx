@@ -91,17 +91,19 @@ const MovieListDraggable = ({
 
   if (!predictionSet) return null; // weird because it returns a blank screen but
 
-  const { predictions: communityPredictions, totalUsersPredicting } =
-    predictionSet.categories[category as CategoryName];
+  const { predictions: communityPredictions, totalUsersPredicting } = predictionSet
+    .categories[category as CategoryName] || { predictions: [], totalUsersPredicting: 0 };
 
   // for leaderboard: get riskiness of all contenders that user earned points for
   const contenderIdToRiskiness: { [cId: string]: number } = {};
+  let numCorrectPredictions = 0;
   if (showAccolades) {
     predictions.forEach(({ contenderId, ranking }) => {
       const accolade = contenderIdsToPhase?.[contenderId];
       const userDidPredictWithinSlots = ranking && ranking <= slots;
-      const userScoredPoints = !!(userDidPredictWithinSlots && accolade);
-      if (!userScoredPoints) {
+      const predictionWasCorrect = !!(userDidPredictWithinSlots && accolade);
+      numCorrectPredictions += predictionWasCorrect ? 1 : 0;
+      if (!predictionWasCorrect) {
         return;
       }
       const numPredictingContender =
@@ -131,33 +133,38 @@ const MovieListDraggable = ({
       onPlaceholderIndexChange={() => {
         triggerHaptic();
       }}
+      initialNumToRender={10}
       ListHeaderComponent={
         <>
           <LastUpdatedText lastUpdated={lastUpdatedString} />
-          <TouchableOpacity
-            style={{
-              alignItems: 'flex-end',
-              paddingRight: 15,
-              paddingBottom: 10,
-            }}
-            onPress={() => setShowPointsHelp((prev) => !prev)}
-          >
-            {isLeaderboard ? (
-              <SubHeader
+          {isLeaderboard ? (
+            <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+              <TouchableOpacity
                 style={{
-                  marginRight: 2,
-                  marginTop: isAndroid ? 10 : 5, // bc last updated text appears
+                  alignItems: 'flex-end',
+                  paddingRight: 15,
+                  paddingBottom: 10,
                 }}
-              >{`${parseFloat(totalRiskiness.toString()).toFixed(2)}pts`}</SubHeader>
-            ) : null}
-            {showPointsHelp ? (
-              <Body style={{ color: COLORS.gray, paddingBottom: 10, textAlign: 'right' }}>
-                {
-                  'earned for accurate predix against the grain\ne.g. if 10% of users predicted, you get 90/100pts'
-                }
-              </Body>
-            ) : null}
-          </TouchableOpacity>
+                onPress={() => setShowPointsHelp((prev) => !prev)}
+              >
+                <SubHeader
+                  style={{
+                    marginRight: 2,
+                    marginTop: isAndroid ? 10 : 5, // bc last updated text appears
+                  }}
+                >{`${parseFloat(totalRiskiness.toString()).toFixed(
+                  2,
+                )}pts  |  ${numCorrectPredictions}/${slots}`}</SubHeader>
+                {showPointsHelp ? (
+                  <Body
+                    style={{ color: COLORS.gray, paddingBottom: 10, textAlign: 'right' }}
+                  >
+                    {'points are earned for risky predix (each 100 max)'}
+                  </Body>
+                ) : null}
+              </TouchableOpacity>
+            </View>
+          ) : null}
         </>
       }
       ListFooterComponent={

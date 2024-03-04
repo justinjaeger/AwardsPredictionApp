@@ -8,14 +8,17 @@ import { useTmdbDataStore } from '../../context/TmdbDataStore';
 import PosterFromTmdb from '../Images/PosterFromTmdb';
 import MoviePosterSkeleton from '../Skeletons/MoviePosterSkeleton';
 import useQueryGetEventAccolades from '../../hooks/queries/useQueryGetEventAccolades';
-
-const MOVIES_IN_ROW = 5;
+import {
+  getPosterDimensionsGrid,
+  getPosterContainerDimensionsGrid,
+} from '../../constants/posterDimensions';
+import { getNumPostersInRow } from '../../util/getNumPostersInRow';
+import { hexToRgb } from '../../util/hexToRgb';
 
 const MovieGrid = ({
   eventId,
   predictions,
   categoryInfo,
-  totalWidth: _totalWidth,
   noLine,
   style,
   showAccolades,
@@ -25,7 +28,6 @@ const MovieGrid = ({
   predictions: iPrediction[];
   categoryInfo?: iCategory;
   noLine?: boolean;
-  totalWidth?: number;
   style?: StyleProp<ViewStyle>;
   // needed for leaderboards:
   showAccolades?: boolean;
@@ -34,9 +36,12 @@ const MovieGrid = ({
   const { data: contenderIdsToPhase } = useQueryGetEventAccolades(eventId);
   const { getTmdbDataFromPrediction } = useTmdbDataStore();
   const { width } = useWindowDimensions();
-  const totalWidth = _totalWidth || width;
 
   const slots = categoryInfo?.slots || 5;
+  const moviesInRow = getNumPostersInRow(slots);
+
+  const posterDimensions = getPosterDimensionsGrid(width, slots);
+  const posterContainerHeight = getPosterContainerDimensionsGrid(width, slots);
 
   return (
     <View
@@ -44,42 +49,57 @@ const MovieGrid = ({
         {
           flexDirection: 'row',
           flexWrap: 'wrap',
-          marginLeft: theme.windowMargin,
-          marginRight: theme.windowMargin,
-          marginBottom: theme.windowMargin / 2,
-          width: totalWidth,
+          alignItems: 'center',
+          justifyContent: 'flex-start',
+          marginLeft: theme.windowMargin - theme.posterMargin,
+          width,
         },
         style,
       ]}
     >
-      {predictions.map((prediction, i) => {
+      {new Array(slots).fill(null).map((x, i) => {
+        const prediction = predictions[i];
+        if (!prediction) {
+          return (
+            <View
+              style={{
+                height: posterDimensions.height,
+                width: posterDimensions.width,
+                margin: theme.posterMargin,
+                borderRadius: theme.borderRadius,
+                borderColor: hexToRgb(COLORS.secondary, 0.1),
+                backgroundColor: COLORS.primary,
+              }}
+            />
+          );
+        }
         const { contenderId } = prediction;
-        // HERE is where it gets the movie data, including poster
-        // BUT ALSO it comes back here from event predictions
         const { movie, person } = getTmdbDataFromPrediction(prediction) || {};
         const accolade = contenderIdsToPhase && contenderIdsToPhase[contenderId];
         const accoladeMatchesPhase = phase === accolade;
         return (
           <View
-            key={contenderId}
             style={{
-              marginRight: theme.posterMargin * 2,
-              marginBottom: theme.posterMargin * 2,
+              height: posterContainerHeight,
+              marginLeft: theme.posterMargin,
+              marginRight: theme.posterMargin,
               position: 'relative',
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
           >
             {!noLine && i === slots ? (
               <Divider
                 style={{
                   position: 'absolute',
-                  width: totalWidth - theme.windowMargin * 2,
+                  width: width - theme.windowMargin * 2,
                   marginTop: theme.windowMargin / 2,
                   borderBottomWidth: 1,
                   borderColor: COLORS.secondary,
                 }}
               />
             ) : null}
-            {!noLine && i >= slots && i < slots + MOVIES_IN_ROW ? (
+            {!noLine && i >= slots && i < slots + moviesInRow ? (
               // we want to give a margin on top if this is the row beneath the divider (since divider is absolute pos)
               <View style={{ marginTop: 20 }} />
             ) : null}
@@ -87,18 +107,13 @@ const MovieGrid = ({
               <PosterFromTmdb
                 movie={movie}
                 person={person}
-                width={
-                  (totalWidth -
-                    theme.posterMargin * (MOVIES_IN_ROW - 1) -
-                    theme.windowMargin) /
-                  MOVIES_IN_ROW
-                }
+                posterDimensions={posterDimensions}
                 ranking={i + 1}
                 accolade={showAccolades && accoladeMatchesPhase ? accolade : undefined}
                 isUnaccoladed={showAccolades && (!accoladeMatchesPhase || !accolade)}
               />
             ) : (
-              <MoviePosterSkeleton />
+              <MoviePosterSkeleton posterDimensions={posterDimensions} />
             )}
           </View>
         );

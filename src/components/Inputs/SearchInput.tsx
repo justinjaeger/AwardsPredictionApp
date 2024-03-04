@@ -1,127 +1,142 @@
 import React, { useState } from 'react';
-import { Input, Spinner } from '@ui-kitten/components';
+import { Spinner } from '@ui-kitten/components';
 import { EvaStatus } from '@ui-kitten/components/devsupport';
 import CustomIcon from '../CustomIcon';
 import COLORS from '../../constants/colors';
-import { Keyboard, TouchableOpacity, useWindowDimensions, View } from 'react-native';
+import {
+  Keyboard,
+  StyleProp,
+  TextInput,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from 'react-native';
 import theme from '../../constants/theme';
 import useDevice from '../../util/device';
+import { BodyBold } from '../Text';
+
+export const getSearchHeight = (isPad: boolean) => (isPad ? 45 : 35);
 
 const SearchInput = ({
   handleSearch,
+  searchIsActive,
   onReset,
-  label,
   placeholder,
-  caption,
   onBlur,
-  status,
+  onFocus,
   autoFocus,
   style,
 }: {
   handleSearch: (s: string) => void;
+  searchIsActive?: boolean;
   onReset?: () => void;
   label?: string;
   placeholder?: string;
   caption?: string;
   onBlur?: () => void;
+  onFocus?: () => void;
   status?: EvaStatus;
   autoFocus?: boolean;
-  style?: any;
+  style?: StyleProp<ViewStyle>;
 }) => {
-  const { width } = useWindowDimensions();
   const { isPad } = useDevice();
 
   const [search, setSearch] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const resetSearch = () => {
-    onReset && onReset();
     setSearch('');
   };
 
-  const searchHeight = isPad ? 40 : 30;
+  const closeSearch = () => {
+    resetSearch();
+    onReset && onReset();
+    Keyboard.dismiss();
+  };
+
+  const searchHeight = getSearchHeight(isPad);
 
   return (
-    <View
-      style={{
-        position: 'relative',
-        width,
-        padding: 10,
-      }}
-    >
-      <Input
-        label={label}
-        value={search}
-        placeholder={placeholder}
-        placeholderTextColor={COLORS.gray}
-        onChangeText={(s) => {
-          if (s === '') {
-            resetSearch();
-          }
-          setSearch(s);
-        }}
-        caption={caption}
-        onFocus={() => {}}
-        onBlur={() => onBlur && onBlur()}
-        autoFocus={autoFocus}
-        onSubmitEditing={async () => {
-          setIsLoading(true);
-          await handleSearch(search);
-          setIsLoading(false);
-        }}
-        returnKeyType="search"
-        status={status || 'basic'}
+    <View style={[{ flexDirection: 'row', padding: 10 }, style]}>
+      <View
         style={{
-          borderRadius: 100,
-          borderWidth: 0,
-          backgroundColor: COLORS.primaryLight,
-          color: 'green',
-          ...style,
-        }}
-        selectionColor={COLORS.gray} // the cursor
-        textStyle={{
-          marginLeft: 10,
-          marginRight: '20%',
+          flexDirection: 'row',
+          width: '100%',
           height: searchHeight,
-          fontSize: 20,
-          color: COLORS.white,
         }}
-        accessoryLeft={
-          <CustomIcon
-            name="search-outline"
-            color={COLORS.gray}
-            size={25}
-            styles={{ marginLeft: 10 }}
+      >
+        <View
+          style={{
+            position: 'relative',
+            width: searchIsActive ? '80%' : '100%',
+          }}
+        >
+          <TextInput
+            style={{
+              height: searchHeight,
+              borderRadius: 100,
+              backgroundColor: COLORS.primaryLight,
+              paddingLeft: 45,
+              color: COLORS.white,
+              fontSize: 16,
+            }}
+            value={search}
+            placeholder={placeholder}
+            placeholderTextColor={COLORS.gray}
+            onChangeText={(s) => {
+              if (s === '') {
+                resetSearch();
+              }
+              setSearch(s);
+            }}
+            onFocus={() => {
+              onFocus && onFocus();
+            }}
+            onBlur={() => {
+              onBlur && onBlur();
+            }}
+            autoFocus={autoFocus}
+            onSubmitEditing={async () => {
+              if (search.length) {
+                setIsLoading(true);
+                await handleSearch(search);
+                setIsLoading(false);
+              }
+            }}
+            returnKeyType={'search'}
+            selectionColor={COLORS.gray} // the cursor
+            keyboardAppearance={'dark'}
           />
-        }
-        accessoryRight={
-          isLoading ? (
-            <View
-              style={{
-                position: 'absolute',
-                right: theme.windowMargin + 15,
-                top: searchHeight / 2 + 2,
-                justifyContent: 'center',
-                height: searchHeight,
-              }}
-            >
-              <Spinner size="medium" style={{ borderColor: COLORS.gray }} />
-            </View>
-          ) : search.length ? (
-            <View>
+          <View
+            style={{
+              position: 'absolute',
+              left: 0,
+              height: searchHeight,
+              justifyContent: 'center',
+            }}
+          >
+            <CustomIcon
+              name="search-outline"
+              color={COLORS.gray}
+              size={25}
+              styles={{ marginLeft: 10 }}
+            />
+          </View>
+          <View
+            style={{
+              position: 'absolute',
+              right: 10,
+              height: searchHeight,
+              justifyContent: 'center',
+            }}
+          >
+            {isLoading ? (
+              <Spinner size="small" style={{ borderColor: COLORS.gray }} />
+            ) : search.length ? (
               <TouchableOpacity
                 onPress={() => {
                   resetSearch();
                   Keyboard.dismiss();
-                }}
-                style={{
-                  paddingLeft: 20,
-                  paddingRight: 20,
-                  left: -10,
-                  width: searchHeight,
-                  height: searchHeight,
-                  alignItems: 'center',
-                  justifyContent: 'center',
                 }}
               >
                 <CustomIcon
@@ -131,11 +146,34 @@ const SearchInput = ({
                   styles={{ marginRight: 2 }}
                 />
               </TouchableOpacity>
-            </View>
-          ) : undefined
-        }
-        keyboardAppearance={'dark'}
-      />
+            ) : undefined}
+          </View>
+        </View>
+        {searchIsActive ? (
+          <View
+            style={{
+              width: '20%',
+              justifyContent: 'center',
+              paddingLeft: 10,
+            }}
+          >
+            <TouchableOpacity
+              onPress={() => {
+                closeSearch();
+              }}
+              style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: COLORS.primaryLight,
+                borderRadius: theme.borderRadius,
+                height: '100%',
+              }}
+            >
+              <BodyBold>Close</BodyBold>
+            </TouchableOpacity>
+          </View>
+        ) : null}
+      </View>
     </View>
   );
 };

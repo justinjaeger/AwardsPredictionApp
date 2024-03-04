@@ -1,9 +1,6 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import BackButton from '../components/Buttons/BackButton';
 import { BottomTabParamList, PredictionsParamList } from './types';
-import EventSelect from '../screens/Predictions/EventSelect';
-import theme from '../constants/theme';
 import { getHeaderTitle } from '../constants';
 import AddPredictions from '../screens/Predictions/AddPredictions.tsx';
 import Profile from '../screens/Profile';
@@ -13,13 +10,14 @@ import { RouteProp, useRoute } from '@react-navigation/native';
 import Followers from '../screens/Profile/Followers';
 import { useHeaderSettings } from '../hooks/useHeaderSettings';
 import ContenderStats from '../screens/ContenderStats';
-import { PersonalCommunityTabProvider } from '../context/EventContext';
-import { FollowingBarProvider } from '../context/FollowingBarContext';
+import { PersonalCommunityTabProvider } from '../context/PersonalCommunityContext';
 import ContenderInfoModal from '../screens/Predictions/ContenderInfoModal';
-import LeaderboardList from '../screens/Leaderboard/LeaderboardList';
 import Leaderboard from '../screens/Leaderboard/Leaderboard';
 import Category from '../screens/Predictions/Category';
 import Event from '../screens/Predictions/Event';
+import { HeaderDropdownProvider } from '../context/HeaderDropdownContext';
+import { BackButtonForNavigator } from '../components/HeaderComponents/BackButton';
+import Social from '../screens/Predictions/Social';
 
 const { Navigator, Screen, Group } = createStackNavigator<PredictionsParamList>();
 
@@ -27,76 +25,41 @@ const PredictionsNavigator = () => {
   const {
     params: { initialScreen },
   } = useRoute<RouteProp<BottomTabParamList, 'ProfileTab'>>();
-  const { toolbarOnly, medium, large } = useHeaderSettings();
+  const { toolbarOnly, medium } = useHeaderSettings();
 
   return (
     <Navigator
-      initialRouteName={initialScreen || 'EventSelect'}
+      initialRouteName={initialScreen || 'Social'}
       screenOptions={{ headerMode: 'screen' }}
     >
       <Group>
-        <Screen
-          name="EventSelect"
-          component={EventSelect}
-          options={{
-            headerTitle: '',
-            ...toolbarOnly,
-          }}
-        />
+        <Screen name="Social" component={Social} options={{ headerShown: false }} />
         {/* Prediction Screens */}
-        <Screen
-          name="Event"
-          component={Event}
-          options={{
-            headerTitle: getHeaderTitle('Event Predictions'),
-            headerLeft: BackButton,
-            ...large,
-          }}
-        />
-        <Screen
-          name="Category"
-          component={Category}
-          options={{
-            headerTitle: getHeaderTitle('Category'),
-            headerLeft: BackButton,
-            cardStyle: theme.cardStyle,
-            ...large,
-          }}
-        />
+        <Screen name="Event" component={Event} options={{ headerShown: false }} />
+        <Screen name="Category" component={Category} options={{ headerShown: false }} />
         <Screen
           name="AddPredictions"
           component={AddPredictions}
-          options={{
-            headerTitle: getHeaderTitle('Add / Remove Predictions'),
-            headerLeft: BackButton,
-            ...large,
-          }}
+          options={{ headerShown: false }}
         />
         <Screen
           name="ContenderStats"
           component={ContenderStats}
           options={{
             headerTitle: getHeaderTitle('Stats'),
-            headerLeft: BackButton,
+            headerLeft: BackButtonForNavigator,
             gestureEnabled: false,
-            ...large,
-          }}
-        />
-        {/* Profile Screens */}
-        <Screen
-          name="Profile"
-          component={Profile}
-          options={{
-            headerTitle: '',
             ...medium,
           }}
         />
+        {/* Profile Screens */}
+        <Screen name="Profile" component={Profile} options={{ headerShown: false }} />
         <Screen
           name="UpdateProfileInfo"
           component={UpdateProfileInfo}
           options={{
             headerTitle: getHeaderTitle('Enter Username'),
-            headerLeft: BackButton,
+            headerLeft: BackButtonForNavigator,
             ...medium,
           }}
         />
@@ -104,7 +67,7 @@ const PredictionsNavigator = () => {
           name="Followers"
           component={Followers}
           options={{
-            headerLeft: BackButton,
+            headerLeft: BackButtonForNavigator,
             headerTitle: getHeaderTitle('Followers'),
             ...medium,
           }}
@@ -119,21 +82,11 @@ const PredictionsNavigator = () => {
         />
         {/* Leaderboard Screens */}
         <Screen
-          name="LeaderboardList"
-          component={LeaderboardList}
-          options={{
-            headerTitle: getHeaderTitle('Leaderboards'),
-            ...medium,
-          }}
-        />
-        <Screen
           name="Leaderboard"
           component={Leaderboard}
           options={{
-            headerTitle: getHeaderTitle('Leaderboard'),
-            headerLeft: BackButton,
             gestureEnabled: false,
-            ...large,
+            headerShown: false,
           }}
         />
       </Group>
@@ -152,9 +105,9 @@ const PredictionsNavigator = () => {
 
 const WithProvider = () => (
   <PersonalCommunityTabProvider>
-    <FollowingBarProvider>
+    <HeaderDropdownProvider>
       <PredictionsNavigator />
-    </FollowingBarProvider>
+    </HeaderDropdownProvider>
   </PersonalCommunityTabProvider>
 );
 

@@ -53,16 +53,6 @@ export type iContenderListItemProps = {
   isUnaccaloded?: boolean;
 };
 
-/**
- * TODO: Display Accolade
- * THEN TODO: Display riskiness, which is a function of:
- * - whatever the community predicted for that contender
- *
- * TODO: I think we should LIFT the points/riskiness calculation OUT OF HERE and put it in the overall list component
- * BECAUSE: First, we don't care about community rankings what the points are.
- * Second, we want the TOTAL NUM OF POINTS
- * Third, it's weird to do this big calculation inside of a single item
- */
 const ContenderListItem = ({
   prediction,
   ranking,
@@ -84,15 +74,14 @@ const ContenderListItem = ({
   const { isActive } = draggable || {};
   const { width: windowWidth } = useWindowDimensions();
 
-  const SMALL_POSTER = windowWidth / 9;
-
   const { phase, category: _category, categoryData } = useRouteParams();
   const category = _category!;
   const { type } = categoryData!;
   const slots = getSlotsInPhase(phase, categoryData);
 
-  const { width: posterWidth, height: posterHeight } =
-    getPosterDimensionsByWidth(SMALL_POSTER);
+  const { width: posterWidth, height: posterHeight } = getPosterDimensionsByWidth(
+    windowWidth / 9 - theme.posterMargin * 2,
+  );
 
   // note: numPredicting is only commnuity
   const { numPredicting: numPredictingIfIsCommunity } = prediction;
@@ -153,16 +142,12 @@ const ContenderListItem = ({
           ? 'rgba(255,255,255,0.03)'
           : isUnaccaloded
           ? 'rgba(0,0,0,0.5)'
-          : ranking && ranking % 2 === 1
-          ? 'rgba(255,255,255,0.03)'
           : 'transparent',
         flexDirection: 'row',
         alignItems: 'flex-end',
-        paddingBottom: 3,
-        paddingTop: 3,
-        height: posterHeight,
-        borderBottomColor: 'rgba(0,0,0,1)',
-        borderBottomWidth: accoladeToShow ? 1 : 0,
+        borderTopColor: hexToRgb(COLORS.primaryLight, 0.5),
+        borderTopWidth: 1,
+        padding: theme.posterMargin,
       }}
     >
       <TouchableOpacity
@@ -193,7 +178,10 @@ const ContenderListItem = ({
         <PosterFromTmdb
           movie={movie}
           person={person}
-          width={posterWidth}
+          posterDimensions={{
+            width: posterWidth,
+            height: posterHeight,
+          }}
           ranking={ranking}
           accolade={accoladeToShow}
           isUnaccoladed={isUnaccaloded}

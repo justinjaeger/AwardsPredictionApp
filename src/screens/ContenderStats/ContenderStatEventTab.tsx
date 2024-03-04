@@ -4,14 +4,15 @@ import useQueryGetCommunityPredictions from '../../hooks/queries/useQueryGetComm
 import { CategoryName, EventModel, WithId, iPrediction } from '../../models';
 import { getNumPredicting, getTotalNumPredicting } from '../../util/getNumPredicting';
 import { sortByLikelihood } from '../../util/sortPredictions';
-import { ScrollView, View, useWindowDimensions } from 'react-native';
-import PredictionTab from '../../navigation/PredictionTabsNavigator/PredictionTab';
+import { ScrollView, View } from 'react-native';
 import { getPredictedOutcomes } from '../../util/getPredictedOutcomes';
 import useDevice from '../../util/device';
-import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
 import { ORDERED_CATEGORIES } from '../../constants/categories';
 import Stat from '../../components/ItemStatBox/Stat';
+import SectionTopTabs from '../../components/SectionTopTabs';
+import { useSharedValue } from 'react-native-reanimated';
+import DualTabsWrapper from '../../components/DualTabsWrapper';
 
 export type iContenderStatsData = iPrediction & {
   category: CategoryName;
@@ -32,14 +33,10 @@ const ContenderStatEventTab = ({
   movieTmdbId: number;
   scrollRef: React.RefObject<ScrollView>;
 }) => {
+  const tabsPosX = useSharedValue(0);
   const { isPad } = useDevice();
-  const { width } = useWindowDimensions();
 
   const { data: communityPredictions } = useQueryGetCommunityPredictions({ event });
-
-  const [sortSetting, setSortSetting] = useState<'likelihood' | 'cat-order'>(
-    'likelihood',
-  );
 
   const [dataInCategoryOrder, setDataInCategoryOrder] = useState<iContenderStatsData[]>(
     [],
@@ -61,7 +58,7 @@ const ContenderStatEventTab = ({
     const allPredictionsWithContender: iContenderStatsData[] = [];
     Object.entries(communityPredictions.categories).forEach(
       ([category, categoryPrediction]) => {
-        const categoryPredictions = categoryPrediction.predictions;
+        const categoryPredictions = categoryPrediction.predictions ?? [];
         const predictions = categoryPredictions.filter(
           (p) => p.movieTmdbId === movieTmdbId,
         );
@@ -117,7 +114,13 @@ const ContenderStatEventTab = ({
 
   const widthFactor = isPad ? theme.padHistogramContainerWidth : 1;
 
-  const data = sortSetting === 'cat-order' ? dataInCategoryOrder : dataInLikelihoodOrder;
+  const longerDataSet =
+    dataInCategoryOrder.length > dataInLikelihoodOrder.length
+      ? dataInCategoryOrder
+      : dataInLikelihoodOrder;
+  const data = longerDataSet.map((_, i) => {
+    return [dataInLikelihoodOrder[i], dataInCategoryOrder[i]];
+  });
 
   return (
     <View style={{ flex: 1 }}>
@@ -136,42 +139,42 @@ const ContenderStatEventTab = ({
           <Stat number={`${potential.potential}`} text="potential" />
         </View>
       ) : null}
-      <View
-        style={{
-          flexDirection: 'row',
-          alignSelf: 'center',
-          width: width * widthFactor,
-          marginBottom: 25,
-          borderRadius: 0,
-          borderColor: COLORS.primaryLight,
-          borderWidth: 1,
-        }}
-      >
-        <PredictionTab
-          text="Likelihood"
-          selected={sortSetting === 'likelihood'}
-          onPress={() => setSortSetting('likelihood')}
+      <SectionTopTabs
+        tabs={[{ title: 'Likelihood' }, { title: 'Category Order' }]}
+        tabsPosX={tabsPosX}
+      />
+      {data.map(([tab1, tab2]) => (
+        <DualTabsWrapper
+          tabsPosX={tabsPosX}
+          tab1={
+            <View style={{ flex: 1, paddingBottom: 25 }}>
+              <ItemStatBox
+                key={tab1.contenderId}
+                prediction={tab1}
+                event={event}
+                category={tab1.category}
+                totalNumPredictingTop={tab1.totalNumPredictingTop}
+                totalNumPredictingCategory={tab1.totalNumPredictingCategory}
+                widthFactor={widthFactor}
+                scrollRef={scrollRef}
+              />
+            </View>
+          }
+          tab2={
+            <View style={{ flex: 1, paddingBottom: 25 }}>
+              <ItemStatBox
+                key={tab2.contenderId}
+                prediction={tab2}
+                event={event}
+                category={tab2.category}
+                totalNumPredictingTop={tab2.totalNumPredictingTop}
+                totalNumPredictingCategory={tab2.totalNumPredictingCategory}
+                widthFactor={widthFactor}
+                scrollRef={scrollRef}
+              />
+            </View>
+          }
         />
-        <View style={{ width: 1, backgroundColor: COLORS.primaryLight }} />
-        <PredictionTab
-          text="Category Order"
-          selected={sortSetting === 'cat-order'}
-          onPress={() => setSortSetting('cat-order')}
-        />
-      </View>
-      {data.map((prediction) => (
-        <View style={{ flex: 1, paddingBottom: 25 }}>
-          <ItemStatBox
-            key={prediction.contenderId}
-            prediction={prediction}
-            event={event}
-            category={prediction.category}
-            totalNumPredictingTop={prediction.totalNumPredictingTop}
-            totalNumPredictingCategory={prediction.totalNumPredictingCategory}
-            widthFactor={widthFactor}
-            scrollRef={scrollRef}
-          />
-        </View>
       ))}
     </View>
   );

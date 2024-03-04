@@ -4,9 +4,12 @@ import COLORS from '../../constants/colors';
 import FollowButton from '../FollowButton';
 import ProfileImage from '../ProfileImage';
 import { Body, SubHeader } from '../Text';
-import { IMAGE_SIZE } from '.';
 import { User, WithId } from '../../models';
 import { iUserInfo } from '../../navigation/types';
+import theme from '../../constants/theme';
+import { hexToRgb } from '../../util/hexToRgb';
+
+export const USER_SEARCH_ITEM_HEIGHT = 70;
 
 const UserSearchResultItem = ({
   item,
@@ -32,8 +35,13 @@ const UserSearchResultItem = ({
       key={item._id}
       style={{
         flexDirection: 'row',
-        padding: 10,
+        height: USER_SEARCH_ITEM_HEIGHT,
+        alignItems: 'center',
         width: '100%',
+        paddingLeft: theme.windowMargin,
+        paddingRight: theme.windowMargin,
+        borderColor: hexToRgb(COLORS.primaryLight, 0.3),
+        borderBottomWidth: 1,
       }}
       onPress={() => onPressProfileImage()}
       underlayColor={COLORS.secondaryDark}
@@ -49,7 +57,7 @@ const UserSearchResultItem = ({
         <View style={{ flexDirection: 'row' }}>
           <ProfileImage
             image={item.image}
-            imageSize={IMAGE_SIZE}
+            imageSize={USER_SEARCH_ITEM_HEIGHT - 20}
             onPress={() => onPressProfileImage()}
           />
           <View

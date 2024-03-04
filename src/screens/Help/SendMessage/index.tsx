@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import { View } from 'react-native';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import { SubmitButton } from '../../../components/Buttons';
 import FormInput from '../../../components/Inputs/FormInput';
@@ -9,39 +9,13 @@ import SlackApi, { SlackChannel } from '../../../services/slack';
 import { useAuth } from '../../../context/AuthContext';
 import { useNavigateAwayEffect } from '../../../util/hooks';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-
-type iTypeButtonProps = { text: string; selected: boolean; onPress: () => void };
-
-const TypeButton = ({ text, selected, onPress }: iTypeButtonProps) => {
-  return (
-    <TouchableOpacity
-      onPress={onPress}
-      style={{
-        backgroundColor: selected ? COLORS.secondaryDark : COLORS.primaryLightest,
-        padding: 20,
-        paddingTop: 10,
-        paddingBottom: 10,
-        borderRadius: 10,
-        margin: 10,
-      }}
-      activeOpacity={0.8}
-    >
-      <BodyBold
-        style={{
-          color: selected ? COLORS.white : 'black',
-          textAlign: 'center',
-        }}
-      >
-        {text}
-      </BodyBold>
-    </TouchableOpacity>
-  );
-};
+import HorizontalScrollingTabs from '../../../components/HorizontalScrollingTabs';
+import theme from '../../../constants/theme';
 
 const SendMessage = () => {
   const { userEmail } = useAuth();
 
-  const [type, setType] = useState<SlackChannel>(SlackChannel.SUPPORT);
+  const [type, setType] = useState<SlackChannel>(SlackChannel.SUGGESTIONS);
   const [message, setMessage] = useState<string>('');
   const [contact, setContact] = useState<string>('');
   const [showConfirmation, setShowConfirmation] = useState<boolean>(false);
@@ -56,31 +30,31 @@ const SendMessage = () => {
     reset();
   }, []);
 
-  const data: iTypeButtonProps[] = [
+  const data = [
     {
-      text: 'Contact Support',
-      selected: type === SlackChannel.SUPPORT,
-      onPress: () => setType(SlackChannel.SUPPORT),
+      text: 'Suggestion',
+      value: SlackChannel.SUGGESTIONS,
+      isSelected: type === SlackChannel.SUGGESTIONS,
     },
     {
-      text: 'Report Bug',
-      selected: type === SlackChannel.BUGS,
-      onPress: () => setType(SlackChannel.BUGS),
+      text: 'Support',
+      value: SlackChannel.SUPPORT,
+      isSelected: type === SlackChannel.SUPPORT,
+    },
+    {
+      text: 'Bug',
+      value: SlackChannel.BUGS,
+      isSelected: type === SlackChannel.BUGS,
     },
     {
       text: 'Question',
-      selected: type === SlackChannel.QUESTIONS,
-      onPress: () => setType(SlackChannel.QUESTIONS),
-    },
-    {
-      text: 'Suggestion',
-      selected: type === SlackChannel.SUGGESTIONS,
-      onPress: () => setType(SlackChannel.SUGGESTIONS),
+      value: SlackChannel.QUESTIONS,
+      isSelected: type === SlackChannel.QUESTIONS,
     },
     {
       text: 'Other',
-      selected: type === SlackChannel.OTHER,
-      onPress: () => setType(SlackChannel.OTHER),
+      value: SlackChannel.OTHER,
+      isSelected: type === SlackChannel.OTHER,
     },
   ];
 
@@ -105,69 +79,73 @@ const SendMessage = () => {
 
   return (
     <BackgroundWrapper>
-      <KeyboardAwareScrollView
-        extraHeight={200}
-        style={{ width: '100%' }}
-        contentContainerStyle={{ width: '90%', alignSelf: 'center' }}
-      >
-        <BodyBold style={{ textAlign: 'center', marginTop: 10 }}>
-          For updates and communications, see twitter @withbrotherbro
+      <KeyboardAwareScrollView extraHeight={200} style={{ width: '100%' }}>
+        <View
+          style={{
+            paddingTop: theme.windowMargin,
+            paddingBottom: theme.windowMargin,
+          }}
+        >
+          <HorizontalScrollingTabs<SlackChannel>
+            options={data}
+            onPress={(v) => setType(v)}
+            contentContainerStyle={{ paddingLeft: theme.windowMargin }}
+          />
+        </View>
+        <BodyBold
+          style={{ paddingLeft: theme.windowMargin, paddingBottom: theme.windowMargin }}
+        >
+          {'Your feedback improves the app!'}
         </BodyBold>
         <View
           style={{
-            flexDirection: 'row',
-            justifyContent: 'center',
-            flexWrap: 'wrap',
-            alignItems: 'center',
-            marginTop: 10,
+            width: '100%',
+            paddingLeft: theme.windowMargin,
+            paddingRight: theme.windowMargin,
           }}
         >
-          {data.map((item) => (
-            <TypeButton key={item.text} {...item} />
-          ))}
-        </View>
-        <FormInput
-          label={'Message'}
-          caption={
-            submitIsDisabled && !showConfirmation
-              ? `Must be at least ${characterRequirement} characters`
-              : ''
-          }
-          value={message}
-          setValue={setMessage}
-          multiline
-          style={{ marginTop: 20 }}
-        />
-        <FormInput
-          label={'Your contact (optional)'}
-          value={contact}
-          setValue={setContact}
-          style={{ marginTop: 20 }}
-          textContentType={'emailAddress'}
-        />
-        <SubmitButton
-          text={'Submit'}
-          onPress={onSubmit}
-          style={{ width: '100%', marginTop: 10 }}
-          disabled={submitIsDisabled}
-        />
-        {showConfirmation ? (
-          <View style={{ width: '100%', alignItems: 'center', marginTop: 20 }}>
-            <SubHeader
-              style={{ margin: 5, color: COLORS.secondaryLight, textAlign: 'center' }}
-            >
-              Reponse submitted!
-            </SubHeader>
-            <BodyBold style={{ marginTop: 20, textAlign: 'center' }}>
-              Your feedback is greatly appreciated.
-            </BodyBold>
-            {userDidSubmitContact ? (
-              <BodyBold style={{ margin: 5, textAlign: 'center', lineHeight: 24 }}>
-                We will be in touch if more info is needed.
+          <FormInput
+            label={'Message'}
+            caption={
+              submitIsDisabled && !showConfirmation
+                ? `Must be at least ${characterRequirement} characters`
+                : ''
+            }
+            value={message}
+            setValue={setMessage}
+            multiline
+          />
+          <FormInput
+            label={'Your contact (optional)'}
+            value={contact}
+            setValue={setContact}
+            style={{ marginTop: 20 }}
+            textContentType={'emailAddress'}
+          />
+          <SubmitButton
+            text={'Submit'}
+            onPress={onSubmit}
+            style={{ width: '100%', marginTop: 10 }}
+            disabled={submitIsDisabled}
+          />
+          {showConfirmation ? (
+            <View style={{ width: '100%', alignItems: 'center', marginTop: 20 }}>
+              <SubHeader
+                style={{ margin: 5, color: COLORS.secondaryLight, textAlign: 'center' }}
+              >
+                Reponse submitted!
+              </SubHeader>
+              <BodyBold style={{ marginTop: 20, textAlign: 'center' }}>
+                Your feedback is greatly appreciated.
               </BodyBold>
-            ) : null}
-          </View>
-        ) : null}
+              {userDidSubmitContact ? (
+                <BodyBold style={{ margin: 5, textAlign: 'center', lineHeight: 24 }}>
+                  We will be in touch if more info is needed.
+                </BodyBold>
+              ) : null}
+            </View>
+          ) : null}
+        </View>
       </KeyboardAwareScrollView>
     </BackgroundWrapper>
   );

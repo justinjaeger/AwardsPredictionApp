@@ -1,6 +1,7 @@
 import theme from '../theme';
 
 const COLORS = {
+  primaryDark: '#1c1c1c',
   primary: theme['grayscale-900'],
   primaryLightest: theme['grayscale-200'],
   primaryLight: theme['grayscale-800'],

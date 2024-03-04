@@ -1,0 +1,3 @@
+export const HEADER_TITLE_MARGIN_TOP = 10;
+export const HEADER_TOP_TAB_MARGIN_BOTTOM = 10;
+export const HEADER_TOP_TAB_MARGIN_TOP = 10;

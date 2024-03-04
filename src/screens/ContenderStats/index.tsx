@@ -10,6 +10,10 @@ import ContenderInfoHeader from '../../components/ContenderInfoHeader';
 import BackgroundWrapper from '../../components/BackgroundWrapper';
 import { ScrollView } from 'react-native';
 import HistoryDateIndicator from '../../components/HistoryDateIndicator';
+import EventTopTabs from '../../components/HeaderComponents/EventTopTabs';
+import LinearGradient from 'react-native-linear-gradient';
+import COLORS from '../../constants/colors';
+import theme from '../../constants/theme';
 
 export type iContenderStatsData = iPrediction & {
   category: CategoryName;
@@ -22,16 +26,16 @@ const ContenderStats = () => {
   const navigation = useNavigation<PredictionsNavigationProp>();
   const route = useRoute<RouteProp<PredictionsParamList, 'ContenderStats'>>();
   const scrollRef = useRef<ScrollView>(null);
-  const { movieTmdbId, year, yyyymmdd } = route.params;
+  const { eventId, movieTmdbId, year, yyyymmdd } = route.params;
   const { store } = useTmdbDataStore();
   const { data: events } = useQueryGetAllEvents();
   const movie = store[movieTmdbId] as Movie;
-  const eventsWithinYear = events?.filter((event) => event.year === year);
 
-  // TODO: Make dropdown so they can set whether they're seeing academy awards or something else
-  const [event, setEvent] = useState<WithId<EventModel> | undefined>(
-    eventsWithinYear?.[0],
-  );
+  const eventsWithinYear = events?.filter((event) => event.year === year);
+  const initialEvent =
+    eventsWithinYear?.find(({ _id }) => eventId === _id) ?? eventsWithinYear?.[0];
+
+  const [event, setEvent] = useState<WithId<EventModel> | undefined>(initialEvent);
 
   // Set the header
   useLayoutEffect(() => {
@@ -45,17 +49,29 @@ const ContenderStats = () => {
     return null;
   }
 
+  // TODO: Can use the collapsing header flatlist component here
   return (
     <BackgroundWrapper>
       <ScrollView ref={scrollRef} style={{ flex: 1, width: '100%' }}>
-        <ContenderInfoHeader
-          prediction={{
-            contenderId: '',
-            ranking: 0,
-            movieTmdbId,
-          }}
-        />
-        <HistoryDateIndicator yyyymmdd={yyyymmdd} />
+        <LinearGradient
+          colors={[COLORS.primaryDark, COLORS.primary]}
+          style={{ paddingBottom: 20 }}
+        >
+          <ContenderInfoHeader
+            prediction={{
+              contenderId: '',
+              ranking: 0,
+              movieTmdbId,
+            }}
+          />
+          <HistoryDateIndicator yyyymmdd={yyyymmdd} />
+          <EventTopTabs
+            selectedEvent={event}
+            setEvent={setEvent}
+            eventOptions={eventsWithinYear}
+            style={{ marginTop: 10, paddingLeft: theme.windowMargin }}
+          />
+        </LinearGradient>
         <ContenderStatEventTab
           event={event}
           movieTmdbId={movieTmdbId}

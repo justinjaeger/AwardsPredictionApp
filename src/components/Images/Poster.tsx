@@ -1,60 +1,49 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { ImageStyle, StyleProp, TouchableHighlight, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import COLORS from '../../constants/colors';
-import { getPosterDimensionsByWidth, PosterSize } from '../../constants/posterDimensions';
+import { PosterSize } from '../../constants/posterDimensions';
 import { getTmdbImageUrl } from '../../constants';
-import { Label } from '../Text';
+import { Body } from '../Text';
 import theme from '../../constants/theme';
 import RankingDisplay from '../RankingDisplay';
-import { Phase } from '../../models';
 import { getAccoladeColor } from '../../util/getAccoladeColor';
+import { iPosterFromTmdbProps } from './PosterFromTmdb';
 
-type iPosterProps = {
+export type iPosterProps = {
   title: string;
   path: string | null;
-  width: number; // 1 is 27*40px, defualt is 5
-  ranking?: number;
-  onPress?: () => void;
-  styles?: StyleProp<ImageStyle>;
-  accolade?: Phase;
-  isUnaccoladed?: boolean;
-};
+} & iPosterFromTmdbProps;
 
 const BORDER_RADIUS = 5;
 
 const Poster = ({
   path,
   title,
-  width,
+  posterDimensions,
   ranking,
   onPress,
   styles,
   accolade,
   isUnaccoladed,
 }: iPosterProps) => {
-  const [isPressed, setIsPressed] = useState<boolean>(false);
-
-  const posterDimensions = getPosterDimensionsByWidth(width - theme.posterMargin * 2);
+  const { width, height } = posterDimensions;
 
   const accoladeColor = accolade && getAccoladeColor(accolade);
 
-  const borderWidth = accolade ? posterDimensions.width / 15 : 1;
+  const borderWidth = accolade ? width / 15 : 1;
 
   const style: StyleProp<ImageStyle> = {
     ...posterDimensions,
     borderWidth,
     borderColor: accolade ? accoladeColor : isUnaccoladed ? undefined : COLORS.secondary,
     borderRadius: BORDER_RADIUS,
-    opacity: isPressed ? 0.8 : 1,
     ...(styles as Record<string, unknown>),
   };
 
   return (
     <TouchableHighlight
       onPress={onPress || undefined}
-      onPressIn={() => setIsPressed(true)}
-      onPressOut={() => setIsPressed(false)}
       underlayColor={'#FFF'}
       disabled={!onPress}
     >
@@ -72,8 +61,8 @@ const Poster = ({
               <View
                 style={{
                   position: 'absolute',
-                  width: posterDimensions.width,
-                  height: posterDimensions.height,
+                  width: width,
+                  height: height,
                   backgroundColor: 'rgba(0,0,0,0.5)',
                   borderRadius: BORDER_RADIUS,
                   zIndex: 2,
@@ -83,7 +72,7 @@ const Poster = ({
             <FastImage
               style={style as Record<string, unknown>}
               source={{
-                uri: getTmdbImageUrl(posterDimensions.width) + '/' + path,
+                uri: getTmdbImageUrl(width) + '/' + path,
               }}
             />
           </View>
@@ -98,14 +87,14 @@ const Poster = ({
             }}
           >
             {(width || 0) > PosterSize.SMALL ? (
-              <Label
+              <Body
                 style={{
                   textAlign: 'center',
                   color: COLORS.primaryLightest,
                 }}
               >
                 {title}
-              </Label>
+              </Body>
             ) : null}
           </View>
         )}

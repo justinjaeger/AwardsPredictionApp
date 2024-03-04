@@ -10,6 +10,5 @@ const options = {
 trigger('impactLight', options);
 
 export const triggerHaptic = () => {
-  console.log('HAPTIC TRIGGERED');
   trigger('impactLight', options);
 };

@@ -13,18 +13,24 @@ export type MainParamList = {
     title?: string;
     showWebLink?: boolean;
   };
+  HelpTab: {
+    disableBack?: boolean;
+  };
 };
 
 type iBottomTabDefaultParamList = {
   initialScreen?: keyof PredictionsParamList;
+  disableBack?: boolean;
 };
 
 export type BottomTabParamList = {
+  Social: iBottomTabDefaultParamList;
   Predictions: iBottomTabDefaultParamList;
   ProfileTab: iBottomTabDefaultParamList & { userId?: string };
-  Friend: iBottomTabDefaultParamList;
   Leaderboard: iBottomTabDefaultParamList;
-  Help: undefined;
+  HelpTab: {
+    disableBack?: boolean;
+  };
   Admin: undefined;
 };
 
@@ -45,11 +51,12 @@ type iHistoryNavigationProps = {
 
 export type PredictionsNavigationProp = StackNavigationProp<PredictionsParamList>;
 export type PredictionsParamList = {
-  EventSelect: undefined;
+  Social: undefined;
   // PREDICTION SCREENS
   Event: {
     userInfo: iUserInfo | undefined;
     eventId: string;
+    disableBack?: boolean;
   } & iHistoryNavigationProps;
   Category: {
     userInfo: iUserInfo | undefined;
@@ -65,12 +72,14 @@ export type PredictionsParamList = {
     onFinish: (predictions: iPrediction[]) => void;
   };
   ContenderStats: {
+    eventId: string;
     movieTmdbId: number;
     year: number;
   } & iHistoryNavigationProps;
   // PROFILE SCREENS
   Profile: {
     userInfo: iUserInfo;
+    disableBack?: boolean;
   };
   Followers: {
     userInfo: iUserInfo;
@@ -80,11 +89,11 @@ export type PredictionsParamList = {
   // FRIEND SCREENS
   SearchFriends: undefined;
   // LEADERBOARD SCREENS
-  LeaderboardList: undefined;
   Leaderboard: {
     eventId: string;
     phase: Phase;
     noShorts?: boolean;
+    disableBack?: boolean;
   };
   // MODALS
   ContenderInfoModal: {

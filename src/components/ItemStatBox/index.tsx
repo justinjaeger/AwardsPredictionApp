@@ -6,7 +6,7 @@ import {
   View,
   useWindowDimensions,
 } from 'react-native';
-import { Header, Label, SmallHeader, SubHeader, SubHeaderLight } from '../Text';
+import { Header, Body, HeaderLight, SubHeader, SubHeaderLight } from '../Text';
 import { CategoryName, EventModel, Phase, WithId, iPrediction } from '../../models';
 import { getNumPredicting, getTotalNumPredicting } from '../../util/getNumPredicting';
 import Histogram, { SLOTS_TO_DISPLAY_EXTRA } from '../Histogram';
@@ -26,6 +26,8 @@ import { useAuth } from '../../context/AuthContext';
 import Stat from './Stat';
 import { formatPercentage } from '../../util/formatPercentage';
 import { useRouteParams } from '../../hooks/useRouteParams';
+import { getUserInfo } from '../../util/getUserInfo';
+import useQueryGetUser from '../../hooks/queries/useQueryGetUser';
 
 const ItemStatBox = ({
   category,
@@ -50,6 +52,7 @@ const ItemStatBox = ({
   const navigation = useNavigation<PredictionsNavigationProp>();
   const { yyyymmdd } = useRouteParams();
   const { userId: authUserId } = useAuth();
+  const { data: user } = useQueryGetUser(authUserId);
 
   const numPredicting = prediction?.numPredicting;
   const totalNumPredicting = getTotalNumPredicting(numPredicting || {});
@@ -84,8 +87,9 @@ const ItemStatBox = ({
   return (
     <View
       style={{
-        borderWidth: 1,
-        borderColor: hexToRgb(COLORS.white, 0.3),
+        borderTopWidth: 1,
+        borderBottomWidth: 1,
+        borderColor: hexToRgb(COLORS.primaryLight, 0.5),
         paddingBottom: 10,
         paddingTop: 5,
         borderRadius: theme.borderRadius,
@@ -108,8 +112,8 @@ const ItemStatBox = ({
             navigation.goBack();
           } else {
             navigation.dispatch(
-              StackActions.replace('Category', {
-                userId: authUserId ?? undefined,
+              StackActions.push('Category', {
+                userInfo: getUserInfo(user),
                 eventId: event._id,
                 category: category,
               }),
@@ -174,9 +178,9 @@ const ItemStatBox = ({
         }}
       >
         <SubHeaderLight>{'out of'}</SubHeaderLight>
-        <SmallHeader>{` ${totalNumPredictingCategory} `}</SmallHeader>
+        <HeaderLight>{` ${totalNumPredictingCategory} `}</HeaderLight>
       </View>
-      <Label style={{ textAlign: 'center' }}>{'users predicting category'}</Label>
+      <Body style={{ textAlign: 'center' }}>{'users predicting category'}</Body>
     </View>
   );
 };

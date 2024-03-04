@@ -5,7 +5,7 @@ import {
   Animated,
   ScrollView,
   StyleProp,
-  TouchableOpacity,
+  TouchableHighlight,
   useWindowDimensions,
   View,
   ViewStyle,
@@ -21,6 +21,23 @@ import UserPredictionList from '../UserPredictionList';
 import CarouselArrow from './CarouselArrow';
 import { iRecentPrediction } from '../../models';
 import { PredictionsNavigationProp, iUserInfo } from '../../navigation/types';
+
+export const CAROUSEL_MARGIN = 8;
+export const CAROUSEL_PROFILE_IMAGE_SIZE = 40;
+
+export const getCarouselSliderHeight = (width: number, isPad: boolean) =>
+  getPosterDimensionsByWidth(
+    (width - theme.posterMargin * (5 - 1) - theme.windowMargin) / 5,
+  ).height + (isPad ? 100 : 70);
+
+export const getCarouselHeight = (
+  width: number,
+  isPad: boolean,
+  hideUserInfo?: boolean,
+) =>
+  getCarouselSliderHeight(width, isPad) +
+  (hideUserInfo ? 0 : CAROUSEL_PROFILE_IMAGE_SIZE + CAROUSEL_MARGIN) +
+  CAROUSEL_MARGIN;
 
 const PredictionCarousel = ({
   predictionSets,
@@ -98,54 +115,48 @@ const PredictionCarousel = ({
   return (
     <View
       style={{
-        borderWidth: 1,
-        borderColor: hexToRgb(COLORS.white, 0.2),
-        backgroundColor: hexToRgb(COLORS.white, 0.02),
-        borderRadius: theme.borderRadius,
-        marginTop: 10,
-        marginBottom: 10,
+        borderBottomWidth: 1,
+        borderColor: hexToRgb(COLORS.primaryLight, 0.5),
+        height: getCarouselHeight(width, isPad, hideUserInfo),
       }}
     >
       {!hideUserInfo ? (
-        <TouchableOpacity
+        <TouchableHighlight
           style={{
             alignSelf: 'flex-start',
             flexDirection: 'row',
             alignItems: 'center',
-            justifyContent: 'flex-start',
-            marginTop: 10,
-            marginLeft: theme.windowMargin,
-            marginRight: theme.windowMargin,
-            marginBottom: 10,
-            borderRadius: theme.borderRadius,
+            justifyContent: 'space-between',
+            paddingLeft: theme.windowMargin,
+            paddingRight: 10,
+            paddingTop: CAROUSEL_MARGIN,
+            width: '100%',
           }}
           onPress={() => {
             navigation.dispatch(StackActions.push('Profile', { userInfo }));
           }}
+          underlayColor={COLORS.secondaryDark}
         >
           <>
-            <ProfileImage
-              image={userInfo?.userImage}
-              imageSize={40}
-              style={{ marginRight: 15 }}
-              isDisabled
-            />
-            <SubHeader>{userInfo?.userName ?? ''}</SubHeader>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <ProfileImage
+                image={userInfo?.userImage}
+                imageSize={CAROUSEL_PROFILE_IMAGE_SIZE}
+                style={{ marginRight: theme.windowMargin }}
+                isDisabled
+              />
+              <SubHeader>{userInfo?.userName ?? ''}</SubHeader>
+            </View>
           </>
-        </TouchableOpacity>
+        </TouchableHighlight>
       ) : null}
       <View
         style={[
           {
             width: '100%',
-            borderRadius: theme.windowMargin, // basically acts as a marginLeft and marginRight to top/bottom borders
             borderLeftWidth: 0,
             borderRightWidth: 0,
-            paddingBottom: 10,
-            height:
-              getPosterDimensionsByWidth(
-                (width - theme.posterMargin * (5 - 1) - theme.windowMargin) / 5,
-              ).height + (isPad ? 100 : 70), // messy, but prevents a bug. has to be a factor of width since poster height is
+            height: getCarouselSliderHeight(width, isPad) - 10,
           },
           style,
         ]}

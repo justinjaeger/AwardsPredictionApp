@@ -5,7 +5,7 @@ import MovieListDraggable from '../../../components/MovieList/MovieListDraggable
 import SignedOutState from '../../../components/SignedOutState';
 import { BodyBold } from '../../../components/Text';
 import useMutationUpdatePredictions from '../../../hooks/mutations/useMutationUpdatePredictions';
-import { useNavigateAwayEffect, useNavigateToEffect } from '../../../util/hooks';
+import { useNavigateAwayEffect } from '../../../util/hooks';
 import { formatLastUpdated } from '../../../util/formatDateTime';
 import { useAuth } from '../../../context/AuthContext';
 import EventLink from '../../../components/EventLinkButton';
@@ -15,23 +15,23 @@ import CategorySkeleton from '../../../components/Skeletons/CategorySkeleton';
 import { sortPredictions } from '../../../util/sortPredictions';
 import ScreenshotMode from '../../../components/Buttons/ScreenshotMode';
 import { FAB } from '../../../components/Buttons/FAB';
-import { useFollowingBar } from '../../../context/FollowingBarContext';
 import BottomFABContainer from '../../../components/BottomFABContainer';
 import FloatingButton from '../../../components/Buttons/FloatingButton';
 import { useRouteParams } from '../../../hooks/useRouteParams';
 import { useNavigation } from '@react-navigation/native';
 import { PredictionsNavigationProp } from '../../../navigation/types';
+import { eventToString } from '../../../util/stringConversions';
 
 // used in both FromProfile and from event
 const CategoryPersonal = ({
   showEventLink,
   onBack,
+  bottomHeight = 0,
 }: {
   showEventLink?: boolean;
   onBack?: () => void;
+  bottomHeight?: number;
 }) => {
-  const { setHideAbsolutely } = useFollowingBar();
-
   const { category: _category, event: _event, userInfo, yyyymmdd } = useRouteParams();
   const category = _category!;
   const event = _event!;
@@ -41,6 +41,7 @@ const CategoryPersonal = ({
   const isAuthProfile = userInfo?.userId === authUserId;
 
   const { data: predictionData, isLoading } = useQueryGetUserPredictions({
+    event,
     userId: userInfo?.userId,
     yyyymmdd,
   });
@@ -53,18 +54,11 @@ const CategoryPersonal = ({
   const [showSave, setShowSave] = useState(false);
 
   useEffect(() => {
-    setHideAbsolutely(showSave);
-  }, [showSave]);
-
-  useEffect(() => {
     setPredictions(initialPredictions);
   }, [userInfo?.userId, predictionData !== undefined]);
 
   useNavigateAwayEffect(() => {
     onBack && onBack();
-    onSaveContenders();
-  }, []);
-  useNavigateToEffect(() => {
     onSaveContenders();
   }, []);
 
@@ -83,21 +77,18 @@ const CategoryPersonal = ({
   );
 
   const onSaveContenders = async (ps?: iPrediction[]) => {
-    console.log('onSaveContenders', userInfo?.userId, isAuthProfile);
     if (!userInfo?.userId || !isAuthProfile) return;
     const predictionsToSave = ps || predictions;
     const predictionsHaveNotChanged = _.isEqual(
       predictionsToSave.map((p) => p.contenderId),
       initialPredictions.map((p) => p.contenderId),
     );
-    console.log('predictionsHaveNotChanged', predictionsHaveNotChanged);
     if (predictionsHaveNotChanged) return;
     // set then rankings according to INSERTION ORDER
     const orderedPredictions: iPrediction[] = predictionsToSave.map((p, i) => ({
       ...p,
       ranking: i + 1,
     }));
-    console.log('updating...');
     await updatePredictions({
       categoryName: category,
       eventId: event._id,
@@ -135,10 +126,12 @@ const CategoryPersonal = ({
       {predictions && predictions.length === 0 ? (
         <View
           style={{
+            position: 'absolute',
+            top: 15,
             width: '100%',
-            marginTop: 20,
             alignItems: 'center',
             justifyContent: 'center',
+            zIndex: 20,
           }}
         >
           <BodyBold style={{ textAlign: 'center', lineHeight: 30 }}>
@@ -146,7 +139,7 @@ const CategoryPersonal = ({
           </BodyBold>
         </View>
       ) : null}
-      <View style={{ height: '100%' }}>
+      <View style={{ width: '100%', height: '100%' }}>
         <MovieListDraggable
           predictions={predictions}
           setPredictions={(ps) => {
@@ -163,23 +156,25 @@ const CategoryPersonal = ({
           onPressAdd={onPressAdd}
         />
       </View>
-      <BottomFABContainer>
-        {showEventLink ? <EventLink /> : null}
+      <BottomFABContainer bottom={bottomHeight}>
+        {showEventLink ? (
+          <EventLink text={eventToString(event.awardsBody, event.year)} />
+        ) : null}
         {isEditable ? <FloatingButton onPress={onPressAdd} icon={'plus'} /> : null}
         <ScreenshotMode predictions={predictions} isCommunity={false} />
       </BottomFABContainer>
-      {isEditable && showSave ? (
-        <FAB
-          iconName="save-outline"
-          text="Save"
-          onPress={() => {
-            onSaveContenders();
-          }}
-          visible={showSave}
-          left
-          isLoading={isSaving}
-        />
-      ) : null}
+      <FAB
+        iconName="save-outline"
+        text="Save"
+        onPress={() => {
+          onSaveContenders();
+        }}
+        bottom={bottomHeight}
+        visible={showSave && isEditable}
+        left
+        isLoading={isSaving}
+        horizontalOffset={10}
+      />
     </>
   );
 };

@@ -2,12 +2,12 @@ import React from 'react';
 import { View, useWindowDimensions } from 'react-native';
 import { ReactChildren } from '../../types/keys';
 import LinearGradient from 'react-native-linear-gradient';
+import COLORS from '../../constants/colors';
 
 const BackgroundWrapper = (props: { children: ReactChildren }) => {
-  const { width, height } = useWindowDimensions();
+  const { width } = useWindowDimensions();
   const spacingFactor = 10;
   const dotSpacing = width / spacingFactor;
-  const dotSize = 6;
   return (
     <LinearGradient
       start={{ x: 0, y: 0 }}
@@ -24,36 +24,14 @@ const BackgroundWrapper = (props: { children: ReactChildren }) => {
           flexWrap: 'wrap',
           width: width + dotSpacing,
         }}
-      >
-        {Array.from({ length: (height / spacingFactor) * (height / width) }).map(
-          (x, i) => (
-            <View
-              key={i}
-              style={{
-                width: dotSpacing + 1,
-                height: dotSpacing,
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <View
-                style={{
-                  backgroundColor: 'rgba(255,255,255,0.02)',
-                  width: dotSize,
-                  height: dotSize,
-                  borderRadius: 10,
-                }}
-              />
-            </View>
-          ),
-        )}
-      </View>
+      />
       <View
         style={{
           flex: 1,
           height: '100%',
           width: '100%',
           alignItems: 'center',
+          backgroundColor: COLORS.primaryDark,
         }}
       >
         {props.children}

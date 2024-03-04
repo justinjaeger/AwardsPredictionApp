@@ -6,7 +6,7 @@ import {
   getPosterDimensionsByHeight,
   getPosterDimensionsByWidth,
 } from '../../constants/posterDimensions';
-import { Body, Header, SmallHeader, SubHeader } from '../Text';
+import { Body, Header, HeaderLight, SubHeader } from '../Text';
 import { iPrediction } from '../../models';
 import ExternalLinkButton from '../ExternalLinkButton';
 import { useNavigation } from '@react-navigation/native';
@@ -60,7 +60,10 @@ const ContenderInfoHeader = ({ prediction }: { prediction: iPrediction }) => {
           <Poster
             path={posterPath} // this will render the loading state if null
             title={posterTitle}
-            width={fullPosterWidth}
+            posterDimensions={{
+              width: fullPosterWidth,
+              height: fullPosterHeight,
+            }}
             onPress={() => {
               setShowFullPoster(false);
             }}
@@ -78,7 +81,10 @@ const ContenderInfoHeader = ({ prediction }: { prediction: iPrediction }) => {
         <Poster
           path={posterPath} // this will render the loading state if null
           title={posterTitle}
-          width={smallPosterWidth}
+          posterDimensions={{
+            width: smallPosterWidth,
+            height: smallPosterHeight,
+          }}
           onPress={() => {
             setShowFullPoster(true);
           }}
@@ -94,7 +100,7 @@ const ContenderInfoHeader = ({ prediction }: { prediction: iPrediction }) => {
         >
           <View>
             {itemTitle.length > 20 ? (
-              <SmallHeader>{itemTitle ?? ''}</SmallHeader>
+              <HeaderLight>{itemTitle ?? ''}</HeaderLight>
             ) : (
               <Header>{itemTitle ?? ''}</Header>
             )}

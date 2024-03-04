@@ -4,6 +4,7 @@ import MongoApi from '../../services/api/requests';
 import { iRecentPrediction } from '../../models';
 import { useTmdbDataStore } from '../../context/TmdbDataStore';
 import { useAuth } from '../../context/AuthContext';
+import { QUERY_OPTIONS } from './constants';
 
 /**
  * returns list of users who current user is following with nested fields
@@ -41,10 +42,12 @@ const useQueryGetFollowingUsers = () => {
         .forEach((p) => {
           if (p) allRecentPredictions.push(p);
         });
-      await storeTmdbDataFromRecentPredictions(allRecentPredictions);
+      storeTmdbDataFromRecentPredictions(allRecentPredictions);
 
       return usersSortedByMostRecentPrediction;
     },
+    ...QUERY_OPTIONS,
+    enabled: !!authUserId,
   });
 
   const usersWhoHaveNotPredictedInLast60Days = allUsers?.filter((u) => {

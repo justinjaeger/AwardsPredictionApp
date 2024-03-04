@@ -17,7 +17,7 @@ const useUserSearch = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const fetchPage = async (s: string, pn: number) => {
-    if (isLoading) return;
+    if (isLoading || s.length === 0) return;
     setIsLoading(true);
     setLastSearchInput(s);
     setPageNumber((prev) => prev + 1);
@@ -34,7 +34,6 @@ const useUserSearch = () => {
   };
 
   const handleSearch = async (s: string) => {
-    reset();
     await fetchPage(s, 1);
   };
 

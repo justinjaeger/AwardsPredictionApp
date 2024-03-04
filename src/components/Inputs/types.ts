@@ -26,4 +26,5 @@ export type iTextContentType =
   | 'username'
   | 'password'
   | 'newPassword'
-  | 'oneTimeCode';
+  | 'oneTimeCode'
+  | 'song';

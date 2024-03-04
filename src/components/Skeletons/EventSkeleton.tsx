@@ -3,20 +3,39 @@ import { View, useWindowDimensions } from 'react-native';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
+import { CATEGORY_TOP_AREA_HEIGHT } from '../../screens/Predictions/Event/constants';
+import { getNumPostersInRow } from '../../util/getNumPostersInRow';
+import { getCategoryListItemHeight } from '../../util/getCategoryListItemHeight';
+import { CategoryName, EventModel } from '../../models';
 import { getPosterDimensionsByWidth } from '../../constants/posterDimensions';
 
-const AMOUNT_IN_ROW = 5;
+const EventSkeleton = ({
+  event,
+  category,
+}: {
+  event: EventModel | undefined;
+  category: CategoryName | undefined;
+}) => {
+  const { width } = useWindowDimensions();
 
-const EventSkeleton = () => {
-  const { width: windowWidth } = useWindowDimensions();
-  const totalWidth = windowWidth - theme.windowMargin - theme.posterMargin;
-  const { width, height } = getPosterDimensionsByWidth(
-    (totalWidth - theme.windowMargin * 2 + theme.posterMargin) / 5,
+  const isLoading = !event || !category;
+  const slots = isLoading ? 5 : event.categories[category]?.slots ?? 5;
+  const numPostersInRow = getNumPostersInRow(slots);
+  const numRowsToRender = Math.ceil(slots / numPostersInRow);
+  const height = getCategoryListItemHeight({
+    categoryName: category,
+    event,
+    windowWidth: width,
+  });
+  const { width: posterWidth, height: posterHeight } = getPosterDimensionsByWidth(
+    (width - theme.windowMargin * 2 - theme.posterMargin * 2 * numPostersInRow) /
+      numPostersInRow,
   );
+
   return (
     <View
       style={{
-        height: '100%',
+        height,
         marginLeft: theme.windowMargin,
         marginRight: theme.windowMargin,
       }}
@@ -27,36 +46,43 @@ const EventSkeleton = () => {
         highlightColor={COLORS.primaryLight}
       >
         <View style={{ flexDirection: 'column' }}>
-          {Array(5)
+          {Array(numRowsToRender)
             .fill(null)
             .map((x, i) => (
               <View
-                key={i}
+                key={'event-skeleton-row' + i}
                 style={{
                   flexDirection: 'column',
                   alignItems: 'flex-start',
-                  marginTop: theme.windowMargin,
                 }}
               >
-                <View
-                  style={{
-                    width: 100,
-                    height: 20,
-                    marginBottom: 5,
-                    borderRadius: theme.borderRadius,
-                  }}
-                />
+                {i === 0 ? (
+                  <View
+                    style={{
+                      height: CATEGORY_TOP_AREA_HEIGHT,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <View
+                      style={{
+                        height: '33%',
+                        width: 100,
+                        borderRadius: theme.borderRadius,
+                      }}
+                    />
+                  </View>
+                ) : null}
                 <View style={{ flexDirection: 'row' }}>
-                  {Array(AMOUNT_IN_ROW)
+                  {Array(numPostersInRow)
                     .fill(null)
                     .map((y, j) => (
                       <View
-                        key={j}
+                        key={`event-skeleton-poster${j}`}
                         style={{
-                          width,
-                          height,
-                          marginLeft: theme.posterMargin,
-                          marginRight: theme.posterMargin,
+                          width: posterWidth,
+                          height: posterHeight,
+                          margin: theme.posterMargin,
                           borderRadius: theme.borderRadius,
                         }}
                       />

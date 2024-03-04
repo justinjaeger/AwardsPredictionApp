@@ -3,8 +3,8 @@ import { ImageStyle, StyleProp } from 'react-native';
 import Poster from './Poster';
 import { Movie, Person, Phase } from '../../models';
 
-type iPosterFromTmdbProps = {
-  width: number;
+export type iPosterFromTmdbProps = {
+  posterDimensions: { width: number; height: number };
   ranking?: number;
   onPress?: () => void;
   styles?: StyleProp<ImageStyle>;
@@ -12,45 +12,19 @@ type iPosterFromTmdbProps = {
   isUnaccoladed?: boolean;
 };
 
-const PosterFromMovie = ({
-  movie,
-  width,
-  onPress,
-  ranking,
-  styles,
-  accolade,
-  isUnaccoladed,
-}: iPosterFromTmdbProps & { movie: Movie }) => (
+const PosterFromMovie = (props: iPosterFromTmdbProps & { movie: Movie }) => (
   <Poster
-    path={movie.posterPath || null} // this will render the loading state if null
-    title={movie.title || ''}
-    width={width}
-    ranking={ranking}
-    onPress={onPress}
-    styles={styles}
-    accolade={accolade}
-    isUnaccoladed={isUnaccoladed}
+    path={props.movie.posterPath || null} // this will render the loading state if null
+    title={props.movie.title || ''}
+    {...props}
   />
 );
 
-const PosterFromPerson = ({
-  person,
-  onPress,
-  width,
-  ranking,
-  styles,
-  accolade,
-  isUnaccoladed,
-}: iPosterFromTmdbProps & { person: Person }) => (
+const PosterFromPerson = (props: iPosterFromTmdbProps & { person: Person }) => (
   <Poster
-    path={person.posterPath || null} // this will render the loading state if null
-    title={person.name || ''}
-    width={width}
-    ranking={ranking}
-    onPress={onPress}
-    styles={styles}
-    accolade={accolade}
-    isUnaccoladed={isUnaccoladed}
+    path={props.person.posterPath || null} // this will render the loading state if null
+    title={props.person.name || ''}
+    {...props}
   />
 );
 
@@ -66,5 +40,4 @@ const PosterFromTmdb = (
     <PosterFromMovie {...props} movie={props.movie} />
   ) : null;
 
-// maybe it's the memoization?
 export default React.memo(PosterFromTmdb);

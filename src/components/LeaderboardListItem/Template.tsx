@@ -2,9 +2,11 @@ import React from 'react';
 import { StyleProp, TouchableHighlight, View, ViewStyle } from 'react-native';
 import COLORS from '../../constants/colors';
 import ProfileImage from '../ProfileImage';
-import { Body, SmallHeader, SubHeader } from '../Text';
+import { Body, HeaderLight, SubHeader } from '../Text';
 import { formatDecimalAsPercentage } from '../../util/formatPercentage';
+import { hexToRgb } from '../../util/hexToRgb';
 
+export const LEADERBOARD_LIST_ITEM_HEIGHT = 70;
 export const LEADERBOARD_PROFILE_IMAGE_SIZE = 50;
 
 const Template = ({
@@ -39,6 +41,9 @@ const Template = ({
           flexDirection: 'row',
           padding: 10,
           width: '100%',
+          height: LEADERBOARD_LIST_ITEM_HEIGHT,
+          borderBottomColor: hexToRgb(COLORS.primaryLight, 0.3),
+          borderBottomWidth: 1,
         },
         style,
       ]}
@@ -91,16 +96,16 @@ const Template = ({
         </View>
         <View style={{ alignItems: 'flex-end', flex: 1 }}>
           <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
-            <SmallHeader>{formatDecimalAsPercentage(percentageAccuracy)}</SmallHeader>
+            <HeaderLight>{formatDecimalAsPercentage(percentageAccuracy)}</HeaderLight>
             <SubHeader>{'%'}</SubHeader>
           </View>
           <View style={{ flexDirection: 'row' }}>
-            <SubHeader style={{ fontWeight: '400' }}>{`${riskiness.toFixed(
-              0,
-            )}pts  |  `}</SubHeader>
             <SubHeader
               style={{ fontWeight: '400' }}
-            >{`${numCorrect}/${totalPossibleSlots}`}</SubHeader>
+            >{`${numCorrect}/${totalPossibleSlots}  |  `}</SubHeader>
+            <SubHeader style={{ fontWeight: '400' }}>{`${riskiness.toFixed(
+              0,
+            )}pts`}</SubHeader>
           </View>
         </View>
       </View>

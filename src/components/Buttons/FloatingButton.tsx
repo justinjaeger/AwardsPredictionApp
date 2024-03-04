@@ -4,7 +4,7 @@ import COLORS from '../../constants/colors';
 import useDevice from '../../util/device';
 import CustomIcon from '../CustomIcon';
 
-const SIZE = 50;
+export const getFloatingButtonSize = (isPad?: boolean) => 50 * (isPad ? 1.5 : 1);
 
 /**
  * https://akveo.github.io/eva-icons/#/
@@ -22,7 +22,7 @@ const FloatingButton = (props: {
 
   const iconProps = icon ? { name: icon } : undefined;
 
-  const size = isPad ? SIZE * 1.5 : SIZE;
+  const size = getFloatingButtonSize(isPad);
 
   return (
     <TouchableHighlight

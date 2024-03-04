@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { QueryKeys } from '../../types/keys';
 import MongoApi from '../../services/api/requests';
 import { useTmdbDataStore } from '../../context/TmdbDataStore';
+import { QUERY_OPTIONS } from './constants';
 
 const useQueryGetUser = (userId: string | undefined) => {
   const { storeTmdbDataFromRecentPredictions } = useTmdbDataStore();
@@ -15,6 +16,7 @@ const useQueryGetUser = (userId: string | undefined) => {
       storeTmdbDataFromRecentPredictions(user?.recentPredictionSets || []);
       return user ?? null;
     },
+    ...QUERY_OPTIONS,
   });
 
   return { data, isLoading, refetch };

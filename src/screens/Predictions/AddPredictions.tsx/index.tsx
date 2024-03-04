@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { SubHeader } from '../../../components/Text';
 import { View } from 'react-native';
 import COLORS from '../../../constants/colors';
@@ -12,7 +12,6 @@ import { useNavigateAwayEffect } from '../../../util/hooks';
 import { PredictionsNavigationProp } from '../../../navigation/types';
 import { getBiggestPhaseThatHasHappened } from '../../../util/getBiggestPhaseThatHasHappened';
 import { usePredictions } from '../AddPredictions.tsx/usePredictions';
-import BackButton from '../../../components/Buttons/BackButton';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import CreatePerformanceModal from './CreatePerformanceModal';
 import CreateSongModal from './CreateSongModal';
@@ -21,8 +20,9 @@ import { useRouteParams } from '../../../hooks/useRouteParams';
 import useKeyboard from '../../../hooks/useKeyboard';
 import { getCategoryIsHidden } from '../../../util/getCategoryIsHidden';
 import { useNavigation } from '@react-navigation/native';
-import { getTwoLineHeaderTitle } from '../../../constants';
 import { eventToString } from '../../../util/stringConversions';
+import { CATEGORY_TYPE_TO_STRING } from '../../../constants/categories';
+import HeaderBasic from '../../../components/HeaderBasic';
 
 const AddPredictions = () => {
   const navigation = useNavigation<PredictionsNavigationProp>();
@@ -69,18 +69,15 @@ const AddPredictions = () => {
     number | undefined
   >(undefined);
 
-  // set custom back arrow functionality
-  useEffect(() => {
-    if (!category || !event) return;
+  let headerText = '';
+  if (category && event) {
     const eventName = eventToString(event.awardsBody, event.year);
-    const categoryName = event.categories[category].name;
-    const headerTitle = eventName + '\n' + 'Best ' + categoryName + ' • Add / Remove';
-    navigation.setOptions({
-      // eslint-disable-next-line react/no-unstable-nested-components
-      headerLeft: () => <BackButton onPress={() => saveAndGoBack()} />,
-      headerTitle: getTwoLineHeaderTitle(headerTitle),
-    });
-  }, [navigation]);
+    const categoryData = event.categories[category];
+    const categoryName = categoryData.name;
+    const type = categoryData.type;
+    const typeAsString = CATEGORY_TYPE_TO_STRING[type];
+    headerText = `${eventName}\nBest ${categoryName}\nAdd ${typeAsString}s`;
+  }
 
   const saveAndGoBack = () => {
     onSave();
@@ -101,6 +98,7 @@ const AddPredictions = () => {
 
   return (
     <BackgroundWrapper>
+      <HeaderBasic title={headerText} safeAreaTop onPressBack={saveAndGoBack} />
       <LoadingStatueModal visible={isSavingFilm} text={'Saving film...'} />
       {selectedPersonTmdbId !== undefined ? (
         <CreatePerformanceModal
@@ -173,22 +171,27 @@ const AddPredictions = () => {
                 onAddContender(selectedSearchTmdbId);
               }
             }}
+            horizontalOffset={10}
             visible={selectedSearchTmdbId !== undefined}
           />
         </View>
       ) : (
         <>
-          <MovieListSelectable
-            predictions={communityPredictions}
-            selectedPredictions={selectedPredictions}
-            setSelectedPredictions={(ps) => setSelectedPredictions(ps)}
-          />
+          <View style={{ height: '100%', width: '100%' }}>
+            <MovieListSelectable
+              predictions={communityPredictions}
+              selectedPredictions={selectedPredictions}
+              setSelectedPredictions={(ps) => setSelectedPredictions(ps)}
+            />
+          </View>
           {androidKeyboardIsVisible ? null : (
             <FAB
               iconName="checkmark-outline"
               text="Done"
               onPress={() => saveAndGoBack()}
               visible={!searchResults.length}
+              horizontalOffset={0}
+              bottom={0}
             />
           )}
         </>

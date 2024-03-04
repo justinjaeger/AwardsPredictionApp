@@ -11,13 +11,13 @@ import MovieListSelectable from '../../../components/MovieList/MovieListSelectab
 import { PredictionsNavigationProp } from '../../../navigation/types';
 import { getBiggestPhaseThatHasHappened } from '../../../util/getBiggestPhaseThatHasHappened';
 import { usePredictions } from './usePredictions';
-import BackButton from '../../../components/Buttons/BackButton';
 import useFilmSearch from './useContenderSearch';
 import CreatePerformanceModal from './CreatePerformanceModal';
 import CreateSongModal from './CreateSongModal';
 import { useRouteParams } from '../../../hooks/useRouteParams';
 import { getCategoryIsHidden } from '../../../util/getCategoryIsHidden';
 import { useNavigation } from '@react-navigation/native';
+import BackButton from '../../../components/HeaderComponents/BackButton';
 
 const CreateFilm = () => {
   const navigation = useNavigation<PredictionsNavigationProp>();
@@ -119,7 +119,6 @@ const CreateFilm = () => {
             style={{
               height: '100%',
               width: '100%',
-              alignItems: 'center',
             }}
           >
             <MovieListSearch
@@ -146,6 +145,7 @@ const CreateFilm = () => {
                 onAddContender(selectedSearchTmdbId);
               }
             }}
+            bottom={100}
             visible={selectedSearchTmdbId !== undefined}
           />
         </View>

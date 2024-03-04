@@ -1,6 +1,5 @@
 import React from 'react';
 import COLORS from '../../constants/colors';
-import { useFollowingBar } from '../../context/FollowingBarContext';
 import useDevice from '../../util/device';
 import ProfileImage, { IPAD_PROFILE_IMAGE_SCALE } from '../ProfileImage';
 import useQueryGetFollowingUsers from '../../hooks/queries/useQueryGetFollowingUsers';
@@ -19,7 +18,6 @@ const FollowingBottomScroll = ({
   onPress: (userInfo: iUserInfo) => void;
 }) => {
   const { eventId, category } = useRouteParams();
-  const { hideAbsolutely } = useFollowingBar();
   const { data: followingUsers } = useQueryGetFollowingUsers();
   const { isPad } = useDevice();
 
@@ -37,7 +35,7 @@ const FollowingBottomScroll = ({
     );
   const usersPredictingCurrent = usersPredictingCategory || usersPredictingEvent;
 
-  if (usersPredictingCurrent.length === 0 || hideAbsolutely) return null;
+  if (usersPredictingCurrent.length === 0) return null;
 
   return (
     <ScrollView

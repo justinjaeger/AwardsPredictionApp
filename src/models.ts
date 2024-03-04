@@ -39,23 +39,17 @@ export enum AwardsBody {
   MPSE = 'MPSE',
 }
 
-export enum EventStatus {
-  NOMS_STAGING = 'NOMS_STAGING', // before nominations go public
-  NOMS_LIVE = 'NOMS_LIVE', // when everyone can predict nominations
-  WINS_STAGING = 'WINS_STAGING', // when nominations are being announced + prepared
-  WINS_LIVE = 'WINS_LIVE', // when everyone can predict wins
-  ARCHIVED = 'ARCHIVED', // when winners have been announced and such
-}
-
 export enum CategoryType {
   FILM = 'FILM',
   PERFORMANCE = 'PERFORMANCE',
   SONG = 'SONG',
 }
 
+// NOTE: When updating this, must also update categories.ts
 export enum CategoryName {
   PICTURE = 'PICTURE',
   DIRECTOR = 'DIRECTOR',
+  ENSEMBLE = 'ENSEMBLE',
   ACTOR = 'ACTOR',
   ACTRESS = 'ACTRESS',
   SUPPORTING_ACTOR = 'SUPPORTING_ACTOR',
@@ -63,22 +57,24 @@ export enum CategoryName {
   ORIGINAL_SCREENPLAY = 'ORIGINAL_SCREENPLAY',
   ADAPTED_SCREENPLAY = 'ADAPTED_SCREENPLAY',
   SCREENPLAY = 'SCREENPLAY',
+  CASTING = 'CASTING',
   INTERNATIONAL = 'INTERNATIONAL',
   ANIMATED = 'ANIMATED',
   DOCUMENTARY = 'DOCUMENTARY',
+  BOX_OFFICE = 'BOX_OFFICE',
   EDITING = 'EDITING',
   CINEMATOGRAPHY = 'CINEMATOGRAPHY',
   PRODUCTION_DESIGN = 'PRODUCTION_DESIGN',
   COSTUMES = 'COSTUMES',
   MAKEUP = 'MAKEUP',
   VISUAL_EFFECTS = 'VISUAL_EFFECTS',
+  STUNT = 'STUNT',
   SOUND = 'SOUND',
   SCORE = 'SCORE',
   SONG = 'SONG',
   SHORT_ANIMATED = 'SHORT_ANIMATED',
   SHORT_DOCUMENTARY = 'SHORT_DOCUMENTARY',
   SHORT_LIVE_ACTION = 'SHORT_LIVE_ACTION',
-  ENSEMBLE = 'ENSEMBLE',
   COMEDY_PICTURE = 'COMEDY_PICTURE',
   COMEDY_ACTOR = 'COMEDY_ACTOR',
   COMEDY_ACTRESS = 'COMEDY_ACTRESS',
@@ -145,6 +141,7 @@ export type iLeaderboard = {
   communityNumCorrect: number;
   percentageAccuracyDistribution: { [percentageAccuracy: number]: number };
   totalPossibleSlots: number;
+  createdAt: Date;
   isHidden?: boolean;
 };
 
@@ -158,9 +155,7 @@ export type EventModel = {
   categories: Record<CategoryName, iCategory>;
   awardsBody: AwardsBody;
   year: number;
-  status: EventStatus;
   accoladeId?: ObjectId;
-  liveAt?: Date;
   shortlistDateTime?: Date;
   nomDateTime?: Date;
   winDateTime?: Date;
@@ -280,6 +275,7 @@ export type iLeaderboardRanking = {
   numUsersPredicting: number;
   slotsPredicted: number;
   yyyymmdd: number; // date of close
+  lastUpdated: Date; // last datetime user updated any category
 };
 
 export type LeaderboardRanking = {
@@ -302,8 +298,11 @@ export type User = {
   image?: string;
   followingCount?: number;
   followerCount?: number;
-  eventsPredicting?: Record<string, string[]>; // key is event, value is array of categories
-  categoriesPredicting?: iCategoriesPredicting; // ...and replace with this
+  eventsPredicting?: Record<string, string[]>; // key is eventId, value is array of CategoryNames
+  // TODO: replace eventsPredicting with this:
+  // It's the same thing, just a different structure which includes a "createdAt" field on each category
+  // but we don't use it anywhere in the app yet. I forget what it's for
+  categoriesPredicting?: iCategoriesPredicting;
   recentPredictionSets?: iRecentPrediction[];
   leaderboardRankings?: iIndexedUserLeaderboardRanking;
   amplify_id?: string;

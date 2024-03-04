@@ -1,5 +1,6 @@
 // @ts-nocheck
-import { RouteProp, useRoute } from '@react-navigation/native';
+import { useRef } from 'react';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { PredictionsParamList, iUserInfo } from '../navigation/types';
 import { useGetEvent } from './useGetEvent';
 import { CategoryName, EventModel, Phase, WithId, iCategory } from '../models';
@@ -19,13 +20,21 @@ export const useRouteParams = (): {
   noShorts?: boolean;
   isLeaderboard?: boolean; // need to distinguish leaderboard vs history
   phase?: Phase;
+  disableBack?: boolean;
 } => {
-  const { params } = useRoute<RouteProp<PredictionsParamList>>();
-  const maybeEventId = params?.eventId;
+  const navigation = useNavigation();
+  const isRootOfBottomtabs = navigation.getState().index === 0;
 
-  const event = useGetEvent(maybeEventId) as WithId<EventModel> | undefined;
+  const { params } = useRoute<RouteProp<PredictionsParamList>>();
+  const maybeEventId = params?.eventId as string | undefined;
+
+  const event = useGetEvent(maybeEventId);
   const categoryData =
     params?.category && event?.categories[params.category as CategoryName];
+
+  const _disableBack = isRootOfBottomtabs;
+  // prevents a re-render when the route changes (fine as long as )
+  const disableBack = useRef(_disableBack).current;
 
   return {
     userInfo: params?.userInfo,
@@ -37,5 +46,6 @@ export const useRouteParams = (): {
     noShorts: params?.noShorts,
     isLeaderboard: params?.isLeaderboard,
     phase: params?.phase,
+    disableBack,
   };
 };
