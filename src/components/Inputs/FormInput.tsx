@@ -58,7 +58,6 @@ const FormInput = ({
         }
         break;
       case 'name':
-        console.log('v', v);
         if (/^[A-Za-z'‘’ -]+$/.test(v) === true) {
           setValue(v);
         }
@@ -89,6 +88,7 @@ const FormInput = ({
           keyboardType: 'number-pad',
         };
       case 'name':
+      case 'song':
         return {
           autoCapitalize: 'words',
         };

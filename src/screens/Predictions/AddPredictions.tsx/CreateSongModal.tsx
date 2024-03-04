@@ -68,7 +68,7 @@ const CreateSongModal = ({
               label="Song Title"
               value={songTitle}
               setValue={setSongTitle}
-              textContentType={'name'}
+              textContentType={'song'}
               caption={'If unknown, leave it as "TBD"'}
               style={{ marginBottom: 10 }}
             />
