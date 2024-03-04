@@ -97,7 +97,7 @@ export const TmdbDataStoreProvider = (props: { children: React.ReactNode }) => {
     eventYear: number,
   ) => {
     const predictions = _.values(predictionSet?.categories ?? []).flatMap(
-      (c) => c.predictions,
+      (c) => c.predictions ?? [],
     );
     await storeTmdbDataFromPredictions(predictions, eventYear);
   };

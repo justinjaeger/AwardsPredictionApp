@@ -58,7 +58,7 @@ const ContenderStatEventTab = ({
     const allPredictionsWithContender: iContenderStatsData[] = [];
     Object.entries(communityPredictions.categories).forEach(
       ([category, categoryPrediction]) => {
-        const categoryPredictions = categoryPrediction.predictions;
+        const categoryPredictions = categoryPrediction.predictions ?? [];
         const predictions = categoryPredictions.filter(
           (p) => p.movieTmdbId === movieTmdbId,
         );
