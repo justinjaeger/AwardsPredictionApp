@@ -58,7 +58,8 @@ const FormInput = ({
         }
         break;
       case 'name':
-        if (/^[a-zA-Z0-9 ]*$/.test(v) === true) {
+        console.log('v', v);
+        if (/^[A-Za-z'‘’ -]+$/.test(v) === true) {
           setValue(v);
         }
         break;
