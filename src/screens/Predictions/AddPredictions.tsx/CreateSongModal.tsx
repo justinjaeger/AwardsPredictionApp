@@ -47,7 +47,6 @@ const CreateSongModal = ({
     iPrediction | undefined
   >(undefined);
   const [songTitle, setSongTitle] = useState<string>('TBD');
-  const [artist, setArtist] = useState<string>('');
 
   return (
     <BasicModal
@@ -72,18 +71,12 @@ const CreateSongModal = ({
               caption={'If unknown, leave it as "TBD"'}
               style={{ marginBottom: 10 }}
             />
-            <FormInput
-              label="Artist (optional)"
-              value={artist}
-              setValue={setArtist}
-              textContentType={'name'}
-            />
           </View>
           <FAB
             iconName="plus"
             text="Submit"
             onPress={() => {
-              onAddContender(selectedMovieTmdbId, undefined, songTitle, artist);
+              onAddContender(selectedMovieTmdbId, undefined, songTitle);
               onCloseModal();
             }}
             visible={songTitle.length > 0}
