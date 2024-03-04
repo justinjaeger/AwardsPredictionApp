@@ -19,10 +19,11 @@ const FollowCountButton = ({
       onPress={onPress}
       style={{
         alignItems: 'center',
-        backgroundColor: COLORS.secondaryDark,
+        backgroundColor: COLORS.primaryLight,
         borderRadius: theme.borderRadius,
-        width: 130,
-        height: 35,
+        height: 30,
+        paddingLeft: 10,
+        paddingRight: 10,
         justifyContent: 'center',
         marginRight: 10,
       }}
@@ -31,7 +32,7 @@ const FollowCountButton = ({
       {loading ? (
         <Spinner size="medium" style={{ borderColor: COLORS.gray }} />
       ) : (
-        <BodyBold>{text}</BodyBold>
+        <BodyBold style={{ fontWeight: '600' }}>{text}</BodyBold>
       )}
     </TouchableHighlight>
   );

@@ -167,10 +167,7 @@ const Profile = () => {
             <SignedOutState />
           ) : (
             <View>
-              <LinearGradient
-                colors={[COLORS.primaryDark, COLORS.primary]}
-                style={{ paddingBottom: 20 }}
-              >
+              <LinearGradient colors={[COLORS.primaryDark, COLORS.primary]}>
                 <View
                   style={{
                     alignItems: 'center',
@@ -284,6 +281,7 @@ const Profile = () => {
                     width: '100%',
                     marginLeft: theme.windowMargin,
                     marginTop: 10,
+                    paddingBottom: 10,
                   }}
                 >
                   {user ? (
@@ -298,11 +296,11 @@ const Profile = () => {
                     </BodyBold>
                   ) : null}
                 </View>
+                <SectionTopTabs
+                  tabs={[{ title: 'Predictions' }, { title: 'Leaderboards' }]}
+                  tabsPosX={tabsPosX}
+                />
               </LinearGradient>
-              <SectionTopTabs
-                tabs={[{ title: 'Predictions' }, { title: 'Leaderboards' }]}
-                tabsPosX={tabsPosX}
-              />
               <DualTabsWrapper
                 tab1={
                   <>
@@ -313,13 +311,12 @@ const Profile = () => {
                           predictionSets={predictionSets}
                           userInfo={userInfo}
                           hideUserInfo
-                          style={{ marginTop: 10, minHeight: 10 }}
+                          style={{ minHeight: 10 }}
                         />
                       </>
                     ) : null}
                     {!isLoadingAllEvents && user && userEvents.length > 0 ? (
                       <>
-                        <View style={{ marginTop: 10 }} />
                         {userEvents.map((event) => {
                           return (
                             <EventItemSimple
@@ -346,7 +343,7 @@ const Profile = () => {
                   <>
                     {leaderboards.length ? (
                       <>
-                        <View style={{ marginTop: 20 }} />
+                        {/* <View style={{ marginTop: 10 }} /> */}
                         {leaderboards.map((lbRanking) => {
                           const event = events.find((e) => e._id === lbRanking.eventId);
                           if (!event) return null;
