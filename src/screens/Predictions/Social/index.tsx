@@ -29,6 +29,7 @@ import COLORS from '../../../constants/colors';
 import SectionTopTabs, { getSectionTabHeight } from '../../../components/SectionTopTabs';
 import { useSharedValue } from 'react-native-reanimated';
 import { Body } from '../../../components/Text';
+import useQueryGetAllEvents from '../../../hooks/queries/useQueryGetAllEvents';
 
 const SEARCH_MARGIN_BOTTOM = 10;
 
@@ -49,6 +50,7 @@ const Social = () => {
   const { isPad } = useDevice();
   const navigation = useNavigation<PredictionsNavigationProp>();
 
+  const { data: allEvents } = useQueryGetAllEvents();
   const { data: user, refetch: refetchUser } = useQueryGetUser(authUserId);
   const {
     data: usersWithNestedData,
@@ -100,10 +102,10 @@ const Social = () => {
   const users = usersWithNestedData ?? [];
   const usersGroupedByEventPredicting: { [eventId: string]: WithId<User>[] } = {};
   const usersGroupedByEventAndCategoryPredicting: {
-    [eventId: string]: { [category: string]: WithId<User>[] };
+    [eventId: string]: { [category: string]: (WithId<User> & { lastUpdated: Date })[] };
   } = {};
   for (const user of users) {
-    Object.entries(user.eventsPredicting ?? {}).forEach(([eventId, categories]) => {
+    Object.entries(user.categoriesPredicting ?? {}).forEach(([eventId, categories]) => {
       if (!usersGroupedByEventPredicting[eventId]) {
         usersGroupedByEventPredicting[eventId] = [];
       }
@@ -111,11 +113,14 @@ const Social = () => {
       if (!usersGroupedByEventAndCategoryPredicting[eventId]) {
         usersGroupedByEventAndCategoryPredicting[eventId] = {};
       }
-      for (const category of categories) {
+      for (const [category, { createdAt }] of Object.entries(categories)) {
         if (!usersGroupedByEventAndCategoryPredicting[eventId][category]) {
           usersGroupedByEventAndCategoryPredicting[eventId][category] = [];
         }
-        usersGroupedByEventAndCategoryPredicting[eventId][category].push(user);
+        usersGroupedByEventAndCategoryPredicting[eventId][category].push({
+          ...user,
+          lastUpdated: createdAt,
+        });
       }
     });
   }
