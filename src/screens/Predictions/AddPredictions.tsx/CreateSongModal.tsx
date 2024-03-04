@@ -69,7 +69,6 @@ const CreateSongModal = ({
               value={songTitle}
               setValue={setSongTitle}
               textContentType={'name'}
-              autoFocus
               caption={'If unknown, leave it as "TBD"'}
               style={{ marginBottom: 10 }}
             />
