@@ -15,10 +15,10 @@ import { eventToString } from '../../../util/stringConversions';
 // Note: We ALSO use this for non-auth-user user profiles
 const CategoryCommunity = ({
   showEventLink,
-  extraBottomHeight,
+  bottomHeight,
 }: {
   showEventLink?: boolean;
-  extraBottomHeight?: number;
+  bottomHeight?: number;
 }) => {
   const { category: _category, event: _event, yyyymmdd } = useRouteParams();
   const category = _category!;
@@ -43,10 +43,12 @@ const CategoryCommunity = ({
       {predictions.length === 0 ? (
         <View
           style={{
+            position: 'absolute',
             width: '100%',
-            marginTop: 20,
+            top: 15,
             alignItems: 'center',
             justifyContent: 'center',
+            zIndex: 20,
           }}
         >
           <BodyBold>{'Community predictions not yet tallied'}</BodyBold>
@@ -58,7 +60,7 @@ const CategoryCommunity = ({
           lastUpdatedString={lastUpdatedString}
         />
       </View>
-      <BottomFABContainer extraBottomHeight={extraBottomHeight}>
+      <BottomFABContainer bottom={bottomHeight}>
         {showEventLink ? (
           <EventLink text={eventToString(event.awardsBody, event.year)} />
         ) : null}

@@ -21,19 +21,16 @@ import { useRouteParams } from '../../../hooks/useRouteParams';
 import { useNavigation } from '@react-navigation/native';
 import { PredictionsNavigationProp } from '../../../navigation/types';
 import { eventToString } from '../../../util/stringConversions';
-import useDevice from '../../../util/device';
-import { IPAD_PROFILE_IMAGE_SCALE } from '../../../components/ProfileImage';
-import { BOTTOM_TAB_HEIGHT } from '../../../constants';
 
 // used in both FromProfile and from event
 const CategoryPersonal = ({
   showEventLink,
   onBack,
-  extraBottomHeight,
+  bottomHeight = 0,
 }: {
   showEventLink?: boolean;
   onBack?: () => void;
-  extraBottomHeight?: number;
+  bottomHeight?: number;
 }) => {
   const { category: _category, event: _event, userInfo, yyyymmdd } = useRouteParams();
   const category = _category!;
@@ -42,9 +39,6 @@ const CategoryPersonal = ({
   const navigation = useNavigation<PredictionsNavigationProp>();
   const { userId: authUserId } = useAuth();
   const isAuthProfile = userInfo?.userId === authUserId;
-
-  const { isPad } = useDevice();
-  const HEIGHT_TO_MOVE_UP = 60 * (isPad ? IPAD_PROFILE_IMAGE_SCALE : 1);
 
   const { data: predictionData, isLoading } = useQueryGetUserPredictions({
     event,
@@ -132,10 +126,12 @@ const CategoryPersonal = ({
       {predictions && predictions.length === 0 ? (
         <View
           style={{
+            position: 'absolute',
+            top: 15,
             width: '100%',
-            marginTop: 20,
             alignItems: 'center',
             justifyContent: 'center',
+            zIndex: 20,
           }}
         >
           <BodyBold style={{ textAlign: 'center', lineHeight: 30 }}>
@@ -143,7 +139,7 @@ const CategoryPersonal = ({
           </BodyBold>
         </View>
       ) : null}
-      <View style={{ height: '100%' }}>
+      <View style={{ width: '100%', height: '100%' }}>
         <MovieListDraggable
           predictions={predictions}
           setPredictions={(ps) => {
@@ -160,7 +156,7 @@ const CategoryPersonal = ({
           onPressAdd={onPressAdd}
         />
       </View>
-      <BottomFABContainer extraBottomHeight={extraBottomHeight}>
+      <BottomFABContainer bottom={bottomHeight}>
         {showEventLink ? (
           <EventLink text={eventToString(event.awardsBody, event.year)} />
         ) : null}
@@ -173,10 +169,11 @@ const CategoryPersonal = ({
         onPress={() => {
           onSaveContenders();
         }}
-        bottom={BOTTOM_TAB_HEIGHT + HEIGHT_TO_MOVE_UP - 5}
+        bottom={bottomHeight}
         visible={showSave && isEditable}
         left
         isLoading={isSaving}
+        horizontalOffset={10}
       />
     </>
   );

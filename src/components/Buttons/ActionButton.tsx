@@ -33,7 +33,6 @@ const ActionButton = ({
           borderRadius: 100,
           alignItems: 'center',
           padding: 15 * (isPad ? 2 : 1),
-          margin: 10,
         },
         style,
       ]}

@@ -30,7 +30,7 @@ const HeaderBasic = ({
 }) => {
   const { top } = useSafeAreaInsets();
   return (
-    <>
+    <View style={{ width: '100%' }}>
       {safeAreaTop ? <View style={{ paddingTop: top, backgroundColor }} /> : null}
       <View
         style={[
@@ -55,7 +55,7 @@ const HeaderBasic = ({
         </SubHeader>
         <View />
       </View>
-    </>
+    </View>
   );
 };
 

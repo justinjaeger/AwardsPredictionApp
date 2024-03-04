@@ -2,6 +2,8 @@ import React, { useEffect, useRef } from 'react';
 import { Animated } from 'react-native';
 import ActionButton from './ActionButton';
 
+const LEFT_OFFSET = 100;
+
 type iFABProps = {
   iconName?: string;
   text?: string;
@@ -20,7 +22,7 @@ export const FAB = ({
   onPress,
   visible,
   bottomPercentage,
-  horizontalOffset,
+  horizontalOffset = 0,
   left,
   isLoading,
   bottom,
@@ -32,7 +34,13 @@ export const FAB = ({
 
   useEffect(() => {
     Animated.timing(buttonX, {
-      toValue: left ? (visible ? 100 : toValue) : visible ? toValue : 100,
+      toValue: left
+        ? visible
+          ? LEFT_OFFSET + horizontalOffset
+          : toValue
+        : visible
+        ? toValue
+        : LEFT_OFFSET,
       duration: 300,
       useNativeDriver: true,
     }).start();
@@ -47,11 +55,11 @@ export const FAB = ({
     <Animated.View
       style={{
         position: 'absolute',
-        bottom: bottom || bottomPercentage || '0%',
-        alignSelf: 'flex-end',
+        bottom: bottom || bottomPercentage || 10,
         transform: [{ translateX: buttonX }],
         opacity: buttonOpacity,
-        left: left ? -100 : undefined,
+        left: left ? -LEFT_OFFSET : undefined,
+        right: left ? undefined : horizontalOffset,
       }}
     >
       <ActionButton

@@ -9,11 +9,16 @@ import PredictionTabsNavigator from '../../../navigation/PredictionTabsNavigator
 import { PHASE_TO_STRING_PLURAL } from '../../../constants/categories';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import { View } from 'react-native';
-import HeaderBasic, { getHeaderBasicHeight } from '../../../components/HeaderBasic';
+import HeaderBasic from '../../../components/HeaderBasic';
 import DualTabsWrapper from '../../../components/DualTabsWrapper';
 import { usePersonalCommunityTab } from '../../../context/PersonalCommunityContext';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import useDevice from '../../../util/device';
+import { getBottomHeight } from '../../../util/getBottomHeight';
 
 const Category = () => {
+  const { top } = useSafeAreaInsets();
+  const { isPad } = useDevice();
   const { tabsPosX } = usePersonalCommunityTab();
   const { params } = useRoute<RouteProp<PredictionsParamList, 'Category'>>();
   const showEventLink = params?.showEventLink || false;
@@ -30,7 +35,7 @@ const Category = () => {
     headerText = headerTitle;
   }
 
-  const headerHeight = getHeaderBasicHeight(headerText);
+  const bottomHeight = getBottomHeight(top, isPad);
 
   return (
     <BackgroundWrapper>
@@ -39,15 +44,12 @@ const Category = () => {
         <PredictionTabsNavigator />
         <DualTabsWrapper
           tab1={
-            <CategoryPersonal
-              showEventLink={showEventLink}
-              extraBottomHeight={headerHeight}
-            />
+            <CategoryPersonal showEventLink={showEventLink} bottomHeight={bottomHeight} />
           }
           tab2={
             <CategoryCommunity
               showEventLink={showEventLink}
-              extraBottomHeight={headerHeight}
+              bottomHeight={bottomHeight}
             />
           }
           tabsPosX={tabsPosX}

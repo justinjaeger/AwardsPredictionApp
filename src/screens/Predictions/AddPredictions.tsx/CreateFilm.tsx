@@ -119,7 +119,6 @@ const CreateFilm = () => {
             style={{
               height: '100%',
               width: '100%',
-              alignItems: 'center',
             }}
           >
             <MovieListSearch
@@ -146,6 +145,7 @@ const CreateFilm = () => {
                 onAddContender(selectedSearchTmdbId);
               }
             }}
+            bottom={100}
             visible={selectedSearchTmdbId !== undefined}
           />
         </View>

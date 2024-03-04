@@ -98,6 +98,7 @@ const AddPredictions = () => {
 
   return (
     <BackgroundWrapper>
+      <HeaderBasic title={headerText} safeAreaTop onPressBack={saveAndGoBack} />
       <LoadingStatueModal visible={isSavingFilm} text={'Saving film...'} />
       {selectedPersonTmdbId !== undefined ? (
         <CreatePerformanceModal
@@ -119,7 +120,6 @@ const AddPredictions = () => {
           addItemToPredictions={addItemToPredictions}
         />
       ) : null}
-      <HeaderBasic title={headerText} safeAreaTop onPressBack={saveAndGoBack} />
       {letUserCreateContenders ? (
         <SearchInput
           placeholder={`Search ${type === CategoryType.PERFORMANCE ? 'actors' : 'films'}`}
@@ -171,22 +171,27 @@ const AddPredictions = () => {
                 onAddContender(selectedSearchTmdbId);
               }
             }}
+            horizontalOffset={10}
             visible={selectedSearchTmdbId !== undefined}
           />
         </View>
       ) : (
         <>
-          <MovieListSelectable
-            predictions={communityPredictions}
-            selectedPredictions={selectedPredictions}
-            setSelectedPredictions={(ps) => setSelectedPredictions(ps)}
-          />
+          <View style={{ height: '100%', width: '100%' }}>
+            <MovieListSelectable
+              predictions={communityPredictions}
+              selectedPredictions={selectedPredictions}
+              setSelectedPredictions={(ps) => setSelectedPredictions(ps)}
+            />
+          </View>
           {androidKeyboardIsVisible ? null : (
             <FAB
               iconName="checkmark-outline"
               text="Done"
               onPress={() => saveAndGoBack()}
               visible={!searchResults.length}
+              horizontalOffset={0}
+              bottom={0}
             />
           )}
         </>

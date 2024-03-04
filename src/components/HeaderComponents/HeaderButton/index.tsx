@@ -19,7 +19,6 @@ const HeaderButton = ({
   return (
     <TouchableOpacity
       onPress={() => {
-        console.log('FUK');
         onPress();
       }}
       style={{
