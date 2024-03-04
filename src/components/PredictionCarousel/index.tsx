@@ -21,7 +21,6 @@ import UserPredictionList from '../UserPredictionList';
 import CarouselArrow from './CarouselArrow';
 import { iRecentPrediction } from '../../models';
 import { PredictionsNavigationProp, iUserInfo } from '../../navigation/types';
-import CustomIcon from '../CustomIcon';
 
 export const CAROUSEL_MARGIN = 8;
 export const CAROUSEL_PROFILE_IMAGE_SIZE = 40;
@@ -35,7 +34,7 @@ export const getCarouselHeight = (
     (width - theme.posterMargin * (5 - 1) - theme.windowMargin) / 5,
   ).height +
   (isPad ? 100 : 70) +
-  (hideUserInfo ? 0 : CAROUSEL_PROFILE_IMAGE_SIZE + CAROUSEL_MARGIN * 2) +
+  (hideUserInfo ? 0 : CAROUSEL_PROFILE_IMAGE_SIZE + CAROUSEL_MARGIN) +
   CAROUSEL_MARGIN * 2;
 
 export const getCarouselSliderHeight = (width: number, isPad: boolean) =>
@@ -134,9 +133,9 @@ const PredictionCarousel = ({
             paddingLeft: theme.windowMargin,
             paddingRight: 10,
             paddingTop: CAROUSEL_MARGIN,
-            paddingBottom: CAROUSEL_MARGIN,
+            // paddingBottom: CAROUSEL_MARGIN,
             width: '100%',
-            backgroundColor: COLORS.primary,
+            // backgroundColor: COLORS.primary,
           }}
           onPress={() => {
             navigation.dispatch(StackActions.push('Profile', { userInfo }));
@@ -153,7 +152,7 @@ const PredictionCarousel = ({
               />
               <SubHeader>{userInfo?.userName ?? ''}</SubHeader>
             </View>
-            <CustomIcon name="chevron-right" size={24} color={COLORS.gray} />
+            {/* <CustomIcon name="chevron-right" size={24} color={COLORS.gray} /> */}
           </>
         </TouchableHighlight>
       ) : null}
