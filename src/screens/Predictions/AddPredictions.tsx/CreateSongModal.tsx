@@ -46,7 +46,7 @@ const CreateSongModal = ({
   const [selectedExistingPrediction, setSelectedExistingPrediction] = useState<
     iPrediction | undefined
   >(undefined);
-  const [songTitle, setSongTitle] = useState<string>('');
+  const [songTitle, setSongTitle] = useState<string>('TBD');
   const [artist, setArtist] = useState<string>('');
 
   return (
@@ -61,12 +61,17 @@ const CreateSongModal = ({
     >
       {modalState === 'create' ? (
         <>
-          <View style={{ alignSelf: 'center', width: '80%', height: '100%' }}>
+          <View
+            style={{ alignSelf: 'center', width: '80%', height: '100%', marginTop: 10 }}
+          >
             <FormInput
               label="Song Title"
               value={songTitle}
               setValue={setSongTitle}
               textContentType={'name'}
+              autoFocus
+              caption={'If unknown, leave it as "TBD"'}
+              style={{ marginBottom: 10 }}
             />
             <FormInput
               label="Artist (optional)"
@@ -83,7 +88,8 @@ const CreateSongModal = ({
               onCloseModal();
             }}
             visible={songTitle.length > 0}
-            bottomPercentage={'15%'}
+            horizontalOffset={10}
+            bottomPercentage={'20%'}
           />
         </>
       ) : (
@@ -118,6 +124,7 @@ const CreateSongModal = ({
               }
             }}
             visible={!!selectedExistingPrediction}
+            horizontalOffset={10}
             bottomPercentage={'20%'}
           />
         </>

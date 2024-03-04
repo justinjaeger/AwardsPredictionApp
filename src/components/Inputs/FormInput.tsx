@@ -1,9 +1,10 @@
+/* eslint-disable react/no-unstable-nested-components */
 import React from 'react';
 import { Input } from '@ui-kitten/components';
 import { iTextContentType } from './types';
 import { EvaStatus } from '@ui-kitten/components/devsupport';
 import COLORS from '../../constants/colors';
-import { Body } from '../Text';
+import { Body, BodyBold } from '../Text';
 import useDevice from '../../util/device';
 
 const FormInput = ({
@@ -101,27 +102,30 @@ const FormInput = ({
   return (
     <Input
       value={value}
-      label={label}
+      label={() => (
+        <BodyBold style={{ color: COLORS.white, marginBottom: 3 }}>
+          {label ?? ''}
+        </BodyBold>
+      )}
       placeholder={placeholder}
       placeholderTextColor={COLORS.gray}
       multiline={multiline}
       onChangeText={onChangeText}
       textContentType={textContentType}
-      caption={
+      caption={() => (
         <Body
           style={{
-            color: ['warning', 'danger'].includes(_status)
-              ? COLORS.warning
-              : COLORS.white,
+            color: ['warning', 'danger'].includes(_status) ? COLORS.warning : COLORS.gray,
+            marginTop: 2,
           }}
         >
           {caption || ''}
         </Body>
-      }
+      )}
       onBlur={onBlur}
       status={_status}
       textStyle={{
-        color: 'rgba(255,255,255,0.8)',
+        color: COLORS.white,
         fontSize: 18,
         padding: 5,
         textAlignVertical: multiline ? 'top' : 'center',
