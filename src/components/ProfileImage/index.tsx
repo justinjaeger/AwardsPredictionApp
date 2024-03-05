@@ -15,6 +15,7 @@ const ProfileImage = ({
   onPress,
   isDisabled,
   isLoading,
+  disablePadResize,
 }: {
   image?: string;
   imageSize?: number;
@@ -22,11 +23,13 @@ const ProfileImage = ({
   onPress?: () => void;
   isDisabled?: boolean;
   isLoading?: boolean;
+  disablePadResize?: boolean;
 }) => {
   const { isPad } = useDevice();
   const uri = image ? getImageUri(image) : undefined;
 
-  const size = (imageSize || 100) * (isPad ? IPAD_PROFILE_IMAGE_SCALE : 1);
+  const size =
+    (imageSize || 100) * (isPad && !disablePadResize ? IPAD_PROFILE_IMAGE_SCALE : 1);
 
   return (
     <View

@@ -59,6 +59,7 @@ const UserSearchResultItem = ({
             image={item.image}
             imageSize={USER_SEARCH_ITEM_HEIGHT - 20}
             onPress={() => onPressProfileImage()}
+            disablePadResize
           />
           <View
             style={{
