@@ -39,11 +39,6 @@ const DynamicHeaderWrapper = (
   const scrollY = useSharedValue(0);
 
   const scrollViewProps: FlashListProps<any> | ScrollViewProps = {
-    style: {
-      position: 'relative',
-      zIndex: -1,
-      elevation: -1,
-    },
     contentContainerStyle: {
       paddingBottom: BOTTOM_TAB_HEIGHT + bottom + UNEXPLAINED_EXTRA_SCROLL_HEIGHT,
       minHeight: height,
