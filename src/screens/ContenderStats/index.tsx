@@ -8,7 +8,7 @@ import ContenderStatEventTab from './ContenderStatEventTab';
 import useQueryGetAllEvents from '../../hooks/queries/useQueryGetAllEvents';
 import ContenderInfoHeader from '../../components/ContenderInfoHeader';
 import BackgroundWrapper from '../../components/BackgroundWrapper';
-import { ScrollView } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import HistoryDateIndicator from '../../components/HistoryDateIndicator';
 import EventTopTabs from '../../components/HeaderComponents/EventTopTabs';
 import LinearGradient from 'react-native-linear-gradient';
@@ -36,6 +36,7 @@ const ContenderStats = () => {
     eventsWithinYear?.find(({ _id }) => eventId === _id) ?? eventsWithinYear?.[0];
 
   const [event, setEvent] = useState<WithId<EventModel> | undefined>(initialEvent);
+  console.log('event', event?.awardsBody);
 
   // Set the header
   useLayoutEffect(() => {
@@ -49,10 +50,13 @@ const ContenderStats = () => {
     return null;
   }
 
-  // TODO: Can use the collapsing header flatlist component here
   return (
     <BackgroundWrapper>
-      <ScrollView ref={scrollRef} style={{ flex: 1, width: '100%' }}>
+      <ScrollView
+        ref={scrollRef}
+        style={{ flex: 1, width: '100%' }}
+        showsVerticalScrollIndicator={false}
+      >
         <LinearGradient
           colors={[COLORS.primaryDark, COLORS.primary]}
           style={{ paddingBottom: 20 }}
@@ -65,11 +69,12 @@ const ContenderStats = () => {
             }}
           />
           <HistoryDateIndicator yyyymmdd={yyyymmdd} />
+          <View style={{ height: 10 }} />
           <EventTopTabs
             selectedEvent={event}
             setEvent={setEvent}
             eventOptions={eventsWithinYear}
-            style={{ marginTop: 10, paddingLeft: theme.windowMargin }}
+            style={{ paddingLeft: theme.windowMargin }}
           />
         </LinearGradient>
         <ContenderStatEventTab
