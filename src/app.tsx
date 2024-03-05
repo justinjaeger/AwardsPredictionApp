@@ -14,7 +14,17 @@ import { Alert, Linking } from 'react-native';
 import BackgroundWrapper from './components/BackgroundWrapper';
 import useDevice from './util/device';
 
-const queryClient = new QueryClient();
+// const STALE_TIME = 5 * 60 * 1000; // 5 minutes
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      // refetchOnWindowFocus: false, // default: true
+      // staleTime: STALE_TIME,
+      // enabled: false, // default: true
+    },
+  },
+});
 
 // https://github.com/react-native-google-signin/google-signin/blob/master/docs/ios-guide.md
 GoogleSignin.configure({

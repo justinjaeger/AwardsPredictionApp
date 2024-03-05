@@ -3,7 +3,6 @@ import { QueryKeys } from '../../types/keys';
 import MongoApi from '../../services/api/requests';
 import { useTmdbDataStore } from '../../context/TmdbDataStore';
 import { EventModel, PredictionSet, WithId } from '../../models';
-import { QUERY_OPTIONS } from './constants';
 
 const useQueryGetUserPredictions = ({
   event,
@@ -17,7 +16,7 @@ const useQueryGetUserPredictions = ({
   const { storeTmdbDataFromPredictionSet } = useTmdbDataStore();
   const eventId = event?._id;
 
-  const { data, isLoading, refetch } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: [QueryKeys.USER_PREDICTIONS, userId, eventId, yyyymmdd],
     queryFn: async (): Promise<WithId<PredictionSet> | null> => {
       if (!userId || !event) return null;
@@ -32,10 +31,9 @@ const useQueryGetUserPredictions = ({
       }
       return predictionSet ?? null;
     },
-    ...QUERY_OPTIONS,
   });
 
-  return { data, isLoading, refetch };
+  return { data, isLoading };
 };
 
 export default useQueryGetUserPredictions;

@@ -1,8 +1,7 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { View, useWindowDimensions } from 'react-native';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import { useAuth } from '../../../context/AuthContext';
-import useQueryGetUser from '../../../hooks/queries/useQueryGetUser';
 import useQueryGetFollowingUsers from '../../../hooks/queries/useQueryGetFollowingUsers';
 import PredictionCarousel, {
   getCarouselHeight,
@@ -45,12 +44,8 @@ const Social = () => {
   const { isPad } = useDevice();
   const navigation = useNavigation<PredictionsNavigationProp>();
 
-  const { data: user, refetch: refetchUser } = useQueryGetUser(authUserId);
-  const {
-    data: usersWithNestedData,
-    isLoading: isLoadingUsers,
-    refetch: refetchFollowingPredictions,
-  } = useQueryGetFollowingUsers();
+  const { data: usersWithNestedData, isLoading: isLoadingUsers } =
+    useQueryGetFollowingUsers();
   const {
     users: recommendedUsers,
     isFetching: isFetchingRecommended,
@@ -66,16 +61,6 @@ const Social = () => {
   const { usersIdsAuthUserIsFollowing } = useQueryGetFollowingUsers();
 
   const [searchIsFocused, setSearchIsFocused] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (authUserId && user === undefined) {
-      refetchUser();
-    }
-    if (authUserId) {
-      // WARN: sometimes refetch appears to be not working, but mostly it seems ok?
-      refetchFollowingPredictions();
-    }
-  }, [authUserId, user]);
 
   const navigateToProfile = (userInfo: iUserInfo) => {
     // important to push so we can have multiple profiles in same stack

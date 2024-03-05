@@ -4,7 +4,6 @@ import MongoApi from '../../services/api/requests';
 import { iRecentPrediction } from '../../models';
 import { useTmdbDataStore } from '../../context/TmdbDataStore';
 import { useAuth } from '../../context/AuthContext';
-import { QUERY_OPTIONS } from './constants';
 
 /**
  * returns list of users who current user is following with nested fields
@@ -14,12 +13,8 @@ const useQueryGetFollowingUsers = () => {
   const { userId: authUserId } = useAuth();
   const { storeTmdbDataFromRecentPredictions } = useTmdbDataStore();
 
-  const {
-    isFetching,
-    data: allUsers,
-    refetch,
-  } = useQuery({
-    queryKey: [QueryKeys.FOLLOWING_USERS_NESTED_FIELDS],
+  const { isFetching, data: allUsers } = useQuery({
+    queryKey: [QueryKeys.FOLLOWING_USERS_NESTED_FIELDS, !!authUserId],
     queryFn: async () => {
       if (!authUserId) return [];
       // Get all following users and their predictions
@@ -46,7 +41,6 @@ const useQueryGetFollowingUsers = () => {
 
       return usersSortedByMostRecentPrediction;
     },
-    ...QUERY_OPTIONS,
     enabled: !!authUserId,
   });
 
@@ -62,7 +56,6 @@ const useQueryGetFollowingUsers = () => {
   return {
     data: usersWhoHaveNotPredictedInLast60Days,
     isLoading: isFetching,
-    refetch,
     usersIdsAuthUserIsFollowing: allUsers?.map((u) => u._id) ?? [],
   };
 };

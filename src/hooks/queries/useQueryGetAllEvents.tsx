@@ -5,35 +5,25 @@ import { useAuth } from '../../context/AuthContext';
 import { UserRole } from '../../models';
 import { getDefaultEvent } from '../../util/getDefaultEvent';
 import { getDefaultLeaderboard } from '../../util/getDefaultLeaderboard';
-import { QUERY_OPTIONS } from './constants';
 import { getLeaderboardsFromEvents } from '../../util/getLeaderboardsFromEvents';
-import { useEffect } from 'react';
 
 const useQueryGetAllEvents = () => {
   const { userRole } = useAuth();
-  const conditionThatChangesResult = userRole === UserRole.ADMIN;
+  const isAdmin = userRole === UserRole.ADMIN;
 
-  const { isLoading, data, refetch } = useQuery({
-    queryKey: [QueryKeys.EVENTS],
+  const { isLoading, data } = useQuery({
+    queryKey: [QueryKeys.EVENTS, isAdmin],
     queryFn: async () => {
       const { data: events } = await MongoApi.getEvents({});
       const filteredEvents = (events ?? []).filter((event) => {
         if (event.isHidden) {
-          return conditionThatChangesResult;
+          return isAdmin;
         }
         return true;
       });
       return filteredEvents;
     },
-    ...QUERY_OPTIONS,
   });
-
-  // really this only impacts admin
-  useEffect(() => {
-    if (conditionThatChangesResult) {
-      refetch();
-    }
-  }, [conditionThatChangesResult]);
 
   const leaderboards = getLeaderboardsFromEvents(data);
 
@@ -44,7 +34,6 @@ const useQueryGetAllEvents = () => {
     data,
     leaderboards,
     isLoading,
-    refetch,
     defaultEvent,
     defaultLeaderboard,
   };

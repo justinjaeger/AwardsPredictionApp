@@ -4,7 +4,6 @@ import MongoApi from '../../services/api/requests';
 import { useTmdbDataStore } from '../../context/TmdbDataStore';
 import { EventModel, WithId } from '../../models';
 import { useRouteParams } from '../useRouteParams';
-import { QUERY_OPTIONS } from './constants';
 
 const useQueryGetCommunityPredictions = (params?: {
   event?: WithId<EventModel>;
@@ -19,7 +18,7 @@ const useQueryGetCommunityPredictions = (params?: {
   /**
    * Note: We can cache this data for an hour because it changes on an hour timer func anyway
    */
-  const { data, isLoading, refetch } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: [QueryKeys.COMMUNITY_PREDICTIONS, eventId, yyyymmdd],
     queryFn: async () => {
       if (!eventId) return null;
@@ -35,10 +34,9 @@ const useQueryGetCommunityPredictions = (params?: {
       }
       return predictionSet ?? null;
     },
-    ...QUERY_OPTIONS,
   });
 
-  return { data, isLoading, refetch };
+  return { data, isLoading };
 };
 
 export default useQueryGetCommunityPredictions;
