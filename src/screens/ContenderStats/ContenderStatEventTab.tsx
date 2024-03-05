@@ -38,6 +38,8 @@ const ContenderStatEventTab = ({
 
   const { data: communityPredictions } = useQueryGetCommunityPredictions({ event });
 
+  const [eventCorrespondingToData, setEventCorrespondingToData] =
+    useState<WithId<EventModel>>(event);
   const [dataInCategoryOrder, setDataInCategoryOrder] = useState<iContenderStatsData[]>(
     [],
   );
@@ -110,7 +112,8 @@ const ContenderStatEventTab = ({
     );
     setDataInCategoryOrder(sortedByCategoryOrder);
     setDataInLikelihoodOrder(sortByLikelihood(allSignificantPredictions));
-  }, [!!communityPredictions]);
+    setEventCorrespondingToData(event);
+  }, [communityPredictions?._id]);
 
   const widthFactor = isPad ? theme.padHistogramContainerWidth : 1;
 
@@ -151,7 +154,7 @@ const ContenderStatEventTab = ({
               <ItemStatBox
                 key={tab1.contenderId}
                 prediction={tab1}
-                event={event}
+                event={eventCorrespondingToData}
                 category={tab1.category}
                 totalNumPredictingTop={tab1.totalNumPredictingTop}
                 totalNumPredictingCategory={tab1.totalNumPredictingCategory}
@@ -165,7 +168,7 @@ const ContenderStatEventTab = ({
               <ItemStatBox
                 key={tab2.contenderId}
                 prediction={tab2}
-                event={event}
+                event={eventCorrespondingToData}
                 category={tab2.category}
                 totalNumPredictingTop={tab2.totalNumPredictingTop}
                 totalNumPredictingCategory={tab2.totalNumPredictingCategory}
