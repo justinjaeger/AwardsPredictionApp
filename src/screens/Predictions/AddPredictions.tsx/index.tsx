@@ -122,7 +122,7 @@ const AddPredictions = () => {
       ) : null}
       {letUserCreateContenders ? (
         <SearchInput
-          placeholder={`Find any ${type === CategoryType.PERFORMANCE ? 'actor' : 'film'}`}
+          placeholder={`Add any ${type === CategoryType.PERFORMANCE ? 'actor' : 'film'}`}
           handleSearch={handleSearch}
           onReset={() => resetSearch()}
         />
