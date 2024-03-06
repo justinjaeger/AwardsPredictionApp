@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, useWindowDimensions, ScrollViewProps } from 'react-native';
+import { View, ScrollViewProps } from 'react-native';
 import { getNumberWithinRange } from '../../util/getNumberWithinRange';
 import { BOTTOM_TAB_HEIGHT } from '../../constants';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -24,7 +24,6 @@ const DynamicHeaderWrapper = (
     collapsedContent,
     persistedContent,
   } = props;
-  const { height } = useWindowDimensions();
   const { bottom } = useSafeAreaInsets();
 
   const { height: topOnlyComponentHeight } = topOnlyContent;
@@ -41,7 +40,6 @@ const DynamicHeaderWrapper = (
   const scrollViewProps: FlashListProps<any> | ScrollViewProps = {
     contentContainerStyle: {
       paddingBottom: BOTTOM_TAB_HEIGHT + bottom + UNEXPLAINED_EXTRA_SCROLL_HEIGHT,
-      minHeight: height,
     },
     scrollEventThrottle: 16,
     keyboardShouldPersistTaps: 'always',
