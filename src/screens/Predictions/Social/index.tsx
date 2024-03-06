@@ -13,7 +13,8 @@ import { getUserInfo } from '../../../util/getUserInfo';
 import SearchInput, { getSearchHeight } from '../../../components/Inputs/SearchInput';
 import useUserSearch from '../../SearchUsers/useUserSearch';
 import UserSearchResultItem, {
-  USER_SEARCH_ITEM_HEIGHT,
+  getUserSearchItemHeight,
+  USER_SEARCH_IMAGE_SIZE,
 } from '../../../components/UserSearchResult/UserSearchResultItem';
 import { StackActions, useNavigation } from '@react-navigation/native';
 import { PredictionsNavigationProp, iUserInfo } from '../../../navigation/types';
@@ -26,6 +27,7 @@ import theme from '../../../constants/theme';
 import { HEADER_TOP_TAB_MARGIN_BOTTOM } from '../../../components/HeaderComponents/constants';
 import { hexToRgb } from '../../../util/hexToRgb';
 import COLORS from '../../../constants/colors';
+import UserListSkeleton from '../../../components/Skeletons/UserListSkeleton';
 
 const SEARCH_MARGIN_BOTTOM = 10;
 
@@ -156,7 +158,16 @@ const Social = () => {
                 fetchMore();
               }
             },
-            estimatedItemSize: USER_SEARCH_ITEM_HEIGHT,
+            estimatedItemSize: getUserSearchItemHeight(isPad),
+            ListHeaderComponent: (
+              <View style={{ width: '100%', alignItems: 'flex-start', marginLeft: 20 }}>
+                {isFetchingRecommended ? (
+                  <View style={{ flexDirection: 'column' }}>
+                    <UserListSkeleton imageSize={USER_SEARCH_IMAGE_SIZE} />
+                  </View>
+                ) : null}
+              </View>
+            ),
           }}
         />
       </View>

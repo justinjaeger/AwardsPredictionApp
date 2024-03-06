@@ -8,8 +8,10 @@ import { User, WithId } from '../../models';
 import { iUserInfo } from '../../navigation/types';
 import theme from '../../constants/theme';
 import { hexToRgb } from '../../util/hexToRgb';
+import useDevice from '../../util/device';
 
-export const USER_SEARCH_ITEM_HEIGHT = 70;
+export const USER_SEARCH_IMAGE_SIZE = 50;
+export const getUserSearchItemHeight = (isPad?: boolean) => 70 * (isPad ? 1.5 : 1);
 
 const UserSearchResultItem = ({
   item,
@@ -20,6 +22,8 @@ const UserSearchResultItem = ({
   authUserIsFollowing: boolean;
   onPress: (userInfo: iUserInfo) => void;
 }) => {
+  const { isPad } = useDevice();
+
   const hasOnlyOneName = !(item.name && item.username);
 
   const onPressProfileImage = () => {
@@ -35,7 +39,7 @@ const UserSearchResultItem = ({
       key={item._id}
       style={{
         flexDirection: 'row',
-        height: USER_SEARCH_ITEM_HEIGHT,
+        height: getUserSearchItemHeight(isPad),
         alignItems: 'center',
         width: '100%',
         paddingLeft: theme.windowMargin,
@@ -57,9 +61,8 @@ const UserSearchResultItem = ({
         <View style={{ flexDirection: 'row' }}>
           <ProfileImage
             image={item.image}
-            imageSize={USER_SEARCH_ITEM_HEIGHT - 20}
+            imageSize={USER_SEARCH_IMAGE_SIZE}
             onPress={() => onPressProfileImage()}
-            disablePadResize
           />
           <View
             style={{

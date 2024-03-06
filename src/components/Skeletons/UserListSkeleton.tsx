@@ -4,6 +4,7 @@ import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
 import useDevice from '../../util/device';
+import { getUserSearchItemHeight } from '../UserSearchResult/UserSearchResultItem';
 
 const UserListSkeleton = ({
   imageSize,
@@ -28,8 +29,7 @@ const UserListSkeleton = ({
               <View
                 key={i}
                 style={{
-                  marginLeft: 10,
-                  marginTop: 20,
+                  height: getUserSearchItemHeight(isPad),
                   flexDirection: 'row',
                   alignItems: 'center',
                 }}
