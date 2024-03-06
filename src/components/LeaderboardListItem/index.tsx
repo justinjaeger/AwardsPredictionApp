@@ -6,8 +6,6 @@ import { PredictionsNavigationProp, iUserInfo } from '../../navigation/types';
 import { usePersonalCommunityTab } from '../../context/PersonalCommunityContext';
 import Template from './Template';
 
-export const LEADERBOARD_PROFILE_IMAGE_SIZE = 50;
-
 const LeaderboardListItem = ({
   leaderboardRanking,
   style,

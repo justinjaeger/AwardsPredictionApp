@@ -2,9 +2,7 @@ import React, { useRef, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import useGetLeaderboardUsers from '../../../hooks/useGetLeaderboardUsers';
 import { View } from 'react-native';
-import LeaderboardListItem, {
-  LEADERBOARD_PROFILE_IMAGE_SIZE,
-} from '../../../components/LeaderboardListItem';
+import LeaderboardListItem from '../../../components/LeaderboardListItem';
 import UserListSkeleton from '../../../components/Skeletons/UserListSkeleton';
 import { SubHeader } from '../../../components/Text';
 import BackgroundWrapper from '../../../components/BackgroundWrapper';
@@ -40,10 +38,14 @@ import {
   HEADER_TOP_TAB_MARGIN_TOP,
 } from '../../../components/HeaderComponents/constants';
 import COLORS from '../../../constants/colors';
-import { LEADERBOARD_LIST_ITEM_HEIGHT } from '../../../components/LeaderboardListItem/Template';
+import {
+  LEADERBOARD_LIST_ITEM_HEIGHT,
+  LEADERBOARD_PROFILE_IMAGE_SIZE,
+} from '../../../components/LeaderboardListItem/Template';
 import { FlashList } from '@shopify/flash-list';
 import DualTabsWrapper from '../../../components/DualTabsWrapper';
 import { useSharedValue } from 'react-native-reanimated';
+import useDevice from '../../../util/device';
 
 const Leaderboard = () => {
   const tabsPosX = useSharedValue(0);
@@ -51,6 +53,7 @@ const Leaderboard = () => {
 
   const navigation = useNavigation<PredictionsNavigationProp>();
 
+  const { isPad } = useDevice();
   const { setPersonalCommunityTab } = usePersonalCommunityTab();
   const { data: events } = useQueryGetAllEvents();
   const { disableBack } = useRouteParams();
@@ -212,7 +215,7 @@ const Leaderboard = () => {
             );
           },
           scrollEnabled,
-          estimatedItemSize: LEADERBOARD_LIST_ITEM_HEIGHT,
+          estimatedItemSize: LEADERBOARD_LIST_ITEM_HEIGHT * (isPad ? 1.5 : 1),
           ListHeaderComponent: (
             <>
               {user && userLeaderboard ? (

@@ -5,6 +5,7 @@ import ProfileImage from '../ProfileImage';
 import { Body, HeaderLight, SubHeader } from '../Text';
 import { formatDecimalAsPercentage } from '../../util/formatPercentage';
 import { hexToRgb } from '../../util/hexToRgb';
+import useDevice from '../../util/device';
 
 export const LEADERBOARD_LIST_ITEM_HEIGHT = 70;
 export const LEADERBOARD_PROFILE_IMAGE_SIZE = 50;
@@ -34,6 +35,7 @@ const Template = ({
   riskiness: number;
   style?: StyleProp<ViewStyle>;
 }) => {
+  const { isPad } = useDevice();
   return (
     <TouchableHighlight
       style={[
@@ -41,7 +43,7 @@ const Template = ({
           flexDirection: 'row',
           padding: 10,
           width: '100%',
-          height: LEADERBOARD_LIST_ITEM_HEIGHT,
+          height: LEADERBOARD_LIST_ITEM_HEIGHT * (isPad ? 1.5 : 1),
           borderBottomColor: hexToRgb(COLORS.primaryLight, 0.3),
           borderBottomWidth: 1,
         },

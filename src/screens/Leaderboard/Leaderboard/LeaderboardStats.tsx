@@ -5,10 +5,10 @@ import { Body, SubHeader } from '../../../components/Text';
 import { formatDecimalAsPercentage } from '../../../util/formatPercentage';
 import Stat from '../../../components/ItemStatBox/Stat';
 import ProfileImage from '../../../components/ProfileImage';
-import { LEADERBOARD_PROFILE_IMAGE_SIZE } from '../../../components/LeaderboardListItem';
 import LastUpdatedText from '../../../components/LastUpdatedText';
 import { formatLastUpdated } from '../../../util/formatDateTime';
 import { DividerSubtle } from '../../../components/DividerSubtle';
+import { LEADERBOARD_PROFILE_IMAGE_SIZE } from '../../../components/LeaderboardListItem/Template';
 
 const LeaderboardStats = ({
   title,
