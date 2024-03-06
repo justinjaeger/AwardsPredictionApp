@@ -11,7 +11,7 @@ type iSectionTopTab = {
   onOpenTab?: () => void;
 };
 
-export const getSectionTabHeight = (isPad: boolean) => (isPad ? 65 : 45);
+export const getSectionTabHeight = (isPad: boolean) => (isPad ? 55 : 45);
 
 const getScrollBarPosition = (index: number, width: number) =>
   index * (width / (index + 1));

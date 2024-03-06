@@ -6,6 +6,8 @@ import { TouchableOpacity, View } from 'react-native';
 import COLORS from '../../../constants/colors';
 import { SubHeader } from '../../Text';
 import CustomIcon from '../../CustomIcon';
+import { HEADER_TITLE_MARGIN_TOP } from '../constants';
+import { HEADER_HEIGHT } from '../Header';
 
 export const USER_PROFILE_HEIGHT = 60;
 
@@ -18,11 +20,14 @@ const UserProfile = ({ userInfo }: { userInfo: iUserInfo }) => {
   };
 
   return userInfo.userImage ? (
-    <ProfileImage
-      image={userInfo.userImage}
-      imageSize={USER_PROFILE_HEIGHT}
-      onPress={navigateToProfile}
-    />
+    <View style={{ height: USER_PROFILE_HEIGHT }}>
+      <ProfileImage
+        image={userInfo.userImage}
+        imageSize={USER_PROFILE_HEIGHT + HEADER_HEIGHT + HEADER_TITLE_MARGIN_TOP - 10}
+        onPress={navigateToProfile}
+        disablePadResize
+      />
+    </View>
   ) : (
     <TouchableOpacity
       onPress={navigateToProfile}
