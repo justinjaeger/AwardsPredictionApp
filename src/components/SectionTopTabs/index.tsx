@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Animated, TouchableHighlight, useWindowDimensions, View } from 'react-native';
 import COLORS from '../../constants/colors';
 import useDevice from '../../util/device';
@@ -13,12 +13,15 @@ type iSectionTopTab = {
 
 export const getSectionTabHeight = (isPad: boolean) => (isPad ? 65 : 45);
 
+const getScrollBarPosition = (index: number, width: number) =>
+  index * (width / (index + 1));
+
 /**
  * Use it with DualTabsWrapper and pass in a shared "tabsPosX" for each to get animated tab switching
  */
 const SectionTopTabs = ({
   tabs,
-  initialTabIndex,
+  initialTabIndex = 0,
   tabsPosX,
 }: {
   tabs: iSectionTopTab[];
@@ -29,19 +32,17 @@ const SectionTopTabs = ({
   const { width } = useWindowDimensions();
 
   const scrollBarAnim = useRef(
-    new Animated.Value(initialTabIndex ? width / initialTabIndex : 0),
+    new Animated.Value(getScrollBarPosition(initialTabIndex, width)),
   ).current;
 
-  const [selectedTab, setSelectedTab] = useState<iSectionTopTab>(
-    initialTabIndex ? tabs[initialTabIndex] : tabs[0],
-  );
+  const [selectedTab, setSelectedTab] = useState<iSectionTopTab>(tabs[initialTabIndex]);
 
   const openTab = (t: iSectionTopTab, index: number) => {
     setSelectedTab(t);
 
     t.onOpenTab && t.onOpenTab();
 
-    const scrollBarPosition = index * (width / (index + 1));
+    const scrollBarPosition = getScrollBarPosition(index, width);
     Animated.timing(scrollBarAnim, {
       toValue: scrollBarPosition,
       duration: 250,
@@ -54,12 +55,6 @@ const SectionTopTabs = ({
       tabsPosX.value = withTiming(newTabPosition, { duration: 250 });
     }
   };
-
-  useEffect(() => {
-    if (initialTabIndex !== undefined) {
-      openTab(tabs[initialTabIndex], initialTabIndex);
-    }
-  }, [initialTabIndex]);
 
   return (
     <View

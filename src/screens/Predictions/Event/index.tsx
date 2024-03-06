@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import PredictionTabsNavigator from '../../../navigation/PredictionTabsNavigator';
 import { useAuth } from '../../../context/AuthContext';
 import useQueryGetUserPredictions from '../../../hooks/queries/useQueryGetUserPredictions';
@@ -78,7 +78,7 @@ const Event = () => {
   const userId = userInfo?.userId || authUserId || undefined;
   const { user } = useProfileUser(userId);
   const isAuthProfile = user?._id === authUserId;
-  const { tabsPosX } = usePersonalCommunityTab();
+  const { tabsPosX, setPersonalCommunityTab } = usePersonalCommunityTab();
 
   const { data: events } = useQueryGetAllEvents();
   const { event, phase, yyyymmdd, setEvent, setYear } = useEventSelect();
@@ -94,6 +94,22 @@ const Event = () => {
     useQueryGetUserPredictions({ event, userId, yyyymmdd });
   const { data: communityPredictionData, isLoading: isLoadingCommunity } =
     useQueryGetCommunityPredictions({ event, yyyymmdd });
+
+  // NOTE: Pertains to showing the commuinty tab initially if logged out
+  // I know this is strange but this is a workaround since "reanimated" seems to have a bug
+  // Ideally we'd set the initial value of tabsPosX in usePersonalCommunityTab to the screen width to show commuinty tab first (broken)
+  // But instead we tell it to switch to the community tab after all hooks have fired
+  useEffect(() => {
+    if (!userId && !isLoadingCommunity && !!communityPredictionData) {
+      setPersonalCommunityTab('community', true);
+    }
+  }, [
+    userId,
+    isLoadingPersonal,
+    isLoadingCommunity,
+    !!userPredictionData,
+    !!communityPredictionData,
+  ]);
 
   const predictionTabHeight = getSectionTabHeight(isPad);
 

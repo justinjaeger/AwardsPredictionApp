@@ -13,8 +13,11 @@ const PredictionTabsNavigator = ({
 }: {
   onChangeTab?: (tab: 'personal' | 'community') => void;
 }) => {
-  const { personalCommunityTab, setPersonalCommunityTab } = usePersonalCommunityTab();
-  const initialTabIndex = personalCommunityTab === 'personal' ? 0 : 1;
+  const { userId } = useAuth();
+  const { setPersonalCommunityTab } = usePersonalCommunityTab();
+
+  // This respects whether commuinty or personal tab is focused first
+  const initialTabIndex = userId ? 0 : 1;
 
   const { userId: authUserId } = useAuth();
   const { userInfo } = useRouteParams();

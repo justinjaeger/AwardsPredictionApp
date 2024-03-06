@@ -21,6 +21,7 @@ const PersonalCommunityTabContext = createContext<iPersonalCommunityTabContext>(
 });
 
 export const PersonalCommunityTabProvider = (props: { children: React.ReactNode }) => {
+  // NOTE: you might think we'd initialize the value according to which tab is default, but see NOTE in Event.tsx
   const tabsPosX = useSharedValue(0);
   const { width } = useWindowDimensions();
 
@@ -28,7 +29,7 @@ export const PersonalCommunityTabProvider = (props: { children: React.ReactNode 
     useState<iPersonalCommunityTab>('personal');
 
   const scrollToX = (v: number, disableAnimation?: boolean) => {
-    tabsPosX.value = disableAnimation ? v : withTiming(-v, { duration: 250 });
+    tabsPosX.value = withTiming(-v, { duration: disableAnimation ? 0 : 250 });
   };
 
   const setPersonalCommunityTab = (
