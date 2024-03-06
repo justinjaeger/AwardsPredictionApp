@@ -3,6 +3,7 @@ import { StyleProp, View, ViewStyle } from 'react-native';
 import { useSharedValue } from 'react-native-reanimated';
 import COLORS from '../../constants/colors';
 import { Slider as AwesomeSlider } from 'react-native-awesome-slider';
+import useDevice from '../../util/device';
 
 const THUMB_SIZE = 24;
 
@@ -15,6 +16,8 @@ const Slider = ({
   onSlidingComplete: (v: number) => void;
   style?: StyleProp<ViewStyle>;
 }) => {
+  const { isPad } = useDevice();
+
   const sliderMin = useSharedValue(0);
   const sliderMax = useSharedValue(100);
   const sliderProgress = useSharedValue(0);
@@ -23,7 +26,7 @@ const Slider = ({
     <AwesomeSlider
       style={[
         {
-          width: '90%',
+          width: isPad ? '50%' : '90%',
           alignSelf: 'center',
           borderRadius: 10,
           paddingLeft: 10,
