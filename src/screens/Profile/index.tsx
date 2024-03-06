@@ -1,11 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import {
-  View,
-  TouchableHighlight,
-  ScrollView,
-  TouchableOpacity,
-  Alert,
-} from 'react-native';
+import { View, TouchableHighlight, ScrollView, Alert } from 'react-native';
 import { Body, BodyBold, HeaderLight, SubHeader } from '../../components/Text';
 import { useAuth } from '../../context/AuthContext';
 import BackgroundWrapper from '../../components/BackgroundWrapper';
@@ -30,13 +24,13 @@ import { PHASE_TO_STRING_PLURAL } from '../../constants/categories';
 import { UserRole, iLeaderboard, iLeaderboardRanking } from '../../models';
 import EventItemSimple from '../../components/EventItemSimple';
 import { usePersonalCommunityTab } from '../../context/PersonalCommunityContext';
-import CustomIcon from '../../components/CustomIcon';
 import DynamicHeaderScrollViewWrapper from '../../components/DynamicHeaderWrapper/DynamicHeaderScrollViewWrapper';
 import SectionTopTabs from '../../components/SectionTopTabs';
 import DualTabsWrapper from '../../components/DualTabsWrapper';
 import { useSharedValue } from 'react-native-reanimated';
 import LinearGradient from 'react-native-linear-gradient';
 import HeaderButton from '../../components/HeaderComponents/HeaderButton';
+import BackButton from '../../components/HeaderComponents/BackButton';
 
 const NullTabState = ({ tab }: { tab: string }) => {
   return (
@@ -142,20 +136,10 @@ const Profile = () => {
           component: disableBack ? (
             <></>
           ) : (
-            <TouchableOpacity
-              onPress={() => {
-                navigation.goBack();
-              }}
-              style={{
-                width: 30,
-                backgroundColor: COLORS.primaryLight,
-                borderRadius: 100,
-                marginLeft: theme.windowMargin,
-                marginTop: 10,
-              }}
-            >
-              <CustomIcon name="chevron-left-outline" size={30} color={COLORS.white} />
-            </TouchableOpacity>
+            <BackButton
+              variation={'on-dark'}
+              style={{ marginLeft: theme.windowMargin }}
+            />
           ),
         }}
         titleWhenCollapsed={user?.name ?? user?.username ?? 'Profile'}

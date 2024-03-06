@@ -2,6 +2,7 @@ import { StyleProp, TouchableOpacity, View, ViewStyle } from 'react-native';
 import React from 'react';
 import CustomIcon from '../../CustomIcon';
 import COLORS from '../../../constants/colors';
+import useDevice from '../../../util/device';
 
 export const HEADER_BUTTON_HEIGHT = 40;
 
@@ -16,14 +17,16 @@ const HeaderButton = ({
   style?: StyleProp<ViewStyle>;
   variation?: 'transparent' | 'on-dark';
 }) => {
+  const { isPad } = useDevice();
+  const height = HEADER_BUTTON_HEIGHT * (isPad ? 1.25 : 1);
   return (
     <TouchableOpacity
       onPress={() => {
         onPress();
       }}
       style={{
-        width: HEADER_BUTTON_HEIGHT,
-        height: HEADER_BUTTON_HEIGHT,
+        width: height,
+        height: height,
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 100,
@@ -32,8 +35,8 @@ const HeaderButton = ({
       <View
         style={[
           {
-            width: HEADER_BUTTON_HEIGHT - 10,
-            height: HEADER_BUTTON_HEIGHT - 10,
+            width: height - 10,
+            height: height - 10,
             backgroundColor:
               variation === 'transparent' ? 'transparent' : COLORS.primaryLight,
             borderRadius: 100,
@@ -43,7 +46,7 @@ const HeaderButton = ({
           style,
         ]}
       >
-        <CustomIcon name={icon} size={HEADER_BUTTON_HEIGHT - 15} color={COLORS.white} />
+        <CustomIcon name={icon} size={height - 15} color={COLORS.white} />
       </View>
     </TouchableOpacity>
   );
