@@ -10,14 +10,12 @@ import SectionTopTabs from '../../components/SectionTopTabs';
  */
 const PredictionTabsNavigator = ({
   onChangeTab,
+  initialTabIndex = 0,
 }: {
   onChangeTab?: (tab: 'personal' | 'community') => void;
+  initialTabIndex?: number;
 }) => {
-  const { userId } = useAuth();
   const { setPersonalCommunityTab } = usePersonalCommunityTab();
-
-  // This respects whether commuinty or personal tab is focused first
-  const initialTabIndex = userId ? 0 : 1;
 
   const { userId: authUserId } = useAuth();
   const { userInfo } = useRouteParams();

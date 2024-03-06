@@ -262,7 +262,7 @@ const Event = () => {
                 justifyContent: 'flex-end',
               }}
             >
-              <PredictionTabsNavigator />
+              <PredictionTabsNavigator initialTabIndex={userId ? 0 : 1} />
             </View>
           ),
         }}
