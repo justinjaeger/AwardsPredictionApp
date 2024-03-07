@@ -31,6 +31,7 @@ import { useSharedValue } from 'react-native-reanimated';
 import LinearGradient from 'react-native-linear-gradient';
 import HeaderButton from '../../components/HeaderComponents/HeaderButton';
 import BackButton from '../../components/HeaderComponents/BackButton';
+import { getSortedEvents } from '../../util/getSortedEvents';
 
 const NullTabState = ({ tab }: { tab: string }) => {
   return (
@@ -59,8 +60,11 @@ const Profile = () => {
     useProfileUser(userId);
 
   const iterableEvents = Object.values(events);
-  const userEvents = Object.values(iterableEvents)?.filter((event) =>
-    Object.keys(user?.eventsPredicting ?? {})?.includes(event._id),
+  // TODO: sort the events by year and awards body
+  const userEvents = getSortedEvents(
+    Object.values(iterableEvents)?.filter((event) =>
+      Object.keys(user?.eventsPredicting ?? {})?.includes(event._id),
+    ),
   );
   const predictionSets = user?.recentPredictionSets || [];
   const isAuthUser = user && userId && user?._id === authUserId;

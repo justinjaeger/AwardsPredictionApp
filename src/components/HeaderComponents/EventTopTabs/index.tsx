@@ -1,12 +1,10 @@
 import React from 'react';
 import { StyleProp, ViewStyle } from 'react-native';
-import {
-  AWARDS_BODY_TO_PLURAL_STRING,
-  SORTED_AWARDS_BODIES,
-} from '../../../constants/awardsBodies';
+import { AWARDS_BODY_TO_PLURAL_STRING } from '../../../constants/awardsBodies';
 import useQueryGetAllEvents from '../../../hooks/queries/useQueryGetAllEvents';
 import { EventModel, WithId } from '../../../models';
 import HorizontalScrollingTabs from '../../HorizontalScrollingTabs';
+import { getSortedEvents } from '../../../util/getSortedEvents';
 
 /**
  * Shows tabs within the selected event's year
@@ -30,13 +28,7 @@ const EventTopTabs = ({
     return e.year === selectedYear;
   });
 
-  const eventsSorted = eventsFilteredByYear.sort(
-    ({ awardsBody: ab1 }, { awardsBody: ab2 }) => {
-      const indexA = SORTED_AWARDS_BODIES.indexOf(ab1);
-      const indexB = SORTED_AWARDS_BODIES.indexOf(ab2);
-      return indexA - indexB;
-    },
-  );
+  const eventsSorted = getSortedEvents(eventsFilteredByYear);
 
   return (
     <HorizontalScrollingTabs<string>
