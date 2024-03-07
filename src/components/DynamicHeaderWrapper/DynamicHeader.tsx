@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { TouchableOpacity, View, useWindowDimensions } from 'react-native';
+import { ScrollView, TouchableOpacity, View, useWindowDimensions } from 'react-native';
 import COLORS from '../../constants/colors';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Animated, {
@@ -19,6 +19,7 @@ export type iDynamicHeaderProps = {
   collapsedContent: { height: number; component: JSX.Element };
   persistedContent?: { height: number; component: JSX.Element };
   flashListRef?: React.LegacyRef<FlashList<any>>;
+  scrollViewRef?: React.RefObject<ScrollView>;
 };
 
 // TODO: replace with reanimated
@@ -31,6 +32,7 @@ const DynamicHeader = ({
   collapsedContent,
   persistedContent,
   flashListRef,
+  scrollViewRef,
 }: {
   scrollY: SharedValue<number>;
   collapsedHeaderHeight: number;
@@ -156,7 +158,9 @@ const DynamicHeader = ({
                 onPress={() => {
                   flashListRef &&
                     // @ts-ignore
-                    flashListRef?.current.scrollToOffset({ offset: 0, animated: true });
+                    flashListRef.current.scrollToOffset({ offset: 0, animated: true });
+                  scrollViewRef?.current &&
+                    scrollViewRef.current.scrollTo({ y: 0, animated: true });
                 }}
               >
                 {collapsedComponent}

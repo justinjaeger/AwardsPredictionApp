@@ -40,6 +40,7 @@ const HeaderBasic = ({
             position: 'absolute',
             left: theme.windowMargin,
             marginRight: theme.windowMargin * 2,
+            zIndex: 2,
           }}
         >
           <BackButton onPress={onPressBack} />
@@ -54,6 +55,7 @@ const HeaderBasic = ({
             height,
             backgroundColor,
             flexDirection: 'row',
+            zIndex: 1,
           },
           style,
         ]}
