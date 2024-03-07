@@ -28,7 +28,6 @@ const useQueryGetAllEvents = () => {
     ...QUERY_OPTIONS,
   });
 
-  // really this only impacts admin
   useEffect(() => {
     refetch();
   }, [conditionThatChangesResult]);
