@@ -137,7 +137,7 @@ const getTmdbPersonMovieCredits = async (
           ? parseInt(c.release_date.slice(0, 4), 10)
           : undefined;
         if (releaseYear) {
-          return releaseYear >= minReleaseYear;
+          return releaseYear >= minReleaseYear - 1;
         } else {
           return true;
         }
