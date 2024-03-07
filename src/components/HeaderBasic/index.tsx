@@ -29,28 +29,41 @@ const HeaderBasic = ({
   backgroundColor?: string;
 }) => {
   const { top } = useSafeAreaInsets();
+  const height = getHeaderBasicHeight(title);
+  const shouldCenterText = disableBack || height <= BASE_HEIGHT;
   return (
     <View style={{ width: '100%' }}>
       {safeAreaTop ? <View style={{ paddingTop: top, backgroundColor }} /> : null}
+      {disableBack || !shouldCenterText ? null : (
+        <View
+          style={{
+            position: 'absolute',
+            left: theme.windowMargin,
+            marginRight: theme.windowMargin * 2,
+          }}
+        >
+          <BackButton onPress={onPressBack} />
+        </View>
+      )}
       <View
         style={[
           {
             width: '100%',
             alignItems: 'center',
-            justifyContent: disableBack ? 'center' : 'flex-start',
-            height: getHeaderBasicHeight(title),
+            justifyContent: shouldCenterText ? 'center' : 'flex-start',
+            height,
             backgroundColor,
             flexDirection: 'row',
           },
           style,
         ]}
       >
-        {disableBack ? null : (
+        {shouldCenterText ? null : (
           <View style={{ left: theme.windowMargin, marginRight: theme.windowMargin * 2 }}>
             <BackButton onPress={onPressBack} />
           </View>
         )}
-        <SubHeader style={{ textAlign: disableBack ? 'center' : 'left' }}>
+        <SubHeader style={{ textAlign: shouldCenterText ? 'center' : 'left' }}>
           {title}
         </SubHeader>
         <View />
