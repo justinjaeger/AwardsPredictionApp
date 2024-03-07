@@ -30,9 +30,7 @@ const useQueryGetAllEvents = () => {
 
   // really this only impacts admin
   useEffect(() => {
-    if (conditionThatChangesResult) {
-      refetch();
-    }
+    refetch();
   }, [conditionThatChangesResult]);
 
   const leaderboards = getLeaderboardsFromEvents(data);
