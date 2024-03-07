@@ -45,12 +45,7 @@ const PredictionsNavigator = () => {
         <Screen
           name="ContenderStats"
           component={ContenderStats}
-          options={{
-            headerTitle: getHeaderTitle('Stats'),
-            headerLeft: BackButtonForNavigator,
-            gestureEnabled: false,
-            ...medium,
-          }}
+          options={{ headerShown: false }}
         />
         {/* Profile Screens */}
         <Screen name="Profile" component={Profile} options={{ headerShown: false }} />
