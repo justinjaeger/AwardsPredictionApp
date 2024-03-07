@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Animated, TouchableHighlight, useWindowDimensions, View } from 'react-native';
 import COLORS from '../../constants/colors';
 import useDevice from '../../util/device';
@@ -37,7 +37,12 @@ const SectionTopTabs = ({
 
   const [selectedTab, setSelectedTab] = useState<iSectionTopTab>(tabs[initialTabIndex]);
 
-  const openTab = (t: iSectionTopTab, index: number) => {
+  useEffect(() => {
+    setSelectedTab(tabs[initialTabIndex]);
+    openTab(tabs[initialTabIndex], initialTabIndex, true);
+  }, [initialTabIndex]);
+
+  const openTab = (t: iSectionTopTab, index: number, immediate?: boolean) => {
     setSelectedTab(t);
 
     t.onOpenTab && t.onOpenTab();
@@ -45,7 +50,7 @@ const SectionTopTabs = ({
     const scrollBarPosition = getScrollBarPosition(index, width);
     Animated.timing(scrollBarAnim, {
       toValue: scrollBarPosition,
-      duration: 250,
+      duration: immediate ? 0 : 250,
       useNativeDriver: true,
     }).start();
 
