@@ -199,7 +199,15 @@ const Event = () => {
               }}
             >
               <View style={{ position: 'relative', alignItems: 'center' }}>
-                <View style={{ position: 'absolute', top: 0, left: 0 }}>
+                <View
+                  style={{
+                    position: showUserInfo ? 'absolute' : 'relative',
+                    alignItems: 'flex-start',
+                    width: '100%',
+                    top: 0,
+                    left: 0,
+                  }}
+                >
                   {disableBack ? null : <BackButton variation={'on-dark'} />}
                 </View>
                 {showUserInfo ? <UserProfile userInfo={userInfo} /> : null}
