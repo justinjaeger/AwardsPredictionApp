@@ -4,7 +4,6 @@ import { AWARDS_BODY_TO_PLURAL_STRING } from '../../../constants/awardsBodies';
 import useQueryGetAllEvents from '../../../hooks/queries/useQueryGetAllEvents';
 import { EventModel, WithId } from '../../../models';
 import HorizontalScrollingTabs from '../../HorizontalScrollingTabs';
-import { getSortedEvents } from '../../../util/getSortedEvents';
 
 /**
  * Shows tabs within the selected event's year
@@ -28,7 +27,7 @@ const EventTopTabs = ({
     return e.year === selectedYear;
   });
 
-  const eventsSorted = getSortedEvents(eventsFilteredByYear);
+  const eventsSorted = eventsFilteredByYear;
 
   return (
     <HorizontalScrollingTabs<string>

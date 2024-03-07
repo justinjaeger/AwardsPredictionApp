@@ -8,6 +8,7 @@ import { getDefaultLeaderboard } from '../../util/getDefaultLeaderboard';
 import { QUERY_OPTIONS } from './constants';
 import { getLeaderboardsFromEvents } from '../../util/getLeaderboardsFromEvents';
 import { useEffect } from 'react';
+import { getSortedEvents } from '../../util/getSortedEvents';
 
 const useQueryGetAllEvents = () => {
   const { userRole } = useAuth();
@@ -38,7 +39,7 @@ const useQueryGetAllEvents = () => {
   const defaultLeaderboard = getDefaultLeaderboard(data);
 
   return {
-    data,
+    data: getSortedEvents(data ?? []),
     leaderboards,
     isLoading,
     refetch,
