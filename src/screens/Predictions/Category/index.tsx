@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import CategoryPersonal from './CategoryPersonal';
 import { PredictionsParamList } from '../../../navigation/types';
 import { eventToString } from '../../../util/stringConversions';
@@ -20,7 +20,8 @@ const Category = () => {
   const navigation = useNavigation();
   const { top } = useSafeAreaInsets();
   const { isPad } = useDevice();
-  const { tabsPosX, setPersonalCommunityTab } = usePersonalCommunityTab();
+  const { tabsPosX, personalCommunityTab, setPersonalCommunityTab } =
+    usePersonalCommunityTab();
   const { params } = useRoute<RouteProp<PredictionsParamList, 'Category'>>();
   const showEventLink = params?.showEventLink || false;
 
@@ -38,7 +39,8 @@ const Category = () => {
 
   const bottomHeight = getBottomHeight(top, isPad);
 
-  const [tab, setTab] = React.useState<'personal' | 'community'>('personal');
+  // we can do this because it's not used in the render; only accessed on the back func
+  const ref = useRef(personalCommunityTab);
 
   return (
     <BackgroundWrapper>
@@ -48,10 +50,10 @@ const Category = () => {
           safeAreaTop
           onPressBack={() => {
             navigation.goBack();
-            setPersonalCommunityTab(tab);
+            setPersonalCommunityTab(ref.current, true);
           }}
         />
-        <PredictionTabsNavigator onOpenTab={(t) => setTab(t)} />
+        <PredictionTabsNavigator onOpenTab={(t) => (ref.current = t)} />
         <DualTabsWrapper
           tab1={
             <CategoryPersonal showEventLink={showEventLink} bottomHeight={bottomHeight} />
