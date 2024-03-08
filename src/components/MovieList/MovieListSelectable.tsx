@@ -100,7 +100,7 @@ const MovieListSelectable = ({
       keyExtractor={(item) => item.contenderId}
       style={{ width: '100%' }}
       showsVerticalScrollIndicator={false}
-      contentContainerStyle={{ paddingBottom: 100 }}
+      contentContainerStyle={{ paddingBottom: 200 }}
       onScroll={(e) => {
         Keyboard.dismiss();
         // Fetches more at bottom of scroll. Note the high event throttle to prevent too many requests
