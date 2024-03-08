@@ -21,7 +21,9 @@ const PersonalCommunityTabContext = createContext<iPersonalCommunityTabContext>(
 });
 
 export const PersonalCommunityTabProvider = (props: { children: React.ReactNode }) => {
-  // NOTE: you might think we'd initialize the value according to which tab is default, but see NOTE in Event.tsx
+  // NOTE: you might think we'd initialize the value according to which tab is default, but "reanimated" seems to have a bug
+  // Ideally we'd set the initial value of tabsPosX to the screen width to show commuinty tab first (broken)
+  // But instead we tell it to switch to the community tab after all hooks have fired
   const tabsPosX = useSharedValue(0);
   const { width } = useWindowDimensions();
 

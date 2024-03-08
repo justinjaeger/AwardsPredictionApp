@@ -87,7 +87,6 @@ const Event = () => {
 
   const { data: events } = useQueryGetAllEvents();
   const { event, phase, yyyymmdd, setEvent, setYear } = useEventSelect();
-  console.log('phase', phase);
 
   const eventIdsUserIsPredicting = Object.keys(user?.eventsPredicting ?? {});
   const eventOptions = isAuthProfile
@@ -101,10 +100,7 @@ const Event = () => {
   const { data: communityPredictionData, isLoading: isLoadingCommunity } =
     useQueryGetCommunityPredictions({ event, yyyymmdd });
 
-  // NOTE: Pertains to showing the commuinty tab initially if logged out
-  // I know this is strange but this is a workaround since "reanimated" seems to have a bug
-  // Ideally we'd set the initial value of tabsPosX in usePersonalCommunityTab to the screen width to show commuinty tab first (broken)
-  // But instead we tell it to switch to the community tab after all hooks have fired
+  // This is weird, but see note in PersonalCommunityContext.tsx
   const isNotLoggedInAndHasNoDataYet =
     !userId && !isLoadingCommunity && !!communityPredictionData;
   useEffect(() => {
@@ -280,9 +276,7 @@ const Event = () => {
                 justifyContent: 'flex-end',
               }}
             >
-              <PredictionTabsNavigator
-                initialTabIndex={isNotLoggedInAndHasNoDataYet ? 1 : undefined}
-              />
+              <PredictionTabsNavigator />
             </View>
           ),
         }}
@@ -309,7 +303,10 @@ const Event = () => {
                   <CategoryListItem
                     event={event}
                     item={item[0]}
-                    onPress={() => onSelectCategory(category, false)}
+                    onPress={() => {
+                      setPersonalCommunityTab('personal', true);
+                      onSelectCategory(category, false);
+                    }}
                     tab={'personal'}
                   />
                 }
@@ -317,7 +314,10 @@ const Event = () => {
                   <CategoryListItem
                     event={event}
                     item={item[1]}
-                    onPress={() => onSelectCategory(category, true)}
+                    onPress={() => {
+                      setPersonalCommunityTab('community', true);
+                      onSelectCategory(category, true);
+                    }}
                     tab={'community'}
                   />
                 }

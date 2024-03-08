@@ -5,16 +5,11 @@ import { useRouteParams } from '../../hooks/useRouteParams';
 import SectionTopTabs from '../../components/SectionTopTabs';
 
 const PredictionTabsNavigator = ({
-  onChangeTab,
-  initialTabIndex,
+  onOpenTab,
 }: {
-  onChangeTab?: (tab: 'personal' | 'community') => void;
-  // whatever is passed as initial tab gets rendered as the current tab
-  // useful for showing community predictions when the user is signed out
-  // but also caution: we don't want to override the preservation of the usePersonalCommunityTab state, which it will default to when this is undefined
-  initialTabIndex?: number;
+  onOpenTab?: (tab: 'personal' | 'community') => void;
 }) => {
-  const { personalCommunityTab, setPersonalCommunityTab } = usePersonalCommunityTab();
+  const { tabsPosX, personalCommunityTab } = usePersonalCommunityTab();
 
   const { userId: authUserId } = useAuth();
   const { userInfo } = useRouteParams();
@@ -25,20 +20,12 @@ const PredictionTabsNavigator = ({
       tabs={[
         {
           title: isAuthUser ? 'My Predictions' : userInfo?.userName ?? 'User',
-          onOpenTab: () => {
-            setPersonalCommunityTab('personal');
-            onChangeTab && onChangeTab('personal');
-          },
+          onOpenTab: () => onOpenTab?.('personal'),
         },
-        {
-          title: 'Community',
-          onOpenTab: () => {
-            setPersonalCommunityTab('community');
-            onChangeTab && onChangeTab('community');
-          },
-        },
+        { title: 'Community', onOpenTab: () => onOpenTab?.('community') },
       ]}
-      initialTabIndex={initialTabIndex ?? personalCommunityTab === 'personal' ? 0 : 1}
+      tabsPosX={tabsPosX}
+      initialTabIndex={personalCommunityTab === 'personal' ? 0 : 1}
     />
   );
 };

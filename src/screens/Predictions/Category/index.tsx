@@ -2,7 +2,7 @@ import React from 'react';
 import CategoryPersonal from './CategoryPersonal';
 import { PredictionsParamList } from '../../../navigation/types';
 import { eventToString } from '../../../util/stringConversions';
-import { RouteProp, useRoute } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useRouteParams } from '../../../hooks/useRouteParams';
 import CategoryCommunity from './CategoryCommunity';
 import PredictionTabsNavigator from '../../../navigation/PredictionTabsNavigator';
@@ -17,9 +17,10 @@ import useDevice from '../../../util/device';
 import { getBottomHeight } from '../../../util/getBottomHeight';
 
 const Category = () => {
+  const navigation = useNavigation();
   const { top } = useSafeAreaInsets();
   const { isPad } = useDevice();
-  const { tabsPosX } = usePersonalCommunityTab();
+  const { tabsPosX, setPersonalCommunityTab } = usePersonalCommunityTab();
   const { params } = useRoute<RouteProp<PredictionsParamList, 'Category'>>();
   const showEventLink = params?.showEventLink || false;
 
@@ -37,11 +38,20 @@ const Category = () => {
 
   const bottomHeight = getBottomHeight(top, isPad);
 
+  const [tab, setTab] = React.useState<'personal' | 'community'>('personal');
+
   return (
     <BackgroundWrapper>
       <View style={{ flex: 1, width: '100%' }}>
-        <HeaderBasic title={headerText} safeAreaTop />
-        <PredictionTabsNavigator />
+        <HeaderBasic
+          title={headerText}
+          safeAreaTop
+          onPressBack={() => {
+            navigation.goBack();
+            setPersonalCommunityTab(tab);
+          }}
+        />
+        <PredictionTabsNavigator onOpenTab={(t) => setTab(t)} />
         <DualTabsWrapper
           tab1={
             <CategoryPersonal showEventLink={showEventLink} bottomHeight={bottomHeight} />
