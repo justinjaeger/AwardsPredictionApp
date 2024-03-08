@@ -8,6 +8,14 @@ const stripProps = (object: any) => ({
   ref: undefined,
 });
 
+/**
+ * How to use:
+ * When your use case for Dynamic Header with scrolling body can't be met with the body
+ * as a single, basic ScrollView or FlashList, you can use this component instead.
+ * Just note: you'll want to pass {...scrollViewProps} to the FlashList or ScrollView component
+ * that you pass in, AND set the paddingTop to top of the scroll body like:
+ * <View style={{ paddingTop }} />
+ */
 const DynamicHeaderManualBody = <T,>(props: {
   titleWhenCollapsed?: string;
   topOnlyContent: { height: number; component: JSX.Element };
