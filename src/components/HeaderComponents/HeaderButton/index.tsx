@@ -35,8 +35,8 @@ const HeaderButton = ({
       <View
         style={[
           {
-            width: height - 10,
-            height: height - 10,
+            width: height - 5,
+            height: height - 5,
             backgroundColor:
               variation === 'transparent' ? 'transparent' : COLORS.primaryLight,
             borderRadius: 100,
