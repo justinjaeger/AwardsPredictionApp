@@ -15,7 +15,6 @@ import useDevice from '../../util/device';
 import { getSlotsInPhase } from '../../util/getSlotsInPhase';
 import useQueryGetEventAccolades from '../../hooks/queries/useQueryGetEventAccolades';
 import { FlashList } from '@shopify/flash-list';
-import { HEADER_HEIGHT } from '../../constants';
 import { SubHeader } from '../Text';
 import { getPredictionStatsFromPredictions } from '../../util/getNumCorrectPredictions';
 import theme from '../../constants/theme';
@@ -98,7 +97,7 @@ const MovieListCommunity = ({
     <FlashList
       data={predictions.slice(0, numToShow)}
       keyExtractor={(item) => item.contenderId}
-      contentContainerStyle={{ paddingBottom: HEADER_HEIGHT + 100 }}
+      contentContainerStyle={{ paddingBottom: 200 }}
       ListHeaderComponent={
         <>
           <LastUpdatedText lastUpdated={lastUpdatedString} />

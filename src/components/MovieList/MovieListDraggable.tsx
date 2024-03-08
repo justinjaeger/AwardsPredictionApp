@@ -113,9 +113,7 @@ const MovieListDraggable = ({
       keyExtractor={(item) => item.contenderId}
       style={{ width: '100%' }}
       showsVerticalScrollIndicator={false}
-      contentContainerStyle={{
-        paddingBottom: 150,
-      }}
+      contentContainerStyle={{ paddingBottom: 200 }}
       onPlaceholderIndexChange={() => {
         triggerHaptic();
       }}
