@@ -23,6 +23,7 @@ import { useNavigation } from '@react-navigation/native';
 import { eventToString } from '../../../util/stringConversions';
 import { CATEGORY_TYPE_TO_STRING } from '../../../constants/categories';
 import HeaderBasic from '../../../components/HeaderBasic';
+import CantFindContenderLink from '../../../components/CantFindContenderLink';
 
 const AddPredictions = () => {
   const navigation = useNavigation<PredictionsNavigationProp>();
@@ -128,9 +129,12 @@ const AddPredictions = () => {
         />
       ) : null}
       {searchMessage ? (
-        <SubHeader style={{ marginTop: 40, color: COLORS.white }}>
-          {searchMessage}
-        </SubHeader>
+        <>
+          <SubHeader style={{ marginTop: 40, color: COLORS.white }}>
+            {searchMessage}
+          </SubHeader>
+          <CantFindContenderLink />
+        </>
       ) : searchResults.length ? (
         <View
           style={{
