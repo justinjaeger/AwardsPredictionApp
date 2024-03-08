@@ -87,7 +87,6 @@ const ItemStatBox = ({
   return (
     <View
       style={{
-        height: '100%',
         borderBottomWidth: 1,
         borderColor: hexToRgb(COLORS.primaryLight, 0.5),
         paddingBottom: 10,
