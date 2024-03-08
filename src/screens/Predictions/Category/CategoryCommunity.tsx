@@ -28,7 +28,7 @@ const CategoryCommunity = ({
     yyyymmdd,
   });
 
-  const { createdAt } = predictionSet?.categories[category] || {};
+  const { createdAt, totalUsersPredicting } = predictionSet?.categories[category] || {};
   const predictions = sortPredictions(
     predictionSet?.categories[category]?.predictions ?? [],
   );
@@ -58,6 +58,7 @@ const CategoryCommunity = ({
         <MovieListCommunity
           predictions={predictions}
           lastUpdatedString={lastUpdatedString}
+          totalUsersPredicting={totalUsersPredicting}
         />
       </View>
       <BottomFABContainer bottom={bottomHeight}>

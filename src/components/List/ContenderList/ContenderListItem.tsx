@@ -22,6 +22,13 @@ import CustomIcon from '../../CustomIcon';
 import { useRouteParams } from '../../../hooks/useRouteParams';
 import { getSlotsInPhase } from '../../../util/getSlotsInPhase';
 
+export const getContenderListItemHeight = (windowWidth: number) => {
+  const { height: posterHeight } = getPosterDimensionsByWidth(
+    windowWidth / 9 - theme.posterMargin * 2,
+  );
+  return posterHeight + theme.posterMargin * 2;
+};
+
 export type iContenderListItemProps = {
   prediction: iPrediction;
   categoryType: CategoryType;
@@ -74,7 +81,7 @@ const ContenderListItem = ({
   const { isActive } = draggable || {};
   const { width: windowWidth } = useWindowDimensions();
 
-  const { phase, category: _category, categoryData } = useRouteParams();
+  const { phase, category: _category, categoryData, isLeaderboard } = useRouteParams();
   const category = _category!;
   const { type } = categoryData!;
   const slots = getSlotsInPhase(phase, categoryData);
@@ -148,6 +155,7 @@ const ContenderListItem = ({
         borderTopColor: hexToRgb(COLORS.primaryLight, 0.5),
         borderTopWidth: 1,
         padding: theme.posterMargin,
+        height: getContenderListItemHeight(windowWidth),
       }}
     >
       <TouchableOpacity
@@ -183,7 +191,7 @@ const ContenderListItem = ({
             height: posterHeight,
           }}
           ranking={ranking}
-          accolade={accoladeToShow}
+          accolade={isLeaderboard ? accoladeToShow : undefined}
           isUnaccoladed={isUnaccaloded}
         />
       </TouchableOpacity>

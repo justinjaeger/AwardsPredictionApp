@@ -16,8 +16,7 @@ import { useRouteParams } from '../../hooks/useRouteParams';
 import useQueryGetEventAccolades from '../../hooks/queries/useQueryGetEventAccolades';
 import { getSlotsInPhase } from '../../util/getSlotsInPhase';
 import useQueryGetCommunityPredictions from '../../hooks/queries/useQueryGetCommunityPredictions';
-import { getContenderRiskiness } from '../../util/getContenderRiskiness';
-import useDevice from '../../util/device';
+import { getPredictionStatsFromPredictions } from '../../util/getNumCorrectPredictions';
 
 type iMovieListProps = {
   predictions: iPrediction[];
@@ -35,7 +34,6 @@ const MovieListDraggable = ({
   isAuthProfile,
   onPressAdd,
 }: iMovieListProps) => {
-  const { isAndroid } = useDevice();
   const navigation = useNavigation<PredictionsNavigationProp>();
   const {
     categoryData,
@@ -95,28 +93,16 @@ const MovieListDraggable = ({
     .categories[category as CategoryName] || { predictions: [], totalUsersPredicting: 0 };
 
   // for leaderboard: get riskiness of all contenders that user earned points for
-  const contenderIdToRiskiness: { [cId: string]: number } = {};
-  let numCorrectPredictions = 0;
-  if (showAccolades) {
-    predictions.forEach(({ contenderId, ranking }) => {
-      const accolade = contenderIdsToPhase?.[contenderId];
-      const userDidPredictWithinSlots = ranking && ranking <= slots;
-      const predictionWasCorrect = !!(userDidPredictWithinSlots && accolade);
-      numCorrectPredictions += predictionWasCorrect ? 1 : 0;
-      if (!predictionWasCorrect) {
-        return;
-      }
-      const numPredictingContender =
-        (communityPredictions ?? []).find((p) => p.contenderId === contenderId)
-          ?.numPredicting || {};
-      const riskiness = getContenderRiskiness(
-        numPredictingContender,
+  const { contenderIdToRiskiness, numCorrectPredictions } = showAccolades
+    ? getPredictionStatsFromPredictions({
+        predictions,
+        communityPredictions,
+        totalUsersPredicting,
         slots,
-        totalUsersPredicting || 0,
-      );
-      contenderIdToRiskiness[contenderId] = riskiness;
-    });
-  }
+        contenderIdsToPhase,
+      })
+    : { contenderIdToRiskiness: {}, numCorrectPredictions: 0 };
+
   const totalRiskiness = Object.values(contenderIdToRiskiness).reduce((a, b) => a + b, 0);
 
   const isEditable = isAuthProfile && !yyyymmdd;
@@ -150,7 +136,7 @@ const MovieListDraggable = ({
                 <SubHeader
                   style={{
                     marginRight: 2,
-                    marginTop: isAndroid ? 10 : 5, // bc last updated text appears
+                    marginTop: 5,
                   }}
                 >{`${parseFloat(totalRiskiness.toString()).toFixed(
                   2,

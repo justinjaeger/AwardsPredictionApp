@@ -11,7 +11,13 @@ import { HEADER_HEIGHT } from '../Header';
 
 export const USER_PROFILE_HEIGHT = 60;
 
-const UserProfile = ({ userInfo }: { userInfo: iUserInfo }) => {
+const UserProfile = ({
+  userInfo,
+  disableImageOverlap,
+}: {
+  userInfo: iUserInfo;
+  disableImageOverlap?: boolean;
+}) => {
   const navigation = useNavigation<PredictionsNavigationProp>();
 
   const navigateToProfile = () => {
@@ -23,7 +29,10 @@ const UserProfile = ({ userInfo }: { userInfo: iUserInfo }) => {
     <View style={{ height: USER_PROFILE_HEIGHT }}>
       <ProfileImage
         image={userInfo.userImage}
-        imageSize={USER_PROFILE_HEIGHT + HEADER_HEIGHT + HEADER_TITLE_MARGIN_TOP - 10}
+        imageSize={
+          USER_PROFILE_HEIGHT +
+          (disableImageOverlap ? 0 : HEADER_HEIGHT + HEADER_TITLE_MARGIN_TOP - 10)
+        }
         onPress={navigateToProfile}
         disablePadResize
       />

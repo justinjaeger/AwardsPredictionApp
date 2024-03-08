@@ -165,7 +165,9 @@ const Event = () => {
                 <View style={{ position: 'absolute', top: 0, left: 0 }}>
                   {disableBack ? null : <BackButton variation={'on-dark'} />}
                 </View>
-                {userInfo ? <UserProfile userInfo={userInfo} /> : null}
+                {userInfo ? (
+                  <UserProfile userInfo={userInfo} disableImageOverlap={isLeaderboard} />
+                ) : null}
                 <View />
               </View>
               <View

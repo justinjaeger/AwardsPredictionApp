@@ -1,9 +1,11 @@
 import React, { useCallback, useState } from 'react';
 import { Divider } from '@ui-kitten/components';
-import { FlatList } from 'react-native';
+import { useWindowDimensions } from 'react-native';
 import COLORS from '../../constants/colors';
 import LastUpdatedText from '../LastUpdatedText';
-import ContenderListItem from '../List/ContenderList/ContenderListItem';
+import ContenderListItem, {
+  getContenderListItemHeight,
+} from '../List/ContenderList/ContenderListItem';
 import { Phase, iPrediction } from '../../models';
 import { getTotalNumPredicting } from '../../util/getNumPredicting';
 import { useNavigation } from '@react-navigation/native';
@@ -12,18 +14,29 @@ import { useRouteParams } from '../../hooks/useRouteParams';
 import useDevice from '../../util/device';
 import { getSlotsInPhase } from '../../util/getSlotsInPhase';
 import useQueryGetEventAccolades from '../../hooks/queries/useQueryGetEventAccolades';
+import { FlashList } from '@shopify/flash-list';
+import { HEADER_HEIGHT } from '../../constants';
+import { SubHeader } from '../Text';
+import { getPredictionStatsFromPredictions } from '../../util/getNumCorrectPredictions';
+import theme from '../../constants/theme';
 
 export const PREDICT_STAT_WIDTH = 120;
 
 type iMovieListProps = {
   predictions: iPrediction[];
   lastUpdatedString: string;
+  totalUsersPredicting?: number;
 };
 
 // TODO: Might want to combine with MovieListCommunity eventually
-const MovieListCommunity = ({ predictions, lastUpdatedString }: iMovieListProps) => {
+const MovieListCommunity = ({
+  predictions,
+  lastUpdatedString,
+  totalUsersPredicting,
+}: iMovieListProps) => {
   const navigation = useNavigation<PredictionsNavigationProp>();
   const { isPad } = useDevice();
+  const { width } = useWindowDimensions();
   const {
     eventId,
     event: _event,
@@ -70,13 +83,37 @@ const MovieListCommunity = ({ predictions, lastUpdatedString }: iMovieListProps)
     phase && [Phase.SHORTLIST, Phase.NOMINATION].includes(phase);
   const displayNoExtraSlots = !nominationsHaveNotHappened && !yyyymmdd;
 
+  // for leaderboard: get riskiness of all contenders that user earned points for
+  const { numCorrectPredictions } = showAccolades
+    ? getPredictionStatsFromPredictions({
+        predictions,
+        communityPredictions: predictions,
+        totalUsersPredicting,
+        slots,
+        contenderIdsToPhase,
+      })
+    : { numCorrectPredictions: 0 };
+
   return (
-    <FlatList
+    <FlashList
       data={predictions.slice(0, numToShow)}
       keyExtractor={(item) => item.contenderId}
-      style={{ width: '100%' }}
-      contentContainerStyle={{ paddingBottom: 100 }}
-      ListHeaderComponent={<LastUpdatedText lastUpdated={lastUpdatedString} />}
+      contentContainerStyle={{ paddingBottom: HEADER_HEIGHT + 100 }}
+      ListHeaderComponent={
+        <>
+          <LastUpdatedText lastUpdated={lastUpdatedString} />
+          {showAccolades ? (
+            <SubHeader
+              style={{
+                alignSelf: 'flex-end',
+                marginRight: theme.windowMargin,
+                marginTop: 5, // bc last updated text appears
+                marginBottom: 10,
+              }}
+            >{`${numCorrectPredictions}/${slots}`}</SubHeader>
+          ) : null}
+        </>
+      }
       onScroll={(e) => {
         // Fetches more at bottom of scroll. Note the high event throttle to prevent too many requests
         // get position of current scroll
@@ -120,6 +157,7 @@ const MovieListCommunity = ({ predictions, lastUpdatedString }: iMovieListProps)
           </>
         );
       }}
+      estimatedItemSize={getContenderListItemHeight(width)}
     />
   );
 };

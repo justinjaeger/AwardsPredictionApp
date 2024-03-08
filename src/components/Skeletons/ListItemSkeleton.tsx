@@ -1,12 +1,16 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, useWindowDimensions } from 'react-native';
 import theme from '../../constants/theme';
 import { getPosterDimensionsByWidth } from '../../constants/posterDimensions';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import COLORS from '../../constants/colors';
+import { getContenderListItemHeight } from '../List/ContenderList/ContenderListItem';
 
 const ListItemSkeleton = ({ posterWidth }: { posterWidth: number }) => {
+  const { width: windowWidth } = useWindowDimensions();
   const { height, width } = getPosterDimensionsByWidth(posterWidth);
+
+  const itemHeight = getContenderListItemHeight(windowWidth);
 
   return (
     <SkeletonPlaceholder
@@ -17,7 +21,7 @@ const ListItemSkeleton = ({ posterWidth }: { posterWidth: number }) => {
       <View
         style={{
           width: '100%',
-          marginTop: theme.posterMargin * 4,
+          height: itemHeight,
           flexDirection: 'row',
         }}
       >
