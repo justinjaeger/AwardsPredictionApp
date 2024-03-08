@@ -195,7 +195,7 @@ const Leaderboard = () => {
         }}
         titleWhenCollapsed={`${event.year} ${
           AWARDS_BODY_TO_PLURAL_STRING[event.awardsBody]
-        }\n${PHASE_TO_STRING_PLURAL[phase]}`}
+        }\n${PHASE_TO_STRING_PLURAL[phase]} Leaderboard`}
         flatListProps={{
           data,
           keyExtractor: (item) => {
