@@ -127,11 +127,10 @@ const Event = () => {
       yyyymmdd,
       isLeaderboard,
     };
+    setPersonalCommunityTab(isCommunityTab ? 'community' : 'personal', true);
     if (isAuthProfile || isCommunityTab) {
-      setPersonalCommunityTab('community', true);
       navigation.navigate('Category', params);
     } else {
-      setPersonalCommunityTab('personal', true);
       navigation.dispatch(StackActions.push('Category', params));
     }
   };
