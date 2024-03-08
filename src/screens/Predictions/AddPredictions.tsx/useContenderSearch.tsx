@@ -50,6 +50,7 @@ const useContenderSearch = ({
   };
 
   const handleSearch = async (searchInput: string) => {
+    setSearchMessage('');
     let Request =
       categoryType === CategoryType.PERFORMANCE
         ? TmdbServices.searchPeople(searchInput)
