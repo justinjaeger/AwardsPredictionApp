@@ -4,6 +4,7 @@ import HeaderBasic, { getHeaderBasicHeight } from '../HeaderBasic';
 export const getCollapsedContent = (
   titleWhenCollapsed: string,
   disableBack?: boolean,
+  onPressBack?: () => void,
 ) => {
   return {
     height: getHeaderBasicHeight(titleWhenCollapsed),
@@ -12,6 +13,7 @@ export const getCollapsedContent = (
         title={titleWhenCollapsed}
         disableBack={disableBack}
         backgroundColor={'transparent'}
+        onPressBack={onPressBack}
       />
     ),
   };

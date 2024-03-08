@@ -16,6 +16,7 @@ const DynamicHeaderFlatListWrapper = <T,>(props: {
   persistedContent?: { height: number; component: JSX.Element };
   flashListRef?: React.LegacyRef<FlashList<T>>;
   disableBack?: boolean;
+  onPressBack?: () => void;
 }) => {
   return (
     <DynamicHeaderWrapper
@@ -35,7 +36,11 @@ const DynamicHeaderFlatListWrapper = <T,>(props: {
       )}
       collapsedContent={
         props.titleWhenCollapsed
-          ? getCollapsedContent(props.titleWhenCollapsed, props.disableBack)
+          ? getCollapsedContent(
+              props.titleWhenCollapsed,
+              props.disableBack,
+              props.onPressBack,
+            )
           : {
               height: 0,
               component: <></>,

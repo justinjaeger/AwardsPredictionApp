@@ -22,6 +22,7 @@ const DynamicHeaderManualBody = <T,>(props: {
   persistedContent?: { height: number; component: JSX.Element };
   flashListRef?: React.LegacyRef<FlashList<T>>;
   disableBack?: boolean;
+  onPressBack?: () => void;
   renderBodyComponent: (props: {
     paddingTop: number;
     scrollViewProps: FlashListProps<T>;
@@ -33,7 +34,11 @@ const DynamicHeaderManualBody = <T,>(props: {
       renderBodyComponent={props.renderBodyComponent}
       collapsedContent={
         props.titleWhenCollapsed
-          ? getCollapsedContent(props.titleWhenCollapsed, props.disableBack)
+          ? getCollapsedContent(
+              props.titleWhenCollapsed,
+              props.disableBack,
+              props.onPressBack,
+            )
           : {
               height: 0,
               component: <></>,
