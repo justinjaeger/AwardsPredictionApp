@@ -46,7 +46,7 @@ const HeaderButton = ({
           style,
         ]}
       >
-        <CustomIcon name={icon} size={height - 15} color={COLORS.white} />
+        <CustomIcon name={icon} size={height - 10} color={COLORS.white} />
       </View>
     </TouchableOpacity>
   );
