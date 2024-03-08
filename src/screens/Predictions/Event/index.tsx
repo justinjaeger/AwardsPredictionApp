@@ -73,7 +73,12 @@ const Event = () => {
   const { width } = useWindowDimensions();
   const { isPad } = useDevice();
   const navigation = useNavigation<PredictionsNavigationProp>();
-  const { userInfo, isLeaderboard, disableBack } = useRouteParams();
+  const {
+    userInfo,
+    isLeaderboard,
+    disableBack,
+    phase: phaseFromRouteParams,
+  } = useRouteParams();
   const { userId: authUserId } = useAuth();
   const userId = userInfo?.userId || authUserId || undefined;
   const { user } = useProfileUser(userId);
@@ -82,6 +87,7 @@ const Event = () => {
 
   const { data: events } = useQueryGetAllEvents();
   const { event, phase, yyyymmdd, setEvent, setYear } = useEventSelect();
+  console.log('phase', phase);
 
   const eventIdsUserIsPredicting = Object.keys(user?.eventsPredicting ?? {});
   const eventOptions = isAuthProfile
@@ -121,7 +127,7 @@ const Event = () => {
       userInfo: userInfo || getUserInfo(user),
       eventId: event._id,
       category,
-      phase,
+      phase: phaseFromRouteParams,
       yyyymmdd,
       isLeaderboard,
     };
