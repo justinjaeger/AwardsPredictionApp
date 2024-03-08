@@ -136,7 +136,6 @@ const SearchInput = ({
               <TouchableOpacity
                 onPress={() => {
                   resetSearch();
-                  Keyboard.dismiss();
                 }}
               >
                 <CustomIcon
