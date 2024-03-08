@@ -99,8 +99,10 @@ const Event = () => {
   // I know this is strange but this is a workaround since "reanimated" seems to have a bug
   // Ideally we'd set the initial value of tabsPosX in usePersonalCommunityTab to the screen width to show commuinty tab first (broken)
   // But instead we tell it to switch to the community tab after all hooks have fired
+  const isNotLoggedInAndHasNoDataYet =
+    !userId && !isLoadingCommunity && !!communityPredictionData;
   useEffect(() => {
-    if (!userId && !isLoadingCommunity && !!communityPredictionData) {
+    if (isNotLoggedInAndHasNoDataYet) {
       setPersonalCommunityTab('community', true);
     }
   }, [
@@ -272,7 +274,9 @@ const Event = () => {
                 justifyContent: 'flex-end',
               }}
             >
-              <PredictionTabsNavigator initialTabIndex={userId ? 0 : 1} />
+              <PredictionTabsNavigator
+                initialTabIndex={isNotLoggedInAndHasNoDataYet ? 1 : undefined}
+              />
             </View>
           ),
         }}

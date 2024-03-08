@@ -38,7 +38,6 @@ const SectionTopTabs = ({
   const [selectedTab, setSelectedTab] = useState<iSectionTopTab>(tabs[initialTabIndex]);
 
   useEffect(() => {
-    setSelectedTab(tabs[initialTabIndex]);
     openTab(tabs[initialTabIndex], initialTabIndex, true);
   }, [initialTabIndex]);
 
