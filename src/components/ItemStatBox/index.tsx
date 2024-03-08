@@ -87,7 +87,7 @@ const ItemStatBox = ({
   return (
     <View
       style={{
-        borderTopWidth: 1,
+        height: '100%',
         borderBottomWidth: 1,
         borderColor: hexToRgb(COLORS.primaryLight, 0.5),
         paddingBottom: 10,
@@ -126,9 +126,9 @@ const ItemStatBox = ({
           <SubHeader style={{ marginLeft: 10 }}>{categoryString}</SubHeader>
         </>
       </TouchableOpacity>
-      {creditString ? (
-        <SubHeader style={{ marginLeft: 10 }}>{creditString}</SubHeader>
-      ) : null}
+      <View style={{ height: 20 }}>
+        {creditString ? <Body style={{ marginLeft: 10 }}>{creditString}</Body> : null}
+      </View>
       {numPredicting ? (
         <Histogram
           totalNumPredicting={totalNumPredicting}

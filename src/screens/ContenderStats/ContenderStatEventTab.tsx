@@ -150,7 +150,7 @@ const ContenderStatEventTab = ({
         <DualTabsWrapper
           tabsPosX={tabsPosX}
           tab1={
-            <View style={{ flex: 1, paddingBottom: 25 }}>
+            <View style={{ flex: 1 }}>
               <ItemStatBox
                 key={tab1.contenderId}
                 prediction={tab1}
@@ -164,7 +164,7 @@ const ContenderStatEventTab = ({
             </View>
           }
           tab2={
-            <View style={{ flex: 1, paddingBottom: 25 }}>
+            <View style={{ flex: 1 }}>
               <ItemStatBox
                 key={tab2.contenderId}
                 prediction={tab2}

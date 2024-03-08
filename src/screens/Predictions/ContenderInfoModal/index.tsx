@@ -95,7 +95,7 @@ const ContenderInfoModal = () => {
                   }),
                 );
               }}
-              text={`More${person || song ? ' movie' : ''} stats`}
+              text={`All${person || song ? ' movie' : ''} stats`}
               style={{
                 marginTop: 10,
                 marginBottom: 10,
