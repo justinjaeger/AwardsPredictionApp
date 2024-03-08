@@ -128,8 +128,10 @@ const Event = () => {
       isLeaderboard,
     };
     if (isAuthProfile || isCommunityTab) {
+      setPersonalCommunityTab('community', true);
       navigation.navigate('Category', params);
     } else {
+      setPersonalCommunityTab('personal', true);
       navigation.dispatch(StackActions.push('Category', params));
     }
   };
@@ -304,7 +306,6 @@ const Event = () => {
                     event={event}
                     item={item[0]}
                     onPress={() => {
-                      setPersonalCommunityTab('personal', true);
                       onSelectCategory(category, false);
                     }}
                     tab={'personal'}
@@ -315,7 +316,6 @@ const Event = () => {
                     event={event}
                     item={item[1]}
                     onPress={() => {
-                      setPersonalCommunityTab('community', true);
                       onSelectCategory(category, true);
                     }}
                     tab={'community'}
