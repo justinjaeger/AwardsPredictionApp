@@ -18,8 +18,7 @@ import UserSearchResultItem, {
 } from '../../../components/UserSearchResult/UserSearchResultItem';
 import { StackActions, useNavigation } from '@react-navigation/native';
 import { PredictionsNavigationProp, iUserInfo } from '../../../navigation/types';
-import DynamicHeaderFlatListWrapper from '../../../components/DynamicHeaderWrapper/DynamicHeaderFlatListWrapper';
-import { FlashList } from '@shopify/flash-list';
+import { FlashList, FlashListProps } from '@shopify/flash-list';
 import { User, WithId } from '../../../models';
 import useRecommendedUsers from '../../../hooks/useRecommendedUsers';
 import Header, { HEADER_HEIGHT } from '../../../components/HeaderComponents/Header';
@@ -28,6 +27,7 @@ import { HEADER_TOP_TAB_MARGIN_BOTTOM } from '../../../components/HeaderComponen
 import { hexToRgb } from '../../../util/hexToRgb';
 import COLORS from '../../../constants/colors';
 import UserListSkeleton from '../../../components/Skeletons/UserListSkeleton';
+import DynamicHeaderManualBody from '../../../components/DynamicHeaderWrapper/DynamicHeaderManualBody';
 
 const SEARCH_MARGIN_BOTTOM = 10;
 
@@ -129,86 +129,88 @@ const Social = () => {
     ),
   };
 
+  const flatListProps: FlashListProps<WithId<User>> = showUserSearch
+    ? {
+        data: isFetchingRecommended
+          ? []
+          : showRecommended
+          ? recommendedUsers
+          : searchResults ?? [],
+        keyExtractor: (item) => item._id + 'search',
+        renderItem: ({ item }) => (
+          <UserSearchResultItem
+            item={item}
+            authUserIsFollowing={usersIdsAuthUserIsFollowing.includes(item._id)}
+            onPress={navigateToProfile}
+          />
+        ),
+        onEndReached: () => {
+          if (showRecommended) {
+            fetchMoreRecommended();
+          } else {
+            fetchMore();
+          }
+        },
+        estimatedItemSize: getUserSearchItemHeight(isPad),
+        ListHeaderComponent: (
+          <View style={{ width: '100%', alignItems: 'flex-start', marginLeft: 20 }}>
+            {isFetchingRecommended ? (
+              <View style={{ flexDirection: 'column' }}>
+                <UserListSkeleton imageSize={USER_SEARCH_IMAGE_SIZE} />
+              </View>
+            ) : null}
+          </View>
+        ),
+      }
+    : {
+        // important: if loading users, this allows the header loader to render without being blocked by js
+        data: isLoadingUsers ? [] : usersWithNestedData ?? [],
+        keyExtractor: (item) => item._id + 'carousel',
+        renderItem: ({ item }) => (
+          <View style={{ width }}>
+            <PredictionCarousel
+              predictionSets={item.recentPredictionSets || []}
+              userInfo={getUserInfo(item)}
+            />
+          </View>
+        ),
+        estimatedItemSize: itemHeightCarousel,
+      };
+
   return (
     <BackgroundWrapper>
-      <View style={{ display: showUserSearch ? 'flex' : 'none' }}>
-        <DynamicHeaderFlatListWrapper<WithId<User>>
-          flashListRef={flashListRef}
-          disableBack={true}
-          topOnlyContent={topOnlyContent}
-          titleWhenCollapsed={screenTitle}
-          flatListProps={{
-            data: isFetchingRecommended
-              ? []
-              : showRecommended
-              ? recommendedUsers
-              : searchResults ?? [],
-            keyExtractor: (item) => item._id + 'search',
-            renderItem: ({ item }) => (
-              <UserSearchResultItem
-                item={item}
-                authUserIsFollowing={usersIdsAuthUserIsFollowing.includes(item._id)}
-                onPress={navigateToProfile}
-              />
-            ),
-            onEndReached: () => {
-              if (showRecommended) {
-                fetchMoreRecommended();
-              } else {
-                fetchMore();
-              }
-            },
-            estimatedItemSize: getUserSearchItemHeight(isPad),
-            ListHeaderComponent: (
-              <View style={{ width: '100%', alignItems: 'flex-start', marginLeft: 20 }}>
-                {isFetchingRecommended ? (
-                  <View style={{ flexDirection: 'column' }}>
-                    <UserListSkeleton imageSize={USER_SEARCH_IMAGE_SIZE} />
-                  </View>
-                ) : null}
-              </View>
-            ),
-          }}
-        />
-      </View>
-      <View style={{ display: showUserSearch ? 'none' : 'flex' }}>
-        <DynamicHeaderFlatListWrapper<WithId<User>>
-          flashListRef={flashListRef}
-          disableBack={true}
-          topOnlyContent={topOnlyContent}
-          titleWhenCollapsed={screenTitle}
-          flatListProps={{
-            // important: if loading users, this allows the header loader to render without being blocked by js
-            data: isLoadingUsers ? [] : usersWithNestedData ?? [],
-            keyExtractor: (item) => item._id + 'carousel',
-            renderItem: ({ item }) => (
-              <View style={{ width }}>
-                <PredictionCarousel
-                  predictionSets={item.recentPredictionSets || []}
-                  userInfo={getUserInfo(item)}
-                />
-              </View>
-            ),
-            ListHeaderComponent: (
-              <View style={{ width: '100%', alignItems: 'center' }}>
-                {isLoadingUsers ? (
-                  <View style={{ flexDirection: 'column' }}>
-                    {new Array(3).fill(null).map((x, i) => (
-                      <CarouselSkeleton
-                        key={i}
-                        renderProfile
-                        renderBody
-                        height={itemHeightCarousel}
-                      />
-                    ))}
-                  </View>
-                ) : null}
-              </View>
-            ),
-            estimatedItemSize: itemHeightCarousel,
-          }}
-        />
-      </View>
+      <DynamicHeaderManualBody<WithId<User>>
+        flashListRef={flashListRef}
+        disableBack={true}
+        topOnlyContent={topOnlyContent}
+        titleWhenCollapsed={screenTitle}
+        renderBodyComponent={({ paddingTop, scrollViewProps }) => (
+          <FlashList
+            {...scrollViewProps}
+            {...flatListProps}
+            ListHeaderComponent={
+              <>
+                <View style={{ paddingTop }} />
+                <View style={{ width: '100%', alignItems: 'center' }}>
+                  {isLoadingUsers ? (
+                    <View style={{ flexDirection: 'column' }}>
+                      {new Array(3).fill(null).map((x, i) => (
+                        <CarouselSkeleton
+                          key={i}
+                          renderProfile
+                          renderBody
+                          height={itemHeightCarousel}
+                        />
+                      ))}
+                    </View>
+                  ) : null}
+                </View>
+              </>
+            }
+            ref={flashListRef}
+          />
+        )}
+      />
     </BackgroundWrapper>
   );
 };
