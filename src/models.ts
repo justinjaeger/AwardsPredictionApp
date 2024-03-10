@@ -37,6 +37,7 @@ export enum AwardsBody {
   CDG = 'CDG',
   ASC = 'ASC',
   MPSE = 'MPSE',
+  COMMUNITY = 'COMMUNITY',
 }
 
 export enum CategoryType {
@@ -162,6 +163,7 @@ export type EventModel = {
   leaderboards?: iIndexedEventLeaderboards;
   amplify_id?: string;
   isHidden?: boolean;
+  recordNoHistory?: boolean;
 };
 
 export type IMovieCategoryCredit =
