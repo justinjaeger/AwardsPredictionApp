@@ -51,7 +51,10 @@ const Category = () => {
             setPersonalCommunityTab(ref.current, true);
           }}
         />
-        <PredictionTabsNavigator onOpenTab={(t) => (ref.current = t)} />
+        <PredictionTabsNavigator
+          type={event?.recordNoHistory ? 'list' : 'prediction'}
+          onOpenTab={(t) => (ref.current = t)}
+        />
         <DualTabsWrapper
           tab1={
             <CategoryPersonal showEventLink={showEventLink} bottomHeight={bottomHeight} />

@@ -6,8 +6,10 @@ import SectionTopTabs from '../../components/SectionTopTabs';
 
 const PredictionTabsNavigator = ({
   onOpenTab,
+  type,
 }: {
   onOpenTab?: (tab: 'personal' | 'community') => void;
+  type?: 'prediction' | 'list';
 }) => {
   const { tabsPosX, personalCommunityTab } = usePersonalCommunityTab();
 
@@ -19,7 +21,9 @@ const PredictionTabsNavigator = ({
     <SectionTopTabs
       tabs={[
         {
-          title: isAuthUser ? 'My Predictions' : userInfo?.userName ?? 'User',
+          title: isAuthUser
+            ? `My ${type === 'list' ? 'List' : 'Predictions'}`
+            : userInfo?.userName ?? 'User',
           onOpenTab: () => onOpenTab?.('personal'),
         },
         { title: 'Community', onOpenTab: () => onOpenTab?.('community') },

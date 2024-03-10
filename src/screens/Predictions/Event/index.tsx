@@ -277,7 +277,9 @@ const Event = () => {
                 justifyContent: 'flex-end',
               }}
             >
-              <PredictionTabsNavigator />
+              <PredictionTabsNavigator
+                type={event?.recordNoHistory ? 'list' : 'prediction'}
+              />
             </View>
           ),
         }}
