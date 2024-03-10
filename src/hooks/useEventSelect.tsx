@@ -113,6 +113,7 @@ export const useEventSelect = (params?: { isLeaderboard?: boolean }) => {
     leaderboard,
     eventType,
     setEventType,
-    events: filteredEvents,
+    allEvents: events,
+    eventsToSelectFrom: filteredEvents,
   };
 };

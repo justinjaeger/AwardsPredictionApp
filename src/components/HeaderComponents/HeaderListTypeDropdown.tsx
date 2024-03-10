@@ -13,10 +13,12 @@ const HeaderListTypeDropdown = ({
   eventType,
   setEventType,
   heightAboveDropdown,
+  showListTab,
 }: {
   eventType: string;
   setEventType: (v: 'list' | 'prediction') => void;
   heightAboveDropdown: number;
+  showListTab: boolean;
 }) => {
   const { openDropdown } = useHeaderDropdown();
   const options = [
@@ -25,12 +27,14 @@ const HeaderListTypeDropdown = ({
       value: 'prediction',
       isSelected: eventType === 'prediction',
     },
-    {
+  ];
+  if (showListTab) {
+    options.push({
       text: 'Lists',
       value: 'list',
       isSelected: eventType === 'list',
-    },
-  ];
+    });
+  }
   const selectedOption = options.find((o) => o.isSelected);
   return (
     <TouchableOpacity

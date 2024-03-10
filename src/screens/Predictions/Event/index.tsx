@@ -121,15 +121,28 @@ const Event = () => {
   const isAuthProfile = user?._id === authUserId;
   const { tabsPosX, setPersonalCommunityTab } = usePersonalCommunityTab();
 
-  const { event, phase, yyyymmdd, setEvent, setYear, eventType, setEventType, events } =
-    useEventSelect();
+  const {
+    event,
+    phase,
+    yyyymmdd,
+    setEvent,
+    setYear,
+    eventType,
+    setEventType,
+    eventsToSelectFrom,
+    allEvents,
+  } = useEventSelect();
 
-  const eventIdsUserIsPredicting = Object.keys(user?.eventsPredicting ?? {});
-  const eventOptions = isAuthProfile
-    ? events
-    : (eventIdsUserIsPredicting
-        .map((id) => events?.find((e) => e._id === id))
-        .filter(Boolean) as WithId<EventModel>[]);
+  const eventsUserIsPredicting = Object.keys(user?.eventsPredicting ?? {}).map((id) =>
+    allEvents?.find((e) => e._id === id),
+  );
+
+  const eventTabOptions = isAuthProfile
+    ? eventsToSelectFrom
+    : (eventsUserIsPredicting.filter(Boolean) as WithId<EventModel>[]);
+
+  const showListTab =
+    isAuthProfile || eventsUserIsPredicting?.some((e) => e?.eventType === 'list');
 
   const { data: userPredictionData, isLoading: isLoadingPersonal } =
     useQueryGetUserPredictions({ event, userId, yyyymmdd });
@@ -293,10 +306,11 @@ const Event = () => {
                   eventType={eventType}
                   setEventType={setEventType}
                   heightAboveDropdown={heightAboveDropdown}
+                  showListTab={showListTab}
                 />
                 <YearDropdown
                   event={event}
-                  eventOptions={eventOptions ?? []}
+                  eventOptions={eventTabOptions ?? []}
                   setYear={setYear}
                   heightAboveDropdown={heightAboveDropdown}
                 />
@@ -315,7 +329,7 @@ const Event = () => {
                   }}
                   selectedEvent={event}
                   setEvent={setEvent}
-                  eventOptions={eventOptions ?? []}
+                  eventOptions={eventTabOptions ?? []}
                 />
               ) : null}
             </View>

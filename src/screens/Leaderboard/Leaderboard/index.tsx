@@ -16,7 +16,6 @@ import { getUserInfo } from '../../../util/getUserInfo';
 import { usePersonalCommunityTab } from '../../../context/PersonalCommunityContext';
 import useQueryGetFollowingUsers from '../../../hooks/queries/useQueryGetFollowingUsers';
 import { iLeaderboardRankingsWithUserData } from '../../../services/api/requests/leaderboard';
-import useQueryGetAllEvents from '../../../hooks/queries/useQueryGetAllEvents';
 import { AWARDS_BODY_TO_PLURAL_STRING } from '../../../constants/awardsBodies';
 import LeaderboardStats from './LeaderboardStats';
 import HeaderDropdownOverlay from '../../../components/HeaderDropdownOverlay';
@@ -55,9 +54,16 @@ const Leaderboard = () => {
 
   const { isPad } = useDevice();
   const { setPersonalCommunityTab } = usePersonalCommunityTab();
-  const { data: events } = useQueryGetAllEvents();
   const { disableBack } = useRouteParams();
-  const { event, setEvent, setYear, phase, setPhase, leaderboard } = useEventSelect({
+  const {
+    event,
+    setEvent,
+    setYear,
+    phase,
+    setPhase,
+    leaderboard,
+    allEvents: events,
+  } = useEventSelect({
     isLeaderboard: true,
   });
 
