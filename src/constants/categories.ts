@@ -45,6 +45,8 @@ export const ORDERED_CATEGORIES = [
   CategoryName.ORIGINAL_SCREENPLAY,
   CategoryName.ADAPTED_SCREENPLAY,
   CategoryName.CASTING,
+  CategoryName.BRITISH_FILM,
+  CategoryName.BRITISH_DEBUT,
   CategoryName.INTERNATIONAL,
   CategoryName.DOCUMENTARY,
   CategoryName.ANIMATED,

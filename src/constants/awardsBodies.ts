@@ -14,8 +14,8 @@ export const AWARDS_BODY_TO_STRING: {
   [AwardsBody.HCA]: 'Hollywood Critics Association',
   [AwardsBody.MAKEUP_GUILD]: 'Make-Up Artists and Hair Stylists Guild',
   [AwardsBody.MPSE]: 'Motion Picture Sound Editors',
-  [AwardsBody.PGA]: 'Producers Guild',
-  [AwardsBody.SAG]: 'Screen Actors Guild',
+  [AwardsBody.PGA]: 'PGA',
+  [AwardsBody.SAG]: 'SAG',
   [AwardsBody.WGA]: 'Writers Guild',
   [AwardsBody.COMMUNITY]: 'Award Expert Community',
 };
