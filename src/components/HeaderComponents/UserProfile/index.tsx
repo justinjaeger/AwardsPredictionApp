@@ -2,7 +2,7 @@ import React from 'react';
 import ProfileImage from '../../ProfileImage';
 import { StackActions, useNavigation } from '@react-navigation/native';
 import { PredictionsNavigationProp, iUserInfo } from '../../../navigation/types';
-import { TouchableOpacity, View } from 'react-native';
+import { StyleProp, TouchableOpacity, View, ViewStyle } from 'react-native';
 import COLORS from '../../../constants/colors';
 import { SubHeader } from '../../Text';
 import CustomIcon from '../../CustomIcon';
@@ -14,9 +14,11 @@ export const USER_PROFILE_HEIGHT = 60;
 const UserProfile = ({
   userInfo,
   disableImageOverlap,
+  style,
 }: {
   userInfo: iUserInfo;
   disableImageOverlap?: boolean;
+  style?: StyleProp<ViewStyle>;
 }) => {
   const navigation = useNavigation<PredictionsNavigationProp>();
 
@@ -26,7 +28,7 @@ const UserProfile = ({
   };
 
   return userInfo.userImage ? (
-    <View style={{ height: USER_PROFILE_HEIGHT }}>
+    <View style={[{ height: USER_PROFILE_HEIGHT }, style]}>
       <ProfileImage
         image={userInfo.userImage}
         imageSize={
@@ -40,11 +42,14 @@ const UserProfile = ({
   ) : (
     <TouchableOpacity
       onPress={navigateToProfile}
-      style={{
-        height: USER_PROFILE_HEIGHT,
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
+      style={[
+        {
+          height: USER_PROFILE_HEIGHT,
+          alignItems: 'center',
+          justifyContent: 'center',
+        },
+        style,
+      ]}
     >
       <View
         style={{

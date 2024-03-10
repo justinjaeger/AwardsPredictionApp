@@ -35,14 +35,14 @@ const SectionTopTabs = ({
     new Animated.Value(getScrollBarPosition(initialTabIndex, width)),
   ).current;
 
-  const [selectedTab, setSelectedTab] = useState<iSectionTopTab>(tabs[initialTabIndex]);
+  const [selectedTab, setSelectedTab] = useState<number>(initialTabIndex);
 
   useEffect(() => {
     openTab(tabs[initialTabIndex], initialTabIndex, true);
   }, [initialTabIndex]);
 
   const openTab = (t: iSectionTopTab, index: number, immediate?: boolean) => {
-    setSelectedTab(t);
+    setSelectedTab(index);
 
     t.onOpenTab && t.onOpenTab();
 
@@ -81,7 +81,7 @@ const SectionTopTabs = ({
         }}
       />
       {tabs.map((t, i) => {
-        const isSelected = t.title === selectedTab.title;
+        const isSelected = selectedTab === i;
         return (
           <TouchableHighlight
             key={t.title}

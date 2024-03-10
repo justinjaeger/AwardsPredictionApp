@@ -8,6 +8,7 @@ import {
   iHeaderDropdownPosition,
   useHeaderDropdown,
 } from '../../context/HeaderDropdownContext';
+import { hexToRgb } from '../../util/hexToRgb';
 
 const HeaderDropdownButton = ({
   options,
@@ -36,10 +37,10 @@ const HeaderDropdownButton = ({
             flexDirection: 'row',
             borderRadius: theme.borderRadius,
             borderWidth: 1,
-            borderColor: COLORS.primaryLight,
+            borderColor: hexToRgb(COLORS.primaryLight, 0.5),
             alignItems: 'center',
             paddingLeft: 10,
-            paddingRight: 10,
+            paddingRight: 4,
             height,
           }}
           activeOpacity={0.5}
@@ -55,37 +56,9 @@ const HeaderDropdownButton = ({
             );
           }}
         >
+          <SubHeader style={{ marginRight: 5 }}>{selectedOption?.text ?? ''}</SubHeader>
           <CustomIcon name="arrow-ios-downward-outline" size={20} color="white" />
-          <SubHeader style={{ marginLeft: 5 }}>{selectedOption?.text ?? ''}</SubHeader>
         </TouchableOpacity>
-        {/* {showDropdown ? (
-          <>
-            <View
-              style={{
-                position: 'absolute',
-                top: height,
-                right: 0,
-                zIndex: 2,
-              }}
-            >
-              {options.map((o) => (
-                <TouchableHighlight
-                  onPress={() => {
-                    onSelect(o.value);
-                    setShowDropdown(false);
-                  }}
-                  style={{
-                    padding: 10,
-                    minWidth: 60,
-                    backgroundColor: o.isSelected ? COLORS.primaryLight : COLORS.primary,
-                  }}
-                >
-                  <BodyBold>{o.text}</BodyBold>
-                </TouchableHighlight>
-              ))}
-            </View>
-          </>
-        ) : null} */}
       </View>
     </>
   );

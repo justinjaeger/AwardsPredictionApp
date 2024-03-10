@@ -67,7 +67,6 @@ export const ORDERED_CATEGORIES = [
   CategoryName.ANIMATED_PERFORMANCE,
   CategoryName.BLOCKBUSTER,
   CategoryName.BREAKTHROUGH,
-  CategoryName.BRITISH_PICTURE,
   CategoryName.DEBUT,
   CategoryName.FIRST_SCREENPLAY,
   CategoryName.RISING_STAR,
