@@ -13,13 +13,11 @@ import HeaderBasic from '../../../components/HeaderBasic';
 import DualTabsWrapper from '../../../components/DualTabsWrapper';
 import { usePersonalCommunityTab } from '../../../context/PersonalCommunityContext';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import useDevice from '../../../util/device';
 import { getBottomHeight } from '../../../util/getBottomHeight';
 
 const Category = () => {
   const navigation = useNavigation();
   const { top } = useSafeAreaInsets();
-  const { isPad } = useDevice();
   const { tabsPosX, personalCommunityTab, setPersonalCommunityTab } =
     usePersonalCommunityTab();
   const { params } = useRoute<RouteProp<PredictionsParamList, 'Category'>>();
@@ -37,7 +35,7 @@ const Category = () => {
     headerText = headerTitle;
   }
 
-  const bottomHeight = getBottomHeight(top, isPad);
+  const bottomHeight = getBottomHeight(top, headerText);
 
   // we can do this because it's not used in the render; only accessed on the back func
   const ref = useRef(personalCommunityTab);
