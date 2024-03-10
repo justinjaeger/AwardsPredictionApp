@@ -5,7 +5,6 @@ import { Body, SubHeader } from '../../components/Text';
 import { AWARDS_BODY_TO_PLURAL_STRING } from '../../constants/awardsBodies';
 import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
-import { useAuth } from '../../context/AuthContext';
 import { iUserInfo, PredictionsNavigationProp } from '../../navigation/types';
 import { formatLastUpdated } from '../../util/formatDateTime';
 import { AwardsBody, CategoryName, iRecentPrediction } from '../../models';
@@ -22,12 +21,10 @@ const UserPredictionList = ({
   userInfo: iUserInfo | undefined;
   fixedSlots?: number;
 }) => {
-  const { userId: authUserId } = useAuth();
   const { setPersonalCommunityTab } = usePersonalCommunityTab();
   const navigation = useNavigation<PredictionsNavigationProp>();
   const { data: events } = useQueryGetAllEvents();
   const { width } = useWindowDimensions();
-  const isAuthProfile = userInfo?.userId === authUserId;
 
   return (
     <>
@@ -61,7 +58,7 @@ const UserPredictionList = ({
                 userInfo,
                 eventId: event._id,
                 category: ps.category as CategoryName,
-                showEventLink: !isAuthProfile,
+                showEventLink: true,
               });
             }}
           >

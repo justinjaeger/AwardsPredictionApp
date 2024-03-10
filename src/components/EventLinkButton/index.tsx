@@ -5,7 +5,6 @@ import CustomIcon from '../CustomIcon';
 import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
 import { BodyBold } from '../Text';
-import { hexToRgb } from '../../util/hexToRgb';
 import { useRouteParams } from '../../hooks/useRouteParams';
 import { IPAD_PROFILE_IMAGE_SCALE } from '../ProfileImage';
 import useDevice from '../../util/device';
@@ -37,7 +36,7 @@ const EventLinkButton = ({ text }: { text?: string }) => {
         paddingLeft: 10,
         zIndex: 100,
         borderRadius: theme.borderRadius,
-        backgroundColor: hexToRgb(COLORS.primary, 0.8),
+        backgroundColor: COLORS.primary,
         borderWidth: 1,
         borderColor: COLORS.primaryLight,
         borderTopWidth: 0,
