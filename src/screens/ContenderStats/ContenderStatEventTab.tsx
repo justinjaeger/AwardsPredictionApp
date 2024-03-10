@@ -125,9 +125,11 @@ const ContenderStatEventTab = ({
     return [dataInLikelihoodOrder[i], dataInCategoryOrder[i]];
   });
 
+  const isList = event.eventType === 'list';
+
   return (
     <View style={{ flex: 1 }}>
-      {potential ? (
+      {potential && !isList ? (
         <View
           style={{
             padding: isPad ? 40 : 10,
@@ -137,9 +139,9 @@ const ContenderStatEventTab = ({
             justifyContent: 'space-between',
           }}
         >
-          <Stat number={`${potential.wins}`} text="wins predicted" />
-          <Stat number={`${potential.noms}`} text="noms predicted" />
-          <Stat number={`${potential.potential}`} text="potential" />
+          <Stat number={`${potential.wins}`} text={'wins predicted'} />
+          <Stat number={`${potential.noms}`} text={'noms predicted'} />
+          <Stat number={`${potential.potential}`} text={'potential'} />
         </View>
       ) : null}
       <SectionTopTabs

@@ -80,6 +80,8 @@ const ItemStatBox = ({
     event?.nomDateTime &&
     new Date(event.nomDateTime) < new Date();
 
+  const isList = event.eventType === 'list';
+
   return (
     <View
       style={{
@@ -148,18 +150,20 @@ const ItemStatBox = ({
       >
         <Stat
           number={`${formatPercentage(win / totalNumPredictingCategory, true)}`}
-          text="predict win"
+          text={isList ? 'vote win' : 'predict win'}
         />
         {!nominationsHavePassed ? (
           <>
             <Stat
               number={`${formatPercentage(nom / totalNumPredictingCategory, true)}`}
-              text="predict nom"
+              text={isList ? 'vote nom' : 'predict nom'}
             />
-            <Stat
-              number={`${formatPercentage(listed / totalNumPredictingCategory, true)}`}
-              text={`top ${(slots ?? 5) + SLOTS_TO_DISPLAY_EXTRA}`}
-            />
+            {isList ? null : (
+              <Stat
+                number={`${formatPercentage(listed / totalNumPredictingCategory, true)}`}
+                text={`top ${(slots ?? 5) + SLOTS_TO_DISPLAY_EXTRA}`}
+              />
+            )}
           </>
         ) : null}
       </View>
@@ -175,7 +179,9 @@ const ItemStatBox = ({
         <SubHeaderLight>{'out of'}</SubHeaderLight>
         <HeaderLight>{` ${totalNumPredictingCategory} `}</HeaderLight>
       </View>
-      <Body style={{ textAlign: 'center' }}>{'users predicting category'}</Body>
+      <Body style={{ textAlign: 'center' }}>
+        {isList ? 'users voting in category' : 'users predicting category'}
+      </Body>
     </View>
   );
 };

@@ -33,8 +33,9 @@ const ContenderStats = () => {
   const movie = store[movieTmdbId] as Movie;
 
   const eventsWithinYear = events?.filter((event) => event.year === year);
-  const initialEvent =
-    eventsWithinYear?.find(({ _id }) => eventId === _id) ?? eventsWithinYear?.[0];
+  const initialEvent = useRef(
+    eventsWithinYear?.find(({ _id }) => eventId === _id) ?? eventsWithinYear?.[0],
+  ).current;
 
   const [event, setEvent] = useState<WithId<EventModel> | undefined>(initialEvent);
 
@@ -43,6 +44,11 @@ const ContenderStats = () => {
   }
 
   const headerTitle = truncateText((movie as Movie).title ?? '', 20);
+
+  const resortedEvents = [
+    initialEvent,
+    ...(eventsWithinYear?.filter((e) => e._id !== initialEvent._id) ?? []),
+  ];
 
   return (
     <BackgroundWrapper>
@@ -77,7 +83,7 @@ const ContenderStats = () => {
             <EventTopTabs
               selectedEvent={event}
               setEvent={setEvent}
-              eventOptions={eventsWithinYear}
+              eventOptions={resortedEvents}
               style={{ paddingLeft: theme.windowMargin }}
             />
           </LinearGradient>

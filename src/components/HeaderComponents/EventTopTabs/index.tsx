@@ -27,11 +27,9 @@ const EventTopTabs = ({
     return e.year === selectedYear;
   });
 
-  const eventsSorted = eventsFilteredByYear;
-
   return (
     <HorizontalScrollingTabs<string>
-      options={eventsSorted.map((e) => ({
+      options={eventsFilteredByYear.map((e) => ({
         isSelected: e.awardsBody === selectedAwardsBody,
         text: AWARDS_BODY_TO_PLURAL_STRING[e.awardsBody],
         value: e._id,
