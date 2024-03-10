@@ -12,7 +12,6 @@ import { AWARDS_BODY_TO_PLURAL_STRING } from '../../../constants/awardsBodies';
 import { EVENT_TOP_TABS_HEIGHT } from '../../../components/HorizontalScrollingTabs';
 import HeaderDropdownOverlay from '../../../components/HeaderDropdownOverlay';
 import { useEventSelect } from '../../../hooks/useEventSelect';
-import useQueryGetAllEvents from '../../../hooks/queries/useQueryGetAllEvents';
 import { getSectionTabHeight } from '../../../components/SectionTopTabs';
 import { getUserInfo } from '../../../util/getUserInfo';
 import DynamicHeaderFlatListWrapper from '../../../components/DynamicHeaderWrapper/DynamicHeaderFlatListWrapper';
@@ -46,6 +45,7 @@ import UserProfile, {
 import { PHASE_TO_STRING_PLURAL } from '../../../constants/categories';
 import { FlashList } from '@shopify/flash-list';
 import { usePersonalCommunityTab } from '../../../context/PersonalCommunityContext';
+import HeaderListTypeDropdown from '../../../components/HeaderComponents/HeaderListTypeDropdown';
 
 const getPredictionsData = (
   userPredictionSet: WithId<PredictionSet> | undefined,
@@ -85,8 +85,8 @@ const Event = () => {
   const isAuthProfile = user?._id === authUserId;
   const { tabsPosX, setPersonalCommunityTab } = usePersonalCommunityTab();
 
-  const { data: events } = useQueryGetAllEvents();
-  const { event, phase, yyyymmdd, setEvent, setYear } = useEventSelect();
+  const { event, phase, yyyymmdd, setEvent, setYear, eventType, setEventType, events } =
+    useEventSelect();
 
   const eventIdsUserIsPredicting = Object.keys(user?.eventsPredicting ?? {});
   const eventOptions = isAuthProfile
@@ -155,6 +155,8 @@ const Event = () => {
     ? 0
     : BACK_BUTTON_HEIGHT;
 
+  const heightAboveDropdown = heightOfTopSection + HEADER_TITLE_MARGIN_TOP;
+
   const topOnlyContent = isLeaderboard
     ? {
         height: HEADER_HEIGHT + SUBHEADER_HEIGHT + USER_PROFILE_HEIGHT,
@@ -180,6 +182,7 @@ const Event = () => {
                   flexDirection: 'column',
                   width: '100%',
                   alignItems: 'flex-start',
+                  zIndex: 1,
                 }}
               >
                 <Header text={eventName} />
@@ -205,7 +208,7 @@ const Event = () => {
                 paddingRight: theme.windowMargin,
               }}
             >
-              <View style={{ position: 'relative', alignItems: 'center' }}>
+              <View style={{ position: 'relative', alignItems: 'center', zIndex: 2 }}>
                 <View
                   style={{
                     position: showUserInfo ? 'absolute' : 'relative',
@@ -226,14 +229,19 @@ const Event = () => {
                   width: '100%',
                   alignItems: 'center',
                   justifyContent: 'space-between',
+                  zIndex: 1,
                 }}
               >
-                <Header text={'Predictions'} />
+                <HeaderListTypeDropdown
+                  eventType={eventType}
+                  setEventType={setEventType}
+                  heightAboveDropdown={heightAboveDropdown}
+                />
                 <YearDropdown
                   event={event}
                   eventOptions={eventOptions ?? []}
                   setYear={setYear}
-                  heightAboveDropdown={heightOfTopSection + HEADER_TITLE_MARGIN_TOP}
+                  heightAboveDropdown={heightAboveDropdown}
                 />
               </View>
             </View>
@@ -278,7 +286,7 @@ const Event = () => {
               }}
             >
               <PredictionTabsNavigator
-                type={event?.recordNoHistory ? 'list' : 'prediction'}
+                type={event?.eventType === 'list' ? 'list' : 'prediction'}
               />
             </View>
           ),

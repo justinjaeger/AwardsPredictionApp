@@ -52,7 +52,7 @@ const Category = () => {
           }}
         />
         <PredictionTabsNavigator
-          type={event?.recordNoHistory ? 'list' : 'prediction'}
+          type={event?.eventType === 'list' ? 'list' : 'prediction'}
           onOpenTab={(t) => (ref.current = t)}
         />
         <DualTabsWrapper

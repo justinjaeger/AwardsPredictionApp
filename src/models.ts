@@ -86,7 +86,6 @@ export enum CategoryName {
   RISING_STAR = 'RISING_STAR',
   DEBUT = 'DEBUT',
   FIRST_SCREENPLAY = 'FIRST_SCREENPLAY',
-  BRITISH_PICTURE = 'BRITISH_PICTURE',
   ANIMATED_PERFORMANCE = 'ANIMATED_PERFORMANCE',
   BLOCKBUSTER = 'BLOCKBUSTER',
   ACTING_ACHIEVEMENT = 'ACTING_ACHIEVEMENT',
@@ -166,6 +165,7 @@ export type EventModel = {
   amplify_id?: string;
   isHidden?: boolean;
   recordNoHistory?: boolean;
+  eventType?: 'list' | 'prediction';
 };
 
 export type IMovieCategoryCredit =

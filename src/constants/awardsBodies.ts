@@ -17,7 +17,7 @@ export const AWARDS_BODY_TO_STRING: {
   [AwardsBody.PGA]: 'PGA',
   [AwardsBody.SAG]: 'SAG',
   [AwardsBody.WGA]: 'Writers Guild',
-  [AwardsBody.COMMUNITY]: 'Award Expert Community',
+  [AwardsBody.COMMUNITY]: 'Community Favorites',
 };
 
 export const SORTED_AWARDS_BODIES = [

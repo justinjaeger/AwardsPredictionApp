@@ -10,41 +10,46 @@ import { AwardsBody, EventModel, WithId } from '../models';
  *
  * Note: not accounting for shortlists here
  */
-export const getDefaultEvent = (events: WithId<EventModel>[] | undefined) => {
+export const getDefaultEvent = (
+  events: WithId<EventModel>[] | undefined,
+  defaultYear?: number,
+) => {
   if (!events || events.length === 0) return undefined;
 
   // find whichever event has the closest deadline AND whose deadline is within a month
   const now = new Date();
   let eventThatHasClosestDeadline: WithId<EventModel> | undefined;
   let closestOverallDateTime: Date = new Date(0);
-  events.forEach((event) => {
-    const nomDateTime = event.nomDateTime && new Date(event.nomDateTime);
-    const winDateTime = event.winDateTime && new Date(event.winDateTime);
+  events
+    .filter((e) => e.year === defaultYear)
+    .forEach((event) => {
+      const nomDateTime = event.nomDateTime && new Date(event.nomDateTime);
+      const winDateTime = event.winDateTime && new Date(event.winDateTime);
 
-    const nomsAreInNearFuture =
-      nomDateTime &&
-      nomDateTime > now &&
-      // true if happening less than 30 days from now
-      now < new Date(nomDateTime.getTime() + 30 * 24 * 60 * 60 * 1000);
-    const winsAreInNearFuture =
-      winDateTime &&
-      winDateTime > now &&
-      now < new Date(winDateTime.getTime() + 30 * 24 * 60 * 60 * 1000);
+      const nomsAreInNearFuture =
+        nomDateTime &&
+        nomDateTime > now &&
+        // true if happening less than 30 days from now
+        now < new Date(nomDateTime.getTime() + 30 * 24 * 60 * 60 * 1000);
+      const winsAreInNearFuture =
+        winDateTime &&
+        winDateTime > now &&
+        now < new Date(winDateTime.getTime() + 30 * 24 * 60 * 60 * 1000);
 
-    const nearestDateTime = nomsAreInNearFuture
-      ? nomDateTime
-      : winsAreInNearFuture
-      ? winDateTime
-      : undefined;
+      const nearestDateTime = nomsAreInNearFuture
+        ? nomDateTime
+        : winsAreInNearFuture
+        ? winDateTime
+        : undefined;
 
-    if (!nearestDateTime) return;
+      if (!nearestDateTime) return;
 
-    const thisDateTimeIsCloserThanPrev = nearestDateTime < closestOverallDateTime;
-    if (!eventThatHasClosestDeadline || thisDateTimeIsCloserThanPrev) {
-      eventThatHasClosestDeadline = event;
-      closestOverallDateTime = nearestDateTime;
-    }
-  });
+      const thisDateTimeIsCloserThanPrev = nearestDateTime < closestOverallDateTime;
+      if (!eventThatHasClosestDeadline || thisDateTimeIsCloserThanPrev) {
+        eventThatHasClosestDeadline = event;
+        closestOverallDateTime = nearestDateTime;
+      }
+    });
 
   if (eventThatHasClosestDeadline) return eventThatHasClosestDeadline;
 
@@ -61,6 +66,5 @@ export const getDefaultEvent = (events: WithId<EventModel>[] | undefined) => {
   });
   if (mostRecentAcademyAwardEvent) return mostRecentAcademyAwardEvent;
 
-  // and if not that, the first event in the list
   return events[0];
 };

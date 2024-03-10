@@ -14,6 +14,9 @@ export const useEventSelect = () => {
   } = useRouteParams();
   const { data: events, defaultEvent, defaultLeaderboard } = useQueryGetAllEvents();
 
+  const [eventType, _setEventType] = useState<'list' | 'prediction'>(
+    initialEvent?.eventType ?? 'prediction',
+  );
   const [year, _setYear] = useState<number | undefined>(
     initialEvent?.year ?? defaultEvent?.year,
   );
@@ -22,6 +25,26 @@ export const useEventSelect = () => {
   );
   const [phase, setPhase] = useState<Phase | undefined>(initialPhase);
   const [yyyymmdd, setYyyymmdd] = useState<number | undefined>(initialYyyymmdd);
+
+  const eventTypeEvents = events.filter((e) => e?.eventType === 'list');
+  const predictionTypeEvents = events.filter((e) => e?.eventType !== 'list');
+
+  const setEventType = (eventType: 'list' | 'prediction') => {
+    _setEventType(eventType);
+    if (eventType !== 'list' && defaultEvent) {
+      const defaultEventRespectingYear = getDefaultEvent(events, year);
+      setEvent(defaultEventRespectingYear ?? defaultEvent);
+    }
+    if (eventType === 'list') {
+      // NO: make it correspond to the year if possible
+      const defaultListEvent = events.find(
+        (e) => e.eventType === 'list' && e.year === year,
+      );
+      if (defaultListEvent) {
+        setEvent(defaultListEvent);
+      }
+    }
+  };
 
   const setEvent = (event: WithId<EventModel>) => {
     _setYear(event.year);
@@ -69,6 +92,8 @@ export const useEventSelect = () => {
 
   const leaderboard = event && phase ? getLeaderboardFromEvent(event, phase) : undefined;
 
+  const filteredEvents = eventType === 'list' ? eventTypeEvents : predictionTypeEvents;
+
   return {
     yyyymmdd,
     setYyyymmdd,
@@ -79,5 +104,8 @@ export const useEventSelect = () => {
     phase,
     setPhase,
     leaderboard,
+    eventType,
+    setEventType,
+    events: filteredEvents,
   };
 };
