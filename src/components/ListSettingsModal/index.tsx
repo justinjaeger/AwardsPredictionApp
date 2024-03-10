@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Switch, View, useWindowDimensions } from 'react-native';
 import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
@@ -15,17 +15,23 @@ const ListSettingsModal = ({
 }) => {
   const { width, height } = useWindowDimensions();
 
-  const [showGenderedCategories, setShowGenderedCategories] = useState(false);
+  const [displayGenderedCategories, setDisplayGenderedCategories] = useState<boolean>();
 
-  if (!visible) return null;
+  useEffect(() => {
+    AsyncStorage.getItem(AsyncStorageKeys.GENDERED_PREFERENCE).then((value) => {
+      setDisplayGenderedCategories(value === 'true');
+    });
+  }, [visible]);
 
   const close = () => {
     onClose();
     AsyncStorage.setItem(
       AsyncStorageKeys.GENDERED_PREFERENCE,
-      showGenderedCategories ? 'true' : 'false',
+      displayGenderedCategories ? 'true' : 'false',
     );
   };
+
+  if (!visible) return null;
 
   return (
     <>
@@ -70,9 +76,9 @@ const ListSettingsModal = ({
             Gendered Categories
           </SubHeader>
           <Switch
-            value={showGenderedCategories}
+            value={displayGenderedCategories}
             onValueChange={() => {
-              setShowGenderedCategories((prev) => !prev);
+              setDisplayGenderedCategories((prev) => !prev);
             }}
             thumbColor={COLORS.white}
             trackColor={{

@@ -59,7 +59,7 @@ const getPredictionsData = (
   userPredictionSet: WithId<PredictionSet> | undefined,
   communityPredictionSet: WithId<PredictionSet> | undefined,
   event: EventModel | undefined,
-  displayGenderPreference?: boolean | undefined, // undefined for non-auth users
+  displayGenderedCategories?: boolean | undefined, // undefined for non-auth users
 ): iCategoryListItem[][] => {
   if (!event) return [];
   const orderedUserPredictions = getOrderedPredictionSetCategories(
@@ -75,16 +75,16 @@ const getPredictionsData = (
     .filter(([category, predictions]) => {
       const isGenderedCategory = GENDERED_CATEGORIES.includes(category);
       const isAgenderCategory = AGENDER_CATEGORIES.includes(category);
-      if (displayGenderPreference === true && isGenderedCategory) {
+      if (displayGenderedCategories === true && isGenderedCategory) {
         return true;
       }
-      if (displayGenderPreference === false && isAgenderCategory) {
+      if (displayGenderedCategories === false && isAgenderCategory) {
         return true;
       }
       // it's undefined for non-auth users
       // in this case, only show the category if they are predicting it
       if (
-        displayGenderPreference === undefined &&
+        displayGenderedCategories === undefined &&
         (isGenderedCategory || isAgenderCategory)
       ) {
         return predictions.length > 0;
@@ -135,7 +135,7 @@ const Event = () => {
     useQueryGetCommunityPredictions({ event, yyyymmdd });
 
   // will remain undefined for non-auth users, in which case we'll show the categories if they're predicting
-  const [displayGenderPreference, setDisplayGenderPreference] = React.useState<
+  const [displayGenderedCategories, setDisplayGenderedCategories] = React.useState<
     boolean | undefined
   >(undefined);
   const [showSettings, setShowSettings] = React.useState(false);
@@ -143,10 +143,10 @@ const Event = () => {
   useEffect(() => {
     if (isAuthProfile) {
       AsyncStorage.getItem(AsyncStorageKeys.GENDERED_PREFERENCE).then((pref) => {
-        setDisplayGenderPreference(pref === 'true');
+        setDisplayGenderedCategories(pref === 'true');
       });
     }
-  }, [showSettings]);
+  }, [showSettings, isAuthProfile]);
 
   // This is weird, but see note in PersonalCommunityContext.tsx
   const isNotLoggedInAndHasNoDataYet =
@@ -187,7 +187,7 @@ const Event = () => {
     userPredictionData || undefined,
     communityPredictionData || undefined,
     event,
-    displayGenderPreference,
+    displayGenderedCategories,
   );
 
   const isLoading = isLoadingPersonal || isLoadingCommunity;
