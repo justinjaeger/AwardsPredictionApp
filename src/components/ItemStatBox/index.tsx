@@ -82,7 +82,7 @@ const ItemStatBox = ({
   const nominationsHaveNotHappened = [undefined, Phase.SHORTLIST].includes(
     biggestPhaseThatHasHappened,
   );
-  const displayNoExtraSlots = !nominationsHaveNotHappened && !yyyymmdd;
+  const displayNoExtraSlots = !nominationsHaveNotHappened;
 
   return (
     <View

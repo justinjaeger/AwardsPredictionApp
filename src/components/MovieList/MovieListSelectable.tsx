@@ -92,7 +92,7 @@ const MovieListSelectable = ({
 
   const nominationsHaveNotHappened =
     phase && [Phase.SHORTLIST, Phase.NOMINATION].includes(phase);
-  const displayNoExtraSlots = !nominationsHaveNotHappened && !yyyymmdd;
+  const displayNoExtraSlots = !nominationsHaveNotHappened;
 
   return (
     <FlatList

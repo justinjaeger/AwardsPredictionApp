@@ -80,7 +80,7 @@ const MovieListCommunity = ({
 
   const nominationsHaveNotHappened =
     phase && [Phase.SHORTLIST, Phase.NOMINATION].includes(phase);
-  const displayNoExtraSlots = !nominationsHaveNotHappened && !yyyymmdd;
+  const displayNoExtraSlots = !nominationsHaveNotHappened;
 
   // for leaderboard: get riskiness of all contenders that user earned points for
   const { numCorrectPredictions } = showAccolades
