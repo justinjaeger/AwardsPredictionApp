@@ -42,15 +42,24 @@ import Subheader, {
 import UserProfile, {
   USER_PROFILE_HEIGHT,
 } from '../../../components/HeaderComponents/UserProfile';
-import { PHASE_TO_STRING_PLURAL } from '../../../constants/categories';
+import {
+  AGENDER_CATEGORIES,
+  GENDERED_CATEGORIES,
+  PHASE_TO_STRING_PLURAL,
+} from '../../../constants/categories';
 import { FlashList } from '@shopify/flash-list';
 import { usePersonalCommunityTab } from '../../../context/PersonalCommunityContext';
 import HeaderListTypeDropdown from '../../../components/HeaderComponents/HeaderListTypeDropdown';
+import ListSettingsModal from '../../../components/ListSettingsModal';
+import HeaderButton from '../../../components/HeaderComponents/HeaderButton';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AsyncStorageKeys } from '../../../types/keys';
 
 const getPredictionsData = (
   userPredictionSet: WithId<PredictionSet> | undefined,
   communityPredictionSet: WithId<PredictionSet> | undefined,
   event: EventModel | undefined,
+  displayGenderPreference?: boolean | undefined, // undefined for non-auth users
 ): iCategoryListItem[][] => {
   if (!event) return [];
   const orderedUserPredictions = getOrderedPredictionSetCategories(
@@ -61,9 +70,34 @@ const getPredictionsData = (
     event,
     communityPredictionSet?.categories,
   );
-  const result = orderedUserPredictions.map((category, i) => {
-    return [category, orderedCommuintyPredictions[i]];
-  });
+
+  const result = orderedUserPredictions
+    .filter(([category, predictions]) => {
+      const isGenderedCategory = GENDERED_CATEGORIES.includes(category);
+      const isAgenderCategory = AGENDER_CATEGORIES.includes(category);
+      if (displayGenderPreference === true && isGenderedCategory) {
+        return true;
+      }
+      if (displayGenderPreference === false && isAgenderCategory) {
+        return true;
+      }
+      // it's undefined for non-auth users
+      // in this case, only show the category if they are predicting it
+      if (
+        displayGenderPreference === undefined &&
+        (isGenderedCategory || isAgenderCategory)
+      ) {
+        return predictions.length > 0;
+      }
+      return !isGenderedCategory && !isAgenderCategory;
+    })
+    .map((category, i) => {
+      return [
+        category,
+        orderedCommuintyPredictions.find(([c]) => c === category[0]) ||
+          orderedCommuintyPredictions[i],
+      ];
+    });
   return result;
 };
 
@@ -99,6 +133,20 @@ const Event = () => {
     useQueryGetUserPredictions({ event, userId, yyyymmdd });
   const { data: communityPredictionData, isLoading: isLoadingCommunity } =
     useQueryGetCommunityPredictions({ event, yyyymmdd });
+
+  // will remain undefined for non-auth users, in which case we'll show the categories if they're predicting
+  const [displayGenderPreference, setDisplayGenderPreference] = React.useState<
+    boolean | undefined
+  >(undefined);
+  const [showSettings, setShowSettings] = React.useState(false);
+
+  useEffect(() => {
+    if (isAuthProfile) {
+      AsyncStorage.getItem(AsyncStorageKeys.GENDERED_PREFERENCE).then((pref) => {
+        setDisplayGenderPreference(pref === 'true');
+      });
+    }
+  }, [showSettings]);
 
   // This is weird, but see note in PersonalCommunityContext.tsx
   const isNotLoggedInAndHasNoDataYet =
@@ -139,6 +187,7 @@ const Event = () => {
     userPredictionData || undefined,
     communityPredictionData || undefined,
     event,
+    displayGenderPreference,
   );
 
   const isLoading = isLoadingPersonal || isLoadingCommunity;
@@ -267,77 +316,94 @@ const Event = () => {
       };
 
   return (
-    <BackgroundWrapper>
-      <HeaderDropdownOverlay />
-      <DynamicHeaderFlatListWrapper<iCategoryListItem[]>
-        flashListRef={flashListRef}
-        disableBack={disableBack}
-        topOnlyContent={topOnlyContent}
-        titleWhenCollapsed={
-          eventName + (isLeaderboard ? `\n${phaseName} Leaderboard` : '')
-        }
-        persistedContent={{
-          height: predictionTabHeight,
-          component: (
-            <View
-              style={{
-                width: '100%',
-                justifyContent: 'flex-end',
-              }}
-            >
-              <PredictionTabsNavigator
-                type={event?.eventType === 'list' ? 'list' : 'prediction'}
-              />
-            </View>
-          ),
-        }}
-        flatListProps={{
-          data,
-          keyExtractor: (item) => item[0][0], // the category name
-          estimatedItemSize: getCategoryListItemHeight({
-            categoryName: CategoryName.ACTOR,
-            event,
-            windowWidth: width,
-          }),
-          renderItem: ({ item }) => {
-            const category = item[0][0] as CategoryName | undefined;
-            if (isLoading || !event || !category) {
-              return (
-                <View key={'event-skeleton' + category}>
-                  <EventSkeleton event={event} category={category} />
+    <>
+      <BackgroundWrapper>
+        <HeaderDropdownOverlay />
+        <DynamicHeaderFlatListWrapper<iCategoryListItem[]>
+          flashListRef={flashListRef}
+          disableBack={disableBack}
+          topOnlyContent={topOnlyContent}
+          titleWhenCollapsed={
+            eventName + (isLeaderboard ? `\n${phaseName} Leaderboard` : '')
+          }
+          persistedContent={{
+            height: predictionTabHeight,
+            component: (
+              <View
+                style={{
+                  width: '100%',
+                  justifyContent: 'flex-end',
+                }}
+              >
+                <PredictionTabsNavigator
+                  type={event?.eventType === 'list' ? 'list' : 'prediction'}
+                />
+              </View>
+            ),
+          }}
+          flatListProps={{
+            data,
+            keyExtractor: (item) => item[0][0], // the category name
+            estimatedItemSize: getCategoryListItemHeight({
+              categoryName: CategoryName.ACTOR,
+              event,
+              windowWidth: width,
+            }),
+            ListHeaderComponent:
+              event?.eventType === 'list' ? (
+                <View style={{ width: '100%', alignItems: 'flex-end' }}>
+                  <HeaderButton
+                    icon={'settings-outline'}
+                    onPress={() => setShowSettings(true)}
+                    style={{
+                      marginRight: theme.windowMargin,
+                      marginTop: 5,
+                    }}
+                    variation="on-dark"
+                  />
                 </View>
+              ) : null,
+            renderItem: ({ item }) => {
+              const category = item[0][0] as CategoryName | undefined;
+              if (isLoading || !event || !category) {
+                return (
+                  <View key={'event-skeleton' + category}>
+                    <EventSkeleton event={event} category={category} />
+                  </View>
+                );
+              }
+              return (
+                <DualTabsWrapper
+                  tab1={
+                    <CategoryListItem
+                      event={event}
+                      item={item[0]}
+                      onPress={() => {
+                        onSelectCategory(category, false);
+                      }}
+                      tab={'personal'}
+                    />
+                  }
+                  tab2={
+                    <CategoryListItem
+                      event={event}
+                      item={item[1]}
+                      onPress={() => {
+                        onSelectCategory(category, true);
+                      }}
+                      tab={'community'}
+                    />
+                  }
+                  tabsPosX={tabsPosX}
+                />
               );
-            }
-            return (
-              <DualTabsWrapper
-                tab1={
-                  <CategoryListItem
-                    event={event}
-                    item={item[0]}
-                    onPress={() => {
-                      onSelectCategory(category, false);
-                    }}
-                    tab={'personal'}
-                  />
-                }
-                tab2={
-                  <CategoryListItem
-                    event={event}
-                    item={item[1]}
-                    onPress={() => {
-                      onSelectCategory(category, true);
-                    }}
-                    tab={'community'}
-                  />
-                }
-                tabsPosX={tabsPosX}
-              />
-            );
-          },
-        }}
-      />
-      <BottomFABContainer />
-    </BackgroundWrapper>
+            },
+          }}
+        />
+        <BottomFABContainer />
+      </BackgroundWrapper>
+      <ListSettingsModal visible={showSettings} onClose={() => setShowSettings(false)} />
+    </>
   );
 };
 

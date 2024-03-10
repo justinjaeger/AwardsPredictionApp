@@ -76,3 +76,17 @@ export const ORDERED_CATEGORIES = [
   CategoryName.RISING_STAR,
   CategoryName.YOUNG_ACTOR,
 ];
+
+export const GENDERED_CATEGORIES = [
+  CategoryName.ACTRESS,
+  CategoryName.COMEDY_ACTRESS,
+  CategoryName.SUPPORTING_ACTRESS,
+  CategoryName.ACTOR,
+  CategoryName.COMEDY_ACTOR,
+  CategoryName.SUPPORTING_ACTOR,
+];
+
+export const AGENDER_CATEGORIES = [
+  CategoryName.PERFORMANCE,
+  CategoryName.SUPPORTING_PERFORMANCE,
+];
