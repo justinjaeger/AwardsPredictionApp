@@ -8,7 +8,6 @@ import { SubHeader } from '../../Text';
 import CustomIcon from '../../CustomIcon';
 import { HEADER_TITLE_MARGIN_TOP } from '../constants';
 import { HEADER_HEIGHT } from '../Header';
-import useDevice from '../../../util/device';
 
 export const USER_PROFILE_HEIGHT = 60;
 
@@ -21,7 +20,6 @@ const UserProfile = ({
   disableImageOverlap?: boolean;
   style?: StyleProp<ViewStyle>;
 }) => {
-  const { isSmallScreen } = useDevice();
   const navigation = useNavigation<PredictionsNavigationProp>();
 
   const navigateToProfile = () => {
@@ -35,9 +33,7 @@ const UserProfile = ({
         image={userInfo.userImage}
         imageSize={
           USER_PROFILE_HEIGHT +
-          (disableImageOverlap || isSmallScreen
-            ? 0
-            : HEADER_HEIGHT + HEADER_TITLE_MARGIN_TOP - 10)
+          (disableImageOverlap ? 0 : HEADER_HEIGHT + HEADER_TITLE_MARGIN_TOP - 10)
         }
         onPress={navigateToProfile}
         disablePadResize
