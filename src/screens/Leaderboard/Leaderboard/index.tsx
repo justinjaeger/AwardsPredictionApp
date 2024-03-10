@@ -97,8 +97,6 @@ const Leaderboard = () => {
     fetchPage();
   };
 
-  console.log('leaderboard', leaderboard);
-
   if (!leaderboard) return null;
 
   const longestList = Math.max(
