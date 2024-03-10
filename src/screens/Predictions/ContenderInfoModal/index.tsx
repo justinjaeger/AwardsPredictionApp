@@ -20,6 +20,9 @@ import BackgroundWrapper from '../../../components/BackgroundWrapper';
 import { useRouteParams } from '../../../hooks/useRouteParams';
 import ModalHeader from '../../../components/ModalHeader';
 import HistoryDateIndicator from '../../../components/HistoryDateIndicator';
+import { iCategoryPrediction } from '../../../models';
+import COLORS from '../../../constants/colors';
+import { SubHeader } from '../../../components/Text';
 
 const ContenderInfoModal = () => {
   const scrollRef = useRef<ScrollView>(null);
@@ -40,7 +43,11 @@ const ContenderInfoModal = () => {
 
   if (!communityPredictions) return null;
 
-  const predictions = communityPredictions.categories[category].predictions ?? [];
+  const categoryPrediction = communityPredictions.categories[category] as
+    | iCategoryPrediction
+    | undefined;
+
+  const predictions = categoryPrediction?.predictions ?? [];
 
   const communityPrediction = predictions.find(
     (p) => p.contenderId === prediction.contenderId,
@@ -51,12 +58,30 @@ const ContenderInfoModal = () => {
   );
 
   const totalNumPredictingCategory =
-    communityPredictions.categories[category].totalUsersPredicting ??
-    totalNumPredictingTop;
+    categoryPrediction?.totalUsersPredicting ?? totalNumPredictingTop;
 
   const widthFactor = isPad ? theme.padHistogramContainerWidth : 1;
 
-  if (!communityPrediction) return null;
+  if (!communityPrediction)
+    return (
+      <View
+        style={{ width: '100%', height: '100%', backgroundColor: COLORS.primary }}
+        onTouchEnd={() => {
+          navigation.goBack();
+        }}
+      >
+        <SubHeader
+          style={{
+            alignSelf: 'center',
+            textAlign: 'center',
+            marginTop: '10%',
+            lineHeight: 30,
+          }}
+        >
+          {'Data not yet compiled.\nCheck back in an hour.'}
+        </SubHeader>
+      </View>
+    );
 
   return (
     <>
