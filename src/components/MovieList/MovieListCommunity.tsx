@@ -6,7 +6,7 @@ import LastUpdatedText from '../LastUpdatedText';
 import ContenderListItem, {
   getContenderListItemHeight,
 } from '../List/ContenderList/ContenderListItem';
-import { Phase, iPrediction } from '../../models';
+import { iPrediction } from '../../models';
 import { getTotalNumPredicting } from '../../util/getNumPredicting';
 import { useNavigation } from '@react-navigation/native';
 import { PredictionsNavigationProp } from '../../navigation/types';
@@ -18,6 +18,7 @@ import { FlashList } from '@shopify/flash-list';
 import { SubHeader } from '../Text';
 import { getPredictionStatsFromPredictions } from '../../util/getNumCorrectPredictions';
 import theme from '../../constants/theme';
+import { yyyymmddToDate } from '../../util/yyyymmddToDate';
 
 export const PREDICT_STAT_WIDTH = 120;
 
@@ -78,9 +79,14 @@ const MovieListCommunity = ({
     });
   }, []);
 
-  const nominationsHaveNotHappened =
-    phase && [Phase.SHORTLIST, Phase.NOMINATION].includes(phase);
-  const displayNoExtraSlots = !nominationsHaveNotHappened;
+  const isHistoryAndIsPreNominations =
+    yyyymmdd &&
+    event.nomDateTime &&
+    yyyymmddToDate(yyyymmdd) < new Date(event.nomDateTime);
+  const nominationsHavePassed =
+    !isHistoryAndIsPreNominations &&
+    event?.nomDateTime &&
+    new Date(event.nomDateTime) < new Date();
 
   // for leaderboard: get riskiness of all contenders that user earned points for
   const { numCorrectPredictions } = showAccolades
@@ -151,7 +157,7 @@ const MovieListCommunity = ({
               totalNumPredictingTop={totalNumPredictingTop}
               accolade={accolade}
               isUnaccaloded={showAccolades && !accoladeMatchesPhase}
-              displayNoExtraSlots={displayNoExtraSlots}
+              displayNoExtraSlots={nominationsHavePassed}
             />
           </>
         );

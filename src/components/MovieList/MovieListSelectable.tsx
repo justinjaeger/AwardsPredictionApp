@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { FlatList, Keyboard } from 'react-native';
 import { removePredictionFromList } from '../../util/removePredictionFromList';
 import ContenderListItem from '../List/ContenderList/ContenderListItem';
-import { Phase, iPrediction } from '../../models';
+import { iPrediction } from '../../models';
 import { getTotalNumPredicting } from '../../util/getNumPredicting';
 import COLORS from '../../constants/colors';
 import { hexToRgb } from '../../util/hexToRgb';
@@ -38,6 +38,7 @@ const MovieListSelectable = ({
     phase,
     noShorts,
     isLeaderboard,
+    event,
   } = useRouteParams();
   const { type } = categoryData!;
   const category = _category!;
@@ -90,9 +91,8 @@ const MovieListSelectable = ({
     (p) => p.contenderId,
   );
 
-  const nominationsHaveNotHappened =
-    phase && [Phase.SHORTLIST, Phase.NOMINATION].includes(phase);
-  const displayNoExtraSlots = !nominationsHaveNotHappened;
+  const nominationsHavePassed =
+    event?.nomDateTime && new Date(event.nomDateTime) < new Date();
 
   return (
     <FlatList
@@ -129,7 +129,7 @@ const MovieListSelectable = ({
             }}
             categoryType={type}
             showHistogram
-            displayNoExtraSlots={displayNoExtraSlots}
+            displayNoExtraSlots={nominationsHavePassed}
             totalNumPredictingTop={totalNumPredictingTop}
             iconRightProps={{
               iconName: highlighted ? 'checkmark-circle-2' : 'radio-button-off',

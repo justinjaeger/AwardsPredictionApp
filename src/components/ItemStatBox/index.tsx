@@ -7,12 +7,11 @@ import {
   useWindowDimensions,
 } from 'react-native';
 import { Header, Body, HeaderLight, SubHeader, SubHeaderLight } from '../Text';
-import { CategoryName, EventModel, Phase, WithId, iPrediction } from '../../models';
+import { CategoryName, EventModel, WithId, iPrediction } from '../../models';
 import { getNumPredicting, getTotalNumPredicting } from '../../util/getNumPredicting';
 import Histogram, { SLOTS_TO_DISPLAY_EXTRA } from '../Histogram';
 import { useTmdbDataStore } from '../../context/TmdbDataStore';
 import { categoryNameToTmdbCredit } from '../../util/categoryNameToTmdbCredit';
-import { getBiggestPhaseThatHasHappened } from '../../util/getBiggestPhaseThatHasHappened';
 import { hexToRgb } from '../../util/hexToRgb';
 import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
@@ -25,9 +24,10 @@ import { PredictionsNavigationProp } from '../../navigation/types';
 import { useAuth } from '../../context/AuthContext';
 import Stat from './Stat';
 import { formatPercentage } from '../../util/formatPercentage';
-import { useRouteParams } from '../../hooks/useRouteParams';
 import { getUserInfo } from '../../util/getUserInfo';
 import useQueryGetUser from '../../hooks/queries/useQueryGetUser';
+import { useRouteParams } from '../../hooks/useRouteParams';
+import { yyyymmddToDate } from '../../util/yyyymmddToDate';
 
 const ItemStatBox = ({
   category,
@@ -69,20 +69,16 @@ const ItemStatBox = ({
   const creditString =
     songName ?? performerName ?? (credit ? credit.join(', ') : undefined);
 
-  const biggestPhaseThatHasHappened = getBiggestPhaseThatHasHappened(
-    event,
-    category,
-    yyyymmdd,
-  );
   const { win, nom, listed } = getNumPredicting(
     prediction?.numPredicting ?? {},
     slots ?? 5,
   );
 
-  const nominationsHaveNotHappened = [undefined, Phase.SHORTLIST].includes(
-    biggestPhaseThatHasHappened,
-  );
-  const displayNoExtraSlots = !nominationsHaveNotHappened;
+  const isHistoryAndIsPreNominations = yyyymmdd && yyyymmddToDate(yyyymmdd) < new Date();
+  const nominationsHavePassed =
+    !isHistoryAndIsPreNominations &&
+    event?.nomDateTime &&
+    new Date(event.nomDateTime) < new Date();
 
   return (
     <View
@@ -139,7 +135,7 @@ const ItemStatBox = ({
           enableHoverInfo
           flatListRef={flatListRef}
           scrollRef={scrollRef}
-          displayNoExtraSlots={displayNoExtraSlots}
+          displayNoExtraSlots={nominationsHavePassed}
         />
       ) : null}
       <View
@@ -154,7 +150,7 @@ const ItemStatBox = ({
           number={`${formatPercentage(win / totalNumPredictingCategory, true)}`}
           text="predict win"
         />
-        {nominationsHaveNotHappened ? (
+        {!nominationsHavePassed ? (
           <>
             <Stat
               number={`${formatPercentage(nom / totalNumPredictingCategory, true)}`}
