@@ -23,10 +23,11 @@ export const AWARDS_BODY_TO_STRING: {
 export const SORTED_AWARDS_BODIES = [
   AwardsBody.ACADEMY_AWARDS,
   AwardsBody.SAG,
+  AwardsBody.PGA,
   AwardsBody.BAFTA,
   AwardsBody.CRITICS_CHOICE,
   AwardsBody.GOLDEN_GLOBES,
-  AwardsBody.PGA,
+  AwardsBody.COMMUNITY,
 ];
 
 export const AWARDS_BODY_TO_PLURAL_STRING: {
