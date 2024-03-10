@@ -39,6 +39,7 @@ const SearchInput = ({
   autoFocus?: boolean;
   style?: StyleProp<ViewStyle>;
 }) => {
+  const inputRef = React.useRef<TextInput>(null);
   const { isPad } = useDevice();
 
   const [search, setSearch] = useState<string>('');
@@ -106,6 +107,7 @@ const SearchInput = ({
             returnKeyType={'search'}
             selectionColor={COLORS.gray} // the cursor
             keyboardAppearance={'dark'}
+            ref={inputRef}
           />
           <View
             style={{
@@ -135,6 +137,7 @@ const SearchInput = ({
             ) : search.length ? (
               <TouchableOpacity
                 onPress={() => {
+                  inputRef.current?.focus();
                   resetSearch();
                 }}
               >
