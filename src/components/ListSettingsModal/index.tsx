@@ -62,7 +62,7 @@ const ListSettingsModal = ({
           alignItems: 'flex-start',
         }}
       >
-        <HeaderLight>Settings</HeaderLight>
+        <HeaderLight>Preferences</HeaderLight>
         <View
           style={{
             marginTop: 10,

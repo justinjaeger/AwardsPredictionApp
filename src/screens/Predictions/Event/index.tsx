@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PredictionTabsNavigator from '../../../navigation/PredictionTabsNavigator';
 import { useAuth } from '../../../context/AuthContext';
 import useQueryGetUserPredictions from '../../../hooks/queries/useQueryGetUserPredictions';
@@ -55,11 +55,13 @@ import HeaderButton from '../../../components/HeaderComponents/HeaderButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AsyncStorageKeys } from '../../../types/keys';
 
+type iGenderDisplayPreference = 'gendered' | 'agender' | 'all' | 'all-if-defined';
+
 const getPredictionsData = (
   userPredictionSet: WithId<PredictionSet> | undefined,
   communityPredictionSet: WithId<PredictionSet> | undefined,
   event: EventModel | undefined,
-  displayGenderedCategories?: boolean | undefined, // undefined for non-auth users
+  genderDisplayPreference: iGenderDisplayPreference,
 ): iCategoryListItem[][] => {
   if (!event) return [];
   const orderedUserPredictions = getOrderedPredictionSetCategories(
@@ -75,21 +77,21 @@ const getPredictionsData = (
     .filter(([category, predictions]) => {
       const isGenderedCategory = GENDERED_CATEGORIES.includes(category);
       const isAgenderCategory = AGENDER_CATEGORIES.includes(category);
-      if (displayGenderedCategories === true && isGenderedCategory) {
-        return true;
+      if (isGenderedCategory || isAgenderCategory) {
+        switch (genderDisplayPreference) {
+          case 'gendered':
+            return isGenderedCategory;
+          case 'agender':
+            return isAgenderCategory;
+          case 'all-if-defined':
+            return isGenderedCategory || isAgenderCategory
+              ? predictions.length > 0
+              : true;
+          default:
+            return true;
+        }
       }
-      if (displayGenderedCategories === false && isAgenderCategory) {
-        return true;
-      }
-      // it's undefined for non-auth users
-      // in this case, only show the category if they are predicting it
-      if (
-        displayGenderedCategories === undefined &&
-        (isGenderedCategory || isAgenderCategory)
-      ) {
-        return predictions.length > 0;
-      }
-      return !isGenderedCategory && !isAgenderCategory;
+      return true;
     })
     .map((category, i) => {
       return [
@@ -134,19 +136,25 @@ const Event = () => {
   const { data: communityPredictionData, isLoading: isLoadingCommunity } =
     useQueryGetCommunityPredictions({ event, yyyymmdd });
 
-  // will remain undefined for non-auth users, in which case we'll show the categories if they're predicting
-  const [displayGenderedCategories, setDisplayGenderedCategories] = React.useState<
-    boolean | undefined
-  >(undefined);
   const [showSettings, setShowSettings] = React.useState(false);
 
+  const [displayGenderedCategories, setDisplayGenderedCategories] =
+    useState<iGenderDisplayPreference>('all');
   useEffect(() => {
-    if (isAuthProfile) {
-      AsyncStorage.getItem(AsyncStorageKeys.GENDERED_PREFERENCE).then((pref) => {
-        setDisplayGenderedCategories(pref === 'true');
-      });
+    if (eventType === 'list') {
+      if (isAuthProfile) {
+        AsyncStorage.getItem(AsyncStorageKeys.GENDERED_PREFERENCE).then((pref) => {
+          setDisplayGenderedCategories(pref === 'true' ? 'gendered' : 'agender');
+        });
+      } else {
+        // for non-auth users, we'll show the gendered categories that they're predicting
+        setDisplayGenderedCategories('all-if-defined');
+      }
     }
-  }, [showSettings, isAuthProfile]);
+    if (eventType === 'prediction') {
+      setDisplayGenderedCategories('all');
+    }
+  }, [showSettings, isAuthProfile, eventType]);
 
   // This is weird, but see note in PersonalCommunityContext.tsx
   const isNotLoggedInAndHasNoDataYet =
