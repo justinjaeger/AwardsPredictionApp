@@ -13,6 +13,7 @@ import { AwardsBody, EventModel, WithId } from '../models';
 export const getDefaultEvent = (
   events: WithId<EventModel>[] | undefined,
   defaultYear?: number,
+  hasLeaderboard?: boolean,
 ) => {
   if (!events || events.length === 0) return undefined;
 
@@ -21,7 +22,8 @@ export const getDefaultEvent = (
   let eventThatHasClosestDeadline: WithId<EventModel> | undefined;
   let closestOverallDateTime: Date = new Date(0);
   events
-    .filter((e) => e.year === defaultYear)
+    .filter((e) => !defaultYear || e.year === defaultYear)
+    .filter((e) => !hasLeaderboard || Object.entries(e.leaderboards ?? {}).length > 0)
     .forEach((event) => {
       const nomDateTime = event.nomDateTime && new Date(event.nomDateTime);
       const winDateTime = event.winDateTime && new Date(event.winDateTime);

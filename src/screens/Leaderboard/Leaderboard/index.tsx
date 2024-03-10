@@ -57,7 +57,9 @@ const Leaderboard = () => {
   const { setPersonalCommunityTab } = usePersonalCommunityTab();
   const { data: events } = useQueryGetAllEvents();
   const { disableBack } = useRouteParams();
-  const { event, setEvent, setYear, phase, setPhase, leaderboard } = useEventSelect();
+  const { event, setEvent, setYear, phase, setPhase, leaderboard } = useEventSelect({
+    isLeaderboard: true,
+  });
 
   const { userId: authUserId } = useAuth();
   const { user } = useProfileUser(authUserId);
@@ -94,6 +96,8 @@ const Leaderboard = () => {
   const onEndReached = () => {
     fetchPage();
   };
+
+  console.log('leaderboard', leaderboard);
 
   if (!leaderboard) return null;
 

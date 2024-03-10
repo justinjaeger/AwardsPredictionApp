@@ -6,13 +6,20 @@ import { getLeaderboardFromEvent } from '../util/getLeaderboardFromEvent';
 import { getLeaderboardsFromEvents } from '../util/getLeaderboardsFromEvents';
 import { getDefaultEvent } from '../util/getDefaultEvent';
 
-export const useEventSelect = () => {
+// AH I know why this is broken
+// The default is being set to an event that does not have a leaderboard
+export const useEventSelect = (params?: { isLeaderboard?: boolean }) => {
+  const { isLeaderboard } = params ?? {};
   const {
     event: initialEvent,
     yyyymmdd: initialYyyymmdd,
     phase: initialPhase,
   } = useRouteParams();
-  const { data: events, defaultEvent, defaultLeaderboard } = useQueryGetAllEvents();
+  const {
+    data: events,
+    defaultEvent,
+    defaultLeaderboard,
+  } = useQueryGetAllEvents({ hasLeaderboard: isLeaderboard });
 
   const [eventType, _setEventType] = useState<'list' | 'prediction'>(
     initialEvent?.eventType ?? 'prediction',
