@@ -7,6 +7,7 @@ export const getPredictionStatsFromPredictions = ({
   totalUsersPredicting,
   slots,
   contenderIdsToPhase,
+  phase,
 }: {
   predictions: iPrediction[];
   communityPredictions: iPrediction[];
@@ -17,12 +18,13 @@ export const getPredictionStatsFromPredictions = ({
         [contenderId: string]: Phase;
       }
     | undefined;
+  phase: Phase | undefined;
 }) => {
   // for leaderboard: get riskiness of all contenders that user earned points for
   const contenderIdToRiskiness: { [cId: string]: number } = {};
   let numCorrectPredictions = 0;
   predictions.forEach(({ contenderId, ranking }) => {
-    const accolade = contenderIdsToPhase?.[contenderId];
+    const accolade = contenderIdsToPhase?.[contenderId] === phase;
     const userDidPredictWithinSlots = ranking && ranking <= slots;
     const predictionWasCorrect = !!(userDidPredictWithinSlots && accolade);
     numCorrectPredictions += predictionWasCorrect ? 1 : 0;

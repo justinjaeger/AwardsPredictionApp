@@ -54,9 +54,8 @@ const MovieListCommunity = ({
   const { data: contenderIdsToPhase } = useQueryGetEventAccolades(eventId);
 
   const { slots: _slots, type } = categoryData!;
-  const slotsInPhase = getSlotsInPhase(phase, categoryData);
-  const slots = showAccolades ? slotsInPhase : _slots ?? 5;
-
+  const slotsWhichAreCorrect =
+    isLeaderboard && phase ? getSlotsInPhase(phase, categoryData) : _slots;
   const totalNumPredictingTop = getTotalNumPredicting(
     predictions?.[0]?.numPredicting ?? {},
   );
@@ -91,14 +90,14 @@ const MovieListCommunity = ({
   // for leaderboard: get riskiness of all contenders that user earned points for
   const { numCorrectPredictions } = showAccolades
     ? getPredictionStatsFromPredictions({
-        predictions,
+        predictions: predictions,
         communityPredictions: predictions,
         totalUsersPredicting,
-        slots,
+        slots: slotsWhichAreCorrect ?? 5,
         contenderIdsToPhase,
+        phase,
       })
     : { numCorrectPredictions: 0 };
-
   return (
     <FlashList
       data={predictions.slice(0, numToShow)}
@@ -115,7 +114,7 @@ const MovieListCommunity = ({
                 marginTop: 5, // bc last updated text appears
                 marginBottom: 10,
               }}
-            >{`${numCorrectPredictions}/${slots}`}</SubHeader>
+            >{`${numCorrectPredictions}/${slotsWhichAreCorrect}`}</SubHeader>
           ) : null}
         </>
       }
@@ -139,7 +138,7 @@ const MovieListCommunity = ({
         const accoladeMatchesPhase = phase === accolade;
         return (
           <>
-            {index === slots ? (
+            {index === slotsWhichAreCorrect ? (
               <Divider
                 style={{
                   margin: 10,

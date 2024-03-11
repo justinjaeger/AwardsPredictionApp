@@ -100,6 +100,7 @@ const MovieListDraggable = ({
         totalUsersPredicting,
         slots,
         contenderIdsToPhase,
+        phase,
       })
     : { contenderIdToRiskiness: {}, numCorrectPredictions: 0 };
 

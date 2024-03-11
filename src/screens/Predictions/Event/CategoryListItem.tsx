@@ -49,6 +49,10 @@ const CategoryListItem = ({
   if (phase === Phase.SHORTLIST && (!isShortlisted || isHiddenBeforeShortlist))
     return null;
 
+  const categoryIsHidden = getCategoryIsHidden(event, category);
+  // hide hidden categories (like shorts)
+  if (categoryIsHidden) return null;
+
   const slotsToDisplay =
     isLeaderboard && phase
       ? getSlotsInPhase(phase, maybeUndefinedCategoryData, isLeaderboard)
@@ -57,10 +61,6 @@ const CategoryListItem = ({
     isLeaderboard && phase
       ? getSlotsInPhase(phase, maybeUndefinedCategoryData)
       : _categorySlots;
-
-  const categoryIsHidden = getCategoryIsHidden(event, category);
-  // hide hidden categories (like shorts)
-  if (categoryIsHidden) return null;
 
   // they're already sorted but if that's the case this is not expensive so may as well for safety
   const predictions = sortPredictions(categoryPrediction);
