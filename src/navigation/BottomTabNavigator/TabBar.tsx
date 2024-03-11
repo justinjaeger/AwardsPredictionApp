@@ -68,7 +68,7 @@ const TabBar = (props: ITabBarProps) => {
                 return (
                   <View key={index}>
                     <CustomIcon
-                      name={'home'}
+                      name={'home-outline'}
                       color={isFocused ? focusedColor : unfocusedColor}
                     />
                   </View>
