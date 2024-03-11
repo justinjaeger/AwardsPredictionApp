@@ -9,8 +9,8 @@
 
 # How to release:
 * Make sure `ENV is pointing to production`!!
-* AND run `yarn reset-env` after changing it so the env cache is clear
-* To be sure, can also just shut down local dev server so it's obvious
+* AND run `yarn reset-env` after changing it so the env cache is clear (To be sure, can also just shut down local dev server so it's obvious)
+* Deploy `dev backend` to prod if there are changes
 ## Versioning (iOS+Android)
 * This is for forcing updates:
 * Update `package.json.version`
