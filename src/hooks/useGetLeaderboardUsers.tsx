@@ -26,32 +26,45 @@ const useGetLeaderboardUsers = ({
   /**
    * This is being called in overlapping requests
    */
-  const fetchPage = async () => {
+  const fetchPage = async (reset?: boolean) => {
     if (!hasNextPage || isLoading || !eventId || !phase) return;
     setIsLoading(true);
-    setPageNumber((prev) => prev + 1);
-    const { data } = await MongoApi.getLeaderboardUsers({
-      eventId,
-      phase,
-      pageNum: pageNumber,
-      noShorts,
-      sortByField,
-      sortOrder,
-    });
-    const newRankings = data?.leaderboardRankingsWithUserData ?? [];
-    setHasNextPage(data?.hasNextPage || false);
-    setLeaderboardRankings((prev) => [...prev, ...newRankings]);
+    if (reset) {
+      setPageNumber(1);
+      const { data } = await MongoApi.getLeaderboardUsers({
+        eventId,
+        phase,
+        pageNum: 1,
+        noShorts,
+        sortByField,
+        sortOrder,
+      });
+      const newRankings = data?.leaderboardRankingsWithUserData ?? [];
+      setHasNextPage(data?.hasNextPage || false);
+      setLeaderboardRankings(newRankings);
+    } else {
+      setPageNumber((prev) => prev + 1);
+      const { data } = await MongoApi.getLeaderboardUsers({
+        eventId,
+        phase,
+        pageNum: pageNumber,
+        noShorts,
+        sortByField,
+        sortOrder,
+      });
+      const newRankings = data?.leaderboardRankingsWithUserData ?? [];
+      setHasNextPage(data?.hasNextPage || false);
+      setLeaderboardRankings((prev) => [...prev, ...newRankings]);
+    }
     setIsLoading(false);
   };
 
-  const hasEventIdAndPhase = eventId && phase;
-
   useEffect(() => {
     // fetch page when land on screen
-    if (hasEventIdAndPhase) {
-      fetchPage();
+    if (eventId && phase) {
+      fetchPage(true);
     }
-  }, [hasEventIdAndPhase]);
+  }, [eventId, phase]);
 
   // export fetchPage to allow user to fetch next page
   return { leaderboardRankings, fetchPage, isLoading, hasNextPage };
