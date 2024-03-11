@@ -39,30 +39,41 @@ const LeaderboardTopTabs = ({
     },
   );
 
-  const options = eventsSorted.reduce(
-    (
-      acc: {
-        text: string;
-        value: { event: WithId<EventModel>; phase: Phase };
-        isSelected?: boolean | undefined;
-      }[],
-      e,
-    ) => {
-      const eventLeaderboards = getLeaderboardsFromEvents([e]);
-      eventLeaderboards.forEach((leaderboard) => {
-        acc.push({
-          isSelected: leaderboard.phase === phase,
-          text:
-            AWARDS_BODY_TO_STRING[e.awardsBody] +
-            ' ' +
-            PHASE_TO_STRING_PLURAL[leaderboard.phase],
-          value: { event: e, phase: leaderboard.phase },
+  const options = eventsSorted
+    .reduce(
+      (
+        acc: {
+          text: string;
+          value: { event: WithId<EventModel>; phase: Phase };
+          isSelected?: boolean | undefined;
+        }[],
+        e,
+      ) => {
+        const eventLeaderboards = getLeaderboardsFromEvents([e]);
+        eventLeaderboards.forEach((leaderboard) => {
+          acc.push({
+            isSelected: leaderboard.phase === phase,
+            text:
+              AWARDS_BODY_TO_STRING[e.awardsBody] +
+              ' ' +
+              PHASE_TO_STRING_PLURAL[leaderboard.phase],
+            value: { event: e, phase: leaderboard.phase },
+          });
         });
-      });
-      return acc;
-    },
-    [],
-  );
+        return acc;
+      },
+      [],
+    )
+    .sort((a, b) => {
+      const p1 = a.value.phase;
+      const p2 = b.value.phase;
+      if (p1 === p2) return 0;
+      if (p1 === Phase.WINNER) return -1;
+      if (p2 === Phase.WINNER) return 1;
+      if (p1 === Phase.NOMINATION) return -1;
+      if (p2 === Phase.NOMINATION) return 1;
+      return 0;
+    });
 
   return (
     <HorizontalScrollingTabs<{ event: WithId<EventModel>; phase: Phase }>
