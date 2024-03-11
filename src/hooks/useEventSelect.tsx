@@ -55,9 +55,10 @@ export const useEventSelect = (params?: { isLeaderboard?: boolean }) => {
     }
   };
 
-  const setEvent = (event: WithId<EventModel>) => {
+  const setEvent = (event: WithId<EventModel>, skipPhaseUpdate?: boolean) => {
     _setYear(event.year);
     _setEvent(event);
+    if (skipPhaseUpdate) return;
     // set phase to the most recent phase
     const phases = getLeaderboardsFromEvents([event]);
     const winnerEvent = phases.find((p) => p.phase === Phase.WINNER);
@@ -91,7 +92,7 @@ export const useEventSelect = (params?: { isLeaderboard?: boolean }) => {
     if (!event && defaultEvent) {
       setEvent(defaultEvent);
     }
-  }, [defaultEvent]);
+  }, [defaultEvent?._id]);
 
   useEffect(() => {
     if (!phase && defaultLeaderboard) {

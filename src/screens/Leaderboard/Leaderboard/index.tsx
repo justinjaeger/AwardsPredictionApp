@@ -191,9 +191,9 @@ const Leaderboard = () => {
                     }}
                     selectedEvent={event}
                     phase={phase}
-                    setLeaderboard={(event, phase) => {
-                      setPhase(phase);
-                      setEvent(event);
+                    setLeaderboard={(e, p) => {
+                      setPhase(p);
+                      setEvent(e, true);
                     }}
                   />
                 ) : null}

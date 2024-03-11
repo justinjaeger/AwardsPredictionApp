@@ -48,34 +48,6 @@ const LeaderboardChart = ({
 
   const [minBarWidth, _setMinBarWidth] = useState<number>(SM);
 
-  // const setMinBarWidth = (newW: number) => {
-  //   _setMinBarWidth((prevW) => {
-  //     // have to compensate the inner scroll position because the total width changes, so it will be off otherwise
-
-  //     const newChartWidth = totalBars * getBarWidth(newW); // this is like 900, 1800, 2700
-  //     const prevChartWidth = totalBars * getBarWidth(prevW);
-
-  //     const v = (scrollPos / (prevChartWidth - width)) * 100;
-  //     const percentageOfSliderThatIsFilled = v;
-
-  //     const x = (newChartWidth - width) * (percentageOfSliderThatIsFilled / 100);
-
-  //     // setTimeout is essential so the chart div can update before we scroll
-  //     setTimeout(() => {
-  //       chartRef.current?.scrollTo({
-  //         x: x,
-  //         animated: false,
-  //       });
-  //     }, 0);
-
-  //     // have to also update the new inner scroll position
-  //     setScrollPos(x);
-
-  //     return newW;
-  //   });
-  // };
-
-  // const groupedByPercentage: [percentage: number, numPredicting: number][] = [];
   const [groupedByPercentage, setGroupedByPercentage] = useState<
     [percentage: number, numPredicting: number][]
   >([]);
@@ -89,7 +61,7 @@ const LeaderboardChart = ({
       groupedByPercentage.push([percentage, numPredicting ?? 0]);
     }
     setGroupedByPercentage(groupedByPercentage);
-  }, []);
+  }, [leaderboard]);
 
   const barWidth = getBarWidth(minBarWidth);
   const chartWidth = totalBars * barWidth;
