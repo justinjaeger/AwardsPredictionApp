@@ -10,7 +10,7 @@ import { getLeaderboardsFromEvents } from '../../util/getLeaderboardsFromEvents'
 import { useEffect } from 'react';
 import { getSortedEvents } from '../../util/getSortedEvents';
 
-const useQueryGetAllEvents = (params?: { hasLeaderboard: boolean | undefined }) => {
+const useQueryGetAllEvents = (params?: { isLeaderboard: boolean | undefined }) => {
   const { userRole } = useAuth();
   const conditionThatChangesResult = userRole === UserRole.ADMIN;
 
@@ -35,7 +35,7 @@ const useQueryGetAllEvents = (params?: { hasLeaderboard: boolean | undefined }) 
 
   const leaderboards = getLeaderboardsFromEvents(data);
 
-  const defaultEvent = getDefaultEvent(data, undefined, params?.hasLeaderboard);
+  const defaultEvent = getDefaultEvent(data, undefined, params?.isLeaderboard);
   const defaultLeaderboard = getDefaultLeaderboard(data);
 
   return {
