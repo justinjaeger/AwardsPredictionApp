@@ -396,7 +396,7 @@ const Event = () => {
               }
               return (
                 <DualTabsWrapper
-                  tab1={
+                  tabs={[
                     <CategoryListItem
                       event={event}
                       item={item[0]}
@@ -404,9 +404,7 @@ const Event = () => {
                         onSelectCategory(category, false);
                       }}
                       tab={'personal'}
-                    />
-                  }
-                  tab2={
+                    />,
                     <CategoryListItem
                       event={event}
                       item={item[1]}
@@ -414,8 +412,8 @@ const Event = () => {
                         onSelectCategory(category, true);
                       }}
                       tab={'community'}
-                    />
-                  }
+                    />,
+                  ]}
                   tabsPosX={tabsPosX}
                 />
               );

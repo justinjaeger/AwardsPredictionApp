@@ -11,7 +11,7 @@ import ProfileImage from '../../components/ProfileImage';
 import FollowButton from '../../components/FollowButton';
 import FollowCountButton from '../../components/FollowCountButton';
 import useQueryGetAllEvents from '../../hooks/queries/useQueryGetAllEvents';
-import { PredictionsNavigationProp } from '../../navigation/types';
+import { PredictionsNavigationProp, iUserInfo } from '../../navigation/types';
 import useProfileUser from './useProfileUser';
 import ProfileSkeleton from '../../components/Skeletons/ProfileSkeleton';
 import Snackbar from '../../components/Snackbar';
@@ -21,7 +21,13 @@ import { getUserInfo } from '../../util/getUserInfo';
 import LeaderboardListItem from '../../components/LeaderboardListItem';
 import { AWARDS_BODY_TO_PLURAL_STRING } from '../../constants/awardsBodies';
 import { PHASE_TO_STRING_PLURAL } from '../../constants/categories';
-import { UserRole, iLeaderboard, iLeaderboardRanking } from '../../models';
+import {
+  EventModel,
+  UserRole,
+  WithId,
+  iLeaderboard,
+  iLeaderboardRanking,
+} from '../../models';
 import EventItemSimple from '../../components/EventItemSimple';
 import { usePersonalCommunityTab } from '../../context/PersonalCommunityContext';
 import DynamicHeaderScrollViewWrapper from '../../components/DynamicHeaderWrapper/DynamicHeaderScrollViewWrapper';
@@ -40,6 +46,30 @@ const NullTabState = ({ tab }: { tab: string }) => {
   );
 };
 
+const SelectableEvent = ({
+  userInfo,
+  event,
+}: {
+  userInfo: iUserInfo | undefined;
+  event: WithId<EventModel>;
+}) => {
+  const navigation = useNavigation<PredictionsNavigationProp>();
+  const { setPersonalCommunityTab } = usePersonalCommunityTab();
+
+  return (
+    <EventItemSimple
+      onPress={() => {
+        setPersonalCommunityTab('personal');
+        navigation.navigate('Event', {
+          userInfo,
+          eventId: event._id,
+        });
+      }}
+      title={`${AWARDS_BODY_TO_PLURAL_STRING[event.awardsBody]} ${event.year}`}
+    />
+  );
+};
+
 const Profile = () => {
   const tabsPosX = useSharedValue(0);
 
@@ -50,7 +80,6 @@ const Profile = () => {
   const userId = routeUserInfo?.userId || authUserId;
 
   const navigation = useNavigation<PredictionsNavigationProp>();
-  const { setPersonalCommunityTab } = usePersonalCommunityTab();
 
   const { data: _events, isLoading: isLoadingAllEvents } = useQueryGetAllEvents();
   const events = _events || [];
@@ -125,6 +154,9 @@ const Profile = () => {
     },
     [],
   );
+
+  const nonPredictionEvents = userEvents.filter((e) => e.eventType === 'list');
+  const predictionEvents = userEvents.filter((e) => e.eventType !== 'list');
 
   return (
     <BackgroundWrapper>
@@ -282,12 +314,16 @@ const Profile = () => {
                   ) : null}
                 </View>
                 <SectionTopTabs
-                  tabs={[{ title: 'Predictions' }, { title: 'Leaderboards' }]}
+                  tabs={[
+                    { title: 'Predictions' },
+                    { title: 'Lists' },
+                    { title: 'Leaderboards' },
+                  ]}
                   tabsPosX={tabsPosX}
                 />
               </LinearGradient>
               <DualTabsWrapper
-                tab1={
+                tabs={[
                   <>
                     {predictionSets.length > 0 ? (
                       <>
@@ -302,29 +338,20 @@ const Profile = () => {
                     ) : null}
                     {!isLoadingAllEvents && user && userEvents.length > 0 ? (
                       <>
-                        {userEvents.map((event) => {
-                          return (
-                            <EventItemSimple
-                              onPress={() => {
-                                setPersonalCommunityTab('personal');
-                                navigation.navigate('Event', {
-                                  userInfo: getUserInfo(user),
-                                  eventId: event._id,
-                                });
-                              }}
-                              title={`${AWARDS_BODY_TO_PLURAL_STRING[event.awardsBody]} ${
-                                event.year
-                              }`}
-                            />
-                          );
+                        {predictionEvents.map((event) => {
+                          return <SelectableEvent event={event} userInfo={userInfo} />;
                         })}
                       </>
                     ) : (
                       <NullTabState tab={'Predictions'} />
                     )}
-                  </>
-                }
-                tab2={
+                  </>,
+                  <>
+                    {nonPredictionEvents.length === 0 && <NullTabState tab={'Lists'} />}
+                    {nonPredictionEvents.map((event) => {
+                      return <SelectableEvent event={event} userInfo={userInfo} />;
+                    })}
+                  </>,
                   <>
                     {leaderboards.length ? (
                       <>
@@ -365,8 +392,8 @@ const Profile = () => {
                     ) : (
                       <NullTabState tab={'Leaderboards'} />
                     )}
-                  </>
-                }
+                  </>,
+                ]}
                 tabsPosX={tabsPosX}
               />
             </View>

@@ -212,12 +212,10 @@ const Leaderboard = () => {
           renderItem: ({ item }) => {
             return (
               <DualTabsWrapper
-                tab1={
-                  item[0] ? <LeaderboardListItem leaderboardRanking={item[0]} /> : <></>
-                }
-                tab2={
-                  item[1] ? <LeaderboardListItem leaderboardRanking={item[1]} /> : <></>
-                }
+                tabs={[
+                  item[0] ? <LeaderboardListItem leaderboardRanking={item[0]} /> : <></>,
+                  item[1] ? <LeaderboardListItem leaderboardRanking={item[1]} /> : <></>,
+                ]}
                 tabsPosX={tabsPosX}
               />
             );

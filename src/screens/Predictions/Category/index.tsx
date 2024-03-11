@@ -56,15 +56,16 @@ const Category = () => {
           onOpenTab={(t) => (ref.current = t)}
         />
         <DualTabsWrapper
-          tab1={
-            <CategoryPersonal showEventLink={showEventLink} bottomHeight={bottomHeight} />
-          }
-          tab2={
+          tabs={[
+            <CategoryPersonal
+              showEventLink={showEventLink}
+              bottomHeight={bottomHeight}
+            />,
             <CategoryCommunity
               showEventLink={showEventLink}
               bottomHeight={bottomHeight}
-            />
-          }
+            />,
+          ]}
           tabsPosX={tabsPosX}
         />
       </View>

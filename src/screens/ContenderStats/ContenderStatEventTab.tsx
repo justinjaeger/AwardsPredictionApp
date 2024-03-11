@@ -151,7 +151,7 @@ const ContenderStatEventTab = ({
       {data.map(([tab1, tab2]) => (
         <DualTabsWrapper
           tabsPosX={tabsPosX}
-          tab1={
+          tabs={[
             <View style={{ flex: 1 }}>
               <ItemStatBox
                 key={tab1.contenderId}
@@ -163,9 +163,7 @@ const ContenderStatEventTab = ({
                 widthFactor={widthFactor}
                 scrollRef={scrollRef}
               />
-            </View>
-          }
-          tab2={
+            </View>,
             <View style={{ flex: 1 }}>
               <ItemStatBox
                 key={tab2.contenderId}
@@ -177,8 +175,8 @@ const ContenderStatEventTab = ({
                 widthFactor={widthFactor}
                 scrollRef={scrollRef}
               />
-            </View>
-          }
+            </View>,
+          ]}
         />
       ))}
     </View>

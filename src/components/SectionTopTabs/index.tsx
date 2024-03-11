@@ -13,8 +13,8 @@ type iSectionTopTab = {
 
 export const getSectionTabHeight = (isPad: boolean) => (isPad ? 55 : 45);
 
-const getScrollBarPosition = (index: number, width: number) =>
-  index * (width / (index + 1));
+const getScrollBarPosition = (index: number, width: number, totalTabs: number) =>
+  width * (index / totalTabs);
 
 /**
  * Use it with DualTabsWrapper and pass in a shared "tabsPosX" for each to get animated tab switching
@@ -32,7 +32,7 @@ const SectionTopTabs = ({
   const { width } = useWindowDimensions();
 
   const scrollBarAnim = useRef(
-    new Animated.Value(getScrollBarPosition(initialTabIndex, width)),
+    new Animated.Value(getScrollBarPosition(initialTabIndex, width, tabs.length)),
   ).current;
 
   const [selectedTab, setSelectedTab] = useState<number>(initialTabIndex);
@@ -46,7 +46,7 @@ const SectionTopTabs = ({
 
     t.onOpenTab && t.onOpenTab();
 
-    const scrollBarPosition = getScrollBarPosition(index, width);
+    const scrollBarPosition = getScrollBarPosition(index, width, tabs.length);
     Animated.timing(scrollBarAnim, {
       toValue: scrollBarPosition,
       duration: immediate ? 0 : 250,
@@ -88,7 +88,7 @@ const SectionTopTabs = ({
             style={{
               alignItems: 'center',
               justifyContent: 'center',
-              width: '50%',
+              width: width / tabs.length,
               borderRadius: 0,
               borderBottomColor: hexToRgb(COLORS.primaryLight, 0.5),
               borderBottomWidth: 1,
