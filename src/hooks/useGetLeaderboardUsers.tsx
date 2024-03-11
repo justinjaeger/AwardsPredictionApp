@@ -3,6 +3,9 @@ import { Phase } from '../models';
 import MongoApi from '../services/api/requests';
 import { iLeaderboardRankingsWithUserData } from '../services/api/requests/leaderboard';
 
+// TODO: could make this more efficient by more re-fetching requests (caching locally)
+// since right now, switching between tabs causes a refetch
+// We can actually do paginated requests via react query so that would be the best way to refactor this
 const useGetLeaderboardUsers = ({
   eventId,
   phase,
@@ -47,7 +50,7 @@ const useGetLeaderboardUsers = ({
       const { data } = await MongoApi.getLeaderboardUsers({
         eventId,
         phase,
-        pageNum: pageNumber,
+        pageNum: pageNumber + 1,
         noShorts,
         sortByField,
         sortOrder,
