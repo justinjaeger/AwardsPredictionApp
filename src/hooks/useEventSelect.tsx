@@ -38,7 +38,10 @@ export const useEventSelect = (params?: { isLeaderboard?: boolean }) => {
   const setEventType = (eventType: 'list' | 'prediction') => {
     _setEventType(eventType);
     if (eventType !== 'list' && defaultEvent) {
-      const defaultEventRespectingYear = getDefaultEvent(events, year);
+      // TODO: When we do history, we should pass "year" as second arg to getDefaultEvent
+      // because it will respect the current year if it's not passed
+      // but right now, as we're hiding expired events, we don't want to do that
+      const defaultEventRespectingYear = getDefaultEvent(events);
       setEvent(defaultEventRespectingYear ?? defaultEvent);
     }
     if (eventType === 'list') {
