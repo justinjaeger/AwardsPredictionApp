@@ -384,6 +384,9 @@ const Event = () => {
         ),
       };
 
+  // const winDateTime = event?.winDateTime && new Date(event.winDateTime);
+  // const eventIsInPast = winDateTime && winDateTime < new Date();
+
   return (
     <>
       <BackgroundWrapper>

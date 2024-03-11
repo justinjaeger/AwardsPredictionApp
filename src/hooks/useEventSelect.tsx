@@ -102,14 +102,14 @@ export const useEventSelect = (params?: { isLeaderboard?: boolean }) => {
 
   const leaderboard = event && phase ? getLeaderboardFromEvent(event, phase) : undefined;
 
-  const eventsToSelectFrom = (
-    eventType === 'list' ? eventTypeEvents : predictionTypeEvents
-  ).filter((e) => {
-    const winDateTime = e.winDateTime && new Date(e.winDateTime);
-    const now = new Date();
-    const winsHaveHappened = winDateTime && winDateTime < now;
-    return !winsHaveHappened;
-  });
+  const eventsToSelectFrom =
+    eventType === 'list' ? eventTypeEvents : predictionTypeEvents;
+  // .filter((e) => {
+  //   const winDateTime = e.winDateTime && new Date(e.winDateTime);
+  //   const now = new Date();
+  //   const winsHaveHappened = winDateTime && winDateTime < now;
+  //   return !winsHaveHappened;
+  // });
 
   return {
     yyyymmdd,
