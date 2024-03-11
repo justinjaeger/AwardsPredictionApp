@@ -23,6 +23,7 @@ import { AWARDS_BODY_TO_PLURAL_STRING } from '../../constants/awardsBodies';
 import { PHASE_TO_STRING_PLURAL } from '../../constants/categories';
 import {
   EventModel,
+  Phase,
   UserRole,
   WithId,
   iLeaderboard,
@@ -140,8 +141,8 @@ const Profile = () => {
   }, []);
 
   // TODO: This is similar to what's in LeaderboardList. Maybe refactor?
-  const leaderboards = Object.values(user?.leaderboardRankings || {}).reduce(
-    (acc: iLeaderboardRanking[], phaseToLbRanking) => {
+  const leaderboards = Object.values(user?.leaderboardRankings || {})
+    .reduce((acc: iLeaderboardRanking[], phaseToLbRanking) => {
       Object.values(phaseToLbRanking).forEach((lbRanking) => {
         // filter out hidden events
         const lb = eventLeaderboards.find(
@@ -151,9 +152,17 @@ const Profile = () => {
         acc.push(lbRanking);
       });
       return acc;
-    },
-    [],
-  );
+    }, [])
+    .sort((a, b) => {
+      const phaseA = a.phase;
+      const phaseB = b.phase;
+      if (phaseA === phaseB) return 0;
+      if (phaseA === Phase.WINNER) return -1;
+      if (phaseB === Phase.WINNER) return 1;
+      if (phaseA === Phase.NOMINATION) return -1;
+      if (phaseB === Phase.NOMINATION) return 1;
+      return 0;
+    });
 
   const nonPredictionEvents = userEvents.filter((e) => e.eventType === 'list');
   const predictionEvents = userEvents.filter((e) => e.eventType !== 'list');
