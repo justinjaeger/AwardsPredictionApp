@@ -49,7 +49,11 @@ const CategoryListItem = ({
   if (phase === Phase.SHORTLIST && (!isShortlisted || isHiddenBeforeShortlist))
     return null;
 
-  const slots =
+  const slotsToDisplay =
+    isLeaderboard && phase
+      ? getSlotsInPhase(phase, maybeUndefinedCategoryData, isLeaderboard)
+      : _categorySlots;
+  const slotsWhichAreCorrect =
     isLeaderboard && phase
       ? getSlotsInPhase(phase, maybeUndefinedCategoryData)
       : _categorySlots;
@@ -60,14 +64,16 @@ const CategoryListItem = ({
 
   // they're already sorted but if that's the case this is not expensive so may as well for safety
   const predictions = sortPredictions(categoryPrediction);
-
-  // once nominations happen, you want "slots" to be however many films are nominated
-  const truncatedPredictions: iPrediction[] = predictions.slice(0, slots || 5);
+  const predictionsToDisplay: iPrediction[] = predictions.slice(0, slotsToDisplay || 5);
+  const predictionsWithinSlots: iPrediction[] = predictions.slice(
+    0,
+    slotsWhichAreCorrect || 5,
+  );
 
   const showAccolades = !!yyyymmdd;
 
   // we need to know the number of predictions that are in the PHASE
-  const numCorrectInCategory = truncatedPredictions.filter(
+  const numCorrectInCategory = predictionsWithinSlots.filter(
     (prediction) => contenderIdsToPhase?.[prediction.contenderId] === phase,
   ).length;
 
@@ -105,7 +111,7 @@ const CategoryListItem = ({
           <SubHeader style={{ color: COLORS.lightest }}>{name}</SubHeader>
           {showAccolades ? (
             <SubHeader style={{ color: COLORS.white }}>
-              {`${numCorrectInCategory}/${slots}`}
+              {`${numCorrectInCategory}/${slotsWhichAreCorrect}`}
             </SubHeader>
           ) : (
             <View
@@ -114,7 +120,7 @@ const CategoryListItem = ({
                 alignItems: 'center',
               }}
             >
-              {truncatedPredictions.length === 0 && tab === 'personal' ? (
+              {predictionsToDisplay.length === 0 && tab === 'personal' ? (
                 <SubHeader style={{ fontWeight: '400' }}>Add</SubHeader>
               ) : null}
               <CustomIcon
@@ -128,7 +134,7 @@ const CategoryListItem = ({
         </View>
         <MovieGrid
           eventId={event?._id}
-          predictions={truncatedPredictions}
+          predictions={predictionsToDisplay}
           categoryInfo={awardsBodyCategories[category]}
           showAccolades={showAccolades}
           phase={phase}

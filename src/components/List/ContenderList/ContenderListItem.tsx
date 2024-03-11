@@ -84,7 +84,7 @@ const ContenderListItem = ({
   const { phase, category: _category, categoryData, isLeaderboard } = useRouteParams();
   const category = _category!;
   const { type } = categoryData!;
-  const slots = getSlotsInPhase(phase, categoryData);
+  const slots = getSlotsInPhase(phase, categoryData, true);
 
   const { width: posterWidth, height: posterHeight } = getPosterDimensionsByWidth(
     windowWidth / 9 - theme.posterMargin * 2,
