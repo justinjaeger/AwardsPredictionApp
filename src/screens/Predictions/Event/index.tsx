@@ -16,7 +16,14 @@ import { getSectionTabHeight } from '../../../components/SectionTopTabs';
 import { getUserInfo } from '../../../util/getUserInfo';
 import DynamicHeaderFlatListWrapper from '../../../components/DynamicHeaderWrapper/DynamicHeaderFlatListWrapper';
 import DualTabsWrapper from '../../../components/DualTabsWrapper';
-import { CategoryName, EventModel, PredictionSet, WithId } from '../../../models';
+import {
+  CategoryName,
+  EventModel,
+  PredictionSet,
+  WithId,
+  iLeaderboard,
+  iLeaderboardRanking,
+} from '../../../models';
 import { getOrderedPredictionSetCategories } from '../../../util/sortByObjectOrder';
 import CategoryListItem, { iCategoryListItem } from './CategoryListItem';
 import { StackActions, useNavigation } from '@react-navigation/native';
@@ -54,8 +61,18 @@ import ListSettingsModal from '../../../components/ListSettingsModal';
 import HeaderButton from '../../../components/HeaderComponents/HeaderButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AsyncStorageKeys } from '../../../types/keys';
+import { getUserLeaderboard } from '../../../util/getUserLeaderboard';
+import LeaderboardStats from '../../Leaderboard/Leaderboard/LeaderboardStats';
+import { getLeaderboardFromEvent } from '../../../util/getLeaderboardFromEvent';
 
 type iGenderDisplayPreference = 'gendered' | 'agender' | 'all' | 'all-if-defined';
+
+type iEventItemType = 'leaderboard-stats' | 'category';
+type iLeaderboardStats = {
+  isLeaderboardData: boolean;
+  userLeaderboard: iLeaderboardRanking;
+  leaderboard: iLeaderboard;
+};
 
 const getPredictionsData = (
   userPredictionSet: WithId<PredictionSet> | undefined,
@@ -204,7 +221,7 @@ const Event = () => {
     }
   };
 
-  const data = getPredictionsData(
+  const predictionsData = getPredictionsData(
     userPredictionData || undefined,
     communityPredictionData || undefined,
     event,
@@ -226,6 +243,36 @@ const Event = () => {
     : BACK_BUTTON_HEIGHT;
 
   const heightAboveDropdown = heightOfTopSection + HEADER_TITLE_MARGIN_TOP;
+
+  const userLeaderboard =
+    isLeaderboard &&
+    user &&
+    event?._id &&
+    phase &&
+    getUserLeaderboard({ user, eventId: event?._id, phase });
+
+  const leaderboard = event && phase && getLeaderboardFromEvent(event, phase);
+
+  const leaderboardData =
+    isLeaderboard && userLeaderboard && leaderboard
+      ? { isLeaderboardData: true, userLeaderboard, leaderboard }
+      : undefined;
+
+  const data: {
+    type: iEventItemType;
+    item: iCategoryListItem[] | iLeaderboardStats;
+  }[] = predictionsData.map((item) => {
+    return {
+      type: 'category',
+      item,
+    };
+  });
+  if (leaderboardData) {
+    data.unshift({
+      type: 'leaderboard-stats',
+      item: leaderboardData,
+    });
+  }
 
   const topOnlyContent = isLeaderboard
     ? {
@@ -341,7 +388,10 @@ const Event = () => {
     <>
       <BackgroundWrapper>
         <HeaderDropdownOverlay />
-        <DynamicHeaderFlatListWrapper<iCategoryListItem[]>
+        <DynamicHeaderFlatListWrapper<{
+          type: iEventItemType;
+          item: iCategoryListItem[] | iLeaderboardStats;
+        }>
           flashListRef={flashListRef}
           disableBack={disableBack}
           topOnlyContent={topOnlyContent}
@@ -365,58 +415,105 @@ const Event = () => {
           }}
           flatListProps={{
             data,
-            keyExtractor: (item) => item[0][0], // the category name
+            // keyExtractor: (item) => item.typeitem[0][0], // the category name
             estimatedItemSize: getCategoryListItemHeight({
               categoryName: CategoryName.ACTOR,
               event,
               windowWidth: width,
             }),
-            ListHeaderComponent:
-              event?.eventType === 'list' ? (
-                <View style={{ width: '100%', alignItems: 'flex-end' }}>
-                  <HeaderButton
-                    icon={'settings-outline'}
-                    onPress={() => setShowSettings(true)}
-                    style={{
-                      marginRight: theme.windowMargin,
-                      marginTop: 5,
-                    }}
-                    variation="on-dark"
-                  />
-                </View>
-              ) : null,
-            renderItem: ({ item }) => {
-              const category = item[0][0] as CategoryName | undefined;
-              if (isLoading || !event || !category) {
-                return (
-                  <View key={'event-skeleton' + category}>
-                    <EventSkeleton event={event} category={category} />
+            getItemType: (item) => {
+              return item.type;
+            },
+            ListHeaderComponent: (
+              <>
+                {event?.eventType === 'list' ? (
+                  <View style={{ width: '100%', alignItems: 'flex-end' }}>
+                    <HeaderButton
+                      icon={'settings-outline'}
+                      onPress={() => setShowSettings(true)}
+                      style={{
+                        marginRight: theme.windowMargin,
+                        marginTop: 5,
+                      }}
+                      variation="on-dark"
+                    />
                   </View>
+                ) : null}
+              </>
+            ),
+            renderItem: ({ item }) => {
+              if (item.type === 'leaderboard-stats') {
+                const typed = item as {
+                  type: 'leaderboard-stats';
+                  item: iLeaderboardStats;
+                };
+                const userLeaderboard = typed.item.userLeaderboard;
+                const leaderboard = typed.item.leaderboard;
+                return (
+                  <DualTabsWrapper
+                    tabs={[
+                      <LeaderboardStats
+                        percentageAccuracy={userLeaderboard.percentageAccuracy}
+                        numCorrect={userLeaderboard.numCorrect}
+                        totalPossibleSlots={userLeaderboard.totalPossibleSlots}
+                        numUsersPredicting={userLeaderboard.numUsersPredicting}
+                        rank={userLeaderboard.rank}
+                        riskiness={userLeaderboard.riskiness}
+                        lastUpdated={userLeaderboard.lastUpdated}
+                        slotsPredicted={userLeaderboard.slotsPredicted}
+                      />,
+                      <LeaderboardStats
+                        percentageAccuracy={leaderboard.communityPercentageAccuracy}
+                        numCorrect={leaderboard.communityNumCorrect}
+                        totalPossibleSlots={leaderboard.totalPossibleSlots}
+                        numUsersPredicting={leaderboard.numUsersPredicting}
+                        rank={
+                          leaderboard.numUsersPredicting -
+                          leaderboard.communityPerformedBetterThanNumUsers
+                        }
+                        riskiness={leaderboard.communityRiskiness}
+                      />,
+                    ]}
+                    tabsPosX={tabsPosX}
+                  />
+                );
+              } else {
+                const typed = item as {
+                  type: 'category';
+                  item: iCategoryListItem[];
+                };
+                const category = typed.item[0][0] as CategoryName | undefined;
+                if (isLoading || !event || !category) {
+                  return (
+                    <View key={'event-skeleton' + category}>
+                      <EventSkeleton event={event} category={category} />
+                    </View>
+                  );
+                }
+                return (
+                  <DualTabsWrapper
+                    tabs={[
+                      <CategoryListItem
+                        event={event}
+                        item={typed.item[0]}
+                        onPress={() => {
+                          onSelectCategory(category, false);
+                        }}
+                        tab={'personal'}
+                      />,
+                      <CategoryListItem
+                        event={event}
+                        item={typed.item[1]}
+                        onPress={() => {
+                          onSelectCategory(category, true);
+                        }}
+                        tab={'community'}
+                      />,
+                    ]}
+                    tabsPosX={tabsPosX}
+                  />
                 );
               }
-              return (
-                <DualTabsWrapper
-                  tabs={[
-                    <CategoryListItem
-                      event={event}
-                      item={item[0]}
-                      onPress={() => {
-                        onSelectCategory(category, false);
-                      }}
-                      tab={'personal'}
-                    />,
-                    <CategoryListItem
-                      event={event}
-                      item={item[1]}
-                      onPress={() => {
-                        onSelectCategory(category, true);
-                      }}
-                      tab={'community'}
-                    />,
-                  ]}
-                  tabsPosX={tabsPosX}
-                />
-              );
             },
           }}
         />
