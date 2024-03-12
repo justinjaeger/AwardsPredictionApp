@@ -91,7 +91,7 @@ const UserPredictionList = ({
                       {categoryData?.name ?? ''}
                     </SubHeader>
                     <Body style={{ color: COLORS.lightest }}>
-                      {'  |  ' + awardsBodyName}
+                      {'  |  ' + event.year + ' ' + awardsBodyName}
                     </Body>
                   </View>
                   <Body style={{ marginTop: 5 }}>
