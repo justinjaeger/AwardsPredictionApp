@@ -14,6 +14,7 @@ import DualTabsWrapper from '../../../components/DualTabsWrapper';
 import { usePersonalCommunityTab } from '../../../context/PersonalCommunityContext';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { getBottomHeight } from '../../../util/getBottomHeight';
+import { useSaveContenders } from './useSaveContenders';
 
 const Category = () => {
   const navigation = useNavigation();
@@ -40,6 +41,8 @@ const Category = () => {
   // we can do this because it's not used in the render; only accessed on the back func
   const ref = useRef(personalCommunityTab);
 
+  const saveContendersResult = useSaveContenders();
+
   return (
     <BackgroundWrapper>
       <View style={{ flex: 1, width: '100%' }}>
@@ -47,6 +50,8 @@ const Category = () => {
           title={headerText}
           safeAreaTop
           onPressBack={() => {
+            console.log('onPressBack');
+            saveContendersResult.onSaveContenders();
             navigation.goBack();
             setPersonalCommunityTab(ref.current, true);
           }}
@@ -60,6 +65,7 @@ const Category = () => {
             <CategoryPersonal
               showEventLink={showEventLink}
               bottomHeight={bottomHeight}
+              {...saveContendersResult}
             />,
             <CategoryCommunity
               showEventLink={showEventLink}

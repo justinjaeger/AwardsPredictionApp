@@ -4,13 +4,10 @@ import { View } from 'react-native';
 import MovieListDraggable from '../../../components/MovieList/MovieListDraggable';
 import SignedOutState from '../../../components/SignedOutState';
 import { BodyBold } from '../../../components/Text';
-import useMutationUpdatePredictions from '../../../hooks/mutations/useMutationUpdatePredictions';
-import { useNavigateAwayEffect } from '../../../util/hooks';
 import { formatLastUpdated } from '../../../util/formatDateTime';
 import { useAuth } from '../../../context/AuthContext';
 import EventLink from '../../../components/EventLinkButton';
 import { iPrediction } from '../../../models';
-import useQueryGetUserPredictions from '../../../hooks/queries/useQueryGetUserPredictions';
 import CategorySkeleton from '../../../components/Skeletons/CategorySkeleton';
 import { sortPredictions } from '../../../util/sortPredictions';
 import ScreenshotMode from '../../../components/Buttons/ScreenshotMode';
@@ -21,17 +18,23 @@ import { useRouteParams } from '../../../hooks/useRouteParams';
 import { useNavigation } from '@react-navigation/native';
 import { PredictionsNavigationProp } from '../../../navigation/types';
 import { eventToString } from '../../../util/stringConversions';
+import { iSaveContendersResult } from './useSaveContenders';
 
 // used in both FromProfile and from event
 const CategoryPersonal = ({
   showEventLink,
-  onBack,
   bottomHeight = 0,
+  onSaveContenders,
+  isSaving,
+  showSave,
+  predictionData,
+  isLoading,
+  setShowSave,
+  predictionsRef,
 }: {
   showEventLink?: boolean;
-  onBack?: () => void;
   bottomHeight?: number;
-}) => {
+} & iSaveContendersResult) => {
   const { category: _category, event: _event, userInfo, yyyymmdd } = useRouteParams();
   const category = _category!;
   const event = _event!;
@@ -40,61 +43,20 @@ const CategoryPersonal = ({
   const { userId: authUserId } = useAuth();
   const isAuthProfile = userInfo?.userId === authUserId;
 
-  const { data: predictionData, isLoading } = useQueryGetUserPredictions({
-    event,
-    userId: userInfo?.userId,
-    yyyymmdd,
-  });
   const { createdAt } = predictionData?.categories[category] ?? {};
   const initialPredictions = sortPredictions(
     predictionData?.categories[category]?.predictions ?? [],
   );
 
-  const [predictions, setPredictions] = useState<iPrediction[]>(initialPredictions);
-  const [showSave, setShowSave] = useState(false);
+  const [predictions, _setPredictions] = useState<iPrediction[]>(initialPredictions);
+  const setPredictions = (ps: iPrediction[]) => {
+    _setPredictions(ps);
+    predictionsRef.current = ps;
+  };
 
   useEffect(() => {
     setPredictions(initialPredictions);
   }, [userInfo?.userId, predictionData !== undefined]);
-
-  useNavigateAwayEffect(() => {
-    onBack && onBack();
-    onSaveContenders();
-  }, []);
-
-  const [isSaving, setIsSaving] = useState(false);
-  // func to fire after we update predictions on db
-  const onComplete = () => {
-    setIsSaving(false);
-    setShowSave(false);
-  };
-  const onIsSaving = () => {
-    setIsSaving(true);
-  };
-  const { mutate: updatePredictions } = useMutationUpdatePredictions(
-    onComplete,
-    onIsSaving,
-  );
-
-  const onSaveContenders = async (ps?: iPrediction[]) => {
-    if (!userInfo?.userId || !isAuthProfile) return;
-    const predictionsToSave = ps || predictions;
-    const predictionsHaveNotChanged = _.isEqual(
-      predictionsToSave.map((p) => p.contenderId),
-      initialPredictions.map((p) => p.contenderId),
-    );
-    if (predictionsHaveNotChanged) return;
-    // set then rankings according to INSERTION ORDER
-    const orderedPredictions: iPrediction[] = predictionsToSave.map((p, i) => ({
-      ...p,
-      ranking: i + 1,
-    }));
-    await updatePredictions({
-      categoryName: category,
-      eventId: event._id,
-      predictions: orderedPredictions,
-    });
-  };
 
   const onPressAdd = () => {
     navigation.navigate('AddPredictions', {
