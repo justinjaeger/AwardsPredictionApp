@@ -141,7 +141,7 @@ const CreatePerformanceModal = ({
             />
             {!selectedExistingPrediction ? (
               <SubmitButton
-                style={{ position: 'absolute', bottom: 0, width: 200 }}
+                style={{ position: 'absolute', bottom: '20%', width: 200 }}
                 text={'Add New Performance'}
                 onPress={() => {
                   setModalState('create');

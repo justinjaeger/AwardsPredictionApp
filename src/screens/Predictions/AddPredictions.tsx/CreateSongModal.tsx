@@ -98,7 +98,7 @@ const CreateSongModal = ({
             />
             {!selectedExistingPrediction ? (
               <SubmitButton
-                style={{ position: 'absolute', bottom: 0, width: 100 }}
+                style={{ position: 'absolute', bottom: '20%', width: 150 }}
                 text={'Add New Song'}
                 onPress={() => {
                   setModalState('create');
