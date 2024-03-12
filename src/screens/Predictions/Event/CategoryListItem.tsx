@@ -61,14 +61,14 @@ const CategoryListItem = ({
   const slotsWhichAreCorrect =
     isLeaderboard && phase
       ? getSlotsInPhase(phase, maybeUndefinedCategoryData)
-      : _categorySlots;
+      : _categorySlots || 5;
 
   // they're already sorted but if that's the case this is not expensive so may as well for safety
   const predictions = sortPredictions(categoryPrediction);
   const predictionsToDisplay: iPrediction[] = predictions.slice(0, slotsToDisplay || 5);
   const predictionsWithinSlots: iPrediction[] = predictions.slice(
     0,
-    slotsWhichAreCorrect || 5,
+    slotsWhichAreCorrect,
   );
 
   const showAccolades = !!yyyymmdd;

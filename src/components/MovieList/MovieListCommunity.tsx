@@ -55,7 +55,7 @@ const MovieListCommunity = ({
 
   const { slots: _slots, type } = categoryData!;
   const slotsWhichAreCorrect =
-    isLeaderboard && phase ? getSlotsInPhase(phase, categoryData) : _slots;
+    isLeaderboard && phase ? getSlotsInPhase(phase, categoryData) : _slots || 5;
   const totalNumPredictingTop = getTotalNumPredicting(
     predictions?.[0]?.numPredicting ?? {},
   );
@@ -93,7 +93,7 @@ const MovieListCommunity = ({
         predictions: predictions,
         communityPredictions: predictions,
         totalUsersPredicting,
-        slots: slotsWhichAreCorrect ?? 5,
+        slots: slotsWhichAreCorrect,
         contenderIdsToPhase,
         phase,
       })
