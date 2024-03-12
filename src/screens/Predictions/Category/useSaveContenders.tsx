@@ -41,7 +41,7 @@ export const useSaveContenders = (): iSaveContendersResult => {
 
   useEffect(() => {
     predictionsRef.current = initialPredictions;
-  }, [userInfo?.userId, predictionData !== undefined]);
+  }, [userInfo?.userId, !!predictionData]);
 
   const [isSaving, setIsSaving] = useState(false);
   // func to fire after we update predictions on db

@@ -56,7 +56,7 @@ const CategoryPersonal = ({
 
   useEffect(() => {
     setPredictions(initialPredictions);
-  }, [userInfo?.userId, predictionData !== undefined]);
+  }, [userInfo?.userId, !!predictionData]);
 
   const onPressAdd = () => {
     navigation.navigate('AddPredictions', {
