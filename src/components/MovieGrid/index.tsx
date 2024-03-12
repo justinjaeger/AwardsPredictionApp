@@ -14,6 +14,7 @@ import {
 } from '../../constants/posterDimensions';
 import { getNumPostersInRow } from '../../util/getNumPostersInRow';
 import { hexToRgb } from '../../util/hexToRgb';
+import { getContenderMeetsAccolade } from '../../util/getContenderMeetsAccolade';
 
 const MovieGrid = ({
   eventId,
@@ -76,7 +77,8 @@ const MovieGrid = ({
         const { contenderId } = prediction;
         const { movie, person } = getTmdbDataFromPrediction(prediction) || {};
         const accolade = contenderIdsToPhase && contenderIdsToPhase[contenderId];
-        const accoladeMatchesPhase = phase === accolade;
+        const accoladeMatchesPhase =
+          phase && accolade && getContenderMeetsAccolade(phase, accolade);
         return (
           <View
             style={{

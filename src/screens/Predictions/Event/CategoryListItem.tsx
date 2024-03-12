@@ -13,6 +13,7 @@ import useQueryGetEventAccolades from '../../../hooks/queries/useQueryGetEventAc
 import CustomIcon from '../../../components/CustomIcon';
 import { CATEGORY_BOTTOM_AREA_HEIGHT, CATEGORY_TOP_AREA_HEIGHT } from './constants';
 import { getCategoryListItemHeight } from '../../../util/getCategoryListItemHeight';
+import { getContenderMeetsAccolade } from '../../../util/getContenderMeetsAccolade';
 
 export type iCategoryListItem = [CategoryName, iPrediction[]];
 
@@ -73,9 +74,11 @@ const CategoryListItem = ({
   const showAccolades = !!yyyymmdd;
 
   // we need to know the number of predictions that are in the PHASE
-  const numCorrectInCategory = predictionsWithinSlots.filter(
-    (prediction) => contenderIdsToPhase?.[prediction.contenderId] === phase,
-  ).length;
+  const numCorrectInCategory = predictionsWithinSlots.filter((prediction) => {
+    const contenderPhase = contenderIdsToPhase?.[prediction.contenderId];
+    if (!contenderPhase || !phase) return false;
+    return getContenderMeetsAccolade(phase, contenderPhase);
+  }).length;
 
   const height = getCategoryListItemHeight({
     categoryName: category,
