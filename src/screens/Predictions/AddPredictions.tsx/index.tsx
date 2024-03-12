@@ -8,7 +8,6 @@ import { FAB } from '../../../components/Buttons/FAB';
 import { CategoryType } from '../../../models';
 import SearchInput from '../../../components/Inputs/SearchInput';
 import MovieListSelectable from '../../../components/MovieList/MovieListSelectable';
-import { useNavigateAwayEffect } from '../../../util/hooks';
 import { PredictionsNavigationProp } from '../../../navigation/types';
 import { getBiggestPhaseThatHasHappened } from '../../../util/getBiggestPhaseThatHasHappened';
 import { usePredictions } from '../AddPredictions.tsx/usePredictions';
@@ -84,11 +83,6 @@ const AddPredictions = () => {
     onSave();
     navigation.goBack();
   };
-
-  // for android native back swipe, we want this to save
-  useNavigateAwayEffect(() => {
-    onSave();
-  }, []);
 
   // applies for both persons AND songs
   const onCloseModal = () => {

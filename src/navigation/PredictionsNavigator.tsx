@@ -40,7 +40,7 @@ const PredictionsNavigator = () => {
         <Screen
           name="AddPredictions"
           component={AddPredictions}
-          options={{ headerShown: false }}
+          options={{ headerShown: false, gestureEnabled: false }}
         />
         <Screen
           name="ContenderStats"
