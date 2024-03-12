@@ -200,26 +200,27 @@ const LeaderboardChart = ({
         />
         <Indicators chartWidth={chartWidth} />
       </ScrollView>
-      <Slider
-        onValueChange={(v) => {
-          const x = (chartWidth - width) * (v / 100);
-          chartRef.current?.scrollTo({
-            x,
-            animated: false,
-          });
-        }}
-        onSlidingComplete={(v) => {
-          const x = (chartWidth - width) * (v / 100);
-          chartRef.current?.scrollTo({
-            x,
-            animated: false,
-          });
-          setScrollPos(x);
-        }}
-        style={{ marginTop: 15 }}
-      />
+      {chartWidth > width ? (
+        <Slider
+          onValueChange={(v) => {
+            const x = (chartWidth - width) * (v / 100);
+            chartRef.current?.scrollTo({
+              x,
+              animated: false,
+            });
+          }}
+          onSlidingComplete={(v) => {
+            const x = (chartWidth - width) * (v / 100);
+            chartRef.current?.scrollTo({
+              x,
+              animated: false,
+            });
+            setScrollPos(x);
+          }}
+          style={{ marginTop: 15 }}
+        />
+      ) : null}
       <View style={{ marginTop: 20 }} />
-      {/* <ChartToolbar minBarWidth={minBarWidth} setMinBarWidth={setMinBarWidth} /> */}
     </View>
   );
 };

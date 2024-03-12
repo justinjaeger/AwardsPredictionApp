@@ -1,5 +1,4 @@
 import React, { useRef, useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
 import useGetLeaderboardUsers from '../../../hooks/useGetLeaderboardUsers';
 import { View } from 'react-native';
 import LeaderboardListItem from '../../../components/LeaderboardListItem';
@@ -11,13 +10,9 @@ import useProfileUser from '../../Profile/useProfileUser';
 import { getUserLeaderboard } from '../../../util/getUserLeaderboard';
 import { PHASE_TO_STRING_PLURAL } from '../../../constants/categories';
 import LeaderboardChart from '../../../components/LeaderboardChart';
-import { PredictionsNavigationProp } from '../../../navigation/types';
-import { getUserInfo } from '../../../util/getUserInfo';
-import { usePersonalCommunityTab } from '../../../context/PersonalCommunityContext';
 import useQueryGetFollowingUsers from '../../../hooks/queries/useQueryGetFollowingUsers';
 import { iLeaderboardRankingsWithUserData } from '../../../services/api/requests/leaderboard';
 import { AWARDS_BODY_TO_PLURAL_STRING } from '../../../constants/awardsBodies';
-import LeaderboardStats from './LeaderboardStats';
 import HeaderDropdownOverlay from '../../../components/HeaderDropdownOverlay';
 import { EVENT_TOP_TABS_HEIGHT } from '../../../components/HorizontalScrollingTabs';
 import { useEventSelect } from '../../../hooks/useEventSelect';
@@ -50,10 +45,7 @@ const Leaderboard = () => {
   const tabsPosX = useSharedValue(0);
   const flashListRef = useRef<FlashList<any>>(null);
 
-  const navigation = useNavigation<PredictionsNavigationProp>();
-
   const { isPad } = useDevice();
-  const { setPersonalCommunityTab } = usePersonalCommunityTab();
   const { disableBack } = useRouteParams();
   const {
     event,
@@ -117,18 +109,6 @@ const Leaderboard = () => {
     leaderboardRankings[i],
     followingLeaderboardRankings[i],
   ]);
-
-  const navigateToPredictions = () => {
-    if (!userLeaderboard) return;
-    setPersonalCommunityTab('personal');
-    navigation.navigate('Event', {
-      eventId: userLeaderboard.eventId,
-      userInfo: getUserInfo(user),
-      yyyymmdd: userLeaderboard.yyyymmdd,
-      phase: userLeaderboard.phase,
-      isLeaderboard: true,
-    });
-  };
 
   const backButtonHeight = disableBack ? 0 : BACK_BUTTON_HEIGHT;
 
@@ -224,18 +204,10 @@ const Leaderboard = () => {
           estimatedItemSize: LEADERBOARD_LIST_ITEM_HEIGHT * (isPad ? 1.5 : 1),
           ListHeaderComponent: (
             <>
-              {user && userLeaderboard ? (
-                <LeaderboardStats
-                  title={'My Score'}
-                  percentageAccuracy={userLeaderboard.percentageAccuracy}
-                  numCorrect={userLeaderboard.numCorrect}
-                  totalPossibleSlots={userLeaderboard.totalPossibleSlots}
-                  numUsersPredicting={userLeaderboard.numUsersPredicting}
-                  rank={userLeaderboard.rank}
-                  riskiness={userLeaderboard.riskiness}
-                  lastUpdated={userLeaderboard.lastUpdated}
-                  slotsPredicted={userLeaderboard.slotsPredicted}
-                  onPress={() => navigateToPredictions()}
+              {user?._id && userLeaderboard ? (
+                <LeaderboardListItem
+                  leaderboardRanking={{ ...userLeaderboard, ...user, userId: user._id }}
+                  style={{ backgroundColor: COLORS.primaryLight }}
                 />
               ) : null}
               <View
