@@ -73,6 +73,7 @@ const SearchInput = ({
           }}
         >
           <TextInput
+            autoCorrect={false}
             style={{
               height: searchHeight,
               borderRadius: 100,
