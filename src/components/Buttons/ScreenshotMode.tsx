@@ -127,7 +127,7 @@ const ScreenshotMode = ({
           </TouchableWithoutFeedback>
         </BasicModal>
       ) : (
-        <FloatingButton onPress={() => setVisible(true)} icon={'grid'} />
+        <FloatingButton onPress={() => setVisible(true)} icon={'camera-outline'} />
       )}
     </>
   );
