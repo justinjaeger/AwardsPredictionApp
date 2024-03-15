@@ -38,6 +38,7 @@ export enum AwardsBody {
   ASC = 'ASC',
   MPSE = 'MPSE',
   COMMUNITY = 'COMMUNITY',
+  ANTICIPATED = 'ANTICIPATED',
 }
 
 export enum CategoryType {

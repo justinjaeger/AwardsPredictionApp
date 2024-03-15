@@ -18,6 +18,7 @@ export const AWARDS_BODY_TO_STRING: {
   [AwardsBody.SAG]: 'SAG',
   [AwardsBody.WGA]: 'Writers Guild',
   [AwardsBody.COMMUNITY]: 'Favorites',
+  [AwardsBody.ANTICIPATED]: 'Most Anticipated',
 };
 
 export const SORTED_AWARDS_BODIES = [
@@ -28,6 +29,7 @@ export const SORTED_AWARDS_BODIES = [
   AwardsBody.CRITICS_CHOICE,
   AwardsBody.GOLDEN_GLOBES,
   AwardsBody.COMMUNITY,
+  AwardsBody.ANTICIPATED,
 ];
 
 export const AWARDS_BODY_TO_PLURAL_STRING: {
