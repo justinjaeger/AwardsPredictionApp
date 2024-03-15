@@ -145,7 +145,10 @@ const ContenderStatEventTab = ({
         </View>
       ) : null}
       <SectionTopTabs
-        tabs={[{ title: 'Likelihood' }, { title: 'Category Order' }]}
+        tabs={[
+          { title: isList ? 'Highest Rank' : 'Likelihood' },
+          { title: 'Category Order' },
+        ]}
         tabsPosX={tabsPosX}
       />
       {data.map(([tab1, tab2]) => (

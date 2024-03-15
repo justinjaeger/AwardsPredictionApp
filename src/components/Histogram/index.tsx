@@ -30,6 +30,7 @@ const Histogram = ({
   displayNoExtraSlots,
   flatListRef,
   scrollRef,
+  isList,
 }: {
   numPredicting: Record<number, number>;
   totalNumPredicting: number;
@@ -44,6 +45,7 @@ const Histogram = ({
   // important props for enabling/disabling scroll when inside a scrollview:
   flatListRef?: React.RefObject<FlatList<any>>;
   scrollRef?: React.RefObject<ScrollView>;
+  isList?: boolean;
 }) => {
   const { isPad } = useDevice();
   const { width: windowWidth } = useWindowDimensions();
@@ -192,9 +194,11 @@ const Histogram = ({
           }}
         >
           <View style={{ padding: 5 }}>
-            <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
+            <View style={{ flexDirection: 'row', alignItems: 'baseline', minWidth: 100 }}>
               <Header>{numPredictingInSelectedSlot.toString()}</Header>
-              <SubHeaderLight style={{ marginLeft: 5 }}>{'predicting'}</SubHeaderLight>
+              <SubHeaderLight style={{ marginLeft: 5 }}>
+                {isList ? 'users' : 'predicting'}
+              </SubHeaderLight>
             </View>
             <View
               style={{

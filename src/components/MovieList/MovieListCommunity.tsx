@@ -98,6 +98,7 @@ const MovieListCommunity = ({
         phase,
       })
     : { numCorrectPredictions: 0 };
+
   return (
     <FlashList
       data={predictions.slice(0, numToShow)}

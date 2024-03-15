@@ -81,10 +81,17 @@ const ContenderListItem = ({
   const { isActive } = draggable || {};
   const { width: windowWidth } = useWindowDimensions();
 
-  const { phase, category: _category, categoryData, isLeaderboard } = useRouteParams();
+  const {
+    event,
+    phase,
+    category: _category,
+    categoryData,
+    isLeaderboard,
+  } = useRouteParams();
   const category = _category!;
   const { type } = categoryData!;
   const slots = getSlotsInPhase(phase, categoryData, true);
+  const isList = event?.eventType === 'list';
 
   const { width: posterWidth, height: posterHeight } = getPosterDimensionsByWidth(
     windowWidth / 9 - theme.posterMargin * 2,
@@ -274,7 +281,7 @@ const ContenderListItem = ({
               slots={slots}
               totalWidth={windowWidth - thumbnailContainerWidth - rightIconContainerWidth}
               posterHeight={posterHeight}
-              displayNoExtraSlots={displayNoExtraSlots}
+              displayNoExtraSlots={isList || displayNoExtraSlots}
             />
           ) : null}
         </>

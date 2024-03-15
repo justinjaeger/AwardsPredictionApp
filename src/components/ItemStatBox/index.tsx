@@ -137,7 +137,8 @@ const ItemStatBox = ({
           enableHoverInfo
           flatListRef={flatListRef}
           scrollRef={scrollRef}
-          displayNoExtraSlots={nominationsHavePassed}
+          displayNoExtraSlots={isList || nominationsHavePassed}
+          isList={isList}
         />
       ) : null}
       <View
@@ -150,13 +151,13 @@ const ItemStatBox = ({
       >
         <Stat
           number={`${formatPercentage(win / totalNumPredictingCategory, true)}`}
-          text={isList ? 'vote win' : 'predict win'}
+          text={isList ? 'top choice' : 'predict win'}
         />
         {!nominationsHavePassed ? (
           <>
             <Stat
               number={`${formatPercentage(nom / totalNumPredictingCategory, true)}`}
-              text={isList ? 'vote nom' : 'predict nom'}
+              text={isList ? `top ${slots ?? 5}` : 'predict nom'}
             />
             {isList ? null : (
               <Stat
@@ -178,10 +179,8 @@ const ItemStatBox = ({
       >
         <SubHeaderLight>{'out of'}</SubHeaderLight>
         <HeaderLight>{` ${totalNumPredictingCategory} `}</HeaderLight>
+        <SubHeaderLight>{'participants'}</SubHeaderLight>
       </View>
-      <Body style={{ textAlign: 'center' }}>
-        {isList ? 'users voting in category' : 'users predicting category'}
-      </Body>
     </View>
   );
 };
