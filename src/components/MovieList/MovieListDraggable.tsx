@@ -1,12 +1,10 @@
-import { Divider } from '@ui-kitten/components';
 import React, { useCallback, useState } from 'react';
 import { TouchableHighlight, TouchableOpacity, View } from 'react-native';
-import DraggableFlatList, { ScaleDecorator } from 'react-native-draggable-flatlist';
+import DraggableFlatList from 'react-native-draggable-flatlist';
 import { CATEGORY_TYPE_TO_STRING } from '../../constants/categories';
 import COLORS from '../../constants/colors';
 import theme from '../../constants/theme';
 import LastUpdatedText from '../LastUpdatedText';
-import ContenderListItem from '../List/ContenderList/ContenderListItem';
 import { Body, SubHeader } from '../Text';
 import { CategoryName, iPrediction } from '../../models';
 import { triggerHaptic } from '../../util/hapticFeedback';
@@ -17,6 +15,7 @@ import useQueryGetEventAccolades from '../../hooks/queries/useQueryGetEventAccol
 import { getSlotsInPhase } from '../../util/getSlotsInPhase';
 import useQueryGetCommunityPredictions from '../../hooks/queries/useQueryGetCommunityPredictions';
 import { getPredictionStatsFromPredictions } from '../../util/getNumCorrectPredictions';
+import MovieListDraggableItem from './MovieListDraggableItem';
 
 type iMovieListProps = {
   predictions: iPrediction[];
@@ -58,7 +57,6 @@ const MovieListDraggable = ({
     yyyymmdd,
   });
 
-  const [itemsToDelete, setItemsToDelete] = useState<iPrediction[]>([]);
   const [showPointsHelp, setShowPointsHelp] = useState<boolean>(false);
 
   const onPressItem = useCallback(async (prediction: iPrediction) => {
@@ -70,20 +68,6 @@ const MovieListDraggable = ({
       phase,
       noShorts,
       isLeaderboard,
-    });
-  }, []);
-
-  const toggleDeleteMode = useCallback((prediction: iPrediction) => {
-    triggerHaptic();
-    setItemsToDelete((curr) => {
-      const newItems = [...curr];
-      const index = curr.findIndex((p) => p.contenderId === prediction.contenderId);
-      if (index === -1) {
-        newItems.push(prediction);
-      } else {
-        newItems.splice(index, 1);
-      }
-      return newItems;
     });
   }, []);
 
@@ -104,6 +88,11 @@ const MovieListDraggable = ({
       })
     : { contenderIdToRiskiness: {}, numCorrectPredictions: 0 };
 
+  const deletePrediction = (contenderId: string) => {
+    triggerHaptic();
+    setPredictions(predictions.filter((p) => p.contenderId !== contenderId));
+  };
+
   const totalRiskiness = Object.values(contenderIdToRiskiness).reduce((a, b) => a + b, 0);
 
   const isEditable = isAuthProfile && !yyyymmdd;
@@ -118,7 +107,6 @@ const MovieListDraggable = ({
       onPlaceholderIndexChange={() => {
         triggerHaptic();
       }}
-      initialNumToRender={10}
       ListHeaderComponent={
         <>
           <LastUpdatedText lastUpdated={lastUpdatedString} />
@@ -172,101 +160,22 @@ const MovieListDraggable = ({
               <SubHeader>{`+ Add ${CATEGORY_TYPE_TO_STRING[type]}s`}</SubHeader>
             </TouchableHighlight>
           </View>
-        ) : isEditable && predictions.length > 0 ? (
-          <Body
-            style={{
-              color: COLORS.gray,
-              width: '100%',
-              marginTop: 20,
-              alignItems: 'center',
-              textAlign: 'center',
-            }}
-          >
-            {'To delete, press + hold'}
-          </Body>
         ) : null
       }
-      renderItem={({ item: prediction, getIndex, drag, isActive }) => {
-        const index = getIndex() || 0;
-        const ranking = index + 1;
-        const isSelectedForDelete = itemsToDelete.some(
-          (p) => p.contenderId === prediction.contenderId,
-        );
-        const accolade = showAccolades
-          ? contenderIdsToPhase && contenderIdsToPhase[prediction.contenderId]
-          : undefined;
-        const accoladeMatchesPhase = phase === accolade;
-
-        return (
-          <>
-            {index === slots ? (
-              <Divider
-                style={{
-                  margin: 10,
-                  backgroundColor: isActive ? 'transparent' : COLORS.secondary,
-                }}
-              />
-            ) : null}
-            <ScaleDecorator activeScale={1}>
-              <ContenderListItem
-                prediction={prediction}
-                ranking={ranking}
-                onPressItem={() => {
-                  if (itemsToDelete.includes(prediction)) {
-                    toggleDeleteMode(prediction);
-                  } else {
-                    onPressItem(prediction);
-                  }
-                }}
-                onLongPress={
-                  isEditable
-                    ? () => {
-                        toggleDeleteMode(prediction);
-                      }
-                    : undefined
-                }
-                draggable={{
-                  drag,
-                  isActive,
-                }}
-                categoryType={type}
-                iconRightProps={
-                  !isEditable
-                    ? undefined
-                    : isSelectedForDelete
-                    ? {
-                        iconName: 'trash-outline',
-                        backgroundColor: COLORS.error,
-                        onPress: () => {
-                          triggerHaptic();
-                          setPredictions(
-                            predictions.filter(
-                              (p) => p.contenderId !== prediction.contenderId,
-                            ),
-                          );
-                          setItemsToDelete((curr) =>
-                            curr.filter((p) => p.contenderId !== prediction.contenderId),
-                          );
-                        },
-                      }
-                    : {
-                        iconName: 'menu',
-                        enableOnPressIn: true,
-                        onPress: () => drag(),
-                      }
-                }
-                accolade={accolade || undefined}
-                isUnaccaloded={showAccolades && !accoladeMatchesPhase}
-                riskiness={
-                  showAccolades
-                    ? contenderIdToRiskiness[prediction.contenderId]
-                    : undefined
-                }
-              />
-            </ScaleDecorator>
-          </>
-        );
-      }}
+      activationDistance={15}
+      renderItem={(props) => (
+        <MovieListDraggableItem
+          {...props}
+          showAccolades={showAccolades}
+          contenderIdsToPhase={contenderIdsToPhase}
+          phase={phase}
+          onDelete={() => deletePrediction(props.item.contenderId)}
+          onPressItem={() => onPressItem(props.item)}
+          categoryType={type}
+          contenderIdToRiskiness={contenderIdToRiskiness}
+          slots={slots}
+        />
+      )}
       onDragEnd={({ data }) => {
         setPredictions(data);
       }}
