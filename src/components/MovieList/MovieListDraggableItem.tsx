@@ -1,5 +1,5 @@
 import { Divider } from '@ui-kitten/components';
-import React, { useRef } from 'react';
+import React, { memo, useRef } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { ScaleDecorator } from 'react-native-draggable-flatlist';
 import COLORS from '../../constants/colors';
@@ -135,4 +135,4 @@ const MovieListDraggableItem = ({
   );
 };
 
-export default MovieListDraggableItem;
+export default memo(MovieListDraggableItem);
