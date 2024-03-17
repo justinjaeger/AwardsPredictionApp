@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import { Divider } from '@ui-kitten/components';
 import { useWindowDimensions } from 'react-native';
 import COLORS from '../../constants/colors';
@@ -11,7 +11,6 @@ import { getTotalNumPredicting } from '../../util/getNumPredicting';
 import { useNavigation } from '@react-navigation/native';
 import { PredictionsNavigationProp } from '../../navigation/types';
 import { useRouteParams } from '../../hooks/useRouteParams';
-import useDevice from '../../util/device';
 import { getSlotsInPhase } from '../../util/getSlotsInPhase';
 import useQueryGetEventAccolades from '../../hooks/queries/useQueryGetEventAccolades';
 import { FlashList } from '@shopify/flash-list';
@@ -35,7 +34,6 @@ const MovieListCommunity = ({
   totalUsersPredicting,
 }: iMovieListProps) => {
   const navigation = useNavigation<PredictionsNavigationProp>();
-  const { isPad } = useDevice();
   const { width } = useWindowDimensions();
   const {
     eventId,
@@ -59,12 +57,6 @@ const MovieListCommunity = ({
   const totalNumPredictingTop = getTotalNumPredicting(
     predictions?.[0]?.numPredicting ?? {},
   );
-
-  const [numToShow, setNumToShow] = useState<number>(20);
-
-  const onEndReached = () => {
-    setNumToShow(numToShow + 10);
-  };
 
   const onPressItem = useCallback(async (prediction: iPrediction) => {
     navigation.navigate('ContenderInfoModal', {
@@ -101,7 +93,7 @@ const MovieListCommunity = ({
 
   return (
     <FlashList
-      data={predictions.slice(0, numToShow)}
+      data={predictions}
       keyExtractor={(item) => item.contenderId}
       contentContainerStyle={{ paddingBottom: 200 }}
       ListHeaderComponent={
@@ -119,20 +111,6 @@ const MovieListCommunity = ({
           ) : null}
         </>
       }
-      onScroll={(e) => {
-        // Fetches more at bottom of scroll. Note the high event throttle to prevent too many requests
-        // get position of current scroll
-        const currentOffset = e.nativeEvent.contentOffset.y;
-        // get max bottom of scroll
-        const maxOffset =
-          e.nativeEvent.contentSize.height - e.nativeEvent.layoutMeasurement.height;
-        // if we're close to the bottom fetch more
-        if (currentOffset > maxOffset - 200 && onEndReached) {
-          onEndReached();
-        }
-      }}
-      scrollEventThrottle={500}
-      onEndReachedThreshold={isPad ? 0.8 : 0.5} // triggers onEndReached at (X*100)% of list, for example 0.9 = 90% down
       showsVerticalScrollIndicator={false}
       renderItem={({ item: prediction, index }) => {
         const accolade = contenderIdsToPhase?.[prediction.contenderId];

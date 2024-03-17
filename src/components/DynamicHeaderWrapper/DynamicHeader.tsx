@@ -22,7 +22,6 @@ export type iDynamicHeaderProps = {
   scrollViewRef?: React.RefObject<ScrollView>;
 };
 
-// TODO: replace with reanimated
 const DynamicHeader = ({
   scrollY,
   collapsedHeaderHeight,
