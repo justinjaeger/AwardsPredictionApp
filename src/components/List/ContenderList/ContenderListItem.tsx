@@ -1,11 +1,6 @@
 /* eslint-disable sonarjs/no-duplicate-string */
 import React, { memo } from 'react';
-import {
-  TouchableHighlight,
-  TouchableOpacity,
-  useWindowDimensions,
-  View,
-} from 'react-native';
+import { useWindowDimensions, View } from 'react-native';
 import COLORS from '../../../constants/colors';
 import { getPosterDimensionsByWidth } from '../../../constants/posterDimensions';
 import { getTotalNumPredicting } from '../../../util/getNumPredicting';
@@ -21,6 +16,7 @@ import PosterFromTmdb from '../../Images/PosterFromTmdb';
 import CustomIcon from '../../CustomIcon';
 import { useRouteParams } from '../../../hooks/useRouteParams';
 import { getSlotsInPhase } from '../../../util/getSlotsInPhase';
+import { TouchableHighlight, TouchableOpacity } from 'react-native-gesture-handler';
 
 export const getContenderListItemHeight = (windowWidth: number) => {
   const { height: posterHeight } = getPosterDimensionsByWidth(
@@ -58,6 +54,7 @@ export type iContenderListItemProps = {
   displayNoExtraSlots?: boolean;
   accolade?: Phase;
   isUnaccaloded?: boolean;
+  itemRef?: React.LegacyRef<View>;
 };
 
 const ContenderListItem = ({
@@ -77,6 +74,7 @@ const ContenderListItem = ({
   onPressItem,
   onPressThumbnail,
   onLongPress,
+  itemRef,
 }: iContenderListItemProps) => {
   const { isActive } = draggable || {};
   const { width: windowWidth } = useWindowDimensions();
@@ -156,7 +154,7 @@ const ContenderListItem = ({
           ? 'rgba(255,255,255,0.03)'
           : isUnaccaloded
           ? 'rgba(0,0,0,0.5)'
-          : 'transparent',
+          : COLORS.primaryDark,
         flexDirection: 'row',
         alignItems: 'flex-end',
         borderTopColor: hexToRgb(COLORS.primaryLight, 0.5),
@@ -164,6 +162,7 @@ const ContenderListItem = ({
         padding: theme.posterMargin,
         height: getContenderListItemHeight(windowWidth),
       }}
+      ref={itemRef}
     >
       <TouchableOpacity
         style={{

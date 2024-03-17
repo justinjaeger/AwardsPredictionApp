@@ -36,7 +36,11 @@ const PredictionsNavigator = () => {
         <Screen name="Social" component={Social} options={{ headerShown: false }} />
         {/* Prediction Screens */}
         <Screen name="Event" component={Event} options={{ headerShown: false }} />
-        <Screen name="Category" component={Category} options={{ headerShown: false }} />
+        <Screen
+          name="Category"
+          component={Category}
+          options={{ headerShown: false, gestureEnabled: false }}
+        />
         <Screen
           name="AddPredictions"
           component={AddPredictions}
