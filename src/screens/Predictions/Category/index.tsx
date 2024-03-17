@@ -50,7 +50,6 @@ const Category = () => {
           title={headerText}
           safeAreaTop
           onPressBack={() => {
-            console.log('onPressBack');
             saveContendersResult.onSaveContenders();
             navigation.goBack();
             setPersonalCommunityTab(ref.current, true);
