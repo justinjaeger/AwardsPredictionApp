@@ -19,6 +19,7 @@ import { getSlotsInPhase } from '../../../util/getSlotsInPhase';
 import { TouchableHighlight, TouchableOpacity } from 'react-native-gesture-handler';
 import { formatPercentage } from '../../../util/formatPercentage';
 import { yyyymmddToDate } from '../../../util/yyyymmddToDate';
+import { getContenderMeetsAccolade } from '../../../util/getContenderMeetsAccolade';
 
 const VERTICAL_MARGINS = 10;
 const POSTER_SIZE_FACTOR = 7;
@@ -139,8 +140,13 @@ const ContenderListItem = ({
   const thumbnailContainerWidth = posterWidth * 1.5;
   const rightIconContainerWidth = iconRightProps ? posterHeight - 10 : 0;
 
-  const accoladeMatchesPhase = phase === accolade;
-  const accoladeToShow = accoladeMatchesPhase ? accolade : undefined;
+  // true when it's not a leaderboard
+  const contenderMeetsAccolade = isLeaderboard
+    ? accolade && phase
+      ? getContenderMeetsAccolade(accolade, phase)
+      : false
+    : true;
+  const accoladeToShow = contenderMeetsAccolade ? accolade : undefined;
 
   if (dataHasNotLoaded) {
     return (
@@ -215,7 +221,7 @@ const ContenderListItem = ({
           }}
           ranking={ranking}
           accolade={isLeaderboard ? accoladeToShow : undefined}
-          isUnaccoladed={isUnaccaloded}
+          isUnaccoladed={!contenderMeetsAccolade}
         />
       </TouchableOpacity>
       <View style={{ marginTop: VERTICAL_MARGINS }}>

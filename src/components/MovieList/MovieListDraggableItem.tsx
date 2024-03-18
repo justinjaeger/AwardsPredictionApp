@@ -17,7 +17,6 @@ const MovieListDraggableItem = ({
   isActive,
   showAccolades,
   contenderIdsToPhase,
-  phase,
   onDelete,
   onPressItem,
   categoryType,
@@ -48,7 +47,6 @@ const MovieListDraggableItem = ({
   const accolade = showAccolades
     ? contenderIdsToPhase && contenderIdsToPhase[prediction.contenderId]
     : undefined;
-  const accoladeMatchesPhase = phase === accolade;
 
   /**
    * Maybe onStartSwipe, we can set the ref on the item to disable other touches.
@@ -125,7 +123,6 @@ const MovieListDraggableItem = ({
             onPress: () => drag(),
           }}
           accolade={accolade || undefined}
-          isUnaccaloded={showAccolades && !accoladeMatchesPhase}
           riskiness={
             showAccolades ? contenderIdToRiskiness[prediction.contenderId] : undefined
           }

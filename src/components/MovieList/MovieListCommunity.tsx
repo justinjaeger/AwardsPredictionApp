@@ -114,7 +114,6 @@ const MovieListCommunity = ({
       showsVerticalScrollIndicator={false}
       renderItem={({ item: prediction, index }) => {
         const accolade = contenderIdsToPhase?.[prediction.contenderId];
-        const accoladeMatchesPhase = phase === accolade;
         return (
           <>
             {index === slotsWhichAreCorrect ? (
@@ -135,7 +134,6 @@ const MovieListCommunity = ({
               totalNumPredictingTop={totalNumPredictingTop}
               totalUsersPredicting={totalUsersPredicting}
               accolade={accolade}
-              isUnaccaloded={showAccolades && !accoladeMatchesPhase}
               displayNoExtraSlots={nominationsHavePassed}
             />
           </>
