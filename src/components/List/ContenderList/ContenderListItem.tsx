@@ -16,7 +16,7 @@ import PosterFromTmdb from '../../Images/PosterFromTmdb';
 import CustomIcon from '../../CustomIcon';
 import { useRouteParams } from '../../../hooks/useRouteParams';
 import { getSlotsInPhase } from '../../../util/getSlotsInPhase';
-import { TouchableHighlight, TouchableOpacity } from 'react-native-gesture-handler';
+import { TouchableHighlight } from 'react-native-gesture-handler';
 import { formatPercentage } from '../../../util/formatPercentage';
 import { yyyymmddToDate } from '../../../util/yyyymmddToDate';
 import { getContenderMeetsAccolade } from '../../../util/getContenderMeetsAccolade';
@@ -24,6 +24,7 @@ import { getContenderMeetsAccolade } from '../../../util/getContenderMeetsAccola
 const VERTICAL_MARGINS = 10;
 const POSTER_SIZE_FACTOR = 7;
 const LEFT_SECTION = 80;
+const RIGHT_SECTION_WIDTH = 80;
 
 export const getContenderListItemHeight = (windowWidth: number) => {
   const { height: posterHeight } = getPosterDimensionsByWidth(
@@ -84,7 +85,6 @@ const ContenderListItem = ({
   isUnaccaloded,
   displayNoExtraSlots, // for showing histogram
   onPressItem,
-  onPressThumbnail,
   itemRef,
 }: iContenderListItemProps) => {
   const { isActive } = draggable || {};
@@ -136,7 +136,7 @@ const ContenderListItem = ({
   const totalNumPredicting = getTotalNumPredicting(numPredictingIfIsCommunity || {});
 
   const thumbnailContainerWidth = posterWidth * 1.5;
-  const rightIconContainerWidth = iconRightProps ? posterHeight - 10 : 0;
+  const rightIconContainerWidth = iconRightProps ? RIGHT_SECTION_WIDTH : 0;
 
   // true when it's not a leaderboard
   const contenderMeetsAccolade = isLeaderboard
@@ -168,6 +168,7 @@ const ContenderListItem = ({
   return (
     <View
       style={{
+        flex: 1,
         backgroundColor: isActive
           ? COLORS.secondaryLight
           : highlighted
@@ -180,63 +181,70 @@ const ContenderListItem = ({
         flexDirection: 'row',
         borderTopColor: hexToRgb(COLORS.primaryLight, 0.5),
         borderTopWidth: 1,
-        padding: theme.posterMargin,
         height: itemHeight,
+        width: '100%',
       }}
       ref={itemRef}
     >
-      <TouchableOpacity
+      <TouchableHighlight
         style={{
-          width: thumbnailContainerWidth,
+          flex: 3,
+          justifyContent: 'flex-start',
+          alignItems: 'flex-start',
           flexDirection: 'row',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '100%',
         }}
-        onPress={() => {
-          if (onPressThumbnail) {
-            onPressThumbnail();
-          } else {
-            onPressItem();
-          }
-        }}
+        onPress={() => onPressItem()}
+        underlayColor={COLORS.secondaryDark}
       >
-        <PosterFromTmdb
-          movie={movie}
-          person={person}
-          posterDimensions={{
-            width: posterWidth,
-            height: posterHeight,
-          }}
-          ranking={ranking}
-          accolade={isLeaderboard ? accoladeToShow : undefined}
-          isUnaccoladed={!contenderMeetsAccolade}
-        />
-      </TouchableOpacity>
-      <View
-        style={{
-          marginTop: VERTICAL_MARGINS,
-          flexDirection: 'row',
-          width: '100%',
-          flex: 1,
-        }}
-      >
-        <TouchableHighlight
-          style={{
-            flex: 2,
-            flexDirection: 'row',
-            width: windowWidth - thumbnailContainerWidth - rightIconContainerWidth,
-            justifyContent: 'flex-start',
-            alignItems: 'flex-start',
-            height: '100%',
-          }}
-          onPress={() => onPressItem()}
-          underlayColor={COLORS.secondaryDark}
-        >
-          <>
-            <View style={{ flexDirection: 'column' }}>
-              <View style={{ height: innerHeight / 2 }}>
-                <SubHeader
+        <>
+          <View
+            style={{
+              width: thumbnailContainerWidth,
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '100%',
+            }}
+          >
+            <PosterFromTmdb
+              movie={movie}
+              person={person}
+              posterDimensions={{
+                width: posterWidth,
+                height: posterHeight,
+              }}
+              ranking={ranking}
+              accolade={isLeaderboard ? accoladeToShow : undefined}
+              isUnaccoladed={!contenderMeetsAccolade}
+            />
+          </View>
+          <View
+            style={{
+              flexDirection: 'column',
+              height: '100%',
+              width: windowWidth - thumbnailContainerWidth - rightIconContainerWidth,
+              marginTop: VERTICAL_MARGINS,
+            }}
+          >
+            <View
+              style={{
+                height: innerHeight / 2,
+                width: '100%',
+              }}
+            >
+              <SubHeader
+                style={{
+                  width: windowWidth,
+                  shadowColor: 'black',
+                  shadowOpacity: 1,
+                  shadowRadius: 5,
+                  color: isUnaccaloded ? 'rgba(255,255,255,0.5)' : COLORS.white,
+                }}
+              >
+                {title}
+              </SubHeader>
+              {subtitle ? (
+                <Body
                   style={{
                     width: windowWidth,
                     shadowColor: 'black',
@@ -245,131 +253,118 @@ const ContenderListItem = ({
                     color: isUnaccaloded ? 'rgba(255,255,255,0.5)' : COLORS.white,
                   }}
                 >
-                  {title}
-                </SubHeader>
-                {subtitle ? (
+                  {`${subtitle}`}
+                </Body>
+              ) : null}
+              <View />
+              <View style={{ flexDirection: 'row' }}>
+                {riskiness ? (
                   <Body
                     style={{
-                      width: windowWidth,
-                      shadowColor: 'black',
-                      shadowOpacity: 1,
-                      shadowRadius: 5,
-                      color: isUnaccaloded ? 'rgba(255,255,255,0.5)' : COLORS.white,
+                      fontWeight: '700',
+                      width: '100%',
+                      textAlign: 'right',
+                      marginBottom: 5,
+                      paddingRight: theme.windowMargin,
                     }}
-                  >
-                    {`${subtitle}`}
-                  </Body>
+                  >{`${riskiness.toString()}pts`}</Body>
                 ) : null}
-                <View />
-                <View style={{ flexDirection: 'row' }}>
-                  {riskiness ? (
-                    <Body
-                      style={{
-                        fontWeight: '700',
-                        width: '100%',
-                        textAlign: 'right',
-                        marginBottom: 5,
-                        paddingRight: theme.windowMargin,
-                      }}
-                    >{`${riskiness.toString()}pts`}</Body>
-                  ) : null}
-                </View>
               </View>
-              {numPredictingIfIsCommunity &&
-              totalNumPredictingTop !== undefined &&
-              totalUsersPredicting !== undefined &&
-              showHistogram ? (
+            </View>
+            {numPredictingIfIsCommunity &&
+            totalNumPredictingTop !== undefined &&
+            totalUsersPredicting !== undefined &&
+            showHistogram ? (
+              <View
+                style={{
+                  height: innerHeight / 2,
+                  zIndex: 1,
+                  flexDirection: 'row',
+                }}
+              >
                 <View
                   style={{
-                    height: innerHeight / 2,
-                    zIndex: 1,
-                    flexDirection: 'row',
+                    width: LEFT_SECTION,
+                    justifyContent: 'space-around',
+                    flexDirection: 'column',
                   }}
                 >
-                  <View
-                    style={{
-                      width: LEFT_SECTION,
-                      justifyContent: 'space-around',
-                      flexDirection: 'column',
-                    }}
-                  >
+                  <View style={{ flexDirection: 'row' }}>
+                    <Body style={{ color: COLORS.gray }}>{`${
+                      isList ? '1ST' : 'WIN'
+                    }: `}</Body>
+                    <Body
+                      style={{ color: COLORS.white, fontWeight: '700' }}
+                    >{`${formatPercentage(win / totalUsersPredicting, true)}`}</Body>
+                  </View>
+                  {!onlyShowWinStats ? (
                     <View style={{ flexDirection: 'row' }}>
                       <Body style={{ color: COLORS.gray }}>{`${
-                        isList ? '1ST' : 'WIN'
+                        isList ? `TOP ${slots ?? 5}` : 'NOM'
                       }: `}</Body>
                       <Body
                         style={{ color: COLORS.white, fontWeight: '700' }}
-                      >{`${formatPercentage(win / totalUsersPredicting, true)}`}</Body>
+                      >{`${formatPercentage(nom / totalUsersPredicting, true)}`}</Body>
                     </View>
-                    {!onlyShowWinStats ? (
-                      <View style={{ flexDirection: 'row' }}>
-                        <Body style={{ color: COLORS.gray }}>{`${
-                          isList ? `TOP ${slots ?? 5}` : 'NOM'
-                        }: `}</Body>
-                        <Body
-                          style={{ color: COLORS.white, fontWeight: '700' }}
-                        >{`${formatPercentage(nom / totalUsersPredicting, true)}`}</Body>
-                      </View>
-                    ) : null}
-                  </View>
-                  <Histogram
-                    numPredicting={numPredictingIfIsCommunity}
-                    totalNumPredicting={totalNumPredicting}
-                    totalNumPredictingTop={totalNumPredictingTop}
-                    slots={slots}
-                    totalWidth={
-                      windowWidth -
-                      thumbnailContainerWidth -
-                      rightIconContainerWidth -
-                      LEFT_SECTION
-                    }
-                    posterHeight={innerHeight / 2}
-                    displayNoExtraSlots={isList || displayNoExtraSlots}
-                  />
+                  ) : null}
                 </View>
-              ) : null}
-            </View>
-          </>
-        </TouchableHighlight>
-        {iconRightProps ? (
-          <TouchableHighlight
+                <Histogram
+                  numPredicting={numPredictingIfIsCommunity}
+                  totalNumPredicting={totalNumPredicting}
+                  totalNumPredictingTop={totalNumPredictingTop}
+                  slots={slots}
+                  totalWidth={
+                    windowWidth -
+                    thumbnailContainerWidth -
+                    rightIconContainerWidth -
+                    LEFT_SECTION
+                  }
+                  posterHeight={innerHeight / 2}
+                  displayNoExtraSlots={isList || displayNoExtraSlots}
+                />
+              </View>
+            ) : null}
+          </View>
+        </>
+      </TouchableHighlight>
+      {iconRightProps ? (
+        <TouchableHighlight
+          style={{
+            flex: 1,
+            width: rightIconContainerWidth,
+            justifyContent: 'center',
+            alignSelf: 'center',
+            alignItems: 'center',
+            paddingRight: 5,
+            paddingLeft: 5,
+            height: '100%',
+            zIndex: 3,
+          }}
+          underlayColor={iconRightProps.underlayColor || 'transparent'}
+          onPressIn={iconRightProps.enableOnPressIn ? iconRightProps.onPress : undefined}
+        >
+          <View
             style={{
-              flex: 1,
-              width: rightIconContainerWidth,
+              backgroundColor: isActive
+                ? COLORS.secondaryDark
+                : iconRightProps.backgroundColor,
               justifyContent: 'center',
+              borderRadius: theme.borderRadius,
+              height: posterWidth,
+              width: posterWidth,
               alignSelf: 'center',
               alignItems: 'center',
-              paddingRight: 5,
-              paddingLeft: 5,
-              height: '100%',
-              zIndex: 3,
             }}
-            underlayColor={iconRightProps.underlayColor || 'transparent'}
-            onPressIn={
-              iconRightProps.enableOnPressIn ? iconRightProps.onPress : undefined
-            }
           >
-            <View
-              style={{
-                backgroundColor: iconRightProps.backgroundColor,
-                justifyContent: 'center',
-                borderRadius: theme.borderRadius,
-                height: posterWidth,
-                width: posterWidth,
-                alignSelf: 'center',
-                alignItems: 'center',
-              }}
-            >
-              <CustomIcon
-                name={iconRightProps.iconName}
-                size={iconRightProps.iconSize || 24}
-                color={iconRightProps.iconColor || COLORS.white}
-                styles={{ borderRadius: 100 }}
-              />
-            </View>
-          </TouchableHighlight>
-        ) : null}
-      </View>
+            <CustomIcon
+              name={iconRightProps.iconName}
+              size={iconRightProps.iconSize || 24}
+              color={iconRightProps.iconColor || COLORS.white}
+              styles={{ borderRadius: 100 }}
+            />
+          </View>
+        </TouchableHighlight>
+      ) : null}
     </View>
   );
 };

@@ -119,6 +119,7 @@ const MovieListDraggableItem = ({
         iconRightProps={{
           iconName: 'menu',
           enableOnPressIn: true,
+          backgroundColor: COLORS.primary,
           onPress: () => {
             triggerHaptic();
             drag();
