@@ -46,7 +46,6 @@ export type iContenderListItemProps = {
   riskiness?: number;
   onPressItem: () => void;
   onPressThumbnail?: () => void;
-  onLongPress?: () => void;
   totalNumPredictingTop?: number;
   totalUsersPredicting?: number;
   iconRightProps?: {
@@ -86,7 +85,6 @@ const ContenderListItem = ({
   displayNoExtraSlots, // for showing histogram
   onPressItem,
   onPressThumbnail,
-  onLongPress,
   itemRef,
 }: iContenderListItemProps) => {
   const { isActive } = draggable || {};
@@ -202,15 +200,6 @@ const ContenderListItem = ({
             onPressItem();
           }
         }}
-        onLongPress={() => {
-          if (onPressThumbnail) {
-            onPressThumbnail();
-          } else if (onLongPress) {
-            onLongPress();
-          } else {
-            onPressItem();
-          }
-        }}
       >
         <PosterFromTmdb
           movie={movie}
@@ -243,8 +232,6 @@ const ContenderListItem = ({
           }}
           onPress={() => onPressItem()}
           underlayColor={COLORS.secondaryDark}
-          onLongPress={onLongPress}
-          // disabled={isActive}
         >
           <>
             <View style={{ flexDirection: 'column' }}>
