@@ -18,6 +18,7 @@ import { useRouteParams } from '../../../hooks/useRouteParams';
 import { getSlotsInPhase } from '../../../util/getSlotsInPhase';
 import { TouchableHighlight, TouchableOpacity } from 'react-native-gesture-handler';
 import { formatPercentage } from '../../../util/formatPercentage';
+import { yyyymmddToDate } from '../../../util/yyyymmddToDate';
 
 const VERTICAL_MARGINS = 10;
 const POSTER_SIZE_FACTOR = 7;
@@ -63,6 +64,10 @@ export type iContenderListItemProps = {
   itemRef?: React.LegacyRef<View>;
 };
 
+/**
+ * TODO: Check this on all other lists
+ * We also need to have it so if the phase is beyond Nomination, it only dispays the win stat
+ */
 const ContenderListItem = ({
   prediction,
   ranking,
@@ -92,6 +97,7 @@ const ContenderListItem = ({
     category: _category,
     categoryData,
     isLeaderboard,
+    yyyymmdd,
   } = useRouteParams();
   const category = _category!;
   const slots = getSlotsInPhase(phase, categoryData, true);
@@ -146,6 +152,12 @@ const ContenderListItem = ({
 
   const { win, nom } = getNumPredicting(prediction?.numPredicting ?? {}, slots ?? 5);
 
+  const isHistory = yyyymmdd && yyyymmddToDate(yyyymmdd) < new Date();
+  const nominationsHavePassed = Boolean(
+    isHistory && event?.nomDateTime && new Date(event.nomDateTime) < new Date(),
+  );
+  const onlyShowWinStats = isLeaderboard ? phase === Phase.WINNER : nominationsHavePassed;
+
   const itemHeight = getContenderListItemHeight(windowWidth);
   const innerHeight = itemHeight - VERTICAL_MARGINS * 2;
 
@@ -162,8 +174,6 @@ const ContenderListItem = ({
           ? 'rgba(0,0,0,0.5)'
           : COLORS.primaryDark,
         flexDirection: 'row',
-        // alignItems: 'center',
-        // justifyContent: 'center',
         borderTopColor: hexToRgb(COLORS.primaryLight, 0.5),
         borderTopWidth: 1,
         padding: theme.posterMargin,
@@ -283,19 +293,23 @@ const ContenderListItem = ({
                     }}
                   >
                     <View style={{ flexDirection: 'row' }}>
-                      <Body style={{ color: COLORS.gray }}>{'WIN: '}</Body>
-                      <Body style={{ color: COLORS.gray }}>{`${formatPercentage(
-                        win / totalUsersPredicting,
-                        true,
-                      )}`}</Body>
+                      <Body style={{ color: COLORS.gray }}>{`${
+                        isList ? '1ST' : 'WIN'
+                      }: `}</Body>
+                      <Body
+                        style={{ color: COLORS.white, fontWeight: '700' }}
+                      >{`${formatPercentage(win / totalUsersPredicting, true)}`}</Body>
                     </View>
-                    <View style={{ flexDirection: 'row' }}>
-                      <Body style={{ color: COLORS.gray }}>{'NOM: '}</Body>
-                      <Body style={{ color: COLORS.gray }}>{`${formatPercentage(
-                        nom / totalUsersPredicting,
-                        true,
-                      )}`}</Body>
-                    </View>
+                    {!onlyShowWinStats ? (
+                      <View style={{ flexDirection: 'row' }}>
+                        <Body style={{ color: COLORS.gray }}>{`${
+                          isList ? `TOP ${slots ?? 5}` : 'NOM'
+                        }: `}</Body>
+                        <Body
+                          style={{ color: COLORS.white, fontWeight: '700' }}
+                        >{`${formatPercentage(nom / totalUsersPredicting, true)}`}</Body>
+                      </View>
+                    ) : null}
                   </View>
                   <Histogram
                     numPredicting={numPredictingIfIsCommunity}

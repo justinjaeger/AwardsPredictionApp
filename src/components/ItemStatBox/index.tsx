@@ -7,7 +7,7 @@ import {
   useWindowDimensions,
 } from 'react-native';
 import { Header, Body, HeaderLight, SubHeader, SubHeaderLight } from '../Text';
-import { CategoryName, EventModel, WithId, iPrediction } from '../../models';
+import { CategoryName, EventModel, Phase, WithId, iPrediction } from '../../models';
 import { getNumPredicting, getTotalNumPredicting } from '../../util/getNumPredicting';
 import Histogram, { SLOTS_TO_DISPLAY_EXTRA } from '../Histogram';
 import { useTmdbDataStore } from '../../context/TmdbDataStore';
@@ -50,7 +50,7 @@ const ItemStatBox = ({
 }) => {
   const { width } = useWindowDimensions();
   const navigation = useNavigation<PredictionsNavigationProp>();
-  const { yyyymmdd } = useRouteParams();
+  const { yyyymmdd, phase, isLeaderboard } = useRouteParams();
   const { userId: authUserId } = useAuth();
   const { data: user } = useQueryGetUser(authUserId);
 
@@ -74,11 +74,11 @@ const ItemStatBox = ({
     slots ?? 5,
   );
 
-  const isHistoryAndIsPreNominations = yyyymmdd && yyyymmddToDate(yyyymmdd) < new Date();
-  const nominationsHavePassed =
-    !isHistoryAndIsPreNominations &&
-    event?.nomDateTime &&
-    new Date(event.nomDateTime) < new Date();
+  const isHistory = yyyymmdd && yyyymmddToDate(yyyymmdd) < new Date();
+  const nominationsHavePassed = Boolean(
+    isHistory && event?.nomDateTime && new Date(event.nomDateTime) < new Date(),
+  );
+  const onlyShowWinStats = isLeaderboard ? phase === Phase.WINNER : nominationsHavePassed;
 
   const isList = event.eventType === 'list';
 
@@ -153,7 +153,7 @@ const ItemStatBox = ({
           number={`${formatPercentage(win / totalNumPredictingCategory, true)}`}
           text={isList ? 'top choice' : 'predict win'}
         />
-        {!nominationsHavePassed ? (
+        {!onlyShowWinStats ? (
           <>
             <Stat
               number={`${formatPercentage(nom / totalNumPredictingCategory, true)}`}
