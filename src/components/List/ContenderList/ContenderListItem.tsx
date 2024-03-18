@@ -171,7 +171,7 @@ const ContenderListItem = ({
     <View
       style={{
         backgroundColor: isActive
-          ? COLORS.secondaryDark
+          ? COLORS.secondaryLight
           : highlighted
           ? hexToRgb(COLORS.secondaryLight, 0.15)
           : accoladeToShow
@@ -224,9 +224,17 @@ const ContenderListItem = ({
           isUnaccoladed={!contenderMeetsAccolade}
         />
       </TouchableOpacity>
-      <View style={{ marginTop: VERTICAL_MARGINS }}>
+      <View
+        style={{
+          marginTop: VERTICAL_MARGINS,
+          flexDirection: 'row',
+          width: '100%',
+          flex: 1,
+        }}
+      >
         <TouchableHighlight
           style={{
+            flex: 2,
             flexDirection: 'row',
             width: windowWidth - thumbnailContainerWidth - rightIconContainerWidth,
             justifyContent: 'flex-start',
@@ -236,23 +244,12 @@ const ContenderListItem = ({
           onPress={() => onPressItem()}
           underlayColor={COLORS.secondaryDark}
           onLongPress={onLongPress}
-          disabled={isActive}
+          // disabled={isActive}
         >
-          <View style={{ flexDirection: 'column' }}>
-            <View style={{ height: innerHeight / 2 }}>
-              <SubHeader
-                style={{
-                  width: windowWidth,
-                  shadowColor: 'black',
-                  shadowOpacity: 1,
-                  shadowRadius: 5,
-                  color: isUnaccaloded ? 'rgba(255,255,255,0.5)' : COLORS.white,
-                }}
-              >
-                {title}
-              </SubHeader>
-              {subtitle ? (
-                <Body
+          <>
+            <View style={{ flexDirection: 'column' }}>
+              <View style={{ height: innerHeight / 2 }}>
+                <SubHeader
                   style={{
                     width: windowWidth,
                     shadowColor: 'black',
@@ -261,36 +258,47 @@ const ContenderListItem = ({
                     color: isUnaccaloded ? 'rgba(255,255,255,0.5)' : COLORS.white,
                   }}
                 >
-                  {`${subtitle}`}
-                </Body>
-              ) : null}
-              <View />
-              <View style={{ flexDirection: 'row' }}>
-                {riskiness ? (
+                  {title}
+                </SubHeader>
+                {subtitle ? (
                   <Body
                     style={{
-                      fontWeight: '700',
-                      width: '100%',
-                      textAlign: 'right',
-                      marginBottom: 5,
-                      paddingRight: theme.windowMargin,
+                      width: windowWidth,
+                      shadowColor: 'black',
+                      shadowOpacity: 1,
+                      shadowRadius: 5,
+                      color: isUnaccaloded ? 'rgba(255,255,255,0.5)' : COLORS.white,
                     }}
-                  >{`${riskiness.toString()}pts`}</Body>
+                  >
+                    {`${subtitle}`}
+                  </Body>
                 ) : null}
+                <View />
+                <View style={{ flexDirection: 'row' }}>
+                  {riskiness ? (
+                    <Body
+                      style={{
+                        fontWeight: '700',
+                        width: '100%',
+                        textAlign: 'right',
+                        marginBottom: 5,
+                        paddingRight: theme.windowMargin,
+                      }}
+                    >{`${riskiness.toString()}pts`}</Body>
+                  ) : null}
+                </View>
               </View>
-            </View>
-            <View
-              style={{
-                height: innerHeight / 2,
-                zIndex: 1,
-                flexDirection: 'row',
-              }}
-            >
               {numPredictingIfIsCommunity &&
               totalNumPredictingTop !== undefined &&
               totalUsersPredicting !== undefined &&
               showHistogram ? (
-                <>
+                <View
+                  style={{
+                    height: innerHeight / 2,
+                    zIndex: 1,
+                    flexDirection: 'row',
+                  }}
+                >
                   <View
                     style={{
                       width: LEFT_SECTION,
@@ -331,24 +339,25 @@ const ContenderListItem = ({
                     posterHeight={innerHeight / 2}
                     displayNoExtraSlots={isList || displayNoExtraSlots}
                   />
-                </>
+                </View>
               ) : null}
             </View>
-          </View>
+          </>
         </TouchableHighlight>
         {iconRightProps ? (
           <TouchableHighlight
             style={{
-              height: itemHeight / 2 - VERTICAL_MARGINS,
+              flex: 1,
               width: rightIconContainerWidth,
               justifyContent: 'center',
               alignSelf: 'center',
               alignItems: 'center',
               paddingRight: 5,
               paddingLeft: 5,
+              height: '100%',
+              zIndex: 3,
             }}
             underlayColor={iconRightProps.underlayColor || 'transparent'}
-            onPress={iconRightProps.onPress}
             onPressIn={
               iconRightProps.enableOnPressIn ? iconRightProps.onPress : undefined
             }

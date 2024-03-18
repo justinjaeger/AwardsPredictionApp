@@ -1,12 +1,12 @@
 import { Divider } from '@ui-kitten/components';
 import React, { memo, useRef } from 'react';
 import { TouchableOpacity, View } from 'react-native';
-import { ScaleDecorator } from 'react-native-draggable-flatlist';
 import COLORS from '../../constants/colors';
 import ContenderListItem from '../List/ContenderList/ContenderListItem';
 import { CategoryType, iPrediction, Phase } from '../../models';
 import SwipeableItem, { SwipeableItemImperativeRef } from 'react-native-swipeable-item';
 import CustomIcon from '../CustomIcon';
+import { triggerHaptic } from '../../util/hapticFeedback';
 
 const SWIPABLE_WIDTH = 60;
 
@@ -106,28 +106,29 @@ const MovieListDraggableItem = ({
           }}
         />
       ) : null}
-      <ScaleDecorator activeScale={1}>
-        <ContenderListItem
-          itemRef={ref}
-          prediction={prediction}
-          ranking={ranking}
-          onPressItem={() => onPressItem()}
-          draggable={{
-            drag,
-            isActive,
-          }}
-          categoryType={categoryType}
-          iconRightProps={{
-            iconName: 'menu',
-            enableOnPressIn: true,
-            onPress: () => drag(),
-          }}
-          accolade={accolade || undefined}
-          riskiness={
-            showAccolades ? contenderIdToRiskiness[prediction.contenderId] : undefined
-          }
-        />
-      </ScaleDecorator>
+      <ContenderListItem
+        itemRef={ref}
+        prediction={prediction}
+        ranking={ranking}
+        onPressItem={() => onPressItem()}
+        draggable={{
+          drag,
+          isActive,
+        }}
+        categoryType={categoryType}
+        iconRightProps={{
+          iconName: 'menu',
+          enableOnPressIn: true,
+          onPress: () => {
+            triggerHaptic();
+            drag();
+          },
+        }}
+        accolade={accolade || undefined}
+        riskiness={
+          showAccolades ? contenderIdToRiskiness[prediction.contenderId] : undefined
+        }
+      />
     </SwipeableItem>
   );
 };
