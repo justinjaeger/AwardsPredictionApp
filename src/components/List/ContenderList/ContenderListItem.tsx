@@ -3,7 +3,7 @@ import React, { memo } from 'react';
 import { useWindowDimensions, View } from 'react-native';
 import COLORS from '../../../constants/colors';
 import { getPosterDimensionsByWidth } from '../../../constants/posterDimensions';
-import { getTotalNumPredicting } from '../../../util/getNumPredicting';
+import { getNumPredicting, getTotalNumPredicting } from '../../../util/getNumPredicting';
 import { Body, SubHeader } from '../../Text';
 import { hexToRgb } from '../../../util/hexToRgb';
 import { CategoryType, iPrediction, Phase } from '../../../models';
@@ -17,12 +17,17 @@ import CustomIcon from '../../CustomIcon';
 import { useRouteParams } from '../../../hooks/useRouteParams';
 import { getSlotsInPhase } from '../../../util/getSlotsInPhase';
 import { TouchableHighlight, TouchableOpacity } from 'react-native-gesture-handler';
+import { formatPercentage } from '../../../util/formatPercentage';
+
+const VERTICAL_MARGINS = 10;
+const POSTER_SIZE_FACTOR = 7;
+const LEFT_SECTION = 80;
 
 export const getContenderListItemHeight = (windowWidth: number) => {
   const { height: posterHeight } = getPosterDimensionsByWidth(
-    windowWidth / 9 - theme.posterMargin * 2,
+    windowWidth / POSTER_SIZE_FACTOR,
   );
-  return posterHeight + theme.posterMargin * 2;
+  return posterHeight + VERTICAL_MARGINS * 2;
 };
 
 export type iContenderListItemProps = {
@@ -40,7 +45,8 @@ export type iContenderListItemProps = {
   onPressItem: () => void;
   onPressThumbnail?: () => void;
   onLongPress?: () => void;
-  totalNumPredictingTop?: number; // important when rendering histogram
+  totalNumPredictingTop?: number;
+  totalUsersPredicting?: number;
   iconRightProps?: {
     iconName: string;
     onPress: () => void;
@@ -65,6 +71,7 @@ const ContenderListItem = ({
   categoryType,
   subtitle: _subtitle,
   totalNumPredictingTop,
+  totalUsersPredicting,
   iconRightProps,
   showHistogram,
   riskiness,
@@ -87,12 +94,11 @@ const ContenderListItem = ({
     isLeaderboard,
   } = useRouteParams();
   const category = _category!;
-  const { type } = categoryData!;
   const slots = getSlotsInPhase(phase, categoryData, true);
   const isList = event?.eventType === 'list';
 
   const { width: posterWidth, height: posterHeight } = getPosterDimensionsByWidth(
-    windowWidth / 9 - theme.posterMargin * 2,
+    windowWidth / POSTER_SIZE_FACTOR,
   );
 
   // note: numPredicting is only commnuity
@@ -104,25 +110,20 @@ const ContenderListItem = ({
   const dataHasNotLoaded = !movie && !person && !song;
 
   const categoryInfo = movie?.categoryCredits
-    ? categoryNameToTmdbCredit(category, movie?.categoryCredits)
+    ? categoryNameToTmdbCredit(category, movie.categoryCredits)
     : undefined;
 
   let title = '';
   let subtitle = '';
-  switch (categoryType) {
-    case CategoryType.FILM:
-      title = movie?.title || '';
-      subtitle = categoryInfo ? categoryInfo.join(',') : movie?.studio ?? '';
-      break;
-    case CategoryType.PERFORMANCE:
-      if (!person) break;
-      title = person?.name || '';
-      subtitle = movie?.title || '';
-      break;
-    case CategoryType.SONG:
-      title = song?.title || '';
-      subtitle = movie?.title || '';
-      break;
+  if (categoryType === CategoryType.FILM) {
+    title = movie?.title || '';
+    subtitle = categoryInfo ? categoryInfo.join(', ') : movie?.studio ?? '';
+  } else if (categoryType === CategoryType.PERFORMANCE) {
+    title = person?.name || '';
+    subtitle = movie?.title || '';
+  } else if (categoryType === CategoryType.SONG) {
+    title = song?.title || '';
+    subtitle = movie?.title || '';
   }
 
   // The bar should be at 100% if everybody is predicting a nomination.
@@ -143,6 +144,11 @@ const ContenderListItem = ({
     );
   }
 
+  const { win, nom } = getNumPredicting(prediction?.numPredicting ?? {}, slots ?? 5);
+
+  const itemHeight = getContenderListItemHeight(windowWidth);
+  const innerHeight = itemHeight - VERTICAL_MARGINS * 2;
+
   return (
     <View
       style={{
@@ -156,11 +162,12 @@ const ContenderListItem = ({
           ? 'rgba(0,0,0,0.5)'
           : COLORS.primaryDark,
         flexDirection: 'row',
-        alignItems: 'flex-end',
+        // alignItems: 'center',
+        // justifyContent: 'center',
         borderTopColor: hexToRgb(COLORS.primaryLight, 0.5),
         borderTopWidth: 1,
         padding: theme.posterMargin,
-        height: getContenderListItemHeight(windowWidth),
+        height: itemHeight,
       }}
       ref={itemRef}
     >
@@ -201,39 +208,25 @@ const ContenderListItem = ({
           isUnaccoladed={isUnaccaloded}
         />
       </TouchableOpacity>
-      <TouchableHighlight
-        style={{
-          flexDirection: 'row',
-          width: windowWidth - thumbnailContainerWidth - rightIconContainerWidth,
-          justifyContent: 'flex-end',
-          alignItems: 'flex-start',
-          height: '100%',
-        }}
-        onPress={() => onPressItem()}
-        underlayColor={COLORS.secondaryDark}
-        onLongPress={onLongPress}
-        disabled={isActive}
-      >
-        <>
-          <View
-            style={{
-              position: 'absolute',
-              flexDirection: 'column',
-              height: '100%',
-              paddingLeft: 5,
-              zIndex: 2,
-              width: '100%',
-              justifyContent: 'space-between',
-            }}
-          >
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'baseline',
-              }}
-            >
+      <View style={{ marginTop: VERTICAL_MARGINS }}>
+        <TouchableHighlight
+          style={{
+            flexDirection: 'row',
+            width: windowWidth - thumbnailContainerWidth - rightIconContainerWidth,
+            justifyContent: 'flex-start',
+            alignItems: 'flex-start',
+            height: '100%',
+          }}
+          onPress={() => onPressItem()}
+          underlayColor={COLORS.secondaryDark}
+          onLongPress={onLongPress}
+          disabled={isActive}
+        >
+          <View style={{ flexDirection: 'column' }}>
+            <View style={{ height: innerHeight / 2 }}>
               <SubHeader
                 style={{
+                  width: windowWidth,
                   shadowColor: 'black',
                   shadowOpacity: 1,
                   shadowRadius: 5,
@@ -242,84 +235,125 @@ const ContenderListItem = ({
               >
                 {title}
               </SubHeader>
-              {type !== CategoryType.FILM ? (
+              {subtitle ? (
                 <Body
                   style={{
+                    width: windowWidth,
                     shadowColor: 'black',
                     shadowOpacity: 1,
                     shadowRadius: 5,
                     color: isUnaccaloded ? 'rgba(255,255,255,0.5)' : COLORS.white,
                   }}
                 >
-                  {` • ${subtitle}`}
+                  {`${subtitle}`}
                 </Body>
               ) : null}
               <View />
+              <View style={{ flexDirection: 'row' }}>
+                {riskiness ? (
+                  <Body
+                    style={{
+                      fontWeight: '700',
+                      width: '100%',
+                      textAlign: 'right',
+                      marginBottom: 5,
+                      paddingRight: theme.windowMargin,
+                    }}
+                  >{`${riskiness.toString()}pts`}</Body>
+                ) : null}
+              </View>
             </View>
-            <View style={{ flexDirection: 'row', marginTop: 5 }}>
-              {riskiness ? (
-                <Body
-                  style={{
-                    fontWeight: '700',
-                    width: '100%',
-                    textAlign: 'right',
-                    marginBottom: 5,
-                    paddingRight: theme.windowMargin,
-                  }}
-                >{`${riskiness.toString()}pts`}</Body>
+            <View
+              style={{
+                height: innerHeight / 2,
+                zIndex: 1,
+                flexDirection: 'row',
+              }}
+            >
+              {numPredictingIfIsCommunity &&
+              totalNumPredictingTop !== undefined &&
+              totalUsersPredicting !== undefined &&
+              showHistogram ? (
+                <>
+                  <View
+                    style={{
+                      width: LEFT_SECTION,
+                      justifyContent: 'space-around',
+                      flexDirection: 'column',
+                    }}
+                  >
+                    <View style={{ flexDirection: 'row' }}>
+                      <Body style={{ color: COLORS.gray }}>{'WIN: '}</Body>
+                      <Body style={{ color: COLORS.gray }}>{`${formatPercentage(
+                        win / totalUsersPredicting,
+                        true,
+                      )}`}</Body>
+                    </View>
+                    <View style={{ flexDirection: 'row' }}>
+                      <Body style={{ color: COLORS.gray }}>{'NOM: '}</Body>
+                      <Body style={{ color: COLORS.gray }}>{`${formatPercentage(
+                        nom / totalUsersPredicting,
+                        true,
+                      )}`}</Body>
+                    </View>
+                  </View>
+                  <Histogram
+                    numPredicting={numPredictingIfIsCommunity}
+                    totalNumPredicting={totalNumPredicting}
+                    totalNumPredictingTop={totalNumPredictingTop}
+                    slots={slots}
+                    totalWidth={
+                      windowWidth -
+                      thumbnailContainerWidth -
+                      rightIconContainerWidth -
+                      LEFT_SECTION
+                    }
+                    posterHeight={innerHeight / 2}
+                    displayNoExtraSlots={isList || displayNoExtraSlots}
+                  />
+                </>
               ) : null}
             </View>
           </View>
-          {numPredictingIfIsCommunity &&
-          totalNumPredictingTop !== undefined &&
-          showHistogram ? (
-            <Histogram
-              numPredicting={numPredictingIfIsCommunity}
-              totalNumPredicting={totalNumPredicting}
-              totalNumPredictingTop={totalNumPredictingTop}
-              slots={slots}
-              totalWidth={windowWidth - thumbnailContainerWidth - rightIconContainerWidth}
-              posterHeight={posterHeight}
-              displayNoExtraSlots={isList || displayNoExtraSlots}
-            />
-          ) : null}
-        </>
-      </TouchableHighlight>
-      {iconRightProps ? (
-        <TouchableHighlight
-          style={{
-            height: posterHeight,
-            width: rightIconContainerWidth,
-            justifyContent: 'center',
-            alignSelf: 'center',
-            alignItems: 'center',
-            paddingRight: 5,
-            paddingLeft: 5,
-          }}
-          underlayColor={iconRightProps.underlayColor || 'transparent'}
-          onPress={iconRightProps.onPress}
-          onPressIn={iconRightProps.enableOnPressIn ? iconRightProps.onPress : undefined}
-        >
-          <View
+        </TouchableHighlight>
+        {iconRightProps ? (
+          <TouchableHighlight
             style={{
-              backgroundColor: iconRightProps.backgroundColor,
+              height: itemHeight / 2 - VERTICAL_MARGINS,
+              width: rightIconContainerWidth,
               justifyContent: 'center',
-              borderRadius: theme.borderRadius,
-              height: posterWidth,
-              width: posterWidth,
               alignSelf: 'center',
               alignItems: 'center',
+              paddingRight: 5,
+              paddingLeft: 5,
             }}
+            underlayColor={iconRightProps.underlayColor || 'transparent'}
+            onPress={iconRightProps.onPress}
+            onPressIn={
+              iconRightProps.enableOnPressIn ? iconRightProps.onPress : undefined
+            }
           >
-            <CustomIcon
-              name={iconRightProps.iconName}
-              size={iconRightProps.iconSize || 24}
-              color={iconRightProps.iconColor || COLORS.white}
-              styles={{ borderRadius: 100 }}
-            />
-          </View>
-        </TouchableHighlight>
-      ) : null}
+            <View
+              style={{
+                backgroundColor: iconRightProps.backgroundColor,
+                justifyContent: 'center',
+                borderRadius: theme.borderRadius,
+                height: posterWidth,
+                width: posterWidth,
+                alignSelf: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <CustomIcon
+                name={iconRightProps.iconName}
+                size={iconRightProps.iconSize || 24}
+                color={iconRightProps.iconColor || COLORS.white}
+                styles={{ borderRadius: 100 }}
+              />
+            </View>
+          </TouchableHighlight>
+        ) : null}
+      </View>
     </View>
   );
 };

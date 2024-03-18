@@ -133,6 +133,7 @@ const MovieListCommunity = ({
               onPressItem={() => onPressItem(prediction)}
               categoryType={type}
               totalNumPredictingTop={totalNumPredictingTop}
+              totalUsersPredicting={totalUsersPredicting}
               accolade={accolade}
               isUnaccaloded={showAccolades && !accoladeMatchesPhase}
               displayNoExtraSlots={nominationsHavePassed}
