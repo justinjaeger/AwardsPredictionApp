@@ -4,7 +4,6 @@ export const categoryNameToTmdbCredit = (
   categoryName: CategoryName,
   credits: Record<IMovieCategoryCredit, string[]>,
 ) => {
-  console.log('credits.directing', credits.directing);
   switch (categoryName) {
     case CategoryName.DIRECTOR:
       return credits.directing;
