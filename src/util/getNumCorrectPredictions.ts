@@ -1,4 +1,5 @@
 import { Phase, iPrediction } from '../models';
+import { getContenderMeetsAccolade } from './getContenderMeetsAccolade';
 import { getContenderRiskiness } from './getContenderRiskiness';
 
 export const getPredictionStatsFromPredictions = ({
@@ -24,9 +25,13 @@ export const getPredictionStatsFromPredictions = ({
   const contenderIdToRiskiness: { [cId: string]: number } = {};
   let numCorrectPredictions = 0;
   predictions.forEach(({ contenderId, ranking }) => {
-    const accolade = contenderIdsToPhase?.[contenderId] === phase;
+    const contenderAccolade = contenderIdsToPhase?.[contenderId];
+    const contenderMeetsAccolade =
+      contenderAccolade && phase
+        ? getContenderMeetsAccolade(phase, contenderAccolade)
+        : undefined;
     const userDidPredictWithinSlots = ranking && ranking <= slots;
-    const predictionWasCorrect = !!(userDidPredictWithinSlots && accolade);
+    const predictionWasCorrect = !!(userDidPredictWithinSlots && contenderMeetsAccolade);
     numCorrectPredictions += predictionWasCorrect ? 1 : 0;
     if (!predictionWasCorrect) {
       return;

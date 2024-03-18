@@ -81,7 +81,7 @@ const ContenderListItem = ({
   iconRightProps,
   showHistogram,
   riskiness,
-  accolade,
+  accolade: contenderAccolade,
   isUnaccaloded,
   displayNoExtraSlots, // for showing histogram
   onPressItem,
@@ -142,11 +142,11 @@ const ContenderListItem = ({
 
   // true when it's not a leaderboard
   const contenderMeetsAccolade = isLeaderboard
-    ? accolade && phase
-      ? getContenderMeetsAccolade(accolade, phase)
+    ? contenderAccolade && phase
+      ? getContenderMeetsAccolade(phase, contenderAccolade)
       : false
     : true;
-  const accoladeToShow = contenderMeetsAccolade ? accolade : undefined;
+  const accoladeToShow = contenderMeetsAccolade ? contenderAccolade : undefined;
 
   if (dataHasNotLoaded) {
     return (
