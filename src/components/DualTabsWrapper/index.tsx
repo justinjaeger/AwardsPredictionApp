@@ -19,7 +19,7 @@ const DualTabsWrapper = ({
     <Animated.View
       style={[
         { backgroundColor: COLORS.primaryDark, flexDirection: 'row' },
-        { left: tabsPosX },
+        { marginLeft: tabsPosX },
       ]}
     >
       {tabs.map((tab) => (
