@@ -10,6 +10,7 @@ import { useNavigation } from '@react-navigation/native';
 import { PredictionsNavigationProp } from '../../navigation/types';
 import { useRouteParams } from '../../hooks/useRouteParams';
 import { filterDuplicates } from '../../util/filterDuplicates';
+import { triggerHaptic } from '../../util/hapticFeedback';
 
 type iMovieListProps = {
   predictions: iPrediction[];
@@ -60,6 +61,7 @@ const MovieListSelectable = ({
 
   const onToggleItem = useCallback(async (prediction: iPrediction) => {
     Keyboard.dismiss();
+    triggerHaptic();
     setSelectedPrediction && setSelectedPrediction(prediction);
     setSelectedPredictions &&
       setSelectedPredictions((sp) => {

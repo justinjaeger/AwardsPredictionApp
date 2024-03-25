@@ -325,46 +325,55 @@ const ContenderListItem = ({
               </View>
             ) : null}
           </View>
+          {iconRightProps ? (
+            <TouchableHighlight
+              style={{
+                flex: 1,
+                width: rightIconContainerWidth,
+                justifyContent: 'center',
+                alignSelf: 'center',
+                alignItems: 'center',
+                paddingRight: 5,
+                paddingLeft: 5,
+                height: '100%',
+                zIndex: 3,
+              }}
+              underlayColor={iconRightProps.underlayColor || 'transparent'}
+              onPressIn={
+                iconRightProps.enableOnPressIn ? iconRightProps.onPress : undefined
+              }
+              onPress={
+                iconRightProps.enableOnPressIn
+                  ? undefined
+                  : () => {
+                      iconRightProps.onPress();
+                    }
+              }
+            >
+              <View
+                style={{
+                  backgroundColor: isActive
+                    ? COLORS.secondaryDark
+                    : iconRightProps.backgroundColor,
+                  justifyContent: 'center',
+                  borderRadius: theme.borderRadius,
+                  height: posterWidth,
+                  width: posterWidth,
+                  alignSelf: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <CustomIcon
+                  name={iconRightProps.iconName}
+                  size={iconRightProps.iconSize || 24}
+                  color={iconRightProps.iconColor || COLORS.white}
+                  styles={{ borderRadius: 100 }}
+                />
+              </View>
+            </TouchableHighlight>
+          ) : null}
         </>
       </TouchableHighlight>
-      {iconRightProps ? (
-        <TouchableHighlight
-          style={{
-            flex: 1,
-            width: rightIconContainerWidth,
-            justifyContent: 'center',
-            alignSelf: 'center',
-            alignItems: 'center',
-            paddingRight: 5,
-            paddingLeft: 5,
-            height: '100%',
-            zIndex: 3,
-          }}
-          underlayColor={iconRightProps.underlayColor || 'transparent'}
-          onPressIn={iconRightProps.enableOnPressIn ? iconRightProps.onPress : undefined}
-        >
-          <View
-            style={{
-              backgroundColor: isActive
-                ? COLORS.secondaryDark
-                : iconRightProps.backgroundColor,
-              justifyContent: 'center',
-              borderRadius: theme.borderRadius,
-              height: posterWidth,
-              width: posterWidth,
-              alignSelf: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <CustomIcon
-              name={iconRightProps.iconName}
-              size={iconRightProps.iconSize || 24}
-              color={iconRightProps.iconColor || COLORS.white}
-              styles={{ borderRadius: 100 }}
-            />
-          </View>
-        </TouchableHighlight>
-      ) : null}
     </View>
   );
 };
