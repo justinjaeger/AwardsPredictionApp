@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const TIME_TO_LIVE = 60 * 60 * 24 * 7 * 1000; // in ms - currently 7 days
+const TIME_TO_LIVE = 60 * 60 * 24 * 1000; // in ms - currently 1 day
 
 type iCachedItem<T> = {
   value: T;
@@ -36,6 +36,7 @@ async function getItems<T>(keys: string[]) {
         return undefined;
       }
       const { value, expiryTime } = JSON.parse(item) as iCachedItem<T>;
+
       const isExpired = expiryTime < Date.now();
       if (isExpired) {
         AsyncStorage.removeItem(key);
