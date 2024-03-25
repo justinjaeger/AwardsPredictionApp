@@ -4,7 +4,9 @@ import {
   FlatList,
   GestureResponderEvent,
   ScrollView,
+  StyleProp,
   View,
+  ViewStyle,
   useWindowDimensions,
 } from 'react-native';
 import COLORS from '../../constants/colors';
@@ -31,6 +33,7 @@ const Histogram = ({
   flatListRef,
   scrollRef,
   isList,
+  style,
 }: {
   numPredicting: Record<number, number>;
   totalNumPredicting: number;
@@ -46,6 +49,7 @@ const Histogram = ({
   flatListRef?: React.RefObject<FlatList<any>>;
   scrollRef?: React.RefObject<ScrollView>;
   isList?: boolean;
+  style?: StyleProp<ViewStyle>;
 }) => {
   const { isPad } = useDevice();
   const { width: windowWidth } = useWindowDimensions();
@@ -103,21 +107,23 @@ const Histogram = ({
 
   return (
     <View
-      style={{
-        flexDirection: 'row',
-        alignSelf: 'flex-end',
-        alignItems: 'flex-end',
-        justifyContent: 'space-between',
-        height: barMaxHeight,
-        width: totalWidth,
-        zIndex: 1,
-        borderBottomWidth: 1,
-        borderBottomColor: hexToRgb(COLORS.secondary, 0.1),
-        marginRight: 10,
-        marginLeft: 10,
-        borderRadius: theme.borderRadius,
-        backgroundColor: enableHoverInfo ? hexToRgb(COLORS.gray, 0.05) : undefined,
-      }}
+      style={[
+        {
+          flexDirection: 'row',
+          alignSelf: 'flex-end',
+          alignItems: 'flex-end',
+          justifyContent: 'space-between',
+          height: barMaxHeight,
+          width: totalWidth,
+          zIndex: 1,
+          borderBottomWidth: 1,
+          borderBottomColor: hexToRgb(COLORS.secondary, 0.1),
+          marginRight: 10,
+          marginLeft: 10,
+          backgroundColor: enableHoverInfo ? hexToRgb(COLORS.gray, 0.05) : undefined,
+        },
+        style,
+      ]}
       pointerEvents={enableHoverInfo ? 'auto' : 'none'}
       onStartShouldSetResponder={() => true}
       onMoveShouldSetResponder={() => true}
