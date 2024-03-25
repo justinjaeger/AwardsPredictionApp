@@ -129,7 +129,7 @@ const MovieListDraggable = ({
       onPlaceholderIndexChange={() => {
         triggerHaptic();
       }}
-      autoscrollSpeed={250}
+      autoscrollSpeed={200}
       autoscrollThreshold={50}
       ListHeaderComponent={
         <>
