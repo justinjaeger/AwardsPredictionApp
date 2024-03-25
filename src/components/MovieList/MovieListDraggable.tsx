@@ -1,5 +1,10 @@
 import React, { useCallback, useState } from 'react';
-import { TouchableHighlight, TouchableOpacity, View } from 'react-native';
+import {
+  TouchableHighlight,
+  TouchableOpacity,
+  View,
+  useWindowDimensions,
+} from 'react-native';
 import DraggableFlatList from 'react-native-draggable-flatlist';
 import { CATEGORY_TYPE_TO_STRING } from '../../constants/categories';
 import COLORS from '../../constants/colors';
@@ -16,6 +21,11 @@ import { getSlotsInPhase } from '../../util/getSlotsInPhase';
 import useQueryGetCommunityPredictions from '../../hooks/queries/useQueryGetCommunityPredictions';
 import { getPredictionStatsFromPredictions } from '../../util/getNumCorrectPredictions';
 import MovieListDraggableItem from './MovieListDraggableItem';
+import { BOTTOM_TAB_HEIGHT } from '../../constants';
+import { getHeaderBasicHeight } from '../HeaderBasic';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import useDevice from '../../util/device';
+import { getSectionTabHeight } from '../SectionTopTabs';
 
 type iMovieListProps = {
   predictions: iPrediction[];
@@ -25,7 +35,6 @@ type iMovieListProps = {
   onPressAdd: () => void;
 };
 
-// TODO: Might want to combine with MovieListCommunity eventually
 const MovieListDraggable = ({
   predictions,
   setPredictions,
@@ -33,6 +42,9 @@ const MovieListDraggable = ({
   isAuthProfile,
   onPressAdd,
 }: iMovieListProps) => {
+  const { height } = useWindowDimensions();
+  const { top, bottom } = useSafeAreaInsets();
+  const { isPad } = useDevice();
   const navigation = useNavigation<PredictionsNavigationProp>();
   const {
     categoryData,
@@ -101,12 +113,24 @@ const MovieListDraggable = ({
     <DraggableFlatList
       data={predictions}
       keyExtractor={(item) => item.contenderId}
-      style={{ width: '100%' }}
+      style={{
+        width: '100%',
+        height:
+          // height is exact so that the draggable flatlist knows when to auto-scroll down
+          height -
+          BOTTOM_TAB_HEIGHT -
+          getHeaderBasicHeight('\n') -
+          top -
+          bottom -
+          getSectionTabHeight(isPad),
+      }}
       showsVerticalScrollIndicator={false}
       contentContainerStyle={{ paddingBottom: 200 }}
       onPlaceholderIndexChange={() => {
         triggerHaptic();
       }}
+      autoscrollSpeed={250}
+      autoscrollThreshold={50}
       ListHeaderComponent={
         <>
           <LastUpdatedText lastUpdated={lastUpdatedString} />
@@ -162,7 +186,6 @@ const MovieListDraggable = ({
           </View>
         ) : null
       }
-      activationDistance={15}
       renderItem={(props) => (
         <MovieListDraggableItem
           {...props}
